@@ -3469,7 +3469,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10532"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>Palauta &apos;Rivin korkeus&apos; -arvo</translation>
+        <translation>Palauta &apos;Riviväli&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10554"/>
@@ -3484,7 +3484,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10665"/>
         <source>Line height (% of text size):</source>
-        <translation>Viivan korkeus (% tekstin koosta):</translation>
+        <translation>Riviväli (% tekstin koosta):</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10736"/>
@@ -3678,7 +3678,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11690"/>
         <source>Line height:</source>
-        <translation>Viivan korkeus:</translation>
+        <translation>Riviväli:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11760"/>

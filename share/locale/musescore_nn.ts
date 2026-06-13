@@ -3776,7 +3776,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12319"/>
         <source>Staccato</source>
-        <translation type="unfinished"/>
+        <translation>Stakkato</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12371"/>
@@ -3816,7 +3816,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12421"/>
         <source>Never show</source>
-        <translation type="unfinished"/>
+        <translation>Vis aldri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12428"/>
@@ -4277,7 +4277,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="428"/>
         <source>Always show</source>
-        <translation type="unfinished"/>
+        <translation>Vis alltid</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="433"/>
@@ -5381,7 +5381,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="54"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Start å nytt</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
@@ -5396,7 +5396,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="66"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Om MuseScore Studio…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="71"/>
@@ -5421,7 +5421,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="87"/>
         <source>As&amp;k for help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Spør etter hjelp</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
@@ -5482,7 +5482,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>Show/hide palettes</source>
-        <translation type="unfinished"/>
+        <translation>Vis/gøym palettar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="136"/>
@@ -5506,7 +5506,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="79"/>
         <source>Show/hide properties</source>
-        <translation type="unfinished"/>
+        <translation>Vis/gøym eigenskapar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
@@ -5523,7 +5523,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="157"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Historikk</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
@@ -5565,7 +5565,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="120"/>
         <source>Show/hide timeline</source>
-        <translation type="unfinished"/>
+        <translation>Vis/skjul tidslinje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="191"/>
@@ -5577,7 +5577,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="192"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="127"/>
         <source>Show/hide mixer</source>
-        <translation type="unfinished"/>
+        <translation>Vis/gøym miksar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
@@ -5595,7 +5595,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="206"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="141"/>
         <source>Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
@@ -5629,19 +5629,19 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="230"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Innstillingar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="237"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="87"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kopier</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="238"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopier</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="245"/>
@@ -5653,7 +5653,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="246"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="95"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>KIlipp ut</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="253"/>
@@ -5665,7 +5665,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="254"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="102"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Lim inn</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="261"/>
@@ -6697,12 +6697,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="565"/>
         <source>&amp;Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Finn / Gå til</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="566"/>
         <source>Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>Finn / Gå til</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="571"/>
@@ -7930,12 +7930,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1628"/>
         <source>Page: Next</source>
-        <translation type="unfinished"/>
+        <translation>Side: Neste</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1629"/>
         <source>Jump to next page</source>
-        <translation type="unfinished"/>
+        <translation>Hopp til neste side</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1634"/>
@@ -8025,32 +8025,32 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1704"/>
         <source>Next word</source>
-        <translation type="unfinished"/>
+        <translation>Neste ord</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1705"/>
         <source>Go to next word</source>
-        <translation type="unfinished"/>
+        <translation>Gå til neste ord</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1710"/>
         <source>Next text element</source>
-        <translation type="unfinished"/>
+        <translation>Neste tekstelement</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1711"/>
         <source>Go to next text element</source>
-        <translation type="unfinished"/>
+        <translation>Gå til neste tekstelement</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1716"/>
         <source>Previous text element</source>
-        <translation type="unfinished"/>
+        <translation>Førre tekstelement</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1717"/>
         <source>Go to previous text element</source>
-        <translation type="unfinished"/>
+        <translation>Gå til førre tekstelement</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1722"/>
@@ -8505,22 +8505,22 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2034"/>
         <source>Transpose up</source>
-        <translation type="unfinished"/>
+        <translation>Transponer opp</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2035"/>
         <source>Transpose up a semitone</source>
-        <translation type="unfinished"/>
+        <translation>Transponer opp ein halvtone</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2040"/>
         <source>Transpose down</source>
-        <translation type="unfinished"/>
+        <translation>Transponer ned</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2041"/>
         <source>Transpose down a semitone</source>
-        <translation type="unfinished"/>
+        <translation>Transponer ned ein halvtone</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2046"/>
@@ -9046,7 +9046,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2474"/>
         <source>Staccato</source>
-        <translation type="unfinished"/>
+        <translation>Stakkato</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2475"/>
@@ -9434,7 +9434,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="56"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
@@ -9625,17 +9625,17 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="65"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Lagre som</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
         <source>Save a &amp;copy…</source>
-        <translation type="unfinished"/>
+        <translation>Lagre ein &amp;kopi…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="71"/>
         <source>Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Lagre ein kopi</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -9650,7 +9650,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="82"/>
         <source>Save to clo&amp;ud…</source>
-        <translation type="unfinished"/>
+        <translation>Lagre i &amp;skya…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="83"/>
@@ -9670,12 +9670,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on &amp;Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Del på &amp;Audio.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="97"/>
         <source>Share on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Del på Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>
@@ -9690,7 +9690,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Import P&amp;DF…</source>
-        <translation type="unfinished"/>
+        <translation>Importer P&amp;DF…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="111"/>
@@ -9771,19 +9771,19 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/PluginsPage.qml" line="120"/>
         <source>Category:</source>
-        <translation type="unfinished"/>
+        <translation>Kategori:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/PluginsPage.qml" line="128"/>
         <source>All</source>
         <extracomment>The title of an option to display the plugins from all categories.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/MainToolBar.qml" line="67"/>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WindowContent.qml" line="67"/>
         <source>Main toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Hovudverktøylinje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="118"/>
@@ -9858,7 +9858,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="515"/>
         <source>Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/platform/AppMenuBar.qml" line="77"/>
@@ -9886,7 +9886,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="76"/>
         <source>Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Kontoar</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="79"/>
@@ -9928,7 +9928,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="374"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Start å nytt</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="337"/>
@@ -9968,17 +9968,17 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/widgets/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
         <source>Loading new score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Lastar inn nytt partitur…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/widgets/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
         <source>Loading “%1”…‎</source>
-        <translation type="unfinished"/>
+        <translation>Lastar “%1”…‎</translation>
     </message>
     <message>
         <location filename="../../src/appshell/widgets/splashscreen/newinstanceloadingscreenview.cpp" line="50"/>
         <source>Loading score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Lastar inn partitur…</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="214"/>
@@ -10003,7 +10003,7 @@ This action cannot be undone.</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="34"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Om MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="86"/>
@@ -10106,12 +10106,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Sjå video</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Velkomen til MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="35"/>
@@ -10121,7 +10121,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="57"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Følg systemtema</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="118"/>
@@ -10131,7 +10131,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="124"/>
         <source>Enable high contrast</source>
-        <translation type="unfinished"/>
+        <translation>Slå på høgkontrast</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
@@ -10396,7 +10396,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="323"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="195"/>
         <source>&amp;Show</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="327"/>
@@ -10468,7 +10468,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Sjå video</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="51"/>
@@ -14894,7 +14894,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1304"/>
         <source>Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1305"/>
@@ -17954,7 +17954,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="494"/>
         <source>score font</source>
-        <translation type="unfinished"/>
+        <translation>partiturskrift</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="495"/>
@@ -18091,7 +18091,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3147"/>
         <source>Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3148"/>
@@ -20728,7 +20728,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/ErrorDetailsView.qml" line="129"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopier</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/ErrorDetailsView.qml" line="173"/>
@@ -21212,7 +21212,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
-        <translation type="unfinished"/>
+        <translation>Ikkje vis igjen</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="51"/>
@@ -21409,7 +21409,7 @@ Band %1 på streng %2</translation>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show less…</source>
-        <translation type="unfinished"/>
+        <translation>Vis mindre…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.cpp" line="91"/>
@@ -22839,7 +22839,8 @@ durations</source>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="759"/>
         <source>Show
 staccato</source>
-        <translation type="unfinished"/>
+        <translation>Vis
+stakkato</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="783"/>
@@ -22891,7 +22892,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="1220"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Alle</translation>
     </message>
 </context>
 <context>
@@ -23198,7 +23199,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="70"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="76"/>
@@ -23573,7 +23574,7 @@ pickup measure</source>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="152"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="426"/>
         <source>Show less</source>
-        <translation type="unfinished"/>
+        <translation>Vis mindre</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="189"/>
@@ -23584,7 +23585,7 @@ pickup measure</source>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="152"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="426"/>
         <source>Show more</source>
-        <translation type="unfinished"/>
+        <translation>Vis meir</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="212"/>
@@ -23772,7 +23773,7 @@ pickup measure</source>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="77"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/scoredisplaysettingsmodel.cpp" line="35"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Vis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="78"/>
@@ -24458,7 +24459,7 @@ pickup measure</source>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="48"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="67"/>
         <source>Show line</source>
-        <translation type="unfinished"/>
+        <translation>Vis linje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml" line="57"/>
@@ -24578,7 +24579,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="60"/>
         <source>Show numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Vis berre nummer</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="62"/>
@@ -24648,7 +24649,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
         <source>Show number</source>
-        <translation type="unfinished"/>
+        <translation>Vis nummer</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
@@ -26533,7 +26534,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="75"/>
         <source>Name on main score</source>
-        <translation type="unfinished"/>
+        <translation>Namn på hovudpartitur</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="76"/>
@@ -26591,7 +26592,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="109"/>
         <source>Voices visible in the score</source>
-        <translation type="unfinished"/>
+        <translation>Stemmer synlege i partituret</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="168"/>
@@ -26852,7 +26853,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="351"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Historikk</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="32"/>
@@ -26872,12 +26873,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
         <source>At start of score</source>
-        <translation type="unfinished"/>
+        <translation>Ved starten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation type="unfinished"/>
+        <translation>Ved slutten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
@@ -27254,7 +27255,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="98"/>
         <source>Find / Go to:</source>
-        <translation type="unfinished"/>
+        <translation>Finn / Gå til:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="45"/>
@@ -27658,7 +27659,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="73"/>
         <source>Show text:</source>
-        <translation type="unfinished"/>
+        <translation>Vis tekst:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="83"/>
@@ -28350,7 +28351,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/notesinchordselectionfiltermodel.cpp" line="147"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="49"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1500"/>
@@ -28478,12 +28479,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="298"/>
         <source>At start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Ved starten av partituret…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="299"/>
         <source>At end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Ved slutten av partituret…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="308"/>
@@ -29982,7 +29983,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="226"/>
         <source>Show</source>
-        <translation type="unfinished"/>
+        <translation>Vis</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="235"/>
@@ -30768,7 +30769,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="163"/>
         <source>Show grid</source>
-        <translation type="unfinished"/>
+        <translation>Vis rutenett</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="114"/>
@@ -34299,7 +34300,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="76"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Følg systemtema</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="91"/>
@@ -34374,7 +34375,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Innstillingar</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/appearancepreferencesmodel.cpp" line="172"/>
@@ -34385,7 +34386,7 @@ failed: %2</source>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/appearancepreferencesmodel.cpp" line="173"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="249"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/braillepreferencesmodel.cpp" line="77"/>
@@ -34473,7 +34474,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="204"/>
         <source>Start with score</source>
-        <translation type="unfinished"/>
+        <translation>Start med partitur</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="248"/>
@@ -34573,7 +34574,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="186"/>
         <source>Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="189"/>
@@ -34724,7 +34725,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="44"/>
         <source>Download score</source>
-        <translation type="unfinished"/>
+        <translation>Last ned partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="59"/>
@@ -34776,7 +34777,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="223"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Sjå video</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
@@ -34848,7 +34849,7 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>Partiturhandlingar</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
@@ -35377,7 +35378,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="81"/>
         <source>Main score</source>
-        <translation type="unfinished"/>
+        <translation>Hovudpartitur</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml" line="31"/>
@@ -35842,7 +35843,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Sjå video</translation>
     </message>
 </context>
 <context>
@@ -35905,7 +35906,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="49"/>
         <source>General score info</source>
-        <translation type="unfinished"/>
+        <translation>Generell partiturinfo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="91"/>
@@ -35959,7 +35960,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>
         <source>Additional score information</source>
-        <translation type="unfinished"/>
+        <translation>Tilleggsinformasjon om partituret</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="48"/>
@@ -36384,7 +36385,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="199"/>
         <source>Share on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Del på Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="203"/>
@@ -36415,7 +36416,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="93"/>
         <source>Save score</source>
-        <translation type="unfinished"/>
+        <translation>Lagre partitur</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="98"/>
@@ -36475,7 +36476,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Klarte ikkje å kople til MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
@@ -36586,7 +36587,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1645"/>
         <source>Your score could not be saved</source>
-        <translation type="unfinished"/>
+        <translation>Klarte ikkje å lagre partituret</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1655"/>
@@ -36899,7 +36900,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="142"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Sjå video</translation>
     </message>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="162"/>
@@ -37285,7 +37286,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="185"/>
         <source>Paste lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Lim inn songtekst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/playcounttext.cpp" line="53"/>
@@ -37320,7 +37321,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/engraving/editing/textedit.cpp" line="925"/>
         <source>Paste text</source>
-        <translation type="unfinished"/>
+        <translation>Lim inn tekst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/qml/MuseScore/Engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
@@ -37708,7 +37709,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5336"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Lim inn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5418"/>
@@ -38452,13 +38453,13 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/appupdatemodel.cpp" line="33"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Oppdaterer MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/appupdatemodel.cpp" line="63"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lastar ned MuseScore Studio %1</translation>
     </message>
 </context>
 <context>

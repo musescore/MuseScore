@@ -187,6 +187,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::ORIENTATION:
                 set(idx, TConv::fromXml(e.readAsciiText(), Orientation::HORIZONTAL));
                 break;
+            case P_TYPE::SHARED_LABEL_ORIENTATION:
+                set(idx, TConv::fromXml(e.readAsciiText(), SharedLabelOrientation::HORIZONTAL));
+                break;
             case P_TYPE::HOOK_TYPE:
                 set(idx, HookType(e.readText().toInt()));
                 break;
@@ -246,6 +249,9 @@ bool MStyle::readProperties(XmlReader& e)
                 break;
             case P_TYPE::INSTRUMENT_NAMES_FORMAT:
                 set(idx, TConv::fromXml(e.readAsciiText(), InstrumentNamesFormat::NAME_IN_TRANSP_NUM));
+                break;
+            case P_TYPE::AUTO_ON_OFF:
+                set(idx, TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -751,6 +757,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.xmlName, int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ORIENTATION == type) {
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<Orientation>()));
+        } else if (P_TYPE::SHARED_LABEL_ORIENTATION == type) {
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<SharedLabelOrientation>()));
         } else if (P_TYPE::ALIGN == type) {
             Align a = value(idx).value<Align>();
             // Don't write if it's the default value
@@ -792,6 +800,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<InstrumentNamesAlign>()));
         } else if (P_TYPE::INSTRUMENT_NAMES_FORMAT == type) {
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<InstrumentNamesFormat>()));
+        } else if (P_TYPE::AUTO_ON_OFF == type) {
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<AutoOnOff>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

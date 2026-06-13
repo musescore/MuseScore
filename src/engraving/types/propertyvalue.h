@@ -75,6 +75,7 @@ enum class P_TYPE : unsigned char {
     DIRECTION_V,
     DIRECTION_H,
     ORIENTATION,
+    SHARED_LABEL_ORIENTATION,
     BEAM_MODE,
     ACCIDENTAL_ROLE,
     TIE_PLACEMENT,
@@ -225,6 +226,9 @@ public:
 
     PropertyValue(Orientation v)
         : m_type(P_TYPE::ORIENTATION), m_data(make_data<Orientation>(v)) {}
+
+    PropertyValue(SharedLabelOrientation v)
+        : m_type(P_TYPE::SHARED_LABEL_ORIENTATION), m_data(make_data<SharedLabelOrientation>(v)) {}
 
     PropertyValue(BeamMode v)
         : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}

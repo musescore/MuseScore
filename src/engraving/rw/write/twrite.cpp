@@ -2591,12 +2591,12 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
 
     writeItemEid(item, xml, ctx);
 
+    writeProperties(item, xml, ctx);
+
     if (SharedPart* sharedPart = item->sharedPart()) {
         DO_ASSERT(sharedPart->eid().isValid());
         xml.tag("sharedPart", sharedPart->eid().toStdString());
     }
-
-    writeProperties(item, xml, ctx);
 
     xml.endElement();
 }

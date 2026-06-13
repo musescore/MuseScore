@@ -109,8 +109,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                             == InstrumentLabelVisibility::LONG;
-    bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
-                           == InstrumentLabelVisibility::LONG;
     if (measure) {
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
         if (const LayoutBreak* layoutBreak = measure->sectionBreakElement()) {
@@ -130,10 +128,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
-
-    Fraction lcmTick = ctx.state().curMeasure()->tick();
-    bool longNames = ctx.mutState().firstSystem() ? ctx.mutState().startWithLongNames() : subsSysLongName;
-    SystemHeaderLayout::setInstrumentNames(system, ctx, longNames, lcmTick);
 
     double curSysWidth = 0.0;
     double leadingHBoxesWidth = 0.0;
@@ -176,7 +170,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             if (m->isFirstInSystem()) {
                 leadingHBoxesWidth = curSysWidth;
-                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+                SystemLayout::layoutSystem(system, ctx, curSysWidth);
                 MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
             } else {
                 bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
@@ -409,7 +403,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     // Relayout system to account for newly hidden/unhidden staves
-    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -800,7 +794,7 @@ void SystemLayout::updateTimeSigAboveStavesXPos(System* system, LayoutContext& c
         }
         Measure* measure = toMeasure(mb);
         for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
 
@@ -903,7 +897,7 @@ void SystemLayout::clearBigTimeSigNotShown(System* system, LayoutContext& ctx)
             continue;
         }
         for (Segment& seg : toMeasure(mb)->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
@@ -1038,7 +1032,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
 
     for (Parenthesis* e : elementsToLayout.parenthesis) {
         Segment* s = toSegment(e->parentItem());
-        if (s->isType(SegmentType::TimeSigType)) {
+        if (s->isType(SegmentType::TimeSigTypes)) {
             EngravingItem* el = s->element(e->track());
             TimeSig* timeSig = el ? toTimeSig(el) : nullptr;
             if (!timeSig) {
@@ -1436,7 +1430,7 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 continue;
             }
 
-            if (s->isType(SegmentType::BarLineType)) {
+            if (s->isType(SegmentType::BarLineTypes)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
                 }
@@ -1641,12 +1635,12 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                     continue;
                 }
                 PointF p(s.pos() + m->pos());
-                if (s.isType(SegmentType::BarLineType)) {
+                if (s.isType(SegmentType::BarLineTypes)) {
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         skyline.add(bl->shape().translated(bl->pos() + p + bl->staffOffset()));
                     }
-                } else if (s.isType(SegmentType::TimeSigType)) {
+                } else if (s.isType(SegmentType::TimeSigTypes)) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
                     if (ts && ts->addToSkyline() && ts->showOnThisStaff()) {
                         TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
@@ -2091,41 +2085,11 @@ void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
     layoutTiesAndBends(elements, ctx);
 }
 
-void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth, const bool isFirstSystem,
-                                bool firstSystemIndent)
+void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth)
 {
-    if (system->staves().empty()) {                 // ignore vbox
-        return;
-    }
-
-    SystemHeaderLayout::computeInstrumentNameOffset(system, ctx);
-    double instrumentNameOffset = system->ldata()->instrumentNameOffset();
+    SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
 
     size_t nstaves = system->staves().size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //---------------------------------------------------
-    SystemHeaderLayout::layoutBrackets(system, ctx);
-    double maxBracketsWidth = SystemHeaderLayout::totalBracketOffset(ctx);
-
-    SystemHeaderLayout::computeInstrumentNamesWidth(system, ctx);
-    double maxNamesWidth = system->ldata()->totalNamesWidth();
-    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
-    if (isFirstSystem && firstSystemIndent) {
-        indent = std::max(indent, system->styleP(Sid::firstSystemIndentationValue) * system->mag() - maxBracketsWidth);
-        maxNamesWidth = indent - instrumentNameOffset;
-    }
-
-    if (muse::RealIsNull(indent)) {
-        if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
-            system->setLeftMargin(0.0);
-        } else {
-            system->setLeftMargin(maxBracketsWidth);
-        }
-    } else {
-        system->setLeftMargin(indent + maxBracketsWidth);
-    }
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s = system->staves().at(staffIdx);
@@ -2604,7 +2568,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
             continue;
         }
         for (Segment& segment : toMeasure(mb)->segments()) {
-            if (!segment.isType(SegmentType::TimeSigType)) {
+            if (!segment.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {

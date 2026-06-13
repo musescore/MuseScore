@@ -384,7 +384,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
     if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > ctx.state().endTick()) {
         for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
-            if (!segment.isType(SegmentType::BarLineType)) {
+            if (!segment.isType(SegmentType::BarLineTypes)) {
                 continue;
             }
             for (EngravingItem* item : segment.elist()) {

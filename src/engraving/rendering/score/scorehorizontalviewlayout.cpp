@@ -280,7 +280,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     }
 
     System* system = ctx.mutDom().systems().front();
-    SystemHeaderLayout::setInstrumentNames(system, ctx, /* longNames */ true);
+    SystemHeaderLayout::setInstrumentNames(system, ctx);
 
     double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleAbsolute(Sid::minMeasureWidth);
     system->setWidth(targetSystemWidth);
@@ -314,7 +314,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 m->mmRest()->resetExplicitParent();
             }
             if (firstMeasureInScore) {
-                SystemLayout::layoutSystem(system, ctx, curSystemWidth, true);
+                SystemLayout::layoutSystem(system, ctx, curSystemWidth);
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -513,7 +513,7 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
 
     Segment* nextSeg = s->nextActive();
     if (!nextSeg) {
-        nextSeg = s->next(SegmentType::BarLineType);
+        nextSeg = s->next(SegmentType::BarLineTypes);
     }
 
     if (nextSeg) {

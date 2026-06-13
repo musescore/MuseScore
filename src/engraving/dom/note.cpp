@@ -4147,6 +4147,12 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
     return true;
 }
 
+staff_idx_t Note::vStaffIdx() const
+{
+    const Chord* c = chord();
+    return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
 void Note::resizeOctaveDotsTo(size_t newSize)
 {
     while (m_octaveDots.size() < newSize) {

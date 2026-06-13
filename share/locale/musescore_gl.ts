@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar o texto á esquerda dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centrar o texto horizontalmente dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar o texto á dereita dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Xustificar o texto para encher o ancho dispoñíbel</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="164"/>
         <source>Left-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar a caixa de texto á esquerda do punto de referencia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="189"/>
         <source>Horizontally center text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Centrar horizontalmente a caixa de texto no punto de referencia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="214"/>
         <source>Right-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar a caixa de texto á dereita do punto de referencia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="262"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Compases por sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Bloquear formato con X compases por sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="34"/>
@@ -78,13 +78,13 @@
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>Engadir bloqueos de sistema a cada sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notationscene/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation type="unfinished"/>
+        <translation>Retirar os bloqueos actuais do sistema</translation>
     </message>
 </context>
 <context>
@@ -92,7 +92,7 @@
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="14"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Personalizar o kit</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="50"/>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="263"/>
         <source>2</source>
-        <translation>branca</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="268"/>
@@ -178,7 +178,7 @@
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="273"/>
         <source>4</source>
-        <translation>negra</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="281"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editpitch.ui" line="122"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editpitch.ui" line="127"/>
@@ -351,12 +351,12 @@
     <message>
         <location filename="../../src/notationscene/widgets/editpitch.ui" line="167"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editpitch.ui" line="172"/>
         <source>»C</source>
-        <translation>»dó</translation>
+        <translation>»Dó</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="95"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Activado</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="100"/>
@@ -395,7 +395,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="114"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>Combinar silencios coincidentes:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="127"/>
@@ -639,7 +639,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="744"/>
         <source>10 - Minor seventh</source>
-        <translation>10 Sétima menor</translation>
+        <translation>10 - Sétima menor</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="749"/>
@@ -699,7 +699,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="906"/>
         <source>Edit string data…</source>
-        <translation>Editar datos das cordas …</translation>
+        <translation>Editar datos da corda…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="913"/>
@@ -805,7 +805,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="445"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo de texto</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="452"/>
@@ -1029,7 +1029,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.ui" line="14"/>
         <source>Default strings tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Afinación predefinida das cordas:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstringdata.ui" line="51"/>
@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="57"/>
         <source>Spacing</source>
-        <translation type="unfinished"/>
+        <translation>Espazado</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="62"/>
@@ -1080,7 +1080,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="67"/>
         <source>Header &amp; footer</source>
-        <translation type="unfinished"/>
+        <translation>Cabeceira  e rodapé</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="72"/>
@@ -1640,12 +1640,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="558"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar automaticamente todos os pentagramas baleiros</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="570"/>
         <source>Don’t hide empty staves in first system</source>
-        <translation>Non agochar os pentagramas baleiros do primeiro sistema</translation>
+        <translation>Non ocultar os pentagramas baleiros do primeiro sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="577"/>
@@ -1660,18 +1660,18 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="594"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Nomes de instrumentos</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="600"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar se só hai 1 instrumento</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="609"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="629"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Nome longo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="619"/>
@@ -4088,12 +4088,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
         <source>Auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar automaticamente</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
         <source>Disable auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>Desactivar a ocultación automática</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
@@ -4282,7 +4282,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="433"/>
         <source>Always hide</source>
-        <translation>Agochar sempre</translation>
+        <translation>Ocultar sempre</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="471"/>
@@ -5411,12 +5411,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="81"/>
         <source>Online &amp;handbook</source>
-        <translation>Manual online</translation>
+        <translation>&amp;Manual na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="82"/>
         <source>Open online handbook</source>
-        <translation>Consultar manual online</translation>
+        <translation>Consultar manual na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="87"/>
@@ -5458,7 +5458,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="49"/>
         <source>Show/hide playback controls</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar controis de reprodución</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="120"/>
@@ -5470,7 +5470,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="121"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="56"/>
         <source>Show/hide note input toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar barra de entrada de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="129"/>
@@ -5482,7 +5482,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>Show/hide palettes</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar paletas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="136"/>
@@ -5494,7 +5494,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="72"/>
         <source>Show/hide layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar panel de deseño</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="143"/>
@@ -5529,7 +5529,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="93"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar historial de desfacer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
@@ -5541,7 +5541,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="102"/>
         <source>Show/hide navigator</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar navegador</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
@@ -5553,7 +5553,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="111"/>
         <source>Show/hide braille panel</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar panel braille</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="184"/>
@@ -5565,7 +5565,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="120"/>
         <source>Show/hide timeline</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar liña de tempo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="191"/>
@@ -5577,7 +5577,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="192"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="127"/>
         <source>Show/hide mixer</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar mesturador</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
@@ -5589,7 +5589,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="200"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="135"/>
         <source>Show/hide piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar teclado do piano</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="206"/>
@@ -5601,7 +5601,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="142"/>
         <source>Show/hide percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar panel de percusión</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="213"/>
@@ -5619,7 +5619,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="222"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="157"/>
         <source>Show/hide status bar</source>
-        <translation type="unfinished"/>
+        <translation>Amosar/ocultar barra de estado</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="229"/>
@@ -5629,7 +5629,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="230"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Preferencias</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="237"/>
@@ -5711,24 +5711,24 @@ followed by dashes</source>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="77"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="160"/>
         <source>Undo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>Desfacer ‘%1’</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="288"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/undoredotoolbarmodel.cpp" line="85"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="166"/>
         <source>Redo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>Refacer ‘%1’</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
         <source>Show &amp;scripts…</source>
-        <translation>Mostrar &amp;scripts...</translation>
+        <translation>Amosar &amp;scripts...</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="38"/>
         <source>Show scripts</source>
-        <translation type="unfinished"/>
+        <translation>Amosar scripts</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
@@ -5738,32 +5738,32 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>Mostrar rut&amp;as...</translation>
+        <translation>Amosar rut&amp;as...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="43"/>
         <source>Show paths</source>
-        <translation type="unfinished"/>
+        <translation>Amosar rutas</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="48"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation type="unfinished"/>
+        <translation>Amosar per&amp;filador</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="49"/>
         <source>Show profiler</source>
-        <translation type="unfinished"/>
+        <translation>Amosar perfilador</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="54"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>Amosar información g&amp;ráfica</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show graphics info</source>
-        <translation type="unfinished"/>
+        <translation>Amosar información gráfica</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="60"/>
@@ -5848,7 +5848,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation type="unfinished"/>
+        <translation>Amosar envorcado da API</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiwindows/internal/multiwindowsuiactions.cpp" line="37"/>
@@ -5873,12 +5873,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation type="unfinished"/>
+        <translation>Usar a vista antiga</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation type="unfinished"/>
+        <translation>Usar a nova vista</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="37"/>
@@ -5888,12 +5888,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Edit workspaces…</source>
-        <translation type="unfinished"/>
+        <translation>Editar espazos de traballo...</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Edit workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Editar espazos de traballo</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="49"/>
@@ -6752,7 +6752,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="596"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Compases por sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="601"/>
@@ -9386,7 +9386,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="61"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Personalizar o kit</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="66"/>
@@ -9570,7 +9570,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="208"/>
         <source>Clear online sounds cache for this score</source>
-        <translation type="unfinished"/>
+        <translation>Limpar a caché de sons na rede para esta partitura</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/playbacktoolbarmodel.cpp" line="117"/>
@@ -9756,7 +9756,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="93"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="88"/>
         <source>MuseSounds</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="94"/>
@@ -9903,7 +9903,9 @@ followed by dashes</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation type="unfinished"/>
+        <translation>Esta acción restablecerá todas as preferencias da aplicación e eliminará todas as paletas e os atallos personalizados. Tamén se borrará a lista de partituras recentes.
+
+Esta acción non eliminará ningunha das túas partituras.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="354"/>
@@ -9983,19 +9985,21 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="214"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>Seguro que queres restablecer as preferencias?</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="215"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Esta acción restablecerá todas as preferencias da aplicación e eliminará todos os atallos personalizados. Non eliminará ningunha das túas partituras.
+
+Esta acción non se pode desfacer.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="225"/>
         <source>Reset preferences</source>
-        <translation type="unfinished"/>
+        <translation>Restablecer preferencias</translation>
     </message>
 </context>
 <context>
@@ -10019,7 +10023,7 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="116"/>
         <source>Visit %1 for new versions and more information.</source>
         <extracomment>%1 will be a link to the MuseScore website</extracomment>
-        <translation type="unfinished"/>
+        <translation>Visita %1 para obter novas versións e máis información.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="119"/>
@@ -10029,7 +10033,7 @@ This action cannot be undone.</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="132"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Para obter información sobre a privacidade, consulta a nosa &lt;a href=&quot;%1&quot;&gt;política de privacidade&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
@@ -10111,22 +10115,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Benvido/a a MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="35"/>
         <source>Let’s get started by choosing a theme.</source>
-        <translation type="unfinished"/>
+        <translation>Comecemos escollendo un tema.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="57"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Seguir o tema do sistema</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="118"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation type="unfinished"/>
+        <translation>Hai máis configuracións de alto contraste dispoñíbeis en Preferencias.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="124"/>
@@ -10147,7 +10151,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Para protexer a súa privacidade, MuseScore Studio non recolle ningunha información persoal. Consulte a nosa &lt;a href=&quot;%1&quot;&gt;Política de privacidade&lt;/a&gt; para obter máis información.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="103"/>
@@ -10279,7 +10283,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
         <source>&amp;Audio</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Son</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="574"/>
@@ -10312,7 +10316,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="209"/>
         <source>Pu&amp;blish online</source>
-        <translation type="unfinished"/>
+        <translation>Pu&amp;blicar na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="222"/>
@@ -10423,7 +10427,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="34"/>
         <source>Welcome</source>
-        <translation type="unfinished"/>
+        <translation>Benvido/a</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="122"/>
@@ -10438,7 +10442,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="263"/>
         <source>Don’t show welcome dialog on startup</source>
-        <translation type="unfinished"/>
+        <translation>Non amosar o diálogo de benvida ao iniciar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="42"/>
@@ -10448,12 +10452,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Garda as túas partituras de forma privada en MuseScore.com para revisitar versións anteriores e convidar a outras persoas a velas e comentalas. Cando esteas listo, comparte a túa música co mundo.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="46"/>
         <source>View my scores online</source>
-        <translation type="unfinished"/>
+        <translation>Ver as miñas partituras na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
@@ -10473,7 +10477,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="51"/>
         <source>Install our free MuseSounds libraries</source>
-        <translation type="unfinished"/>
+        <translation>Instala as nosas bibliotecas gratuítas de MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="53"/>
@@ -10515,7 +10519,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="52"/>
         <source>Do you want to add SoundFont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Queres engadir a fonte de son %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="72"/>
@@ -10537,7 +10541,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="90"/>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="100"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
-        <translation type="unfinished"/>
+        <translation>Podes asignar fontes de son a instrumentos usando o panel do mesturador.</translation>
     </message>
     <message>
         <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="123"/>
@@ -10660,7 +10664,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="39"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished"/>
+        <translation>Isto creará un ficheiro .zip con información sobre a configuración de MuseScore Studio para axudar aos desenvolvedores a diagnosticar calquera problema que esteas a ter. Podes inspeccionar o contido deste ficheiro antes de enviárllo a alguén.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="53"/>
@@ -15389,12 +15393,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1415"/>
         <source>rfz (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>rfz (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
         <source>rf (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>rf (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1419"/>
@@ -15409,7 +15413,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1423"/>
         <source>r (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>r (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1425"/>
@@ -20737,7 +20741,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialog.qml" line="52"/>
         <source>Hide details</source>
-        <translation>Agochar detalles</translation>
+        <translation>Ocultar detalles</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialog.qml" line="52"/>
@@ -20753,7 +20757,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="93"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="98"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Información</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/Dialogs/StandardDialogPanel.qml" line="94"/>
@@ -20790,7 +20794,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="91"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="134"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Activado</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -21155,7 +21159,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="211"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Esta configuración pódese cambiar en calquera momento en Preferencias</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="129"/>
@@ -21206,7 +21210,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation type="unfinished"/>
+        <translation>Podes cambiar esta configuración en Preferencias en calquera momento.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
@@ -22634,7 +22638,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="142"/>
         <source>Processing online sounds…</source>
-        <translation type="unfinished"/>
+        <translation>Procesando sons na rede...</translation>
     </message>
 </context>
 <context>
@@ -23242,7 +23246,7 @@ as anacruses</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="202"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="205"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Activado</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="199"/>
@@ -23259,7 +23263,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="68"/>
         <source>Hide empty staves</source>
-        <translation>Agochar os pentagramas baleiros</translation>
+        <translation>Ocultar os pentagramas baleiros</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="87"/>
@@ -24026,7 +24030,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml" line="58"/>
         <source>Chords</source>
-        <translation type="unfinished"/>
+        <translation>Acordes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="55"/>
@@ -24763,7 +24767,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="77"/>
         <source>Hide notehead</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar cabeceira da nota</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="88"/>
@@ -25045,7 +25049,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar claves de cortesía e sinaturas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -25289,7 +25293,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="54"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar automaticamente todos os pentagramas baleiros</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="81"/>
@@ -25364,17 +25368,17 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="227"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar o texto á esquerda dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="233"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Centrar o texto horizontalmente dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="239"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Aliñar o texto á dereita dentro do seu cadro delimitador</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="244"/>
@@ -25386,7 +25390,7 @@ as anacruses</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="245"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="296"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Xustificar o texto para encher o ancho dispoñíbel</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="353"/>
@@ -25469,7 +25473,7 @@ as anacruses</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="447"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="54"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo de texto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="234"/>
@@ -25704,7 +25708,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="34"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Nomes de instrumentos</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -26569,7 +26573,7 @@ as anacruses</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="176"/>
         <source>Only hide staves on a system if the entire instrument is empty</source>
-        <translation type="unfinished"/>
+        <translation>Só ocultar os pentagramas nun sistema se todo o instrumento está baleiro</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="197"/>
@@ -26602,13 +26606,13 @@ as anacruses</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="182"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Esconder todos os compases que non teñan notación (corte)</translation>
+        <translation>Ocultar todos os compases que non teñan notación (corte)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="200"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="224"/>
         <source>Hide empty staves</source>
-        <translation>Agochar os pentagramas baleiros</translation>
+        <translation>Ocultar os pentagramas baleiros</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="212"/>
@@ -26618,12 +26622,12 @@ as anacruses</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="213"/>
         <source>Always hide</source>
-        <translation>Agochar sempre</translation>
+        <translation>Ocultar sempre</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="214"/>
         <source>Never hide</source>
-        <translation>Non agochar nunca</translation>
+        <translation>Non ocultar nunca</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="240"/>
@@ -26705,7 +26709,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation type="unfinished"/>
+        <translation>Benvido/a a Mastering MuseScore, o recurso máis completo para aprender o software de notación musical máis popular do mundo. Chámome Marc Sabatella e levo axudando a desenvolver, apoiar e promover MuseScore dende o seu lanzamento inicial hai máis de dez anos.
+
+Tanto se estás a comezar co software de notación musical como se es un usuario avanzado con ganas de explorar técnicas avanzadas de gravado e reprodución, o meu curso na rede insignia, Mastering MuseScore, abrangue todo o que necesitas saber para sacarlle o máximo proveito a MuseScore.
+
+Ademais, Mastering MuseScore conta cunha comunidade de músicos que apoia o teu traballo, con espazos de debate, transmisións en directo e outros cursos e servizos relacionados para axudarche a crear a túa mellor música. Aproveita esta oportunidade para aprender MuseScore dun dos seus expertos máis recoñecidos!
+
+(Nota: Mastering MuseScore só está dispoñíbel en inglés)</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/learnpagemodel.cpp" line="97"/>
@@ -26909,7 +26919,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="98"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>Activado</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="100"/>
@@ -27294,7 +27304,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="126"/>
         <source>Chords</source>
-        <translation type="unfinished"/>
+        <translation>Acordes</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="168"/>
@@ -28089,7 +28099,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="159"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation type="unfinished"/>
+        <translation>Esta partitura xa ten partituras parciais. Aínda non se permite cambiar os compases locais mentres hai partituras.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="163"/>
@@ -29929,7 +29939,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="82"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="337"/>
         <source>Text style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo de texto</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="119"/>
@@ -30201,7 +30211,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/PercussionPanelToolBar.qml" line="255"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Personalizar o kit</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanel.qml" line="421"/>
@@ -30548,7 +30558,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="66"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Personalizar o kit</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="67"/>
@@ -33290,24 +33300,24 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="596"/>
         <source>This sound processes online</source>
-        <translation type="unfinished"/>
+        <translation>Este son procésase na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="597"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>O son procésase en segundo plano mentres traballas. Para activar ti mesmo o procesamento, desactiva o procesamento automático en Preferencias &gt; Son e MIDI &gt; Sons na rede.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="611"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="111"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="121"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="612"/>
         <source>Click to manually process online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>Premer para procesar manualmente os sons na rede.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
@@ -33410,17 +33420,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="109"/>
         <source>Processing online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Procesando sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="114"/>
         <source>Process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Procesar sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="117"/>
         <source>Online sounds processed</source>
-        <translation type="unfinished"/>
+        <translation>Sons na rede procesados</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/PlaybackToolBar.qml" line="40"/>
@@ -33475,34 +33485,34 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="180"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Isto pode deberse a unha mala conexión a internet ou a un problema co servidor. A túa partitura seguirá reproducíndose, pero pode que falten algúns sons. Comproba a túa conexión e asegúrate de que MuseHub estea en funcionamento e de que iniciaches sesión. &lt;a href=&quot;%1&quot;&gt;Obtén máis información aquí&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="186"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="117"/>
         <source>Some online sounds aren’t ready yet</source>
-        <translation type="unfinished"/>
+        <translation>Algúns sons na rede aínda non están listos</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="220"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Alcanzaches o teu límite de renderización actual para %1. Poderás procesar sons na rede de novo despois de que a túa cota se restableza o %2. Máis información: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="227"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="119"/>
         <source>Unable to process online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel procesar os sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="244"/>
         <source>Are you sure you want to clear online sounds cache?</source>
-        <translation type="unfinished"/>
+        <translation>Seguro que queres limpar a caché de sons na rede?</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="245"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
-        <translation type="unfinished"/>
+        <translation>Isto eliminará os datos de sons na rede almacenados no teu ordenador para esta partitura. O procesamento de sons en liña tentará reiniciarse inmediatamente.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
@@ -33523,7 +33533,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1087"/>
         <source>Chords</source>
-        <translation type="unfinished"/>
+        <translation>Acordes</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1414"/>
@@ -33533,7 +33543,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="117"/>
         <source>Get more sounds</source>
-        <translation type="unfinished"/>
+        <translation>Obtén máis sons</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="393"/>
@@ -33609,7 +33619,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation type="unfinished"/>
+        <translation>Alcanzaches o teu límite de renderización actual para %1. Poderás procesar sons na rede de novo despois de que a túa cota se restableza en %2.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="132"/>
@@ -33654,12 +33664,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="161"/>
         <source>Change sounds</source>
-        <translation type="unfinished"/>
+        <translation>Cambiar os sons</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="164"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation type="unfinished"/>
+        <translation>Seguro que queres cambiar os sons?</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="165"/>
@@ -33739,7 +33749,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>A comprobación de actualizacións require acceso á rede. Para protexer a súa privacidade, MuseScore Studio non almacena ningunha información persoal. Consulte a nosa &lt;a href=&quot;%1&quot;&gt;política de privacidade&lt;/a&gt; para obter máis información.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -33989,7 +33999,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="75"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation type="unfinished"/>
+        <translation>Aplicar o tipo de letra predefinido (Edwin) ás partituras importadas</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="90"/>
@@ -34160,22 +34170,22 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="30"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="52"/>
         <source>Show error dialog when online sounds cannot be processed</source>
-        <translation type="unfinished"/>
+        <translation>Amosar o diálogo de erro cando non se poidan procesar os sons na rede</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="68"/>
         <source>Automatically process online sounds in the background</source>
-        <translation type="unfinished"/>
+        <translation>Procesar automaticamente os sons na rede en segundo plano</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="102"/>
         <source>To process online sounds, press ‘Process online sounds’ in the status bar at the bottom of the app window</source>
-        <translation type="unfinished"/>
+        <translation>Para procesar sons na rede, preme &quot;Procesar sons na rede&quot; na barra de estado, na parte inferior da xanela da aplicación.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="113"/>
@@ -34220,7 +34230,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
-        <translation type="unfinished"/>
+        <translation>Restablecer preferencias</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ProgramStartSection.qml" line="31"/>
@@ -34260,7 +34270,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/SaveToCloudSection.qml" line="41"/>
         <source>Generate MP3 audio for private cloud scores</source>
-        <translation type="unfinished"/>
+        <translation>Xerar son MP3 para partituras na nube privada</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ScrollPagesSection.qml" line="32"/>
@@ -34300,7 +34310,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="76"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Seguir o tema do sistema</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="91"/>
@@ -34345,12 +34355,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/WelcomeDialogSection.qml" line="32"/>
         <source>Welcome screen</source>
-        <translation type="unfinished"/>
+        <translation>Pantalla de benvida</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/WelcomeDialogSection.qml" line="43"/>
         <source>Show welcome screen when MuseScore Studio launches</source>
-        <translation type="unfinished"/>
+        <translation>Amosar a pantalla de benvida ao iniciar MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -34375,7 +34385,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Preferencias</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/appearancepreferencesmodel.cpp" line="172"/>
@@ -34630,12 +34640,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="129"/>
         <source>You don’t have any online scores yet</source>
-        <translation type="unfinished"/>
+        <translation>Aínda non tes ningunha partitura na rede</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>As partituras aparecerán aquí cando gardes un ficheiro na nube ou publiques unha partitura en &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="154"/>
@@ -34645,22 +34655,22 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
         <source>Log in or create a new account on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; to view online scores.</source>
-        <translation type="unfinished"/>
+        <translation>Acceder ou crea unha nova conta en &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt; para ver as partituras na rede.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="218"/>
         <source>Unable to load online scores</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel cargar as partituras na rede</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresGridView.qml" line="32"/>
         <source>Online scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Grade de partituras na rede</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="35"/>
         <source>Online scores list</source>
-        <translation type="unfinished"/>
+        <translation>Lista de partituras na rede</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="171"/>
@@ -34730,12 +34740,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="59"/>
         <source>Recent scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Grade de partituras recentes</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="90"/>
         <source>Recent scores list</source>
-        <translation type="unfinished"/>
+        <translation>Lista de partituras recentes</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
@@ -34757,7 +34767,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Publica as túas partituras rematadas en MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
@@ -34782,17 +34792,17 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
         <source>View score online</source>
-        <translation>Ver partitura online</translation>
+        <translation>Ver partitura na rede</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="85"/>
         <source>Scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Grade de partituras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation type="unfinished"/>
+        <translation>Lista de partituras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="150"/>
@@ -34808,12 +34818,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
         <source>Search recent scores</source>
-        <translation type="unfinished"/>
+        <translation>Buscar partituras recentes</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>
         <source>Scores tab bar</source>
-        <translation type="unfinished"/>
+        <translation>Barra da lapela partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
@@ -34823,7 +34833,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="162"/>
         <source>My online scores</source>
-        <translation type="unfinished"/>
+        <translation>As miñas partituras en rede</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
@@ -34849,12 +34859,12 @@ failed: %2</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>Accións das partituras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
         <source>Score manager (online)</source>
-        <translation>Xestor de partituras (online)</translation>
+        <translation>Xestor de partituras (na rede)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
@@ -35764,7 +35774,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation type="unfinished"/>
+        <translation>Para exportar a este formato de ficheiro, requírese unha instalación de FFmpeg. Tamén podes configuralo en Preferencias &gt; Vídeo.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -35906,7 +35916,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="49"/>
         <source>General score info</source>
-        <translation type="unfinished"/>
+        <translation>Información xeral da partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="91"/>
@@ -35960,7 +35970,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>
         <source>Additional score information</source>
-        <translation type="unfinished"/>
+        <translation>Información adicional da partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="48"/>
@@ -36301,7 +36311,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation type="unfinished"/>
+        <translation>Isto pode levar uns minutos cada vez que gardes, dependendo do tamaño da túa partitura. Esta configuración sempre se pode cambiar en Preferencias.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
@@ -36368,12 +36378,12 @@ failed: %2</source>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="189"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>Substituír a &lt;a href=&quot;%1&quot;&gt;partitura na rede&lt;/a&gt; existente</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="192"/>
         <source>Publish as new online score</source>
-        <translation type="unfinished"/>
+        <translation>Publicar como nova partitura na rede</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="195"/>
@@ -36451,7 +36461,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="357"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="390"/>
         <source>Publish changes online?</source>
-        <translation>Publicar alteracións online?</translation>
+        <translation>Publicar alteracións na rede?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="358"/>
@@ -36461,7 +36471,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="360"/>
         <source>Publish this score online?</source>
-        <translation>Publicar esta partitura online?</translation>
+        <translation>Publicar esta partitura na rede?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="361"/>
@@ -36524,12 +36534,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="568"/>
         <source>There are conflicting changes in the online score</source>
-        <translation type="unfinished"/>
+        <translation>Hai cambios contraditorios na partitura na rede</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="570"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Podes substituír a partitura na rede ou publicala como unha nova partitura para evitar perder os cambios na versión na rede actual.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="576"/>
@@ -36545,7 +36555,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="581"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Podes substituír a partitura na rede ou gardala como un novo ficheiro para evitar perder os cambios na versión na rede actual.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="587"/>
@@ -36562,7 +36572,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1393"/>
         <source>View online</source>
-        <translation>Ver online</translation>
+        <translation>Ver na rede</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1396"/>
@@ -37845,7 +37855,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5994"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Medidas por sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6001"/>

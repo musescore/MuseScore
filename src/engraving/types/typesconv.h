@@ -66,6 +66,10 @@ public:
     static AsciiStringView toXml(Orientation v);
     static Orientation fromXml(const AsciiStringView& tag, Orientation def);
 
+    static String translatedUserName(SharedLabelOrientation v);
+    static AsciiStringView toXml(SharedLabelOrientation v);
+    static SharedLabelOrientation fromXml(const AsciiStringView& tag, SharedLabelOrientation def);
+
     static String translatedUserName(NoteHeadType v);
     static AsciiStringView toXml(NoteHeadType v);
     static NoteHeadType fromXml(const AsciiStringView& tag, NoteHeadType def);

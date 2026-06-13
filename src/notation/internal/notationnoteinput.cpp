@@ -113,6 +113,10 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
         return;
     }
 
+    if (Part* part = el->part(); part && part->isSharedPart()) {
+        return;
+    }
+
     m_interaction->select({ el }, SelectType::SINGLE, 0);
 
     mu::engraving::InputState& is = score()->inputState();

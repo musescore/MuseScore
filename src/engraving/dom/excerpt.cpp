@@ -1546,8 +1546,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     EngravingItem* linkedElement = e->findLinkedInScore(score);
                     Segment* linkedParent = linkedElement ? toSegment(linkedElement->parent()) : nullptr;
                     bool alreadyCloned = linkedParent && (linkedParent == ns
-                                                          || (linkedParent->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
-                                                              && ns->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
+                                                          || (linkedParent->isType(SegmentType::Duration)
+                                                              && ns->isType(SegmentType::Duration)
                                                               && linkedParent->tick() == ns->tick()));
                     bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 

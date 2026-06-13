@@ -81,6 +81,15 @@ enum class Sid : short {
     instrumentNamesAlignShort,
     instrumentNamesStackVertically,
     instrumentNamesAlignIncludeGroupBrackets,
+
+    instrumentNumeralsTrailingDotSingle,
+    instrumentNumeralsTrailingDotMultiple,
+    instrumentNumeralsOrientation,
+    instrumentNumeralsVerticalThreshold,
+    instrumentNumeralsHorizontalThreshold,
+    instrumentNumeralsHyphenEnable,
+    instrumentNumeralsHyphenThreshold,
+
     windsNameByGroup,
     vocalsNameByGroup,
     stringsNameByGroup,

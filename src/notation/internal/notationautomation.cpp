@@ -35,7 +35,7 @@ static const Segment* segmentForCanvasX(const System* system, double canvasX)
     IF_ASSERT_FAILED(system) {
         return nullptr;
     }
-    const mu::engraving::SegmentType type = Segment::CHORD_REST_OR_TIME_TICK_TYPE;
+    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration;
     const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
     while (seg && seg->system() == system) {
         if (canvasX >= seg->canvasX() && canvasX <= seg->canvasX() + seg->width()) {

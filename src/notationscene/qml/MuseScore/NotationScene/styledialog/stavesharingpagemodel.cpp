@@ -21,11 +21,33 @@
  */
 #include "stavesharingpagemodel.h"
 
-using namespace mu::notation;
 using namespace mu::engraving;
 
+namespace mu::notation {
 StaveSharingPageModel::StaveSharingPageModel(QObject* parent)
-    : AbstractStyleDialogModel(parent, {
-})
+    : AbstractStyleDialogModel(parent, { StyleId::enableStaveSharing,
+                                         StyleId::allowVoiceCrossing,
+                               })
 {
+}
+
+bool StaveSharingPageModel::isStaveSharingEnabled() const
+{
+    bool val = styleItem(StyleId::enableStaveSharing)->value().toBool();
+    return val;
+}
+
+void StaveSharingPageModel::setIsStaveSharingEnabled(bool v)
+{
+    styleItem(StyleId::enableStaveSharing)->setValue(v);
+
+    context.get()->currentNotation()->parts()->toggleStaveSharing(v);
+
+    emit isStaveSharingEnabledChanged(v);
+}
+
+StyleItem* StaveSharingPageModel::allowVoiceCrossing() const
+{
+    return styleItem(StyleId::allowVoiceCrossing);
+}
 }

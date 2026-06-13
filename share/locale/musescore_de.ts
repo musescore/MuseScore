@@ -25570,7 +25570,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/playback/internal/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Atemzeichen, Zäsuren &amp; Fermaten</translation>
+        <translation>Fermaten, Atemzeichen &amp; Zäsuren</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/playback/internal/fermataplaybackmodel.cpp" line="34"/>
@@ -29041,7 +29041,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1409"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation>MuseScore Studio Version, mit der diese Partitur zuletzt abgespeichert wurde</translation>
+        <translation>MuseScore Studio Revision, mit der diese Partitur zuletzt abgespeichert wurde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1411"/>
@@ -31018,7 +31018,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="952"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Atemzeichen, Zäsuren &amp; Fermaten</translation>
+        <translation>Fermaten, Atemzeichen &amp; Zäsuren</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="999"/>

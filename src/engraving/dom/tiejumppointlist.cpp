@@ -124,8 +124,8 @@ String TieJumpPoint::precedingJumpItemName() const
         return muse::mtrc("engraving", "start repeat", "partial tie menu");
     }
 
-    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
-         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
+    for (Segment* prevSeg = seg->prev(SegmentType::BarLineTypes); prevSeg && prevSeg->tick() == seg->tick();
+         prevSeg = prevSeg->prev(SegmentType::BarLineTypes)) {
         EngravingItem* el = prevSeg->element(startChord->track());
         if (!el || !el->isBarLine()) {
             continue;

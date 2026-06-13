@@ -67,7 +67,7 @@ public:
     static System* collectSystem(LayoutContext& ctx);
     static void layoutSystemElements(System* system, LayoutContext& ctx);
 
-    static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
+    static void layoutSystem(System* system, LayoutContext& ctx, double xo1);
 
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
     static bool canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx);

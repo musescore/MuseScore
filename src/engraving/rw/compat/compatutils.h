@@ -76,5 +76,6 @@ private:
     static NoteLine* createNoteLineFromTextLine(TextLine* textLine);
     static void convertTextLineToNoteAnchoredLine(MasterScore* masterScore);
     static void convertLaissezVibArticToTie(MasterScore* masterScore);
+    static void removeMMRestElements(MasterScore* masterScore);
 };
 }

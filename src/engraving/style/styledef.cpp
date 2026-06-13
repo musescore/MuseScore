@@ -70,6 +70,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(instrumentNamesAlignShort,                  InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesStackVertically,             false),
     styleDef(instrumentNamesAlignIncludeGroupBrackets,   true),
+
+    styleDef(instrumentNumeralsTrailingDotSingle,            false),
+    styleDef(instrumentNumeralsTrailingDotMultiple,          false),
+    styleDef(instrumentNumeralsOrientation,                  SharedLabelOrientation::HORIZONTAL),
+    styleDef(instrumentNumeralsVerticalThreshold,            2),
+    styleDef(instrumentNumeralsHorizontalThreshold,          2),
+    styleDef(instrumentNumeralsHyphenEnable,                 true),
+    styleDef(instrumentNumeralsHyphenThreshold,              1),
+
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),
     styleDef(stringsNameByGroup,                         false),

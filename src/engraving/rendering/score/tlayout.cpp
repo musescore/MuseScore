@@ -1560,9 +1560,10 @@ void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const 
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
-        return;
-    }
+    // TODO review with all other instances of this
+    // if (ldata->isValid()) {
+    // return;
+    // }
 
     const double voiceOffset = item->placeBelow() ? item->staff()->staffHeight(item->tick()) : 0.0;
     if (item->isCaesura()) {
@@ -3230,7 +3231,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
             endX = endChord->systemPos().x();
         } else {
             // The last endChord of this segment is in next system. Use end barline instead.
-            Segment* endSeg = system->lastMeasure()->last(SegmentType::BarLineType);
+            Segment* endSeg = system->lastMeasure()->last(SegmentType::BarLineTypes);
             endX = endSeg ? endSeg->systemPos().x() : endX;
         }
         if (startChord->stem() && endChord->stem() && startChord->up() == above && endChord->up() == above) {
@@ -3610,7 +3611,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         // AND we're not force hiding naturals (continuous mode)
         // AND key sig is CMaj/Amin OR style says they are on
         const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
-        const bool isCourtesy = s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero());
+        const bool isCourtesy = s && (s->isType(SegmentType::CourtesyKeySigTypes) || !s->rtick().isZero());
         const bool prevTrailerCourtesy = pm && !pm->sectionBreak() && (!pm->trailer() || !pm->hasCourtesyKeySig());
         if (!item->hideNaturals() && track != muse::nidx
             && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
@@ -4564,7 +4565,7 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
     // align with barline, point just after header, or start of measure depending on context
     const Measure* m = s->measure();
     const Segment* header = s->prev();                // possibly just a start repeat
-    while (header && header->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    while (header && header->isType(SegmentType::Duration)) {
         header = header->prev();
     }
     double measureX = -s->x();
@@ -4616,7 +4617,7 @@ void TLayout::checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, TextBase
     const Segment* s = item->segment();
     TimeSig* bigTimeSig = nullptr;
     for (const Segment* segment = s; segment && segment->tick() == s->tick(); segment = segment->prevActive()) {
-        if (!segment->isType(SegmentType::TimeSigType)) {
+        if (!segment->isType(SegmentType::TimeSigTypes)) {
             continue;
         }
         TimeSig* timeSig = toTimeSig(segment->element(item->track()));

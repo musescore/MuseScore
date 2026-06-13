@@ -149,6 +149,7 @@ public:
     // Const access
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<Part*> visibleParts() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;
@@ -205,6 +206,7 @@ public:
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
     void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents = true);
 
     void addUnmanagedSpanner(Spanner* s);
     const std::set<Spanner*>& unmanagedSpanners() const;

@@ -3977,17 +3977,13 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
                 break;
             default: {
                 // find measure
-                Measure* measure = toMeasure(el->findMeasure());
+                mb = toMeasure(el->findMeasure());
                 // for start repeat, attach break to previous measure
-                if (measure && el->isBarLine()) {
+                if (mb && el->isBarLine()) {
                     BarLine* bl = toBarLine(el);
                     if (bl->barLineType() == BarLineType::START_REPEAT) {
-                        measure = measure->prevMeasure();
+                        mb = mb->prevMeasure();
                     }
-                }
-                // if measure is mmrest, then propagate to last original measure
-                if (measure) {
-                    mb = measure->isMMRest() ? measure->mmRestLast() : measure;
                 }
 
                 if (mb) {

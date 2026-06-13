@@ -139,7 +139,7 @@
         <source>Flute in G, sounding a fifth higher than the standard flute.</source>
         <comment>treble-flute description</comment>
         <extracomment>description for Treble Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Frauta en sol, que soa unha quinta máis alta que a frauta estándar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="252"/>
@@ -195,7 +195,7 @@
         <source>Flute in E♭, sounding a minor third above the standard flute.</source>
         <comment>soprano-flute description</comment>
         <extracomment>description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Frauta en Mi♭, que soa unha terceira menor por riba da frauta estándar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="270"/>
@@ -804,7 +804,7 @@
         <source>D</source>
         <comment>d-tin-whistle traitName</comment>
         <extracomment>traitName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
@@ -1161,7 +1161,7 @@
         <source>Recorder pitched in F (an octave below the alto).</source>
         <comment>bass-recorder description</comment>
         <extracomment>description for Bass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Frauta doce afinada en Fa (unha oitava por debaixo do alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="578"/>
@@ -1189,7 +1189,7 @@
         <source>Recorder pitched in C (an octave below the tenor).</source>
         <comment>greatbass-recorder description</comment>
         <extracomment>description for Greatbass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Frauta doce afinada en Do (unha oitava por debaixo do tenor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="587"/>
@@ -1217,7 +1217,7 @@
         <source>Recorder pitched in F (an octave below the bass).</source>
         <comment>contrabass-recorder description</comment>
         <extracomment>description for Contrabass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Frauta doce afinada en Fa (unha oitava por debaixo do baixo).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="596"/>

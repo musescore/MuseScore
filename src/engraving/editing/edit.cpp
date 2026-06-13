@@ -3856,7 +3856,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         if (!s->isChordRestType()) {
             // do not delete TimeSig/KeySig, it doesn't make sense to do it (except on full system)
             if (!s->isTimeTickType() && !s->isTimeSigType() && !s->isKeySigType()
-                && !s->isType(SegmentType::BarLineType) /*covers all barLine types*/) {
+                && !s->isType(SegmentType::BarLineTypes) /*covers all barLine types*/) {
                 undoRemoveElement(e);
             }
             continue;
@@ -4427,7 +4427,7 @@ void Score::addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2)
         }
         const Segment* startSegment = cr2 ? cr2->segment() : cr1->segment();
         for (const Segment* segment = startSegment; segment && segment->tick() < endTick;
-             segment = segment->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+             segment = segment->next1(SegmentType::Duration)) {
             if (segment == startSegment) {
                 continue;
             }
@@ -4468,7 +4468,7 @@ void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
     Fraction endTick = startChord ? startChord->endTickIncludingTied() : dynamic->segment()->measure()->endTick();
 
     for (Segment* segment = dynamicSegment; segment && segment->tick() < endTick;
-         segment = segment->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+         segment = segment->next1(SegmentType::Duration)) {
         if (segment == dynamicSegment) {
             continue;
         }
@@ -4749,9 +4749,27 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
 {
     const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
-
     if (!isFrame) {
         return nullptr;
+    }
+
+    return this->insertBox(toMeasureBase(Factory::createItem(type, dummy())), beforeMeasure, options);
+}
+
+MeasureBase* Score::insertBox(MeasureBase* box, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
+{
+    IF_ASSERT_FAILED(box) {
+        return nullptr;
+    }
+
+    ElementType type = box->type();
+    const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
+    if (!isFrame) {
+        return nullptr;
+    }
+
+    if (box->score() != this) {
+        box->setScore(this);
     }
 
     Fraction tick;
@@ -4777,27 +4795,26 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, dummy()));
-    newMeasureBase->setTick(tick);
-    newMeasureBase->setNext(beforeMeasure);
-    newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
-    newMeasureBase->setSizeIsSpatiumDependent(!isTitleFrame);
+    box->setTick(tick);
+    box->setNext(beforeMeasure);
+    box->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
+    box->setSizeIsSpatiumDependent(!isTitleFrame);
 
     if (type == ElementType::FBOX) {
-        toFBox(newMeasureBase)->init();
+        toFBox(box)->init();
     }
 
-    undo(new InsertMeasures(newMeasureBase, newMeasureBase));
+    undo(new InsertMeasures(box, box));
 
     if (options.needDeselectAll) {
         deselectAll();
     }
 
     if (options.cloneBoxToAllParts) {
-        newMeasureBase->manageExclusionFromParts(/*exclude =*/ false);
+        box->manageExclusionFromParts(/*exclude =*/ false);
     }
 
-    return newMeasureBase;
+    return box;
 }
 
 void Score::restoreInitialKeySigAndTimeSig()
@@ -5295,7 +5312,7 @@ void Score::undoChangePageNumberOffset(int po)
     undo(new ChangePageNumberOffset(this, po));
 }
 
-void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staffIdx)
+void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staffIdx, bool changeLinksParents)
 {
     if (!element || !parent) {
         return;
@@ -5318,7 +5335,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
             linkedDest = linkedScore->staff(0);
         }
 
-        if (!linkedScore) {
+        if (!linkedScore || (!changeLinksParents && item != element)) {
             continue;
         }
         if (item == element) {
@@ -5333,7 +5350,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
                 Measure* oldMeas = oldSeg->measure();
                 Measure* newMeas = linkedScore->tick2measure(oldMeas->tick());
                 linkedParent = newMeas->tick2segment(oldSeg->tick(), oldSeg->segmentType());
-                if (!linkedParent && oldSeg->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+                if (!linkedParent && oldSeg->isType(SegmentType::Duration)) {
                     // A ChordRest segment that exists in the score may not exist in the part.
                     // In that case we create a TimeTick segment as new parent for the linked item.
                     linkedParent = newMeas->getSegment(SegmentType::TimeTick, oldSeg->tick());
@@ -5412,7 +5429,7 @@ void Score::undoUpdatePlayCountText(Measure* m)
     const int playCount = m->repeatCount();
     const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true) && m->repeatEnd();
 
-    Segment* endBarSeg = m->last(SegmentType::BarLineType);
+    Segment* endBarSeg = m->last(SegmentType::BarLineTypes);
     BarLine* topBl = endBarSeg ? toBarLine(endBarSeg->element(0)) : nullptr;
     if (!topBl) {
         return;

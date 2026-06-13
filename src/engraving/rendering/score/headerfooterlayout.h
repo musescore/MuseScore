@@ -65,5 +65,8 @@ private:
                                       const CharFormat& macroFormat);
 
     static bool containsTimestampMacros(const String& text);
+
+    static bool mustShowHeadersForPage(const LayoutContext& ctx, const Page* page);
+    static bool mustShowFootersForPage(const LayoutContext& ctx, const Page* page);
 };
 }

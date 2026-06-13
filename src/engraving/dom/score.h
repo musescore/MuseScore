@@ -512,7 +512,7 @@ public:
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values);
     void undoChangePageNumberOffset(int po);
-    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff, bool changeLinksParents = true);
     void undoResetPlayCountTextSettings(BarLine* bl);
     void undoUpdatePlayCountText(Measure* m);
     void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace = false);
@@ -620,6 +620,7 @@ public:
 
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<Part*> visibleParts() const;
     std::vector<SharedPart*> sharedParts() const;
     bool hasSharedParts() const;
 
@@ -937,6 +938,8 @@ public:
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
                                const InsertMeasureOptions& options = InsertMeasureOptions());
     MeasureBase* insertBox(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                           const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertBox(MeasureBase* box, MeasureBase* beforeMeasure = nullptr,
                            const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return m_audio; }

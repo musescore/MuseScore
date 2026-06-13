@@ -47,7 +47,7 @@ PropertiesPanelSection {
         Repeater {
             model: root.model ? root.model.models : []
 
-            delegate: PopupViewButton {
+            delegate: PropertiesPanelPopupButton {
                 id: button
 
                 required property PropertiesPanelAbstractModel modelData

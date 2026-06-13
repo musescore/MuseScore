@@ -160,6 +160,14 @@ size_t DomAccessor::visiblePartCount() const
     return score()->visiblePartCount();
 }
 
+std::vector<Part*> DomAccessor::visibleParts() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return {};
+    }
+    return score()->visibleParts();
+}
+
 size_t DomAccessor::npages() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -477,6 +485,14 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
         return;
     }
     EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
+}
+
+void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->undoChangeParent(element, parent, staff, changeLinksParents);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

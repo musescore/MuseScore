@@ -1496,7 +1496,7 @@ void Score::addElement(EngravingItem* element)
     }
 
     if (element->isTextBase() && toTextBase(element)->hasParentSegment()
-        && toSegment(element->parent())->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        && toSegment(element->parent())->isType(SegmentType::Duration)) {
         MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(element);
     }
 
@@ -3460,12 +3460,12 @@ void Score::selectAdd(EngravingItem* e)
 static Segment* findElementStartSegment(Score* score, EngravingItem* e)
 {
     if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
-        if (ancestor->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        if (ancestor->isType(SegmentType::Duration)) {
             return ancestor;
         }
     }
 
-    return score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    return score->tick2segmentMM(e->tick(), true, SegmentType::Duration);
 }
 
 /// Returns `nullptr` when the end segment is the end of the score;
@@ -3490,16 +3490,16 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
 
     if (e->isSpanner() || e->isSpannerSegment()) {
         Spanner* sp = e->isSpanner() ? toSpanner(e) : toSpannerSegment(e)->spanner();
-        return score->tick2segmentMM(sp->tick2(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        return score->tick2segmentMM(sp->tick2(), true, SegmentType::Duration);
     }
 
     if (Segment* seg = toSegment(e->findAncestor(ElementType::SEGMENT))) {
-        if (seg->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        if (seg->isType(SegmentType::Duration)) {
             // https://github.com/musescore/MuseScore/pull/25821#issuecomment-2617369881
             return seg->nextCR(e->track(), true);
         }
         // Strictly speaking redundant, but more efficient than `tick2segmentMM`
-        else if (Segment* crSegAtSameTick = seg->measure()->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, seg->rtick())) {
+        else if (Segment* crSegAtSameTick = seg->measure()->findSegmentR(SegmentType::Duration, seg->rtick())) {
             return crSegAtSameTick;
         }
     }
@@ -3509,7 +3509,7 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
         return nullptr;
     }
 
-    if (Segment* seg = score->tick2segmentMM(tick, true, Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    if (Segment* seg = score->tick2segmentMM(tick, true, SegmentType::Duration)) {
         return seg;
     }
 
@@ -5771,6 +5771,20 @@ size_t Score::visiblePartCount() const
         }
     }
     return count;
+}
+
+std::vector<Part*> Score::visibleParts() const
+{
+    std::vector<Part*> result;
+    result.reserve(m_parts.size());
+
+    for (Part* p : m_parts) {
+        if (p->show()) {
+            result.push_back(p);
+        }
+    }
+
+    return result;
 }
 
 std::vector<SharedPart*> Score::sharedParts() const

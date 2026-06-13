@@ -37,7 +37,6 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
-#include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
 #include "page.h"
@@ -70,9 +69,11 @@ namespace mu::engraving {
 
 SysStaff::~SysStaff()
 {
-    delete groupName;
-    delete instrumentName;
-    delete individualStaffName;
+    for (auto& pair : m_instrumentNames) {
+        if (InstrumentName* n = pair.second) {
+            delete n;
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -102,6 +103,34 @@ void SysStaff::restoreLayout()
 {
     bbox().setTop(m_yPos);
     bbox().setHeight(m_height);
+}
+
+InstrumentName* SysStaff::name(InstrumentNameRole role) const
+{
+    if (muse::contains(m_instrumentNames, role)) {
+        return m_instrumentNames.at(role);
+    }
+
+    return nullptr;
+}
+
+void SysStaff::addInstrumentName(InstrumentName* n)
+{
+    InstrumentNameRole role = n->instrumentNameRole();
+    if (InstrumentName* curName = name(role)) {
+        delete curName;
+    }
+
+    m_instrumentNames[role] = n;
+}
+
+void SysStaff::removeInstrumentName(InstrumentNameRole role)
+{
+    if (InstrumentName* n = name(role)) {
+        delete n;
+    }
+
+    m_instrumentNames[role] = nullptr;
 }
 
 //---------------------------------------------------------
@@ -452,13 +481,7 @@ void System::add(EngravingItem* el)
     {
         InstrumentName* n = toInstrumentName(el);
         SysStaff* sysStaff = m_staves[n->staffIdx()];
-        if (n->instrumentNameRole() == InstrumentNameRole::GROUP) {
-            sysStaff->groupName = n;
-        } else if (n->instrumentNameRole() == InstrumentNameRole::PART) {
-            sysStaff->instrumentName = n;
-        } else {
-            sysStaff->individualStaffName = n;
-        }
+        sysStaff->addInstrumentName(n);
         n->setSysStaff(sysStaff);
         break;
     }
@@ -544,18 +567,11 @@ void System::remove(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
     {
-        // TODO: I'm pretty sure that this gets leadked. Needs fixing.
+        // NOTE: el gets deleted here
         InstrumentName* n = toInstrumentName(el);
         SysStaff* sysStaff = m_staves[n->staffIdx()];
-        if (n->instrumentNameRole() == InstrumentNameRole::GROUP) {
-            sysStaff->groupName = nullptr;
-        } else if (n->instrumentNameRole() == InstrumentNameRole::PART) {
-            sysStaff->instrumentName = nullptr;
-        } else {
-            sysStaff->individualStaffName = nullptr;
-        }
-        n->setSysStaff(nullptr);
-        break;
+        sysStaff->removeInstrumentName(n->instrumentNameRole());
+        return;
     }
     case ElementType::BEAM:
         score()->removeElement(el);
@@ -719,20 +735,16 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     for (const SysStaff* st : m_staves) {
         if (st->show()) {
-            if (InstrumentName* n = st->groupName) {
-                func(n);
-            }
-            if (InstrumentName* t = st->instrumentName) {
-                func(t);
-            }
-            if (InstrumentName* n = st->individualStaffName) {
-                func(n);
+            for (auto& pair : st->instrumentNames()) {
+                if (InstrumentName* n = pair.second) {
+                    func(n);
+                }
             }
         } else {
-            if (InstrumentName* n = st->groupName; n && n->effectiveStaffIdx() != muse::nidx) {
+            if (InstrumentName* n = st->name(InstrumentNameRole::GROUP); n && n->effectiveStaffIdx() != muse::nidx) {
                 func(n);
             }
-            if (InstrumentName* n = st->instrumentName; n && n->effectiveStaffIdx() != muse::nidx) {
+            if (InstrumentName* n = st->name(InstrumentNameRole::PART); n && n->effectiveStaffIdx() != muse::nidx) {
                 func(n);
             }
         }
@@ -1237,4 +1249,4 @@ std::vector<Part*> System::visiblePartsOfGroup(staff_idx_t start, staff_idx_t en
 
     return result;
 }
-}
+} // namespace mu::engraving

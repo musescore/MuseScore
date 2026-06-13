@@ -153,12 +153,21 @@ void Page::doRebuildBspTree()
 }
 
 //---------------------------------------------------------
+//   getDisplayPageNumber
+//---------------------------------------------------------
+
+int Page::getDisplayPageNumber() const
+{
+    return static_cast<int>(m_pageNumber) + 1 + score()->pageNumberOffset();
+}
+
+//---------------------------------------------------------
 //   isOdd
 //---------------------------------------------------------
 
 bool Page::isOdd() const
 {
-    return (m_pageNumber + 1 + score()->pageNumberOffset()) & 1;
+    return getDisplayPageNumber() & 1;
 }
 
 //---------------------------------------------------------
