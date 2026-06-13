@@ -98,6 +98,7 @@
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editvisibility.h"
+#include "engraving/editing/reset.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
@@ -6726,7 +6727,7 @@ void NotationInteraction::resetStretch()
 void NotationInteraction::resetTextStyleOverrides()
 {
     startEdit(TranslatableString("undoableAction", "Reset text style overrides"));
-    score()->cmdResetTextStyleOverrides();
+    Reset::resetTextStyleOverrides(score());
     apply();
 }
 
@@ -6771,7 +6772,7 @@ void NotationInteraction::resetToDefaultLayout()
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Reset to default layout"));
-    score()->cmdResetToDefaultLayout();
+    Reset::resetToDefaultLayout(score()->transactionManager()->currentOrDummyTransaction(), score());
     apply();
 }
 

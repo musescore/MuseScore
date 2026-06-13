@@ -28,6 +28,8 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/editing/editstyle.h"
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/reset.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/style/defaultstyle.h"
 
 using namespace mu::notation;
@@ -101,7 +103,7 @@ void NotationStyle::applyToAllParts()
 
 void NotationStyle::resetAllStyleValues(const StyleIdSet& exceptTheseOnes)
 {
-    score()->cmdResetAllStyles(exceptTheseOnes);
+    mu::engraving::Reset::resetAllStyles(score()->transactionManager()->currentOrDummyTransaction(), score(), exceptTheseOnes);
     score()->update();
     m_styleChanged.notify();
 }
