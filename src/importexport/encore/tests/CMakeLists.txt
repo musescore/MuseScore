@@ -37,6 +37,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_notes_ties.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_ornaments.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_repeats.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_hairpins.cpp
 )
 
 set(MODULE_TEST_LINK
