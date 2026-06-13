@@ -650,9 +650,9 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         ldata->startAnchor = chordBeamAnchor(ldata, startCr, ChordBeamAnchorType::Start);
         ldata->endAnchor = chordBeamAnchor(ldata, endCr, ChordBeamAnchorType::End);
 
-        double heigh = item->staff()->staffType()->jianpuBoxH() * item->mag();
-        double distance = ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag();
-        double offsetY = heigh * .5 + distance; // Jianpu Y origin is at the center of the number.
+        const double height = item->staff()->staffTypeForElement(item)->jianpuBoxH() * startCr->mag();
+        const double distance = ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * startCr->mag();
+        const double offsetY = height * .5 + distance; // Jianpu Y origin is at the center of the number.
         ldata->startAnchor += PointF(0, offsetY);
         ldata->endAnchor += PointF(0, offsetY);
         return true;

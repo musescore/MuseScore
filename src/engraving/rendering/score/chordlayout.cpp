@@ -131,7 +131,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // https://github.com/musescore/MuseScore/issues/8970
     std::vector<Accidental*> chordAccidentals;
 
-    const bool isJianpuStaff = item->staff() && item->staff()->isJianpuStaff(item->tick());
+    const bool isJianpuStaff = item->isJianpuStaff();
 
     auto notes = item->notes();
     if (isJianpuStaff) {
@@ -143,13 +143,22 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // Jianpu Y origin is at the center of the number.
     // It always starts half a spatium above, aligned with the middle of the measure line.
     double jianpuOffsetY = upnote ? -upnote->spatium() * .5 * mag_ : 0.0;
+
+    // Grace notes are placed above the main notehead, so start with an offset.
+    if (item->isGrace() && item->staff()) {
+        // Use the staff scale (mag_) rather than the grace-note scale (item->mag()) so the
+        // offset matches the normal note's box height, keeping the gap consistent.
+        jianpuOffsetY -= item->staff()->staffTypeForElement(item)->jianpuBoxH() * mag_;
+    }
+
+    const double itemMag = item->mag();
     for (Note* note : notes) {
         Note::LayoutData* ldata = note->mutldata();
         TLayout::layoutNote(note, ldata);
 
         if (isJianpuStaff) {
             std::vector<OctaveDot*> dots = note->octaveDots();
-            double dotDistance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * mag_;
+            const double dotDistance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * itemMag;
 
             // Move the current note down if it is has octave dots above it
             if (note != upnote && !dots.empty() && dots.back()->above()) {
@@ -167,14 +176,14 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             if (note == upnote) {
                 Beam* beam = item->beam();
                 if (beam) {
-                    jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * mag_;
-                    jianpuOffsetY -= ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * mag_;
+                    jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * itemMag;
+                    jianpuOffsetY -= ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * itemMag;
                     jianpuOffsetY += beam->ldata()->bbox().height();
                 }
             }
 
             jianpuOffsetY += ldata->bbox().height();
-            jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuNumberVerticalDistance) * mag_;
+            jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuNumberVerticalDistance) * itemMag;
         }
 
         double x1 = note->pos().x() + chordX;
@@ -1789,7 +1798,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         }
 
         double hw = note->headWidth();
-        double minX = note->pos().x() + note->bboxXShift();
+        double minX = note->bboxXShift();
         double maxX = minX + hw;
 
         note->resizeOctaveDotsTo(dots);
