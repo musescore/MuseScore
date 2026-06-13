@@ -165,8 +165,6 @@ enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : unsigned char;
 enum class Prefer : char;
-enum class Voicing : signed char;
-enum class HDuration : signed char;
 enum class AccidentalType : unsigned char;
 enum class LayoutBreakType : unsigned char;
 enum class CommandType : signed char;
@@ -940,7 +938,6 @@ public:
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
     void cmdRemoveEmptyTrailingMeasures();
-    void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);

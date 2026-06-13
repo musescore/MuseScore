@@ -99,6 +99,7 @@
 #include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editvisibility.h"
 #include "engraving/editing/editvoice.h"
+#include "engraving/editing/realizechordsymbols.h"
 #include "engraving/editing/reset.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
@@ -6561,7 +6562,8 @@ void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voic
     }
 
     startEdit(TranslatableString("undoableAction", "Realize chord symbols"));
-    score()->cmdRealizeChordSymbols(literal, voicing, durationType);
+    RealizeChordSymbols::realizeChordSymbols(score()->transactionManager()->currentOrDummyTransaction(), score(), literal, voicing,
+                                             durationType);
     apply();
 }
 
