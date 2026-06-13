@@ -1033,6 +1033,14 @@ void emitMeasures(BuildCtx& ctx)
 
         resetPerMeasureState(ctx);
 
+        EncRepeatType rt = encMeas.repeatMark();
+        if (rt != EncRepeatType::NONE) {
+            addRepeatMark(score, measure, rt);
+        }
+
+        // Consecutive measures with equal repeatAlternative bitmask coalesce into one Volta.
+        coalesceVolta(ctx, measure, encMeas, measTick);
+
         flushPendingKeySigs(score, measure, measTick, encMeas, pendingKeySigs);
 
         MeasureElemRefVec sortedElems;
