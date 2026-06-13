@@ -35,7 +35,6 @@
 #include "global/types/ret.h"
 
 #include "modularity/ioc.h"
-#include "draw/iimageprovider.h"
 #include "../iengravingfontsprovider.h"
 #include "../ipalettescoreprovider.h"
 #include "../iengravingcontextconfiguration.h"
@@ -332,7 +331,6 @@ class Score : public EngravingObject, public muse::Contextable
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
     muse::GlobalInject<IEngravingConfiguration> configuration;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
     muse::ContextInject<IEngravingContextConfiguration> contextConfiguration = { this };
@@ -929,8 +927,6 @@ public:
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
-
-    std::shared_ptr<muse::draw::Pixmap> createThumbnail();
 
     muse::Ret sanityCheckLocal();
 
