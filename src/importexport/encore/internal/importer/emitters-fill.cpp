@@ -404,12 +404,12 @@ void handleDanglingGraces(BuildCtx& ctx)
                 c->setDurationType(src->durationType());
                 c->setTicks(d);
                 c->setDots(0);
+                c->setSmall(true);   // cue chord: whole chord small (head + stem), not just the note
                 for (Note* sn : src->notes()) {
                     Note* n = Factory::createNote(c);
                     n->setPitch(sn->pitch());
                     n->setTpc1(sn->tpc1());
                     n->setTpc2(sn->tpc2());
-                    n->setSmall(true);
                     n->setPlay(!g->en->isMuted());
                     c->add(n);
                 }

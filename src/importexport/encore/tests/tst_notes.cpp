@@ -437,6 +437,46 @@ TEST_F(Tst_Notes, note_rdur_80_stays_16th_face_value)
     delete score;
 }
 
+// Grace notes are detected only for eighth-or-shorter face values; grace chords live in graceNotes() while
+// segment-attached chords stay NORMAL.
+TEST_F(Tst_Notes, grace_notes_only_on_short_facevalues)
+{
+    MasterScore* score = readEncoreScore("notes_grace.enc");
+    ASSERT_NE(score, nullptr);
+    bool foundGrace = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->elist()) {
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                Chord* c = toChord(e);
+                EXPECT_EQ(c->noteType(), NoteType::NORMAL)
+                    << "Segment-attached chord must be NORMAL; grace chords belong in graceNotes()";
+                for (Chord* gc : c->graceNotes()) {
+                    if (gc->noteType() != NoteType::NORMAL) {
+                        foundGrace = true;
+                        DurationType dt = gc->durationType().type();
+                        bool shortEnough = (dt == DurationType::V_EIGHTH
+                                            || dt == DurationType::V_16TH
+                                            || dt == DurationType::V_32ND
+                                            || dt == DurationType::V_64TH);
+                        EXPECT_TRUE(shortEnough)
+                            << "Grace note must have eighth or shorter duration (fv<4 filter), got "
+                            << int(dt);
+                    }
+                }
+            }
+        }
+    }
+    EXPECT_TRUE(foundGrace) << "Should have at least one grace note (from the fv=4 eighth)";
+    delete score;
+}
+
 // Off-beat MIDI ticks (a note 1 tick late) must be placed by cumulative face value, not the raw MIDI tick,
 // so notes land at canonical positions without spurious gap fills.
 TEST_F(Tst_Notes, offbeat_notes_canonical_placement)
