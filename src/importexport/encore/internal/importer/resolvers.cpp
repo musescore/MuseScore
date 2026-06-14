@@ -34,5 +34,6 @@ void resolveAll(BuildCtx& ctx)
     resolveOrnaments(ctx);
     resolveVoltas(ctx);
     resolveFingeringAndBowing(ctx);
+    resolveOttavas(ctx);
 }
 } // namespace mu::iex::enc
