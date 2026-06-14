@@ -86,6 +86,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/resolvers-ornaments.cpp
     internal/importer/resolvers-volta.cpp
     internal/importer/resolvers-fingering.cpp
+    internal/importer/resolvers-ottava.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )
