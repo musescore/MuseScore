@@ -436,7 +436,13 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
 
     // Register a bowing/articulation ORN in pendingBowings.
     auto pushBowing = [&](SymId sid) {
-        const bool cm = !noteTicks.count(static_cast<int>(e->tick));
+        // A mark travels to the next measure only in the grand-staff case: Encore stores the second
+        // staff's marks at the end of the previous measure's block, at the last voice-0 tick. Outside
+        // that, a tick with no note is where a note ENDS, and the mark belongs to that note, which the
+        // resolver walks back to. Reading every such tick as cross-measure emptied the bar instead.
+        const bool cm = !mc.voice4NoteTicks.empty()
+                        && !mc.voice4NoteTicks.count(static_cast<int>(e->tick))
+                        && static_cast<int>(e->tick) == mc.maxVoice0Tick;
         const Fraction bt = measTick + Fraction(static_cast<int>(e->tick), kEncWholeTicks);
         ctx.pendingBowings.push_back({ bt, track, sid, measIdx, cm,
                                        static_cast<int>(eo->xoffset), static_cast<int>(e->tick) });
