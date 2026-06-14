@@ -34,7 +34,7 @@
         <source>Piccolo in E♭, sounding a minor third above the standard piccolo.</source>
         <comment>eb-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Piccolo en Mi♭, que soa unha terceira menor por riba do piccolo estándar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="219"/>
