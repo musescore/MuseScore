@@ -39,6 +39,7 @@ void resolveAll(BuildCtx& ctx);
 void resolveSlurs(BuildCtx& ctx);
 void resolveHairpins(BuildCtx& ctx);
 void resolveOrnaments(BuildCtx& ctx);
+void resolveFingeringAndBowing(BuildCtx& ctx);
 
 // A track derived from untrusted Encore staff/voice bytes can exceed the score's track
 // count; Segment::element(track) indexes a fixed-size vector, so an out-of-range track is

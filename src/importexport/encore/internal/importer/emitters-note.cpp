@@ -125,6 +125,30 @@ static void attachPendingGracesToChord(BuildCtx& ctx,
     // Do not erase graceStolenTicks yet: the snap guard for the next regular note reads it.
 }
 
+static void applyFingeringsFromArtic(const NoteElemCtx& ec,
+                                     Note* note,
+                                     const EncNote* en)
+{
+    track_idx_t track = ec.track;
+    for (quint8 ab : { en->articulationUp, en->articulationDown }) {
+        int n = encArticByteToFingerNumber(ab);
+        if (n > 0) {
+            Fingering* fg = Factory::createFingering(note);
+            fg->setTrack(track);
+            fg->setXmlText(String::number(n));
+            note->add(fg);
+            break;
+        }
+        if (encArticByteIsOpenString(ab)) {
+            Fingering* fg = Factory::createFingering(note);  // "0" not circled STRING_NUMBER
+            fg->setTrack(track);
+            fg->setXmlText(u"0");
+            note->add(fg);
+            break;
+        }
+    }
+}
+
 static void completePendingTie(BuildCtx& ctx,
                                const NoteElemCtx& ec,
                                const EncNote* en,
@@ -739,6 +763,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     }
 
     configureNoteHeadForDrumset(note, en);
+    applyFingeringsFromArtic(ec, note, en);
     completePendingTie(ctx, ec, en, note);
     applyNoteArticulations(ctx, note, chord, en, track, mc);
     registerTieStartIfApplicable(ctx, ec, mc, en, note);
