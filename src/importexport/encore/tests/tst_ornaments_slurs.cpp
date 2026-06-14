@@ -656,6 +656,37 @@ TEST_F(Tst_OrnamentsSlurs, v0c4_slur_cross_measure_fallback)
     delete score;
 }
 
+// Two ottava spanners: 8va in m0, 8vb in m1.
+// resolveOttavas pins each endpoint to the next ottava's startTick, or scoreEnd.
+TEST_F(Tst_OrnamentsSlurs, v0c4_ottava_two_spanners)
+{
+    MasterScore* score = readEncoreScore("ornaments_ottava_two_spanners.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load ornaments_ottava_two_spanners.enc";
+
+    std::vector<Ottava*> ottavas;
+    for (const auto& kv : score->spanner()) {
+        Spanner* sp = kv.second;
+        if (sp && sp->isOttava()) {
+            ottavas.push_back(toOttava(sp));
+        }
+    }
+    ASSERT_EQ(ottavas.size(), 2u) << "expected exactly 2 ottava spanners";
+
+    std::sort(ottavas.begin(), ottavas.end(), [](Ottava* a, Ottava* b) {
+        return a->tick() < b->tick();
+    });
+
+    EXPECT_EQ(ottavas[0]->ottavaType(), OttavaType::OTTAVA_8VA);
+    EXPECT_EQ(ottavas[0]->tick(),  Fraction(0, 1));
+    EXPECT_EQ(ottavas[0]->tick2(), Fraction(1, 1));
+
+    EXPECT_EQ(ottavas[1]->ottavaType(), OttavaType::OTTAVA_8VB);
+    EXPECT_EQ(ottavas[1]->tick(),  Fraction(1, 1));
+    EXPECT_EQ(ottavas[1]->tick2(), Fraction(6, 1));
+
+    delete score;
+}
+
 // Regression: when any slur's +16 measure-count points past the last measure, the whole file's field is
 // unreliable, so every slur (even plausible-looking counts) must resolve inside its own bar.
 TEST_F(Tst_OrnamentsSlurs, v0c2_unreliable_slur_count_stays_in_measure)
