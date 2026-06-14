@@ -71,8 +71,12 @@ static bool isMidiArtifact(const EncNote* en,
     const quint8 safeFv = fvLow(en->faceValue);
     int fvBase = faceValue2ticks(safeFv);
     if (fvBase <= 15) {
+        // A note written this short sounds this short: a sixty-fourth is fifteen ticks written and
+        // ten inside a triplet, so any ordinary gate puts it under the threshold. What tells it from
+        // an artifact is that a complete bracket counts it as one of its members.
         bool bypass = mc.isTieStartAt(ec.staffIdx, ec.voice, (int)ec.e->tick)
-                      || isChordExt;
+                      || isChordExt
+                      || mc.validTupletGroupMember.count(ec.e) > 0;
         if (!bypass) {
             if ((en->grace1 & 0x0F) == 1) {
                 filteredSenders.insert({ ec.staffIdx, ec.voice, (int)en->semiTonePitch });
@@ -125,6 +129,49 @@ static void attachPendingGracesToChord(BuildCtx& ctx,
     // Do not erase graceStolenTicks yet: the snap guard for the next regular note reads it.
 }
 
+static void applyFingeringsFromArtic(const NoteElemCtx& ec,
+                                     Note* note,
+                                     const EncNote* en)
+{
+    track_idx_t track = ec.track;
+    for (quint8 ab : { en->articulationUp, en->articulationDown }) {
+        int n = encArticByteToFingerNumber(ab);
+        if (n > 0) {
+            Fingering* fg = Factory::createFingering(note);
+            fg->setTrack(track);
+            fg->setXmlText(String::number(n));
+            note->add(fg);
+            break;
+        }
+        if (encArticByteIsOpenString(ab)) {
+            Fingering* fg = Factory::createFingering(note);  // "0" not circled STRING_NUMBER
+            fg->setTrack(track);
+            fg->setXmlText(u"0");
+            note->add(fg);
+            break;
+        }
+    }
+}
+
+// Find the note a pending tie starts from: the chord that now sits where the tie was registered,
+// and in it the note of the pitch that was written there. A chord removed or replaced in between
+// simply fails to answer, which is the same result as before but reached without a stale pointer.
+static Note* tieStartNote(const BuildCtx& ctx, const PendingTie& pending)
+{
+    const Measure* m = ctx.score->tick2measure(pending.tick);
+    const Segment* seg = m ? m->findSegment(SegmentType::ChordRest, pending.tick) : nullptr;
+    const EngravingItem* el = seg ? seg->element(pending.track) : nullptr;
+    if (!el || !el->isChord()) {
+        return nullptr;
+    }
+    for (Note* n : toChord(el)->notes()) {
+        if (n->pitch() == pending.pitch) {
+            return n;
+        }
+    }
+    return nullptr;
+}
+
 static void completePendingTie(BuildCtx& ctx,
                                const NoteElemCtx& ec,
                                const EncNote* en,
@@ -133,11 +180,15 @@ static void completePendingTie(BuildCtx& ctx,
     auto tieKey = std::make_tuple(ec.staffIdx, ec.voice, (int)en->semiTonePitch);
     auto it = ctx.scratch.pendingTieNote.find(tieKey);
     if (it != ctx.scratch.pendingTieNote.end()) {
-        Note* startNote = it->second;
-        // The format has no tie-end, so a tie-start is matched to a later note by (staff, voice,
-        // pitch); accept only when the receiver is the first chord after the start on that track
-        // (intervening chords void the tie, rests are skipped), else it jumps across measures to
-        // the next same-pitch note. See ENCORE_IMPORTER.md §TIE element handling.
+        Note* startNote = tieStartNote(ctx, it->second);
+        if (!startNote) {
+            // The chord that started the tie is no longer there: the measure was made to fit and
+            // took it away. Nothing to tie from.
+            ctx.scratch.pendingTieNote.erase(it);
+            return;
+        }
+        // The format has no tie end, so a start is matched by staff, voice and pitch to the first chord after
+        // it on that track; an intervening chord voids the tie. See ENCORE_IMPORTER.md 6.3.
         bool consecutive = true;
         Chord* startChord = startNote->chord();
         if (startChord && startChord->segment() && note->chord()) {
@@ -172,7 +223,8 @@ static void registerTieStartIfApplicable(BuildCtx& ctx,
     bool hasTieStart = mc.isTieStartAt(ec.staffIdx, ec.voice, (int)ec.e->tick, (int)en->position)
                        || en->isTieSender;
     if (hasTieStart) {
-        ctx.scratch.pendingTieNote[{ ec.staffIdx, ec.voice, (int)en->semiTonePitch }] = note;
+        ctx.scratch.pendingTieNote[{ ec.staffIdx, ec.voice, (int)en->semiTonePitch }]
+            = { note->track(), note->chord() ? note->chord()->tick() : Fraction(0, 1), note->pitch() };
     }
 }
 
@@ -271,11 +323,12 @@ static void attachChordToTuplet(
                     normalN = 0;           // treat as plain note
                 }
             } else {
-                // Partial measure-end groups: derive baseLen from remaining/normalN (e.g. rem=1/8, normalN=2 -> baseLen=1/16).
+                // Partial measure-end groups: derive baseLen from remaining/normalN (e.g. rem=1/8, normalN=2 ->
+                // baseLen=1/16).
                 DurationType baseLenDt = dt;
                 if (partialEndGroup.count(e)) {
                     Fraction rem3 = measure->ticks() - ctx.scratch.cumTick[trackKey];
-                    Fraction fullAdv = TDuration(dt).fraction() * Fraction(normalN, 1);
+                    Fraction fullAdv = dottedAdvance(dt, dots) * Fraction(normalN, 1);
                     if (fullAdv > rem3 && rem3 > Fraction(0, 1)) {
                         Fraction baseFrac = Fraction(rem3.numerator(),
                                                      rem3.denominator() * normalN).reduced();
@@ -305,7 +358,7 @@ static void attachChordToTuplet(
             if (innerTt.inTuplet()) {
                 chord->setTuplet(innerTt.currentTuplet);
                 innerTt.currentTuplet->add(chord);
-                innerTt.faceTicks += TDuration(dt).fraction();
+                innerTt.faceTicks += dottedAdvance(dt, dots);
             }
             if (isInnerLast && innerTt.inTuplet()) {
                 innerTt.closeTuplet();
@@ -318,19 +371,20 @@ static void attachChordToTuplet(
             chord->setTuplet(tt.currentTuplet);
             tt.currentTuplet->add(chord);
 
-            // No-downdate: only lower fullFaceSum when smaller fv arrives and current tally still fits the new threshold.
+            // No-downdate: only lower fullFaceSum when smaller fv arrives and current tally still fits the new
+            // threshold.
             // {Q,E}/3:2: before E, faceTicks=Q≤3E → update; {Q,Q,8,8}/3:2: faceTicks=2Q>3E → skip.
             if (tt.actualN > 0 && tt.fullFaceSum > Fraction(0, 1)) {
-                const Fraction thisFace = TDuration(dt).fraction();
+                const Fraction thisFace = dottedAdvance(dt, dots);
                 const Fraction currentBaseLen = tt.fullFaceSum / tt.actualN;
                 if (thisFace > Fraction(0, 1) && thisFace < currentBaseLen) {
                     const Fraction newThreshold = thisFace * tt.actualN;
-                    if (tt.faceTicks <= newThreshold) {
+                    if (tt.faceTicks + thisFace <= newThreshold) {
                         tt.fullFaceSum = newThreshold;
                     }
                 }
             }
-            tt.faceTicks += TDuration(dt).fraction();
+            tt.faceTicks += dottedAdvance(dt, dots);
         }
     } else {
         auto& innerTt2 = ctx.scratch.innerTuplets[trackKey];
@@ -379,7 +433,7 @@ static bool advanceCumulativeTick(
         }
         const int innerAN = niAdv ? niAdv->innerActualN : (innerTtAdv.inTuplet() ? innerTtAdv.actualN : preACheck);
         const int innerNN = niAdv ? niAdv->innerNormalN : (innerTtAdv.inTuplet() ? innerTtAdv.normalN : preNCheck);
-        Fraction innerAdv = TDuration(dt).fraction()
+        Fraction innerAdv = dottedAdvance(dt, dots)
                             * Fraction(innerNN, innerAN);
         if (tt.inTuplet()) {
             advance = innerAdv * Fraction(tt.normalN, tt.actualN);
@@ -387,12 +441,13 @@ static bool advanceCumulativeTick(
             advance = innerAdv;
         }
     } else if (tt.inTuplet()) {
-        advance = TDuration(dt).fraction() * Fraction(tt.normalN, tt.actualN);
+        advance = dottedAdvance(dt, dots) * Fraction(tt.normalN, tt.actualN);
     } else {
         advance = dottedAdvance(dt, dots);
     }
 
-    // Tuplet-remaining cap: fv > baseLen (e.g. 8th inside 3:2 with baseLen=16th) would produce non-TDuration-aligned Tuplet.ticks and crash layout.
+    // Tuplet-remaining cap: fv > baseLen (e.g. 8th inside 3:2 with baseLen=16th) would produce non-TDuration-aligned
+    // Tuplet.ticks and crash layout.
     if (tt.inTuplet() && chord) {
         const Fraction tupExpected = TDuration(tt.currentTuplet->baseLen()).fraction()
                                      * tt.normalN;
@@ -406,7 +461,7 @@ static bool advanceCumulativeTick(
                 chord->setTicks(cappedFace.fraction());
                 chord->setDots(0);
                 // Re-sync faceTicks: the original dt may have been larger.
-                tt.faceTicks -= TDuration(dt).fraction();
+                tt.faceTicks -= dottedAdvance(dt, dots);
                 tt.faceTicks += cappedFace.fraction();
             }
         }
@@ -419,10 +474,11 @@ static bool advanceCumulativeTick(
     if (tt.inTuplet()) {
         tt.placedTicks += advance;
     }
-    // Inner-group notes: advance innerTt.placedTicks by the singly-nested advance so closeTuplet() sees the correct inner span.
+    // Inner-group notes: advance innerTt.placedTicks by the singly-nested advance so closeTuplet() sees the correct
+    // inner span.
     auto& innerTtFin = ctx.scratch.innerTuplets[trackKey];
     if (isInnerMember && innerTtFin.inTuplet()) {
-        const Fraction innerOnlyAdv = TDuration(dt).fraction()
+        const Fraction innerOnlyAdv = dottedAdvance(dt, dots)
                                       * Fraction(innerTtFin.normalN, innerTtFin.actualN);
         innerTtFin.placedTicks += innerOnlyAdv;
     }
@@ -463,11 +519,8 @@ static bool resolveNoteDuration(
     };
 
     if (isStandardExplicit) {
-        // In files where the face-value byte encodes "beats" rather than absolute note
-        // values (e.g. 8/8 where fv=Q means one eighth beat), rdur equals exactly
-        // beatTicks x (normalN/actualN). Use rdur in that case; otherwise trust fv.
-        // This distinguishes beat-relative face values (rdur=beatTicks x ratio) from
-        // truncated rdur (last note in a measure, rdur shortened by a following rest).
+        // Where the face value counts beats rather than absolute values, the sounding duration is exactly the
+        // beat times the ratio, which is how it is told from a duration truncated by a following rest.
         dt = faceValue2DurationType(en->faceValue);
         {
             const DurationType dtBeat = resolveBeatRelativeFaceValue(en, mc.encMeas, preACheck, preNCheck);
@@ -475,18 +528,20 @@ static bool resolveNoteDuration(
                 dt = dtBeat;
             }
         }
-        dots = 0;
+        // A member of a bracket can be dotted: the dot is part of the value the ratio then scales,
+        // and Encore's own played duration agrees with the dotted reading wherever one appears.
+        dots = e->dotCount();
         // Partial measure-end groups: reduce dt when the tuplet advance overshoots remaining space.
         if (partialEndGroup.count(e)) {
             const auto& ttX = ctx.scratch.tuplets[trackKey];
             if (ttX.inTuplet() && dt != DurationType::V_INVALID) {
-                Fraction adv = TDuration(dt).fraction()
+                Fraction adv = dottedAdvance(dt, dots)
                                * Fraction(ttX.normalN, ttX.actualN);
                 Fraction rem = measure->ticks() - ctx.scratch.cumTick[trackKey];
                 while (adv > rem && rem > Fraction(0, 1)
                        && dt < DurationType::V_128TH) {
                     dt  = static_cast<DurationType>(static_cast<int>(dt) + 1);
-                    adv = TDuration(dt).fraction()
+                    adv = dottedAdvance(dt, dots)
                           * Fraction(ttX.normalN, ttX.actualN);
                 }
             }
@@ -494,7 +549,8 @@ static bool resolveNoteDuration(
     } else {
         dt   = realDuration2DurationType(en->realDuration, en->faceValue);
         if (en->dotControl > 0) {
-            // dotControl bit 0 = dotted flag; computeDotCount tries tick-value interpretation first, falls back to bit 0 on MIDI drift.
+            // dotControl bit 0 = dotted flag; computeDotCount tries tick-value interpretation first, falls back to
+            // bit 0 on MIDI drift.
             dots = computeDotCount(en->dotControl, en->realDuration, en->faceValue,
                                    true /*useBit0Fallback*/);
         } else {
@@ -611,10 +667,8 @@ static void configureNoteHeadForDrumset(Note* note, const EncNote* en, const Enc
         return;
     }
     {
-        // 5-line PERC staff: line derived from Encore position byte.
-        // faceValue high nibble encodes the notehead type (all 10 values confirmed):
-        //   0=normal, 1=diamond, 2=triangle-up, 4=cross, 5=xcircle,
-        //   6=plus, 8=large-diamond(soft), 9=invisible(no head)
+        // On a percussion staff the position byte is a line, not a pitch, and the face value's high nibble is
+        // the notehead. See ENCORE_FORMAT.md 6.3.
         static const NoteHeadGroup nibble2head[] = {
             NoteHeadGroup::HEAD_NORMAL,        // 0
             NoteHeadGroup::HEAD_DIAMOND,       // 1 rombo
@@ -731,10 +785,8 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     applyConcertPitch(note, concertPitch);
     chord->add(note);
 
-    // A small note reaching this normal path is a cue note (full value, drawn small); graces never
-    // reach here. A cue is small as a whole (head + stem + flag), so mark the chord small, not just
-    // the note (Note::mag multiplies the chord mag, so a note-only flag shrinks the head but leaves a
-    // full-size stem). See ENCORE_IMPORTER.md §Grace and cue notes.
+    // A small note on the normal path is a cue, not a grace. Mark the chord small rather than the note:
+    // Note::mag multiplies the chord's, so a note-only flag leaves a full-size stem.
     if (en->isSmall()) {
         chord->setSmall(true);
     }
@@ -744,6 +796,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     }
 
     configureNoteHeadForDrumset(note, en, ctx.enc.fmt.get());
+    applyFingeringsFromArtic(ec, note, en);
     completePendingTie(ctx, ec, en, note);
     applyNoteArticulations(ctx, note, chord, en, track, mc);
     registerTieStartIfApplicable(ctx, ec, mc, en, note);
