@@ -125,6 +125,30 @@ static void attachPendingGracesToChord(BuildCtx& ctx,
     // Do not erase graceStolenTicks yet: the snap guard for the next regular note reads it.
 }
 
+static void applyFingeringsFromArtic(const NoteElemCtx& ec,
+                                     Note* note,
+                                     const EncNote* en)
+{
+    track_idx_t track = ec.track;
+    for (quint8 ab : { en->articulationUp, en->articulationDown }) {
+        int n = encArticByteToFingerNumber(ab);
+        if (n > 0) {
+            Fingering* fg = Factory::createFingering(note);
+            fg->setTrack(track);
+            fg->setXmlText(String::number(n));
+            note->add(fg);
+            break;
+        }
+        if (encArticByteIsOpenString(ab)) {
+            Fingering* fg = Factory::createFingering(note);  // "0" not circled STRING_NUMBER
+            fg->setTrack(track);
+            fg->setXmlText(u"0");
+            note->add(fg);
+            break;
+        }
+    }
+}
+
 static void completePendingTie(BuildCtx& ctx,
                                const NoteElemCtx& ec,
                                const EncNote* en,
@@ -729,9 +753,11 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     chord->add(note);
 
     // A small note reaching this normal path is a cue note (full value, drawn small); graces never
-    // reach here. See ENCORE_IMPORTER.md §Grace and cue notes.
+    // reach here. A cue is small as a whole (head + stem + flag), so mark the chord small, not just
+    // the note (Note::mag multiplies the chord mag, so a note-only flag shrinks the head but leaves a
+    // full-size stem). See ENCORE_IMPORTER.md §Grace and cue notes.
     if (en->isSmall()) {
-        note->setSmall(true);
+        chord->setSmall(true);
     }
     // Encore per-note mute flag: applies to any note (normal, cue, or grace), independent of size.
     if (en->isMuted()) {
@@ -739,6 +765,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     }
 
     configureNoteHeadForDrumset(note, en);
+    applyFingeringsFromArtic(ec, note, en);
     completePendingTie(ctx, ec, en, note);
     applyNoteArticulations(ctx, note, chord, en, track, mc);
     registerTieStartIfApplicable(ctx, ec, mc, en, note);

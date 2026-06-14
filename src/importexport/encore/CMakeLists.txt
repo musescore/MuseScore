@@ -84,6 +84,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/resolvers-slur.cpp
     internal/importer/resolvers-hairpin.cpp
     internal/importer/resolvers-ornaments.cpp
+    internal/importer/resolvers-fingering.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )
