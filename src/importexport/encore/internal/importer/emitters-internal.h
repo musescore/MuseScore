@@ -120,6 +120,8 @@ struct NoteElemCtx {
 };
 
 void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
+// Returns true if note was a grace note (caller must return). (emitters-note-grace.cpp)
+bool tryHandleGraceNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec, const EncNote* en);
 // Apply articulations, ornaments, tremolos, string numbers to a note/chord. (emitters-note-artic.cpp)
 void applyNoteArticulations(BuildCtx& ctx, mu::engraving::Note* note, mu::engraving::Chord* chord, const EncNote* en,
                             mu::engraving::track_idx_t track, const MeasEmitCtx& mc);
@@ -145,6 +147,10 @@ std::optional<RoutedTrack> routeElementStaffVoice(
 void adjustPickupMeasure(BuildCtx& ctx, mu::engraving::Measure* measure, int measIdx);
 // Pre-fill trailing silence with invisible gap rests. (emitters-fill.cpp)
 void fillTrailingGaps(BuildCtx& ctx, mu::engraving::Measure* measure, mu::engraving::Fraction measTick);
+// End-of-score handling of grace chords that never found a principal chord: re-place them as small
+// audible cue notes in the spare cue voice of their own bar (flush to the barline) instead of
+// dropping them. Clears ctx.scratch.pendingGraces. (emitters-fill.cpp)
+void handleDanglingGraces(BuildCtx& ctx);
 // Fix over/undershoots up to 1/24. (emitters-fill.cpp)
 void correctMeasureLength(BuildCtx& ctx, mu::engraving::Measure* measure);
 // Extend the measure to the max voice content (IrregularMeasure / Stretch fallback). (emitters-fill.cpp)
