@@ -111,7 +111,9 @@ static void handleStaffTextOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
         return;
     }
     QString text = enc.textBlock.entries[textIdx];
-    if (text.isEmpty()) {
+    // A comment of blank lines, which older files store as a run of CR and LF, is not a mark and
+    // must not become an element that draws nothing.
+    if (text.trimmed().isEmpty()) {
         return;
     }
     Fraction placeTick = elemTick;
@@ -136,7 +138,6 @@ static void handleStaffTextOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
         if (tempoBps > 0.0) {
             tt2->setTempo(BeatsPerSecond(tempoBps));
             tt2->setFollowText(true);
-            score->setTempo(elemTick, BeatsPerSecond(tempoBps));
         }
         if (placeBelow) {
             tt2->setPlacement(mu::engraving::PlacementV::BELOW);
@@ -175,11 +176,8 @@ static void handleTempoOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
         }
         // Use nominal timesig so a pickup measure inherits the main sig's beat classification.
         const bool cmpd = isCompoundBeat(encMeas.beatTicks, measure->timesig());
-        // The MEAS header BPM is the authoritative tempo position (applyMeasureBpmMarks places a
-        // TempoText at the measure start, which registers in the tempo map). The ORN TEMPO is only
-        // a visual mark whose stored tick is often off (end of a measure, or a system early). So
-        // suppress the ORN whenever a header BPM equals it, and keep the ORN only when NO header
-        // BPM matches (a genuine standalone mark).
+        // The header BPM is the tempo position that counts; the ORN tempo is a visual mark whose tick is
+        // often off by a measure or a system, so keep it only when no header BPM matches it.
         if (static_cast<quint16>(eo->tempo) == encMeas.bpm) {
             return;  // redundant with this measure's header
         }
@@ -203,10 +201,8 @@ static void handleTempoOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
         TempoText* tt2 = Factory::createTempoText(seg);
         tt2->setTrack(track);
 
-        // The tempo value is expressed in the mark's beat unit. Prefer the unit Encore stored
-        // explicitly on the mark (`noto`); a compound meter is often beaten in dotted quarters,
-        // but the composer may pick a plain quarter (e.g. quarter=198 in 6/8), and only `noto`
-        // records that choice. Fall back to the meter heuristic when `noto` is unset.
+        // The value is in the mark's own beat unit, which only the stored unit records: a compound meter is
+        // usually beaten in dotted quarters but the composer may pick a plain one.
         const int notoTicks = notoToBeatTicks(eo->noto);
         const int displayBeatTicks = notoTicks ? notoTicks : (cmpd ? 360 : 240);
         const double beatInQuarters = displayBeatTicks / 240.0;
@@ -215,7 +211,6 @@ static void handleTempoOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
         tt2->setXmlText(tempoXmlText(static_cast<int>(eo->tempo), displayBeatTicks));
         tt2->setFollowText(true);
         seg->add(tt2);
-        score->setTempo(seg->tick(), BeatsPerSecond(bps));
     }
 }
 
@@ -436,7 +431,12 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
 
     // Register a bowing/articulation ORN in pendingBowings.
     auto pushBowing = [&](SymId sid) {
-        const bool cm = !noteTicks.count(static_cast<int>(e->tick));
+        // A mark travels to the next measure only for a grand staff, where Encore stores the second staff's
+        // marks at the end of the previous block. Elsewhere a tick with no note is where a note ends, and the
+        // mark belongs to that note.
+        const bool cm = !mc.voice4NoteTicks.empty()
+                        && !mc.voice4NoteTicks.count(static_cast<int>(e->tick))
+                        && static_cast<int>(e->tick) == mc.maxVoice0Tick;
         const Fraction bt = measTick + Fraction(static_cast<int>(e->tick), kEncWholeTicks);
         ctx.pendingBowings.push_back({ bt, track, sid, measIdx, cm,
                                        static_cast<int>(eo->xoffset), static_cast<int>(e->tick) });
