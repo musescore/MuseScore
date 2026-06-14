@@ -41,6 +41,7 @@ void resolveHairpins(BuildCtx& ctx);
 void resolveOrnaments(BuildCtx& ctx);
 void resolveVoltas(BuildCtx& ctx);
 void resolveFingeringAndBowing(BuildCtx& ctx);
+void resolveOttavas(BuildCtx& ctx);
 
 // A track derived from untrusted Encore staff/voice bytes can exceed the score's track
 // count; Segment::element(track) indexes a fixed-size vector, so an out-of-range track is
@@ -74,10 +75,8 @@ inline mu::engraving::Chord* findChordAt(mu::engraving::MasterScore* score,
     return toChord(el);
 }
 
-// First chord on any voice of `staffIdx` within segment `seg`, scanning voices 0..VOICES-1 in order.
-// Sets outTrack to the carrying voice's track and returns the chord, or nullptr if seg is null or
-// holds no chord on that staff. validTrack is folded in so an out-of-range staff yields nullptr
-// instead of an out-of-bounds element() access.
+// First chord on any voice of the staff in this segment, with the carrying track reported. The staff
+// range check is folded in, so an out-of-range staff yields nullptr rather than a bad access.
 inline mu::engraving::Chord* firstChordVoiceAt(const mu::engraving::Score* score,
                                                const mu::engraving::Segment* seg, int staffIdx,
                                                mu::engraving::track_idx_t& outTrack)
