@@ -96,7 +96,7 @@ release_info_json["assetsNew"] = release_new_assets
 
 eprint("=== Add macOS auto-update zip asset ===")
 
-MACOS_ZIP_BASE_URL = "https://updates.musescore.org"
+MACOS_ZIP_BASE_URL = "https://extensions.musescore.org/update"
 
 dmg_asset = next((a for a in release_assets if str(a.get("name", "")).endswith(".dmg")), None)
 if dmg_asset is not None:

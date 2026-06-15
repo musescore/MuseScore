@@ -86,7 +86,8 @@ ZIP_ENV="$ARTIFACTS_DIR/env/artifact_name_zip.env"
 if [ -f "$ZIP_ENV" ]; then
     ZIP_ARTIFACT_NAME="$(cat $ZIP_ENV)"
     if xcrun stapler staple applebuild/mscore.app; then
-        ditto -c -k --keepParent applebuild/mscore.app "$ARTIFACTS_DIR/$ZIP_ARTIFACT_NAME"
+        mkdir -p update_artifacts
+        ditto -c -k --keepParent applebuild/mscore.app "update_artifacts/$ZIP_ARTIFACT_NAME"
         echo "Stapled auto-update zip: $ZIP_ARTIFACT_NAME"
     else
         echo "::warning::Failed to staple app bundle; auto-update zip left unstapled"
