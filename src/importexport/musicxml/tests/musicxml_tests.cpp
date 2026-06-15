@@ -396,14 +396,17 @@ TEST_F(MusicXml_Tests, articulationCombination) {
 TEST_F(MusicXml_Tests, backupRoundingError) {
     musicXmlImportTestRef("testBackupRoundingError");
 }
+TEST_F(MusicXml_Tests, barlineFermatas) {
+    musicXmlIoTest("testBarlineFermatas");
+}
 TEST_F(MusicXml_Tests, barlineLoc) {
     musicXmlImportTestRef("testBarlineLoc");
 }
 TEST_F(MusicXml_Tests, barlineSpan) {
     musicXmlIoTest("testBarlineSpan");
 }
-TEST_F(MusicXml_Tests, barlineFermatas) {
-    musicXmlIoTest("testBarlineFermatas");
+TEST_F(MusicXml_Tests, barlineTips) {
+    musicXmlIoTest("testBarlineTips");
 }
 TEST_F(MusicXml_Tests, barStyles) {
     musicXmlIoTest("testBarStyles");
