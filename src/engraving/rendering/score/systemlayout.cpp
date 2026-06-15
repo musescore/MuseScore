@@ -76,6 +76,7 @@
 #include "harmonylayout.h"
 #include "lyricslayout.h"
 #include "measurelayout.h"
+#include "mmrestlayout.h"
 #include "tupletlayout.h"
 #include "restlayout.h"
 #include "slurtielayout.h"
@@ -1200,7 +1201,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         Measure* measure = toMeasure(mb);
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
-        MeasureLayout::layoutMMRestRange(measure, ctx);
+        MMRestLayout::layoutMMRestRange(measure, ctx);
         MeasureLayout::layoutPlayCountText(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
