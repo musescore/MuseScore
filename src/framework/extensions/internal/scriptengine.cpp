@@ -40,10 +40,9 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiversion)
     : m_iocContext(iocCtx)
 {
     m_engine = new QJSEngine();
-    m_apiengine = new JsApiEngine(m_engine, m_iocContext);
-
     m_engine->installExtensions(QJSEngine::ConsoleExtension);
     m_engine->setProperty("apiversion", apiversion);
+    m_apiengine = new JsApiEngine(m_engine, m_iocContext);
 
     QJSValue globalObj = m_engine->globalObject();
     if (apiversion == 1) {
