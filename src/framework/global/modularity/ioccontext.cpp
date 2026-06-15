@@ -55,7 +55,7 @@ muse::modularity::ContextPtr muse::iocCtxForQmlContext(const QQmlContext* ctx)
     //     return modularity::ContextPtr();
     // }
 
-    //! NOTE At the monent, it can be null, need add ioc context to extension qml engine
+    //! NOTE At the moment, it can be null, need add ioc context to extension qml engine
     if (!qmlIoc) {
         return modularity::ContextPtr();
     }
