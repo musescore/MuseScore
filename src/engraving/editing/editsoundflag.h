@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/soundflag.h"
 
 namespace mu::engraving {
-class ChangeSoundFlag : public UndoCommand
+class ChangeSoundFlag : public UndoableCommand
 {
     SoundFlag* m_soundFlag = nullptr;
     SoundFlag::PresetCodes m_presets;

@@ -22,7 +22,9 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
+
+#include "../dom/chord.h"
 #include "../dom/parenthesis.h"
 
 namespace mu::engraving {
@@ -52,7 +54,7 @@ private:
     static void doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen);
 };
 
-class ChangeChordStaffMove : public UndoCommand
+class ChangeChordStaffMove : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeChordStaffMove)
 
@@ -70,7 +72,7 @@ public:
     UNDO_CHANGED_OBJECTS({ chordRest })
 };
 
-class SwapCR : public UndoCommand
+class SwapCR : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SwapCR)
 
@@ -88,7 +90,7 @@ public:
     UNDO_CHANGED_OBJECTS({ cr1, cr2 })
 };
 
-class ChangeSpanArpeggio : public UndoCommand
+class ChangeSpanArpeggio : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpanArpeggio)
 
@@ -104,14 +106,14 @@ public:
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
 
-class AddNoteParenthesisInfo : public UndoCommand
+class AddNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddNoteParenthesisInfo)
 
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;
@@ -124,14 +126,14 @@ public:
     UNDO_TYPE(CommandType::AddNoteParenthesesInfo)
 };
 
-class RemoveNoteParenthesisInfo : public UndoCommand
+class RemoveNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveNoteParenthesisInfo)
 
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;
@@ -144,7 +146,7 @@ public:
     UNDO_TYPE(CommandType::RemoveNoteParenthesesInfo)
 };
 
-class RemoveSingleNoteParentheses : public UndoCommand
+class RemoveSingleNoteParentheses : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSingleNoteParentheses)
 

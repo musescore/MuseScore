@@ -125,7 +125,6 @@
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
-#include "engraving/editing/undo.h"
 
 #include "../shared/musicxmlfonthandler.h"
 #include "../shared/musicxmlsupport.h"

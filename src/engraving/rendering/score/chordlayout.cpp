@@ -56,7 +56,6 @@
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
-#include "editing/undo.h"
 #include "editing/editchord.h"
 
 #include "accidentalslayout.h"

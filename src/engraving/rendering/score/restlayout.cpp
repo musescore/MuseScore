@@ -27,6 +27,7 @@
 #include "tlayout.h"
 
 #include "dom/beam.h"
+#include "dom/staff.h"
 #include "dom/system.h"
 
 using namespace muse;

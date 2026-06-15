@@ -29,7 +29,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/score.h"
 #include "engraving/editing/exchangevoices.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

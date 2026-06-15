@@ -91,38 +91,17 @@
 #include "editspanner.h"
 #include "editstaff.h"
 #include "editsystemlocks.h"
-#include "transpose.h"
 #include "mscoreview.h"
+#include "transaction/undostack.h"
+#include "transpose.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack, bool undo = false)
-{
-    IF_ASSERT_FAILED(stack) {
-        static UndoMacro::ChangesInfo empty;
-        return empty;
-    }
-
-    const UndoMacro* actualMacro = stack->activeCommand();
-
-    if (!actualMacro) {
-        actualMacro = stack->last();
-    }
-
-    if (!actualMacro) {
-        static UndoMacro::ChangesInfo empty;
-        return empty;
-    }
-
-    return actualMacro->changesInfo(undo);
-}
-
-static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro::ChangesInfo& changes)
+static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
@@ -336,6 +315,38 @@ void CmdState::setUpdateMode(UpdateMode m)
 }
 
 //---------------------------------------------------------
+//   deleteLater
+//---------------------------------------------------------
+
+void CmdState::deleteLater(EngravingObject* e)
+{
+    m_postponedDeletions.push_back(e);
+}
+
+std::vector<EngravingObject*> CmdState::takePostponedDeletions()
+{
+    std::vector<EngravingObject*> result;
+    result.swap(m_postponedDeletions);
+    return result;
+}
+
+static void deletePostponed(CmdState& cmdState)
+{
+    for (EngravingObject* e : cmdState.takePostponedDeletions()) {
+        if (e->isSystem()) {
+            System* s = toSystem(e);
+            std::list<SpannerSegment*> spanners = s->spannerSegments();
+            for (SpannerSegment* ss : spanners) {
+                if (ss->system() == s) {
+                    ss->setSystem(0);
+                }
+            }
+        }
+        delete e;
+    }
+}
+
+//---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
 ///   and starting a user-visible undo.
@@ -343,16 +354,17 @@ void CmdState::setUpdateMode(UpdateMode m)
 
 void Score::startCmd(const TranslatableString& actionName)
 {
+    masterScore()->startCmd(actionName);
+}
+
+void MasterScore::startCmd(const TranslatableString& actionName)
+{
     if (undoStack()->isLocked()) {
         return;
     }
 
-    if (MScore::debugMode) {
-        LOGD("===startCmd()");
-    }
-
-    if (undoStack()->hasActiveCommand()) {
-        LOGD("Score::startCmd(): cmd already active");
+    if (undoStack()->hasActiveTransaction()) {
+        LOGD() << "cmd already active";
         return;
     }
 
@@ -360,9 +372,8 @@ void Score::startCmd(const TranslatableString& actionName)
 
     cmdState().reset();
 
-    // Start collecting low-level undo operations for a
-    // user-visible undo action.
-    undoStack()->beginMacro(this, actionName);
+    // Start collecting low-level undoable operations for a user-visible undoable transaction.
+    undoStack()->beginTransaction(this, actionName);
 }
 
 //---------------------------------------------------------
@@ -371,26 +382,49 @@ void Score::startCmd(const TranslatableString& actionName)
 
 void Score::undoRedo(bool undo, EditData* ed)
 {
+    masterScore()->undoRedo(undo, ed);
+}
+
+void MasterScore::undoRedo(bool undo, EditData* ed)
+{
     if (readOnly()) {
         return;
     }
 
+    IF_ASSERT_FAILED(!undoStack()->hasActiveTransaction()) {
+        LOGW() << "cannot undo/redo while transaction is active";
+        return;
+    }
+
+    if (undo) {
+        IF_ASSERT_FAILED(undoStack()->canUndo()) {
+            LOGW() << "cannot undo";
+            return;
+        }
+    } else {
+        IF_ASSERT_FAILED(undoStack()->canRedo()) {
+            LOGW() << "cannot redo";
+            return;
+        }
+    }
+
+    cmdState().reset();
+
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    UndoMacro::ChangesInfo changes;
+    UndoableTransaction::ChangesInfo changes;
 
-    cmdState().reset();
     if (undo) {
-        changes = changesInfo(undoStack(), undo);
+        changes = undoStack()->last()->changesInfo(true);
         undoStack()->undo(ed);
     } else {
         undoStack()->redo(ed);
-        changes = changesInfo(undoStack());
+        changes = undoStack()->last()->changesInfo(false);
     }
 
     update(false);
-    masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
+    setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
 
     ScoreChanges result = buildScoreChanges(cmdState(), changes);
@@ -405,11 +439,16 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback, bool layoutAllParts)
 {
+    masterScore()->endCmd(rollback, layoutAllParts);
+}
+
+void MasterScore::endCmd(bool rollback, bool layoutAllParts)
+{
     if (undoStack()->isLocked()) {
         return;
     }
 
-    if (!undoStack()->hasActiveCommand()) {
+    if (!undoStack()->hasActiveTransaction()) {
         LOGW() << "no command active";
         update();
         return;
@@ -420,28 +459,28 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     }
 
     if (rollback) {
-        undoStack()->activeCommand()->unwind();
+        undoStack()->activeTransaction()->unwind();
     }
 
     update(false, layoutAllParts);
 
     ScoreChanges changes;
     if (!rollback) {
-        changes = buildScoreChanges(cmdState(), changesInfo(undoStack()));
+        changes = buildScoreChanges(cmdState(), undoStack()->activeTransaction()->changesInfo());
     }
 
-    LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
+    LOGD() << "Undo stack current transaction commands count: " << undoStack()->activeTransaction()->commands().size();
 
-    const bool isCurrentCommandEmpty = undoStack()->activeCommand()->empty(); // nothing to undo?
-    undoStack()->endMacro(isCurrentCommandEmpty);
+    const bool isCurrentTransactionEmpty = undoStack()->activeTransaction()->empty(); // nothing to undo?
+    undoStack()->endTransaction(isCurrentTransactionEmpty);
 
     if (dirty()) {
-        masterScore()->setPlaylistDirty(); // TODO: flag individual operations
+        setPlaylistDirty(); // TODO: flag individual operations
     }
 
     cmdState().reset();
 
-    if (!isCurrentCommandEmpty && !rollback) {
+    if (!isCurrentTransactionEmpty && !rollback) {
         changesChannel().send(changes);
     }
 }
@@ -465,7 +504,12 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update(bool resetCmdState, bool layoutAllParts)
+void Score::update()
+{
+    masterScore()->update();
+}
+
+void MasterScore::update(bool resetCmdState, bool layoutAllParts)
 {
     if (m_updatesLocked) {
         return;
@@ -473,53 +517,55 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
 
     TRACEFUNC;
 
+    deletePostponed(m_cmdState);
+
     bool updateAll = false;
-    {
-        MasterScore* ms = masterScore();
-        CmdState& cs = ms->cmdState();
-        ms->deletePostponed();
-
-        if (cs.layoutRange()) {
-            for (Score* s : ms->scoreList()) {
-                if (s != this && !s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
-                    continue;
-                }
-                s->doLayoutRange(cs.startTick(), cs.endTick());
-            }
-            updateAll = true;
-        }
-    }
-
-    if (m_needSetUpTempoMap) {
-        setUpTempoMap();
-        m_needSetUpTempoMap = false;
-    }
-
-    MasterScore* ms = masterScore();
-    CmdState& cs = ms->cmdState();
-    if (updateAll || cs.updateAll()) {
+    if (m_cmdState.layoutRange()) {
         for (Score* s : scoreList()) {
-            for (MuseScoreView* v : s->m_viewer) {
+            if (s != this && !s->isOpen() && scoreList().size() > 1 && !layoutAllParts) {
+                continue;
+            }
+            s->doLayoutRange(m_cmdState.startTick(), m_cmdState.endTick());
+        }
+        updateAll = true;
+    }
+
+    if (needSetUpTempoMap()) {
+        setUpTempoMap();
+    }
+
+    if (updateAll || m_cmdState.updateAll()) {
+        for (Score* s : scoreList()) {
+            for (MuseScoreView* v : s->getViewer()) {
                 v->updateAll();
             }
         }
-    } else if (cs.updateRange()) {
-        // updateRange updates only current score
-        double d = style().spatium() * .5;
-        m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-        for (MuseScoreView* v : m_viewer) {
-            v->dataChanged(m_updateState.refresh);
+    } else if (m_cmdState.updateRange()) {
+        // Any score that accumulated a refresh rect via addRefresh() calls dataChanged() on its viewers.
+        for (Score* s : scoreList()) {
+            if (s->refreshRect().isNull()) {
+                continue;
+            }
+            const std::list<MuseScoreView*>& viewers = s->getViewer();
+            if (!viewers.empty()) {
+                double d = s->style().spatium() * .5;
+                RectF rect = s->refreshRect().adjusted(-d, -d, 2 * d, 2 * d);
+                for (MuseScoreView* v : viewers) {
+                    v->dataChanged(rect);
+                }
+            }
+            s->clearRefreshRect();
         }
-        m_updateState.refresh = RectF();
-    }
-    if (playlistDirty()) {
-        masterScore()->setPlaylistClean();
-    }
-    if (resetCmdState) {
-        cs.reset();
     }
 
-    for (Score* score : ms->scoreList()) {
+    if (playlistDirty()) {
+        setPlaylistClean();
+    }
+    if (resetCmdState) {
+        m_cmdState.reset();
+    }
+
+    for (Score* score : scoreList()) {
         Selection& sel = score->selection();
         if (sel.isRange() && !sel.isLocked()) {
             sel.updateSelectedElements();
@@ -527,30 +573,9 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
     }
 }
 
-void Score::lockUpdates(bool locked)
+void MasterScore::lockUpdates(bool locked)
 {
     m_updatesLocked = locked;
-}
-
-//---------------------------------------------------------
-//   deletePostponed
-//---------------------------------------------------------
-
-void Score::deletePostponed()
-{
-    for (EngravingObject* e : m_updateState.deleteList) {
-        if (e->isSystem()) {
-            System* s = toSystem(e);
-            std::list<SpannerSegment*> spanners = s->spannerSegments();
-            for (SpannerSegment* ss : spanners) {
-                if (ss->system() == s) {
-                    ss->setSystem(0);
-                }
-            }
-        }
-    }
-    muse::DeleteAll(m_updateState.deleteList);
-    m_updateState.deleteList.clear();
 }
 
 //---------------------------------------------------------

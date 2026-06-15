@@ -455,7 +455,7 @@ void DomAccessor::undoRemoveElement(EngravingItem* item)
     score()->undoRemoveElement(item);
 }
 
-void DomAccessor::undo(UndoCommand* cmd, EditData* ed) const
+void DomAccessor::undo(UndoableCommand* cmd, EditData* ed) const
 {
     IF_ASSERT_FAILED(score()) {
         return;

@@ -83,21 +83,13 @@ AddElement::AddElement(EngravingItem* e)
     element = e;
 }
 
-//---------------------------------------------------------
-//   AddElement::cleanup
-//---------------------------------------------------------
-
-void AddElement::cleanup(bool undo)
+void AddElement::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete element;
         element = nullptr;
     }
 }
-
-//---------------------------------------------------------
-//   endUndoRedo
-//---------------------------------------------------------
 
 void AddElement::endUndoRedo(bool isUndo) const
 {
@@ -116,10 +108,6 @@ void AddElement::endUndoRedo(bool isUndo) const
     }
 }
 
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
 void AddElement::undo(EditData*)
 {
     Score* score = element->score();
@@ -128,16 +116,8 @@ void AddElement::undo(EditData*)
         score->removeElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    }
-
     endUndoRedo(true);
 }
-
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
 
 void AddElement::redo(EditData*)
 {
@@ -147,16 +127,8 @@ void AddElement::redo(EditData*)
         score->addElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    }
-
     endUndoRedo(false);
 }
-
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
 
 const char* AddElement::name() const
 {
@@ -172,17 +144,12 @@ const char* AddElement::name() const
     return buffer;
 }
 
-//---------------------------------------------------------
-//   AddElement::isFiltered
-//---------------------------------------------------------
-
-bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool AddElement::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
     switch (f) {
-    case Filter::AddElement:
+    case UndoableCommandFilter::AddElement:
         return target == element;
-    case Filter::AddElementLinked:
+    case UndoableCommandFilter::AddElementLinked:
         return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
@@ -266,21 +233,13 @@ RemoveElement::RemoveElement(EngravingItem* e)
     }
 }
 
-//---------------------------------------------------------
-//   RemoveElement::cleanup
-//---------------------------------------------------------
-
-void RemoveElement::cleanup(bool undo)
+void RemoveElement::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete element;
         element = nullptr;
     }
 }
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
 
 void RemoveElement::undo(EditData*)
 {
@@ -290,9 +249,7 @@ void RemoveElement::undo(EditData*)
         score->addElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    } else if (element->isChordRest()) {
+    if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
             for (Note* note : chord->notes()) {
@@ -307,10 +264,6 @@ void RemoveElement::undo(EditData*)
     }
 }
 
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
-
 void RemoveElement::redo(EditData*)
 {
     Score* score = element->score();
@@ -319,9 +272,7 @@ void RemoveElement::redo(EditData*)
         score->removeElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    } else if (element->isChordRest()) {
+    if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -335,10 +286,6 @@ void RemoveElement::redo(EditData*)
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     }
 }
-
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
 
 const char* RemoveElement::name() const
 {
@@ -354,17 +301,12 @@ const char* RemoveElement::name() const
     return buffer;
 }
 
-//---------------------------------------------------------
-//   RemoveElement::isFiltered
-//---------------------------------------------------------
-
-bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool RemoveElement::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
     switch (f) {
-    case Filter::RemoveElement:
+    case UndoableCommandFilter::RemoveElement:
         return target == element;
-    case Filter::RemoveElementLinked:
+    case UndoableCommandFilter::RemoveElementLinked:
         return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
@@ -437,10 +379,6 @@ void ChangeElement::flip(EditData*)
         if (ns->system()) {
             ns->system()->add(ns);
         }
-    }
-
-    if (newElement->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(newElement), score);
     }
 
     std::swap(oldElement, newElement);
@@ -516,14 +454,9 @@ Link::Link(EngravingObject* e1, EngravingObject* e2)
     e = e1;
 }
 
-//---------------------------------------------------------
-//   Link::isFiltered
-//---------------------------------------------------------
-
-bool Link::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool Link::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
-    if (f == Filter::Link) {
+    if (f == UndoableCommandFilter::Link) {
         return e == target || le->contains(const_cast<EngravingItem*>(target));
     }
     return false;

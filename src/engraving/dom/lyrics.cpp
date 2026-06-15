@@ -25,7 +25,6 @@
 #include "types/translatablestring.h"
 
 #include "../editing/textedit.h"
-#include "../editing/undo.h"
 
 #include "measure.h"
 #include "navigate.h"

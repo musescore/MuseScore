@@ -343,12 +343,12 @@ void InsertRemoveMeasures::removeMeasures()
             // erase system from score
             muse::remove(score->systems(), s);
             // finally delete system
-            score->deleteLater(s);
+            s->deleteLater();
 
             if (page && page->systems().empty()) {
                 // if page is empty, delete it as well
                 muse::remove(score->pages(), page);
-                score->deleteLater(page);
+                page->deleteLater();
             }
         }
     }

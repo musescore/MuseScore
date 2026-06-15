@@ -29,7 +29,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

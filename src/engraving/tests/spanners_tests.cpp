@@ -35,6 +35,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/elements.h"

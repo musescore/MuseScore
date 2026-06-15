@@ -28,8 +28,9 @@
 #include "dom/bracket.h"
 #include "dom/factory.h"
 #include "dom/part.h"
-#include "style/defaultstyle.h"
+#include "dom/staff.h"
 #include "dom/system.h"
+#include "style/defaultstyle.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;

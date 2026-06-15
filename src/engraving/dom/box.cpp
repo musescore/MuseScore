@@ -25,7 +25,6 @@
 #include <cmath>
 
 #include "../editing/elementeditdata.h"
-#include "../editing/undo.h"
 #include "../editing/editfretboarddiagram.h"
 
 #include "actionicon.h"

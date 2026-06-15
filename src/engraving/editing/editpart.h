@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../compat/midi/midipatch.h"
 #include "../dom/drumset.h"
@@ -31,7 +31,7 @@
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class InsertPart : public UndoCommand
+class InsertPart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertPart)
 
@@ -49,7 +49,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class RemovePart : public UndoCommand
+class RemovePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
@@ -67,7 +67,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class SetSoloist : public UndoCommand
+class SetSoloist : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetSoloist)
 
@@ -84,7 +84,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangePart : public UndoCommand
+class ChangePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePart)
 
@@ -102,7 +102,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentLong : public UndoCommand
+class ChangeInstrumentLong : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentLong)
 
@@ -120,7 +120,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentShort : public UndoCommand
+class ChangeInstrumentShort : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentShort)
 
@@ -138,7 +138,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentGroupOptions : public UndoCommand
+class ChangeInstrumentGroupOptions : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentGroupOptions)
 
@@ -158,7 +158,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentNumber : public UndoCommand
+class ChangeInstrumentNumber : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentNumber)
 
@@ -176,7 +176,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeDrumset : public UndoCommand
+class ChangeDrumset : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeDrumset)
 
@@ -194,7 +194,7 @@ public:
     UNDO_NAME("ChangeDrumset")
 };
 
-class ChangeStringData : public UndoCommand
+class ChangeStringData : public UndoableCommand
 {
     Instrument* m_instrument = nullptr;
     StringTunings* m_stringTunings = nullptr;
@@ -210,7 +210,7 @@ public:
     UNDO_NAME("ChangeStringData")
 };
 
-class ChangePatch : public UndoCommand
+class ChangePatch : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePatch)
 
@@ -227,7 +227,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class SetUserBankController : public UndoCommand
+class SetUserBankController : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetUserBankController)
 

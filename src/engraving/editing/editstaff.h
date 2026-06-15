@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measure.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
 
 namespace mu::engraving {
-class InsertStaff : public UndoCommand
+class InsertStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertStaff)
 
@@ -47,7 +47,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class RemoveStaff : public UndoCommand
+class RemoveStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveStaff)
 
@@ -66,7 +66,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class AddSystemObjectStaff : public UndoCommand
+class AddSystemObjectStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddSystemObjectStaff)
 
@@ -82,7 +82,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class RemoveSystemObjectStaff : public UndoCommand
+class RemoveSystemObjectStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSystemObjectStaff)
 
@@ -98,7 +98,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class InsertMStaff : public UndoCommand
+class InsertMStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertMStaff)
 
@@ -116,7 +116,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class RemoveMStaff : public UndoCommand
+class RemoveMStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveMStaff)
 
@@ -134,7 +134,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class InsertStaves : public UndoCommand
+class InsertStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertStaves)
 
@@ -152,7 +152,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class RemoveStaves : public UndoCommand
+class RemoveStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveStaves)
 
@@ -170,7 +170,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class SortStaves : public UndoCommand
+class SortStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SortStaves)
 
@@ -192,7 +192,7 @@ public:
 //   ChangeStaff
 //---------------------------------------------------------
 
-class ChangeStaff : public UndoCommand
+class ChangeStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStaff)
 
@@ -223,7 +223,7 @@ public:
 //   ChangeStaffType
 //---------------------------------------------------------
 
-class ChangeStaffType : public UndoCommand
+class ChangeStaffType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStaffType)
 
@@ -242,7 +242,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class ChangeMStaffProperties : public UndoCommand
+class ChangeMStaffProperties : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMStaffProperties)
 
@@ -261,7 +261,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class ChangeMStaffHideIfEmpty : public UndoCommand
+class ChangeMStaffHideIfEmpty : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMStaffHideIfEmpty)
 

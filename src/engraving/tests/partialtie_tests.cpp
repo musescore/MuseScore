@@ -92,11 +92,9 @@ protected:
     {
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
-        Tie* t = m_masterScore->cmdToggleTie();
+        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
-        m_masterScore->endCmd();
 
         for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
@@ -112,9 +110,7 @@ protected:
         TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
         EXPECT_TRUE(jumpPointList->size() > 1);
 
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         jumpPointList->toggleJumpPoint(u"jumpPoint1");
-        m_masterScore->endCmd();
 
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
             if (jumpPoint->id() == u"jumpPoint1") {
@@ -199,9 +195,7 @@ protected:
 
         Tie* startTie = jumpPointList->startTie();
 
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        jumpPointList->toggleJumpPoint(u"jumpPoint0");
-        m_masterScore->endCmd();
+        jumpPointList->toggleJumpPoint(u"jumpPoint0"); // calls startCmd/endCmd internally
 
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
             if (jumpPoint->id() == u"jumpPoint0") {
@@ -261,10 +255,8 @@ protected:
         EXPECT_TRUE(initialTie && initialTie->isPartialTie());
 
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
-        m_masterScore->endCmd();
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
 
         bool newTieFound = false;
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
@@ -297,11 +289,9 @@ protected:
     {
         // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(tieBeforeSegno);
-        m_masterScore->endCmd();
 
         Tie* startTie = addTie();
 
@@ -358,12 +348,10 @@ protected:
 
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
         m_masterScore->select(secondTieNote, SelectType::ADD);
-        Tie* t = m_masterScore->cmdToggleTie();
+        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
-        m_masterScore->endCmd();
 
         for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
@@ -560,9 +548,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie at 4/4
     score->select(tieFromNote);
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdToggleTie();
-    score->endCmd();
+    score->cmdToggleTie(); // calls startCmd/endCmd internally
 
     // Clear the second measure
 
@@ -600,9 +586,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie again at 4/4
     score->select(tieFromNote);
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdToggleTie();
-    score->endCmd();
+    score->cmdToggleTie(); // calls startCmd/endCmd internally
 
     // Verify the tie is now full
     Tie* newTie = tieFromNote->tieFor();

@@ -37,6 +37,7 @@
 #include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
+#include "editing/transaction/undostack.h"
 #include "editing/transpose.h"
 
 #include "style/style.h"
@@ -1559,7 +1560,7 @@ void Score::removeElement(EngravingItem* element)
             }
 
             muse::remove(m_systems, system);
-            deleteLater(system);
+            system->deleteLater();
 
             if (page && page->systems().empty()) {
                 // Remove this page, since it is now empty.
@@ -1567,7 +1568,7 @@ void Score::removeElement(EngravingItem* element)
                 PointF pos = page->pos();
                 auto ii = std::find(pages().begin(), pages().end(), page);
                 pages().erase(ii);
-                deleteLater(page);
+                page->deleteLater();
 
                 while (ii != pages().end()) {
                     page = *ii;
@@ -4340,7 +4341,7 @@ void Score::cmdSelectSection()
 //   undo
 //---------------------------------------------------------
 
-void Score::undo(UndoCommand* cmd, EditData* ed) const
+void Score::undo(UndoableCommand* cmd, EditData* ed) const
 {
     undoStack()->pushAndPerform(cmd, ed);
 }
