@@ -108,6 +108,7 @@ bash ./buildscripts/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME
 
 # Zip of the signed .app for in-place auto-update
 ZIP_ARTIFACT_NAME="${ARTIFACT_NAME%.dmg}.zip"
-ditto -c -k --keepParent applebuild/mscore.app "$ARTIFACTS_DIR/$ZIP_ARTIFACT_NAME"
+mkdir -p update_artifacts
+ditto -c -k --keepParent applebuild/mscore.app "update_artifacts/$ZIP_ARTIFACT_NAME"
 echo "$ZIP_ARTIFACT_NAME" > $ARTIFACTS_DIR/env/artifact_name_zip.env
 echo "ZIP_ARTIFACT_NAME: $ZIP_ARTIFACT_NAME"
