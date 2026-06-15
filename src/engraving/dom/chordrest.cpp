@@ -874,29 +874,45 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 
 EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
-    if (isChord() && e->isArticulationFamily()) {
-        Chord* c = toChord(this);
-        auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
-        if (i != c->articulations().end()) {
-            if (i != c->articulations().end() - 1) {
-                return *(i + 1);
-            } else {
-                if (!m_lyrics.empty()) {
-                    return m_lyrics[0];
-                } else {
-                    return nullptr;
-                }
-            }
-        }
-    } else {
-        auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
-        if (i != m_lyrics.end()) {
-            if (i != m_lyrics.end() - 1) {
-                return *(i + 1);
-            }
+    if (e->isLyrics()) {
+        // The next element after Lyrics is the LyricsLine (if it exists)...
+        if (LyricsLine* line = toLyrics(e)->separator()) {
+            return line;
         }
     }
-    return 0;
+    if (e->isLyricsLine()) {
+        LyricsLine* lyricsLine = toLyricsLine(e);
+        Lyrics* lyrics = lyricsLine->lyrics();
+        IF_ASSERT_FAILED(lyrics) {
+            return nullptr;
+        }
+        // We were on a LyricsLine - now we'll try to move to the next Lyrics...
+        e = lyrics;
+    }
+
+    if (!isChord() || !e->isArticulationFamily()) {
+        // Move to the next Lyrics...
+        auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
+        if (i == m_lyrics.end() || i == m_lyrics.end() - 1) {
+            return nullptr;
+        }
+        return *(i + 1);
+    }
+
+    // Cycle through articulations...
+    Chord* c = toChord(this);
+    auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
+    if (i == c->articulations().end()) {
+        return nullptr;
+    }
+    if (i != c->articulations().end() - 1) {
+        return *(i + 1);
+    }
+    if (!m_lyrics.empty()) {
+        return m_lyrics[0];
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -905,27 +921,39 @@ EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 
 EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 {
-    auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
-    if (i != m_lyrics.end()) {
-        if (i != m_lyrics.begin()) {
-            return *(i - 1);
-        } else {
-            if (isChord() && !toChord(this)->articulations().empty()) {
-                return toChord(this)->articulations().back();
-            } else {
-                return nullptr;
-            }
-        }
-    } else if (isChord() && e->isArticulationFamily()) {
-        Chord* c = toChord(this);
-        auto j = std::find(c->articulations().begin(), c->articulations().end(), e);
-        if (j != c->articulations().end()) {
-            if (j != c->articulations().begin()) {
-                return *(j - 1);
-            }
-        }
+    const std::vector<Articulation*> artics = isChord() ? toChord(this)->articulations() : std::vector<Articulation*>();
+
+    if (e->isLyricsLine()) {
+        // The previous element to a LyricsLine is the associated Lyrics...
+        return toLyricsLine(e)->lyrics();
     }
-    return 0;
+
+    auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
+    if (i == m_lyrics.end()) {
+        // Cycle through articulations...
+        if (artics.empty()) {
+            return nullptr;
+        }
+        auto j = std::find(artics.begin(), artics.end(), e);
+        if (j == artics.end() || j == artics.begin()) {
+            return nullptr;
+        }
+        return *(j - 1);
+    }
+    if (i == m_lyrics.begin()) {
+        return !artics.empty() ? artics.back() : nullptr;
+    }
+
+    // Move to the previous Lyrics...
+    Lyrics* lyrics = *(i - 1);
+    IF_ASSERT_FAILED(lyrics) {
+        return nullptr;
+    }
+    if (lyrics->separator()) {
+        // Move to the LyricsLine of the previous Lyrics (if it exists)...
+        return lyrics->separator();
+    }
+    return lyrics;
 }
 
 //---------------------------------------------------------
@@ -942,7 +970,8 @@ EngravingItem* ChordRest::nextElement()
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::TAPPING:
-    case ElementType::LYRICS: {
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE: {
         EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
             return next;
@@ -978,7 +1007,8 @@ EngravingItem* ChordRest::prevElement()
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::TAPPING:
-    case ElementType::LYRICS: {
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE: {
         EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {
             return prev;
@@ -1016,11 +1046,17 @@ EngravingItem* ChordRest::prevElement()
 
 EngravingItem* ChordRest::lastElementBeforeSegment()
 {
-    if (!m_lyrics.empty()) {
-        return m_lyrics.back();
+    if (m_lyrics.empty()) {
+        return nullptr;
     }
-
-    return nullptr;
+    Lyrics* lyrics = m_lyrics.back();
+    IF_ASSERT_FAILED(lyrics) {
+        return nullptr;
+    }
+    if (LyricsLine* lyricsLine = lyrics->separator()) {
+        return lyricsLine;
+    }
+    return lyrics;
 }
 
 //---------------------------------------------------------
