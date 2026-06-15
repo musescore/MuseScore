@@ -184,6 +184,69 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
     ElementType::HARP_DIAGRAM,
 };
 
+void MeasureLayout::reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, Measure* lastMeasure, Fraction len)
+{
+    if (mmrMeasure->ticks() == len) {
+        MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
+        return;
+    }
+
+    Fraction remainingMMRDuration = std::min(mmrMeasure->ticks() - len, ctx.dom().lastMeasure()->endTick() - len);
+
+    Segment* barLineSeg = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+    Segment* clefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
+    Segment* breathSeg = mmrMeasure->findSegmentR(SegmentType::Breath, mmrMeasure->ticks());
+
+    if (!remainingMMRDuration.negative() && remainingMMRDuration.isNotZero()) {
+        // Time remaining. Create another mmrest to fill the time
+        Measure* nextFirstMeasure = ctx.mutDom().tick2measure(lastMeasure->endTick());
+        if (!nextFirstMeasure->mmRest()) {
+            Measure* nextLastMeasure = ctx.mutDom().tick2measure(lastMeasure->endTick() + remainingMMRDuration - Fraction::eps());
+            nextLastMeasure = nextLastMeasure ? nextLastMeasure : ctx.mutDom().lastMeasure();
+            const int numMeasuresInNewMMRest = nextLastMeasure->measureIndex() - nextFirstMeasure->measureIndex();
+
+            Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
+            nextMMRMeasure->setTicks(remainingMMRDuration);
+            nextMMRMeasure->setTick(nextFirstMeasure->tick());
+            ctx.mutDom().undo(new ChangeMMRest(nextFirstMeasure, nextMMRMeasure));
+
+            nextMMRMeasure->setTimesig(nextFirstMeasure->timesig());
+            nextMMRMeasure->setRepeatCount(nextLastMeasure->repeatCount());
+            nextMMRMeasure->setMMRestCount(numMeasuresInNewMMRest);
+            nextMMRMeasure->setMeasureNumber(nextFirstMeasure->measureNumber());
+
+            ctx.mutDom().updateSystemLocksOnCreateMMRest(nextFirstMeasure, nextLastMeasure);
+
+            nextMMRMeasure->setRepeatStart(nextFirstMeasure->repeatStart() || nextLastMeasure->repeatStart());
+            nextMMRMeasure->setRepeatEnd(nextFirstMeasure->repeatEnd() || nextLastMeasure->repeatEnd());
+
+            if (barLineSeg) {
+                changeElementsParent(barLineSeg, nextMMRMeasure, remainingMMRDuration, ctx);
+            }
+            if (clefSeg) {
+                changeElementsParent(clefSeg, nextMMRMeasure, remainingMMRDuration, ctx);
+            }
+            if (breathSeg) {
+                changeElementsParent(breathSeg, nextMMRMeasure, remainingMMRDuration, ctx);
+            }
+        }
+    }
+
+    // adjust length
+    mmrMeasure->setTicks(len);
+    // move existing end barline, clef and breath
+    if (barLineSeg) {
+        barLineSeg->setRtick(len);
+    }
+    if (clefSeg) {
+        clefSeg->setRtick(len);
+    }
+    if (breathSeg) {
+        breathSeg->setRtick(len);
+    }
+    MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
+}
+
 //---------------------------------------------------------
 //   createMMRest
 //    create a multimeasure rest
@@ -211,25 +274,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     // mmrMeasure coexists with n undisplayed measures of rests
     Measure* mmrMeasure = firstMeasure->mmRest();
     if (mmrMeasure) {
-        // reuse existing mmrest
-        if (mmrMeasure->ticks() != len) {
-            Segment* barLineSeg = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-            Segment* clefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
-            Segment* breathSeg = mmrMeasure->findSegmentR(SegmentType::Breath, mmrMeasure->ticks());
-            // adjust length
-            mmrMeasure->setTicks(len);
-            // move existing end barline, clef and breath
-            if (barLineSeg) {
-                barLineSeg->setRtick(len);
-            }
-            if (clefSeg) {
-                clefSeg->setRtick(len);
-            }
-            if (breathSeg) {
-                breathSeg->setRtick(len);
-            }
-        }
-        MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
+        reuseExistingMMRest(ctx, mmrMeasure, lastMeasure, len);
     } else {
         mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
         mmrMeasure->setTicks(len);

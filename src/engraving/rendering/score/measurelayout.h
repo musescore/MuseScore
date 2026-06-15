@@ -92,6 +92,7 @@ private:
     static void restoreMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
     static void changeAnnotationsParent(Segment* oldParent, Segment* newParent);
     static Segment* changeElementsParent(Segment* oldSeg, Measure* newMeasure, const Fraction& newSegTick, LayoutContext& ctx);
+    static void reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, Measure* lastMeasure, Fraction len)
 
     static int adjustMeasureNumber(Measure* m, int measureNumber);
 
