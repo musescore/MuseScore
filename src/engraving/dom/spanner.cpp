@@ -1390,7 +1390,12 @@ void Spanner::setTick(const Fraction& v)
 
 void Spanner::setTick2(const Fraction& f)
 {
-    setTicks(f - m_tick);
+    Fraction ticks = f - m_tick;
+    IF_ASSERT_FAILED(f >= m_tick) {
+        ticks = m_tick - f;
+        m_tick = f;
+    }
+    setTicks(ticks);
 }
 
 //---------------------------------------------------------
