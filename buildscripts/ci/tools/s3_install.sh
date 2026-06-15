@@ -39,10 +39,14 @@ if [ -z "$S3_SECRET" ]; then echo "error: not set S3_SECRET"; exit 1; fi
 if ! command -v s3cmd >/dev/null 2>&1; then
     echo "=== Install tools ==="
 
-    sudo apt-get install python3-setuptools
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        brew install s3cmd
+    else
+        sudo apt-get install python3-setuptools
 
-    echo "Install s3cmd"
-    pip3 install s3cmd
+        echo "Install s3cmd"
+        pip3 install s3cmd
+    fi
 fi
 
 

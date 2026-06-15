@@ -43,6 +43,7 @@ if __name__ == '__main__' and sys.prefix == sys.base_prefix:
     del old_dir, new_dir, rel_pyi, abs_pyi, script_name
 
 import sys
+import re
 import json
 import markdown
 
@@ -91,6 +92,25 @@ while i < len(release_assets):
         i += 1
 
 release_info_json["assets"] = release_assets
+release_info_json["assetsNew"] = release_new_assets
+
+eprint("=== Add macOS auto-update zip asset ===")
+
+MACOS_ZIP_BASE_URL = "https://update.musescore.org"
+
+dmg_asset = next((a for a in release_assets if str(a.get("name", "")).endswith(".dmg")), None)
+if dmg_asset is not None:
+    zip_name = dmg_asset["name"][:-len(".dmg")] + ".zip"
+    # Path mirrors where the build uploads the zip on the update server:
+    # <major.minor.patch>/macOS/<file> (e.g. "4.7.0/macOS/...").
+    version_match = re.search(r"\d+\.\d+\.\d+", zip_name)
+    version_path = (version_match.group(0) + "/") if version_match else ""
+    zip_url = MACOS_ZIP_BASE_URL + "/" + version_path + "macOS/" + zip_name
+    release_new_assets.append({"name": zip_name, "browser_download_url": zip_url})
+    eprint("Added macOS zip asset: " + zip_url)
+else:
+    eprint("No macOS .dmg asset found; skipping zip asset")
+
 release_info_json["assetsNew"] = release_new_assets
 
 release_info_json_updated = json.dumps(release_info_json)

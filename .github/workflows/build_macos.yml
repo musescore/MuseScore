@@ -164,6 +164,15 @@ jobs:
           fi
         fi
 
+        DO_PUBLISH_UPDATE_ZIP='false'
+        if [ "${{ inputs.publish }}" == "on" ] && { [ "$BUILD_MODE" == "stable" ] || [ "$BUILD_MODE" == "testing" ]; }; then
+          DO_PUBLISH_UPDATE_ZIP='true'
+          if [ -z "${{ secrets.S3_KEY }}" ]; then
+            echo "::warning::S3_KEY is empty; not publishing update zip to S3"
+            DO_PUBLISH_UPDATE_ZIP='false'
+          fi
+        fi
+
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
@@ -180,6 +189,7 @@ jobs:
         echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
         echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH_UPDATE_ZIP=$DO_PUBLISH_UPDATE_ZIP" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Restore ccache files
@@ -262,6 +272,19 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 4
+    - name: Publish macOS update zip to S3
+      if: env.DO_PUBLISH_UPDATE_ZIP == 'true'
+      run: |
+        ZIP_NAME="$(cat ./build.artifacts/env/artifact_name_zip.env)"
+        BUILD_VERSION="$(cat ./build.artifacts/env/build_version.env)"
+        MAJOR_MINOR_PATCH="$(cut -d. -f1,2,3 <<< "$BUILD_VERSION")"
+        S3_URL="s3://updates.musescore.org/${MAJOR_MINOR_PATCH}/macOS/${ZIP_NAME}"
+
+        bash ./buildscripts/ci/release/push_file_to_s3.sh \
+          --s3_key '${{ secrets.S3_KEY_UPDATE }}' \
+          --s3_secret '${{ secrets.S3_SECRET_UPDATE }}' \
+          --s3_url "${S3_URL}" \
+          --file_name "${ZIP_NAME}"
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v7
       with:
