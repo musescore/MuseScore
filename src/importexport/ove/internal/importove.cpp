@@ -68,7 +68,7 @@
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/jump.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/editing/transpose.h"
 
 #include "modularity/ioc.h"
@@ -431,8 +431,8 @@ void OveToMScore::convertGroups()
 
             // brace
             if (j == 0 && partStaffCount == 2) {
-                staff->setBracketType(0, BracketType::BRACE);
-                staff->setBracketSpan(0, 2);
+                m_score->setBracketType(staffIndex, 0, BracketType::BRACE);
+                m_score->setBracketSpan(staffIndex, 0, 2);
                 staff->setBarLineSpan(true);
             }
 
@@ -442,7 +442,7 @@ void OveToMScore::convertGroups()
                 int span = staffPtr->getGroupStaffCount() + 1;
                 int endStaff = staffIndex + span;
                 if (span > 0 && endStaff >= staffIndex && endStaff <= m_ove->getTrackCount()) {
-                    staff->addBracket(Factory::createBracketItem(staff->score()->dummy(), BracketType::NORMAL, span));
+                    m_score->addBracket(staffIndex, Factory::createBracketItem(m_score->dummy(), BracketType::NORMAL, span));
                     staff->setBarLineSpan(static_cast<bool>(span));
                 }
             }

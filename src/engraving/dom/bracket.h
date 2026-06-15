@@ -23,7 +23,7 @@
 #pragma once
 
 #include "engravingitem.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 
 namespace mu::engraving {
 class Factory;

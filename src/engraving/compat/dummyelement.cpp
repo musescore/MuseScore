@@ -30,7 +30,7 @@
 #include "dom/segment.h"
 #include "dom/chord.h"
 #include "dom/note.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

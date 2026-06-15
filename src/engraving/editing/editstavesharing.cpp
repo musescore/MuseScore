@@ -101,6 +101,8 @@ void EditStaveSharing::toggleStaveSharing(Score* score, bool on)
         cmdCreateSharedStaves(score);
     }
 
+    score->setBracketsAndBarlines();
+
     score->update();
 }
 

@@ -24,7 +24,7 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/instrtemplate.h"
 #include "dom/part.h"
 #include "dom/score.h"
@@ -405,11 +405,11 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
         size_t staffIdx { 0 };
-        bool blockThinBracket { false };
+        const bool isMultiStaffInstrument = ii.instrTemplate->staffCount > 1;
         size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
             // Create copy, because the original is modified while we are iterating over it
-            std::vector<BracketItem*> brackets = staff->brackets();
+            std::vector<BracketItem*> brackets = score->brackets(staff->idx());
 
             for (BracketItem* bi : brackets) {
                 if (bi->bracketType() == BracketType::GROUP) {
@@ -441,18 +441,21 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 thkBracketSpan += static_cast<int>(part->nstaves());
             }
 
-            if (prvInstrument == -1 || (ii.instrIndex != prvInstrument)) {
+            if (prvInstrument == -1 || (ii.instrIndex != prvInstrument) || isMultiStaffInstrument) {
                 if (thnBracketStaff && (thnBracketSpan > 1)) {
                     score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
                 }
-                if (ii.instrIndex != prvInstrument) {
-                    thnBracketStaff = (sg.thinBracket && !blockThinBracket) ? staff : nullptr;
+                if (ii.instrIndex != prvInstrument || isMultiStaffInstrument) {
+                    thnBracketStaff = nullptr;
                     thnBracketSpan  = 0;
                 }
             }
+            if (!thnBracketStaff && sg.thinBracket && !isMultiStaffInstrument && !staffIdx) {
+                thnBracketStaff = staff;
+                thnBracketSpan  = 0;
+            }
 
-            if (ii.instrTemplate->staffCount > 1) {
-                blockThinBracket = true;
+            if (isMultiStaffInstrument) {
                 if (staffIdx < ii.instrTemplate->staffCount) {
                     ++staffIdx;
                 }

@@ -30,6 +30,7 @@
 
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/score.h"
 
 namespace mu::iex::midi {
 namespace MidiDrum {
@@ -187,8 +188,9 @@ void splitDrumTracks(std::multimap<int, MTrack>& tracks)
 void setBracket(engraving::Staff*& staff, int& counter)
 {
     if (staff && counter > 1) {
-        staff->setBracketType(0, engraving::BracketType::NORMAL);
-        staff->setBracketSpan(0, counter);
+        engraving::Score* score = staff->score();
+        score->setBracketType(staff->idx(), 0, engraving::BracketType::NORMAL);
+        score->setBracketSpan(staff->idx(), 0, counter);
     }
     if (counter) {
         counter = 0;

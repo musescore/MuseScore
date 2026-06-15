@@ -31,7 +31,7 @@
 #include "dom/beam.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/factory.h"

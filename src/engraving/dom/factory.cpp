@@ -384,9 +384,9 @@ BracketItem* Factory::createBracketItem(EngravingItem * parent)
     return bi;
 }
 
-BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, int b)
+BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
 {
-    BracketItem* bi = new BracketItem(parent, a, b);
+    BracketItem* bi = new BracketItem(parent, bracketType, span);
     return bi;
 }
 

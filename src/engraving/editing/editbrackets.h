@@ -45,7 +45,6 @@ public:
 
     UNDO_TYPE(CommandType::RemoveBracket)
     UNDO_NAME("RemoveBracket")
-    UNDO_CHANGED_OBJECTS({ staff })
 };
 
 class AddBracket : public UndoableCommand
@@ -66,6 +65,5 @@ public:
 
     UNDO_TYPE(CommandType::AddBracket)
     UNDO_NAME("AddBracket")
-    UNDO_CHANGED_OBJECTS({ staff })
 };
 }

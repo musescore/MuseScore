@@ -22,7 +22,7 @@
 #include "bracketsettingsmodel.h"
 
 #include "engraving/dom/bracket.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 
@@ -134,7 +134,7 @@ int BracketSettingsModel::maxBracketColumnPosition() const
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
     const Score* score = bracketItem->score();
-    int bracketStartIndex = static_cast<int>(bracketItem->staff()->idx());
+    int bracketStartIndex = static_cast<int>(bracketItem->startStaffIdx());
     int bracketEndIndex = bracketStartIndex + static_cast<int>(bracketItem->bracketSpan()) - 1;
 
     int count = 0;
@@ -142,7 +142,7 @@ int BracketSettingsModel::maxBracketColumnPosition() const
     // Count the number of brackets that overlap with the selected one
     for (const Staff* staff : score->staves()) {
         int otherBracketStartIndex = static_cast<int>(staff->idx());
-        for (const BracketItem* otherBracketItem : staff->brackets()) {
+        for (const BracketItem* otherBracketItem : score->brackets(staff->idx())) {
             int otherBracketEndIndex = otherBracketStartIndex + static_cast<int>(otherBracketItem->bracketSpan()) - 1;
             if (otherBracketStartIndex <= bracketEndIndex
                 && otherBracketEndIndex >= bracketStartIndex) {
@@ -162,7 +162,7 @@ int BracketSettingsModel::maxBracketSpanStaves() const
     }
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
-    return static_cast<int>(bracketItem->score()->nstaves()) - static_cast<int>(bracketItem->staff()->idx());
+    return static_cast<int>(bracketItem->score()->nstaves()) - static_cast<int>(bracketItem->startStaffIdx());
 }
 
 bool BracketSettingsModel::isGroupBracket() const

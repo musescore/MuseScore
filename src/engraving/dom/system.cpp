@@ -32,7 +32,8 @@
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
+#include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"
@@ -287,11 +288,11 @@ void System::adjustStavesNumber(size_t nstaves)
     }
 }
 
-size_t System::getBracketsColumnsCount()
+size_t System::getBracketsColumnsCount() const
 {
     size_t columns = 0;
     for (const Staff* staff : score()->staves()) {
-        for (auto bi : staff->brackets()) {
+        for (auto bi : score()->brackets(staff->idx())) {
             columns = std::max(columns, bi->column() + 1);
         }
     }
