@@ -41,11 +41,13 @@ done
 command -v s3cmd >/dev/null 2>&1
 if [[ $? -ne 0 ]]; then
     echo "=== Install tools ==="
-
-    sudo apt-get install python3-setuptools
-
-    echo "Install s3cmd"
-    pip3 install s3cmd
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        brew install s3cmd
+    else
+        sudo apt-get install python3-setuptools
+        echo "Install s3cmd"
+        pip3 install s3cmd
+    fi
 fi
 
 cat >~/.s3cfg <<EOL
