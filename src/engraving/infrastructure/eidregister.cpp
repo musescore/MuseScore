@@ -71,7 +71,9 @@ void EIDRegister::removeItem(const EngravingObject* item)
     m_itemToEid.erase(itemIter);
 
     auto eidIter = m_eidToItem.find(eid);
-    DO_ASSERT(eidIter != m_eidToItem.end());
+    IF_ASSERT_FAILED(eidIter != m_eidToItem.end()) {
+        return;
+    }
 
     m_eidToItem.erase(eidIter);
 }
