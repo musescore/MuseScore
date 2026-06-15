@@ -1333,10 +1333,6 @@ void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* 
         return;
     }
 
-    if ((originItem->ldata()->m_sharedItem && originItem->ldata()->m_sharedItem != sharedItem)) {
-        disconnectSharedItem(originItem->ldata()->m_sharedItem, originItem);
-    }
-
     originItem->mutldata()->m_sharedItem = sharedItem;
 
     std::vector<EngravingItem*>& curOriginItems = sharedItem->mutldata()->m_originItems;
