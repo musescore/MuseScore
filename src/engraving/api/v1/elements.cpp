@@ -335,7 +335,6 @@ void Chord::setPlayEventType(mu::engraving::PlayEventType v)
 {
     // Only create undo operation if the value has changed.
     if (v != chord()->playEventType()) {
-        chord()->score()->setPlaylistDirty();
         chord()->score()->undo(new ChangeChordPlayEventType(chord(), v));
     }
 }

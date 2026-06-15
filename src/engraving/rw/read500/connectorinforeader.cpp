@@ -350,10 +350,16 @@ void ConnectorInfoReader::readAddConnector(Measure* item, ConnectorInfoReader* i
             sp->setTrack(l.track());
             sp->setTrack2(sp->track());
             sp->setTick(spTick);
-            item->score()->addSpanner(sp);
+            // Defer computing the end element: the end anchor (tick2/track2) is only known once the
+            // matching end connector is processed (below). Computing it here would cache a wrong value
+            // (tick2 == tick) that nothing recomputes until layout. See readAddConnector end branch.
+            item->score()->addSpanner(sp, /*computeStartEnd=*/ false);
+            sp->computeStartElement();
         } else if (info->isEnd()) {
             sp->setTrack2(l.track());
             sp->setTick2(spTick);
+            // Now that the end anchor is set, compute the end element once with the final value.
+            sp->computeEndElement();
         }
     }
     break;

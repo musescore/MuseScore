@@ -103,10 +103,6 @@ public:
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
     IAutomation* automation() const override;
 
-    bool playlistDirty() const override { return m_playlistDirty; }
-    void setPlaylistDirty() override;
-    void setPlaylistClean() { m_playlistDirty = false; }
-
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
     void setExpandRepeats(bool expandRepeats);
@@ -115,8 +111,10 @@ public:
     void updateRepeatListTempo();
     void updateRepeatList();
 
-    const RepeatList& repeatList() const override;
-    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const override;
+    const RepeatList& repeatList() const;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+
+    void invalidateRepeatList();
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
@@ -229,7 +227,7 @@ private:
     RepeatList* m_nonExpandedRepeatList = nullptr;
     AutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
-    bool m_playlistDirty = true;
+
     std::vector<Excerpt*> m_excerpts;
     std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
     Score* m_playbackScore = nullptr;

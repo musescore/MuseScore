@@ -193,7 +193,7 @@ static void clearMeasures(mu::engraving::MasterScore* masterScore)
         measures->clear();
     }
 
-    masterScore->setPlaylistDirty();
+    masterScore->invalidateRepeatList();
     masterScore->updateRepeatList();
 }
 

@@ -2878,12 +2878,10 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
     case Pid::EXCLUDE_FROM_NUMBERING:
         setExcludeFromNumbering(value.toBool());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_OFFSET:
         setMeasureNumberOffset(value.toInt());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_MODE:
         setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -2900,15 +2898,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);
