@@ -1319,6 +1319,16 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+EngravingItem* EngravingItem::sharedItem() const
+{
+    return ldata()->m_sharedItem;
+}
+
+const std::vector<EngravingItem*>& EngravingItem::originItems() const
+{
+    return ldata()->m_originItems;
+}
+
 void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
 {
     if (originItem->ldata()->m_sharedItem == sharedItem) {

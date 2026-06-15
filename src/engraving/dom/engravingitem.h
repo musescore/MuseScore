@@ -676,8 +676,8 @@ public:
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 
-    EngravingItem* sharedItem() const { return m_layoutData->m_sharedItem; }
-    const std::vector<EngravingItem*>& originItems() const { return m_layoutData->m_originItems; }
+    EngravingItem* sharedItem() const;
+    const std::vector<EngravingItem*>& originItems() const;
     static void connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectAllOriginItems(EngravingItem* sharedItem);

@@ -250,14 +250,21 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
         }
 
         for (size_t i = 0; i < notes1.size(); ++i) {
-            if (!notes1[i]->isExactUnison(notes2[i])) {
+            Note* n1 = notes1[i];
+            Note* n2 = notes2[i];
+
+            if (!n1->isExactUnison(n2)) {
+                return false;
+            }
+
+            if (!checkNoteSpannersForUnison(n1, n2)) {
                 return false;
             }
         }
     }
 
     for (Segment* segment : ctx.allSegments) {
-        if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack, ctx)) {
+        if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
     }
@@ -295,40 +302,52 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
 
         Chord* c1 = toChord(cr1);
         Chord* c2 = toChord(cr2);
-        for (Note* n1 : c1->notes()) {
-            for (Note* n2 : c2->notes()) {
-                if (n2->pitch() > n1->pitch()) {
+
+        const std::vector<Note*>& notes1 = c1->notes();
+        const std::vector<Note*>& notes2 = c2->notes();
+        if (notes1.size() != notes2.size()) {
+            return false;
+        }
+
+        for (size_t i = 0; i < notes1.size(); ++i) {
+            Note* n1 = notes1[i];
+            Note* n2 = notes2[i];
+
+            if (n2->pitch() > n1->pitch()) {
+                return false;
+            }
+
+            if (!n2->isExactUnison(n1)) {
+                if (n2->pitch() == n1->pitch() || muse::contains(localUnisonNotes, n1)) {
                     return false;
                 }
 
-                if (!n2->isExactUnison(n1)) {
-                    if (n2->pitch() == n1->pitch() || muse::contains(localUnisonNotes, n1)) {
-                        return false;
-                    }
+                continue;
+            }
 
+            if (!checkNoteSpannersForUnison(n1, n2)) {
+                return false;
+            }
+
+            for (track_idx_t track : curTrackGroup) {
+                if (track == prevTrack) {
                     continue;
                 }
-
-                for (track_idx_t track : curTrackGroup) {
-                    if (track == prevTrack) {
-                        continue;
-                    }
-                    if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
-                        for (Note* n : toChord(cr)->notes()) {
-                            if (!n2->isExactUnison(n)) {
-                                return false;
-                            }
+                if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
+                    for (Note* n : toChord(cr)->notes()) {
+                        if (!n2->isExactUnison(n)) {
+                            return false;
                         }
                     }
                 }
-
-                potentialUnisonNotes.push_back(n2);
             }
+
+            potentialUnisonNotes.push_back(n2);
         }
     }
 
     for (Segment* segment : ctx.allSegments) {
-        if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack, ctx)) {
+        if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
     }
@@ -340,8 +359,7 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
     return true;
 }
 
-bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack,
-                                                      StaveSharingContext& ctx)
+bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
 {
     std::multimap<ElementType, EngravingItem*> annotationsOnPrevTrack;
     std::multimap<ElementType, EngravingItem*> annotationsOnNextTrack;
@@ -373,6 +391,65 @@ bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_id
                 }
             }
             // TODO: other types will probably need other checks
+        }
+    }
+
+    return true;
+}
+
+bool StaveSharingLayout::checkNoteSpannersForUnison(const Note* note1, const Note* note2)
+{
+    const Tie* tieBack1 = note1->tieBack();
+    const Tie* tieBack2 = note2->tieBack();
+    if (bool(tieBack1) != bool(tieBack2)) {
+        return false;
+    }
+    if (tieBack1 && bool(tieBack1->startElement()) != bool(tieBack2->startElement())) {
+        return false;
+    }
+
+    const Tie* tieFor1 = note1->tieFor();
+    const Tie* tieFor2 = note2->tieFor();
+    if (bool(tieFor1) != bool(tieFor2)) {
+        return false;
+    }
+    if (tieFor1 && bool(tieFor1->endElement()) != bool(tieFor2->endElement())) {
+        return false;
+    }
+
+    const std::vector<Spanner*>& spannerBack1 = note1->spannerBack();
+    const std::vector<Spanner*>& spannerBack2 = note2->spannerBack();
+    if (spannerBack1.size() != spannerBack2.size()) {
+        return false;
+    }
+
+    for (Spanner* sp1 : spannerBack1) {
+        auto i = std::find_if(spannerBack2.begin(), spannerBack2.end(), [sp1](Spanner* sp2) { return sp2->type() == sp1->type(); });
+        if (i == spannerBack2.end()) {
+            return false;
+        }
+
+        Spanner* sp2 = *i;
+        if (bool(sp1->startElement()) != bool(sp2->startElement())) {
+            return false;
+        }
+    }
+
+    const std::vector<Spanner*>& spannerFor1 = note1->spannerFor();
+    const std::vector<Spanner*>& spannerFor2 = note2->spannerFor();
+    if (spannerFor1.size() != spannerFor2.size()) {
+        return false;
+    }
+
+    for (Spanner* sp1 : spannerFor1) {
+        auto i = std::find_if(spannerFor2.begin(), spannerFor2.end(), [sp1](Spanner* sp2) { return sp2->type() == sp1->type(); });
+        if (i == spannerFor2.end()) {
+            return false;
+        }
+
+        Spanner* sp2 = *i;
+        if (bool(sp1->endElement()) != bool(sp2->endElement())) {
+            return false;
         }
     }
 
@@ -474,6 +551,24 @@ void StaveSharingLayout::disconnectAll(SharedPart* p, StaveSharingContext& ctx)
             if (cr->isChord()) {
                 for (Note* note : toChord(cr)->notes()) {
                     EngravingItem::disconnectAllOriginItems(note);
+
+                    if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endNote()) { // if it does have endNote it will be disconnected when we process that note
+                        EngravingItem::disconnectAllOriginItems(tieFor);
+                    }
+
+                    for (Spanner* spannerFor : note->spannerFor()) {
+                        if (!spannerFor->endElement()) {
+                            EngravingItem::disconnectAllOriginItems(spannerFor); // if it does have endElement it will be disconnected when we process that note
+                        }
+                    }
+
+                    if (Tie* tieBack = note->tieBack()) {
+                        EngravingItem::disconnectAllOriginItems(tieBack);
+                    }
+
+                    for (Spanner* spannerBack : note->spannerBack()) {
+                        EngravingItem::disconnectAllOriginItems(spannerBack);
+                    }
                 }
             }
         }
@@ -567,7 +662,7 @@ void StaveSharingLayout::makeSharedChordRests(SharedPart* p, StaveSharingContext
             Chord* sharedChord = toChord(sharedCR);
             Note* sharedNote = nullptr;
             for (Note* n : sharedChord->notes()) {
-                if (n->pitch() == originNote->pitch()) {
+                if (n->isExactUnison(originNote)) {
                     sharedNote = n;
                     break;
                 }
@@ -581,7 +676,88 @@ void StaveSharingLayout::makeSharedChordRests(SharedPart* p, StaveSharingContext
             }
 
             EngravingItem::connectSharedItem(sharedNote, originNote);
+
+            makeSharedTiesAndNoteSpanners(originNote, sharedNote);
         }
+    }
+}
+
+void StaveSharingLayout::makeSharedTiesAndNoteSpanners(Note* originNote, Note* sharedNote)
+{
+    Score* score = originNote->score();
+
+    Tie* tieBack = originNote->tieBack();
+    if (tieBack) {
+        Tie* sharedTieBack = sharedNote->tieBack();
+        if (!sharedTieBack) {
+            sharedTieBack = toTie(tieBack->clone());
+            Note* sharedStartNote = tieBack->startNote() ? toNote(tieBack->startNote()->sharedItem()) : nullptr;
+            sharedTieBack->setNoteSpan(sharedStartNote, sharedNote);
+
+            score->undoAddElement(sharedTieBack);
+        }
+
+        EngravingItem::connectSharedItem(sharedTieBack, tieBack);
+    }
+
+    Tie* tieFor = originNote->tieFor();
+    if (tieFor && !tieFor->endNote()) { // If it does have an end note we add it when we process the end note
+        Tie* sharedTieFor = sharedNote->tieFor();
+        if (!sharedTieFor) {
+            sharedTieFor = toTie(tieFor->clone());
+            sharedTieFor->setNoteSpan(sharedNote, nullptr);
+
+            score->undoAddElement(sharedTieFor);
+        }
+
+        EngravingItem::connectSharedItem(sharedTieFor, tieFor);
+    }
+
+    const std::vector<Spanner*>& originSpannerBack = originNote->spannerBack();
+    const std::vector<Spanner*>& sharedSpannerBack = sharedNote->spannerBack();
+
+    for (Spanner* spanner : originSpannerBack) {
+        Spanner* sharedSpanner = nullptr;
+        for (Spanner* sp : sharedSpannerBack) {
+            if (sp && sp->type() == spanner->type()) {
+                sharedSpanner = sp;
+                break;
+            }
+        }
+
+        if (!sharedSpanner) {
+            sharedSpanner = toSpanner(spanner->clone());
+            Note* startNote = spanner->startElement() ? toNote(spanner->startElement()->sharedItem()) : nullptr;
+            sharedSpanner->setNoteSpan(startNote, sharedNote);
+
+            score->undoAddElement(sharedSpanner);
+        }
+
+        EngravingItem::connectSharedItem(sharedSpanner, spanner);
+    }
+
+    for (Spanner* spanner : originNote->spannerFor()) {
+        if (spanner->endElement()) { // If it does have an end note we add it when we process the end note
+            continue;
+        }
+
+        Spanner* sharedSpanner = nullptr;
+        for (Spanner* sp : sharedNote->spannerFor()) {
+            if (sp->type() == spanner->type()) {
+                sharedSpanner = sp;
+                break;
+            }
+        }
+
+        if (!sharedSpanner) {
+            sharedSpanner = toSpanner(spanner->clone());
+            sharedSpanner->setTrack(sharedNote->track());
+            sharedSpanner->setStartElement(sharedNote);
+
+            score->undoAddElement(sharedSpanner);
+        }
+
+        EngravingItem::connectSharedItem(sharedSpanner, spanner);
     }
 }
 
@@ -663,10 +839,6 @@ void StaveSharingLayout::makeSharedAnnotations(SharedPart* p, StaveSharingContex
     }
 }
 
-bool StaveSharingLayout::annotationRefersToBothVoices(EngravingItem* sharedAnnotation, StaveSharingContext& ctx)
-{
-}
-
 void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
 {
     Score* score = ctx.score;
@@ -677,10 +849,8 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
     for (Segment* seg : ctx.segmentsToUpdate) {
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we may remove elements
         for (EngravingItem* item : annotations) {
-            if (item->track() >= startTrack && item->track() < endTrack) {
-                if (item->originItems().empty()) {
-                    score->undoRemoveElement(item);
-                }
+            if (item->track() >= startTrack && item->track() < endTrack && item->originItems().empty()) {
+                score->undoRemoveElement(item);
             }
         }
 
@@ -714,6 +884,26 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
                 Chord* c = toChord(cr);
                 std::vector<Note*> notes = c->notes();     // copy because may be removed
                 for (Note* note : notes) {
+                    if (Tie* tieBack = note->tieBack(); tieBack && tieBack->originItems().empty()) {
+                        score->undoRemoveElement(tieBack);
+                    }
+
+                    for (Spanner* sp : note->spannerBack()) {
+                        if (sp->originItems().empty()) {
+                            score->undoRemoveElement(sp);
+                        }
+                    }
+
+                    if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endElement() && tieFor->originItems().empty()) {
+                        score->undoRemoveElement(tieFor);
+                    }
+
+                    for (Spanner* sp : note->spannerFor()) {
+                        if (!sp->endElement() && sp->originItems().empty()) {
+                            score->undoRemoveElement(sp);
+                        }
+                    }
+
                     if (note->originItems().empty()) {
                         score->undoRemoveElement(note);
                     }
