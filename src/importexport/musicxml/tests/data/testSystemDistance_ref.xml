@@ -589,10 +589,10 @@
       <print new-system="yes">
         <system-layout>
           <system-margins>
-            <left-margin>255.11</left-margin>
+            <left-margin>0</left-margin>
             <right-margin>0</right-margin>
             </system-margins>
-          <system-distance>-40</system-distance>
+          <system-distance>87.26</system-distance>
           </system-layout>
         </print>
       <note default-x="58.6" default-y="-25">
@@ -1076,7 +1076,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
             </system-margins>
-          <system-distance>-40</system-distance>
+          <system-distance>87.26</system-distance>
           </system-layout>
         </print>
       <note default-x="58.6" default-y="-25">
@@ -1327,7 +1327,7 @@
             <left-margin>0</left-margin>
             <right-margin>0</right-margin>
             </system-margins>
-          <top-system-distance>933.55</top-system-distance>
+          <top-system-distance>70</top-system-distance>
           </system-layout>
         </print>
       <note default-x="58.6" default-y="-25">

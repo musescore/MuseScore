@@ -30,6 +30,7 @@
 #include "dom/mmrestrange.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 
 #include "editing/editmeasures.h"
 
@@ -99,7 +100,7 @@ void MMRestLayout::reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, 
         if (!nextFirstMeasure->mmRest()) {
             Measure* nextLastMeasure = ctx.mutDom().tick2measure(lastMeasure->endTick() + remainingMMRDuration - Fraction::eps());
             nextLastMeasure = nextLastMeasure ? nextLastMeasure : ctx.mutDom().lastMeasure();
-            const int numMeasuresInNewMMRest = nextLastMeasure->measureIndex() - nextFirstMeasure->measureIndex();
+            const int numMeasuresInNewMMRest = nextLastMeasure->measureIndex() - nextFirstMeasure->measureIndex() + 1;
 
             Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
             nextMMRMeasure->setTicks(remainingMMRDuration);
