@@ -8035,6 +8035,9 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
             if (staves > 1) {
                 attributes.emplace_back(std::make_pair("number", i + 1));
             }
+            if (st->isTabStaff(Fraction(0, 1)) && !st->staffType(Fraction(0, 1))->useNumbers()) {
+                attributes.emplace_back(std::make_pair("show-frets", "letters"));
+            }
             if (hidden) {
                 attributes.emplace_back(std::make_pair("print-object", "no"));
                 if (st->cutaway()) {
