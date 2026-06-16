@@ -560,11 +560,11 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
                     for (int i = brailleInput()->addedOctave(); i < brailleInput()->octave(); i++) {
-                        interaction()->movePitch(MoveDirection::Down, PitchMode::OCTAVE);
+                        interaction()->movePitch(MoveDirection::Down, PitchMode::OCTAVE, selection()->elements());
                     }
                 } else if (brailleInput()->addedOctave() > brailleInput()->octave()) {
                     for (int i = brailleInput()->octave(); i < brailleInput()->addedOctave(); i++) {
-                        interaction()->movePitch(MoveDirection::Up, PitchMode::OCTAVE);
+                        interaction()->movePitch(MoveDirection::Up, PitchMode::OCTAVE, selection()->elements());
                     }
                 }
                 brailleInput()->setOctave(brailleInput()->addedOctave(), true);
@@ -623,11 +623,11 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
                     for (int i = brailleInput()->addedOctave(); i < brailleInput()->octave(); i++) {
-                        interaction()->movePitch(MoveDirection::Down, PitchMode::OCTAVE);
+                        interaction()->movePitch(MoveDirection::Down, PitchMode::OCTAVE, selection()->elements());
                     }
                 } else if (brailleInput()->addedOctave() > brailleInput()->octave()) {
                     for (int i = brailleInput()->octave(); i < brailleInput()->addedOctave(); i++) {
-                        interaction()->movePitch(MoveDirection::Up, PitchMode::OCTAVE);
+                        interaction()->movePitch(MoveDirection::Up, PitchMode::OCTAVE, selection()->elements());
                     }
                 }
                 brailleInput()->setOctave(brailleInput()->addedOctave());
