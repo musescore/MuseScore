@@ -21,6 +21,7 @@
  */
 
 #include "editsystemlocks.h"
+#include "editpagelocks.h"
 
 #include "transaction/transaction.h"
 #include "transaction/undoablecommand.h"
@@ -119,7 +120,7 @@ public:
 
 void EditSystemLocks::undoAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
-    removeLayoutBreaksOnAddSystemLock(tx, score, lock);
+    updateLayoutBreaksOnAddSystemLock(tx, score, lock);
     tx.push(new AddSystemLock(lock));
 }
 
@@ -312,6 +313,7 @@ void EditSystemLocks::moveMeasureToNextSystem(Transaction& tx, Score* score, Mea
 {
     const System* curSystem = m->system();
     MeasureBase* startMeas = curSystem->first();
+    MeasureBase* systemCurEndMeasure = curSystem->last();
     bool refMeasureIsStartOfSystem = m == startMeas;
 
     const RangeLock* curLock = score->systemLocks()->lockStartingAt(startMeas);
@@ -323,6 +325,28 @@ void EditSystemLocks::moveMeasureToNextSystem(Transaction& tx, Score* score, Mea
         MeasureBase* prevMeas = m->prevMM();
         RangeLock* sysLock = new RangeLock(startMeas, prevMeas);
         undoAddSystemLock(tx, score, sysLock);
+
+        // Move existing page breaks and section breaks to the end of the new range
+        if (systemCurEndMeasure->pageBreak()) {
+            systemCurEndMeasure->undoSetBreak(false, LayoutBreakType::PAGE);
+            prevMeas->undoSetBreak(true, LayoutBreakType::PAGE);
+        }
+
+        if (systemCurEndMeasure->sectionBreak()) {
+            systemCurEndMeasure->undoSetBreak(false, LayoutBreakType::SECTION);
+            prevMeas->undoSetBreak(true, LayoutBreakType::SECTION);
+        }
+
+        // Create an updated page lock which extends to the end of the new range
+        if (systemCurEndMeasure->isEndOfPageLock()) {
+            const RangeLock* pageLock = systemCurEndMeasure->pageLock();
+            MeasureBase* pageLockStartMb = pageLock->startMB();
+
+            EditPageLocks::undoRemovePageLock(tx, score, pageLock);
+
+            RangeLock* newPageLock = new RangeLock(pageLockStartMb, sysLock->endMB());
+            EditPageLocks::undoAddPageLock(tx, score, newPageLock);
+        }
     }
 
     const System* nextSystem = m->nextNonVBoxSystem();
@@ -397,15 +421,38 @@ void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Transaction& tx, Score* 
     }
 }
 
-void EditSystemLocks::removeLayoutBreaksOnAddSystemLock(Transaction&, Score* score, const RangeLock* lock)
+void EditSystemLocks::updateLayoutBreaksOnAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
+    bool moveSectionBreak = false;
+    bool movePageBreak = false;
     for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->nextMM()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);
         mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         if (mb != lock->endMB()) {
+            // Move existing page breaks and section breaks to the end of the new range
+            moveSectionBreak |= mb->sectionBreak();
+            movePageBreak |= mb->pageBreak();
             mb->undoSetBreak(false, LayoutBreakType::SECTION);
             mb->undoSetBreak(false, LayoutBreakType::PAGE);
         }
+
+        if (mb->isEndOfPageLock()) {
+            // Create an updated page lock which extends to the end of the new range
+            const RangeLock* pageLock = mb->pageLock();
+            MeasureBase* pageLockStartMb = pageLock->startMB();
+
+            EditPageLocks::undoRemovePageLock(tx, score, pageLock);
+
+            RangeLock* newPageLock = new RangeLock(pageLockStartMb, lock->endMB());
+            EditPageLocks::undoAddPageLock(tx, score, newPageLock);
+        }
+    }
+
+    if (moveSectionBreak) {
+        lock->endMB()->undoSetBreak(true, LayoutBreakType::SECTION);
+    }
+    if (movePageBreak) {
+        lock->endMB()->undoSetBreak(true, LayoutBreakType::PAGE);
     }
 }
 

@@ -393,12 +393,7 @@ void EditPageLocks::removePageLocksOnAddLayoutBreak(Transaction& tx, Score* scor
 void EditPageLocks::removeLayoutBreaksOnAddPageLock(Transaction&, const RangeLock* lock)
 {
     for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->nextMM()) {
-        mb->undoSetBreak(false, LayoutBreakType::LINE);
-        mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
-        if (mb != lock->endMB()) {
-            mb->undoSetBreak(false, LayoutBreakType::SECTION);
-            mb->undoSetBreak(false, LayoutBreakType::PAGE);
-        }
+        mb->undoSetBreak(false, LayoutBreakType::PAGE);
     }
 }
 
