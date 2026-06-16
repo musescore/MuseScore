@@ -182,7 +182,7 @@ StyledDialogView {
                 for (var i in pages) {
                     var page = pages[i]
                     var obj = root.prv.pagesObjects[page.id]
-                    ok &= obj.apply()
+                    ok = obj && ok & obj.apply()
                 }
 
                 if (ok) {
