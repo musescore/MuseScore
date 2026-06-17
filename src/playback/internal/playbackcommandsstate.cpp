@@ -66,7 +66,7 @@ void PlaybackCommandsState::deinit()
     globalContext()->currentProjectChanged().disconnect(this);
     interactive()->opened().disconnect(this);
     playbackController()->isPlayAllowedChanged().disconnect(this);
-    playbackController()->isPlayingChanged().disconnect(this);
+    //playbackController()->isPlayingChanged().disconnect(this);
 }
 
 void PlaybackCommandsState::updateCommandStates()
