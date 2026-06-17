@@ -112,8 +112,8 @@ const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
         return *it;
     }
 
-    static Manifest _dymmy;
-    return _dymmy;
+    static Manifest _dummy;
+    return _dummy;
 }
 
 muse::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
