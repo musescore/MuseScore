@@ -112,8 +112,26 @@ TEST_F(IntInputValidatorTests, ValidateCommaLocale) {
 
     runInputTests({
             { "0", QValidator::Invalid },
-            { "", QValidator::Invalid },
+            { "", QValidator::Intermediate, "1" },
             { "1", QValidator::Acceptable }
+        });
+
+    m_validator->setTop(10);
+    m_validator->setBottom(5);
+
+    runInputTests({
+            { "1", QValidator::Intermediate, "5" },
+            { "2", QValidator::Intermediate, "5" }
+        });
+
+    m_validator->setTop(-50);
+    m_validator->setBottom(-100);
+
+    runInputTests({
+            { "-5", QValidator::Intermediate, "-50" },
+            { "-2", QValidator::Intermediate, "-50" },
+            { "-75", QValidator::Acceptable },
+            { "0", QValidator::Invalid }
         });
 
     QLocale::setDefault(prev);
