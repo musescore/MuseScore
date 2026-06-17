@@ -62,6 +62,7 @@
 #include "glissando.h"
 #include "gradualtempochange.h"
 #include "guitarbend.h"
+#include "fret.h"
 #include "harmony.h"
 #include "imageStore.h"
 #include "instrchange.h"
@@ -6100,6 +6101,11 @@ void Score::updateCapo(bool ignoreNotationUpdate /* = false */)
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 toHarmony(e)->realizedHarmony().setDirty(true);
+            } else if (e->isFretDiagram()) {
+                Harmony* harmony = toFretDiagram(e)->harmony();
+                if (harmony) {
+                    harmony->realizedHarmony().setDirty(true);
+                }
             }
 
             if (!e->isCapo()) {
