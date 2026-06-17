@@ -31,6 +31,7 @@
 #include "dom/connector.h"
 #include "dom/interval.h"
 #include "dom/location.h"
+#include "../infrastructure/eid.h"
 
 #include "connectorinforeader.h"
 
@@ -39,11 +40,11 @@ class Beam;
 class EngravingObject;
 class LinkedObjects;
 class Measure;
+class MStyle;
 class Score;
 class Spanner;
 class Staff;
 class Tuplet;
-class MStyle;
 }
 
 namespace mu::engraving::compat {
@@ -133,6 +134,9 @@ public:
     void reconnectBrokenConnectors();
     void clearOrphanedConnectors();
 
+    void addMMRestEndMeasureEID(Measure* mmrest, EID lastMeasureEID);
+    void setMMRestEndMeasures();
+
 private:
     void addConnectorInfo(std::shared_ptr<ConnectorInfoReader>);
     void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
@@ -164,5 +168,7 @@ private:
     PropertyIdSet m_propertiesToSkip;
 
     Fraction m_timeSigForNextMeasure = Fraction(0, 1);
+
+    std::unordered_map<Measure*, EID> m_mmRestEndMeasures;
 };
 }
