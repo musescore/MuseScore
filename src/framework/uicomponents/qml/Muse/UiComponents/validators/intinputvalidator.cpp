@@ -21,6 +21,7 @@
  */
 #include "intinputvalidator.h"
 #include "global/realfn.h"
+#include <qvalidator.h>
 
 using namespace muse::uicomponents;
 
@@ -89,16 +90,26 @@ QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos)
         } else {
             state = Acceptable;
         }
-    } else if (digits.contains(QRegularExpression("^\\-?$"))) {
-        state = Intermediate;
-    } else {
+    } else if (digits.isEmpty()) {
+        return Intermediate;
+    } else if ((digits == "-")) {
+        if (m_bottom < 0) {
+            return Intermediate;
+        }
+
         cursorPos = 0;
         return Invalid;
     }
 
     int val = digits.toInt();
-    if (val > m_top || val < m_bottom) {
-        return Invalid;
+    if (val > m_top) {
+        // A negative value above the maximum may still be an in-progress prefix
+        return val < 0 ? Intermediate : Invalid;
+    }
+
+    if (val < m_bottom) {
+        // Symmetrically, a positive not 0 value below the minimum may still be an in-progress
+        return val > 0 ? Intermediate : Invalid;
     }
 
     return state;
