@@ -20,7 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "playbackcommands.h"
+#include "playbackcommandsregister.h"
+
+#include "../playbackcommands.h"
 
 using namespace muse;
 using namespace muse::rcommand;
@@ -29,21 +31,21 @@ using namespace mu::playback;
 
 static const std::vector<CommandInfo> s_commandInfos = {
     CommandInfo{
-        Command("command://playback/play"),
+        PLAY_COMMAND,
         TranslatableString("playback", "Play"),
         TranslatableString("playback", "Play the current score"),
         InputSchema(),
         Decoration(IconCode::Code::PLAY)
     },
     CommandInfo{
-        Command("command://playback/pause"),
+        PAUSE_COMMAND,
         TranslatableString("playback", "Pause"),
         TranslatableString("playback", "Pause playback"),
         InputSchema(),
         Decoration(IconCode::Code::PAUSE)
     },
     CommandInfo{
-        Command("command://playback/stop"),
+        STOP_COMMAND,
         TranslatableString("playback", "Stop"),
         TranslatableString("playback", "Stop playback"),
         InputSchema(),
@@ -51,12 +53,24 @@ static const std::vector<CommandInfo> s_commandInfos = {
     }
 };
 
-std::string PlaybackCommands::moduleName() const
+std::string PlaybackCommandsRegister::moduleName() const
 {
     return "playback";
 }
 
-const std::vector<CommandInfo>& PlaybackCommands::commandInfos() const
+const std::vector<muse::rcommand::Command>& PlaybackCommandsRegister::commandList() const
+{
+    static std::vector<muse::rcommand::Command> commands;
+    if (commands.empty()) {
+        commands.reserve(s_commandInfos.size());
+        for (const auto& info : s_commandInfos) {
+            commands.push_back(info.command);
+        }
+    }
+    return commands;
+}
+
+const std::vector<CommandInfo>& PlaybackCommandsRegister::commandInfoList() const
 {
     return s_commandInfos;
 }

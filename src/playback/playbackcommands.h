@@ -22,15 +22,10 @@
 
 #pragma once
 
-#include "rcommand/imodulecommands.h"
+#include "rcommand/commandtypes.h"
 
 namespace mu::playback {
-class PlaybackCommands : public muse::rcommand::IModuleCommands
-{
-public:
-    PlaybackCommands() = default;
-
-    std::string moduleName() const override;
-    const std::vector<muse::rcommand::CommandInfo>& commandInfos() const override;
-};
+inline static const muse::rcommand::Command PLAY_COMMAND("command://playback/play");
+inline static const muse::rcommand::Command PAUSE_COMMAND("command://playback/pause");
+inline static const muse::rcommand::Command STOP_COMMAND("command://playback/stop");
 }
