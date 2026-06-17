@@ -1134,6 +1134,30 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     return nmb;
 }
 
+void Excerpt::cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                           const TracksMap& trackList, TieMap& tieMap)
+{
+    for (Measure* srcM = sourceScore->firstMeasure(); srcM; srcM = srcM->nextMeasure()) {
+        if (!srcM->hasMMRest()) {
+            continue;
+        }
+
+        Measure* dstM = dstScore->tick2measure(srcM->tick());
+        if (!dstM) {
+            continue;
+        }
+
+        Measure* srcMMRest = srcM->mmRest();
+
+        Measure* dstMMRest = toMeasure(cloneMeasure(srcMMRest, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap));
+        dstMMRest->setMMRestCount(srcMMRest->mmRestCount());
+        dstMMRest->setPrev(dstM->prev());
+        dstMMRest->setNext(dstScore->tick2measure(srcMMRest->tick() + srcMMRest->ticks()));
+
+        dstM->setMMRest(dstMMRest);
+    }
+}
+
 void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
                           const TracksMap& trackList)
 {
@@ -1156,6 +1180,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->append(newMeasure);
     }
+
+    cloneMMRests(sourceScore, dstScore, sourceStavesIndexes, trackList, tieMap);
 
     size_t n = sourceStavesIndexes.size();
     for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
@@ -1221,6 +1247,8 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
         measures->append(newMeasure);
     }
+
+    cloneMMRests(oscore, score, {}, {}, tieMap);
 
     collectTieEndPoints(tieMap);
 }

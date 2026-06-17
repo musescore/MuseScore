@@ -36,6 +36,7 @@ class Part;
 class Score;
 class Staff;
 class Spanner;
+class TieMap;
 
 class Excerpt
 {
@@ -100,6 +101,8 @@ private:
     friend class MasterScore;
 
     static void promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx);
+    static void cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                             const TracksMap& trackList, TieMap& tieMap);
 
     void setInited(bool inited);
     void writeNameToMetaTags();
