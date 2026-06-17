@@ -53,6 +53,7 @@ public:
     PluginScanResult scanPlugins() const override;
 
     void updatePluginsRegistry() override;
+    void rescanAllPlugins() override;
 
     Ret registerNewPlugins(const io::paths_t& pluginPaths) override;
     Ret unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds) override;

@@ -30,6 +30,7 @@ class KnownAudioPluginsRegisterMock : public IKnownAudioPluginsRegister
 {
 public:
     MOCK_METHOD(Ret, load, (), (override));
+    MOCK_METHOD(Ret, clear, (), (override));
 
     MOCK_METHOD(AudioPluginInfoList, pluginInfoList, (PluginInfoAccepted), (const, override));
     MOCK_METHOD(async::Notification, pluginInfoListChanged, (), (const, override));
