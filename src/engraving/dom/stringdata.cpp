@@ -624,6 +624,21 @@ void StringData::updateFretsOnSameStrings(const Chord* chord) const
             note->setFret(INVALID_FRET_INDEX);
             continue;
         }
+        if (newFret < 0) {
+            // Don't create a negative fret on a string that already holds another note — this would cause a false conflict
+            bool sameStringConflict = false;
+            for (Note* other : chord->notes()) {
+                if (other != note && !skipTabNote(other, skipDead) && other->string() == note->string()) {
+                    sameStringConflict = true;
+                    break;
+                }
+            }
+            if (sameStringConflict) {
+                note->setString(INVALID_STRING_INDEX);
+                note->setFret(INVALID_FRET_INDEX);
+                continue;
+            }
+        }
         note->setFret(newFret);
     }
 }
