@@ -31,44 +31,74 @@ IntInputValidator::IntInputValidator(QObject* parent)
 
 void IntInputValidator::fixup(QString& string) const
 {
+    QLocale locale;
+
     if (string.isEmpty() || string.endsWith("-")) {
         string.append("0");
     }
-    if (string.toInt() == 0) {
+
+    QString stripped = string;
+    stripped.remove(locale.groupSeparator());
+
+    bool ok = false;
+    int val = stripped.toInt(&ok);
+
+    if (!ok) {
         string = "0";
+        return;
     }
 
-    if (string.toInt() > m_top) {
-        string = QString::number(m_top);
-    } else if (string.toInt() < m_bottom) {
-        string = QString::number(m_bottom);
+    if (val > m_top) {
+        val = m_top;
+    } else if (val < m_bottom) {
+        val = m_bottom;
     }
+
+    string = locale.toString(val);
 }
 
 QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos) const
 {
+    QLocale locale;
+    QString groupSep = locale.groupSeparator();
+
+    if (inputStr.contains(groupSep)) {
+        bool ok = false;
+        locale.toInt(inputStr, &ok);
+        if (!ok) {
+            // Handle group separator in the wrong place
+            int sepsBefore = inputStr.left(cursorPos).count(groupSep);
+            inputStr.remove(groupSep);
+            cursorPos -= sepsBefore;
+        }
+    }
+
+    QString digits = inputStr;
+    digits.remove(groupSep);
+
     QValidator::State state = Invalid;
 
     const int maxAbsoluteValue = std::max(std::abs(m_top), std::abs(m_bottom));
     const int maxNumberOfDigits = maxAbsoluteValue > 0
                                   ? std::floor(std::log10(maxAbsoluteValue)) + 1
                                   : 1;
-    if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,%1}$").arg(maxNumberOfDigits)))) {
-        if ((maxNumberOfDigits >= 2 && inputStr.contains(QRegularExpression(QString("^\\-?0{2,%1}").arg(maxNumberOfDigits))))
-            || (inputStr.startsWith("-") && muse::RealIsNull(inputStr.toDouble()))) {
+    if (digits.contains(QRegularExpression(QString("^\\-?\\d{1,%1}$").arg(maxNumberOfDigits)))) {
+        if ((maxNumberOfDigits >= 2 && digits.contains(QRegularExpression(QString("^\\-?0{2,%1}").arg(maxNumberOfDigits))))
+            || (digits.startsWith("-") && muse::RealIsNull(digits.toDouble()))) {
             state = Intermediate;
         } else {
             state = Acceptable;
         }
-    } else if (inputStr.contains(QRegularExpression("^\\-?$"))) {
+    } else if (digits.contains(QRegularExpression("^\\-?$"))) {
         state = Intermediate;
     } else {
         cursorPos = 0;
         return Invalid;
     }
 
-    if (inputStr.toInt() > m_top || inputStr.toInt() < m_bottom) {
-        state = Intermediate;
+    int val = digits.toInt();
+    if (val > m_top || val < m_bottom) {
+        return Invalid;
     }
 
     return state;
