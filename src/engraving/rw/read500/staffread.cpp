@@ -76,6 +76,11 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                         measure->setTick(m1->tick());
                         measure->setPrev(m1->prev());
                     }
+
+                    if (ctx.score()->style().styleB(Sid::createMultiMeasureRests)) {
+                        m1->setTicks(measure->timesig());
+                        m1->setTimesig(measure->timesig());
+                    }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
