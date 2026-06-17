@@ -31,6 +31,10 @@
 #include "engraving/dom/segment.h"
 #include "engraving/editing/transpose.h"
 
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/mscxcompat.h"
+#include "engraving/infrastructure/localfileinfoprovider.h"
+
 #include "mocks/engravingconfigurationmock.h"
 
 #include "utils/scorerw.h"
@@ -553,6 +557,55 @@ TEST_F(Engraving_TabTransposeTests, negFretNoteDisplacesPositiveFretToOptimalStr
     EXPECT_EQ(n3->fret, 4) << "pitch 54 should be on str3/fr4";
     EXPECT_EQ(n4->pitch, 51) << "pitch 51 should be on str4";
     EXPECT_EQ(n4->fret, 6) << "pitch 51 should be on str4/fr6";
+
+    delete score;
+}
+
+// Capo TAB_ONLY + two notes on string 5 (one unfrettable with capo).
+// Without the fix, pitch 47 gets displaced to string 0 / fret -18.
+TEST_F(Engraving_TabTransposeTests, capoTabOnlyDoesNotCascadeNegativeFrets)
+{
+    setFrettingFlags(true, true);
+
+    // updateCapo must run before doLayout (ScoreRW::readScore doesn't do this).
+    static const muse::modularity::ContextPtr ctx = std::make_shared<muse::modularity::Context>(1);
+    muse::io::path_t path = ScoreRW::rootPath() + u"/" + DATA_DIR + u"capo_tab_only_same_string.mscx";
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(ctx);
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+    {
+        ScoreLoad sl;
+        auto rv = compat::loadMsczOrMscx(score, path.toString(), false);
+        ASSERT_TRUE(rv) << "failed to load fixture";
+    }
+    score->updateCapo();
+    score->doLayout();
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 6u);
+
+    const TabNote* n1 = findNoteByString(notes, 1);
+    const TabNote* n2 = findNoteByString(notes, 2);
+    const TabNote* n3 = findNoteByString(notes, 3);
+    const TabNote* n4 = findNoteByString(notes, 4);
+    ASSERT_NE(n1, nullptr);
+    ASSERT_NE(n2, nullptr);
+    ASSERT_NE(n3, nullptr);
+    ASSERT_NE(n4, nullptr);
+    EXPECT_EQ(n1->fret, 4);
+    EXPECT_EQ(n2->fret, 3);
+    EXPECT_EQ(n3->fret, 5);
+    EXPECT_EQ(n4->fret, 6);
+
+    // pitch 47 must stay on string 5 / fret 6, not be displaced to string 0 / fret -18
+    bool found47onStr5 = false;
+    for (const auto& n : notes) {
+        if (n.pitch == 47) {
+            EXPECT_EQ(n.string, 5) << "pitch 47 should stay on string 5, not be displaced";
+            EXPECT_EQ(n.fret, 6) << "pitch 47 should keep fret 6";
+            found47onStr5 = true;
+        }
+    }
+    EXPECT_TRUE(found47onStr5) << "pitch 47 note not found";
 
     delete score;
 }

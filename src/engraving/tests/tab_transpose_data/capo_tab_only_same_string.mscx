@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.70">
+  <Score>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="workTitle">Capo TAB_ONLY same-string test</metaTag>
+    <Part id="1">
+      <Staff>
+        <StaffType group="tablature">
+          <name>tab6StrCommon</name>
+          <lines>6</lines>
+          <lineDistance>1.5</lineDistance>
+          <durations>0</durations>
+          <durationFontName>MuseScore Tab Modern</durationFontName>
+          <durationFontSize>15</durationFontSize>
+          <durationFontY>0</durationFontY>
+          <fretUseTextStyle>1</fretUseTextStyle>
+          <fretTextStyle>tab_fret_number</fretTextStyle>
+          <linesThrough>0</linesThrough>
+          <minimStyle>1</minimStyle>
+          <onLines>1</onLines>
+          <showRests>1</showRests>
+          <stemsDown>1</stemsDown>
+          <stemsThrough>0</stemsThrough>
+          <upsideDown>0</upsideDown>
+          <showTabFingering>1</showTabFingering>
+          <useNumbers>1</useNumbers>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Guitar</trackName>
+      <Instrument id="guitar-steel-tablature">
+        <longName>Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Acoustic Guitar (tablature)</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
+        <clef>G8vb</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>20</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel name="open">
+          <program value="25"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Capo>
+            <transposeMode>2</transposeMode>
+            <style>staff</style>
+            <text>Capo 1</text>
+            </Capo>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>40</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>5</string>
+              </Note>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <fret>6</fret>
+              <string>5</string>
+              </Note>
+            <Note>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <fret>6</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <fret>5</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>3</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>4</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
