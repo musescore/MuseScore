@@ -96,7 +96,7 @@ void NoteInputBarModel::init()
         setNotation(context()->currentNotation());
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    context()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
         updateState();
     });
 

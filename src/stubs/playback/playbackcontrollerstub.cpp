@@ -39,20 +39,6 @@ bool PlaybackControllerStub::isPlaying() const
     return false;
 }
 
-muse::async::Notification PlaybackControllerStub::isPlayingChanged() const
-{
-    return muse::async::Notification();
-}
-
-void PlaybackControllerStub::reset()
-{
-}
-
-muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
-{
-    return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
-}
-
 bool PlaybackControllerStub::isPlaybackInited() const
 {
     return false;

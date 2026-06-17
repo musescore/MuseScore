@@ -243,16 +243,6 @@ bool PlaybackController::loopBoundariesSet() const
     return notationPlayback() && !notationPlayback()->loopBoundaries().isNull();
 }
 
-Notification PlaybackController::isPlayingChanged() const
-{
-    return m_isPlayingChanged;
-}
-
-void PlaybackController::reset()
-{
-    stop();
-}
-
 void PlaybackController::seekRawTick(const midi::tick_t tick, const bool flushSound)
 {
     if (m_currentTick == tick) {
@@ -274,11 +264,6 @@ void PlaybackController::seek(const audio::secs_t secs, const bool flushSound)
     }
 
     currentPlayer()->seek(secs, flushSound);
-}
-
-muse::async::Channel<secs_t, tick_t> PlaybackController::currentPlaybackPositionChanged() const
-{
-    return m_currentPlaybackPositionChanged;
 }
 
 bool PlaybackController::isPlaybackInited() const
@@ -1495,7 +1480,6 @@ void PlaybackController::setupPlayer()
 {
     currentPlayer()->playbackPositionChanged().onReceive(this, [this](const audio::secs_t pos) {
         m_currentTick = notationPlayback()->secToTick(pos);
-        m_currentPlaybackPositionChanged.send(pos, m_currentTick);
 
         updateCurrentTempo();
 
@@ -1506,7 +1490,6 @@ void PlaybackController::setupPlayer()
     });
 
     currentPlayer()->playbackStatusChanged().onReceive(this, [this](PlaybackStatus) {
-        m_isPlayingChanged.notify();
         onPlaybackStatusChanged();
     });
 

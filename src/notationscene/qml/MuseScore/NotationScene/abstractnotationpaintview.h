@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
@@ -33,7 +34,6 @@
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "playback/iplaybackcontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
@@ -79,7 +79,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
@@ -271,8 +270,9 @@ private:
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
+    void updatePlaybackCursorInterpolated();
     void movePlaybackCursor(muse::midi::tick_t tick);
-    bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
+    bool shouldAdjustCanvasVerticallyDuringPlayback(const muse::RectF& cursorRect);
 
     void onPlaybackCursorRectChanged();
 
@@ -318,6 +318,21 @@ private:
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
 
+    struct PageCache {
+        const Page* page = nullptr;
+        std::optional<bool> adjustVerticallyDuringPlayback;
+
+        void clear()
+        {
+            *this = PageCache();
+        }
+    } mutable m_pageCache;
+
     QQuickItem* m_playbackCursorItem = nullptr;
+
+    muse::secs_t m_lastPlaybackPosition = 0.;
+    qint64 m_lastPlaybackPositionUpdateTimeNs = 0;
+    QTimer m_updatePlaybackCursorInterpolatedTimer;
+    QElapsedTimer m_elapsedTimer;
 };
 }
