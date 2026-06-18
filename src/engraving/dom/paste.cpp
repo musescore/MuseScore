@@ -312,7 +312,17 @@ bool Score::cmdRepeatListSelection()
                 continue;
             }
             is.moveToNextInputPos();
-            is.setDuration(sourceChord->durationType());
+
+            if (is.noteEntryMode()) {
+                // In note input mode - use the duration of from the note input panel (InputState)...
+                IF_ASSERT_FAILED(is.duration().isValid()) {
+                    LOGE() << "Invalid InputState duration";
+                    is.setDuration(sourceChord->durationType());
+                }
+            } else {
+                // Otherwise set it based on the duration of the previous chord...
+                is.setDuration(sourceChord->durationType());
+            }
         }
 
         NoteVal nval = n->noteVal();
