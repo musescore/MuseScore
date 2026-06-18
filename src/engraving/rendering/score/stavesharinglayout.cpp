@@ -524,7 +524,7 @@ void StaveSharingLayout::disconnectAll(SharedPart* p, StaveSharingContext& ctx)
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         for (EngravingItem* item : seg->annotations()) {
-            if (item->track() >= startTrack && item->track() < endTrack) {
+            if (!item->systemFlag() && item->track() >= startTrack && item->track() < endTrack) {
                 EngravingItem::disconnectAllOriginItems(item);
             }
         }
@@ -863,7 +863,7 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
     for (Segment* seg : ctx.segmentsToUpdate) {
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we may remove elements
         for (EngravingItem* item : annotations) {
-            if (item->track() >= startTrack && item->track() < endTrack && item->originItems().empty()) {
+            if (!item->systemFlag() && item->track() >= startTrack && item->track() < endTrack && item->originItems().empty()) {
                 score->undoRemoveElement(item);
             }
         }
