@@ -383,15 +383,22 @@ bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_id
             return false;
         }
 
-        for (auto i = range.first; i != range.second; ++i) {
-            EngravingItem* nextItem = i->second;
-            if (muse::contains(TEXTBASE_TYPES, type)) {
-                if (toTextBase(item)->xmlText() != toTextBase(nextItem)->xmlText()) {
-                    return false;
+        if (muse::contains(TEXTBASE_TYPES, type)) {
+            EngravingItem* matchingAnnotation = nullptr;
+            for (auto i = range.first; i != range.second; ++i) {
+                EngravingItem* nextItem = i->second;
+                if (nextItem->type() == type && toTextBase(item)->xmlText() == toTextBase(nextItem)->xmlText()) {
+                    matchingAnnotation = nextItem;
+                    break;
                 }
             }
-            // TODO: other types will probably need other checks
+
+            if (!matchingAnnotation) {
+                return false;
+            }
         }
+
+        // TODO: other types will probably need other checks
     }
 
     return true;
@@ -784,11 +791,18 @@ void StaveSharingLayout::makeSharedAnnotations(SharedPart* p, StaveSharingContex
             }
 
             track_idx_t sharedTrack = trackMap.at(originTrack);
-            EngravingItem* sharedItem = seg->findAnnotation(originItem->type(), sharedTrack, sharedTrack);
-            if (sharedItem && sharedItem->isTextBase()) {
-                if (toTextBase(sharedItem)->xmlText() != toTextBase(originItem)->xmlText()) {
-                    sharedItem = nullptr; // Not the one we are looking for
+            EngravingItem* sharedItem = nullptr;
+            for (EngravingItem* item : seg->annotations()) {
+                if (item->track() != sharedTrack || item->type() != originItem->type()) {
+                    continue;
                 }
+
+                if (item->isTextBase() && toTextBase(item)->xmlText() != toTextBase(originItem)->xmlText()) {
+                    continue;
+                }
+
+                sharedItem = item;
+                break;
             }
 
             if (!sharedItem) {
