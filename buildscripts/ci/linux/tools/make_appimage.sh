@@ -109,6 +109,7 @@ export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland.so"
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
 export QML_SOURCES_PATHS=./
 
+export LD_LIBRARY_PATH="${appdir}/lib:${appdir}/usr/lib:${LD_LIBRARY_PATH:-}"
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
