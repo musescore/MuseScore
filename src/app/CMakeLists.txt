@@ -249,7 +249,7 @@ set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
     set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
-    set(COVERAGE_LINK_FLAGS -lgcov --coverage)
+    set(COVERAGE_LINK_FLAGS --coverage)
     target_compile_options(MuseScoreStudio PRIVATE ${COVERAGE_FLAGS})
     target_link_options(MuseScoreStudio PRIVATE ${COVERAGE_LINK_FLAGS})
 endif()
