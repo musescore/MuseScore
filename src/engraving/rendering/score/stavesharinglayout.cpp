@@ -269,6 +269,10 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
         }
     }
 
+    if (!checkSpannersForSameVoice(prevTrack, nextTrack, ctx)) {
+        return false;
+    }
+
     return true;
 }
 
@@ -350,6 +354,10 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
         if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
+    }
+
+    if (!checkSpannersForSameVoice(prevTrack, nextTrack, ctx)) {
+        return false;
     }
 
     for (Note* unisonNote : potentialUnisonNotes) {
@@ -456,6 +464,47 @@ bool StaveSharingLayout::checkNoteSpannersForUnison(const Note* note1, const Not
 
         Spanner* sp2 = *i;
         if (bool(sp1->endElement()) != bool(sp2->endElement())) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool StaveSharingLayout::checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx)
+{
+    std::multimap<ElementType, Spanner*> spannersOnPrevTrack;
+    std::multimap<ElementType, Spanner*> spannersOnNextTrack;
+
+    for (Spanner* spanner : ctx.overlappingSpanners) {
+        if (spanner->track() == prevTrack) {
+            spannersOnPrevTrack.insert({ spanner->type(), spanner });
+        } else if (spanner->track() == nextTrack) {
+            spannersOnNextTrack.insert({ spanner->type(), spanner });
+        }
+    }
+
+    if (spannersOnPrevTrack.size() != spannersOnNextTrack.size()) {
+        return false;
+    }
+
+    for (auto [type, spanner] : spannersOnPrevTrack) {
+        auto range = spannersOnNextTrack.equal_range(type);
+        if (range.first == range.second) {
+            // No spanner of this type exists in nextTrack
+            return false;
+        }
+
+        Spanner* matchingSpanner = nullptr;
+        for (auto i = range.first; i != range.second; ++i) {
+            Spanner* nextSpanner = i->second;
+            if (nextSpanner->tick() == spanner->tick() && nextSpanner->ticks() == spanner->ticks()) {
+                matchingSpanner = nextSpanner;
+                break;
+            }
+        }
+
+        if (!matchingSpanner) {
             return false;
         }
     }
@@ -580,12 +629,19 @@ void StaveSharingLayout::disconnectAll(SharedPart* p, StaveSharingContext& ctx)
             }
         }
     }
+
+    for (Spanner* spanner : ctx.overlappingSpanners) {
+        if (!spanner->systemFlag() && spanner->track() >= startTrack && spanner->track() < endTrack) {
+            EngravingItem::disconnectAllOriginItems(spanner);
+        }
+    }
 }
 
 void StaveSharingLayout::makeSharedNotation(SharedPart* p, StaveSharingContext& ctx)
 {
     makeSharedChordRests(p, ctx);
     makeSharedAnnotations(p, ctx);
+    makeSharedSpanners(p, ctx);
 }
 
 void StaveSharingLayout::makeSharedChordRests(SharedPart* p, StaveSharingContext& ctx)
@@ -818,7 +874,65 @@ void StaveSharingLayout::makeSharedAnnotations(SharedPart* p, StaveSharingContex
         }
     }
 
-    for (EngravingItem* sharedItem : sharedAnnotations) {
+    manageVoicePropertyAndTrackForSharedItems(sharedAnnotations, startOriginTrack, endOriginTrack, trackMap);
+}
+
+void StaveSharingLayout::makeSharedSpanners(SharedPart* p, StaveSharingContext& ctx)
+{
+    const SharedTrackMap& trackMap = p->trackMapAtTick(ctx.sTick);
+    track_idx_t startOriginTrack = trackMap.begin()->first;
+    track_idx_t endOriginTrack = trackMap.rbegin()->first;
+
+    std::vector<EngravingItem*> sharedSpanners;
+
+    std::vector<Spanner*> overlappingSpanners = ctx.overlappingSpanners; // copy because we may add
+    for (Spanner* spanner : overlappingSpanners) {
+        if (spanner->track() < startOriginTrack || spanner->track() > endOriginTrack) {
+            continue;
+        }
+
+        track_idx_t originTrack = spanner->track();
+        IF_ASSERT_FAILED(muse::contains(trackMap, originTrack)) {
+            continue;
+        }
+
+        track_idx_t sharedTrack = trackMap.at(originTrack);
+
+        Spanner* sharedSpanner = nullptr;
+        for (Spanner* possibleSharedSpanner : ctx.overlappingSpanners) {
+            if (possibleSharedSpanner->track() == sharedTrack && possibleSharedSpanner->type() == spanner->type()
+                && possibleSharedSpanner->tick() == spanner->tick() && possibleSharedSpanner->ticks() == spanner->ticks()) {
+                sharedSpanner = possibleSharedSpanner;
+                break;
+            }
+        }
+
+        if (!sharedSpanner) {
+            sharedSpanner = toSpanner(spanner->clone());
+            sharedSpanner->setTrack(sharedTrack);
+            sharedSpanner->setTick(spanner->tick());
+            sharedSpanner->setTicks(spanner->ticks());
+            sharedSpanner->setStartElement(nullptr);
+            sharedSpanner->setEndElement(nullptr);
+            sharedSpanner->reset();
+
+            ctx.score->undoAddElement(sharedSpanner);
+            ctx.overlappingSpanners.push_back(sharedSpanner);
+        }
+
+        EngravingItem::connectSharedItem(sharedSpanner, spanner);
+
+        sharedSpanners.push_back(sharedSpanner);
+    }
+
+    manageVoicePropertyAndTrackForSharedItems(sharedSpanners, startOriginTrack, endOriginTrack, trackMap);
+}
+
+void StaveSharingLayout::manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems,
+                                                                   track_idx_t startOriginTrack, track_idx_t endOriginTrack,
+                                                                   const SharedTrackMap& trackMap)
+{
+    for (EngravingItem* sharedItem : sharedItems) {
         bool refersToVoice2 = track2voice(sharedItem->track()) != 0;
         bool voice2isUsed = refersToVoice2;
         if (!voice2isUsed) {
@@ -928,6 +1042,12 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
             }
         }
     }
+
+    for (Spanner* spanner : ctx.overlappingSpanners) {
+        if (!spanner->systemFlag() && spanner->track() >= startTrack && spanner->track() < endTrack && spanner->originItems().empty()) {
+            score->undoRemoveElement(spanner);
+        }
+    }
 }
 
 StaveSharingLayout::StaveSharingContext::StaveSharingContext(MeasureBase* first, MeasureBase* last, LayoutContext& ctx)
@@ -957,5 +1077,10 @@ StaveSharingLayout::StaveSharingContext::StaveSharingContext(MeasureBase* first,
     sTick = crSegments.front()->tick();
     eTick = crSegments.back()->measure()->endTick();
     score = crSegments.front()->score();
+
+    auto spanners = score->spannerMap().findOverlapping(sTick.ticks(), eTick.ticks());
+    for (auto& i : spanners) {
+        overlappingSpanners.push_back(i.value);
+    }
 }
 }

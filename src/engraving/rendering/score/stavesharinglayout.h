@@ -44,6 +44,7 @@ private:
         std::vector<Segment*> crSegments;
         std::vector<Segment*> segmentsToUpdate;
         std::vector<Segment*> crSegmentsToUpdate;
+        std::vector<Spanner*> overlappingSpanners;
 
         Score* score = nullptr;
         LayoutContext& layoutCtx;
@@ -64,6 +65,7 @@ private:
 
     static bool checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkNoteSpannersForUnison(const Note* note1, const Note* note2);
+    static bool checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
 
     static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
 
@@ -75,6 +77,9 @@ private:
     static void makeSharedChordRests(SharedPart* p, StaveSharingContext& ctx);
     static void makeSharedTiesAndNoteSpanners(Note* originNote, Note* sharedNote);
     static void makeSharedAnnotations(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedSpanners(SharedPart* p, StaveSharingContext& ctx);
+    static void manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems, track_idx_t startOriginTrack,
+                                                          track_idx_t endOriginTrack, const SharedTrackMap& trackMap);
 
     static void cleanup(SharedPart* p, StaveSharingContext& ctx);
 };
