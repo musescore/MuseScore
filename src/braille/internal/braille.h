@@ -23,7 +23,12 @@
 
 #include <QIODevice>
 
+#include <map>
+
 #include "engraving/types/types.h"
+
+#include "modularity/ioc.h"
+#include "../ibrailleconfiguration.h"
 
 namespace mu::engraving {
 class Arpeggio;
@@ -148,10 +153,23 @@ private:
     QMap<QString, QString> textToBrailleASCII;
 };
 
+// Rendering decision for an articulation under the Music Braille Code 2015 doubling rule.
+// Absence from the map means Single (render the sign once, the default behaviour).
+enum class ArticulationDoubling {
+    Single = 0,        // default: write the sign once, as a prefix before the note
+    Double = 1,        // first note of a group: write the sign twice, as a prefix
+    Omit = 2,          // middle notes of a group: do not write the sign
+    CloseSuffix = 3,   // last note of a group: write the sign once, as a suffix after the note
+};
+
 struct BrailleContext {
     std::vector<Note*> previousNote;
     std::vector<ClefType> currentClefType;
     std::vector<Key> currentKey;
+
+    // Per-articulation-instance decision for the doubling rule, computed once per Braille run.
+    std::map<const Articulation*, ArticulationDoubling> articulationDoubling;
+    bool articulationDoublingComputed = false;
 };
 
 // Braille export is implemented according to Music Braille Code 2015
@@ -169,11 +187,18 @@ public:
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
 
+    // Music Braille Code 2015: the same sign on this many notes in a row is doubled.
+    static constexpr size_t ARTICULATION_DOUBLING_MIN_GROUP = 4;
+
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
+
     Score* m_score = nullptr;
     BrailleContext m_context;
 
     void resetOctave(size_t stave);
     void resetOctaves();
+
+    void computeArticulationDoubling();
 
     void credits(QIODevice& device);
     void instruments(QIODevice& device);

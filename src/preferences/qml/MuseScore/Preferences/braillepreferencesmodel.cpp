@@ -47,6 +47,10 @@ void BraillePreferencesModel::load()
     brailleConfiguration()->brailleTableChanged().onNotify(this, [this]() {
         emit brailleTableChanged(brailleTable());
     });
+
+    brailleConfiguration()->articulationDoublingChanged().onNotify(this, [this]() {
+        emit articulationDoublingChanged(articulationDoubling());
+    });
 }
 
 bool BraillePreferencesModel::braillePanelEnabled() const
@@ -62,6 +66,11 @@ QString BraillePreferencesModel::brailleTable() const
 int BraillePreferencesModel::intervalDirection() const
 {
     return static_cast<int>(brailleConfiguration()->intervalDirection());
+}
+
+bool BraillePreferencesModel::articulationDoubling() const
+{
+    return brailleConfiguration()->articulationDoubling();
 }
 
 QStringList BraillePreferencesModel::brailleTables() const
@@ -118,4 +127,14 @@ void BraillePreferencesModel::setIntervalDirection(int direction)
 
     brailleConfiguration()->setIntervalDirection(static_cast<BrailleIntervalDirection>(direction));
     emit intervalDirectionChanged(direction);
+}
+
+void BraillePreferencesModel::setArticulationDoubling(bool value)
+{
+    if (value == articulationDoubling()) {
+        return;
+    }
+
+    brailleConfiguration()->setArticulationDoubling(value);
+    emit articulationDoublingChanged(value);
 }

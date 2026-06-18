@@ -34,8 +34,11 @@ BaseSection {
     property var directions: null
     property int intervalDirection: -1
 
+    property alias articulationDoubling: articulationDoublingBox.checked
+
     signal brailleTableChangeRequested(string table)
     signal intervalDirectionChangeRequested(int direction)
+    signal articulationDoublingChangeRequested(bool enabled)
 
     ComboBoxWithTitle {
         title: qsTrc("preferences", "Braille table for lyrics")
@@ -66,6 +69,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.intervalDirectionChangeRequested(newValue);
+        }
+    }
+
+    CheckBox {
+        id: articulationDoublingBox
+        width: parent.width
+
+        text: qsTrc("preferences", "Double repeated articulation marks (Braille rule)")
+
+        navigation.name: "ArticulationDoublingBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.articulationDoublingChangeRequested(!checked);
         }
     }
 }
