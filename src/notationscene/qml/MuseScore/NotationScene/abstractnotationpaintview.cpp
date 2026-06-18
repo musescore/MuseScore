@@ -1048,6 +1048,14 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
         return false;
     }
 
+    // When the viewport is empty, which might happen for example when the view
+    // is being loaded or unloaded, the scrollable area is computed without any
+    // overscroll allowance, resulting in unexpected clamping of the canvas
+    // position to (0, 0).
+    if (size().isEmpty()) {
+        return false;
+    }
+
     auto [dx, dy] = constraintCanvas(0, 0);
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return false;
