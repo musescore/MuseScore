@@ -43,8 +43,9 @@ private:
     static void removeMMRestElements(Measure* mmRestMeasure, LayoutContext& ctx);
     static void changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
     static void restoreMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
-    static void changeAnnotationsParent(Segment* oldParent, Segment* newParent);
-    static Segment* changeElementsParent(Segment* oldSeg, Measure* newMeasure, const Fraction& newSegTick, LayoutContext& ctx);
+    static void changeAnnotationsParent(Segment* oldParent, Segment* newParent, const LayoutContext& ctx, bool checkVisibility);
+    static Segment* changeElementsParent(Segment* oldSeg, Measure* newMeasure, const Fraction& newSegTick, LayoutContext& ctx,
+                                         bool checkVisibility);
 
     static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m);
     static bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutContext& ctx);
