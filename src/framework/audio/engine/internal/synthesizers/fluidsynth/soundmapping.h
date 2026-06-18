@@ -237,7 +237,11 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                         mpe::SoundSubCategory::Plucked, } }, { midi::Program(8, 107) } },
 
         { { mpe::SoundId::Guzheng,  { mpe::SoundSubCategory::Chinese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Guqin,  { mpe::SoundSubCategory::Chinese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Pipa,  { mpe::SoundSubCategory::Chinese, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 106) } },
+        { { mpe::SoundId::Yangqin,  { mpe::SoundSubCategory::Chinese } }, { midi::Program(0, 15) } },
         { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Gayageum,  { mpe::SoundSubCategory::Korean, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African, mpe::SoundSubCategory::Plucked } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Shamisen,  { mpe::SoundSubCategory::Japanese, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 106) } },
         { { mpe::SoundId::Sitar,  { mpe::SoundSubCategory::Indian, mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 104) } },
@@ -279,6 +283,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Erhu,  { mpe::SoundSubCategory::Chinese } }, { midi::Program(0, 110) } },
         { { mpe::SoundId::Nyckelharpa,  { mpe::SoundSubCategory::Swedish } }, { midi::Program(0, 41) } },
+        { { mpe::SoundId::Ajaeng,  { mpe::SoundSubCategory::Korean } }, { midi::Program(0, 110) } },
 
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::Bass,
@@ -303,10 +308,12 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Flute,  { } }, { midi::Program(0, 73) } },
         { { mpe::SoundId::Traverso,  { mpe::SoundSubCategory::Baroque } }, { midi::Program(0, 73) } },
         { { mpe::SoundId::Danso,  {} }, { midi::Program(0, 76) } },
+        { { mpe::SoundId::Daegeum,  { mpe::SoundSubCategory::Korean } }, { midi::Program(0, 73) } },
 
         { { mpe::SoundId::Dizi,  { mpe::SoundSubCategory::Chinese } }, { midi::Program(0, 72) } },
 
         { { mpe::SoundId::Shakuhachi,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 77) } },
+        { { mpe::SoundId::Hichiriki,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 68) } },
         { { mpe::SoundId::Fife,  { } }, { midi::Program(0, 72) } },
 
         { { mpe::SoundId::Whistle,  { mpe::SoundSubCategory::Tin } }, { midi::Program(0, 78) } },
@@ -458,6 +465,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Melodica,  {} }, { midi::Program(0, 22) } },
 
+        { { mpe::SoundId::Sho,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 20) } },
         { { mpe::SoundId::Sheng,  {} }, { midi::Program(0, 20) } },
         { { mpe::SoundId::Sheng,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 20) } },
         { { mpe::SoundId::Sheng,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 20) } },
@@ -676,6 +684,10 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Shoko,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Janggu,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Buk,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::SamulBuk,  { mpe::SoundSubCategory::Korean } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::SamulJanggu,  { mpe::SoundSubCategory::Korean } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::SanjoJanggu,  { mpe::SoundSubCategory::Korean } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::SoriBuk,  { mpe::SoundSubCategory::Korean } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Sogo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Kkwaenggwari,  {} }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Jing,  {} }, { midi::Program(128, 0) } },
