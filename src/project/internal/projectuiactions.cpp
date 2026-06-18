@@ -109,7 +109,7 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Import P&DF…"),
              TranslatableString("action", "Import PDF"),
-             IconCode::Code::IMPORT
+             IconCode::Code::OPEN_LINK
              ),
     UiAction("project-properties",
              mu::context::UiCtxAny,
