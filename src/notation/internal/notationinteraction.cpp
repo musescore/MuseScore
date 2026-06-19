@@ -101,6 +101,7 @@
 #include "engraving/editing/editvoice.h"
 #include "engraving/editing/paste.h"
 #include "engraving/editing/realizechordsymbols.h"
+#include "engraving/editing/regroup.h"
 #include "engraving/editing/reset.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
@@ -6708,9 +6709,11 @@ void NotationInteraction::spellPitchesWithFlats()
 
 void NotationInteraction::regroupNotesAndRests()
 {
-    startEdit(TranslatableString("undoableAction", "Regroup rhythms"));
-    score()->cmdResetNoteAndRestGroupings();
-    apply();
+    transaction(TranslatableString("undoableAction", "Regroup rhythms"), [&](Transaction& tx) {
+        Regroup::regroupNotesAndRestsInSelection(tx, score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::resequenceRehearsalMarks()
