@@ -95,6 +95,11 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
+OutputSpec AudioConfigurationStub::defaultOutputSpec() const
+{
+    return OutputSpec();
+}
+
 OutputSpec AudioConfigurationStub::desiredOutputSpec() const
 {
     return OutputSpec();

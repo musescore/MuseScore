@@ -48,6 +48,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
 
+    OutputSpec defaultOutputSpec() const override;
     OutputSpec desiredOutputSpec() const override;
 
     // synthesizers

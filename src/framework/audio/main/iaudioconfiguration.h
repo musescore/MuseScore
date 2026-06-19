@@ -58,6 +58,7 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) = 0;
     virtual async::Notification sampleRateChanged() const = 0;
 
+    virtual OutputSpec defaultOutputSpec() const = 0;
     virtual OutputSpec desiredOutputSpec() const = 0;
 
     // synthesizers
