@@ -374,23 +374,14 @@ void Measure::setParent(System* s)
 }
 
 //---------------------------------------------------------
-//   AcEl
-//---------------------------------------------------------
-
-struct AcEl {
-    Note* note;
-    double x;
-};
-
-//---------------------------------------------------------
 //   findAccidental
 ///   return current accidental value at note position
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Note* note) const
+AccidentalVal Measure::findAccidental(const Note* note) const
 {
-    Chord* chord = note->chord();
-    Staff* vStaff = chord->score()->staff(chord->vStaffIdx());
+    const Chord* chord = note->chord();
+    const Staff* vStaff = chord->score()->staff(chord->vStaffIdx());
     AccidentalState tversatz;    // state of already set accidentals for this measure
     tversatz.init(vStaff->keySigEvent(tick()));
 
@@ -398,25 +389,25 @@ AccidentalVal Measure::findAccidental(Note* note) const
     track_idx_t mainTrack = chord->vStaffIdx() * VOICES;
     track_idx_t endTrack = vStaff->part()->endTrack();
 
-    for (Segment* segment = first(); segment; segment = segment->next()) {
+    for (const Segment* segment = first(); segment; segment = segment->next()) {
         if (segment->isKeySigType()) {
-            KeySig* ks = toKeySig(segment->element(mainTrack));
+            const KeySig* ks = toKeySig(segment->element(mainTrack));
             if (!ks) {
                 continue;
             }
             tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* e = segment->element(track);
+                const EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
                 }
-                Chord* crd = toChord(e);
-                for (Chord* chord1 : crd->graceNotes()) {
+                const Chord* crd = toChord(e);
+                for (const Chord* chord1 : crd->graceNotes()) {
                     if (chord1->vStaffIdx() != chord->vStaffIdx()) {
                         continue;
                     }
-                    for (Note* note1 : chord1->notes()) {
+                    for (const Note* note1 : chord1->notes()) {
                         if (note1->tieBack() && !note1->accidental()) {
                             continue;
                         }
@@ -435,7 +426,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                 if (crd->vStaffIdx() != chord->vStaffIdx()) {
                     continue;
                 }
-                for (Note* note1 : crd->notes()) {
+                for (const Note* note1 : crd->notes()) {
                     if (note1->tieBack() && !note1->accidental()) {
                         continue;
                     }
@@ -453,7 +444,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
             }
         }
     }
-    LOGD("Measure::findAccidental: note not found");
+    LOGD() << "Measure::findAccidental: note not found";
     return AccidentalVal::NATURAL;
 }
 
@@ -463,32 +454,32 @@ AccidentalVal Measure::findAccidental(Note* note) const
 ///   relative staff line.
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line, bool& error) const
+AccidentalVal Measure::findAccidental(const Segment* s, staff_idx_t staffIdx, int line, bool& error) const
 {
     AccidentalState tversatz;    // state of already set accidentals for this measure
-    Staff* staff = score()->staff(staffIdx);
+    const Staff* staff = score()->staff(staffIdx);
     tversatz.init(staff->keySigEvent(tick()));
 
     SegmentType st = SegmentType::ChordRest;
     track_idx_t startTrack = staff->part()->startTrack();
     track_idx_t endTrack = staff->part()->endTrack();
-    for (Segment* segment = first(st); segment; segment = segment->next(st)) {
+    for (const Segment* segment = first(st); segment; segment = segment->next(st)) {
         if (segment == s && staff->isPitchedStaff(tick())) {
             ClefType clef = staff->clef(s->tick());
             int l = relStep(line, clef);
             return tversatz.accidentalVal(l, error);
         }
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* e = segment->element(track);
+            const EngravingItem* e = segment->element(track);
             if (!e || !e->isChord()) {
                 continue;
             }
-            Chord* chord = toChord(e);
-            for (Chord* chord1 : chord->graceNotes()) {
+            const Chord* chord = toChord(e);
+            for (const Chord* chord1 : chord->graceNotes()) {
                 if (chord1->vStaffIdx() != staffIdx) {
                     continue;
                 }
-                for (Note* note : chord1->notes()) {
+                for (const Note* note : chord1->notes()) {
                     if (note->tieBack() && !note->accidental()) {
                         continue;
                     }
@@ -500,7 +491,7 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             if (chord->vStaffIdx() != staffIdx) {
                 continue;
             }
-            for (Note* note : chord->notes()) {
+            for (const Note* note : chord->notes()) {
                 if (note->tieBack() && !note->accidental()) {
                     continue;
                 }
@@ -510,7 +501,7 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             }
         }
     }
-    LOGD("segment not found");
+    LOGD() << "segment not found";
     return AccidentalVal::NATURAL;
 }
 

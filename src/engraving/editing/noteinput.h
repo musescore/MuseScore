@@ -56,7 +56,7 @@ public:
     static bool resolveNoteInputParams(const Score* score, int note, bool addFlag, NoteInputParams& out);
 
     static NoteVal noteVal(const Score* score, int pitch, staff_idx_t staffIdx, bool allowTransposition);
-    static NoteVal noteValForPosition(Transaction& tx, Score* score, Position pos, AccidentalType at, bool& error);
+    static NoteVal noteValForPosition(const Score* score, Position pos, AccidentalType at, bool& error);
 
     static Note* addNote(Transaction& tx, Score* score, Chord* chord, const NoteVal& noteVal, bool forceAccidental = false,
                          const std::set<SymId>& articulationIds = {}, InputState* externalInputState = nullptr);
