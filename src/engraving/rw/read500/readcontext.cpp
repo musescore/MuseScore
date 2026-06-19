@@ -373,7 +373,7 @@ void ReadContext::setMMRestEndMeasures()
         EngravingObject* linkedElement = eidRegister->itemFromEID(lastMeasureEID);
         IF_ASSERT_FAILED(linkedElement && linkedElement->isMeasure()) {
             LOGE() << "No valid end measure found for MMRest at " << mmrest->tick().toString();
-            return;
+            continue;
         }
 
         Measure* lastMeasure = toMeasure(linkedElement);

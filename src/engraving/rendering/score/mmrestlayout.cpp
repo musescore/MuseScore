@@ -724,7 +724,6 @@ void MMRestLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutCo
         Fraction len;
 
         while (validMMRestMeasure(ctx, measureToBeChecked)) {
-            LOGI() << "check: " << measureToBeChecked;
             if (n && breakMultiMeasureRest(ctx, measureToBeChecked)) {
                 break;
             }
