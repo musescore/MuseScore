@@ -226,7 +226,6 @@ void MenuView::updateGeometry()
         } else {
             // move to the left to an area that doesn't fit
             movePos(m_globalPos.x() - (viewRect.right() - paddedAnchorRect.right()) + padding() * 2, m_globalPos.y());
-            newPopupPos = PopupPosition::Left;
         }
     }
 
