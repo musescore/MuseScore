@@ -561,14 +561,15 @@
         <Measure len="16/4">
           <multiMeasureRest>4</multiMeasureRest>
           <eid>aB_aB</eid>
+          <mmRestLast>bB_bB</mmRestLast>
           <voice>
             <RehearsalMark>
-              <eid>bB_bB</eid>
+              <eid>cB_cB</eid>
               <linkedTo>i_i</linkedTo>
               <text>D</text>
               </RehearsalMark>
             <Rest>
-              <eid>cB_cB</eid>
+              <eid>dB_dB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -576,10 +577,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>dB_dB</eid>
+          <eid>eB_eB</eid>
           <voice>
             <Rest>
-              <eid>eB_eB</eid>
+              <eid>fB_fB</eid>
               <linkedTo>l_l</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -587,10 +588,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>fB_fB</eid>
+          <eid>gB_gB</eid>
           <voice>
             <Rest>
-              <eid>gB_gB</eid>
+              <eid>hB_hB</eid>
               <linkedTo>n_n</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -598,7 +599,7 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>hB_hB</eid>
+          <eid>bB_bB</eid>
           <voice>
             <Rest>
               <eid>iB_iB</eid>

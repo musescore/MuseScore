@@ -97,18 +97,19 @@
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <eid>I_I</eid>
+        <mmRestLast>J_J</mmRestLast>
         <voice>
           <KeySig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
@@ -116,27 +117,27 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>N_N</eid>
         <voice>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>J_J</eid>
         <voice>
           <Rest>
             <eid>R_R</eid>

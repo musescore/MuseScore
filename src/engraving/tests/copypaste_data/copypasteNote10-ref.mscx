@@ -251,6 +251,7 @@
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
         <eid>l_l</eid>
+        <mmRestLast>j_j</mmRestLast>
         <voice>
           <Rest>
             <eid>m_m</eid>
