@@ -214,8 +214,8 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
     changeMeasureElParents(firstMeasure, lastMeasure, mmrMeasure, ctx);
 
     MeasureBase* nm = ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure();
-    mmrMeasure->setNext(nm);
-    mmrMeasure->setPrev(firstMeasure->prev());
+    ctx.mutDom().undo(new ChangeMMRestNext(mmrMeasure, nm));
+    ctx.mutDom().undo(new ChangeMMRestPrev(mmrMeasure, firstMeasure->prev()));
 }
 
 void MMRestLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx)
@@ -724,6 +724,7 @@ void MMRestLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutCo
         Fraction len;
 
         while (validMMRestMeasure(ctx, measureToBeChecked)) {
+            LOGI() << "check: " << measureToBeChecked;
             if (n && breakMultiMeasureRest(ctx, measureToBeChecked)) {
                 break;
             }

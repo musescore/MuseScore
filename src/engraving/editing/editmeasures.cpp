@@ -408,3 +408,21 @@ void ChangeMeasureRepeatCount::flip(EditData*)
     m->setMeasureRepeatCount(count, staffIdx);
     count = oldCount;
 }
+
+void ChangeMMRestNext::flip(EditData*)
+{
+    assert(m_mmrest->isMMRest());
+    MeasureBase* oldNext = m_mmrest->next();
+
+    m_mmrest->setNext(m_next);
+    m_next = oldNext;
+}
+
+void ChangeMMRestPrev::flip(EditData*)
+{
+    assert(m_mmrest->isMMRest());
+    MeasureBase* oldPrev = m_mmrest->prev();
+
+    m_mmrest->setPrev(m_prev);
+    m_prev = oldPrev;
+}
