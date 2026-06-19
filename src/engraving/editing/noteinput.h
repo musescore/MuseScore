@@ -23,6 +23,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 #include <utility>
 
 #include "global/types/ret.h"
@@ -91,6 +92,6 @@ public:
     static void padNoteIncreaseTAB(Transaction& tx, Score* score);
     static void padNoteDecreaseTAB(Transaction& tx, Score* score);
 
-    static void realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition);
+    static void realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition, const std::vector<int>& activeMidiPitches);
 };
 }
