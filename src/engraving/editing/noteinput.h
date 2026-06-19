@@ -90,5 +90,7 @@ public:
     static void padToggle(Transaction& tx, Score* score, Pad p, bool toggleForSelectionOnly = false);
     static void padNoteIncreaseTAB(Transaction& tx, Score* score);
     static void padNoteDecreaseTAB(Transaction& tx, Score* score);
+
+    static void realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition);
 };
 }

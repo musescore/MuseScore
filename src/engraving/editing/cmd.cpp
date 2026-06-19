@@ -93,7 +93,6 @@
 #include "editstaff.h"
 #include "editsystemlocks.h"
 #include "mscoreview.h"
-#include "regroup.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
@@ -2275,51 +2274,6 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
         return;
     }
     lyrics->undoChangeProperty(Pid::VERSE, verse);
-}
-
-//---------------------------------------------------------
-//   realtimeAdvance
-//---------------------------------------------------------
-
-void Score::realtimeAdvance(bool allowTransposition)
-{
-    InputState& is = inputState();
-    if (!is.noteEntryMode()) {
-        return;
-    }
-
-    Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
-    if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd)) {
-        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
-    }
-
-    ChordRest* prevCR = toChordRest(is.cr());
-    if (inputState().beyondScore()) {
-        appendMeasures(1);
-    }
-
-    is.moveToNextInputPos();
-
-    std::list<MidiInputEvent>& midiPitches = activeMidiPitches();
-    if (midiPitches.empty()) {
-        setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
-    } else {
-        Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
-        bool partOfChord = false;
-        Transaction& tx = transactionManager()->currentOrDummyTransaction();
-        for (const MidiInputEvent& ev : midiPitches) {
-            NoteInput::addTiedMidiPitch(tx, this, ev.pitch, partOfChord, prevChord, allowTransposition);
-            partOfChord = true;
-        }
-    }
-
-    if (prevCR->measure() != is.segment()->measure()) {
-        // just advanced across barline. Now simplify tied notes.
-        Transaction& tx = transactionManager()->currentOrDummyTransaction();
-        Regroup::regroupNotesAndRests(tx, this, prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
-    }
-
-    return;
 }
 
 bool Score::canInsertClef(ClefType type) const

@@ -31,6 +31,7 @@
 #include "editnote.h"
 #include "inserttime.h"
 #include "mscoreview.h"
+#include "regroup.h"
 #include "transaction/transaction.h"
 #include "transpose.h"
 
@@ -1724,5 +1725,46 @@ void NoteInput::padNoteDecreaseTAB(Transaction& tx, Score* score)
 //                break;
     default:
         break;
+    }
+}
+
+//---------------------------------------------------------
+//   realtimeAdvance
+//---------------------------------------------------------
+
+void NoteInput::realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition)
+{
+    InputState& is = score->inputState();
+    if (!is.noteEntryMode()) {
+        return;
+    }
+
+    Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
+    if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd)) {
+        score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    }
+
+    ChordRest* prevCR = toChordRest(is.cr());
+    if (is.beyondScore()) {
+        score->appendMeasures(1);
+    }
+
+    is.moveToNextInputPos();
+
+    std::list<MidiInputEvent>& midiPitches = score->activeMidiPitches();
+    if (midiPitches.empty()) {
+        score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
+    } else {
+        Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
+        bool partOfChord = false;
+        for (const MidiInputEvent& ev : midiPitches) {
+            NoteInput::addTiedMidiPitch(tx, score, ev.pitch, partOfChord, prevChord, allowTransposition);
+            partOfChord = true;
+        }
+    }
+
+    if (prevCR->measure() != is.segment()->measure()) {
+        // just advanced across barline. Now simplify tied notes.
+        Regroup::regroupNotesAndRests(tx, score, prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
     }
 }
