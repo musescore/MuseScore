@@ -197,12 +197,6 @@ enum class Pad : char {
     DOT4
 };
 
-struct MidiInputEvent {
-    int pitch = 0;
-    bool chord = false;
-    int velocity = 0;
-};
-
 struct Position {
     Segment* segment = nullptr;
     staff_idx_t staffIdx = muse::nidx;
@@ -932,9 +926,6 @@ public:
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-
-//    virtual QQueue<MidiInputEvent>* midiInputQueue();
-    virtual std::list<MidiInputEvent>& activeMidiPitches();
 
     /// For MasterScores: returns the filename without extension
     /// For Scores: returns the excerpt name

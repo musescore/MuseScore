@@ -19,23 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationmidiinput.h"
 
 #include <QGuiApplication>
 
-#include "engraving/dom/masterscore.h"
+#include "containers.h"
+#include "defer.h"
+#include "log.h"
+
+#include "engraving/dom/factory.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tie.h"
-#include "engraving/dom/score.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/factory.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "playback/playbackcommands.h"
-
-#include "defer.h"
-#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -302,13 +303,9 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 {
     Score* sc = score();
 
-    MidiInputEvent inputEv;
-    inputEv.pitch = e.note();
-    inputEv.velocity = e.velocity7();
+    const int pitch = e.note();
 
-    sc->activeMidiPitches().remove_if([&inputEv](const MidiInputEvent& val) {
-        return inputEv.pitch == val.pitch;
-    });
+    muse::remove(m_activeMidiPitches, pitch);
 
     const InputState& is = sc->inputState();
     if (!is.noteEntryMode()) {
@@ -333,7 +330,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
             const Chord* chord = is.cr()->isChord() ? engraving::toChord(is.cr()) : nullptr;
             if (chord) {
-                Note* n = chord->findNote(inputEv.pitch);
+                Note* n = chord->findNote(pitch);
                 if (n) {
                     sc->deleteItem(n->tieBack());
                     sc->deleteItem(n);
@@ -344,24 +341,20 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         return nullptr;
     }
 
-    if (sc->activeMidiPitches().empty()) {
-        inputEv.chord = false;
-    } else {
-        inputEv.chord = true;
-    }
+    bool addToChord = !m_activeMidiPitches.empty();
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) {
         EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
-            inputEv.chord = true;
+            addToChord = true;
         }
     }
 
-    Note* note = NoteInput::addMidiPitch(sc->transactionManager()->currentOrDummyTransaction(), sc, inputEv.pitch,
-                                                        inputEv.chord, configuration()->midiUseWrittenPitch().val);
+    Note* note = NoteInput::addMidiPitch(sc->transactionManager()->currentOrDummyTransaction(), sc, pitch,
+                                         addToChord, configuration()->midiUseWrittenPitch().val);
 
-    sc->activeMidiPitches().push_back(inputEv);
+    m_activeMidiPitches.push_back(pitch);
 
     if (is.cr()) {
         m_notationInteraction->showItem(is.cr());
@@ -494,7 +487,7 @@ void NotationMidiInput::stopRealtime()
 
 void NotationMidiInput::doRealtimeAdvance()
 {
-    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
+    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_activeMidiPitches.empty())) {
         if (m_realtimeTimer.isActive()) {
             stopRealtime();
         }
@@ -510,7 +503,7 @@ void NotationMidiInput::doRealtimeAdvance()
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
         m_undoStack->transaction(muse::TranslatableString("undoableAction", "Realtime advance"), [this](Transaction& tx) {
-            NoteInput::realtimeAdvance(tx, score(), configuration()->midiUseWrittenPitch().val);
+            NoteInput::realtimeAdvance(tx, score(), configuration()->midiUseWrittenPitch().val, m_activeMidiPitches);
         });
     });
 

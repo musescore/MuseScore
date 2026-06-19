@@ -121,8 +121,6 @@ public:
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
-    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>& activeMidiPitches() override { return m_activeMidiPitches; }
 
     void setUpdateAll() override;
 
@@ -157,7 +155,6 @@ public:
     bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
     int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
-//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -242,8 +239,6 @@ private:
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
     int m_midiPortCount = 0;                           // A count of ALSA midi out ports
-    //    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
-    std::list<MidiInputEvent> m_activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> m_midiMapping;
     bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
     // don't decrease and don't have gaps

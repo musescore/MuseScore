@@ -1732,7 +1732,7 @@ void NoteInput::padNoteDecreaseTAB(Transaction& tx, Score* score)
 //   realtimeAdvance
 //---------------------------------------------------------
 
-void NoteInput::realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition)
+void NoteInput::realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition, const std::vector<int>& activeMidiPitches)
 {
     InputState& is = score->inputState();
     if (!is.noteEntryMode()) {
@@ -1751,14 +1751,13 @@ void NoteInput::realtimeAdvance(Transaction& tx, Score* score, bool allowTranspo
 
     is.moveToNextInputPos();
 
-    std::list<MidiInputEvent>& midiPitches = score->activeMidiPitches();
-    if (midiPitches.empty()) {
+    if (activeMidiPitches.empty()) {
         score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), DirectionV::AUTO);
     } else {
         Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
         bool partOfChord = false;
-        for (const MidiInputEvent& ev : midiPitches) {
-            NoteInput::addTiedMidiPitch(tx, score, ev.pitch, partOfChord, prevChord, allowTransposition);
+        for (int pitch : activeMidiPitches) {
+            NoteInput::addTiedMidiPitch(tx, score, pitch, partOfChord, prevChord, allowTransposition);
             partOfChord = true;
         }
     }
