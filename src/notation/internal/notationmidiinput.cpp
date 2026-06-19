@@ -509,9 +509,9 @@ void NotationMidiInput::doRealtimeAdvance()
     playbackController()->playMetronome(is.tick().ticks());
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
-        m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Realtime advance"));
-        m_getScore->score()->realtimeAdvance(configuration()->midiUseWrittenPitch().val);
-        m_undoStack->commitChanges();
+        m_undoStack->transaction(muse::TranslatableString("undoableAction", "Realtime advance"), [this](Transaction& tx) {
+            NoteInput::realtimeAdvance(tx, score(), configuration()->midiUseWrittenPitch().val);
+        });
     });
 
     if (isRealtimeManual()) {
