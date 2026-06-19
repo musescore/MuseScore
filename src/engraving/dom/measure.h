@@ -307,8 +307,8 @@ public:
     void createVoice(int track);
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
-    AccidentalVal findAccidental(Note*) const;
-    AccidentalVal findAccidental(Segment* s, staff_idx_t staffIdx, int line, bool& error) const;
+    AccidentalVal findAccidental(const Note*) const;
+    AccidentalVal findAccidental(const Segment* s, staff_idx_t staffIdx, int line, bool& error) const;
     void checkMultiVoices(staff_idx_t staffIdx);
     bool hasVoice(track_idx_t track) const;
     bool isEmpty(staff_idx_t staffIdx) const;

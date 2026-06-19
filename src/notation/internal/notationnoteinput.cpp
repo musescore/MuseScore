@@ -370,8 +370,7 @@ NoteVal NotationNoteInput::noteValForLine(int line) const
     pos.line = line;
 
     bool error = false;
-    const NoteVal nval = NoteInput::noteValForPosition(score()->transactionManager()->currentOrDummyTransaction(), score(), pos,
-                                                       is.accidentalType(), error);
+    const NoteVal nval = NoteInput::noteValForPosition(score(), pos, is.accidentalType(), error);
     if (error) {
         LOGE() << "Could not find note val for position, staffIdx: " << pos.staffIdx << ", line: " << pos.line;
     }

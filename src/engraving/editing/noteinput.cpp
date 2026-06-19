@@ -191,16 +191,16 @@ NoteVal NoteInput::noteVal(const Score* score, int pitch, staff_idx_t staffIdx, 
 //   noteValForPosition
 //---------------------------------------------------------
 
-NoteVal NoteInput::noteValForPosition(Transaction&, Score* score, Position pos, AccidentalType at, bool& error)
+NoteVal NoteInput::noteValForPosition(const Score* score, Position pos, AccidentalType at, bool& error)
 {
-    InputState& is = score->inputState();
+    const InputState& is = score->inputState();
 
     error           = false;
-    Segment* s      = pos.segment;
+    const Segment* s = pos.segment;
     int line        = pos.line;
     Fraction tick   = s->tick();
     staff_idx_t staffIdx = pos.staffIdx;
-    Staff* st       = score->staff(staffIdx);
+    const Staff* st = score->staff(staffIdx);
     ClefType clef   = st->clef(tick);
     const Instrument* instr = st->part()->instrument(s->tick());
     NoteVal nval;
@@ -255,7 +255,6 @@ NoteVal NoteInput::noteValForPosition(Transaction&, Score* score, Position pos, 
         if (pos.fret != INVALID_FRET_INDEX) {                  // if a fret is given, use it
             nval.fret = pos.fret;
         } else {                                      // if no fret, use 0 as default
-            is.setString(line);
             nval.fret = 0;
         }
         // reduce within fret limit
@@ -783,7 +782,7 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
 
     DirectionV stemDirection = DirectionV::AUTO;
     bool error = false;
-    NoteVal nval = noteValForPosition(tx, score, p, is.accidentalType(), error);
+    NoteVal nval = noteValForPosition(score, p, is.accidentalType(), error);
     if (error) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -905,7 +904,7 @@ Ret NoteInput::putNote(Transaction& tx, Score* score, const Position& p, bool re
     }
     bool forceAccidental = false;
     if (is.accidentalType() != AccidentalType::NONE) {
-        NoteVal nval2 = noteValForPosition(tx, score, p, AccidentalType::NONE, error);
+        NoteVal nval2 = noteValForPosition(score, p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
     }
 
@@ -1016,7 +1015,7 @@ Ret NoteInput::repitchNote(Transaction& tx, Score* score, const Position& p, boo
 
     bool forceAccidental = false;
     if (is.accidentalType() != AccidentalType::NONE) {
-        NoteVal nval2 = noteValForPosition(tx, score, p, AccidentalType::NONE, error);
+        NoteVal nval2 = noteValForPosition(score, p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
     }
 
@@ -1258,13 +1257,13 @@ void NoteInput::addPitch(Transaction& tx, Score* score, int step, bool addFlag, 
             ClefType clef = score->staff(pos.staffIdx)->clef(seg->tick());
             pos.line      = relStep(step, clef);
             bool error;
-            NoteVal nval = noteValForPosition(tx, score, pos, is.accidentalType(), error);
+            NoteVal nval = noteValForPosition(score, pos, is.accidentalType(), error);
             if (error) {
                 return;
             }
             bool forceAccidental = false;
             if (is.accidentalType() != AccidentalType::NONE) {
-                NoteVal nval2 = noteValForPosition(tx, score, pos, AccidentalType::NONE, error);
+                NoteVal nval2 = noteValForPosition(score, pos, AccidentalType::NONE, error);
                 forceAccidental = (nval.pitch == nval2.pitch);
             }
             if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
