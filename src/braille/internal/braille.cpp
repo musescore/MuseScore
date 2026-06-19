@@ -985,7 +985,7 @@ void Braille::computeArticulationDoubling()
     const size_t ntracks = m_score->staves().size() * VOICES;
     for (track_idx_t track = 0; track < ntracks; ++track) {
         // Runs of consecutive chords sharing the same articulation SymId, grouped per sign.
-        std::map<SymId, std::vector<Articulation*> > openRuns;
+        std::map<QString, std::vector<Articulation*> > openRuns;
 
         for (Segment* seg = m_score->firstSegment(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
             EngravingItem* el = seg->element(track);
@@ -1002,9 +1002,13 @@ void Braille::computeArticulationDoubling()
 
             Chord* chord = toChord(el);
 
-            std::set<SymId> present;
+            std::set<QString> present;
             for (Articulation* artic : chord->articulations()) {
-                present.insert(artic->symId());
+                const QString key = brailleArticulation(artic);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                present.insert(key);
             }
 
             // End any open run whose articulation is not present on this chord.
@@ -1019,7 +1023,11 @@ void Braille::computeArticulationDoubling()
 
             // Extend or start a run for each articulation on this chord.
             for (Articulation* artic : chord->articulations()) {
-                openRuns[artic->symId()].push_back(artic);
+                const QString key = brailleArticulation(artic);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                openRuns[key].push_back(artic);
             }
         }
 
