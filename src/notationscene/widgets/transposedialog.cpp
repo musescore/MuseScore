@@ -22,9 +22,6 @@
 
 #include "transposedialog.h"
 
-#include "async/notifylist.h"
-
-#include "notation/internal/mscoreerrorscontroller.h"
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -212,7 +209,6 @@ INotationSelectionPtr TransposeDialog::selection() const
 void TransposeDialog::apply()
 {
     TransposeOptions options;
-
     options.mode = mode();
     options.direction = direction();
     options.key = transposeKey();
@@ -224,8 +220,6 @@ void TransposeDialog::apply()
     saveState();
 
     interaction()->transpose(options);
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     if (m_allSelected) {
         interaction()->clearSelection();

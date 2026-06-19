@@ -1875,7 +1875,9 @@ void NotationActionController::openBreaksDialog()
 
 void NotationActionController::openTransposeDialog()
 {
-    interactive()->open("musescore://notation/transpose");
+    interactive()->open("musescore://notation/transpose").onResolve(this, [this](const Val&) {
+        currentNotationInteraction()->checkAndShowError();
+    });
 }
 
 void NotationActionController::openPartsDialog()
