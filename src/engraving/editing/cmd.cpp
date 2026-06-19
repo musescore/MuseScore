@@ -93,6 +93,7 @@
 #include "editstaff.h"
 #include "editsystemlocks.h"
 #include "mscoreview.h"
+#include "regroup.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
@@ -1841,46 +1842,6 @@ void Score::cmdAddStretch(double val)
     }
 }
 
-//---------------------------------------------------------
-//   cmdResetNoteAndRestGroupings
-//---------------------------------------------------------
-
-void Score::cmdResetNoteAndRestGroupings()
-{
-    bool noSelection = selection().isNone();
-    if (noSelection) {
-        cmdSelectAll();
-    } else if (!selection().isRange()) {
-        LOGD("no system or staff selected");
-        return;
-    }
-
-    // save selection values because selection changes during grouping
-    Fraction sTick = selection().tickStart();
-    Fraction eTick = selection().tickEnd();
-    staff_idx_t sStaff = selection().staffStart();
-    staff_idx_t eStaff = selection().staffEnd();
-
-    for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
-        track_idx_t sTrack = staff * VOICES;
-        track_idx_t eTrack = sTrack + VOICES;
-        for (track_idx_t track = sTrack; track < eTrack; track++) {
-            if (selectionFilter().canSelectVoice(track)) {
-                regroupNotesAndRests(sTick, eTick, track);
-            }
-        }
-    }
-
-    if (noSelection) {
-        deselectAll();
-        return;
-    }
-
-    // Reset selection to original selection
-    selection().setRangeTicks(sTick, eTick, sStaff, eStaff);
-    selection().updateSelectedElements();
-}
-
 static void resetBeamOffSet(EngravingItem* e)
 {
     // Reset completely cross staff beams from MU1&2
@@ -2354,7 +2315,8 @@ void Score::realtimeAdvance(bool allowTransposition)
 
     if (prevCR->measure() != is.segment()->measure()) {
         // just advanced across barline. Now simplify tied notes.
-        score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
+        Transaction& tx = transactionManager()->currentOrDummyTransaction();
+        Regroup::regroupNotesAndRests(tx, this, prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
     }
 
     return;

@@ -395,7 +395,6 @@ public:
 
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
-    void cmdResetNoteAndRestGroupings();
     void cmdToggleLayoutBreak(LayoutBreakType);
     void resetUserStretch();
     bool canInsertClef(ClefType) const;
@@ -518,8 +517,6 @@ public:
     std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                         const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
     void cmdFullMeasureRest();
-
-    void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command

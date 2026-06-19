@@ -191,6 +191,8 @@ target_sources(engraving PRIVATE
     editing/paste.h
     editing/realizechordsymbols.cpp
     editing/realizechordsymbols.h
+    editing/regroup.cpp
+    editing/regroup.h
     editing/reset.cpp
     editing/reset.h
     editing/splitjoinmeasure.cpp
