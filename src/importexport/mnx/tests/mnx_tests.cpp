@@ -120,7 +120,7 @@ static const String MSCX_PROJECT_REFERENCE_DIR(u"data/project_examples/");
 #error "MNX_W3C_EXAMPLES_PATH must be provided by mnxdom"
 #endif
 
-static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode);
+static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode, bool normalizeChordStemDirection);
 
 static const std::unordered_set<std::string> MNX_NO_ROUNDTRIP {
     /// @note clarinet38MissingTime omits a time signature in MNX, so roundtrip inserts one and mismatches.
@@ -142,7 +142,8 @@ public:
     MasterScore* importMnxFromJson(const std::string& json, const String& virtualPath);
     MasterScore* roundTripMnxScore(const String& sourceFile, const String& exportedFile, bool isAbsolutePath = false);
 
-    bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr);
+    bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr,
+                                  bool normalizeChordStemDirection = false);
     bool importReferenceExample(const String& baseName);
     void runProjectFileTest(const char* name);
     void runW3cExampleTest(const char* name);
@@ -251,7 +252,8 @@ MasterScore* Mnx_Tests::roundTripMnxScore(const String& sourceFile, const String
     return roundTrip;
 }
 
-bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePath, const char* testName)
+bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePath, const char* testName,
+                                         bool normalizeChordStemDirection)
 {
 #if MUE_MNX_WRITE_REFS
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
@@ -274,8 +276,13 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
         /// @note The exporter exports layout beams, which omits one of the beams-over-barline in the input
         "project_beamsOverBarlines"
     };
+    constexpr std::array<std::string_view, 1> chordStemDirectionNormalizationTests{
+        /// @note Beamed stem direction may round-trip as either chord or beam overrides.
+        "project_beamsOverBarlines"
+    };
 
     bool normalizeBeamMode = false;
+    bool normalizeChordStemDirectionForTest = false;
     if (testName) {
         for (const std::string_view name : normalizationTests) {
             if (name == testName) {
@@ -283,13 +290,23 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
                 break;
             }
         }
+        for (const std::string_view name : chordStemDirectionNormalizationTests) {
+            if (name == testName) {
+                normalizeChordStemDirectionForTest = true;
+                break;
+            }
+        }
     }
+    normalizeChordStemDirection = normalizeChordStemDirection && normalizeChordStemDirectionForTest;
 
     LOGI() << "BeamMode normalization " << (normalizeBeamMode ? "enabled" : "disabled") << " for "
            << (testName ? testName : "unnamed test");
+    LOGI() << "Chord StemDirection normalization " << (normalizeChordStemDirection ? "enabled" : "disabled") << " for "
+           << (testName ? testName : "unnamed test");
 
     const std::string outputText = normalizeMscxText(
-        std::string(reinterpret_cast<const char*>(buffer.data().constData()), buffer.data().size()), normalizeBeamMode);
+        std::string(reinterpret_cast<const char*>(buffer.data().constData()), buffer.data().size()),
+        normalizeBeamMode, normalizeChordStemDirection);
 
     ByteArray referenceData;
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
@@ -301,7 +318,7 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
     }
 
     const std::string referenceText = normalizeMscxText(
-        std::string(referenceData.constChar(), referenceData.size()), normalizeBeamMode);
+        std::string(referenceData.constChar(), referenceData.size()), normalizeBeamMode, normalizeChordStemDirection);
 
     if (referenceText == outputText) {
         return true;
@@ -368,7 +385,7 @@ static String tempRoundTripPath(const String& baseName)
     return u"<roundtrip>/" + baseName + u".mnx";
 }
 
-static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode)
+static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode, bool normalizeChordStemDirection)
 {
     static const std::regex crlfRe("\r\n");
     static const std::regex tagWhitespaceRe(">\\s+<");
@@ -376,12 +393,18 @@ static std::string normalizeMscxText(const std::string& text, bool normalizeBeam
     static const std::regex trackNameRe("<trackName>[\\s\\S]*?</trackName>");
     // Beam modes are different on round trip if inbound file doesn't set useBeams
     static const std::regex beamModeRe("<BeamMode>[\\s\\S]*?</BeamMode>");
+    // Beamed stem directions may round-trip as either chord or beam overrides.
+    static const std::regex chordStemDirectionRe(
+        "(<Chord\\b[^>]*>(?:(?!</Chord>)[\\s\\S])*?)<StemDirection>[\\s\\S]*?</StemDirection>");
     // Explicit normal barlines are redundant and not preserved on export
     static const std::regex normalBarlineRe("<BarLine>(?:(?!<subtype>)[\\s\\S])*?</BarLine>");
     std::string out = std::regex_replace(text, crlfRe, "\n");
     out = std::regex_replace(out, trackNameRe, "");
     if (normalizeBeamMode) {
         out = std::regex_replace(out, beamModeRe, "");
+    }
+    if (normalizeChordStemDirection) {
+        out = std::regex_replace(out, chordStemDirectionRe, "$1");
     }
     out = std::regex_replace(out, normalBarlineRe, "");
     return std::regex_replace(out, tagWhitespaceRe, "><");
@@ -441,7 +464,8 @@ void Mnx_Tests::runProjectFileTest(const char* name)
     std::unique_ptr<MasterScore> roundTrip(roundTripMnxScore(sourcePath, exportName));
     ASSERT_TRUE(roundTrip);
 
-    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str()));
+    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str(),
+                                         /*normalizeChordStemDirection*/ true));
 }
 
 void Mnx_Tests::runW3cExampleTest(const char* name)
@@ -479,7 +503,8 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
         roundTripMnxScore(w3cSourcePath(baseName), exportName, /*isAbsolutePath*/ true));
     ASSERT_TRUE(roundTrip);
 
-    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str()));
+    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str(),
+                                         /*normalizeChordStemDirection*/ true));
 }
 
 #define MNX_PROJECT_FILE_TEST(name) \
@@ -505,6 +530,7 @@ MNX_PROJECT_FILE_TEST(breathMark)
 MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)
+MNX_PROJECT_FILE_TEST(dynamicV1V2)
 MNX_PROJECT_FILE_TEST(dynamicVoice)
 MNX_PROJECT_FILE_TEST(enharmonicPart)
 MNX_PROJECT_FILE_TEST(fermata)
