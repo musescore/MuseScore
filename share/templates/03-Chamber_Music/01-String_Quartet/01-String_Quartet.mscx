@@ -61,6 +61,7 @@
           <string>69</string>
           <string>76</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -143,6 +144,7 @@
           <string>69</string>
           <string>76</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -227,6 +229,7 @@
           <string>62</string>
           <string>69</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -310,6 +313,7 @@
           <string>50</string>
           <string>57</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
