@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <optional>
 #include <stack>
 #include <vector>
 
@@ -27,6 +28,7 @@
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
@@ -53,6 +55,7 @@
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 
 #ifdef MNXDOM_SYSTEM
@@ -1005,7 +1008,7 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
 //   Create MuseScore dynamics from MNX part-measure dynamics.
 //---------------------------------------------------------
 
-void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure)
+void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* measure)
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxDynamics = mnxMeasure.dynamics()) {
@@ -1050,7 +1053,7 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, engraving
 //   Create MuseScore ottava spanners from MNX ottavas.
 //---------------------------------------------------------
 
-void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure)
+void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, Measure* measure)
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxOttavas = mnxMeasure.ottavas()) {
@@ -1139,6 +1142,141 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
 }
 
 //---------------------------------------------------------
+//   createArpeggios
+//   Create MuseScore arepeggio markings from MNX arpeggios and nonArpeggios.
+//---------------------------------------------------------
+
+void MnxImporter::createArpeggios(const mnx::part::Measure& mnxMeasure)
+{
+    const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
+
+    auto processArpeggio = [&](const auto& mnxArpeggio) -> void {
+        using MnxArpeggioType = std::decay_t<decltype(mnxArpeggio)>;
+        static_assert(std::is_base_of_v<mnx::part::ArpeggioBase, MnxArpeggioType>,
+                      "arpeggio must derive from mnx::part::ArpeggioBase");
+
+        const mnx::part::ArpeggioBase& arpBase = mnxArpeggio;
+        Note* noteStart = mnxNoteIdToNote(arpBase.span().start());
+        Note* noteEnd =  mnxNoteIdToNote(arpBase.span().end());
+        IF_ASSERT_FAILED(noteStart && noteEnd) {
+            LOGE() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " not mapped.";
+            return;
+        }
+        const auto mnxPartIndexForNote = [this](const Note* note) -> std::optional<size_t> {
+            const auto partIt = m_StaffToMnxPart.find(track2staff(note->track()));
+            if (partIt == m_StaffToMnxPart.end()) {
+                return std::nullopt;
+            }
+            return partIt->second;
+        };
+        const std::optional<size_t> startPartIndex = mnxPartIndexForNote(noteStart);
+        const std::optional<size_t> endPartIndex = mnxPartIndexForNote(noteEnd);
+        IF_ASSERT_FAILED(startPartIndex && endPartIndex) {
+            LOGE() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " belongs to an unmapped staff.";
+            return;
+        }
+        if (*startPartIndex != part->calcArrayIndex() || *endPartIndex != part->calcArrayIndex()) {
+            LOGW() << "skipping arpeggio span " << arpBase.span().start() << " to " << arpBase.span().end()
+                   << " because MNX arpeggios cannot cross part boundaries.";
+            return;
+        }
+        if (noteStart->tick() != noteEnd->tick()) {
+            LOGW() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " are not vertically aligned.";
+            return;
+        }
+
+        Chord* chordTop{};
+        Chord* chordBot{};
+        if (noteEnd->track() <= noteStart->track()) {
+            chordTop = noteEnd->chord();
+            chordBot = noteStart->chord();
+        } else {
+            chordTop = noteStart->chord();
+            chordBot = noteEnd->chord();
+        }
+        IF_ASSERT_FAILED(chordTop && chordBot) {
+            LOGE() << "failed to determining top/bottom notes for arpeggio";
+            return;
+        }
+
+        const bool graceArpeggio = chordTop->isGrace() || chordBot->isGrace();
+        if (graceArpeggio) {
+            /// @note hopefully we can lift this requirement someday
+            LOGW() << "skipping arpeggio on grace note (not supported by MuseScore)";
+            return;
+        }
+        // leave the graceArpeggio check here in case we support grace arpeggios in the future
+        if (graceArpeggio && chordTop != chordBot) {
+            LOGW() << "skipping arpeggio spanning multiple grace chords at " << chordTop->tick().toString();
+            return;
+        }
+
+        // MNX targets individual notes, but MuseScore must target entire chords
+
+        const Note* chordTopNote = chordTop->upNote();
+        const Note* chordBotNote = chordBot->downNote();
+        const bool targetsChordExtremes = (noteStart == chordTopNote && noteEnd == chordBotNote)
+                                          || (noteEnd == chordTopNote && noteStart == chordBotNote);
+        if (!targetsChordExtremes) {
+            LOGW() << "arpeggio span " << arpBase.span().start() << " to " << arpBase.span().end()
+                   << " does not target the top and bottom notes of its chord span at " << chordTop->tick().toString();
+        }
+        if (chordTop->arpeggio()) {
+            LOGW() << "arpeggio already exists on top chord";
+            return;
+        }
+
+        Arpeggio* arpeggio = Factory::createArpeggio(chordTop);
+        arpeggio->setTrack(chordTop->track());
+        if constexpr (std::is_same_v<MnxArpeggioType, mnx::part::NonArpeggio>) {
+            arpeggio->setArpeggioType(ArpeggioType::BRACKET);
+        } else {
+            arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+            if (mnxArpeggio.arrow()) {
+                switch (mnxArpeggio.direction()) {
+                case mnx::MarkingUpDownAuto::Down:
+                    arpeggio->setArpeggioType(ArpeggioType::DOWN);
+                    break;
+                case mnx::MarkingUpDownAuto::Up:
+                    arpeggio->setArpeggioType(ArpeggioType::UP);
+                    break;
+                case mnx::MarkingUpDownAuto::Auto:
+                    break;
+                }
+            }
+        }
+        if (graceArpeggio) {
+            arpeggio->setSpan(1);
+        } else {
+            arpeggio->setSpan(int(chordBot->track() + 1 - chordTop->track()));
+            Segment* s = chordTop->segment();
+            for (track_idx_t track = chordTop->track(); track <= chordBot->track(); ++track) {
+                EngravingItem* item = s->element(track);
+                if (item && item->isChord()) {
+                    toChord(item)->setSpanArpeggio(arpeggio);
+                }
+            }
+        }
+        arpeggio->setParent(chordTop);
+        chordTop->setArpeggio(arpeggio);
+    };
+
+    if (const auto mnxArpeggios = mnxMeasure.arpeggios()) {
+        for (const auto& arpeggio : mnxArpeggios.value()) {
+            processArpeggio(arpeggio);
+        }
+    }
+    if (const auto mnxNonArpeggios = mnxMeasure.nonArpeggios()) {
+        for (const auto& nonArpeggio : mnxNonArpeggios.value()) {
+            processArpeggio(nonArpeggio);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   processSequencePass2
 //   Second pass over a sequence for lyrics, accidentals, slurs, ties, and rest positions.
 //---------------------------------------------------------
@@ -1207,7 +1345,7 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
 void MnxImporter::importPartMeasures()
 {
     m_lyricLineUsage.clear();
-    /// pass1: create ChordRests and clefs
+    // pass1: create ChordRests and clefs
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {
             Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex());
@@ -1218,10 +1356,11 @@ void MnxImporter::importPartMeasures()
         }
     }
     buildLyricLineVerseMap();
-    /// pass2: add accidentals, beams, dynamics, ottavas, slurs, and ties
+    // pass2: add accidentals, beams, dynamics, ottavas, slurs, and ties
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {
             Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex());
+            createArpeggios(partMeasure);
             createDynamics(partMeasure, measure);
             createOttavas(partMeasure, measure);
             createBeams(partMeasure);
