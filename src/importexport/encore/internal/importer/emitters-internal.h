@@ -127,6 +127,7 @@ void applyNoteArticulations(BuildCtx& ctx, mu::engraving::Note* note, mu::engrav
                             mu::engraving::track_idx_t track, const MeasEmitCtx& mc);
 void handleRest(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
+void handleChordSym(BuildCtx& ctx, const MeasEmitCtx& mc, const NoteElemCtx& ec);
 
 // Queue one LYRIC element into ctx.pendingLyrics. (emitters-lyrics.cpp)
 void enqueueLyric(BuildCtx& ctx, const EncLyric* el, mu::engraving::track_idx_t track);
