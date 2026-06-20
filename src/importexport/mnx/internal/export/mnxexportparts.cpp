@@ -26,13 +26,18 @@
 #include <algorithm>
 #include <optional>
 #include <string>
+#include <unordered_set>
 
+#include "engraving/dom/arpeggio.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/engravingitem.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -455,6 +460,158 @@ void MnxExporter::exportSpanners()
 }
 
 //---------------------------------------------------------
+//   createArpeggios
+//   emit MNX measure-level arpeggios and non-arpeggios
+//---------------------------------------------------------
+
+void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
+{
+    IF_ASSERT_FAILED(part && measure) {
+        return;
+    }
+
+    std::unordered_set<const Arpeggio*> exportedArpeggios;
+
+    auto isExportedChord = [this](const Chord* chord) {
+        return chord && m_crToMnxEvent.find(chord) != m_crToMnxEvent.end();
+    };
+
+    auto isExportableEndpoint = [&](const Note* note) {
+        if (!note || !isExportedChord(note->chord())) {
+            return false;
+        }
+        const Staff* staff = note->staff();
+        if (staff && staff->isDrumStaff(note->tick())) {
+            return pitchIsValid(note->pitch());
+        }
+        return toMnxPitch(note).has_value();
+    };
+
+    auto findBottomChord = [](const Arpeggio* arpeggio) -> Chord* {
+        Chord* chord = arpeggio ? arpeggio->chord() : nullptr;
+        Segment* segment = chord ? chord->segment() : nullptr;
+        if (!chord || !segment) {
+            return nullptr;
+        }
+
+        Chord* bottomChord = chord;
+        for (track_idx_t track = arpeggio->track(); track <= arpeggio->endTrack(); ++track) {
+            EngravingItem* item = segment->element(track);
+            if (!item || !item->isChord()) {
+                continue;
+            }
+            Chord* spanChord = toChord(item);
+            if (spanChord == chord || spanChord->spanArpeggio() == arpeggio) {
+                bottomChord = spanChord;
+            }
+        }
+        return bottomChord;
+    };
+
+    auto setMnxGraceIndex = [](mnx::part::ArpeggioBase& item, const MnxChordTargetPosition& position) {
+        if (position.graceIndex) {
+            item.position().set_graceIndex(position.graceIndex.value());
+        }
+    };
+
+    auto processArpeggio = [&](Chord* chord) {
+        IF_ASSERT_FAILED(chord) {
+            return;
+        }
+
+        Arpeggio* arpeggio = chord->arpeggio();
+        if (!arpeggio || !exportedArpeggios.insert(arpeggio).second) {
+            return;
+        }
+        if (!isExportedChord(chord)) {
+            LOGW() << "Skipping arpeggio whose chord was not exported.";
+            return;
+        }
+
+        Chord* bottomChord = chord;
+        if (chord->isGrace()) {
+            if (arpeggio->span() != 1) {
+                LOGW() << "Skipping multi-track grace-note arpeggio.";
+                return;
+            }
+        } else {
+            bottomChord = findBottomChord(arpeggio);
+            if (!bottomChord || bottomChord->track() < chord->track()) {
+                LOGW() << "Skipping arpeggio with invalid span.";
+                return;
+            }
+        }
+
+        if (!isExportedChord(bottomChord)) {
+            LOGW() << "Skipping arpeggio whose endpoint chord was not exported.";
+            return;
+        }
+
+        Note* topNote = chord->upNote();
+        Note* bottomNote = bottomChord->downNote();
+        if (!isExportableEndpoint(topNote) || !isExportableEndpoint(bottomNote)) {
+            LOGW() << "Skipping arpeggio with non-exportable endpoint note.";
+            return;
+        }
+
+        const std::optional<MnxChordTargetPosition> position = mnxChordTargetPosition(chord, measure);
+        if (!position) {
+            return;
+        }
+        const mnx::IdPair::Required span = mnx::IdPair::make(getOrAssignEID(topNote).toStdString(),
+                                                             getOrAssignEID(bottomNote).toStdString());
+
+        switch (arpeggio->arpeggioType()) {
+        case ArpeggioType::NORMAL: {
+            auto mnxArpeggio = mnxMeasure.ensure_arpeggios().append(position->fraction, span);
+            setMnxGraceIndex(mnxArpeggio, *position);
+            break;
+        }
+        case ArpeggioType::UP:
+        case ArpeggioType::UP_STRAIGHT: {
+            auto mnxArpeggio = mnxMeasure.ensure_arpeggios().append(position->fraction, span);
+            mnxArpeggio.set_arrow(true);
+            mnxArpeggio.set_direction(mnx::MarkingUpDownAuto::Up);
+            setMnxGraceIndex(mnxArpeggio, *position);
+            break;
+        }
+        case ArpeggioType::DOWN:
+        case ArpeggioType::DOWN_STRAIGHT: {
+            auto mnxArpeggio = mnxMeasure.ensure_arpeggios().append(position->fraction, span);
+            mnxArpeggio.set_arrow(true);
+            mnxArpeggio.set_direction(mnx::MarkingUpDownAuto::Down);
+            setMnxGraceIndex(mnxArpeggio, *position);
+            break;
+        }
+        case ArpeggioType::BRACKET: {
+            auto mnxNonArpeggio = mnxMeasure.ensure_nonArpeggios().append(position->fraction, span);
+            setMnxGraceIndex(mnxNonArpeggio, *position);
+            break;
+        }
+        default:
+            LOGW() << "Skipping unsupported arpeggio type: " << static_cast<int>(arpeggio->arpeggioType());
+            break;
+        }
+    };
+
+    for (Segment* segment = measure->first(SegmentType::ChordRest);
+         segment;
+         segment = segment->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+            EngravingItem* item = segment->element(track);
+            if (!item || !item->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(item);
+            processArpeggio(chord);
+            for (Chord* graceChord : chord->graceNotes()) {
+                processArpeggio(graceChord);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   createParts
 //---------------------------------------------------------
 
@@ -533,6 +690,8 @@ bool MnxExporter::createParts()
             appendClefsForMeasure(part, measure, mnxMeasure);
             /// @todo Dynamics are deferred pending MNX spec clarifications.
             createSequences(part, measure, mnxMeasure);
+            /// the items below must come after createSequences.
+            createArpeggios(part, measure, mnxMeasure);
         }
     }
 
