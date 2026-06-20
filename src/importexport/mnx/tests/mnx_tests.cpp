@@ -123,15 +123,13 @@ static const String MSCX_PROJECT_REFERENCE_DIR(u"data/project_examples/");
 static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode);
 
 static const std::unordered_set<std::string> MNX_NO_ROUNDTRIP {
-    /// @note File contains dynamics, which are not currently exported to MNX.
-    "dynamics",
     /// @note clarinet38MissingTime omits a time signature in MNX, so roundtrip inserts one and mismatches.
     "clarinet38MissingTime",
     /// @note multimeasure-rests has an explicit regular barline that is dropped on export, shifting eids.
     "multimeasure-rests",
     /// @note organ-layout is a W3C example missing clefs; we don't change the example, so skip roundtrip.
     "organ-layout",
-    /// @note Files contains overlapping ottavas, which are not exported in the same octave due to MuseScore
+    /// @note ottavas has overlapping ottavas, which are not exported in the same octave due to MuseScore
     /// playback only playing one ottava at a time.
     "ottavas"
 };
@@ -507,6 +505,7 @@ MNX_PROJECT_FILE_TEST(breathMark)
 MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)
+MNX_PROJECT_FILE_TEST(dynamicVoice)
 MNX_PROJECT_FILE_TEST(enharmonicPart)
 MNX_PROJECT_FILE_TEST(fermata)
 MNX_PROJECT_FILE_TEST(graceArps)
