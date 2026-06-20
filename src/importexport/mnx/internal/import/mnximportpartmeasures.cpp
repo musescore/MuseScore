@@ -30,6 +30,7 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
+#include "engraving/dom/beam.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/dynamic.h"
@@ -1135,13 +1136,25 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
     if (const auto beams = mnxMeasure.beams()) {
         for (const auto& beam : beams.value()) {
             const auto events = beam.events();
+            std::vector<ChordRest*> beamElements;
+            DirectionV beamDirection = DirectionV::AUTO;
             for (size_t x = 0; x < events.size(); x++) {
                 const auto& eventId = events[x];
+                const auto mnxEvent = mnxDocument().getEntityMap().tryGet<mnx::sequence::Event>(eventId);
+                if (beamDirection == DirectionV::AUTO && mnxEvent) {
+                    if (const auto stemDir = mnxEvent->stemDirection()) {
+                        beamDirection = stemDir.value() == mnx::StemDirection::Up ? DirectionV::UP : DirectionV::DOWN;
+                    }
+                }
                 ChordRest* cr = mnxEventIdToCR(eventId);
                 IF_ASSERT_FAILED(cr) {
                     LOGE() << "encountered unmapped event " << eventId << " in beam " << beam.pointer().to_string();
                     LOGE() << beam.dump(2);
                     continue;
+                }
+                beamElements.push_back(cr);
+                if (beamDirection == DirectionV::AUTO && cr->isChord()) {
+                    beamDirection = toChord(cr)->stemDirection();
                 }
                 if (events.size() == 1) {
                     cr->setBeamMode(BeamMode::NONE); // MuseScore does not have singleton beams
@@ -1152,6 +1165,14 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
                 } else {
                     const auto mode = toMuseScoreBeamMode(mnxDocument().getEntityMap().getBeamStartLevel(eventId));
                     cr->setBeamMode(mode);
+                }
+            }
+            if (beamElements.size() > 1) {
+                Beam* msBeam = Factory::createBeam(m_score->dummy()->system());
+                msBeam->setTrack(beamElements.front()->track());
+                msBeam->setDirection(beamDirection);
+                for (ChordRest* cr : beamElements) {
+                    msBeam->add(cr);
                 }
             }
         }

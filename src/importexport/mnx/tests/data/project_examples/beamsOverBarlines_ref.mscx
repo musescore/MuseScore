@@ -282,6 +282,7 @@
             </Rest>
           <Beam>
             <eid>p_p</eid>
+            <StemDirection>down</StemDirection>
             <l1>52</l1>
             <l2>44</l2>
             </Beam>
