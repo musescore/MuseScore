@@ -966,6 +966,55 @@ TEST_F(Tst_Instruments, v0c4_key_transposition_per_staff)
     delete score;
 }
 
+// Regression: voice >= VOICES (e.g. voice=4) was silently dropped; fix maps out-of-range voices to voice 0.
+// Also: short names (1-3 chars) skip name+MIDI matcher and fall through to Grand Piano template.
+TEST_F(Tst_Instruments, v0c4_satb_short_names_with_voice4_bass_lyrics)
+{
+    MasterScore* score = readEncoreScore("text_satb_short_names_voice4_lyrics.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load text_satb_short_names_voice4_lyrics.enc";
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    const int totalStaves = static_cast<int>(score->nstaves());
+    ASSERT_EQ(totalStaves, 4) << "score must carry 4 staves (SATB)";
+    const int bassStaff = totalStaves - 1;
+
+    int bassChords = 0;
+    int bassLyrics = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            for (int v = 0; v < static_cast<int>(VOICES); ++v) {
+                EngravingItem* el = s->element(bassStaff * VOICES + v);
+                if (el && el->isChord()) {
+                    Chord* c = toChord(el);
+                    ++bassChords;
+                    bassLyrics += static_cast<int>(c->lyrics().size());
+                }
+            }
+        }
+    }
+    EXPECT_GE(bassChords, 4) << "bass staff must carry the four voice-4 chords";
+    EXPECT_GE(bassLyrics, 4) << "bass lyrics must attach to the voice-0 chords";
+
+    ASSERT_EQ(score->parts().size(), 4u);
+    const String expectedLabels[] = { u"S", u"C", u"T", u"B" };
+    for (size_t i = 0; i < 4; ++i) {
+        const Part* part = score->parts()[i];
+        const Instrument* inst = part->instrument();
+        ASSERT_NE(inst, nullptr);
+        EXPECT_EQ(inst->id(), String(u"grand-piano"))
+            << "part " << i << " (label '" << expectedLabels[i].toStdString()
+            << "'): short names must fall back to Grand Piano";
+        EXPECT_EQ(part->longName(), expectedLabels[i])
+            << "the original Encore label is preserved as longName";
+    }
+    delete score;
+}
+
 // Oboe with keyTransposeSemitones=5: instrument transposition must be chromatic=5, diatonic=3.
 TEST_F(Tst_Instruments, key_transposition_non_octave_oboe)
 {
