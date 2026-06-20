@@ -964,6 +964,8 @@ static void emitMeasureElement(BuildCtx& ctx, MeasEmitCtx& mc, const EncMeasureE
         break;
     case EncElemType::REST:      handleRest(ctx, mc, ec);
         break;
+    case EncElemType::CHORD:     handleChordSym(ctx, mc, ec);
+        break;
     case EncElemType::LYRIC:     enqueueLyric(ctx, static_cast<const EncLyric*>(e), track);
         break;
     case EncElemType::ORNAMENT:  handleOrnament(ctx, mc, ec);

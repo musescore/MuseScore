@@ -67,6 +67,40 @@ protected:
     void SetUp() override { setRootDir(ENC_DIR); }
 };
 
+// A sung syllable always belongs to a note: one whose stored tick falls between notes (beyond the match
+// window) with no rest available must attach to the nearest chord rather than being dropped.
+TEST_F(Tst_Text, lyrics_offgrid_syllable_attaches_to_nearest_chord)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_offgrid_nearest_chord.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    int pitchWithLyric = -1;
+    int lyricCount = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* e = s->element(0);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Lyrics* ly : c->lyrics()) {
+                if (ly->plainText() == u"ge") {
+                    pitchWithLyric = c->upNote()->pitch();
+                    ++lyricCount;
+                }
+            }
+        }
+    }
+    EXPECT_EQ(lyricCount, 1) << "the off-grid syllable must be kept, not dropped";
+    EXPECT_EQ(pitchWithLyric, 62) << "it must attach to the nearest chord (note at tick 120, pitch 62)";
+
+    delete score;
+}
+
 // A hyphen opening a measure must promote the previous measure's last syllable (SINGLE -> BEGIN) so the
 // connecting hyphen survives across the barline.
 TEST_F(Tst_Text, lyrics_hyphen_renders_across_barline)
@@ -145,6 +179,41 @@ TEST_F(Tst_Text, lyrics_hyphen_separators_dropped_and_set_syllabic)
     delete score;
 }
 
+TEST_F(Tst_Text, lyrics_two_verses_on_voice_0_chord)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_two_verses.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> verse0;
+    std::vector<String> verse1;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                if (ly->verse() == 0) {
+                    verse0.push_back(ly->plainText());
+                } else if (ly->verse() == 1) {
+                    verse1.push_back(ly->plainText());
+                }
+            }
+        }
+    }
+    std::vector<String> expectedV0 = { u"JU", u"LIO", u"RO", u"ME" };
+    std::vector<String> expectedV1 = { u"Co", u"mo", u"ca", u"pa" };
+    EXPECT_EQ(verse0, expectedV0);
+    EXPECT_EQ(verse1, expectedV1);
+    delete score;
+}
+
 TEST_F(Tst_Text, lyrics_variable_length_with_empty_placeholder)
 {
     MasterScore* score = readEncoreScore("text_lyrics_variable.enc");
@@ -202,6 +271,35 @@ TEST_F(Tst_Text, lyrics_offset_ticks_still_attach_correctly)
     EXPECT_EQ(seen, expected)
         << "All 4 lyrics must attach to their correct note even when lyric encTick "
         "is +50 ticks after the note encTick";
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_attached_to_chords)
+{
+    MasterScore* score = readEncoreScore("text_lyrics.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> expected = { u"do", u"re", u"mi", u"fa" };
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(el);
+            for (Lyrics* ly : c->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    EXPECT_EQ(seen, expected);
     delete score;
 }
 
@@ -1234,6 +1332,152 @@ TEST_F(Tst_Text, title_frame_headers_footers)
     EXPECT_NE(styleText(Sid::evenFooterL), String(u"Footer Center"));
     EXPECT_NE(styleText(Sid::evenFooterL), String(u"Footer Right"));
 
+    delete score;
+}
+
+TEST_F(Tst_Text, chord_symbols_present)
+{
+    // akordo.enc has chord symbols (Am, G7, etc.)
+    MasterScore* score = readEncoreScore("akordo.enc");
+    ASSERT_NE(score, nullptr);
+    bool foundHarmony = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            if (segmentHarmony(s)) {
+                foundHarmony = true;
+                break;
+            }
+        }
+        if (foundHarmony) {
+            break;
+        }
+    }
+    EXPECT_TRUE(foundHarmony) << "akordo.enc should contain chord symbols";
+    delete score;
+}
+
+// Regression: chord symbols stored without text (tipo bit0 == 0) were silently skipped.
+TEST_F(Tst_Text, numeric_chord_symbols)
+{
+    MasterScore* score = readEncoreScore("chord_parsing.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::map<int, String> harmonyByMeasure;
+    int measureIdx = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            if (Harmony* h = segmentHarmony(s)) {
+                harmonyByMeasure[measureIdx] = h->harmonyName();
+            }
+        }
+        ++measureIdx;
+    }
+
+    EXPECT_FALSE(harmonyByMeasure.empty()) << "numeric chord symbols must be imported (were silently dropped)";
+    EXPECT_EQ(harmonyByMeasure[0], String(u"C")) << "toniko=0 (major)";
+    EXPECT_EQ(harmonyByMeasure[1], String(u"Cm")) << "toniko=1 (minor)";
+    EXPECT_EQ(harmonyByMeasure[2], String(u"C+")) << "toniko=2 (augmented)";
+    EXPECT_EQ(harmonyByMeasure[4], String(u"C7")) << "toniko=24 (dom7 alternate)";
+    EXPECT_EQ(harmonyByMeasure[8], String(u"Cdim")) << "toniko=3 (diminished)";
+    EXPECT_EQ(harmonyByMeasure[9], String(u"CMaj7")) << "toniko=12 (maj7)";
+
+    delete score;
+}
+
+// Regression: the numeric chord-quality table (toniko -> suffix) was wrong from index 4 on.
+// Encore's real palette has "dim7" at 4 (the importer had dominant "7"), fills the slots the
+// importer left blank (maj7#11, 7#11, the multi-alteration dominants), and from 34 onward the
+// importer's entries were all shifted by one, so e.g. toniko 48 rendered as 9sus4 instead of
+// 7sus4. The fixture carries one numeric C chord per measure at the affected toniko values.
+TEST_F(Tst_Text, numeric_chord_quality_table)
+{
+    MasterScore* score = readEncoreScore("text_chord_quality_table.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::map<int, String> byMeasure;
+    int measureIdx = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (Harmony* h = segmentHarmony(s)) {
+                byMeasure[measureIdx] = h->harmonyName();
+            }
+        }
+        ++measureIdx;
+    }
+
+    EXPECT_EQ(byMeasure[0], String(u"Cdim7")) << "toniko=4 is diminished 7, not dominant 7";
+    EXPECT_EQ(byMeasure[1], String(u"CMaj7#11")) << "toniko=16 was blank, is maj7(#11)";
+    EXPECT_EQ(byMeasure[2], String(u"C9#11")) << "toniko=34 is 9(#11), not 11";
+    EXPECT_EQ(byMeasure[3], String(u"C13#11")) << "toniko=40 is 13(#11), not +7";
+    EXPECT_EQ(byMeasure[4], String(u"C7sus")) << "toniko=48 is 7sus4, not 9sus4";
+    EXPECT_EQ(byMeasure[5], String(u"Cm13")) << "toniko=63 was blank, is m13";
+
+    delete score;
+}
+
+// Regression: numeric chord with bass note (tipo bit 1 set) should produce a slash chord.
+TEST_F(Tst_Text, numeric_chord_with_bass_note)
+{
+    MasterScore* score = readEncoreScore("akordo.enc");
+    ASSERT_NE(score, nullptr);
+
+    Harmony* slashChord = nullptr;
+    for (MeasureBase* mb = score->first(); mb && !slashChord; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s && !slashChord; s = s->next(SegmentType::ChordRest)) {
+            if (Harmony* h = segmentHarmony(s)) {
+                if (h->harmonyName().contains(u"/")) {
+                    slashChord = h;
+                }
+            }
+        }
+    }
+
+    ASSERT_NE(slashChord, nullptr) << "akordo.enc must have a slash chord (tipo=2, bass note present)";
+    const String name = slashChord->harmonyName();
+    EXPECT_TRUE(name.startsWith(u"Ab"))
+        << "root should be Ab (radiko=0x25): " << name.toStdString();
+    EXPECT_TRUE(name.contains(u"/F#"))
+        << "bass should be F# (baso=0x13): " << name.toStdString();
+
+    delete score;
+}
+
+// Regression: CHORD symbol (type=7) text decoded unconditionally as UTF-16 LE.
+TEST_F(Tst_Text, v0c4_chord_sym_latin1)
+{
+    MasterScore* score = readEncoreScore("text_chord_sym_latin1.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load text_chord_sym_latin1.enc";
+
+    Harmony* found = nullptr;
+    for (MeasureBase* mb = score->first(); mb && !found; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (Harmony* h = segmentHarmony(s)) {
+                found = h;
+                break;
+            }
+        }
+    }
+    ASSERT_NE(found, nullptr) << "expected one Harmony from the chord-symbol element";
+    EXPECT_EQ(found->harmonyName(), String(u"Am"))
+        << "Latin-1 chord text must decode as 'Am', not as UTF-16 gibberish";
     delete score;
 }
 
