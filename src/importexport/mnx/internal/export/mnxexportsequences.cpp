@@ -743,7 +743,10 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
         }
     }
     if (chordRest->isChord()) {
-        DirectionV stemDir = toChord(chordRest)->stemDirection();
+        DirectionV stemDir = chordRest->beam() ? chordRest->beam()->direction() : DirectionV::AUTO;
+        if (stemDir == DirectionV::AUTO) {
+            stemDir = toChord(chordRest)->stemDirection();
+        }
         if (stemDir != DirectionV::AUTO) {
             using MnxDir = mnx::StemDirection;
             mnxEvent.set_stemDirection(stemDir == DirectionV::UP ? MnxDir::Up : MnxDir::Down);
