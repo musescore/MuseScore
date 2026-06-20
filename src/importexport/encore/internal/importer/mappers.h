@@ -67,6 +67,7 @@ mu::engraving::ClefType applyOctaveToClef(mu::engraving::ClefType base, int keyO
 
 int encKeyToFifths(quint8 key);
 
+void addTitleFrame(mu::engraving::MasterScore* score, const EncTitle& titleBlock);
 void addInitialKeySig(mu::engraving::MasterScore* score, int staffIdx, quint8 encKey);
 void addInitialTimeSig(mu::engraving::MasterScore* score, int nstaves, mu::engraving::Fraction ts,
                        mu::engraving::TimeSigType tsType = mu::engraving::TimeSigType::NORMAL);
@@ -80,12 +81,9 @@ QString normalizeEncoreInstrName(const QString& name);
 // Valid Encore key offsets are in [-33, +24]; 0x7FFFFFFF is outside that range.
 constexpr int ENC_KEY_NO_FILTER = 0x7FFFFFFF;
 
-// Find best non-drumset template by name+MIDI score; applies transposition filter when encKeySemitones != ENC_KEY_NO_FILTER.
-// When outExactName is non-null, it is set to true if the returned template matched the instrument
-// name exactly (track/long/short name equality) rather than only via a substring ("contains").
-// When outUniqueName is non-null, it is set to true if the returned template matched via a
-// "distinctive" needle, i.e. a word no other template's name contains (e.g. "Dulzaina" hits only
-// "Castilian Dulzaina"). Such a contains-match is as trustworthy as an exact match.
+// Best non-drumset template by name and MIDI score, filtered by transposition unless the key says no
+// filter. outExactName reports a name equality; outUniqueName reports a match on a word no other
+// template's name carries, which is as trustworthy as equality.
 const mu::engraving::InstrumentTemplate* findEncoreInstrumentTemplate(
     const QString& encName, int encMidiProgram = -1, int encKeySemitones = ENC_KEY_NO_FILTER, bool* outExactName = nullptr,
     bool* outUniqueName = nullptr);
@@ -96,24 +94,17 @@ const mu::engraving::InstrumentTemplate* findDrumsetTemplate(const QString& encN
 // MIDI-only lookup among non-drumset templates; prefers "common" genre when multiple share the same program.
 const mu::engraving::InstrumentTemplate* findTemplateByMidi(int encMidiProgram0indexed);
 
-// Fallback when findTemplateByMidi finds no exact program match: returns the nearest template
-// within the same General MIDI family (16 families of 8 programs), preferring the "common"
-// genre on ties. Keeps the instrument's category (Strings, Brass, Bass, …) instead of falling
-// back to Grand Piano for programs no template carries as its primary sound (Pizzicato/Tremolo
-// Strings, Muted Trumpet, Synth Bass, Voice Oohs, …).
+// Nearest template in the same General MIDI family, preferring the common genre on ties, so a program
+// no template carries keeps its category instead of becoming a piano.
 const mu::engraving::InstrumentTemplate* findTemplateByMidiFamily(int encMidiProgram0indexed);
 
-// Given a matched template, return one MuseScore lists in its own instrument panel. A template with
-// no track name is hidden there, and the staff properties dialog then shows a blank instrument, so
-// swap it for the named sibling that stands for it: same family, sound, written range and
-// transposition. Returns the input unchanged when it is already listed or has no such sibling.
+// A template with no track name is hidden from the instrument panel and shows blank in the staff
+// dialog, so swap it for the named sibling that stands for it. Unchanged when already listed.
 const mu::engraving::InstrumentTemplate* resolveListedTemplate(
     const mu::engraving::InstrumentTemplate* tmpl);
 
-// Given a matched template, return its standard-notation or tablature sibling (e.g.
-// "Classical Guitar" <-> "Classical Guitar (tablature)"). Returns the input if it already
-// matches wantTab, or nullptr when no sibling exists. Siblings are matched by shared
-// musicXmlId, then by track name with any trailing "(...)" variant suffix removed.
+// The standard-notation or tablature sibling, matched by musicXmlId and then by track name with any
+// trailing variant suffix removed.
 const mu::engraving::InstrumentTemplate* findInstrumentVariant(
     const mu::engraving::InstrumentTemplate* base, bool wantTab);
 
