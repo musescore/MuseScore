@@ -22,6 +22,7 @@
 #pragma once
 
 #include <optional>
+#include <string>
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/ottava.h"
@@ -48,7 +49,7 @@ extern engraving::BeamMode toMuseScoreBeamMode(int lowestBeamStart);
 extern engraving::BracketType toMuseScoreBracketType(mnx::LayoutSymbol lys);
 extern engraving::SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym);
 extern engraving::ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef);
-extern engraving::DynamicType toMuseScoreDynamicType(const engraving::String& glyph);
+extern engraving::DynamicType toMuseScoreDynamicType(const std::string& type);
 extern engraving::DurationType toMuseScoreDurationType(mnx::NoteValueBase nvb);
 extern engraving::TDuration toMuseScoreDuration(mnx::NoteValue nv);
 extern engraving::SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol);
@@ -70,6 +71,7 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDispla
 extern mnx::BarlineType toMnxBarLineType(engraving::BarLineType blt);
 extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId sym);
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
+extern std::string toMnxDynamicType(engraving::DynamicType type);
 extern mnx::FermataDuration toMnxFermataDuration(engraving::FermataType fermataType);
 extern mnx::FermataSymbol toMnxFermataSymbol(engraving::SymId sym);
 extern mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction);

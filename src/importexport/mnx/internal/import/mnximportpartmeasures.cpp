@@ -1012,12 +1012,7 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxDynamics = mnxMeasure.dynamics()) {
-        for (const auto& mnxDynamic : mnxDynamics.value()) {
-            /// @todo Process all dynamics, including those without glyphs, once the meaning of value()
-            /// has been clarified and once mnx has text formatting, which seems to be imminent.
-            if (!mnxDynamic.glyph()) {
-                continue;
-            }
+        for (const auto& mnxDynamic : mnxDynamics.value()) {            
             /// @todo Honor mnx requirement that dynamics apply to all staves when staff() member
             /// is missing (after clarification).
             staff_idx_t staffIdx = muse::value(m_mnxPartStaffToStaff,
@@ -1027,21 +1022,43 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
                 LOGE() << "staff idx not found for part " << part->pointer().to_string();
                 continue;
             }
+
+            bool useVoiceAssignment = false;
             track_idx_t curTrackIdx = staff2track(staffIdx);
+            if (const auto mnxVoiceId = mnxDynamic.voice()) {
+                for (size_t x = 0; x < mnxMeasure.sequences().size(); x++) {
+                    if (x >= VOICES) {
+                        break;
+                    }
+                    if (mnxVoiceId == mnxMeasure.sequences().at(x).voice()) {
+                        curTrackIdx += x;
+                        useVoiceAssignment = true;
+                        break;
+                    }
+                }
+            }
 
             Fraction rTick = toMuseScoreFraction(mnxDynamic.position().fraction());
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
             Dynamic* dyn = Factory::createDynamic(s);
             dyn->setParent(s);
             dyn->setTrack(curTrackIdx);
-            /// @todo: smarter approach to creating xmlText.
-            String xmlText = u"<sym>" + String::fromStdString(mnxDynamic.glyph().value()) + u"</sym>";
-            dyn->setXmlText(xmlText);
-            dyn->setDynamicType(toMuseScoreDynamicType(xmlText));
-            /// @todo: voice assignment based on voice()
-            dyn->setVoiceAssignment(mnxDynamic.staff()
-                                    ? VoiceAssignment::ALL_VOICE_IN_STAFF
-                                    : VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
+            /// @todo Refactor for finalized dynamics schema when it becomes available.
+            /// For now, we do the best we can, assuming `value` is a musicxml dynamics type
+            String dynamicText = String::fromStdString(mnxDynamic.value());
+            dyn->setDynamicType(dynamicText);
+            if (mnxDynamic.glyph()) {
+                /// @todo: this will probably become a formatted string in MNX
+                dyn->setXmlText(u"<sym>" + String::fromStdString(mnxDynamic.glyph().value()) + u"</sym>");
+            }
+
+            if (mnxDynamic.voice() && useVoiceAssignment) {
+                dyn->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
+            } else if (mnxDynamic.staff()) {
+                dyn->setVoiceAssignment(VoiceAssignment::ALL_VOICE_IN_STAFF);
+            } else {
+                dyn->setVoiceAssignment(VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
+            }
 
             s->add(dyn);
         }
