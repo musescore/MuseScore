@@ -67,6 +67,216 @@ protected:
     void SetUp() override { setRootDir(ENC_DIR); }
 };
 
+// A hyphen opening a measure must promote the previous measure's last syllable (SINGLE -> BEGIN) so the
+// connecting hyphen survives across the barline.
+TEST_F(Tst_Text, lyrics_hyphen_renders_across_barline)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_hyphen_across_barline.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    LyricsSyllabic sofSyll = LyricsSyllabic::SINGLE;
+    LyricsSyllabic tlySyll = LyricsSyllabic::SINGLE;
+    bool sofSeen = false, tlySeen = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* e = s->element(0);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(e)->lyrics()) {
+                if (ly->plainText() == u"sof") {
+                    sofSyll = ly->syllabic();
+                    sofSeen = true;
+                } else if (ly->plainText() == u"tly") {
+                    tlySyll = ly->syllabic();
+                    tlySeen = true;
+                }
+            }
+        }
+    }
+    ASSERT_TRUE(sofSeen && tlySeen);
+    EXPECT_EQ(sofSyll, LyricsSyllabic::BEGIN) << "first syllable must become BEGIN so the hyphen renders";
+    EXPECT_EQ(tlySyll, LyricsSyllabic::END) << "continuation syllable after the barline is END";
+
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_hyphen_separators_dropped_and_set_syllabic)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_hyphenated_words.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    struct Entry {
+        String text;
+        LyricsSyllabic syll;
+    };
+    std::vector<Entry> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back({ ly->plainText(), ly->syllabic() });
+            }
+        }
+    }
+    ASSERT_EQ(seen.size(), 3u);
+    EXPECT_EQ(seen[0].text, String(u"JU"));
+    EXPECT_EQ(seen[0].syll, LyricsSyllabic::BEGIN)
+        << "JU is followed by a hyphen continuation";
+    EXPECT_EQ(seen[1].text, String(u"LIO"));
+    EXPECT_EQ(seen[1].syll, LyricsSyllabic::END)
+        << "LIO closes the JU-LIO word";
+    EXPECT_EQ(seen[2].text, String(u"RO"));
+    EXPECT_EQ(seen[2].syll, LyricsSyllabic::BEGIN)
+        << "RO is followed by a hyphen continuation past the bar";
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_variable_length_with_empty_placeholder)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_variable.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> expected = { u"JU", u"LIO", u"RO" };
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    EXPECT_EQ(seen, expected);
+    delete score;
+}
+
+// A lyric whose tick is slightly after its note's (visual offset) must still attach to that note; the
+// note-tick mapping must not halve the Encore tick, which pushed offset lyrics past the match threshold.
+TEST_F(Tst_Text, lyrics_offset_ticks_still_attach_correctly)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_6_8_offset_ticks.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> expected = { u"do", u"re", u"mi", u"fa" };
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    EXPECT_EQ(seen, expected)
+        << "All 4 lyrics must attach to their correct note even when lyric encTick "
+        "is +50 ticks after the note encTick";
+    delete score;
+}
+
+// Lyric encoding is detected per element: a Latin-1 (one byte/char) lyric must not be read as UTF-16 LE,
+// which produced spurious CJK code units.
+TEST_F(Tst_Text, lyrics_latin1_text_decoded_as_one_byte_per_char)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_latin1.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    ASSERT_EQ(seen.size(), 2u);
+    EXPECT_EQ(seen[0], String(u"txã"));
+    EXPECT_EQ(seen[1], String(u"nã"));
+    delete score;
+}
+
+// Lyrics on a grand-staff bottom staff must be matched against that staff's routed notes, not the raw
+// encStaff (which grabs another instrument's notes and reverses the syllables).
+TEST_F(Tst_Text, lyrics_grandstaff_match_routed_staff_notes)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_grandstaff_routed_notes.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    // Collect (pitch, syllable, syllabic) for lyrics on MuseScore staff 1 (track 4 = staff 1, voice 0).
+    struct Hit {
+        int pitch;
+        String text;
+        LyricsSyllabic syll;
+    };
+    std::vector<Hit> hits;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(4);   // staff 1, voice 0
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(el);
+            for (Lyrics* ly : c->lyrics()) {
+                hits.push_back({ c->upNote()->pitch(), ly->plainText(), ly->syllabic() });
+            }
+        }
+    }
+    ASSERT_EQ(hits.size(), 2u) << "Both syllables must land on the bottom-staff notes";
+    EXPECT_EQ(hits[0].text, String(u"Sal"));
+    EXPECT_EQ(hits[0].pitch, 55) << "First syllable must be on the first bottom-staff note (pitch 55), not reversed";
+    EXPECT_EQ(hits[0].syll, LyricsSyllabic::BEGIN);
+    EXPECT_EQ(hits[1].text, String(u"ve"));
+    EXPECT_EQ(hits[1].pitch, 57) << "Second syllable must be on the second bottom-staff note (pitch 57)";
+    EXPECT_EQ(hits[1].syll, LyricsSyllabic::END);
+
+    delete score;
+}
+
 // STAFFTEXT matching an Italian tempo term is promoted to TempoText (relative markings like "a tempo" get
 // no absolute BPS); non-tempo strings stay StaffText.
 TEST_F(Tst_Text, staff_text_promoted_to_tempo_for_italian_terms)

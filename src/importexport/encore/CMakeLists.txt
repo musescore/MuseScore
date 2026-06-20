@@ -75,6 +75,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/emitters-note-artic.cpp
     internal/importer/emitters-rest.cpp
     internal/importer/emitters-orn.cpp
+    internal/importer/emitters-lyrics.cpp
     internal/importer/emitters-tempo.cpp
     internal/importer/emitters-fill.cpp
     internal/importer/emitters-overfill.cpp
