@@ -1470,6 +1470,142 @@ TEST_F(Tst_Notes, voice_overflow_notes_dropped_not_routed_to_voice2)
     delete score;
 }
 
+TEST_F(Tst_Notes, chord_symbol_snaps_to_beat1_despite_midi_offset)
+{
+    // Fixture: quarter note at tick=0, chord symbol CHD at tick=6 (6/960 offset),
+    // quarter note at tick=240. CHD must attach to the beat-1 segment.
+    MasterScore* score = readEncoreScore("notes_chord_symbol_snap_to_beat1.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck()) << "CHD snap must not corrupt";
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    // The first ChordRest segment must have the Harmony attached.
+    Segment* firstSeg = m->first(SegmentType::ChordRest);
+    ASSERT_NE(firstSeg, nullptr);
+
+    EXPECT_NE(segmentHarmony(firstSeg), nullptr)
+        << "Chord symbol with tick=6 (MIDI offset from note at tick=0) must snap to beat-1 segment";
+
+    // The second segment must NOT have the Harmony.
+    Segment* secondSeg = firstSeg->next(SegmentType::ChordRest);
+    if (secondSeg) {
+        EXPECT_EQ(segmentHarmony(secondSeg), nullptr)
+            << "Chord symbol must NOT land on beat-2 segment due to MIDI drift";
+    }
+
+    delete score;
+}
+
+TEST_F(Tst_Notes, chord_symbol_large_midi_drift_still_on_beat1)
+{
+    MasterScore* score = readEncoreScore("notes_chord_symbol_large_drift.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+    Segment* first = m->first(SegmentType::ChordRest);
+    ASSERT_NE(first, nullptr);
+
+    EXPECT_NE(segmentHarmony(first), nullptr)
+        << "CHD@87 (large drift from note@0) must still snap to beat-1 segment";
+
+    delete score;
+}
+
+TEST_F(Tst_Notes, chord_symbol_snaps_to_beat_not_nearby_subdivision)
+{
+    // tick=62, beat=240 → beatStart=0 → first note in [0..62] is at tick=0, not tick=60
+    MasterScore* score = readEncoreScore("notes_chord_symbol_nearbeat_subdivision.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    // Beat-1 segment (tick offset = 0)
+    Segment* beat1seg = m->first(SegmentType::ChordRest);
+    ASSERT_NE(beat1seg, nullptr);
+    EXPECT_EQ(beat1seg->tick() - m->tick(), Fraction(0, 1))
+        << "First segment must be at tick=0 (beat 1)";
+
+    EXPECT_NE(segmentHarmony(beat1seg), nullptr)
+        << "CHD@62 with note at tick=60 only 2t away must NOT snap to tick=60; "
+        "beat-floor forces it to tick=0 (beat 1)";
+
+    // Second segment (tick=60) must NOT have a harmony
+    Segment* seg60 = beat1seg->next(SegmentType::ChordRest);
+    if (seg60) {
+        EXPECT_EQ(segmentHarmony(seg60), nullptr)
+            << "CHD must not land on the tick=60 subdivision segment";
+    }
+
+    delete score;
+}
+
+TEST_F(Tst_Notes, chord_symbol_gets_fretboard_diagram)
+{
+    // A FretDiagram is drawn only when Encore's fret-frame bit is set, independent of whether MuseScore's
+    // chord database recognizes the name (gating on database recognition alone put a frame under every chord).
+    MasterScore* score = readEncoreScore("notes_chord_symbol_fretboard.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    auto scanSeg = [](Segment* s, FretDiagram** fdOut, Harmony** bareOut) {
+        *fdOut = nullptr;
+        *bareOut = nullptr;
+        for (EngravingItem* ann : s->annotations()) {
+            if (ann && ann->isFretDiagram()) {
+                *fdOut = toFretDiagram(ann);
+            } else if (ann && ann->isHarmony()) {
+                *bareOut = toHarmony(ann);
+            }
+        }
+    };
+
+    // Measure 0: "Am" with frame bit -> FretDiagram wrapping the Harmony.
+    Measure* m0 = measureAt(score, 0);
+    ASSERT_NE(m0, nullptr);
+    Segment* s0 = m0->first(SegmentType::ChordRest);
+    ASSERT_NE(s0, nullptr);
+    FretDiagram* fd0 = nullptr;
+    Harmony* bare0 = nullptr;
+    scanSeg(s0, &fd0, &bare0);
+    ASSERT_NE(fd0, nullptr) << "\"Am\" with the frame bit must be wrapped in a FretDiagram";
+    EXPECT_FALSE(fd0->isClear()) << "FretDiagram for \"Am\" must be populated from the database";
+    ASSERT_NE(fd0->harmony(), nullptr) << "FretDiagram must carry the Harmony as its child";
+    EXPECT_EQ(fd0->harmony()->harmonyName(), String(u"Am"));
+    EXPECT_EQ(bare0, nullptr)
+        << "Harmony must live under the FretDiagram, not directly on the segment";
+
+    // Measure 1: "Am" WITHOUT the frame bit -> plain Harmony, no FretDiagram.
+    Measure* m1 = measureAt(score, 1);
+    ASSERT_NE(m1, nullptr);
+    Segment* s1 = m1->first(SegmentType::ChordRest);
+    ASSERT_NE(s1, nullptr);
+    FretDiagram* fd1 = nullptr;
+    Harmony* bare1 = nullptr;
+    scanSeg(s1, &fd1, &bare1);
+    EXPECT_EQ(fd1, nullptr)
+        << "\"Am\" WITHOUT the frame bit must NOT get a FretDiagram, even though the database knows it";
+    EXPECT_NE(bare1, nullptr) << "\"Am\" without the frame bit must remain a plain Harmony";
+
+    // Measure 2: "Zzz" with frame bit but unknown chord -> plain Harmony (no diagram to draw).
+    Measure* m2 = measureAt(score, 2);
+    ASSERT_NE(m2, nullptr);
+    Segment* s2 = m2->first(SegmentType::ChordRest);
+    ASSERT_NE(s2, nullptr);
+    FretDiagram* fd2 = nullptr;
+    Harmony* bare2 = nullptr;
+    scanSeg(s2, &fd2, &bare2);
+    EXPECT_EQ(fd2, nullptr) << "Unknown chord \"Zzz\" must NOT get a FretDiagram";
+    EXPECT_NE(bare2, nullptr) << "Unknown chord \"Zzz\" must remain a plain Harmony";
+
+    delete score;
+}
+
 // Compact rawStaff encodes staffWithin in the high bits and the instrument index in the low bits; the low
 // bits must not be read as a LINE slot, or the second instrument's notes land on the first's staves.
 TEST_F(Tst_Notes, notes_multiinstr_compact_routing)
