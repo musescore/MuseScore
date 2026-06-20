@@ -290,38 +290,54 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
     return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
-DynamicType toMuseScoreDynamicType(const String& glyph)
-{
-    // Currently there is very little clarity around dynamics in mnx.
-    // This will likely change considerably as the details emerge.
-    static const std::unordered_map<String, DynamicType> dynamicTypes {
-        { u"<sym>dynamicPPPPPP</sym>",              DynamicType::PPPPPP },
-        { u"<sym>dynamicPPPPP</sym>",               DynamicType::PPPPP },
-        { u"<sym>dynamicPPPP</sym>",                DynamicType::PPPP },
-        { u"<sym>dynamicPPP</sym>",                 DynamicType::PPP },
-        { u"<sym>dynamicPP</sym>",                  DynamicType::PP },
-        { u"<sym>dynamicP</sym>",                   DynamicType::P },
-        { u"<sym>dynamicMP</sym>",                  DynamicType::MP },
-        { u"<sym>dynamicMF</sym>",                  DynamicType::MF },
-        { u"<sym>dynamicPF</sym>",                  DynamicType::PF },
-        { u"<sym>dynamicF</sym>",                   DynamicType::F },
-        { u"<sym>dynamicFF</sym>",                  DynamicType::FF },
-        { u"<sym>dynamicFFF</sym>",                 DynamicType::FFF },
-        { u"<sym>dynamicFFFF</sym>",                DynamicType::FFFF },
-        { u"<sym>dynamicFFFFF</sym>",               DynamicType::FFFFF },
-        { u"<sym>dynamicFFFFFF</sym>",              DynamicType::FFFFFF },
-        { u"<sym>dynamicFortePiano</sym>",          DynamicType::FP },
-        { u"<sym>dynamicForzando</sym>",            DynamicType::FZ },
-        { u"<sym>dynamicSforzando1</sym>",          DynamicType::SF },
-        { u"<sym>dynamicSforzandoPiano</sym>",      DynamicType::SFP },
-        { u"<sym>dynamicSforzandoPianissimo</sym>", DynamicType::SFPP },
-        { u"<sym>dynamicSforzato</sym>",            DynamicType::SFZ },
-        { u"<sym>dynamicSforzatoPiano</sym>",       DynamicType::SFZ }, // SFZP does not exist
-        { u"<sym>dynamicSforzatoFF</sym>",          DynamicType::SFFZ },
-        { u"<sym>dynamicRinforzando1</sym>",        DynamicType::RF },
-        { u"<sym>dynamicRinforzando2</sym>",        DynamicType::RFZ },
+// Currently there is very little clarity around dynamics in mnx.
+// This will likely change considerably as the details emerge.
+
+namespace {
+const std::unordered_map<std::string, DynamicType> dynamicTypeTable = {
+    { "pppppp", DynamicType::PPPPPP },
+    { "ppppp",  DynamicType::PPPPP },
+    { "pppp",   DynamicType::PPPP },
+    { "ppp",    DynamicType::PPP },
+    { "pp",     DynamicType::PP },
+    { "p",      DynamicType::P },
+    { "mp",     DynamicType::MP },
+    { "mf",     DynamicType::MF },
+    { "f",      DynamicType::F },
+    { "ff",     DynamicType::FF },
+    { "fff",    DynamicType::FFF },
+    { "ffff",   DynamicType::FFFF },
+    { "fffff",  DynamicType::FFFFF },
+    { "ffffff", DynamicType::FFFFFF },
+    { "fp",     DynamicType::FP },
+    { "pf",     DynamicType::PF },
+    { "sf",     DynamicType::SF },
+    { "sfz",    DynamicType::SFZ },
+    { "sff",    DynamicType::SFF },
+    { "sffz",   DynamicType::SFFZ },
+    { "sfff",   DynamicType::SFFF },
+    { "sfffz",  DynamicType::SFFFZ },
+    { "sfp",    DynamicType::SFP },
+    { "sfpp",   DynamicType::SFPP },
+    { "rfz",    DynamicType::RFZ },
+    { "rf",     DynamicType::RF },
+    { "fz",     DynamicType::FZ },
+    { "m",      DynamicType::M },
+    { "r",      DynamicType::R },
+    { "s",      DynamicType::S },
+    { "z",      DynamicType::Z },
+    { "n",      DynamicType::N },
     };
-    return muse::value(dynamicTypes, glyph, DynamicType::OTHER);
+} // namespace
+
+DynamicType toMuseScoreDynamicType(const std::string& type)
+{
+    return muse::value(dynamicTypeTable, type, DynamicType::OTHER);
+}
+
+std::string toMnxDynamicType(DynamicType type)
+{
+    return muse::key(dynamicTypeTable, type, std::string());
 }
 
 namespace {
