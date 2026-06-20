@@ -35,6 +35,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
+class Chord;
 class ChordRest;
 class EID;
 class EngravingItem;
@@ -52,6 +53,11 @@ class Tuplet;
 } // namespace mu::engraving
 
 namespace mu::iex::mnxio {
+struct MnxChordTargetPosition {
+    mnx::FractionValue fraction;
+    std::optional<unsigned> graceIndex;
+};
+
 class MnxExporter
 {
 public:
@@ -70,6 +76,8 @@ public:
     size_t mnxMeasureIndexFromMeasure(const engraving::Measure* measure) const;
     std::pair<size_t, int> mnxPartStaffFromStaffIdx(engraving::staff_idx_t staffIdx) const;
     static mnx::Fermata mnxFermataFromFermata(const engraving::Fermata* fermata);
+    std::optional<MnxChordTargetPosition> mnxChordTargetPosition(const engraving::Chord* chord,
+                                                                 const engraving::Measure* measure);
 
 private:
     enum class ContentContext {
@@ -107,6 +115,7 @@ private:
     bool createParts();
     void createLayout(const std::vector<engraving::Staff*>& staves, const std::string& layoutId);
     void createSequences(const engraving::Part* part, const engraving::Measure* measure, mnx::part::Measure& mnxMeasure);
+    void createArpeggios(const engraving::Part* part, const engraving::Measure* measure, mnx::part::Measure& mnxMeasure);
     void appendContent(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
                        ContentContext context);
     void appendGrace(mnx::ContentArray content, ExportContext& ctx, engraving::GraceNotesGroup& graceNotes);

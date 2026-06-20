@@ -120,10 +120,11 @@ private:
                                  const mnx::FractionValue& duration, engraving::Tuplet* tupletToAdd);
     engraving::Note* createNote(const mnx::sequence::Note& mnxNote, engraving::Chord* chord, engraving::Staff* baseStaff,
                                 const engraving::Fraction& tick, int ottavaDisplacement, engraving::track_idx_t curTrackIdx);
-    void createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::part::PositionedClef>& mnxClefs, engraving::Measure* measure);
-    void createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
+    void createArpeggios(const mnx::part::Measure& mnxMeasure);
     void createBeams(const mnx::part::Measure& mnxMeasure);
+    void createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::part::PositionedClef>& mnxClefs, engraving::Measure* measure);
     void createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
+    void createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
 
     // markings
     engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,

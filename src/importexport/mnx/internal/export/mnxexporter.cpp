@@ -100,6 +100,56 @@ mnx::Fermata MnxExporter::mnxFermataFromFermata(const Fermata* fermata)
 }
 
 //---------------------------------------------------------
+//   mnxChordTargetPosition
+//   calculate exact MNX position for an object targeting
+//   a chord, including grace-note targets
+//---------------------------------------------------------
+
+std::optional<MnxChordTargetPosition> MnxExporter::mnxChordTargetPosition(const Chord* chord, const Measure* measure)
+{
+    IF_ASSERT_FAILED(chord && measure) {
+        return std::nullopt;
+    }
+
+    auto positionFromTick = [measure](const Fraction& tick) {
+        return MnxChordTargetPosition {
+            toMnxFractionValue(tick - measure->tick()).reduced(),
+            std::nullopt
+        };
+    };
+
+    if (!chord->isGrace()) {
+        MnxChordTargetPosition position = positionFromTick(chord->tick());
+        if (!chord->graceNotes().empty()) {
+            position.graceIndex = 0;
+        }
+        return position;
+    }
+
+    EngravingObject* parent = chord->explicitParent();
+    if (!parent || !parent->isChord()) {
+        LOGW() << "Skipping grace-note target with missing main chord.";
+        return std::nullopt;
+    }
+
+    const Chord* mainChord = toChord(parent);
+    const GraceNotesGroup& graceNotes = chord->isGraceAfter()
+                                            ? mainChord->graceNotesAfter()
+                                            : mainChord->graceNotesBefore();
+    const auto graceIt = std::find(graceNotes.begin(), graceNotes.end(), chord);
+    if (graceIt == graceNotes.end()) {
+        LOGW() << "Skipping grace-note target whose grace index could not be resolved.";
+        return std::nullopt;
+    }
+
+    const size_t index = static_cast<size_t>(std::distance(graceNotes.begin(), graceIt));
+    MnxChordTargetPosition position = positionFromTick(chord->isGraceAfter() ? mainChord->tick() + mainChord->ticks()
+                                                                             : mainChord->tick());
+    position.graceIndex = static_cast<unsigned>(graceNotes.size() - index);
+    return position;
+}
+
+//---------------------------------------------------------
 //   exportMnx
 //---------------------------------------------------------
 

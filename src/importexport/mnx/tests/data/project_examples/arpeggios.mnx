@@ -1,0 +1,1426 @@
+{
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "tempos": [
+                    {
+                        "bpm": 120,
+                        "value": {
+                            "base": "quarter"
+                        }
+                    }
+                ],
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+                "id": "m2"
+            },
+            {
+                "id": "m3"
+            },
+            {
+                "id": "m4"
+            },
+            {
+                "id": "m5"
+            },
+            {
+                "id": "m6"
+            },
+            {
+                "id": "m7"
+            },
+            {
+                "id": "m8"
+            },
+            {
+                "id": "m9"
+            },
+            {
+                "id": "m10"
+            },
+            {
+                "id": "m11"
+            },
+            {
+                "id": "m12"
+            },
+            {
+                "id": "m13"
+            },
+            {
+                "id": "m14"
+            },
+            {
+                "id": "m15"
+            },
+            {
+                "id": "m16"
+            },
+            {
+                "id": "m17"
+            },
+            {
+                "id": "m18"
+            },
+            {
+                "id": "m19"
+            },
+            {
+                "id": "m20"
+            },
+            {
+                "id": "m21"
+            },
+            {
+                "id": "m22"
+            },
+            {
+                "id": "m23"
+            },
+            {
+                "id": "m24"
+            },
+            {
+                "id": "m25"
+            },
+            {
+                "id": "m26"
+            },
+            {
+                "id": "m27"
+            },
+            {
+                "id": "m28"
+            },
+            {
+                "id": "m29"
+            },
+            {
+                "id": "m30"
+            },
+            {
+                "id": "m31"
+            }
+        ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys2"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys3"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys4"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys5"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys6"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "shortName",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                },
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P2",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys7"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys2"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys3"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys4"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys5"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys6"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys7"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys8"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/17"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 17
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "arpeggios": [
+                        {
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "span": {
+                                "end": "ev125n3",
+                                "start": "ev125n1"
+                            }
+                        },
+                        {
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            },
+                            "span": {
+                                "end": "ev127n3",
+                                "start": "ev127n1"
+                            }
+                        }
+                    ],
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "id": "P1.m1",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev125",
+                                    "notes": [
+                                        {
+                                            "id": "ev125n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev125n2",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev125n3",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "up"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev126",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev127",
+                                    "notes": [
+                                        {
+                                            "id": "ev127n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev127n2",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev127n3",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "up"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev128",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": [
+                                        1,
+                                        2
+                                    ],
+                                    "type": "space"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev129",
+                                    "notes": [
+                                        {
+                                            "id": "ev129n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "E"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev129n2",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev129n3",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "down"
+                                },
+                                {
+                                    "duration": [
+                                        1,
+                                        4
+                                    ],
+                                    "type": "space"
+                                }
+                            ],
+                            "voice": "s1layer1v2"
+                        }
+                    ]
+                },
+                {
+                    "arpeggios": [
+                        {
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "span": {
+                                "end": "ev145n3",
+                                "start": "ev145n1"
+                            }
+                        },
+                        {
+                            "position": {
+                                "fraction": [
+                                    1,
+                                    2
+                                ]
+                            },
+                            "span": {
+                                "end": "ev147n3",
+                                "start": "ev148n1"
+                            }
+                        }
+                    ],
+                    "id": "P1.m2",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev145",
+                                    "notes": [
+                                        {
+                                            "id": "ev145n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev145n2",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev145n3",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "up"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev146",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev147",
+                                    "notes": [
+                                        {
+                                            "id": "ev147n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev147n2",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "D"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev147n3",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "up"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev149",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": [
+                                        1,
+                                        2
+                                    ],
+                                    "type": "space"
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev148",
+                                    "notes": [
+                                        {
+                                            "id": "ev148n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev148n2",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev148n3",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ],
+                                    "stemDirection": "down"
+                                },
+                                {
+                                    "duration": [
+                                        1,
+                                        4
+                                    ],
+                                    "type": "space"
+                                }
+                            ],
+                            "voice": "s1layer1v2"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m3",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m4",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m5",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m6",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m7",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m8",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m9",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m10",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m11",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m12",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m13",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m14",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m15",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m16",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m17",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m18",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m19",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m20",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m21",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m22",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m23",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m24",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m25",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m26",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m27",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m28",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m29",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m30",
+                    "sequences": []
+                },
+                {
+                    "id": "P1.m31",
+                    "sequences": []
+                }
+            ]
+        },
+        {
+            "id": "P2",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "fClef",
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "glyph": "fClef",
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "id": "P2.m1",
+                    "sequences": []
+                },
+                {
+                    "arpeggios": [
+                        {
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "span": {
+                                "end": "ev133n3",
+                                "start": "ev133n1"
+                            }
+                        }
+                    ],
+                    "id": "P2.m2",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev133",
+                                    "notes": [
+                                        {
+                                            "id": "ev133n1",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "F"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev133n2",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "C"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev133n3",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev134",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev135",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "arpeggios": [
+                        {
+                            "position": {
+                                "fraction": [
+                                    0,
+                                    1
+                                ]
+                            },
+                            "span": {
+                                "end": "ev136n3",
+                                "start": "ev150n1"
+                            }
+                        }
+                    ],
+                    "id": "P2.m3",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev136",
+                                    "notes": [
+                                        {
+                                            "id": "ev136n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "F"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev136n2",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "A"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev136n3",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev137",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev138",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev150",
+                                    "notes": [
+                                        {
+                                            "id": "ev150n1",
+                                            "pitch": {
+                                                "octave": 1,
+                                                "step": "F"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev150n2",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "C"
+                                            }
+                                        },
+                                        {
+                                            "id": "ev150n3",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev151",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev152",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P2.m4",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m5",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m6",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m7",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m8",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m9",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m10",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m11",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m12",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m13",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m14",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m15",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m16",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m17",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m18",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m19",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m20",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m21",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m22",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m23",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m24",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m25",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m26",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m27",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m28",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m29",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m30",
+                    "sequences": []
+                },
+                {
+                    "id": "P2.m31",
+                    "sequences": []
+                }
+            ],
+            "staves": 2
+        }
+    ],
+    "scores": [
+        {
+            "layout": "S0-ScrVw",
+            "name": "SCORE",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
+                        },
+                        {
+                            "layout": "S0-Sys2",
+                            "measure": "m4"
+                        },
+                        {
+                            "layout": "S0-Sys3",
+                            "measure": "m9"
+                        },
+                        {
+                            "layout": "S0-Sys4",
+                            "measure": "m14"
+                        }
+                    ]
+                },
+                {
+                    "systems": [
+                        {
+                            "layout": "S0-Sys5",
+                            "measure": "m19"
+                        },
+                        {
+                            "layout": "S0-Sys6",
+                            "measure": "m24"
+                        },
+                        {
+                            "layout": "S0-Sys7",
+                            "measure": "m29"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "layout": "S1-ScrVw",
+            "name": "Part 1",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S1-Sys1",
+                            "measure": "m1"
+                        },
+                        {
+                            "layout": "S1-Sys2",
+                            "measure": "m4"
+                        },
+                        {
+                            "layout": "S1-Sys3",
+                            "measure": "m8"
+                        },
+                        {
+                            "layout": "S1-Sys4",
+                            "measure": "m12"
+                        },
+                        {
+                            "layout": "S1-Sys5",
+                            "measure": "m16"
+                        },
+                        {
+                            "layout": "S1-Sys6",
+                            "measure": "m20"
+                        },
+                        {
+                            "layout": "S1-Sys7",
+                            "measure": "m24"
+                        },
+                        {
+                            "layout": "S1-Sys8",
+                            "measure": "m28"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
