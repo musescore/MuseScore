@@ -67,6 +67,7 @@ mu::engraving::ClefType applyOctaveToClef(mu::engraving::ClefType base, int keyO
 
 int encKeyToFifths(quint8 key);
 
+void addTitleFrame(mu::engraving::MasterScore* score, const EncTitle& titleBlock);
 void addInitialKeySig(mu::engraving::MasterScore* score, int staffIdx, quint8 encKey);
 void addInitialTimeSig(mu::engraving::MasterScore* score, int nstaves, mu::engraving::Fraction ts,
                        mu::engraving::TimeSigType tsType = mu::engraving::TimeSigType::NORMAL);
