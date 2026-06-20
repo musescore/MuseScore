@@ -483,3 +483,98 @@ TEST_F(Tst_NotesTies, sf_tiestart_not_filtered_by_rdur)
 
 ENC_SANITY_TEST_TIES(tie_start_flag_byte6, "notes_tie_start_flag_byte6.enc")
 ENC_SANITY_TEST_TIES(tie_direction_fc,     "notes_tie_dir_fc.enc")
+
+// Comprehensive synthetic fixture exercising every reader/importer feature; checks clean import and counts.
+TEST_F(Tst_NotesTies, sintetico_all_features_imports_cleanly)
+{
+    MasterScore* score = readEncoreScore("sintetico_all_features.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load sintetico_all_features.enc";
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "sanityCheck failed: " << ret.text();
+
+    EXPECT_EQ(score->parts().size(), 2u) << "2 instruments expected";
+    EXPECT_EQ(score->nmeasures(), 20) << "20 measures expected";
+
+    int fermatas=0, tuplets=0, lyrics_count=0, hairpins=0, spanners=0;
+    int tremolos=0, arpeggios=0, tempos=0, dynamics=0, markers=0;
+
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        if (m->repeatStart()) {
+            ++spanners;
+        }
+        for (EngravingItem* me : m->el()) {
+            if (me && me->isMarker()) {
+                ++markers;
+            }
+        }
+        for (Segment* s = m->first(SegmentType::ChordRest); s;
+             s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->annotations()) {
+                if (!e) {
+                    continue;
+                }
+                if (e->isFermata()) {
+                    ++fermatas;
+                }
+                if (e->isDynamic()) {
+                    ++dynamics;
+                }
+                if (e->isTempoText()) {
+                    ++tempos;
+                }
+            }
+            for (int ti = 0; ti < static_cast<int>(score->nstaves() * VOICES); ++ti) {
+                EngravingItem* el = s->element(static_cast<track_idx_t>(ti));
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+                Chord* c = toChord(el);
+                if (c->tremoloSingleChord()) {
+                    ++tremolos;
+                }
+                if (c->arpeggio()) {
+                    ++arpeggios;
+                }
+                for (Lyrics* ly : c->lyrics()) {
+                    if (ly) {
+                        ++lyrics_count;
+                    }
+                }
+            }
+            if (s->isChordRestType()) {
+                Tuplet* tup = nullptr;
+                EngravingItem* el = s->element(0);
+                if (el && el->isChordRest()) {
+                    tup = toChordRest(el)->tuplet();
+                }
+                if (tup && tup->elements().front() == s->element(0)) {
+                    ++tuplets;
+                }
+            }
+        }
+    }
+    for (const auto& kv : score->spanner()) {
+        Spanner* sp = kv.second;
+        if (sp && sp->isHairpin()) {
+            ++hairpins;
+        }
+    }
+
+    EXPECT_GE(fermatas,     1) << "at least 1 fermata (non-tuplet note with articUp=0x20)";
+    EXPECT_GE(tuplets,      2) << "at least 2 tuplet groups (triplets in m3)";
+    EXPECT_GE(lyrics_count, 4) << "4 lyrics syllables (do re mi fa)";
+    EXPECT_GE(dynamics,     8) << "at least 8 of the 13 dynamics";
+    EXPECT_GE(tempos,       3) << "at least 3 TempoText marks";
+    EXPECT_GE(hairpins,     1) << "at least 1 hairpin";
+    EXPECT_GE(tremolos,     1) << "at least 1 TremoloSingleChord";
+    EXPECT_GE(arpeggios,    1) << "at least 1 arpeggio";
+    EXPECT_GE(markers,      2) << "at least 2 section markers";
+    EXPECT_GE(spanners,     1) << "at least 1 repeat-start barline";
+
+    delete score;
+}

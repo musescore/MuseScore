@@ -793,6 +793,7 @@ static void finalizeMeasureAfterNoteLoop(BuildCtx& ctx, MeasEmitCtx& mc,
     for (auto& [key, tt] : ctx.scratch.tuplets) {
         mc.closeTupletWithFill(ctx, tt, key);
     }
+    attachPendingLyrics(ctx, mc);
     adjustPickupMeasure(ctx, measure, measIdx);
     fillTrailingGaps(ctx, measure, measTick);
     for (int si = 0; si < ctx.totalStaves; ++si) {
@@ -962,6 +963,8 @@ static void emitMeasureElement(BuildCtx& ctx, MeasEmitCtx& mc, const EncMeasureE
     case EncElemType::NOTE:      handleNote(ctx, mc, ec);
         break;
     case EncElemType::REST:      handleRest(ctx, mc, ec);
+        break;
+    case EncElemType::LYRIC:     enqueueLyric(ctx, static_cast<const EncLyric*>(e), track);
         break;
     case EncElemType::ORNAMENT:  handleOrnament(ctx, mc, ec);
         break;

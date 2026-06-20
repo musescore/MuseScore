@@ -128,6 +128,11 @@ void applyNoteArticulations(BuildCtx& ctx, mu::engraving::Note* note, mu::engrav
 void handleRest(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 
+// Queue one LYRIC element into ctx.pendingLyrics. (emitters-lyrics.cpp)
+void enqueueLyric(BuildCtx& ctx, const EncLyric* el, mu::engraving::track_idx_t track);
+// Attach queued lyrics to the nearest chords in the measure. (emitters-lyrics.cpp)
+void attachPendingLyrics(BuildCtx& ctx, const MeasEmitCtx& mc);
+
 // Resolved MuseScore destination for an element: staff/voice and the derived track + lookup keys.
 struct RoutedTrack {
     int staffIdx { 0 };
