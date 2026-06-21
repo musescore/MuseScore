@@ -711,6 +711,7 @@ void EditStyle::classBegin()
         { StyleId::jianpuOctaveDotDistance, false, jianpuOctaveDotDistance, jianpuOctaveDotDistanceReset },
         { StyleId::jianpuDiminutionBeamThickness, false, jianpuDiminutionBeamThickness, jianpuDiminutionBeamThicknessReset },
         { StyleId::jianpuDiminutionBeamDistance, false, jianpuDiminutionBeamDistance, jianpuDiminutionBeamDistanceReset },
+        { StyleId::jianpuDiminutionBeamPlacement, false, jianpuDiminutionBeamPlacement, jianpuDiminutionBeamPlacementReset },
         { StyleId::jianpuDurationLineThickness, false, jianpuDurationLineThickness, jianpuDurationLineThicknessReset },
     };
 
@@ -776,6 +777,7 @@ void EditStyle::classBegin()
         tempoTextPlacement,
         staffTextPlacement,
         rehearsalMarkPlacement,
+        jianpuDiminutionBeamPlacement,
     };
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {

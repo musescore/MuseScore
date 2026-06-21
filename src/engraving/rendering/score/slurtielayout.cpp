@@ -384,8 +384,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->endCR()->tick());
-    bool useJianpu = item->staff() && item->staff()->isJianpuStaff(item->endCR()->tick());
-    bool staffHasStems = true;       // assume staff uses stems
+    bool useJianpu = item->isJianpuStaff();
+    bool staffHasStems = useJianpu ? false : true; // assume staff uses stems except jianpu
     const StaffType* stt = 0;
     if (useTablature) {
         stt = item->staff()->staffType(item->tick());
@@ -556,8 +556,15 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         break;
     }
 
-    // Slur for jianpu is always horizontal above chords
-    double jianpuY = std::min(scr->ldata()->bbox().top(), ecr->ldata()->bbox().top());
+    // Slur for jianpu is always horizontal
+    double jianpuY = 0.0;
+    if (useJianpu) {
+        if (item->up()) {
+            jianpuY = std::min(scr->ldata()->bbox().top(), ecr->ldata()->bbox().top());
+        } else {
+            jianpuY = std::max(scr->ldata()->bbox().bottom(), ecr->ldata()->bbox().bottom());
+        }
+    }
 
     //
     // default position:
@@ -2638,9 +2645,9 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
             break;
         }
 
-        if (chord1 && chord1->staff()->isJianpuStaff(chord1->tick())) {
-            // Jianpu slurs always go up
-            slur->setUp(true);
+        if (chord1 && chord1->isJianpuStaff()) {
+            // In Jianpu mode, slurs follow the opposite side of the diminution beams.
+            slur->setUp(ctx.conf().style().styleV(Sid::jianpuDiminutionBeamPlacement).value<PlacementV>() != PlacementV::ABOVE);
             break;
         }
 

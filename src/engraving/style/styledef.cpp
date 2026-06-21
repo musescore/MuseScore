@@ -2243,6 +2243,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(jianpuOctaveDotDistance,                    0.3_sp),
     styleDef(jianpuDiminutionBeamThickness,              0.1_sp),
     styleDef(jianpuDiminutionBeamDistance,               0.3_sp),
+    styleDef(jianpuDiminutionBeamPlacement,              PlacementV::BELOW),
     styleDef(jianpuDurationLineThickness,                0.1_sp),
 } };
 

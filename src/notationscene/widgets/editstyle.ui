@@ -12992,6 +12992,43 @@ followed by dashes</string>
             </widget>
            </item>
            <item row="5" column="0">
+            <widget class="QLabel" name="label_jianpu_DiminutionBeamPlacement">
+             <property name="text">
+              <string>Diminution beam placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuDiminutionBeamPlacement</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="jianpuDiminutionBeamPlacement">
+             <item>
+              <property name="text">
+               <string>Above</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Below</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="jianpuDiminutionBeamPlacementReset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Diminution beam placement' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
             <widget class="QLabel" name="label_jianpu_DurationLineThickness">
              <property name="text">
               <string>Duration line thickness:</string>
@@ -13001,7 +13038,7 @@ followed by dashes</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
+           <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="jianpuDurationLineThickness">
              <property name="keyboardTracking">
               <bool>false</bool>
@@ -13017,7 +13054,7 @@ followed by dashes</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="2">
+           <item row="6" column="2">
             <widget class="QToolButton" name="jianpuDurationLineThicknessReset">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -14364,6 +14401,7 @@ followed by dashes</string>
   <tabstop>jianpuOctaveDotDistance</tabstop>
   <tabstop>jianpuDiminutionBeamThickness</tabstop>
   <tabstop>jianpuDiminutionBeamDistance</tabstop>
+  <tabstop>jianpuDiminutionBeamPlacement</tabstop>
   <tabstop>jianpuDurationLineThickness</tabstop>
  </tabstops>
  <resources/>

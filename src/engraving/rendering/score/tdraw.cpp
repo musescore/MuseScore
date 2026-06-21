@@ -2749,7 +2749,6 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
             jianpuY = bbox.height() + bbox.y();
             jianpuY -= jianpuHeight;
             jianpuY -= dotDistance * abs(item->jianpuOctaveDots()) + lineDistance * item->jianpuDiminutionLines();
-            jianpuY -= rad * 2;
         }
 
         painter->save();

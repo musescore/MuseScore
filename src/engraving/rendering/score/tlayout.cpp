@@ -4760,11 +4760,14 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         if (item->isRest()) {
             item->setJianpuDigit(String(u"0"));
         } else {
-            Position pos;
+            item->setJianpuDigit(String());
             Score* score = item->score();
-            score->getPosition(&pos, item->pos(), item->track());
-            bool error = false;
-            NoteVal nval = score->noteValForPosition(pos, item->accidentalType(), error);
+            Position pos;
+            bool error = !(score && score->getPosition(&pos, item->pos(), item->track()) && pos.segment);
+            NoteVal nval;
+            if (!error) {
+                nval = score->noteValForPosition(pos, item->accidentalType(), error);
+            }
             if (!error) {
                 bool concertPitch = ctx.conf().styleB(Sid::concertPitch);
                 int tpc = nval.tpc(concertPitch);
