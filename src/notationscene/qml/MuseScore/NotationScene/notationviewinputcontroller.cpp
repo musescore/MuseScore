@@ -63,6 +63,12 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
     return muse::contains(ALLOWED_TYPES, element->type());
 }
 
+static bool isEditingLyrics(const INotationInteractionPtr& interaction)
+{
+    const EngravingItem* element = interaction->selection()->element();
+    return interaction->isTextEditingStarted() && element && element->isLyrics();
+}
+
 NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_view(view)
 {
@@ -1451,6 +1457,13 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
     }
 
     if (viewInteraction()->isEditingElement()) {
+        // The shortcut layer cannot route the underscore key to the add-melisma
+        // action on non-US keyboard layouts (e.g. JIS, where '_' is its own
+        // dedicated key rather than Shift+'-'). Claim it here so it is delivered
+        // as a key press and handled directly in keyPressEvent().
+        if (key == Qt::Key_Underscore && event->modifiers() == Qt::NoModifier && isEditingLyrics(viewInteraction())) {
+            return true;
+        }
         return viewInteraction()->isEditAllowed(event);
     }
 
@@ -1475,9 +1488,18 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         m_view->asItem()->setCursor({});
         event->accept();
     } else if (viewInteraction()->isEditingElement()) {
-        viewInteraction()->editElement(event);
-        if (key == Qt::Key_Shift) {
-            viewInteraction()->updateTimeTickAnchors(event);
+        if (key == Qt::Key_Underscore && event->modifiers() == Qt::NoModifier && isEditingLyrics(viewInteraction())) {
+            // Underscore -> melisma in lyrics (the shortcut layer can't map '_'
+            // to add-melisma on non-US keyboard layouts; see shortcutOverrideEvent()).
+            // Dispatch on the next event-loop turn so add-melisma's text-edit
+            // teardown does not run while this key event is still being delivered.
+            QTimer::singleShot(0, m_view->asItem(), [this]() { dispatcher()->dispatch("add-melisma"); });
+            event->accept();
+        } else {
+            viewInteraction()->editElement(event);
+            if (key == Qt::Key_Shift) {
+                viewInteraction()->updateTimeTickAnchors(event);
+            }
         }
     } else if (key == Qt::Key_Shift) {
         viewInteraction()->updateTimeTickAnchors(event);
