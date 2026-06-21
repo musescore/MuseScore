@@ -48,13 +48,13 @@
     "mnx": {
         "_x": {
             "schemaVersion": {
-                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/17"
+                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/19"
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 17
+        "version": 19
     },
     "parts": [
         {
@@ -72,7 +72,10 @@
                     ],
                     "dynamics": [
                         {
-                            "glyph": "dynamicMF",
+                            "glyphs": [
+                                "dynamicMF"
+                            ],
+                            "orient": "below",
                             "position": {
                                 "fraction": [
                                     0,
@@ -80,11 +83,15 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "mf",
                             "voice": "s1layer2"
                         },
                         {
-                            "glyph": "dynamicPiano",
+                            "glyphs": [
+                                "dynamicPiano"
+                            ],
+                            "orient": "above",
                             "position": {
                                 "fraction": [
                                     0,
@@ -92,6 +99,7 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "p",
                             "voice": "s1layer1"
                         }

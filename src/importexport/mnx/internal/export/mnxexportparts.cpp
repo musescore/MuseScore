@@ -34,6 +34,7 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/measure.h"
@@ -231,39 +232,67 @@ static const ChordRest* findFirstChordRest(const Slur* s)
     }
 }
 
+static mnx::MultiStaffOrientation mnxMultiStaffOrientFromDirection(const EngravingItem* item)
+{
+    switch (item->getProperty(Pid::DIRECTION).value<DirectionV>()) {
+    case DirectionV::UP:
+        return mnx::MultiStaffOrientation::Above;
+    case DirectionV::DOWN:
+        return mnx::MultiStaffOrientation::Below;
+    case DirectionV::AUTO:
+        if (item->part()->staves().size() > 1) {
+            if (item->getProperty(Pid::CENTER_BETWEEN_STAVES) == AutoOnOff::ON) {
+                return mnx::MultiStaffOrientation::Between;
+            }
+        }
+    }
+
+    return mnx::MultiStaffOrientation::Auto;
+}
+
+static void exportMnxVoiceAssignment(mnx::part::DynamicGroupBase& mnxDynamic, int mnxStaffNum,
+                                     VoiceAssignment voiceAssignment, track_idx_t curTrackIdx)
+{
+    switch (voiceAssignment) {
+    case VoiceAssignment::CURRENT_VOICE_ONLY:
+        mnxDynamic.set_staff(mnxStaffNum);
+        mnxDynamic.set_voice(makeMnxVoiceIdFromTrack(mnxDynamic.staff_or(1), curTrackIdx));
+        break;
+    case VoiceAssignment::ALL_VOICE_IN_STAFF:
+        mnxDynamic.set_staff(mnxStaffNum);
+        break;
+    case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT:
+        break;
+    }
+}
+
 //---------------------------------------------------------
-//   createEnding
+//   createVolta
 //   export volta as an MNX ending
 //---------------------------------------------------------
 
-static void createEnding(const Spanner* sp, MnxExporter* exporter)
+void MnxExporter::createVolta(const Volta* volta)
 {
-    IF_ASSERT_FAILED(sp && exporter) {
+    IF_ASSERT_FAILED(volta) {
         return;
     }
 
-    if (!sp->isVolta()) {
-        LOGW() << "Skipping spanner that has ElementType::VOLTA but is not a volta.";
-        return;
-    }
-
-    const Volta* volta = toVolta(sp);
     Measure* startMeasure = toMeasure(volta->startElement());
     IF_ASSERT_FAILED(startMeasure) {
         LOGW() << "Skipping volta with missing start measure.";
         return;
     }
 
-    const size_t mnxMeasureIndex = exporter->mnxMeasureIndexFromMeasure(startMeasure);
-    auto mnxMeasure = exporter->mnxDocument().global().measures().at(mnxMeasureIndex);
+    const size_t mnxMeasureIndex = mnxMeasureIndexFromMeasure(startMeasure);
+    auto mnxMeasure = mnxDocument().global().measures().at(mnxMeasureIndex);
 
     const Fraction endTick = volta->tick2() - Fraction::eps();
     Measure* endMeasure = startMeasure->score()->tick2measure(endTick);
-    if (!endMeasure) {
+    IF_ASSERT_FAILED(endMeasure) {
         LOGW() << "Skipping volta with missing end measure.";
         return;
     }
-    if (endMeasure->tick() < startMeasure->tick()) {
+    IF_ASSERT_FAILED(endMeasure->tick() >= startMeasure->tick()) {
         LOGW() << "Skipping volta with end measure before start measure.";
         return;
     }
@@ -277,7 +306,7 @@ static void createEnding(const Spanner* sp, MnxExporter* exporter)
             break;
         }
     }
-    if (!foundEnd) {
+    IF_ASSERT_FAILED(foundEnd) {
         LOGW() << "Skipping volta with unsupported end measure.";
         return;
     }
@@ -298,29 +327,25 @@ static void createEnding(const Spanner* sp, MnxExporter* exporter)
 //   export a single slur spanner
 //---------------------------------------------------------
 
-static void createSlur(const Spanner* sp, MnxExporter* exporter)
+void MnxExporter::createSlur(const Slur* s)
 {
-    IF_ASSERT_FAILED(sp && exporter) {
+    IF_ASSERT_FAILED(s) {
         return;
     }
-    if (!sp->isSlur()) {
-        LOGW() << "Skipping spanner that has ElementType::SLUR but is not a slur.";
-        return;
-    }
-    if (!sp->startElement() || !sp->endElement()) {
+    IF_ASSERT_FAILED(s->startElement() && s->endElement()) {
         LOGW() << "Skipping slur with missing endpoints.";
         return;
     }
-    if (!sp->startElement()->isChordRest() || !sp->endElement()->isChordRest()) {
+    if (!s->startElement()->isChordRest() || !s->endElement()->isChordRest()) {
+        LOGW() << "Skipping slur not attached to chord-rests.";
         return;
     }
 
-    const Slur* s = toSlur(sp);
     if (const ChordRest* startCR = findFirstChordRest(s)) {
-        const ChordRest* endCR = startCR == sp->startElement()
-                                 ? toChordRest(sp->endElement())
-                                 : toChordRest(sp->startElement());
-        auto mnxEvent = exporter->mnxEventFromCR(startCR);
+        const ChordRest* endCR = startCR == s->startElement()
+                                 ? toChordRest(s->endElement())
+                                 : toChordRest(s->startElement());
+        auto mnxEvent = mnxEventFromCR(startCR);
         if (mnxEvent && endCR) {
             auto mnxSlur = mnxEvent->ensure_slurs().append(endCR->eid().toStdString());
             mnxSlur.set_lineType(toMnxSlurLineType(s->styleType()));
@@ -334,28 +359,84 @@ static void createSlur(const Spanner* sp, MnxExporter* exporter)
 }
 
 //---------------------------------------------------------
+//   createHairpin
+//   export a single hairpin spanner
+//---------------------------------------------------------
+
+void MnxExporter::createHairpin(const Hairpin* hairpin)
+{
+    IF_ASSERT_FAILED(hairpin) {
+        return;
+    }
+
+    if (hairpin->isLineType()) {
+        LOGI() << "Line-type hairpins not yet supported by MNX export.";
+        return;
+    }
+
+    const Staff* startStaff = m_score->staff(track2staff(hairpin->track()));
+    const Staff* endStaff = m_score->staff(track2staff(hairpin->effectiveTrack2()));
+    IF_ASSERT_FAILED(startStaff && startStaff->part()) {
+        LOGW() << "Skipping hairpin with missing start staff or part context.";
+        return;
+    }
+
+    if (!endStaff || startStaff->idx() != endStaff->idx()) {
+        LOGW() << "Hairpin crosses staves and will be exported using the start staff/voice only.";
+    }
+
+    const Measure* startMeasure = m_score->tick2measure(hairpin->tick());
+    IF_ASSERT_FAILED(startMeasure) {
+        LOGW() << "Skipping hairpin with missing start measure for tick " << hairpin->tick().ticks() << ".";
+        return;
+    }
+
+    const Fraction adjustedEndTick = hairpin->tick2() - Fraction::eps();
+    Measure* endMeasure = m_score->tick2measure(adjustedEndTick);
+    IF_ASSERT_FAILED(endMeasure) {
+        LOGW() << "Skipping hairpin with missing end measure.";
+        return;
+    }
+    IF_ASSERT_FAILED(endMeasure->tick() >= startMeasure->tick()) {
+        LOGW() << "Skipping hairpin with end measure before start measure.";
+        return;
+    }
+
+    const size_t mnxMeasureIndex = mnxMeasureIndexFromMeasure(startMeasure);
+    const auto [mnxPartIdx, mnxStaffNum] = mnxPartStaffFromStaffIdx(startStaff->idx());
+    auto mnxPart = mnxDocument().parts().at(mnxPartIdx);
+    auto mnxMeasure = mnxPart.measures().at(mnxMeasureIndex);
+
+    const Fraction startOffset = hairpin->tick() - startMeasure->tick();
+    const Fraction endOffset = hairpin->tick2() - endMeasure->tick();
+    const std::string endMeasureId = getOrAssignEID(const_cast<Measure*>(endMeasure)).toStdString();
+
+    auto mnxHairpin = mnxMeasure.ensure_dynamics().appendGradual(
+        hairpin->hairpinType() == HairpinType::CRESC_HAIRPIN
+            ? mnx::DynamicWedgeType::Increasing
+            : mnx::DynamicWedgeType::Decreasing,
+        toMnxFractionValue(startOffset).reduced(),
+        mnx::MeasureRhythmicPosition::make(
+            endMeasureId,
+            toMnxFractionValue(endOffset).reduced()));
+
+    mnxHairpin.set_or_clear_orient(mnxMultiStaffOrientFromDirection(hairpin));
+    exportMnxVoiceAssignment(mnxHairpin, mnxStaffNum, hairpin->voiceAssignment(), hairpin->track());
+}
+
+//---------------------------------------------------------
 //   createOttava
 //   export a single ottava spanner
 //---------------------------------------------------------
 
-static void createOttava(const Spanner* sp, MnxExporter* exporter)
+void MnxExporter::createOttava(const Ottava* ottava)
 {
-    IF_ASSERT_FAILED(sp && exporter) {
+    IF_ASSERT_FAILED(ottava) {
         return;
     }
 
-    if (!sp->isOttava()) {
-        LOGW() << "Skipping spanner that has ElementType::OTTAVA but is not an ottava.";
-        return;
-    }
-
-    if (!sp->startElement() || !sp->endElement()) {
+    if (!ottava->startElement() || !ottava->endElement()) {
         LOGW() << "Skipping ottava with missing endpoints.";
-        return;
-    }
-
-    const Ottava* ottava = toOttava(sp);
-    if (!ottava) {
         return;
     }
 
@@ -365,8 +446,8 @@ static void createOttava(const Spanner* sp, MnxExporter* exporter)
         return;
     }
 
-    const EngravingItem* startElement = sp->startElement();
-    const EngravingItem* endElement = sp->endElement();
+    const EngravingItem* startElement = ottava->startElement();
+    const EngravingItem* endElement = ottava->endElement();
 
     const Measure* startMeasure = startElement->findMeasure();
     const Measure* endMeasure = endElement->findMeasure();
@@ -378,7 +459,7 @@ static void createOttava(const Spanner* sp, MnxExporter* exporter)
 
     if (!endMeasure) {
         // Adjust end measure by tick if end element is generated outside normal measure lookup.
-        const Fraction adjustedEndTick = sp->tick2() - Fraction::eps();
+        const Fraction adjustedEndTick = ottava->tick2() - Fraction::eps();
         endMeasure = startMeasure->score()->tick2measure(adjustedEndTick);
         if (!endMeasure) {
             LOGW() << "Skipping ottava with missing end measure.";
@@ -386,48 +467,39 @@ static void createOttava(const Spanner* sp, MnxExporter* exporter)
         }
     }
 
-    const Fraction startOffset = sp->tick() - startMeasure->tick();
-    const Fraction adjustedEndTick = sp->endElement()->isChordRest()
-                                     ? toChordRest(sp->endElement())->tick()
-                                     : sp->tick();
+    const Fraction startOffset = ottava->tick() - startMeasure->tick();
+    const Fraction adjustedEndTick = ottava->endElement()->isChordRest()
+                                     ? toChordRest(ottava->endElement())->tick()
+                                     : ottava->tick2();
     const Fraction endOffset = adjustedEndTick - endMeasure->tick();
 
     // Resolve part and staff so we can attach the ottava to the correct part measure.
     const Staff* staff = startElement->staff();
-    if (!staff || !staff->part()) {
+    IF_ASSERT_FAILED(staff && staff->part()) {
         LOGW() << "Skipping ottava with missing staff or part context.";
         return;
     }
 
     const Part* part = staff->part();
-    std::pair<size_t, int> partStaff;
-    try {
-        partStaff = exporter->mnxPartStaffFromStaffIdx(staff->idx());
-    } catch (const std::exception& ex) {
-        LOGW() << "Skipping ottava because the owning part/staff could not be resolved: " << ex.what();
-        return;
-    }
-
-    const size_t mnxMeasureIndex = exporter->mnxMeasureIndexFromMeasure(startMeasure);
-    auto mnxPart = exporter->mnxDocument().parts().at(partStaff.first);
+    const auto [mnxPartIdx, mnxStaffNum] = mnxPartStaffFromStaffIdx(staff->idx());
+    const size_t mnxMeasureIndex = mnxMeasureIndexFromMeasure(startMeasure);
+    auto mnxPart = mnxDocument().parts().at(mnxPartIdx);
     auto mnxMeasure = mnxPart.measures().at(mnxMeasureIndex);
+    const std::string endMeasureId = getOrAssignEID(const_cast<Measure*>(endMeasure)).toStdString();
 
-    const std::string endMeasureId = exporter->getOrAssignEID(const_cast<Measure*>(endMeasure)).toStdString();
+    auto mnxOttava = mnxMeasure.ensure_ottavas().append(amount.value(),
+                                                        toMnxFractionValue(startOffset).reduced(),
+                                                        mnx::MeasureRhythmicPosition::make(
+                                                            endMeasureId,
+                                                            toMnxFractionValue(endOffset).reduced()));
 
-    auto mnxOttava = mnxMeasure.ensure_ottavas().append(*amount,
-                                                        mnx::FractionValue(startOffset.numerator(),
-                                                                           startOffset.denominator()).reduced(),
-                                                        endMeasureId,
-                                                        mnx::FractionValue(endOffset.numerator(),
-                                                                           endOffset.denominator()).reduced());
-
-    if (const Chord* endC = toChord(sp->endElement()); endC && !endC->graceNotesBefore().empty()) {
+    if (const Chord* endC = toChord(ottava->endElement()); endC && !endC->graceNotesBefore().empty()) {
         // Ensure grace notes before the end of the ottava are included.
         mnxOttava.end().position().set_graceIndex(0);
     }
 
     if (part && part->nstaves() > 1) {
-        mnxOttava.set_staff(partStaff.second);
+        mnxOttava.set_staff(mnxStaffNum);
     }
 
     /// @todo map track-specific ottava to ottava.voice() if MuseScore decides to implements it.
@@ -448,14 +520,17 @@ void MnxExporter::exportSpanners()
             continue;
         }
         switch (sp->type()) {
-        case ElementType::VOLTA:
-            createEnding(sp, this);
-            break;
-        case ElementType::SLUR:
-            createSlur(sp, this);
+        case ElementType::HAIRPIN:
+            createHairpin(toHairpin(sp));
             break;
         case ElementType::OTTAVA:
-            createOttava(sp, this);
+            createOttava(toOttava(sp));
+            break;
+        case ElementType::SLUR:
+            createSlur(toSlur(sp));
+            break;
+        case ElementType::VOLTA:
+            createVolta(toVolta(sp));
             break;
         default:
             break;
@@ -615,6 +690,69 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
     }
 }
 
+static void splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector<std::string>& glyphs, String& suffix)
+{
+    const auto engravingFonts = [&]() -> std::shared_ptr<mu::engraving::IEngravingFontsProvider> {
+        return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("engraving");
+    }();
+
+    bool gotGlyph{};
+    bool gotSuffix{};
+    for (const TextFragment& fragment : dynamic->fragmentList()) {
+        const CharFormat& format = fragment.format;
+        if (format.fontFamily() == u"ScoreText") {
+            if (gotSuffix) {
+                return; // can't encode a dynamic with multiple glyph sequences separated by text.
+            }
+            for (size_t i = 0; i < fragment.text.size(); ++i) {
+                const Char ch = fragment.text.at(i);
+                const SymId symId = engravingFonts->fallbackFont()->fromCode(ch.unicode());
+                if (symId != SymId::noSym) {
+                    gotGlyph = true;
+                    glyphs.push_back(SymNames::nameForSymId(symId).ascii());
+                }
+            }
+        } else {
+            if (gotGlyph) {
+                suffix += fragment.text;
+                gotSuffix = true;
+            } else {
+                prefix += fragment.text;
+            }
+        }
+    }
+    prefix = prefix.trimmed();
+    suffix = suffix.trimmed();
+}
+
+static std::vector<std::string> parseSymGlyphNames(const muse::String& source)
+{
+    std::vector<std::string> result;
+
+    static const muse::String openTag(u"<sym>");
+    static const muse::String closeTag(u"</sym>");
+
+    size_t pos = 0;
+    while (true) {
+        size_t open = source.indexOf(openTag, pos);
+        if (open == std::string::npos) {
+            break;
+        }
+
+        open += openTag.size();
+
+        size_t close = source.indexOf(closeTag, open);
+        if (close == std::string::npos) {
+            break;
+        }
+
+        result.push_back(source.mid(open, close - open).toStdString());
+        pos = close + closeTag.size();
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   createDynamic
 //   export a dynamic text annotation
@@ -627,40 +765,74 @@ static void createDynamic(const Dynamic* dynamic, const Fraction& rTick, int mnx
         return;
     }
 
-    /// @todo This will change a lot when the real MNX dynamics schema arrives
-    auto mnxDynamicValue = toMnxDynamicType(dynamic->dynamicType());
-    if (mnxDynamicValue.empty()) {
-        mnxDynamicValue = dynamic->plainText().toStdString();
-    }
-    auto mnxDynamic = mnxMeasure.ensure_dynamics().append(mnxDynamicValue, toMnxFractionValue(rTick));
-    /// @todo append formatted text when MNX schema provides it.
-    /// For now, see if our text is a glyph and export if so
-    auto u32DynamicText = dynamic->plainText().toStdU32String();
-    if (u32DynamicText.size() == 1) {
-        SymId symId = dynamic->score()->engravingFont()->fromCode(u32DynamicText.at(0));
-        if (symId != SymId::noSym) {
-            mnxDynamic.set_glyph(SymNames::nameForSymId(symId).ascii());
+    String prefix{};
+    String suffix{};
+    std::vector<std::string> glyphs{};
+    splitDynamicText(dynamic, prefix, glyphs, suffix);
+
+    bool sawIncrease{};
+    bool sawDecrease{};
+    auto checkRelative = [&](const String& value) {
+        if (value == u"piu" || value == u"più") {
+            sawIncrease = true;
         }
+        if (value == u"menos" || value == u"meno") {
+            sawDecrease = true;
+        }
+    };
+    checkRelative(prefix);
+    checkRelative(suffix);
+
+    bool isAccent{};
+    bool copyGlyphs{};
+    const auto [mnxDynamicValue, mnxAttackValue] = toMnxDynamicType(dynamic->dynamicType(), copyGlyphs, isAccent);
+    if (!mnxDynamicValue && ((!sawIncrease && !sawDecrease) || (prefix.empty() && glyphs.empty() && suffix.empty()))) {
+        return;
     }
-    switch (dynamic->voiceAssignment()) {
-    case VoiceAssignment::CURRENT_VOICE_ONLY:
-        mnxDynamic.set_staff(mnxStaffNum);
-        mnxDynamic.set_voice(makeMnxVoiceIdFromTrack(mnxDynamic.staff_or(1), dynamic->track()));
-        break;
-    case VoiceAssignment::ALL_VOICE_IN_STAFF:
-        mnxDynamic.set_staff(mnxStaffNum);
-        break;
-    case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT:
-        break;
+
+    auto mnxDynamic = [&]() -> mnx::part::DynamicGroupBase {
+        using DynRelVal = mnx::DynamicRelativeValue;
+        if (sawIncrease || sawDecrease) {
+            auto relValue = sawIncrease ? DynRelVal::Louder : DynRelVal::Softer;
+            auto dyn = mnxMeasure.ensure_dynamics().appendRelative(relValue, toMnxFractionValue(rTick));
+            if (mnxDynamicValue) {
+                dyn.set_value(mnxDynamicValue.value());
+            }
+            return dyn;
+        } else if (isAccent) {
+            return mnxMeasure.ensure_dynamics().appendAccent(mnxDynamicValue.value(), toMnxFractionValue(rTick));
+        } else {
+            return mnxMeasure.ensure_dynamics().appendImmediate(mnxDynamicValue.value(), toMnxFractionValue(rTick));
+        }
+    }();
+
+    if (copyGlyphs && !glyphs.empty()) {
+        glyphs = parseSymGlyphNames(Dynamic::dynamicText(dynamic->dynamicType()));
     }
+
+    if (mnxAttackValue) {
+        mnxDynamic.set_attackValue(mnxAttackValue.value());
+    }
+    if (!prefix.empty()) {
+        mnxDynamic.set_prefix(prefix.toStdString());
+    }
+    if (!suffix.empty()) {
+        mnxDynamic.set_suffix(suffix.toStdString());
+    }
+    if (!glyphs.empty()) {
+        mnxDynamic.ensure_glyphs().assign(glyphs);
+    }
+
+    mnxDynamic.set_or_clear_orient(mnxMultiStaffOrientFromDirection(dynamic));
+    exportMnxVoiceAssignment(mnxDynamic, mnxStaffNum, dynamic->voiceAssignment(), dynamic->track());
 }
 
 //---------------------------------------------------------
-//   createTextAnnotations
+//   exportTextAnnotations
 //   export dynamics, staff text, etc. for a single measure
 //---------------------------------------------------------
 
-static void createTextAnnotations(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
+static void exportTextAnnotations(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
 {
     const size_t staves = part->nstaves();
     constexpr SegmentType timeSegments = SegmentType::Duration;
@@ -763,7 +935,7 @@ bool MnxExporter::createParts()
 
             appendClefsForMeasure(part, measure, mnxMeasure);
             createSequences(part, measure, mnxMeasure);
-            createTextAnnotations(part, measure, mnxMeasure);
+            exportTextAnnotations(part, measure, mnxMeasure);
             /// the items below must come after createSequences.
             createArpeggios(part, measure, mnxMeasure);
         }

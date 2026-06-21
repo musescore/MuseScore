@@ -105,6 +105,8 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>up</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
             <eid>I_I</eid>
             </Dynamic>
           <Chord>
@@ -126,6 +128,8 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>down</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
             <eid>M_M</eid>
             <text><sym>dynamicMF</sym></text>
             </Dynamic>

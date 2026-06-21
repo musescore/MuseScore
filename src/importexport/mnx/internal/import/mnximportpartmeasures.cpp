@@ -36,6 +36,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/hook.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/keysig.h"
@@ -808,7 +809,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         insertedCR = true;
         return true;
     };
-    hooks.onItem = [&](const mnx::ContentObject& item, mnx::util::SequenceWalkContext& ctx) {
+    hooks.onItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Grace::ContentTypeValue) {
             /// @todo refactor this if MuseScore allows grace notes to be normal.
             const auto grace = item.get<mnx::sequence::Grace>();
@@ -885,7 +886,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         return true;
     };
-    hooks.onAfterItem = [&](const mnx::ContentObject& item, mnx::util::SequenceWalkContext& ctx) {
+    hooks.onAfterItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
             activeTuplets.pop();
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
@@ -1004,6 +1005,209 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
     }
 }
 
+static DynamicType dynamicTypeFromAttackValuePair(std::optional<mnx::DynamicValue> attackValue,
+                                                  std::optional<mnx::DynamicValue> value)
+{
+    if (!value) {
+        return DynamicType::OTHER;
+    }
+
+    if (attackValue) {
+        switch (attackValue.value()) {
+        case mnx::DynamicValue::p:
+            switch (value.value()) {
+            case mnx::DynamicValue::f: return DynamicType::PF;
+            default: break;
+            }
+            break;
+        case mnx::DynamicValue::f:
+            switch (value.value()) {
+            case mnx::DynamicValue::p: return DynamicType::FP;
+            default: break;
+            }
+            break;
+        default:
+            break;
+        }
+        return DynamicType::OTHER;
+    }
+
+    switch (value.value()) {
+    case mnx::DynamicValue::f: return DynamicType::F;
+    case mnx::DynamicValue::ff: return DynamicType::FF;
+    case mnx::DynamicValue::fff: return DynamicType::FFF;
+    case mnx::DynamicValue::mf: return DynamicType::MF;
+    case mnx::DynamicValue::mp: return DynamicType::MP;
+    case mnx::DynamicValue::n: return DynamicType::N;
+    case mnx::DynamicValue::p: return DynamicType::P;
+    case mnx::DynamicValue::pp: return DynamicType::PP;
+    case mnx::DynamicValue::ppp: return DynamicType::PPP;
+    default: break;
+    }
+
+    return DynamicType::OTHER;
+}
+
+staff_idx_t MnxImporter::resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic)
+{
+    const auto explicitStaff = mnxDynamic.staff();
+    if (explicitStaff) {
+        return muse::value(m_mnxPartStaffToStaff,
+                           std::make_pair(mnxPart.calcArrayIndex(), *explicitStaff),
+                           muse::nidx);
+    }
+
+    // Orient only decides which staff to anchor to when MNX does not provide an
+    // explicit staff number.
+    const int staffNum = [&]() {
+        switch (mnxDynamic.orient()) {
+        case mnx::MultiStaffOrientation::Above:
+            return 1;
+        case mnx::MultiStaffOrientation::Below:
+            return mnxPart.staves();
+        case mnx::MultiStaffOrientation::Between:
+            return 1;
+        case mnx::MultiStaffOrientation::Auto:
+            return 1;
+        }
+        return 1;
+    }();
+
+    return muse::value(m_mnxPartStaffToStaff,
+                       std::make_pair(mnxPart.calcArrayIndex(), staffNum),
+                       muse::nidx);
+}
+
+void MnxImporter::applyDynamicOrient(EngravingItem* item, const mnx::Part& mnxPart, mnx::MultiStaffOrientation orient)
+{
+    IF_ASSERT_FAILED(item) {
+        return;
+    }
+
+    switch (orient) {
+    case mnx::MultiStaffOrientation::Above:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::UP);
+        setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+        break;
+    case mnx::MultiStaffOrientation::Below:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::DOWN);
+        setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+        break;
+    case mnx::MultiStaffOrientation::Between:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::AUTO);
+        if (mnxPart.staves() > 1) {
+            setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::ON);
+        }
+        break;
+    case mnx::MultiStaffOrientation::Auto:
+        break;
+    }
+}
+
+static VoiceAssignment resolveDynamicVoiceAssignment(const mnx::part::DynamicGroupBase& mnxDynamic, bool useVoiceAssignment)
+{
+    if (mnxDynamic.voice() && useVoiceAssignment) {
+        return VoiceAssignment::CURRENT_VOICE_ONLY;
+    }
+    if (mnxDynamic.staff()) {
+        return VoiceAssignment::ALL_VOICE_IN_STAFF;
+    }
+    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
+}
+
+void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, Segment* segment, const mnx::Part& mnxPart,
+                                track_idx_t curTrackIdx, bool useVoiceAssignment)
+{
+    if (!segment) {
+        return;
+    }
+
+    Dynamic* dyn = Factory::createDynamic(segment);
+    dyn->setParent(segment);
+    dyn->setTrack(curTrackIdx);
+
+    String dynamicText = String::fromStdString(mnxDynamic.prefix_or({}));
+    // As of now we prefer glyphs over value/attackValue because the current
+    // list of dynamics classifications is so limited in MNX.
+    if (const auto glyphs = mnxDynamic.glyphs(); glyphs && !glyphs->empty()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        for (const auto& glyph : glyphs.value()) {
+            dynamicText += u"<sym>" + String::fromStdString(glyph) + u"</sym>";
+        }
+    } else if (mnxDynamic.attackValue() || mnxDynamic.value()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        auto applyEnumString = [&](std::optional<mnx::DynamicValue> val) {
+            if (val) {
+                const auto& map = mnx::EnumStringMapping<mnx::DynamicValue>::enumToString();
+                dynamicText += String::fromStdString(map.at(*val));
+            }
+        };
+        applyEnumString(mnxDynamic.attackValue());
+        applyEnumString(mnxDynamic.value());
+    }
+
+    if (mnxDynamic.suffix()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        dynamicText += String::fromStdString(mnxDynamic.suffix().value());
+    }
+
+    dyn->setDynamicType(dynamicText);
+    /// @todo If mnx adds an "other" type, we should leave our type as other and remove
+    /// this if statement.
+    if (dyn->dynamicType() == DynamicType::OTHER) {
+        dyn->setDynamicType(dynamicTypeFromAttackValuePair(mnxDynamic.attackValue(), mnxDynamic.value()));
+    }
+    applyDynamicOrient(dyn, mnxPart, mnxDynamic.orient());
+    dyn->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxDynamic, useVoiceAssignment));
+    segment->add(dyn);
+}
+
+void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Segment* segment, const mnx::Part& mnxPart,
+                                track_idx_t curTrackIdx, bool useVoiceAssignment)
+{
+    if (!segment) {
+        return;
+    }
+
+    const auto endMeasure = mnxDocument().getEntityMap().tryGet<mnx::global::Measure>(mnxHairpin.end().measure());
+    if (!endMeasure.has_value()) {
+        LOGW() << "hairpin end measure not found for " << mnxHairpin.pointer().to_string();
+        return;
+    }
+    Measure* targetMeasure = mnxMeasureToMeasure(endMeasure->calcArrayIndex());
+    if (!targetMeasure) {
+        LOGW() << "hairpin end measure could not be resolved to a MuseScore measure for "
+               << mnxHairpin.pointer().to_string();
+        return;
+    }
+
+    const Fraction endTick = targetMeasure->tick() + toMuseScoreFraction(mnxHairpin.end().position().fraction());
+    if (endTick <= segment->tick()) {
+        LOGW() << "hairpin end tick is not after start tick for " << mnxHairpin.pointer().to_string();
+        return;
+    }
+
+    Hairpin* hairpin = Factory::createHairpin(segment);
+    hairpin->setHairpinType(mnxHairpin.wedgeType() == mnx::DynamicWedgeType::Increasing
+                            ? HairpinType::CRESC_HAIRPIN
+                            : HairpinType::DIM_HAIRPIN);
+    hairpin->setTrack(curTrackIdx);
+    hairpin->setTrack2(curTrackIdx);
+    hairpin->setTick(segment->tick());
+    hairpin->setTick2(endTick);
+
+    applyDynamicOrient(hairpin, mnxPart, mnxHairpin.orient());
+    hairpin->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxHairpin, useVoiceAssignment));
+
+    m_score->addElement(hairpin);
+}
+
 //---------------------------------------------------------
 //   createDynamics
 //   Create MuseScore dynamics from MNX part-measure dynamics.
@@ -1013,19 +1217,15 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxDynamics = mnxMeasure.dynamics()) {
-        for (const auto& mnxDynamic : mnxDynamics.value()) {            
-            /// @todo Honor mnx requirement that dynamics apply to all staves when staff() member
-            /// is missing (after clarification).
-            staff_idx_t staffIdx = muse::value(m_mnxPartStaffToStaff,
-                                               std::make_pair(part->calcArrayIndex(), mnxDynamic.staff_or(1)),
-                                               muse::nidx);
+        for (const auto& mnxDynamic : mnxDynamics.value()) {
+            staff_idx_t staffIdx = resolveDynamicStaff(part.value(), mnxDynamic);
             IF_ASSERT_FAILED(staffIdx != muse::nidx) {
                 LOGE() << "staff idx not found for part " << part->pointer().to_string();
                 continue;
             }
-
+            const track_idx_t staffTrackIdx = staff2track(staffIdx);
             bool useVoiceAssignment = false;
-            track_idx_t curTrackIdx = staff2track(staffIdx);
+            track_idx_t curTrackIdx = staffTrackIdx;
             if (const auto mnxVoiceId = mnxDynamic.voice()) {
                 for (size_t x = 0; x < mnxMeasure.sequences().size(); x++) {
                     if (x >= VOICES) {
@@ -1041,27 +1241,15 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
 
             Fraction rTick = toMuseScoreFraction(mnxDynamic.position().fraction());
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
-            Dynamic* dyn = Factory::createDynamic(s);
-            dyn->setParent(s);
-            dyn->setTrack(curTrackIdx);
-            /// @todo Refactor for finalized dynamics schema when it becomes available.
-            /// For now, we do the best we can, assuming `value` is a musicxml dynamics type
-            String dynamicText = String::fromStdString(mnxDynamic.value());
-            dyn->setDynamicType(dynamicText);
-            if (mnxDynamic.glyph()) {
-                /// @todo: this will probably become a formatted string in MNX
-                dyn->setXmlText(u"<sym>" + String::fromStdString(mnxDynamic.glyph().value()) + u"</sym>");
+
+            if (mnxDynamic.calcHasImmediateText()) {
+                createDynamic(mnxDynamic, s, part.value(), curTrackIdx, useVoiceAssignment);
             }
 
-            if (mnxDynamic.voice() && useVoiceAssignment) {
-                dyn->setVoiceAssignment(VoiceAssignment::CURRENT_VOICE_ONLY);
-            } else if (mnxDynamic.staff()) {
-                dyn->setVoiceAssignment(VoiceAssignment::ALL_VOICE_IN_STAFF);
-            } else {
-                dyn->setVoiceAssignment(VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
+            if (mnxDynamic.type() == mnx::part::DynamicGradual::ContentTypeValue) {
+                const auto mnxHairpin = mnxDynamic.get<mnx::part::DynamicGradual>();
+                createHairpin(mnxHairpin, s, part.value(), curTrackIdx, useVoiceAssignment);
             }
-
-            s->add(dyn);
         }
     }
 }

@@ -290,54 +290,106 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
     return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
-// Currently there is very little clarity around dynamics in mnx.
-// This will likely change considerably as the details emerge.
+std::pair<std::optional<mnx::DynamicValue>, std::optional<mnx::DynamicValue>> toMnxDynamicType(DynamicType type,
+                                                                                               bool& copyGlyphs,
+                                                                                               bool& isAccent)
+    {
+        std::optional<mnx::DynamicValue> dynValue;
+        std::optional<mnx::DynamicValue> attackValue;
+        copyGlyphs = false;
+        isAccent = false;
 
-namespace {
-const std::unordered_map<std::string, DynamicType> dynamicTypeTable = {
-    { "pppppp", DynamicType::PPPPPP },
-    { "ppppp",  DynamicType::PPPPP },
-    { "pppp",   DynamicType::PPPP },
-    { "ppp",    DynamicType::PPP },
-    { "pp",     DynamicType::PP },
-    { "p",      DynamicType::P },
-    { "mp",     DynamicType::MP },
-    { "mf",     DynamicType::MF },
-    { "f",      DynamicType::F },
-    { "ff",     DynamicType::FF },
-    { "fff",    DynamicType::FFF },
-    { "ffff",   DynamicType::FFFF },
-    { "fffff",  DynamicType::FFFFF },
-    { "ffffff", DynamicType::FFFFFF },
-    { "fp",     DynamicType::FP },
-    { "pf",     DynamicType::PF },
-    { "sf",     DynamicType::SF },
-    { "sfz",    DynamicType::SFZ },
-    { "sff",    DynamicType::SFF },
-    { "sffz",   DynamicType::SFFZ },
-    { "sfff",   DynamicType::SFFF },
-    { "sfffz",  DynamicType::SFFFZ },
-    { "sfp",    DynamicType::SFP },
-    { "sfpp",   DynamicType::SFPP },
-    { "rfz",    DynamicType::RFZ },
-    { "rf",     DynamicType::RF },
-    { "fz",     DynamicType::FZ },
-    { "m",      DynamicType::M },
-    { "r",      DynamicType::R },
-    { "s",      DynamicType::S },
-    { "z",      DynamicType::Z },
-    { "n",      DynamicType::N },
-    };
-} // namespace
+    switch (type) {
+    case DynamicType::PPPPPP:
+    case DynamicType::PPPPP:
+    case DynamicType::PPPP:
+        dynValue = mnx::DynamicValue::ppp;
+        copyGlyphs = true;
+        break;
+    case DynamicType::PPP:
+        dynValue = mnx::DynamicValue::ppp;
+        break;
+    case DynamicType::PP:
+        dynValue = mnx::DynamicValue::pp;
+        break;
+    case DynamicType::P:
+        dynValue = mnx::DynamicValue::p;
+        break;
+    case DynamicType::MP:
+        dynValue = mnx::DynamicValue::mp;
+        break;
+    case DynamicType::MF:
+        dynValue = mnx::DynamicValue::mf;
+        break;
+    case DynamicType::F:
+        dynValue = mnx::DynamicValue::f;
+        break;
+    case DynamicType::FF:
+        dynValue = mnx::DynamicValue::ff;
+        break;
+    case DynamicType::FFF:
+        dynValue = mnx::DynamicValue::fff;
+        break;
+    case DynamicType::FFFF:
+    case DynamicType::FFFFF:
+    case DynamicType::FFFFFF:
+        dynValue = mnx::DynamicValue::fff;
+        copyGlyphs = true;
+        break;
+    case DynamicType::FP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::p;
+        break;
+    case DynamicType::PF:
+        attackValue = mnx::DynamicValue::p;
+        dynValue = mnx::DynamicValue::f;
+        break;
+    case DynamicType::FZ:
+    case DynamicType::SF:
+    case DynamicType::SFZ:
+    case DynamicType::RF:
+    case DynamicType::RFZ:
+        dynValue = mnx::DynamicValue::f;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFF:
+    case DynamicType::SFFZ:
+        dynValue = mnx::DynamicValue::ff;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFFF:
+    case DynamicType::SFFFZ:
+        dynValue = mnx::DynamicValue::fff;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::p;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFPP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::pp;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::N:
+        dynValue = mnx::DynamicValue::n;
+        break;
+    case DynamicType::OTHER:
+    case DynamicType::M:
+    case DynamicType::R:
+    case DynamicType::S:
+    case DynamicType::Z:
+    case DynamicType::LAST:
+        break;
+    }
 
-DynamicType toMuseScoreDynamicType(const std::string& type)
-{
-    return muse::value(dynamicTypeTable, type, DynamicType::OTHER);
-}
-
-std::string toMnxDynamicType(DynamicType type)
-{
-    return muse::key(dynamicTypeTable, type, std::string());
+    return std::make_pair(dynValue, attackValue);
 }
 
 namespace {
