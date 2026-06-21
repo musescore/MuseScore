@@ -10654,7 +10654,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>debugOption</name>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8424"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8426"/>
         <source>Toggle show gap rests</source>
         <translation type="unfinished"/>
     </message>
@@ -11134,37 +11134,37 @@ Fret %1 on strings %2</source>
         <translation>注释：</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1625"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1630"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="155"/>
         <source>Start measure: %1</source>
         <translation>起始小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1628"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1633"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="157"/>
         <source>Start displayed measure: %1</source>
         <translation>谱面起始小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1631"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1636"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="159"/>
         <source>Start beat: %1</source>
         <translation>起始拍：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1638"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1643"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="162"/>
         <source>End measure: %1</source>
         <translation>终止小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1641"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1646"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="164"/>
         <source>End displayed measure: %1</source>
         <translation>谱面终止小节：%1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1644"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
         <translation>终拍：%1</translation>
@@ -11419,17 +11419,17 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="7957"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8105"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8112"/>
         <source>Remove stale partial tie</source>
         <translation>移除失效的局部延音线</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8015"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8019"/>
         <source>Reset incoming partial slur</source>
         <translation>重置圆滑线的进入部分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8025"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8032"/>
         <source>Reset outgoing partial slur</source>
         <translation>重置圆滑线的出走部分</translation>
     </message>
@@ -20568,7 +20568,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="35"/>
         <source>The extension does not contain a valid manifest file.</source>
-        <translation>扩展不包含有效的实体描述文件。</translation>
+        <translation>该扩展缺少有效的主清单文件。</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="59"/>
@@ -20604,7 +20604,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="79"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation>插件“%1”当前已禁用。您要立即启用它吗？</translation>
+        <translation>插件“%1”当前已禁用。您现在要启用它吗？</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="80"/>
@@ -20624,7 +20624,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="45"/>
         <source>Playback</source>
-        <translation>播放</translation>
+        <translation>回放</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="46"/>
@@ -20653,7 +20653,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="65"/>
         <source>Run plugin %1: %2</source>
         <extracomment>%1 is replaced with the name of the plugin; %2 is replaced with the name of the action</extracomment>
-        <translation type="unfinished"/>
+        <translation>运行插件%1：%2</translation>
     </message>
 </context>
 <context>
@@ -28197,25 +28197,25 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>抱歉，此时不支持在网络上更换乐器。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4569"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4571"/>
         <source>‘</source>
         <extracomment>Single open quotation mark</extracomment>
         <translation>‘</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4571"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4573"/>
         <source>’</source>
         <extracomment>Single close quotation mark</extracomment>
         <translation>’</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4573"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4575"/>
         <source>“</source>
         <extracomment>Double open quotation mark</extracomment>
         <translation>“</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4575"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4577"/>
         <source>”</source>
         <extracomment>Double close quotation mark</extracomment>
         <translation>”</translation>
@@ -37293,7 +37293,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="738"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2878"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2880"/>
         <source>Add slur</source>
         <translation>添加圆滑线</translation>
     </message>
@@ -37367,7 +37367,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/engraving/tests/voiceswitching_tests.cpp" line="118"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/inspectormodelwithvoiceandpositionoptions.cpp" line="165"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6096"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6098"/>
         <source>Change voice</source>
         <translation>更改声部</translation>
     </message>
@@ -37631,535 +37631,535 @@ failed: %2</source>
         <translation>应用面板元素：%1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3393"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3395"/>
         <source>Add chord symbol to fretboard diagram</source>
         <translation>向品格图添加和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3961"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3963"/>
         <source>Move chord/rest to staff</source>
         <translation>将和弦/休止符移到谱表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3991"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="3993"/>
         <source>Move chord/rest</source>
         <translation>移动和弦/休止符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4041"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4043"/>
         <source>Toggle snap to previous</source>
         <translation>切换吸附至上一个</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4082"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4084"/>
         <source>Toggle snap to next</source>
         <translation>切换吸附至下一个</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4222"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4224"/>
         <source>Change vertical position</source>
         <translation>更改垂直位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4225"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4227"/>
         <source>Change pitch</source>
         <translation>更改音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4238"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4240"/>
         <source>Move lyrics</source>
         <translation>移动唱词</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4250"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4252"/>
         <source>Nudge element</source>
         <translation>微移元素</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4286"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4288"/>
         <source>Nudge</source>
         <translation>微移</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4400"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4402"/>
         <source>Edit text</source>
         <translation>编辑文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4452"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4506"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4531"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4563"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4454"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4508"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4533"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4565"/>
         <source>Keystroke edit</source>
         <extracomment>Means: an editing operation triggered by a keystroke</extracomment>
         <translation>按键性编辑</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4971"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4973"/>
         <source>Move element anchors</source>
         <translation>移动元素锚点</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5017"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5019"/>
         <source>Split measure</source>
         <translation>分割小节</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5032"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5034"/>
         <source>Join measures</source>
         <translation>合并小节</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5172"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5174"/>
         <source>Add horizontal frame</source>
         <translation>添加水平框</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5173"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5175"/>
         <source>Add vertical frame</source>
         <translation>添加垂直框</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5174"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5176"/>
         <source>Add text frame</source>
         <translation>添加文本框</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5175"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5177"/>
         <source>Add fretboard diagram legend</source>
         <translation>添加品格图图例</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5176"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5178"/>
         <source>Add %Ln measure(s)</source>
         <translation><numerusform>添加%Ln小节</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5263"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5284"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5316"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5265"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5286"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5318"/>
         <source>Repeat selection</source>
         <translation>重复选中区域</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5338"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5340"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5420"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5422"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5446"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5448"/>
         <source>Flip direction</source>
         <translation>翻转方向</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5459"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5461"/>
         <source>Flip horizontally</source>
         <translation>水平翻转</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5519"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5521"/>
         <source>Add ottava</source>
         <translation>添加八度记号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5526"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5566"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5528"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5568"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>添加楔形记号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5627"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5629"/>
         <source>Add brackets</source>
         <translation>添加括号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5632"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5634"/>
         <source>Add braces</source>
         <translation>添加括弧</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5637"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5639"/>
         <source>Add parentheses</source>
         <translation>添加圆括号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5664"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5666"/>
         <source>Toggle accidental</source>
         <translation>切换变音号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5707"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8264"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5709"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8266"/>
         <source>Toggle articulation</source>
         <translation>切换运音法记号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5724"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5726"/>
         <source>Toggle augmentation dots</source>
         <translation>切换附点</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5758"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5760"/>
         <source>Add grace note</source>
         <translation>添加倚音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5785"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="708"/>
         <source>Add tuplet</source>
         <translation>添加连音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5806"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5808"/>
         <source>Set beam type</source>
         <translation>设置符杠类型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5818"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5820"/>
         <source>Decrease duration</source>
         <translation>减少时值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5819"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5821"/>
         <source>Increase duration</source>
         <translation>增加时值</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5836"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5838"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>更改楔形记号类型</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5879"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5881"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation>添加力度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5930"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5932"/>
         <source>Toggle layout break</source>
         <translation>切换换行符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5941"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5943"/>
         <source>Move measure to previous system</source>
         <translation>将小节移至上一谱行组</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5952"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5954"/>
         <source>Move measure to next system</source>
         <translation>将小节移至下一谱行组</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5959"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5961"/>
         <source>Lock/unlock selected system(s)</source>
         <translation>锁定/解锁所选谱行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5966"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5968"/>
         <source>Lock/unlock all systems</source>
         <translation>锁定/解锁所有谱行</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5979"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5981"/>
         <source>Create system from selection</source>
         <translation>从选区创建谱行组</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5986"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5988"/>
         <source>Apply system lock to selection</source>
         <translation>将谱行锁应用到选区</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5996"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5998"/>
         <source>Measures per system</source>
         <translation>每行小节</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6003"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6005"/>
         <source>Transposition</source>
         <translation>移调</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6027"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6029"/>
         <source>Swap voices</source>
         <translation>交换声部</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6074"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6076"/>
         <source>Add interval</source>
         <translation>添加音程</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6081"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6083"/>
         <source>Enter note at fret %1</source>
         <translation>在%1品输入音符</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6107"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6109"/>
         <source>Change voice assignment</source>
         <translation>更改声部阵营</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6118"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6120"/>
         <source>Add note-anchored line</source>
         <translation>添加音符锚线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6205"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6207"/>
         <source>Add text</source>
         <translation>添加文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6273"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6275"/>
         <source>Add image</source>
         <translation>添加图片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6292"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6294"/>
         <source>Add figured bass</source>
         <translation>添加数字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6307"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6309"/>
         <source>Increase layout stretch</source>
         <translation>增加小节宽度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6308"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6310"/>
         <source>Decrease layout stretch</source>
         <translation>缩减小节宽度</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6331"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6333"/>
         <source>Add time signature</source>
         <translation>添加拍号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6342"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6344"/>
         <source>Explode</source>
         <translation>分解谱表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6358"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6360"/>
         <source>Implode</source>
         <translation>合并谱表</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6374"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6376"/>
         <source>Realize chord symbols</source>
         <translation>具像化和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6385"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6387"/>
         <source>Extend to next note</source>
         <translation>扩展时值至下一个音符</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6431"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6433"/>
         <source>Delete %Ln measure(s)</source>
         <translation><numerusform>删除%Ln个小节</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6442"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6444"/>
         <source>Delete range</source>
         <translation>删除范围</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6449"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6451"/>
         <source>Remove empty trailing measures</source>
         <translation>移除末尾空小节</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6460"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6462"/>
         <source>Fill with slashes</source>
         <translation>用斜杠填满小节节拍</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6471"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6473"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>切换节奏斜线记谱</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6478"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6480"/>
         <source>Change enharmonic spelling</source>
         <translation>更改异名同音的音名</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6485"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6487"/>
         <source>Optimize enharmonic spelling</source>
         <translation>优化等音拼写</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6492"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6494"/>
         <source>Respell pitches with sharps</source>
         <translation>以升号重注音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6499"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6501"/>
         <source>Respell pitches with flats</source>
         <translation>以降号重注音高</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6506"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6508"/>
         <source>Regroup rhythms</source>
         <translation>重组旋律</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6513"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6515"/>
         <source>Resequence rehearsal marks</source>
         <translation>排练号重排序</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6520"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6522"/>
         <source>Reset layout stretch</source>
         <translation>重置小节拉伸</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6527"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6529"/>
         <source>Reset text style overrides</source>
         <translation>重置文本样式优先级</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6534"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6536"/>
         <source>Reset beams</source>
         <translation>重置符杠</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6551"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6553"/>
         <source>Reset shapes and positions</source>
         <translation>重置形状和位置</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6571"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6573"/>
         <source>Reset to default layout</source>
         <translation>重置为默认版面</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6597"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6599"/>
         <source>Set score view settings</source>
         <translation>设置乐谱视图</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6767"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6769"/>
         <source>Navigate to lyrics</source>
         <translation>导航到唱词</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6898"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6958"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6900"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6960"/>
         <source>Navigate to next syllable</source>
         <translation>导航到下一个音节</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6920"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6922"/>
         <source>Add partial lyrics dash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7124"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7126"/>
         <source>Navigate to verse</source>
         <translation>导航到段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7181"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7271"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7183"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7273"/>
         <source>Navigate to next chord symbol</source>
         <translation>导航到下一个和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7314"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7316"/>
         <source>Navigate to chord symbol</source>
         <translation>导航到和弦符号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7371"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7417"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7373"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7419"/>
         <source>Navigate to next figured bass</source>
         <translation>导航到下一个数字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7465"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7467"/>
         <source>Navigate to figured bass</source>
         <translation>导航到数字低音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7763"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7792"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7853"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7913"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7765"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7794"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7855"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7915"/>
         <source>Enter lyrics extension line</source>
         <translation>输入唱词延长线</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7938"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7940"/>
         <source>Add lyrics verse</source>
         <translation>添加唱词段落</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7978"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
         <source>Enter guitar bend</source>
         <translation>输入吉他弯音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8047"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8049"/>
         <source>Add fretboard diagram</source>
         <translation>添加品格图</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8188"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8190"/>
         <source>Format text</source>
         <translation>格式化文本</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8208"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8210"/>
         <source>Toggle subscript</source>
         <translation>切换下标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8210"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8212"/>
         <source>Toggle superscript</source>
         <translation>切换上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8212"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8214"/>
         <source>Toggle subscript/superscript</source>
         <translation>切换下/上标</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8269"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8271"/>
         <source>Toggle ornament</source>
         <translation>切换装饰音</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8274"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8276"/>
         <source>Toggle automatic placement</source>
         <translation>切换自动排布</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8285"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
         <source>Add clef</source>
         <translation>添加谱号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8290"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8292"/>
         <source>Add accidental</source>
         <translation>添加变音号</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8295"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8297"/>
         <source>Transpose semitone</source>
         <translation>半音移调</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8302"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8304"/>
         <source>Transpose diatonically</source>
         <translation>按全音移调</translation>
     </message>
