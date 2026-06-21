@@ -132,6 +132,8 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>up</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
             <eid>M_M</eid>
             </Dynamic>
           <Chord>
@@ -154,6 +156,7 @@
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <centerBetweenStaves>on</centerBetweenStaves>
             <eid>Q_Q</eid>
             <text><sym>dynamicPP</sym></text>
             </Dynamic>
@@ -176,6 +179,8 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>up</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
             <eid>U_U</eid>
             </Dynamic>
           <Chord>
@@ -197,6 +202,7 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <centerBetweenStaves>on</centerBetweenStaves>
             <eid>Y_Y</eid>
             <text><sym>dynamicMF</sym></text>
             </Dynamic>
@@ -234,7 +240,7 @@
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <voiceAssignment>allInStaff</voiceAssignment>
+            <centerBetweenStaves>on</centerBetweenStaves>
             <eid>f_f</eid>
             <text><sym>dynamicMP</sym></text>
             </Dynamic>

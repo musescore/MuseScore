@@ -528,13 +528,13 @@
     "mnx": {
         "_x": {
             "schemaVersion": {
-                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/17"
+                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/19"
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 17
+        "version": 19
     },
     "parts": [
         {
@@ -565,7 +565,10 @@
                 {
                     "dynamics": [
                         {
-                            "glyph": "dynamicPiano",
+                            "glyphs": [
+                                "dynamicPiano"
+                            ],
+                            "orient": "above",
                             "position": {
                                 "fraction": [
                                     0,
@@ -573,11 +576,15 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "p",
                             "voice": "s1layer1"
                         },
                         {
-                            "glyph": "dynamicPP",
+                            "glyphs": [
+                                "dynamicPP"
+                            ],
+                            "orient": "between",
                             "position": {
                                 "fraction": [
                                     0,
@@ -585,6 +592,7 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "pp",
                             "voice": "s1layer1v2"
                         }
@@ -654,7 +662,10 @@
                 {
                     "dynamics": [
                         {
-                            "glyph": "dynamicMF",
+                            "glyphs": [
+                                "dynamicMF"
+                            ],
+                            "orient": "between",
                             "position": {
                                 "fraction": [
                                     0,
@@ -662,11 +673,15 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "mf",
                             "voice": "s1layer2"
                         },
                         {
-                            "glyph": "dynamicForte",
+                            "glyphs": [
+                                "dynamicForte"
+                            ],
+                            "orient": "above",
                             "position": {
                                 "fraction": [
                                     0,
@@ -674,6 +689,7 @@
                                 ]
                             },
                             "staff": 1,
+                            "type": "immediate",
                             "value": "f",
                             "voice": "s1layer1"
                         }
@@ -749,14 +765,17 @@
                     ],
                     "dynamics": [
                         {
-                            "glyph": "dynamicMP",
+                            "glyphs": [
+                                "dynamicMP"
+                            ],
+                            "orient": "between",
                             "position": {
                                 "fraction": [
                                     1,
                                     4
                                 ]
                             },
-                            "staff": 1,
+                            "type": "immediate",
                             "value": "mp"
                         }
                     ],
