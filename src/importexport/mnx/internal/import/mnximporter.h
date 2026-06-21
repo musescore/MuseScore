@@ -38,10 +38,12 @@ namespace mu::engraving {
 class Articulation;
 class Chord;
 class ChordRest;
+class Dynamic;
 class EngravingObject;
 class EngravingItem;
 class Fermata;
 class Instrument;
+class Hairpin;
 class Measure;
 class Note;
 class Part;
@@ -124,6 +126,8 @@ private:
     void createBeams(const mnx::part::Measure& mnxMeasure);
     void createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::part::PositionedClef>& mnxClefs, engraving::Measure* measure);
     void createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
+    void createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, engraving::Segment* segment, const mnx::Part& mnxPart,
+                       engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
     void createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
 
     // markings
@@ -155,6 +159,10 @@ private:
     engraving::Note* mnxNoteIdToNote(const std::string& noteId);
     static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v);
     engraving::Fraction mnxMeasurePosToTick(const mnx::MeasureRhythmicPosition& measPos);
+    engraving::staff_idx_t resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic);
+    void applyDynamicOrient(engraving::EngravingItem* item, const mnx::Part& part, mnx::MultiStaffOrientation orient);
+    void createHairpin(const mnx::part::DynamicGradual& mnxHairpin, engraving::Segment* segment, const mnx::Part& mnxPart,
+                       engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
 
     // ordered map avoids need for hash on std::pair
     std::map<std::pair<size_t, int>, engraving::staff_idx_t> m_mnxPartStaffToStaff;
