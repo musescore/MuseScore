@@ -1,0 +1,2095 @@
+{
+  "a_name": "DrawData",
+  "a_viewport": [
+    0,
+    0,
+    1134000,
+    496000
+  ],
+  "item": {
+    "a_name": "target_DrawData",
+    "children": [
+      {
+        "a_name": "page_0",
+        "children": [],
+        "datas": [
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#FFFFFF",
+                  "style": 1
+                },
+                "mode": 1,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      0,
+                      0
+                    ],
+                    [
+                      1,
+                      3779532,
+                      0
+                    ],
+                    [
+                      1,
+                      3779532,
+                      1653540
+                    ],
+                    [
+                      1,
+                      0,
+                      1653540
+                    ],
+                    [
+                      1,
+                      0,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 0,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 0
+          },
+          {
+            "polygons": [
+              {
+                "mode": 3,
+                "polygon": [
+                  [
+                    7440,
+                    -169901
+                  ],
+                  [
+                    7440,
+                    87224
+                  ]
+                ]
+              }
+            ],
+            "state": 1
+          },
+          {
+            "polygons": [
+              {
+                "mode": 3,
+                "polygon": [
+                  [
+                    68208,
+                    -169901
+                  ],
+                  [
+                    68208,
+                    87224
+                  ]
+                ]
+              }
+            ],
+            "state": 2
+          },
+          {
+            "state": 3,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  0
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 4,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  0
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 5,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  0
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 6,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  0
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 7,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "4",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 8,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "4",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 9,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "3",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 10,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "3",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 11,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "2",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 12,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "2",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 13,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  12050,
+                  55500
+                ],
+                "text": "1",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 14,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  -123529
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 15,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  40852
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "state": 16,
+            "texts": [
+              {
+                "alignment": 0,
+                "point": [
+                  0,
+                  0
+                ],
+                "text": "",
+                "textFlags": 0
+              }
+            ]
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 0
+                },
+                "mode": 0,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      0,
+                      0
+                    ],
+                    [
+                      2,
+                      0,
+                      41338
+                    ],
+                    [
+                      3,
+                      -49606,
+                      82677
+                    ],
+                    [
+                      3,
+                      -99212,
+                      82677
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 13.228346
+                }
+              }
+            ],
+            "state": 17
+          },
+          {
+            "polygons": [
+              {
+                "mode": 0,
+                "polygon": [
+                  [
+                    419037,
+                    34830
+                  ],
+                  [
+                    1428767,
+                    34830
+                  ],
+                  [
+                    1428767,
+                    43098
+                  ],
+                  [
+                    419037,
+                    43098
+                  ]
+                ]
+              },
+              {
+                "mode": 0,
+                "polygon": [
+                  [
+                    419037,
+                    59633
+                  ],
+                  [
+                    1100130,
+                    59633
+                  ],
+                  [
+                    1100130,
+                    67901
+                  ],
+                  [
+                    419037,
+                    67901
+                  ]
+                ]
+              },
+              {
+                "mode": 0,
+                "polygon": [
+                  [
+                    419037,
+                    84437
+                  ],
+                  [
+                    809245,
+                    84437
+                  ],
+                  [
+                    809245,
+                    92704
+                  ],
+                  [
+                    419037,
+                    92704
+                  ]
+                ]
+              },
+              {
+                "mode": 0,
+                "polygon": [
+                  [
+                    419037,
+                    109240
+                  ],
+                  [
+                    667887,
+                    109240
+                  ],
+                  [
+                    667887,
+                    117507
+                  ],
+                  [
+                    419037,
+                    117507
+                  ]
+                ]
+              }
+            ],
+            "state": 18
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 19
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 20
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 21
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 22
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 23
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 24
+          },
+          {
+            "paths": [
+              {
+                "brush": {
+                  "color": "#000000",
+                  "style": 1
+                },
+                "mode": 2,
+                "path": {
+                  "elements": [
+                    [
+                      0,
+                      62013,
+                      0
+                    ],
+                    [
+                      2,
+                      62013,
+                      4566
+                    ],
+                    [
+                      3,
+                      58312,
+                      8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      8267
+                    ],
+                    [
+                      2,
+                      49179,
+                      8267
+                    ],
+                    [
+                      3,
+                      45478,
+                      4566
+                    ],
+                    [
+                      3,
+                      45478,
+                      0
+                    ],
+                    [
+                      2,
+                      45478,
+                      -4566
+                    ],
+                    [
+                      3,
+                      49179,
+                      -8267
+                    ],
+                    [
+                      3,
+                      53746,
+                      -8267
+                    ],
+                    [
+                      2,
+                      58312,
+                      -8267
+                    ],
+                    [
+                      3,
+                      62013,
+                      -4566
+                    ],
+                    [
+                      3,
+                      62013,
+                      0
+                    ]
+                  ],
+                  "fillRule": 0
+                },
+                "pen": {
+                  "capStyle": 16,
+                  "color": "#000000",
+                  "dashPattern": [],
+                  "joinStyle": 64,
+                  "style": 1,
+                  "width": 1
+                }
+              }
+            ],
+            "state": 25
+          },
+          {
+            "polygons": [
+              {
+                "mode": 3,
+                "polygon": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    107492,
+                    0
+                  ]
+                ]
+              }
+            ],
+            "state": 26
+          }
+        ]
+      }
+    ],
+    "datas": []
+  },
+  "states": {
+    "0": {
+      "brush": {
+        "color": "#FFFFFF",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": -1,
+        "type": 0,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 0,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        0,
+        0,
+        1000
+      ]
+    },
+    "1": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": -1,
+        "type": 0,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 0,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 14.88189
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        1078229,
+        201887,
+        1000
+      ]
+    },
+    "10": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        238872,
+        189490,
+        1000
+      ]
+    },
+    "11": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        541511,
+        189490,
+        1000
+      ]
+    },
+    "12": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        302969,
+        189490,
+        1000
+      ]
+    },
+    "13": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        398386,
+        189490,
+        1000
+      ]
+    },
+    "14": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        42583,
+        201887,
+        1000
+      ]
+    },
+    "15": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        42583,
+        201887,
+        1000
+      ]
+    },
+    "16": {
+      "brush": {
+        "color": "#000000",
+        "style": 0
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 13.228346
+      },
+      "transform": [
+        299,
+        -5,
+        0,
+        5,
+        299,
+        0,
+        491354,
+        185151,
+        1000
+      ]
+    },
+    "17": {
+      "brush": {
+        "color": "#000000",
+        "style": 0
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 13.228346
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        533326,
+        195688,
+        1000
+      ]
+    },
+    "18": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 0,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        28346,
+        201887,
+        1000
+      ]
+    },
+    "19": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        302969,
+        165409,
+        1000
+      ]
+    },
+    "2": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": -1,
+        "type": 0,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 0,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 45.472441
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        1078229,
+        201887,
+        1000
+      ]
+    },
+    "20": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        398386,
+        165409,
+        1000
+      ]
+    },
+    "21": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        238872,
+        165409,
+        1000
+      ]
+    },
+    "22": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        541511,
+        165409,
+        1000
+      ]
+    },
+    "23": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        196465,
+        165409,
+        1000
+      ]
+    },
+    "24": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        154057,
+        165409,
+        1000
+      ]
+    },
+    "25": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        756198,
+        165409,
+        1000
+      ]
+    },
+    "26": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 0,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 8.267717
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        794895,
+        189490,
+        1000
+      ]
+    },
+    "27": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Bravura",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 0,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 8.267717
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        0,
+        0,
+        1000
+      ]
+    },
+    "3": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        123645,
+        189490,
+        1000
+      ]
+    },
+    "4": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        713185,
+        189490,
+        1000
+      ]
+    },
+    "5": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        279801,
+        189490,
+        1000
+      ]
+    },
+    "6": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "Leland",
+        "hinting": 2,
+        "italic": false,
+        "no_merging": true,
+        "pointSize": 66.141732,
+        "type": 5,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        372043,
+        189490,
+        1000
+      ]
+    },
+    "7": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        154057,
+        189490,
+        1000
+      ]
+    },
+    "8": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        196465,
+        189490,
+        1000
+      ]
+    },
+    "9": {
+      "brush": {
+        "color": "#000000",
+        "style": 1
+      },
+      "compositionMode": 0,
+      "font": {
+        "family": "FreeSans",
+        "hinting": 0,
+        "italic": false,
+        "no_merging": false,
+        "pointSize": 30,
+        "type": 6,
+        "weight": 50
+      },
+      "isAntialiasing": true,
+      "pen": {
+        "capStyle": 16,
+        "color": "#000000",
+        "dashPattern": [],
+        "joinStyle": 64,
+        "style": 1,
+        "width": 1
+      },
+      "transform": [
+        300,
+        0,
+        0,
+        0,
+        299,
+        0,
+        756198,
+        189490,
+        1000
+      ]
+    }
+  }
+}
