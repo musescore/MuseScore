@@ -167,10 +167,12 @@ target_sources(engraving PRIVATE
     editing/splitjoinmeasure.h
     editing/textedit.cpp
     editing/textedit.h
+    editing/transaction/undoablecommand.cpp
+    editing/transaction/undoablecommand.h
+    editing/transaction/undostack.cpp
+    editing/transaction/undostack.h
     editing/transpose.cpp
     editing/transpose.h
-    editing/undo.cpp
-    editing/undo.h
 
     rw/ireader.h
     rw/iwriter.h

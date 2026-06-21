@@ -2855,7 +2855,7 @@ void NotationUiActions::init()
         }
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
         updateActionsEnabled(actionsList());
     });
 

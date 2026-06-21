@@ -31,6 +31,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/editing/textedit.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

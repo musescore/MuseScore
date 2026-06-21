@@ -21,12 +21,7 @@
  */
 #include "tie.h"
 
-#include <cmath>
-
-#include "draw/types/transform.h"
-
 #include "../editing/mscoreview.h"
-#include "../editing/undo.h"
 
 #include "accidental.h"
 #include "barline.h"

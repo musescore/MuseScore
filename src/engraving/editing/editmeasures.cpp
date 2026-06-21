@@ -85,7 +85,7 @@ void InsertRemoveMeasures::insertMeasures()
     Segment* fs = nullptr;
     Segment* ls = nullptr;
     if (fm->isMeasure()) {
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
         fs = toMeasure(fm)->first();
         ls = toMeasure(lm)->last();
         for (Segment* s = fs; s && s != ls; s = s->next1()) {
@@ -294,7 +294,7 @@ void InsertRemoveMeasures::removeMeasures()
 
     if (fm->isMeasure()) {
         score->setUpTempoMap();
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
 
         // check if there is a clef at the end of last measure
         // remove clef from staff cleflist
@@ -343,12 +343,12 @@ void InsertRemoveMeasures::removeMeasures()
             // erase system from score
             muse::remove(score->systems(), s);
             // finally delete system
-            score->deleteLater(s);
+            s->deleteLater();
 
             if (page && page->systems().empty()) {
                 // if page is empty, delete it as well
                 muse::remove(score->pages(), page);
-                score->deleteLater(page);
+                page->deleteLater();
             }
         }
     }

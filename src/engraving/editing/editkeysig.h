@@ -22,13 +22,13 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/key.h"
 #include "../dom/keysig.h"
 
 namespace mu::engraving {
-class ChangeKeySig : public UndoCommand
+class ChangeKeySig : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeKeySig)
 

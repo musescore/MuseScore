@@ -1795,7 +1795,6 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::VISIBLE:
         setVisible(v.toBool());
         masterScore()->rebuildMidiMapping();
-        score()->setPlaylistDirty();
         break;
     case Pid::STAFF_CUTAWAY:
         setCutaway(v.toBool());

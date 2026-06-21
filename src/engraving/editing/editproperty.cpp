@@ -46,10 +46,6 @@ void ChangeProperty::flip(EditData*)
     element->setProperty(id, property);
     element->setPropertyFlags(id, flags);
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), element->score());
-    }
-
     property = v;
     flags = ps;
 }

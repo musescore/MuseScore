@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/staff.h"
 
 namespace mu::engraving {
-class RemoveBracket : public UndoCommand
+class RemoveBracket : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveBracket)
 
@@ -48,7 +48,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class AddBracket : public UndoCommand
+class AddBracket : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddBracket)
 

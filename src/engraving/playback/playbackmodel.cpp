@@ -22,8 +22,6 @@
 
 #include "playbackmodel.h"
 
-#include <limits>
-
 #include "dom/fret.h"
 #include "dom/harmony.h"
 #include "dom/instrument.h"
@@ -36,7 +34,8 @@
 #include "dom/segment.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
-#include "editing/undo.h"
+
+#include "editing/transaction/undoablecommand.h"
 
 #include "defer.h"
 #include "log.h"

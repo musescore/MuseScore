@@ -48,6 +48,10 @@ jobs:
       run: |
         sudo docker system prune -a -f
         sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc /usr/local/.ghcup
+        sudo rm -rf /usr/share/swift
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
@@ -91,10 +95,11 @@ jobs:
     - name: Code coverage
       if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'
       run: |
-        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info
+        lcov --capture --directory "$(pwd)/build.debug/" --output-file coverage.info --ignore-errors mismatch,inconsistent,gcov,negative
+        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' '*/moc_*' '*framework/Headers/*' '*.framework/*' '*/hb-*' '*/Qt/*' --output-file filtered_coverage.info --ignore-errors unused
 
-        python3 buildscripts/ci/linux/tools/lcov_badger.py filtered_coverage.info coverage_badge.svg
+        COVERAGE=$(lcov --summary filtered_coverage.info --ignore-errors inconsistent,corrupt,unsupported,empty,negative,mismatch,gcov | grep -oP 'lines\.+:\s+\K[0-9.]+')
+        python3 buildscripts/ci/linux/tools/lcov_badger.py "${COVERAGE}" coverage_badge.svg
 
     - name: Push to S3
       if: ( github.event_name == 'schedule' || inputs.code_coverage ) && github.repository == 'musescore/MuseScore'

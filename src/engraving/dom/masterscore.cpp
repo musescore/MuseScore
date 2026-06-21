@@ -25,6 +25,7 @@
 
 #include "compat/writescorehook.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -151,12 +152,11 @@ IAutomation* MasterScore::automation() const
 }
 
 //---------------------------------------------------------
-//   setPlaylistDirty
+//   invalidateRepeatLists
 //---------------------------------------------------------
 
-void MasterScore::setPlaylistDirty()
+void MasterScore::invalidateRepeatList()
 {
-    m_playlistDirty = true;
     m_expandedRepeatList->setScoreChanged();
     m_nonExpandedRepeatList->setScoreChanged();
 }
@@ -171,7 +171,7 @@ void MasterScore::setExpandRepeats(bool expand)
         return;
     }
     m_expandRepeats = expand;
-    setPlaylistDirty();
+    invalidateRepeatList();
 }
 
 //---------------------------------------------------------

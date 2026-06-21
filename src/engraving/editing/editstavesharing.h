@@ -21,12 +21,15 @@
  */
 #pragma once
 
-#include "undo.h"
+#include <vector>
 
 namespace mu::engraving {
 class Instrument;
 class KeyList;
+class Part;
+class Score;
 class SharedPart;
+class StaffType;
 
 using StaveSharingGroup = std::vector<Part*>;
 using StaveSharingGroups = std::vector<StaveSharingGroup>;
@@ -48,41 +51,5 @@ private:
 
     static void connectSharedPart(SharedPart* sharedPart, Part* originPart);
     static void disconnectSharedPart(SharedPart* sharedPart, Part* originPart);
-};
-
-class ConnectSharedPart : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ConnectSharedPart)
-
-    SharedPart* sharedPart = nullptr;
-    Part* originPart = nullptr;
-
-public:
-    ConnectSharedPart(SharedPart* s, Part* o)
-        : sharedPart(s), originPart(o) {}
-
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-    UNDO_TYPE(CommandType::ConnectSharedPart)
-    UNDO_NAME("Connect shared part")
-};
-
-class DisconnectSharedPart : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, DisconnectSharedPart)
-
-    SharedPart* sharedPart = nullptr;
-    Part* originPart = nullptr;
-
-public:
-    DisconnectSharedPart(SharedPart* s, Part* o)
-        : sharedPart(s), originPart(o) {}
-
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-    UNDO_TYPE(CommandType::DisconnectSharedPart)
-    UNDO_NAME("Disconnect shared part")
 };
 }

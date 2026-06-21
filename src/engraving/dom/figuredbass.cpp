@@ -24,7 +24,6 @@
 
 #include "io/file.h"
 
-#include "../editing/undo.h"
 #include "rw/xmlreader.h"
 #include "style/textstyle.h"
 

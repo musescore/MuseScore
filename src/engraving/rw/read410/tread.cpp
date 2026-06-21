@@ -105,6 +105,7 @@
 #include "../../dom/soundflag.h"
 #include "../../dom/spacer.h"
 #include "../../dom/spanner.h"
+#include "../../dom/staff.h"
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
@@ -3306,10 +3307,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             n->add(s);
         }

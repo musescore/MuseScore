@@ -29,7 +29,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 #include "engraving/types/types.h"
 
 #include "connectorinforeader.h"
@@ -133,7 +133,7 @@ void ReadContext::addSpanner(Spanner* s)
 
 bool ReadContext::undoStackActive() const
 {
-    return m_score->undoStack()->hasActiveCommand();
+    return m_score->undoStack()->hasActiveTransaction();
 }
 
 bool ReadContext::isSameScore(const EngravingObject* obj) const

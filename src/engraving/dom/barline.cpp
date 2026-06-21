@@ -24,7 +24,6 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
 #include "../types/symnames.h"
 
 #include "articulation.h"

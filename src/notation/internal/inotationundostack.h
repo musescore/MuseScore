@@ -50,7 +50,7 @@ public:
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 
-    virtual void mergeCommands(const size_t startIdx) = 0;
+    virtual void mergeTransactions(const size_t startIdx) = 0;
 
     virtual bool isStackClean() const = 0;
 

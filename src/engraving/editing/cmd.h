@@ -37,7 +37,6 @@ struct UpdateState
     bool playNote = false;       ///< play selected note after command
     bool playChord = false;      ///< play whole chord for the selected note
     bool selectionChanged = false;
-    std::vector<EngravingObject*> deleteList;
 };
 
 //---------------------------------------------------------
@@ -73,6 +72,9 @@ public:
     staff_idx_t endStaff() const { return m_endStaff; }
     const EngravingItem* element() const;
 
+    void deleteLater(EngravingObject* e);
+    std::vector<EngravingObject*> takePostponedDeletions();
+
     void lock() { m_locked = true; }
     void unlock() { m_locked = false; }
 #ifndef NDEBUG
@@ -91,6 +93,7 @@ private:
     const MeasureBase* m_mb = nullptr;
     bool m_oneElement = true;
     bool m_oneMeasureBase = true;
+    std::vector<EngravingObject*> m_postponedDeletions;
 
     bool m_locked = false;
 };

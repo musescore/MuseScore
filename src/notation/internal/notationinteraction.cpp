@@ -1388,7 +1388,11 @@ void NotationInteraction::endDrag()
 
     if (m_editData.isHairpinDragCreatedFromDynamic) {
         // Merge the two actions of hairpin creation + hairpin drag
-        m_undoStack->mergeCommands(m_undoStack->currentStateIndex() - 2);
+        assert(m_undoStack->currentStateIndex() >= 2);
+        if (m_undoStack->currentStateIndex() >= 2) {
+            m_undoStack->mergeTransactions(m_undoStack->currentStateIndex() - 2);
+        }
+        m_editData.isHairpinDragCreatedFromDynamic = false;
     }
 
     notifyAboutDragChanged();
@@ -4531,6 +4535,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
+
+    m_editData.isEditMode = isEditingElement();
 
     //: Means: an editing operation triggered by a keystroke
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));

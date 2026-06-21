@@ -23,6 +23,7 @@
 
 #include "../editing/editspanner.h"
 #include "../editing/mscoreview.h"
+#include "../editing/transaction/undostack.h"
 
 #include "arpeggio.h"
 #include "beam.h"

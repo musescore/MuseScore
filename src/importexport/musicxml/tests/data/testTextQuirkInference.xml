@@ -7,7 +7,8 @@
   <identification>
     <creator type="composer">Henry Ives</creator>
     <encoding>
-      <software>MuseScore 0.7.0</software>
+      <software>Sibelius 20231.1</software>
+      <software>Dolet 6.6 for Sibelius</software>
       <encoding-date>2007-09-10</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>

@@ -24,7 +24,6 @@ ARTIFACTS_DIR=build.artifacts
 S3_KEY=""
 S3_SECRET=""
 S3_URL=""
-S3_BUCKET=""
 
 CURRENT_FILE_NAME=""
 PREVIOUS_FILE_NAME=""
@@ -34,7 +33,6 @@ while [[ "$#" -gt 0 ]]; do
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         --s3_url) S3_URL="$2"; shift ;;
-        --s3_bucket) S3_BUCKET="$2"; shift ;;
         --current_file_name) CURRENT_FILE_NAME="$2"; shift ;;
         --previous_file_name) PREVIOUS_FILE_NAME="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -48,7 +46,6 @@ bash ./buildscripts/ci/release/get_file_from_s3.sh \
     --s3_key "${S3_KEY}" \
     --s3_secret "${S3_SECRET}" \
     --s3_url "${S3_URL}" \
-    --s3_bucket "${S3_BUCKET}" \
     --local_file_name "${PREVIOUS_FILE_NAME}"
 
 echo "=== Append release info to previous releases ==="

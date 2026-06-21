@@ -125,7 +125,6 @@
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
-#include "engraving/editing/undo.h"
 
 #include "../shared/musicxmlfonthandler.h"
 #include "../shared/musicxmlsupport.h"
@@ -1836,7 +1835,11 @@ void ExportMusicXml::barlineLeft(const Measure* const m, const track_idx_t track
         ending(m_xml, volta, true);
     }
     if (rs) {
-        m_xml.tag("repeat", { { "direction", "forward" } });
+        XmlWriter::Attributes attrs = { { "direction", "forward" } };
+        if (m_score->style().styleB(Sid::repeatBarTips)) {
+            attrs.push_back({ "winged", "curved" });
+        }
+        m_xml.tag("repeat", attrs);
     }
     m_xml.endElement();
 }
@@ -2105,11 +2108,14 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     }
 
     if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT) {
+        XmlWriter::Attributes attrs = { { "direction", "backward" } };
         if (m->repeatCount() > 2) {
-            m_xml.tag("repeat", { { "direction", "backward" }, { "times", m->repeatCount() } });
-        } else {
-            m_xml.tag("repeat", { { "direction", "backward" } });
+            attrs.push_back({ "times", m->repeatCount() });
         }
+        if (m_score->style().styleB(Sid::repeatBarTips)) {
+            attrs.push_back({ "winged", "curved" });
+        }
+        m_xml.tag("repeat", attrs);
     }
 
     m_xml.endElement();

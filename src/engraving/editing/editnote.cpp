@@ -38,8 +38,9 @@
 #include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/stringdata.h"
-#include "dom/tapping.h"
 #include "dom/utils.h"
+
+#include "editing/transaction/undostack.h"
 
 using namespace mu::engraving;
 
@@ -47,7 +48,7 @@ using namespace mu::engraving;
 //   ChangePitch
 //---------------------------------------------------------
 
-class ChangePitch : public UndoCommand
+class ChangePitch : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePitch)
 
@@ -97,7 +98,7 @@ public:
 //    fret and string numbers for (potentially) all the notes of all the chords of a segment.
 //---------------------------------------------------------
 
-class ChangeFretting : public UndoCommand
+class ChangeFretting : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeFretting)
 
@@ -696,7 +697,6 @@ void ChangeVelocity::flip(EditData*)
 
 void ChangeNoteEventList::flip(EditData*)
 {
-    note->score()->setPlaylistDirty();
     // Get copy of current list.
     NoteEventList nel = note->playEvents();
     // Replace current copy with new list.
@@ -717,7 +717,6 @@ void ChangeNoteEventList::flip(EditData*)
 
 void ChangeNoteEvent::flip(EditData*)
 {
-    note->score()->setPlaylistDirty();
     NoteEvent e = *oldEvent;
     *oldEvent   = newEvent;
     newEvent    = e;
@@ -735,7 +734,6 @@ void ChangeNoteEvent::flip(EditData*)
 
 void ChangeChordPlayEventType::flip(EditData*)
 {
-    chord->score()->setPlaylistDirty();
     // Flips data between NoteEventList's.
     size_t n = chord->notes().size();
     for (size_t i = 0; i < n; ++i) {

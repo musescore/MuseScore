@@ -26,11 +26,7 @@
 #include "translation.h"
 
 #include "draw/fontmetrics.h"
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 
-#include "../editing/textedit.h"
-#include "../editing/undo.h"
 #include "../editing/transpose.h"
 
 #include "chordlist.h"

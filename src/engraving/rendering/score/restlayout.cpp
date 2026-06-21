@@ -28,6 +28,7 @@
 
 #include "dom/beam.h"
 #include "dom/durationline.h"
+#include "dom/staff.h"
 #include "dom/system.h"
 
 using namespace muse;

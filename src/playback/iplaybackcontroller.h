@@ -47,11 +47,6 @@ public:
     virtual muse::async::Notification isPlayAllowedChanged() const = 0;
 
     virtual bool isPlaying() const = 0;
-    virtual muse::async::Notification isPlayingChanged() const = 0;
-
-    virtual void reset() = 0;
-
-    virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
 
     virtual bool isPlaybackInited() const = 0;
     virtual muse::async::Channel<bool> playbackInitedChanged() const = 0;

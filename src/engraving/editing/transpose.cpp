@@ -734,7 +734,7 @@ int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlat
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmony : public UndoCommand
+class TransposeHarmony : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
@@ -784,7 +784,7 @@ void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval in
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmonyDiatonic : public UndoCommand
+class TransposeHarmonyDiatonic : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
 

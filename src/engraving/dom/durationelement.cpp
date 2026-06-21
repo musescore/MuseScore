@@ -22,12 +22,12 @@
 
 #include "durationelement.h"
 
-#include "../editing/undo.h"
-
 #include "property.h"
 #include "score.h"
 #include "staff.h"
 #include "tuplet.h"
+
+#include "editing/transaction/undostack.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -123,7 +123,7 @@ Fraction DurationElement::actualTicks() const
 void DurationElement::readAddTuplet(Tuplet* t)
 {
     setTuplet(t);
-    if (!score()->undoStack()->hasActiveCommand()) { // HACK, also added in Undo::AddElement()
+    if (!score()->undoStack()->hasActiveTransaction()) { // HACK, also added in Undo::AddElement()
         t->add(this);
     }
 }

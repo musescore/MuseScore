@@ -512,6 +512,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
     if (globalConfiguration()->devModeEnabled()) {
         MenuItemList actionsItems {
             makeMenuItem("diagnostic-show-actions"),
+            makeMenuItem("diagnostic-show-rcommands"),
             makeMenuItem("action://diagnostic/actions/query"),
             makeMenuItem("action://diagnostic/actions/query_params1?param1=val1"),
             makeMenuItem("action://diagnostic/actions/query_params2?param1=val1")

@@ -187,7 +187,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
 {
-    return globalContext()->playbackState()->playbackStatus() == muse::audio::PlaybackStatus::Running;
+    return globalContext()->playbackState()->isPlaying();
 }
 
 void NotationRegionsBeingProcessedModel::clear()
