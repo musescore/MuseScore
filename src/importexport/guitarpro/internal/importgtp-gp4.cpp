@@ -21,6 +21,7 @@
  */
 
 #include "importgtp.h"
+#include "utils.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
@@ -1196,6 +1197,7 @@ bool GuitarPro4::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     m_guitarBendImporter->applyBendsToChords();
+    utils::addPlayCountTexts(score);
 
     return true;
 }
