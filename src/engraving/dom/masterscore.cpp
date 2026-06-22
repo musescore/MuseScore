@@ -154,6 +154,11 @@ IAutomation* MasterScore::automation() const
     return m_automationController->automation();
 }
 
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+{
+    m_automationController->insertTime(this, tick, len);
+}
+
 //---------------------------------------------------------
 //   invalidateRepeatLists
 //---------------------------------------------------------
@@ -384,6 +389,15 @@ void MasterScore::initAutomation()
         return;
     }
     m_automationController->init(this);
+}
+
+void MasterScore::updateAutomation(const ScoreChanges& changes)
+{
+    NOT_IMPLEMENTED;
+    UNUSED(changes);
+
+    //! TODO
+    //m_automationController->update(this, changes);
 }
 
 //---------------------------------------------------------

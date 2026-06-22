@@ -148,6 +148,19 @@ void Automation::setPointOutValue(const AutomationCurveKey& key, int utick, doub
     p.outValue = value;
 }
 
+void Automation::removePoints(const PointRemoveAccepted& accepted)
+{
+    for (auto& [key, curve] : m_curveMap) {
+        for (auto it = curve.begin(); it != curve.end();) {
+            it = accepted(key, it->first, it->second) ? curve.erase(it) : std::next(it);
+        }
+    }
+
+    for (auto it = m_curveMap.begin(); it != m_curveMap.end();) {
+        it = it->second.empty() ? m_curveMap.erase(it) : std::next(it);
+    }
+}
+
 void Automation::moveTicks(int utickFrom, int diff)
 {
     for (auto& [_, curve] : m_curveMap) {
@@ -178,15 +191,15 @@ void Automation::removeTicks(int utickFrom, int utickTo)
         return;
     }
 
-    const int diff = -(utickTo - utickFrom + 1);
-
     for (auto& [_, curve] : m_curveMap) {
-        auto eraseFrom = curve.lower_bound(utickFrom);
-        auto eraseTo = curve.upper_bound(utickTo);
-
-        curve.erase(eraseFrom, eraseTo);
-        moveTicks(utickTo, diff);
+        curve.erase(curve.lower_bound(utickFrom), curve.upper_bound(utickTo));
     }
+
+    for (auto it = m_curveMap.begin(); it != m_curveMap.end();) {
+        it = it->second.empty() ? m_curveMap.erase(it) : std::next(it);
+    }
+
+    moveTicks(utickTo, utickFrom - utickTo);
 }
 
 void Automation::read(const muse::ByteArray& json)

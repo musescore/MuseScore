@@ -22,6 +22,11 @@
 
 #include "automationcontroller.h"
 
+#include <set>
+#include <unordered_set>
+
+#include "global/containers.h"
+
 #include "engraving/dom/score.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
@@ -76,9 +81,36 @@ static const std::unordered_map<DynamicType, std::pair<double, double> > COMPOUN
     { DynamicType::SFPP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::PP) } },
 };
 
-static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type)
+static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx,
+                           staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo,
+                           AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
+{
+    if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
+        return;
+    }
+
+    const Staff* staff = score ? score->staff(staffIdx) : nullptr;
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    if (!staff->isPrimaryStaff()) {
+        return; // ignore linked staves
+    }
+
+    key.staffId = staff->id();
+    result.push_back(key);
+}
+
+static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type,
+                                                   staff_idx_t staffIdxFrom = muse::nidx,
+                                                   staff_idx_t staffIdxTo = muse::nidx)
 {
     const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
+    const staff_idx_t from = hasStaffFilter ? staffIdxFrom : 0;
+    const staff_idx_t to = hasStaffFilter ? staffIdxTo : muse::nidx;
+    const Score* score = item->score();
 
     std::vector<AutomationCurveKey> result;
     AutomationCurveKey key;
@@ -86,9 +118,8 @@ static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, Au
 
     switch (voiceAssignment) {
     case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
-        const Score* score = item->score();
         const Part* part = item->part();
-        IF_ASSERT_FAILED(score && part) {
+        IF_ASSERT_FAILED(part) {
             return result;
         }
 
@@ -97,46 +128,15 @@ static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, Au
         result.reserve(endStaffIdx - startStaffIdx);
 
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
-            const Staff* staff = score->staff(staffIdx);
-            IF_ASSERT_FAILED(staff) {
-                continue;
-            }
-
-            if (!staff->isPrimaryStaff()) {
-                continue; // ignore linked staves
-            }
-
-            key.staffId = staff->id();
-            result.push_back(key);
+            tryAddStaffKey(score, staffIdx, from, to, key, result);
         }
     } break;
-    case VoiceAssignment::ALL_VOICE_IN_STAFF: {
-        const Staff* staff = item->staff();
-        IF_ASSERT_FAILED(staff) {
-            return result;
-        }
-
-        if (!staff->isPrimaryStaff()) {
-            return result; // ignore linked staves
-        }
-
-        key.staffId = staff->id();
-        result.push_back(key);
-    } break;
-    case VoiceAssignment::CURRENT_VOICE_ONLY: {
-        const Staff* staff = item->staff();
-        IF_ASSERT_FAILED(staff) {
-            return result;
-        }
-
-        if (!staff->isPrimaryStaff()) {
-            return result; // ignore linked staves
-        }
-
-        key.staffId = staff->id();
+    case VoiceAssignment::CURRENT_VOICE_ONLY:
         key.voiceIdx = item->voice();
-        result.push_back(key);
-    } break;
+        // fallthrough
+    case VoiceAssignment::ALL_VOICE_IN_STAFF:
+        tryAddStaffKey(score, item->staffIdx(), from, to, key, result);
+        break;
     }
 
     return result;
@@ -270,45 +270,163 @@ AutomationController::~AutomationController()
     delete m_automation;
 }
 
-void AutomationController::init(Score* score)
+static bool isRelevantChange(const ScoreChanges& changes)
+{
+    static const std::unordered_set<ElementType> RELEVANT_TYPES {
+        ElementType::DYNAMIC,
+        ElementType::HAIRPIN,
+        ElementType::HAIRPIN_SEGMENT,
+    };
+
+    for (const ElementType type : changes.changedTypes) {
+        if (muse::contains(RELEVANT_TYPES, type)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void AutomationController::init(const Score* score)
 {
     TRACEFUNC;
 
-    m_automation->clear();
+    update(score, 0, muse::nidx, muse::nidx);
+}
 
-    for (const RepeatSegment* repeatSegment : score->repeatList()) {
-        const int tickOffset = repeatSegment->utick - repeatSegment->tick;
+void AutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
+{
+    const int diff = len.ticks();
+    if (m_automation->isEmpty() || diff == 0) {
+        return;
+    }
 
-        for (const Measure* measure : repeatSegment->measureList()) {
-            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
-                addSegmentPoints(segment, tickOffset);
-            }
-        }
+    const int utick = score->repeatList().tick2utick(tick.ticks());
 
-        addSpannerPoints(score, repeatSegment->tick, repeatSegment->endTick(), tickOffset);
+    if (diff < 0) {
+        m_automation->removeTicks(utick + diff, utick);
+    } else if (diff > 0) {
+        m_automation->moveTicks(utick, diff);
     }
 }
 
-void AutomationController::addSegmentPoints(const Segment* segment, int tickOffset)
+void AutomationController::update(const Score* score, const ScoreChanges& changes)
 {
+    if (changes.isTextEditing || !isRelevantChange(changes)) {
+        return;
+    }
+
+    const int tickFrom = std::max(changes.tickFrom, 0);
+
+    // VoiceAssignment change shifts which staves a dynamic/hairpin covers, so the old points
+    // on staves outside the new assignment must also be cleared
+    const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+    if (voiceAssignmentChanged) {
+        update(score, tickFrom, muse::nidx, muse::nidx);
+    } else {
+        update(score, tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
+    }
+}
+
+void AutomationController::update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo)
+{
+    TRACEFUNC;
+
+    if (!score) {
+        m_automation->clear();
+        return;
+    }
+
+    const RepeatList& repeatList = score->repeatList();
+    const auto repeatFromIt = std::find_if(repeatList.cbegin(), repeatList.cend(),
+                                           [tickFrom](const RepeatSegment* seg) {
+        return seg->endTick() > tickFrom;
+    });
+
+    if (repeatFromIt == repeatList.cend()) {
+        m_automation->clear();
+        return;
+    }
+
+    removeGeneratedPoints(score, *repeatFromIt, tickFrom, staffIdxFrom, staffIdxTo);
+
+    for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
+        const RepeatSegment* seg = *it;
+        const int tickOffset = seg->utick - seg->tick;
+        const int measureFrom = std::max(seg->tick, tickFrom);
+
+        for (const Measure* measure : seg->measureList()) {
+            if (measure->endTick().ticks() <= measureFrom) {
+                continue;
+            }
+
+            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+                if (segment->annotations().empty() || segment->tick().ticks() < measureFrom) {
+                    continue;
+                }
+
+                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo);
+            }
+        }
+
+        addSpannerPoints(score, seg->tick, seg->endTick(), tickOffset, staffIdxFrom, staffIdxTo);
+    }
+}
+
+void AutomationController::removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom,
+                                                 size_t staffIdxFrom, size_t staffIdxTo)
+{
+    const int tickOffset = seg->utick - seg->tick;
+    const int clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
+    const staff_idx_t fromIdx = hasStaffFilter ? staffIdxFrom : 0;
+    const staff_idx_t toIdx = hasStaffFilter ? staffIdxTo : score->nstaves() - 1;
+
+    std::set<muse::ID> staffIds;
+    for (staff_idx_t staffIdx = fromIdx; staffIdx <= toIdx; ++staffIdx) {
+        if (const Staff* staff = score->staff(staffIdx)) {
+            staffIds.insert(staff->id());
+        }
+    }
+
+    m_automation->removePoints([clearFromTick, &staffIds](const AutomationCurveKey& key, int utick, const AutomationPoint& point) {
+        return utick >= clearFromTick
+               && key.type == AutomationType::Dynamics
+               && point.itemId.has_value()
+               && muse::contains(staffIds, key.staffId);
+    });
+}
+
+void AutomationController::addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo)
+{
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
+
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation) {
             continue;
         }
 
+        if (hasStaffFilter) {
+            const staff_idx_t staffIdx = annotation->staffIdx();
+            if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
+                continue;
+            }
+        }
+
         if (annotation->isDynamic()) {
-            addDynamicPoints(toDynamic(annotation), tickOffset);
+            addDynamicPoints(toDynamic(annotation), tickOffset, staffIdxFrom, staffIdxTo);
         }
     }
 }
 
-void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset)
+void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset,
+                                            size_t staffIdxFrom, size_t staffIdxTo)
 {
     if (!dynamic->playDynamic()) {
         return;
     }
 
-    const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics);
+    const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, staffIdxFrom, staffIdxTo);
     for (const AutomationCurveKey& key : keys) {
         addDynamicPoints(dynamic, tickOffset, key);
     }
@@ -377,12 +495,15 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
     }
 }
 
-void AutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset)
+void AutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset,
+                                            size_t staffIdxFrom, size_t staffIdxTo)
 {
     const SpannerMap& spannerMap = score->spannerMap();
     if (spannerMap.empty()) {
         return;
     }
+
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 
     const auto& intervals = spannerMap.findOverlapping(repeatStartTick + 1, repeatEndTick - 1);
     for (const auto& interval : intervals) {
@@ -391,8 +512,16 @@ void AutomationController::addSpannerPoints(const Score* score, int repeatStartT
             continue;
         }
 
+        if (hasStaffFilter) {
+            const staff_idx_t staffIdx = spanner->staffIdx();
+            if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
+                continue;
+            }
+        }
+
         const Hairpin* hairpin = toHairpin(spanner);
-        const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics);
+        const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics,
+                                                                 staffIdxFrom, staffIdxTo);
         for (const AutomationCurveKey& key : keys) {
             addHairpinPoints(hairpin, tickOffset, key);
         }
@@ -451,12 +580,12 @@ void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffs
     // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
     const bool useNominalValueTo = hasNominalValueTo
                                    && (isCrescendo ? nominalValueTo.value() > valueFrom
-                                                   : nominalValueTo.value() < valueFrom);
+                                       : nominalValueTo.value() < valueFrom);
 
     // --- Check end tick
     const double valueTo = useNominalValueTo
-                                   ? nominalValueTo.value()
-                                   : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
+                           ? nominalValueTo.value()
+                           : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
     auto endPointToIt = curve.find(hairpinTo);
     if (endPointToIt != curve.cend()) {

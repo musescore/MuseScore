@@ -193,6 +193,10 @@ public:
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
 
+    void updateAutomation(const ScoreChanges& changes);
+
+    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
+
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();

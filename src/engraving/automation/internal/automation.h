@@ -38,6 +38,8 @@ public:
     void removePoint(const AutomationCurveKey& key, int utick) override;
     void movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick) override;
 
+    void removePoints(const PointRemoveAccepted& accepted) override;
+
     void setPointInValue(const AutomationCurveKey& key, int utick, double value) override;
     void setPointOutValue(const AutomationCurveKey& key, int utick, double value) override;
 

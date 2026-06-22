@@ -192,6 +192,7 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
     m_masterScore->cmdState().reset();
 
     if (!isCurrentTransactionEmpty && !rollback) {
+        m_masterScore->updateAutomation(changes);
         m_masterScore->changesChannel().send(changes);
     }
 }
@@ -255,5 +256,6 @@ void TransactionManager::undoRedo(bool undo, EditData* editData)
     m_masterScore->updateSelection();
 
     ScoreChanges result = buildScoreChanges(m_masterScore->cmdState(), changes);
+    m_masterScore->updateAutomation(result);
     m_masterScore->changesChannel().send(result);
 }

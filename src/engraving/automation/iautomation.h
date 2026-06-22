@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <functional>
+
 #include "automationtypes.h"
 
 #include "global/types/bytearray.h"
@@ -42,13 +44,16 @@ public:
     virtual void removePoint(const AutomationCurveKey& key, int utick) = 0;
     virtual void movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick) = 0;
 
+    using PointRemoveAccepted = std::function<bool(const AutomationCurveKey&, int utick, const AutomationPoint&)>;
+    virtual void removePoints(const PointRemoveAccepted& accepted) = 0;
+
     virtual void setPointInValue(const AutomationCurveKey& key, int utick, double value) = 0;
     virtual void setPointOutValue(const AutomationCurveKey& key, int utick, double value) = 0;
 
-    //! NOTE: moves all points with keys >= utickFrom by diff ticks
+    //! NOTE: moves all points with utick >= utickFrom by diff ticks
     virtual void moveTicks(int utickFrom, int diff) = 0;
 
-    //! NOTE: removes points in [from, to], moves later points back to close the gap
+    //! NOTE: removes points in [utickFrom, utickTo], shifts later points back to close the gap
     virtual void removeTicks(int utickFrom, int utickTo) = 0;
 
     virtual void read(const muse::ByteArray& json) = 0;
