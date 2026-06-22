@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.70">
   <Style>
     <slurShowTabSimple>0</slurShowTabSimple>
     <slurShowTabCommon>1</slurShowTabCommon>
