@@ -237,7 +237,8 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
                     VBox* first = static_cast<VBox*>(mb);
                     VBox* second = static_cast<VBox*>(nextmb);
                     if (first->bottomGap() > 0_sp && second->topGap() > 0_sp) {
-                        first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                        first->setProperty(Pid::BOTTOM_GAP, first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                        first->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
                     }
                 }
             }
