@@ -39,7 +39,11 @@
         <key>
           <fifths>0</fifths>
           </key>
-        <time>
+        <time number="1">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <time number="2" print-object="no">
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
