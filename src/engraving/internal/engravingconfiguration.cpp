@@ -253,6 +253,11 @@ Color EngravingConfiguration::scoreInversionColor() const
     return Color(220, 220, 220);
 }
 
+Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
+{
+    return "#49AAFF";
+}
+
 Color EngravingConfiguration::lassoColor() const
 {
     return "#00323200";
