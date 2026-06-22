@@ -66,6 +66,7 @@ private:
     static bool checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack);
     static bool checkNoteSpannersForUnison(const Note* note1, const Note* note2);
     static bool checkSpannersForSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
+    static bool checkArticulationsForSameVoice(Chord* chord1, Chord* chord2);
 
     static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
 
@@ -75,6 +76,7 @@ private:
 
     static void makeSharedNotation(SharedPart* p, StaveSharingContext& ctx);
     static void makeSharedChordRests(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
     static void makeSharedTiesAndNoteSpanners(Note* originNote, Note* sharedNote);
     static void makeSharedAnnotations(SharedPart* p, StaveSharingContext& ctx);
     static void makeSharedSpanners(SharedPart* p, StaveSharingContext& ctx);
