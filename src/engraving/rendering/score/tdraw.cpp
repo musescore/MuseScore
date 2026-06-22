@@ -1740,8 +1740,30 @@ void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* pain
 
 void TDraw::draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
 {
+#ifndef Q_OS_MACOS
+    drawTextWorkaround(textFragment, item, painter);
+    return;
+#endif
     painter->setFont(textFragment.font(item));
     painter->drawText(textFragment.pos, textFragment.text);
+}
+
+void TDraw::drawTextWorkaround(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter)
+{
+    Font f = textFragment.font(item);
+    const String& text = textFragment.text;
+    const PointF& pos = textFragment.pos;
+
+    painter->setFont(f);
+
+    double mm = painter->worldTransform().m11();
+    bool useWorkaround = !(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike());
+    if (!useWorkaround) {
+        painter->drawText(pos, text);
+        return;
+    }
+
+    painter->drawTextWorkaround(pos, text);
 }
 
 void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter, const PaintOptions& opt)
