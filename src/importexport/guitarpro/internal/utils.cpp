@@ -26,8 +26,11 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
+#include "engraving/style/styledef.h"
 
 using namespace mu::engraving;
 
@@ -122,6 +125,29 @@ void createGhostNoteParenGroups(Chord* ch)
             addParenthesesToNotes(ch, currentGroup);
             currentGroup.clear();
         }
+    }
+}
+
+void addPlayCountTexts(Score* score)
+{
+    const bool showText = score->style().styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = score->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        if (!m->repeatEnd()) {
+            continue;
+        }
+        const int playCount = m->repeatCount();
+        if (!showText || (playCount == 2 && !singleRepeats)) {
+            continue;
+        }
+        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        if (!endBarSeg || endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0)) {
+            continue;
+        }
+        PlayCountText* pct = Factory::createPlayCountText(endBarSeg);
+        pct->setTrack(0);
+        pct->setParent(endBarSeg);
+        score->addElement(pct);
     }
 }
 } // namespace mu::iex::guitarpro
