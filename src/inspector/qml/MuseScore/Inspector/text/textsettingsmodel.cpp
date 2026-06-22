@@ -730,7 +730,7 @@ void TextSettingsModel::updateIsPositionAvailable()
 {
     bool available = false;
     for (EngravingItem* item : m_elementList) {
-        if (item->isTextLineBase()) {
+        if (item->isTextLineBase() || item->isMeasureNumber()) {
             available = false;
             break;
         } else if (!item->hasVoiceAssignmentProperties()) {
