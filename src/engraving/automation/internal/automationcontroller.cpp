@@ -94,7 +94,7 @@ static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, Au
 
         const staff_idx_t startStaffIdx = track2staff(part->startTrack());
         const staff_idx_t endStaffIdx = startStaffIdx + part->nstaves();
-        result.reserve(endStaffIdx - endStaffIdx);
+        result.reserve(endStaffIdx - startStaffIdx);
 
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
             const Staff* staff = score->staff(staffIdx);
@@ -142,48 +142,82 @@ static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, Au
     return result;
 }
 
-static std::optional<double> startHairpinValue(const Hairpin* hairpin)
+static std::optional<double> dynamicValue(DynamicType type, bool startValue)
 {
-    DynamicType type = hairpin->dynamicTypeFrom();
-    if (type == DynamicType::OTHER) {
-        return std::nullopt;
+    if (auto it = ORDINARY_DYNAMIC_VALUES.find(type); it != ORDINARY_DYNAMIC_VALUES.end()) {
+        return it->second;
     }
 
-    if (muse::contains(ORDINARY_DYNAMIC_VALUES, type)) {
-        return ORDINARY_DYNAMIC_VALUES.at(type);
+    if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(type); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
+        return it->second;
     }
 
-    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, type)) {
-        return SINGLE_NOTE_DYNAMIC_VALUES.at(type);
-    }
-
-    if (muse::contains(COMPOUND_DYNAMIC_VALUES, type)) {
-        return COMPOUND_DYNAMIC_VALUES.at(type).second;
+    if (auto it = COMPOUND_DYNAMIC_VALUES.find(type); it != COMPOUND_DYNAMIC_VALUES.end()) {
+        return startValue ? it->second.first : it->second.second;
     }
 
     return std::nullopt;
 }
 
-static std::optional<double> endHairpinValue(const Hairpin* hairpin)
+static std::optional<double> startHairpinValue(const Hairpin* hairpin)
 {
-    DynamicType type = hairpin->dynamicTypeTo();
+    const DynamicType type = hairpin->dynamicTypeFrom();
     if (type == DynamicType::OTHER) {
         return std::nullopt;
     }
 
-    if (muse::contains(ORDINARY_DYNAMIC_VALUES, type)) {
-        return ORDINARY_DYNAMIC_VALUES.at(type);
+    return dynamicValue(type, false);
+}
+
+static DynamicType findEndDynamicType(const Hairpin* hairpin)
+{
+    const DynamicType textType = hairpin->dynamicTypeTo();
+    if (textType != DynamicType::OTHER) {
+        return textType;
     }
 
-    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, type)) {
-        return SINGLE_NOTE_DYNAMIC_VALUES.at(type);
+    if (hairpin->spannerSegments().empty()) {
+        const Segment* endSegment = hairpin->endSegment();
+        if (!endSegment) {
+            return DynamicType::OTHER;
+        }
+
+        const track_idx_t trackIdx = hairpin->track();
+        const std::vector<EngravingItem*> dynamics = endSegment->findAnnotations(ElementType::DYNAMIC, trackIdx, trackIdx);
+        for (const EngravingItem* item : dynamics) {
+            if (item && item->isDynamic() && toDynamic(item)->playDynamic()) {
+                return toDynamic(item)->dynamicType();
+            }
+        }
+
+        return DynamicType::OTHER;
     }
 
-    if (muse::contains(COMPOUND_DYNAMIC_VALUES, type)) {
-        return COMPOUND_DYNAMIC_VALUES.at(type).first;
+    const LineSegment* seg = hairpin->backSegment();
+    if (!seg) {
+        return DynamicType::OTHER;
     }
 
-    return std::nullopt;
+    // Optimization: first check if there is a cached dynamic
+    const EngravingItem* snappedItem = seg->ldata()->itemSnappedAfter();
+    if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
+        snappedItem = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/, true /*requirePlayable*/);
+        if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
+            return DynamicType::OTHER;
+        }
+    }
+
+    return toDynamic(snappedItem)->dynamicType();
+}
+
+static std::optional<double> endHairpinValue(const Hairpin* hairpin)
+{
+    const DynamicType type = findEndDynamicType(hairpin);
+    if (type == DynamicType::OTHER) {
+        return std::nullopt;
+    }
+
+    return dynamicValue(type, true);
 }
 
 static bool isEndDynamicOfHairpin(const Dynamic* dynamic, double dynamicValue, double prevValue)
@@ -270,6 +304,10 @@ void AutomationController::addSegmentPoints(const Segment* segment, int tickOffs
 
 void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset)
 {
+    if (!dynamic->playDynamic()) {
+        return;
+    }
+
     const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics);
     for (const AutomationCurveKey& key : keys) {
         addDynamicPoints(dynamic, tickOffset, key);
@@ -349,7 +387,7 @@ void AutomationController::addSpannerPoints(const Score* score, int repeatStartT
     const auto& intervals = spannerMap.findOverlapping(repeatStartTick + 1, repeatEndTick - 1);
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
-        if (!spanner->isHairpin()) {
+        if (!spanner->isHairpin() || !spanner->playSpanner()) {
             continue;
         }
 
@@ -363,41 +401,77 @@ void AutomationController::addSpannerPoints(const Score* score, int repeatStartT
 
 void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key)
 {
-    const int hairpinFrom = hairpin->tick().ticks() + tickOffset;
+    int hairpinFrom = hairpin->tick().ticks() + tickOffset;
     const int hairpinTo = hairpinFrom + hairpin->ticks().ticks();
+
+    // --- Check start tick
+    {
+        const Segment* startSegment = hairpin->startSegment();
+        const track_idx_t trackIdx = hairpin->track();
+        const Dynamic* startDynamic = startSegment
+                                      ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
+                                      : nullptr;
+        if (startDynamic && muse::contains(COMPOUND_DYNAMIC_VALUES, startDynamic->dynamicType())) {
+            // The hairpin starts with a compound dynamic; we should start the hairpin after the transition is complete
+            // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
+            hairpinFrom += startDynamic->velocityChangeLength().ticks();
+        }
+    }
+
+    IF_ASSERT_FAILED(hairpinFrom < hairpinTo) {
+        return;
+    }
 
     EID eid = hairpin->eid();
     if (!eid.isValid()) {
         eid = hairpin->assignNewEID();
     }
 
-    const std::optional<double> valueFrom = startHairpinValue(hairpin);
-    if (valueFrom.has_value()) {
-        const AutomationPoint& prevPoint = m_automation->activePoint(key, hairpinFrom);
-        AutomationPoint point;
-        point.outValue = valueFrom.value();
-        point.inValue = prevPoint.outValue;
-        point.itemId = eid;
-        m_automation->addPoint(key, hairpinFrom, point);
+    // --- Determine valueFrom
+    const std::optional<double> nominalValueFrom = startHairpinValue(hairpin);
+    const AutomationPoint& prevPoint = m_automation->activePoint(key, hairpinFrom);
+    const AutomationCurve& curve = m_automation->curve(key);
+
+    // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
+    const double valueFrom = nominalValueFrom.value_or(prevPoint.outValue);
+
+    if (!muse::contains(curve, hairpinFrom)) {
+        AutomationPoint startPoint;
+        startPoint.outValue = valueFrom;
+        startPoint.inValue = prevPoint.outValue;
+        startPoint.itemId = eid;
+        m_automation->addPoint(key, hairpinFrom, startPoint);
     }
 
-    const std::optional<double> valueTo = endHairpinValue(hairpin);
-    if (valueTo.has_value()) {
-        AutomationPoint point;
-        point.outValue = valueTo.value();
-        point.inValue = point.outValue;
-        point.itemId = eid;
-        m_automation->addPoint(key, hairpinTo, point);
-    } else {
-        const AutomationCurve& curve = m_automation->curve(key);
-        if (muse::contains(curve, hairpinTo)) {
-            return;
-        }
+    // --- Determine valueTo
+    const std::optional<double> nominalValueTo = endHairpinValue(hairpin);
+    const bool hasNominalValueTo = nominalValueTo.has_value();
+    const bool isCrescendo = hairpin->isCrescendo();
 
-        const AutomationPoint& prevPoint = m_automation->activePoint(key, hairpinFrom);
+    // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
+    const bool useNominalValueTo = hasNominalValueTo
+                                   && (isCrescendo ? nominalValueTo.value() > valueFrom
+                                                   : nominalValueTo.value() < valueFrom);
+
+    // --- Check end tick
+    const double valueTo = useNominalValueTo
+                                   ? nominalValueTo.value()
+                                   : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
+
+    auto endPointToIt = curve.find(hairpinTo);
+    if (endPointToIt != curve.cend()) {
+        // A dynamic already sits at hairpinTo. If the hairpin arrives at a different value,
+        // encode the transition via inValue != outValue on the existing point
+        if (!muse::RealIsEqual(endPointToIt->second.outValue, valueTo)) {
+            m_automation->setPointInValue(key, hairpinTo, valueTo);
+        }
+    } else {
         AutomationPoint point;
-        point.outValue = prevPoint.outValue + (hairpin->isCrescendo() ? DYNAMIC_STEP : -DYNAMIC_STEP);
-        point.inValue = point.outValue;
+        point.inValue = valueTo;
+        // If the end dynamic contradicts the hairpin direction it is still notated and must take effect;
+        // encode it as an instantaneous level change at hairpinTo: the hairpin arrives at valueTo (inValue),
+        // then the dynamic immediately overrides it to nominalValueTo (outValue)
+        point.outValue = (hasNominalValueTo && !useNominalValueTo) ? nominalValueTo.value() : valueTo;
         point.itemId = eid;
         m_automation->addPoint(key, hairpinTo, point);
     }
