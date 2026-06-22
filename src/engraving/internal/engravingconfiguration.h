@@ -60,6 +60,7 @@ public:
 
     Color defaultColor() const override;
     Color scoreInversionColor() const override;
+    Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
     Color warningSelectedColor() const override;

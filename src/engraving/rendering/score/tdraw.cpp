@@ -2459,14 +2459,17 @@ void TDraw::draw(const PageLockIndicator* item, Painter* painter, const PaintOpt
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
     painter->setPen(pen);
     painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
 
     if (item->selected()) {
-        Color lockedAreaColor = item->configuration()->selectionColor();
-        lockedAreaColor.setAlpha(38);
+        Color lockedAreaColor = selectionColor;
+        lockedAreaColor.setAlpha(opt.invertColors ? 90 : 38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
@@ -3005,7 +3008,10 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
     painter->setPen(pen);
     painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
@@ -3013,8 +3019,8 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
     if (item->isSystemLockIndicator() && item->selected()) {
         const SystemLockIndicator* sli = toSystemLockIndicator(item);
 
-        Color lockedAreaColor = sli->configuration()->selectionColor();
-        lockedAreaColor.setAlpha(38);
+        Color lockedAreaColor = selectionColor;
+        lockedAreaColor.setAlpha(opt.invertColors ? 90 : 38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
