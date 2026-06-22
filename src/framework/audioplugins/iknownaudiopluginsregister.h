@@ -38,6 +38,7 @@ public:
     virtual ~IKnownAudioPluginsRegister() = default;
 
     virtual Ret load() = 0;
+    virtual Ret clear() = 0;
 
     using PluginInfoAccepted = std::function<bool (const AudioPluginInfo& info)>;
 

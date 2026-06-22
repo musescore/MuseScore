@@ -151,6 +151,17 @@ Ret KnownAudioPluginsRegister::load()
     return muse::make_ok();
 }
 
+Ret KnownAudioPluginsRegister::clear()
+{
+    m_pluginInfoMap.clear();
+    m_pluginPaths.clear();
+
+    Ret ret = writePluginsInfo();
+    m_pluginInfoListChanged.notify();
+
+    return ret;
+}
+
 AudioPluginInfoList KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const
 {
     if (!accepted) {

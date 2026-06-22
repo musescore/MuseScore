@@ -75,4 +75,23 @@ BaseSection {
             }
         }
     }
+
+    RowLayout {
+        visible: root.model.vstEnabled
+        width: parent.width
+
+        Item { Layout.fillWidth: true }
+
+        FlatButton {
+            text: qsTrc("preferences", "Rescan VST3 plugins")
+
+            navigation.name: "rescanVstPluginsButton"
+            navigation.panel: root.navigation
+            navigation.row: view.count + 1
+
+            onClicked: {
+                Qt.callLater(root.model.rescanVstPlugins)
+            }
+        }
+    }
 }

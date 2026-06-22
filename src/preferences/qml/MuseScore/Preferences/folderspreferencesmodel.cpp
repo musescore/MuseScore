@@ -33,6 +33,15 @@ FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
 {
 }
 
+bool FoldersPreferencesModel::vstEnabled() const
+{
+#ifdef MUSE_MODULE_VST
+    return true;
+#else
+    return false;
+#endif
+}
+
 int FoldersPreferencesModel::rowCount(const QModelIndex&) const
 {
     return m_folders.count();
@@ -233,6 +242,13 @@ QModelIndex FoldersPreferencesModel::folderIndex(FoldersPreferencesModel::Folder
     }
 
     return QModelIndex();
+}
+
+void FoldersPreferencesModel::rescanVstPlugins()
+{
+    if (registerAudioPluginsScenario()) {
+        registerAudioPluginsScenario()->rescanAllPlugins();
+    }
 }
 
 QString FoldersPreferencesModel::pathsToString(const io::paths_t& paths) const
