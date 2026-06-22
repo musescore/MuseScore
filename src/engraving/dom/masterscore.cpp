@@ -28,6 +28,8 @@
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
+#include "rw/write/writer.h"
+#include "rw/inoutdata.h"
 
 #include "style/defaultstyle.h"
 
@@ -265,6 +267,76 @@ MasterScore* MasterScore::clone()
 
     score->doLayout();
     return score;
+}
+
+void MasterScore::addSnapshot(const mu::engraving::String& name)
+{
+    muse::ByteArray buffer;
+    auto device = muse::io::Buffer::opened(muse::io::IODevice::WriteOnly, &buffer);
+
+    write::Writer writer;
+    rw::WriteInOutData inout(this);
+    writer.writeScore(this, &device, &inout);
+    device.close();
+
+    Snapshot snap;
+    snap.name = name;
+    snap.scoreData = buffer;
+    m_snapshots.push_back(snap);
+
+    return;
+}
+
+void MasterScore::restoreSnapshot(size_t index)
+{
+    deselectAll();
+
+    while (first()) {
+        MeasureBase* mb = first();
+        m_measures.remove(mb);
+    }
+
+    m_eidRegister.clear();
+
+    muse::ByteArray& data = m_snapshots[index].scoreData;
+    XmlReader xmlReader(data);
+    MscLoader().readMasterScore(this, xmlReader, true);
+
+    doLayout();
+
+    ScoreChanges changes;
+    changes.tickFrom = 0;
+    changes.tickTo = std::numeric_limits<int>::max();
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = m_masterScore->nstaves();
+
+    changes.changedTypes.insert(ElementType::INSTRUMENT_CHANGE);
+    changes.changedTypes.insert(ElementType::STAFF);
+    changes.changedTypes.insert(ElementType::PART);
+    changes.changedTypes.insert(ElementType::SCORE);
+
+    changesChannel().send(changes);
+
+    delete m_undoStack;
+    m_undoStack = new UndoStack();
+
+    return;
+}
+
+void MasterScore::removeSnapshot(size_t index)
+{
+    TRACEFUNC;
+
+    if (index >= m_snapshots.size()) {
+        LOGE() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    muse::String name = m_snapshots[index].name;
+    m_snapshots.erase(m_snapshots.begin() + index);
+
+    LOGI() << "Snapshot removed: " << name;
+    return;
 }
 
 Score* MasterScore::createScore()

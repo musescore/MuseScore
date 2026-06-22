@@ -42,6 +42,12 @@ public:
     EngravingObject* itemFromEID(const EID& eid) const;
     EID EIDFromItem(const EngravingObject* item) const;
 
+    void clear()
+    {
+        m_eidToItem.clear();
+        m_itemToEid.clear();
+    }
+
 private:
     EIDRegister(const EIDRegister&) = delete;
 

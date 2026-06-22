@@ -226,6 +226,41 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
         }
     }
 
+    // Read snapshots
+    {
+        ByteArray indexData = mscReader.readSnapshotIndexFile();
+        if (!indexData.empty()) {
+            XmlReader xml(indexData);
+            while (xml.readNextStartElement()) {
+                if (xml.name() == "snapshots") {
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == "snapshot") {
+                            MasterScore::Snapshot snap;
+                            size_t index = 0;
+                            while (xml.readNextStartElement()) {
+                                if (xml.name() == "index") {
+                                    index = static_cast<size_t>(xml.readInt());
+                                } else if (xml.name() == "name") {
+                                    snap.name = xml.readText();
+                                } else {
+                                    xml.skipCurrentElement();
+                                }
+                            }
+                            snap.scoreData = mscReader.readSnapshotFile(index);
+                            if (!snap.scoreData.empty()) {
+                                masterScore->snapshots().push_back(std::move(snap));
+                            }
+                        } else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                } else {
+                    xml.skipCurrentElement();
+                }
+            }
+        }
+    }
+
     return ret;
 }
 

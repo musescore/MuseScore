@@ -562,3 +562,20 @@ ByteArray MscReader::XmlFileReader::fileData(const String& fileName) const
 
     return ByteArray();
 }
+
+ByteArray MscReader::readSnapshotIndexFile() const
+{
+    if (!fileExists(u"Snapshots/index.xml")) {
+        return ByteArray();
+    }
+    return fileData(u"Snapshots/index.xml");
+}
+
+ByteArray MscReader::readSnapshotFile(size_t index) const
+{
+    String fileName = u"Snapshots/snapshot_" + String::number(static_cast<int>(index)) + u".bin";
+    if (!fileExists(fileName)) {
+        return ByteArray();
+    }
+    return fileData(fileName);
+}

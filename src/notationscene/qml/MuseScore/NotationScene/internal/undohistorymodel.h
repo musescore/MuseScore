@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
+//#include "actions/iactionsdispatcher.h"
 
 namespace mu::notation {
 class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
@@ -40,6 +41,11 @@ class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, pub
 
     muse::ContextInject<context::IGlobalContext> context = { this };
 
+    Q_PROPERTY(QVariantList snapshots READ snapshots NOTIFY snapshotsChanged)
+    QVariantList snapshots() const;
+
+    //muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+
 public:
     explicit UndoHistoryModel(QObject* parent = nullptr);
 
@@ -51,8 +57,13 @@ public:
 
     Q_INVOKABLE void undoRedoToIndex(int index);
 
+    Q_INVOKABLE void addSnapshot(const QString& name);
+    Q_INVOKABLE void removeSnapshot(int index);
+    Q_INVOKABLE void restoreSnapshot(int index);
+
 signals:
     void currentIndexChanged();
+    void snapshotsChanged();
 
 private:
     void classBegin() override;
@@ -64,7 +75,6 @@ private:
     void updateCurrentIndex();
 
     INotationUndoStackPtr undoStack() const;
-
     int m_rowCount = 0;
 };
 }
