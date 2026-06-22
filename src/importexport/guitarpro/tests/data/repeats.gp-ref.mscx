@@ -100,31 +100,37 @@
               <string>2</string>
               </Note>
             </Chord>
+          <PlayCountText>
+            <playCountCustomText></playCountCustomText>
+            <eid>N_N</eid>
+            <style>repeat_play_count</style>
+            <text>3x</text>
+            </PlayCountText>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <startRepeat/>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -132,19 +138,19 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <endRepeat>2</endRepeat>
         <voice>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
