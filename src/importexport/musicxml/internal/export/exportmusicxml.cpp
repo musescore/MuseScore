@@ -7017,6 +7017,17 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                 }
             }
         }
+        if (singleKey) {
+            auto keyPrintObject = [](const KeySig* ks) {
+                return !ks->visible() || (ks->staff() && ks->staff()->isTabStaff(ks->tick()));
+            };
+            for (staff_idx_t i = 1; i < nstaves; i++) {
+                if (keyPrintObject(keysigs.at(i)) != keyPrintObject(keysigs.at(0))) {
+                    singleKey = false;
+                    break;
+                }
+            }
+        }
 
         // write the keysigs
         //LOGD(" singleKey %d", singleKey);
@@ -7060,6 +7071,18 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (singleTime) {
             for (staff_idx_t i = 1; i < nstaves; i++) {
                 if (!(timesigs.at(i)->sig() == timesigs.at(0)->sig())) {
+                    singleTime = false;
+                    break;
+                }
+            }
+        }
+        if (singleTime) {
+            auto timePrintObject = [](const TimeSig* ts) {
+                return !ts->visible() || !ts->showOnThisStaff()
+                       || (ts->staff() && !ts->staff()->staffType(ts->tick())->genTimesig());
+            };
+            for (staff_idx_t i = 1; i < nstaves; i++) {
+                if (timePrintObject(timesigs.at(i)) != timePrintObject(timesigs.at(0))) {
                     singleTime = false;
                     break;
                 }
