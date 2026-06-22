@@ -2740,46 +2740,76 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
         auto bbox = item->ldata()->bbox();
         double jianpuX = (noteheadWidth - jianpuWidth) * .5;
         double jianpuY = bbox.y();
-        double lineDistance = item->style().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->magS();
-        double lineThickness = item->style().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->magS();
-        double dotDistance = item->style().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
-        double rad = item->style().styleAbsolute(Sid::jianpuOctaveDotRadius) * item->magS();
+        const bool beamAbove = item->style().styleV(Sid::jianpuDiminutionBeamPlacement).value<PlacementV>() == PlacementV::ABOVE;
+        const double beamDistance = item->style().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->magS();
+        const double beamThickness = item->style().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->magS();
+        const double dotDistance = item->style().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
+        const double dotRadius = item->style().styleAbsolute(Sid::jianpuOctaveDotRadius) * item->magS();
 
         if (item->lineIndex() >= 0) {
             jianpuY = bbox.height() + bbox.y();
             jianpuY -= jianpuHeight;
-            jianpuY -= dotDistance * abs(item->jianpuOctaveDots()) + lineDistance * item->jianpuDiminutionLines();
+            jianpuY -= dotDistance * abs(item->jianpuOctaveDots());
+            jianpuY -= beamDistance * item->jianpuDiminutionLines();
         }
 
+        // Save painter state before drawing beams and dots, as they may change pen width
         painter->save();
         pen.setWidthF(1.0);
         painter->setPen(pen);
         painter->setBrush(Brush(pen.color()));
 
-        double dotX = noteheadWidth * .5;
-        for (int i = 0; i < -item->jianpuOctaveDots(); i++) {
-            painter->drawEllipse(PointF(dotX, jianpuY + rad), rad, rad);
-            jianpuY += dotDistance;
+        auto drawOctaveDots = [&jianpuY, &noteheadWidth, &dotDistance, &dotRadius, &item, &painter]() {
+            for (int i = 0; i < abs(item->jianpuOctaveDots()); i++) {
+                jianpuY += dotDistance;
+                painter->drawEllipse(PointF(noteheadWidth * .5, jianpuY), dotRadius, dotRadius);
+            }
+        };
+
+        auto drawBeam = [&jianpuY, &noteheadWidth, &beamDistance, &beamThickness, &item, &pen, &painter]() {
+            painter->save();
+            pen.setWidthF(beamThickness);
+            painter->setPen(pen);
+            for (int i = 0; i < item->jianpuDiminutionLines(); i++) {
+                jianpuY += beamDistance;
+                painter->drawLine(LineF(0.0, jianpuY, noteheadWidth, jianpuY));
+            }
+            painter->restore();
+        };
+
+        // Draw beams above the jianpu digit
+        bool hasBeamAbove = false;
+        double toNoteDistance = 0;
+        if (beamAbove && item->jianpuDiminutionLines()) {
+            hasBeamAbove = true;
+            jianpuY -= beamDistance; // Pre offset for 1st beam
+            toNoteDistance = beamDistance;
+            drawBeam();
         }
 
-        jianpuY += jianpuHeight;
+        // Draw octave dots above the jianpu digit
+        if (item->jianpuOctaveDots() < 0) {
+            jianpuY -= hasBeamAbove ? 0.0 : dotDistance; // Pre offset for 1st dot if no beam
+            toNoteDistance = dotDistance;
+            drawOctaveDots();
+        }
+
+        // Draw jianpu digit
+        jianpuY += toNoteDistance; // Spacing for beams or dots to the notehead
+        jianpuY += jianpuHeight; // Spacing from jianpu digit
         painter->drawText(jianpuX, jianpuY, item->jianpuDigit());
-        jianpuY += item->jianpuDiminutionLines() ? lineDistance : dotDistance;
 
-        pen.setWidthF(lineThickness);
-        painter->setPen(pen);
-        for (int i = 0; i < item->jianpuDiminutionLines(); i++) {
-            painter->drawLine(LineF(0.0, jianpuY, noteheadWidth, jianpuY));
-            jianpuY += lineDistance;
+        // Draw beams below the jianpu digit
+        if (!beamAbove && item->jianpuDiminutionLines()) {
+            drawBeam();
         }
 
-        pen.setWidthF(1.0);
-        painter->setPen(pen);
-        for (int i = 0; i < item->jianpuOctaveDots(); i++) {
-            painter->drawEllipse(PointF(dotX, jianpuY + rad), rad, rad);
-            jianpuY += dotDistance;
+        // Draw octave dots below the jianpu digit
+        if (item->jianpuOctaveDots() > 0) {
+            drawOctaveDots();
         }
 
+        // Restore painter state after drawing beams and dots
         painter->restore();
     }
 
