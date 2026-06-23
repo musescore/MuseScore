@@ -1482,6 +1482,9 @@ void Segment::scanElements(std::function<void(EngravingItem*)> func)
         e->scanElements(func);
     }
     for (EngravingItem* e : annotations()) {
+        if (!e->systemFlag() && (!measure() || !measure()->visible(e->staffIdx()))) {
+            continue;
+        }
         e->scanElements(func);
     }
 }
