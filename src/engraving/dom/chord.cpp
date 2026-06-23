@@ -818,6 +818,16 @@ void Chord::remove(EngravingItem* e)
         }
     }
     break;
+    case ElementType::PARENTHESIS: {
+        NoteParenthesisInfo* parenInfo = findNoteParenthesisInfo(toParenthesis(e));
+        IF_ASSERT_FAILED(parenInfo) {
+            LOGD() << "Chord::remove(): This parenthesis does not belong to this chord";
+            return;
+        }
+        EditChord::removeChordParentheses(this, parenInfo->notes());
+        break;
+    }
+    break;
     default:
         ChordRest::remove(e);
         return;
