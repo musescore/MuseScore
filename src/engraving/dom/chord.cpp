@@ -814,8 +814,18 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
-            LOGD("ChordRest::remove(): articulation not found");
+            LOGD("Chord::remove(): articulation not found");
         }
+    }
+    break;
+    case ElementType::PARENTHESIS: {
+        NoteParenthesisInfo* parenInfo = findNoteParenthesisInfo(toParenthesis(e));
+        IF_ASSERT_FAILED(parenInfo) {
+            LOGD() << "Chord::remove(): This parenthesis does not belong to this chord";
+            return;
+        }
+        EditChord::removeChordParentheses(this, parenInfo->notes());
+        break;
     }
     break;
     default:
