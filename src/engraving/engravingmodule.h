@@ -60,7 +60,7 @@ public:
 
     void registerExports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    void onDestroy() override;
 
 private:
 
