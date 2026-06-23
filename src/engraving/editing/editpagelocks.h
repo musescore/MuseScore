@@ -48,8 +48,8 @@ public:
     static void addRemovePageLocks(Transaction& tx, Score* score, int interval, bool lock);
 
     static void makeIntoPage(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last);
-    static void moveMeasureToPrevPage(Transaction& tx, Score* score, MeasureBase* m);
-    static void moveMeasureToNextPage(Transaction& tx, Score* score, MeasureBase* m);
+    static void moveMeasuresToPrevPage(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last);
+    static void moveMeasuresToNextPage(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last);
 
     static void applyLockToSelection(Transaction& tx, Score* score);
 

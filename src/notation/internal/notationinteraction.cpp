@@ -6197,27 +6197,33 @@ void NotationInteraction::applySystemLock()
 
 void NotationInteraction::moveSystemToPrevPage()
 {
-    MeasureBase* m = score()->selection().endMeasureBase();
-    System* sys = m ? m->system() : nullptr;
-    if (!sys) {
+    MeasureBase* firstMeas = score()->selection().startMeasureBase();
+    MeasureBase* endMeas = score()->selection().endMeasureBase();
+    System* startSys = firstMeas ? firstMeas->system() : nullptr;
+    System* endSys = endMeas ? endMeas->system() : nullptr;
+    if (!startSys || !endSys) {
         return;
     }
-    MeasureBase* lastMb = sys->last();
+    MeasureBase* firstMb = startSys->first();
+    MeasureBase* lastMb = endSys->last();
     transaction(TranslatableString("undoableAction", "Move system to previous page"), [&](auto& tx) {
-        EditPageLocks::moveMeasureToPrevPage(tx, score(), lastMb);
+        EditPageLocks::moveMeasuresToPrevPage(tx, score(), firstMb, lastMb);
     });
 }
 
 void NotationInteraction::moveSystemToNextPage()
 {
-    MeasureBase* m = score()->selection().startMeasureBase();
-    System* sys = m ? m->system() : nullptr;
-    if (!sys) {
+    MeasureBase* firstMeas = score()->selection().startMeasureBase();
+    MeasureBase* endMeas = score()->selection().endMeasureBase();
+    System* startSys = firstMeas ? firstMeas->system() : nullptr;
+    System* endSys = endMeas ? endMeas->system() : nullptr;
+    if (!startSys || !endSys) {
         return;
     }
-    MeasureBase* firstMb = sys->first();
+    MeasureBase* firstMb = startSys->first();
+    MeasureBase* lastMb = endSys->last();
     transaction(TranslatableString("undoableAction", "Move system to next page"), [&](auto& tx) {
-        EditPageLocks::moveMeasureToNextPage(tx, score(), firstMb);
+        EditPageLocks::moveMeasuresToNextPage(tx, score(), firstMb, lastMb);
     });
 }
 

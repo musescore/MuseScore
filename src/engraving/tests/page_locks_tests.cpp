@@ -158,14 +158,14 @@ TEST_F(Engraving_PageLocksTests, moveToPreviousNext)
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditPageLocks::moveMeasureToPrevPage(tx, score, sixthMeasure);
+        EditPageLocks::moveMeasuresToPrevPage(tx, score, sixthMeasure, sixthMeasure);
     });
 
     EXPECT_TRUE(sixthMeasure->isEndOfPageLock());
     EXPECT_TRUE(sixthMeasure->next()->isStartOfPageLock());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditPageLocks::moveMeasureToNextPage(tx, score, thirdMeasure);
+        EditPageLocks::moveMeasuresToNextPage(tx, score, thirdMeasure, thirdMeasure);
     });
 
     EXPECT_TRUE(thirdMeasure->prev()->isEndOfPageLock());
