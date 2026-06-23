@@ -180,7 +180,7 @@ public:
 
     EventSequenceMap movePlaybackForward(const msecs_t nextMsecs)
     {
-        ONLY_AUDIO_ENGINE_THREAD;
+        ONLY_AUDIO_PROC_THREAD;
 
         EventSequenceMap result;
 

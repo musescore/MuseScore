@@ -47,6 +47,8 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
         }
     });
 
+    // Fires synchronously from within execOperation (via play/pause/etc.),
+    // adding execOperation here would cause a deadlock
     m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
         const bool active = status == PlaybackStatus::Running;
 
@@ -57,9 +59,14 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
         }
     });
 
+    // Fires only from the driver thread and is forwarded to the engine thread,
+    // so execOperation is needed to guard setIsActive() and prevent data race
     m_clock->countDownEnded().onNotify(this, [this]() {
         m_countDownIsSet = false;
-        audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
+
+        audioEngine()->execOperation(OperationType::QuickOperation, [this]() {
+            audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
+        });
     });
 }
 
