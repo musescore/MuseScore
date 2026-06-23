@@ -1137,6 +1137,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 void Excerpt::cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
                            const TracksMap& trackList, TieMap& tieMap)
 {
+    // When MMRests are enabled in the main score and we are creating a new part or revealing a hidden stave within one, we must copy MMRests
+    // Elements are moved from underlying measures to MMRest measures. If we do not copy these MMRests, the elements attached to them will be lost
+    // It doesn't matter if the MMRest range is different in the part to the score. As long as the MMRest measure is present in the DOM, MMRestLayout will
+    // correct this, setting the appropriate length and moving the elements to the correct locations
+
     for (Measure* srcM = sourceScore->firstMeasure(); srcM; srcM = srcM->nextMeasure()) {
         if (!srcM->hasMMRest()) {
             continue;
