@@ -1971,4 +1971,28 @@ bool noteIsBefore(const Note* n1, const Note* n2)
 
     return false;
 }
+
+void updatePercussionNotes(Chord* c, const Drumset* drumset)
+{
+    TRACEFUNC;
+    for (Chord* ch : c->graceNotes()) {
+        updatePercussionNotes(ch, drumset);
+    }
+    std::vector<Note*> lnotes(c->notes());    // we need a copy!
+    for (Note* note : lnotes) {
+        if (!drumset) {
+            note->setLine(0);
+        } else {
+            int pitch = note->pitch();
+            if (!drumset->isValid(pitch)) {
+                note->setLine(0);
+                //! NOTE May be called too often
+                //LOGW("unmapped drum note %d", pitch);
+            } else if (!note->fixed()) {
+                note->undoChangeProperty(Pid::HEAD_GROUP, drumset->noteHead(pitch));
+                note->setLine(drumset->line(pitch));
+            }
+        }
+    }
+}
 }

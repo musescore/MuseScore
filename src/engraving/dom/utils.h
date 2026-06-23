@@ -31,6 +31,7 @@
 namespace mu::engraving {
 class Chord;
 class ChordRest;
+class Drumset;
 class EngravingItem;
 class KeySig;
 class Lyrics;
@@ -133,4 +134,5 @@ extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, En
 
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
 extern bool noteIsBefore(const Note* n1, const Note* n2);
+extern void updatePercussionNotes(Chord* c, const Drumset* drumset);
 } // namespace mu::engraving
