@@ -24,6 +24,8 @@ import QtQuick
 import Muse.UiComponents
 
 StyledTabButton {
-    fillWidth: true
+    readonly property PropertiesPanelTabBar propertiesTabBar: tabBar as PropertiesPanelTabBar
+
     font: ui.theme.bodyBoldFont
+    width: propertiesTabBar ? Math.min(implicitWidth, propertiesTabBar.truncatedItemWidth) : implicitWidth
 }

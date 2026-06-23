@@ -31,4 +31,29 @@ StyledTabBar {
     background: Item {
         implicitHeight: 28
     }
+
+    // Equally divided share given to overflowing tabs, or Infinity when everything fits:
+    readonly property real truncatedItemWidth: {
+        let items = contentChildren.filter(i => i.visible)
+        if (items.length === 0) {
+            return Infinity
+        }
+
+        let totalSpacing = (items.length - 1) * root.spacing
+        let totalContent = items.reduce((s, i) => s + i.implicitWidth, 0)
+        if (totalContent + totalSpacing <= root.width) {
+            return Infinity
+        }
+
+        let share = (root.width - totalSpacing) / items.length
+        let prev = -1
+        while (share !== prev) {
+            prev = share
+            let fittedItems = items.filter(i => i.implicitWidth < share)
+            let totalFittedWidth = fittedItems.reduce((s, i) => s + i.implicitWidth, 0)
+            share = (root.width - totalFittedWidth - totalSpacing) / (items.length - fittedItems.length)
+        }
+        return share
+    }
+
 }
