@@ -454,6 +454,16 @@ void Painter::drawText(const RectF& rect, int flags, const String& text)
     }
 }
 
+void Painter::drawTextWorkaround(const PointF& pos, const String& text)
+{
+    applyFontSizeScaling();
+
+    m_provider->drawTextWorkaround(font(), pos, text);
+    if (extended) {
+        m_provider->drawTextWorkaround(font(), pos, text);
+    }
+}
+
 void Painter::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     applyFontSizeScaling();

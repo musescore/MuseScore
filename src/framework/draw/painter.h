@@ -133,6 +133,8 @@ public:
 
     void drawText(const RectF& rect, int flags, const String& text);
 
+    void drawTextWorkaround(const PointF& pos, const String& text);
+
     void drawSymbol(const PointF& point, char32_t ucs4Code);
 
     void fillRect(const RectF& rect, const Brush& brush);
