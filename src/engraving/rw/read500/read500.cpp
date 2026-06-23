@@ -270,6 +270,7 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    ctx.setMMRestEndMeasures();
     ctx.reconnectBrokenConnectors();
     if (e.error() != muse::XmlStreamReader::NoError) {
         if (e.error() == muse::XmlStreamReader::CustomError) {

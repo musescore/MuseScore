@@ -586,36 +586,37 @@
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
           <eid>w_w</eid>
+          <mmRestLast>x_x</mmRestLast>
           <voice>
             <TimeSig>
-              <eid>x_x</eid>
+              <eid>y_y</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>y_y</eid>
+              <eid>z_z</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>z_z</eid>
+              <eid>0_0</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>0_0</eid>
+          <eid>1_1</eid>
           <voice>
             <Rest>
-              <eid>1_1</eid>
+              <eid>2_2</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>2_2</eid>
+          <eid>x_x</eid>
           <voice>
             <Rest>
               <eid>3_3</eid>
@@ -815,36 +816,37 @@
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
           <eid>GB_GB</eid>
+          <mmRestLast>HB_HB</mmRestLast>
           <voice>
             <TimeSig>
-              <eid>HB_HB</eid>
+              <eid>IB_IB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>IB_IB</eid>
+              <eid>JB_JB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>JB_JB</eid>
+              <eid>KB_KB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>KB_KB</eid>
+          <eid>LB_LB</eid>
           <voice>
             <Rest>
-              <eid>LB_LB</eid>
+              <eid>MB_MB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>MB_MB</eid>
+          <eid>HB_HB</eid>
           <voice>
             <Rest>
               <eid>NB_NB</eid>
@@ -1044,36 +1046,37 @@
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
           <eid>cB_cB</eid>
+          <mmRestLast>dB_dB</mmRestLast>
           <voice>
             <TimeSig>
-              <eid>dB_dB</eid>
+              <eid>eB_eB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>eB_eB</eid>
+              <eid>fB_fB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>fB_fB</eid>
+              <eid>gB_gB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>gB_gB</eid>
+          <eid>hB_hB</eid>
           <voice>
             <Rest>
-              <eid>hB_hB</eid>
+              <eid>iB_iB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>iB_iB</eid>
+          <eid>dB_dB</eid>
           <voice>
             <Rest>
               <eid>jB_jB</eid>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>qUysZ/hO8KD_DaV9BuTSZUC</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-06-15</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>55lUBezUzYN_zze/k4VeGuG</eid>
+      <Staff>
+        <eid>n8NOKDuXLjD_UPYjrvFoj9O</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="piano">
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>gIBFxtKXHqH_imVEM1OiLoB</eid>
+        <voice>
+          <TimeSig>
+            <eid>ypMDdqFMkhI_XMHTXzq0Sy</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>vlD4CGdX3cP_hl68t6Cpso</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>7dLW6v2UCAC_joZixEVbmSC</eid>
+        <voice>
+          <Rest>
+            <eid>zA0upoXVDYL_4pXleWDoMqG</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>w8SOL1IsU4J_MOAl0Oab3SC</eid>
+        <voice>
+          <Rest>
+            <eid>HOah/mnuMNE_LSma67L6WML</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>eR/bBfnbZeG_clafZSHALCI</eid>
+        <voice>
+          <Rest>
+            <eid>Ta4OIj865JP_hCNTR/2QXCM</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>xUXTK4X4FoM_gAktQt+oKbN</eid>
+        <voice>
+          <Rest>
+            <eid>qQjW9XBddQL_15M46WkixXP</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>clSt+bXXfNP_vUfRPx+hs2M</eid>
+        <voice>
+          <Rest>
+            <eid>bwd7fzgRXOC_hi1ZeA2QQ5F</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

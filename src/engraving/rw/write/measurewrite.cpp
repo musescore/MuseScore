@@ -57,6 +57,16 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
     }
     if (writeSystemElements) {
         TWrite::writeItemEid(measure, xml, ctx);
+
+        if (measure->isMMRest()) {
+            Measure* lastMeasure = measure->mmRestLast();
+            EID eidOfLastMeasure = lastMeasure->eid();
+            if (!eidOfLastMeasure.isValid()) {
+                eidOfLastMeasure = lastMeasure->assignNewEID();
+            }
+            xml.tag("mmRestLast", eidOfLastMeasure.toStdString());
+        }
+
         if (measure->repeatStart()) {
             xml.tag("startRepeat");
         }

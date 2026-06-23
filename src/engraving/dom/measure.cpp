@@ -3028,7 +3028,7 @@ Measure* Measure::coveringMMRestOrThis()
         m = m->prevMeasure();
     }
 
-    if (m) {
+    if (m && !m->m_mmRest->mmRestLast()->isBefore(this)) {
         return m->m_mmRest;
     }
 
