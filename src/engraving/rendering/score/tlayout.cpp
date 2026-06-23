@@ -418,6 +418,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFF_TEXT:
         layoutStaffText(item_cast<const StaffText*>(item), static_cast<StaffText::LayoutData*>(ldata));
         break;
+    case ElementType::STAVE_SHARING_LABEL:
+        layoutStaveSharingLabel(item_cast<const StaveSharingLabel*>(item), static_cast<StaffText::LayoutData*>(ldata));
+        break;
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
         break;
@@ -5205,6 +5208,13 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     if (SoundFlag* flag = item->soundFlag()) {
         layoutSoundFlag(flag, flag->mutldata());
     }
+}
+
+void TLayout::layoutStaveSharingLabel(const StaveSharingLabel* item, TextBase::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    TextLayout::layoutBaseTextBase(item, ldata);
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)

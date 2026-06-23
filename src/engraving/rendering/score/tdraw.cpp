@@ -125,6 +125,7 @@
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
 #include "dom/staffvisibilityindicator.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -350,6 +351,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter, opt);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
+        break;
+    case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter, opt);
         break;
@@ -2763,6 +2766,13 @@ void TDraw::draw(const StaffText* item, Painter* painter, const PaintOptions& op
     if (item->hasSoundFlag()) {
         draw(item->soundFlag(), painter, opt);
     }
+}
+
+void TDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextBase(item, painter, opt);
 }
 
 void TDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions& opt)

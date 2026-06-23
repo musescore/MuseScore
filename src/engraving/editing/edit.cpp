@@ -6430,6 +6430,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::DYNAMIC
             && et != ElementType::EXPRESSION
             && et != ElementType::STAFF_TEXT
+            && et != ElementType::STAVE_SHARING_LABEL
             && et != ElementType::SYSTEM_TEXT
             && et != ElementType::TRIPLET_FEEL
             && et != ElementType::PLAYTECH_ANNOTATION
@@ -6638,6 +6639,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isDynamic()
                  || element->isExpression()
                  || element->isStaffText()
+                 || element->isStaveSharingLabel()
                  || element->isPlayTechAnnotation()
                  || element->isCapo()
                  || element->isStringTunings()

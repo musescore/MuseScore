@@ -123,6 +123,7 @@ enum class ElementType : unsigned char {
     TEMPO_TEXT,
     STAFF_TEXT,
     SYSTEM_TEXT,
+    STAVE_SHARING_LABEL,
     SOUND_FLAG,
     PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
@@ -235,6 +236,7 @@ const static std::unordered_set<ElementType> TEXTBASE_TYPES {
     ElementType::MARKER,
     ElementType::JUMP,
     ElementType::STAFF_TEXT,
+    ElementType::STAVE_SHARING_LABEL,
     ElementType::SYSTEM_TEXT,
     ElementType::TRIPLET_FEEL,
     ElementType::PLAY_COUNT_TEXT,
@@ -895,6 +897,7 @@ enum class TextStyleType : unsigned char {
 
     // Staff oriented styles
     STAFF,
+    STAVE_SHARING,
     EXPRESSION,
     DYNAMICS,
     HAIRPIN,

@@ -1318,7 +1318,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
-    for (StaffText* st : elementsToLayout.staffText) {
+    for (StaffTextBase* st : elementsToLayout.staffText) {
         TLayout::layoutItem(st, ctx);
     }
 
@@ -1505,7 +1505,8 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 }
                 break;
             case ElementType::STAFF_TEXT:
-                elements.staffText.push_back(toStaffText(item));
+            case ElementType::STAVE_SHARING_LABEL:
+                elements.staffText.push_back(toStaffTextBase(item));
                 break;
             case ElementType::INSTRUMENT_CHANGE:
                 elements.instrChanges.push_back(toInstrumentChange(item));

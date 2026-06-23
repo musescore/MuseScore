@@ -704,6 +704,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::EXPRESSION:
     case ElementType::SYMBOL:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -905,6 +906,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::MARKER:
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -1977,6 +1979,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -2195,6 +2198,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SOUND_FLAG:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:

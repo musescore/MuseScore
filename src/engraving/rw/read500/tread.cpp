@@ -113,6 +113,7 @@
 #include "../../dom/stafftextbase.h"
 #include "../../dom/stafftype.h"
 #include "../../dom/stafftypechange.h"
+#include "../../dom/stavesharinglabel.h"
 #include "../../dom/stem.h"
 #include "../../dom/stemslash.h"
 #include "../../dom/sticking.h"
@@ -295,6 +296,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::STAFF_STATE: read(item_cast<StaffState*>(item), xml, ctx);
         break;
     case ElementType::STAFF_TEXT: read(item_cast<StaffText*>(item), xml, ctx);
+        break;
+    case ElementType::STAVE_SHARING_LABEL: read(item_cast<StaveSharingLabel*>(item), xml, ctx);
         break;
     case ElementType::STAFFTYPE_CHANGE: read(item_cast<StaffTypeChange*>(item), xml, ctx);
         break;
@@ -672,6 +675,16 @@ void TRead::read(StaffText* t, XmlReader& xml, ReadContext& ctx)
             read(flag, xml, ctx);
             t->setSoundFlag(flag);
         } else if (!readProperties(static_cast<StaffTextBase*>(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+void TRead::read(StaveSharingLabel* t, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (!readProperties(static_cast<StaffTextBase*>(t), xml, ctx)) {
             xml.unknown();
         }
     }

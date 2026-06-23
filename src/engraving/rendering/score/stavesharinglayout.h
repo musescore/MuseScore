@@ -24,6 +24,7 @@
 #include "layoutcontext.h"
 
 #include "dom/sharedpart.h"
+#include "dom/stavesharinglabel.h"
 
 namespace mu::engraving::rendering::score {
 class StaveSharingLayout
@@ -46,6 +47,11 @@ private:
         std::vector<Segment*> crSegmentsToUpdate;
         std::vector<Spanner*> overlappingSpanners;
 
+        SharedPart* curSharedPart = nullptr;
+        std::unordered_set<Note*> sharedUnisonNotes;
+        std::vector<StaveSharingLabel*> oldStaveSharingLabels;
+        std::vector<StaveSharingLabel*> updatedStaveSharingLabels;
+
         Score* score = nullptr;
         LayoutContext& layoutCtx;
 
@@ -54,8 +60,8 @@ private:
 
     static void updateStaveSharing(StaveSharingContext& ctx);
 
-    static void updateTrackMaps(SharedPart* p, StaveSharingContext& ctx);
-    static SharedTrackMap computeTrackMap(SharedPart* p, StaveSharingContext& ctx);
+    static void updateTrackMaps(StaveSharingContext& ctx);
+    static SharedTrackMap computeTrackMap(StaveSharingContext& ctx);
 
     static bool isEmpty(track_idx_t track, StaveSharingContext& ctx);
 
@@ -70,19 +76,24 @@ private:
 
     static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
 
-    static void updateNotation(SharedPart* p, StaveSharingContext& ctx);
+    static void updateNotation(StaveSharingContext& ctx);
     static void computeSegmentsToUpdate(StaveSharingContext& ctx);
-    static void disconnectAll(SharedPart* p, StaveSharingContext& ctx);
+    static void disconnectAll(StaveSharingContext& ctx);
 
-    static void makeSharedNotation(SharedPart* p, StaveSharingContext& ctx);
-    static void makeSharedChordRests(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedNotation(StaveSharingContext& ctx);
+    static void makeSharedChordRests(StaveSharingContext& ctx);
     static void makeSharedArticulations(Chord* originChord, Chord* sharedChord);
     static void makeSharedTiesAndNoteSpanners(Note* originNote, Note* sharedNote);
-    static void makeSharedAnnotations(SharedPart* p, StaveSharingContext& ctx);
-    static void makeSharedSpanners(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedAnnotations(StaveSharingContext& ctx);
+    static void makeSharedSpanners(StaveSharingContext& ctx);
+
+    static void makeStaveSharingLabels(StaveSharingContext& ctx);
+    static bool unisonNoteNeedsLabel(Note* unisonNote);
+    static String formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, const StaveSharingContext& ctx);
+
     static void manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems, track_idx_t startOriginTrack,
                                                           track_idx_t endOriginTrack, const SharedTrackMap& trackMap);
 
-    static void cleanup(SharedPart* p, StaveSharingContext& ctx);
+    static void cleanup(StaveSharingContext& ctx);
 };
 }
