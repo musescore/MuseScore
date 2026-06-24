@@ -30,21 +30,21 @@ public:
     void clear() override;
 
     const AutomationCurve& curve(const AutomationCurveKey& key) const override;
-    const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const override;
+    const AutomationPoint& activePoint(const AutomationCurveKey& key, utick_t tick) const override;
 
     bool isEmpty() const override;
 
-    void addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p) override;
-    void removePoint(const AutomationCurveKey& key, int utick) override;
-    void movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick) override;
+    void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) override;
+    void removePoint(const AutomationCurveKey& key, utick_t tick) override;
+    void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) override;
 
     void removePoints(const PointRemoveAccepted& accepted) override;
 
-    void setPointInValue(const AutomationCurveKey& key, int utick, double value) override;
-    void setPointOutValue(const AutomationCurveKey& key, int utick, double value) override;
+    void setPointInValue(const AutomationCurveKey& key, utick_t tick, double value) override;
+    void setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value) override;
 
-    void moveTicks(int utickFrom, int diff) override;
-    void removeTicks(int utickFrom, int utickTo) override;
+    void moveTicks(utick_t tickFrom, utick_t diff) override;
+    void removeTicks(utick_t tickFrom, utick_t tickTo) override;
 
     void read(const muse::ByteArray& json) override;
     muse::ByteArray toJson() const override;

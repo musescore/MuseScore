@@ -296,12 +296,12 @@ void ScoreAutomationController::init(const Score* score)
 
 void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
 {
-    const int diff = len.ticks();
+    const utick_t diff = len.ticks();
     if (m_automation->isEmpty() || diff == 0) {
         return;
     }
 
-    const int utick = score->repeatList().tick2utick(tick.ticks());
+    const utick_t utick = score->repeatList().tick2utick(tick.ticks());
 
     if (diff < 0) {
         m_automation->removeTicks(utick + diff, utick);
@@ -377,7 +377,7 @@ void ScoreAutomationController::removeGeneratedPoints(const Score* score, const 
                                                       size_t staffIdxFrom, size_t staffIdxTo)
 {
     const int tickOffset = seg->utick - seg->tick;
-    const int clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
+    const utick_t clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
     const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
     const staff_idx_t fromIdx = hasStaffFilter ? staffIdxFrom : 0;
     const staff_idx_t toIdx = hasStaffFilter ? staffIdxTo : score->nstaves() - 1;
@@ -389,8 +389,8 @@ void ScoreAutomationController::removeGeneratedPoints(const Score* score, const 
         }
     }
 
-    m_automation->removePoints([clearFromTick, &staffIds](const AutomationCurveKey& key, int utick, const AutomationPoint& point) {
-        return utick >= clearFromTick
+    m_automation->removePoints([clearFromTick, &staffIds](const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point) {
+        return tick >= clearFromTick
                && key.type == AutomationType::Dynamics
                && point.itemId.has_value()
                && muse::contains(staffIds, key.staffId);
@@ -439,7 +439,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     }
 
     const DynamicType dynamicType = dynamic->dynamicType();
-    const int dynamicUTick = dynamic->tick().ticks() + tickOffset;
+    const utick_t dynamicUTick = dynamic->tick().ticks() + tickOffset;
     AutomationPoint prevPoint = m_automation->activePoint(key, dynamicUTick);
 
     EID eid = dynamic->eid();
@@ -475,7 +475,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     if (muse::contains(COMPOUND_DYNAMIC_VALUES, dynamicType)) {
         const std::pair<double, double>& values = COMPOUND_DYNAMIC_VALUES.at(dynamicType);
-        const int endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
+        const utick_t endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
 
         AutomationPoint startPoint;
         startPoint.outValue = values.first;
@@ -530,8 +530,8 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
 
 void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key)
 {
-    int hairpinFrom = hairpin->tick().ticks() + tickOffset;
-    const int hairpinTo = hairpinFrom + hairpin->ticks().ticks();
+    utick_t hairpinFrom = hairpin->tick().ticks() + tickOffset;
+    const utick_t hairpinTo = hairpinFrom + hairpin->ticks().ticks();
 
     // --- Check start tick
     {

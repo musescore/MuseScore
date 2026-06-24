@@ -48,10 +48,10 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
     return curveIt->second;
 }
 
-const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, int utick) const
+const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
 {
     const AutomationCurve& curve = this->curve(key);
-    auto it = muse::findLessOrEqual(curve, utick);
+    auto it = muse::findLessOrEqual(curve, tick);
     if (it == curve.cend()) {
         static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear, std::nullopt };
         return MIDPOINT;
@@ -70,7 +70,7 @@ bool Automation::isEmpty() const
     return m_curveMap.empty();
 }
 
-void Automation::addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p)
+void Automation::addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p)
 {
     auto curveIt = m_curveMap.find(key);
     if (curveIt == m_curveMap.end()) {
@@ -78,10 +78,10 @@ void Automation::addPoint(const AutomationCurveKey& key, int utick, const Automa
     }
 
     AutomationCurve& curve = curveIt->second;
-    curve.insert({ utick, p });
+    curve.insert({ tick, p });
 }
 
-void Automation::removePoint(const AutomationCurveKey& key, int utick)
+void Automation::removePoint(const AutomationCurveKey& key, utick_t tick)
 {
     auto curveIt = m_curveMap.find(key);
     IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
@@ -89,7 +89,7 @@ void Automation::removePoint(const AutomationCurveKey& key, int utick)
     }
 
     AutomationCurve& curve = curveIt->second;
-    bool ok = muse::remove(curve, utick);
+    bool ok = muse::remove(curve, tick);
     DO_ASSERT(ok);
 
     if (curve.empty()) {
@@ -97,7 +97,7 @@ void Automation::removePoint(const AutomationCurveKey& key, int utick)
     }
 }
 
-void Automation::movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick)
+void Automation::movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick)
 {
     auto curveIt = m_curveMap.find(key);
     IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
@@ -105,16 +105,16 @@ void Automation::movePoint(const AutomationCurveKey& key, int srcUtick, int dstU
     }
 
     AutomationCurve& curve = curveIt->second;
-    auto node = curve.extract(srcUtick);
+    auto node = curve.extract(srcTick);
     IF_ASSERT_FAILED(!node.empty()) {
         return;
     }
 
-    node.key() = dstUtick;
+    node.key() = dstTick;
     curve.insert(std::move(node));
 }
 
-void Automation::setPointInValue(const AutomationCurveKey& key, int utick, double value)
+void Automation::setPointInValue(const AutomationCurveKey& key, utick_t tick, double value)
 {
     auto curveIt = m_curveMap.find(key);
     IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
@@ -122,7 +122,7 @@ void Automation::setPointInValue(const AutomationCurveKey& key, int utick, doubl
     }
 
     AutomationCurve& curve = curveIt->second;
-    auto pointIt = curve.find(utick);
+    auto pointIt = curve.find(tick);
     IF_ASSERT_FAILED(pointIt != curve.end()) {
         return;
     }
@@ -131,7 +131,7 @@ void Automation::setPointInValue(const AutomationCurveKey& key, int utick, doubl
     p.inValue = value;
 }
 
-void Automation::setPointOutValue(const AutomationCurveKey& key, int utick, double value)
+void Automation::setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value)
 {
     auto curveIt = m_curveMap.find(key);
     IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
@@ -139,7 +139,7 @@ void Automation::setPointOutValue(const AutomationCurveKey& key, int utick, doub
     }
 
     AutomationCurve& curve = curveIt->second;
-    auto pointIt = curve.find(utick);
+    auto pointIt = curve.find(tick);
     IF_ASSERT_FAILED(pointIt != curve.end()) {
         return;
     }
@@ -161,13 +161,13 @@ void Automation::removePoints(const PointRemoveAccepted& accepted)
     }
 }
 
-void Automation::moveTicks(int utickFrom, int diff)
+void Automation::moveTicks(utick_t tickFrom, utick_t diff)
 {
     for (auto& [_, curve] : m_curveMap) {
-        // Step 1: find the first point >= utickFrom
-        auto startIt = curve.lower_bound(utickFrom);
+        // Step 1: find the first point >= tickFrom
+        auto startIt = curve.lower_bound(tickFrom);
 
-        std::vector<std::pair<int, AutomationPoint> > toMove;
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
         toMove.reserve(std::distance(startIt, curve.end()));
 
         // Step 2: copy affected points
@@ -185,21 +185,21 @@ void Automation::moveTicks(int utickFrom, int diff)
     }
 }
 
-void Automation::removeTicks(int utickFrom, int utickTo)
+void Automation::removeTicks(utick_t tickFrom, utick_t tickTo)
 {
-    IF_ASSERT_FAILED(utickFrom <= utickTo) {
+    IF_ASSERT_FAILED(tickFrom <= tickTo) {
         return;
     }
 
     for (auto& [_, curve] : m_curveMap) {
-        curve.erase(curve.lower_bound(utickFrom), curve.upper_bound(utickTo));
+        curve.erase(curve.lower_bound(tickFrom), curve.upper_bound(tickTo));
     }
 
     for (auto it = m_curveMap.begin(); it != m_curveMap.end();) {
         it = it->second.empty() ? m_curveMap.erase(it) : std::next(it);
     }
 
-    moveTicks(utickTo, utickFrom - utickTo);
+    moveTicks(tickTo, tickFrom - tickTo);
 }
 
 void Automation::read(const muse::ByteArray& json)
@@ -246,7 +246,7 @@ void Automation::read(const muse::ByteArray& json)
             point.interpolation = muse::key(INTERPOLATION_TYPE_TO_STRING, pointObj.value("interpolation").toString(),
                                             AutomationPoint::InterpolationType::Linear);
 
-            const int tick = pointObj.value("tick").toInt();
+            const utick_t tick = pointObj.value("tick").toInt();
             curve.insert_or_assign(tick, point);
         }
 

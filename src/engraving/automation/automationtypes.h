@@ -46,7 +46,8 @@ enum class AutomationType : unsigned char {
     Dynamics,
 };
 
-using AutomationCurve = std::map<int /*utick*/, AutomationPoint>;
+using utick_t = int;
+using AutomationCurve = std::map<utick_t, AutomationPoint>;
 
 struct AutomationCurveKey {
     AutomationType type = AutomationType::Unknown;
