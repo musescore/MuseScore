@@ -291,7 +291,9 @@ void ScoreAutomationController::init(const Score* score)
 {
     TRACEFUNC;
 
+    m_automation->beginTransaction();
     update(score, 0, muse::nidx, muse::nidx);
+    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
@@ -303,11 +305,13 @@ void ScoreAutomationController::insertTime(const Score* score, const Fraction& t
 
     const utick_t utick = score->repeatList().tick2utick(tick.ticks());
 
+    m_automation->beginTransaction();
     if (diff < 0) {
         m_automation->removeTicks(utick + diff, utick);
     } else if (diff > 0) {
         m_automation->moveTicks(utick, diff);
     }
+    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::update(const Score* score, const ScoreChanges& changes)
@@ -321,11 +325,14 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
     // VoiceAssignment change shifts which staves a dynamic/hairpin covers, so the old points
     // on staves outside the new assignment must also be cleared
     const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
+
+    m_automation->beginTransaction();
     if (voiceAssignmentChanged) {
         update(score, tickFrom, muse::nidx, muse::nidx);
     } else {
         update(score, tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
     }
+    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo)
@@ -397,7 +404,8 @@ void ScoreAutomationController::removeGeneratedPoints(const Score* score, const 
     });
 }
 
-void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset,
+                                                 size_t staffIdxFrom, size_t staffIdxTo)
 {
     const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 

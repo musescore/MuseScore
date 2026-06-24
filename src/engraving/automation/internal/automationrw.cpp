@@ -54,6 +54,7 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
         return;
     }
 
+    automation.beginTransaction();
     automation.clear();
 
     const muse::JsonArray rootArray = doc.rootArray();
@@ -85,6 +86,8 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
             automation.addPoint(key, tick, point);
         }
     }
+
+    automation.commitTransaction();
 }
 
 muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGenerated)

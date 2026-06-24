@@ -30,6 +30,8 @@
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h"
 
+#include "defer.h"
+
 using namespace mu::notation;
 using namespace muse::uicomponents;
 
@@ -299,6 +301,11 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     // STEP 2 - Update the point value using the y parameter...
     // TODO: Not always dynamics...
     const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
+
+    engravingAutomation()->beginTransaction();
+    DEFER {
+        engravingAutomation()->commitTransaction();
+    };
 
     //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
     const double newValue = 1.0 - y;

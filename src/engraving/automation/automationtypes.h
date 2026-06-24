@@ -25,8 +25,10 @@
 
 #include "engraving/infrastructure/eid.h"
 
+#include <limits>
 #include <map>
 #include <optional>
+#include <set>
 
 namespace mu::engraving {
 struct AutomationPoint {
@@ -70,4 +72,28 @@ struct AutomationCurveKey {
 using utick_t = int;
 using AutomationCurve = std::map<utick_t, AutomationPoint>;
 using AutomationCurveMap = std::map<AutomationCurveKey, AutomationCurve>;
+
+struct AutomationChanges {
+    bool isFullReset = false;
+    std::set<AutomationCurveKey> affectedKeys;
+    utick_t tickFrom = -1;
+    utick_t tickTo = -1;
+
+    bool isEmpty() const
+    {
+        return !isFullReset && affectedKeys.empty();
+    }
+
+    void extend(const AutomationCurveKey& key, utick_t from, utick_t to)
+    {
+        affectedKeys.insert(key);
+        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
+        tickTo = std::max(tickTo, to);
+    }
+
+    void clear()
+    {
+        *this = {};
+    }
+};
 }

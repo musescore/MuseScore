@@ -47,7 +47,21 @@ public:
     void moveTicks(utick_t tickFrom, utick_t diff) override;
     void removeTicks(utick_t tickFrom, utick_t tickTo) override;
 
+    muse::async::Channel<AutomationChanges> changed() const override;
+
+    void beginTransaction() override;
+    void commitTransaction() override;
+    void rollbackTransaction() override;
+
 private:
+    void notifyChanged();
+
     AutomationCurveMap m_curveMap;
+    AutomationCurveMap m_snapshot;
+
+    bool m_transactionStarted = false;
+    bool m_notifyPending = false;
+    AutomationChanges m_pendingChanges;
+    muse::async::Channel<AutomationChanges> m_changesChannel;
 };
 }

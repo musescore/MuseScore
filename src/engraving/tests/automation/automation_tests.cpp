@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/automation/internal/automation.h"
+#include "global/async/asyncable.h"
 #include "global/containers.h"
 
 using namespace mu::engraving;
@@ -68,7 +69,7 @@ static AutomationPoint customPoint(double inVal, double outVal,
     return p;
 }
 
-class Automation_Tests : public ::testing::Test
+class Automation_Tests : public ::testing::Test, public muse::async::Asyncable
 {
 };
 
@@ -141,7 +142,7 @@ TEST_F(Automation_Tests, MoveTicks_AcrossMultipleCurves)
     automation.addPoint(key1, 200, p1);
     automation.addPoint(key2, 200, p2);
 
-    // [WHEN]
+    // [WHEN] Ticks from 100 shifted by +500
     automation.moveTicks(100, 500);
 
     // [THEN] Both curves shift from 200 to 700
@@ -191,7 +192,7 @@ TEST_F(Automation_Tests, RemoveTicks_CleansUpEmptyCurves)
     automation.addPoint(key, 200, generatedPoint(0.4, 0.5));
     automation.addPoint(key, 400, generatedPoint(0.5, 0.6));
 
-    // [WHEN]
+    // [WHEN] Remove ticks in range [100, 500]
     automation.removeTicks(100, 500);
 
     // [THEN] Curve entry is removed from the map
@@ -243,7 +244,7 @@ TEST_F(Automation_Tests, RemovePoints_FilterByKeyAndTick)
     automation.addPoint(key1, 300, generatedPoint(0.4, 0.5));
     automation.addPoint(key2, 300, p_key2_300);
 
-    // [WHEN]
+    // [WHEN] Remove generated points from key1 at tick >= 300
     automation.removePoints([&key1](const AutomationCurveKey& key, int utick, const AutomationPoint& point) {
         return key == key1 && utick >= 300 && point.itemId.has_value();
     });
@@ -268,12 +269,169 @@ TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
     automation.addPoint(key, 100, generatedPoint(0.4, 0.5));
     automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
 
-    // [WHEN]
+    // [WHEN] Remove all generated points
     automation.removePoints([](const AutomationCurveKey&, int, const AutomationPoint& point) {
         return point.itemId.has_value();
     });
 
-    // [THEN]
+    // [THEN] Curve entry is removed from the map
     EXPECT_TRUE(automation.isEmpty());
 }
 
+TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
+{
+    // [GIVEN] A subscriber registered before the change
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    int notifyCount = 0;
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
+        ++notifyCount;
+        lastChanges = ch;
+    });
+
+    // [WHEN] Add a point
+    automation.addPoint(key, 200, generatedPoint(0.5, 0.5));
+
+    // [THEN] Exactly one notification with the correct range
+    EXPECT_EQ(notifyCount, 1);
+    EXPECT_FALSE(lastChanges.isFullReset);
+    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key));
+    EXPECT_EQ(lastChanges.tickFrom, 200);
+    EXPECT_EQ(lastChanges.tickTo, 200);
+}
+
+TEST_F(Automation_Tests, Notify_SetPointInValue_SameValue_NotFired)
+{
+    // [GIVEN] A point already at 0.5
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    automation.addPoint(key, 100, generatedPoint(0.5, 0.5));
+
+    int notifyCount = 0;
+    automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
+        ++notifyCount;
+    });
+
+    // [WHEN] Set the same inValue
+    automation.setPointInValue(key, 100, 0.5);
+
+    // [THEN] No notification fired
+    EXPECT_EQ(notifyCount, 0);
+}
+
+TEST_F(Automation_Tests, Notify_Clear_IsFullReset)
+{
+    // [GIVEN] A non-empty automation with a subscriber
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    automation.addPoint(key, 100, generatedPoint(0.5, 0.5));
+
+    int notifyCount = 0;
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
+        ++notifyCount;
+        lastChanges = ch;
+    });
+
+    // [WHEN] Clear automation
+    automation.clear();
+
+    // [THEN] One notification and a full reset
+    EXPECT_EQ(notifyCount, 1);
+    EXPECT_TRUE(lastChanges.isFullReset);
+}
+
+TEST_F(Automation_Tests, Notify_MoveTicks_OpenEndedRange)
+{
+    // [GIVEN] Two points and a subscriber
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    automation.addPoint(key, 100, generatedPoint(0.3, 0.4));
+    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
+
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&lastChanges](const AutomationChanges& ch) {
+        lastChanges = ch;
+    });
+
+    // [WHEN] Ticks shifted from 100 by +50
+    automation.moveTicks(100, 50);
+
+    // [THEN] tickTo is open-ended (all points from tickFrom forward are affected)
+    EXPECT_EQ(lastChanges.tickFrom, 100);
+    EXPECT_EQ(lastChanges.tickTo, std::numeric_limits<utick_t>::max());
+}
+
+TEST_F(Automation_Tests, Transaction_CommitFiresSingleNotification)
+{
+    // [GIVEN] A subscriber before the transaction
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    int notifyCount = 0;
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
+        ++notifyCount;
+        lastChanges = ch;
+    });
+
+    // [WHEN] Two changes inside a transaction
+    automation.beginTransaction();
+    automation.addPoint(key, 100, generatedPoint(0.3, 0.4));
+    automation.addPoint(key, 300, generatedPoint(0.5, 0.6));
+
+    // [THEN] No notification yet
+    EXPECT_EQ(notifyCount, 0);
+
+    // [WHEN] Commit
+    automation.commitTransaction();
+
+    // [THEN] Exactly one notification with the merged range
+    EXPECT_EQ(notifyCount, 1);
+    EXPECT_EQ(lastChanges.tickFrom, 100);
+    EXPECT_EQ(lastChanges.tickTo, 300);
+}
+
+TEST_F(Automation_Tests, Transaction_RollbackRestoresStateAndSilent)
+{
+    // [GIVEN] One existing point, a subscriber, then a transaction that adds two more
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationPoint original = generatedPoint(0.3, 0.4);
+    automation.addPoint(key, 100, original);
+
+    int notifyCount = 0;
+    automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
+        ++notifyCount;
+    });
+
+    // [WHEN] Transaction started, two points added, then rolled back
+    automation.beginTransaction();
+    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
+    automation.addPoint(key, 300, generatedPoint(0.7, 0.8));
+    automation.rollbackTransaction();
+
+    // [THEN] No notification fired and only the original point survives
+    EXPECT_EQ(notifyCount, 0);
+    AutomationCurve expected;
+    expected[100] = original;
+    checkCurvesMatch(automation.curve(key), expected);
+}

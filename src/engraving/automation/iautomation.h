@@ -23,6 +23,8 @@
 
 #include <functional>
 
+#include "global/async/channel.h"
+
 #include "automationtypes.h"
 
 namespace mu::engraving {
@@ -54,5 +56,11 @@ public:
 
     //! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
     virtual void removeTicks(utick_t tickFrom, utick_t tickTo) = 0;
+
+    virtual muse::async::Channel<AutomationChanges> changed() const = 0;
+
+    virtual void beginTransaction() = 0;
+    virtual void commitTransaction() = 0;
+    virtual void rollbackTransaction() = 0;
 };
 }
