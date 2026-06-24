@@ -25,20 +25,19 @@
 
 #include "automationtypes.h"
 
-#include "global/types/bytearray.h"
-
 namespace mu::engraving {
 class IAutomation
 {
 public:
     virtual ~IAutomation() = default;
 
-    virtual void clear() = 0;
-
+    virtual const AutomationCurveMap& curves() const = 0;
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
     virtual const AutomationPoint& activePoint(const AutomationCurveKey& key, utick_t tick) const = 0;
 
     virtual bool isEmpty() const = 0;
+
+    virtual void clear() = 0;
 
     virtual void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) = 0;
     virtual void removePoint(const AutomationCurveKey& key, utick_t tick) = 0;
@@ -55,8 +54,5 @@ public:
 
     //! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
     virtual void removeTicks(utick_t tickFrom, utick_t tickTo) = 0;
-
-    virtual void read(const muse::ByteArray& json) = 0;
-    virtual muse::ByteArray toJson() const = 0;
 };
 }

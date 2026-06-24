@@ -34,7 +34,7 @@
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"
@@ -213,7 +213,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
     {
         if (masterScore->automation()) {
             ByteArray ba = mscReader.readAutomationJsonFile();
-            masterScore->automation()->read(ba);
+            AutomationRW::read(*masterScore->automation(), ba);
         }
     }
 

@@ -369,6 +369,8 @@ target_sources(engraving PRIVATE
     automation/iautomation.h
     automation/internal/automation.cpp
     automation/internal/automation.h
+    automation/internal/automationrw.cpp
+    automation/internal/automationrw.h
     automation/internal/scoreautomationcontroller.cpp
     automation/internal/scoreautomationcontroller.h
 

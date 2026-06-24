@@ -46,9 +46,6 @@ enum class AutomationType : unsigned char {
     Dynamics,
 };
 
-using utick_t = int;
-using AutomationCurve = std::map<utick_t, AutomationPoint>;
-
 struct AutomationCurveKey {
     AutomationType type = AutomationType::Unknown;
     muse::ID staffId;
@@ -69,4 +66,8 @@ struct AutomationCurveKey {
         return std::tie(type, staffId, voiceIdx) < std::tie(k.type, k.staffId, k.voiceIdx);
     }
 };
+
+using utick_t = int;
+using AutomationCurve = std::map<utick_t, AutomationPoint>;
+using AutomationCurveMap = std::map<AutomationCurveKey, AutomationCurve>;
 }

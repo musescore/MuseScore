@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,12 +27,13 @@ namespace mu::engraving {
 class Automation : public IAutomation
 {
 public:
-    void clear() override;
-
+    const AutomationCurveMap& curves() const override;
     const AutomationCurve& curve(const AutomationCurveKey& key) const override;
     const AutomationPoint& activePoint(const AutomationCurveKey& key, utick_t tick) const override;
 
     bool isEmpty() const override;
+
+    void clear() override;
 
     void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) override;
     void removePoint(const AutomationCurveKey& key, utick_t tick) override;
@@ -46,10 +47,7 @@ public:
     void moveTicks(utick_t tickFrom, utick_t diff) override;
     void removeTicks(utick_t tickFrom, utick_t tickTo) override;
 
-    void read(const muse::ByteArray& json) override;
-    muse::ByteArray toJson() const override;
-
 private:
-    std::map<AutomationCurveKey, AutomationCurve> m_curveMap;
+    AutomationCurveMap m_curveMap;
 };
 }

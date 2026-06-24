@@ -38,7 +38,7 @@
 #include "dom/mscore.h"
 #include "dom/page.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"
@@ -187,7 +187,10 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write automation
     {
         if (score->automation()) {
-            mscWriter.writeAutomationJsonFile(score->automation()->toJson());
+            ByteArray automationData = AutomationRW::write(*score->automation(), false /*writeGenerated*/);
+            if (!automationData.empty()) {
+                mscWriter.writeAutomationJsonFile(automationData);
+            }
         }
     }
 

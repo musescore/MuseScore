@@ -277,29 +277,3 @@ TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
     EXPECT_TRUE(automation.isEmpty());
 }
 
-TEST_F(Automation_Tests, JsonRoundTrip_MultipleCurves)
-{
-    // [GIVEN] Two curves on different staves
-    Automation automation;
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
-    key2.voiceIdx = 2;
-
-    AutomationPoint p1 = customPoint(0.3, 0.5);
-    AutomationPoint p2 = customPoint(0.6, 0.8);
-    automation.addPoint(key1, 100, p1);
-    automation.addPoint(key2, 200, p2);
-
-    // [WHEN]
-    Automation loaded;
-    loaded.read(automation.toJson());
-
-    // [THEN] Both curves survive the round-trip
-    checkCurvesMatch(loaded.curve(key1), automation.curve(key1));
-    checkCurvesMatch(loaded.curve(key2), automation.curve(key2));
-}
