@@ -89,6 +89,7 @@ All located in `project_examples/`.
 - `altoFluteTremMissingKey.mnx`: Removed `key` node to test that importer correctly imports transposed key signatures when no first key signature is present.
 - `barlineTypesWithShort.mnx`: Modified a dashed barline to "dotted" and a tick barline to "short" to test full range of barline type in mnx.
 - `clarinet38MissingTime.mnx`: Removed `time` node to test that importer handles missing time signature gracefully.
+- `enharmonics.mnx`: Hand-edited example to exercise extremes of enharmonic respelling of transposed notes.
 - `key56Wrapped56Edited.mnx` : Hand-edited to test keyFifthsWrapAt values +/-5 and +/-6.
 - `layoutBrackets.mnx`: Minimal layout with nested group brackets to exercise layout import/export bracket handling.
 - `layoutBarlineStylesInstrument.mnx`: Hand-authored SATB mensurstrich choir layout (no bracket symbol) with separate piano accompaniment, to verify mensurstrich handling without bracket coupling.
