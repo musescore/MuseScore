@@ -224,7 +224,7 @@ void Automation::read(const muse::ByteArray& json)
         const muse::JsonObject curveObj = rootArray.at(i).toObject();
         AutomationCurveKey key;
         key.type = muse::key(AUTOMATION_TYPE_TO_STRING, curveObj.value("type").toString(), AutomationType::Unknown);
-        key.staffId = static_cast<uint64_t>(curveObj.value("staffId").toInt());
+        key.staffId = muse::ID(curveObj.value("staffId").toString().toStdString());
 
         if (curveObj.contains("voiceId")) {
             key.voiceIdx = static_cast<size_t>(curveObj.value("voiceId").toInt());

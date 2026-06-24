@@ -22,88 +22,284 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/internal/automationcontroller.h"
-#include "engraving/automation/iautomation.h"
-#include "engraving/dom/staff.h"
-
-#include "utils/scorerw.h"
+#include "engraving/automation/internal/automation.h"
+#include "global/containers.h"
 
 using namespace mu::engraving;
 
 using InterpolationType = AutomationPoint::InterpolationType;
 
-static const String AUTOMATION_DATA_DIR(u"automation/data/");
-
-static constexpr double P_VALUE(0.429);
-static constexpr double MID_VALUE(0.5);
-static constexpr double MP_VALUE(0.5);
-static constexpr double F_VALUE(0.643);
-static constexpr double FF_VALUE(0.714);
-
-class Engraving_AutomationTests : public ::testing::Test
-{
-};
-
 static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
 {
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
 
-    for (const auto& [utick, actualPoint] : actualCurve) {
-        ASSERT_TRUE(muse::contains(expectedCurve, utick));
-        const AutomationPoint& expectedPoint = expectedCurve.at(utick);
+    for (const auto& [utick, expectedPoint] : expectedCurve) {
+        ASSERT_TRUE(muse::contains(actualCurve, utick)) << "Missing point at utick " << utick;
+        const AutomationPoint& actualPoint = actualCurve.at(utick);
 
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001);
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001);
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation);
+        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at utick " << utick;
+        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at utick " << utick;
+        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at utick " << utick;
     }
 }
 
-TEST_F(Engraving_AutomationTests, Init_Dynamics)
+static AutomationPoint generatedPoint(double inVal, double outVal,
+                                      InterpolationType interp = InterpolationType::Linear)
 {
-    // [GIVEN] Score with dynamics
-    Score* score = ScoreRW::readScore(AUTOMATION_DATA_DIR + u"dynamics.mscx");
-    ASSERT_TRUE(score);
-    ASSERT_FALSE(score->staves().empty());
+    static uint64_t lastId = 0;
 
-    // [WHEN] Calculate the dynamics curve
-    AutomationController controller;
-    controller.init(score);
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+    p.itemId = EID::newUniqueTestMode(lastId);
 
-    // [THEN] Curve matches expectations
+    return p;
+}
+
+static AutomationPoint customPoint(double inVal, double outVal,
+                                   InterpolationType interp = InterpolationType::Linear)
+{
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+
+    return p;
+}
+
+class Automation_Tests : public ::testing::Test
+{
+};
+
+TEST_F(Automation_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
+{
+    // [GIVEN] Three points on a single curve
+    Automation automation;
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
-    key.staffId = score->staff(0)->id();
+    key.staffId = muse::ID(1);
 
-    AutomationCurve actualCurve = controller.automation()->curve(key);
+    AutomationPoint p1 = generatedPoint(0.3, 0.4);
+    AutomationPoint p2 = generatedPoint(0.4, 0.6);
+    AutomationPoint p3 = generatedPoint(0.6, 0.7);
+    automation.addPoint(key, 100, p1);
+    automation.addPoint(key, 200, p2);
+    automation.addPoint(key, 300, p3);
 
-    // 1st measure
-    AutomationCurve expectedCurve;
-    expectedCurve[480] = AutomationPoint { MID_VALUE, P_VALUE, InterpolationType::Linear }; // 2nd beat: p
-    expectedCurve[1440] = AutomationPoint { P_VALUE, MP_VALUE, InterpolationType::Linear }; // 4th beat: mp
+    // [WHEN] Move ticks starting at 200 by +100
+    automation.moveTicks(200, 100);
 
-    // 2nd measure
-    expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: sf
-    expectedCurve[2400] = AutomationPoint { F_VALUE, MP_VALUE, InterpolationType::Linear }; // 2nd beat: mp
-    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE, InterpolationType::Exponential }; // 3rd beat: p (pf)
-    expectedCurve[3264] = AutomationPoint { P_VALUE, F_VALUE, InterpolationType::Linear }; // 4th beat: f (pf)
+    // [THEN] Point before 200 is unchanged; points at 200 and 300 shift to 300 and 400
+    AutomationCurve expected;
+    expected[100] = p1;
+    expected[300] = p2;
+    expected[400] = p3;
+    checkCurvesMatch(automation.curve(key), expected);
+}
 
-    // 3rd measure
-    expectedCurve[4800] = AutomationPoint { F_VALUE, P_VALUE, InterpolationType::Linear }; // 3rd beat: p (hairpin starts)
+TEST_F(Automation_Tests, MoveTicks_NegativeDiff_ShiftsPointsBack)
+{
+    // [GIVEN] Three points
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
 
-    // 4th measure
-    expectedCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear }; // 1st beat: ff (hairpin ends)
+    AutomationPoint p1 = generatedPoint(0.3, 0.4);
+    AutomationPoint p2 = generatedPoint(0.4, 0.6);
+    AutomationPoint p3 = generatedPoint(0.6, 0.7);
+    automation.addPoint(key, 100, p1);
+    automation.addPoint(key, 500, p2);
+    automation.addPoint(key, 700, p3);
 
-    checkCurvesMatch(actualCurve, expectedCurve);
+    // [WHEN] Move ticks starting at 500 by -200
+    automation.moveTicks(500, -200);
 
-    // [THEN] 2nd voice curve matches expectations
-    key.voiceIdx = 1;
-    actualCurve = controller.automation()->curve(key);
+    // [THEN] Point before 500 is unchanged; 500 -> 300, 700 -> 500
+    AutomationCurve expected;
+    expected[100] = p1;
+    expected[300] = p2;
+    expected[500] = p3;
+    checkCurvesMatch(automation.curve(key), expected);
+}
 
-    // 3rd measure
-    expectedCurve.clear();
-    expectedCurve[3840] = AutomationPoint { MID_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: f (applied only to 2nd voice)
+TEST_F(Automation_Tests, MoveTicks_AcrossMultipleCurves)
+{
+    // [GIVEN] Two curves with points on different staves
+    Automation automation;
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
 
-    checkCurvesMatch(actualCurve, expectedCurve);
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
 
-    delete score;
+    AutomationPoint p1 = generatedPoint(0.3, 0.5);
+    AutomationPoint p2 = generatedPoint(0.4, 0.6);
+    automation.addPoint(key1, 200, p1);
+    automation.addPoint(key2, 200, p2);
+
+    // [WHEN]
+    automation.moveTicks(100, 500);
+
+    // [THEN] Both curves shift from 200 to 700
+    AutomationCurve expected1;
+    expected1[700] = p1;
+    AutomationCurve expected2;
+    expected2[700] = p2;
+    checkCurvesMatch(automation.curve(key1), expected1);
+    checkCurvesMatch(automation.curve(key2), expected2);
+}
+
+TEST_F(Automation_Tests, RemoveTicks_RemovesRangeAndClosesGap)
+{
+    // [GIVEN] Points at 100, 300, 500, 700
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationPoint p100 = generatedPoint(0.3, 0.4);
+    AutomationPoint p300 = generatedPoint(0.4, 0.5);
+    AutomationPoint p500 = generatedPoint(0.5, 0.6);
+    AutomationPoint p700 = generatedPoint(0.6, 0.7);
+    automation.addPoint(key, 100, p100);
+    automation.addPoint(key, 300, p300);
+    automation.addPoint(key, 500, p500);
+    automation.addPoint(key, 700, p700);
+
+    // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
+    automation.removeTicks(300, 500);
+
+    // [THEN] Points at 300 and 500 removed; 700 shifts to 500
+    AutomationCurve expected;
+    expected[100] = p100;
+    expected[500] = p700;
+    checkCurvesMatch(automation.curve(key), expected);
+}
+
+TEST_F(Automation_Tests, RemoveTicks_CleansUpEmptyCurves)
+{
+    // [GIVEN] A curve with all its points inside the removed range
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    automation.addPoint(key, 200, generatedPoint(0.4, 0.5));
+    automation.addPoint(key, 400, generatedPoint(0.5, 0.6));
+
+    // [WHEN]
+    automation.removeTicks(100, 500);
+
+    // [THEN] Curve entry is removed from the map
+    EXPECT_TRUE(automation.isEmpty());
+}
+
+TEST_F(Automation_Tests, RemovePoints_RemovesGeneratedPreservesCustom)
+{
+    // [GIVEN] A mix of generated (itemId set) and custom (no itemId) points
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationPoint custom100 = customPoint(0.3, 0.4);
+    AutomationPoint custom300 = customPoint(0.5, 0.6);
+    automation.addPoint(key, 100, custom100);
+    automation.addPoint(key, 200, generatedPoint(0.4, 0.5));
+    automation.addPoint(key, 300, custom300);
+    automation.addPoint(key, 400, generatedPoint(0.6, 0.7));
+
+    // [WHEN] Remove only generated points
+    automation.removePoints([](const AutomationCurveKey&, int, const AutomationPoint& point) {
+        return point.itemId.has_value();
+    });
+
+    // [THEN] Only custom points remain
+    AutomationCurve expected;
+    expected[100] = custom100;
+    expected[300] = custom300;
+    checkCurvesMatch(automation.curve(key), expected);
+}
+
+TEST_F(Automation_Tests, RemovePoints_FilterByKeyAndTick)
+{
+    // [GIVEN] Two curves; remove generated points from key1 at tick >= 300 only
+    Automation automation;
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
+
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
+
+    AutomationPoint p_key1_100 = generatedPoint(0.3, 0.4);
+    AutomationPoint p_key2_300 = generatedPoint(0.5, 0.6);
+    automation.addPoint(key1, 100, p_key1_100);
+    automation.addPoint(key1, 300, generatedPoint(0.4, 0.5));
+    automation.addPoint(key2, 300, p_key2_300);
+
+    // [WHEN]
+    automation.removePoints([&key1](const AutomationCurveKey& key, int utick, const AutomationPoint& point) {
+        return key == key1 && utick >= 300 && point.itemId.has_value();
+    });
+
+    // [THEN] key1/300 removed, key1/100 and key2/300 untouched
+    AutomationCurve expectedKey1;
+    expectedKey1[100] = p_key1_100;
+    AutomationCurve expectedKey2;
+    expectedKey2[300] = p_key2_300;
+    checkCurvesMatch(automation.curve(key1), expectedKey1);
+    checkCurvesMatch(automation.curve(key2), expectedKey2);
+}
+
+TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
+{
+    // [GIVEN] A curve where all points will be removed by the filter
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    automation.addPoint(key, 100, generatedPoint(0.4, 0.5));
+    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
+
+    // [WHEN]
+    automation.removePoints([](const AutomationCurveKey&, int, const AutomationPoint& point) {
+        return point.itemId.has_value();
+    });
+
+    // [THEN]
+    EXPECT_TRUE(automation.isEmpty());
+}
+
+TEST_F(Automation_Tests, JsonRoundTrip_MultipleCurves)
+{
+    // [GIVEN] Two curves on different staves
+    Automation automation;
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
+
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
+    key2.voiceIdx = 2;
+
+    AutomationPoint p1 = customPoint(0.3, 0.5);
+    AutomationPoint p2 = customPoint(0.6, 0.8);
+    automation.addPoint(key1, 100, p1);
+    automation.addPoint(key2, 200, p2);
+
+    // [WHEN]
+    Automation loaded;
+    loaded.read(automation.toJson());
+
+    // [THEN] Both curves survive the round-trip
+    checkCurvesMatch(loaded.curve(key1), automation.curve(key1));
+    checkCurvesMatch(loaded.curve(key2), automation.curve(key2));
 }
