@@ -173,6 +173,10 @@ option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
 option(MUSE_COMPILE_USE_COMPILER_CACHE "Try to use compiler cache: tries ccache, sccache, buildcache in that order. Use COMPILER_CACHE_PROGRAM to specify a specific compiler cache program." ON)
 option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 
+# === System libraries ===
+# Important for the maintainers of Linux distributions
+option(MSS_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
+
 # === Debug ===
 option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
