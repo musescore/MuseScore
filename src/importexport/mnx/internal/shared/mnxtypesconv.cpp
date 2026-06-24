@@ -642,6 +642,7 @@ NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, Key key,
     if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
         nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        LOGW() << "Enharmonically transposing pitch with alteration value out of range.";
     } else {
         nval.tpc1 = step2tpc(step, AccidentalVal(alteration));
     }
