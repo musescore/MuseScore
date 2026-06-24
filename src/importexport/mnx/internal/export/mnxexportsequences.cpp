@@ -107,23 +107,15 @@ static int calcWrittenDiatonicDelta(const Note* note)
         return 0;
     }
 
-    int delta = 0;
-    const KeySigEvent kse = staff->keySigEvent(note->tick());
-    if (kse.isValid() && !kse.custom()) {
-        int concertRelStep = absStep(concertTpc, concertPitch) - tpc2step(int(Tpc::TPC_C) + int(kse.concertKey()));
-        int writtenRelStep = absStep(writtenTpc, writtenPitch) - tpc2step(int(Tpc::TPC_C) + int(kse.key()));
-        delta = writtenRelStep - concertRelStep;
-    } else {
-        int expectedWrittenTpc = Transpose::transposeTpc(concertTpc, transpose, true);
-        IF_ASSERT_FAILED(tpc2pitch(expectedWrittenTpc) == tpc2pitch(writtenTpc)) {
-            LOGW() << "Skipping written pitch override with mismatched chromatic pitch:"
-                   << " concert=" << tpcUserName(concertTpc, concertPitch, true).toStdString()
-                   << " transposed=" << tpcUserName(writtenTpc, writtenPitch, true).toStdString()
-                   << " expectedTransposed=" << tpcUserName(expectedWrittenTpc, writtenPitch, true).toStdString();
-            return 0;
-        }
-        delta = absStep(writtenTpc, writtenPitch) - absStep(expectedWrittenTpc, writtenPitch);
+    int expectedWrittenTpc = Transpose::transposeTpc(concertTpc, transpose, true);
+    IF_ASSERT_FAILED(tpc2pitch(expectedWrittenTpc) == tpc2pitch(writtenTpc)) {
+        LOGW() << "Skipping written pitch override with mismatched chromatic pitch:"
+               << " concert=" << tpcUserName(concertTpc, concertPitch, true).toStdString()
+               << " transposed=" << tpcUserName(writtenTpc, writtenPitch, true).toStdString()
+               << " expectedTransposed=" << tpcUserName(expectedWrittenTpc, writtenPitch, true).toStdString();
+        return 0;
     }
+    int delta = absStep(writtenTpc, writtenPitch) - absStep(expectedWrittenTpc, writtenPitch);
 
     static constexpr int maxDelta = STEP_DELTA_OCTAVE / 2;
     if (std::abs(delta) > maxDelta) {
