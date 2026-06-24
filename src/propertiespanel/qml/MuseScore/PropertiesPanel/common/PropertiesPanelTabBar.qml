@@ -30,6 +30,11 @@ StyledTabBar {
 
     background: Item {
         implicitHeight: 28
+
+        SeparatorLine {
+            id: underlineStroke
+            anchors.bottom: parent.bottom
+        }
     }
 
     // Equally divided share given to overflowing tabs, or Infinity when everything fits:
@@ -45,13 +50,17 @@ StyledTabBar {
             return Infinity
         }
 
-        let share = (root.width - totalSpacing) / items.length
+        let availableWidth = Math.max(0, root.width - totalSpacing)
+        let share = availableWidth / items.length
         let prev = -1
         while (share !== prev) {
             prev = share
             let fittedItems = items.filter(i => i.implicitWidth < share)
             let totalFittedWidth = fittedItems.reduce((s, i) => s + i.implicitWidth, 0)
-            share = (root.width - totalFittedWidth - totalSpacing) / (items.length - fittedItems.length)
+            let remaining = items.length - fittedItems.length
+            share = remaining > 0
+                    ? Math.max(0, (root.width - totalFittedWidth - totalSpacing) / remaining)
+                    : 0
         }
         return share
     }

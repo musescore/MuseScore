@@ -28,4 +28,6 @@ StyledTabButton {
 
     font: ui.theme.bodyBoldFont
     width: Math.min(implicitWidth, maxWidth)
+    leftPadding: 4
+    rightPadding: 4
 }
