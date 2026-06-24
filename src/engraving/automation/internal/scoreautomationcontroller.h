@@ -32,11 +32,11 @@ class RepeatSegment;
 struct AutomationCurveKey;
 struct ScoreChanges;
 
-class AutomationController
+class ScoreAutomationController
 {
 public:
-    AutomationController();
-    ~AutomationController();
+    ScoreAutomationController();
+    ~ScoreAutomationController();
 
     void init(const Score* score);
 
@@ -48,8 +48,7 @@ public:
 private:
     void update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
-    void removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom,
-                               size_t staffIdxFrom, size_t staffIdxTo);
+    void removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo);

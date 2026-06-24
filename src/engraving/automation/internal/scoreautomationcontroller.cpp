@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "automationcontroller.h"
+#include "scoreautomationcontroller.h"
 
 #include <set>
 #include <unordered_set>
@@ -260,12 +260,12 @@ static bool isEndDynamicOfHairpin(const Dynamic* dynamic, double dynamicValue, d
     return false;
 }
 
-AutomationController::AutomationController()
+ScoreAutomationController::ScoreAutomationController()
 {
     m_automation = new Automation();
 }
 
-AutomationController::~AutomationController()
+ScoreAutomationController::~ScoreAutomationController()
 {
     delete m_automation;
 }
@@ -287,14 +287,14 @@ static bool isRelevantChange(const ScoreChanges& changes)
     return false;
 }
 
-void AutomationController::init(const Score* score)
+void ScoreAutomationController::init(const Score* score)
 {
     TRACEFUNC;
 
     update(score, 0, muse::nidx, muse::nidx);
 }
 
-void AutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
+void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
 {
     const int diff = len.ticks();
     if (m_automation->isEmpty() || diff == 0) {
@@ -310,7 +310,7 @@ void AutomationController::insertTime(const Score* score, const Fraction& tick, 
     }
 }
 
-void AutomationController::update(const Score* score, const ScoreChanges& changes)
+void ScoreAutomationController::update(const Score* score, const ScoreChanges& changes)
 {
     if (changes.isTextEditing || !isRelevantChange(changes)) {
         return;
@@ -328,7 +328,7 @@ void AutomationController::update(const Score* score, const ScoreChanges& change
     }
 }
 
-void AutomationController::update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo)
 {
     TRACEFUNC;
 
@@ -373,8 +373,8 @@ void AutomationController::update(const Score* score, int tickFrom, size_t staff
     }
 }
 
-void AutomationController::removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom,
-                                                 size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom,
+                                                      size_t staffIdxFrom, size_t staffIdxTo)
 {
     const int tickOffset = seg->utick - seg->tick;
     const int clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
@@ -397,7 +397,7 @@ void AutomationController::removeGeneratedPoints(const Score* score, const Repea
     });
 }
 
-void AutomationController::addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo)
 {
     const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 
@@ -419,8 +419,8 @@ void AutomationController::addSegmentPoints(const Segment* segment, int tickOffs
     }
 }
 
-void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset,
-                                            size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset,
+                                                 size_t staffIdxFrom, size_t staffIdxTo)
 {
     if (!dynamic->playDynamic()) {
         return;
@@ -432,7 +432,7 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
     }
 }
 
-void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key)
+void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return;
@@ -495,8 +495,8 @@ void AutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffs
     }
 }
 
-void AutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset,
-                                            size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset,
+                                                 size_t staffIdxFrom, size_t staffIdxTo)
 {
     const SpannerMap& spannerMap = score->spannerMap();
     if (spannerMap.empty()) {
@@ -528,7 +528,7 @@ void AutomationController::addSpannerPoints(const Score* score, int repeatStartT
     }
 }
 
-void AutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key)
+void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key)
 {
     int hairpinFrom = hairpin->tick().ticks() + tickOffset;
     const int hairpinTo = hairpinFrom + hairpin->ticks().ticks();

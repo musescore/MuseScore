@@ -53,7 +53,7 @@ class Revisions;
 class TempoMap;
 class TimeSigMap;
 class UndoStack;
-class AutomationController;
+class ScoreAutomationController;
 
 class MidiMapping
 {
@@ -224,7 +224,7 @@ private:
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
-    AutomationController* m_automationController = nullptr;
+    ScoreAutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;
