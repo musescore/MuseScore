@@ -626,3 +626,60 @@ TEST_F(Engraving_PartialTieTests, deleteAllMeasures)
     deleteScoreWithPartialTies(test1);
     deleteScoreWithPartialTies(test2);
 }
+
+TEST_F(Engraving_PartialTieTests, copyPasteRemoveInvalidPartialTies)
+{
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + u"copyPastePartials05.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    Measure* m4 = m3->nextMeasure();
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+    EXPECT_TRUE(m3);
+    EXPECT_TRUE(m4);
+
+    // Select measures 1 and 2
+    score->select(m1, SelectType::RANGE, 0);
+    score->select(m2, SelectType::RANGE, 0);
+
+    EXPECT_TRUE(score->selection().canCopy());
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    QByteArray ba = score->selection().mimeData().toQByteArray();
+    mimeData->setData(mimeType, ba);
+
+    // Paste at measure 4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
+    score->select(m4->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+
+    // Measure 4 beat 1 — no ties expected
+    const Fraction tick1 = Fraction(3, 1);
+    Segment* seg1 = score->tick2segment(tick1, false, SegmentType::ChordRest);
+    EXPECT_TRUE(seg1);
+    EXPECT_TRUE(seg1->element(0) && seg1->element(0)->isChord());
+    Note* note1 = toChord(seg1->element(0))->upNote();
+    EXPECT_TRUE(note1);
+    EXPECT_FALSE(note1->tieBack());
+    EXPECT_FALSE(note1->tieFor());
+
+    // Measure 5 beat 4 — no ties expected
+    const Fraction tick2 = Fraction(19, 4);
+    Segment* seg2 = score->tick2segment(tick2, false, SegmentType::ChordRest);
+    EXPECT_TRUE(seg2);
+    EXPECT_TRUE(seg2->element(0) && seg2->element(0)->isChord());
+    Note* note2 = toChord(seg2->element(0))->upNote();
+    EXPECT_TRUE(note2);
+    EXPECT_FALSE(note2->tieBack());
+    EXPECT_FALSE(note2->tieFor());
+
+    delete score;
+}

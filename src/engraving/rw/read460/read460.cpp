@@ -815,6 +815,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
     for (Score* s : score->scoreList()) {     // for all parts
         s->connectTies();
+        s->undoRemoveStaleTieJumpPoints(false);
 
         for (Spanner* sp : score->unmanagedSpanners()) {
             if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
