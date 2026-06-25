@@ -5,6 +5,7 @@
       <Ottava>
         <subtype>8va</subtype>
         <ticks_f>3/4</ticks_f>
+        <eid>B_B</eid>
         </Ottava>
       <next>
         <location>
@@ -13,22 +14,28 @@
         </next>
       </Spanner>
     <Chord>
+      <eid>C_C</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>D_D</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>F_F</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>G_G</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>H_H</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
@@ -41,8 +48,10 @@
         </prev>
       </Spanner>
     <Chord>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>J_J</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

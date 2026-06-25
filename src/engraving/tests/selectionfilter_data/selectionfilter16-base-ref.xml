@@ -2,42 +2,53 @@
 <StaffList version="2.00" tick="0/1" len="4/4" staff="0" staves="1">
   <Staff id="0">
     <Chord>
+      <eid>B_B</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>C_C</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       <TremoloSingleChord>
         <subtype>r8</subtype>
+        <eid>D_D</eid>
         </TremoloSingleChord>
       </Chord>
     <Chord>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>F_F</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       <TremoloSingleChord>
         <subtype>r16</subtype>
+        <eid>G_G</eid>
         </TremoloSingleChord>
       </Chord>
     <Chord>
+      <eid>H_H</eid>
       <durationType>half</durationType>
       <duration>1/4</duration>
       <Note>
+        <eid>I_I</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       <TremoloTwoChord>
         <subtype>c8</subtype>
+        <eid>J_J</eid>
         <l1>26</l1>
         <l2>24</l2>
         </TremoloTwoChord>
       </Chord>
     <Chord>
+      <eid>K_K</eid>
       <durationType>half</durationType>
       <duration>1/4</duration>
       <Note>
+        <eid>L_L</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

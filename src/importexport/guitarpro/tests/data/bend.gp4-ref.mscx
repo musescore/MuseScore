@@ -145,7 +145,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>Q_Q</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -202,7 +202,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>V_V</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -367,7 +367,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>n_n</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -438,7 +438,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>u_u</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
