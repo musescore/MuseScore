@@ -42,8 +42,7 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
         }
 
         if (m_tracksFollowClockSeek) {
-            const bool flushSound = type == IClock::ActionType::Seek;
-            seekAllTracks(m_clock->currentTime(), flushSound);
+            seekAllTracks(m_clock->currentTime(), true /*flushSound*/);
         }
     });
 
