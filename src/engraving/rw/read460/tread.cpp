@@ -3867,6 +3867,13 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    if (notes.empty()) {
+        LOGW() << "NoteParenGroup has no valid notes, skipping";
+        delete leftParen;
+        delete rightParen;
+        return;
+    }
+
     if (!leftParen) {
         leftParen = Factory::createParenthesis(ch);
         leftParen->setParent(ch);
