@@ -1129,7 +1129,7 @@ void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, S
     String dynamicText = String::fromStdString(mnxDynamic.prefix_or({}));
     // As of now we prefer glyphs over value/attackValue because the current
     // list of dynamics classifications is so limited in MNX.
-    if (const auto glyphs = mnxDynamic.glyphs(); glyphs && !glyphs->empty()) {
+    if (const auto glyphs = mnxDynamic.glyphs(); glyphs&& !glyphs->empty()) {
         if (!dynamicText.empty()) {
             dynamicText += u" ";
         }

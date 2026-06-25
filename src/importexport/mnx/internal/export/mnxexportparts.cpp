@@ -413,8 +413,8 @@ void MnxExporter::createHairpin(const Hairpin* hairpin)
 
     auto mnxHairpin = mnxMeasure.ensure_dynamics().appendGradual(
         hairpin->hairpinType() == HairpinType::CRESC_HAIRPIN
-            ? mnx::DynamicWedgeType::Increasing
-            : mnx::DynamicWedgeType::Decreasing,
+        ? mnx::DynamicWedgeType::Increasing
+        : mnx::DynamicWedgeType::Decreasing,
         toMnxFractionValue(startOffset).reduced(),
         mnx::MeasureRhythmicPosition::make(
             endMeasureId,
