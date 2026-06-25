@@ -18,9 +18,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-include(MuseDeps)
+include(GetPlatformInfo)
 
-# setup framework dependences
-include(${MUSE_FRAMEWORK_PATH}/buildscripts/cmake/SetupDependencies.cmake)
+set(EXTDEPS_DIR "${CMAKE_SOURCE_DIR}/muse_deps")
+if (NOT EXISTS "${EXTDEPS_DIR}/buildtools/manifest.cmake")
+    message(FATAL_ERROR "muse_deps submodule missing, run: git submodule update --init muse_deps")
+endif()
 
-# add a list of local dependencies here
+set(LOCAL_ROOT_PATH ${FETCHCONTENT_BASE_DIR})
+include(${EXTDEPS_DIR}/buildtools/manifest.cmake)
+
+include(${CMAKE_CURRENT_LIST_DIR}/DependencyManifest.cmake)
+include(${MUSE_FRAMEWORK_PATH}/buildscripts/cmake/ExtDepsManifest.cmake)
+
+extdeps_install_consumed(MACOS_BUNDLE mscore.app)
+
+add_custom_target(prepare_deps_sources
+    COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_LIST_DIR}/PrepareDepsSources.cmake"
+    COMMENT "Pre-fetching dependency sources into the cache"
+    VERBATIM
+)
