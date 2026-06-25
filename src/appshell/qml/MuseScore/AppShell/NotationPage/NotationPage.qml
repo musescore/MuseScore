@@ -588,10 +588,11 @@ DockPage {
 
             navigationSection: root.navigationPanelSec(videoPanel.location)
 
-            VideoPanel {
+            VideoPanelLoader {
                 anchors.fill: parent
                 navigationSection: videoPanel.navigationSection
                 contentNavigationPanelOrderStart: videoPanel.contentNavigationPanelOrderStart
+                loadPanel: videoPanel.visible
             }
         }
     ]

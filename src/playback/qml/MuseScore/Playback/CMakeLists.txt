@@ -26,10 +26,6 @@ set(PLAYBACK_QML_IMPORTS
     TARGET notationscene_qml
 )
 
-if (Qt6Multimedia_FOUND)
-    list(APPEND PLAYBACK_QML_IMPORTS QtMultimedia)
-endif()
-
 qt_add_qml_module(playback_qml
     URI MuseScore.Playback
     VERSION 1.0
@@ -93,13 +89,10 @@ qt_add_qml_module(playback_qml
         PlaybackToolBar.qml
         SoundFlagPopup.qml
         SoundProfilesDialog.qml
+        VideoPanelLoader.qml
         VideoPanel.qml
     IMPORTS
         ${PLAYBACK_QML_IMPORTS}
 )
-
-if (Qt6Multimedia_FOUND)
-    target_link_libraries(playback_qml PRIVATE Qt6::Multimedia)
-endif()
 
 fixup_qml_module_dependencies(playback_qml)
