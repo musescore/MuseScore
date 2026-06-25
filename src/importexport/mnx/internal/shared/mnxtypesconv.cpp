@@ -766,8 +766,12 @@ PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingI
     case mnx::Orientation::Below:
         return PlacementV::BELOW;
     case mnx::Orientation::Auto:
+        IF_ASSERT_FAILED(item) {
+            break;
+        }
         return item->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
     }
+    return PlacementV::ABOVE;
 }
 
 int toMnxKeyFifthsFlipValue(PreferSharpFlat prefer, const Interval& keyTransposition)
