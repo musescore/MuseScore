@@ -965,6 +965,8 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
 void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Measure& partMeasure,
                                   Measure* measure)
 {
+    auto& sequenceTracks = m_partMeasureSequenceTracks[partMeasure.pointer().to_string()];
+    sequenceTracks.clear();
     std::vector<std::vector<track_idx_t> > staffVoiceMaps(mnxPart.staves());
 
     // pass1: import non-grace-note events to ChordRest
@@ -989,11 +991,13 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
         if (voiceId >= VOICES) {
             LOGW() << "Part measure " << partMeasure.pointer().to_string()
                    << " contains too many voices for staff " << sequence.staff() << ". This sequence is skipped.";
+            continue;
         }
         const track_idx_t curTrackIdx = staff2track(curStaffIdx, voiceId);
         GraceNeighborsMap graceNeighbors;
         if (importNonGraceEvents(sequence, measure, curTrackIdx, graceNeighbors)) {
             importGraceEvents(sequence, measure, curTrackIdx, graceNeighbors); // if MuseScore refactors graces, maybe we don't need this.
+            sequenceTracks.emplace(sequence.pointer().to_string(), curTrackIdx);
             staffVoiceMap.push_back(voiceId);
         }
     }
@@ -1118,7 +1122,7 @@ static VoiceAssignment resolveDynamicVoiceAssignment(const mnx::part::DynamicGro
 void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, Segment* segment, const mnx::Part& mnxPart,
                                 track_idx_t curTrackIdx, bool useVoiceAssignment)
 {
-    if (!segment) {
+    IF_ASSERT_FAILED(segment) {
         return;
     }
 
@@ -1208,6 +1212,41 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
     m_score->addElement(hairpin);
 }
 
+std::optional<track_idx_t> MnxImporter::resolveDynamicVoiceTrack(const mnx::part::Measure& mnxMeasure,
+                                                                 staff_idx_t staffIdx,
+                                                                 const std::string& mnxVoiceId)
+{
+    const auto measureIt = m_partMeasureSequenceTracks.find(mnxMeasure.pointer().to_string());
+    if (measureIt == m_partMeasureSequenceTracks.end()) {
+        return std::nullopt;
+    }
+
+    const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
+    IF_ASSERT_FAILED(part) {
+        LOGE() << "part not found for measure " << mnxMeasure.pointer().to_string();
+        return std::nullopt;
+    }
+
+    for (const auto& sequence : mnxMeasure.sequences()) {
+        if (mnxPartStaffToStaffIdx(part.value(), sequence.staff()) != staffIdx) {
+            continue;
+        }
+
+        const auto sequenceVoice = sequence.voice();
+        if (!sequenceVoice || sequenceVoice.value() != mnxVoiceId) {
+            continue;
+        }
+
+        const auto sequenceIt = measureIt->second.find(sequence.pointer().to_string());
+        if (sequenceIt != measureIt->second.end()) {
+            return sequenceIt->second;
+        }
+        break;
+    }
+
+    return std::nullopt;
+}
+
 //---------------------------------------------------------
 //   createDynamics
 //   Create MuseScore dynamics from MNX part-measure dynamics.
@@ -1227,15 +1266,9 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
             bool useVoiceAssignment = false;
             track_idx_t curTrackIdx = staffTrackIdx;
             if (const auto mnxVoiceId = mnxDynamic.voice()) {
-                for (size_t x = 0; x < mnxMeasure.sequences().size(); x++) {
-                    if (x >= VOICES) {
-                        break;
-                    }
-                    if (mnxVoiceId == mnxMeasure.sequences().at(x).voice()) {
-                        curTrackIdx += x;
-                        useVoiceAssignment = true;
-                        break;
-                    }
+                if (const auto resolvedTrack = resolveDynamicVoiceTrack(mnxMeasure, staffIdx, mnxVoiceId.value())) {
+                    curTrackIdx = resolvedTrack.value();
+                    useVoiceAssignment = true;
                 }
             }
 
@@ -1514,9 +1547,9 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
                         const mnx::FractionValue&,
                         const mnx::FractionValue&, mnx::util::SequenceWalkContext& ctx) {
         ChordRest* cr = muse::value(m_mnxEventToCR, event.pointer().to_string());
-        IF_ASSERT_FAILED(cr) {
-            LOGE() << "event is not mapped.";
-            LOGE() << event.dump(2);
+        if (!cr) {
+            LOGW() << "event " << event.pointer().to_string()
+                   << " is not mapped, possibly due to too many sequences in measure.";
             return true;
         }
         if (!ctx.inGrace) {
@@ -1571,6 +1604,7 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
 void MnxImporter::importPartMeasures()
 {
     m_lyricLineUsage.clear();
+    m_partMeasureSequenceTracks.clear();
     // pass1: create ChordRests and clefs
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {

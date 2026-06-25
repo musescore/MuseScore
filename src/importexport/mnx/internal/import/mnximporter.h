@@ -160,6 +160,8 @@ private:
     static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v);
     engraving::Fraction mnxMeasurePosToTick(const mnx::MeasureRhythmicPosition& measPos);
     engraving::staff_idx_t resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic);
+    std::optional<engraving::track_idx_t> resolveDynamicVoiceTrack(const mnx::part::Measure& mnxMeasure, engraving::staff_idx_t staffIdx,
+                                                                   const std::string& mnxVoiceId);
     void applyDynamicOrient(engraving::EngravingItem* item, const mnx::Part& part, mnx::MultiStaffOrientation orient);
     void createHairpin(const mnx::part::DynamicGradual& mnxHairpin, engraving::Segment* segment, const mnx::Part& mnxPart,
                        engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
@@ -171,6 +173,7 @@ private:
     std::unordered_map<engraving::staff_idx_t,
                        std::unordered_map<std::string, std::pair<engraving::Fraction, engraving::Fraction> > > m_lyricLineUsage;
     std::unordered_map<engraving::staff_idx_t, std::unordered_map<std::string, int> > m_lyricLineToVerse;
+    std::unordered_map<std::string, std::unordered_map<std::string, engraving::track_idx_t> > m_partMeasureSequenceTracks;
     struct GroupBarlineOverrideSpan {
         engraving::staff_idx_t startStaff{};
         engraving::staff_idx_t endStaff{};

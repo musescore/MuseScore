@@ -346,7 +346,8 @@ void MnxExporter::createSlur(const Slur* s)
                                  ? toChordRest(s->endElement())
                                  : toChordRest(s->startElement());
         auto mnxEvent = mnxEventFromCR(startCR);
-        if (mnxEvent && endCR) {
+        auto endEvent = endCR ? mnxEventFromCR(endCR) : std::nullopt;
+        if (mnxEvent && endEvent) {
             auto mnxSlur = mnxEvent->ensure_slurs().append(endCR->eid().toStdString());
             mnxSlur.set_lineType(toMnxSlurLineType(s->styleType()));
             if (s->slurDirection() != DirectionV::AUTO) {
