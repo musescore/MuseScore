@@ -3884,14 +3884,16 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         } else if (t == "Notes") {
             while (e.readNextStartElement()) {
                 const AsciiStringView noteTag(e.name());
-                if (noteTag == "NoteIdx") {
-                    size_t idx = e.readInt();
-                    if (idx >= ch->notes().size()) {
-                        LOGE() << "Note index " << idx << " out of bounds " << ch->notes().size();
+                if (noteTag == "NoteEID") {
+                    AsciiStringView s = e.readAsciiText();
+                    EID eid = EID::fromStdString(s);
+                    IF_ASSERT_FAILED(eid.isValid()) {
                         continue;
                     }
-                    Note* note = ch->notes().at(idx);
-                    notes.push_back(note);
+                    EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+                    EngravingObject* obj = eidRegister->itemFromEID(eid);
+                    DO_ASSERT(obj && obj->isNote());
+                    notes.push_back(toNote(obj));
                 } else {
                     e.unknown();
                 }

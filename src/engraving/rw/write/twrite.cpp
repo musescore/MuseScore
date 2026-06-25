@@ -1081,9 +1081,11 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
         xml.startElement("Notes");
         for (const Note* note : parenPair->notes()) {
-            auto it = std::find(item->notes().begin(), item->notes().end(), note);
-            size_t idx = it - item->notes().begin();
-            xml.tag("NoteIdx", idx);
+            EID noteEID = note->eid();
+            if (!noteEID.isValid()) {
+                noteEID = note->assignNewEID();
+            }
+            xml.tag("NoteEID", noteEID.toStdString());
         }
         xml.endElement();
         xml.endElement();
