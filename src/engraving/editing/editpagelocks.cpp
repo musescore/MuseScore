@@ -422,8 +422,14 @@ void EditPageLocks::removePageLocksOnAddLayoutBreak(Transaction& tx, Score* scor
     }
 
     const RangeLock* lock = score->pageLocks()->lockContaining(measure);
-    if (lock && (breakType == LayoutBreakType::PAGE && measure == lock->endMB())) {
+    MeasureBase* lockEndMeasure = lock ? lock->endMB() : nullptr;
+    if (lock && breakType == LayoutBreakType::PAGE) {
         undoRemovePageLock(tx, score, lock);
+
+        if (measure != lockEndMeasure && measure->next()) {
+            // Make sure the resultant page is locked
+            undoAddPageLock(tx, score, new RangeLock(measure->next(), lockEndMeasure));
+        }
     }
 }
 
