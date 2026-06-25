@@ -172,6 +172,7 @@ private:
 
 static const std::unordered_map<std::string_view, std::vector<std::string_view> > MNX_ALLOWED_WARNINGS {
     { "project_enharmonics", { "mnxio::toMuseScoreNoteVal | Enharmonically transposing pitch with alteration value out of range" } },
+    { "project_dynamicsKbdVoices", { "MnxImporter::importSequences | Part measure",  "MnxImporter::processSequencePass2 | event" } },
     { "project_key56Wrapped56Edited", { "mnxio::loadInstrument | MNX keyFifthsFlipAt value" } },
     { "project_graceArps", { "MnxImporter::createArpeggios | skipping arpeggio on grace note" } },
     { "w3c_organ_layout", { "MnxImporter::createTies" } }
@@ -659,6 +660,7 @@ MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)
 MNX_PROJECT_FILE_TEST(dynamicsHairpins)
+MNX_PROJECT_FILE_TEST(dynamicsKbdVoices)
 MNX_PROJECT_FILE_TEST(dynamicV1V2)
 MNX_PROJECT_FILE_TEST(dynamicVoice)
 MNX_PROJECT_FILE_TEST(enharmonicPart)

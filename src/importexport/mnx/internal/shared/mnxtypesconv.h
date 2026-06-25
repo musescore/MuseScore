@@ -23,6 +23,7 @@
 
 #include <optional>
 #include <string>
+#include <utility>
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/ottava.h"
