@@ -339,6 +339,16 @@ void EditSystemLocks::moveMeasureToNextSystem(Transaction& tx, Score* score, Mea
         return;
     }
 
+    if (curLock && !nextSysLock) {
+        undoRemoveSystemLock(tx, score, curLock);
+
+        MeasureBase* firstMeasure = curSystem->first();
+        MeasureBase* lastMeasure = m->prev();
+
+        undoAddSystemLock(tx, score, new RangeLock(firstMeasure, lastMeasure));
+        return;
+    }
+
     MeasureBase* lastMeasure = nextSystem->last();
     makeIntoSystem(tx, score, m, lastMeasure);
 }
