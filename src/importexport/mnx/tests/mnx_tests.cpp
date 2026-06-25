@@ -170,7 +170,7 @@ private:
     std::unique_ptr<kors::logger::MemLogDest> m_dest;
 };
 
-static const std::unordered_map<std::string_view, std::vector<std::string_view>> MNX_ALLOWED_WARNINGS {
+static const std::unordered_map<std::string_view, std::vector<std::string_view> > MNX_ALLOWED_WARNINGS {
     { "project_enharmonics", { "mnxio::toMuseScoreNoteVal | Enharmonically transposing pitch with alteration value out of range" } },
     { "project_key56Wrapped56Edited", { "mnxio::loadInstrument | MNX keyFifthsFlipAt value" } },
     { "project_graceArps", { "MnxImporter::createArpeggios | skipping arpeggio on grace note" } },
@@ -207,13 +207,13 @@ static void expectNoWarnings(const ScopedLogCapture& capture, std::string_view t
     const std::vector<std::string> unexpectedWarnings = unexpectedWarningsForTest(capture, testName);
     EXPECT_TRUE(unexpectedWarnings.empty()) << "Unexpected warnings for " << testName << ":\n"
                                             << [&unexpectedWarnings]() {
-                                                   std::string out;
-                                                   for (const std::string& warning : unexpectedWarnings) {
-                                                       out += warning;
-                                                       out += '\n';
-                                                   }
-                                                   return out;
-                                               }();
+        std::string out;
+        for (const std::string& warning : unexpectedWarnings) {
+            out += warning;
+            out += '\n';
+        }
+        return out;
+        } ();
 }
 
 class ScopedWarningExpectation
