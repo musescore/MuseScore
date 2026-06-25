@@ -42,7 +42,7 @@ VideoPanelModel::VideoPanelModel(QObject* parent)
 
 void VideoPanelModel::load()
 {
-    listenPlaybackController();
+    listenPlaybackState();
 
     context()->currentProjectChanged().onNotify(this, [this]() {
         listenCurrentProject();
@@ -386,7 +386,8 @@ QVariantList VideoPanelModel::hitPoints() const
 
 bool VideoPanelModel::scorePlaying() const
 {
-    return playbackController()->isPlaying();
+    context::IPlaybackStatePtr playbackState = context()->playbackState();
+    return playbackState && playbackState->playbackStatus() == muse::audio::PlaybackStatus::Running;
 }
 
 int VideoPanelModel::scorePlaybackPositionMs() const
@@ -459,13 +460,23 @@ void VideoPanelModel::listenCurrentProject()
     }, Asyncable::Mode::SetReplace);
 }
 
-void VideoPanelModel::listenPlaybackController()
+void VideoPanelModel::listenPlaybackState()
 {
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    context::IPlaybackStatePtr playbackState = context()->playbackState();
+    if (!playbackState) {
+        return;
+    }
+
+    const int initialPositionMs = std::max(0, static_cast<int>(std::lround(playbackState->playbackPosition() * 1000.0)));
+    if (m_scorePlaybackPositionMs != initialPositionMs) {
+        m_scorePlaybackPositionMs = initialPositionMs;
+    }
+
+    playbackState->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
         emit playbackSyncChanged();
     });
 
-    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](muse::audio::secs_t pos, muse::midi::tick_t) {
+    playbackState->playbackPositionChanged().onReceive(this, [this](muse::audio::secs_t pos) {
         const int positionMs = std::max(0, static_cast<int>(std::lround(pos * 1000.0)));
         if (m_scorePlaybackPositionMs == positionMs) {
             return;

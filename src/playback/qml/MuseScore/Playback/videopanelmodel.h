@@ -31,7 +31,6 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "project/iprojectvideosettings.h"
-#include "playback/iplaybackcontroller.h"
 
 namespace mu::playback {
 class VideoPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -55,7 +54,6 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::Inject<IPlaybackController> playbackController = { this };
 
 public:
     explicit VideoPanelModel(QObject* parent = nullptr);
@@ -113,7 +111,7 @@ private:
     QString musicalPositionText(int videoPositionMs) const;
     int parseTimecodeToMs(const QString& timecode) const;
     void listenCurrentProject();
-    void listenPlaybackController();
+    void listenPlaybackState();
 
     int m_scorePlaybackPositionMs = 0;
 };
