@@ -8,7 +8,7 @@ else()
     # If not set MUSE_MODULE_AUDIO_ASIO_SDK_PATH
     # download asiosdk source
 
-    set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
+    set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/legacy)
     set(remote_url "${REMOTE_ROOT_URL}/asiosdk/ASIO-SDK_2.3.4_2025-10-15")
     set(local_path ${PROJECT_BINARY_DIR}/_deps/asiosdk)
     if (NOT EXISTS ${local_path}/asiosdk.cmake)
