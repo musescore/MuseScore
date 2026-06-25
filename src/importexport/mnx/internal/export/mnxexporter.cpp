@@ -24,7 +24,11 @@
 
 #include <stdexcept>
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/score.h"
+#include "global/iapplication.h"
+#include "io/path.h"
+#include "modularity/ioc.h"
 #include "log.h"
 #include "translation.h"
 
@@ -134,8 +138,8 @@ std::optional<MnxChordTargetPosition> MnxExporter::mnxChordTargetPosition(const 
 
     const Chord* mainChord = toChord(parent);
     const GraceNotesGroup& graceNotes = chord->isGraceAfter()
-                                            ? mainChord->graceNotesAfter()
-                                            : mainChord->graceNotesBefore();
+                                        ? mainChord->graceNotesAfter()
+                                        : mainChord->graceNotesBefore();
     const auto graceIt = std::find(graceNotes.begin(), graceNotes.end(), chord);
     if (graceIt == graceNotes.end()) {
         LOGW() << "Skipping grace-note target whose grace index could not be resolved.";
@@ -144,7 +148,7 @@ std::optional<MnxChordTargetPosition> MnxExporter::mnxChordTargetPosition(const 
 
     const size_t index = static_cast<size_t>(std::distance(graceNotes.begin(), graceIt));
     MnxChordTargetPosition position = positionFromTick(chord->isGraceAfter() ? mainChord->tick() + mainChord->ticks()
-                                                                             : mainChord->tick());
+                                                       : mainChord->tick());
     position.graceIndex = static_cast<unsigned>(graceNotes.size() - index);
     return position;
 }
@@ -157,6 +161,36 @@ muse::Ret MnxExporter::exportMnx()
 {
     LOGI() << "MNX export started: schema version=" << m_mnxDocument.mnx().version();
     // Header
+    static muse::GlobalInject<muse::IApplication> application;
+    auto client = m_mnxDocument.mnx().ensure_mnxdom().ensure_client();
+    muse::String version = application()->version().toString();
+    const muse::String revision = application()->revision();
+    const muse::String build = application()->build();
+    if (!revision.isEmpty()) {
+        version += u" rev. " + revision;
+    }
+    client.set_name(application()->title().toStdString());
+    client.set_version(version.toStdString());
+    if (!build.isEmpty()) {
+        client.set_build(build.toStdString());
+    }
+    if (m_score && m_score->masterScore()) {
+        IFileInfoProviderPtr fileInfo = m_score->masterScore()->fileInfo();
+        if (fileInfo) {
+            const muse::io::path_t fileName = fileInfo->fileName();
+            const std::string format = muse::io::suffix(fileName);
+            if (!format.empty() || !fileName.empty()) {
+                auto source = m_mnxDocument.mnx().ensure_mnxdom().ensure_source();
+                if (!format.empty()) {
+                    source.set_format(format);
+                }
+                if (!fileName.empty()) {
+                    source.set_filename(fileName.toStdString());
+                }
+            }
+        }
+    }
+
     if (m_exportBeams) {
         mnx::MnxMetaData::Support support = m_mnxDocument.mnx().ensure_support();
         support.set_useBeams(true);

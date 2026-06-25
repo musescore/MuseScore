@@ -80,8 +80,7 @@ public:
     size_t mnxMeasureIndexFromMeasure(const engraving::Measure* measure) const;
     std::pair<size_t, int> mnxPartStaffFromStaffIdx(engraving::staff_idx_t staffIdx) const;
     static mnx::Fermata mnxFermataFromFermata(const engraving::Fermata* fermata);
-    std::optional<MnxChordTargetPosition> mnxChordTargetPosition(const engraving::Chord* chord,
-                                                                 const engraving::Measure* measure);
+    std::optional<MnxChordTargetPosition> mnxChordTargetPosition(const engraving::Chord* chord, const engraving::Measure* measure);
 
 private:
     enum class ContentContext {
@@ -128,11 +127,11 @@ private:
                        ContentContext context);
     void appendGrace(mnx::sequence::SequenceContent content, ExportContext& ctx, engraving::GraceNotesGroup& graceNotes);
     void createBeam(ExportContext& ctx, engraving::ChordRest* chordRest);
-    size_t appendTuplet(mnx::sequence::SequenceContent, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
+    size_t appendTuplet(mnx::sequence::SequenceContent, ExportContext & ctx, const std::vector<engraving::ChordRest*>& chordRests,
                         size_t idx, engraving::ChordRest* chordRest, const engraving::Tuplet* tuplet);
     size_t appendTremolo(mnx::sequence::SequenceContent content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
                          size_t idx, engraving::ChordRest* chordRest);
-    bool appendEvent(mnx::sequence::SequenceContent, ExportContext& ctx, engraving::ChordRest* chordRest);
+    bool appendEvent(mnx::sequence::SequenceContent, ExportContext & ctx, engraving::ChordRest* chordRest);
     bool createRest(mnx::sequence::Event& mnxEvent, engraving::ChordRest* chordRest);
     bool createNotes(mnx::sequence::Event& mnxEvent, engraving::ChordRest* chordRest);
     void createTies(mnx::sequence::NoteBase& mnxNote, engraving::Note* note);

@@ -290,14 +290,14 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
     return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
-std::pair<std::optional<mnx::DynamicValue>, std::optional<mnx::DynamicValue>> toMnxDynamicType(DynamicType type,
-                                                                                               bool& copyGlyphs,
-                                                                                               bool& isAccent)
-    {
-        std::optional<mnx::DynamicValue> dynValue;
-        std::optional<mnx::DynamicValue> attackValue;
-        copyGlyphs = false;
-        isAccent = false;
+std::pair<std::optional<mnx::DynamicValue>, std::optional<mnx::DynamicValue> > toMnxDynamicType(DynamicType type,
+                                                                                                bool& copyGlyphs,
+                                                                                                bool& isAccent)
+{
+    std::optional<mnx::DynamicValue> dynValue;
+    std::optional<mnx::DynamicValue> attackValue;
+    copyGlyphs = false;
+    isAccent = false;
 
     switch (type) {
     case DynamicType::PPPPPP:
