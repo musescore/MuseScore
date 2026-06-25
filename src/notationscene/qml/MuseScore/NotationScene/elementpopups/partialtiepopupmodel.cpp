@@ -52,7 +52,11 @@ bool PartialTiePopupModel::canOpen(const EngravingItem* element)
     }
 
     Tie* tieItem = toTieSegment(element)->tie();
-    if (!tieItem || !tieItem->tieJumpPoints()) {
+    if (!tieItem) {
+        return false;
+    }
+    tieItem->updatePossibleJumpPoints();
+    if (!tieItem->tieJumpPoints()) {
         return false;
     }
 

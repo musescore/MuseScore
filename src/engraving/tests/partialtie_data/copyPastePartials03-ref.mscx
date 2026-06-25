@@ -253,48 +253,27 @@
           <Chord>
             <eid>exvNJKXR4+P_exvNJKXR4+P</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>fxvNJKXR4+P_fxvNJKXR4+P</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>gxvNJKXR4+P_gxvNJKXR4+P</eid>
-              <PartialTie>
-                <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>hxvNJKXR4+P_hxvNJKXR4+P</eid>
-                </PartialTie>
+              <eid>fxvNJKXR4+P_fxvNJKXR4+P</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>ixvNJKXR4+P_ixvNJKXR4+P</eid>
+            <eid>gxvNJKXR4+P_gxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>jxvNJKXR4+P_jxvNJKXR4+P</eid>
+              <eid>hxvNJKXR4+P_hxvNJKXR4+P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>kxvNJKXR4+P_kxvNJKXR4+P</eid>
+            <eid>ixvNJKXR4+P_ixvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
-                <partialSpannerDirection>outgoing</partialSpannerDirection>
-                <eid>lxvNJKXR4+P_lxvNJKXR4+P</eid>
+                <eid>jxvNJKXR4+P_jxvNJKXR4+P</eid>
                 </Slur>
               <next>
                 <location>
@@ -303,13 +282,13 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>mxvNJKXR4+P_mxvNJKXR4+P</eid>
+              <eid>kxvNJKXR4+P_kxvNJKXR4+P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>nxvNJKXR4+P_nxvNJKXR4+P</eid>
+            <eid>lxvNJKXR4+P_lxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -319,10 +298,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>oxvNJKXR4+P_oxvNJKXR4+P</eid>
-              <PartialTie>
-                <eid>pxvNJKXR4+P_pxvNJKXR4+P</eid>
-                </PartialTie>
+              <eid>mxvNJKXR4+P_mxvNJKXR4+P</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -341,50 +317,30 @@
           </Jump>
         <voice>
           <Chord>
-            <eid>qxvNJKXR4+P_qxvNJKXR4+P</eid>
+            <eid>nxvNJKXR4+P_nxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>rxvNJKXR4+P_rxvNJKXR4+P</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>sxvNJKXR4+P_sxvNJKXR4+P</eid>
-              <PartialTie>
-                <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>txvNJKXR4+P_txvNJKXR4+P</eid>
-                </PartialTie>
+              <eid>oxvNJKXR4+P_oxvNJKXR4+P</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>uxvNJKXR4+P_uxvNJKXR4+P</eid>
+            <eid>pxvNJKXR4+P_pxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>vxvNJKXR4+P_vxvNJKXR4+P</eid>
+              <eid>qxvNJKXR4+P_qxvNJKXR4+P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>wxvNJKXR4+P_wxvNJKXR4+P</eid>
+            <eid>rxvNJKXR4+P_rxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
                 <partialSpannerDirection>outgoing</partialSpannerDirection>
-                <eid>xxvNJKXR4+P_xxvNJKXR4+P</eid>
+                <eid>sxvNJKXR4+P_sxvNJKXR4+P</eid>
                 </Slur>
               <next>
                 <location>
@@ -393,13 +349,13 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>yxvNJKXR4+P_yxvNJKXR4+P</eid>
+              <eid>txvNJKXR4+P_txvNJKXR4+P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>zxvNJKXR4+P_zxvNJKXR4+P</eid>
+            <eid>uxvNJKXR4+P_uxvNJKXR4+P</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -409,9 +365,9 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>0xvNJKXR4+P_0xvNJKXR4+P</eid>
+              <eid>vxvNJKXR4+P_vxvNJKXR4+P</eid>
               <PartialTie>
-                <eid>1xvNJKXR4+P_1xvNJKXR4+P</eid>
+                <eid>wxvNJKXR4+P_wxvNJKXR4+P</eid>
                 </PartialTie>
               <pitch>67</pitch>
               <tpc>15</tpc>

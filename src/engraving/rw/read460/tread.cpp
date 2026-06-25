@@ -3836,7 +3836,8 @@ void TRead::lineBreakFromTag(String& str)
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
-    StaffGroup staffGroup = ctx.staff(ch->staffIdx())->staffTypeForElement(ch)->group();
+    Staff* staff = ctx.staff(ch->staffIdx());
+    StaffGroup staffGroup = staff ? staff->staffTypeForElement(ch)->group() : StaffGroup::STANDARD;
     if (staffGroup == StaffGroup::PERCUSSION) {
         // We should have read all notes by now. They need to be sorted for percussion staves
         const Instrument* instrument = ch->part()->instrument(ch->tick());
