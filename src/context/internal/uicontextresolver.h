@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <QTimer>
+
 #include "../iuicontextresolver.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -55,5 +57,8 @@ private:
 
     muse::ui::UiContext m_currentUiContext;
     muse::async::Notification m_currentUiContextChanged;
+
+    //! NOTE Owned by this resolver, so that a pending timeout is cancelled when the resolver is destroyed
+    QTimer m_currentUriChangedTimer;
 };
 }

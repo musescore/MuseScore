@@ -550,13 +550,8 @@
         <Measure>
           <eid>YB_YB</eid>
           <voice>
-            <RehearsalMark>
-              <eid>ZB_ZB</eid>
-              <linkedTo>i_i</linkedTo>
-              <text>QQ</text>
-              </RehearsalMark>
             <Rest>
-              <eid>aB_aB</eid>
+              <eid>ZB_ZB</eid>
               <linkedTo>j_j</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -565,7 +560,8 @@
           </Measure>
         <Measure len="16/4">
           <multiMeasureRest>4</multiMeasureRest>
-          <eid>bB_bB</eid>
+          <eid>aB_aB</eid>
+          <mmRestLast>bB_bB</mmRestLast>
           <voice>
             <RehearsalMark>
               <eid>cB_cB</eid>
@@ -578,20 +574,13 @@
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
-            <location>
-              <fractions>3/1</fractions>
-              </location>
-            <BarLine>
-              <span>1</span>
-              <eid>eB_eB</eid>
-              </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>fB_fB</eid>
+          <eid>eB_eB</eid>
           <voice>
             <Rest>
-              <eid>gB_gB</eid>
+              <eid>fB_fB</eid>
               <linkedTo>l_l</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -599,11 +588,22 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>hB_hB</eid>
+          <eid>gB_gB</eid>
+          <voice>
+            <Rest>
+              <eid>hB_hB</eid>
+              <linkedTo>n_n</linkedTo>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <eid>bB_bB</eid>
           <voice>
             <Rest>
               <eid>iB_iB</eid>
-              <linkedTo>n_n</linkedTo>
+              <linkedTo>q_q</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -612,28 +612,17 @@
         <Measure>
           <eid>jB_jB</eid>
           <voice>
-            <Rest>
-              <eid>kB_kB</eid>
-              <linkedTo>q_q</linkedTo>
-              <durationType>measure</durationType>
-              <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure>
-          <eid>lB_lB</eid>
-          <voice>
             <RehearsalMark>
-              <eid>mB_mB</eid>
+              <eid>kB_kB</eid>
               <linkedTo>s_s</linkedTo>
               <text>Foo</text>
               </RehearsalMark>
             <Chord>
-              <eid>nB_nB</eid>
+              <eid>lB_lB</eid>
               <linkedTo>t_t</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>oB_oB</eid>
+                <eid>mB_mB</eid>
                 <linkedTo>u_u</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -642,14 +631,14 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>pB_pB</eid>
+          <eid>nB_nB</eid>
           <voice>
             <Chord>
-              <eid>qB_qB</eid>
+              <eid>oB_oB</eid>
               <linkedTo>w_w</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>rB_rB</eid>
+                <eid>pB_pB</eid>
                 <linkedTo>x_x</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -658,14 +647,14 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>sB_sB</eid>
+          <eid>qB_qB</eid>
           <voice>
             <Chord>
-              <eid>tB_tB</eid>
+              <eid>rB_rB</eid>
               <linkedTo>z_z</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>uB_uB</eid>
+                <eid>sB_sB</eid>
                 <linkedTo>0_0</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -674,14 +663,14 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>vB_vB</eid>
+          <eid>tB_tB</eid>
           <voice>
             <Chord>
-              <eid>wB_wB</eid>
+              <eid>uB_uB</eid>
               <linkedTo>2_2</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>xB_xB</eid>
+                <eid>vB_vB</eid>
                 <linkedTo>3_3</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -690,7 +679,7 @@
             <BarLine>
               <subtype>end</subtype>
               <span>1</span>
-              <eid>yB_yB</eid>
+              <eid>wB_wB</eid>
               <linkedTo>4_4</linkedTo>
               </BarLine>
             </voice>

@@ -42,9 +42,7 @@
 #endif
 
 #include "anchors.h"
-#include "barline.h"
 #include "box.h"
-#include "dynamic.h"
 #include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
@@ -52,7 +50,6 @@
 #include "score.h"
 
 #include "../editing/textedit.h"
-#include "../editing/undo.h"
 
 #include "log.h"
 

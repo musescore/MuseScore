@@ -116,6 +116,22 @@
       <Measure>
         <eid>F_F</eid>
         <voice>
+          <Rest>
+            <eid>I_I</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure len="8/4">
+        <multiMeasureRest>2</multiMeasureRest>
+        <eid>J_J</eid>
+        <mmRestLast>P_P</mmRestLast>
+        <LayoutBreak>
+          <eid>Q_Q</eid>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
           <TimeSig>
             <eid>G_G</eid>
             <sigN>4</sigN>
@@ -127,32 +143,6 @@
             <text>test1</text>
             </StaffText>
           <Rest>
-            <eid>I_I</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure len="8/4">
-        <multiMeasureRest>2</multiMeasureRest>
-        <eid>J_J</eid>
-        <LayoutBreak>
-          <eid>K_K</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <TimeSig>
-            <eid>L_L</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <eid>M_M</eid>
-            <linkedTo>H_H</linkedTo>
-            <offset x="-12.5239" y="-3.69242"/>
-            <text>test1</text>
-            </StaffText>
-          <Rest>
             <eid>N_N</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
@@ -160,37 +150,23 @@
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>O_O</eid>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>P_P</eid>
-        <LayoutBreak>
-          <eid>Q_Q</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            <eid>S_S</eid>
-            <linkedTo>O_O</linkedTo>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>T_T</eid>
         <voice>
-          <StaffText>
-            <eid>U_U</eid>
-            <offset x="28.5455" y="-4.14373"/>
-            <text>test2</text>
-            </StaffText>
           <Rest>
             <eid>V_V</eid>
             <durationType>measure</durationType>
@@ -201,14 +177,14 @@
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>W_W</eid>
+        <mmRestLast>b_b</mmRestLast>
         <LayoutBreak>
-          <eid>X_X</eid>
+          <eid>c_c</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>Y_Y</eid>
-            <linkedTo>U_U</linkedTo>
+            <eid>U_U</eid>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
             </StaffText>
@@ -220,36 +196,23 @@
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>a_a</eid>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>b_b</eid>
-        <LayoutBreak>
-          <eid>c_c</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            <eid>e_e</eid>
-            <linkedTo>a_a</linkedTo>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>f_f</eid>
         <voice>
-          <StaffText>
-            <eid>g_g</eid>
-            <text>test3</text>
-            </StaffText>
           <Rest>
             <eid>h_h</eid>
             <durationType>measure</durationType>
@@ -260,10 +223,10 @@
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>i_i</eid>
+        <mmRestLast>l_l</mmRestLast>
         <voice>
           <StaffText>
-            <eid>j_j</eid>
-            <linkedTo>g_g</linkedTo>
+            <eid>g_g</eid>
             <text>test3</text>
             </StaffText>
           <Rest>

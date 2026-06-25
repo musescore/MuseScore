@@ -528,6 +528,27 @@ StyledListView {
                 paletteTree.paletteController.remove(modelIndex);
             }
 
+            function finishDrag(dropAction) {
+                paletteTree.itemDragged = false;
+
+                if (dropAction !== Qt.IgnoreAction) {
+                    paletteTree.currentIndex = -1;
+                }
+
+                const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
+                placeholder.removePlaceholder();
+                const controller = paletteTree.paletteController;
+                const root = paletteTreeDelegateModel.rootIndex;
+                DelegateModel.inItems = true;
+                DelegateModel.inPersistedItems = false;
+
+                if (dropAction === Qt.MoveAction) {
+                    controller.move(
+                                root, rowIndex,
+                                root, destIndex);
+                }
+            }
+
             text: paletteTree.filter.length ? qsTrc("palette", "%1, contains %Ln matching element(s)", "", mainPalette.count).arg(model.accessibleText)
                                             : model.expanded ? qsTrc("palette", "%1 expanded", "tree item not collapsed").arg(model.accessibleText)
                                                              : model.accessibleText
@@ -554,24 +575,7 @@ StyledListView {
             }
 
             Drag.onDragFinished: function(dropAction) {
-                paletteTree.itemDragged = false;
-
-                if (dropAction !== Qt.IgnoreAction) {
-                    paletteTree.currentIndex = -1;
-                }
-
-                const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
-                placeholder.removePlaceholder();
-                const controller = paletteTree.paletteController;
-                const root = paletteTreeDelegateModel.rootIndex;
-                DelegateModel.inItems = true;
-                DelegateModel.inPersistedItems = false;
-
-                if (dropAction === Qt.MoveAction) {
-                    controller.move(
-                                root, rowIndex,
-                                root, destIndex);
-                }
+                Qt.callLater(finishDrag, dropAction)
             }
 
             DropArea {

@@ -70,7 +70,7 @@ class ChordRest;
 class Segment;
 struct PaddingTable;
 
-class UndoCommand;
+class UndoableCommand;
 class EditData;
 
 class Selection;
@@ -149,6 +149,7 @@ public:
     // Const access
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<Part*> visibleParts() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;
@@ -201,10 +202,11 @@ public:
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);
-    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void undo(UndoableCommand* cmd, EditData* ed = nullptr) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
     void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents = true);
 
     void addUnmanagedSpanner(Spanner* s);
     const std::set<Spanner*>& unmanagedSpanners() const;

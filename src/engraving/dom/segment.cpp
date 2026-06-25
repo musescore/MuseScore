@@ -727,7 +727,7 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::PLAY_COUNT_TEXT:
-        assert(isType(SegmentType::BarLineType));
+        assert(isType(SegmentType::BarLineTypes));
         if (!findAnnotation(ElementType::PLAY_COUNT_TEXT, el->track(), el->track())) {
             m_annotations.push_back(el);
         }
@@ -760,7 +760,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::CLEF:
-        assert(m_segmentType & SegmentType::ClefType);
+        assert(m_segmentType & SegmentType::ClefTypes);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -770,25 +770,25 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        assert(segmentType() & SegmentType::TimeSigType);
+        assert(segmentType() & SegmentType::TimeSigTypes);
         checkElement(el, track);
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
         setEmpty(false);
-        if (segmentType() & SegmentType::CourtesyTimeSigType) {
+        if (segmentType() & SegmentType::CourtesyTimeSigTypes) {
             toTimeSig(el)->setIsCourtesy(true);
         }
         break;
 
     case ElementType::KEYSIG:
-        assert(m_segmentType & SegmentType::KeySigType);
+        assert(m_segmentType & SegmentType::KeySigTypes);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
-        if (m_segmentType == SegmentType::CourtesyKeySigType) {
+        if (m_segmentType == SegmentType::CourtesyKeySigTypes) {
             toKeySig(el)->setIsCourtesy(true);
         }
         break;
@@ -818,7 +818,6 @@ void Segment::add(EngravingItem* el)
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }
-            score()->setPlaylistDirty();
         }
     // fall through
 
@@ -886,7 +885,6 @@ void Segment::remove(EngravingItem* el)
                 score()->undo(new ChangeStartEndSpanner(s, start, end));
             }
         }
-        score()->setPlaylistDirty();
     }
     break;
 
@@ -1234,7 +1232,7 @@ Fraction Segment::ticksInStaff(staff_idx_t staffIdx) const
     const Fraction segTick = tick();
     Fraction nextSegTick = segTick;
 
-    Segment* nextSeg = nextInStaff(staffIdx, durationSegmentsMask);
+    Segment* nextSeg = nextInStaff(staffIdx, SegmentType::Duration);
     if (nextSeg) {
         nextSegTick = nextSeg->tick();
     } else {
@@ -1358,7 +1356,7 @@ bool Segment::allElementsInvisible() const
         return true;
     }
 
-    if (isType(SegmentType::BarLineType | SegmentType::ChordRest)) {
+    if (isType(SegmentType::BarLineTypes | SegmentType::ChordRest)) {
         return false;
     }
 
@@ -1460,7 +1458,7 @@ void Segment::clearAnnotations()
 
 void Segment::scanElements(std::function<void(EngravingItem*)> func)
 {
-    bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
+    bool scanAllTimeSigs = (isType(SegmentType::TimeSigTypes)
                             && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
@@ -2785,7 +2783,7 @@ double Segment::spacing() const
 
 bool Segment::hasTimeSigAboveStaves() const
 {
-    return isType(SegmentType::TimeSigType)
+    return isType(SegmentType::TimeSigTypes)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
 }
 
@@ -2799,7 +2797,7 @@ bool Segment::makeSpaceForTimeSigAboveStaves() const
 
 bool Segment::hasTimeSigAcrossStaves() const
 {
-    return isType(SegmentType::TimeSigType)
+    return isType(SegmentType::TimeSigTypes)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
 }
 

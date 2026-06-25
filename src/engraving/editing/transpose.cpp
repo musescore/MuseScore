@@ -423,7 +423,7 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
     }
 
     // now transpose notes and chord symbols
-    for (Segment* s = score->firstSegment(Segment::CHORD_REST_OR_TIME_TICK_TYPE); s; s = s->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    for (Segment* s = score->firstSegment(SegmentType::Duration); s; s = s->next1(SegmentType::Duration)) {
         if (s->tick() < tickStart) {
             continue;
         }
@@ -734,7 +734,7 @@ int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlat
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmony : public UndoCommand
+class TransposeHarmony : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
@@ -784,7 +784,7 @@ void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval in
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmonyDiatonic : public UndoCommand
+class TransposeHarmonyDiatonic : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
 

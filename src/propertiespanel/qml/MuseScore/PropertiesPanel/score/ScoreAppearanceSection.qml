@@ -65,7 +65,7 @@ PropertiesPanelSection {
                 }
             }
 
-            PopupViewButton {
+            PropertiesPanelPopupButton {
                 id: hideEmptyStavesSettingsPopupButton
                 Layout.fillWidth: false
                 Layout.minimumWidth: implicitWidth

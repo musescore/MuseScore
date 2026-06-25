@@ -199,7 +199,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
     // Check barlines to the right
     Segment* rightBarLineSegment = nullptr;
     for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
+        if (segment->segmentType() & SegmentType::BarLineTypes) {
             rightBarLineSegment = segment;
             break;
         }
@@ -220,7 +220,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
     // Check barlines to the left
     Segment* leftBarLineSegment = nullptr;
     for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
+        if (segment->segmentType() & SegmentType::BarLineTypes) {
             leftBarLineSegment = segment;
             break;
         }

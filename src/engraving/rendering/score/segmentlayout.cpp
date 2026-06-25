@@ -24,6 +24,7 @@
 #include "dom/part.h"
 #include "dom/drumset.h"
 #include "dom/parenthesis.h"
+#include "dom/staff.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"

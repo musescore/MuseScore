@@ -1161,7 +1161,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     }
 
     for (Segment* seg = startSeg; seg && (seg->isBefore(endSeg) || seg == endSeg); seg = seg->next1enabled()) {
-        if (seg->isType(SegmentType::BarLineType) || seg->isBreathType() || seg->hasTimeSigAboveStaves() || seg->isTimeTickType()) {
+        if (seg->isType(SegmentType::BarLineTypes) || seg->isBreathType() || seg->hasTimeSigAboveStaves() || seg->isTimeTickType()) {
             continue;
         }
         segShapes.add(getSegmentShape(slurSeg, seg, startCR, endCR));
@@ -2036,7 +2036,8 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
 
         const double elPosInSystemCoords = adjSeg->xPosInSystemCoords() + elPos;
         widthToSegment = outgoing ? elPosInSystemCoords - sPos.p1.x() : sPos.p2.x() - (elPosInSystemCoords + elementWidth);
-        bool incomingFromBarline = !outgoing && element->isBarLine() && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
+        bool incomingFromBarline = !outgoing && element && element->isBarLine()
+                                   && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
         widthToSegment
             -= item->style().styleAbsolute(incomingFromBarline ? Sid::barlineToLineStartDistance : Sid::lineEndToBarlineDistance);
     }
@@ -2157,7 +2158,7 @@ void SlurTieLayout::forceHorizontal(Tie* tie, SlurTiePos& sPos)
 
     if (startNote && endNote
         && startNote->line() == endNote->line()
-        && startNote->chord()->vStaffIdx() == endNote->chord()->vStaffIdx()) {
+        && startNote->vStaffIdx() == endNote->vStaffIdx()) {
         double y1 = sPos.p1.y();
         double y2 = sPos.p2.y();
         double outerY = tie->up() ? std::min(y1, y2) : std::max(y1, y2);

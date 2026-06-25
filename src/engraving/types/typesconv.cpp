@@ -1095,6 +1095,27 @@ Orientation TConv::fromXml(const AsciiStringView& tag, Orientation def)
     return findTypeByXmlTag<Orientation>(ORIENTATION, tag, def);
 }
 
+static const std::array<Item<SharedLabelOrientation>, 3> SHARED_LABEL_ORIENTATION = { {
+    { SharedLabelOrientation::VERTICAL,    "vertical",     muse::TranslatableString("engraving", "Vertical") },
+    { SharedLabelOrientation::HORIZONTAL,  "horizontal",   muse::TranslatableString("engraving", "Horizontal") },
+    { SharedLabelOrientation::VOICE,       "voice",        muse::TranslatableString("engraving", "Voice") },
+} };
+
+String TConv::translatedUserName(SharedLabelOrientation v)
+{
+    return findCapitalizedUserNameByType(SHARED_LABEL_ORIENTATION, v).translated();
+}
+
+AsciiStringView TConv::toXml(SharedLabelOrientation v)
+{
+    return findXmlTagByType<SharedLabelOrientation>(SHARED_LABEL_ORIENTATION, v);
+}
+
+SharedLabelOrientation TConv::fromXml(const AsciiStringView& tag, SharedLabelOrientation def)
+{
+    return findTypeByXmlTag<SharedLabelOrientation>(SHARED_LABEL_ORIENTATION, tag, def);
+}
+
 static const std::array<Item<NoteHeadType>, 5> NOTEHEAD_TYPES = { {
     { NoteHeadType::HEAD_AUTO,      "auto",    muse::TranslatableString("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   muse::TranslatableString("engraving/noteheadtype", "Whole") },

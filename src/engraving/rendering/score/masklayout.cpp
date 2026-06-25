@@ -31,6 +31,7 @@
 #include "dom/measurenumber.h"
 #include "dom/note.h"
 #include "dom/parenthesis.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
@@ -60,7 +61,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 
             if (maskBarlines) {
                 for (const Segment& seg : measure->segments()) {
-                    if (seg.isType(SegmentType::BarLineType)) {
+                    if (seg.isType(SegmentType::BarLineTypes)) {
                         computeBarlineMasks(&seg, system, allSystemText, ctx);
                     }
                 }
@@ -235,7 +236,7 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
             }
         }
         for (const Segment& s : measure->segments()) {
-            if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
+            if (!s.isType(SegmentType::Duration) || !s.enabled()) {
                 continue;
             }
             for (EngravingItem* annotation : s.annotations()) {
@@ -371,17 +372,25 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     TRACEFUNC;
 
     Spanner* spanner = slurTieSegment->spanner();
-    std::vector<const EngravingItem*> itemsToMaskOver;
     const Segment* startSeg = spanner->startSegment();
     const Segment* endSeg = spanner->endSegment();
+    const EngravingItem* startElement = spanner->startElement();
+    const EngravingItem* endElement = spanner->endElement();
+    staff_idx_t startStaffIdx = startElement ? startElement->vStaffIdx() : 0;
+    staff_idx_t endStaffIdx = endElement ? endElement->vStaffIdx() : spanner->score()->nstaves() - 1;
+    if (startStaffIdx > endStaffIdx) {
+        std::swap(startStaffIdx, endStaffIdx);
+    }
+
+    std::vector<const EngravingItem*> itemsToMaskOver;
     for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
         if (!seg->enabled()
-            || !seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
+            || !seg->isType(SegmentType::KeySigTypes | SegmentType::TimeSigTypes | SegmentType::ClefTypes)
             || seg->system() != slurTieSegment->system()) {
             continue;
         }
-        for (const EngravingItem* item : seg->elist()) {
-            if (item) {
+        for (staff_idx_t staffIdx = startStaffIdx; staffIdx <= endStaffIdx; ++staffIdx) {
+            if (EngravingItem* item = seg->element(staffIdx * VOICES)) { // Key/Time/Clef-type segments never have elements in any voice other than 0
                 itemsToMaskOver.push_back(item);
             }
         }

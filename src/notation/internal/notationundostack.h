@@ -52,7 +52,7 @@ public:
 
     bool isStackClean() const override;
 
-    void mergeCommands(size_t startIdx) override;
+    void mergeTransactions(size_t startIdx) override;
 
     void lock() override;
     void unlock() override;

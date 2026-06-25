@@ -25,7 +25,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

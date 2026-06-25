@@ -36,6 +36,7 @@ class IPlaybackState
 public:
     virtual ~IPlaybackState() = default;
 
+    virtual bool isPlaying() const = 0;
     virtual muse::audio::PlaybackStatus playbackStatus() const = 0;
     virtual muse::async::Channel<muse::audio::PlaybackStatus> playbackStatusChanged() const = 0;
 

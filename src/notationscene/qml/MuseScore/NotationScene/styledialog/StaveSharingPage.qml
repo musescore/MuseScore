@@ -51,11 +51,25 @@ StyledFlickable {
             width: parent.width
             spacing: 6
 
-            StyleToggle {
+            ToggleButton {
                 id: enableStaveSharingToggle
                 Layout.fillWidth: true
-                styleItem: staveSharingModel.enableStaveSharing
+                checked: staveSharingModel.isStaveSharingEnabled
+                onToggled: staveSharingModel.isStaveSharingEnabled = !checked
+
                 text: qsTrc("notation/editstyle/stavesharing", "Enable stave sharing")
+            }
+
+            StyledGroupBox {
+                id: staveSharingBox
+                enabled: enableStaveSharingToggle.checked
+                Layout.fillWidth: true
+
+                CheckBox {
+                    text: qsTrc("notation/editstyle/stavesharing", "Allow voice crossing")
+                    checked: staveSharingModel.allowVoiceCrossing.value === true
+                    onClicked: staveSharingModel.allowVoiceCrossing.value = !staveSharingModel.allowVoiceCrossing.value
+                }
             }
         }
     }

@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class InsertTime : public UndoCommand
+class InsertTime : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertTime)
 
@@ -47,7 +47,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class InsertTimeUnmanagedSpanner : public UndoCommand
+class InsertTimeUnmanagedSpanner : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertTimeUnmanagedSpanner)
 

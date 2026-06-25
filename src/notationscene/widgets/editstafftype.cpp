@@ -268,7 +268,6 @@ Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::
     }
     score->rebuildMidiMapping();
     for (mu::engraving::Score* s : score->scoreList()) {
-        s->setPlaylistDirty();
         s->setLayoutAll();
     }
     score->updateChannel();

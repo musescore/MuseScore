@@ -45,9 +45,9 @@ class AbstractStyleDialogModel : public QObject, public muse::Contextable, publi
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
+protected:
     muse::ContextInject<context::IGlobalContext> context = { this };
 
-protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
     StyleItem* styleItem(StyleId id) const;
 

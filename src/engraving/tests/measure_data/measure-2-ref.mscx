@@ -721,19 +721,13 @@
         <Measure>
           <eid>aB_aB</eid>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <isHeader>1</isHeader>
-              <eid>bB_bB</eid>
-              </Clef>
             <TimeSig>
-              <eid>cB_cB</eid>
+              <eid>bB_bB</eid>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>dB_dB</eid>
+              <eid>cB_cB</eid>
               <linkedTo>p_p</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -741,16 +735,17 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>eB_eB</eid>
+          <eid>dB_dB</eid>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
-            <Tempo>
-              <tempo>1.66667</tempo>
-              <eid>fB_fB</eid>
-              <text>𝅘𝅥 = 100</text>
-              </Tempo>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
+              <eid>eB_eB</eid>
+              </Clef>
             <Rest>
-              <eid>gB_gB</eid>
+              <eid>fB_fB</eid>
               <linkedTo>q_q</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -759,12 +754,12 @@
           </Measure>
         <Measure len="8/4">
           <multiMeasureRest>4</multiMeasureRest>
-          <eid>hB_hB</eid>
+          <eid>gB_gB</eid>
+          <mmRestLast>hB_hB</mmRestLast>
           <voice>
             <Tempo>
               <tempo>1.66667</tempo>
               <eid>iB_iB</eid>
-              <linkedTo>fB_fB</linkedTo>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Rest>
@@ -798,10 +793,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>oB_oB</eid>
+          <eid>hB_hB</eid>
           <voice>
             <Rest>
-              <eid>pB_pB</eid>
+              <eid>oB_oB</eid>
               <linkedTo>t_t</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>

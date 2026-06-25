@@ -39,17 +39,17 @@ jobs:
       url: ${{ github.server_url }}/${{ github.repository }}/releases/${{ inputs.tag && format('tag/{0}', inputs.tag) || 'latest' }} # show on run page
     steps:
       - name: Clone repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: recursive
-      - name: Update info about the release in musescore-updates
+      - name: Update info about the release in updates.musescore.org
         run: |
-          S3_URL="s3://musescore-updates/feed/latest.xml"
-          S3_ALL_URL="s3://musescore-updates/feed/all.xml"
+          S3_URL="s3://updates.musescore.org/feed/latest.xml"
+          S3_ALL_URL="s3://updates.musescore.org/feed/all.xml"
 
           if [ ${{ inputs.mode }} == "testing" ]; then
-            S3_URL="s3://musescore-updates/feed/latest.test.xml"
-            S3_ALL_URL="s3://musescore-updates/feed/all.test.xml"
+            S3_URL="s3://updates.musescore.org/feed/latest.test.xml"
+            S3_ALL_URL="s3://updates.musescore.org/feed/all.test.xml"
           fi
 
           bash ./buildscripts/ci/release/make_release_info_file.sh \
@@ -61,14 +61,12 @@ jobs:
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \
-            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
             --file_name "release_info.json"
 
           bash ./buildscripts/ci/release/make_previous_releases_notes.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_ALL_URL} \
-            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
             --current_file_name "release_info.json" \
             --previous_file_name "previous_releases_notes.json"
 
@@ -76,5 +74,4 @@ jobs:
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_ALL_URL} \
-            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
             --file_name "previous_releases_notes.json"

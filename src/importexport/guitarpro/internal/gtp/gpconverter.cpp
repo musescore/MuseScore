@@ -268,6 +268,7 @@ void GPConverter::convertGP()
     clearDefectedSpanner();
     fixPercussion();
     addCapos();
+    utils::addPlayCountTexts(_score);
 }
 
 void GPConverter::fixPercussion()

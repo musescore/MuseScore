@@ -418,9 +418,9 @@ void mu::engraving::AddNoteParenthesisInfo::undo(EditData*)
     m_chord->triggerLayout();
 }
 
-void AddNoteParenthesisInfo::cleanup(bool undo)
+void AddNoteParenthesisInfo::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_noteParenInfo;
         m_noteParenInfo = nullptr;
     }
@@ -440,9 +440,9 @@ void RemoveNoteParenthesisInfo::undo(EditData*)
     m_chord->triggerLayout();
 }
 
-void RemoveNoteParenthesisInfo::cleanup(bool undo)
+void RemoveNoteParenthesisInfo::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete m_noteParenInfo;
         m_noteParenInfo = nullptr;
     }

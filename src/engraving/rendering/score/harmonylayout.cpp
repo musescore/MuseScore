@@ -21,14 +21,17 @@
  */
 
 #include "harmonylayout.h"
-#include "rendering/score/parenthesislayout.h"
-#include "tlayout.h"
-#include "textlayout.h"
 
+#include "draw/fontmetrics.h"
+
+#include "dom/factory.h"
 #include "dom/fret.h"
 #include "dom/harmony.h"
-#include "draw/fontmetrics.h"
-#include "dom/factory.h"
+#include "dom/staff.h"
+
+#include "parenthesislayout.h"
+#include "textlayout.h"
+#include "tlayout.h"
 
 using namespace muse::draw;
 using namespace mu::engraving;

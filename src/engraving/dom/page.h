@@ -62,6 +62,7 @@ public:
 
     page_idx_t pageNumber() const { return m_pageNumber; }
     void setPageNumber(page_idx_t n) { m_pageNumber = n; }
+    int getDisplayPageNumber() const;
     bool isOdd() const;
     double tm() const;              // margins in pixel
     double bm() const;
@@ -77,6 +78,7 @@ public:
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     RectF tbbox() const;                             // tight bounding box, excluding white space
     Fraction endTick() const;
+    Measure* firstMeasure() const;
 
     Text* headerText(int index) const { return m_headerTexts.at(index); }
     Text* footerText(int index) const { return m_footerTexts.at(index); }

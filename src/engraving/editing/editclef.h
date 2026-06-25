@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/clef.h"
 
 namespace mu::engraving {
-class ChangeClefType : public UndoCommand
+class ChangeClefType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeClefType)
 

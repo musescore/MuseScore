@@ -178,7 +178,7 @@ Item {
         }
     }
 
-    FlatButton {
+    PopupButton {
         id: customizeButton
 
         anchors.margins: 4
@@ -198,15 +198,8 @@ Item {
         navigation.order: 100
         navigation.accessible.name: qsTrc("notation", "Customize toolbar")
 
-        onClicked: {
-            customizePopup.toggleOpened()
-        }
-
-        NoteInputBarCustomisePopup {
-            id: customizePopup
-
-            anchorItem: !root.floating ? ui.rootItem : null
-        }
+        popupAnchorItem: root.floating ? null : ui.rootItem
+        popupComponent: NoteInputBarCustomisePopup {}
     }
 
     states: [

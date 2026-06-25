@@ -21,12 +21,12 @@
  */
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measure.h"
 
 namespace mu::engraving {
-class InsertRemoveMeasures : public UndoCommand
+class InsertRemoveMeasures : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertRemoveMeasures)
 
@@ -75,7 +75,7 @@ public:
     UNDO_NAME("InsertMeasures")
 };
 
-class ChangeMeasureLen : public UndoCommand
+class ChangeMeasureLen : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureLen)
 
@@ -92,7 +92,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class ChangeMMRest : public UndoCommand
+class ChangeMMRest : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMMRest)
 
@@ -110,7 +110,42 @@ public:
     UNDO_CHANGED_OBJECTS({ m, mmrest })
 };
 
-class ChangeMeasureRepeatCount : public UndoCommand
+// ChangeMMRestNext & ChangeMMRestPrev SHOULD ONLY BE USED FOR MMRests
+// Setting m_next & m_prev involves the score's MeasureList for regular measures
+// This is handled through undo commands above
+class ChangeMMRestNext : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMMRestNext)
+
+    Measure* m_mmrest = nullptr;
+    MeasureBase* m_next = nullptr;
+
+    void flip(EditData*) override;
+public:
+    ChangeMMRestNext(Measure* mmrest, MeasureBase* next)
+        : m_mmrest(mmrest), m_next(next) {}
+
+    UNDO_NAME("ChangeMMRestNext")
+    UNDO_CHANGED_OBJECTS({ m_mmrest })
+};
+
+class ChangeMMRestPrev : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMMRestPrev)
+
+    Measure* m_mmrest = nullptr;
+    MeasureBase* m_prev = nullptr;
+
+    void flip(EditData*) override;
+public:
+    ChangeMMRestPrev(Measure* mmrest, MeasureBase* prev)
+        : m_mmrest(mmrest), m_prev(prev) {}
+
+    UNDO_NAME("ChangeMMRestPrev")
+    UNDO_CHANGED_OBJECTS({ m_mmrest })
+};
+
+class ChangeMeasureRepeatCount : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureRepeatCount)
 

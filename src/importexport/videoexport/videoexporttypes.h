@@ -24,11 +24,8 @@
 
 namespace mu::iex::videoexport {
 enum ViewMode {
-    Auto,
-    PagedFloat,
-    PagedOriginal,
-    PagedFloatHeight,
-    Pano
+    PageFull,
+    Flexible,
 };
 
 enum PianoPosition {

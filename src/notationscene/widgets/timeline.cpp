@@ -2269,7 +2269,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             if (event->modifiers() == Qt::ShiftModifier) {
                 if (currMeasure->mmRest()) {
                     currMeasure = currMeasure->mmRest();
-                } else if (currMeasure->mmRestCount() == -1) {
+                } else if (!currMeasure->isMMRest()) {
                     currMeasure = currMeasure->prevMeasureMM();
                 }
 
@@ -2280,7 +2280,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                 if (interaction()->selection()->isNone()) {
                     if (currMeasure->mmRest()) {
                         currMeasure = currMeasure->mmRest();
-                    } else if (currMeasure->mmRestCount() == -1) {
+                    } else if (!currMeasure->isMMRest()) {
                         currMeasure = currMeasure->prevMeasureMM();
                     }
 
@@ -2294,7 +2294,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             } else {
                 if (currMeasure->mmRest()) {
                     currMeasure = currMeasure->mmRest();
-                } else if (currMeasure->mmRestCount() == -1) {
+                } else if (!currMeasure->isMMRest()) {
                     currMeasure = currMeasure->prevMeasureMM();
                 }
 
@@ -2452,12 +2452,12 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
                 // Focus selection of mmRests here
                 if (tlMeasure->mmRest()) {
                     tlMeasure = tlMeasure->mmRest();
-                } else if (tlMeasure->mmRestCount() == -1) {
+                } else if (!tlMeasure->isMMRest()) {
                     tlMeasure = tlMeasure->prevMeasureMM();
                 }
                 if (brMeasure->mmRest()) {
                     brMeasure = brMeasure->mmRest();
-                } else if (brMeasure->mmRestCount() == -1) {
+                } else if (!brMeasure->isMMRest()) {
                     brMeasure = brMeasure->prevMeasureMM();
                 }
 

@@ -246,19 +246,15 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <eid>l_l</eid>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
-        <eid>m_m</eid>
+        <eid>l_l</eid>
+        <mmRestLast>j_j</mmRestLast>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>m_m</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -266,8 +262,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>o_o</eid>
-            <linkedTo>l_l</linkedTo>
+            <eid>n_n</eid>
             </BarLine>
           </voice>
         </Measure>

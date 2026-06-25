@@ -658,8 +658,7 @@ void Chord::add(EngravingItem* e)
             measure()->setHasVoices(staffIdx(), true);
         }
     }
-        score()->setPlaylistDirty();
-        break;
+    break;
     case ElementType::ARPEGGIO:
         m_arpeggio = toArpeggio(e);
         break;
@@ -761,7 +760,6 @@ void Chord::remove(EngravingItem* e)
         if (voice() && measure() && note->visible()) {
             measure()->checkMultiVoices(staffIdx());
         }
-        score()->setPlaylistDirty();
     }
     break;
 

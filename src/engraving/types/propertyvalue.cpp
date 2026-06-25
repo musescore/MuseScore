@@ -134,6 +134,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
     case P_TYPE::ORIENTATION: return static_cast<int>(value<Orientation>());
+    case P_TYPE::SHARED_LABEL_ORIENTATION: return static_cast<int>(value<SharedLabelOrientation>());
     case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
 
@@ -259,6 +260,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
     case P_TYPE::ORIENTATION:   return PropertyValue(Orientation(v.toInt()));
+    case P_TYPE::SHARED_LABEL_ORIENTATION:   return PropertyValue(SharedLabelOrientation(v.toInt()));
     case P_TYPE::BEAM_MODE:     return PropertyValue(BeamMode(v.toInt()));
     case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(AccidentalRole(v.toInt()));
 

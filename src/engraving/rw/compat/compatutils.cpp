@@ -23,37 +23,40 @@
 #include "compatutils.h"
 
 #include "dom/articulation.h"
+#include "dom/capo.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
+#include "dom/excerpt.h"
 #include "dom/expression.h"
+#include "dom/factory.h"
 #include "dom/harmony.h"
 #include "dom/image.h"
+#include "dom/key.h"
+#include "dom/keylist.h"
 #include "dom/laissezvib.h"
-#include "dom/masterscore.h"
-#include "dom/note.h"
-#include "dom/score.h"
-#include "dom/excerpt.h"
-#include "dom/part.h"
-#include "dom/stem.h"
 #include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
 #include "dom/measure.h"
-#include "dom/factory.h"
+#include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
+#include "dom/part.h"
+#include "dom/playtechannotation.h"
 #include "dom/rest.h"
+#include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/stafftext.h"
 #include "dom/stafftextbase.h"
-#include "dom/playtechannotation.h"
-#include "dom/capo.h"
-#include "dom/noteline.h"
-#include "dom/textline.h"
-#include "style/styledef.h"
-#include "style/defaultstyle.h"
+#include "dom/stem.h"
 #include "dom/tempotext.h"
+#include "dom/textline.h"
 
 #include "editing/editchord.h"
 #include "editing/transpose.h"
 
-#include "engraving/style/textstyle.h"
+#include "style/defaultstyle.h"
+#include "style/styledef.h"
+#include "style/textstyle.h"
 
 #include "types/string.h"
 
@@ -184,6 +187,10 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     if (masterScore->mscVersion() < 450) {
         convertTextLineToNoteAnchoredLine(masterScore);
         convertLaissezVibArticToTie(masterScore);
+    }
+
+    if (masterScore->mscVersion() < 500) {
+        removeMMRestElements(masterScore);
     }
 }
 
@@ -1120,4 +1127,55 @@ void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
     PropertyValue offset = item->getProperty(Pid::OFFSET);
     CompatUtils::migrateOffset500(item, offset);
     item->setProperty(Pid::OFFSET, offset);
+}
+
+void CompatUtils::removeMMRestElements(MasterScore* masterScore)
+{
+    // <5.0 MMRests had copies of underlying elements. We now move the element when toggling the rests.
+    // Remove redundant copies which are written to the file
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            Measure* mmrest = m->mmRest();
+
+            if (!mmrest) {
+                continue;
+            }
+
+            // Remove jumps/markers/layout breaks
+            std::vector<EngravingItem*> measureEls = mmrest->el();
+            for (EngravingItem* el : measureEls) {
+                el->unlink();
+                score->removeElement(el);
+                delete el;
+            }
+
+            // Remove annotations
+            for (Segment& seg : mmrest->segments()) {
+                std::vector<EngravingItem*> annotations = seg.annotations();
+                for (EngravingItem* annotation : annotations) {
+                    annotation->unlink();
+                    score->removeElement(annotation);
+                    delete annotation;
+                }
+                if (seg.isChordRestType()) {
+                    continue;
+                }
+                // Remove time sigs, key sigs, clefs, ambitus, breaths, barlines
+                for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                    EngravingItem* el = seg.element(staff2track(staffIdx));
+                    if (!el) {
+                        continue;
+                    }
+                    el->unlink();
+                    score->removeElement(el);
+                    delete el;
+                }
+            }
+        }
+    }
 }

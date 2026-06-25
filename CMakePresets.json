@@ -30,8 +30,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MUSE_COMPILE_BUILD_64": "ON"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {

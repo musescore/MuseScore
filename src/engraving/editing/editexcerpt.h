@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/excerpt.h"
 #include "../dom/masterscore.h"
 #include "../dom/part.h"
 
 namespace mu::engraving {
-class AddExcerpt : public UndoCommand
+class AddExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddExcerpt)
 
@@ -49,7 +49,7 @@ public:
     UNDO_NAME("AddExcerpt")
 };
 
-class RemoveExcerpt : public UndoCommand
+class RemoveExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveExcerpt)
 
@@ -70,7 +70,7 @@ public:
     UNDO_NAME("RemoveExcerpt")
 };
 
-class SwapExcerpt : public UndoCommand
+class SwapExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SwapExcerpt)
 
@@ -89,7 +89,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeExcerptTitle : public UndoCommand
+class ChangeExcerptTitle : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeExcerptTitle)
 
@@ -106,7 +106,7 @@ public:
     UNDO_NAME("ChangeExcerptTitle")
 };
 
-class AddPartToExcerpt : public UndoCommand
+class AddPartToExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddPartToExcerpt)
 
@@ -118,7 +118,7 @@ public:
     AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     UNDO_TYPE(CommandType::AddPartToExcerpt)
     UNDO_NAME("AddPartToExcerpt")

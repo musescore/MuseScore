@@ -47,7 +47,7 @@ PropertiesPanelSection {
             width: parent.width
             spacing: 4
 
-            PopupViewButton {
+            PropertiesPanelPopupButton {
                 id: insertMeasuresPopupButton
 
                 anchorItem: root.anchorItem

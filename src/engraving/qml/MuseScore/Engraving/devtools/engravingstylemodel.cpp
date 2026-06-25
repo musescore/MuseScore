@@ -160,6 +160,7 @@ QString EngravingStyleModel::typeToString(P_TYPE pt) const
     case P_TYPE::DIRECTION_V:   return "Int";
     case P_TYPE::DIRECTION_H:   return "Int";
     case P_TYPE::ORIENTATION:   return "Int";
+    case P_TYPE::SHARED_LABEL_ORIENTATION: return "Int";
     case P_TYPE::BEAM_MODE:     return "Int";
     case P_TYPE::ACCIDENTAL_ROLE: return "Int";
 

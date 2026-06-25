@@ -122,13 +122,8 @@
       <Measure>
         <eid>H_H</eid>
         <voice>
-          <TimeSig>
-            <eid>I_I</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Rest>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -136,16 +131,16 @@
         </Measure>
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
-        <eid>K_K</eid>
+        <eid>J_J</eid>
+        <mmRestLast>H_H</mmRestLast>
         <voice>
           <TimeSig>
-            <eid>L_L</eid>
-            <linkedTo>I_I</linkedTo>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -153,18 +148,18 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>M_M</eid>
         <voice>
           <Spanner type="TextLine">
             <TextLine>
               <endHookType>1</endHookType>
               <beginText>VII</beginText>
-              <eid>O_O</eid>
+              <eid>N_N</eid>
               <Segment>
                 <subtype>0</subtype>
                 <offset x="0" y="0"/>
                 <off2 x="0.106397" y="0"/>
-                <eid>P_P</eid>
+                <eid>O_O</eid>
                 </Segment>
               </TextLine>
             <next>
@@ -174,7 +169,7 @@
               </next>
             </Spanner>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -182,7 +177,8 @@
         </Measure>
       <Measure len="12/4">
         <multiMeasureRest>3</multiMeasureRest>
-        <eid>R_R</eid>
+        <eid>Q_Q</eid>
+        <mmRestLast>R_R</mmRestLast>
         <LayoutBreak>
           <eid>S_S</eid>
           <subtype>line</subtype>
@@ -207,21 +203,17 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
-        <LayoutBreak>
-          <eid>X_X</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
+        <eid>R_R</eid>
         <voice>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Z_Z</eid>
+        <eid>X_X</eid>
         <voice>
           <Spanner type="TextLine">
             <prev>
@@ -231,7 +223,7 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>a_a</eid>
+            <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -239,14 +231,15 @@
         </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <eid>b_b</eid>
+        <eid>Z_Z</eid>
+        <mmRestLast>a_a</mmRestLast>
         <LayoutBreak>
-          <eid>c_c</eid>
+          <eid>b_b</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>d_d</eid>
+            <eid>c_c</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
@@ -254,17 +247,27 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>d_d</eid>
         <voice>
           <Rest>
-            <eid>f_f</eid>
+            <eid>e_e</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>g_g</eid>
+        <eid>f_f</eid>
+        <voice>
+          <Rest>
+            <eid>g_g</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>a_a</eid>
         <voice>
           <Rest>
             <eid>h_h</eid>
@@ -275,26 +278,12 @@
         </Measure>
       <Measure>
         <eid>i_i</eid>
-        <LayoutBreak>
-          <eid>j_j</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Rest>
-            <eid>k_k</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>l_l</eid>
         <voice>
           <Spanner type="Volta">
             <Volta>
               <endHookType>1</endHookType>
               <beginText>1.</beginText>
-              <eid>m_m</eid>
+              <eid>j_j</eid>
               <endings>1</endings>
               </Volta>
             <next>
@@ -304,7 +293,7 @@
               </next>
             </Spanner>
           <Rest>
-            <eid>n_n</eid>
+            <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -312,17 +301,28 @@
         </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <eid>o_o</eid>
+        <eid>l_l</eid>
+        <mmRestLast>m_m</mmRestLast>
         <LayoutBreak>
-          <eid>p_p</eid>
+          <eid>n_n</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>q_q</eid>
+            <eid>o_o</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>p_p</eid>
+        <voice>
+          <Rest>
+            <eid>q_q</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -337,31 +337,17 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>t_t</eid>
+        <eid>m_m</eid>
         <voice>
           <Rest>
-            <eid>u_u</eid>
+            <eid>t_t</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>v_v</eid>
-        <LayoutBreak>
-          <eid>w_w</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Rest>
-            <eid>x_x</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>y_y</eid>
+        <eid>u_u</eid>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -371,7 +357,7 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>z_z</eid>
+            <eid>v_v</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -379,14 +365,15 @@
         </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <eid>0_0</eid>
+        <eid>w_w</eid>
+        <mmRestLast>x_x</mmRestLast>
         <LayoutBreak>
-          <eid>1_1</eid>
+          <eid>y_y</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>2_2</eid>
+            <eid>z_z</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
@@ -394,34 +381,30 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>3_3</eid>
+        <eid>0_0</eid>
+        <voice>
+          <Rest>
+            <eid>1_1</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>2_2</eid>
+        <voice>
+          <Rest>
+            <eid>3_3</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>x_x</eid>
         <voice>
           <Rest>
             <eid>4_4</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>5_5</eid>
-        <voice>
-          <Rest>
-            <eid>6_6</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>7_7</eid>
-        <LayoutBreak>
-          <eid>8_8</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Rest>
-            <eid>9_9</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

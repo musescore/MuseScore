@@ -33,8 +33,10 @@
 #include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
+#include "scorepageviewlayout.h"
 #include "horizontalspacing.h"
 #include "slurtielayout.h"
+#include "headerfooterlayout.h"
 
 #include "paint.h"
 
@@ -47,6 +49,16 @@ using namespace mu::engraving::rendering::score;
 void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
 {
     ScoreLayout::layoutRange(score, st, et);
+}
+
+void ScoreRenderer::layoutHeadersFooters(Score* score) const
+{
+    LayoutContext ctx(score);
+    if (!ctx.conf().isMode(LayoutMode::PAGE) && !ctx.conf().isMode(LayoutMode::FLOAT)) {
+        return;
+    }
+
+    ScorePageViewLayout::layoutHeadersFooters(ctx);
 }
 
 SizeF ScoreRenderer::pageSizeInch(const Score* score) const
@@ -118,4 +130,12 @@ void ScoreRenderer::layoutStem(Chord* item)
 {
     LayoutContext ctx(item->score());
     ChordLayout::layoutStem(item, ctx);
+}
+
+bool ScoreRenderer::scoreHasTimestampHeadersFooters(const Score* score) const
+{
+    if (score->layoutMode() != LayoutMode::PAGE && score->layoutMode() != LayoutMode::FLOAT) {
+        return false;
+    }
+    return HeaderFooterLayout::scoreHasTimestampHeadersFooters(score);
 }

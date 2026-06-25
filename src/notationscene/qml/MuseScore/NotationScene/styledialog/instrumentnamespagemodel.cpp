@@ -41,6 +41,14 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
     StyleId::instrumentNamesFormatShort,
     StyleId::instrumentNamesCustomFormatShort,
     StyleId::instrumentNamesAlignIncludeGroupBrackets,
+
+    StyleId::instrumentNumeralsTrailingDotSingle,
+    StyleId::instrumentNumeralsTrailingDotMultiple,
+    StyleId::instrumentNumeralsOrientation,
+    StyleId::instrumentNumeralsVerticalThreshold,
+    StyleId::instrumentNumeralsHorizontalThreshold,
+    StyleId::instrumentNumeralsHyphenEnable,
+    StyleId::instrumentNumeralsHyphenThreshold,
 })
 {
 }
@@ -113,4 +121,39 @@ StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatShort() const
 StyleItem* InstrumentNamesPageModel::instrumentNamesAlignIncludeGroupBrackets() const
 {
     return styleItem(StyleId::instrumentNamesAlignIncludeGroupBrackets);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsTrailingDotSingle() const
+{
+    return styleItem(StyleId::instrumentNumeralsTrailingDotSingle);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsTrailingDotMultiple() const
+{
+    return styleItem(StyleId::instrumentNumeralsTrailingDotMultiple);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsOrientation() const
+{
+    return styleItem(StyleId::instrumentNumeralsOrientation);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsHyphenThreshold() const
+{
+    return styleItem(StyleId::instrumentNumeralsHyphenThreshold);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsVerticalThreshold() const
+{
+    return styleItem(StyleId::instrumentNumeralsVerticalThreshold);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsHyphenEnable() const
+{
+    return styleItem(StyleId::instrumentNumeralsHyphenEnable);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsHorizontalThreshold() const
+{
+    return styleItem(StyleId::instrumentNumeralsHorizontalThreshold);
 }

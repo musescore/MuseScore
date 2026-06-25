@@ -101,7 +101,6 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
 #include "editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
@@ -1178,10 +1177,10 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         read400::TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             note->setParenthesesMode(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             note->setParenthesesMode(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             note->add(s);
         }
@@ -3583,11 +3582,21 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         return false;
     }
 
-    score->connectTies();
-
     score->setFileDivision(Constants::DIVISION);
 
     score->setUpTempoMap();
+    if (score->isMaster()) {
+        // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+        // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+        // elements still do it).
+        // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+        // up-to-date from that point. But we weren't finished reading the score, so the score will still
+        // change. We need to tell the repeat list about that, so that it will be updated next time
+        // someone uses it.
+        static_cast<MasterScore*>(score)->invalidateRepeatList();
+    }
+    score->connectTies();
+    score->undoRemoveStaleTieJumpPoints(false);
 
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
@@ -3656,7 +3665,7 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     read114::Read114::setBarLineSpanToStaves(score, ctx);
 
     // set local overrides to bar lines
-    constexpr auto st = SegmentType::BarLineType;
+    constexpr auto st = SegmentType::BarLineTypes;
     const size_t numStaves = score->nstaves();
     for (Segment* s = score->firstSegment(st); s; s = s->next1(st)) {
         // optional local bar line span override of this segment

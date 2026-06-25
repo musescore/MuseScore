@@ -22,8 +22,6 @@
 
 #include "dynamichairpingroup.h"
 
-#include "../editing/undo.h"
-
 #include "dynamic.h"
 #include "expression.h"
 #include "hairpin.h"

@@ -1081,7 +1081,7 @@ Fraction ScoreRange::ticks() const
 void ScoreRange::backupBarLines(Segment* first, Segment* last)
 {
     for (Segment* s = first; s && (s->isBefore(last) || s == last); s = s->next1()) {
-        if (!s->isType(SegmentType::BarLineType)) {
+        if (!s->isType(SegmentType::BarLineTypes)) {
             continue;
         }
         for (EngravingItem* e : s->elist()) {

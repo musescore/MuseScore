@@ -24,7 +24,6 @@
 
 #include "engraving/dom/partialtie.h"
 #include "engraving/dom/tie.h"
-#include "engraving/editing/undo.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -226,6 +225,6 @@ void mu::notation::PartialTiePopupModel::onClosed()
         }
 
         // Combine this with the last undoable action (which will be to remove a tie) so the user cannot undo to get a translucent tie
-        undoStack()->mergeCommands(undoStack()->currentStateIndex() - 2);
+        undoStack()->mergeTransactions(undoStack()->currentStateIndex() - 2);
     }
 }

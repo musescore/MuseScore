@@ -584,8 +584,8 @@ bool Measure::showMeasureNumberInAutoMode() const
         // Show either if
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is excluded from numbering.
-        return isFirstInSystem()
-               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->isFirstInSystem());
+        return (system() && isFirstInSystem())
+               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->system() && prevMeasure->isFirstInSystem());
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure
@@ -826,7 +826,7 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                if (seg->isType(SegmentType::BarLineType)) {
+                if (seg->isType(SegmentType::BarLineTypes)) {
                     // Barline segments are regenerated every layout
                     // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
                     m_segments.remove(s);
@@ -1535,7 +1535,7 @@ EngravingItem* Measure::drop(EditData& data)
             return nullptr;
         }
         staffIdx = staff->idx();
-        Segment* parentSeg = first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        Segment* parentSeg = first(SegmentType::Duration);
         if (!parentSeg) {
             delete e;
             return nullptr;
@@ -1827,16 +1827,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::TBOX:
     case ElementType::FBOX:
     case ElementType::HBOX:
-    {
-        MeasureBase* newBox = toMeasureBase(e);
-        Measure* m = isMMRest() ? mmRestFirst() : this;
-        newBox->setTick(m->tick());
-        newBox->setNext(m);
-        newBox->setPrev(m->prev());
-        score()->undo(new InsertMeasures(newBox, newBox));
-        return newBox;
-    }
-    break;
+        return score()->insertBox(toMeasureBase(e), this);
 
     default:
         LOGD("Measure: cannot drop %s here", e->typeName());
@@ -1872,7 +1863,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
+                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigTypes | SegmentType::CourtesyKeySigTypes)) {
                     seg->setRtick(nl);
                 }
             }
@@ -2887,12 +2878,10 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
     case Pid::EXCLUDE_FROM_NUMBERING:
         setExcludeFromNumbering(value.toBool());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_OFFSET:
         setMeasureNumberOffset(value.toInt());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_MODE:
         setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -2909,15 +2898,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);
@@ -3030,7 +3019,7 @@ Measure* Measure::coveringMMRestOrThis()
         return m_mmRest;
     }
 
-    if (m_mmRestCount != -1) {
+    if (isMMRest()) {
         return this;
     }
 
@@ -3039,11 +3028,11 @@ Measure* Measure::coveringMMRestOrThis()
         m = m->prevMeasure();
     }
 
-    if (m) {
+    if (m && !m->m_mmRest->mmRestLast()->isBefore(this)) {
         return m->m_mmRest;
     }
 
-    return 0;
+    return this;
 }
 
 const Measure* Measure::coveringMMRestOrThis() const
@@ -3385,7 +3374,7 @@ double Measure::endingXForOpenEndedLines() const
     double systemEndX = sys->ldata()->bbox().width();
 
     Segment* lastSeg = last();
-    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineTypes)) {
         lastSeg = lastSeg->prevEnabled();
     }
     if (!lastSeg) {

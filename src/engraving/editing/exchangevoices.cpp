@@ -31,12 +31,12 @@
 #include "../types/types.h"
 
 #include "clonevoice.h"
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 using namespace mu::engraving;
 
 namespace {
-class ExchangeVoicesInMeasure : public UndoCommand
+class ExchangeVoicesInMeasure : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ExchangeVoicesInMeasure)
 

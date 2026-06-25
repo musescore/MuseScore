@@ -22,8 +22,9 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
+#include "../dom/chord.h"
 #include "../dom/note.h"
 
 namespace mu::engraving {
@@ -51,7 +52,7 @@ private:
     static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
-class ChangeVelocity : public UndoCommand
+class ChangeVelocity : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeVelocity)
 
@@ -68,7 +69,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeNoteEventList : public UndoCommand
+class ChangeNoteEventList : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEventList)
 
@@ -85,7 +86,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note });
 };
 
-class ChangeNoteEvent : public UndoCommand
+class ChangeNoteEvent : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEvent)
 
@@ -103,7 +104,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeChordPlayEventType : public UndoCommand
+class ChangeChordPlayEventType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeChordPlayEventType)
 

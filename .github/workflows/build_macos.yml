@@ -16,6 +16,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
+        required: false
   workflow_call:
     inputs:
       build_mode:
@@ -36,6 +40,11 @@ on:
       build_number:
         description: "Build number (if not provided, will be generated)"
         default: ""
+        type: string
+        required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
         type: string
         required: false
       app_repo:
@@ -73,7 +82,7 @@ jobs:
     runs-on: macos-26
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.app_repo || github.repository }}
         ref: ${{ inputs.app_ref || github.ref }}
@@ -81,7 +90,7 @@ jobs:
 
     - name: Override muse_framework
       if: inputs.framework_ref != '' && inputs.framework_repo != ''
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.framework_repo }}
         ref: ${{ inputs.framework_ref }}
@@ -225,7 +234,7 @@ jobs:
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
+        bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --dockwidgets_v2 ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
     - name: Show ccache stats
       run: |
         ccache -sv

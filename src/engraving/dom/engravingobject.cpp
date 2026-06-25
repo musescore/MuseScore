@@ -24,9 +24,9 @@
 
 #include "global/containers.h"
 
-#include "../editing/undo.h"
 #include "../editing/addremoveelement.h"
 #include "../editing/editproperty.h"
+#include "../editing/transaction/undostack.h"
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 

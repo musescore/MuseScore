@@ -80,6 +80,7 @@
 #include "dom/slur.h"
 #include "dom/soundflag.h"
 #include "dom/spacer.h"
+#include "dom/staff.h"
 #include "dom/stafftext.h"
 #include "dom/stafftypechange.h"
 #include "dom/sticking.h"

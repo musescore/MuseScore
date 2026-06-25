@@ -224,7 +224,6 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 void TempoText::updateScore()
 {
     score()->setUpTempoMapLater();
-    score()->setPlaylistDirty();
 }
 
 //---------------------------------------------------------

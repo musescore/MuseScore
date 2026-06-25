@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "editstavesharing.h"
 
 #include "dom/factory.h"
@@ -28,7 +29,66 @@
 #include "dom/sharedpart.h"
 #include "dom/staff.h"
 
-namespace mu::engraving {
+#include "transaction/undoablecommand.h"
+
+using namespace mu::engraving;
+
+namespace {
+//-------------------------------------------------------------------
+// Undo commands
+//-------------------------------------------------------------------
+
+class ConnectSharedPart : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ConnectSharedPart)
+
+    SharedPart* sharedPart = nullptr;
+    Part* originPart = nullptr;
+
+public:
+    ConnectSharedPart(SharedPart* s, Part* o)
+        : sharedPart(s), originPart(o) {}
+
+    void undo(EditData*) override
+    {
+        sharedPart->removeOriginPart(originPart);
+    }
+
+    void redo(EditData*) override
+    {
+        sharedPart->addOriginPart(originPart);
+    }
+
+    UNDO_TYPE(CommandType::ConnectSharedPart)
+    UNDO_NAME("Connect shared part")
+};
+
+class DisconnectSharedPart : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, DisconnectSharedPart)
+
+    SharedPart* sharedPart = nullptr;
+    Part* originPart = nullptr;
+
+public:
+    DisconnectSharedPart(SharedPart* s, Part* o)
+        : sharedPart(s), originPart(o) {}
+
+    void undo(EditData*) override
+    {
+        sharedPart->addOriginPart(originPart);
+    }
+
+    void redo(EditData*) override
+    {
+        sharedPart->removeOriginPart(originPart);
+    }
+
+    UNDO_TYPE(CommandType::DisconnectSharedPart)
+    UNDO_NAME("Disconnect shared part")
+};
+}
+
 //-------------------------------------------------------------------
 // EditStaveSharing
 //-------------------------------------------------------------------
@@ -219,29 +279,4 @@ void EditStaveSharing::handleRemovePart(Part* part)
             score->undo(new DisconnectSharedPart(sharedPart, originPart));
         }
     }
-}
-
-//-------------------------------------------------------------------
-// Undo commands
-//-------------------------------------------------------------------
-
-void ConnectSharedPart::undo(EditData*)
-{
-    sharedPart->removeOriginPart(originPart);
-}
-
-void ConnectSharedPart::redo(EditData*)
-{
-    sharedPart->addOriginPart(originPart);
-}
-
-void DisconnectSharedPart::undo(EditData*)
-{
-    sharedPart->addOriginPart(originPart);
-}
-
-void DisconnectSharedPart::redo(EditData*)
-{
-    sharedPart->removeOriginPart(originPart);
-}
 }

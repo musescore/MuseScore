@@ -25,10 +25,14 @@
 #include "modularity/ioc.h"
 
 #include "ui/iuiactionsregister.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 #include "interactive/iinteractiveuriregister.h"
 
 #include "internal/playbackcontroller.h"
 #include "internal/playbackuiactions.h"
+#include "internal/playbackcommandsregister.h"
+#include "internal/playbackcommandsstate.h"
 #include "internal/playbackconfiguration.h"
 #include "internal/soundprofilesrepository.h"
 
@@ -57,6 +61,11 @@ void PlaybackModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
     }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<PlaybackCommandsRegister>());
+    }
 }
 
 void PlaybackModule::onInit(const IApplication::RunMode&)
@@ -84,6 +93,11 @@ void PlaybackContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_playbackUiActions);
+    }
+
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<PlaybackCommandsState>(iocContext()));
     }
 }
 

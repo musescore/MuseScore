@@ -45,6 +45,7 @@ public:
 
     muse::DateTime birthTime() const override;
     muse::DateTime lastModified() const override;
+    bool isNewlyCreated() const override;
 
 private:
     muse::io::path_t m_path;
