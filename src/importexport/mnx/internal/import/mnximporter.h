@@ -160,8 +160,8 @@ private:
     static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v);
     engraving::Fraction mnxMeasurePosToTick(const mnx::MeasureRhythmicPosition& measPos);
     engraving::staff_idx_t resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic);
-    std::optional<engraving::track_idx_t> resolveDynamicVoiceTrack(const mnx::part::Measure& mnxMeasure, engraving::staff_idx_t staffIdx,
-                                                                   const std::string& mnxVoiceId);
+    std::optional<engraving::track_idx_t> resolveVoiceTrack(const mnx::part::Measure& mnxMeasure, engraving::staff_idx_t staffIdx,
+                                                            const std::string& mnxVoiceId);
     void applyDynamicOrient(engraving::EngravingItem* item, const mnx::Part& part, mnx::MultiStaffOrientation orient);
     void createHairpin(const mnx::part::DynamicGradual& mnxHairpin, engraving::Segment* segment, const mnx::Part& mnxPart,
                        engraving::track_idx_t curTrackIdx, bool useVoiceAssignment);
