@@ -32,7 +32,7 @@ Page {
     title: qsTrc("appshell/gettingstarted", "Video tutorials")
     explanation: qsTrc("appshell/gettingstarted", "Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started\n(Video tutorials require an internet connection)")
 
-    titleContentSpacing: 24
+    titleContentSpacing: 32
 
     TutorialsPageModel {
         id: tutorialsModel
@@ -42,7 +42,7 @@ Page {
         id: content
 
         anchors.fill: parent
-        spacing: 20
+        spacing: 40
 
         Item {
             id: imageArea
@@ -55,8 +55,8 @@ Page {
 
                 anchors.centerIn: parent
 
-                height: parent.height
-                width: implicitWidth
+                height: 172
+                width: 277
 
                 fillMode: Image.PreserveAspectFit
                 source: "resources/VideoTutorials.png"

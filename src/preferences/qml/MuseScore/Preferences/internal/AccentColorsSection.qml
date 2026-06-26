@@ -34,7 +34,7 @@ Row {
     property NavigationPanel navigation: NavigationPanel {
         name: titleLabel.text
         enabled: root.enabled && root.visible
-        direction: NavigationPanel.Horizontal
+        direction: NavigationPanel.Both
         accessible.name: titleLabel.text
 
         onActiveChanged: function(active) {
@@ -55,8 +55,10 @@ Row {
         id: titleLabel
         width: root.columnWidth
 
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        height: colorsList.firstRowHeight
         horizontalAlignment: Qt.AlignLeft
+        verticalAlignment: Qt.AlignVCenter
 
         text: qsTrc("preferences", "Accent color")
     }
@@ -65,8 +67,6 @@ Row {
         id: colorsList
 
         navigationPanel: root.navigation
-
-        sampleSize: 30
 
         onAccentColorChangeRequested: function(newColorIndex) {
             root.accentColorChangeRequested(newColorIndex)
