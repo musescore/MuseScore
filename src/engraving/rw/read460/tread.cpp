@@ -3886,6 +3886,24 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    if (notes.empty()) {
+        LOGW() << "NoteParenGroup has no valid notes, skipping";
+        delete leftParen;
+        delete rightParen;
+        return;
+    }
+
+    for (const NoteParenthesisInfo* existing : ch->noteParentheses()) {
+        for (Note* note : notes) {
+            if (muse::contains(existing->notes(), note)) {
+                LOGW() << "Skipping duplicate NoteParenGroup: note already covered by existing group";
+                delete leftParen;
+                delete rightParen;
+                return;
+            }
+        }
+    }
+
     if (!leftParen) {
         leftParen = Factory::createParenthesis(ch);
         leftParen->setParent(ch);
