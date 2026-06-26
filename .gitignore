@@ -17,6 +17,7 @@ build.qtc
 build-*
 build
 muse
+muse_deps
 win32build
 win32install
 win64build
