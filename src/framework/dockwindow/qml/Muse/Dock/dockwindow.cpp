@@ -578,10 +578,6 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
 
     loadPageContent(newPage);
     restorePageState(newPage);
-
-    // Calls such as clearRegistry lead to deferred deletes of docks. Ensure these
-    // have been fully processed before attempting to re-init (see issue #31997)
-    qApp->sendPostedEvents(nullptr, QEvent::DeferredDelete);
     initDocks(newPage);
 
     newPage->setParams(params);
