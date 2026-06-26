@@ -2162,7 +2162,10 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions& 
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
     painter->setPen(pen);
     painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
