@@ -2470,7 +2470,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         switch (icon->actionType()) {
         case ActionIconType::SYSTEM_LOCK: {
             engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
-            EditSystemLocks::applyLockToSelection(tx, score);
+            EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PARENTHESES: {
@@ -2716,7 +2716,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         const ActionIconType actionType = toActionIcon(element)->actionType();
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
-            EditSystemLocks::applyLockToSelection(tx, score);
+            EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PARENTHESES: {
