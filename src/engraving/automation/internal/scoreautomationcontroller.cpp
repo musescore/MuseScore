@@ -448,7 +448,8 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     const DynamicType dynamicType = dynamic->dynamicType();
     const utick_t dynamicUTick = dynamic->tick().ticks() + tickOffset;
-    AutomationPoint prevPoint = m_automation->activePoint(key, dynamicUTick);
+    const AutomationPoint* prevPoint = m_automation->activePoint(key, dynamicUTick);
+    const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
 
     EID eid = dynamic->eid();
     if (!eid.isValid()) {
@@ -458,8 +459,8 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     if (muse::contains(ORDINARY_DYNAMIC_VALUES, dynamicType)) {
         AutomationPoint point;
         point.outValue = muse::value(ORDINARY_DYNAMIC_VALUES, dynamicType);
-        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevPoint.outValue);
-        point.inValue = isHairpinEnd ? point.outValue : prevPoint.outValue;
+        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevOutValue);
+        point.inValue = isHairpinEnd ? point.outValue : prevOutValue;
         point.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, point);
         return;
@@ -468,14 +469,15 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, dynamicType)) {
         AutomationPoint point;
         point.outValue = muse::value(SINGLE_NOTE_DYNAMIC_VALUES, dynamicType);
-        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevPoint.outValue);
-        point.inValue = isHairpinEnd ? point.outValue : prevPoint.outValue;
+        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevOutValue);
+        point.inValue = isHairpinEnd ? point.outValue : prevOutValue;
         point.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, point);
 
         if (const Segment* nextSeg = dynamic->segment()->next()) {
-            prevPoint.inValue = point.outValue;
-            m_automation->addPoint(key, nextSeg->tick().ticks() + tickOffset, prevPoint);
+            AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
+            nextPoint.inValue = point.outValue;
+            m_automation->addPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint);
         }
 
         return;
@@ -487,8 +489,8 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
         AutomationPoint startPoint;
         startPoint.outValue = values.first;
-        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, startPoint.outValue, prevPoint.outValue);
-        startPoint.inValue = isHairpinEnd ? startPoint.outValue : prevPoint.outValue;
+        const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, startPoint.outValue, prevOutValue);
+        startPoint.inValue = isHairpinEnd ? startPoint.outValue : prevOutValue;
         startPoint.interpolation = AutomationPoint::InterpolationType::Exponential;
         startPoint.itemId = eid;
         m_automation->addPoint(key, dynamicUTick, startPoint);
@@ -566,16 +568,17 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
 
     // --- Determine valueFrom
     const std::optional<double> nominalValueFrom = startHairpinValue(hairpin);
-    const AutomationPoint& prevPoint = m_automation->activePoint(key, hairpinFrom);
+    const AutomationPoint* prevPoint = m_automation->activePoint(key, hairpinFrom);
+    const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
     const AutomationCurve& curve = m_automation->curve(key);
 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
-    const double valueFrom = nominalValueFrom.value_or(prevPoint.outValue);
+    const double valueFrom = nominalValueFrom.value_or(prevOutValue);
 
     if (!muse::contains(curve, hairpinFrom)) {
         AutomationPoint startPoint;
         startPoint.outValue = valueFrom;
-        startPoint.inValue = prevPoint.outValue;
+        startPoint.inValue = prevOutValue;
         startPoint.itemId = eid;
         m_automation->addPoint(key, hairpinFrom, startPoint);
     }

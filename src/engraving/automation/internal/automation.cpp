@@ -44,16 +44,15 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
     return curveIt->second;
 }
 
-const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
+const AutomationPoint* Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
 {
     const AutomationCurve& curve = this->curve(key);
     auto it = muse::findLessOrEqual(curve, tick);
     if (it == curve.cend()) {
-        static const AutomationPoint MIDPOINT { 0.5, 0.5, AutomationPoint::InterpolationType::Linear, std::nullopt };
-        return MIDPOINT;
+        return nullptr;
     }
 
-    return it->second;
+    return &it->second;
 }
 
 bool Automation::isEmpty() const

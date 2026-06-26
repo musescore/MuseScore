@@ -341,13 +341,16 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return;
     }
 
-    const mu::engraving::AutomationPoint& oldPoint = engravingAutomation()->activePoint(curveKey, oldPointData.tick);
-    const mu::engraving::AutomationPoint newPoint = { newValue, newValue, oldPoint.interpolation, oldPoint.itemId };
-    if (pointType == PointData::PointType::IN) {
-        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, oldPoint.outValue);
+    const mu::engraving::AutomationPoint* oldPoint = engravingAutomation()->activePoint(curveKey, oldPointData.tick);
+    const mu::engraving::AutomationPoint newPoint = { newValue, newValue,
+                                                      oldPoint ? oldPoint->interpolation
+                                                               : mu::engraving::AutomationPoint::InterpolationType::Linear,
+                                                      oldPoint ? oldPoint->itemId : std::nullopt };
+    if (oldPoint && pointType == PointData::PointType::IN) {
+        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, oldPoint->outValue);
     }
-    if (pointType == PointData::PointType::OUT) {
-        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, oldPoint.inValue);
+    if (oldPoint && pointType == PointData::PointType::OUT) {
+        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, oldPoint->inValue);
     }
     engravingAutomation()->addPoint(curveKey, newTick, newPoint);
 }

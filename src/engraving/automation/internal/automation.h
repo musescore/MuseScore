@@ -29,7 +29,7 @@ class Automation : public IAutomation
 public:
     const AutomationCurveMap& curves() const override;
     const AutomationCurve& curve(const AutomationCurveKey& key) const override;
-    const AutomationPoint& activePoint(const AutomationCurveKey& key, utick_t tick) const override;
+    const AutomationPoint* activePoint(const AutomationCurveKey& key, utick_t tick) const override;
 
     bool isEmpty() const override;
 

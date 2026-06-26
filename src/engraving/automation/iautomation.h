@@ -35,7 +35,7 @@ public:
 
     virtual const AutomationCurveMap& curves() const = 0;
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
-    virtual const AutomationPoint& activePoint(const AutomationCurveKey& key, utick_t tick) const = 0;
+    virtual const AutomationPoint* activePoint(const AutomationCurveKey& key, utick_t tick) const = 0;
 
     virtual bool isEmpty() const = 0;
 
