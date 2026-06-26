@@ -104,7 +104,6 @@ void AbstractNotationPaintView::load()
 
     m_inputController->setReadonly(m_readonly);
     m_inputController->init();
-    m_notationAutomationController->init();
 
     m_elapsedTimer.start();
 
@@ -763,6 +762,8 @@ void AbstractNotationPaintView::onNotationSetup()
     TRACEFUNC;
     onCurrentNotationChanged();
     onPlayingChanged();
+
+    m_notationAutomationController->init();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
