@@ -1212,9 +1212,9 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
     m_score->addElement(hairpin);
 }
 
-std::optional<track_idx_t> MnxImporter::resolveDynamicVoiceTrack(const mnx::part::Measure& mnxMeasure,
-                                                                 staff_idx_t staffIdx,
-                                                                 const std::string& mnxVoiceId)
+std::optional<track_idx_t> MnxImporter::resolveVoiceTrack(const mnx::part::Measure& mnxMeasure,
+                                                          staff_idx_t staffIdx,
+                                                          const std::string& mnxVoiceId)
 {
     const auto measureIt = m_partMeasureSequenceTracks.find(mnxMeasure.pointer().to_string());
     if (measureIt == m_partMeasureSequenceTracks.end()) {
@@ -1266,7 +1266,7 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* 
             bool useVoiceAssignment = false;
             track_idx_t curTrackIdx = staffTrackIdx;
             if (const auto mnxVoiceId = mnxDynamic.voice()) {
-                if (const auto resolvedTrack = resolveDynamicVoiceTrack(mnxMeasure, staffIdx, mnxVoiceId.value())) {
+                if (const auto resolvedTrack = resolveVoiceTrack(mnxMeasure, staffIdx, mnxVoiceId.value())) {
                     curTrackIdx = resolvedTrack.value();
                     useVoiceAssignment = true;
                 }
