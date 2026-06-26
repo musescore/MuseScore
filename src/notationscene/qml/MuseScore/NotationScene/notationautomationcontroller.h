@@ -86,21 +86,26 @@ private:
     using PolylinesSet = std::unordered_set<muse::uicomponents::PolylinePlot*>;
     using SysStaffToPolylinesMap = std::map<const SysStaffKey, const PolylinesSet>;
 
+    struct PointData {
+        enum class PointType : unsigned char {
+            UNKNOWN,
+            IN,
+            OUT,
+            BOTH
+        };
+        int polylinePointIndex = -1;
+        int tick = -1;
+        QPointF qPointF;
+        PointType pointType = PointType::UNKNOWN;
+    };
+
     SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
-    QVector<QPointF> pointsInStaff(const muse::ID& staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
+    QVector<PointData> pointsDataInStaff(const muse::ID& staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
 
     void updatePolylinesGeometry();
     void onCurrentNotationChanged();
 
-    struct EditPointParams {
-        const SysStaffKey sysStaffKey;
-        const muse::uicomponents::PolylinePlot* polyline = nullptr;
-        const int pointIndex = -1;
-        const qreal x = -1.0;
-        const qreal y = -1.0;
-    };
-
-    void requestEditPoint(const EditPointParams& params);
+    void requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
 
     INotationAutomationPtr automation() const;
     mu::engraving::IAutomation* engravingAutomation() const;
