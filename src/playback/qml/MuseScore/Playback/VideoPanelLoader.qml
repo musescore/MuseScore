@@ -29,7 +29,8 @@ Item {
 
     property NavigationSection navigationSection: null
     property int contentNavigationPanelOrderStart: 0
-    property bool loadPanel: false
+
+    readonly property bool shouldLoadPanel: width > 0 && height > 0
 
     function updateLoadedItem() {
         if (!videoPanelLoader.item) {
@@ -47,9 +48,9 @@ Item {
         id: videoPanelLoader
 
         anchors.fill: parent
-        active: root.loadPanel
+        active: root.shouldLoadPanel
         asynchronous: true
-        source: root.loadPanel ? "VideoPanel.qml" : ""
+        source: root.shouldLoadPanel ? "VideoPanel.qml" : ""
 
         onLoaded: {
             root.updateLoadedItem()

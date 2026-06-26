@@ -592,7 +592,6 @@ DockPage {
                 anchors.fill: parent
                 navigationSection: videoPanel.navigationSection
                 contentNavigationPanelOrderStart: videoPanel.contentNavigationPanelOrderStart
-                loadPanel: videoPanel.visible
             }
         }
     ]
