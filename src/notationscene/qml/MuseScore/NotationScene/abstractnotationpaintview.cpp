@@ -84,6 +84,7 @@ void AbstractNotationPaintView::load()
 
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
+    m_notationAutomationController = std::make_unique<NotationAutomationController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -103,6 +104,7 @@ void AbstractNotationPaintView::load()
 
     m_inputController->setReadonly(m_readonly);
     m_inputController->init();
+    m_notationAutomationController->init();
 
     m_elapsedTimer.start();
 
@@ -363,10 +365,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         emit automationModeChanged();
     });
 
-    notationAutomation()->automationLinesDataChanged().onNotify(this, [this]() {
-        emit automationLinesDataChanged();
-    });
-
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
@@ -400,7 +398,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     emit verticalScrollChanged();
     emit viewportChanged();
     emit automationModeChanged();
-    emit automationLinesDataChanged();
 }
 
 void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
@@ -420,7 +417,6 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     notationPlayback()->loopBoundariesChanged().disconnect(this);
     m_notation->viewModeChanged().disconnect(this);
     notationAutomation()->automationModeEnabledChanged().disconnect(this);
-    notationAutomation()->automationLinesDataChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -465,6 +461,10 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
     if (m_previewMeasureRect.isValid()) {
         RectF logicRect = oldMatrixInverted.map(m_previewMeasureRect);
         m_previewMeasureRect = newMatrix.map(logicRect);
+    }
+
+    if (m_notationAutomationController) {
+        m_notationAutomationController->setViewMatrix(newMatrix);
     }
 
     scheduleRedraw();
@@ -1280,11 +1280,6 @@ void AbstractNotationPaintView::forceFocusIn()
     forceActiveFocus();
 }
 
-QVariant AbstractNotationPaintView::automationLinesData() const
-{
-    return notationAutomation() ? notationAutomation()->automationLinesData() : QVariant();
-}
-
 void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
 {
     m_isContextMenuOpen = open;
@@ -1751,12 +1746,4 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
             m_playbackCursorItem = nullptr;
         });
     }
-}
-
-void AbstractNotationPaintView::requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y)
-{
-    IF_ASSERT_FAILED(notationAutomation()) {
-        return;
-    }
-    notationAutomation()->requestChangeAutomationPoint(lineIdx, pointIdx, x, y);
 }
