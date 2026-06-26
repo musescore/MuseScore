@@ -44,11 +44,7 @@ PlayCountText::PlayCountText(Segment* parent, TextStyleType tid)
 
 void PlayCountText::endEdit(EditData& ed)
 {
-    UndoStack* undo = score()->undoStack();
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
-
-    if (textWasEdited) {
+    if (textWasEdited(ed)) {
         score()->startCmd(TranslatableString("undoableAction", "Update play count text"));
         barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT, xmlText());
         barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::CUSTOM);
