@@ -255,7 +255,7 @@ Color EngravingConfiguration::scoreInversionColor() const
 
 Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
 {
-    return "#49AAFF";
+    return Color::fromQColor(voiceColor(0).toQColor().lighter(135));
 }
 
 Color EngravingConfiguration::lassoColor() const
