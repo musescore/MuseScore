@@ -864,6 +864,8 @@ Type 5, variable size, and the busiest element in the format: it covers hairpins
 
 **Staff-text entry index** is at `+32` only when the element is at least 33 bytes. In shorter ornaments, notably the size-32 staff texts of `0xC2` files, it is read from `+30`, sharing the slot with the tempo.
 
+**The one-byte fields are words.** The forward counts, the end x, the hairpin direction, the beat unit and the staff-text index each fill two bytes, with a value that fits the first in a little-endian file. In `SCO5` that byte is the high one and reads zero, so each field is read as a word and its low byte kept: a staff-text index read as a byte sends every text of a `SCO5` score to the first entry of its `TEXT` block `[verified]`. A 33-byte element still leaves only one byte for the index at `+32`.
+
 **Hairpin direction.** Bit 0 of `+26`: 0 crescendo, 1 diminuendo. Encore 5 also sets bit 1, giving `0x02` and `0x03` where legacy files use `0x00` and `0x01`, so test the bit rather than comparing to zero.
 
 **The ornament y.** Negative is below the staff and positive above. A dynamic dragged onto the staff above the one that owns it keeps its owner's staff byte and flips its y positive. A dynamic or staff text whose tick exceeds the measure's total ticks is a section-end marker. A file can carry two dynamics at the same tick and x on one staff and voice, an identical pair or a score-view and part-view pair differing only in y; Encore renders one per beat.

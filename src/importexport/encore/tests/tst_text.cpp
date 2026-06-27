@@ -1806,3 +1806,23 @@ TEST_F(Tst_Text, copyright_lines_one_byte_layout)
         << "all three copyright lines must import, joined by newlines";
     delete score;
 }
+
+// A macOS Encore 3 staff text names its TEXT entry with a big-endian word. Entries 0 and 1 hold "3"
+// and "4"; reading the first byte of the word sent both staff texts to entry 0.
+TEST_F(Tst_Text, sco5_stafftext_index_is_a_word)
+{
+    MasterScore* score = readEncoreScore("text_sco5_stafftext_index_word.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<std::string> texts;
+    for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isStaffText()) {
+                texts.push_back(toStaffText(e)->plainText().toStdString());
+            }
+        }
+    }
+    EXPECT_EQ(texts, (std::vector<std::string> { "3", "4" })) << "each staff text keeps its own TEXT entry";
+
+    delete score;
+}
