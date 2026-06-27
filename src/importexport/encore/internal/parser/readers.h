@@ -29,6 +29,7 @@
 #include <vector>
 
 #include <QtGlobal>
+#include <QString>
 #include "elem.h"
 
 class QDataStream;
@@ -38,6 +39,18 @@ struct EncMeasureElem;
 struct EncInstrument;
 struct EncRoot;
 struct EncLine;
+
+// File format versions, from header 0x28. The field is BCD with the major digit in the high byte
+// and the minor in the low, so the values compare in release order and an unseen one sorts into
+// place. It is the only version indicator the header carries: no date, no build stamp.
+// See ENCORE_FORMAT.md §1.3 The four generations.
+inline constexpr quint16 ENC_FORMAT_2_50 = 0x0250;   // Encore 2.x
+inline constexpr quint16 ENC_FORMAT_3_05 = 0x0305;   // Encore 3.x
+inline constexpr quint16 ENC_FORMAT_3_07 = 0x0307;   // Encore 4.0 to 4.2
+inline constexpr quint16 ENC_FORMAT_4_20 = 0x0420;   // Encore 4.3 through 5.x
+
+// "3.07" for 0x0307, for logging and messages.
+QString encFormatVersionString(quint16 formatVersion);
 
 // Skip an untrusted file-supplied block size. Returns false (so the caller stops) when the size is
 // negative or past EOF; chunks the skip because skipRawData takes int and a >INT_MAX size wraps.
@@ -98,6 +111,12 @@ struct EncFormatReader
     // Byte offset where the file header ends; first block starts here.
     // See ENCORE_FORMAT.md §8.1 Per-generation differences at a glance for per-version values.
     virtual qint64 headerEnd() const { return 0xC2; }
+
+    // Bytes to add to every element body field from offset +8 onward. Encore 4.0 inserted two
+    // bytes there in every element type, so a file older than format 3.07 needs -2 while every
+    // later generation needs 0. Fields at +5, +6 and +7 never move.
+    // See ENCORE_FORMAT.md §1.3 The four generations.
+    virtual int elementBodyShift() const { return 0; }
 
     // Read MIDI program, Key, and name metadata stored outside TK blocks.
     virtual bool readInstrumentMeta(std::vector<EncInstrument>& instruments,
@@ -194,12 +213,20 @@ struct EncFormatReader
     // §Ornament subtypes.
     virtual int staffTextYoffsetOffset() const { return -1; }
 
+    // An ornament subtype in the vocabulary the rest of the importer speaks. Encore 4.0 renumbered
+    // part of the articulation block, so a file older than format 3.07 states those subtypes six
+    // higher and they reach the emitters as codes nothing recognises.
+    // See ENCORE_FORMAT.md §8.2 Ornament subtypes.
+    virtual quint8 normalizeOrnamentSubtype(quint8 subtype) const { return subtype; }
+
     virtual ~EncFormatReader() = default;
 
     // Factory: returns the reader for the file. The 4-char magic string is needed because some
     // formats are not distinguished by chuMagio (SCO5/macOS Encore 5 shares the v0xC4 format but
-    // does not carry chuMagio 0xC4). See create() in readers.cpp.
-    static std::unique_ptr<EncFormatReader> create(quint8 chuMagio, const QString& magic);
+    // does not carry chuMagio 0xC4). formatVersion is the file format version at header 0x28; it
+    // selects the element body layout, which the version byte alone does not identify, and it is
+    // what an unrecognised version byte falls back on. See create() in readers.cpp.
+    static std::unique_ptr<EncFormatReader> create(quint8 chuMagio, const QString& magic, quint16 formatVersion);
 };
 } // namespace mu::iex::enc
 

@@ -333,3 +333,43 @@ TEST_F(Tst_Grace, beamed_grace_group_stays_separate)
 
 // Covers: grace note filtering (fv>=4 only), ACCIACCATURA
 ENC_SANITY_TEST(grace_notes, "notes_grace.enc")
+// A small note with no slash and no principal note to ornament is a cue: it keeps its full value,
+// draws small and, when the mute bit is set, stays silent. m1 holds a same-tick two-note chord
+// flagged 0x30/0x01: it must import as ONE small, silent chord of two notes. m2 holds a lone slashed
+// note (0x20/0x04), a real grace, which must still import small.
+TEST_F(Tst_Grace, v0c2_cue_chord_keeps_members_and_size)
+{
+    MasterScore* score = readEncoreScore("importer_v0c2_small_flag_chord.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m1 = score->firstMeasure();
+    ASSERT_NE(m1, nullptr);
+    const Chord* chord = nullptr;
+    for (Segment* s = m1->first(SegmentType::ChordRest); s && !chord; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* e = s->element(0);
+        if (e && e->isChord()) {
+            chord = toChord(e);
+        }
+    }
+    ASSERT_NE(chord, nullptr);
+    EXPECT_EQ(chord->notes().size(), 2u) << "the two same-tick notes must form one chord, not split";
+    EXPECT_TRUE(chord->isSmall()) << "a cue chord is drawn small as a whole, head and stem";
+    for (const Note* n : chord->notes()) {
+        EXPECT_FALSE(n->play()) << "the 0x01 mute flag silences the note whatever its size";
+    }
+
+    Measure* m2 = m1->nextMeasure();
+    ASSERT_NE(m2, nullptr);
+    bool slashStaysSmall = false;
+    for (Segment* s = m2->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        for (EngravingItem* e : s->elist()) {
+            if (e && e->isChord() && !toChord(e)->notes().empty() && toChord(e)->isSmall()) {
+                slashStaysSmall = true;
+            }
+        }
+    }
+    EXPECT_TRUE(slashStaysSmall) << "a slashed (grace2 0x04) note must still import small";
+    delete score;
+}
