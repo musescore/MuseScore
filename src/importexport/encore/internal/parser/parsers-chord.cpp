@@ -121,7 +121,7 @@ bool EncChordSym::read(QDataStream& ds)
 {
     EncMeasureElem::read(ds);
     ds >> toniko >> tipo;
-    ds.skipRawData(3);
+    ds.skipRawData(3 + bodyShift);
     ds >> xoffset;
     ds.skipRawData(1);
     ds >> radiko >> baso;
@@ -131,7 +131,7 @@ bool EncChordSym::read(QDataStream& ds)
     if (hasText) {
         // The name runs to the end of the element, which is why the size grows with it.
         // See ENCORE_FORMAT.md §6.10 Chord symbol.
-        teksto = readEncodedStringFixed(ds, static_cast<int>(size) - 14);
+        teksto = readEncodedStringFixed(ds, static_cast<int>(size) - (14 + bodyShift));
     }
     // No trailing skip: the element loop reseeks to the element end after read().
     return true;

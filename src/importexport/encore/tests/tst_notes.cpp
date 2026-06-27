@@ -905,6 +905,44 @@ TEST_F(Tst_Notes, grace1_cascade_filter)
     delete score;
 }
 
+// Four live-recorded notes a few ticks apart must form one chord (not split), tied to a 4-note receiver.
+TEST_F(Tst_Notes, chord_cluster_5tick_v0c2)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_chord_cluster_5tick.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "score must be clean: " << ret.text();
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<Chord*> chords;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChord()) {
+            chords.push_back(toChord(el));
+        }
+    }
+
+    ASSERT_EQ(chords.size(), 2u) << "Must have exactly 2 chords (sender + receiver)";
+    EXPECT_EQ(chords[0]->notes().size(), 4u)
+        << "All 4 live-recorded chord notes must be in one chord, not split";
+
+    int tiedCount = 0;
+    for (Note* n : chords[0]->notes()) {
+        if (n->tieFor() && n->tieFor()->endNote()) {
+            ++tiedCount;
+        }
+    }
+    EXPECT_EQ(tiedCount, 4)
+        << "All 4 sender notes must have outgoing ties to the receiver chord";
+
+    EXPECT_EQ(chords[1]->notes().size(), 4u)
+        << "Receiver chord must have all 4 notes";
+
+    delete score;
+}
+
 // A pitch encoded twice in the same chord cluster must collapse to one notehead, regardless of the
 // grace1 0x40 chord-extension bit.
 TEST_F(Tst_Notes, duplicate_pitch_in_chord_cluster_suppressed)
@@ -1668,6 +1706,82 @@ TEST_F(Tst_Notes, notes_v0c2_multiinstr_compact_routing)
     delete score;
 }
 
+// A v0xC2 note grows past its base length to carry its articulations: the slot for the mark above
+// sits immediately after the base note and the one below two bytes further, the same places v0xC4
+// uses. Reading every note as if it were the base length drops them all.
+// See ENCORE_FORMAT.md §6.3 Note.
+//
+// The fixture is an Encore 4.x file (base note 24) with a 26-byte note carrying staccato above, a
+// 28-byte note carrying accent above and staccato below, a plain 24-byte note with no mark, and a
+// second 26-byte note with tenuto above.
+TEST_F(Tst_Notes, notes_v0c2_articulation_grows_the_note)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_artic_grows_note.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<size_t> articCounts;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        articCounts.push_back(toChord(el)->articulations().size());
+    }
+
+    ASSERT_EQ(articCounts.size(), 4u) << "fixture holds four notes";
+    EXPECT_EQ(articCounts[0], 1u) << "26-byte note carries the mark above";
+    EXPECT_EQ(articCounts[1], 2u) << "28-byte note carries both marks";
+    EXPECT_EQ(articCounts[2], 0u) << "24-byte note has no slot and no mark";
+    EXPECT_EQ(articCounts[3], 1u) << "26-byte note carries the mark above";
+
+    delete score;
+}
+
+// v0xC2 size=24 notes carry pitch and articulation at the same offsets as size=22; reading the v0xC4 pitch
+// slot yields 0 (C-1). See ENCORE_FORMAT.md §6.3 Note.
+TEST_F(Tst_Notes, notes_v0c2_size24_correct_pitch_and_artic)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_size24_artic_pitch.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<int> pitches;
+    std::vector<SymId> artics;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(el);
+        pitches.push_back(c->notes().front()->pitch());
+        for (Articulation* a : c->articulations()) {
+            artics.push_back(a->symId());
+        }
+    }
+
+    ASSERT_EQ(pitches.size(), 2u);
+    EXPECT_EQ(pitches[0], 67) << "First note should be G4 (67), not C-1 (0)";
+    EXPECT_EQ(pitches[1], 64) << "Second note should be E4 (64), not C-1 (0)";
+
+    // MuseScore flips Above/Below based on stem direction after layout; compare kind only.
+    auto isStaccato = [](SymId s) {
+        return s == SymId::articStaccatoAbove || s == SymId::articStaccatoBelow;
+    };
+    auto isTenuto = [](SymId s) {
+        return s == SymId::articTenutoAbove || s == SymId::articTenutoBelow;
+    };
+    ASSERT_EQ(artics.size(), 2u);
+    EXPECT_TRUE(isStaccato(artics[0])) << "G4 should have staccato (0x1d)";
+    EXPECT_TRUE(isTenuto(artics[1])) << "E4 should have tenuto (0x1c)";
+
+    delete score;
+}
+
 // In some v0xC2 size=24 notes the pitch is already in semiTonePitch (tuplet==0); the pitch-swap must be
 // skipped so it is preserved.
 TEST_F(Tst_Notes, notes_v0c2_size24_semitone_pitch)
@@ -1803,6 +1917,14 @@ static void checkDottedHintFillsBar(MasterScore* score, const char* file)
 TEST_F(Tst_Notes, v0c4_dotted_hint_fills_bar)
 {
     const char* file = "notes_v0c4_dotted_hint_fills_bar.enc";
+    MasterScore* score = readEncoreScore(file);
+    checkDottedHintFillsBar(score, file);
+    delete score;
+}
+
+TEST_F(Tst_Notes, v0c2_dotted_hint_fills_bar)
+{
+    const char* file = "notes_v0c2_dotted_hint_fills_bar.enc";
     MasterScore* score = readEncoreScore(file);
     checkDottedHintFillsBar(score, file);
     delete score;

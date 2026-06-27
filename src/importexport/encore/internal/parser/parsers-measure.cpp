@@ -257,6 +257,7 @@ bool EncMeasure::read(QDataStream& ds, const quint32 vs, const EncFormatReader& 
         const quint8 vo = typeVoice & 0x0F;
 
         auto elem = createMeasureElement(tick, tp, vo, fmt);
+        elem->bodyShift = static_cast<qint8>(fmt.elementBodyShift());
 
         elem->read(ds);
         EncMeasureElem* elemRaw = elem.get();

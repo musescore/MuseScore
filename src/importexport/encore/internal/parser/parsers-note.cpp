@@ -53,7 +53,9 @@ bool EncNote::read(QDataStream& ds)
     EncMeasureElem::read(ds);
 
     ds >> faceValue >> grace1 >> grace2;
-    ds.skipRawData(2);
+    // Everything from +8 onward moved two bytes later at format 3.07; bodyShift folds the older
+    // layout into this one read. See ENCORE_FORMAT.md §6.3 Note.
+    ds.skipRawData(2 + bodyShift);
     ds >> xoffset;
     ds.skipRawData(1);
     ds >> position >> tuplet >> dotControl >> semiTonePitch >> playbackDurTicks;
@@ -63,13 +65,12 @@ bool EncNote::read(QDataStream& ds)
     ds >> articulationUp;
     ds.skipRawData(1);
     ds >> articulationDown;
-    // The two articulation slots sit immediately past the base note, so a note carries them only
-    // when it is long enough: it grows by two bytes to hold one and by four to hold both.
+    // The note grows by two bytes to hold one articulation and by four to hold both.
     // See ENCORE_FORMAT.md §6.3 Note.
-    if (static_cast<int>(size) <= 24) {
+    if (static_cast<int>(size) <= 24 + bodyShift) {
         articulationUp = 0;
     }
-    if (static_cast<int>(size) <= 26) {
+    if (static_cast<int>(size) <= 26 + bodyShift) {
         articulationDown = 0;
     }
     // No trailing skip to the element end: the measure element loop reseeks to
@@ -82,11 +83,11 @@ bool EncRest::read(QDataStream& ds)
 {
     EncMeasureElem::read(ds);
     ds >> faceValue;
-    ds.skipRawData(4);
+    ds.skipRawData(4 + bodyShift);
     ds >> xoffset;
     ds.skipRawData(2);
     ds >> tuplet >> dotControl;
-    if (static_cast<int>(size) > 15) {
+    if (static_cast<int>(size) > 15 + bodyShift) {
         ds >> mrestCount;   // multi-measure rest count at element offset +15
         if (mrestCount < 1) {
             mrestCount = 1;
@@ -122,8 +123,8 @@ bool EncMidiCc::read(QDataStream& ds)
     EncMeasureElem::read(ds);
     // Controller/value only exist in the full 12-byte element; a short/garbage one stays aligned
     // (the measure loop reseeks past it) with controller/value left at 0.
-    if (size >= 12) {
-        ds.skipRawData(5);
+    if (static_cast<int>(size) >= 12 + bodyShift) {
+        ds.skipRawData(5 + bodyShift);
         ds >> controller >> value;
     }
     return true;

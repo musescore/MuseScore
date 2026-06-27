@@ -50,6 +50,9 @@ struct EncMeasureElem {
     quint8 staffWithin { 0 };   // high 2 bits (>> 6): staff index within instrument (0=first, 1=second, ...)
     quint8 xoffset  { 0 };
     qint16 realDuration { -1 };
+    // Bytes to add to every body field from offset +8 onward, from EncFormatReader::elementBodyShift().
+    // -2 for pre-Encore-4.0 files, 0 otherwise. Set before read(); see parsers-measure.cpp.
+    qint8 bodyShift { 0 };
 
     // Raw staff byte (staffWithin<<6)|staffIdx, identical to instrStaffIdx in the LINE block.
     // Importers reverse-map it to a LINE slot (see buildLineSlotByRawByte).

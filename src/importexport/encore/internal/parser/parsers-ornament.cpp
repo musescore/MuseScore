@@ -30,7 +30,9 @@ bool EncOrnament::read(QDataStream& ds)
     const qint64 elemPos = ds.device()->pos();   // first byte after the type/voice byte; see ENCORE_FORMAT.md §8.2 Ornament subtypes
     EncMeasureElem::read(ds);
     ds >> tipo;
-    ds.skipRawData(4);
+    // Everything from +8 onward moved two bytes later in Encore 4.0; bodyShift folds the older
+    // layout into this one read. See ENCORE_FORMAT.md §6.8 Ornament.
+    ds.skipRawData(4 + bodyShift);
     ds >> xoffset;
     ds.skipRawData(1);
     ds >> yoffset;
@@ -47,8 +49,10 @@ bool EncOrnament::read(QDataStream& ds)
     ds >> noto;
     ds.skipRawData(1);
     ds >> tempo;
-    // v0xC2 size-32: tind overlaps tempo at byte 30. See ENCORE_FORMAT.md §8.2 Ornament subtypes.
-    if (static_cast<int>(size) >= 33) {
+    // The text index has its own slot only in a long enough element; otherwise it shares the tempo
+    // byte. The threshold moves with the body layout, so a pre-4.0 size-32 staff text still reaches
+    // its own slot. See ENCORE_FORMAT.md §8.2 Ornament subtypes.
+    if (static_cast<int>(size) >= 33 + bodyShift) {
         ds.skipRawData(1);
         ds >> tind;
     } else {
