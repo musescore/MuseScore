@@ -23,6 +23,7 @@
 // Shared block-skip/clamp helper implementations and the EncFormatReader factory (version to reader).
 
 #include "readers.h"
+#include "readers-v0xc2.h"
 #include "readers-v0xc4.h"
 
 #include <algorithm>
@@ -76,6 +77,8 @@ std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const 
         return makeFormatReader_SCO5();
     }
     switch (chuMagio) {
+    case static_cast<quint8>(EncFormatVersion::V3_4_X):
+        return makeFormatReader_V0xC2();
     case static_cast<quint8>(EncFormatVersion::V5_X):
         return makeFormatReader_V0xC4();
     default:

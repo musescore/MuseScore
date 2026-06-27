@@ -425,6 +425,69 @@ TEST_F(Tst_Structure, old_format_v0c2_correct_pitches)
     delete score;
 }
 
+TEST_F(Tst_Structure, old_format_v0c2_triplets_detected)
+{
+    // v0xC2: 6 eighth notes at 80-tick spacing (2/3 of an eighth) → detectImpliedTuplet returns 3:2.
+    MasterScore* score = readEncoreScore("structure_v0c2_triplets.enc");
+    ASSERT_NE(score, nullptr);
+
+    bool foundTriplet = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (EngravingItem* e : toMeasure(mb)->el()) {
+            if (e->isTuplet() && toTuplet(e)->ratio() == Fraction(3, 2)) {
+                foundTriplet = true;
+                break;
+            }
+        }
+        if (foundTriplet) {
+            break;
+        }
+    }
+    EXPECT_TRUE(foundTriplet) << "v0xC2 implied triplets should be detected";
+    delete score;
+}
+
+TEST_F(Tst_Structure, old_format_v0c2_triplet_pitch_in_semitone)
+{
+    // When a v0xC2 note already has its pitch in semiTonePitch, the tuplet slot holds a real ratio (0x32),
+    // so the pitch-swap must not fire, or a triplet's notes all import as MIDI 50 with the ratio lost.
+    MasterScore* score = readEncoreScore("structure_v0c2_triplet_pitch_in_semitone.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<int> pitches;
+    bool foundTriplet = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (EngravingItem* e : toMeasure(mb)->el()) {
+            if (e->isTuplet() && toTuplet(e)->ratio() == Fraction(3, 2)) {
+                foundTriplet = true;
+            }
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s;
+             s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->elist()) {
+                if (e && e->isChord()) {
+                    for (Note* n : toChord(e)->notes()) {
+                        pitches.push_back(n->pitch());
+                    }
+                }
+            }
+        }
+    }
+    ASSERT_EQ(pitches.size(), 4u) << "Should have 4 notes";
+    EXPECT_EQ(pitches[0], 60) << "triplet note 1 must be C4 (60), not the tuplet byte 50";
+    EXPECT_EQ(pitches[1], 64) << "triplet note 2 must be E4 (64)";
+    EXPECT_EQ(pitches[2], 67) << "triplet note 3 must be G4 (67)";
+    EXPECT_EQ(pitches[3], 72) << "quarter note must be C5 (72)";
+    EXPECT_TRUE(foundTriplet) << "explicit 3:2 tuplet must survive the pitch fix";
+    delete score;
+}
+
 TEST_F(Tst_Structure, old_format_v0c2_spurious_semitone_flag_uses_pitch_at_13)
 {
     // A small stray flag (1 or 3) in the semiTonePitch slot is not a pitch: the discriminator must treat

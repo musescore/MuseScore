@@ -857,6 +857,42 @@ TEST_F(Tst_Ornaments, bowing_marks_from_orn_c4_c5)
 }
 
 // ===========================================================================
+// FEATURE: In v0xC2, ORN tipo 0xC4 = accent above (not up-bow as in v0xC4).
+// v0xC2 NOTE elements (size=22) have no articulation bytes; accent is in ORN.
+// ===========================================================================
+TEST_F(Tst_Ornaments, v0xc2_orn_c4_is_accent_not_upbow)
+{
+    MasterScore* score = readEncoreScore("ornaments_v0c2_orn_c4_accent.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int accentCount = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Articulation* a : toChord(el)->articulations()) {
+                EXPECT_NE(a->symId(), SymId::stringsUpBow)
+                    << "ORN 0xC4 in v0xC2 must not produce stringsUpBow";
+                if (a->symId() == SymId::articAccentAbove
+                    || a->symId() == SymId::articAccentBelow) {
+                    ++accentCount;
+                }
+            }
+        }
+    }
+    EXPECT_GE(accentCount, 5) << "Expected several accent marks in this v0xC2 score";
+    delete score;
+}
+
+// ===========================================================================
 // FEATURE: In v0xC4, ORN tipo 0xBE = accent above (standalone accent glyph).
 // ===========================================================================
 TEST_F(Tst_Ornaments, v0xc4_orn_be_is_accent)
