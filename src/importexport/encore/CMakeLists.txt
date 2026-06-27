@@ -38,6 +38,8 @@ target_sources(iex_encore PRIVATE
     internal/parser/parsers-encoding.cpp
     internal/parser/readers.h
     internal/parser/readers.cpp
+    internal/parser/readers-v0xa6.h
+    internal/parser/readers-v0xa6.cpp
     internal/parser/readers-v0xc4-base.h
     internal/parser/readers-v0xc4-base.cpp
     internal/parser/readers-v0xc2.h
@@ -93,11 +95,6 @@ target_sources(iex_encore PRIVATE
     internal/importer/import.h
     internal/importer/import-options.h
 )
-
-# While the module is partially populated, unity chunk boundaries shift and a source can lose
-# the neighbor includes it sees in the full module; one unity unit keeps CI-equivalent
-# semantics without those boundaries. Removed when every module source is in place.
-set_target_properties(iex_encore PROPERTIES UNITY_BUILD_BATCH_SIZE 0)
 
 target_link_libraries(iex_encore PRIVATE engraving)
 

@@ -87,3 +87,17 @@ TEST_F(Tst_StaffSize, enc4x_line_staff_size_hint_size3_sets_100pct)
         << "Encore 4.x: byte[13]=2 in LINE staff entry must yield 100% scale, got " << mag * 100 << "%";
     delete score;
 }
+
+// v0xA6 has a single global staff size applied to every staff. See ENCORE_FORMAT.md §v0xA6 staff size and clef.
+// Regression guard: size=1 must yield 60% (importer previously fell back to the default 130%).
+TEST_F(Tst_StaffSize, v0xa6_global_staff_size_from_header_0x8d)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_score_size.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load structure_v0xa6_score_size.enc";
+    ASSERT_GE(score->staves().size(), size_t(2));
+    const double mag0 = score->staff(0)->staffType(mu::engraving::Fraction(0, 1))->userMag();
+    const double mag1 = score->staff(1)->staffType(mu::engraving::Fraction(0, 1))->userMag();
+    EXPECT_NEAR(mag0, 0.60, 1e-6) << "v0xA6 size=1 (header 0x8D) must yield 60%, got " << mag0 * 100 << "%";
+    EXPECT_NEAR(mag1, 0.60, 1e-6) << "v0xA6 size=1 (header 0x8D) must yield 60%, got " << mag1 * 100 << "%";
+    delete score;
+}
