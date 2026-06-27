@@ -32,6 +32,7 @@ class Fraction;
 class Segment;
 class Dynamic;
 class Hairpin;
+class MeasureRepeat;
 class RepeatSegment;
 struct ScoreChanges;
 
@@ -66,6 +67,12 @@ private:
                           size_t staffIdxTo, DynamicPriorities& dynamicPriorities);
     void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
                           DynamicPriorities& dynamicPriorities);
+
+    void collectMeasureRepeats(const Score* score, const Segment* segment,
+                               std::vector<const MeasureRepeat*>& result,
+                               size_t staffIdxFrom, size_t staffIdxTo) const;
+    void addMeasureRepeatPoints(const std::vector<const MeasureRepeat*>& measureRepeats, int tickOffset,
+                                DynamicPriorities& dynamicPriorities);
 
     bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                             DynamicPriorities& dynamicPriorities);

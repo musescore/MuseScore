@@ -31,6 +31,7 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/hairpin.h"
@@ -281,6 +282,7 @@ static bool isRelevantChange(const ScoreChanges& changes)
         ElementType::DYNAMIC,
         ElementType::HAIRPIN,
         ElementType::HAIRPIN_SEGMENT,
+        ElementType::MEASURE_REPEAT,
     };
 
     for (const ElementType type : changes.changedTypes) {
@@ -368,13 +370,21 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
         const int tickOffset = seg->utick - seg->tick;
         const int measureFrom = std::max(seg->tick, tickFrom);
 
+        std::vector<const MeasureRepeat*> measureRepeats;
+
         for (const Measure* measure : seg->measureList()) {
             if (measure->endTick().ticks() <= measureFrom) {
                 continue;
             }
 
             for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
-                if (segment->annotations().empty() || segment->tick().ticks() < measureFrom) {
+                if (segment->tick().ticks() < measureFrom) {
+                    continue;
+                }
+
+                collectMeasureRepeats(score, segment, measureRepeats, staffIdxFrom, staffIdxTo);
+
+                if (segment->annotations().empty()) {
                     continue;
                 }
 
@@ -383,6 +393,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
         }
 
         addSpannerPoints(score, seg->tick, seg->endTick(), tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities);
+        addMeasureRepeatPoints(measureRepeats, tickOffset, dynamicPriorities);
     }
 
     // Second pass: copy shared dynamics points into each voice curve so that
@@ -658,6 +669,99 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         point.outValue = (hasNominalValueTo && !useNominalValueTo) ? nominalValueTo.value() : valueTo;
         point.itemId = eid;
         tryAddDynamicPoint(key, hairpinTo, point, priority, dynamicPriorities);
+    }
+}
+
+void ScoreAutomationController::collectMeasureRepeats(const Score* score, const Segment* segment,
+                                                      std::vector<const MeasureRepeat*>& result,
+                                                      size_t staffIdxFrom, size_t staffIdxTo) const
+{
+    if (!segment->isChordRestType()) {
+        return;
+    }
+
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
+    const size_t nstaves = score->nstaves();
+
+    std::unordered_set<const MeasureRepeat*> visited;
+    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (hasStaffFilter && (staffIdx < staffIdxFrom || staffIdx > staffIdxTo)) {
+            continue;
+        }
+
+        const EngravingItem* item = segment->element(staff2track(staffIdx));
+        if (!item || !item->isMeasureRepeat()) {
+            continue;
+        }
+
+        const MeasureRepeat* mr = toMeasureRepeat(item);
+        if (visited.insert(mr).second) {
+            result.push_back(mr);
+        }
+    }
+}
+
+void ScoreAutomationController::addMeasureRepeatPoints(const std::vector<const MeasureRepeat*>& measureRepeats,
+                                                       int tickOffset, DynamicPriorities& dynamicPriorities)
+{
+    for (const MeasureRepeat* mr : measureRepeats) {
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        if (!currMeasure) {
+            continue;
+        }
+
+        const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+        if (!referringMeasure) {
+            continue;
+        }
+
+        const Staff* staff = mr->staff();
+        if (!staff) {
+            continue;
+        }
+
+        const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
+
+        std::vector<std::pair<AutomationCurveKey, const AutomationCurve*> > staffCurves;
+        for (const auto& [key, curve] : m_automation->curves()) {
+            if (key.staffId == staff->id()) {
+                staffCurves.emplace_back(key, &curve);
+            }
+        }
+
+        for (int num = 0; num < mr->numMeasures(); ++num) {
+            const utick_t srcFrom = referringMeasure->tick().ticks() + tickOffset;
+            const utick_t srcTo = referringMeasure->endTick().ticks() + tickOffset;
+
+            for (const auto& [key, curvePtr] : staffCurves) {
+                const AutomationCurve& curve = *curvePtr;
+                bool firstPoint = true;
+
+                for (auto it = curve.lower_bound(srcFrom), end = curve.lower_bound(srcTo); it != end; ++it) {
+                    AutomationPoint point = it->second;
+                    const utick_t dstTick = it->first + tickShift;
+
+                    if (firstPoint) {
+                        // Sync the inValue of the first copied point to the level active at the destination
+                        const AutomationPoint* prev = m_automation->activePoint(key, dstTick);
+                        point.inValue = prev ? prev->outValue : 0.0;
+                        firstPoint = false;
+                    }
+
+                    tryAddDynamicPoint(key, dstTick, point, 0, dynamicPriorities);
+                }
+            }
+
+            currMeasure = currMeasure->nextMeasure();
+            if (!currMeasure) {
+                break;
+            }
+
+            referringMeasure = mr->referringMeasure(currMeasure);
+            if (!referringMeasure) {
+                break;
+            }
+        }
     }
 }
 
