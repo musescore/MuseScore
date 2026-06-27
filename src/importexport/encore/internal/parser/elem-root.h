@@ -72,8 +72,9 @@ struct EncLineStaffData {
     EncStaffType staffType  { EncStaffType::MELODY };
     quint8 instrStaffIdx { 0 };
     bool showStaff { true }; // byte +19 of LINE staff entry: 0x01 = visible, 0x00 = hidden.
-    // Staff display size: byte +13 of LINE staff entry, 0-indexed (0=Size1/60%, 1=Size2/70%, 2=Size3/75%, 3=Size4/100%).
-    quint8 staffSizeHint { 3 };
+    // Staff display size: byte +13 of LINE staff entry, 0-indexed (0=60%, 1=75%, 2=100%, 3=130%).
+    // Default 2 is Encore's own untouched value, so a staff whose entry is missing keeps 100%.
+    quint8 staffSizeHint { 2 };
 
     unsigned int instrumentIndex() const { return instrStaffIdx & 0x3F; }
     unsigned int staffIndex() const { return instrStaffIdx >> 6; }
@@ -86,10 +87,13 @@ struct EncLine {
     quint16 start        { 0 };
     quint8 measureCount { 0 };
     std::vector<EncLineStaffData> staffData;
-    // Per-staff written key index (Encore key index 0-14), filled only by the formats whose
-    // reader implements EncFormatReader::readLineStaffKeys, where the LINE block carries the
-    // keys and staffData stays empty.
+    // Per-staff written key index (Encore key index 0-14), clef and display size, filled only by
+    // the formats whose reader implements EncFormatReader::readLineStaffEntries, where the LINE
+    // block carries a staff entry this parse cannot read and staffData stays empty. One entry per
+    // staff of the system, in system order.
     std::vector<quint8> staffKeys;
+    std::vector<EncClefType> staffClefs;
+    std::vector<quint8> staffSizes;   // 0-indexed selector, as in EncLineStaffData::staffSizeHint
 
     bool read(QDataStream& ds, quint32 vs, int staffPerSystem);
 };
@@ -160,7 +164,7 @@ struct EncHeader {
     qint8 staffPerSystem { 0 };
     qint16 measureCount   { 0 };
     quint8 formatRev      { 0 };  // format-revision byte at 0x3E: 1 = Encore 4.5, 4 = Encore 5.0 (v0xC4)
-    quint8 scoreSize      { 4 };  // staff-size selector 1-4 at header offset 0x52; 4 = default
+    quint8 scoreSize      { 3 };  // staff-size selector 1-4 at header offset 0x52; 3 = 100%, the fallback
 
     bool readMagicAndVersion(QDataStream& ds);
     bool read(QDataStream& ds, const EncFormatReader& fmt);
