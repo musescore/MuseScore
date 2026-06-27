@@ -857,6 +857,42 @@ TEST_F(Tst_Ornaments, bowing_marks_from_orn_c4_c5)
 }
 
 // ===========================================================================
+// FEATURE: In v0xC2, ORN tipo 0xC4 = accent above (not up-bow as in v0xC4).
+// v0xC2 NOTE elements (size=22) have no articulation bytes; accent is in ORN.
+// ===========================================================================
+TEST_F(Tst_Ornaments, v0xc2_orn_c4_is_accent_not_upbow)
+{
+    MasterScore* score = readEncoreScore("ornaments_v0c2_orn_c4_accent.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int accentCount = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Articulation* a : toChord(el)->articulations()) {
+                EXPECT_NE(a->symId(), SymId::stringsUpBow)
+                    << "ORN 0xC4 in v0xC2 must not produce stringsUpBow";
+                if (a->symId() == SymId::articAccentAbove
+                    || a->symId() == SymId::articAccentBelow) {
+                    ++accentCount;
+                }
+            }
+        }
+    }
+    EXPECT_GE(accentCount, 5) << "Expected several accent marks in this v0xC2 score";
+    delete score;
+}
+
+// ===========================================================================
 // FEATURE: In v0xC4, ORN tipo 0xBE = accent above (standalone accent glyph).
 // ===========================================================================
 TEST_F(Tst_Ornaments, v0xc4_orn_be_is_accent)
@@ -1071,6 +1107,60 @@ TEST_F(Tst_Ornaments, fingering_grandstaff_routing)
         }
     }
 
+    delete score;
+}
+
+// Regression: FINGER ORNs are stored on Encore voice 0 but may annotate notes in other voices of the
+// SAME staff. A finger over a voice-2 note must attach to that note, not float to the bass sibling;
+// and a run of fingers whose count fits a same-tick voice-0 chord must stay on that chord, not go
+// cross-measure. Fixture m1: FINGER_1 over a voice-2 C4 (bass note present as a decoy), and 5/3/2 over
+// a 3-note voice-0 chord at the last voice-0 tick (no bass note there).
+TEST_F(Tst_Ornaments, fingering_multivoice_same_staff)
+{
+    MasterScore* score = readEncoreScore("ornaments_fingering_multivoice.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    auto measureAt = [&](int idx) -> Measure* {
+        int n = 0;
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (mb->isMeasure() && n++ == idx) {
+                return toMeasure(mb);
+            }
+        }
+        return nullptr;
+    };
+    auto fingersOn = [](Measure* m, track_idx_t tr) -> std::vector<String> {
+        std::vector<String> out;
+        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(tr);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Note* n : toChord(el)->notes()) {
+                for (EngravingItem* e : n->el()) {
+                    if (e && e->isFingering()) {
+                        out.push_back(toFingering(e)->plainText());
+                    }
+                }
+            }
+        }
+        return out;
+    };
+
+    Measure* m1 = measureAt(1);
+    ASSERT_NE(m1, nullptr);
+    // FINGER_1 lands on the voice-2 C4 (track 2), not the bass (track VOICES).
+    EXPECT_EQ(fingersOn(m1, 2), (std::vector<String> { u"1" }))
+        << "the finger over the voice-2 note must attach to it";
+    EXPECT_TRUE(fingersOn(m1, VOICES).empty())
+        << "no fingering may leak onto the bass staff";
+    // The 5/3/2 run stays on the voice-0 chord (track 0) in this measure, not cross-measure.
+    std::vector<String> v0 = fingersOn(m1, 0);
+    std::sort(v0.begin(), v0.end());
+    EXPECT_EQ(v0, (std::vector<String> { u"2", u"3", u"5" }))
+        << "the chord fingerings must stay on this measure's chord";
     delete score;
 }
 
@@ -1775,7 +1865,7 @@ TEST_F(Tst_Ornaments, new_artic_types_from_orns)
     EXPECT_TRUE(ret) << ret.text();
 
     enum class K {
-        Marcato, MarcatoStaccato, Tenuto, Mordent, Other
+        Marcato, MarcatoStaccato, Tenuto, Trill, Other
     };
     auto kindOf = [](Articulation* a) -> K {
         SymId s = SymId(a->subtype());
@@ -1788,8 +1878,8 @@ TEST_F(Tst_Ornaments, new_artic_types_from_orns)
         if (s == SymId::articTenutoAbove || s == SymId::articTenutoBelow) {
             return K::Tenuto;
         }
-        if (s == SymId::ornamentMordent || s == SymId::ornamentPrallMordent) {
-            return K::Mordent;
+        if (s == SymId::ornamentShortTrill || s == SymId::ornamentTrill) {
+            return K::Trill;
         }
         return K::Other;
     };
@@ -1811,9 +1901,10 @@ TEST_F(Tst_Ornaments, new_artic_types_from_orns)
         }
     }
     // 5 chords with articulations: two marcato (0xBF and 0xC6), one marcatoStaccato (0xC0),
-    // one tenuto (0xC8), one mordent (0xB8). 0x30 (GUITAR_BEND_V) is skipped.
+    // one tenuto (0xC8), one trill (0xB8, a standalone trill zigzag, not a double mordent).
+    // 0x30 (GUITAR_BEND_V) is skipped.
     const std::vector<K> expected = {
-        K::Marcato, K::Marcato, K::MarcatoStaccato, K::Tenuto, K::Mordent
+        K::Marcato, K::Marcato, K::MarcatoStaccato, K::Tenuto, K::Trill
     };
     EXPECT_EQ(found, expected);
     EXPECT_EQ(found.size(), 5u) << "0x30 guitar bend must be skipped; only 5 chords get articulations";
@@ -2301,5 +2392,72 @@ TEST_F(Tst_Ornaments, v0c4_trill_between_notes_snaps_to_preceding)
     // note@0 is beat 1 (tick 0); the following note@240(enc) is beat 2 (tick 480 in MuseScore).
     EXPECT_EQ(trillTick, Fraction(0, 1))
         << "the TR must land on its own (preceding) note, not the following one";
+    delete score;
+}
+
+// Regression: a "TR" whose tick coincides with a note but whose xoffset is drawn to the left of it
+// (the "tr" text is left-anchored) must stay on that note. The xoffset-snap previously dragged it
+// back onto the preceding note. Here the trilled note is the second one (enc 120 -> MuseScore 240).
+TEST_F(Tst_Ornaments, v0c4_trill_tr_stays_on_own_note)
+{
+    MasterScore* score = readEncoreScore("ornaments_trill_tr_on_own_note.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load ornaments_trill_tr_on_own_note.enc";
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    Fraction trillTick(-1, 1);
+    int trillCount = 0;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        for (Articulation* a : toChord(el)->articulations()) {
+            if (a && (a->symId() == SymId::ornamentTrill || a->symId() == SymId::ornamentShortTrill)) {
+                trillTick = s->tick() - m->tick();
+                ++trillCount;
+            }
+        }
+    }
+    EXPECT_EQ(trillCount, 1) << "exactly one trill must import";
+    EXPECT_EQ(trillTick, Fraction(1, 8))
+        << "the TR must stay on the note at its own tick (2nd note), not snap to the first";
+    delete score;
+}
+
+// Regression: a lone TRILL_END (0x35) several measures after an unrelated TRILL_START on the same
+// track is a standalone terminal trill and must render its own trill on its note, not be swallowed
+// into a huge span by the far-away start (which loses the terminal trill entirely).
+TEST_F(Tst_Ornaments, trill_end_far_from_start_is_standalone)
+{
+    MasterScore* score = readEncoreScore("ornaments_trill_end_far_from_start.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    Measure* m2 = nullptr;
+    int mi = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (mb->isMeasure() && mi++ == 2) {
+            m2 = toMeasure(mb);
+            break;
+        }
+    }
+    ASSERT_NE(m2, nullptr);
+
+    int trillInM2 = 0, spanReachingM2 = 0;
+    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+        Spanner* sp = it->second;
+        if (!sp->isTrill()) {
+            continue;
+        }
+        if (sp->tick() >= m2->tick() && sp->tick() < m2->tick() + m2->ticks()) {
+            ++trillInM2;
+        } else if (sp->tick() < m2->tick() && sp->tick2() >= m2->tick()) {
+            ++spanReachingM2;   // a wrong giant span from an earlier measure
+        }
+    }
+    EXPECT_EQ(trillInM2, 1) << "the lone terminal TRILL_END must render its own trill on m2";
+    EXPECT_EQ(spanReachingM2, 0) << "no far-away trill span may swallow m2's terminal trill";
     delete score;
 }

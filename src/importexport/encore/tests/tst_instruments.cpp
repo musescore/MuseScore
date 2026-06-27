@@ -718,6 +718,47 @@ TEST_F(Tst_Instruments, abbreviated_name_with_trailing_dot_matches_bandurria)
         << "Name 'Bandurr. I' must resolve to bandurria after punctuation stripping";
     delete score;
 }
+
+// v0xC2 files without a ~~~~ block use a distinct compact-table layout; using the ~~~~ stride/offsets
+// shifts each instrument's name and MIDI by one entry. Names must stay on their own instrument.
+TEST_F(Tst_Instruments, c2_no_tilde_compact_instr1_name_not_duplicated_to_instr0)
+{
+    MasterScore* score = readEncoreScore("instruments_c2_no_tilde_compact_names_midi.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), 3u);
+    EXPECT_EQ(score->parts()[1]->longName(), String(u"Guitarra"))
+        << "Name 'Guitarra' must be assigned to instrument [1], not [0]";
+    EXPECT_NE(score->parts()[0]->longName(), String(u"Guitarra"))
+        << "Instrument [0] must not receive instrument [1]'s name";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, c2_no_tilde_compact_midi_assigned_to_correct_instr)
+{
+    // Same file: MIDI programs must not be shifted by one entry, so adjacent instruments do not collapse
+    // to the same template.
+    MasterScore* score = readEncoreScore("instruments_c2_no_tilde_compact_names_midi.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), 3u);
+    const String id0 = score->parts()[0]->instrument()->id();
+    const String id1 = score->parts()[1]->instrument()->id();
+    const String id2 = score->parts()[2]->instrument()->id();
+    EXPECT_NE(id0, id1) << "Instrument [0] must not match instrument [1] (MIDI shifted bug)";
+    EXPECT_NE(id1, id2) << "Instrument [1] must not match instrument [2]";
+    delete score;
+}
+
+// In v0xC2 ~~~~-block files, an instrument whose name block has printable ASCII must still have its MIDI
+// read from block+60 rather than being skipped (which left midiProgram 0 -> Grand Piano).
+TEST_F(Tst_Instruments, c2_tilde_primary_block_midi_read_from_offset_60)
+{
+    MasterScore* score = readEncoreScore("instruments_c2_tilde_primary_block_midi.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), 1u);
+    EXPECT_NE(score->parts()[0]->instrument()->id(), String(u"grand-piano"))
+        << "Primary-block MIDI=25 at block+60 must be read; Grand Piano means midiProgram stayed 0";
+    delete score;
+}
 TEST_F(Tst_Instruments, orchestra_loads_with_all_parts)
 {
     MasterScore* score = readEncoreScore("kordorkestro.enc");

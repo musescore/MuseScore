@@ -645,6 +645,36 @@ TEST_F(Tst_Text, tempo_beat_unit_from_noto_overrides_compound_meter)
     delete score;
 }
 
+// v0xC2 stores a tempo mark's BPM in a different ORN slot than v0xC4, so reading the v0xC4 slot gets a
+// constant, not the real BPM. See ENCORE_FORMAT.md §Note element (Tempo beat unit).
+TEST_F(Tst_Text, tempo_orn_v0c2_reads_bpm_from_offset_28)
+{
+    MasterScore* score = readEncoreScore("text_tempo_orn_v0c2_bpm_offset.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    TempoText* tt = nullptr;
+    for (MeasureBase* mb = score->first(); mb && !tt; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s && !tt; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e && e->isTempoText()) {
+                    tt = toTempoText(e);
+                    break;
+                }
+            }
+        }
+    }
+    ASSERT_NE(tt, nullptr) << "No TempoText found in score";
+    EXPECT_EQ(tt->xmlText(), u"<sym>metNoteQuarterUp</sym> = 80")
+        << "v0xC2 tempo BPM is at ORN +28 (80), not +30 (the constant 52)";
+    EXPECT_NEAR(tt->tempo().val, 80.0 / 60.0, 1e-6);
+
+    delete score;
+}
+
 // Some v0xC2 files store the tempo the v0xC4 way (beat-unit code at +28, BPM at +30); the reader must keep
 // the +30 BPM when +28 is a valid beat-unit code, or a quarter=158 mark imports as quarter=2.
 TEST_F(Tst_Text, tempo_orn_v0c2_keeps_bpm_at_offset_30_when_28_is_beat_unit)
@@ -1244,6 +1274,85 @@ static std::vector<String> collectAllLyrics(MasterScore* score)
         }
     }
     return lyrics;
+}
+
+TEST_F(Tst_Text, lyrics_v0xc2_text_offset_full_words)
+{
+    // lyrics_v0c2_compound_meter.enc: v0xC2 6/8, 3 measures × 6 eighth notes = 18 notes,
+    // each with a lyric. Syllables: "La","ro","sol","es","mi","do" (each >=2 chars).
+    // Wrong +20 offset would decode each as a single char ("L","r","s","e","m","d").
+    MasterScore* score = readEncoreScore("lyrics_v0c2_compound_meter.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> all = collectAllLyrics(score);
+    // 3 measures × 6 syllables = 18 lyrics after v0xC2 +18 offset fix.
+    EXPECT_GE(all.size(), 18u)
+        << "expected 18 lyrics after v0xC2 offset fix";
+
+    auto contains = [&](const String& s) {
+        return std::find(all.begin(), all.end(), s) != all.end();
+    };
+    EXPECT_TRUE(contains(u"La")) << "'La' must be present (wrong offset gives 'L')";
+    EXPECT_TRUE(contains(u"ro")) << "'ro' must be present (wrong offset gives 'r')";
+    EXPECT_TRUE(contains(u"sol")) << "'sol' must be present (wrong offset gives 's')";
+    EXPECT_TRUE(contains(u"es")) << "'es' must be present (wrong offset gives 'e')";
+    EXPECT_TRUE(contains(u"mi")) << "'mi' must be present (wrong offset gives 'm')";
+    EXPECT_TRUE(contains(u"do")) << "'do' must be present (wrong offset gives 'd')";
+
+    // Single-char garbled fragments must not appear after the fix.
+    EXPECT_FALSE(contains(u"L")) << "garbled fragment 'L' must not appear after offset fix";
+    EXPECT_FALSE(contains(u"s")) << "garbled fragment 's' must not appear after offset fix";
+
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_compound_meter_all_syllables_matched)
+{
+    // lyrics_v0c2_compound_meter.enc: v0xC2 6/8 (beatTicks=360), 3 measures.
+    // In 6/8 the segEncTick formula must use encTicksPerQuarter = beatTicks*2/3 = 240.
+    // Using 360 inflates note positions, placing beat-2 syllables out of range.
+    // Each of the 6 syllables appears 3 times (once per measure).
+    MasterScore* score = readEncoreScore("lyrics_v0c2_compound_meter.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<String> all = collectAllLyrics(score);
+    int countLa = 0, countSol = 0, countEs = 0;
+    for (const String& s : all) {
+        if (s == u"La") {
+            ++countLa;
+        }
+        if (s == u"sol") {
+            ++countSol;
+        }
+        if (s == u"es") {
+            ++countEs;
+        }
+    }
+    EXPECT_GE(countLa, 2)
+        << "'La' must appear at least twice; before compound-meter fix: 0 or 1 occurrences.";
+    EXPECT_GE(countSol, 3)
+        << "'sol' must appear at least three times; before compound-meter fix: 0 occurrences.";
+    EXPECT_GE(countEs, 3)
+        << "'es' must appear at least three times; before compound-meter fix: 0 occurrences.";
+
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_rest_does_not_shift_note_assignment)
+{
+    // Two lyric-matching invariants: rests must not consume note-tick entries (which would shift every
+    // note's encTick), and proximity matching must prefer a note at or before the lyric tick rather than a
+    // closer later note. Here LYRIC@140 must attach to NOTE@120, not NOTE@240.
+    MasterScore* score = readEncoreScore("lyrics_rest_does_not_shift_notes.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<String> all = collectAllLyrics(score);
+    ASSERT_GE(all.size(), 1u) << "fixture must have at least one lyric";
+    EXPECT_EQ(all[0], u"ma") << "lyric text must be 'ma'";
+
+    delete score;
 }
 
 TEST_F(Tst_Text, title_frame_created)

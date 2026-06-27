@@ -86,3 +86,39 @@ TEST_F(Tst_Tempo, swing_timing_file_no_crash)
     EXPECT_GT(score->nmeasures(), 0);
     delete score;
 }
+
+// Regression: older-layout v0xC2 tempo marks carry the beat unit in a different slot; without it
+// an "eighth = 240" mark in 6/8 was read as a dotted quarter and played 3x too fast.
+// See ENCORE_FORMAT.md §Note element (Tempo beat unit).
+TEST_F(Tst_Tempo, v0c2_older_layout_tempo_beat_unit_at_plus26)
+{
+    MasterScore* score = readEncoreScore("tempo_v0c2_eighth_beat_unit.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load tempo_v0c2_eighth_beat_unit.enc";
+
+    TempoText* tt = nullptr;
+    for (MeasureBase* mb = score->first(); mb && !tt; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        for (Segment* s = m->first(SegmentType::ChordRest); s && !tt; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e && e->isTempoText()) {
+                    tt = toTempoText(e);
+                    break;
+                }
+            }
+        }
+    }
+    ASSERT_NE(tt, nullptr) << "no TempoText emitted for the v0xC2 tempo mark";
+
+    EXPECT_TRUE(tt->xmlText().contains(u"metNote8thUp"))
+        << "expected eighth beat unit, got: " << tt->xmlText().toStdString();
+    EXPECT_FALSE(tt->xmlText().contains(u"metAugmentationDot"))
+        << "beat unit must not be dotted: " << tt->xmlText().toStdString();
+    // eighth = 240 -> 120 quarter/min -> 2 beats/sec.
+    EXPECT_EQ(std::lround(tt->tempo().val), 2)
+        << "playback tempo must be 2 beats/sec, got " << tt->tempo().val;
+
+    delete score;
+}

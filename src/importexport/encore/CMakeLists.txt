@@ -40,6 +40,8 @@ target_sources(iex_encore PRIVATE
     internal/parser/readers.cpp
     internal/parser/readers-v0xc4-base.h
     internal/parser/readers-v0xc4-base.cpp
+    internal/parser/readers-v0xc2.h
+    internal/parser/readers-v0xc2.cpp
     internal/parser/readers-v0xc4.h
     internal/parser/readers-v0xc4.cpp
     internal/parser/elem.h

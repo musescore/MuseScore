@@ -135,6 +135,41 @@ TEST_F(Tst_OrnamentsSlurs, multi_measure_slur_resolved_from_almezuro)
     delete score;
 }
 
+// A v0xC2 slur whose +16 measure-count marks it cross-measure must anchor its end to the downbeat of the
+// target measure; the stale xoffset2 must not be used.
+TEST_F(Tst_OrnamentsSlurs, v0xc2_cross_measure_slur_ends_in_next_measure)
+{
+    MasterScore* score = readEncoreScore("ornaments_v0c2_cross_measure_slur.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int crossMeasureCount = 0;
+    int sameMeasureCount = 0;
+    for (auto& [tick, sp] : score->spannerMap().map()) {
+        if (!sp->isSlur()) {
+            continue;
+        }
+        EXPECT_LT(sp->tick(), sp->tick2()) << "slur span must be positive";
+        EXPECT_NE(sp->startElement(), nullptr) << "slur missing start element";
+        EXPECT_NE(sp->endElement(), nullptr) << "slur missing end element";
+        if (sp->startElement() && sp->endElement()) {
+            const EngravingItem* startEl = sp->startElement();
+            const EngravingItem* endEl   = sp->endElement();
+            const Measure* startMeas = startEl->findMeasure();
+            const Measure* endMeas   = endEl->findMeasure();
+            if (startMeas && endMeas && startMeas != endMeas) {
+                ++crossMeasureCount;
+            } else {
+                ++sameMeasureCount;
+            }
+        }
+    }
+    EXPECT_GT(crossMeasureCount, 0) << "expected at least one cross-measure slur";
+    EXPECT_EQ(sameMeasureCount, 0) << "no same-measure slurs expected in this file";
+    delete score;
+}
+
 // Regression: in multi-instrument compact-encoded files the raw instrument index must be translated to
 // the routed LINE slot before finding a slur's notes, or staves 1-3 miss and the last-chord fallback
 // wrongly picks note3. Each staff's slur must end at note2.
