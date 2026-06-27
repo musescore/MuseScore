@@ -334,6 +334,108 @@ TEST_F(Tst_Text, lyrics_latin1_text_decoded_as_one_byte_per_char)
     delete score;
 }
 
+// A syllable whose first character is not ASCII is still UTF-16 when the byte after it is zero.
+// Probing for a printable ASCII byte sent it down the Latin-1 branch, which read the high byte of
+// the enye as the terminator and cut "ño" to "ñ".
+TEST_F(Tst_Text, lyrics_accented_first_letter_survives_the_encoding_probe)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_accent_first_letter.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    ASSERT_EQ(seen.size(), 2u);
+    EXPECT_EQ(seen[0], String(u"ño")) << "the syllable written UTF-16 LE";
+    EXPECT_EQ(seen[1], String(u"ño")) << "the same syllable written Latin-1";
+    delete score;
+}
+
+// A syllable belongs to the note written in its column, which the anchor byte states exactly. The
+// stored tick does not always say the same thing, and the syllables of one bar are not stored in
+// order, so matching by tick alone read the phrase backwards.
+TEST_F(Tst_Text, lyrics_take_the_note_written_in_their_own_column)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_column_says_which_note.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Lyrics* ly : toChord(el)->lyrics()) {
+                seen.push_back(ly->plainText());
+            }
+        }
+    }
+    const std::vector<String> expected { String(u"yer"), String(u"con"), String(u"flor") };
+    EXPECT_EQ(seen, expected) << "the phrase reads left to right, in the order of the columns";
+    delete score;
+}
+
+// Encore draws a syllable in its note's column, and pushes it left onto the previous column when the
+// words are wider than their notes, which is what a crowded bar looks like. So two syllables written
+// in one column are not one note's: the second sings the note after it, and when the bar has no note
+// left for it, Encore does not draw it either.
+TEST_F(Tst_Text, a_syllable_crowded_out_of_its_column_takes_the_next_note)
+{
+    MasterScore* score = readEncoreScore("text_lyrics_two_in_one_column.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<size_t> perChord;
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            const std::vector<Lyrics*>& ly = toChord(el)->lyrics();
+            perChord.push_back(ly.size());
+            for (const Lyrics* l : ly) {
+                seen.push_back(l->plainText());
+            }
+        }
+    }
+    const std::vector<size_t> expectedCounts { 1, 0, 1, 1 };
+    EXPECT_EQ(perChord, expectedCounts)
+        << "one syllable a note: the crowded one goes forward, never back to the bare note before it";
+    const std::vector<String> expectedText { String(u"do"), String(u"remi"), String(u"re") };
+    EXPECT_EQ(seen, expectedText)
+        << "the fuller text keeps the column it was written in; the other moves along";
+    delete score;
+}
+
 // Lyrics on a grand-staff bottom staff must be matched against that staff's routed notes, not the raw
 // encStaff (which grabs another instrument's notes and reverses the syllables).
 TEST_F(Tst_Text, lyrics_grandstaff_match_routed_staff_notes)
@@ -645,6 +747,36 @@ TEST_F(Tst_Text, tempo_beat_unit_from_noto_overrides_compound_meter)
     delete score;
 }
 
+// v0xC2 stores a tempo mark's BPM in a different ORN slot than v0xC4, so reading the v0xC4 slot gets a
+// constant, not the real BPM. See ENCORE_FORMAT.md §6.8 Ornament.
+TEST_F(Tst_Text, tempo_orn_v0c2_reads_bpm_from_offset_28)
+{
+    MasterScore* score = readEncoreScore("text_tempo_orn_v0c2_bpm_offset.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    TempoText* tt = nullptr;
+    for (MeasureBase* mb = score->first(); mb && !tt; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s && !tt; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e && e->isTempoText()) {
+                    tt = toTempoText(e);
+                    break;
+                }
+            }
+        }
+    }
+    ASSERT_NE(tt, nullptr) << "No TempoText found in score";
+    EXPECT_EQ(tt->xmlText(), u"<sym>metNoteQuarterUp</sym> = 80")
+        << "v0xC2 tempo BPM is at ORN +28 (80), not +30 (the constant 52)";
+    EXPECT_NEAR(tt->tempo().val, 80.0 / 60.0, 1e-6);
+
+    delete score;
+}
+
 // Some v0xC2 files store the tempo the v0xC4 way (beat-unit code at +28, BPM at +30); the reader must keep
 // the +30 BPM when +28 is a valid beat-unit code, or a quarter=158 mark imports as quarter=2.
 TEST_F(Tst_Text, tempo_orn_v0c2_keeps_bpm_at_offset_30_when_28_is_beat_unit)
@@ -774,6 +906,36 @@ TEST_F(Tst_Text, staff_text_resolved_via_text_block)
         }
     }
     EXPECT_EQ(seen, expected);
+    delete score;
+}
+
+// A text can open with a line break, and one can be nothing but breaks. Written UTF-16 LE the first
+// byte of both is a carriage return, which a probe taking only printable bytes for text sends down
+// the one-byte branch, where the zero high byte of that return ends the string: the mark came out as
+// a bare return and was lost. A text of breaks alone is not a mark and must not become an element.
+TEST_F(Tst_Text, staff_text_opening_with_a_line_break)
+{
+    MasterScore* score = readEncoreScore("text_staff_text_leading_break.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> seen;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e && e->isStaffText()) {
+                    seen.push_back(toStaffText(e)->plainText());
+                }
+            }
+        }
+    }
+    ASSERT_EQ(seen.size(), 1u) << "the text of breaks alone leaves nothing behind";
+    EXPECT_TRUE(seen[0].contains(String(u"cresc."))) << "and the other keeps what it says";
     delete score;
 }
 
@@ -1244,6 +1406,85 @@ static std::vector<String> collectAllLyrics(MasterScore* score)
         }
     }
     return lyrics;
+}
+
+TEST_F(Tst_Text, lyrics_v0xc2_text_offset_full_words)
+{
+    // lyrics_v0c2_compound_meter.enc: v0xC2 6/8, 3 measures × 6 eighth notes = 18 notes,
+    // each with a lyric. Syllables: "La","ro","sol","es","mi","do" (each >=2 chars).
+    // Wrong +20 offset would decode each as a single char ("L","r","s","e","m","d").
+    MasterScore* score = readEncoreScore("lyrics_v0c2_compound_meter.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<String> all = collectAllLyrics(score);
+    // 3 measures × 6 syllables = 18 lyrics after v0xC2 +18 offset fix.
+    EXPECT_GE(all.size(), 18u)
+        << "expected 18 lyrics after v0xC2 offset fix";
+
+    auto contains = [&](const String& s) {
+        return std::find(all.begin(), all.end(), s) != all.end();
+    };
+    EXPECT_TRUE(contains(u"La")) << "'La' must be present (wrong offset gives 'L')";
+    EXPECT_TRUE(contains(u"ro")) << "'ro' must be present (wrong offset gives 'r')";
+    EXPECT_TRUE(contains(u"sol")) << "'sol' must be present (wrong offset gives 's')";
+    EXPECT_TRUE(contains(u"es")) << "'es' must be present (wrong offset gives 'e')";
+    EXPECT_TRUE(contains(u"mi")) << "'mi' must be present (wrong offset gives 'm')";
+    EXPECT_TRUE(contains(u"do")) << "'do' must be present (wrong offset gives 'd')";
+
+    // Single-char garbled fragments must not appear after the fix.
+    EXPECT_FALSE(contains(u"L")) << "garbled fragment 'L' must not appear after offset fix";
+    EXPECT_FALSE(contains(u"s")) << "garbled fragment 's' must not appear after offset fix";
+
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_compound_meter_all_syllables_matched)
+{
+    // lyrics_v0c2_compound_meter.enc: v0xC2 6/8 (beatTicks=360), 3 measures.
+    // In 6/8 the segEncTick formula must use encTicksPerQuarter = beatTicks*2/3 = 240.
+    // Using 360 inflates note positions, placing beat-2 syllables out of range.
+    // Each of the 6 syllables appears 3 times (once per measure).
+    MasterScore* score = readEncoreScore("lyrics_v0c2_compound_meter.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<String> all = collectAllLyrics(score);
+    int countLa = 0, countSol = 0, countEs = 0;
+    for (const String& s : all) {
+        if (s == u"La") {
+            ++countLa;
+        }
+        if (s == u"sol") {
+            ++countSol;
+        }
+        if (s == u"es") {
+            ++countEs;
+        }
+    }
+    EXPECT_GE(countLa, 2)
+        << "'La' must appear at least twice; before compound-meter fix: 0 or 1 occurrences.";
+    EXPECT_GE(countSol, 3)
+        << "'sol' must appear at least three times; before compound-meter fix: 0 occurrences.";
+    EXPECT_GE(countEs, 3)
+        << "'es' must appear at least three times; before compound-meter fix: 0 occurrences.";
+
+    delete score;
+}
+
+TEST_F(Tst_Text, lyrics_rest_does_not_shift_note_assignment)
+{
+    // Two lyric-matching invariants: rests must not consume note-tick entries (which would shift every
+    // note's encTick), and proximity matching must prefer a note at or before the lyric tick rather than a
+    // closer later note. Here LYRIC@140 must attach to NOTE@120, not NOTE@240.
+    MasterScore* score = readEncoreScore("lyrics_rest_does_not_shift_notes.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<String> all = collectAllLyrics(score);
+    ASSERT_GE(all.size(), 1u) << "fixture must have at least one lyric";
+    EXPECT_EQ(all[0], u"ma") << "lyric text must be 'ma'";
+
+    delete score;
 }
 
 TEST_F(Tst_Text, title_frame_created)
