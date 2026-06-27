@@ -48,8 +48,9 @@ static std::unique_ptr<EncMeasureElem> createMeasureElement(
     case EncElemType::ORNAMENT:
     {
         auto orn = std::make_unique<EncOrnament>(tick, tp, vo);
-        orn->tindOffset = fmt.staffTextTindOffset();
-        orn->yoffOffset = fmt.staffTextYoffsetOffset();
+        orn->tindOffset      = fmt.staffTextTindOffset();
+        orn->yByteOffset     = fmt.ornamentYoffsetOffset();
+        orn->measCountOffset = fmt.ornamentMeasureCountOffset();
         return orn;
     }
     case EncElemType::LYRIC:

@@ -78,6 +78,13 @@ int staffDisplaySize(const EncRoot& enc, int instrIdx)
                 return std::clamp(static_cast<int>(lsd.staffSizeHint) + 1, 1, 4);
             }
         }
+        // The compact generations keep the same per-staff selector in a staff entry this parse
+        // cannot walk, so the reader leaves it here instead, in system order. It is the size the
+        // file really carries, while the header byte only tends to agree with it.
+        const std::vector<quint8>& sizes = enc.lines[0].staffSizes;
+        if (instrIdx >= 0 && instrIdx < static_cast<int>(sizes.size())) {
+            return std::clamp(static_cast<int>(sizes[instrIdx]) + 1, 1, 4);
+        }
     }
     return std::clamp(static_cast<int>(enc.header.scoreSize), 1, 4);
 }

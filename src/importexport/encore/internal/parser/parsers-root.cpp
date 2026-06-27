@@ -342,9 +342,9 @@ bool EncRoot::read(QDataStream& ds)
             const qint64 lineContentStart = ds.device()->pos();
             EncLine line;
             line.read(ds, varSize, header.staffPerSystem);
-            // Where the per-staff key indices live in the LINE block rather than in staffData,
-            // the reader extracts them: EncFormatReader::readLineStaffKeys.
-            fmt->readLineStaffKeys(line, ds, lineContentStart);
+            // Where the per-staff key, clef and size live in a LINE staff entry this parse
+            // cannot walk, the reader extracts them: EncFormatReader::readLineStaffEntries.
+            fmt->readLineStaffEntries(line, ds, lineContentStart);
             lines.push_back(std::move(line));
         } else if (nextId == "MEAS") {
             EncMeasure meas;
