@@ -46,13 +46,23 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
 
 const AutomationPoint* Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
 {
-    const AutomationCurve& curve = this->curve(key);
-    auto it = muse::findLessOrEqual(curve, tick);
-    if (it == curve.cend()) {
-        return nullptr;
+    const AutomationCurve& keyCurve = curve(key);
+    const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
+
+    if (key.voiceIdx.has_value()) {
+        AutomationCurveKey sharedKey = key;
+        sharedKey.voiceIdx = std::nullopt;
+        const AutomationCurve& sharedCurve = curve(sharedKey);
+        const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
+
+        if (sharedIt != sharedCurve.cend()) {
+            if (keyIt == keyCurve.cend() || sharedIt->first > keyIt->first) {
+                return &sharedIt->second;
+            }
+        }
     }
 
-    return &it->second;
+    return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
 }
 
 bool Automation::isEmpty() const

@@ -21,6 +21,10 @@
  */
 #pragma once
 
+#include <map>
+
+#include "engraving/automation/automationtypes.h"
+
 namespace mu::engraving {
 class IAutomation;
 class Score;
@@ -29,7 +33,6 @@ class Segment;
 class Dynamic;
 class Hairpin;
 class RepeatSegment;
-struct AutomationCurveKey;
 struct ScoreChanges;
 
 class ScoreAutomationController
@@ -46,17 +49,26 @@ public:
     IAutomation* automation() const { return m_automation; }
 
 private:
+    using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
+
     void update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
-    void addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo);
-    void addDynamicPoints(const Dynamic* dynamic, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo);
-    void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key);
+    void addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
+                          DynamicPriorities& dynamicPriorities);
+    void addDynamicPoints(const Dynamic* dynamic, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
+                          DynamicPriorities& dynamicPriorities);
+    void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
+                          DynamicPriorities& dynamicPriorities);
 
     void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, size_t staffIdxFrom,
-                          size_t staffIdxTo);
-    void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key);
+                          size_t staffIdxTo, DynamicPriorities& dynamicPriorities);
+    void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
+                          DynamicPriorities& dynamicPriorities);
+
+    bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
+                            DynamicPriorities& dynamicPriorities);
 
     IAutomation* m_automation = nullptr;
 };

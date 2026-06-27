@@ -260,6 +260,11 @@ static bool isEndDynamicOfHairpin(const Dynamic* dynamic, double dynamicValue, d
     return false;
 }
 
+static int dynamicPriority(const EngravingItem* item)
+{
+    return static_cast<int>(item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>());
+}
+
 ScoreAutomationController::ScoreAutomationController()
 {
     m_automation = new Automation();
@@ -356,6 +361,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
     }
 
     removeGeneratedPoints(score, *repeatFromIt, tickFrom, staffIdxFrom, staffIdxTo);
+    DynamicPriorities dynamicPriorities;
 
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
@@ -372,11 +378,38 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
                     continue;
                 }
 
-                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo);
+                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities);
             }
         }
 
-        addSpannerPoints(score, seg->tick, seg->endTick(), tickOffset, staffIdxFrom, staffIdxTo);
+        addSpannerPoints(score, seg->tick, seg->endTick(), tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities);
+    }
+
+    // Second pass: copy shared dynamics points into each voice curve so that
+    // voice curves are fully self-contained (no merging needed at query time)
+    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
+
+    for (const auto& [key, curve] : m_automation->curves()) {
+        if (key.type != AutomationType::Dynamics || !key.voiceIdx.has_value() || curve.empty()) {
+            continue;
+        }
+
+        if (hasStaffFilter) {
+            const Staff* staff = score->staffById(key.staffId);
+            if (!staff || staff->idx() < staffIdxFrom || staff->idx() > staffIdxTo) {
+                continue;
+            }
+        }
+
+        AutomationCurveKey sharedKey = key;
+        sharedKey.voiceIdx = std::nullopt;
+        const AutomationCurve& sharedCurve = m_automation->curve(sharedKey);
+
+        for (const auto& [tick, point] : sharedCurve) {
+            if (!muse::contains(curve, tick)) {
+                m_automation->addPoint(key, tick, point);
+            }
+        }
     }
 }
 
@@ -405,7 +438,7 @@ void ScoreAutomationController::removeGeneratedPoints(const Score* score, const 
 }
 
 void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo)
+                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities)
 {
     const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 
@@ -422,13 +455,13 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
         }
 
         if (annotation->isDynamic()) {
-            addDynamicPoints(toDynamic(annotation), tickOffset, staffIdxFrom, staffIdxTo);
+            addDynamicPoints(toDynamic(annotation), tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities);
         }
     }
 }
 
 void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo)
+                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities)
 {
     if (!dynamic->playDynamic()) {
         return;
@@ -436,16 +469,18 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, staffIdxFrom, staffIdxTo);
     for (const AutomationCurveKey& key : keys) {
-        addDynamicPoints(dynamic, tickOffset, key);
+        addDynamicPoints(dynamic, tickOffset, key, dynamicPriorities);
     }
 }
 
-void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key)
+void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
+                                                 DynamicPriorities& dynamicPriorities)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return;
     }
 
+    const int priority = dynamicPriority(dynamic);
     const DynamicType dynamicType = dynamic->dynamicType();
     const utick_t dynamicUTick = dynamic->tick().ticks() + tickOffset;
     const AutomationPoint* prevPoint = m_automation->activePoint(key, dynamicUTick);
@@ -462,7 +497,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevOutValue);
         point.inValue = isHairpinEnd ? point.outValue : prevOutValue;
         point.itemId = eid;
-        m_automation->addPoint(key, dynamicUTick, point);
+        tryAddDynamicPoint(key, dynamicUTick, point, priority, dynamicPriorities);
         return;
     }
 
@@ -472,12 +507,12 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         const bool isHairpinEnd = isEndDynamicOfHairpin(dynamic, point.outValue, prevOutValue);
         point.inValue = isHairpinEnd ? point.outValue : prevOutValue;
         point.itemId = eid;
-        m_automation->addPoint(key, dynamicUTick, point);
+        tryAddDynamicPoint(key, dynamicUTick, point, priority, dynamicPriorities);
 
         if (const Segment* nextSeg = dynamic->segment()->next()) {
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
-            m_automation->addPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint);
+            tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, dynamicPriorities);
         }
 
         return;
@@ -493,20 +528,20 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         startPoint.inValue = isHairpinEnd ? startPoint.outValue : prevOutValue;
         startPoint.interpolation = AutomationPoint::InterpolationType::Exponential;
         startPoint.itemId = eid;
-        m_automation->addPoint(key, dynamicUTick, startPoint);
+        tryAddDynamicPoint(key, dynamicUTick, startPoint, priority, dynamicPriorities);
 
         AutomationPoint endPoint;
         endPoint.inValue = startPoint.outValue;
         endPoint.outValue = values.second;
         endPoint.itemId = eid;
-        m_automation->addPoint(key, endPointTick, endPoint);
+        tryAddDynamicPoint(key, endPointTick, endPoint, priority, dynamicPriorities);
 
         return;
     }
 }
 
 void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo)
+                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities)
 {
     const SpannerMap& spannerMap = score->spannerMap();
     if (spannerMap.empty()) {
@@ -533,12 +568,13 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
         const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics,
                                                                  staffIdxFrom, staffIdxTo);
         for (const AutomationCurveKey& key : keys) {
-            addHairpinPoints(hairpin, tickOffset, key);
+            addHairpinPoints(hairpin, tickOffset, key, dynamicPriorities);
         }
     }
 }
 
-void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key)
+void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
+                                                 DynamicPriorities& dynamicPriorities)
 {
     utick_t hairpinFrom = hairpin->tick().ticks() + tickOffset;
     const utick_t hairpinTo = hairpinFrom + hairpin->ticks().ticks();
@@ -570,17 +606,17 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
     const std::optional<double> nominalValueFrom = startHairpinValue(hairpin);
     const AutomationPoint* prevPoint = m_automation->activePoint(key, hairpinFrom);
     const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
-    const AutomationCurve& curve = m_automation->curve(key);
 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
     const double valueFrom = nominalValueFrom.value_or(prevOutValue);
+    const int priority = dynamicPriority(hairpin);
 
-    if (!muse::contains(curve, hairpinFrom)) {
+    {
         AutomationPoint startPoint;
         startPoint.outValue = valueFrom;
         startPoint.inValue = prevOutValue;
         startPoint.itemId = eid;
-        m_automation->addPoint(key, hairpinFrom, startPoint);
+        tryAddDynamicPoint(key, hairpinFrom, startPoint, priority, dynamicPriorities);
     }
 
     // --- Determine valueTo
@@ -598,11 +634,19 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
                            ? nominalValueTo.value()
                            : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
-    auto endPointToIt = curve.find(hairpinTo);
-    if (endPointToIt != curve.cend()) {
-        // A dynamic already sits at hairpinTo. If the hairpin arrives at a different value,
-        // encode the transition via inValue != outValue on the existing point
-        if (!muse::RealIsEqual(endPointToIt->second.outValue, valueTo)) {
+    // Re-fetch the real curve in case it was created by tryAddDynamicPoint above
+    const AutomationCurve& curve = m_automation->curve(key);
+    if (muse::contains(curve, hairpinTo)) {
+        // A point already sits at hairpinTo. Encode the hairpin's arrival via inValue
+        // only when this hairpin has at least as much priority as whoever placed that point.
+        bool canModify = true;
+        const auto prioKeyIt = dynamicPriorities.find(key);
+        if (prioKeyIt != dynamicPriorities.end()) {
+            const auto tickIt = prioKeyIt->second.find(hairpinTo);
+            canModify = tickIt == prioKeyIt->second.end() || priority >= tickIt->second;
+        }
+
+        if (canModify) {
             m_automation->setPointInValue(key, hairpinTo, valueTo);
         }
     } else {
@@ -613,6 +657,27 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         // then the dynamic immediately overrides it to nominalValueTo (outValue)
         point.outValue = (hasNominalValueTo && !useNominalValueTo) ? nominalValueTo.value() : valueTo;
         point.itemId = eid;
-        m_automation->addPoint(key, hairpinTo, point);
+        tryAddDynamicPoint(key, hairpinTo, point, priority, dynamicPriorities);
     }
+}
+
+bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick,
+                                                   const AutomationPoint& point, int priority, DynamicPriorities& dynamicPriorities)
+{
+    //! See: https://github.com/musescore/MuseScore/issues/23355
+    auto& tickPrioMap = dynamicPriorities[key];
+    const auto prioIt = tickPrioMap.find(tick);
+
+    if (prioIt != tickPrioMap.end()) {
+        if (priority <= prioIt->second) {
+            return false;
+        }
+    } else if (muse::contains(m_automation->curve(key), tick)) {
+        return false; // point from a prior update pass — don't overwrite
+    }
+
+    m_automation->addPoint(key, tick, point);
+    tickPrioMap[tick] = priority;
+
+    return true;
 }

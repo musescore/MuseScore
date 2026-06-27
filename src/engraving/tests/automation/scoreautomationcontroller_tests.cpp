@@ -113,10 +113,26 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
 
     checkCurvesMatch(controller.automation()->curve(key), expectedCurve);
 
-    // [THEN] Voice-1 curve on staff 0 matches expectations
+    // [THEN] Voice-1 curve on staff 0 matches expectations.
+    // Voice-1 has a CURRENT_VOICE_ONLY f at tick 3840. The second pass then fills in all
+    // shared-curve points so the voice curve is self-contained
     key.voiceIdx = 1;
     AutomationCurve expectedVoiceCurve;
-    expectedVoiceCurve[3840] = AutomationPoint { 0.0, F_VALUE, InterpolationType::Linear };       // f applied to voice 1 only
+
+    // Shared points copied in by the second pass
+    expectedVoiceCurve[480]  = AutomationPoint { 0.0,      P_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };
+    expectedVoiceCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };
+    expectedVoiceCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Exponential };
+    expectedVoiceCurve[3264] = AutomationPoint { P_VALUE,  F_VALUE,  InterpolationType::Linear };
+
+    // CURRENT_VOICE_ONLY f; inValue comes from the shared active point at tick 3264 (outValue = F_VALUE)
+    expectedVoiceCurve[3840] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
+
+    // Remaining shared points copied in by the second pass
+    expectedVoiceCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear };
 
     checkCurvesMatch(controller.automation()->curve(key), expectedVoiceCurve);
 }
