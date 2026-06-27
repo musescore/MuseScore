@@ -46,7 +46,7 @@ struct EncLine;
 // See ENCORE_FORMAT.md §1.3 The four generations.
 inline constexpr quint16 ENC_FORMAT_2_50 = 0x0250;   // Encore 2.x
 inline constexpr quint16 ENC_FORMAT_3_05 = 0x0305;   // Encore 3.x
-inline constexpr quint16 ENC_FORMAT_3_07 = 0x0307;   // Encore 4.0 to 4.2
+inline constexpr quint16 ENC_FORMAT_3_07 = 0x0307;   // the two-byte body shift starts here
 inline constexpr quint16 ENC_FORMAT_4_20 = 0x0420;   // Encore 4.3 through 5.x
 
 // "3.07" for 0x0307, for logging and messages.
@@ -112,7 +112,7 @@ struct EncFormatReader
     // See ENCORE_FORMAT.md §8.1 Per-generation differences at a glance for per-version values.
     virtual qint64 headerEnd() const { return 0xC2; }
 
-    // Bytes to add to every element body field from offset +8 onward. Encore 4.0 inserted two
+    // Bytes to add to every element body field from offset +8 onward. Format 3.07 inserted two
     // bytes there in every element type, so a file older than format 3.07 needs -2 while every
     // later generation needs 0. Fields at +5, +6 and +7 never move.
     // See ENCORE_FORMAT.md §1.3 The four generations.
@@ -146,13 +146,14 @@ struct EncFormatReader
                                     QDataStream& /*ds*/,
                                     qint64 /*contentStart*/) const {}
 
-    // Reads per-staff written key indices from a LINE block into EncLine::staffKeys.
-    // v0xA6 stores them in its 22-byte staff entries; other formats fill staffData during
-    // EncLine::read and leave staffKeys empty. The override seeks within the stream and must
-    // restore the position before returning. See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
-    virtual void readLineStaffKeys(EncLine& /*line*/,
-                                   QDataStream& /*ds*/,
-                                   qint64 /*lineContentStart*/) const {}
+    // Reads the per-staff key, clef and display size out of a LINE block into EncLine::staffKeys,
+    // staffClefs and staffSizes. v0xA6 keeps them in its 22-byte staff entries, which EncLine::read
+    // cannot walk; other formats fill staffData there and leave these three empty. The override
+    // seeks within the stream and must restore the position before returning.
+    // See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
+    virtual void readLineStaffEntries(EncLine& /*line*/,
+                                      QDataStream& /*ds*/,
+                                      qint64 /*lineContentStart*/) const {}
 
     // Maps this generation's notehead vocabulary onto the one 6.4 lists. The high nibble of the
     // face value names a notehead, and the generations do not name them alike, just as they do not
@@ -202,18 +203,22 @@ struct EncFormatReader
     // header. See ENCORE_FORMAT.md §5.5 Text block.
     virtual bool textBlockEntryHasRunHeader() const { return true; }
 
-    // Byte offset of a STAFFTEXT ornament's TEXT-entry index (tind) measured from the type/voice
-    // byte, or -1 to use the size-based location read inline. v0xA6 stores it at +26 in its compact
-    // ornament; other formats return -1. See ENCORE_FORMAT.md §8.2 Ornament subtypes.
+    // Element-relative offset of a STAFFTEXT ornament's TEXT-entry index (tind), or -1 to use the
+    // size-based location read inline. v0xA6 stores it at +28 in its compact ornament; other
+    // formats return -1. See ENCORE_FORMAT.md §6.8 Ornament.
     virtual int staffTextTindOffset() const { return -1; }
 
-    // Byte offset of a STAFFTEXT ornament's vertical placement value (signed Cartesian y, positive =
-    // above, negative = below) measured from the type/voice byte, or -1 to use the offset read inline.
-    // v0xA6 stores it at +6 in its compact ornament; other formats return -1. See ENCORE_FORMAT.md
-    // §Ornament subtypes.
-    virtual int staffTextYoffsetOffset() const { return -1; }
+    // Element-relative offset of the ornament's vertical placement, stored as a signed byte
+    // (positive = above the staff, negative = below), or -1 when the format keeps it in the inline
+    // s16 slot. v0xA6 stores it at +9 in its compact ornament and it applies to every subtype, not
+    // only to staff text. See ENCORE_FORMAT.md §6.8 Ornament.
+    virtual int ornamentYoffsetOffset() const { return -1; }
 
-    // An ornament subtype in the vocabulary the rest of the importer speaks. Encore 4.0 renumbered
+    // Element-relative offset of the ornament's forward measure count (spanner endpoint), or -1
+    // when the format keeps it in the inline slot. v0xA6 stores it at +14. See ENCORE_FORMAT.md.
+    virtual int ornamentMeasureCountOffset() const { return -1; }
+
+    // An ornament subtype in the vocabulary the rest of the importer speaks. Format 3.07 renumbered
     // part of the articulation block, so a file older than format 3.07 states those subtypes six
     // higher and they reach the emitters as codes nothing recognises.
     // See ENCORE_FORMAT.md §8.2 Ornament subtypes.

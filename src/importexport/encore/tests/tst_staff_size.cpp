@@ -87,3 +87,38 @@ TEST_F(Tst_StaffSize, enc4x_line_staff_size_hint_size3_sets_100pct)
         << "Encore 4.x: byte[13]=2 in LINE staff entry must yield 100% scale, got " << mag * 100 << "%";
     delete score;
 }
+
+// The header byte at 0x8D is the last resort for this generation, used when the staff entries say
+// nothing: here they carry 0 and the header carries 1, and both mean 60%.
+// See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
+// Regression guard: size=1 must yield 60% (importer previously fell back to the default 130%).
+TEST_F(Tst_StaffSize, v0xa6_global_staff_size_from_header_0x8d)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_score_size.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load structure_v0xa6_score_size.enc";
+    ASSERT_GE(score->staves().size(), size_t(2));
+    const double mag0 = score->staff(0)->staffType(mu::engraving::Fraction(0, 1))->userMag();
+    const double mag1 = score->staff(1)->staffType(mu::engraving::Fraction(0, 1))->userMag();
+    EXPECT_NEAR(mag0, 0.60, 1e-6) << "v0xA6 size=1 (header 0x8D) must yield 60%, got " << mag0 * 100 << "%";
+    EXPECT_NEAR(mag1, 0.60, 1e-6) << "v0xA6 size=1 (header 0x8D) must yield 60%, got " << mag1 * 100 << "%";
+    delete score;
+}
+
+// The 22-byte staff entry of this generation opens with the same 0-indexed size selector the later
+// 30-byte one keeps at +13, so the size is per staff here too, not one value for the whole score.
+// The fixture carries 0, 1, 2 and 3 in the entries against a header byte of 1, and the entries win.
+// See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
+TEST_F(Tst_StaffSize, v0xa6_per_staff_size_from_line_entry)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_per_staff_size.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load structure_v0xa6_per_staff_size.enc";
+    ASSERT_GE(score->staves().size(), size_t(4));
+    const double expected[4] = { 0.60, 0.75, 1.00, 1.30 };
+    for (size_t i = 0; i < 4; ++i) {
+        const double mag = score->staff(i)->staffType(mu::engraving::Fraction(0, 1))->userMag();
+        EXPECT_NEAR(mag, expected[i], 1e-6)
+            << "v0xA6 staff " << i << " must take size " << i << " from its LINE entry, got "
+            << mag * 100 << "%";
+    }
+    delete score;
+}

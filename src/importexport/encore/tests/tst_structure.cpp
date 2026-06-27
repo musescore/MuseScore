@@ -49,6 +49,8 @@
 #include "engraving/dom/clef.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/tie.h"
+
+#include "importexport/encore/internal/parser/readers.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
@@ -176,6 +178,42 @@ TEST_F(Tst_Structure, key_sig_no_accidentals)
     ASSERT_NE(st, nullptr);
     Key k = st->key(Fraction(0, 1));
     EXPECT_EQ(int(k), 0) << "bazo.enc should be in C major (0 accidentals)";
+    delete score;
+}
+
+// v0xA6 stores the key signature in the LINE staff entry, not where v0xC2/C4 keep it, and its
+// staffPerSystem reads 0; the key must still be read (A major = 3 sharps on every staff), not lost.
+// See ENCORE_FORMAT.md §5.2 System block (LINE).
+TEST_F(Tst_Structure, key_sig_v0xa6_from_line_entry)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_key_signature.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GT(score->nstaves(), 0u);
+    for (size_t i = 0; i < score->nstaves(); ++i) {
+        Staff* st = score->staff(i);
+        ASSERT_NE(st, nullptr);
+        EXPECT_EQ(int(st->key(Fraction(0, 1))), 3)
+            << "v0xA6 staff " << i << " must import A major (3 sharps) from LINE entry offset 14";
+    }
+    delete score;
+}
+
+// The same 22-byte staff entry carries the clef one byte before the key. It was never read, so
+// every staff of every Encore 2.x and MusicTime file opened in the treble clef its instrument
+// template happened to default to, whatever Encore drew. G, F and C on the fourth line here.
+// See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
+TEST_F(Tst_Structure, clefs_v0xa6_from_line_entry)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_staff_clefs.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(score->nstaves(), 3u);
+    const ClefType expected[3] = { ClefType::G, ClefType::F, ClefType::C4 };
+    for (size_t i = 0; i < 3; ++i) {
+        Staff* st = score->staff(i);
+        ASSERT_NE(st, nullptr);
+        EXPECT_EQ(st->clef(Fraction(0, 1)), expected[i])
+            << "v0xA6 staff " << i << " must take its clef from the LINE staff entry";
+    }
     delete score;
 }
 
@@ -540,6 +578,40 @@ TEST_F(Tst_Structure, element_family_reads_the_same_in_every_generation)
     delete crossed;
 }
 
+// ===========================================================================
+// The header carries a file format version at 0x28, BCD with the major digit in the high byte, and
+// it is the only version indicator there. Because the values are ordered, a version byte this build
+// does not know still lands on the right layout: the reader is chosen by the highest known format
+// the file is not older than, rather than defaulting to the newest one.
+// See ENCORE_FORMAT.md §1.5 The version byte, and where it disagrees.
+TEST(Tst_EncoreFormatReader, unknown_version_byte_falls_back_on_the_format_version)
+{
+    using namespace mu::iex::enc;
+
+    // A known version byte is unaffected; the format version still picks the body layout.
+    auto encore3 = EncFormatReader::create(0xC2, "SCOW", ENC_FORMAT_3_05);
+    EXPECT_STREQ(encore3->formatName(), "v0xC2");
+    EXPECT_EQ(encore3->elementBodyShift(), -2) << "format 3.05 predates the Encore 4.0 body layout";
+
+    auto encore4 = EncFormatReader::create(0xC2, "SCOW", ENC_FORMAT_3_07);
+    EXPECT_EQ(encore4->elementBodyShift(), 0) << "format 3.07 already has the later body layout";
+
+    // An unrecognised version byte reads as the newest format it is not older than.
+    auto oldUnknown = EncFormatReader::create(0x99, "SCOW", ENC_FORMAT_2_50);
+    EXPECT_EQ(oldUnknown->headerEnd(), 0xA6) << "format 2.50 keeps the compact header";
+
+    auto midUnknown = EncFormatReader::create(0x99, "SCOW", ENC_FORMAT_3_05);
+    EXPECT_EQ(midUnknown->headerEnd(), 0xC2);
+    EXPECT_EQ(midUnknown->elementBodyShift(), -2);
+
+    // A format newer than anything known reads as the newest known one, not as a compact header.
+    auto future = EncFormatReader::create(0x99, "SCOW", 0x0500);
+    EXPECT_STREQ(future->formatName(), "v0xC4");
+    EXPECT_EQ(future->elementBodyShift(), 0);
+
+    EXPECT_EQ(encFormatVersionString(ENC_FORMAT_3_07), QString("3.07"));
+    EXPECT_EQ(encFormatVersionString(ENC_FORMAT_4_20), QString("4.20"));
+}
 
 TEST_F(Tst_Structure, old_format_v0c2_triplets_detected)
 {
@@ -1142,6 +1214,27 @@ TEST_F(Tst_Structure, malformed_truncated_at_byte_boundaries_does_not_crash)
     setRootDir(ENC_DIR);
 }
 
+// Hostile but structurally complete fixtures: a zero tuplet nibble (zero-term ratio), an out-of-range
+// staff index, an out-of-range voice nibble, and a zero-size element (advance-by-one guard). Each must
+// import without crashing and produce a score that passes sanityCheck (garbage is dropped, not emitted).
+TEST_F(Tst_Structure, hostile_fixtures_import_and_pass_sanity_check)
+{
+    static const char* kHostileFixtures[] = {
+        "structure_grandstaff_wedge_out_of_range_voice.enc",
+        "structure_hostile_zero_tuplet_nibble.enc",
+        "structure_hostile_out_of_range_staff.enc",
+        "structure_hostile_out_of_range_voice.enc",
+        "structure_hostile_zero_size_element.enc",
+    };
+    for (const char* name : kHostileFixtures) {
+        MasterScore* score = readEncoreScore(name);
+        ASSERT_NE(score, nullptr) << "hostile fixture should import to a bounded score: " << name;
+        muse::Ret ret = score->sanityCheck();
+        EXPECT_TRUE(ret) << name << " should pass sanityCheck: " << ret.text();
+        delete score;
+    }
+}
+
 TEST_F(Tst_Structure, malformed_truncated_at_block_boundaries_does_not_crash)
 {
     // Cut a known-good file a few bytes past each 4-char block magic (SCOW/TK00/PAGE/LINE/MEAS/PREC/
@@ -1174,6 +1267,30 @@ TEST_F(Tst_Structure, malformed_truncated_at_block_boundaries_does_not_crash)
             f.close();
             delete readEncoreScore(name);
         }
+    }
+
+    setRootDir(ENC_DIR);
+}
+
+TEST_F(Tst_Structure, malformed_v0xa6_truncation_does_not_crash)
+{
+    // v0xA6 (Encore 2.x) uses fixed-offset absolute seeks; a prefix cut must exercise those bounds
+    // checks. Every truncation must import (null or bounded score) without crashing.
+    const QByteArray good = readFixtureBytes("structure_v0xa6_basic.enc");
+    ASSERT_GT(good.size(), 0);
+
+    QTemporaryDir tmp;
+    ASSERT_TRUE(tmp.isValid());
+    setRootDir(tmp.path());
+
+    // Dense in the header/absolute-seek region (first 512 bytes), coarse thereafter to keep runtime low.
+    for (int len = 0; len <= good.size(); len += (len < 512 ? 8 : 256)) {
+        const QString name = QString("trunc_a6_%1.enc").arg(len);
+        QFile f(tmp.path() + "/" + name);
+        ASSERT_TRUE(f.open(QIODevice::WriteOnly));
+        f.write(good.left(len));
+        f.close();
+        delete readEncoreScore(name);
     }
 
     setRootDir(ENC_DIR);

@@ -23,6 +23,7 @@
 // Read ORNAMENT elements (slurs, wedges, staff text, etc.): geometry, spanning measure counts, tind.
 
 #include "elem-ornament.h"
+#include "readers.h"
 
 namespace mu::iex::enc {
 bool EncOrnament::read(QDataStream& ds)
@@ -30,7 +31,7 @@ bool EncOrnament::read(QDataStream& ds)
     const qint64 elemPos = ds.device()->pos();   // first byte after the type/voice byte; see ENCORE_FORMAT.md §8.2 Ornament subtypes
     EncMeasureElem::read(ds);
     ds >> tipo;
-    // Everything from +8 onward moved two bytes later in Encore 4.0; bodyShift folds the older
+    // Everything from +8 onward moved two bytes later at format 3.07; bodyShift folds the older
     // layout into this one read. See ENCORE_FORMAT.md §6.8 Ornament.
     ds.skipRawData(4 + bodyShift);
     ds >> xoffset;
@@ -50,7 +51,7 @@ bool EncOrnament::read(QDataStream& ds)
     ds.skipRawData(1);
     ds >> tempo;
     // The text index has its own slot only in a long enough element; otherwise it shares the tempo
-    // byte. The threshold moves with the body layout, so a pre-4.0 size-32 staff text still reaches
+    // byte. The threshold moves with the body layout, so a pre-3.07 size-32 staff text still reaches
     // its own slot. See ENCORE_FORMAT.md §8.2 Ornament subtypes.
     if (static_cast<int>(size) >= 33 + bodyShift) {
         ds.skipRawData(1);
@@ -58,23 +59,16 @@ bool EncOrnament::read(QDataStream& ds)
     } else {
         tind = tempo;
     }
-    // Compact v0xA6 STAFFTEXT stores tind at a fixed offset from the type/voice byte instead;
-    // scope the seek to STAFFTEXT and to the device so an unrelated ornament near EOF cannot desync.
+    // The compact ornament keeps these three elsewhere. See ENCORE_FORMAT.md §6.8 Ornament.
+    const qint64 elemStart = elemPos - 3;   // elemPos sits just past the type/voice byte, at +3
     if (tindOffset >= 0 && ornType() == EncOrnamentType::STAFFTEXT) {
-        const qint64 tindPos = elemPos - 1 + tindOffset;
-        if (tindPos >= 0 && tindPos < ds.device()->size()) {
-            ds.device()->seek(tindPos);
-            ds >> tind;
-        }
+        tind = byteAt(ds, elemStart + tindOffset);
     }
-    // Same story for the placement y of compact v0xA6 STAFFTEXT: fixed offset, so the inline read
-    // above landed on an unrelated byte. Same scoping as tind.
-    if (yoffOffset >= 0 && ornType() == EncOrnamentType::STAFFTEXT) {
-        const qint64 yoffPos = elemPos - 1 + yoffOffset;
-        if (yoffPos >= 0 && yoffPos + 1 < ds.device()->size()) {
-            ds.device()->seek(yoffPos);
-            ds >> yoffset;
-        }
+    if (yByteOffset >= 0) {
+        yoffset = static_cast<qint8>(byteAt(ds, elemStart + yByteOffset));
+    }
+    if (measCountOffset >= 0) {
+        alMezuro = byteAt(ds, elemStart + measCountOffset);
     }
     // No trailing skip: the element loop reseeks to the element end after read().
     return true;

@@ -92,7 +92,7 @@ bool EncLineStaffData::read(QDataStream& ds)
 {
     // 30-byte staff entry; byte offsets and field meanings in ENCORE_FORMAT.md §5.2 System block (LINE).
     ds.skipRawData(13);                         // bytes 0-12: visual layout
-    ds >> staffSizeHint;                        // byte 13: display size (0=60% .. 3=100%)
+    ds >> staffSizeHint;                        // byte 13: display size (0=60%, 1=75%, 2=100%, 3=130%)
     qint8 ct;
     ds >> ct;                                   // byte 14: clef type
     clef = static_cast<EncClefType>(ct);

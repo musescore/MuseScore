@@ -232,13 +232,29 @@ void buildInitialSignatures(BuildCtx& ctx)
         }
 
         // v0xA6: staffData is empty (its header staffPerSystem reads 0 and the staff entry
-        // layout differs), so the loop above adds no key signature. The per-staff written
-        // key was parsed separately into staffKeys; apply it here. Clefs still come from the
-        // instrument template, handled by the !haveLineClefs block below.
+        // layout differs), so the loop above adds neither key nor clef. Both were parsed out of
+        // the 22-byte staff entries into staffKeys and staffClefs; apply them here.
         if (firstLine.staffData.empty() && !firstLine.staffKeys.empty()) {
             for (int si = 0; si < ctx.totalStaves; ++si) {
                 const size_t ki = std::min(static_cast<size_t>(si), firstLine.staffKeys.size() - 1);
                 addInitialKeySig(score, si, firstLine.staffKeys[ki]);
+            }
+        }
+        if (firstLine.staffData.empty() && !firstLine.staffClefs.empty()) {
+            for (int si = 0; si < ctx.totalStaves; ++si) {
+                const size_t ci = std::min(static_cast<size_t>(si), firstLine.staffClefs.size() - 1);
+                const int keyOffset = si < static_cast<int>(ctx.staffPitchOffset.size())
+                                      ? ctx.staffPitchOffset[si] : 0;
+                // Same rule as the staffData path: a drumset staff keeps its percussion clef
+                // whatever the entry says. A file can write a drum part on an ordinary staff with
+                // an ordinary clef, but once the part carries a drum map the vertical position of
+                // a note is an instrument and not a pitch, and a G clef there says otherwise.
+                const Staff* st = score->staff(static_cast<staff_idx_t>(si));
+                const bool hasDrumset = st && st->part() && st->part()->instrument()
+                                        && st->part()->instrument()->drumset();
+                const ClefType ct = hasDrumset ? ClefType::PERC
+                                    : pickStaffClef(firstLine.staffClefs[ci], keyOffset);
+                addInitialClef(score, si, ct);
             }
         }
     }
@@ -247,7 +263,8 @@ void buildInitialSignatures(BuildCtx& ctx)
     // instrument template, which does not reflect an octave Key. The note pitches are already
     // octave-shifted by the Key, so apply the matching octave-decorated clef to bring the
     // display back to the written octave, mirroring what pickStaffClef does for v0xC4.
-    const bool haveLineClefs = !enc.lines.empty() && !enc.lines[0].staffData.empty();
+    const bool haveLineClefs = !enc.lines.empty()
+                               && (!enc.lines[0].staffData.empty() || !enc.lines[0].staffClefs.empty());
     if (!haveLineClefs) {
         for (int si = 0; si < ctx.totalStaves; ++si) {
             const int keyOffset = si < static_cast<int>(ctx.staffPitchOffset.size())
