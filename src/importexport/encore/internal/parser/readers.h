@@ -40,13 +40,11 @@ struct EncInstrument;
 struct EncRoot;
 struct EncLine;
 
-// File format versions, from header 0x28. The field is BCD with the major digit in the high byte
-// and the minor in the low, so the values compare in release order and an unseen one sorts into
-// place. It is the only version indicator the header carries: no date, no build stamp.
-// See ENCORE_FORMAT.md §1.3 The four generations.
+// Format version from header 0x28, BCD so the values compare in release order and an unseen one
+// sorts into place. See ENCORE_FORMAT.md §1.3.
 inline constexpr quint16 ENC_FORMAT_2_50 = 0x0250;   // Encore 2.x
 inline constexpr quint16 ENC_FORMAT_3_05 = 0x0305;   // Encore 3.x
-inline constexpr quint16 ENC_FORMAT_3_07 = 0x0307;   // Encore 4.0 to 4.2
+inline constexpr quint16 ENC_FORMAT_3_07 = 0x0307;   // the two-byte body shift starts here
 inline constexpr quint16 ENC_FORMAT_4_20 = 0x0420;   // Encore 4.3 through 5.x
 
 // "3.07" for 0x0307, for logging and messages.
@@ -70,17 +68,16 @@ bool isReadableEncoreMagic(const QString& magic);
 // cannot push the element loop past EOF. Pure so it can be unit-tested with synthetic sizes.
 qint64 clampMeasureEnd(qint64 measStart, quint32 varsize, qint64 elemBlockOffset, qint64 deviceSize);
 
-// Phase 1 of duration resolution: set each element's realDuration from the gap to the next event
-// (skipping same-tick chord members and near-simultaneous cluster notes), capping the gap at any
-// boundaryTicks (mid-measure CLEF/KEYCHANGE) and applying v0xA6 grace time-borrowing when enabled.
-// Declared here so the decision core can be unit-tested with synthetic element lists.
+// Phase 1 of duration resolution: realDuration from the gap to the next event. Declared here so the
+// decision core can be unit-tested with synthetic element lists.
 void computeElementDurations(std::vector<EncMeasureElem*>& elems, int durTicks, bool hasGraceTimeBorrowing,
                              const std::vector<qint16>& boundaryTicks = {});
 
 // EncFormatReader: per-format binary parsing strategy. Register a new version in EncFormatReader::create().
 struct EncFormatReader
 {
-    // Byte offset where element block begins in a MEAS block. See ENCORE_FORMAT.md §8.1 Per-generation differences at a glance.
+    // Byte offset where element block begins in a MEAS block. See ENCORE_FORMAT.md §8.1 Per-generation differences at
+    // a glance.
     virtual quint32 elemBlockOffset() const = 0;
 
     // Apply format-specific fixups; return true to drop the element (duplicate suppression).
@@ -112,10 +109,8 @@ struct EncFormatReader
     // See ENCORE_FORMAT.md §8.1 Per-generation differences at a glance for per-version values.
     virtual qint64 headerEnd() const { return 0xC2; }
 
-    // Bytes to add to every element body field from offset +8 onward. Encore 4.0 inserted two
-    // bytes there in every element type, so a file older than format 3.07 needs -2 while every
-    // later generation needs 0. Fields at +5, +6 and +7 never move.
-    // See ENCORE_FORMAT.md §1.3 The four generations.
+    // Added to every body field from +8 on: -2 before format 3.07, which inserted two bytes there.
+    // Fields at +5, +6 and +7 never move. See ENCORE_FORMAT.md §1.3.
     virtual int elementBodyShift() const { return 0; }
 
     // Read MIDI program, Key, and name metadata stored outside TK blocks.
@@ -146,13 +141,11 @@ struct EncFormatReader
                                     QDataStream& /*ds*/,
                                     qint64 /*contentStart*/) const {}
 
-    // Reads per-staff written key indices from a LINE block into EncLine::staffKeys.
-    // v0xA6 stores them in its 22-byte staff entries; other formats fill staffData during
-    // EncLine::read and leave staffKeys empty. The override seeks within the stream and must
-    // restore the position before returning. See ENCORE_FORMAT.md §5.2 System block (LINE), Format 2.50 systems.
-    virtual void readLineStaffKeys(EncLine& /*line*/,
-                                   QDataStream& /*ds*/,
-                                   qint64 /*lineContentStart*/) const {}
+    // Per-staff key, clef and size for the generations EncLine::read cannot walk; the override seeks
+    // and must restore the stream position. See ENCORE_FORMAT.md §5.2.
+    virtual void readLineStaffEntries(EncLine& /*line*/,
+                                      QDataStream& /*ds*/,
+                                      qint64 /*lineContentStart*/) const {}
 
     // Maps this generation's notehead vocabulary onto the one 6.4 lists. The high nibble of the
     // face value names a notehead, and the generations do not name them alike, just as they do not
@@ -168,20 +161,17 @@ struct EncFormatReader
     // preferred over MuseScore's A4-tuned defaults. SCO5 (macOS Encore 5) only.
     virtual bool usesUniformPageMargins() const { return false; }
 
-    // Format capability queries, see ENCORE_FORMAT.md §8.1 Per-generation differences at a glance for per-version details.
+    // Format capability queries, see ENCORE_FORMAT.md §8.1 Per-generation differences at a glance for per-version
+    // details.
     virtual bool hasGraceTimeBorrowing() const { return false; }  // v0xA6: grace borrows rdur from next note
     virtual const char* formatName() const { return "v0xC4"; }    // for logging
 
-    // True when a chord's notes are recorded with staggered playback ticks (a per-chord "strum")
-    // but share one notated horizontal column (the note xoffset byte). When set, a run of notes
-    // sharing the same nonzero xoffset and face value is collapsed to one tick before duration
-    // computation so they form a single chord. See ENCORE_FORMAT.md §7.7 The chord column.
+    // Notes of one chord recorded at staggered ticks but in one column; the run is collapsed to a single
+    // tick before durations. See ENCORE_FORMAT.md §7.7.
     virtual bool clustersChordsByXoffset() const { return false; }
 
-    // Called once per (staffIdx, voice) element group after computeElementDurations().
-    // Override to perform format-specific per-voice post-processing:
-    //   v0xA6: marks inner-grace notes (isInnerGrace)
-    //   v0xC2: fixes dotted-eighth placement and marks implied tuplet members
+    // Per-voice hook after computeElementDurations: v0xA6 marks inner graces, v0xC2 fixes dotted
+    // eighths and marks implied tuplet members.
     virtual void postProcessVoiceGroup(std::vector<EncMeasureElem*>& /*elems*/,
                                        qint16 /*durTicks*/) const {}
     // Bytes to skip between kie (byte +10) and text. v0xC4=9 (text at +20), v0xC2=7 (text at +18).
@@ -196,36 +186,32 @@ struct EncFormatReader
     // header precedes the text); v0xA6 uses 0 (text starts at the entry). See ENCORE_FORMAT.md §5.5 Text block.
     virtual quint8 textBlockEntryTextOffset() const { return 14; }
 
-    // True when a TEXT-block entry begins with Encore's rich-text run header: a uint16 run count,
-    // a flags word, a run-offset table (run count * uint32), then a 6-byte descriptor before the
-    // text. The text offset is then variable (14 is only the single-run case). v0xA6 has no such
-    // header. See ENCORE_FORMAT.md §5.5 Text block.
+    // A TEXT entry that opens with Encore's rich-text run header, which makes the text offset variable.
+    // See ENCORE_FORMAT.md §5.5.
     virtual bool textBlockEntryHasRunHeader() const { return true; }
 
-    // Byte offset of a STAFFTEXT ornament's TEXT-entry index (tind) measured from the type/voice
-    // byte, or -1 to use the size-based location read inline. v0xA6 stores it at +26 in its compact
-    // ornament; other formats return -1. See ENCORE_FORMAT.md §8.2 Ornament subtypes.
+    // Element-relative offset of a STAFFTEXT ornament's TEXT-entry index (tind), or -1 to use the
+    // size-based location read inline. v0xA6 stores it at +28 in its compact ornament; other
+    // formats return -1. See ENCORE_FORMAT.md §6.8 Ornament.
     virtual int staffTextTindOffset() const { return -1; }
 
-    // Byte offset of a STAFFTEXT ornament's vertical placement value (signed Cartesian y, positive =
-    // above, negative = below) measured from the type/voice byte, or -1 to use the offset read inline.
-    // v0xA6 stores it at +6 in its compact ornament; other formats return -1. See ENCORE_FORMAT.md
-    // §Ornament subtypes.
-    virtual int staffTextYoffsetOffset() const { return -1; }
+    // Element-relative offset of the ornament's vertical placement, or -1 when the format keeps it in
+    // the inline s16 slot. See ENCORE_FORMAT.md §6.8.
+    virtual int ornamentYoffsetOffset() const { return -1; }
 
-    // An ornament subtype in the vocabulary the rest of the importer speaks. Encore 4.0 renumbered
-    // part of the articulation block, so a file older than format 3.07 states those subtypes six
-    // higher and they reach the emitters as codes nothing recognises.
-    // See ENCORE_FORMAT.md §8.2 Ornament subtypes.
+    // Element-relative offset of the ornament's forward measure count (spanner endpoint), or -1
+    // when the format keeps it in the inline slot. v0xA6 stores it at +14. See ENCORE_FORMAT.md.
+    virtual int ornamentMeasureCountOffset() const { return -1; }
+
+    // Subtypes into the one vocabulary the importer speaks: before format 3.07 part of the articulation
+    // block is stated six higher. See ENCORE_FORMAT.md §8.2.
     virtual quint8 normalizeOrnamentSubtype(quint8 subtype) const { return subtype; }
 
     virtual ~EncFormatReader() = default;
 
-    // Factory: returns the reader for the file. The 4-char magic string is needed because some
-    // formats are not distinguished by chuMagio (SCO5/macOS Encore 5 shares the v0xC4 format but
-    // does not carry chuMagio 0xC4). formatVersion is the file format version at header 0x28; it
-    // selects the element body layout, which the version byte alone does not identify, and it is
-    // what an unrecognised version byte falls back on. See create() in readers.cpp.
+    // The reader for the file. The magic is needed because SCO5 shares the v0xC4 layout without
+    // carrying its version byte; formatVersion selects the body layout, which the version byte alone
+    // does not identify.
     static std::unique_ptr<EncFormatReader> create(quint8 chuMagio, const QString& magic, quint16 formatVersion);
 };
 } // namespace mu::iex::enc

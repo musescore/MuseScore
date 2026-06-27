@@ -40,12 +40,12 @@ struct EncOrnament : EncMeasureElem {
     quint8 noto      { 0 };
     quint8 tempo     { 0 };
     quint8 tind      { 0 };
-    // Byte offset of tind from the type/voice byte, or -1 to read it inline by size. Set from
-    // EncFormatReader::staffTextTindOffset(); v0xA6's compact ornament stores tind at +26.
-    int tindOffset  { -1 };
-    // Byte offset of yoffset from the type/voice byte, or -1 to read it inline. Set from
-    // EncFormatReader::staffTextYoffsetOffset(); v0xA6's compact ornament stores it at +6.
-    int yoffOffset  { -1 };
+    // Element-relative offsets for formats whose ornament does not follow the v0xC4 field order;
+    // -1 means read the field inline. All three are set from EncFormatReader before read().
+    // v0xA6's compact ornament uses all of them. See ENCORE_FORMAT.md §6.8 Ornament.
+    int tindOffset      { -1 };   // staff-text TEXT index
+    int yByteOffset     { -1 };   // y as a signed byte, every subtype
+    int measCountOffset { -1 };   // forward measure count, every subtype
 
     using EncMeasureElem::EncMeasureElem;
 

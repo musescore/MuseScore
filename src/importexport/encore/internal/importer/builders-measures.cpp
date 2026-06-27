@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Build MuseScore measures from EncMeasure data: time signatures, barlines, multi-measure-rest expansion, and initial clefs/keys.
+// Build MuseScore measures from EncMeasure data: time signatures, barlines, multi-measure-rest expansion, and initial
+// clefs/keys.
 
 #include "builders.h"
 #include "ctx.h"
@@ -47,10 +48,8 @@
 using namespace mu::engraving;
 
 namespace mu::iex::enc {
-// The number of empty measures Encore collapsed into this block (byte +15 of a REST element), or 0
-// when the block is not an empty multi-measure rest. The block may carry companion elements on the
-// empty span (a key change, a clef); only pitched notes/chords disqualify it. Consecutive empty
-// groups are genuinely separate blocks with their own counts, so each expands independently.
+// Empty measures Encore collapsed into this block, or 0. Companion elements on the span are allowed;
+// only pitched notes disqualify it, and consecutive groups expand independently.
 static int encMeasMultiRestCount(const EncMeasure& m)
 {
     int maxMrest = 0;
@@ -137,7 +136,7 @@ void buildMeasures(BuildCtx& ctx)
         ctx.encToMsIdx.push_back(msIdxCounter);
 
         for (int di = 0; di < displayCount; ++di) {
-            Measure* measure = Factory::createMeasure(score->dummy()->system());
+            Measure* measure = Factory::createMeasure(score);
             measure->setTick(Fraction::fromTicks(currentTick));
 
             // Case A: timeSig[0] != timeSig[1], pickup with explicit shorter sig; shorten now.
@@ -158,10 +157,8 @@ void buildMeasures(BuildCtx& ctx)
                 if (encMeas.startBarline() == EncBarlineType::REPEATSTART) {
                     measure->setRepeatStart(true);
                 }
-                // A non-repeat special barline drawn at a measure's START (e.g. a double bar
-                // before this measure) belongs, in MuseScore's model, to the end of the
-                // previous measure. Encore stores it as this measure's startBarline; map it
-                // onto the preceding measure's end barline so the divider is not dropped.
+                // MuseScore keeps a divider at the end of the previous measure, while Encore stores it as this
+                // measure's start barline, so move it back or it is dropped.
                 if (encMeas.startBarline() == EncBarlineType::DOUBLEL
                     || encMeas.startBarline() == EncBarlineType::DOUBLER
                     || encMeas.startBarline() == EncBarlineType::DOTTED) {
@@ -232,22 +229,35 @@ void buildInitialSignatures(BuildCtx& ctx)
         }
 
         // v0xA6: staffData is empty (its header staffPerSystem reads 0 and the staff entry
-        // layout differs), so the loop above adds no key signature. The per-staff written
-        // key was parsed separately into staffKeys; apply it here. Clefs still come from the
-        // instrument template, handled by the !haveLineClefs block below.
+        // layout differs), so the loop above adds neither key nor clef. Both were parsed out of
+        // the 22-byte staff entries into staffKeys and staffClefs; apply them here.
         if (firstLine.staffData.empty() && !firstLine.staffKeys.empty()) {
             for (int si = 0; si < ctx.totalStaves; ++si) {
                 const size_t ki = std::min(static_cast<size_t>(si), firstLine.staffKeys.size() - 1);
                 addInitialKeySig(score, si, firstLine.staffKeys[ki]);
             }
         }
+        if (firstLine.staffData.empty() && !firstLine.staffClefs.empty()) {
+            for (int si = 0; si < ctx.totalStaves; ++si) {
+                const size_t ci = std::min(static_cast<size_t>(si), firstLine.staffClefs.size() - 1);
+                const int keyOffset = si < static_cast<int>(ctx.staffPitchOffset.size())
+                                      ? ctx.staffPitchOffset[si] : 0;
+                // A drumset staff keeps its percussion clef whatever the entry says: once the part carries a drum map
+                // a note's vertical position is an instrument, and a G clef there says otherwise.
+                const Staff* st = score->staff(static_cast<staff_idx_t>(si));
+                const bool hasDrumset = st && st->part() && st->part()->instrument()
+                                        && st->part()->instrument()->drumset();
+                const ClefType ct = hasDrumset ? ClefType::PERC
+                                    : pickStaffClef(firstLine.staffClefs[ci], keyOffset);
+                addInitialClef(score, si, ct);
+            }
+        }
     }
 
-    // Files without per-staff LINE clef data (v0xA6): the initial clef comes from the
-    // instrument template, which does not reflect an octave Key. The note pitches are already
-    // octave-shifted by the Key, so apply the matching octave-decorated clef to bring the
-    // display back to the written octave, mirroring what pickStaffClef does for v0xC4.
-    const bool haveLineClefs = !enc.lines.empty() && !enc.lines[0].staffData.empty();
+    // Without per-staff clef data the clef comes from the template, which knows nothing of an octave key,
+    // while the pitches are already shifted; so decorate the clef to bring the display back.
+    const bool haveLineClefs = !enc.lines.empty()
+                               && (!enc.lines[0].staffData.empty() || !enc.lines[0].staffClefs.empty());
     if (!haveLineClefs) {
         for (int si = 0; si < ctx.totalStaves; ++si) {
             const int keyOffset = si < static_cast<int>(ctx.staffPitchOffset.size())
