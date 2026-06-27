@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <cmath>
 #include <memory>
 
 #include "async/asyncable.h"
@@ -515,7 +516,7 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
 {
     // [GIVEN] Score with piano marking at the start, then crescendo to forte,
     //         then again crescendo, followed by sudden pianissimo
-    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dynamics/dynamics.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dynamics/dynamics.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -528,6 +529,9 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
 
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
@@ -553,13 +557,14 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION), piano);
 
     // Gradually grow to forte after that
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 4312);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 4313);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24), 4375);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), piano + (forte - piano) * 3 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24),
+              static_cast<dynamic_level_t>(std::lround(piano + (forte - piano) * 3.0 / 24)));
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 4687);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 8 / 24), piano + (forte - piano) * 8 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24), 5187);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24), 5562);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24), 5188);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24), 5563);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), piano + (forte - piano) * 22 / 24);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 5687);
 
@@ -570,15 +575,15 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION), forte);
 
     // Gradually grow louder than forte after that
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 1) / 480.0 * QUARTER_NOTE_DURATION), 5770);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 1) / 480.0 * QUARTER_NOTE_DURATION), 5771);
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 2) / 480.0 * QUARTER_NOTE_DURATION),
-              forte + (fortePlusSomething - forte) * 2 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 3) / 480.0 * QUARTER_NOTE_DURATION), 5812);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 7) / 480.0 * QUARTER_NOTE_DURATION), 5895);
+              static_cast<dynamic_level_t>(std::lround(forte + (fortePlusSomething - forte) * 2.0 / 24)));
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 3) / 480.0 * QUARTER_NOTE_DURATION), 5813);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 7) / 480.0 * QUARTER_NOTE_DURATION), 5896);
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 15) / 480.0 * QUARTER_NOTE_DURATION),
-              forte + (fortePlusSomething - forte) * 15 / 24);
+              static_cast<dynamic_level_t>(std::lround(forte + (fortePlusSomething - forte) * 15.0 / 24)));
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 21) / 480.0 * QUARTER_NOTE_DURATION),
-              forte + (fortePlusSomething - forte) * 21 / 24);
+              static_cast<dynamic_level_t>(std::lround(forte + (fortePlusSomething - forte) * 21.0 / 24)));
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 22) / 480.0 * QUARTER_NOTE_DURATION), 6208);
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 23) / 480.0 * QUARTER_NOTE_DURATION), 6229);
 
@@ -590,6 +595,8 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
 
     // That should be the last event
     EXPECT_EQ(std::prev(dynamicLevelMap.cend())->first, 16 * QUARTER_NOTE_DURATION);
+
+    delete score;
 }
 
 /**
@@ -1198,7 +1205,7 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
 TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Score* score = ScoreRW::readScore(
+    MasterScore* score = ScoreRW::readScore(
         PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
@@ -1224,6 +1231,9 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     const Note* firstNote = chord->notes().front();
     mpe::timestamp_t firstNoteTimestamp = 0;
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
@@ -1260,6 +1270,8 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [WHEN] User has clicked on the first note
     model.triggerEventsForItems({ firstNote }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
+
+    delete score;
 }
 
 /**

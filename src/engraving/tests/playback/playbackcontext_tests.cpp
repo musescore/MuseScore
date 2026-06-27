@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <cmath>
+
 #include "utils/scorerw.h"
 
 #include "engraving/dom/part.h"
@@ -40,8 +42,7 @@ using namespace muse;
 
 static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playback/playbackcontext_data/");
 
-static constexpr int HAIRPIN_STEPS = 24;
-static constexpr int COMPOUND_DYNAMIC_STEPS = 6;
+static constexpr int STEPS_COUNT = 24;
 static constexpr int TICKS_STEP = 480;
 
 class Engraving_PlaybackContextTests : public ::testing::Test
@@ -54,13 +55,16 @@ class Engraving_PlaybackContextTests : public ::testing::Test
 TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 {
     // [GIVEN] Score with hairpins and repeats
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/hairpins_and_repeats.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/hairpins_and_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
 
     const RepeatList& repeats = score->repeatList();
     ASSERT_EQ(repeats.size(), 2);
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -75,21 +79,21 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
 
-    const std::map<int, int> p_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - p),
-                                                                    ChangeMethod::NORMAL);
+    const std::map<int, double> p_to_f_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(f - p),
+                                                                       ChangeMethod::NORMAL);
 
     for (const auto& pair : p_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
         ASSERT_FALSE(expectedDynamics.contains(time));
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
 
     // [GIVEN] 2nd hairpin (inside the repeat): f -> fff
     constexpr mpe::dynamic_level_t fff = dynamicLevelFromType(mpe::DynamicType::fff);
     constexpr int f_to_fff_startTick = 1920;
 
-    const std::map<int, int> f_to_fff_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(fff - f),
-                                                                      ChangeMethod::NORMAL);
+    const std::map<int, double> f_to_fff_curve = TConv::easingValueCurve(1440, STEPS_COUNT, static_cast<double>(fff - f),
+                                                                         ChangeMethod::NORMAL);
 
     for (const mu::engraving::RepeatSegment* repeatSegment : repeats) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -102,7 +106,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
                 ASSERT_FALSE(expectedDynamics.contains(time));
             }
 
-            expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+            expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
         }
     }
 
@@ -110,19 +114,19 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     constexpr mpe::dynamic_level_t ppp = dynamicLevelFromType(mpe::DynamicType::ppp);
     constexpr int ppp_to_p_startTick = 3840 + 1920; // real tick + repeat tick
 
-    const std::map<int, int> ppp_to_p_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(p - ppp),
-                                                                      ChangeMethod::NORMAL);
+    const std::map<int, double> ppp_to_p_curve = TConv::easingValueCurve(1440, STEPS_COUNT, static_cast<double>(p - ppp),
+                                                                         ChangeMethod::NORMAL);
 
     for (const auto& pair : ppp_to_p_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
         ASSERT_FALSE(expectedDynamics.contains(time));
-        expectedDynamics.emplace(time, ppp + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(ppp + pair.second)));
     }
 
     ASSERT_FALSE(expectedDynamics.empty());
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     EXPECT_FALSE(layers.empty());
@@ -139,10 +143,13 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
 {
     // [GIVEN] Score with 5 measures and 2 instruments. There is a measure repeat on the last 2 measures of the 1st instrument
     // (so the previous 2 measures will be repeated)
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_and_measure_repeats.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_and_measure_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_EQ(parts.size(), 2);
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -172,7 +179,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     };
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     EXPECT_FALSE(layers.empty());
@@ -186,7 +193,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     ctx.update(parts.at(1)->id(), score);
 
     // [WHEN] Get the actual dynamics
-    layers = ctx.dynamicLevelLayers(score);
+    layers = ctx.dynamicLevelLayers();
 
     // [THEN] Measure repeat on the 1st instrument doesn't affect other instruments
     expectedDynamics = {
@@ -203,15 +210,20 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
         const DynamicLevelMap& actualDynamics = layer.second;
         EXPECT_EQ(actualDynamics, expectedDynamics);
     }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
 {
     // [GIVEN]
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_on_voices.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_on_voices.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -221,7 +233,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     DynamicLevelLayers expectedLayers;
@@ -273,10 +285,13 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
 TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
 {
     // [GIVEN]
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_overlap.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_overlap.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -286,7 +301,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -295,11 +310,14 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     constexpr mpe::dynamic_level_t ff = dynamicLevelFromType(mpe::DynamicType::ff);
     constexpr mpe::dynamic_level_t pp = dynamicLevelFromType(mpe::DynamicType::pp);
 
-    const std::map<int, int> ff_to_pp_curve = TConv::easingValueCurve(1920 - Fraction::eps().ticks(),
-                                                                      HAIRPIN_STEPS, static_cast<int>(pp - ff), ChangeMethod::NORMAL);
+    // The automation curve holds { inValue=pp, outValue=ff } at tick 1920; since that's a discontinuity, the
+    // diminuendo's true target (pp) is recorded one tick early (tick 1919), so the ramp's own interval is
+    // shortened by a tick to land on it.
+    const std::map<int, double> ff_to_pp_curve = TConv::easingValueCurve(1919,
+                                                                         STEPS_COUNT, static_cast<double>(pp - ff), ChangeMethod::NORMAL);
     for (const auto& pair : ff_to_pp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        expectedDynamics.emplace(time, ff + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(ff + pair.second)));
     }
 
     // 2nd measure: ff (starts at the 1920 tick)
@@ -310,15 +328,20 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
         const DynamicLevelMap& actualDynamics = layer.second;
         EXPECT_EQ(actualDynamics, expectedDynamics);
     }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
 {
     // [GIVEN]
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_niente.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_niente.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -328,7 +351,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -336,31 +359,31 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
     constexpr mpe::dynamic_level_t n = dynamicLevelFromType(mpe::DynamicType::ppppppppp);
 
-    const std::map<int, int> f_to_n_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(n - f), ChangeMethod::NORMAL);
-    const std::map<int, int> n_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - n), ChangeMethod::NORMAL);
+    const std::map<int, double> f_to_n_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(n - f), ChangeMethod::NORMAL);
+    const std::map<int, double> n_to_f_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(f - n), ChangeMethod::NORMAL);
 
     // 1st measure: Dim. al niente with 'n' dynamic
     for (const auto& pair : f_to_n_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
     // 3rd measure: same, now with niente circle
     for (const auto& pair : f_to_n_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, 3840 + pair.first);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
     // 5th measure: Cresc. dal niente with 'n' dynamic
     for (const auto& pair : n_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, 7680 + pair.first);
-        expectedDynamics.emplace(time, n + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(n + pair.second)));
     }
 
     // 7th measure: same, now with niente circle
     for (const auto& pair : n_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, 11520 + pair.first);
-        expectedDynamics.emplace(time, n + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(n + pair.second)));
     }
 
     EXPECT_FALSE(actualLayers.empty());
@@ -368,15 +391,20 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
         const DynamicLevelMap& actualDynamics = layer.second;
         EXPECT_EQ(actualDynamics, expectedDynamics);
     }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
 {
     // [GIVEN]
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_compound.mscx");
+    MasterScore* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_compound.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
+
+    // [WHEN] Init automation
+    score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
     PlaybackContext ctx;
@@ -386,7 +414,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(score);
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -399,54 +427,59 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     constexpr int compoundDynamicTicks = 384;
 
     // 1st and 2nd measures: fp -> f
-    const std::map<int, int> fp_curve = TConv::easingValueCurve(compoundDynamicTicks, COMPOUND_DYNAMIC_STEPS, static_cast<int>(p - f),
-                                                                ChangeMethod::NORMAL);
-    const std::map<int,
-                   int> p_to_f_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, HAIRPIN_STEPS, static_cast<int>(f - p),
-                                                               ChangeMethod::NORMAL);
+    const std::map<int, double> fp_curve = TConv::easingValueCurve(compoundDynamicTicks, STEPS_COUNT, static_cast<double>(p - f),
+                                                                   ChangeMethod::NORMAL);
+    const std::map<int, double> p_to_f_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, STEPS_COUNT,
+                                                                       static_cast<double>(f - p), ChangeMethod::NORMAL);
 
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 0 * measureTicks);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
     for (const auto& pair : p_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 0 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
 
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 1 * measureTicks);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
     for (const auto& pair : p_to_f_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 1 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
+
+    const std::map<int, double> p_to_pp_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, STEPS_COUNT,
+                                                                        static_cast<double>(pp - p), ChangeMethod::NORMAL);
+
+    // The hairpin's end tick is claimed by the next dynamic marking (fp/f), which contradicts the pp hairpin's
+    // direction; that marking's own value wins there, so the ramp's true target (pp) is instead recorded one
+    // tick early, shortening the ramp's own interval by a tick to land on it.
+    const std::map<int, double> p_to_pp_curve_short = TConv::easingValueCurve(measureTicks - compoundDynamicTicks - 1, STEPS_COUNT,
+                                                                              static_cast<double>(pp - p), ChangeMethod::NORMAL);
 
     // 4th and 5th measures: fp -> pp, then jump back to f
-    const std::map<int, int> p_to_pp_curve_shorted_by_one = TConv::easingValueCurve(measureTicks - compoundDynamicTicks - 1, HAIRPIN_STEPS,
-                                                                                    static_cast<int>(pp - p), ChangeMethod::NORMAL);
-
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 3 * measureTicks);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
-    for (const auto& pair : p_to_pp_curve_shorted_by_one) {
+    for (const auto& pair : p_to_pp_curve_short) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 3 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
 
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 4 * measureTicks);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
-    for (const auto& pair : p_to_pp_curve_shorted_by_one) {
+    for (const auto& pair : p_to_pp_curve_short) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 4 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
 
     {
@@ -455,19 +488,14 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     }
 
     // 7th measure: fp -> pp, now don't jump back to f
-    const std::map<int,
-                   int> p_to_pp_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, HAIRPIN_STEPS,
-                                                                static_cast<int>(pp - p),
-                                                                ChangeMethod::NORMAL);
-
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 6 * measureTicks);
-        expectedDynamics.emplace(time, f + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
     }
 
     for (const auto& pair : p_to_pp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 6 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, p + static_cast<dynamic_level_t>(pair.second));
+        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
     }
 
     EXPECT_FALSE(actualLayers.empty());
@@ -475,6 +503,8 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
         const DynamicLevelMap& actualDynamics = layer.second;
         EXPECT_EQ(actualDynamics, expectedDynamics);
     }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
@@ -492,7 +522,7 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     int maxTick = score->endTick().ticks();
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -539,13 +569,13 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     };
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         std::pair<timestamp_t, PlayingTechniqueType> expectedType = findExpectedType(tick);
         EXPECT_EQ(actualType, expectedType);
     }
 
     // [WHEN] Find position of Damp
-    const timestamp_t actualDampPosition = ctx.findPlayingTechniqueTimestamp(score, PlayingTechniqueType::HandbellsDamp,
+    const timestamp_t actualDampPosition = ctx.findPlayingTechniqueTimestamp(PlayingTechniqueType::HandbellsDamp,
                                                                              ticksPerMeasure * 20);
 
     // [THEN] Position is correct
@@ -556,7 +586,7 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
 
     // [THEN] No technique parsed, returns the "Natural" type
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -601,10 +631,12 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
     };
 
     for (const auto& pair : expectedTypes) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, pair.first);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(pair.first);
         EXPECT_EQ(actualType.first, timestampFromTicks(score, pair.first));
         EXPECT_EQ(actualType.second, pair.second);
     }
+
+    delete score;
 }
 
 TEST_F(Engraving_PlaybackContextTests, SoundFlags_TextArticulations)
@@ -623,7 +655,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_TextArticulations)
     ctx.update(part->id(), score);
 
     // [WHEN] Get the actual articulations
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(score);
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
 
     // [THEN] Expected articulations
     const layer_idx_t secondStaffLayer = static_cast<layer_idx_t>(staff2track(1));
@@ -728,8 +760,10 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
         { timestampFromTicks(score, 7680), { bartok } }, // measure repeat
     };
 
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(score);
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
     EXPECT_EQ(expectedArticulations, actualArticulations);
+
+    delete score;
 }
 
 /**
@@ -754,7 +788,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
 
     // [THEN] 1st measure: Pizz.
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Pizzicato);
     }
@@ -763,7 +797,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     const timestamp_t expectedNaturalTimestamp = timestampFromTicks(score, 1920);
     int lastTick = score->lastMeasure()->tick().ticks();
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, expectedNaturalTimestamp);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -783,7 +817,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
         { timestampFromTicks(score, 5760), { ordinary } }, // 4th (canceled by Arco)
     };
 
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(score);
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
     EXPECT_EQ(expectedArticulations, actualArticulations);
 
     // [WHEN] Parse the brass part
@@ -793,7 +827,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
 
     // [THEN] 1st measure: Standard
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -801,7 +835,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     // [THEN] "Open" starting from the 2nd measure
     const timestamp_t expectedOpenTimestamp = timestampFromTicks(score, 1920);
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
         EXPECT_EQ(actualType.first, expectedOpenTimestamp);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Open);
     }
@@ -819,7 +853,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
         { timestampFromTicks(score, 1920), { ordinary } }, // 2nd measure (canceled by Open)
     };
 
-    actualArticulations = ctx.textArticulations(score);
+    actualArticulations = ctx.textArticulations();
     EXPECT_EQ(expectedArticulations, actualArticulations);
 
     delete score;
@@ -871,7 +905,7 @@ TEST_F(Engraving_PlaybackContextTests, Lyrics_Multiverses)
         { 6500000, { makeSyllable(u"world") } },
     };
 
-    const std::map<timestamp_t, SyllableEventList> actualEvents = ctx.syllables(score);
+    const std::map<timestamp_t, SyllableEventList> actualEvents = ctx.syllables();
     EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
     for (const auto& pair : actualEvents) {

@@ -134,7 +134,7 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
 void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result, bool sustainAllowed)
 {
     const int chordPosTickWithOffset = ctx.nominalPositionStartTick + ctx.positionTickOffset;
-    const std::pair<timestamp_t, PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(ctx.score, chordPosTickWithOffset);
+    const std::pair<timestamp_t, PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(chordPosTickWithOffset);
     if (tech.second == PlayingTechniqueType::HandbellsLV && !sustainAllowed) {
         return;
     }
@@ -153,7 +153,7 @@ void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx,
     duration_t duration = ctx.nominalDuration;
 
     if (tech.second == PlayingTechniqueType::HandbellsLV) {
-        const timestamp_t dampTime = ctx.playbackCtx->findPlayingTechniqueTimestamp(ctx.score, PlayingTechniqueType::HandbellsDamp,
+        const timestamp_t dampTime = ctx.playbackCtx->findPlayingTechniqueTimestamp(PlayingTechniqueType::HandbellsDamp,
                                                                                     chordPosTickWithOffset);
         timestamp = tech.first;
         duration = dampTime > 0 ? dampTime - timestamp : mpe::INFINITE_DURATION;
