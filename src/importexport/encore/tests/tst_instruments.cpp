@@ -68,6 +68,23 @@ TEST_F(Tst_Instruments, instrument_name_midi_tiebreaks_to_acoustic_bass)
 }
 
 // ===========================================================================
+// FIX: v0xA6 stores the MIDI program at TK content+52 (block+60). The v0xA6 reader
+// used to skip it, leaving midiProgram=0 (Grand Piano). MIDI=119 is in the GM
+// percussive range (>=113) and must route to a drumset.
+// ===========================================================================
+TEST_F(Tst_Instruments, v0xa6_reads_midi_program_from_tk_block)
+{
+    MasterScore* score = readEncoreScore("instruments_v0xa6_midi_program.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    const Instrument* inst = score->parts().front()->instrument();
+    ASSERT_NE(inst, nullptr);
+    EXPECT_NE(inst->drumset(), nullptr)
+        << "v0xA6 MIDI 119 (>=113) must be read from TK+52 and route to a drumset, not Grand Piano";
+    delete score;
+}
+
+// ===========================================================================
 // FIX: a name/MIDI match may land on a tablature template variant ("Classical
 // Guitar (tablature)"), but Encore stores a normal clef. The importer must swap
 // to the standard-notation sibling so the staff is a normal pitched staff.

@@ -177,6 +177,23 @@ TEST_F(Tst_Structure, key_sig_no_accidentals)
     delete score;
 }
 
+// v0xA6 stores the key signature in the LINE staff entry, not where v0xC2/C4 keep it, and its
+// staffPerSystem reads 0; the key must still be read (A major = 3 sharps on every staff), not lost.
+// See ENCORE_FORMAT.md §System block (LINE).
+TEST_F(Tst_Structure, key_sig_v0xa6_from_line_entry)
+{
+    MasterScore* score = readEncoreScore("structure_v0xa6_key_signature.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GT(score->nstaves(), 0u);
+    for (size_t i = 0; i < score->nstaves(); ++i) {
+        Staff* st = score->staff(i);
+        ASSERT_NE(st, nullptr);
+        EXPECT_EQ(int(st->key(Fraction(0, 1))), 3)
+            << "v0xA6 staff " << i << " must import A major (3 sharps) from LINE entry offset 14";
+    }
+    delete score;
+}
+
 TEST_F(Tst_Structure, key_sig_no_invalid_large_values)
 {
     // encKeyToFifths wrapping was broken before (key index 8 mapped to -248); verify -7..7 range.
@@ -1026,6 +1043,27 @@ TEST_F(Tst_Structure, malformed_truncated_at_byte_boundaries_does_not_crash)
     setRootDir(ENC_DIR);
 }
 
+// Hostile but structurally complete fixtures: a zero tuplet nibble (zero-term ratio), an out-of-range
+// staff index, an out-of-range voice nibble, and a zero-size element (advance-by-one guard). Each must
+// import without crashing and produce a score that passes sanityCheck (garbage is dropped, not emitted).
+TEST_F(Tst_Structure, hostile_fixtures_import_and_pass_sanity_check)
+{
+    static const char* kHostileFixtures[] = {
+        "structure_grandstaff_wedge_out_of_range_voice.enc",
+        "structure_hostile_zero_tuplet_nibble.enc",
+        "structure_hostile_out_of_range_staff.enc",
+        "structure_hostile_out_of_range_voice.enc",
+        "structure_hostile_zero_size_element.enc",
+    };
+    for (const char* name : kHostileFixtures) {
+        MasterScore* score = readEncoreScore(name);
+        ASSERT_NE(score, nullptr) << "hostile fixture should import to a bounded score: " << name;
+        muse::Ret ret = score->sanityCheck();
+        EXPECT_TRUE(ret) << name << " should pass sanityCheck: " << ret.text();
+        delete score;
+    }
+}
+
 TEST_F(Tst_Structure, malformed_truncated_at_block_boundaries_does_not_crash)
 {
     // Cut a known-good file a few bytes past each 4-char block magic (SCOW/TK00/PAGE/LINE/MEAS/PREC/
@@ -1058,6 +1096,30 @@ TEST_F(Tst_Structure, malformed_truncated_at_block_boundaries_does_not_crash)
             f.close();
             delete readEncoreScore(name);
         }
+    }
+
+    setRootDir(ENC_DIR);
+}
+
+TEST_F(Tst_Structure, malformed_v0xa6_truncation_does_not_crash)
+{
+    // v0xA6 (Encore 2.x) uses fixed-offset absolute seeks; a prefix cut must exercise those bounds
+    // checks. Every truncation must import (null or bounded score) without crashing.
+    const QByteArray good = readFixtureBytes("structure_v0xa6_basic.enc");
+    ASSERT_GT(good.size(), 0);
+
+    QTemporaryDir tmp;
+    ASSERT_TRUE(tmp.isValid());
+    setRootDir(tmp.path());
+
+    // Dense in the header/absolute-seek region (first 512 bytes), coarse thereafter to keep runtime low.
+    for (int len = 0; len <= good.size(); len += (len < 512 ? 8 : 256)) {
+        const QString name = QString("trunc_a6_%1.enc").arg(len);
+        QFile f(tmp.path() + "/" + name);
+        ASSERT_TRUE(f.open(QIODevice::WriteOnly));
+        f.write(good.left(len));
+        f.close();
+        delete readEncoreScore(name);
     }
 
     setRootDir(ENC_DIR);
