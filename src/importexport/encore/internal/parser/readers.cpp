@@ -23,6 +23,7 @@
 // Shared block-skip/clamp helper implementations and the EncFormatReader factory (version to reader).
 
 #include "readers.h"
+#include "readers-v0xc2.h"
 #include "readers-v0xc4.h"
 
 #include <algorithm>
@@ -98,18 +99,46 @@ qint64 clampMeasureEnd(qint64 measStart, quint32 varsize, qint64 elemBlockOffset
 
 // Selects a format reader. SCO5 (macOS Encore 5) is matched by magic string because its chuMagio
 // is not 0xC4 even though it shares the v0xC4 format; otherwise chuMagio picks the reader.
-std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const QString& magic)
+QString encFormatVersionString(quint16 formatVersion)
+{
+    // BCD: major digit in the high byte, minor in the low.
+    return QString("%1.%2")
+           .arg((formatVersion >> 8) & 0xFF, 0, 16)
+           .arg(formatVersion & 0xFF, 2, 16, QChar('0'));
+}
+
+std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const QString& magic, quint16 formatVersion)
 {
     if (magic == "SCO5") {
         return makeFormatReader_SCO5();
     }
     switch (chuMagio) {
+    case static_cast<quint8>(EncFormatVersion::V3_4_X):
+        return makeFormatReader_V0xC2(formatVersion);
     case static_cast<quint8>(EncFormatVersion::V5_X):
         return makeFormatReader_V0xC4();
     default:
-        LOGW() << QString("Encore: unsupported format version 0x%1 - import may fail")
-            .arg(chuMagio, 2, 16, QChar('0'));
-        return makeFormatReader_V0xC4();
+        break;
     }
+
+    // The version byte is not one this build knows. It is not the only thing that identifies the
+    // layout: the format version at header 0x28 gives the geometry and the body offsets on its own,
+    // and it is ordered, so an unseen version reads as the newest one it is not older than. Only
+    // the ornament vocabulary is genuinely the version byte's to decide, and only around format
+    // 3.07. See ENCORE_FORMAT.md §1.5 The version byte, and where it disagrees.
+    const char* readAs = nullptr;
+    std::unique_ptr<EncFormatReader> reader;
+    if (formatVersion < ENC_FORMAT_4_20) {
+        readAs = "3.05";
+        reader = makeFormatReader_V0xC2(formatVersion);
+    } else {
+        readAs = "4.20";
+        reader = makeFormatReader_V0xC4();
+    }
+    LOGW() << QString("Encore: version byte 0x%1 is not known; the file states format %2, reading it as %3")
+        .arg(chuMagio, 2, 16, QChar('0'))
+        .arg(encFormatVersionString(formatVersion))
+        .arg(QString::fromLatin1(readAs));
+    return reader;
 }
 } // namespace mu::iex::enc

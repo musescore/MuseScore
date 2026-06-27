@@ -47,6 +47,8 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/articulation.h"
+#include "engraving/dom/tie.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
@@ -422,6 +424,183 @@ TEST_F(Tst_Structure, old_format_v0c2_correct_pitches)
     EXPECT_EQ(pitches[3], 72) << "Fourth note should be C5 (72)";
     muse::Ret ret = score->sanityCheck();
     EXPECT_TRUE(ret) << "v0xC2 pitch-fixed score should pass sanityCheck: " << ret.text();
+    delete score;
+}
+
+// ===========================================================================
+// Encore 4.0 inserted two bytes into every element body at offset +8, so a file written by an
+// earlier build (app version 773) keeps every field from there on two bytes lower. Reading such a
+// file with the post-4.0 offsets takes the wrong byte for the pitch and never reaches the tie arc.
+// See ENCORE_FORMAT.md §1.5 The version byte, and where it disagrees.
+//
+// The fixture is an Encore 3.x file holding two half notes whose real pitch (C4, 60) sits at +13,
+// with a decoy 72 at +15 where the post-4.0 layout expects the pitch, plus a 16-byte tie whose arc
+// span at +8/+10 is its only tie-start signal (both flag bytes are clear).
+//
+// Before the offsets were keyed on the generation this imported the notes as C5 and produced no
+// tie at all.
+TEST_F(Tst_Structure, pre_encore4_element_body_offsets)
+{
+    MasterScore* score = readEncoreScore("structure_v0c2_pre4_element_offsets.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<Note*> notes;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s;
+             s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->elist()) {
+                if (e && e->isChord()) {
+                    for (Note* n : toChord(e)->notes()) {
+                        notes.push_back(n);
+                    }
+                }
+            }
+        }
+    }
+
+    ASSERT_EQ(notes.size(), 2u) << "fixture holds two half notes";
+    EXPECT_EQ(notes[0]->pitch(), 60) << "pitch comes from +13 in a pre-4.0 note, not from the +15 decoy";
+    EXPECT_EQ(notes[1]->pitch(), 60) << "pitch comes from +13 in a pre-4.0 note, not from the +15 decoy";
+    EXPECT_NE(notes[0]->tieFor(), nullptr) << "the 16-byte tie carries its arc span at +8/+10";
+
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "pre-Encore-4 score should pass sanityCheck: " << ret.text();
+    delete score;
+}
+
+// ===========================================================================
+// The same measure written in the geometry of each generation that occurs in the corpus. Encore 4.0
+// moved every element body two bytes later at once, so the note, the rest, the tie and the MIDI CC
+// all change size together, and the articulation vocabulary moved in the same release. A reader
+// that gets the generation wrong therefore fails on all of them at once, which is what makes one
+// assertion set over three files worth more than three separate tests.
+//
+// The third file is the combination that genuinely crosses the two version axes, a version byte of
+// 0xC4 with format 3.07: 996 files in the corpus and no fixture before this one. The reader comes
+// from the version byte and the geometry from the format version, so it is the case where the two
+// have to agree. See ENCORE_FORMAT.md §1.5 The version byte, and where it disagrees.
+// ===========================================================================
+static void checkElementFamily(MasterScore* score, const char* what)
+{
+    ASSERT_NE(score, nullptr) << what;
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << what << ": " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr) << what;
+
+    std::vector<int> pitches;
+    int rests = 0, ties = 0, staccati = 0;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        EngravingItem* el = seg->element(0);
+        if (!el) {
+            continue;
+        }
+        if (el->isRest()) {
+            ++rests;
+            continue;
+        }
+        if (!el->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(el);
+        for (Note* n : c->notes()) {
+            pitches.push_back(n->pitch());
+            if (n->tieFor()) {
+                ++ties;
+            }
+        }
+        for (Articulation* a : c->articulations()) {
+            if (a->symId() == SymId::articStaccatoAbove || a->symId() == SymId::articStaccatoBelow) {
+                ++staccati;
+            }
+        }
+    }
+    EXPECT_EQ(pitches, (std::vector<int> { 60, 60, 62 })) << what << ": pitches come from the body offset of this generation";
+    EXPECT_EQ(ties, 1) << what << ": the tie arc pair moves with the body too";
+    EXPECT_EQ(staccati, 1) << what << ": the staccato subtype is the one this generation spells";
+    EXPECT_EQ(rests, 1) << what;
+}
+
+TEST_F(Tst_Structure, element_family_reads_the_same_in_every_generation)
+{
+    MasterScore* encore3 = readEncoreScore("structure_family_3x.enc");
+    checkElementFamily(encore3, "Encore 3.x, version byte 0xC2 with format 3.05");
+    delete encore3;
+
+    MasterScore* encore4 = readEncoreScore("structure_family_40x_c2.enc");
+    checkElementFamily(encore4, "Encore 4.0 to 4.2, version byte 0xC2 with format 3.07");
+    delete encore4;
+
+    MasterScore* crossed = readEncoreScore("structure_family_40x_c4.enc");
+    checkElementFamily(crossed, "version byte 0xC4 with format 3.07, the crossed pair");
+    delete crossed;
+}
+
+
+TEST_F(Tst_Structure, old_format_v0c2_triplets_detected)
+{
+    // v0xC2: 6 eighth notes at 80-tick spacing (2/3 of an eighth) → detectImpliedTuplet returns 3:2.
+    MasterScore* score = readEncoreScore("structure_v0c2_triplets.enc");
+    ASSERT_NE(score, nullptr);
+
+    bool foundTriplet = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (EngravingItem* e : toMeasure(mb)->el()) {
+            if (e->isTuplet() && toTuplet(e)->ratio() == Fraction(3, 2)) {
+                foundTriplet = true;
+                break;
+            }
+        }
+        if (foundTriplet) {
+            break;
+        }
+    }
+    EXPECT_TRUE(foundTriplet) << "v0xC2 implied triplets should be detected";
+    delete score;
+}
+
+TEST_F(Tst_Structure, old_format_v0c2_triplet_pitch_in_semitone)
+{
+    // When a v0xC2 note already has its pitch in semiTonePitch, the tuplet slot holds a real ratio (0x32),
+    // so the pitch-swap must not fire, or a triplet's notes all import as MIDI 50 with the ratio lost.
+    MasterScore* score = readEncoreScore("structure_v0c2_triplet_pitch_in_semitone.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<int> pitches;
+    bool foundTriplet = false;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (EngravingItem* e : toMeasure(mb)->el()) {
+            if (e->isTuplet() && toTuplet(e)->ratio() == Fraction(3, 2)) {
+                foundTriplet = true;
+            }
+        }
+        for (Segment* s = toMeasure(mb)->first(SegmentType::ChordRest); s;
+             s = s->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : s->elist()) {
+                if (e && e->isChord()) {
+                    for (Note* n : toChord(e)->notes()) {
+                        pitches.push_back(n->pitch());
+                    }
+                }
+            }
+        }
+    }
+    ASSERT_EQ(pitches.size(), 4u) << "Should have 4 notes";
+    EXPECT_EQ(pitches[0], 60) << "triplet note 1 must be C4 (60), not the tuplet byte 50";
+    EXPECT_EQ(pitches[1], 64) << "triplet note 2 must be E4 (64)";
+    EXPECT_EQ(pitches[2], 67) << "triplet note 3 must be G4 (67)";
+    EXPECT_EQ(pitches[3], 72) << "quarter note must be C5 (72)";
+    EXPECT_TRUE(foundTriplet) << "explicit 3:2 tuplet must survive the pitch fix";
     delete score;
 }
 

@@ -61,12 +61,11 @@ bool EncTie::read(QDataStream& ds)
     // Dir/startFlag bit layout: see ENCORE_FORMAT.md §6.7 Tie.
     isTieStart = ((dirByte & 0x80) != 0) || ((startFlag & 0x80) != 0) || ((dirByte & 0x02) != 0);
 
-    if (static_cast<int>(size) >= 18) {
-        // 18-byte form: the arc x-span is the authoritative forward-tie signal, overriding the
-        // +5 curvature byte. arcX1<arcX2 is a real forward tie; arcX1==arcX2 is either an
-        // intra-chord decorative arc (drop) or a cross-measure placeholder (keep, startFlag bit
-        // 7 distinguishes them). See ENCORE_FORMAT.md §6.7 Tie.
-        ds.skipRawData(3);          // to offset +10
+    // The arc span decides, not the curvature byte: a growing span is a real forward tie, an equal one is
+    // either a decorative intra-chord arc or a cross-measure placeholder, which the start flag tells
+    // apart. See ENCORE_FORMAT.md 6.7.
+    if (static_cast<int>(size) >= 18 + bodyShift) {
+        ds.skipRawData(3 + bodyShift);   // to offset +10, or +8 before format 3.07
         // Both endpoints are uint16, read through the stream so the file's byte order applies.
         // Taking only their low byte silently yields zero on a big-endian file.
         ds >> arcX1 >> arcX2;

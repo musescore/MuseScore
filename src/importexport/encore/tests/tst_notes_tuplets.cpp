@@ -93,17 +93,43 @@ TEST_F(Tst_NotesTuplets, explicit_triplets_in_score)
         if (!mb->isMeasure()) {
             continue;
         }
-        for (EngravingItem* e : toMeasure(mb)->el()) {
-            if (e->isTuplet()) {
-                Tuplet* t = toTuplet(e);
-                EXPECT_NE(t->ticks(), Fraction(0, 1)) << "Tuplet ticks must be non-zero";
-                EXPECT_EQ(t->ratio().reduced(), Fraction(3, 2)) << "Should be 3:2 triplet";
-                ++measWithTuplets;
-                break;
-            }
+        for (const Tuplet* t : measureTuplets(toMeasure(mb))) {
+            EXPECT_NE(t->ticks(), Fraction(0, 1)) << "Tuplet ticks must be non-zero";
+            EXPECT_EQ(t->ratio().reduced(), Fraction(3, 2)) << "Should be 3:2 triplet";
+            ++measWithTuplets;
+            break;
         }
     }
     EXPECT_GT(measWithTuplets, 0) << "Should have at least one measure with triplets";
+    delete score;
+}
+
+TEST_F(Tst_NotesTuplets, tuplet_is_not_a_measure_element)
+{
+    // A tuplet is owned by its measure through its parent pointer and is reached through its member
+    // chords and rests. While it was also pushed into the measure's generic element list the writer
+    // emitted a second copy of it as a child of the measure, which the reader discarded on load, so
+    // saving and reopening silently repaired the score.
+    MasterScore* score = readEncoreScore("notes_triplets.enc");
+    ASSERT_NE(score, nullptr);
+
+    size_t strays = 0;
+    size_t reachable = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        for (EngravingItem* e : m->el()) {
+            if (e->isTuplet()) {
+                ++strays;
+            }
+        }
+        reachable += measureTuplets(m).size();
+    }
+
+    EXPECT_GT(reachable, size_t(0)) << "fixture should contain tuplets";
+    EXPECT_EQ(strays, size_t(0)) << "a tuplet must not be registered in the measure element list";
     delete score;
 }
 
@@ -118,11 +144,7 @@ TEST_F(Tst_NotesTuplets, tuplet_notes_have_correct_actual_ticks)
         if (!mb->isMeasure()) {
             continue;
         }
-        for (EngravingItem* e : toMeasure(mb)->el()) {
-            if (!e->isTuplet()) {
-                continue;
-            }
-            Tuplet* t = toTuplet(e);
+        for (const Tuplet* t : measureTuplets(toMeasure(mb))) {
             if (t->ratio().reduced() != Fraction(3, 2)) {
                 continue;
             }
@@ -275,11 +297,8 @@ TEST_F(Tst_NotesTuplets, canonical_implied_triplet_preserved)
         if (!mb->isMeasure()) {
             continue;
         }
-        for (EngravingItem* e : toMeasure(mb)->el()) {
-            if (e->isTuplet()) {
-                hasTuplet = true;
-                break;
-            }
+        if (!measureTuplets(toMeasure(mb)).empty()) {
+            hasTuplet = true;
         }
         if (hasTuplet) {
             break;
@@ -476,8 +495,6 @@ TEST_F(Tst_NotesTuplets, dotted_note_dotctrl_bit0_with_rdur_drift)
     delete score;
 }
 
-// The dotted-eighth pattern fix must not fire in an already-full measure: the 8th+16th binary pattern is
-// ambiguous, so it only applies when faceSum + 60 == durTicks (measure short by an eighth's dot).
 TEST_F(Tst_NotesTuplets, v0c2_full_measure_eighth_plus_sixteenth_no_false_dot)
 {
     MasterScore* score = readEncoreScore("notes_v0c2_full_measure_no_false_dot.enc");
@@ -537,6 +554,37 @@ TEST_F(Tst_NotesTuplets, mixed_value_tuplet_exact_ticks_and_isolated_partial)
     EXPECT_EQ(chords[0]->tuplet(), chords[3]->tuplet()) << "All 4 in same tuplet";
     EXPECT_EQ(chords[3]->actualTicks(), Fraction(1, 12))
         << "8th actualTicks = (1/8)*(2/3) = 1/12";
+    delete score;
+}
+
+TEST_F(Tst_NotesTuplets, implied_group_boundary_no_spurious_new_group)
+{
+    // Once a complete implied tuplet group closes, an isolated note right after it must not start a new
+    // unvalidated group (guarded by groupFull); it must be a plain note so the measure does not overflow.
+    MasterScore* score = readEncoreScore("notes_v0c2_implied_group_boundary.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Isolated note after complete implied group should be plain: "
+                     << ret.text();
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->timesig(), Fraction(2, 4));
+
+    // Notes 4-6 (ticks 240-280-320) should be in the same tuplet (complete 3:2 group).
+    // Note 7 (tick 360, isolated rdur=40) should NOT be in a tuplet.
+    std::vector<Chord*> chords;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* e = s->element(0);
+        if (e && e->isChord()) {
+            chords.push_back(toChord(e));
+        }
+    }
+    ASSERT_GE(chords.size(), 7u) << "Should have at least 7 chords";
+    EXPECT_NE(chords[3]->tuplet(), nullptr) << "Note 4 (triplet 16th 1) should be in tuplet";
+    EXPECT_NE(chords[4]->tuplet(), nullptr) << "Note 5 (triplet 16th 2) should be in tuplet";
+    EXPECT_NE(chords[5]->tuplet(), nullptr) << "Note 6 (triplet 16th 3) should be in tuplet";
+    EXPECT_EQ(chords[6]->tuplet(), nullptr)
+        << "Note 7 (isolated rdur=40 after complete group) should NOT be in a tuplet";
     delete score;
 }
 
@@ -875,11 +923,10 @@ TEST_F(Tst_NotesTuplets, mixed_value_tuplet_ticks_corrected_for_overshoot)
     Measure* m = measureAt(score, 0);
     ASSERT_NE(m, nullptr);
 
-    Tuplet* firstTuplet = nullptr;
-    for (EngravingItem* e : m->el()) {
-        if (e->isTuplet()) {
-            firstTuplet = toTuplet(e);
-            break;
+    const Tuplet* firstTuplet = nullptr;
+    for (const Tuplet* t : measureTuplets(m)) {
+        if (!firstTuplet || t->tick() < firstTuplet->tick()) {
+            firstTuplet = t;
         }
     }
     ASSERT_NE(firstTuplet, nullptr) << "Must have at least one tuplet";
@@ -1177,12 +1224,11 @@ TEST_F(Tst_NotesTuplets, triplet_orphan_with_prior_complete_group)
     Measure* m0 = measureAt(score, 0);
     ASSERT_NE(m0, nullptr);
 
-    std::vector<Tuplet*> tuplets;
-    for (EngravingItem* e : m0->el()) {
-        if (e->isTuplet()) {
-            tuplets.push_back(toTuplet(e));
-        }
-    }
+    const std::set<const Tuplet*> found = measureTuplets(m0);
+    std::vector<const Tuplet*> tuplets(found.begin(), found.end());
+    std::sort(tuplets.begin(), tuplets.end(), [](const Tuplet* a, const Tuplet* b) {
+        return a->tick() < b->tick();
+    });
     ASSERT_EQ(tuplets.size(), 2u) << "Measure must contain exactly two 3:2 tuplets";
     for (int t = 0; t < 2; ++t) {
         EXPECT_EQ(static_cast<int>(tuplets[t]->elements().size()), 3)

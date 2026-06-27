@@ -905,6 +905,44 @@ TEST_F(Tst_Notes, grace1_cascade_filter)
     delete score;
 }
 
+// Four live-recorded notes a few ticks apart must form one chord (not split), tied to a 4-note receiver.
+TEST_F(Tst_Notes, chord_cluster_5tick_v0c2)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_chord_cluster_5tick.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "score must be clean: " << ret.text();
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<Chord*> chords;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChord()) {
+            chords.push_back(toChord(el));
+        }
+    }
+
+    ASSERT_EQ(chords.size(), 2u) << "Must have exactly 2 chords (sender + receiver)";
+    EXPECT_EQ(chords[0]->notes().size(), 4u)
+        << "All 4 live-recorded chord notes must be in one chord, not split";
+
+    int tiedCount = 0;
+    for (Note* n : chords[0]->notes()) {
+        if (n->tieFor() && n->tieFor()->endNote()) {
+            ++tiedCount;
+        }
+    }
+    EXPECT_EQ(tiedCount, 4)
+        << "All 4 sender notes must have outgoing ties to the receiver chord";
+
+    EXPECT_EQ(chords[1]->notes().size(), 4u)
+        << "Receiver chord must have all 4 notes";
+
+    delete score;
+}
+
 // A pitch encoded twice in the same chord cluster must collapse to one notehead, regardless of the
 // grace1 0x40 chord-extension bit.
 TEST_F(Tst_Notes, duplicate_pitch_in_chord_cluster_suppressed)
@@ -1668,6 +1706,82 @@ TEST_F(Tst_Notes, notes_v0c2_multiinstr_compact_routing)
     delete score;
 }
 
+// A v0xC2 note grows past its base length to carry its articulations: the slot for the mark above
+// sits immediately after the base note and the one below two bytes further, the same places v0xC4
+// uses. Reading every note as if it were the base length drops them all.
+// See ENCORE_FORMAT.md §6.3 Note.
+//
+// The fixture is an Encore 4.x file (base note 24) with a 26-byte note carrying staccato above, a
+// 28-byte note carrying accent above and staccato below, a plain 24-byte note with no mark, and a
+// second 26-byte note with tenuto above.
+TEST_F(Tst_Notes, notes_v0c2_articulation_grows_the_note)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_artic_grows_note.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<size_t> articCounts;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        articCounts.push_back(toChord(el)->articulations().size());
+    }
+
+    ASSERT_EQ(articCounts.size(), 4u) << "fixture holds four notes";
+    EXPECT_EQ(articCounts[0], 1u) << "26-byte note carries the mark above";
+    EXPECT_EQ(articCounts[1], 2u) << "28-byte note carries both marks";
+    EXPECT_EQ(articCounts[2], 0u) << "24-byte note has no slot and no mark";
+    EXPECT_EQ(articCounts[3], 1u) << "26-byte note carries the mark above";
+
+    delete score;
+}
+
+// v0xC2 size=24 notes carry pitch and articulation at the same offsets as size=22; reading the v0xC4 pitch
+// slot yields 0 (C-1). See ENCORE_FORMAT.md §6.3 Note.
+TEST_F(Tst_Notes, notes_v0c2_size24_correct_pitch_and_artic)
+{
+    MasterScore* score = readEncoreScore("notes_v0c2_size24_artic_pitch.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m = measureAt(score, 0);
+    ASSERT_NE(m, nullptr);
+
+    std::vector<int> pitches;
+    std::vector<SymId> artics;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(el);
+        pitches.push_back(c->notes().front()->pitch());
+        for (Articulation* a : c->articulations()) {
+            artics.push_back(a->symId());
+        }
+    }
+
+    ASSERT_EQ(pitches.size(), 2u);
+    EXPECT_EQ(pitches[0], 67) << "First note should be G4 (67), not C-1 (0)";
+    EXPECT_EQ(pitches[1], 64) << "Second note should be E4 (64), not C-1 (0)";
+
+    // MuseScore flips Above/Below based on stem direction after layout; compare kind only.
+    auto isStaccato = [](SymId s) {
+        return s == SymId::articStaccatoAbove || s == SymId::articStaccatoBelow;
+    };
+    auto isTenuto = [](SymId s) {
+        return s == SymId::articTenutoAbove || s == SymId::articTenutoBelow;
+    };
+    ASSERT_EQ(artics.size(), 2u);
+    EXPECT_TRUE(isStaccato(artics[0])) << "G4 should have staccato (0x1d)";
+    EXPECT_TRUE(isTenuto(artics[1])) << "E4 should have tenuto (0x1c)";
+
+    delete score;
+}
+
 // In some v0xC2 size=24 notes the pitch is already in semiTonePitch (tuplet==0); the pitch-swap must be
 // skipped so it is preserved.
 TEST_F(Tst_Notes, notes_v0c2_size24_semitone_pitch)
@@ -1803,6 +1917,14 @@ static void checkDottedHintFillsBar(MasterScore* score, const char* file)
 TEST_F(Tst_Notes, v0c4_dotted_hint_fills_bar)
 {
     const char* file = "notes_v0c4_dotted_hint_fills_bar.enc";
+    MasterScore* score = readEncoreScore(file);
+    checkDottedHintFillsBar(score, file);
+    delete score;
+}
+
+TEST_F(Tst_Notes, v0c2_dotted_hint_fills_bar)
+{
+    const char* file = "notes_v0c2_dotted_hint_fills_bar.enc";
     MasterScore* score = readEncoreScore(file);
     checkDottedHintFillsBar(score, file);
     delete score;
@@ -2333,6 +2455,279 @@ ENC_SANITY_TEST_NOTES(explicit_triplets_3_4,      "notes_triplets.enc")
 // it the head used to be dropped, so a cross or a diamond came out as an ordinary head, and the
 // square came out as a drumset symbol with nothing to draw. Same four nibbles as above, on an
 // ordinary pitched staff.
+// Two 6/8 bars each holding a whole note, tied to each other. A whole note does not fit in 6/8, so
+// making the bar fit removes the second one, and the tie built while the music was emitted is left
+// pointing at a note that is gone. Nothing here dereferences that pointer: the endpoints are
+// compared against the notes the score still holds, because following a freed note is exactly the
+// crash this guards against, and a use after free does not fault reliably enough to test for.
+TEST_F(Tst_Notes, no_tie_outlives_the_notes_it_joins)
+{
+    MasterScore* score = readEncoreScore("notes_tie_across_trimmed_overflow.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::set<const EngravingItem*> liveNotes;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (track_idx_t tr = 0; tr < score->ntracks(); ++tr) {
+                EngravingItem* el = s->element(tr);
+                if (el && el->isChord()) {
+                    for (Note* n : toChord(el)->notes()) {
+                        liveNotes.insert(n);
+                    }
+                }
+            }
+        }
+    }
+
+    int dangling = 0;
+    for (const EngravingItem* item : liveNotes) {
+        const Note* n = toNote(item);
+        if (const Tie* t = n->tieFor()) {
+            if (t->endElement() && !liveNotes.count(t->endElement())) {
+                ++dangling;
+            }
+        }
+        if (const Tie* t = n->tieBack()) {
+            if (t->startElement() && !liveNotes.count(t->startElement())) {
+                ++dangling;
+            }
+        }
+    }
+    EXPECT_EQ(dangling, 0) << "a tie kept an endpoint the score no longer holds";
+    delete score;
+}
+
+// Nine sixteenths in the time of eight, with the tuplet byte missing on one interior member, which
+// is how Encore stores them: nine members, eight marks. The unmarked member is enclosed by marked
+// ones so it belongs to the bracket, and its stored tick is the rounding of a position that is not
+// a whole number of Encore ticks, landing just before the running total of the members before it.
+// Losing it leaves the bracket a member short and the bar a third too long.
+TEST_F(Tst_Notes, nonuplet_keeps_the_member_whose_marker_is_missing)
+{
+    MasterScore* score = readEncoreScore("notes_nonuplet_missing_marker.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    const Tuplet* tuplet = nullptr;
+    int inTuplet = 0;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        if (const Tuplet* t = toChordRest(el)->tuplet()) {
+            tuplet = t;
+            ++inTuplet;
+        }
+    }
+    ASSERT_NE(tuplet, nullptr) << "the nine sixteenths must form a tuplet";
+    EXPECT_EQ(tuplet->ratio(), Fraction(9, 8)) << "nine in the time of eight";
+    EXPECT_EQ(inTuplet, 9) << "every member belongs to the bracket, marked or not";
+}
+
+// Six sixteenths in the time of four, two triplet groups, with the tuplet byte missing on the
+// member that opens the second group, and that member given a plain sixteenth's room so every one
+// after it sits late. Read literally the six span a quarter and a sixteenth instead of a quarter,
+// the bar overflows, and the staves that were exactly full get stretched into corruption with it.
+TEST_F(Tst_Notes, tuplet_keeps_the_member_whose_marker_is_missing_at_the_group_start)
+{
+    MasterScore* score = readEncoreScore("notes_tuplet_group_opens_unmarked.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->ticks(), Fraction(4, 4)) << "the bar must stay the length its signature states";
+
+    std::set<const Tuplet*> brackets;
+    int inTuplet = 0;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        if (const Tuplet* t = toChordRest(el)->tuplet()) {
+            brackets.insert(t);
+            ++inTuplet;
+            EXPECT_EQ(t->ratio(), Fraction(3, 2)) << "three in the time of two";
+        }
+    }
+    EXPECT_EQ(inTuplet, 6) << "every member belongs to a bracket, marked or not";
+    EXPECT_EQ(brackets.size(), 2u) << "the six members form two groups of three";
+}
+
+// A chord of half notes starting on the second beat of a 2/4 bar states more length than the bar
+// has room for, so the pass that makes the bar fit rewrites it as a tied chain: the chord is
+// removed and built again at the same beat. The tie start was registered before that happened, and
+// only the upper pitch continues into the next bar, so recognising the start by anything other than
+// where it is and what pitch it holds ties two different pitches together.
+TEST_F(Tst_Notes, tie_survives_its_start_chord_being_rebuilt_at_the_barline)
+{
+    MasterScore* score = readEncoreScore("notes_tie_start_recut_at_barline.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Note* tieStart = nullptr;
+    for (Measure* m = score->firstMeasure(); m && !tieStart; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::ChordRest); s && !tieStart; s = s->next(SegmentType::ChordRest)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            for (Note* n : toChord(el)->notes()) {
+                if (n->tieFor()) {
+                    tieStart = n;
+                    break;
+                }
+            }
+        }
+    }
+    ASSERT_NE(tieStart, nullptr) << "the tie must survive the chord being rebuilt";
+    ASSERT_NE(tieStart->tieFor()->endNote(), nullptr) << "and reach the note it ties to";
+    EXPECT_EQ(tieStart->tieFor()->endNote()->pitch(), tieStart->pitch());
+}
+
+// A dotted eighth carrying no tuplet byte, sitting between marked triplet eighths. The dot is part
+// of what the note is worth, so it is not the eighth the bracket is built from and cannot take one
+// of its slots: reading the bare face value lets it in, scales it by the ratio, and lays the next
+// member on top of its tail, leaving the bar over its signature in the middle instead of past the
+// barline, where the passes that make a bar fit would have found it.
+TEST_F(Tst_Notes, a_dotted_note_does_not_take_a_plain_slot_of_a_tuplet)
+{
+    MasterScore* score = readEncoreScore("notes_dotted_note_between_tuplet_members.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->ticks(), Fraction(4, 4)) << "the bar must stay the length its signature states";
+
+    const ChordRest* dotted = nullptr;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChordRest() && toChordRest(el)->dots() > 0) {
+            dotted = toChordRest(el);
+            break;
+        }
+    }
+    ASSERT_NE(dotted, nullptr) << "the dotted note must survive as a dotted note";
+    EXPECT_EQ(dotted->tuplet(), nullptr) << "and must not have been taken into the bracket";
+    EXPECT_EQ(dotted->actualTicks(), Fraction(3, 16)) << "keeping the value the dot gives it";
+}
+
+// A dotted eighth and three sixteenths, all marked, filling the room of a quarter as a triplet.
+// The dot belongs to the member and the ratio scales it; the value the bracket is built from is the
+// plain eighth, which no member of the group actually is. Dropping the dot slides everything after
+// it, and building the bracket on the dotted value leaves it never closing.
+TEST_F(Tst_Notes, a_bracket_member_keeps_its_dot)
+{
+    MasterScore* score = readEncoreScore("notes_dotted_tuplet_member.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->ticks(), Fraction(3, 4)) << "the bar must stay the length its signature states";
+
+    const Tuplet* bracket = nullptr;
+    const ChordRest* dotted = nullptr;
+    int members = 0;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        const ChordRest* cr = toChordRest(el);
+        if (const Tuplet* t = cr->tuplet()) {
+            bracket = t;
+            ++members;
+            if (cr->dots() > 0 && !dotted) {
+                dotted = cr;
+            }
+        }
+    }
+    ASSERT_NE(bracket, nullptr) << "the four must form a bracket";
+    EXPECT_EQ(bracket->ratio(), Fraction(3, 2)) << "three in the time of two";
+    EXPECT_EQ(members, 4) << "a dotted eighth and three sixteenths";
+    ASSERT_NE(dotted, nullptr) << "the dotted member must keep its dot";
+    EXPECT_EQ(dotted->actualTicks(), Fraction(1, 8)) << "a dotted eighth at three in the time of two";
+    EXPECT_EQ(bracket->ticks(), Fraction(1, 4)) << "the bracket fills the quarter it sits in";
+}
+
+// A triplet of eighths opening with a rest, after a half note that was played at half its written
+// value so every stored tick behind it stands a beat early. The rest arrives with a tick the notes
+// already written account for, and dropping it there, which is right for the redundant rests Encore
+// writes on a filled beat, costs the bracket the member that opens it.
+TEST_F(Tst_Notes, a_bracket_opening_rest_survives_a_tick_left_behind)
+{
+    MasterScore* score = readEncoreScore("notes_bracket_opening_rest_behind_fill.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->ticks(), Fraction(4, 4)) << "the bar must stay the length its signature states";
+
+    std::vector<ChordRest*> all, members;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        all.push_back(toChordRest(el));
+        if (toChordRest(el)->tuplet()) {
+            members.push_back(toChordRest(el));
+        }
+    }
+    ASSERT_EQ(members.size(), 3u) << "the bracket keeps all three members";
+    EXPECT_TRUE(members.front()->isRest()) << "and the rest is the one that opens it";
+    EXPECT_EQ(members.front()->tuplet()->ratio(), Fraction(3, 2)) << "three in the time of two";
+    EXPECT_EQ(all.size(), 8u) << "a half, three members and four sixteenths, nothing added to fill";
+}
+
+// A triplet of sixty-fourths, part of an ornamental flourish. A sixty-fourth is fifteen ticks
+// written and ten inside a triplet, so its recorded length falls under the threshold that marks a
+// note as a MIDI tie-continuation artifact, and all three members were thrown away: the bar came up
+// short by a value that cannot be written, and the flourish was gone from the score.
+TEST_F(Tst_Notes, sixtyfourths_in_a_bracket_are_not_midi_artifacts)
+{
+    MasterScore* score = readEncoreScore("notes_sixtyfourth_bracket_not_artifact.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    EXPECT_EQ(m->ticks(), Fraction(4, 4)) << "the bar must stay the length its signature states";
+
+    std::vector<ChordRest*> members;
+    int notes = 0;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        if (el->isChord()) {
+            ++notes;
+        }
+        if (toChordRest(el)->tuplet()) {
+            members.push_back(toChordRest(el));
+        }
+    }
+    ASSERT_EQ(members.size(), 3u) << "the three sixty-fourths must survive";
+    EXPECT_EQ(members.front()->tuplet()->ratio(), Fraction(3, 2)) << "three in the time of two";
+    EXPECT_EQ(members.front()->durationType().type(), DurationType::V_64TH) << "written as sixty-fourths";
+    EXPECT_EQ(notes, 10) << "every note of the bar is written, flourish included";
+}
+
 TEST_F(Tst_Notes, notehead_nibbles_on_a_staff_without_drumset)
 {
     MasterScore* score = readEncoreScore("notes_notehead_without_drumset.enc");
