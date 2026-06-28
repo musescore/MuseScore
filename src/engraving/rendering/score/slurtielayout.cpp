@@ -82,6 +82,12 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                  item->track(), item->track2(), item->startCR(), item->endCR(), item->tick().ticks(), item->tick2().ticks());
             return slurSegment;
         }
+        if (item->ticks().isZero() && !(item->startCR() && item->startCR()->isGrace()) && !(item->endCR() && item->endCR()->isGrace())
+            && !item->isIncoming() && !item->isOutgoing()) {
+            LOGD("Slur::layout(): track %zu tick %d zero-length slur, skipping",
+                 item->track(), item->tick().ticks());
+            return slurSegment;
+        }
         if (item->endCR() == 0) {         // sanity check
             item->setEndElement(item->startCR());
             item->setTick2(item->tick());
