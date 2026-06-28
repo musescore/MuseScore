@@ -42,6 +42,7 @@ class CompatUtils
 public:
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
     static void doCompatibilityConversions(MasterScore* masterScore);
+    static void createUninitExcerptsForParts(MasterScore* masterScore);
     static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
     static double convertChordExtModUnits(double val);
     static void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s);
@@ -77,6 +78,5 @@ private:
     static void convertTextLineToNoteAnchoredLine(MasterScore* masterScore);
     static void convertLaissezVibArticToTie(MasterScore* masterScore);
     static void removeMMRestElements(MasterScore* masterScore);
-    static void createUninitExcerptsForParts(MasterScore* masterScore);
 };
 }
