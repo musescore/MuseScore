@@ -123,7 +123,7 @@ Item {
                         required property int index
 
                         property int string: repeater.count - index - 1
-                        property string finger: root.model ? root.model.displayFingerings[string] : 0
+                        property string finger: root.model ? root.model.displayFingerings[string] : ""
 
                         Layout.preferredWidth: 40
                         spacing: 8
@@ -150,20 +150,7 @@ Item {
 
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
-
-                            isIndeterminate: {
-                                const f = repeaterItem.finger
-
-                                if(!f || f.length === 0)
-                                    return true
-
-                                if(f === "T" || f === "P" || f === "t" || f === "p")
-                                    return false
-
-                                const v = parseInt(f)
-                                return isNaN(v) || v < 1 || v > 5
-
-                            }
+                            isIndeterminate: !repeaterItem.finger || repeaterItem.finger.length === 0
 
                             currentText: isIndeterminate ? '' : repeaterItem.finger
 
