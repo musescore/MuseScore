@@ -49,6 +49,7 @@
 #include "engraving/editing/editmeasurerepeat.h"
 #include "engraving/editing/editvoice.h"
 #include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
