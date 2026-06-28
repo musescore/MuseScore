@@ -867,6 +867,39 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     }
 }
 
+static Shape chordBracketObstacleShape(const ChordBracket* item)
+{
+    Chord* owner = item->chord();
+    Shape ownerShape = owner->shape();
+    ownerShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+    if (!owner->segment() || !owner->staff()) {
+        return ownerShape;
+    }
+
+    Shape result;
+    const track_idx_t startTrack = staff2track(owner->staffIdx());
+    const track_idx_t endTrack = startTrack + VOICES;
+
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = owner->segment()->element(track);
+        if (!e || !e->isChord()) {
+            continue;
+        }
+
+        Chord* chord = toChord(e);
+        if (chord->vStaffIdx() != owner->vStaffIdx()) {
+            continue;
+        }
+
+        Shape chordShape = chord->shape();
+        chordShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+        chordShape.translate(chord->pos() - owner->pos());
+        result.add(chordShape);
+    }
+
+    return result.empty() ? ownerShape : result;
+}
+
 void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     double spatium = item->spatium();
@@ -893,8 +926,7 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     const Note* upnote = item->chord()->upNote();
     ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
 
-    Shape chordShape = item->chord()->shape();
-    chordShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+    Shape chordShape = chordBracketObstacleShape(item);
     Shape itemShape = item->shape().translated(PointF(0.0, item->ldata()->pos().y()));
     if (item->rightSide()) {
         double x = HorizontalSpacing::minHorizontalDistance(chordShape, itemShape, spatium);
