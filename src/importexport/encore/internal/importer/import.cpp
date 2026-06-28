@@ -165,6 +165,162 @@ static void applyStaffScale(MasterScore* score, const EncRoot& enc)
     }
 }
 
+// Collapse a staff's voices back into voice 1 when they never sound at the same time (the
+// engraving equivalent of "move to voice 1" + Tools > Implode). All-or-nothing per staff:
+// a staff is collapsible only if every voice fits into voice 1 with no timing change (notes may
+// merge into a chord only at identical onset+duration), so the music is never altered.
+// TODO: format-agnostic, reads no Encore data; candidate to promote to a shared importexport util.
+static void mergeNonOverlappingVoices(MasterScore* score)
+{
+    // Pass 1: find the staves that carry notes in more than voice 0 and whose voices
+    // can be flattened without a timing conflict.
+    std::vector<staff_idx_t> candidates;
+    for (staff_idx_t si = 0; si < score->nstaves(); ++si) {
+        const track_idx_t base = si * VOICES;
+        bool hasUpperVoiceNotes = false;
+        std::set<std::pair<int, int> > intervals;   // distinct (startTick, endTick) of chords
+        for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                for (voice_idx_t v = 0; v < VOICES; ++v) {
+                    EngravingItem* e = s->element(base + v);
+                    if (!e || !e->isChord()) {
+                        continue;
+                    }
+                    if (v != 0) {
+                        hasUpperVoiceNotes = true;
+                    }
+                    const Chord* c = toChord(e);
+                    const int start = c->tick().ticks();
+                    const int end   = (c->tick() + c->actualTicks()).ticks();
+                    intervals.insert({ start, end });
+                }
+            }
+        }
+        if (!hasUpperVoiceNotes) {
+            continue;   // already a single voice, nothing to do
+        }
+        // The distinct intervals (identical ones, i.e. chord candidates, are deduped
+        // by the set) must not overlap. Sweep in start order: an interval that begins
+        // before the furthest end seen so far overlaps a different one => conflict.
+        bool collapsible = true;
+        int maxEnd = -1;
+        for (const std::pair<int, int>& iv : intervals) {   // std::set is ordered by (start, end)
+            if (iv.first < maxEnd) {
+                collapsible = false;
+                break;
+            }
+            maxEnd = std::max(maxEnd, iv.second);
+        }
+        if (collapsible) {
+            candidates.push_back(si);
+        }
+    }
+
+    Measure* first = score->firstMeasure();
+    Measure* last  = score->lastMeasure();
+    if (!first || !last) {
+        return;
+    }
+
+    // Pass 2: collapse each candidate staff. No undo transaction is opened, so the
+    // editing commands below execute immediately and free themselves (see
+    // UndoStack::pushAndPerform); the surrounding ScoreLoad keeps that path quiet.
+    // (May be empty; the stale-rest cleanup below still runs.)
+    for (staff_idx_t si : candidates) {
+        const track_idx_t base = si * VOICES;
+
+        // The voice change below rebuilds the destination chord from scratch; it carries
+        // articulations, lyrics and slurs across but not a single-chord tremolo, so a
+        // tremolo on a moved upper-voice chord would be lost. Snapshot every tremolo on
+        // the staff (keyed by onset tick) and re-attach it after the collapse.
+        std::map<int, TremoloType> tremolosByTick;
+        for (Measure* m = first; m; m = m->nextMeasure()) {
+            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                for (voice_idx_t v = 0; v < VOICES; ++v) {
+                    EngravingItem* e = s->element(base + v);
+                    if (e && e->isChord()) {
+                        if (TremoloSingleChord* trem = toChord(e)->tremoloSingleChord()) {
+                            tremolosByTick[s->tick().ticks()] = trem->tremoloType();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Move every note on the staff into voice 1, filling its rests and merging
+        // simultaneous same-duration notes into chords.
+        score->deselectAll();
+        score->select(first, SelectType::RANGE, si);
+        score->select(last, SelectType::RANGE, si);
+        EditVoice::changeSelectedElementsVoice(score->transactionManager()->currentOrDummyTransaction(), score, 0);
+
+        // Drop the now-empty upper voices (their leftover rests) by imploding the
+        // single staff onto voice 1.
+        score->deselectAll();
+        score->select(first, SelectType::RANGE, si);
+        score->select(last, SelectType::RANGE, si);
+        ImplodeExplode::implode(score);
+
+        // Re-attach any tremolo whose chord was moved into voice 1 (and so lost it).
+        for (const auto& [tick, type] : tremolosByTick) {
+            const Fraction f = Fraction::fromTicks(tick);
+            Measure* m = score->tick2measure(f);
+            if (!m) {
+                continue;
+            }
+            Segment* s = m->findSegment(SegmentType::ChordRest, f);
+            if (!s) {
+                continue;
+            }
+            for (voice_idx_t v = 0; v < VOICES; ++v) {
+                EngravingItem* e = s->element(base + v);
+                if (e && e->isChord() && !toChord(e)->tremoloSingleChord()) {
+                    Chord* c = toChord(e);
+                    TremoloSingleChord* trem = Factory::createTremoloSingleChord(c);
+                    trem->setTremoloType(type);
+                    c->add(trem);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Final pass: drop redundant upper-voice rests. An upper voice (index >= 1) holding only rests
+    // in a measure is not a real second voice (voice 0 already fills the bar after the collapse);
+    // it would show as a spurious extra voice and can inflate the measure length. An upper voice
+    // still carrying a chord is a genuine overlapping voice and is left untouched.
+    for (staff_idx_t si = 0; si < score->nstaves(); ++si) {
+        const track_idx_t base = si * VOICES;
+        std::vector<Rest*> staleRests;
+        for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            for (voice_idx_t v = 1; v < VOICES; ++v) {
+                bool voiceHasChord = false;
+                std::vector<Rest*> voiceRests;
+                for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                    EngravingItem* e = s->element(base + v);
+                    if (!e) {
+                        continue;
+                    }
+                    if (e->isChord()) {
+                        voiceHasChord = true;
+                        break;
+                    }
+                    if (e->isRest()) {
+                        voiceRests.push_back(toRest(e));
+                    }
+                }
+                if (!voiceHasChord) {
+                    staleRests.insert(staleRests.end(), voiceRests.begin(), voiceRests.end());
+                }
+            }
+        }
+        for (Rest* r : staleRests) {
+            score->removeElement(r);
+        }
+    }
+    score->deselectAll();
+}
+
 static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOptions& opts)
 {
     ScoreLoad sl;   // import edits run outside any undo transaction; see mergeNonOverlappingVoices
@@ -224,6 +380,11 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->rebuildMidiMapping();
     score->setUpTempoMap();
     score->doLayout();
+
+    if (ctx.opts.mergeVoices) {
+        mergeNonOverlappingVoices(score);
+        score->doLayout();
+    }
 
     // doLayout computes and caches the repeat list; at that point voltas may not yet be
     // anchored, so the cached expansion ignores 1st/2nd endings and replays the 1st
