@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_ticks.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_v0xa6.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_chord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_instruments.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_staff_size.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_structure.cpp
