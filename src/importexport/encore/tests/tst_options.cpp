@@ -925,6 +925,18 @@ TEST_F(Tst_Options, mergeVoices_default_off_keeps_separate_voices)
     delete score;
 }
 
+TEST_F(Tst_Options, mergeVoices_collapses_non_overlapping_voices)
+{
+    EncImportOptions opts;
+    opts.mergeVoices = true;
+    MasterScore* score = readEncoreScoreWithOpts("importer_merge_voices_non_overlapping.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_EQ(voicesWithChords(score, 0), 1)
+        << "mergeVoices=true must collapse two non-overlapping voices into voice 1";
+    EXPECT_TRUE(score->sanityCheck()) << "merged score must pass sanity check";
+    delete score;
+}
+
 TEST_F(Tst_Options, mergeVoices_keeps_overlapping_voices)
 {
     EncImportOptions opts;
@@ -934,6 +946,58 @@ TEST_F(Tst_Options, mergeVoices_keeps_overlapping_voices)
     EXPECT_EQ(voicesWithChords(score, 0), 2)
         << "mergeVoices=true must leave genuinely overlapping voices untouched (all-or-nothing)";
     EXPECT_TRUE(score->sanityCheck()) << "untouched score must pass sanity check";
+    delete score;
+}
+
+// Regression: merging voices rebuilds the destination chord and used to carry over articulations, lyrics
+// and slurs but not a single-chord tremolo, so it vanished. mergeVoices must preserve the tremolo.
+TEST_F(Tst_Options, mergeVoices_preserves_single_chord_tremolo)
+{
+    EncImportOptions opts;
+    opts.mergeVoices = true;
+    MasterScore* score = readEncoreScoreWithOpts("importer_merge_voices_tremolo.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck()) << "merged score must pass sanity check";
+    EXPECT_EQ(voicesWithChords(score, 0), 1)
+        << "mergeVoices=true must collapse the non-overlapping voices into voice 1";
+
+    bool foundTremolo = false;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (voice_idx_t v = 0; v < VOICES; ++v) {
+                EngravingItem* e = s->element(v);
+                if (e && e->isChord() && toChord(e)->tremoloSingleChord()) {
+                    foundTremolo = true;
+                }
+            }
+        }
+    }
+    EXPECT_TRUE(foundTremolo)
+        << "single-chord tremolo must survive when mergeVoices collapses its voice into voice 1";
+    delete score;
+}
+
+// Regression: an upper voice holding only rests over a bar voice 0 already fills is not a real voice; with
+// voice merging on, those stray rests must be removed rather than left as a spurious empty second voice.
+TEST_F(Tst_Options, v0c4_merge_removes_stray_upper_voice_rests)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.mergeVoices = true;
+    MasterScore* score = readEncoreScoreWithOpts("structure_merge_stray_voice_rests.enc", opts);
+    ASSERT_NE(score, nullptr) << "Failed to load structure_merge_stray_voice_rests.enc";
+
+    int upperVoiceElems = 0;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (int v = 1; v < (int)VOICES; ++v) {
+                if (s->element(v)) {
+                    ++upperVoiceElems;
+                }
+            }
+        }
+    }
+    EXPECT_EQ(upperVoiceElems, 0)
+        << "stray upper-voice rests must be removed when merging voices";
     delete score;
 }
 
