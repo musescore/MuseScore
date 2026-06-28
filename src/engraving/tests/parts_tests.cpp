@@ -46,6 +46,7 @@
 #include "engraving/dom/staff.h"
 
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/undostack.h"
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/rw/compat/compatutils.h"
