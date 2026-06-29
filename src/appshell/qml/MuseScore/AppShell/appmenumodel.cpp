@@ -209,6 +209,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
+        makeMenuItem("file-import-audio-to-score"),
         makeMenuItem("file-export"),
         makeSeparator(),
         makeMenuItem("project-properties"),
