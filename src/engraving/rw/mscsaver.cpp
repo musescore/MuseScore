@@ -107,10 +107,20 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 partScore->style().write(&styleBuf);
 
                 WriteInOutData writeOutData = masterWriteOutData;
+                writeOutData.ctx.setUpdateSharedWriteState(false);
                 auto scoreBuf = Buffer::opened(IODevice::ReadWrite, &data.scoreData);
                 RWRegister::writer()->writeScore(partScore, &scoreBuf, &writeOutData);
 
                 return data;
+            };
+
+            auto writeExcerptData = [&mscWriter](const ExcerptData& data) {
+                if (data.fileName.empty()) {
+                    return;
+                }
+
+                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
+                mscWriter.addExcerptFile(data.fileName, data.scoreData);
             };
 
 #ifdef MUSE_THREADS_SUPPORT
@@ -130,16 +140,14 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             // (MscWriter is not thread-safe)
             for (auto& future : futures) {
                 ExcerptData data = future.get();
-                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
-                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+                writeExcerptData(data);
             }
 #else
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
                 Excerpt* excerpt = excerpts.at(excerptIndex);
 
                 ExcerptData data = serializeExcerpt(excerpt, excerptIndex);
-                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
-                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+                writeExcerptData(data);
             }
 #endif
         }

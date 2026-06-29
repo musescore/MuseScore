@@ -21,6 +21,8 @@
  */
 #include "twrite.h"
 
+#include <mutex>
+
 #include "global/io/fileinfo.h"
 
 #include "../../iengravingfont.h"
@@ -174,6 +176,22 @@
 using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::write;
+
+namespace {
+std::mutex eidRegisterMutex;
+
+EID writeEid(const EngravingObject* item, bool assignIfMissing)
+{
+    std::lock_guard<std::mutex> lock(eidRegisterMutex);
+
+    EID eid = item->eid();
+    if (!eid.isValid() && assignIfMissing) {
+        eid = item->assignNewEID();
+    }
+
+    return eid;
+}
+}
 
 void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
@@ -499,10 +517,7 @@ void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteCont
         return;
     }
 
-    EID eid = item->eid();
-    if (!eid.isValid()) {
-        eid = item->assignNewEID();
-    }
+    EID eid = writeEid(item, true);
 
     std::array<char, EID::MAX_STR_SIZE> buf{};
     const char* last = eid.toChars(buf.data(), buf.data() + buf.size());
@@ -519,7 +534,7 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
 
     EngravingItem* mainElement = static_cast<EngravingItem*>(item->links()->mainElement());
     if (mainElement != item) {
-        EID eidOfMainElement = mainElement->eid();
+        EID eidOfMainElement = writeEid(mainElement, false);
         DO_ASSERT(eidOfMainElement.isValid());
         xml.tag("linkedTo", eidOfMainElement.toStdString());
     }
@@ -529,8 +544,8 @@ void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
 {
     xml.startElement("systemLock");
 
-    xml.tag("startMeasure", systemLock->startMB()->eid().toStdString());
-    xml.tag("endMeasure", systemLock->endMB()->eid().toStdString());
+    xml.tag("startMeasure", writeEid(systemLock->startMB(), false).toStdString());
+    xml.tag("endMeasure", writeEid(systemLock->endMB(), false).toStdString());
 
     xml.endElement();
 }
@@ -2594,8 +2609,9 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(item, xml, ctx);
 
     if (SharedPart* sharedPart = item->sharedPart()) {
-        DO_ASSERT(sharedPart->eid().isValid());
-        xml.tag("sharedPart", sharedPart->eid().toStdString());
+        EID sharedPartEid = writeEid(sharedPart, false);
+        DO_ASSERT(sharedPartEid.isValid());
+        xml.tag("sharedPart", sharedPartEid.toStdString());
     }
 
     xml.endElement();

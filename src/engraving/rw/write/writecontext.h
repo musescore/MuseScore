@@ -78,6 +78,9 @@ public:
     const std::optional<WriteRange>& range() const { return _range; }
     void setRange(const WriteRange& v) { _range = v; }
 
+    bool shouldUpdateSharedWriteState() const { return _updateSharedWriteState; }
+    void setUpdateSharedWriteState(bool v) { _updateSharedWriteState = v; }
+
     inline bool operator==(const WriteContext& c) const
     {
         return _curTick == c._curTick
@@ -85,6 +88,7 @@ public:
                && _curTrack == c._curTrack
                && _trackDiff == c._trackDiff
                && _clipboardmode == c._clipboardmode
+               && _updateSharedWriteState == c._updateSharedWriteState
                && _filter == c._filter
                && _range == c._range;
     }
@@ -101,6 +105,7 @@ private:
     int _trackDiff       { 0 };             // saved track is curTrack-trackDiff
 
     bool _clipboardmode  { false };     // used to modify write() behaviour
+    bool _updateSharedWriteState { true };
 
     std::optional<WriteRange> _range;
     std::optional<SelectionFilter> _filter;

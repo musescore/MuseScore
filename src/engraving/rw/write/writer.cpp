@@ -92,14 +92,21 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     std::vector<Part*> hiddenParts;
     bool unhide = false;
+    const bool updateSharedWriteState = ctx.shouldUpdateSharedWriteState();
     if (score->style().styleB(Sid::createMultiMeasureRests)) {
         for (Part* part : score->m_parts) {
             if (!part->show()) {
-                if (!unhide) {
+                if (!unhide && updateSharedWriteState) {
                     score->startCmd(TranslatableString::untranslatable("Unhide instruments for save"));
-                    unhide = true;
                 }
-                part->undoChangeProperty(Pid::VISIBLE, true);
+                unhide = true;
+
+                if (updateSharedWriteState) {
+                    part->undoChangeProperty(Pid::VISIBLE, true);
+                } else {
+                    part->setShow(true);
+                }
+
                 hiddenParts.push_back(part);
             }
         }
@@ -232,7 +239,9 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     ctx.setCurTrack(0);
 
     // Let's decide: write midi mapping to a file or not
-    score->masterScore()->checkMidiMapping();
+    if (updateSharedWriteState) {
+        score->masterScore()->checkMidiMapping();
+    }
 
     auto shouldWritePart = [&ctx, score, staffStart, staffEnd](const Part* part) {
         if (!ctx.shouldWriteRange()) {
@@ -269,7 +278,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     xml.endElement(); // score
 
-    if (unhide) {
+    if (unhide && updateSharedWriteState) {
         score->endCmd(true);
     }
 }
