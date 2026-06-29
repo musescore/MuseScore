@@ -1,0 +1,9 @@
+{
+    "PROJECT_PAGE": [
+        {
+            "command": "command://playback/play",
+            "sequences": ["Space"],
+            "autorepeat": 0
+        }
+    ]
+}
