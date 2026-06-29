@@ -1318,7 +1318,7 @@ String instrTemplateIdfromUuid(std::string uuid)
         { uuid::Daibyosi,                  u"snare-drum" },
         { uuid::Damroo,                    u"snare-drum" },
         { uuid::Darabuka,                  u"snare-drum" },
-        { uuid::DatangulionDrum,           u"snare-drum" },
+        { uuid::DatanguLionDrum,           u"snare-drum" },
         { uuid::Dhol,                      u"snare-drum" },
         { uuid::Dholak,                    u"snare-drum" },
         { uuid::Dollu,                     u"snare-drum" },
