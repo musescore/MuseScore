@@ -3334,6 +3334,24 @@ void Score::deleteItem(EngravingItem* el)
         EditSystemLocks::undoRemoveSystemLock(this, systemLock);
     }
     break;
+    case ElementType::PARENTHESIS: {
+        Parenthesis* paren = toParenthesis(el);
+        // Use EditChord::removeChordParentheses when parent is a chord, fall through for all others
+        if (el->parent() && el->parent()->isChord()) {
+            Chord* chord = toChord(el->parent());
+            NoteParenthesisInfo* parenInfo = chord->findNoteParenthesisInfo(paren);
+            IF_ASSERT_FAILED(parenInfo) {
+                LOGD() << "deleteItem: This parenthesis does not belong to this chord";
+                return;
+            }
+            for (Note* note : parenInfo->notes()) {
+                note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+                note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
+            }
+            EditChord::removeChordParentheses(chord, parenInfo->notes());
+            break;
+        }
+    }
 
     default:
         undoRemoveElement(el);
