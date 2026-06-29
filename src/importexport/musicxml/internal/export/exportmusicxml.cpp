@@ -76,6 +76,8 @@
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmonicmark.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/image.h"
+#include "engraving/dom/imageStore.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
@@ -346,6 +348,7 @@ public:
     void moveToTickIfNeed(const Fraction& t, track_idx_t track, const Fraction& measureTick);
     void words(TextBase const* const text, staff_idx_t staff);
     void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, PointF position);
+    void image(const Image* const img, staff_idx_t staff);
     void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
     void harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t staff);
     void hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick);
@@ -360,6 +363,7 @@ public:
     void tempoSound(TempoText const* const text);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
     Score* score() const { return m_score; }
+    void setMxl(bool v) { m_isMxl = v; }
     double getTenthsFromInches(double) const;
     double getTenthsFromDots(double) const;
     Fraction tick() const { return m_tick; }
@@ -437,6 +441,7 @@ private:
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
     PlayingTechniqueType m_currPlayTechnique;
+    bool m_isMxl = false;
 };
 
 //---------------------------------------------------------
@@ -5028,7 +5033,7 @@ void ExportMusicXml::playText(PlayTechAnnotation const* const annot, staff_idx_t
 {
     const int offset = calculateTimeDeltaInDivisions(annot->tick(), tick(), m_div);
 
-    if (annot->plainText() == "") {
+    if (annot->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5077,7 +5082,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
            muPrintable(text->plainText()));
     */
 
-    if (text->plainText() == "") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5090,6 +5095,119 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 }
 
 //---------------------------------------------------------
+//   getImageInfo
+//---------------------------------------------------------
+
+static void getImageInfo(const ImageStoreItem* isi, String& source, String& type)
+{
+    source = String::fromStdString(isi->hashName());
+    String suffix = String::fromStdString(isi->type()).toLower();
+
+    if (suffix == u"svg" || suffix == u"svgz") {
+        type = u"image/svg+xml";
+    } else if (suffix == u"png") {
+        type = u"image/png";
+    } else if (suffix == u"jpg" || suffix == u"jpeg") {
+        type = u"image/jpeg";
+    } else if (suffix == u"gif") {
+        type = u"image/gif";
+    } else if (suffix == u"bmp") {
+        type = u"image/bmp";
+    } else if (suffix == u"tif" || suffix == u"tiff") {
+        type = u"image/tiff";
+    }
+
+    if (type.isEmpty()) {
+        const ByteArray& ba = isi->buffer();
+        if (ba.size() >= 4) {
+            if (ba.at(0) == 0x89 && ba.at(1) == 0x50 && ba.at(2) == 0x4E && ba.at(3) == 0x47) {
+                type = u"image/png";
+                if (suffix.isEmpty()) {
+                    source += u".png";
+                }
+            } else if (ba.at(0) == 0xFF && ba.at(1) == 0xD8 && ba.at(2) == 0xFF) {
+                type = u"image/jpeg";
+                if (suffix.isEmpty()) {
+                    source += u".jpg";
+                }
+            } else if (ba.at(0) == 0x47 && ba.at(1) == 0x49 && ba.at(2) == 0x46 && ba.at(3) == 0x38) {
+                type = u"image/gif";
+                if (suffix.isEmpty()) {
+                    source += u".gif";
+                }
+            } else if (ba.at(0) == 0x42 && ba.at(1) == 0x4D) {
+                type = u"image/bmp";
+                if (suffix.isEmpty()) {
+                    source += u".bmp";
+                }
+            } else if ((ba.at(0) == 0x49 && ba.at(1) == 0x49 && ba.at(2) == 0x2A && ba.at(3) == 0x00)
+                       || (ba.at(0) == 0x4D && ba.at(1) == 0x4D && ba.at(2) == 0x00 && ba.at(3) == 0x2A)) {
+                type = u"image/tiff";
+                if (suffix.isEmpty()) {
+                    source += u".tif";
+                }
+            } else if (ba.at(0) == 0x3C && (ba.at(1) == 0x3F || ba.at(1) == 0x73)) {
+                type = u"image/svg+xml";
+                if (suffix.isEmpty()) {
+                    source += u".svg";
+                }
+            }
+        }
+    }
+
+    if (type.isEmpty()) {
+        type = u"application/octet-stream";
+    }
+}
+
+//---------------------------------------------------------
+//   image
+//---------------------------------------------------------
+
+void ExportMusicXml::image(const Image* const img, staff_idx_t staff)
+{
+    ImageStoreItem* isi = img->storeItem();
+    if (!isi) {
+        return;
+    }
+
+    directionTag(m_xml, m_attr, img);
+    m_xml.startElement("direction-type");
+
+    String source;
+    String type;
+    getImageInfo(isi, source, type);
+
+    if (m_isMxl) {
+        String imgTag = u"image source=\"" + XmlWriter::xmlString(source) + u"\"";
+        imgTag += u" type=\"" + XmlWriter::xmlString(type) + u"\"";
+
+        double width = img->imageWidth();
+        double height = img->imageHeight();
+        if (!img->sizeIsSpatium()) {
+            double sp = img->spatium();
+            if (sp > 0.0) {
+                width /= sp;
+                height /= sp;
+            }
+        }
+
+        imgTag += u" height=\"" + String::number(height * 10.0, 2) + u"\"";
+        imgTag += u" width=\"" + String::number(width * 10.0, 2) + u"\"";
+        imgTag += positioningAttributes(img);
+
+        m_xml.tagRaw(imgTag);
+    } else {
+        String otherTag = u"other-direction";
+        otherTag += positioningAttributes(img);
+        m_xml.tagRaw(otherTag, XmlWriter::xmlString(source));
+    }
+    m_xml.endElement(); // direction-type
+
+    directionETag(m_xml, staff);
+}
+
+//---------------------------------------------------------
 //   systemText
 //---------------------------------------------------------
 
@@ -5097,7 +5215,7 @@ void ExportMusicXml::systemText(StaffTextBase const* const text, staff_idx_t sta
 {
     const int offset = calculateTimeDeltaInDivisions(text->tick(), tick(), m_div);
 
-    if (text->plainText() == "") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5133,7 +5251,7 @@ String ExportMusicXml::positioningAttributesForTboxText(const PointF position, f
 
 void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, const PointF relativePosition)
 {
-    if (text->plainText() == "") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5162,7 +5280,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff)
 {
-    if (rmk->plainText() == "") {
+    if (rmk->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -6155,7 +6273,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     case MarkerType::CODA:
     case MarkerType::CODETTA:
         type = u"coda";
-        if (m->label() == "") {
+        if (m->label().empty()) {
             sound = u"coda=\"1\"";
         } else {
             sound = u"coda=\"" + m->label() + u"\"";
@@ -6166,7 +6284,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         [[fallthrough]];
     case MarkerType::SEGNO:
         type = u"segno";
-        if (m->label() == "") {
+        if (m->label().empty()) {
             sound = u"segno=\"1\"";
         } else {
             sound = u"segno=\"" + m->label() + u"\"";
@@ -6180,7 +6298,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     case MarkerType::TOCODASYM:
     case MarkerType::DA_CODA:
     case MarkerType::DA_DBLCODA: {
-        if (m->xmlText() == "") {
+        if (m->xmlText().empty()) {
             words = u"To Coda";
         } else {
             words = m->xmlText();
@@ -6492,6 +6610,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->harpPedals(toHarpPedalDiagram(e), sstaff);
     } else if (e->isRehearsalMark()) {
         exp->rehearsal(toRehearsalMark(e), sstaff);
+    } else if (e->isImage()) {
+        exp->image(toImage(e), sstaff);
     } else if (e->isSystemText()) {
         exp->systemText(toStaffTextBase(e), sstaff);
     }
@@ -8841,9 +8961,19 @@ static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& fi
 
     auto dbuf = Buffer::opened(IODevice::ReadWrite);
     ExportMusicXml em(score);
+    em.setMxl(true);
     em.write(&dbuf);
     dbuf.seek(0);
     zip.addFile(filename.toStdString(), dbuf.data());
+
+    for (const ImageStoreItem* isi : imageStore) {
+        if (isi->isUsed(score)) {
+            String source;
+            String type;
+            getImageInfo(isi, source, type);
+            zip.addFile(source.toStdString(), isi->buffer());
+        }
+    }
 }
 
 bool saveMxl(Score* score, IODevice* device)
