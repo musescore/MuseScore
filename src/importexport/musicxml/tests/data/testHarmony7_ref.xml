@@ -39,7 +39,11 @@
         <key>
           <fifths>0</fifths>
           </key>
-        <time>
+        <time number="1">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <time number="2" print-object="no">
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
@@ -482,7 +486,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <note>
+      <note print-object="no">
         <rest/>
         <duration>4</duration>
         <voice>5</voice>
@@ -693,14 +697,14 @@
             </technical>
           </notations>
         </note>
-      <note>
+      <note print-object="no">
         <rest/>
         <duration>1</duration>
         <voice>5</voice>
         <type>quarter</type>
         <staff>2</staff>
         </note>
-      <note>
+      <note print-object="no">
         <rest/>
         <duration>1</duration>
         <voice>5</voice>
@@ -744,14 +748,14 @@
             </technical>
           </notations>
         </note>
-      <note>
+      <note print-object="no">
         <rest/>
         <duration>1</duration>
         <voice>6</voice>
         <type>quarter</type>
         <staff>2</staff>
         </note>
-      <note>
+      <note print-object="no">
         <rest/>
         <duration>1</duration>
         <voice>6</voice>
@@ -769,7 +773,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <note>
+      <note print-object="no">
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>5</voice>
