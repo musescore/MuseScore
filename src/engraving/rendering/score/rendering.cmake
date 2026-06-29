@@ -27,6 +27,8 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lyricslayout.h
     ${CMAKE_CURRENT_LIST_DIR}/measurelayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measurelayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/mmrestlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mmrestlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/beamlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beamlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/beamtremololayout.cpp

@@ -26,6 +26,7 @@
 
 #include "../editing/addremoveelement.h"
 #include "../editing/editproperty.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transaction/undostack.h"
 #include "style/textstyle.h"
 #include "types/typesconv.h"
@@ -487,7 +488,9 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
 void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
-    score()->undoStack()->pushWithoutPerforming(new ChangeProperty(this, id, val));
+
+    Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+    tx.pushWithoutPerforming(new ChangeProperty(this, id, val));
 }
 
 //---------------------------------------------------------

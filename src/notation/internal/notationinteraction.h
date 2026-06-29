@@ -354,6 +354,7 @@ private:
     void onScoreInited();
     void onViewModeChanged();
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func);
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();

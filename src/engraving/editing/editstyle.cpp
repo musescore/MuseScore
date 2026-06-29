@@ -24,7 +24,9 @@
 
 #include "../dom/chordlist.h"
 #include "../dom/score.h"
+
 #include "editing/editsystemlocks.h"
+#include "editing/transaction/transaction.h"
 
 using namespace mu::engraving;
 
@@ -124,7 +126,8 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::createMultiMeasureRests:
         if (oldValue.toBool() == true && newValue.toBool() == false) {
-            EditSystemLocks::removeSystemLocksContainingMMRests(score);
+            Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
         }
         break;
     default:

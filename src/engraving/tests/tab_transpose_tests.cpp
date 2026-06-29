@@ -29,6 +29,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "engraving/compat/scoreaccess.h"
@@ -85,22 +86,21 @@ static void transposeScore(MasterScore* score, int semitones)
     static constexpr int kIntervalIdx[12] = { 0, 3, 4, 7, 8, 11, 12, 14, 17, 18, 21, 22 };
 
     score->cmdSelectAll();
-    score->startCmd(TranslatableString::untranslatable("fretting test"));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("fretting test"), [&](auto& tx) {
+        const TransposeDirection dir = semitones < 0 ? TransposeDirection::DOWN : TransposeDirection::UP;
+        const int abs = std::abs(semitones);
+        const int remainder = abs % 12;
+        const int octaves = abs / 12;
 
-    const TransposeDirection dir = semitones < 0 ? TransposeDirection::DOWN : TransposeDirection::UP;
-    const int abs = std::abs(semitones);
-    const int remainder = abs % 12;
-    const int octaves = abs / 12;
+        if (remainder != 0) {
+            Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, dir, Key::C,
+                                 kIntervalIdx[remainder], true, true, true);
+        }
+        for (int i = 0; i < octaves; i++) {
+            Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, dir, Key::C, 25, true, true, true);
+        }
+    });
 
-    if (remainder != 0) {
-        Transpose::transpose(score, TransposeMode::BY_INTERVAL, dir, Key::C,
-                             kIntervalIdx[remainder], true, true, true);
-    }
-    for (int i = 0; i < octaves; i++) {
-        Transpose::transpose(score, TransposeMode::BY_INTERVAL, dir, Key::C, 25, true, true, true);
-    }
-
-    score->endCmd();
     score->doLayout();
 }
 

@@ -51,9 +51,9 @@ set(CMAKE_MODULE_PATH
 
 ###########################################
 # Check compiler version
-###########################################    
+###########################################
 message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
-message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
+message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 include(CheckCompilerVersion)
 check_compile_version("Clang" 20 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
@@ -123,13 +123,13 @@ option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 option(MUE_BUILD_PROPERTIESPANEL_MODULE "Build propertiespanel module" ON)
 option(MUE_BUILD_PROPERTIESPANEL_QML "Build propertiespanel QML" ${MUE_BUILD_PROPERTIESPANEL_MODULE})
 
-option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
+option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})
 
 option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
 option(MUE_BUILD_MUSESOUNDS_QML "Build musesounds QML" ${MUE_BUILD_MUSESOUNDS_MODULE})
 
-option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON) 
+option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ${MUE_BUILD_NOTATION_MODULE})
 
 option(MUE_BUILD_NOTATIONSCENE_MODULE "Build notation scene module" ON)
@@ -158,7 +158,7 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
-option(MUE_RUN_WINDEPLOYQT "Run windeployqt" ON)
+option(MUE_RUN_WINDEPLOYQT "Run windeployqt" OFF)
 
 # === Tests ===
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
@@ -221,10 +221,6 @@ set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
 
 if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
-
-    # These are included in the precompiled dependencies, so let's use them from there
-    set(MUSE_USE_SYSTEM_FLAC ON)
-    set(MUSE_USE_SYSTEM_OPUS ON)
 endif()
 
 include(SetupQt6)

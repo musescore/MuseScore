@@ -126,6 +126,7 @@
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>J_J</eid>
+        <mmRestLast>P_P</mmRestLast>
         <LayoutBreak>
           <eid>Q_Q</eid>
           <subtype>line</subtype>
@@ -176,6 +177,7 @@
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>W_W</eid>
+        <mmRestLast>b_b</mmRestLast>
         <LayoutBreak>
           <eid>c_c</eid>
           <subtype>line</subtype>
@@ -221,6 +223,7 @@
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>i_i</eid>
+        <mmRestLast>l_l</mmRestLast>
         <voice>
           <StaffText>
             <eid>g_g</eid>

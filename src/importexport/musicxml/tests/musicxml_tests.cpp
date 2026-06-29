@@ -1225,6 +1225,9 @@ TEST_F(MusicXml_Tests, tablature4) {
 TEST_F(MusicXml_Tests, tablature5) {
     musicXmlIoTestRef("testTablature5");
 }
+TEST_F(MusicXml_Tests, tablature6) {
+    musicXmlMscxExportTestRef("testTabs");
+}
 TEST_F(MusicXml_Tests, tapping) {
     musicXmlIoTest("testTapping");
 }
@@ -1257,6 +1260,9 @@ TEST_F(MusicXml_Tests, tempo3) {
 }
 TEST_F(MusicXml_Tests, tempo4) {
     musicXmlIoTestRef("testTempo4");
+}
+TEST_F(MusicXml_Tests, metronome) {
+    musicXmlIoTest("testMetronome");
 }
 TEST_F(MusicXml_Tests, tempo5) {
     musicXmlIoTest("testTempo5");

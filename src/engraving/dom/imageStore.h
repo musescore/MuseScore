@@ -56,6 +56,7 @@ public:
     bool isUsed() const { return !m_references.empty(); }
     std::string hashName() const;
     const muse::ByteArray& hash() const { return m_hash; }
+    const std::string& type() const { return m_type; }
     void set(const muse::ByteArray& b, const muse::ByteArray& h) { m_buffer = b; m_hash = h; }
 
 private:

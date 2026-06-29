@@ -59,7 +59,6 @@ public:
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
     static void layoutPlayCountText(Measure* m, LayoutContext& ctx);
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
-    static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
 
     static void createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
@@ -85,16 +84,9 @@ public:
 
     static void updateKeySignatures(const Measure* measure, LayoutContext& ctx);
 
-private:
-
-    static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
-    static void changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
-    static void restoreMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
-    static void changeAnnotationsParent(Segment* oldParent, Segment* newParent);
-    static Segment* changeElementsParent(Segment* oldSeg, Measure* newMeasure, const Fraction& newSegTick, LayoutContext& ctx);
-
     static int adjustMeasureNumber(Measure* m, int measureNumber);
 
+private:
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
@@ -102,9 +94,6 @@ private:
     static void moveToNextMeasure(LayoutContext& ctx);
 
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
-
-    static void createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutContext& ctx);
-    static void removeMMRestElements(Measure* mmRestMeasure, LayoutContext& ctx);
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 

@@ -119,6 +119,7 @@
 #include "inserttime.h"
 #include "mscoreview.h"
 #include "splitjoinmeasure.h"
+#include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
 
@@ -2810,14 +2811,16 @@ void Score::deleteItem(EngravingItem* el)
     }
 //      LOGD("%s", el->typeName());
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0, 1), part, String()));
+            tx.push(new ChangeInstrumentLong(Fraction(0, 1), part, String()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0, 1), part, String()));
+            tx.push(new ChangeInstrumentShort(Fraction(0, 1), part, String()));
         }
     }
     break;
@@ -2839,16 +2842,6 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::KEYSIG:
     {
         KeySig* k = toKeySig(el);
-        Measure* m = k->measure();
-        if (m->isMMRest()) {
-            m = m->mmRestFirst();
-            if (Segment* s = m->findSegment(SegmentType::KeySig, k->tick())) {
-                k = toKeySig(s->element(k->track()));
-            }
-            if (!k || k->generated()) {
-                return;
-            }
-        }
         Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
         bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
                                                          el->part()->startTrack(), el->part()->endTrack() - 1);
@@ -3132,52 +3125,22 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::BRACKET:
         undoRemoveBracket(toBracket(el));
         break;
-
-    case ElementType::LAYOUT_BREAK:
-    {
-        undoRemoveElement(el);
-        LayoutBreak* lb = toLayoutBreak(el);
-        MeasureBase* mb = lb->measure();
-        Measure* m = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
-        if (m && m->isMMRest()) {
-            // propagate to original measure
-            m = m->mmRestLast();
-            for (EngravingItem* e : m->el()) {
-                if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == toLayoutBreak(el)->layoutBreakType()) {
-                    undoRemoveElement(e);
-                    break;
-                }
-            }
-        }
-    }
-    break;
-
     case ElementType::CLEF:
     {
         Clef* clef = toClef(el);
         Measure* m = clef->measure();
-        if (m->isMMRest()) {
-            // propagate to original measure
-            m = m->mmRestLast();
-            Segment* s = m->findSegment(SegmentType::Clef, clef->segment()->tick());
-            if (s && s->element(clef->track())) {
-                Clef* c = toClef(s->element(clef->track()));
-                undoRemoveElement(c);
-            }
-        } else {
-            if (clef->generated()) {
-                // find the real clef if this is a cautionary one
-                if (m && m->prevMeasure()) {
-                    Fraction tick = m->tick();
-                    m = m->prevMeasure();
-                    Segment* s = m->findSegment(SegmentType::Clef, tick);
-                    if (s && s->element(clef->track())) {
-                        clef = toClef(s->element(clef->track()));
-                    }
+        if (clef->generated()) {
+            // find the real clef if this is a cautionary one
+            if (m && m->prevMeasure()) {
+                Fraction tick = m->tick();
+                m = m->prevMeasure();
+                Segment* s = m->findSegment(SegmentType::Clef, tick);
+                if (s && s->element(clef->track())) {
+                    clef = toClef(s->element(clef->track()));
                 }
             }
-            undoRemoveElement(clef);
         }
+        undoRemoveElement(clef);
     }
     break;
 
@@ -3207,29 +3170,6 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
-    case ElementType::REHEARSAL_MARK:
-    case ElementType::TEMPO_TEXT:
-    {
-        Segment* s = toSegment(el->explicitParent());
-        Measure* m = s->measure();
-        if (m->isMMRest()) {
-            // propagate to original measure/element
-            m = m->mmRestFirst();
-            Segment* ns = m->findSegment(SegmentType::ChordRest, s->tick());
-            const auto annotations = ns->annotations(); // make a copy since we alter the list
-            for (EngravingItem* e : annotations) {
-                if (e->type() == el->type() && e->track() == el->track()) {
-                    el = e;
-                    undoRemoveElement(el);
-                    break;
-                }
-            }
-        } else {
-            undoRemoveElement(el);
-        }
-    }
-    break;
-
     case ElementType::LYRICSLINE_SEGMENT:
     {
         el = toLyricsLineSegment(el)->lyricsLine();
@@ -3337,61 +3277,14 @@ void Score::deleteItem(EngravingItem* el)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
+            Transpose::transpositionChanged(tx, this, part, oldV, tickStart, tickEnd);
         }
     }
     break;
-
-    case ElementType::MARKER:
-    {
-        Measure* m = toMeasure(el->explicitParent());
-        if (m->isMMRest()) {
-            // find corresponding marker in underlying measure
-            bool found = false;
-            // the marker may be in the first measure...
-            for (EngravingItem* e : m->mmRestFirst()->el()) {
-                if (e->isMarker() && e->subtype() == el->subtype()) {
-                    undoRemoveElement(e);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                // ...or it may be in the last measure
-                for (EngravingItem* e : m->mmRestLast()->el()) {
-                    if (e->isMarker() && e->subtype() == el->subtype()) {
-                        undoRemoveElement(e);
-                        break;
-                    }
-                }
-            }
-        }
-        // whether m is an mmrest or not, we still need to remove el
-        undoRemoveElement(el);
-    }
-    break;
-
-    case ElementType::JUMP:
-    {
-        Measure* m = toMeasure(el->explicitParent());
-        if (m->isMMRest()) {
-            // find corresponding jump in underlying measure
-            for (EngravingItem* e : m->mmRestLast()->el()) {
-                if (e->isJump() && e->subtype() == el->subtype()) {
-                    undoRemoveElement(e);
-                    break;
-                }
-            }
-        }
-        // whether m is an mmrest or not, we still need to remove el
-        undoRemoveElement(el);
-    }
-    break;
-
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
         const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
-        EditSystemLocks::undoRemoveSystemLock(this, systemLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
     }
     break;
 
@@ -5002,13 +4895,15 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 
 void Score::cmdTimeDelete()
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     EngravingItem* e = selection().element();
 
     if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
         const Measure* m = toBarLine(e)->segment()->measure();
         const Measure* next = m->nextMeasure();
         if (next) {
-            SplitJoinMeasure::joinMeasures(m_masterScore, m->tick(), next->tick());
+            SplitJoinMeasure::joinMeasures(tx, m_masterScore, m->tick(), next->tick());
         }
         return;
     }
@@ -5255,6 +5150,8 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
 
 bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue, PropertyFlags propFlags)
 {
+    Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+
     bool changed = false;
 
     const PropertyValue currentPropValue = item->getProperty(propId);
@@ -5262,7 +5159,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 
     if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
         item->setPropertyFlags(propId, propFlags);
-        undoStack()->pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
+        tx.pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
         changed = true;
     }
 
@@ -5276,7 +5173,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         switch (propertyPropagate) {
         case PropertyPropagation::PROPAGATE:
             if (linkedItem->getProperty(propId) != currentPropValue) {
-                undoStack()->pushAndPerform(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
+                tx.push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
                 changed = true;
             }
             break;
@@ -5294,7 +5191,8 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
-        undoStack()->pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
+        Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+        tx.pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
     }
 }
 
@@ -5730,6 +5628,8 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 
 void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     KeySig* lks = 0;
     bool needsUpdate = false;
 
@@ -5765,7 +5665,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         updateInstrumentChangeTranspositions(key, staff, tick);
         if (ks) {
             ks->undoChangeProperty(Pid::GENERATED, false);
-            undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
+            tx.push(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
         } else {
             KeySig* nks = Factory::createKeySig(s);
             nks->setParent(s);
@@ -5773,7 +5673,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             nks->setKeySigEvent(nkey);
             doUndoAddElement(nks);
             if (lks) {
-                undo(new Link(lks, nks));
+                tx.push(new Link(lks, nks));
             } else {
                 lks = nks;
             }
@@ -5784,7 +5684,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
     }
     if (needsUpdate) {
         Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
-        Transpose::transpositionChanged(this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
+        Transpose::transpositionChanged(tx, this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }
 
@@ -6273,6 +6173,8 @@ void Score::undoChangeVisible(EngravingItem* item, bool visible)
 
 void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool ctrlModifier, EngravingItem* elementToRelink)
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     Staff* ostaff = element->staff();
     track_idx_t strack = element->track();
 
@@ -6763,7 +6665,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         if (!score->style().styleB(Sid::concertPitch)) {
                             interval.flip();
                         }
-                        Transpose::undoTransposeHarmony(score, h, interval);
+                        Transpose::undoTransposeHarmony(tx, h, interval);
                     }
                 }
             }
@@ -6933,7 +6835,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (score->isMaster() && nis->staff()->transpose(tickStart) != oldV) {
                 auto i = part->instruments().upper_bound(tickStart.ticks());
                 Fraction tickEnd = i == part->instruments().end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
-                Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
+                Transpose::transpositionChanged(tx, this, part, oldV, tickStart, tickEnd);
             }
         } else if (element->isBreath()) {
             Breath* breath   = toBreath(element);
@@ -7457,6 +7359,8 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
 {
     assert(m1 && m2);
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();
     std::set<Spanner*> spannersToRemove;
@@ -7540,7 +7444,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
         }
     }
 
-    EditSystemLocks::removeSystemLocksOnRemoveMeasures(this, m1, m2);
+    EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }
@@ -7624,7 +7528,11 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo)
 void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
 {
     const size_t undoIdx = undoStack()->currentIndex();
-    if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
+
+    const ChordRest* startCR = slur ? slur->startCR() : nullptr;
+    IF_ASSERT_FAILED(startCR) {
+        LOGE() << "Slur is corrupted";
+    } else if (!startCR->hasPrecedingJumpItem() && slur->isIncoming()) {
         if (undo) {
             startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
             slur->undoSetIncoming(false);
@@ -7634,7 +7542,10 @@ void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
         }
     }
 
-    if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
+    const ChordRest* endCR = slur ? slur->endCR() : nullptr;
+    IF_ASSERT_FAILED(endCR) {
+        LOGE() << "Slur is corrupted";
+    } else if (!endCR->hasFollowingJumpItem() && slur->isOutgoing()) {
         if (undo) {
             startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
             slur->undoSetOutgoing(false);

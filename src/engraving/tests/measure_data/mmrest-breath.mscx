@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>91wq9nUOEnE_CvT0xiAEw0K</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-06-15</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>AEYPX2MYCPH_u7WNqBEGonG</eid>
+      <Staff>
+        <eid>zjYjLVK70wC_IbxseGsMoQC</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="piano">
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>Ev+BuhgngoP_g3LXFu3S5AC</eid>
+        <voice>
+          <TimeSig>
+            <eid>YOXS1qFY/jO_shlqrra6rUH</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>d4eov4x1zTC_0kZQ+2qUeCP</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>BDcGUbEaOiO_7ofSsTr4DuM</eid>
+        <voice>
+          <Rest>
+            <eid>7XHb5oG+7bC_XM9nwaHcE2K</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>FqH6u3Ojso_eUnzbjAanXP</eid>
+        <voice>
+          <Rest>
+            <eid>rII9sTbcJ2D_gUigDkRIHNL</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>MlLVZsftaQB_ULSq+apVAmD</eid>
+            </Breath>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>xX9vmNybbbH_qpfLj6DiG2N</eid>
+        <voice>
+          <Rest>
+            <eid>TmACDC8QhMD_gGypNiP6hAJ</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>2Rw7XDL5W5J_UoX2DXTfjwO</eid>
+        <voice>
+          <Rest>
+            <eid>+FDj82boPeH_FMzeFxWcQfI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>3BBY8qXhRVD_anrh58NcQCH</eid>
+            </Breath>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>hSO47AqDKmD_dzHlBX0XDNN</eid>
+        <voice>
+          <Chord>
+            <eid>6IzNA4GAVdN_rO3BZY6reDN</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>sqxyZkCfjjI_cnc2F21xo/B</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

@@ -655,27 +655,23 @@ void PlaybackController::togglePlay(bool showErrors)
 
 void PlaybackController::playFromSelection(bool showErrors)
 {
-    const EngravingItem* lastElementHit = selection()->lastElementHit();
-    if (selection()->isNone() && !lastElementHit) {
-        return;
-    }
-
     if (showErrors && m_onlineSoundsController->shouldShowOnlineSoundsProcessingError(isPlaying())) {
         m_onlineSoundsController->showOnlineSoundsProcessingError([this]() { playFromSelection(false /*showErrors*/); });
         return;
     }
 
-    int startTick = INT_MAX;
-    for (const EngravingItem* item : selection()->elements()) {
-        startTick = std::min(startTick, item->tick().ticks());
-    }
+    int startTick = 0;
 
-    if (startTick == INT_MAX) {
-        // Selection is none - fall back to last element hit...
-        IF_ASSERT_FAILED(lastElementHit) {
-            return;
+    if (!selection()->isNone()) {
+        startTick = INT_MAX;
+        for (const EngravingItem* item : selection()->elements()) {
+            startTick = std::min(startTick, item->tick().ticks());
         }
-        startTick = lastElementHit->tick().ticks();
+    } else {
+        // Selection is none - fall back to last element hit...
+        if (const EngravingItem* lastElementHit = selection()->lastElementHit()) {
+            startTick = lastElementHit->tick().ticks();
+        }
     }
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();

@@ -132,6 +132,8 @@ public:
 
     QUrl supportForumUrl() const override;
 
+    QUrl dotComBugReportUrl() const override;
+
     bool openDetailedProjectUploadedDialog() const override;
     void setOpenDetailedProjectUploadedDialog(bool show) override;
 

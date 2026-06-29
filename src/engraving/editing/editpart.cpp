@@ -23,6 +23,7 @@
 #include "editpart.h"
 #include "editscoreproperties.h"
 #include "editstaff.h"
+#include "transaction/transaction.h"
 #include "transpose.h"
 
 #include "../dom/excerpt.h"
@@ -425,7 +426,9 @@ void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpF
     Interval oldTransposition = part->staff(0)->transpose(Fraction(0, 1));
 
     part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(sharpFlat));
-    Transpose::transpositionChanged(score, part, oldTransposition);
+
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    Transpose::transpositionChanged(tx, score, part, oldTransposition);
 }
 
 void EditPart::setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name)

@@ -89,7 +89,7 @@ jobs:
     runs-on: windows-2025
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.app_repo || github.repository }}
         ref: ${{ inputs.app_ref || github.ref }}
@@ -97,7 +97,7 @@ jobs:
 
     - name: Override muse_framework
       if: inputs.framework_ref != '' && inputs.framework_repo != ''
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.framework_repo }}
         ref: ${{ inputs.framework_ref }}
@@ -295,7 +295,7 @@ jobs:
     runs-on: windows-2025
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Configure workflow
       shell: bash
       env:
@@ -435,7 +435,7 @@ jobs:
   #   runs-on: windows-2025
   #   steps:
   #   - name: Clone repository
-  #     uses: actions/checkout@v6
+  #     uses: actions/checkout@v7
   #   - name: Sign test
   #     shell: cmd
   #     run: |

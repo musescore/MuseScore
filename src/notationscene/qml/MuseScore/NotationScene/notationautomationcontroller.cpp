@@ -1,0 +1,364 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "notationautomationcontroller.h"
+
+#include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
+#include "engraving/automation/iautomation.h"
+#include "engraving/dom/masterscore.h"
+
+using namespace mu::notation;
+using namespace muse::uicomponents;
+
+static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
+{
+    IF_ASSERT_FAILED(polyline) {
+        return false;
+    }
+    return pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size());
+}
+
+// TODO: This will do for now, but it needs to be smarter because there will be gaps between ChordRest/TimeTick segment types (e.g.
+// barlines). This method effectively needs to return the closest segment of the desired type (and probably whether canvasX is before
+// or after the segment). If the canvasX is before the closest segment, then we'll go on to use the start tick of the segment. If it's
+// after, we'll use the end tick of the segment....
+static const Segment* segmentForCanvasX(const System* system, double canvasX)
+{
+    IF_ASSERT_FAILED(system) {
+        return nullptr;
+    }
+    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration;
+    const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
+    while (seg && seg->system() == system) {
+        if (canvasX >= seg->canvasX() && canvasX <= seg->canvasX() + seg->width()) {
+            return seg;
+        }
+        seg = seg->next1(type);
+    }
+    return nullptr;
+}
+
+NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx), m_linesParent(linesParent)
+{
+}
+
+void NotationAutomationController::init()
+{
+    IF_ASSERT_FAILED(automation() && currentNotation()) {
+        return;
+    }
+
+    onCurrentNotationChanged();
+
+    automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+        updatePolylinesGeometry();
+    });
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
+}
+
+NotationAutomationController::SysStaffToPolylinesMap NotationAutomationController::createPolylinesForSystem(const System* system)
+{
+    IF_ASSERT_FAILED(system && m_linesParent && score()) {
+        return {};
+    }
+
+    SysStaffToPolylinesMap map;
+    const int systemStartTick = system->first()->tick().ticks();
+    const int systemEndTick = system->last()->endTick().ticks();
+
+    staff_idx_t staffIdx = system->firstVisibleStaff();
+    while (staffIdx != muse::nidx) {
+        const Staff* staff = score()->staff(staffIdx);
+        const SysStaff* sysStaff = system->staff(staffIdx);
+        if (!staff || !sysStaff || !staff->isPrimaryStaff()) {
+            staffIdx = system->nextVisibleStaff(staffIdx);
+            continue;
+        }
+
+        // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
+        // providing a single polyline over the entire staff...
+        PolylinePlot* polyline = new PolylinePlot(m_linesParent);
+
+        const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+        const QVector<PointData> pointsData = pointsDataInStaff(staff->id(), staffCanvasRect, systemStartTick, systemEndTick);
+
+        //! NOTE: There can't be a 1-to-1 match between the number of points in the automation model and
+        //! points on the polyline. A point with equal in/out values (i.e. a "BOTH" point) is represented
+        //! as 1 polyline point, whereas a point with different in/out values will be represented with 2
+        //! separate polyline points...
+        QVector<QPointF> pointsForPolyline;
+        for (const PointData& pointData : pointsData) {
+            pointsForPolyline.emplace_back(pointData.qPointF);
+        }
+        polyline->setPoints(pointsForPolyline);
+
+        polyline->setDrawBackground(false);
+        polyline->setVisible(false);
+
+        const SysStaffKey key(system, staffIdx);
+        map.emplace(key, PolylinesSet({ polyline }));
+
+        QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
+                         [this, key, polyline, pointsData](int pointIdx, qreal x, qreal y, bool completed) {
+            IF_ASSERT_FAILED(polylinePointIndexIsValid(polyline, pointIdx)) {
+                return;
+            }
+            QVector<QPointF> points = polyline->points();
+            points.replace(pointIdx, { x, y });
+            polyline->setPoints(points);
+            polyline->update(); // TODO: pass update rect?
+            if (completed) {
+                // Only request to update the model when completed...
+                IF_ASSERT_FAILED(pointIdx < pointsData.size()) {
+                    return;
+                }
+                requestEditPoint(pointsData.at(pointIdx), key, x, y);
+            }
+        });
+
+        staffIdx = system->nextVisibleStaff(staffIdx);
+    }
+
+    return map;
+}
+
+QVector<NotationAutomationController::PointData> NotationAutomationController::pointsDataInStaff(const muse::ID& staffId,
+                                                                                                 const muse::RectF& sysStaffCanvasRect,
+                                                                                                 int startTick, int endTick) const
+{
+    QVector<PointData> points;
+    IF_ASSERT_FAILED(staffId.isValid() && score() && engravingAutomation()) {
+        return points;
+    }
+
+    int currentPointIndex = 0;
+    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staffId, std::nullopt };
+    for (const auto& pair : engravingAutomation()->curve(key)) {
+        const int tick = pair.first;
+        if (tick < startTick || tick > endTick) {
+            continue;
+        }
+
+        const Fraction frac = Fraction::fromTicks(tick);
+        const Segment* seg = score()->tick2leftSegmentMM(frac);
+        IF_ASSERT_FAILED(seg) {
+            continue;
+        }
+
+        // The point's tick may not exactly match that of a segment. For this reason we can only calculate the x position
+        // of our points based on a "tickRatio". This ratio is based on the "tick difference" between the point tick and
+        // the segment's tick, and the duration of the segment (in ticks)...
+        const int tickDiff = tick - seg->tick().ticks();
+        const double tickRatio = static_cast<double>(tickDiff) / seg->ticks().ticks();
+        const double pointXInSeg = tickRatio * seg->width(); // The point's x relative to the segment
+
+        const double segXInStaff = seg->canvasX() - sysStaffCanvasRect.x(); // The segment's x relative to the staff
+        const double pointXInStaff = (segXInStaff + pointXInSeg) / sysStaffCanvasRect.width();
+
+        // Point in/out values are always between 0 and 1 - higher value == lower Y...
+        const mu::engraving::AutomationPoint& autoPoint = pair.second;
+        if (muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
+            const QPointF qpf(pointXInStaff, 1.0 - autoPoint.inValue);
+            points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
+            continue;
+        }
+
+        const QPointF qpfIn(pointXInStaff, 1.0 - autoPoint.inValue);
+        points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
+
+        const QPointF qpfOut(pointXInStaff, 1.0 - autoPoint.outValue);
+        points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
+    }
+
+    return points;
+}
+
+void NotationAutomationController::updatePolylinesGeometry()
+{
+    const bool visible = automation() && automation()->isAutomationModeEnabled();
+
+    for (const auto& [key, polylines] : m_stavesToLinesMap) {
+        IF_ASSERT_FAILED(key.isValid() && !polylines.empty()) {
+            continue;
+        }
+
+        // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
+        // providing a single polyline over the entire staff...
+        PolylinePlot* polyline = *polylines.begin();
+        polyline->setVisible(visible);
+        if (!visible) {
+            continue;
+        }
+
+        const SysStaff* sysStaff = key.system->staff(key.staffIdx);
+        IF_ASSERT_FAILED(sysStaff) {
+            continue;
+        }
+
+        //! NOTE: Here we should only update properties of the polyline that change relative to the view matrix. Polyline points are
+        //! placed relative to the polylines themselves, and thus do not need to be modified in here...
+        muse::RectF staffCanvasRect = sysStaff->bbox().translated(key.system->canvasPos());
+        staffCanvasRect = m_viewMatrix.map(staffCanvasRect);
+
+        polyline->setWidth(staffCanvasRect.width());
+        polyline->setHeight(staffCanvasRect.height());
+        polyline->setX(staffCanvasRect.x());
+        polyline->setY(staffCanvasRect.y());
+    }
+}
+
+void NotationAutomationController::setViewMatrix(const muse::draw::Transform& viewMatrix)
+{
+    if (viewMatrix == m_viewMatrix) {
+        return;
+    }
+    m_viewMatrix = viewMatrix;
+
+    if (automation() && automation()->isAutomationModeEnabled()) {
+        updatePolylinesGeometry();
+    }
+}
+
+void NotationAutomationController::onCurrentNotationChanged()
+{
+    // TODO: More efficient if we don't clear/recreate the polylines every time...
+    for (const auto& [staff, polylines] : m_stavesToLinesMap) {
+        for (PolylinePlot* polyline : polylines) {
+            delete polyline;
+        }
+    }
+    m_stavesToLinesMap.clear();
+
+    if (!score()) {
+        // Happens on close...
+        return;
+    }
+
+    if (score()->masterScore()) { // HACK - needs to happen somewhere...
+        score()->masterScore()->initAutomation();
+    }
+
+    for (const System* system : score()->systems()) {
+        m_stavesToLinesMap.merge(createPolylinesForSystem(system));
+    }
+
+    updatePolylinesGeometry();
+}
+
+void NotationAutomationController::requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y)
+{
+    // STEP 1 - Check that all of our parameters are valid...
+    const PointData::PointType pointType = oldPointData.pointType;
+    IF_ASSERT_FAILED(key.isValid() && pointType != PointData::PointType::UNKNOWN) {
+        return;
+    }
+    const System* system = key.system;
+    const SysStaff* sysStaff = system ? system->staff(key.staffIdx) : nullptr;
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(sysStaff && staff) {
+        return;
+    }
+
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+    const double staffStartCanvasX = staffCanvasRect.x();
+    const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
+    const double pointCanvasX = staffStartCanvasX + x * (staffEndCanvasX - staffStartCanvasX);
+
+    // TODO: See segmentForCanvasX - it needs to be a bit smarter...
+    const Segment* newSeg = segmentForCanvasX(system, pointCanvasX);
+    IF_ASSERT_FAILED(newSeg) {
+        return;
+    }
+
+    // STEP 2 - Update the point value using the y parameter...
+    // TODO: Not always dynamics...
+    const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
+
+    //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
+    const double newValue = 1.0 - y;
+    if (pointType == PointData::PointType::IN || pointType == PointData::PointType::BOTH) {
+        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, newValue);
+    }
+    if (pointType == PointData::PointType::OUT || pointType == PointData::PointType::BOTH) {
+        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, newValue);
+    }
+
+    // STEP 3 - Determine the new tick value based on the x parameter...
+    const double segStartCanvasX = newSeg->canvasX();
+    const double setEndCanvasX = segStartCanvasX + newSeg->width();
+
+    const int segStartTick = newSeg->tick().ticks();
+    const int segEndTick = segStartTick + newSeg->ticks().ticks();
+
+    const double tickRatio = (pointCanvasX - segStartCanvasX) / (setEndCanvasX - segStartCanvasX);
+    const int newTick = segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
+    if (newTick == oldPointData.tick) {
+        // Nothing to update - tick didn't change...
+        return;
+    }
+
+    // STEP 4 - Update the tick....
+
+    //! NOTE: Moving a BOTH point is the simplest case - we can simply change the tick. Moving IN/OUT points is slightly
+    //! more complex. In this case we need to set the in/out values to be equal at oldTick (effectively converting the
+    //! original point to a BOTH point) and create a new point at newTick...
+
+    if (pointType == PointData::PointType::BOTH) {
+        engravingAutomation()->movePoint(curveKey, oldPointData.tick, newTick);
+        return;
+    }
+
+    const mu::engraving::AutomationPoint& oldPoint = engravingAutomation()->activePoint(curveKey, oldPointData.tick);
+    const mu::engraving::AutomationPoint newPoint = { newValue, newValue, oldPoint.interpolation, oldPoint.itemId };
+    if (pointType == PointData::PointType::IN) {
+        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, oldPoint.outValue);
+    }
+    if (pointType == PointData::PointType::OUT) {
+        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, oldPoint.inValue);
+    }
+    engravingAutomation()->addPoint(curveKey, newTick, newPoint);
+}
+
+INotationAutomationPtr NotationAutomationController::automation() const
+{
+    const IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    return masterNotation ? masterNotation->automation() : nullptr;
+}
+
+INotationPtr NotationAutomationController::currentNotation() const
+{
+    return globalContext()->currentNotation();
+}
+
+mu::engraving::IAutomation* NotationAutomationController::engravingAutomation() const
+{
+    return score() ? score()->automation() : nullptr;
+}
+
+mu::engraving::Score* NotationAutomationController::score() const
+{
+    const INotationElementsPtr currElems = currentNotation() ? currentNotation()->elements() : nullptr;
+    return currElems ? currElems->msScore() : nullptr;
+}

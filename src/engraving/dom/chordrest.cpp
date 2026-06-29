@@ -59,6 +59,7 @@
 #include "volta.h"
 
 #include "editing/splitjoinmeasure.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
 #include "log.h"
@@ -192,6 +193,8 @@ bool ChordRest::acceptDrop(EditData& data) const
 
 EngravingItem* ChordRest::drop(EditData& data)
 {
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+
     EngravingItem* e = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == muse::nidx);
@@ -227,7 +230,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Fraction barLineTick = bl->barLineType() == BarLineType::START_REPEAT ? tick() : endTick();
 
         if (data.control()) {
-            SplitJoinMeasure::splitMeasure(masterScore(), barLineTick);
+            SplitJoinMeasure::splitMeasure(tx, masterScore(), barLineTick);
             m = score()->tick2measure(tick());
             // consume the ControlModifier flag
             data.modifiers &= ~ControlModifier;
@@ -326,7 +329,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Interval interval = staff()->transpose(tick());
         if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
-            Transpose::undoTransposeHarmony(score(), harmony, interval);
+            Transpose::undoTransposeHarmony(tx, harmony, interval);
         }
     }
         [[fallthrough]];

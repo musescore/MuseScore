@@ -1869,7 +1869,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         if (tl->beginHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
-            brush.setColor(item->curColor(opt));
+            brush.setColor(color);
             painter->setBrush(brush);
             painter->setNoPen();
             painter->drawPolygon(ldata->beginArrow);
@@ -1902,7 +1902,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         if (tl->endHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
-            brush.setColor(item->curColor(opt));
+            brush.setColor(color);
             painter->setBrush(brush);
             painter->setNoPen();
             painter->drawPolygon(ldata->endArrow);

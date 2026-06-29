@@ -293,7 +293,7 @@ void EngravingContext::onInit(const muse::IApplication::RunMode&)
 #endif
 }
 
-void EngravingContext::onDeinit()
+void EngravingContext::onDestroy()
 {
 #ifndef ENGRAVING_NO_INTERNAL
     m_paletteScoreProvider->deinit();
