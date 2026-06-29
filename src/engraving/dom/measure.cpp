@@ -27,11 +27,12 @@
 
 #include "measure.h"
 
-#include "../editing/mscoreview.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
 #include "../editing/inserttime.h"
+#include "../editing/mscoreview.h"
+#include "../editing/transaction/transaction.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -1519,6 +1520,8 @@ EngravingItem* Measure::drop(EditData& data)
     Staff* staff = score()->staff(staffIdx);
     //bool fromPalette = (e->track() == -1);
 
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+
     switch (e->type()) {
     case ElementType::MARKER:
     case ElementType::JUMP:
@@ -1808,7 +1811,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            EditSystemLocks::makeIntoSystem(score(), system()->first(), this);
+            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
             break;
         default:
             break;

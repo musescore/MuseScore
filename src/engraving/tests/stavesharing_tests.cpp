@@ -26,6 +26,7 @@
 #include "engraving/dom/sharedpart.h"
 
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -87,9 +88,9 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPart)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     EXPECT_TRUE(score);
 
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Enable stave sharing"));
-    EditStaveSharing::toggleStaveSharing(score, true);
-    score->endCmd();
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
 
     SharedPart* sharedPart = nullptr;
     std::vector<Part*> originParts;
@@ -105,9 +106,9 @@ TEST_F(Engraving_StaveSharingTests, testCreateSharedPartUndoRedo)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     EXPECT_TRUE(score);
 
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Enable stave sharing"));
-    EditStaveSharing::toggleStaveSharing(score, true);
-    score->endCmd();
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
 
     score->undoRedo(true, nullptr);
 
@@ -131,9 +132,9 @@ TEST_F(Engraving_StaveSharingTests, testDeleteSharedStaves)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     EXPECT_TRUE(score);
 
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Enable stave sharing"));
-    EditStaveSharing::toggleStaveSharing(score, true);
-    score->endCmd();
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
 
     SharedPart* sharedPart = nullptr;
     std::vector<Part*> originParts;
@@ -177,9 +178,9 @@ TEST_F(Engraving_StaveSharingTests, testSaveReloadStaveSharing)
     MasterScore* score = ScoreRW::readScore(STAVE_SHARING_DIR + u"staveSharing_00.mscz");
     EXPECT_TRUE(score);
 
-    score->startCmd(muse::TranslatableString("staveSharingTest", "Enable stave sharing"));
-    EditStaveSharing::toggleStaveSharing(score, true);
-    score->endCmd();
+    score->transactionManager()->transaction(muse::TranslatableString("staveSharingTest", "Enable stave sharing"), [&](Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score, true);
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"staveSharing", STAVE_SHARING_DIR + u"staveSharing_00_ref.mscx"));
 

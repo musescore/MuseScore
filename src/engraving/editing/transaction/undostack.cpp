@@ -128,42 +128,6 @@ void UndoStack::beginTransaction(Score* score, const TranslatableString& actionN
     m_activeTransaction = new UndoableTransaction(score, actionName);
 }
 
-void UndoStack::pushAndPerform(UndoableCommand* cmd, EditData* ed)
-{
-    if (!m_activeTransaction) {
-        // this can happen for layout() outside of a transaction (load)
-        if (!ScoreLoad::loading()) {
-            LOG_UNDO() << "no active transaction, UndoStack";
-        }
-
-        cmd->redo(ed);
-        delete cmd;
-        return;
-    }
-#ifndef QT_NO_DEBUG
-    if (cmd->type() == CommandType::ChangeProperty) {
-        ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
-        LOG_UNDO() << cmd->name() << " id: " << int(cp->getId()) << ", property: " << propertyName(cp->getId());
-    } else {
-        LOG_UNDO() << cmd->name();
-    }
-#endif
-    m_activeTransaction->appendCommand(cmd);
-    cmd->redo(ed);
-}
-
-void UndoStack::pushWithoutPerforming(UndoableCommand* cmd)
-{
-    if (!m_activeTransaction) {
-        if (!ScoreLoad::loading()) {
-            LOGW("no active transaction, UndoStack %p", this);
-        }
-        delete cmd;
-        return;
-    }
-    m_activeTransaction->appendCommand(cmd);
-}
-
 void UndoStack::remove(size_t idx)
 {
     assert(idx <= m_currentIndex);

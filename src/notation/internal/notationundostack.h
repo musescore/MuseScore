@@ -28,6 +28,7 @@
 namespace mu::engraving {
 class Score;
 class MasterScore;
+class TransactionManager;
 class UndoStack;
 class EditData;
 }
@@ -45,6 +46,8 @@ public:
     void redo(mu::engraving::EditData*) override;
 
     void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
+
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) override;
 
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
@@ -75,6 +78,7 @@ private:
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;
+    mu::engraving::TransactionManager* transactionManager() const;
     mu::engraving::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;

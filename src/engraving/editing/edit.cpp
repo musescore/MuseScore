@@ -119,6 +119,7 @@
 #include "inserttime.h"
 #include "mscoreview.h"
 #include "splitjoinmeasure.h"
+#include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
 
@@ -2810,14 +2811,16 @@ void Score::deleteItem(EngravingItem* el)
     }
 //      LOGD("%s", el->typeName());
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0, 1), part, String()));
+            tx.push(new ChangeInstrumentLong(Fraction(0, 1), part, String()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0, 1), part, String()));
+            tx.push(new ChangeInstrumentShort(Fraction(0, 1), part, String()));
         }
     }
     break;
@@ -3274,14 +3277,14 @@ void Score::deleteItem(EngravingItem* el)
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
             }
-            Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
+            Transpose::transpositionChanged(tx, this, part, oldV, tickStart, tickEnd);
         }
     }
     break;
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
         const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
-        EditSystemLocks::undoRemoveSystemLock(this, systemLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
     }
     break;
 
@@ -4892,13 +4895,15 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 
 void Score::cmdTimeDelete()
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     EngravingItem* e = selection().element();
 
     if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
         const Measure* m = toBarLine(e)->segment()->measure();
         const Measure* next = m->nextMeasure();
         if (next) {
-            SplitJoinMeasure::joinMeasures(m_masterScore, m->tick(), next->tick());
+            SplitJoinMeasure::joinMeasures(tx, m_masterScore, m->tick(), next->tick());
         }
         return;
     }
@@ -5145,6 +5150,8 @@ void Score::doTimeDeleteForMeasure(Measure* m, Segment* startSegment, const Frac
 
 bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue, PropertyFlags propFlags)
 {
+    Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+
     bool changed = false;
 
     const PropertyValue currentPropValue = item->getProperty(propId);
@@ -5152,7 +5159,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 
     if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
         item->setPropertyFlags(propId, propFlags);
-        undoStack()->pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
+        tx.pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
         changed = true;
     }
 
@@ -5166,7 +5173,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         switch (propertyPropagate) {
         case PropertyPropagation::PROPAGATE:
             if (linkedItem->getProperty(propId) != currentPropValue) {
-                undoStack()->pushAndPerform(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
+                tx.push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
                 changed = true;
             }
             break;
@@ -5184,7 +5191,8 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
-        undoStack()->pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
+        Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+        tx.pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
     }
 }
 
@@ -5620,6 +5628,8 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 
 void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     KeySig* lks = 0;
     bool needsUpdate = false;
 
@@ -5655,7 +5665,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         updateInstrumentChangeTranspositions(key, staff, tick);
         if (ks) {
             ks->undoChangeProperty(Pid::GENERATED, false);
-            undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
+            tx.push(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
         } else {
             KeySig* nks = Factory::createKeySig(s);
             nks->setParent(s);
@@ -5663,7 +5673,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             nks->setKeySigEvent(nkey);
             doUndoAddElement(nks);
             if (lks) {
-                undo(new Link(lks, nks));
+                tx.push(new Link(lks, nks));
             } else {
                 lks = nks;
             }
@@ -5674,7 +5684,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
     }
     if (needsUpdate) {
         Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
-        Transpose::transpositionChanged(this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
+        Transpose::transpositionChanged(tx, this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }
 
@@ -6163,6 +6173,8 @@ void Score::undoChangeVisible(EngravingItem* item, bool visible)
 
 void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool ctrlModifier, EngravingItem* elementToRelink)
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     Staff* ostaff = element->staff();
     track_idx_t strack = element->track();
 
@@ -6653,7 +6665,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         if (!score->style().styleB(Sid::concertPitch)) {
                             interval.flip();
                         }
-                        Transpose::undoTransposeHarmony(score, h, interval);
+                        Transpose::undoTransposeHarmony(tx, h, interval);
                     }
                 }
             }
@@ -6823,7 +6835,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (score->isMaster() && nis->staff()->transpose(tickStart) != oldV) {
                 auto i = part->instruments().upper_bound(tickStart.ticks());
                 Fraction tickEnd = i == part->instruments().end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
-                Transpose::transpositionChanged(this, part, oldV, tickStart, tickEnd);
+                Transpose::transpositionChanged(tx, this, part, oldV, tickStart, tickEnd);
             }
         } else if (element->isBreath()) {
             Breath* breath   = toBreath(element);
@@ -7347,6 +7359,8 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
 {
     assert(m1 && m2);
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();
     std::set<Spanner*> spannersToRemove;
@@ -7430,7 +7444,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
         }
     }
 
-    EditSystemLocks::removeSystemLocksOnRemoveMeasures(this, m1, m2);
+    EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }

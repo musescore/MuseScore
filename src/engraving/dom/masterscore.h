@@ -23,6 +23,7 @@
 #pragma once
 
 #include <array>
+#include <memory>
 
 #include "../infrastructure/ifileinfoprovider.h"
 #include "../infrastructure/eidregister.h"
@@ -35,6 +36,7 @@ class EngravingProject;
 class MscReader;
 class MscWriter;
 class MscLoader;
+class TransactionManager;
 }
 
 namespace mu::engraving::compat {
@@ -97,7 +99,8 @@ public:
 
     bool readOnly() const override { return m_readOnly; }
     void setReadOnly(bool ro) { m_readOnly = ro; }
-    UndoStack* undoStack() const override { return m_undoStack; }
+    TransactionManager* transactionManager() const { return m_transactionManager.get(); }
+    UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
@@ -135,10 +138,6 @@ public:
     void setExcerptsChanged(bool val) { m_cmdState.excerptsChanged = val; }
     bool excerptsChanged() const { return m_cmdState.excerptsChanged; }
     bool instrumentsChanged() const { return m_cmdState.instrumentsChanged; }
-
-    void startCmd(const TranslatableString& actionName);
-    void endCmd(bool rollback = false, bool layoutAllParts = false);
-    void undoRedo(bool undo, EditData* ed);
 
     void update() { update(true); }
     void lockUpdates(bool locked);
@@ -212,6 +211,7 @@ private:
     friend class compat::ScoreAccess;
     friend class read114::Read114;
     friend class read400::Read400;
+    friend class TransactionManager;
 
     MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
     MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
@@ -220,6 +220,7 @@ private:
     void initParts(Excerpt*);
 
     EIDRegister m_eidRegister;
+    std::unique_ptr<TransactionManager> m_transactionManager;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
     TempoMap* m_tempomap = nullptr;
