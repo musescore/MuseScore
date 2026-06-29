@@ -22,6 +22,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 
 #include "engraving/automation/automationtypes.h"
 
@@ -51,31 +52,35 @@ public:
 
 private:
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
+    using DeferredInValuePoints = std::set<std::pair<AutomationCurveKey, utick_t> >;
 
     void update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
-                          DynamicPriorities& dynamicPriorities);
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
-                          DynamicPriorities& dynamicPriorities);
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
-                          DynamicPriorities& dynamicPriorities);
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
 
     void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, size_t staffIdxFrom,
-                          size_t staffIdxTo, DynamicPriorities& dynamicPriorities);
+                          size_t staffIdxTo, DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
     void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
-                          DynamicPriorities& dynamicPriorities);
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
 
-    void collectMeasureRepeats(const Score* score, const Segment* segment,
-                               std::vector<const MeasureRepeat*>& result,
-                               size_t staffIdxFrom, size_t staffIdxTo) const;
-    void addMeasureRepeatPoints(const std::vector<const MeasureRepeat*>& measureRepeats, int tickOffset,
+    void copyVoiceCurves(const Score* score, size_t staffIdxFrom, size_t staffIdxTo);
+
+    void collectMeasureRepeats(const Score* score, const Segment* segment, std::vector<std::pair<const MeasureRepeat*, int> >& result,
+                               int tickOffset, size_t staffIdxFrom, size_t staffIdxTo) const;
+    void addMeasureRepeatPoints(const std::vector<std::pair<const MeasureRepeat*, int> >& measureRepeats,
                                 DynamicPriorities& dynamicPriorities);
 
     bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                             DynamicPriorities& dynamicPriorities);
+
+    void resolveDeferredInValues(DeferredInValuePoints& deferredInValuePoints);
 
     IAutomation* m_automation = nullptr;
 };
