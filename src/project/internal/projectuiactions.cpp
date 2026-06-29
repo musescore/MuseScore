@@ -111,6 +111,13 @@ const UiActionList ProjectUiActions::m_actions = {
              TranslatableString("action", "Import PDF"),
              IconCode::Code::OPEN_LINK
              ),
+    UiAction("file-import-audio-to-score",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Import A&udio to Score…"),
+             TranslatableString("action", "Import Audio to Score"),
+             IconCode::Code::OPEN_LINK
+             ),
     UiAction("project-properties",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,

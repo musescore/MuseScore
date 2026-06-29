@@ -90,6 +90,7 @@ void ProjectActionsController::init()
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
+    dispatcher()->reg(this, "file-import-audio-to-score", this, &ProjectActionsController::importAudioToScore);
 
     dispatcher()->reg(this, "print", this, &ProjectActionsController::printScore);
 
@@ -132,6 +133,7 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
             "file-new",
             "file-open",
             "file-import-pdf",
+            "file-import-audio-to-score",
             "continue-last-session",
             "clear-recent",
         };
@@ -1849,6 +1851,11 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const m
 void ProjectActionsController::importPdf()
 {
     interactive()->openUrl("https://musescore.com/import");
+}
+
+void ProjectActionsController::importAudioToScore()
+{
+    interactive()->openUrl("https://musescore.com/upload?format=audio2score");
 }
 
 void ProjectActionsController::clearRecentScores()
