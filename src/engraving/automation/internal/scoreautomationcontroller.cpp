@@ -43,26 +43,26 @@
 
 using namespace mu::engraving;
 
-//! NOTE: Linear values
+// Normalized [0.0, 1.0] dynamic levels, aligned with MPE dynamic level percentages (5% steps starting at 17.5%)
 static const std::unordered_map<DynamicType, double> ORDINARY_DYNAMIC_VALUES {
     { DynamicType::N,      0.000 },
-    { DynamicType::PPPPPP, 0.071 },
-    { DynamicType::PPPPP,  0.143 },
-    { DynamicType::PPPP,   0.214 },
-    { DynamicType::PPP,    0.286 },
-    { DynamicType::PP,     0.357 },
-    { DynamicType::P,      0.429 },
-    { DynamicType::MP,     0.500 },
-    { DynamicType::MF,     0.571 },
-    { DynamicType::F,      0.643 },
-    { DynamicType::FF,     0.714 },
-    { DynamicType::FFF,    0.786 },
-    { DynamicType::FFFF,   0.857 },
-    { DynamicType::FFFFF,  0.929 },
-    { DynamicType::FFFFFF, 1.000 },
+    { DynamicType::PPPPPP, 0.175 },
+    { DynamicType::PPPPP,  0.225 },
+    { DynamicType::PPPP,   0.275 },
+    { DynamicType::PPP,    0.325 },
+    { DynamicType::PP,     0.375 },
+    { DynamicType::P,      0.425 },
+    { DynamicType::MP,     0.475 },
+    { DynamicType::MF,     0.525 },
+    { DynamicType::F,      0.575 },
+    { DynamicType::FF,     0.625 },
+    { DynamicType::FFF,    0.675 },
+    { DynamicType::FFFF,   0.725 },
+    { DynamicType::FFFFF,  0.775 },
+    { DynamicType::FFFFFF, 0.825 },
 };
 
-static constexpr double DYNAMIC_STEP(0.071);
+static constexpr double DYNAMIC_STEP(0.05);
 
 static const std::unordered_map<DynamicType, double> SINGLE_NOTE_DYNAMIC_VALUES {
     { DynamicType::SF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },

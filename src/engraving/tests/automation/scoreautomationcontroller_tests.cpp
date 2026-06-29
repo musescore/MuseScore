@@ -41,10 +41,10 @@ using InterpolationType = AutomationPoint::InterpolationType;
 
 static const String AUTOMATION_DATA_DIR(u"automation/data/");
 
-static constexpr double P_VALUE(0.429);
-static constexpr double MP_VALUE(0.500);
-static constexpr double F_VALUE(0.643);
-static constexpr double FF_VALUE(0.714);
+static constexpr double P_VALUE(0.425);
+static constexpr double MP_VALUE(0.475);
+static constexpr double F_VALUE(0.575);
+static constexpr double FF_VALUE(0.625);
 
 static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
 {
