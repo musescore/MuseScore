@@ -92,6 +92,10 @@ public:
         connect(model, &AbstractMenuModel::itemChanged, this, [this](MenuItem* item) {
             updateItem(item);
         });
+
+        connect(model, &AbstractMenuModel::destroyed, this, [this]() {
+            m_customMenuModel = nullptr;
+        });
     }
 
 private:
