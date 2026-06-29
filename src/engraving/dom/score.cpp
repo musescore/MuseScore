@@ -5428,6 +5428,9 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 }
                 // move articulations
                 for (Articulation* artic : chord->articulations()) {
+                    if (dstChord->hasArticulation(artic)) {
+                        continue;
+                    }
                     score->undoChangeParent(artic, dstChord, dstChord->staffIdx());
                 }
                 // create rest to leave behind
