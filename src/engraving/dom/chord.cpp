@@ -813,7 +813,7 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
-            LOGD("ChordRest::remove(): articulation not found");
+            LOGD("Chord::remove(): articulation not found");
         }
     }
     break;
