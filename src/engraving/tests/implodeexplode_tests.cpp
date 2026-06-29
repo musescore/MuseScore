@@ -131,3 +131,8 @@ TEST_F(Engraving_ImplodeExplodeTests, implodeDynamics)
 {
     testUndoImplode(u"implodeDynamics");
 }
+
+TEST_F(Engraving_ImplodeExplodeTests, implodeArticulations)
+{
+    testUndoImplode(u"implodeArticulations");
+}
