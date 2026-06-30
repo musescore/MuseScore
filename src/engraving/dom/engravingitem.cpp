@@ -364,12 +364,6 @@ bool EngravingItem::collectForDrawing() const
         return false;
     }
 
-    bool isAnnotation = parent() && parent()->isSegment() && toSegment(parent())->element(track()) != this;
-    if (isAnnotation) {
-        Segment* segment = toSegment(parent());
-        return systemFlag() || (segment->measure() && segment->measure()->visible(staffIdx()));
-    }
-
     return true;
 }
 
