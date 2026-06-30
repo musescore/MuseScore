@@ -418,8 +418,8 @@ void Ornament::updateCueNote()
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
 
-        std::vector<Note*> notes = { cueNote };
-        EditChord::addChordParentheses(const_cast<Chord*>(m_cueNoteChord), notes, false, true);//BROKEN
+        std::list<Note*> notes = { cueNote };
+        score()->cmdAddParenthesesToNotes(notes);
     }
     m_cueNoteChord->setTrack(track());
     m_cueNoteChord->setParent(parentChord->segment());
