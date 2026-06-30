@@ -586,7 +586,7 @@ public:
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
-    void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
+    void endCmd(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false); // end undoable command
     void update();
     void undoRedo(bool undo, EditData*);
 

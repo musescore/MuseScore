@@ -148,7 +148,7 @@ void TransactionManager::beginTransaction(const muse::TranslatableString& descri
     m_currentTransaction = std::unique_ptr<Transaction>(new Transaction(stack->activeTransaction()));
 }
 
-void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
+void TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool keepRolledBackElements)
 {
     UndoStack* stack = undoStack();
 
@@ -167,7 +167,10 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
     }
 
     if (rollback) {
-        stack->activeTransaction()->unwind();
+        /* When keepRolledBackElements is true, unwind removes the rolled-back elements from
+         * the score but does not free them: an external owner is responsible for the deferred
+         * deletion, since the elements are still referenced after this returns. */
+        stack->activeTransaction()->unwind(!keepRolledBackElements);
     }
 
     // NOTE: perform update and re-layout within the transaction, so that
