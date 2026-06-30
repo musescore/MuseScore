@@ -43,6 +43,7 @@ static const String AUTOMATION_DATA_DIR(u"automation/data/");
 
 static constexpr double P_VALUE(0.425);
 static constexpr double MP_VALUE(0.475);
+static constexpr double MF_VALUE(0.525);
 static constexpr double F_VALUE(0.575);
 static constexpr double FF_VALUE(0.625);
 
@@ -257,4 +258,44 @@ TEST_F(ScoreAutomationController_Tests, Update_NoRelevantTypes_DoesNothing)
         ASSERT_TRUE(muse::contains(curvesAfter, key));
         checkCurvesMatch(curvesAfter.at(key), curveBefore);
     }
+}
+
+TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValues)
+{
+    // [GIVEN] The score has a crescendo hairpin in measures 3–4: p at tick 4800, ff at tick 5760.
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = s_score->staff(0)->id();
+
+    // [WHEN] The user inserts a custom automation point at the midpoint of the hairpin
+    AutomationPoint midpoint;
+    midpoint.outValue = MF_VALUE;
+    controller.automation()->addPoint(key, 5280, midpoint);
+
+    // [WHEN] The score is re-processed (simulates any subsequent score change)
+    ScoreChanges changes;
+    changes.changedTypes = { ElementType::HAIRPIN };
+    controller.update(s_score, changes);
+
+    const AutomationCurve& curve = controller.automation()->curve(key);
+
+    // [THEN] The p dynamic at the hairpin start is unchanged
+    ASSERT_TRUE(muse::contains(curve, 4800));
+    EXPECT_NEAR(curve.at(4800).inValue,  F_VALUE,  0.0001);
+    EXPECT_NEAR(curve.at(4800).outValue, P_VALUE,  0.0001);
+
+    // [THEN] The user midpoint survives the update and its inValue is set to prev.outValue
+    //        (the curve holds flat at p before the breakpoint, then steps to MF_VALUE)
+    ASSERT_TRUE(muse::contains(curve, 5280));
+    EXPECT_NEAR(curve.at(5280).inValue,  P_VALUE,  0.0001);
+    EXPECT_NEAR(curve.at(5280).outValue, MF_VALUE, 0.0001);
+
+    // [THEN] The ff dynamic's inValue is overridden to the midpoint's outValue
+    //        (the curve holds flat at MF_VALUE until ff fires its own outValue)
+    ASSERT_TRUE(muse::contains(curve, 5760));
+    EXPECT_NEAR(curve.at(5760).inValue,  MF_VALUE, 0.0001);
+    EXPECT_NEAR(curve.at(5760).outValue, FF_VALUE, 0.0001);
 }

@@ -787,6 +787,23 @@ void ScoreAutomationController::resolveDeferredInValues(DeferredInValuePoints& d
             }
         }
     }
+
+    // User-added points (no itemId) act as breakpoints: the curve holds flat before them
+    // (inValue = prev.outValue) and holds flat at their level until the next point
+    // (nextPoint.inValue = outValue).
+    for (const auto& [key, curve] : m_automation->curves()) {
+        for (auto it = curve.begin(); it != curve.end(); ++it) {
+            const auto& [tick, point] = *it;
+            if (point.itemId.has_value()) {
+                continue;
+            }
+            resolvePoint(key, tick);
+            const auto nextIt = std::next(it);
+            if (nextIt != curve.end()) {
+                m_automation->setPointInValue(key, nextIt->first, point.outValue);
+            }
+        }
+    }
 }
 
 bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick,
