@@ -484,6 +484,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         if (!item->separator()) {
             LyricsLine* separator = Factory::createLyricsLine(ctx.mutDom().dummyParent());
             separator->setTick(cr->tick());
+            separator->setVisible(item->visible());
             item->setSeparator(separator);
             ctx.mutDom().addUnmanagedSpanner(item->separator());
         }
