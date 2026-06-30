@@ -491,14 +491,13 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         AutomationPoint startPoint;
         startPoint.inValue = 0.0;
         startPoint.outValue = values.first;
-        startPoint.interpolation = AutomationPoint::InterpolationType::Exponential;
         startPoint.itemId = eid;
         if (tryAddDynamicPoint(key, dynamicUTick, startPoint, priority, dynamicPriorities)) {
             deferredInValuePoints.emplace(key, dynamicUTick);
         }
 
         AutomationPoint endPoint;
-        endPoint.inValue = startPoint.outValue;
+        endPoint.inValue = values.second;
         endPoint.outValue = values.second;
         endPoint.itemId = eid;
         tryAddDynamicPoint(key, endPointTick, endPoint, priority, dynamicPriorities);

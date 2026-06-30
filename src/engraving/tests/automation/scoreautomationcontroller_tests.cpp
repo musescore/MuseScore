@@ -102,8 +102,8 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     // 2nd measure
     expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };      // 1st beat: sf
     expectedCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };      // 2nd beat: mp (sf recovery)
-    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Exponential }; // 3rd beat: pf start
-    expectedCurve[3264] = AutomationPoint { P_VALUE,  F_VALUE,  InterpolationType::Linear };      // 4th beat: pf end
+    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };      // 3rd beat: pf start
+    expectedCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };      // 4th beat: pf end
 
     // 3rd measure
     expectedCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };      // 3rd beat: p (hairpin start)
@@ -124,8 +124,8 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     expectedVoiceCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };
     expectedVoiceCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };
     expectedVoiceCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };
-    expectedVoiceCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Exponential };
-    expectedVoiceCurve[3264] = AutomationPoint { P_VALUE,  F_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
 
     // CURRENT_VOICE_ONLY f; inValue comes from the shared active point at tick 3264 (outValue = F_VALUE)
     expectedVoiceCurve[3840] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
