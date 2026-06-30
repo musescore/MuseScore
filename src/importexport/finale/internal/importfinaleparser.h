@@ -114,7 +114,7 @@ struct FrameSettings {
     engraving::FrameType frameType = engraving::FrameType::NO_FRAME;
     double frameWidth = 0.1;
     double paddingWidth = 0.2;
-    int frameRound = 0;
+    engraving::Spatium frameRound;
 
     void setFrameProperties(engraving::TextBase* text) const;
     double oneSidePaddingWidth() const;
@@ -426,6 +426,16 @@ private:
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
+    musx::util::ArpeggioSpanOptions arpeggioSpanOptions() const;
+    bool createArpeggioForChordRange(const musx::util::ArpeggioSpanCandidate& span,
+                                     const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
+                                     bool visible, engraving::Chord* topChord, engraving::Chord* bottomChord);
+    bool createPartSplitArpeggios(const musx::util::ArpeggioSpanCandidate& span,
+                                  const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
+                                  bool visible, engraving::Chord* topChord, engraving::Chord* bottomChord);
+    bool createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
+                                const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef = nullptr,
+                                bool visible = true);
 
     // styles
     void importStyles();
