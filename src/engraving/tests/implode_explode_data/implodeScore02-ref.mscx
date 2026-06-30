@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>D_D</eid>
     <Division>480</Division>
     <Style>
       <windsNameByGroup>0</windsNameByGroup>
@@ -43,9 +43,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">implode1</metaTag>
     <Part id="1">
-      <eid>C_C</eid>
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -98,9 +98,9 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <eid>E_E</eid>
+      <eid>G_G</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -152,9 +152,9 @@
         </Instrument>
       </Part>
     <Part id="3">
-      <eid>G_G</eid>
+      <eid>I_I</eid>
       <Staff>
-        <eid>H_H</eid>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -213,9 +213,9 @@
         </Instrument>
       </Part>
     <Part id="4">
-      <eid>I_I</eid>
+      <eid>K_K</eid>
       <Staff>
-        <eid>J_J</eid>
+        <eid>L_L</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -271,18 +271,18 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>K_K</eid>
+        <eid>M_M</eid>
         <Text>
-          <eid>L_L</eid>
+          <eid>N_N</eid>
           <style>title</style>
           <text>implode1</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>M_M</eid>
+        <eid>O_O</eid>
         <voice>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -294,7 +294,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>z_z</eid>
+        <eid>0_0</eid>
         <voice>
           <Rest>
             <eid>uD_uD</eid>
@@ -304,7 +304,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>WB_WB</eid>
+        <eid>XB_XB</eid>
         <voice>
           <Rest>
             <eid>vD_vD</eid>
@@ -314,7 +314,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>zB_zB</eid>
+        <eid>0B_0B</eid>
         <voice>
           <Rest>
             <eid>wD_wD</eid>
@@ -328,19 +328,19 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>8B_8B</eid>
+            <eid>9B_9B</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>9B_9B</eid>
+            <eid>+B_+B</eid>
             <durationType>half</durationType>
             <Articulation>
               <subtype>guitarFadeOut</subtype>
-              <eid>+B_+B</eid>
+              <eid>/B_/B</eid>
               </Articulation>
             <Note>
-              <eid>/B_/B</eid>
+              <eid>AC_AC</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -350,7 +350,7 @@
               <subtype>0</subtype>
               <beginHookHeight>-1.9</beginHookHeight>
               <endHookHeight>-1.9</endHookHeight>
-              <eid>AC_AC</eid>
+              <eid>B_B</eid>
               </HairPin>
             <next>
               <location>
