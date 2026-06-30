@@ -183,7 +183,9 @@ void TextBase::endEdit(EditData& ed)
 
         undo->reopen();
         if (newlyAdded) {
-            score()->endCmd(true); // rollback the "add element" command
+            // Rollback the "AddElement" command, but don't delete the rolled-back element(s):
+            score()->endCmd(true, false, /*keepRolledBackElements*/ true);
+            // Defer deletion (to ~TextEditData):
             ted->deleteText = true;
         } else {
             score()->undoRemoveElement(this);
