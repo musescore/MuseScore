@@ -44,7 +44,6 @@
 #include "dom/ambitus.h"
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
-#include "dom/audio.h"
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
@@ -3450,12 +3449,11 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->setAudio(new Audio);
-            read400::TRead::read(score->audio(), e, ctx);
+            e.skipCurrentElement();
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {

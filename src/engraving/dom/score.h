@@ -103,7 +103,6 @@ class WriteScoreHook;
 
 namespace mu::engraving {
 class Articulation;
-class Audio;
 class Box;
 class Bracket;
 class Chord;
@@ -204,11 +203,6 @@ struct Position {
     int fret = INVALID_FRET_INDEX;
     PointF pos;
     bool beyondScore = false;
-};
-
-enum class PlayMode : char {
-    SYNTHESIZER,
-    AUDIO
 };
 
 struct NoteInputParams {
@@ -779,7 +773,6 @@ public:
     void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
     void addInterval(int, const std::vector<Note*>&);
     void cmdCreateTuplet(ChordRest*, Tuplet*);
-    void removeAudio();
 
     bool autoLayoutEnabled() const;
 
@@ -845,11 +838,6 @@ public:
                            const InsertMeasureOptions& options = InsertMeasureOptions());
     MeasureBase* insertBox(MeasureBase* box, MeasureBase* beforeMeasure = nullptr,
                            const InsertMeasureOptions& options = InsertMeasureOptions());
-
-    Audio* audio() const { return m_audio; }
-    void setAudio(Audio* a) { m_audio = a; }
-    PlayMode playMode() const { return m_playMode; }
-    void setPlayMode(PlayMode v) { m_playMode = v; }
 
     std::list<Score*> scoreList();
 
@@ -1090,8 +1078,6 @@ private:
 
     Selection m_selection;
     SelectionFilter m_selectionFilter;
-    Audio* m_audio = nullptr;
-    PlayMode m_playMode = PlayMode::SYNTHESIZER;
 
     RootItem* m_rootItem = nullptr;
     LayoutOptions m_layoutOptions;

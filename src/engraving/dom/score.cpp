@@ -50,7 +50,6 @@
 #include "types/typesconv.h"
 
 #include "anchors.h"
-#include "audio.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -1859,16 +1858,6 @@ void Score::setSynthesizerState(const SynthesizerState& s)
 {
     // TODO: make undoable
     m_synthesizerState = s;
-}
-
-//---------------------------------------------------------
-//   removeAudio
-//---------------------------------------------------------
-
-void Score::removeAudio()
-{
-    delete m_audio;
-    m_audio = 0;
 }
 
 //---------------------------------------------------------

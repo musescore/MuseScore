@@ -21,8 +21,6 @@
  */
 #include "twrite.h"
 
-#include "global/io/fileinfo.h"
-
 #include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
@@ -43,7 +41,6 @@
 #include "dom/ambitus.h"
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
-#include "dom/audio.h"
 
 #include "dom/bagpembell.h"
 #include "dom/barline.h"
@@ -754,13 +751,6 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
-    xml.endElement();
-}
-
-void TWrite::write(const Audio* item, XmlWriter& xml, WriteContext&)
-{
-    xml.startElement("Audio");
-    xml.tag("path", item->path());
     xml.endElement();
 }
 
