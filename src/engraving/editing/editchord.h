@@ -61,7 +61,7 @@ class ChangeChordStaffMove : public UndoableCommand
     ChordRest* chordRest = nullptr;
     int staffMove = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeChordStaffMove(ChordRest* cr, int v)
@@ -79,7 +79,7 @@ class SwapCR : public UndoableCommand
     ChordRest* cr1 = nullptr;
     ChordRest* cr2 = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SwapCR(ChordRest* a, ChordRest* b)
@@ -97,7 +97,7 @@ class ChangeSpanArpeggio : public UndoableCommand
     Chord* m_chord = nullptr;
     Arpeggio* m_spanArpeggio = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 public:
     ChangeSpanArpeggio(Chord* chord, Arpeggio* spanArp)
         : m_chord(chord), m_spanArpeggio(spanArp) {}
@@ -110,8 +110,8 @@ class AddNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddNoteParenthesisInfo)
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
     void cleanup(bool wasDone) override;
 
@@ -130,8 +130,8 @@ class RemoveNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveNoteParenthesisInfo)
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
     void cleanup(bool wasDone) override;
 
@@ -154,8 +154,8 @@ class RemoveSingleNoteParentheses : public UndoableCommand
     Note* m_note = nullptr;
     Parenthesis* m_paren = nullptr;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     RemoveSingleNoteParentheses(Chord* chord, Note* note, Parenthesis* paren)

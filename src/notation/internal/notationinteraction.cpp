@@ -1111,8 +1111,7 @@ void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 void NotationInteraction::selectAll()
 {
     if (isTextEditingStarted()) {
-        auto textBase = toTextBase(m_editData.element);
-        textBase->selectAll(textBase->cursorFromEditData(m_editData));
+        toTextBase(m_editData.element)->selectAll();
     } else {
         score()->cmdSelectAll();
     }
@@ -4445,7 +4444,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
 
     if (!event->commitString().isEmpty()) {
         score()->startCmd(TranslatableString("undoableAction", "Edit text"));
-        text->insertText(m_editData, event->commitString());
+        text->insertText(event->commitString());
         score()->endCmd();
         preeditString.clear();
     } else {
@@ -4591,11 +4590,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
         return true;
     }
 
-    TextEditData* ted = static_cast<TextEditData*>(m_editData.getData(tb).get());
-    TextCursor* cursor = ted ? ted->cursor() : nullptr;
-    IF_ASSERT_FAILED(cursor) {
-        return true;
-    }
+    TextCursor* cursor = tb->cursor();
 
     bool useCloseQuote = false; // Use close if there's a non-space before the newly inputted quote
 
@@ -4610,7 +4605,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
 
     cursor->movePosition(TextCursor::MoveOperation::Left);
-    score()->undo(new RemoveText(cursor, event->text()), &m_editData);
+    score()->undo(new RemoveText(cursor, event->text()));
 
     //: Single open quotation mark
     const String singleOpenQuote = muse::mtrc("notation", u"‘");
@@ -4625,7 +4620,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
                                ? (useCloseQuote ? singleCloseQuote : singleOpenQuote)
                                : (useCloseQuote ? doubleCloseQuote : doubleOpenQuote);
 
-    tb->insertText(m_editData, replacement);
+    tb->insertText(replacement);
     apply();
 
     return true;
@@ -4735,7 +4730,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     textEl->mousePress(m_editData);
     if (m_editData.buttons == mu::engraving::MiddleButton) {
         QString txt = QGuiApplication::clipboard()->text();
-        textEl->paste(m_editData, txt);
+        textEl->paste(txt);
     }
 
     notifyAboutTextEditingChanged();
@@ -4748,8 +4743,8 @@ void NotationInteraction::selectText(mu::engraving::SelectTextType type)
     }
 
     mu::engraving::TextBase* text = mu::engraving::toTextBase(m_editData.element);
-    text->select(m_editData, type);
-    text->endHexState(m_editData);
+    text->select(type);
+    text->endHexState();
     text->setPrimed(false);
 
     notifyAboutTextEditingChanged();
@@ -5489,7 +5484,7 @@ void NotationInteraction::pasteIntoTextEdit()
     const QMimeData* mimeData = QApplication::clipboard()->mimeData();
     if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
         const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
-        toTextBase(m_editData.element)->paste(m_editData, txt);
+        toTextBase(m_editData.element)->paste(txt);
         notifyAboutTextEditingChanged();
         return;
     }
@@ -5500,7 +5495,7 @@ void NotationInteraction::pasteIntoTextEdit()
         textForPaste = extractSyllable(clipboardText);
     }
 
-    toTextBase(m_editData.element)->paste(m_editData, textForPaste);
+    toTextBase(m_editData.element)->paste(textForPaste);
     notifyAboutTextEditingChanged();
 
     if (textForPaste.isEmpty() || !m_editData.element->isLyrics()) {
@@ -5548,7 +5543,7 @@ void NotationInteraction::deleteSelection()
 
     if (isTextEditingStarted()) {
         mu::engraving::TextBase* textBase = toTextBase(m_editData.element);
-        if (!textBase->deleteSelectedText(m_editData)) {
+        if (!textBase->deleteSelectedText()) {
             m_editData.key = Qt::Key_Backspace;
             m_editData.modifiers = {};
             if (textBase->edit(m_editData)) {
@@ -6948,10 +6943,10 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
 
     startEditText(nextLyrics, PointF());
 
-    mu::engraving::TextCursor* cursor = nextLyrics->cursor();
     if (end) {
-        nextLyrics->selectAll(cursor);
+        nextLyrics->selectAll();
     } else if (!newLyrics) {
+        mu::engraving::TextCursor* cursor = nextLyrics->cursor();
         cursor->movePosition(mu::engraving::TextCursor::MoveOperation::End, mu::engraving::TextCursor::MoveMode::MoveAnchor);
         cursor->movePosition(mu::engraving::TextCursor::MoveOperation::Start, mu::engraving::TextCursor::MoveMode::KeepAnchor);
     }
@@ -7089,7 +7084,7 @@ void NotationInteraction::navigateToNextSyllable()
             score()->select(toLyrics, SelectType::SINGLE, 0);
             score()->setLayoutAll();
             startEditText(toLyrics, PointF());
-            toLyrics->selectAll(toLyrics->cursor());
+            toLyrics->selectAll();
             showItem(toLyrics);
 
             return;
@@ -7215,7 +7210,7 @@ void NotationInteraction::navigateToNextSyllable()
 
     startEditText(toLyrics, PointF());
 
-    toLyrics->selectAll(toLyrics->cursor());
+    toLyrics->selectAll();
     showItem(toLyrics);
 }
 
@@ -7275,7 +7270,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     score()->setLayoutAll();
     score()->update();
 
-    lyrics->selectAll(lyrics->cursor());
+    lyrics->selectAll();
     showItem(lyrics);
 }
 
@@ -7811,7 +7806,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 
         if (text) {
             startEditText(text);
-            text->selectAll(text->cursor());
+            text->selectAll();
             showItem(text);
         }
     } else {
@@ -8058,7 +8053,7 @@ void NotationInteraction::addMelisma()
     score()->select(toLyrics, SelectType::SINGLE, 0);
     startEditText(toLyrics, PointF());
 
-    toLyrics->selectAll(toLyrics->cursor());
+    toLyrics->selectAll();
 }
 
 //! NOTE: Copied from ScoreView::lyricsReturn

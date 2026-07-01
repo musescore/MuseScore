@@ -37,7 +37,7 @@ class ChangeKeySig : public UndoableCommand
     bool showCourtesy = false;
     bool evtInStaff = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEvtToStaff = true);

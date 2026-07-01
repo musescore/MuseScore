@@ -34,7 +34,7 @@ using namespace mu::engraving;
 //   ChangeHarpPedalState
 //---------------------------------------------------------
 
-void ChangeHarpPedalState::flip(EditData*)
+void ChangeHarpPedalState::flip()
 {
     std::array<PedalPosition, HARP_STRING_NO> f_state = diagram->getPedalState();
     if (f_state == pedalState) {
@@ -68,7 +68,7 @@ std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
 //   ChangeSingleHarpPedal
 //---------------------------------------------------------
 
-void ChangeSingleHarpPedal::flip(EditData*)
+void ChangeSingleHarpPedal::flip()
 {
     HarpStringType f_type = type;
     PedalPosition f_pos = diagram->getPedalState()[type];

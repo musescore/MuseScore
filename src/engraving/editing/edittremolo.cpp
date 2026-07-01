@@ -33,7 +33,7 @@ using namespace mu::engraving;
 //   MoveTremolo
 //---------------------------------------------------------
 
-void MoveTremolo::redo(EditData*)
+void MoveTremolo::redo()
 {
     // Find new tremolo chords
     Measure* m1 = score->tick2measure(chord1Tick);
@@ -90,7 +90,7 @@ void MoveTremolo::redo(EditData*)
     }
 }
 
-void MoveTremolo::undo(EditData*)
+void MoveTremolo::undo()
 {
     // Move tremolo to old position
     trem->chord1()->setTremoloTwoChord(nullptr);

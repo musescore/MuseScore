@@ -34,7 +34,7 @@ class ChangeMetaTags : public UndoableCommand
     Score* score = nullptr;
     std::map<String, String> metaTags;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMetaTags(Score* s, const std::map<String, String>& m)
@@ -53,7 +53,7 @@ class ChangeMetaText : public UndoableCommand
     String id;
     String text;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMetaText(Score* s, const String& i, const String& t)
@@ -70,7 +70,7 @@ class ChangeScoreOrder : public UndoableCommand
 
     Score* score = nullptr;
     ScoreOrder order;
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeScoreOrder(Score* sc, ScoreOrder so)
@@ -88,7 +88,7 @@ class ChangePageNumberOffset : public UndoableCommand
     Score* score = nullptr;
     int pageOffset = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePageNumberOffset(Score* s, int po)

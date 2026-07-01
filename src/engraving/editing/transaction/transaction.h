@@ -110,7 +110,7 @@ public:
     Transaction(Transaction&&) = default;
     Transaction& operator=(Transaction&&) = default;
 
-    void push(UndoableCommand* cmd, EditData* editData = nullptr);
+    void push(UndoableCommand* cmd);
     void pushWithoutPerforming(UndoableCommand* cmd);
 
 private:

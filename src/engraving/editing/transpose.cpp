@@ -754,7 +754,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_harmony })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Harmony* m_harmony = nullptr;
 
@@ -763,7 +763,7 @@ private:
 };
 }
 
-void TransposeHarmony::flip(EditData*)
+void TransposeHarmony::flip()
 {
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 
@@ -805,7 +805,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_harmony })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Harmony* m_harmony = nullptr;
     int m_interval = 0;
@@ -814,7 +814,7 @@ private:
 };
 }
 
-void TransposeHarmonyDiatonic::flip(EditData*)
+void TransposeHarmonyDiatonic::flip()
 {
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 

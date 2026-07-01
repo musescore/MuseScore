@@ -38,7 +38,7 @@ class ChangeTieJumpPointActive : public UndoableCommand
     muse::String m_id;
     bool m_active = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, muse::String id, bool active)

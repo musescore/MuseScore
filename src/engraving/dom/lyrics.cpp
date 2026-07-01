@@ -167,10 +167,10 @@ bool Lyrics::isMelisma() const
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& ed, const String& txt)
+void Lyrics::paste(const String& txt)
 {
     if (txt.startsWith('<') && txt.contains('>')) {
-        TextBase::paste(ed, txt);
+        TextBase::paste(txt);
         return;
     }
 
@@ -183,14 +183,14 @@ void Lyrics::paste(EditData& ed, const String& txt)
     StringList hyph = sl.at(0).split(u'-');
     score()->startCmd(TranslatableString("undoableAction", "Paste lyrics"));
 
-    deleteSelectedText(ed);
+    deleteSelectedText();
 
     if (hyph.size() > 1) {
-        score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
+        score()->undo(new InsertText(cursor(), hyph[0]));
         hyph.removeAt(0);
         sl[0] =  hyph.join(u"-");
     } else if (sl.size() > 1 && sl[1] == u"-") {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
         sl.removeAt(0);
     } else if (sl[0].startsWith(u"_")) {
@@ -200,17 +200,17 @@ void Lyrics::paste(EditData& ed, const String& txt)
         }
     } else if (sl[0].contains(u"_")) {
         size_t p = sl[0].indexOf(u'_');
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl[0] = sl[0].mid(p + 1);
         if (sl[0].isEmpty()) {
             sl.removeAt(0);
         }
     } else if (sl.size() > 1 && sl[1] == "_") {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
         sl.removeAt(0);
     } else {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
     }
 

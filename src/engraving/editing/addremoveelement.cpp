@@ -108,7 +108,7 @@ void AddElement::endUndoRedo(bool isUndo) const
     }
 }
 
-void AddElement::undo(EditData*)
+void AddElement::undo()
 {
     Score* score = element->score();
 
@@ -119,7 +119,7 @@ void AddElement::undo(EditData*)
     endUndoRedo(true);
 }
 
-void AddElement::redo(EditData*)
+void AddElement::redo()
 {
     Score* score = element->score();
 
@@ -241,7 +241,7 @@ void RemoveElement::cleanup(bool wasDone)
     }
 }
 
-void RemoveElement::undo(EditData*)
+void RemoveElement::undo()
 {
     Score* score = element->score();
 
@@ -264,7 +264,7 @@ void RemoveElement::undo(EditData*)
     }
 }
 
-void RemoveElement::redo(EditData*)
+void RemoveElement::redo()
 {
     Score* score = element->score();
 
@@ -329,7 +329,7 @@ ChangeElement::ChangeElement(EngravingItem* oe, EngravingItem* ne)
     newElement = ne;
 }
 
-void ChangeElement::flip(EditData*)
+void ChangeElement::flip()
 {
     const LinkedObjects* links = oldElement->links();
     if (links) {
@@ -390,7 +390,7 @@ void ChangeElement::flip(EditData*)
 //   ChangeParent
 //---------------------------------------------------------
 
-void ChangeParent::flip(EditData*)
+void ChangeParent::flip()
 {
     EngravingItem* p = element->parentItem();
     staff_idx_t si = element->staffIdx();
@@ -473,7 +473,7 @@ Unlink::Unlink(EngravingObject* _e)
     assert(le);
 }
 
-void ChangeSegmentParent::flip(EditData*)
+void ChangeSegmentParent::flip()
 {
     Measure* p = segment->measure();
     Fraction oldTick = segment->rtick();

@@ -40,8 +40,8 @@ class MoveTremolo : public UndoableCommand
     Chord* oldC1 = nullptr;
     Chord* oldC2 = nullptr;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     MoveTremolo(Score* s, Fraction c1, Fraction c2, TremoloTwoChord* tr, track_idx_t t)

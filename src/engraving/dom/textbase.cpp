@@ -462,7 +462,7 @@ void TextCursor::setFormat(FormatId id, FormatValue val)
 {
     if (!hasSelection()) {
         if (!editing()) {
-            m_text->selectAll(this);
+            m_text->selectAll();
         } else if (format()->formatValue(id) == val) {
             return;
         }
@@ -2148,27 +2148,27 @@ void TextBase::genText()
 //   selectAll
 //---------------------------------------------------------
 
-void TextBase::selectAll(TextCursor* cursor)
+void TextBase::selectAll()
 {
     const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->blocks.empty()) {
         return;
     }
 
-    cursor->setSelectColumn(0);
-    cursor->setSelectLine(0);
-    cursor->setRow(ldata->rows() - 1);
-    cursor->setColumn(cursor->curLine().columns());
+    cursor()->setSelectColumn(0);
+    cursor()->setSelectLine(0);
+    cursor()->setRow(ldata->rows() - 1);
+    cursor()->setColumn(cursor()->curLine().columns());
 }
 
-void TextBase::select(EditData& editData, SelectTextType type)
+void TextBase::select(SelectTextType type)
 {
     switch (type) {
     case SelectTextType::Word:
-        cursorFromEditData(editData)->selectWord();
+        cursor()->selectWord();
         break;
     case SelectTextType::All:
-        selectAll(cursorFromEditData(editData));
+        selectAll();
         break;
     }
 }
@@ -2210,9 +2210,7 @@ RectF TextBase::pageRectangle() const
 
 void TextBase::dragTo(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-    cursor->set(ed.pos, TextCursor::MoveMode::KeepAnchor);
+    cursor()->set(ed.pos, TextCursor::MoveMode::KeepAnchor);
     score()->setUpdateAll();
     score()->update();
 }
@@ -2241,8 +2239,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 bool TextBase::mousePress(EditData& ed)
 {
     bool shift = ed.modifiers & ShiftModifier;
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
+    if (!cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
 
@@ -3105,11 +3102,10 @@ void TextBase::endDrag(EditData& ed)
 void TextBase::editCut(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-    String s = cursor->selectedText(true);
+    String s = cursor()->selectedText(true);
 
     if (!s.isEmpty()) {
-        ted->selectedText = cursor->selectedText(true);
+        ted->selectedText = cursor()->selectedText(true);
         ed.curGrip = Grip::START;
         ed.key     = Key_Delete;
         ed.s       = String();
@@ -3127,9 +3123,8 @@ void TextBase::editCopy(EditData& ed)
     // store selection as rich and plain text
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-    ted->selectedText = cursor->selectedText(true);
-    ted->selectedPlainText = cursor->selectedText(false);
+    ted->selectedText = cursor()->selectedText(true);
+    ted->selectedPlainText = cursor()->selectedText(false);
 }
 
 bool TextBase::nudge(const EditData& ed)
@@ -3155,17 +3150,6 @@ bool TextBase::nudge(const EditData& ed)
     }
     undoChangeProperty(Pid::OFFSET, offset() + addOffset, PropertyFlags::UNSTYLED);
     return true;
-}
-
-//---------------------------------------------------------
-//   cursor
-//---------------------------------------------------------
-
-TextCursor* TextBase::cursorFromEditData(const EditData& ed)
-{
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    assert(ted);
-    return ted->cursor();
 }
 
 //---------------------------------------------------------

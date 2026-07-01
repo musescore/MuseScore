@@ -31,7 +31,7 @@ using namespace mu::engraving;
 //   ChangeTieJumpPointActive
 //---------------------------------------------------------
 
-void ChangeTieJumpPointActive::flip(EditData*)
+void ChangeTieJumpPointActive::flip()
 {
     TieJumpPoint* jumpPoint = m_jumpPointList->findJumpPoint(m_id);
     if (!jumpPoint) {

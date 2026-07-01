@@ -38,8 +38,8 @@ class InsertStaff : public UndoableCommand
 
 public:
     InsertStaff(Staff*, staff_idx_t idx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertStaff)
@@ -57,8 +57,8 @@ class RemoveStaff : public UndoableCommand
 
 public:
     RemoveStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemoveStaff)
@@ -74,8 +74,8 @@ class AddSystemObjectStaff : public UndoableCommand
 
 public:
     AddSystemObjectStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::AddSystemObjectStaff)
     UNDO_NAME("AddSystemObjectStaff")
@@ -90,8 +90,8 @@ class RemoveSystemObjectStaff : public UndoableCommand
 
 public:
     RemoveSystemObjectStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveSystemObjectStaff)
     UNDO_NAME("RemoveSystemObjectStaff")
@@ -108,8 +108,8 @@ class InsertMStaff : public UndoableCommand
 
 public:
     InsertMStaff(Measure*, MStaff*, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::InsertMStaff)
     UNDO_NAME("InsertMStaff")
@@ -126,8 +126,8 @@ class RemoveMStaff : public UndoableCommand
 
 public:
     RemoveMStaff(Measure*, MStaff*, int);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveMStaff)
     UNDO_NAME("RemoveMStaff")
@@ -144,8 +144,8 @@ class InsertStaves : public UndoableCommand
 
 public:
     InsertStaves(Measure*, staff_idx_t, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::InsertStaves)
     UNDO_NAME("InsertStaves")
@@ -162,8 +162,8 @@ class RemoveStaves : public UndoableCommand
 
 public:
     RemoveStaves(Measure*, staff_idx_t, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveStaves)
     UNDO_NAME("RemoveStaves")
@@ -180,8 +180,8 @@ class SortStaves : public UndoableCommand
 
 public:
     SortStaves(Score*, const std::vector<staff_idx_t>&);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::SortStaves)
     UNDO_NAME("SortStaves")
@@ -206,7 +206,7 @@ class ChangeStaff : public UndoableCommand
     AutoOnOff mergeMatchingRests = AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStaff(Staff*);
@@ -231,7 +231,7 @@ class ChangeStaffType : public UndoableCommand
     StaffType staffType;
     Fraction tick;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStaffType(Staff* s, const StaffType& t, Fraction tick = Fraction(0, 1))
@@ -251,7 +251,7 @@ class ChangeMStaffProperties : public UndoableCommand
     bool visible = false;
     bool stemless = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMStaffProperties(Measure*, staff_idx_t staffIdx, bool visible, bool stemless);
@@ -269,7 +269,7 @@ class ChangeMStaffHideIfEmpty : public UndoableCommand
     staff_idx_t staffIdx = 0;
     AutoOnOff hideIfEmpty = AutoOnOff::AUTO;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMStaffHideIfEmpty(Measure*, staff_idx_t staffIdx, AutoOnOff hideIfEmpty);
