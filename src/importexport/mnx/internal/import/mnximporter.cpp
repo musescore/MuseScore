@@ -813,6 +813,9 @@ void MnxImporter::importGlobalMeasures()
             }
             createTimeSig(measure, mnxTimeSig.value());
         }
+        measure->setTimesig(currTimeSig);
+        measure->setTicks(currTimeSig);
+
         if (const std::optional<mnx::KeySignature>& keySig = mnxMeasure.key(); keySig || isFirst) {
             const int keyFifths = keySig ? keySig->fifths() : 0;
             createKeySig(measure, keyFifths);
@@ -843,6 +846,10 @@ void MnxImporter::importGlobalMeasures()
                 createTempoMark(measure, tempo);
             }
         }
+        if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {
+            Segment* const segment = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+            addFermata(segment, mnxFermata.value(), 0);
+        }
 
         /// @todo MNX currently offers no way to exclude a measure from having
         /// a measure number.
@@ -852,8 +859,6 @@ void MnxImporter::importGlobalMeasures()
         }
         lastDisplayNum = currDisplayNum;
 
-        measure->setTimesig(currTimeSig);
-        measure->setTicks(currTimeSig);
         m_score->measures()->append(measure);
         m_mnxMeasToTick.emplace(mnxMeasure.calcArrayIndex(), tick);
     }

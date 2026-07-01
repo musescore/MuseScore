@@ -40,6 +40,34 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
+const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAnchorTable = {
+    { mnx::Orientation::Auto,       ArticulationAnchor::AUTO },
+    { mnx::Orientation::Below,      ArticulationAnchor::BOTTOM },
+    { mnx::Orientation::Above,      ArticulationAnchor::TOP },
+};
+} // namespace
+
+ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+{
+    return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
+}
+
+mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
+{
+    return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
+}
+
+mnx::Orientation toMnxOrientation(PlacementV placement)
+{
+    switch (placement) {
+    case PlacementV::ABOVE: return mnx::Orientation::Above;
+    case PlacementV::BELOW: return mnx::Orientation::Below;
+    }
+    ASSERT_X("invalid placement value");
+    return mnx::Orientation::Auto;
+}
+
+namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
     { mnx::BarlineType::Dashed,     BarLineType::DASHED },
@@ -262,38 +290,106 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
     return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
-DynamicType toMuseScoreDynamicType(const String& glyph)
+std::pair<std::optional<mnx::DynamicValue>, std::optional<mnx::DynamicValue> > toMnxDynamicType(DynamicType type,
+                                                                                                bool& copyGlyphs,
+                                                                                                bool& isAccent)
 {
-    // Currently there is very little clarity around dynamics in mnx.
-    // This will likely change considerably as the details emerge.
-    static const std::unordered_map<String, DynamicType> dynamicTypes {
-        { u"<sym>dynamicPPPPPP</sym>",              DynamicType::PPPPPP },
-        { u"<sym>dynamicPPPPP</sym>",               DynamicType::PPPPP },
-        { u"<sym>dynamicPPPP</sym>",                DynamicType::PPPP },
-        { u"<sym>dynamicPPP</sym>",                 DynamicType::PPP },
-        { u"<sym>dynamicPP</sym>",                  DynamicType::PP },
-        { u"<sym>dynamicP</sym>",                   DynamicType::P },
-        { u"<sym>dynamicMP</sym>",                  DynamicType::MP },
-        { u"<sym>dynamicMF</sym>",                  DynamicType::MF },
-        { u"<sym>dynamicPF</sym>",                  DynamicType::PF },
-        { u"<sym>dynamicF</sym>",                   DynamicType::F },
-        { u"<sym>dynamicFF</sym>",                  DynamicType::FF },
-        { u"<sym>dynamicFFF</sym>",                 DynamicType::FFF },
-        { u"<sym>dynamicFFFF</sym>",                DynamicType::FFFF },
-        { u"<sym>dynamicFFFFF</sym>",               DynamicType::FFFFF },
-        { u"<sym>dynamicFFFFFF</sym>",              DynamicType::FFFFFF },
-        { u"<sym>dynamicFortePiano</sym>",          DynamicType::FP },
-        { u"<sym>dynamicForzando</sym>",            DynamicType::FZ },
-        { u"<sym>dynamicSforzando1</sym>",          DynamicType::SF },
-        { u"<sym>dynamicSforzandoPiano</sym>",      DynamicType::SFP },
-        { u"<sym>dynamicSforzandoPianissimo</sym>", DynamicType::SFPP },
-        { u"<sym>dynamicSforzato</sym>",            DynamicType::SFZ },
-        { u"<sym>dynamicSforzatoPiano</sym>",       DynamicType::SFZ }, // SFZP does not exist
-        { u"<sym>dynamicSforzatoFF</sym>",          DynamicType::SFFZ },
-        { u"<sym>dynamicRinforzando1</sym>",        DynamicType::RF },
-        { u"<sym>dynamicRinforzando2</sym>",        DynamicType::RFZ },
-    };
-    return muse::value(dynamicTypes, glyph, DynamicType::OTHER);
+    std::optional<mnx::DynamicValue> dynValue;
+    std::optional<mnx::DynamicValue> attackValue;
+    copyGlyphs = false;
+    isAccent = false;
+
+    switch (type) {
+    case DynamicType::PPPPPP:
+    case DynamicType::PPPPP:
+    case DynamicType::PPPP:
+        dynValue = mnx::DynamicValue::ppp;
+        copyGlyphs = true;
+        break;
+    case DynamicType::PPP:
+        dynValue = mnx::DynamicValue::ppp;
+        break;
+    case DynamicType::PP:
+        dynValue = mnx::DynamicValue::pp;
+        break;
+    case DynamicType::P:
+        dynValue = mnx::DynamicValue::p;
+        break;
+    case DynamicType::MP:
+        dynValue = mnx::DynamicValue::mp;
+        break;
+    case DynamicType::MF:
+        dynValue = mnx::DynamicValue::mf;
+        break;
+    case DynamicType::F:
+        dynValue = mnx::DynamicValue::f;
+        break;
+    case DynamicType::FF:
+        dynValue = mnx::DynamicValue::ff;
+        break;
+    case DynamicType::FFF:
+        dynValue = mnx::DynamicValue::fff;
+        break;
+    case DynamicType::FFFF:
+    case DynamicType::FFFFF:
+    case DynamicType::FFFFFF:
+        dynValue = mnx::DynamicValue::fff;
+        copyGlyphs = true;
+        break;
+    case DynamicType::FP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::p;
+        break;
+    case DynamicType::PF:
+        attackValue = mnx::DynamicValue::p;
+        dynValue = mnx::DynamicValue::f;
+        break;
+    case DynamicType::FZ:
+    case DynamicType::SF:
+    case DynamicType::SFZ:
+    case DynamicType::RF:
+    case DynamicType::RFZ:
+        dynValue = mnx::DynamicValue::f;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFF:
+    case DynamicType::SFFZ:
+        dynValue = mnx::DynamicValue::ff;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFFF:
+    case DynamicType::SFFFZ:
+        dynValue = mnx::DynamicValue::fff;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::p;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::SFPP:
+        attackValue = mnx::DynamicValue::f;
+        dynValue = mnx::DynamicValue::pp;
+        isAccent = true;
+        copyGlyphs = true;
+        break;
+    case DynamicType::N:
+        dynValue = mnx::DynamicValue::n;
+        break;
+    case DynamicType::OTHER:
+    case DynamicType::M:
+    case DynamicType::R:
+    case DynamicType::S:
+    case DynamicType::Z:
+    case DynamicType::LAST:
+        break;
+    }
+
+    return std::make_pair(dynValue, attackValue);
 }
 
 namespace {
@@ -342,8 +438,68 @@ std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration
 }
 
 namespace {
+const std::unordered_map<mnx::FermataSymbol, SymId> symIdToFermataSym {
+    { mnx::FermataSymbol::Normal,       SymId::fermataAbove },
+    { mnx::FermataSymbol::Angled,       SymId::fermataShortAbove },
+    { mnx::FermataSymbol::Square,       SymId::fermataLongAbove },
+    { mnx::FermataSymbol::DoubleAngled, SymId::fermataVeryShortAbove },
+    { mnx::FermataSymbol::DoubleSquare, SymId::fermataVeryLongAbove },
+    { mnx::FermataSymbol::DoubleDot,    SymId::fermataLongHenzeAbove },
+    { mnx::FermataSymbol::HalfCurve,    SymId::fermataShortHenzeAbove },
+    { mnx::FermataSymbol::Curlew,       SymId::curlewSign },
+};
+} // namespace
+
+SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol)
+{
+    return muse::value(symIdToFermataSym, fermataSymbol, SymId::fermataAbove);
+}
+
+namespace {
+const std::unordered_map<FermataType, mnx::FermataDuration> fermataDuraTable {
+    { FermataType::Normal,      mnx::FermataDuration::Normal },
+    { FermataType::Long,        mnx::FermataDuration::Long },
+    { FermataType::LongHenze,   mnx::FermataDuration::Long },
+    { FermataType::Short,       mnx::FermataDuration::Short },
+    { FermataType::ShortHenze,  mnx::FermataDuration::Short },
+    { FermataType::VeryLong,    mnx::FermataDuration::VeryLong },
+    { FermataType::VeryShort,   mnx::FermataDuration::VeryShort },
+};
+} // namespace
+
+mnx::FermataDuration toMnxFermataDuration(FermataType fermataType)
+{
+    return muse::value(fermataDuraTable, fermataType, mnx::FermataDuration::Auto);
+}
+
+namespace {
+const std::unordered_map<SymId, mnx::FermataSymbol> fermataSymToSymId {
+    { SymId::fermataAbove,              mnx::FermataSymbol::Normal },
+    { SymId::fermataBelow,              mnx::FermataSymbol::Normal },
+    { SymId::fermataShortAbove,         mnx::FermataSymbol::Angled },
+    { SymId::fermataShortBelow,         mnx::FermataSymbol::Angled },
+    { SymId::fermataLongAbove,          mnx::FermataSymbol::Square, },
+    { SymId::fermataLongBelow,          mnx::FermataSymbol::Square, },
+    { SymId::fermataVeryShortAbove,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryShortBelow,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryLongAbove,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataVeryLongBelow,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataLongHenzeAbove,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataLongHenzeBelow,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataShortHenzeAbove,    mnx::FermataSymbol::HalfCurve },
+    { SymId::fermataShortHenzeBelow,    mnx::FermataSymbol::HalfCurve },
+    { SymId::curlewSign,                mnx::FermataSymbol::Curlew },
+};
+} // namespace
+
+mnx::FermataSymbol toMnxFermataSymbol(SymId sym)
+{
+    return muse::value(fermataSymToSymId, sym, mnx::FermataSymbol::Normal);
+}
+
+namespace {
 /// @todo Grow this table as MNX grows it.
-static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
+const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
     { mnx::JumpType::Segno,         JumpType::DSS },
 };
@@ -360,7 +516,7 @@ std::optional<mnx::JumpType> toMnxJumpType(JumpType jt)
 }
 
 namespace {
-static const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
+const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
     { mnx::LyricLineType::Whole,        LyricsSyllabic::SINGLE },
     { mnx::LyricLineType::Start,        LyricsSyllabic::BEGIN },
     { mnx::LyricLineType::Middle,       LyricsSyllabic::MIDDLE },
@@ -486,6 +642,7 @@ NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, Key key,
     if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
         nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        LOGW() << "Enharmonically transposing pitch with alteration value out of range.";
     } else {
         nval.tpc1 = step2tpc(step, AccidentalVal(alteration));
     }
@@ -571,7 +728,7 @@ Fraction toMuseScoreFraction(const mnx::FractionValue& fraction)
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
-mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
+mnx::FractionValue toMnxFractionValue(const Fraction& fraction)
 {
     return mnx::FractionValue(fraction.numerator(), fraction.denominator());
 }
@@ -599,6 +756,22 @@ PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
     default:
         return PreferSharpFlat::NONE;
     }
+}
+
+PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingItem* item)
+{
+    switch (orient) {
+    case mnx::Orientation::Above:
+        return PlacementV::ABOVE;
+    case mnx::Orientation::Below:
+        return PlacementV::BELOW;
+    case mnx::Orientation::Auto:
+        IF_ASSERT_FAILED(item) {
+            break;
+        }
+        return item->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
+    }
+    return PlacementV::ABOVE;
 }
 
 int toMnxKeyFifthsFlipValue(PreferSharpFlat prefer, const Interval& keyTransposition)

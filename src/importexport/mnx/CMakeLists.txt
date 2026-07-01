@@ -16,11 +16,14 @@ if(MSS_USE_SYSTEM_MNXDOM)
     target_compile_definitions(iex_mnx PRIVATE MNXDOM_SYSTEM)
     message(STATUS "Using system-installed mnxdom")
 else()
+    set(MNXDOM_GIT_TAG 97ed39ac5f7f0b38878d8ea9d48290929e0eeba7)
+    string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
         GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-        GIT_TAG        e7c947bf768caccf315426dcae0dfac02caf738b
+        GIT_TAG        ${MNXDOM_GIT_TAG}
     )
+    set(MNXDOM_GIT_COMMIT "${MNXDOM_GIT_COMMIT}" CACHE STRING "mnxdom source control revision to embed in provenance" FORCE)
     FetchContent_MakeAvailable(mnxdom)
     set(MNXDOM_LIB mnxdom)
     message(STATUS "Using fetched mnxdom")

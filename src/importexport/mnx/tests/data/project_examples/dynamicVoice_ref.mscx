@@ -102,66 +102,50 @@
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
-            <subtype>ff</subtype>
-            <velocity>112</velocity>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>up</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
             <eid>I_I</eid>
             </Dynamic>
           <Chord>
             <eid>J_J</eid>
-            <durationType>quarter</durationType>
+            <durationType>half</durationType>
             <Note>
               <eid>K_K</eid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>L_L</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>M_M</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>N_N</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>O_O</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>ppp</subtype>
-            <velocity>16</velocity>
-            <eid>P_P</eid>
-            </Dynamic>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            <Note>
-              <eid>S_S</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            <Note>
-              <eid>T_T</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Note>
-              <eid>U_U</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <eid>L_L</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        <voice>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <direction>down</direction>
+            <centerBetweenStaves>off</centerBetweenStaves>
+            <eid>M_M</eid>
+            <text><sym>dynamicMF</sym></text>
+            </Dynamic>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>P_P</eid>
+            <durationType>half</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
