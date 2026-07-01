@@ -57,21 +57,28 @@ static QByteArray soundsRequestJson()
             museScoreStudioPageSections {
               ... on ProductPageSectionDynamic {
                 title(locale: {locale: "%1"})
-                productCards {
-                  ... on ProductCardRegular {
-                    iconImageUrl
-                    product(locale: {locale: "%1"}) {
-                      ... on ProductLibrary {
-                        code
-                        title
-                        subtitle
-                        compatibleWith {
-                          museSoundManager
-                          museHub
-                        }
-                      }
-                    }
-                  }
+                productCards { ...CardFields }
+              }
+              ... on ProductPageSectionRegular {
+                title(locale: {locale: "%1"})
+                productCards { ...CardFields }
+              }
+            }
+          }
+        }
+        fragment CardFields on ProductCard {
+          ... on ProductCardRegular {
+            iconImageUrl
+            product(locale: {locale: "%1"}) {
+              ... on ProductBase {
+                code
+                title
+                subtitle
+              }
+              ... on ProductLibrary {
+                compatibleWith {
+                  museSoundManager
+                  museHub
                 }
               }
             }
@@ -175,8 +182,12 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             }
 
             JsonObject compatibleWithObj = productObj.value("compatibleWith").toObject();
-            if (!compatibleWithObj.empty() && compatibleWithObj.contains(museSoundsAppName)
-                && !compatibleWithObj.value(museSoundsAppName).toBool()) {
+            if (compatibleWithObj.empty()) {
+                // Products without compatibleWith info are only manageable through MuseHub
+                if (museSoundsAppName != "museHub") {
+                    continue;
+                }
+            } else if (compatibleWithObj.contains(museSoundsAppName) && !compatibleWithObj.value(museSoundsAppName).toBool()) {
                 continue;
             }
 
