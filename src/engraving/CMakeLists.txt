@@ -128,6 +128,8 @@ target_sources(engraving PRIVATE
     editing/editexcerpt.h
     editing/editfretboarddiagram.cpp
     editing/editfretboarddiagram.h
+    editing/edithairpin.cpp
+    editing/edithairpin.h
     editing/editharppedaldiagram.cpp
     editing/editharppedaldiagram.h
     editing/editinstrumentchange.cpp
