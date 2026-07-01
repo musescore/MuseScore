@@ -901,6 +901,7 @@ public:
     void setPageNumberOffset(int v) { m_pageNumberOffset = v; }
 
     String appVersion() const { return application()->version().toString(); }
+    String appRevision() const { return application()->revision(); }
     String mscoreVersion() const { return m_mscoreVersion; }
     int mscoreRevision() const { return m_mscoreRevision; }
     void setMscoreVersion(const String& val) { m_mscoreVersion = val; }

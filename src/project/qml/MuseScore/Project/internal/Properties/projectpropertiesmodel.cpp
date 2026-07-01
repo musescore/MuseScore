@@ -158,10 +158,13 @@ QString ProjectPropertiesModel::revision() const
 {
     int rev = m_projectMetaInfo.musescoreRevision;
     QString revision;
-    if (rev > 99999) {     // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-        revision = QString::number(rev, 16);
-    } else {
-        revision = QString::number(rev, 10);
+    if (rev > 0 && rev <= 5709) { // MuseScore 1.x and earlier used decimal numbers, referring to a commit on SourceForge.net, the largest being 5709
+        revision = QString("<a href=\"https://sourceforge.net/p/mscore/code/%1/\">%1</a>").arg(QString::number(rev, 10));
+    } else if (rev > 0xffffff) { // MuseScore 2.0 and later use a >= 7-digit hex SHA, referring to a commit on GitHub.com
+        revision = QString("<a href=\"https://github.com/%1/MuseScore/commit/%2\">%2</a>")
+                   .arg(m_projectMetaInfo.musescoreVersion == "3.6.3" ? "Jojo-Schmitz" : "musescore", QString::number(rev, 16));
+    } else { // unknown, like in a self-built development version, or in a very old version of MuseScore before the revision number was tracked
+        revision = QString::number(rev, 10); // or "" or "Unknown"?
     }
 
     return revision;
