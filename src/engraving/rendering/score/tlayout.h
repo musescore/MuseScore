@@ -118,6 +118,7 @@ class BagpipeEmbellishment;
 class Beam;
 
 class Chord;
+class DurationLine;
 
 class Glissando;
 class GlissandoSegment;
@@ -139,6 +140,7 @@ class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
 
+class OctaveDot;
 class Ottava;
 class OttavaSegment;
 
@@ -230,6 +232,7 @@ public:
     static void layoutCapo(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData* ldata);
+    static void layoutDurationLine(DurationLine* item, const LayoutContext& ctx);
     static void layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layoutExpression(const Expression* item, Expression::LayoutData* ldata);
@@ -295,6 +298,7 @@ public:
     static void layoutNoteLine(NoteLine* item, LayoutContext& ctx);
     static void layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx);
 
+    static void layoutOctaveDot(OctaveDot* item, LayoutContext& ctx);
     static void layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 

@@ -823,4 +823,68 @@ bool TDuration::isValid(Fraction f)
     t.truncateToFraction(f, 4);
     return t.isValid() && (t.fraction() - f).numerator() == 0;
 }
+
+//---------------------------------------------------------
+//   augmentation lines - number of Line to lengthen duration
+//---------------------------------------------------------
+int TDuration::augmentationLines() const
+{
+    auto getLinesByDots = [this](int base){
+        int lines = base - 1;
+        int dots = this->dots();
+        while (dots > 0)
+        {
+            base /= 2;
+            lines += base;
+            dots--;
+        }
+        return lines;
+    };
+
+    switch (m_val) {
+    case DurationType::V_LONG:
+        return getLinesByDots(16);
+    case DurationType::V_BREVE:
+        return getLinesByDots(8);
+    case DurationType::V_WHOLE:
+        return getLinesByDots(4);
+    case DurationType::V_HALF:
+        return getLinesByDots(2);
+    default:
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+//   diminution lines - number of Line to halve duration
+//---------------------------------------------------------
+int TDuration::diminutionLines() const
+{
+    switch (m_val) {
+    case DurationType::V_LONG:
+    case DurationType::V_BREVE:
+    case DurationType::V_WHOLE:
+    case DurationType::V_HALF:
+    case DurationType::V_QUARTER:
+        return 0;
+    case DurationType::V_EIGHTH:
+        return 1;
+    case DurationType::V_16TH:
+        return 2;
+    case DurationType::V_32ND:
+        return 3;
+    case DurationType::V_64TH:
+        return 4;
+    case DurationType::V_128TH:
+        return 5;
+    case DurationType::V_256TH:
+        return 6;
+    case DurationType::V_512TH:
+        return 7;
+    case DurationType::V_1024TH:
+        return 8;
+    default:
+        return 0;
+    }
+}
 }
