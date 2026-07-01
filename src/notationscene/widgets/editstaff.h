@@ -110,7 +110,6 @@ private:
     mu::engraving::Staff* m_staff = nullptr;
     mu::engraving::Staff* m_orgStaff = nullptr;
     Instrument m_instrument;
-    Instrument m_orgInstrument;
     InstrumentKey m_instrumentKey;
     int m_minPitchA, m_maxPitchA, m_minPitchP, m_maxPitchP;
     mu::engraving::Fraction m_tick;
