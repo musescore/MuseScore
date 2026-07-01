@@ -1645,61 +1645,6 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     }
 }
 
-//---------------------------------------------------------
-//   moveUp
-//---------------------------------------------------------
-
-void Score::moveUp(ChordRest* cr)
-{
-    Staff* staff  = cr->staff();
-    Part* part    = staff->part();
-    staff_idx_t rstaff    = staff->rstaff();
-    int staffMove = cr->staffMove();
-
-    if ((staffMove == -1) || (static_cast<int>(rstaff) + staffMove <= 0)) {
-        return;
-    }
-
-    const std::vector<Staff*>& staves = part->staves();
-    // we know that staffMove+rstaff-1 index exists due to the previous condition.
-    if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves.at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
-        LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
-    } else {
-        // move the chord up a staff
-        undo(new ChangeChordStaffMove(cr, staffMove - 1));
-    }
-}
-
-//---------------------------------------------------------
-//   moveDown
-//---------------------------------------------------------
-
-void Score::moveDown(ChordRest* cr)
-{
-    Staff* staff  = cr->staff();
-    Part* part    = staff->part();
-    staff_idx_t rstaff = staff->rstaff();
-    int staffMove = cr->staffMove();
-    // calculate the number of staves available so that we know whether there is another staff to move down to
-    size_t rstaves = part->nstaves();
-
-    if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-        LOGD("moveDown staffMove==%d  rstaff %zu rstaves %zu", staffMove, rstaff, rstaves);
-        return;
-    }
-
-    const std::vector<Staff*>& staves = part->staves();
-    // we know that staffMove+rstaff+1 index exists due to the previous condition.
-    if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves.at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
-        LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
-    } else {
-        // move the chord down a staff
-        undo(new ChangeChordStaffMove(cr, staffMove + 1));
-    }
-}
-
 static void resetBeamOffSet(EngravingItem* e)
 {
     // Reset completely cross staff beams from MU1&2

@@ -92,6 +92,7 @@
 #include "engraving/editing/editbeam.h"
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editclef.h"
+#include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/edithairpin.h"
@@ -4039,13 +4040,14 @@ void NotationInteraction::moveChordRestToStaff(MoveDirection dir)
 {
     startEdit(TranslatableString("undoableAction", "Move chord/rest to staff"));
 
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
     for (EngravingItem* e: score()->selection().uniqueElements()) {
         ChordRest* cr = asChordRest(e);
         if (cr != nullptr) {
             if (dir == MoveDirection::Up) {
-                score()->moveUp(cr);
+                EditCrossStaff::moveUp(tx, score(), cr);
             } else if (dir == MoveDirection::Down) {
-                score()->moveDown(cr);
+                EditCrossStaff::moveDown(tx, score(), cr);
             }
         }
     }
