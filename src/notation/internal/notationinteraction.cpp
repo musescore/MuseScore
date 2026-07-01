@@ -93,6 +93,7 @@
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editbrackets.h"
 #include "engraving/editing/editparentheses.h"
@@ -2533,7 +2534,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         spanner->setScore(score);
         spanner->styleChanged();
         if (spanner->isHairpin()) {
-            score->addHairpin(toHairpin(spanner), cr1, cr2);
+            EditHairpin::addHairpin(tx, score, toHairpin(spanner), cr1, cr2);
             if (!spanner->segmentsEmpty() && !score->noteEntryMode()) {
                 SpannerSegment* frontSegment = spanner->frontSegment();
                 score->select(frontSegment);
@@ -5700,7 +5701,8 @@ void NotationInteraction::addHairpinOnGripDrag(EditData& ed, bool isLeftGrip)
     Dynamic* dynamic = toDynamic(ed.element);
 
     const PointF pos = m_dragData.ed.pos;
-    Hairpin* hairpin = score()->addHairpinToDynamicOnGripDrag(dynamic, isLeftGrip, pos);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    Hairpin* hairpin = EditHairpin::addHairpinToDynamicOnGripDrag(tx, score(), dynamic, isLeftGrip, pos);
 
     if (!hairpin) {
         rollback();
@@ -5736,8 +5738,8 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
     }
 
     std::vector<mu::engraving::Hairpin*> hairpins;
-    transaction(TranslatableString("undoableAction", "Add hairpin"), [&](auto&) {
-        hairpins = score()->addHairpins(type);
+    transaction(TranslatableString("undoableAction", "Add hairpin"), [&](Transaction& tx) {
+        hairpins = EditHairpin::addHairpins(tx, score(), type);
     });
 
     if (!noteInput()->isNoteInputMode() && hairpins.size() == 1) {

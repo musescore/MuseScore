@@ -108,12 +108,10 @@ class Bracket;
 class Chord;
 class ChordRest;
 class Clef;
-class Dynamic;
 class Element;
 class EventsHolder;
 class Excerpt;
 class FiguredBass;
-class Hairpin;
 class Harmony;
 class InstrumentTemplate;
 class InputState;
@@ -159,7 +157,6 @@ struct ShowAnchors;
 
 enum class BeatType : unsigned char;
 enum class Key : signed char;
-enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : unsigned char;
 enum class Prefer : char;
@@ -378,7 +375,6 @@ public:
 
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
-    std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
 
     void cmdAddStretch(double);
@@ -856,12 +852,6 @@ public:
     const std::set<Spanner*>& unmanagedSpanners() const { return m_unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
-
-    Hairpin* addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2 = nullptr);
-    Hairpin* addHairpin(HairpinType type, Fraction sTick, Fraction eTick, track_idx_t track);
-    void addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2 = nullptr);
-    void addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic);
-    Hairpin* addHairpinToDynamicOnGripDrag(Dynamic* dynamic, bool isLeftGrip, const PointF& pos);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;
