@@ -96,6 +96,7 @@
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/editspanner.h"
 #include "engraving/editing/editbrackets.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editrehearsalmark.h"
@@ -2047,7 +2048,8 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     {
         systemStavesOnly |=  edd.ed.dropElement->systemFlag();
         mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
-        score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
+        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditSpanner::addSpanner(tx, score(), spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
         accepted = true;
     }
@@ -2545,7 +2547,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         } else {
             bool firstStaffOnly = isSystemTextLine(element) && !(modifiers & Qt::ControlModifier);
             staff_idx_t targetStaff = firstStaffOnly ? 0 : cr1->staffIdx();
-            score->cmdAddSpanner(spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, targetStaff, startSegment, endSegment, modifiers & Qt::ControlModifier);
         }
         if (spanner->hasVoiceAssignmentProperties()) {
             spanner->setInitialTrackAndVoiceAssignment(cr1->track(), modifiers & ControlModifier);
@@ -2722,7 +2724,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             Spanner* spanner = toSpanner(element->clone());
             spanner->setScore(score);
             spanner->styleChanged();
-            score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
+            EditSpanner::addSpanner(tx, score, spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
             if (spanner->hasVoiceAssignmentProperties()) {
                 spanner->setInitialTrackAndVoiceAssignment(staff2track(i), modifiers & ControlModifier);
             }
