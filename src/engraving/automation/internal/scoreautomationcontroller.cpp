@@ -325,6 +325,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
     removeGeneratedPoints(score, *repeatFromIt, tickFrom, staffIdxFrom, staffIdxTo);
     DynamicPriorities dynamicPriorities;
     DeferredInValuePoints deferredInValuePoints;
+    PendingAnchorDynamics pendingAnchorDynamics;
 
     std::vector<std::pair<const MeasureRepeat*, int> > measureRepeats;
 
@@ -353,9 +354,16 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
                     continue;
                 }
 
-                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
+                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints,
+                                 pendingAnchorDynamics);
             }
         }
+    }
+
+    // Step 1.5: anchored dynamics — processed after all regular dynamics so that a regular dynamic
+    // at the same tick (possibly in a different segment) has already claimed outValue
+    for (const auto& [dyn, tickOffset] : pendingAnchorDynamics) {
+        addDynamicPoints(dyn, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
     }
 
     // Step 2: spanner points: dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
@@ -401,12 +409,13 @@ void ScoreAutomationController::removeGeneratedPoints(const Score* score, const 
 
 void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset,
                                                  size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities,
-                                                 DeferredInValuePoints& deferredInValuePoints)
+                                                 DeferredInValuePoints& deferredInValuePoints,
+                                                 PendingAnchorDynamics& pendingAnchorDynamics)
 {
     const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 
     for (const EngravingItem* annotation : segment->annotations()) {
-        if (!annotation) {
+        if (!annotation || !annotation->isDynamic()) {
             continue;
         }
 
@@ -417,8 +426,11 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
             }
         }
 
-        if (annotation->isDynamic()) {
-            addDynamicPoints(toDynamic(annotation), tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
+        const Dynamic* dyn = toDynamic(annotation);
+        if (dyn->anchorToEndOfPrevious()) {
+            pendingAnchorDynamics.emplace_back(dyn, tickOffset);
+        } else {
+            addDynamicPoints(dyn, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
         }
     }
 }
@@ -453,27 +465,31 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         eid = dynamic->assignNewEID();
     }
 
-    if (muse::contains(ORDINARY_DYNAMIC_VALUES, dynamicType)) {
+    if (auto it = ORDINARY_DYNAMIC_VALUES.find(dynamicType); it != ORDINARY_DYNAMIC_VALUES.end()) {
+        const double value = it->second;
+        // Called after all non-anchored dynamics in this segment, so a regular dynamic at the
+        // same tick has already claimed outValue. Contribute only inValue; otherwise add normally.
+        if (dynamic->anchorToEndOfPrevious() && muse::contains(m_automation->curve(key), dynamicUTick)) {
+            m_automation->setPointInValue(key, dynamicUTick, value);
+            deferredInValuePoints.erase({ key, dynamicUTick });
+            return;
+        }
         AutomationPoint point;
         point.inValue = 0.0;
-        point.outValue = muse::value(ORDINARY_DYNAMIC_VALUES, dynamicType);
+        point.outValue = value;
         point.itemId = eid;
-        if (tryAddDynamicPoint(key, dynamicUTick, point, priority, dynamicPriorities)) {
-            deferredInValuePoints.emplace(key, dynamicUTick);
-        }
+        addDeferredPoint(key, dynamicUTick, point, priority, dynamicPriorities, deferredInValuePoints);
         return;
     }
 
-    if (muse::contains(SINGLE_NOTE_DYNAMIC_VALUES, dynamicType)) {
+    if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
         const AutomationPoint* prevPoint = m_automation->activePoint(key, dynamicUTick);
 
         AutomationPoint point;
         point.inValue = 0.0;
-        point.outValue = muse::value(SINGLE_NOTE_DYNAMIC_VALUES, dynamicType);
+        point.outValue = it->second;
         point.itemId = eid;
-        if (tryAddDynamicPoint(key, dynamicUTick, point, priority, dynamicPriorities)) {
-            deferredInValuePoints.emplace(key, dynamicUTick);
-        }
+        addDeferredPoint(key, dynamicUTick, point, priority, dynamicPriorities, deferredInValuePoints);
 
         if (const Segment* nextSeg = dynamic->segment()->next()) {
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
@@ -484,17 +500,15 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         return;
     }
 
-    if (muse::contains(COMPOUND_DYNAMIC_VALUES, dynamicType)) {
-        const std::pair<double, double>& values = COMPOUND_DYNAMIC_VALUES.at(dynamicType);
+    if (auto it = COMPOUND_DYNAMIC_VALUES.find(dynamicType); it != COMPOUND_DYNAMIC_VALUES.end()) {
+        const std::pair<double, double>& values = it->second;
         const utick_t endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
 
         AutomationPoint startPoint;
         startPoint.inValue = 0.0;
         startPoint.outValue = values.first;
         startPoint.itemId = eid;
-        if (tryAddDynamicPoint(key, dynamicUTick, startPoint, priority, dynamicPriorities)) {
-            deferredInValuePoints.emplace(key, dynamicUTick);
-        }
+        addDeferredPoint(key, dynamicUTick, startPoint, priority, dynamicPriorities, deferredInValuePoints);
 
         AutomationPoint endPoint;
         endPoint.inValue = values.second;
@@ -803,6 +817,15 @@ void ScoreAutomationController::resolveDeferredInValues(DeferredInValuePoints& d
                 m_automation->setPointInValue(key, nextIt->first, point.outValue);
             }
         }
+    }
+}
+
+void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
+                                                 int priority, DynamicPriorities& dynamicPriorities,
+                                                 DeferredInValuePoints& deferredInValuePoints)
+{
+    if (tryAddDynamicPoint(key, tick, point, priority, dynamicPriorities)) {
+        deferredInValuePoints.emplace(key, tick);
     }
 }
 

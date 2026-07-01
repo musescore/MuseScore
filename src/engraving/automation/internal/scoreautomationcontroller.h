@@ -23,6 +23,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 #include "engraving/automation/automationtypes.h"
 
@@ -53,13 +54,15 @@ public:
 private:
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
     using DeferredInValuePoints = std::set<std::pair<AutomationCurveKey, utick_t> >;
+    using PendingAnchorDynamics = std::vector<std::pair<const Dynamic*, int> >;
 
     void update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo);
 
     void addSegmentPoints(const Segment* segment, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
-                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints,
+                          PendingAnchorDynamics& pendingAnchorDynamics);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, size_t staffIdxFrom, size_t staffIdxTo,
                           DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
     void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
@@ -79,6 +82,8 @@ private:
 
     bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                             DynamicPriorities& dynamicPriorities);
+    void addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
+                          DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints);
 
     void resolveDeferredInValues(DeferredInValuePoints& deferredInValuePoints);
 
