@@ -129,7 +129,7 @@ Rectangle {
         color: "transparent"
         radius: 4
         border.width: 1
-        border.color: mouseArea.containsMouse ? root.theme.accentColor : root.theme.strokeColor
+        border.color: mouseArea.containsMouse ? ui.theme.accentColor : ui.theme.strokeColor
     }
 
     MouseArea {
