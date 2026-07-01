@@ -997,6 +997,7 @@ void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
         if (!sharedSpanner) {
             sharedSpanner = toSpanner(spanner->clone());
             sharedSpanner->setTrack(sharedTrack);
+            sharedSpanner->setTrack2(sharedTrack);
             sharedSpanner->setTick(spanner->tick());
             sharedSpanner->setTicks(spanner->ticks());
             sharedSpanner->setStartElement(nullptr);
