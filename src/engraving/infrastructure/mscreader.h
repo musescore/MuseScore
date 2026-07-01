@@ -74,6 +74,9 @@ public:
     muse::ByteArray readViewSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
     muse::ByteArray readAutomationJsonFile() const;
 
+    muse::ByteArray readSnapshotIndexFile() const;
+    muse::ByteArray readSnapshotFile(size_t index) const;
+
 private:
 
     struct IReader {
