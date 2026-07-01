@@ -1071,7 +1071,14 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
     Segment* curSegment = unisonNote->chord()->segment();
     for (Segment* seg = curSegment->prev1(SegmentType::ChordRest); seg; seg = seg->prev1(SegmentType::ChordRest)) {
         if (EngravingItem* el = seg->element(curTrack); el && el->isChord()) {
-            prevNote = toChord(el)->upNote();
+            for (Note* note : toChord(el)->notes()) {
+                if (!note->originItems().empty()) {
+                    prevNote = note;
+                    break;
+                }
+            }
+        }
+        if (prevNote) {
             break;
         }
     }
