@@ -789,7 +789,10 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     // calculate additional length due to ties forward
     // taking NoteEvent length adjustments into account
 
-    int tick1    = note->tick().ticks() + noteParams.tickOffset;
+    // Grace notes are exported relative to their principal chord and then shifted
+    // earlier via grace offsets. Using the grace note's own tick here double-shifts
+    // acciaccaturas in the MIDI export path.
+    int tick1    = chord->tick().ticks() + noteParams.tickOffset;
     const GuitarBend* bendFor = note->bendFor();
     const GuitarBend* bendBack = note->bendBack();
 
@@ -861,8 +864,15 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             int eventChannel = noteChannel;
             playParams.pitch = p;
             playParams.velo = std::clamp(velo, 1, 127);
-            playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
-            playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
+            int rawOnTime = on - noteParams.graceOffsetOn;
+            playParams.onTime = std::max(0, rawOnTime);
+            if (noteParams.graceOffsetOn > 0 && rawOnTime < 0) {
+                // Grace before beat was clamped (e.g., first beat of piece).
+                // Preserve the intended duration so the grace remains audible.
+                playParams.offTime = playParams.onTime + noteParams.graceOffsetOn - 1;
+            } else {
+                playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
+            }
 
             if (eventEffect == MidiInstrumentEffect::NONE) {
                 eventEffect = midiEffectFromEvent(e);

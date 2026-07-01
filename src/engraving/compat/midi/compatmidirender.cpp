@@ -596,9 +596,12 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
             el.push_back(nel);
         }
 
-        if (gc->playEventType() == PlayEventType::Auto) {
-            gc->setNoteEventLists(el);
-        }
+        // Always overwrite grace note events: MuseScore 4 exposes no UI for
+        // manually editing grace note MIDI timing, so any stored PlayEventType::User
+        // on a grace chord is a stale artifact from an earlier render. Honouring it
+        // would leave zero-duration events (saved by old buggy renders) in place and
+        // make the grace note silent in MIDI export.
+        gc->setNoteEventLists(el);
 
         on += graceDuration;
     }
@@ -633,9 +636,7 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
                 el.push_back(nel);
             }
 
-            if (gc->playEventType() == PlayEventType::Auto) {
-                gc->setNoteEventLists(el);
-            }
+            gc->setNoteEventLists(el);
             on += graceDuration1;
         }
     }
