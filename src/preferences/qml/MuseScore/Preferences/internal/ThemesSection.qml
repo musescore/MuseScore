@@ -102,26 +102,26 @@ BaseSection {
                 }
             }
         }
-    }
 
-    AccentColorsSection {
-        id: accentColorsSection
+        AccentColorsSection {
+            id: accentColorsSection
 
-        columnWidth: root.columnWidth
-        spacing: root.columnSpacing
+            columnWidth: root.columnWidth
+            spacing: root.columnSpacing
 
-        visible: !root.highContrastEnabled
+            visible: !root.highContrastEnabled
 
-        navigation.section: root.navigation.section
-        navigation.order: root.navigation.order + 1
+            navigation.section: root.navigation.section
+            navigation.order: root.navigation.order + 1
 
-        onAccentColorChangeRequested: function(newColorIndex) {
-            root.accentColorChangeRequested(newColorIndex)
-        }
+            onAccentColorChangeRequested: function(newColorIndex) {
+                root.accentColorChangeRequested(newColorIndex)
+            }
 
-        onFocusChanged: {
-            if (activeFocus) {
-                root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }
