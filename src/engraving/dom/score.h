@@ -598,6 +598,8 @@ public:
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
+    ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
+    ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);
     Box* cmdNextPrevFrame(MeasureBase*, bool) const;
     EngravingItem* cmdNextPrevSection(EngravingItem*, bool) const;
@@ -756,8 +758,6 @@ public:
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
 
-    EngravingItem* selectMove(const String& cmd);
-    EngravingItem* move(const String& cmd);
     void cmdEnterRest(const TDuration& d);
     void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
     void addInterval(int, const std::vector<Note*>&);
@@ -951,8 +951,6 @@ private:
     static std::set<Score*> validScores;
 
     Note* getSelectedNote();
-    ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
-    ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
                                                             voice_idx_t voice) const;
 

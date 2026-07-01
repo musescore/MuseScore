@@ -26,7 +26,9 @@
 
 namespace mu::engraving {
 class ChordRest;
+class EngravingItem;
 class Lyrics;
+class Score;
 class Segment;
 
 struct ChordRestNavigateOptions {
@@ -43,5 +45,7 @@ public:
     static Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement);
     static Lyrics* prevLyrics(const Lyrics* lyrics);
     static Lyrics* nextLyrics(const Lyrics* lyrics);
+    static EngravingItem* move(Score* score, const String& cmd);
+    static EngravingItem* selectMove(Score* score, const String& cmd);
 };
 }

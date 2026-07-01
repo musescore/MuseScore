@@ -3980,7 +3980,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 
     cmd += typeToString(type);
 
-    mu::engraving::EngravingItem* item = score()->move(cmd);
+    mu::engraving::EngravingItem* item = Navigation::move(score(), cmd);
     resetHitElementContext();
 
     notifyAboutSelectionChangedIfNeed();
