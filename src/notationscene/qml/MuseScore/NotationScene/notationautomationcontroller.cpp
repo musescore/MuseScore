@@ -72,10 +72,10 @@ void NotationAutomationController::init()
 
     automation()->automationModeEnabledChanged().onNotify(this, [this]() {
         updatePolylinesGeometry();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 NotationAutomationController::SysStaffToPolylinesMap NotationAutomationController::createPolylinesForSystem(const System* system)
