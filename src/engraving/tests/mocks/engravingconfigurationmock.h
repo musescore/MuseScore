@@ -48,11 +48,6 @@ public:
     MOCK_METHOD(Color, defaultColor, (), (const, override));
     MOCK_METHOD(Color, scoreInversionColor, (), (const, override));
     MOCK_METHOD(Color, lassoColor, (), (const, override));
-    MOCK_METHOD(Color, warningColor, (), (const, override));
-    MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
-    MOCK_METHOD(Color, criticalColor, (), (const, override));
-    MOCK_METHOD(Color, criticalBackgroundColor, (), (const, override));
-    MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
     MOCK_METHOD(Color, thumbnailBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, noteBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
@@ -72,6 +67,15 @@ public:
 
     MOCK_METHOD(Color, formattingColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, formattingColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, warningColor, (), (const, override));
+    MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, warningColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, criticalColor, (), (const, override));
+    MOCK_METHOD(Color, criticalBackgroundColor, (), (const, override));
+    MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, criticalColorChanged, (), (const, override));
 
     MOCK_METHOD(Color, frameColor, (), (const, override));
     MOCK_METHOD(muse::async::Channel<Color>, frameColorChanged, (), (const, override));
