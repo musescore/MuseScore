@@ -59,7 +59,6 @@
 #include "../dom/measure.h"
 #include "../dom/measurerepeat.h"
 #include "../dom/mscore.h"
-#include "../dom/navigate.h"
 #include "../dom/note.h"
 #include "../dom/ornament.h"
 #include "../dom/page.h"
@@ -93,6 +92,7 @@
 #include "editstaff.h"
 #include "editsystemlocks.h"
 #include "mscoreview.h"
+#include "navigation.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
@@ -1792,11 +1792,11 @@ EngravingItem* Score::move(const String& cmd)
         // selection "cursor"
         // find next chordrest, which might be a grace note
         // this may override note input cursor
-        el = nextChordRest(cr);
+        el = Navigation::nextChordRest(cr);
 
         // Skip gap rests if we're not in note entry mode...
         while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
-            el = nextChordRest(toChordRest(el));
+            el = Navigation::nextChordRest(toChordRest(el));
         }
         if (el && noteEntryMode()) {
             // do not use if not in original or new measure (don't skip measures)
@@ -1843,11 +1843,11 @@ EngravingItem* Score::move(const String& cmd)
         // selection "cursor"
         // find previous chordrest, which might be a grace note
         // this may override note input cursor
-        el = prevChordRest(cr);
+        el = Navigation::prevChordRest(cr);
 
         // Skip gap rests if we're not in note entry mode...
         while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
-            el = prevChordRest(toChordRest(el));
+            el = Navigation::prevChordRest(toChordRest(el));
         }
         if (el && noteEntryMode()) {
             // do not use if not in original or new measure (don't skip measures)
@@ -2010,9 +2010,9 @@ EngravingItem* Score::selectMove(const String& cmd)
     options.skipGrace = true;
     options.skipMeasureRepeatRests = false;
     if (cmd == u"select-next-chord") {
-        el = nextChordRest(cr, options);
+        el = Navigation::nextChordRest(cr, options);
     } else if (cmd == u"select-prev-chord") {
-        el = prevChordRest(cr, options);
+        el = Navigation::prevChordRest(cr, options);
     } else if (cmd == u"select-next-measure") {
         el = nextMeasure(cr, true, true);
     } else if (cmd == u"select-prev-measure") {

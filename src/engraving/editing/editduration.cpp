@@ -33,7 +33,6 @@
 #include "../dom/input.h"
 #include "../dom/laissezvib.h"
 #include "../dom/measure.h"
-#include "../dom/navigate.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
@@ -41,6 +40,7 @@
 #include "../dom/tie.h"
 #include "../dom/utils.h"
 
+#include "navigation.h"
 #include "noteinput.h"
 #include "paste.h"
 #include "transaction/transaction.h"
@@ -174,7 +174,7 @@ void EditDuration::extendToNextNote(Transaction& tx, Score* score)
     const std::vector<Note*> initialSelection = selection.noteList();
 
     for (ChordRest* cr : score->getSelectedChordRests()) {
-        ChordRest* ncr = nextChordRest(cr);
+        ChordRest* ncr = Navigation::nextChordRest(cr);
         if (cr->isRest() || cr->isGrace() || cr->endTick() == score->endTick()
             || (ncr && ncr->isChord() && cr->endTick() == ncr->tick())) {
             continue;
@@ -229,11 +229,11 @@ void EditDuration::extendToNextNote(Transaction& tx, Score* score)
                 Fraction newDur = cr->ticks() + ncr->ticks();
                 score->changeCRlen(cr, newDur);
                 while (toChord(cr)->notes()[0]->tieFor()) {
-                    cr = nextChordRest(cr);
+                    cr = Navigation::nextChordRest(cr);
                     toSelect.push_back(cr);
                 }
             }
-            ncr = nextChordRest(cr);
+            ncr = Navigation::nextChordRest(cr);
             endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
         }
     }

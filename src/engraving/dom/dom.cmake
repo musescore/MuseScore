@@ -199,8 +199,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mmrestrange.h
     ${CMAKE_CURRENT_LIST_DIR}/mscore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mscore.h
-    ${CMAKE_CURRENT_LIST_DIR}/navigate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
     ${CMAKE_CURRENT_LIST_DIR}/note.h
     ${CMAKE_CURRENT_LIST_DIR}/noteval.h

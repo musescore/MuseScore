@@ -59,7 +59,6 @@
 #include "laissezvib.h"
 #include "linkedobjects.h"
 #include "measure.h"
-#include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
 #include "parenthesis.h"

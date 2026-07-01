@@ -23,6 +23,7 @@
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
 #include "../editing/editnote.h"
+#include "../editing/navigation.h"
 #include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
@@ -31,7 +32,6 @@
 #include "actionicon.h"
 #include "chord.h"
 #include "guitarbend.h"
-#include "navigate.h"
 #include "note.h"
 #include "part.h"
 #include "rest.h"
@@ -638,12 +638,12 @@ GuitarBend* GuitarBend::findPrecedingBend() const
     }
 
     if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
-        ChordRest* prevCR = prevChordRest(startN->chord());
+        ChordRest* prevCR = Navigation::prevChordRest(startN->chord());
         if (prevCR && prevCR->isRest() && isDive()) {
             WhammyBar* whammyBar = findOverlappingWhammyBar(prevCR->tick(), tick2());
             if (whammyBar) {
                 while (prevCR && prevCR->isRest() && prevCR->tick() > whammyBar->tick()) {
-                    prevCR = prevChordRest(prevCR);
+                    prevCR = Navigation::prevChordRest(prevCR);
                 }
             }
         }
@@ -686,12 +686,12 @@ GuitarBend* GuitarBend::findFollowingPreBendOrDive() const
         endN = endN->tieFor()->endNote();
     }
 
-    ChordRest* nextCR = nextChordRest(endN->chord());
+    ChordRest* nextCR = Navigation::nextChordRest(endN->chord());
     if (isDive() && nextCR && nextCR->isRest()) {
         WhammyBar* whammyBar = findOverlappingWhammyBar(tick(), nextCR->endTick());
         if (whammyBar) {
             while (nextCR && nextCR->isRest() && nextCR->tick() < whammyBar->tick2()) {
-                nextCR = nextChordRest(nextCR);
+                nextCR = Navigation::nextChordRest(nextCR);
             }
         }
     }

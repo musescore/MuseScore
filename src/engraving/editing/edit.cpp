@@ -61,7 +61,6 @@
 #include "../dom/masterscore.h"
 #include "../dom/measure.h"
 #include "../dom/measurerepeat.h"
-#include "../dom/navigate.h"
 #include "../dom/note.h"
 #include "../dom/noteline.h"
 #include "../dom/ottava.h"
@@ -116,6 +115,7 @@
 #include "edittremolo.h"
 #include "inserttime.h"
 #include "mscoreview.h"
+#include "navigation.h"
 #include "splitjoinmeasure.h"
 #include "transaction/transaction.h"
 #include "transaction/undostack.h"
@@ -566,7 +566,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     if (!secondChordRest) {
         ChordRestNavigateOptions options;
         options.disableOverRepeats = true;
-        secondChordRest = nextChordRest(firstChordRest, options);
+        secondChordRest = Navigation::nextChordRest(firstChordRest, options);
 
         if (!secondChordRest || !secondChordRest->isChord()) {
             if (slurTemplate && slurTemplate->isHammerOnPullOff() && firstChordRest->isChord()) {
@@ -591,7 +591,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
 
             // If the first chord rest is also tied to this chain, slur to the next non-tied note
             if (firstChordRestIsTiedToSecond) {
-                ChordRest* nextCandidate = nextChordRest(secondChordRest, options);
+                ChordRest* nextCandidate = Navigation::nextChordRest(secondChordRest, options);
                 if (nextCandidate) {
                     secondChordRest = nextCandidate;
                 }

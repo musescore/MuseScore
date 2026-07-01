@@ -20,25 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "navigate.h"
+#include "navigation.h"
 
-#include "box.h"
-#include "chord.h"
-#include "engravingitem.h"
-#include "fret.h"
-#include "guitarbend.h"
-#include "hammeronpulloff.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "measure.h"
-#include "measurerepeat.h"
-#include "note.h"
-#include "score.h"
-#include "segment.h"
-#include "soundflag.h"
-#include "spanner.h"
-#include "staff.h"
-#include "tapping.h"
+#include "../dom/box.h"
+#include "../dom/chord.h"
+#include "../dom/engravingitem.h"
+#include "../dom/fret.h"
+#include "../dom/guitarbend.h"
+#include "../dom/hammeronpulloff.h"
+#include "../dom/harmony.h"
+#include "../dom/lyrics.h"
+#include "../dom/measure.h"
+#include "../dom/measurerepeat.h"
+#include "../dom/note.h"
+#include "../dom/score.h"
+#include "../dom/segment.h"
+#include "../dom/soundflag.h"
+#include "../dom/spanner.h"
+#include "../dom/staff.h"
+#include "../dom/tapping.h"
 
 using namespace mu;
 
@@ -143,7 +143,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
+ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -226,7 +226,7 @@ ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
+ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -1199,7 +1199,7 @@ EngravingItem* Score::prevElement()
 //    - currently used to determine the first lyric of a melisma
 //---------------------------------------------------------
 
-Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
+Lyrics* Navigation::lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
 {
     while (seg) {
         const track_idx_t strack = staffIdx * VOICES;
@@ -1216,7 +1216,7 @@ Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, cons
     return nullptr;
 }
 
-Lyrics* prevLyrics(const Lyrics* lyrics)
+Lyrics* Navigation::prevLyrics(const Lyrics* lyrics)
 {
     Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {
@@ -1236,7 +1236,7 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
     return nullptr;
 }
 
-Lyrics* nextLyrics(const Lyrics* lyrics)
+Lyrics* Navigation::nextLyrics(const Lyrics* lyrics)
 {
     Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {

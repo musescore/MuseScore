@@ -48,7 +48,6 @@
 #include "../dom/masterscore.h"
 #include "../dom/measure.h"
 #include "../dom/measurerepeat.h"
-#include "../dom/navigate.h"
 #include "../dom/note.h"
 #include "../dom/noteval.h"
 #include "../dom/part.h"
@@ -65,6 +64,8 @@
 #include "../dom/tremolotwochord.h"
 #include "../dom/tuplet.h"
 #include "../dom/utils.h"
+
+#include "navigation.h"
 
 #include "log.h"
 
@@ -522,9 +523,9 @@ Note* NoteInput::addPitch(Transaction& tx, Score* score, NoteVal& nval, bool add
     }
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         // move cursor to next note, but skip tied notes (they were already repitched above)
-        ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(is.cr());
+        ChordRest* next = lastTiedNote ? Navigation::nextChordRest(lastTiedNote->chord()) : Navigation::nextChordRest(is.cr());
         while (next && !next->isChord()) {
-            next = nextChordRest(next);
+            next = Navigation::nextChordRest(next);
         }
         if (next) {
             is.moveInputPos(next->segment());
@@ -567,9 +568,9 @@ Note* NoteInput::addPitchToChord(Transaction& tx, Score* score, NoteVal& nval, C
 
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         // move cursor to next note
-        ChordRest* next = nextChordRest(note->chord());
+        ChordRest* next = Navigation::nextChordRest(note->chord());
         while (next && !next->isChord()) {
-            next = nextChordRest(next);
+            next = Navigation::nextChordRest(next);
         }
         if (next) {
             is.moveInputPos(next->segment());
@@ -1002,9 +1003,9 @@ Ret NoteInput::repitchNote(Transaction& tx, Score* score, const Position& p, boo
         }
     }
     if (cr->isRest()) {   //skip rests
-        ChordRest* next = nextChordRest(cr);
+        ChordRest* next = Navigation::nextChordRest(cr);
         while (next && !next->isChord()) {
-            next = nextChordRest(next);
+            next = Navigation::nextChordRest(next);
         }
         if (next) {
             is.moveInputPos(next->segment());
@@ -1029,9 +1030,9 @@ Ret NoteInput::repitchNote(Transaction& tx, Score* score, const Position& p, boo
     score->setPlayChord(true);
 
     // move to next Chord
-    ChordRest* next = nextChordRest(lastTiedNote->chord());
+    ChordRest* next = Navigation::nextChordRest(lastTiedNote->chord());
     while (next && !next->isChord()) {
-        next = nextChordRest(next);
+        next = Navigation::nextChordRest(next);
     }
     if (next) {
         is.moveInputPos(next->segment());
@@ -1201,7 +1202,7 @@ void NoteInput::nextInputPos(Transaction&, Score* score, const ChordRest* cr, bo
 {
     InputState& is = score->inputState();
 
-    ChordRest* ncr = nextChordRest(cr);
+    ChordRest* ncr = Navigation::nextChordRest(cr);
     if ((!ncr) && (is.track() % VOICES)) {
         Segment* s = score->tick2segment(cr->endTick(), false, SegmentType::ChordRest);
         ncr = s ? toChordRest(s->element(cr->staffIdx() * VOICES)) : nullptr;
