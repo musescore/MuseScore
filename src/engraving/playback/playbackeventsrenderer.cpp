@@ -27,7 +27,9 @@
 #include "dom/chord.h"
 #include "dom/harmony.h"
 #include "dom/note.h"
+#include "dom/segment.h"
 #include "dom/sig.h"
+#include "dom/swing.h"
 #include "dom/tempo.h"
 #include "dom/staff.h"
 #include "dom/utils.h"
@@ -44,6 +46,42 @@
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
+
+static const Chord* findChordAtHarmony(const Harmony* chordSymbol)
+{
+    const EngravingItem* parent = chordSymbol->parentItem();
+    if (!parent || !parent->isSegment()) {
+        return nullptr;
+    }
+
+    const EngravingItem* el = toSegment(parent)->element(chordSymbol->track());
+    return el && el->isChord() ? toChord(el) : nullptr;
+}
+
+static void applySwingIfNeed(const Harmony* chordSymbol,
+                             const Score* score,
+                             int positionTickWithOffset,
+                             timestamp_t& eventTimestamp,
+                             duration_t& duration)
+{
+    const SwingParameters swing = chordSymbol->staff()->swing(chordSymbol->tick());
+    if (!swing.isOn()) {
+        return;
+    }
+
+    const Chord* chord = findChordAtHarmony(chordSymbol);
+    if (!chord || chord->tuplet()) {
+        return;
+    }
+
+    const Swing::ChordDurationAdjustment swingDurationAdjustment = Swing::applySwing(chord, swing);
+    const duration_t nominalDuration = timestampFromTicks(score, positionTickWithOffset + chord->actualTicks().ticks()) - eventTimestamp;
+    const duration_t additionalDuration = duration - nominalDuration;
+    const timestamp_t swingOffset = static_cast<timestamp_t>(nominalDuration * swingDurationAdjustment.remainingDurationMultiplier);
+
+    eventTimestamp += swingOffset;
+    duration = static_cast<duration_t>(nominalDuration * swingDurationAdjustment.durationMultiplier) + additionalDuration;
+}
 
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
@@ -143,10 +181,13 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     int positionTickWithOffset = positionTick + ticksPositionOffset;
 
     timestamp_t eventTimestamp = timestampFromTicks(score, positionTickWithOffset);
-    PlaybackEventList& events = result[eventTimestamp];
 
     int durationTicks = realized.getActualDuration(positionTickWithOffset).ticks();
     duration_t duration = timestampFromTicks(score, positionTickWithOffset + durationTicks) - eventTimestamp;
+
+    applySwingIfNeed(chordSymbol, score, positionTickWithOffset, eventTimestamp, duration);
+
+    PlaybackEventList& events = result[eventTimestamp];
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
