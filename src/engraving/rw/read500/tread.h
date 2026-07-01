@@ -396,7 +396,7 @@ public:
     static void readSystemLocks(Score* score, XmlReader& e);
     static void readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx);
 
-    static void readItemEID(EngravingObject* item, XmlReader& xml);
+    static void readItemEID(EngravingObject* item, XmlReader& xml, ReadContext& ctx);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
 
     static String readLegacyStaffName(XmlReader& xml);
