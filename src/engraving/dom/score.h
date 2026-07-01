@@ -107,7 +107,6 @@ class Box;
 class Bracket;
 class Chord;
 class ChordRest;
-class Clef;
 class Element;
 class EventsHolder;
 class Excerpt;
@@ -381,8 +380,6 @@ public:
     void cmdAddGrace(NoteType, int);
     void cmdToggleLayoutBreak(LayoutBreakType);
     void resetUserStretch();
-    bool canInsertClef(ClefType) const;
-    void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
@@ -431,7 +428,6 @@ public:
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr);
     bool undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue,
                              PropertyFlags propFlags = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
@@ -887,8 +883,6 @@ public:
     int keysig() const;
     int duration() const;
     int durationWithoutRepeats() const;
-
-    void cmdInsertClef(Clef* clef, ChordRest* cr);
 
     void cmdRemoveEmptyTrailingMeasures();
 

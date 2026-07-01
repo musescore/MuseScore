@@ -34,6 +34,7 @@
 #include "containers.h"
 
 #include "editing/addremoveelement.h"
+#include "editing/editclef.h"
 #include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
@@ -2006,7 +2007,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 
         // check if clef signature needs to be changed
         if (ostaff->clef(otick) != staff->clef(ctick)) {
-            undoChangeClef(staff, firstAppendedMeasure, ostaff->clef(otick));
+            EditClef::undoChangeClef(tx, this, staff, firstAppendedMeasure, ostaff->clef(otick));
         }
         // check if a clef change is present but is spurious (i.e. no actual change)
         else if (staff->currentClefTick(ctick) == ctick

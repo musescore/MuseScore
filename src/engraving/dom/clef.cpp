@@ -29,7 +29,9 @@
 
 #include "translation.h"
 
+#include "../editing/editclef.h"
 #include "../editing/editproperty.h"
+#include "../editing/transaction/transaction.h"
 #include "../types/typesconv.h"
 
 #include "ambitus.h"
@@ -135,7 +137,8 @@ EngravingItem* Clef::drop(EditData& data)
         Clef* clef = toClef(e);
         ClefType stype  = clef->clefType();
         if (clefType() != stype) {
-            score()->undoChangeClef(staff(), this, stype);
+            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+            EditClef::undoChangeClef(tx, score(), staff(), this, stype);
             c = this;
         }
     } else if (e->isAmbitus()) {
@@ -389,7 +392,8 @@ void Clef::manageExclusionFromParts(bool exclude)
         if (!nextEl) {
             nextEl = nextElement();
         }
-        score()->undoChangeClef(staff(), nextEl, clefType(), false, this);
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditClef::undoChangeClef(tx, score(), staff(), nextEl, clefType(), false, this);
     }
 }
 
