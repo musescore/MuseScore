@@ -35,6 +35,7 @@ class PageLayout
 {
 public:
 
+    static void removeEmptySystems(LayoutContext& ctx);
     static void getNextPage(LayoutContext& ctx);
     static void collectPage(LayoutContext& ctx);
 
