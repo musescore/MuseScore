@@ -26,6 +26,7 @@
 
 #include "../editing/editclef.h"
 #include "../editing/editinstrumentchange.h"
+#include "../editing/editkeysig.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
@@ -130,7 +131,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                 ks.setForInstrumentChange(forInstChange);
                 Key cKey = part->staff(i)->concertKey(tickStart);
                 ks.setConcertKey(cKey);
-                score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+                EditKeySig::undoChangeKeySig(tx, score(), part->staff(i), tickStart, ks);
             }
         }
     }

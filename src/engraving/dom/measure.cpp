@@ -28,6 +28,7 @@
 #include "measure.h"
 
 #include "../editing/editclef.h"
+#include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
@@ -1584,11 +1585,11 @@ EngravingItem* Measure::drop(EditData& data)
 
         if (data.modifiers & ControlModifier) {
             // apply only to this stave
-            score()->undoChangeKeySig(staff, tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff, tick(), k);
         } else {
             // apply to all staves:
             for (Staff* s : score()->staves()) {
-                score()->undoChangeKeySig(s, tick(), k);
+                EditKeySig::undoChangeKeySig(tx, score(), s, tick(), k);
             }
         }
 

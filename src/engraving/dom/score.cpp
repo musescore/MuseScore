@@ -35,6 +35,7 @@
 
 #include "editing/addremoveelement.h"
 #include "editing/editclef.h"
+#include "editing/editkeysig.h"
 #include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
@@ -2078,7 +2079,8 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setIsHeader(true);
     undoAddElement(clef);
 
-    undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+    EditKeySig::undoChangeKeySig(tx, this, ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
     masterScore()->rebuildMidiMapping();
     cmdState().instrumentsChanged = true;
