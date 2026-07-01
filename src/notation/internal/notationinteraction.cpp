@@ -74,7 +74,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
@@ -107,6 +106,7 @@
 #include "engraving/editing/realizechordsymbols.h"
 #include "engraving/editing/regroup.h"
 #include "engraving/editing/reset.h"
+#include "engraving/editing/navigation.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
@@ -3023,7 +3023,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
         if (firstChordRest == secondItem && (!firstItem || firstItem->isChordRest())) {
             ChordRestNavigateOptions options;
             options.disableOverRepeats = true;
-            secondItem = nextChordRest(toChordRest(firstItem), options);
+            secondItem = engraving::Navigation::nextChordRest(toChordRest(firstItem), options);
         }
 
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
@@ -3871,9 +3871,9 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
         ChordRestNavigateOptions options;
         options.skipGrace = true;
         if (d == MoveDirection::Right) {
-            el = mu::engraving::nextChordRest(cr, options);
+            el = mu::engraving::Navigation::nextChordRest(cr, options);
         } else {
-            el = mu::engraving::prevChordRest(cr, options);
+            el = mu::engraving::Navigation::prevChordRest(cr, options);
         }
         break;
     }
@@ -4081,9 +4081,9 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
         // ensures cr1 is the left chord, useful in SwapCR::flip()
         if (direction == MoveDirection::Left) {
             cr2 = cr1;
-            cr1 = prevChordRest(cr2);
+            cr1 = engraving::Navigation::prevChordRest(cr2);
         } else {
-            cr2 = nextChordRest(cr1);
+            cr2 = engraving::Navigation::nextChordRest(cr1);
         }
         if (cr1 && cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
             && cr1->durationType() == cr2->durationType() && cr1->ticks() == cr2->ticks()

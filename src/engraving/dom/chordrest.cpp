@@ -42,7 +42,6 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
-#include "navigate.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -60,6 +59,7 @@
 #include "editing/editclef.h"
 #include "editing/editkeysig.h"
 #include "editing/editrehearsalmark.h"
+#include "editing/navigation.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
@@ -658,7 +658,7 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
     if (secondChordRest == nullptr) {
         ChordRestNavigateOptions options;
         options.disableOverRepeats = true;
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), options);
+        secondChordRest = Navigation::nextChordRest(const_cast<ChordRest*>(this), options);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;

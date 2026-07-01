@@ -24,11 +24,12 @@
 
 #include "../dom/chordrest.h"
 #include "../dom/groups.h"
-#include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
 #include "../dom/select.h"
 #include "../dom/utils.h"
+
+#include "navigation.h"
 
 #include "log.h"
 
@@ -75,7 +76,7 @@ void EditBeam::beamSelectedRange(Transaction& tx, Score* score)
             continue;
         }
 
-        ChordRest* prev = prevChordRest(firstChordRest);
+        ChordRest* prev = Navigation::prevChordRest(firstChordRest);
         ChordRest* cr = firstChordRest;
         BeamMode actualBeamMode = Groups::actualBeamMode(cr, prev);
         if (actualBeamMode != BeamMode::BEGIN) {
@@ -84,7 +85,7 @@ void EditBeam::beamSelectedRange(Transaction& tx, Score* score)
 
         while (cr != lastChordRest) {
             prev = cr;
-            cr = nextChordRest(cr);
+            cr = Navigation::nextChordRest(cr);
             actualBeamMode = Groups::actualBeamMode(cr, prev);
             if (actualBeamMode == BeamMode::BEGIN || actualBeamMode == BeamMode::NONE) {
                 cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
@@ -92,7 +93,7 @@ void EditBeam::beamSelectedRange(Transaction& tx, Score* score)
         }
 
         prev = cr;
-        cr = nextChordRest(cr);
+        cr = Navigation::nextChordRest(cr);
         if (cr) {
             actualBeamMode = Groups::actualBeamMode(cr, prev);
             if (actualBeamMode != BeamMode::BEGIN && actualBeamMode != BeamMode::NONE) {

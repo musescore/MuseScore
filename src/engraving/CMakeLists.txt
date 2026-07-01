@@ -191,6 +191,8 @@ target_sources(engraving PRIVATE
     editing/inserttime.h
     editing/mscoreview.cpp
     editing/mscoreview.h
+    editing/navigation.cpp
+    editing/navigation.h
     editing/noteinput.cpp
     editing/noteinput.h
     editing/paste.cpp

@@ -27,6 +27,7 @@
 #include "translation.h"
 
 #include "../editing/editspanner.h"
+#include "../editing/navigation.h"
 #include "types/typesconv.h"
 #include "rendering/score/tlayout.h"
 
@@ -55,8 +56,6 @@
 #include "timesig.h"
 #include "tuplet.h"
 #include "utils.h"
-
-#include "navigate.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -1807,7 +1806,7 @@ EngravingItem* Segment::prevElementOfSegment(EngravingItem* e, staff_idx_t activ
             Chord* chord = toChord(el);
             GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
             if (!graceNotesBefore.empty()) {
-                ChordRest* next = prevChordRest(chord);
+                ChordRest* next = Navigation::prevChordRest(chord);
                 if (next) {
                     if (next->isChord()) {
                         return toChord(next)->notes().back();
