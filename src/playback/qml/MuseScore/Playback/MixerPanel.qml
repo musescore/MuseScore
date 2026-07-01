@@ -193,155 +193,155 @@ ColumnLayout {
                 contentColumn.completed = true
             }
 
-            MixerSoundSection {
-                id: soundSection
+                MixerSoundSection {
+                    id: soundSection
 
-                visible: contextMenuModel.soundSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: 8
+                    visible: contextMenuModel.soundSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: 8
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 1
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 1
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerFxSection {
-                id: fxSection
+                MixerFxSection {
+                    id: fxSection
 
-                visible: contextMenuModel.audioFxSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                    visible: contextMenuModel.audioFxSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 100
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 100
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerAuxSendsSection {
-                id: auxSendsSection
+                MixerAuxSendsSection {
+                    id: auxSendsSection
 
-                visible: contextMenuModel.auxSendsSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
+                    visible: contextMenuModel.auxSendsSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
 
-                channelItemWidth: prv.channelItemWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 200
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 200
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerBalanceSection {
-                id: balanceSection
+                MixerBalanceSection {
+                    id: balanceSection
 
-                visible: contextMenuModel.balanceSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                    visible: contextMenuModel.balanceSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 300
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 300
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerVolumeSection {
-                id: volumeSection
+                MixerVolumeSection {
+                    id: volumeSection
 
-                visible: contextMenuModel.volumeSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                    visible: contextMenuModel.volumeSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 400
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 400
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerFaderSection {
-                id: faderSection
+                MixerFaderSection {
+                    id: faderSection
 
-                visible: contextMenuModel.faderSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: -3
-                spacingBelow: -2
+                    visible: contextMenuModel.faderSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: -3
+                    spacingBelow: -2
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 500
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 500
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerMuteAndSoloSection {
-                id: muteAndSoloSection
+                MixerMuteAndSoloSection {
+                    id: muteAndSoloSection
 
-                visible: contextMenuModel.muteAndSoloSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                    visible: contextMenuModel.muteAndSoloSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 600
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 600
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
 
-            MixerTitleSection {
-                id: titleSection
+                MixerTitleSection {
+                    id: titleSection
 
-                visible: contextMenuModel.titleSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: 2
-                spacingBelow: 0
+                    visible: contextMenuModel.titleSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: 2
+                    spacingBelow: 0
 
-                model: mixerPanelModel
+                    model: mixerPanelModel
 
-                navigationRowStart: 700
-                needReadChannelName: prv.isPanelActivated
+                    navigationRowStart: 700
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
-            }
         }
     }
 

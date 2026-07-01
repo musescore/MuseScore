@@ -32,6 +32,7 @@
 #include "dockwindow/idockwindowprovider.h"
 #include "extensions/iextensionsprovider.h"
 #include "context/iglobalcontext.h"
+#include "project/iprojectvideosettings.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
 #include "iappshellstate.h"
@@ -78,6 +79,7 @@ public:
     Q_INVOKABLE QString pianoKeyboardPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
     Q_INVOKABLE QString percussionPanelName() const;
+    Q_INVOKABLE QString videoPanelName() const;
 
     Q_INVOKABLE QString statusBarName() const;
 
@@ -89,6 +91,7 @@ private:
     void onNotationChanged();
 
     void toggleDock(const QString& name);
+    void setVideoTimecodeDisplayMode(project::VideoTimecodeDisplayMode mode);
 
     void scheduleUpdatePercussionPanelVisibility();
     void doUpdatePercussionPanelVisibility();

@@ -270,6 +270,8 @@ private:
     void onPlaybackCursorRectChanged();
 
     void updateLoopMarkers();
+    void paintVideoHitPoints(QPainter* painter);
+    muse::RectF videoHitPointRectByTick(muse::midi::tick_t tick) const;
     void updateShadowNoteVisibility();
 
     const Page* pageByPoint(const muse::PointF& point) const;

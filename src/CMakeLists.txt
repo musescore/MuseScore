@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+if (MUE_BUILD_PLAYBACK_MODULE)
+    find_package(Qt6 COMPONENTS Multimedia QUIET)
+endif()
+
 # Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)

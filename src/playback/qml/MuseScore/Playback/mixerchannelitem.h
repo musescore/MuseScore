@@ -81,6 +81,7 @@ public:
         PrimaryInstrument,
         SecondaryInstrument,
         Metronome,
+        Video,
         Aux,
         Master,
     };
