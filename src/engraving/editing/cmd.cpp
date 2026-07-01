@@ -1725,41 +1725,6 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 }
 
 //---------------------------------------------------------
-//   resetUserStretch
-//---------------------------------------------------------
-
-void Score::resetUserStretch()
-{
-    Measure* m1 = nullptr;
-    Measure* m2 = nullptr;
-    // retrieve span of selection
-    Segment* s1 = m_selection.startSegment();
-    Segment* s2 = m_selection.endSegment();
-    // if either segment is not returned by the selection
-    // (for instance, no selection) fall back to first/last measure
-    if (!s1) {
-        m1 = firstMeasureMM();
-    } else {
-        m1 = s1->measure();
-    }
-    if (!s2) {
-        m2 = lastMeasureMM();
-    } else {
-        m2 = s2->measure();
-    }
-    if (!m1 || !m2) {               // should not happen!
-        return;
-    }
-
-    for (Measure* m = m1; m; m = m->nextMeasureMM()) {
-        m->undoChangeProperty(Pid::USER_STRETCH, 1.0);
-        if (m == m2) {
-            break;
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   moveUp
 //---------------------------------------------------------
 
@@ -1811,33 +1776,6 @@ void Score::moveDown(ChordRest* cr)
     } else {
         // move the chord down a staff
         undo(new ChangeChordStaffMove(cr, staffMove + 1));
-    }
-}
-
-//---------------------------------------------------------
-//   cmdAddStretch
-//---------------------------------------------------------
-
-void Score::cmdAddStretch(double val)
-{
-    if (!selection().isRange()) {
-        return;
-    }
-    Fraction startTick = selection().tickStart();
-    Fraction endTick   = selection().tickEnd();
-    for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-        if (m->tick() < startTick) {
-            continue;
-        }
-        if (m->tick() >= endTick) {
-            break;
-        }
-        double stretch = m->userStretch();
-        stretch += val;
-        if (stretch < 0) {
-            stretch = 0;
-        }
-        m->undoChangeProperty(Pid::USER_STRETCH, stretch);
     }
 }
 
