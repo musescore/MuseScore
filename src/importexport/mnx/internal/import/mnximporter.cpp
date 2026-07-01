@@ -843,6 +843,10 @@ void MnxImporter::importGlobalMeasures()
                 createTempoMark(measure, tempo);
             }
         }
+        if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {
+            Segment* const segment = measure->getSegment(SegmentType::EndBarLine, measure->endTick());
+            addFermata(segment, mnxFermata.value(), 0);
+        }
 
         /// @todo MNX currently offers no way to exclude a measure from having
         /// a measure number.

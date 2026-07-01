@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "mnxexporter.h"
+#include "internal/shared/mnxtypesconv.h"
 
 #include <stdexcept>
 
@@ -83,6 +84,19 @@ std::pair<size_t, int> MnxExporter::mnxPartStaffFromStaffIdx(engraving::staff_id
         throw std::logic_error("Staff index is not mapped to an MNX part/staff.");
     }
     return it->second;
+}
+
+//---------------------------------------------------------
+//   mnxFermataFromFermata
+//---------------------------------------------------------
+
+mnx::Fermata MnxExporter::mnxFermataFromFermata(const Fermata* fermata)
+{
+    mnx::Fermata result;
+    result.set_or_clear_duration(toMnxFermataDuration(fermata->fermataType()));
+    result.set_or_clear_symbol(toMnxFermataSymbol(fermata->symId()));
+    result.set_or_clear_orient(toMnxOrientation(fermata->placement()));
+    return result;
 }
 
 //---------------------------------------------------------

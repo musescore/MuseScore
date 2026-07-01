@@ -40,6 +40,34 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
+const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAnchorTable = {
+    { mnx::Orientation::Auto,       ArticulationAnchor::AUTO },
+    { mnx::Orientation::Below,      ArticulationAnchor::BOTTOM },
+    { mnx::Orientation::Above,      ArticulationAnchor::TOP },
+};
+} // namespace
+
+ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+{
+    return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
+}
+
+mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
+{
+    return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
+}
+
+mnx::Orientation toMnxOrientation(PlacementV placement)
+{
+    switch (placement) {
+    case PlacementV::ABOVE: return mnx::Orientation::Above;
+    case PlacementV::BELOW: return mnx::Orientation::Below;
+    }
+    ASSERT_X("invalid placement value");
+    return mnx::Orientation::Auto;
+}
+
+namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
     { mnx::BarlineType::Dashed,     BarLineType::DASHED },
@@ -342,8 +370,68 @@ std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration
 }
 
 namespace {
+const std::unordered_map<mnx::FermataSymbol, SymId> symIdToFermataSym {
+    { mnx::FermataSymbol::Normal,       SymId::fermataAbove },
+    { mnx::FermataSymbol::Angled,       SymId::fermataShortAbove },
+    { mnx::FermataSymbol::Square,       SymId::fermataLongAbove },
+    { mnx::FermataSymbol::DoubleAngled, SymId::fermataVeryShortAbove },
+    { mnx::FermataSymbol::DoubleSquare, SymId::fermataVeryLongAbove },
+    { mnx::FermataSymbol::DoubleDot,    SymId::fermataLongHenzeAbove },
+    { mnx::FermataSymbol::HalfCurve,    SymId::fermataShortHenzeAbove },
+    { mnx::FermataSymbol::Curlew,       SymId::curlewSign },
+};
+} // namespace
+
+SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol)
+{
+    return muse::value(symIdToFermataSym, fermataSymbol, SymId::fermataAbove);
+}
+
+namespace {
+const std::unordered_map<FermataType, mnx::FermataDuration> fermataDuraTable {
+    { FermataType::Normal,      mnx::FermataDuration::Normal },
+    { FermataType::Long,        mnx::FermataDuration::Long },
+    { FermataType::LongHenze,   mnx::FermataDuration::Long },
+    { FermataType::Short,       mnx::FermataDuration::Short },
+    { FermataType::ShortHenze,  mnx::FermataDuration::Short },
+    { FermataType::VeryLong,    mnx::FermataDuration::VeryLong },
+    { FermataType::VeryShort,   mnx::FermataDuration::VeryShort },
+};
+} // namespace
+
+mnx::FermataDuration toMnxFermataDuration(FermataType fermataType)
+{
+    return muse::value(fermataDuraTable, fermataType, mnx::FermataDuration::Auto);
+}
+
+namespace {
+const std::unordered_map<SymId, mnx::FermataSymbol> fermataSymToSymId {
+    { SymId::fermataAbove,              mnx::FermataSymbol::Normal },
+    { SymId::fermataBelow,              mnx::FermataSymbol::Normal },
+    { SymId::fermataShortAbove,         mnx::FermataSymbol::Angled },
+    { SymId::fermataShortBelow,         mnx::FermataSymbol::Angled },
+    { SymId::fermataLongAbove,          mnx::FermataSymbol::Square, },
+    { SymId::fermataLongBelow,          mnx::FermataSymbol::Square, },
+    { SymId::fermataVeryShortAbove,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryShortBelow,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryLongAbove,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataVeryLongBelow,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataLongHenzeAbove,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataLongHenzeBelow,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataShortHenzeAbove,    mnx::FermataSymbol::HalfCurve },
+    { SymId::fermataShortHenzeBelow,    mnx::FermataSymbol::HalfCurve },
+    { SymId::curlewSign,                mnx::FermataSymbol::Curlew },
+};
+} // namespace
+
+mnx::FermataSymbol toMnxFermataSymbol(SymId sym)
+{
+    return muse::value(fermataSymToSymId, sym, mnx::FermataSymbol::Normal);
+}
+
+namespace {
 /// @todo Grow this table as MNX grows it.
-static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
+const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
     { mnx::JumpType::Segno,         JumpType::DSS },
 };
@@ -360,7 +448,7 @@ std::optional<mnx::JumpType> toMnxJumpType(JumpType jt)
 }
 
 namespace {
-static const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
+const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
     { mnx::LyricLineType::Whole,        LyricsSyllabic::SINGLE },
     { mnx::LyricLineType::Start,        LyricsSyllabic::BEGIN },
     { mnx::LyricLineType::Middle,       LyricsSyllabic::MIDDLE },
@@ -571,7 +659,7 @@ Fraction toMuseScoreFraction(const mnx::FractionValue& fraction)
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
-mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
+mnx::FractionValue toMnxFractionValue(const Fraction& fraction)
 {
     return mnx::FractionValue(fraction.numerator(), fraction.denominator());
 }
@@ -598,6 +686,18 @@ PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
         return PreferSharpFlat::AUTO;
     default:
         return PreferSharpFlat::NONE;
+    }
+}
+
+PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingItem* item)
+{
+    switch (orient) {
+    case mnx::Orientation::Above:
+        return PlacementV::ABOVE;
+    case mnx::Orientation::Below:
+        return PlacementV::BELOW;
+    case mnx::Orientation::Auto:
+        return item->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
     }
 }
 
