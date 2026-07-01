@@ -1134,7 +1134,7 @@ void EditStyle::classBegin()
 
     textStyleFrameType->clear();
     textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
-    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
+    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::RECTANGLE));
     textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
 
     connect(dynamicsAndHairpinPos, &QComboBox::currentIndexChanged, dynamicsAndHairpinPosDescription, [this]() {
