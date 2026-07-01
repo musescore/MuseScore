@@ -1327,7 +1327,7 @@ void Score::deleteItem(EngravingItem* el)
             // Set input position
             // TODO If deleted element is last of a sequence, use prev?
             if (noteEntryMode()) {
-                score()->move(u"prev-chord");
+                Navigation::move(score(), u"prev-chord");
             }
         }
     }
