@@ -359,6 +359,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     // FIXME: only un-/re-subscribe when master notation changes
+    m_notationAutomationController->init();
     notationAutomation()->automationModeEnabledChanged().onNotify(this, [this]() {
         scheduleRedraw();
         emit automationModeChanged();
@@ -762,8 +763,6 @@ void AbstractNotationPaintView::onNotationSetup()
     TRACEFUNC;
     onCurrentNotationChanged();
     onPlayingChanged();
-
-    m_notationAutomationController->init();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
