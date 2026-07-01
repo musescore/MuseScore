@@ -229,6 +229,7 @@ TEST_F(Braille_Tests, breath) {
 }
 TEST_F(Braille_Tests, articulations) {
     brailleSaveTest("testArticulations_Example_22.1_MBC2015");
+    brailleSaveTest("testArticulationDoubling_1.12_MBC2015");
 }
 TEST_F(Braille_Tests, hairpins) {
     // removed the 4th measure from the example as MuseScore does not have a representations for mordents with accidentals

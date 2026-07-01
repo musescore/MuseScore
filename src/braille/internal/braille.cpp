@@ -24,6 +24,8 @@
 
 #include <QRegularExpression>
 
+#include <set>
+
 #include "containers.h"
 
 #include "engraving/dom/accidental.h"
@@ -949,6 +951,92 @@ void Braille::resetOctaves()
     }
 }
 
+// 22. Doubling of Signs. Music Braille Code 2015.
+// When the same articulation mark appears on more than three consecutive notes
+// (ignoring any rests between them), it is written twice before the first note of the group
+// and once after the last note, and omitted on the notes in between. This precomputes, per
+// articulation instance, whether it should be doubled, omitted, closed (suffix on the last
+// note) or rendered singly (the default).
+void Braille::computeArticulationDoubling()
+{
+    m_context.articulationDoublingComputed = true;
+    m_context.articulationDoubling.clear();
+
+    // When disabled, the empty map means every articulation is rendered singly (legacy behaviour).
+    // The configuration may be unavailable (e.g. in unit tests that don't register the braille
+    // module); in that case fall back to the default of doubling enabled.
+    if (brailleConfiguration() && !brailleConfiguration()->articulationDoubling()) {
+        return;
+    }
+
+    auto finalizeRun = [this](const std::vector<Articulation*>& run) {
+        if (run.size() < ARTICULATION_DOUBLING_MIN_GROUP) {
+            return;
+        }
+        // Double (prefix) on the first note, omit on the middle notes, and a single closing sign
+        // as a suffix after the last note. run.size() >= 4 here, so front and back differ.
+        m_context.articulationDoubling[run.front()] = ArticulationDoubling::Double;
+        for (size_t i = 1; i + 1 < run.size(); ++i) {
+            m_context.articulationDoubling[run[i]] = ArticulationDoubling::Omit;
+        }
+        m_context.articulationDoubling[run.back()] = ArticulationDoubling::CloseSuffix;
+    };
+
+    const size_t ntracks = m_score->staves().size() * VOICES;
+    for (track_idx_t track = 0; track < ntracks; ++track) {
+        // Runs of consecutive chords sharing the same articulation SymId, grouped per sign.
+        std::map<QString, std::vector<Articulation*> > openRuns;
+
+        for (Segment* seg = m_score->firstSegment(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
+            EngravingItem* el = seg->element(track);
+            if (!el) {
+                continue;
+            }
+            if (el->isRest()) {
+                // Rests never break a run.
+                continue;
+            }
+            if (!el->isChord()) {
+                continue;
+            }
+
+            Chord* chord = toChord(el);
+
+            std::set<QString> present;
+            for (Articulation* artic : chord->articulations()) {
+                const QString key = brailleArticulation(artic);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                present.insert(key);
+            }
+
+            // End any open run whose articulation is not present on this chord.
+            for (auto it = openRuns.begin(); it != openRuns.end();) {
+                if (present.find(it->first) == present.end()) {
+                    finalizeRun(it->second);
+                    it = openRuns.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+
+            // Extend or start a run for each articulation on this chord.
+            for (Articulation* artic : chord->articulations()) {
+                const QString key = brailleArticulation(artic);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                openRuns[key].push_back(artic);
+            }
+        }
+
+        for (const auto& pair : openRuns) {
+            finalizeRun(pair.second);
+        }
+    }
+}
+
 void Braille::credits(QIODevice& device)
 {
     QTextStream out(&device);
@@ -1817,9 +1905,32 @@ QString Braille::brailleChord(Chord* chord)
         }
     }
 
-    QString articulationsBraille = QString();
+    if (!m_context.articulationDoublingComputed) {
+        computeArticulationDoubling();
+    }
+    QString articulationsBraille = QString();        // prefix, before the note
+    QString articulationsBrailleAfter = QString();   // suffix, after the note (doubling closing sign)
     for (Articulation* artic : chord->articulations()) {
-        articulationsBraille += brailleArticulation(artic);
+        auto it = m_context.articulationDoubling.find(artic);
+        ArticulationDoubling state = (it != m_context.articulationDoubling.end()) ? it->second : ArticulationDoubling::Single;
+        const QString code = brailleArticulation(artic);
+        switch (state) {
+        case ArticulationDoubling::Omit:
+            // Middle of a doubled group: the sign is not written.
+            break;
+        case ArticulationDoubling::Double:
+            // First note of a doubled group: write the sign twice, before the note.
+            articulationsBraille += code + code;
+            break;
+        case ArticulationDoubling::CloseSuffix:
+            // Last note of a doubled group: write the closing sign once, after the note.
+            articulationsBrailleAfter += code;
+            break;
+        case ArticulationDoubling::Single:
+        default:
+            articulationsBraille += code;
+            break;
+        }
     }
 
     std::vector<Slur*> chordSlurs = slurs(chord);
@@ -1843,6 +1954,7 @@ QString Braille::brailleChord(Chord* chord)
     result += tupletBraille;
     result += rootNoteBraille;
     result += intervals;
+    result += articulationsBrailleAfter;
     result += tremoloBraille;
     result += chordTieBraille;
     result += slurBrailleAfter;
