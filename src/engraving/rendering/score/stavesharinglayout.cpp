@@ -926,6 +926,13 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
                 continue;
             }
 
+            if (originItem->isFermata()) {
+                EngravingItem* fermataOriginBaseItem = seg->element(originTrack);
+                if (fermataOriginBaseItem && !fermataOriginBaseItem->sharedItem()) {
+                    continue;
+                }
+            }
+
             track_idx_t sharedTrack = trackMap.at(originTrack);
             EngravingItem* sharedItem = nullptr;
             for (EngravingItem* item : seg->annotations()) {
