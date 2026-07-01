@@ -376,10 +376,8 @@ public:
     void cmdAddOttava(OttavaType);
     void addNoteLine();
 
-    void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
     void cmdToggleLayoutBreak(LayoutBreakType);
-    void resetUserStretch();
     void removeChordRest(ChordRest* cr, bool clearSegment);
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);

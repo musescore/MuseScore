@@ -108,6 +108,7 @@
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
+#include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -6497,11 +6498,12 @@ void NotationInteraction::addFiguredBass()
 
 void NotationInteraction::addStretch(qreal value)
 {
-    startEdit(value >= 0
-              ? TranslatableString("undoableAction", "Increase layout stretch")
-              : TranslatableString("undoableAction", "Decrease layout stretch"));
-    score()->cmdAddStretch(value);
-    apply();
+    TranslatableString name = value >= 0
+                              ? TranslatableString("undoableAction", "Increase layout stretch")
+                              : TranslatableString("undoableAction", "Decrease layout stretch");
+    transaction(name, [&](Transaction& tx) {
+        mu::engraving::EditStretch::addStretch(tx, score(), value);
+    });
 }
 
 Measure* NotationInteraction::selectedMeasure() const
@@ -6730,9 +6732,9 @@ void NotationInteraction::resequenceRehearsalMarks()
 
 void NotationInteraction::resetStretch()
 {
-    startEdit(TranslatableString("undoableAction", "Reset layout stretch"));
-    score()->resetUserStretch();
-    apply();
+    transaction(TranslatableString("undoableAction", "Reset layout stretch"), [&](Transaction& tx) {
+        mu::engraving::EditStretch::resetUserStretch(tx, score());
+    });
 }
 
 void NotationInteraction::resetTextStyleOverrides()
