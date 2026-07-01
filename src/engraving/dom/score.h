@@ -855,8 +855,6 @@ public:
 
     std::vector<staff_idx_t> uniqueStaves() const;
 
-    void moveUp(ChordRest*);
-    void moveDown(ChordRest*);
     EngravingItem* upAlt(EngravingItem*);
     Note* upAltCtrl(Note*) const;
     EngravingItem* downAlt(EngravingItem*);

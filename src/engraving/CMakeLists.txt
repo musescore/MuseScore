@@ -118,6 +118,8 @@ target_sources(engraving PRIVATE
     editing/editchord.h
     editing/editclef.cpp
     editing/editclef.h
+    editing/editcrossstaff.cpp
+    editing/editcrossstaff.h
     editing/editdata.cpp
     editing/editdata.h
     editing/editduration.cpp
