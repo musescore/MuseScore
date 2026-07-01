@@ -41,6 +41,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 
+#include "engraving/editing/editkeysig.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
 
@@ -249,7 +250,7 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
 
         for (Staff* staff : masterScore->staves()) {
             // Add keysig for each staff...
-            masterScore->undoChangeKeySig(staff, measure->tick(), keySigEvent);
+            mu::engraving::EditKeySig::undoChangeKeySig(tx, masterScore, staff, measure->tick(), keySigEvent);
         }
     }
 }

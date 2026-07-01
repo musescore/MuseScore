@@ -58,6 +58,7 @@
 #include "volta.h"
 
 #include "editing/editclef.h"
+#include "editing/editkeysig.h"
 #include "editing/editrehearsalmark.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
@@ -424,7 +425,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         if (data.modifiers & ControlModifier) {
             // apply only to this stave
             KeySigEvent k = toKeySig(e)->keySigEvent();
-            score()->undoChangeKeySig(staff(), tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);
             delete e;
             return nullptr;
         }

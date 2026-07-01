@@ -52,6 +52,8 @@
 #include "dom/textline.h"
 
 #include "editing/editchord.h"
+#include "editing/editkeysig.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
 #include "style/defaultstyle.h"
@@ -759,7 +761,8 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
                     }
                     kse.setConcertKey(cKey);
                     kse.setKey(key);
-                    score->undoChangeKeySig(staff, Fraction(0, 1), kse);
+                    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, staff,
+                                                 Fraction(0, 1), kse);
                 }
             }
         }

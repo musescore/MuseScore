@@ -1126,7 +1126,7 @@ void Score::deleteItem(EngravingItem* el)
             }
             ke.setConcertKey(cKey);
             ke.setKey(tKey);
-            undoChangeKeySig(k->staff(), k->tick(), ke);
+            EditKeySig::undoChangeKeySig(tx, this, k->staff(), k->tick(), ke);
         }
         for (size_t i = 0; i < k->part()->nstaves(); i++) {
             Staff* staff = k->part()->staff(i);
@@ -3692,72 +3692,6 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
                 }
             }
         }
-    }
-}
-
-//---------------------------------------------------------
-//   undoChangeKeySig
-//---------------------------------------------------------
-
-void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
-{
-    Transaction& tx = transactionManager()->currentOrDummyTransaction();
-
-    KeySig* lks = 0;
-    bool needsUpdate = false;
-
-    for (Staff* staff : ostaff->staffList()) {
-        if (staff->isDrumStaff(tick)) {
-            continue;
-        }
-
-        Score* score = staff->score();
-        Measure* measure = score->tick2measure(tick);
-        KeySigEvent currentKeySigEvent = staff->keySigEvent(tick);
-        if (!measure) {
-            LOGW("measure for tick %d not found!", tick.ticks());
-            continue;
-        }
-        Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
-
-        staff_idx_t staffIdx = staff->idx();
-        track_idx_t track    = staffIdx * VOICES;
-        KeySig* ks   = toKeySig(s->element(track));
-
-        Interval interval = staff->part()->instrument(tick)->transpose();
-        Interval oldStaffInterval = staff->transpose(tick);
-        KeySigEvent nkey  = key;
-        bool concertPitch = score->style().styleB(Sid::concertPitch);
-
-        if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
-            interval.flip();
-            nkey.setKey(Transpose::transposeKey(key.concertKey(), interval, staff->part()->preferSharpFlat()));
-            interval.flip();
-        }
-
-        updateInstrumentChangeTranspositions(key, staff, tick);
-        if (ks) {
-            ks->undoChangeProperty(Pid::GENERATED, false);
-            tx.push(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
-        } else {
-            KeySig* nks = Factory::createKeySig(s);
-            nks->setParent(s);
-            nks->setTrack(track);
-            nks->setKeySigEvent(nkey);
-            doUndoAddElement(nks);
-            if (lks) {
-                tx.push(new Link(lks, nks));
-            } else {
-                lks = nks;
-            }
-        }
-        if (interval != staff->transpose(tick) || interval != oldStaffInterval) {
-            needsUpdate = true;
-        }
-    }
-    if (needsUpdate) {
-        Fraction tickEnd = Fraction::fromTicks(ostaff->keyList()->nextKeyTick(tick.ticks()));
-        Transpose::transpositionChanged(tx, this, ostaff->part(), ostaff->transpose(tick), tick, tickEnd);
     }
 }
 

@@ -251,7 +251,7 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
                     // undoChangeKey handles linked staves/parts and generating new keysigs as needed
                     // it always sets the keysig non-generated
                     // so only call it when needed
-                    score->undoChangeKeySig(staff, tick, ke);
+                    EditKeySig::undoChangeKeySig(tx, score, staff, tick, ke);
                 }
             }
         }
