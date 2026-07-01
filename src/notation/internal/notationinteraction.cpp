@@ -91,6 +91,7 @@
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editbeam.h"
 #include "engraving/editing/editchord.h"
+#include "engraving/editing/editclef.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/edithairpin.h"
@@ -8492,12 +8493,14 @@ void NotationInteraction::toggleAutoplace(bool all)
 bool NotationInteraction::canInsertClef(ClefType type) const
 {
     const Score* score = this->score();
-    return score && score->canInsertClef(type);
+    return score && mu::engraving::EditClef::canInsertClef(score, type);
 }
 
 void NotationInteraction::insertClef(ClefType type)
 {
-    execute(&mu::engraving::Score::cmdInsertClef, type, TranslatableString("undoableAction", "Add clef"));
+    transaction(TranslatableString("undoableAction", "Add clef"), [&](Transaction& tx) {
+        mu::engraving::EditClef::insertClef(tx, score(), type);
+    });
 }
 
 void NotationInteraction::changeAccidental(mu::engraving::AccidentalType accidental)

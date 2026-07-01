@@ -2276,34 +2276,6 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
     lyrics->undoChangeProperty(Pid::VERSE, verse);
 }
 
-bool Score::canInsertClef(ClefType type) const
-{
-    if (type == ClefType::INVALID) {
-        return false;
-    }
-
-    const Staff* staff = this->staff(m_is.track() / VOICES);
-    const ChordRest* cr = m_is.cr();
-
-    return staff && cr;
-}
-
-void Score::cmdInsertClef(ClefType type)
-{
-    undoChangeClef(staff(m_is.track() / VOICES), m_is.cr(), type);
-}
-
-//---------------------------------------------------------
-//   cmdInsertClef
-//    insert clef before cr
-//---------------------------------------------------------
-
-void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
-{
-    undoChangeClef(cr->staff(), cr, clef->clefType());
-    delete clef;
-}
-
 //---------------------------------------------------------
 //   cmdAddGrace
 ///   adds grace note of specified type to selected notes

@@ -27,6 +27,7 @@
 
 #include "measure.h"
 
+#include "../editing/editclef.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
@@ -1572,7 +1573,7 @@ EngravingItem* Measure::drop(EditData& data)
     break;
 
     case ElementType::CLEF:
-        score()->undoChangeClef(staff, this, toClef(e)->clefType());
+        EditClef::undoChangeClef(tx, score(), staff, this, toClef(e)->clefType());
         delete e;
         break;
 

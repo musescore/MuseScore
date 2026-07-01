@@ -57,6 +57,7 @@
 #include "utils.h"
 #include "volta.h"
 
+#include "editing/editclef.h"
 #include "editing/editrehearsalmark.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
@@ -264,7 +265,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     }
 
     case ElementType::CLEF:
-        score()->cmdInsertClef(toClef(e), this);
+        EditClef::insertClef(tx, score(), toClef(e), this);
         return nullptr;
 
     case ElementType::FERMATA:
