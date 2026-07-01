@@ -51,9 +51,6 @@ Grid {
     property real sampleSize: 24
     readonly property real totalSampleSize: sampleSize + 6
 
-    // Height of a single row, so callers can align labels with the first row only:
-    readonly property real firstRowHeight: totalSampleSize
-
     signal accentColorChangeRequested(var newColorIndex)
 
     columns: Math.floor(root.colors.length / 2)

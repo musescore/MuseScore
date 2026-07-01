@@ -25,7 +25,7 @@ import QtQuick.Controls
 import Muse.Ui
 import Muse.UiComponents
 
-Row {
+Column {
     id: root
 
     property alias colors: colorsList.colors
@@ -48,17 +48,13 @@ Row {
 
     signal accentColorChangeRequested(var newColorIndex)
 
-    height: colorsList.height
     spacing: 12
 
     StyledTextLabel {
         id: titleLabel
         width: root.columnWidth
 
-        anchors.top: parent.top
-        height: colorsList.firstRowHeight
         horizontalAlignment: Qt.AlignLeft
-        verticalAlignment: Qt.AlignVCenter
 
         text: qsTrc("preferences", "Accent color")
     }
