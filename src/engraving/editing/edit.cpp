@@ -3287,6 +3287,24 @@ void Score::deleteItem(EngravingItem* el)
         EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
     }
     break;
+    case ElementType::PARENTHESIS: {
+        Parenthesis* paren = toParenthesis(el);
+        // Use EditChord::removeChordParentheses when parent is a chord, fall through for all others
+        if (el->parent() && el->parent()->isChord()) {
+            Chord* chord = toChord(el->parent());
+            NoteParenthesisInfo* parenInfo = chord->findNoteParenthesisInfo(paren);
+            IF_ASSERT_FAILED(parenInfo) {
+                LOGD() << "deleteItem: This parenthesis does not belong to this chord";
+                return;
+            }
+            for (Note* note : parenInfo->notes()) {
+                note->undoChangeProperty(Pid::HIDE_GENERATED_PARENTHESES, true);
+                note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
+            }
+            EditChord::removeChordParentheses(chord, parenInfo->notes());
+            break;
+        }
+    }
 
     default:
         undoRemoveElement(el);
@@ -7530,15 +7548,28 @@ void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
     const size_t undoIdx = undoStack()->currentIndex();
 
     const ChordRest* startCR = slur ? slur->startCR() : nullptr;
+    // Slurs can only have the same start & end element when they are partial.
+    // If they are no longer partial, we should remove them
+    const bool shouldRemove = slur->startElement() == slur->endElement();
     IF_ASSERT_FAILED(startCR) {
         LOGE() << "Slur is corrupted";
     } else if (!startCR->hasPrecedingJumpItem() && slur->isIncoming()) {
-        if (undo) {
-            startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
-            slur->undoSetIncoming(false);
-            endCmd();
+        if (shouldRemove) {
+            if (undo) {
+                startCmd(TranslatableString("engraving", "Remove invalid incoming partial slur"));
+                undoRemoveElement(slur);
+                endCmd();
+            } else {
+                removeElement(slur);
+            }
         } else {
-            slur->setIncoming(false);
+            if (undo) {
+                startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
+                slur->undoSetIncoming(false);
+                endCmd();
+            } else {
+                slur->setIncoming(false);
+            }
         }
     }
 
@@ -7546,12 +7577,22 @@ void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
     IF_ASSERT_FAILED(endCR) {
         LOGE() << "Slur is corrupted";
     } else if (!endCR->hasFollowingJumpItem() && slur->isOutgoing()) {
-        if (undo) {
-            startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
-            slur->undoSetOutgoing(false);
-            endCmd();
+        if (shouldRemove) {
+            if (undo) {
+                startCmd(TranslatableString("engraving", "Remove invalid outgoing partial slur"));
+                undoRemoveElement(slur);
+                endCmd();
+            } else {
+                removeElement(slur);
+            }
         } else {
-            slur->setOutgoing(false);
+            if (undo) {
+                startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
+                slur->undoSetOutgoing(false);
+                endCmd();
+            } else {
+                slur->setOutgoing(false);
+            }
         }
     }
 
@@ -7575,7 +7616,9 @@ void Score::undoRemoveStaleTieJumpPoints(bool undo)
         return;
     }
 
-    for (auto& interval : spanner()) {
+    // Copy, invalid slurs could be removed
+    auto spannerMap = spanner();
+    for (auto& interval : spannerMap) {
         Spanner* sp = interval.second;
         if (!sp || !sp->isSlur()) {
             continue;

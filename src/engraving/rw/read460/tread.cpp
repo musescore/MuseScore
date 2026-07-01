@@ -3830,6 +3830,19 @@ String TRead::lineBreakFromTag(const String& str)
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
+    Staff* staff = ctx.staff(ch->staffIdx());
+    StaffGroup staffGroup = staff ? staff->staffTypeForElement(ch)->group() : StaffGroup::STANDARD;
+    if (staffGroup == StaffGroup::PERCUSSION) {
+        // We should have read all notes by now. They need to be sorted for percussion staves
+        const Instrument* instrument = ch->part()->instrument(ch->tick());
+        const Drumset* drumset = instrument->drumset();
+        if (!drumset) {
+            LOGW("no drumset");
+        }
+        updatePercussionNotes(ch, drumset);
+        ch->sortNotes();
+    }
+
     Parenthesis* leftParen = nullptr;
     Parenthesis* rightParen = nullptr;
     std::vector<Note*> notes;

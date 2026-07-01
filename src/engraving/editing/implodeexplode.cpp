@@ -302,6 +302,13 @@ bool ImplodeExplode::implode(Score* score)
                             }
                             bool forceAccidental = n->accidental() && n->accidental()->role() == AccidentalRole::USER;
                             Note* nn = score->addNote(dstChord, nv, forceAccidental);
+                            // move articulations
+                            for (Articulation* artic : srcChord->articulations()) {
+                                if (dstChord->hasArticulation(artic)) {
+                                    continue;
+                                }
+                                score->undoChangeParent(artic, dstChord, dstChord->staffIdx());
+                            }
                             // add tie to this note if original chord was tied
                             if (tied) {
                                 // find note to tie to
