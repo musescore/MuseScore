@@ -83,6 +83,8 @@
       <staffTextFontFace>Times New Roman</staffTextFontFace>
       <staffTextFontSize>10.25</staffTextFontSize>
       <staffTextFrameWidth>0.13021</staffTextFrameWidth>
+      <staveSharingLabelFontFace>Times New Roman</staveSharingLabelFontFace>
+      <staveSharingLabelFontSize>10.25</staveSharingLabelFontSize>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10.25</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>

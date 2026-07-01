@@ -813,7 +813,7 @@ const TextStyle staveSharingLabelStyle {
         { TextStylePropertyType::FrameBorderColor,     Sid::staveSharingLabelFrameFgColor,                  Pid::FRAME_FG_COLOR },
         { TextStylePropertyType::FrameFillColor,       Sid::staveSharingLabelFrameBgColor,                  Pid::FRAME_BG_COLOR },
         { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                       Pid::MUSICAL_SYMBOLS_SCALE },
-        { TextStylePropertyType::MusicalSymbolsSize,   Sid::dummyMusicalSymbolSize,                         Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::MusicalSymbolsSize,   Sid::staffTextMusicalSymbolSize,                     Pid::MUSIC_SYMBOL_SIZE },
         { TextStylePropertyType::Position,             Sid::staveSharingLabelPosition,                      Pid::POSITION },
     } },
     { Sid::staveSharingLabelPosAbove, Sid::staveSharingLabelPosBelow }
