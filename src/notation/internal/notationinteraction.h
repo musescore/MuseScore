@@ -230,6 +230,7 @@ public:
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
     bool canAddTupletToSelectedChordRests() const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
+    void removeTupletFromSelectedChordRests() override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
     void beamSelectedRange() override;
 
