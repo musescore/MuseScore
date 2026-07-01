@@ -29,7 +29,6 @@
 #include "../types/types.h"
 
 #include "dom/anchors.h"
-#include "dom/audio.h"
 #include "dom/beam.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
@@ -128,11 +127,6 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             TRead::readItemEID(score, e);
         } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
-        } else if (tag == "Audio") {
-            score->m_audio = new Audio;
-            TRead::read(score->m_audio, e, ctx);
-        } else if (tag == "playMode") {
-            score->m_playMode = PlayMode(e.readInt());
         } else if (tag == "Synthesizer") {
             score->m_synthesizerState.read(e);
         } else if (tag == "page-offset") {

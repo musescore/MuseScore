@@ -27,7 +27,6 @@
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
-#include "dom/audio.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/masterscore.h"
@@ -133,12 +132,11 @@ bool Read400::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->m_audio = new Audio;
-            TRead::read(score->m_audio, e, ctx);
+            e.skipCurrentElement();
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->m_playMode = PlayMode(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {

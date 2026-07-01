@@ -31,7 +31,6 @@
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"
-#include "../dom/audio.h"
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
 
@@ -209,14 +208,6 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
     // Compatibility conversions
     // NOTE: must be done after all score and parts have been read
     compat::CompatUtils::doCompatibilityConversions(masterScore);
-
-    //  Read audio
-    {
-        if (masterScore->audio()) {
-            ByteArray dbuf1 = mscReader.readAudioFile();
-            masterScore->audio()->setData(dbuf1);
-        }
-    }
 
     // Read automation
     {

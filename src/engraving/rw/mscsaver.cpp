@@ -35,7 +35,6 @@
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
 #include "dom/imageStore.h"
-#include "dom/audio.h"
 #include "dom/mscore.h"
 #include "dom/page.h"
 
@@ -182,13 +181,6 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
             auto b = Buffer::opened(IODevice::WriteOnly, &ba);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    // Write audio
-    {
-        if (score->audio()) {
-            mscWriter.writeAudioFile(score->audio()->data());
         }
     }
 
