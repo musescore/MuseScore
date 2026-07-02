@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include "navigation.h"
+
 #include "../dom/harppedaldiagram.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
@@ -59,7 +61,7 @@ std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
     if (nextDiagram) {
         objs.push_back(nextDiagram);
     } else {
-        objs.push_back(diagram->score()->lastElement());
+        objs.push_back(Navigation::lastElement(diagram->score()));
     }
     return objs;
 }
@@ -95,7 +97,7 @@ std::vector<EngravingObject*> ChangeSingleHarpPedal::objectItems() const
     if (nextDiagram) {
         objs.push_back(nextDiagram);
     } else {
-        objs.push_back(diagram->score()->lastElement());
+        objs.push_back(Navigation::lastElement(diagram->score()));
     }
     return objs;
 }

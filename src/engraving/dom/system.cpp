@@ -29,6 +29,8 @@
 
 #include "style/style.h"
 
+#include "../editing/navigation.h"
+
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -823,7 +825,7 @@ EngravingItem* System::nextSegmentElement()
             return firstSeg->element(0);
         }
     }
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -839,7 +841,7 @@ EngravingItem* System::prevSegmentElement()
         while (!re) {
             seg = seg->prev1MM();
             if (!seg) {
-                return score()->firstElement();
+                return Navigation::firstElement(score());
             }
 
             if (seg->segmentType() == SegmentType::EndBarLine) {

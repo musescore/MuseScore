@@ -36,6 +36,7 @@
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/mscoreview.h"
+#include "../editing/navigation.h"
 #include "../editing/transaction/transaction.h"
 
 #include "accidental.h"
@@ -3273,7 +3274,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
         return next;
     }
 
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -3307,7 +3308,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
             return seg->lastElementForNavigation(staff);
         }
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 double Measure::firstNoteRestSegmentX(bool leading) const
