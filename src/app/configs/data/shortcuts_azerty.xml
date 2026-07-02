@@ -959,10 +959,12 @@
   <SC>
     <key>toggle-piano-keyboard</key>
     <seq>P</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-percussion-panel</key>
     <seq>O</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-properties-panel</key>
