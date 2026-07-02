@@ -67,6 +67,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     bool allowTimeAnchor() const override { return false; }
 
     Note* startNote() const;
@@ -253,6 +255,8 @@ public:
     GuitarBendHold(const GuitarBendHold&);
 
     GuitarBendHold* clone() const override { return new GuitarBendHold(*this); }
+
+    Anchor anchor() const override { return Anchor::NOTE; }
 
     LineSegment* createLineSegment(System* parent) override;
 

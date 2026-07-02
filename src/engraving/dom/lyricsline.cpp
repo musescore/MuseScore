@@ -50,7 +50,6 @@ LyricsLine::LyricsLine(EngravingItem* parent)
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
     setGenerated(true);             // no need to save it, as it can be re-generated
 }
@@ -60,7 +59,6 @@ LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFl
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
     setGenerated(true);             // no need to save it, as it can be re-generated
 }

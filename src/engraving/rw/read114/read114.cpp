@@ -1170,11 +1170,6 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
             e.unknown();
         }
     }
-    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
-        volta->setAnchor(Volta::VOLTA_ANCHOR);
-    }
     volta->setOffset(PointF());          // ignore offsets
     volta->setAutoplace(true);
     CompatUtils::resetHookHeightSign(volta);
@@ -3005,13 +3000,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     for (std::pair<int, Spanner*> p : masterScore->spanner()) {
         Spanner* s = p.second;
-        if (!s->isSlur()) {
-            if (s->isVolta()) {
-                Volta* volta = toVolta(s);
-                volta->setAnchor(Spanner::Anchor::MEASURE);
-            }
-        }
-
         if (s->isOttava() || s->isPedal() || s->isTrill() || s->isTextLine()) {
             double yo = 0;
             if (s->isOttava()) {
