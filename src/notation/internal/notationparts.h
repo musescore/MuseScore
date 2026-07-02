@@ -77,6 +77,7 @@ public:
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;
+    const Part* duplicatePart(const muse::ID& partId, std::function<void(const Part* newPart)> copyAudioStateForNewPart) override;
 
     void replacePart(const muse::ID& partId, Part* newPart) override;
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
@@ -123,6 +124,7 @@ private:
     void doAppendStaff(Staff* staff, Part* destinationPart, bool createRests=true);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
     void doInsertPart(Part* part, size_t index);
+    Part* doDuplicatePart(Part* part);
 
     Staff* staffModifiable(const muse::ID& staffId) const;
 

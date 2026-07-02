@@ -743,6 +743,34 @@ void NotationParts::insertPart(Part* part, size_t index)
     notifyAboutPartAdded(part);
 }
 
+const Part* NotationParts::duplicatePart(const ID& partId, std::function<void(const Part* newPart)> copyAudioStateForNewPart)
+{
+    TRACEFUNC;
+
+    Part* sourcePart = partModifiable(partId);
+    if (!sourcePart) {
+        return nullptr;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Duplicate instrument"));
+
+    EditSystemLocks::removeSystemLocksContainingMMRests(score());
+
+    Part* newPart = doDuplicatePart(sourcePart);
+
+    const bool lambdaExists = (copyAudioStateForNewPart != nullptr);
+    const bool newPartExists = (newPart != nullptr);
+    if (lambdaExists && newPartExists) {
+        copyAudioStateForNewPart(newPart);
+    }
+
+    apply();
+
+    notifyAboutPartAdded(newPart);
+
+    return newPart;
+}
+
 void NotationParts::replacePart(const ID& partId, Part* newPart)
 {
     TRACEFUNC;
@@ -1062,6 +1090,67 @@ void NotationParts::doInsertPart(Part* part, size_t index)
     }
 
     score()->remapBracketsAndBarlines();
+}
+
+Part* NotationParts::doDuplicatePart(Part* sourcePart)
+{
+    TRACEFUNC;
+
+    const InstrumentList sourceInstruments = sourcePart->instruments();
+    const std::vector<Staff*> sourceStaves = sourcePart->staves();
+    const size_t insertionIndex = muse::indexOf(score()->parts(), sourcePart) + 1;
+
+    // Create new part from clone
+    Part* newPart = sourcePart->clone();
+    newPart->setId(ID());
+    newPart->clearStaves();
+    newPart->setInstruments({});
+
+    if (Excerpt* excerpt = score()->excerpt()) {
+        score()->undo(new AddPartToExcerpt(excerpt, newPart, insertionIndex));
+    } else {
+        score()->undoInsertPart(newPart, insertionIndex);
+    }
+
+    // Copy the instruments
+    for (const auto& [tick, sourceInstrument] : sourceInstruments) {
+        if (!sourceInstrument) {
+            continue;
+        }
+
+        Instrument* instrumentCopy = new Instrument(*sourceInstrument);
+
+        // Get a new number for the instrument (so the name isn't the same)
+        InstrumentTemplate templateWithJustId;
+        templateWithJustId.id = instrumentCopy->id();
+
+        const int copyNumber = resolveNewInstrumentNumber(templateWithJustId, {});
+        instrumentCopy->setNumber(copyNumber);
+
+        newPart->setInstrument(instrumentCopy, tick);
+    }
+
+    // Copy the staves
+    for (size_t i = 0; i < sourceStaves.size(); ++i) {
+        Staff* sourceStaff = sourceStaves[i];
+
+        // Create a new staff based on the previous one
+        Staff* staffCopy = engraving::Factory::createStaff(newPart);
+        staffCopy->setId(ID());
+        staffCopy->setScore(score());
+        staffCopy->setPart(newPart);
+        staffCopy->init(sourceStaff);
+
+        insertStaff(staffCopy, static_cast<int>(i), /*createRests*/ true);
+
+        const bool cloneSpanners = true;
+        const bool createLinks = false;
+        mu::engraving::Excerpt::cloneStaff(sourceStaff, staffCopy, cloneSpanners, createLinks);
+    }
+
+    score()->remapBracketsAndBarlines();
+
+    return newPart;
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)

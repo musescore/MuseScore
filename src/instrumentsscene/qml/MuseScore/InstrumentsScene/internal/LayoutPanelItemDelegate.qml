@@ -187,6 +187,10 @@ FocusableControl {
                 // Same as above
                 Qt.callLater((root.item as PartTreeItem).resetAllFormatting)
             }
+
+            onDuplicateInstrumentRequested: {
+                Qt.callLater((root.item as PartTreeItem).duplicateInstrument)
+            }
         }
     }
 

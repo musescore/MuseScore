@@ -1362,6 +1362,127 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
 //   staffStyles
 //---------------------------------------------------------
 
+//---------------------------------------------------------
+//   countNotesOnStaff
+//---------------------------------------------------------
+
+static size_t countNotesOnStaff(Score* score, staff_idx_t staffIdx)
+{
+    size_t count = 0;
+    const track_idx_t startTrack = staffIdx * VOICES;
+    const track_idx_t endTrack = startTrack + VOICES;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                EngravingItem* element = seg->element(track);
+                if (element && element->isChord()) {
+                    count += toChord(element)->notes().size();
+                }
+            }
+        }
+    }
+    return count;
+}
+
+//---------------------------------------------------------
+//   duplicateStaffUnlinked
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, duplicateStaffUnlinked)
+{
+    MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"part-breath.mscx");
+    ASSERT_TRUE(masterScore);
+
+    Staff* sourceStaff = masterScore->staff(0);
+    ASSERT_TRUE(sourceStaff);
+    Part* part = sourceStaff->part();
+    ASSERT_TRUE(part);
+
+    const size_t originalStaffCount = masterScore->staves().size();
+    const size_t sourceNoteCount = countNotesOnStaff(masterScore, 0);
+    EXPECT_GT(sourceNoteCount, 0u);
+
+    masterScore->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    Staff* duplicatedStaff = Factory::createStaff(part);
+    duplicatedStaff->setPart(part);
+    masterScore->undoInsertStaff(duplicatedStaff, 1, false);
+    const bool cloneSpanners = true;
+    const bool createLinks = false;
+    Excerpt::cloneStaff(sourceStaff, duplicatedStaff, cloneSpanners, createLinks);
+    masterScore->endCmd();
+
+    EXPECT_EQ(masterScore->staves().size(), originalStaffCount + 1);
+
+    const size_t duplicatedNoteCount = countNotesOnStaff(masterScore, duplicatedStaff->idx());
+    EXPECT_EQ(duplicatedNoteCount, sourceNoteCount);
+
+    EXPECT_FALSE(sourceStaff->isLinked(duplicatedStaff));
+    EXPECT_FALSE(duplicatedStaff->isLinked(sourceStaff));
+
+    delete masterScore;
+}
+
+//---------------------------------------------------------
+//   undoDuplicateStaffUnlinked
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, undoDuplicateStaffUnlinked)
+{
+    MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"part-breath.mscx");
+    ASSERT_TRUE(masterScore);
+
+    Staff* sourceStaff = masterScore->staff(0);
+    ASSERT_TRUE(sourceStaff);
+    Part* part = sourceStaff->part();
+    ASSERT_TRUE(part);
+
+    const size_t originalStaffCount = masterScore->staves().size();
+    const size_t sourceNoteCount = countNotesOnStaff(masterScore, 0);
+
+    masterScore->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    Staff* duplicatedStaff = Factory::createStaff(part);
+    duplicatedStaff->setPart(part);
+    masterScore->undoInsertStaff(duplicatedStaff, 1, false);
+    Excerpt::cloneStaff(sourceStaff, duplicatedStaff, /*cloneSpanners*/ true, /*link*/ false);
+    masterScore->endCmd();
+
+    EXPECT_EQ(masterScore->staves().size(), originalStaffCount + 1);
+
+    masterScore->undoRedo(true, 0);
+
+    EXPECT_EQ(masterScore->staves().size(), originalStaffCount);
+    EXPECT_EQ(countNotesOnStaff(masterScore, 0), sourceNoteCount);
+
+    delete masterScore;
+}
+
+//---------------------------------------------------------
+//   cloneStaffLinkedDefault
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, cloneStaffLinkedDefault)
+{
+    MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"part-breath.mscx");
+    ASSERT_TRUE(masterScore);
+
+    Staff* sourceStaff = masterScore->staff(0);
+    ASSERT_TRUE(sourceStaff);
+    Part* part = sourceStaff->part();
+    ASSERT_TRUE(part);
+
+    masterScore->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    Staff* linkedStaff = Factory::createStaff(part);
+    linkedStaff->setPart(part);
+    masterScore->undoInsertStaff(linkedStaff, 1, false);
+    Excerpt::cloneStaff(sourceStaff, linkedStaff);
+    masterScore->endCmd();
+
+    EXPECT_TRUE(sourceStaff->isLinked(linkedStaff));
+    EXPECT_TRUE(linkedStaff->isLinked(sourceStaff));
+
+    delete masterScore;
+}
+
 #if 0
 TEST_F(Engraving_PartsTests, staffStyles)
 {

@@ -35,6 +35,7 @@ StyledPopupView {
 
     signal replaceInstrumentRequested()
     signal resetAllFormattingRequested()
+    signal duplicateInstrumentRequested()
 
     contentHeight: contentColumn.childrenRect.height
 
@@ -243,6 +244,22 @@ StyledPopupView {
 
                 onClicked: {
                     root.resetAllFormattingRequested()
+                    root.close()
+                }
+            }
+
+            FlatButton {
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 9
+
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Duplicate instrument")
+
+                visible: settingsModel.isMainScore
+
+                onClicked: {
+                    root.duplicateInstrumentRequested()
                     root.close()
                 }
             }
