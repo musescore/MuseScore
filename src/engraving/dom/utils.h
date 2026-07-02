@@ -57,7 +57,6 @@ extern RectF handleRect(const PointF& pos);
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);
-extern int quantizeLen(int, int);
 
 extern String pitch2string(int v, bool useFlats = false);
 extern int string2pitch(const String& s);
@@ -65,8 +64,6 @@ extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
-extern Segment* nextSeg1(Segment* s);
-extern Segment* prevSeg1(Segment* seg);
 
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
 

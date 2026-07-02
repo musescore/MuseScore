@@ -615,8 +615,6 @@ public:
     bool isOpen() const;
     void setIsOpen(bool open);
 
-    Fraction nextSeg(const Fraction& tick, int track);
-
     ChordList* chordList() { return &m_chordList; }
     const ChordList* chordList() const { return &m_chordList; }
     void checkChordList();
@@ -907,20 +905,12 @@ public:
 
     virtual IAutomation* automation() const;
 
-    friend class Chord;
-
 protected:
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);
     Score(MasterScore*, bool forcePartStyle = true);
     Score(MasterScore*, const MStyle&);
-
-    // NOTE: Looks like this four are unused
-    void cmdPitchUp();
-    void cmdPitchDown();
-    void cmdPitchUpOctave();
-    void cmdPitchDownOctave();
 
     int m_fileDivision = 0;   // division of current loading *.msc file
     SynthesizerState m_synthesizerState;
