@@ -260,6 +260,8 @@ typedef struct ms_PitchBendInfo
     ms_PitchBendType _type;
 } ms_PitchBendInfo;
 
+static constexpr int MAX_PITCH_BEND_RANGE_CENTS = 1200;
+
 typedef struct ms_VibratoInfo
 {
     int64_t event_id;
