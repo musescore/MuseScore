@@ -40,7 +40,11 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
-    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY themesChanged)
+    Q_PROPERTY(QStringList generalThemeCodes READ generalThemeCodes CONSTANT)
+    Q_PROPERTY(QStringList highContrastThemeCodes READ highContrastThemeCodes CONSTANT)
+
+    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
+
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
@@ -86,6 +90,8 @@ public:
     bool isFollowSystemTheme() const;
 
     bool highContrastEnabled() const;
+    QStringList generalThemeCodes() const;
+    QStringList highContrastThemeCodes() const;
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
 
@@ -133,6 +139,7 @@ public slots:
 
 signals:
     void isFollowSystemThemeChanged();
+    void highContrastEnabledChanged();
     void themesChanged();
     void currentFontIndexChanged();
     void bodyTextSizeChanged();
@@ -148,5 +155,7 @@ signals:
 private:
     muse::ui::ThemeInfo currentTheme() const;
     muse::ui::ThemeList allThemes() const;
+
+    bool m_lastHighContrast = false;
 };
 }
