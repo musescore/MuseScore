@@ -801,6 +801,18 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
 }
 
 //---------------------------------------------------------
+//   quantizeLen
+//---------------------------------------------------------
+
+int quantizeLen(int len, int raster)
+{
+    if (raster == 0) {
+        return len;
+    }
+    return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
+}
+
+//---------------------------------------------------------
 //   quantize
 //    process one segment (measure)
 //---------------------------------------------------------
