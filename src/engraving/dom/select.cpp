@@ -456,13 +456,12 @@ void Selection::clear()
     }
 
     for (EngravingItem* e : m_el) {
+        e->score()->addRefresh(changeSelection(e, false));
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
                 e->score()->addRefresh(changeSelection(s, false));
             }
-        } else {
-            e->score()->addRefresh(changeSelection(e, false));
         }
     }
     m_el.clear();
