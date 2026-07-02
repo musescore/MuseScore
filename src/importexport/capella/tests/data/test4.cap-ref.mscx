@@ -100,11 +100,11 @@
             <Note>
               <eid>R_R</eid>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 <eid>S_S</eid>
                 </Accidental>
               <pitch>63</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               </Note>
             </Chord>
           <Beam>
@@ -198,11 +198,20 @@
             <Note>
               <eid>n_n</eid>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 <eid>o_o</eid>
                 </Accidental>
               <pitch>70</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>n_n</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>o_o</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -210,19 +219,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>q_q</eid>
-              <Accidental>
-                <subtype>accidentalNatural</subtype>
-                <eid>r_r</eid>
-                </Accidental>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>s_s</eid>
-            <durationType>eighth</durationType>
-            <Note>
-              <eid>t_t</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
