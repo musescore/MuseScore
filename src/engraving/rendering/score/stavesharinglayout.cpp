@@ -744,8 +744,6 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                         sharedTuplet->setTrack(sharedTrack);
                         sharedTuplet->setParent(originTuplet->measure());
                         score->undoAddElement(sharedTuplet);
-
-                        EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
                     }
                 } else {
                     sharedTuplet = toTuplet(originTuplet->sharedItem());
@@ -754,6 +752,8 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                 IF_ASSERT_FAILED(sharedTuplet) {
                     break;
                 }
+
+                EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
 
                 sharedTuplet->add(sharedDE);
 
