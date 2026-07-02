@@ -42,7 +42,15 @@ static std::string platformMuseSoundsAppName()
 static muse::UriQuery correctThumbnailSize(const UriQuery& uri)
 {
     String uriStr = String::fromStdString(uri.toString());
-    uriStr.replace(u"/library-images/", u"/cdn-cgi/image/w=240,q=80,f=webp/library-images/");
+
+    // Thumbnails can live under different CDN folders (library-images, bundle-images,
+    // platform-subscription-images, etc.), so resize by host rather than a fixed folder name
+    static const String host(u"muse-cdn.com/");
+    const size_t hostIdx = uriStr.indexOf(host);
+    if (hostIdx != muse::nidx) {
+        uriStr.insert(hostIdx + host.size(), u"cdn-cgi/image/w=240,q=80,f=webp/");
+    }
+
     return UriQuery(uriStr.toStdString());
 }
 
