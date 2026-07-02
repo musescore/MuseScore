@@ -78,6 +78,7 @@ public:
     void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) override;
     void setLoopBoundariesEnabled(bool enabled) override;
     bool isLoopEnabled() const override;
+    muse::async::Channel<bool> loopEnabledChanged() const override;
     const LoopBoundaries& loopBoundaries() const override;
     muse::async::Notification loopBoundariesChanged() const override;
 
@@ -111,6 +112,7 @@ private:
 
     LoopBoundaries m_loopBoundaries;
     muse::async::Notification m_loopBoundariesChanged;
+    muse::async::Channel<bool> m_loopEnabledChanged;
 
     muse::audio::secs_t m_totalPlayTime = 0;
     muse::async::Channel<muse::audio::secs_t> m_totalPlayTimeChanged;

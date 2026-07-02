@@ -309,7 +309,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
         makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("playback-setup"),
+        makeMenuItem("command://playback/show-playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
@@ -473,7 +473,7 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     if (isMuseSamplerModuleAdded()) {
-        helpItems << makeMenuItem("clear-online-sounds-cache");
+        helpItems << makeMenuItem("command://playback/clear-onlinesounds-cache");
         helpItems << makeSeparator();
     }
 #endif
@@ -493,7 +493,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenuItem("playback-reload-cache"),
+        makeMenuItem("command://playback/reload-playback-cache"),
         makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 

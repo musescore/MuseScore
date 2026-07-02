@@ -272,6 +272,9 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
+    settings()->valueChanged(IS_COUNT_IN_ENABLED).onReceive(this, [this](const Val&) {
+        m_isCountInEnabledChanged.notify();
+    });
 
     settings()->setDefaultValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
@@ -912,6 +915,11 @@ bool NotationConfiguration::isCountInEnabled() const
 void NotationConfiguration::setIsCountInEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
+}
+
+Notification NotationConfiguration::isCountInEnabledChanged() const
+{
+    return m_isCountInEnabledChanged;
 }
 
 ValCh<muse::Orientation> NotationConfiguration::canvasOrientation() const

@@ -25,6 +25,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "rcommand/commandable.h"
 #include "actions/actionable.h"
@@ -66,13 +67,17 @@ public:
 
     void init();
 
-    bool isPlayAllowed() const override;
-    muse::async::Notification isPlayAllowedChanged() const override;
-
-    bool isPlaying() const override;
-
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
+
+    bool isPlayAllowed() const override;
+    muse::async::Channel<bool> isPlayAllowedChanged() const override;
+
+    bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
+
+    bool isLoopEnabled() const override;
+    muse::async::Channel<bool> loopEnabledChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -149,7 +154,6 @@ private:
     bool isPaused() const;
     bool isLoaded() const;
 
-    bool isLoopEnabled() const;
     bool loopBoundariesSet() const;
 
     void onNotationChanged();
@@ -167,33 +171,38 @@ private:
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
-    void togglePlay(bool showErrors = true);
-    void playFromSelection(bool showErrors = true);
-    void rewind(const muse::actions::ActionData& args);
-    void play();
-    void pause(bool select = false);
-    void stop();
-    void resume();
+    muse::Ret playToggle();
+    muse::Ret play(bool showErrors = true);
+    muse::Ret playFromSelection(bool showErrors = true);
+    muse::Ret pause(bool select = false);
+    muse::Ret stop();
+    muse::rcommand::Response rewind(const muse::rcommand::Request& request);
+
+    void doRewind(muse::secs_t newPosition);
+    void doPlay();
+    void doPause(bool select = false);
+    void doStop();
+    void doResume();
 
     muse::audio::secs_t playbackStartSecs() const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
-    void togglePlayRepeats();
-    void togglePlayChordSymbols();
-    void toggleAutomaticallyPan();
-    void toggleMetronome();
-    void toggleCountIn();
-    void toggleMidiInput();
-    void setMidiUseWrittenPitch(bool useWrittenPitch);
-    void toggleLoopPlayback();
-    void toggleHearPlaybackWhenEditing();
+    muse::Ret togglePlayRepeats();
+    muse::Ret togglePlayChordSymbols();
+    muse::Ret toggleAutomaticallyPan();
+    muse::Ret toggleMetronome();
+    muse::Ret toggleCountIn();
+    muse::Ret toggleMidiInput();
+    muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch);
+    muse::Ret toggleHearPlaybackWhenEditing();
 
-    void reloadPlaybackCache();
+    muse::Ret reloadPlaybackCache();
 
-    void openPlaybackSetupDialog();
+    muse::Ret showPlaybackSetup();
 
-    void addLoopBoundary(notation::LoopBoundaryType type);
+    muse::Ret toggleLoopPlayback();
+    muse::Ret addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
     void updateLoop();
 
@@ -233,7 +242,9 @@ private:
     bool m_isPlaybackInited = false;
     muse::async::Channel<bool> m_playbackInited;
 
-    muse::async::Notification m_isPlayAllowedChanged;
+    muse::async::Channel<bool> m_isPlayAllowedChanged;
+    muse::async::Channel<bool> m_isPlayingChanged;
+    muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
