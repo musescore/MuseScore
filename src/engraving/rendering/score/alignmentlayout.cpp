@@ -193,7 +193,7 @@ void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* s
 
 double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
 {
-    double curY = item->pos().y();
+    double curY = item->ldata()->pos().y();
     switch (item->type()) {
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
