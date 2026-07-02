@@ -24,22 +24,15 @@
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
 
-#include "draw/painter.h"
-
 #include "../editing/editstyle.h"
-#include "rendering/paintoptions.h"
 #include "style/style.h"
 
-#include "engravingitem.h"
-#include "mscore.h"
-#include "page.h"
 #include "score.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace muse::io;
-using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -120,35 +113,5 @@ bool Score::saveStyle(const String& name)
     }
 
     return true;
-}
-
-//---------------------------------------------------------
-//   print
-//---------------------------------------------------------
-
-void Score::print(Painter* painter, int pageNo)
-{
-    m_printing  = true;
-    MScore::pdfPrinting = true;
-
-    rendering::PaintOptions opt;
-    opt.isPrinting = true;
-
-    Page* page = pages().at(pageNo);
-    RectF fr  = page->pageBoundingRect();
-
-    std::vector<EngravingItem*> ell = page->items(fr);
-    std::sort(ell.begin(), ell.end(), elementLessThan);
-    for (const EngravingItem* e : ell) {
-        if (!e->visible()) {
-            continue;
-        }
-        painter->save();
-        painter->translate(e->pagePos());
-        renderer()->drawItem(e, painter, opt);
-        painter->restore();
-    }
-    MScore::pdfPrinting = false;
-    m_printing = false;
 }
 }

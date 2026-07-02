@@ -252,7 +252,15 @@ std::shared_ptr<muse::draw::Pixmap> MscSaver::createThumbnail(Score* score)
 
     p.setAntialiasing(true);
     p.scale(mag, mag);
-    score->print(&p, 0);
+
+    rendering::IScoreRenderer::ScorePaintOptions opt;
+    opt.isPrinting = true;
+    opt.isSetViewport = false;
+    opt.printPageBackground = false;
+    opt.fromPage = 0;
+    opt.toPage = 0;
+    scoreRenderer()->paintScore(&p, score, opt);
+
     p.endDraw();
 
     if (score->layoutMode() != mode) {
