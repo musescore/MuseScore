@@ -30,13 +30,18 @@ namespace mu::playback {
 class PlaybackControllerMock : public IPlaybackController
 {
 public:
-    MOCK_METHOD(bool, isPlayAllowed, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, isPlayAllowedChanged, (), (const, override));
-
-    MOCK_METHOD(bool, isPlaying, (), (const, override));
 
     MOCK_METHOD(bool, isPlaybackInited, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, playbackInitedChanged, (), (const, override));
+
+    MOCK_METHOD(bool, isPlayAllowed, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, isPlayAllowedChanged, (), (const, override));
+
+    MOCK_METHOD(bool, isPlaying, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
+
+    MOCK_METHOD(bool, isLoopEnabled, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, loopEnabledChanged, (), (const, override));
 
     MOCK_METHOD(const InstrumentTrackIdMap&, instrumentTrackIdMap, (), (const, override));
 

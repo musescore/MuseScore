@@ -1,8 +1,31 @@
 {
     "PROJECT_PAGE": [
         {
-            "command": "command://playback/play",
+            "command": "command://playback/play-toggle",
             "sequences": ["Space"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://playback/play-selection",
+            "sequences": ["Shift+Space"],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/pause-and-select",
+            "sequences": ["Ctrl+Space"],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/loop-toggle",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/metronome-toggle",
+            "sequences": [],
             "autorepeat": 0
         }
     ]

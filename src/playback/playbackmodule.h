@@ -29,7 +29,6 @@
 namespace mu::playback {
 class PlaybackConfiguration;
 class PlaybackController;
-class PlaybackUiActions;
 class SoundProfilesRepository;
 class PlaybackModule : public muse::modularity::IModuleSetup
 {
@@ -58,7 +57,6 @@ public:
 
 private:
     std::shared_ptr<PlaybackController> m_playbackController;
-    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
 };
 }

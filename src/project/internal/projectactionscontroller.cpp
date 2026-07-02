@@ -713,7 +713,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
     }
 
     if (globalContext()->playbackState()->isPlaying()) {
-        dispatcher()->dispatch("stop");
+        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
     }
 
     bool result = true;

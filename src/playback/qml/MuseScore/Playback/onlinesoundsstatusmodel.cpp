@@ -22,10 +22,11 @@
 
 #include "onlinesoundsstatusmodel.h"
 
-#include "audio/common/audioerrors.h"
+#include "global/async/async.h"
+#include "global/translation.h"
 
-#include "async/async.h"
-#include "translation.h"
+#include "audio/common/audioerrors.h"
+#include "playback/playbackcommands.h"
 
 using namespace mu::notation;
 using namespace mu::playback;
@@ -91,7 +92,7 @@ void OnlineSoundsStatusModel::load()
 void OnlineSoundsStatusModel::processOnlineSounds()
 {
     if (m_manualProcessingAllowed) {
-        dispatcher()->dispatch("process-online-sounds");
+        commandsDispatcher()->dispatch(PROCESS_ONLINESOUNDS_COMMAND);
     }
 }
 

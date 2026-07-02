@@ -43,13 +43,17 @@ class IPlaybackController : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IPlaybackController() = default;
 
-    virtual bool isPlayAllowed() const = 0;
-    virtual muse::async::Notification isPlayAllowedChanged() const = 0;
-
-    virtual bool isPlaying() const = 0;
-
     virtual bool isPlaybackInited() const = 0;
     virtual muse::async::Channel<bool> playbackInitedChanged() const = 0;
+
+    virtual bool isPlayAllowed() const = 0;
+    virtual muse::async::Channel<bool> isPlayAllowedChanged() const = 0;
+
+    virtual bool isPlaying() const = 0;
+    virtual muse::async::Channel<bool> isPlayingChanged() const = 0;
+
+    virtual bool isLoopEnabled() const = 0;
+    virtual muse::async::Channel<bool> loopEnabledChanged() const = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
@@ -63,9 +67,8 @@ public:
     virtual std::string auxChannelName(muse::audio::aux_channel_idx_t index) const = 0;
     virtual muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
 
-    virtual muse::async::Promise<muse::audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId)
-    const
-        = 0;
+    virtual muse::async::Promise<muse::audio::SoundPresetList>
+    availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const = 0;
 
     using SoloMuteState = notation::INotationSoloMuteState::SoloMuteState;
 
