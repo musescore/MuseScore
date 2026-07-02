@@ -1111,6 +1111,8 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
 
     std::vector<track_idx_t> originTracks;
     originTracks.reserve(originUnisonsCount);
+    std::vector<Instrument*> originInstruments;
+    originInstruments.reserve(originUnisonsCount);
     std::vector<track_idx_t> tracksMappedToThisStave;
     tracksMappedToThisStave.reserve(originUnisonsCount);
 
@@ -1120,6 +1122,7 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         }
         if (sharedTrack == curTrack) {
             originTracks.push_back(originTrack);
+            originInstruments.push_back(ctx.score->staff(track2staff(originTrack))->part()->instrument());
         }
     }
 
@@ -1127,17 +1130,13 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         return result;
     }
 
-    String prefix;
-    for (track_idx_t originTrack : originTracks) {
-        if (!prefix.empty()) {
-            prefix += '.';
-        }
-        Instrument* originInstrument = ctx.score->staff(track2staff(originTrack))->part()->instrument();
-        prefix += String::number(originInstrument->number());
-    }
-    prefix += ' ';
+    const MStyle& style = ctx.score->style();
+    bool trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+    bool trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+    int hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    String prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
-    result.prepend(prefix);
+    result.prepend(prefix + ' ');
 
     return result;
 }
