@@ -32,39 +32,22 @@
 using namespace mu::engraving::apiv1;
 
 //---------------------------------------------------------
-//   Channel::activeChannel
-//---------------------------------------------------------
-
-mu::engraving::InstrChannel* Channel::activeChannel()
-{
-    mu::engraving::Score* score = m_part->score();
-    mu::engraving::MasterScore* masterScore = score->masterScore();
-
-    if (masterScore->playbackScore() == score) {
-        return masterScore->playbackChannel(m_channel);
-    }
-    return m_channel;
-}
-
-//---------------------------------------------------------
 //   Channel::setMidiBankAndProgram
 //---------------------------------------------------------
 
 void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankController)
 {
-    mu::engraving::InstrChannel* ch = activeChannel();
-
     MidiPatch patch;
     // other values are unused in ChangePatch command
-    patch.synti = ch->synti();
+    patch.synti = m_channel->synti();
     patch.bank = bank;
     patch.prog = program;
 
     mu::engraving::Score* score = m_part->score();
-    score->undo(new ChangePatch(score, ch, patch));
+    score->undo(new ChangePatch(score, m_channel, patch));
 
     if (setUserBankController) {
-        score->undo(new SetUserBankController(ch, true));
+        score->undo(new SetUserBankController(m_channel, true));
     }
 }
 
@@ -75,7 +58,7 @@ void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankContr
 void Channel::setMidiProgram(int prog)
 {
     prog = qBound(0, prog, 127);
-    setMidiBankAndProgram(activeChannel()->bank(), prog, false);
+    setMidiBankAndProgram(m_channel->bank(), prog, false);
 }
 
 //---------------------------------------------------------
@@ -85,7 +68,7 @@ void Channel::setMidiProgram(int prog)
 void Channel::setMidiBank(int bank)
 {
     bank = qBound(0, bank, 255);
-    setMidiBankAndProgram(bank, activeChannel()->program(), true);
+    setMidiBankAndProgram(bank, m_channel->program(), true);
 }
 
 //---------------------------------------------------------

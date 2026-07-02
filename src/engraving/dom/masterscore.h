@@ -75,7 +75,6 @@ private:
     signed char m_port = 0;
     signed char m_channel = 0;
     InstrChannel* m_masterChannel = nullptr;
-    PartChannelSettingsLink m_link;
 };
 
 class MasterScore : public Score
@@ -121,8 +120,6 @@ public:
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
-    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>& activeMidiPitches() override { return m_activeMidiPitches; }
 
     void setUpdateAll() override;
 
@@ -157,7 +154,6 @@ public:
     bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
     int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
-//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -176,9 +172,6 @@ public:
 
     void initAutomation(); // TODO: Placeholder?
 
-    void setPlaybackScore(Score*);
-    Score* playbackScore() { return m_playbackScore; }
-    const Score* playbackScore() const { return m_playbackScore; }
     InstrChannel* playbackChannel(const InstrChannel* c) { return m_midiMapping[c->channel()].articulation(); }
     const InstrChannel* playbackChannel(const InstrChannel* c) const { return m_midiMapping[c->channel()].articulation(); }
 
@@ -192,9 +185,6 @@ public:
     String name() const override;
 
     muse::Ret sanityCheck();
-
-    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
-    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
@@ -230,24 +220,18 @@ private:
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;
-    std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
-    Score* m_playbackScore = nullptr;
     muse::async::Channel<ScoreChanges> m_changesChannel;
 
     bool m_readOnly = false;
 
-    CmdState m_cmdState;       // modified during cmd processing
+    CmdState m_cmdState; // modified during cmd processing
     bool m_updatesLocked = false;
 
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
-    int m_midiPortCount = 0;                           // A count of ALSA midi out ports
-    //    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
-    std::list<MidiInputEvent> m_activeMidiPitches;     // MIDI keys currently being held down
+    int m_midiPortCount = 0; // A count of ALSA midi out ports
     std::vector<MidiMapping> m_midiMapping;
-    bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
-    // don't decrease and don't have gaps
-    double m_widthOfSegmentCell = 3;
+    bool m_isSimpleMidiMapping = false; // midi mapping is simple if all ports and channels don't decrease and don't have gaps
 
     std::weak_ptr<EngravingProject> m_project;
 

@@ -22,11 +22,15 @@
 
 #pragma once
 
+#include "global/io/iodevice.h"
+
 #include "transaction/undoablecommand.h"
 
 #include "../dom/score.h"
 
 namespace mu::engraving {
+class Transaction;
+
 class ChangeStyle : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyle)
@@ -67,5 +71,11 @@ private:
 
     Score* m_score = nullptr;
     std::unordered_map<Sid, PropertyValue> m_values;
+};
+
+class EditStyle
+{
+public:
+    static bool loadStyle(Transaction& tx, Score* score, muse::io::IODevice& dev, bool ign = false, bool overlap = false);
 };
 }

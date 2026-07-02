@@ -38,7 +38,6 @@
 #include "dom/ledgerline.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
@@ -57,6 +56,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
 #include "editing/editchord.h"
+#include "editing/navigation.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -404,7 +404,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
             Chord* startChord = startNote ? startNote->chord() : nullptr;
-            if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
+            if (startChord && startChord->measure() == item->measure() && startChord == Navigation::prevChordRest(item)) {
                 double startNoteWidth = startNote->width();
                 // overlap into start chord?
                 // if in start chord, there are several notes or stem and tie in same direction
@@ -529,7 +529,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         bool repeat = false;
         if (!item->noStem()) {
             // check duration of prev. CR segm
-            ChordRest* prevCR = prevChordRest(item);
+            ChordRest* prevCR = Navigation::prevChordRest(item);
             if (prevCR == 0) {
                 needTabDur = true;
             } else if (item->beamMode() != BeamMode::AUTO

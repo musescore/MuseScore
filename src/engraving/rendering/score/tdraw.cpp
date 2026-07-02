@@ -92,7 +92,6 @@
 #include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
 
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/notedot.h"
 #include "dom/noteline.h"
@@ -158,6 +157,7 @@
 #include "dom/whammybar.h"
 
 #include "editing/mscoreview.h"
+#include "editing/navigation.h"
 
 #include "infrastructure/rtti.h"
 
@@ -3036,7 +3036,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
 
     if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
         Chord* chord = toChord(item->explicitParent());
-        ChordRest* prevCR = prevChordRest(chord);
+        ChordRest* prevCR = Navigation::prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
             return;
         }

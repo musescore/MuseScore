@@ -26,6 +26,9 @@
 
 #include "style/style.h"
 
+#include "../editing/edittimesig.h"
+#include "../editing/transaction/transaction.h"
+
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -108,10 +111,12 @@ EngravingItem* TimeSig::drop(EditData& data)
     if (e->isTimeSig()) {
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
-        // ownership of e is transferred to cmdAddTimeSig
+        // ownership of e is transferred to EditTimeSig::addTimeSig
+
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
 
         if (tick() != measure()->endTick()) {
-            score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
+            EditTimeSig::addTimeSig(tx, score(), measure(), staffIdx(), toTimeSig(e), false);
             return nullptr;
         }
 
@@ -126,7 +131,7 @@ EngravingItem* TimeSig::drop(EditData& data)
         }
 
         // Apply change to next measure
-        score()->cmdAddTimeSig(measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
+        EditTimeSig::addTimeSig(tx, score(), measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
         return nullptr;
     }
     delete e;

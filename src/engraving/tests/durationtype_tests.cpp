@@ -27,6 +27,10 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
 
+#include "engraving/editing/editduration.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -55,20 +59,20 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd(TranslatableString::untranslatable("Half duration tests"));
-    score->cmdAddPitch(42, false, false);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Half duration tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
-    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    EXPECT_EQ(c->ticks(), Fraction(1, 1));
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c->ticks(), Fraction(1, 1));
 
-    // repeatedly half-duration from V_WHOLE to V_128
-    for (int i = 128; i > 1; i /= 2) {
-        score->cmdHalfDuration();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
-    }
+        // repeatedly half-duration from V_WHOLE to V_128
+        for (int i = 128; i > 1; i /= 2) {
+            EditDuration::halfDuration(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
+        }
+    });
 
-    score->endCmd();
     delete score;
 }
 
@@ -84,20 +88,20 @@ TEST_F(Engraving_DurationTypeTests, doubleDuration)
     score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd(TranslatableString::untranslatable("Double duration tests"));
-    score->cmdAddPitch(42, false, false);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Double duration tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
-    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    EXPECT_EQ(c->ticks(), Fraction(1, 128));
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c->ticks(), Fraction(1, 128));
 
-    // repeatedly double-duration from V_128 to V_WHOLE
-    for (int i = 1; i < 128; i *= 2) {
-        score->cmdDoubleDuration();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(2 * i, 128));
-    }
+        // repeatedly double-duration from V_128 to V_WHOLE
+        for (int i = 1; i < 128; i *= 2) {
+            EditDuration::doubleDuration(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(2 * i, 128));
+        }
+    });
 
-    score->endCmd();
     delete score;
 }
 
@@ -113,24 +117,24 @@ TEST_F(Engraving_DurationTypeTests, decDurationDotted)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd(TranslatableString::untranslatable("Decrease duration dotted tests"));
-    score->cmdAddPitch(42, false, false);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Decrease duration dotted tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
-    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    EXPECT_EQ(c->ticks(), Fraction(1, 1));
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c->ticks(), Fraction(1, 1));
 
-    // repeatedly dec-duration-dotted from V_WHOLE to V_128
-    for (int i = 128; i > 1; i /= 2) {
-        score->cmdDecDurationDotted();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i + i / 2, 256));
+        // repeatedly dec-duration-dotted from V_WHOLE to V_128
+        for (int i = 128; i > 1; i /= 2) {
+            EditDuration::decDurationDotted(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(i + i / 2, 256));
 
-        score->cmdDecDurationDotted();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
-    }
+            EditDuration::decDurationDotted(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
+        }
+    });
 
-    score->endCmd();
     delete score;
 }
 
@@ -146,23 +150,23 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
     score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd(TranslatableString::untranslatable("Increase duration dotted tests"));
-    score->cmdAddPitch(42, false, false);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Increase duration dotted tests"), [&](Transaction& tx) {
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
-    Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    EXPECT_EQ(c->ticks(), Fraction(1, 128));
+        Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c->ticks(), Fraction(1, 128));
 
-    // repeatedly inc-duration-dotted from V_128 to V_WHOLE
-    for (int i = 1; i < 128; i *= 2) {
-        score->cmdIncDurationDotted();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(3 * i, 256));
+        // repeatedly inc-duration-dotted from V_128 to V_WHOLE
+        for (int i = 1; i < 128; i *= 2) {
+            EditDuration::incDurationDotted(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(3 * i, 256));
 
-        score->cmdIncDurationDotted();
-        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i, 64));
-    }
+            EditDuration::incDurationDotted(tx, score);
+            c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+            EXPECT_EQ(c->ticks(), Fraction(i, 64));
+        }
+    });
 
-    score->endCmd();
     delete score;
 }

@@ -40,6 +40,10 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
+
 using namespace mu::engraving::apiv1;
 
 Cursor::Cursor(mu::engraving::Score* s)
@@ -304,7 +308,8 @@ void Cursor::add(EngravingItem* wrapped)
     case ElementType::TIMESIG: {
         mu::engraving::Measure* m = _segment->measure();
         mu::engraving::Fraction tick = m->tick();
-        m_score->cmdAddTimeSig(m, m_track, toTimeSig(s), false);
+        mu::engraving::Transaction& tx = m_score->transactionManager()->currentOrDummyTransaction();
+        mu::engraving::EditTimeSig::addTimeSig(tx, m_score, m, m_track, toTimeSig(s), false);
         m = m_score->tick2measure(tick);
         _segment = m->first(m_filter);
         nextInTrack();
@@ -456,7 +461,7 @@ void Cursor::addNote(int pitch, bool addToChord)
         setDuration(1, 4);
     }
     NoteVal nval(pitch);
-    m_score->addPitch(nval, addToChord, is.get());
+    NoteInput::addPitch(m_score->transactionManager()->currentOrDummyTransaction(), m_score, nval, addToChord, is.get());
 }
 
 //---------------------------------------------------------

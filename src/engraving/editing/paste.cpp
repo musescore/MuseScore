@@ -20,45 +20,49 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "paste.h"
+
+#include "draw/iimageprovider.h"
 #include "io/buffer.h"
+#include "modularity/ioc.h"
 
 #include "imimedata.h"
 
-#include "../editing/editmeasures.h"
-#include "../editing/editstaff.h"
-#include "../editing/mscoreview.h"
-#include "../editing/transpose.h"
+#include "editmeasures.h"
+#include "editparentheses.h"
+#include "editstaff.h"
+#include "mscoreview.h"
+#include "noteinput.h"
+#include "transaction/transaction.h"
+#include "transpose.h"
 
 #include "rw/read400/tread.h"
 #include "rw/rwregister.h"
-#include "types/typesconv.h"
 
-#include "articulation.h"
-#include "beam.h"
-#include "breath.h"
-#include "chord.h"
-#include "drumset.h"
-#include "dynamic.h"
-#include "factory.h"
-#include "figuredbass.h"
-#include "fret.h"
-#include "hairpin.h"
-#include "harmony.h"
-#include "image.h"
-#include "lyrics.h"
-#include "measure.h"
-#include "measurerepeat.h"
-#include "note.h"
-#include "part.h"
-#include "rest.h"
-#include "score.h"
-#include "sig.h"
-#include "staff.h"
-#include "tie.h"
-#include "timesig.h"
-#include "tuplet.h"
-#include "tremolosinglechord.h"
-#include "utils.h"
+#include "../dom/articulation.h"
+#include "../dom/beam.h"
+#include "../dom/breath.h"
+#include "../dom/chord.h"
+#include "../dom/drumset.h"
+#include "../dom/dynamic.h"
+#include "../dom/factory.h"
+#include "../dom/figuredbass.h"
+#include "../dom/fret.h"
+#include "../dom/harmony.h"
+#include "../dom/image.h"
+#include "../dom/measure.h"
+#include "../dom/measurerepeat.h"
+#include "../dom/note.h"
+#include "../dom/part.h"
+#include "../dom/rest.h"
+#include "../dom/score.h"
+#include "../dom/sig.h"
+#include "../dom/staff.h"
+#include "../dom/tie.h"
+#include "../dom/timesig.h"
+#include "../dom/tuplet.h"
+#include "../dom/tremolosinglechord.h"
+#include "../dom/utils.h"
 
 #include "log.h"
 
@@ -71,7 +75,7 @@ namespace mu::engraving {
 //   pasteStaff
 //    return false if paste fails
 //---------------------------------------------------------
-bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
+bool Paste::pasteStaff(Transaction&, Score*, XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
@@ -82,12 +86,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 //   pasteChordRest
 //---------------------------------------------------------
 
-void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
+void Paste::pasteChordRest(Transaction& tx, Score* score, ChordRest* cr, const Fraction& t)
 {
     Fraction tick(t);
 // LOGD("pasteChordRest %s at %d, len %d/%d", cr->typeName(), tick, cr->ticks().numerator(), cr->ticks().denominator() );
 
-    Measure* measure = tick2measure(tick);
+    Measure* measure = score->tick2measure(tick);
     if (!measure) {
         return;
     }
@@ -133,7 +137,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
         MeasureRepeat* mr = toMeasureRepeat(cr);
         Measure* m = (mr->numMeasures() == 4 ? measure->prevMeasure() : measure);
         for (int i = 1; i <= mr->numMeasures(); ++i) {
-            undo(new ChangeMeasureRepeatCount(m, i, mr->staffIdx()));
+            tx.push(new ChangeMeasureRepeatCount(m, i, mr->staffIdx()));
             if (i < mr->numMeasures()) {
                 m->undoSetNoBreak(true);
             }
@@ -157,7 +161,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     Staff* stf = cr->staff();
     const bool shouldSplit = tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest;
     if (isGrace || cr->tuplet() || !shouldSplit) {
-        undoAddCR(cr, measure, tick);
+        score->undoAddCR(cr, measure, tick);
         return;
     }
     if (cr->isChord()) {
@@ -166,7 +170,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
         Fraction rest = c->ticks();
         bool firstpart = true;
         while (rest.isNotZero()) {
-            measure = tick2measure(tick);
+            measure = score->tick2measure(tick);
             Chord* c2 = firstpart ? c : toChord(c->clone());
             if (!firstpart) {
                 c2->removeMarkings(true);
@@ -175,7 +179,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             Fraction mlen = (measure->endTick() - tick) * timeStretch;
             Fraction len = mlen > rest ? rest : mlen;
             std::vector<TDuration> dl = toRhythmicDurationList(len, false, (tick - measure->tick()) * timeStretch,
-                                                               sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                               score->sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
             if (dl.empty()) {
                 LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                 return;
@@ -183,7 +187,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             TDuration d = dl[0];
             c2->setDurationType(d);
             c2->setTicks(d.fraction());
-            undoAddCR(c2, measure, tick);
+            score->undoAddCR(c2, measure, tick);
 
             std::vector<Note*> nl1 = c->notes();
             std::vector<Note*> nl2 = c2->notes();
@@ -218,12 +222,12 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
         bool firstpart = true;
         while (!rest.isZero()) {
             Rest* r2      = firstpart ? r : toRest(r->clone());
-            measure       = tick2measure(tick);
+            measure       = score->tick2measure(tick);
             Fraction timeStretch = stf->timeStretch(tick);
             Fraction mlen = (measure->endTick() - tick) * timeStretch;
             Fraction len  = rest > mlen ? mlen : rest;
             std::vector<TDuration> dl = toRhythmicDurationList(len, true, (tick - measure->tick()) * timeStretch,
-                                                               sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                               score->sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
             if (dl.empty()) {
                 LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                 return;
@@ -231,7 +235,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             TDuration d = dl[0];
             r2->setDurationType(d);
             r2->setTicks(d.isMeasure() ? measure->stretchedLen(stf) : d.fraction());
-            undoAddCR(r2, measure, tick);
+            score->undoAddCR(r2, measure, tick);
             rest -= r2->ticks();
             tick += r2->actualTicksAt(tick);
             firstpart = false;
@@ -240,12 +244,12 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
         MeasureRepeat* mr = toMeasureRepeat(cr);
         std::vector<TDuration> list = toDurationList(mr->ticks(), true);
         for (auto dur : list) {
-            Rest* r = Factory::createRest(this->dummy()->segment(), dur);
+            Rest* r = Factory::createRest(score->dummy()->segment(), dur);
             r->setTrack(cr->track());
             Fraction rest = r->ticks();
             while (!rest.isZero()) {
                 Rest* r2      = toRest(r->clone());
-                measure       = tick2measure(tick);
+                measure       = score->tick2measure(tick);
                 Fraction timeStretch = stf->timeStretch(tick);
                 Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len  = rest > mlen ? mlen : rest;
@@ -257,7 +261,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 TDuration d = dl[0];
                 r2->setTicks(d.fraction());
                 r2->setDurationType(d);
-                undoAddCR(r2, measure, tick);
+                score->undoAddCR(r2, measure, tick);
                 rest -= r2->ticks();
                 tick += r2->actualTicksAt(tick);
             }
@@ -274,20 +278,20 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
 //
 //    (Note: info about delta ticks is currently ignored)
 //---------------------------------------------------------
-void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
+void Paste::pasteSymbols(Transaction&, XmlReader& e, ChordRest* dst)
 {
     //! NOTE Needs refactoring - reading should be separated from insertion
     //! (we read the elements into some structure, then inserted them)
     rw::RWRegister::reader()->pasteSymbols(e, dst);
 }
 
-bool Score::cmdRepeatListSelection()
+bool Paste::repeatListSelection(Transaction& tx, Score* score)
 {
     TRACEFUNC;
 
-    InputState& is = inputState();
+    InputState& is = score->inputState();
 
-    std::vector<Note*> notes = m_selection.noteList();
+    std::vector<Note*> notes = score->selection().noteList();
     std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) {
         return std::make_tuple(a->track(), a->tick(), a->pitch())
                < std::make_tuple(b->track(), b->tick(), b->pitch());
@@ -299,7 +303,7 @@ bool Score::cmdRepeatListSelection()
     // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
     // new notes have been created we can call cmdAddParentheses on each group...
     // Use a vector of pairs to preserve insertion order
-    using NoteList = std::list<Note*>;
+    using NoteList = std::vector<Note*>;
     std::vector<std::pair<const Parenthesis*, NoteList> > parenEntries;
 
     for (Note* n : notes) {
@@ -330,7 +334,7 @@ bool Score::cmdRepeatListSelection()
         }
 
         NoteVal nval = n->noteVal();
-        Note* newNote = addPitch(nval, addFlag);
+        Note* newNote = NoteInput::addPitch(tx, score, nval, addFlag);
         IF_ASSERT_FAILED(newNote) {
             continue;
         }
@@ -344,7 +348,7 @@ bool Score::cmdRepeatListSelection()
             TremoloSingleChord* newTsc = oldTsc->clone();
             newTsc->setParent(newChord);
             newTsc->setTrack(newChord->track());
-            score()->doUndoAddElement(newTsc);
+            score->doUndoAddElement(newTsc);
         }
 
         toSelect.push_back(newNote);
@@ -381,10 +385,10 @@ bool Score::cmdRepeatListSelection()
     }
 
     for (auto& [paren, noteList] : parenEntries) {
-        cmdAddParenthesesToNotes(noteList);
+        EditParentheses::addParenthesesToNotes(tx, noteList);
     }
 
-    select(toSelect, SelectType::ADD);
+    score->select(toSelect, SelectType::ADD);
     return !toSelect.empty();
 }
 
@@ -437,7 +441,7 @@ static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fra
     return target;
 }
 
-static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target)
+static EngravingItem* pasteSystemObject(Transaction& tx, EditData& srcData, EngravingItem* target)
 {
     if (!target) {
         return nullptr;
@@ -465,7 +469,7 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
         return target->drop(srcData);
     }
 
-    targetScore->undo(new AddSystemObjectStaff(targetStaff));
+    tx.push(new AddSystemObjectStaff(targetStaff));
 
     const std::vector<EngravingItem*> topSystemObjects = collectSystemObjects(targetScore);
     const staff_idx_t staffIdx = targetStaff->idx();
@@ -497,14 +501,14 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
 //   cmdPaste
 //---------------------------------------------------------
 
-bool Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
+bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreView* view, Fraction scale)
 {
     if (!ms) {
         LOGE() << "No MIME data given";
         return false;
     }
 
-    if (m_selection.isNone()) {
+    if (score->selection().isNone()) {
         LOGE() << "No target selection";
         MScore::setError(MsError::NO_DEST);
         return false;
@@ -512,34 +516,35 @@ bool Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 
     if (ms->hasFormat(mimeSymbolFormat)) {
         muse::ByteArray data = ms->data(mimeSymbolFormat);
-        return cmdPasteSymbol(data, view, scale);
+        return pasteSymbol(tx, score, data, view, scale);
     }
 
     if (ms->hasFormat(mimeStaffListFormat)) {
         muse::ByteArray data = ms->data(mimeStaffListFormat);
-        return cmdPasteStaffList(data, scale);
+        return pasteStaffList(tx, score, data, scale);
     }
 
     if (ms->hasFormat(mimeSymbolListFormat)) {
         muse::ByteArray data = ms->data(mimeSymbolListFormat);
-        return cmdPasteSymbolList(data);
+        return pasteSymbolList(tx, score, data);
     }
 
     if (ms->hasImage()) {
         muse::ByteArray ba;
         auto buffer = Buffer::opened(IODevice::WriteOnly, &ba);
 
+        muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
         auto px = ms->imageData();
         imageProvider()->saveAsPng(px, &buffer);
 
-        std::unique_ptr<Image> image(new Image(this->dummy()));
+        std::unique_ptr<Image> image(new Image(score->dummy()));
         image->setImageType(ImageType::RASTER);
         image->loadFromData("paste", ba);
 
         std::vector<EngravingItem*> droppedElements;
-        std::vector<EngravingItem*> targetElements = m_selection.elements();
+        std::vector<EngravingItem*> targetElements = score->selection().elements();
         for (EngravingItem* target : targetElements) {
-            addRefresh(target->pageBoundingRect()); // layout() ?!
+            score->addRefresh(target->pageBoundingRect()); // layout() ?!
 
             EngravingItem* nel = image->clone();
             EditData ddata(view);
@@ -551,13 +556,13 @@ bool Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
                     droppedElements.emplace_back(dropped);
                 }
 
-                if (m_selection.element()) {
-                    addRefresh(m_selection.element()->pageBoundingRect());
+                if (score->selection().element()) {
+                    score->addRefresh(score->selection().element()->pageBoundingRect());
                 }
             }
         }
 
-        select(droppedElements);
+        score->select(droppedElements);
         return true;
     }
 
@@ -566,14 +571,14 @@ bool Score::cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale)
 }
 }
 
-bool Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction scale)
+bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, MuseScoreView* view, Fraction scale)
 {
     std::vector<EngravingItem*> droppedElements;
 
     PointF dragOffset;
     Fraction duration(1, 4);
 
-    std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(this, data, &dragOffset, &duration));
+    std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(score, data, &dragOffset, &duration));
     if (!el) {
         return false;
     }
@@ -584,7 +589,7 @@ bool Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction 
     }
 
     std::vector<EngravingItem*> targetElements;
-    if (m_selection.isNone()) {
+    if (score->selection().isNone()) {
         UNREACHABLE;
         return false;
     }
@@ -593,11 +598,11 @@ bool Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction 
     // without duplicating logic. (Currently, for range selections, we only
     // paste onto the "top-left corner" for non-measure based elements.)
     bool unique;
-    targetElements = filterTargetElements(m_selection, el.get(), unique);
-    if (!unique && m_selection.isRange()) {
+    targetElements = filterTargetElements(score->selection(), el.get(), unique);
+    if (!unique && score->selection().isRange()) {
         // The usage of `firstElementForNavigation` is inspired by `NotationInteraction::applyPaletteElement`.
-        Segment* firstSegment = m_selection.startSegment();
-        targetElements = { firstSegment->firstElementForNavigation(m_selection.staffStart()) };
+        Segment* firstSegment = score->selection().startSegment();
+        targetElements = { firstSegment->firstElementForNavigation(score->selection().staffStart()) };
     }
 
     if (targetElements.empty()) {
@@ -609,7 +614,7 @@ bool Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction 
     const bool systemObj = el->systemFlag();
 
     for (EngravingItem* target : targetElements) {
-        addRefresh(target->pageBoundingRect()); // layout() ?!
+        score->addRefresh(target->pageBoundingRect()); // layout() ?!
         el->setTrack(target->track());
 
         EditData ddata(view);
@@ -624,28 +629,28 @@ bool Score::cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction 
         if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
             ddata.dropElement = el->clone();
 
-            EngravingItem* dropped = systemObj ? pasteSystemObject(ddata, target) : target->drop(ddata);
+            EngravingItem* dropped = systemObj ? pasteSystemObject(tx, ddata, target) : target->drop(ddata);
             if (dropped) {
                 droppedElements.emplace_back(dropped);
             }
         }
     }
 
-    select(droppedElements);
+    score->select(droppedElements);
     return true;
 }
 
-bool Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
+bool Paste::pasteStaffList(Transaction& tx, Score* score, muse::ByteArray& data, Fraction scale)
 {
     if (MScore::debugMode) {
         LOGD() << "Pasting staff list: " << data.data();
     }
 
     ChordRest* cr = nullptr;
-    if (m_selection.isRange()) {
-        cr = m_selection.firstChordRest();
-    } else if (m_selection.isSingle()) {
-        EngravingItem* e = m_selection.element();
+    if (score->selection().isRange()) {
+        cr = score->selection().firstChordRest();
+    } else if (score->selection().isSingle()) {
+        EngravingItem* e = score->selection().element();
         Measure* measure = e->findMeasure();
         cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
         if (!cr) {
@@ -666,20 +671,20 @@ bool Score::cmdPasteStaffList(muse::ByteArray& data, Fraction scale)
     }
 
     XmlReader xmlReader(data);
-    return pasteStaff(xmlReader, cr->segment(), cr->staffIdx(), scale);
+    return pasteStaff(tx, score, xmlReader, cr->segment(), cr->staffIdx(), scale);
 }
 
-bool Score::cmdPasteSymbolList(muse::ByteArray& data)
+bool Paste::pasteSymbolList(Transaction& tx, Score* score, muse::ByteArray& data)
 {
     if (MScore::debugMode) {
         LOGD() << "Pasting element list: " << data.data();
     }
 
     ChordRest* cr = nullptr;
-    if (m_selection.isRange()) {
-        cr = m_selection.firstChordRest();
-    } else if (m_selection.isSingle()) {
-        EngravingItem* e = m_selection.element();
+    if (score->selection().isRange()) {
+        cr = score->selection().firstChordRest();
+    } else if (score->selection().isSingle()) {
+        EngravingItem* e = score->selection().element();
         Measure* measure = e->findMeasure();
         cr = measure ? measure->findChordRest(e->tick(), e->track()) : nullptr;
         if (!cr) {
@@ -695,6 +700,6 @@ bool Score::cmdPasteSymbolList(muse::ByteArray& data)
     }
 
     XmlReader xmlReader(data);
-    pasteSymbols(xmlReader, cr);
+    pasteSymbols(tx, xmlReader, cr);
     return true;
 }

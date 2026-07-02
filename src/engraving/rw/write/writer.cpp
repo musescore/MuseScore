@@ -139,11 +139,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
         xml.tag("layoutMode", "system");
     }
 
-    if (score->m_audio) {
-        xml.tag("playMode", int(score->m_playMode));
-        TWrite::write(score->m_audio, xml, ctx);
-    }
-
     if (score->isMaster() && !MScore::testMode) {
         score->m_synthesizerState.write(xml);
     }

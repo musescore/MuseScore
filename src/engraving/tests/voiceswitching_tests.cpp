@@ -26,6 +26,9 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/rest.h"
 
+#include "engraving/editing/editvoice.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -108,10 +111,10 @@ TEST_F(Engraving_VoiceSwitchingTests, articulationsAfterVoiceSwitch)
     EXPECT_TRUE(score);
 
     //! [WHEN] The first bar is range selected and all elements are moved to voice 0
-    score->startCmd(TranslatableString::untranslatable("Engraving voice switching tests"));
-    score->cmdSelectAll();
-    score->changeSelectedElementsVoice(0);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving voice switching tests"), [&](Transaction& tx) {
+        score->cmdSelectAll();
+        EditVoice::changeSelectedElementsVoice(tx, score, 0);
+    });
 
     //! [THEN] Articulations from both voices are merged into voice 0, with duplicates removed
 
@@ -207,7 +210,7 @@ TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
     //! [WHEN] The last note of the measure is selected and moved to voice one
     score->select(chord->upNote());
     score->startCmd(TranslatableString("undoableAction", "Change voice"));
-    score->changeSelectedElementsVoice(1);
+    EditVoice::changeSelectedElementsVoice(score->transactionManager()->currentOrDummyTransaction(), score, 1);
     score->endCmd();
 
     //! [THEN] Voice 1 should be filled with gap rests from the start of the measure

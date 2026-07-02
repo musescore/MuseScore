@@ -37,16 +37,11 @@ namespace mu::engraving {
 
 void MasterScore::rebuildMidiMapping()
 {
-    Score* playbackScore = m_playbackScore ? m_playbackScore : this;
-    setPlaybackScore(nullptr);
-
     removeDeletedMidiMapping();
     int maxport = updateMidiMapping();
     reorderMidiMapping();
     rebuildExcerptsMidiMapping();
     masterScore()->setMidiPortCount(maxport);
-
-    setPlaybackScore(playbackScore);
 }
 
 //---------------------------------------------------------
@@ -353,7 +348,6 @@ void MasterScore::addMidiMapping(InstrChannel* channel, Part* part, int midiPort
     mm.m_part = part;
     mm.m_masterChannel = channel;
     mm.m_articulation.reset(new InstrChannel(*channel));
-    mm.m_link = PartChannelSettingsLink(mm.articulation(), mm.m_masterChannel, /* excerpt */ false);
 
     mm.m_port = midiPort;
     mm.m_channel = midiChannel;

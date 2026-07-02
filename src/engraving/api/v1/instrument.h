@@ -118,8 +118,6 @@ class Channel : public QObject
     /// action.
     Q_PROPERTY(int midiBank READ midiBank WRITE setMidiBank)
 
-    mu::engraving::InstrChannel* activeChannel();
-
     void setMidiBankAndProgram(int bank, int program, bool setUserBankController);
 
 public:
@@ -131,13 +129,13 @@ public:
     bool isHarmonyChannel() const { return m_channel->isHarmonyChannel(); }
 
     int volume() const { return m_channel->volume(); }
-    void setVolume(int val) { activeChannel()->setVolume(qBound(0, val, 127)); }
+    void setVolume(int val) { m_channel->setVolume(qBound(0, val, 127)); }
     int pan() const { return m_channel->pan(); }
-    void setPan(int val) { activeChannel()->setPan(qBound(0, val, 127)); }
+    void setPan(int val) { m_channel->setPan(qBound(0, val, 127)); }
     int chorus() const { return m_channel->chorus(); }
-    void setChorus(int val) { activeChannel()->setChorus(qBound(0, val, 127)); }
+    void setChorus(int val) { m_channel->setChorus(qBound(0, val, 127)); }
     int reverb() const { return m_channel->reverb(); }
-    void setReverb(int val) { activeChannel()->setReverb(qBound(0, val, 127)); }
+    void setReverb(int val) { m_channel->setReverb(qBound(0, val, 127)); }
 
     bool mute() const
     {

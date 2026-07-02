@@ -27,6 +27,7 @@
 #include "translation.h"
 
 #include "../editing/editspanner.h"
+#include "../editing/navigation.h"
 #include "types/typesconv.h"
 #include "rendering/score/tlayout.h"
 
@@ -55,8 +56,6 @@
 #include "timesig.h"
 #include "tuplet.h"
 #include "utils.h"
-
-#include "navigate.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -1807,7 +1806,7 @@ EngravingItem* Segment::prevElementOfSegment(EngravingItem* e, staff_idx_t activ
             Chord* chord = toChord(el);
             GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
             if (!graceNotesBefore.empty()) {
-                ChordRest* next = prevChordRest(chord);
+                ChordRest* next = Navigation::prevChordRest(chord);
                 if (next) {
                     if (next->isChord()) {
                         return toChord(next)->notes().back();
@@ -2135,7 +2134,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         }
         if (!nextSegment) {
             MeasureBase* mb = measure()->next();
-            return mb && mb->isBox() ? mb : score()->lastElement();
+            return mb && mb->isBox() ? mb : Navigation::lastElement(score());
         }
 
         Measure* nsm = nextSegment->measure();
@@ -2349,7 +2348,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
         if (!prevSeg) {
             MeasureBase* mb = measure()->prev();
-            return mb && mb->isBox() ? mb : score()->firstElement();
+            return mb && mb->isBox() ? mb : Navigation::firstElement(score());
         }
 
         Measure* psm = prevSeg->measure();
@@ -2389,7 +2388,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
         if (!prevSeg) {
-            return score()->firstElement();
+            return Navigation::firstElement(score());
         }
 
         if (prevSeg->notChordRestType()) {

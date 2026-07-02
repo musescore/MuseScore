@@ -22,13 +22,18 @@
 #include "notationstyle.h"
 
 #include "io/file.h"
+#include "io/fileinfo.h"
 #include "types/translatablestring.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/editing/editstyle.h"
 #include "engraving/editing/editstavesharing.h"
+#include "engraving/editing/reset.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/style/defaultstyle.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace muse::async;
@@ -101,7 +106,7 @@ void NotationStyle::applyToAllParts()
 
 void NotationStyle::resetAllStyleValues(const StyleIdSet& exceptTheseOnes)
 {
-    score()->cmdResetAllStyles(exceptTheseOnes);
+    mu::engraving::Reset::resetAllStyles(score()->transactionManager()->currentOrDummyTransaction(), score(), exceptTheseOnes);
     score()->update();
     m_styleChanged.notify();
 }
@@ -115,7 +120,8 @@ bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion
 {
     m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Load style"));
     muse::io::File styleFile(path);
-    bool result = score()->loadStyle(styleFile, allowAnyVersion);
+    bool result = mu::engraving::EditStyle::loadStyle(score()->transactionManager()->currentOrDummyTransaction(), score(), styleFile,
+                                                      allowAnyVersion);
     m_undoStack->commitChanges();
 
     if (result) {
@@ -127,7 +133,16 @@ bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion
 
 bool NotationStyle::saveStyle(const muse::io::path_t& path)
 {
-    return score()->saveStyle(path.toQString());
+    muse::io::path_t filePath = muse::io::FileInfo(path).suffix().isEmpty() ? path.appendingSuffix("mss") : path;
+
+    muse::io::File styleFile(filePath);
+    if (!styleFile.open(muse::io::IODevice::WriteOnly) || !score()->style().write(&styleFile)) {
+        LOGE() << "Failed to write style file: " << filePath.toString();
+        return false;
+    }
+
+    styleFile.close();
+    return true;
 }
 
 mu::engraving::Score* NotationStyle::score() const

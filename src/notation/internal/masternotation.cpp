@@ -41,6 +41,10 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 
+#include "engraving/editing/editkeysig.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
@@ -241,11 +245,12 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         // Add timesigs...
         TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
         timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
-        masterScore->cmdAddTimeSig(measure, /*staffIdx*/ 0, timesig, /*local*/ false);
+        Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
+        EditTimeSig::addTimeSig(tx, masterScore, measure, /*staffIdx*/ 0, timesig, /*local*/ false);
 
         for (Staff* staff : masterScore->staves()) {
             // Add keysig for each staff...
-            masterScore->undoChangeKeySig(staff, measure->tick(), keySigEvent);
+            mu::engraving::EditKeySig::undoChangeKeySig(tx, masterScore, staff, measure->tick(), keySigEvent);
         }
     }
 }

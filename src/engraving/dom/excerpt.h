@@ -92,6 +92,7 @@ public:
     static void cloneStaves(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
                             const TracksMap& allTracks);
     static void cloneMeasures(Score* oscore, Score* score);
+    static void linkMeasures(Score* excerptScore, Score* masterScore);
     static void cloneStaff(Staff* ostaff, Staff* nstaff, bool cloneSpanners = true);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
     static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2);

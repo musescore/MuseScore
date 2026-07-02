@@ -233,11 +233,6 @@ std::vector<String> MscReader::imageFileNames() const
     return names;
 }
 
-ByteArray MscReader::readAudioFile() const
-{
-    return fileData(u"audio.ogg");
-}
-
 ByteArray MscReader::readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix) const
 {
     return fileData(pathPrefix.toString() + u"audiosettings.json");

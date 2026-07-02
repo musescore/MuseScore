@@ -30,6 +30,8 @@
 #include "staff.h"
 #include "part.h"
 
+#include "editing/editkeysig.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
 #include "log.h"
@@ -88,15 +90,16 @@ EngravingItem* KeySig::drop(EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
     if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
-            score()->undoChangeKeySig(staff(), tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);
         }
     } else {
         // apply to all staves:
         for (Staff* s : score()->masterScore()->staves()) {
-            score()->undoChangeKeySig(s, tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), s, tick(), k);
         }
     }
     return this;

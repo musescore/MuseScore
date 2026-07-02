@@ -28,7 +28,6 @@
 #include "rw/compat/compatutils.h"
 #include "style/style.h"
 
-#include "dom/audio.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/masterscore.h"
@@ -62,12 +61,11 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->m_audio = new Audio;
-            read400::TRead::read(score->m_audio, e, ctx);
+            e.skipCurrentElement();
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->m_playMode = PlayMode(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {
@@ -161,7 +159,7 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
             ctx.setScore(curScore);
 
-            s->linkMeasures(m);
+            Excerpt::linkMeasures(s, m);
             ex->setTracksMapping(ctx.tracks());
             m->addExcerpt(ex);
         } else if (tag == "name") {

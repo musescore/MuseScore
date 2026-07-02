@@ -33,6 +33,11 @@
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
+
+#include "engraving/editing/edittie.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -63,7 +68,7 @@ TEST_F(Engraving_LVTests, LV_Double_Notehead_test)
     score->inputState().setNoteEntryMode(true);
 
     // Add the First Note
-    score->cmdAddPitch(45, true, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 45, true, false);
 
     Measure* m = score->firstMeasure();
     Chord* c = m->findChord(Fraction(0, 1), 0);
@@ -71,14 +76,14 @@ TEST_F(Engraving_LVTests, LV_Double_Notehead_test)
 
     // Add a Laissez-Vibrer tie to the First Note
     score->select(c->upNote());
-    score->cmdToggleLaissezVib();
+    EditTie::cmdToggleLaissezVib(score);
 
     EXPECT_TRUE(c->upNote()->tieFor()->isLaissezVib());
     score->doLayout();
 
     // Add a Second Note
     NoteVal newNoteVal(71);
-    Note* second_note = score->addPitch(newNoteVal, true);
+    Note* second_note = NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, newNoteVal, true);
 
     // Check if there is a double notehead
     std::vector<Note*> tn = second_note->tiedNotes();

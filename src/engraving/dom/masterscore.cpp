@@ -24,6 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
@@ -386,37 +387,6 @@ void MasterScore::initAutomation()
 }
 
 //---------------------------------------------------------
-//   setPlaybackScore
-//---------------------------------------------------------
-
-void MasterScore::setPlaybackScore(Score* score)
-{
-    if (m_playbackScore == score) {
-        return;
-    }
-
-    m_playbackScore = score;
-    m_playbackSettingsLinks.clear();
-
-    if (!m_playbackScore) {
-        return;
-    }
-
-    for (Part* part : score->parts()) {
-        for (const auto& pair : part->instruments()) {
-            Instrument* instr = pair.second;
-            for (InstrChannel* ch : instr->channel()) {
-                InstrChannel* pChannel = playbackChannel(ch);
-                IF_ASSERT_FAILED(pChannel) {
-                    continue;
-                }
-                m_playbackSettingsLinks.emplace_back(pChannel, ch, /* excerpt */ true);
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   updateExpressive
 //    change patches to their expressive equivalent or vica versa, if possible
 //    This works only with MuseScore general soundfont
@@ -671,7 +641,8 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                EditKeySig::undoChangeKeySig(transactionManager()->currentOrDummyTransaction(), this, ks->staff(),
+                                                             e->tick(), ke);
                             } else {
                                 ee = e;
                             }

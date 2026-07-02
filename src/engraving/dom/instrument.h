@@ -205,33 +205,6 @@ private:
 };
 
 //---------------------------------------------------------
-//   PartChannelSettingsLink
-//---------------------------------------------------------
-
-class PartChannelSettingsLink final : private ChannelListener
-{
-public:
-    PartChannelSettingsLink() = default;
-    PartChannelSettingsLink(InstrChannel* main, InstrChannel* bound, bool excerpt);
-    PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
-    PartChannelSettingsLink(PartChannelSettingsLink&&);
-    PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
-    PartChannelSettingsLink& operator=(PartChannelSettingsLink&&);
-    ~PartChannelSettingsLink() {}
-
-    friend void swap(PartChannelSettingsLink&, PartChannelSettingsLink&);
-
-private:
-
-    static void applyProperty(InstrChannel::Prop p, const InstrChannel* from, InstrChannel* to);
-    void propertyChanged(InstrChannel::Prop p) override;
-
-    InstrChannel* m_main = nullptr;
-    InstrChannel* m_bound = nullptr;
-    bool m_excerpt = false;
-};
-
-//---------------------------------------------------------
 //   Trait
 //---------------------------------------------------------
 
