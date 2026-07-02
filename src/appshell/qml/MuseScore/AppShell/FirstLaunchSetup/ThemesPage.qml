@@ -78,6 +78,7 @@ Page {
             Layout.alignment: Qt.AlignCenter
 
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
+            themeCodes: model.highContrastEnabled ? model.highContrastThemeCodes : model.generalThemeCodes
             currentThemeCode: model.currentThemeCode
 
             spacing: 48

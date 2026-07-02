@@ -46,6 +46,7 @@ PreferencesPage {
             width: parent.width
 
             themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
+            themeCodes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemeCodes : appearanceModel.generalThemeCodes
             currentThemeCode: appearanceModel.currentThemeCode
             highContrastEnabled: appearanceModel.highContrastEnabled
             isFollowSystemThemeAvailable: appearanceModel.isFollowSystemThemeAvailable
