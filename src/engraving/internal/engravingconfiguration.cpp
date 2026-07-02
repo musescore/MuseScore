@@ -488,3 +488,13 @@ bool EngravingConfiguration::preferSameStringForTranspose() const
 void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameString*/)
 {
 }
+
+int EngravingConfiguration::maxScaledImageDim() const
+{
+    return m_maxScaledImageDim;
+}
+
+void EngravingConfiguration::setMaxScaledImageDim(int maxDim)
+{
+    m_maxScaledImageDim = maxDim;
+}
