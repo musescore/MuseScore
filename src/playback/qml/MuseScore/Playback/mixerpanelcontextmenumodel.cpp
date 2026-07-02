@@ -49,6 +49,7 @@ static TranslatableString mixerSectionTitle(MixerSectionType type)
     case MixerSectionType::Fader: return TranslatableString("playback", "Fader");
     case MixerSectionType::MuteAndSolo: return TranslatableString("playback", "Mute and solo");
     case MixerSectionType::Title: return TranslatableString("playback", "Name");
+    case MixerSectionType::UnMuteAndUnSolo: return TranslatableString("playback", "Unmute and Unsolo");
     case MixerSectionType::Unknown: break;
     }
 
@@ -121,6 +122,11 @@ bool MixerPanelContextMenuModel::titleSectionVisible() const
     return isSectionVisible(MixerSectionType::Title);
 }
 
+bool MixerPanelContextMenuModel::unMuteAndUnSoloSectionVisible() const
+{
+    return isSectionVisible(MixerSectionType::UnMuteAndUnSolo);
+}
+
 void MixerPanelContextMenuModel::load()
 {
     AbstractMenuModel::load();
@@ -149,6 +155,7 @@ void MixerPanelContextMenuModel::load()
         buildSectionVisibleItem(MixerSectionType::Labels),
         buildSectionVisibleItem(MixerSectionType::Sound),
         buildSectionVisibleItem(MixerSectionType::AudioFX),
+        buildSectionVisibleItem(MixerSectionType::UnMuteAndUnSolo),
     };
 
     for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
@@ -317,6 +324,9 @@ void MixerPanelContextMenuModel::emitMixerSectionVisibilityChanged(MixerSectionT
         break;
     case MixerSectionType::Title:
         emit titleSectionVisibleChanged();
+        break;
+    case MixerSectionType::UnMuteAndUnSolo:
+        emit unMuteAndUnSoloSectionVisibleChanged();
         break;
     case MixerSectionType::Unknown:
         break;

@@ -64,6 +64,7 @@ private:
     static const muse::ui::UiActionList s_loopBoundaryActions;
     static const muse::ui::UiActionList s_diagnosticActions;
     static const muse::ui::UiActionList s_onlineSoundsActions;
+    static const muse::ui::UiActionList s_mixerActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

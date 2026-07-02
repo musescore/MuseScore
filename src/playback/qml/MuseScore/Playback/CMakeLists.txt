@@ -74,6 +74,7 @@ qt_add_qml_module(playback_qml
         internal/SoundFlag/ParamsGridView.qml
         internal/VolumePressureMeter.qml
         internal/VolumeSlider.qml
+        internal/MixerUnMuteAndUnSoloSection.qml
         MixerPanel.qml
         NotationRegionsBeingProcessedView.qml
         OnlineSoundsStatusView.qml

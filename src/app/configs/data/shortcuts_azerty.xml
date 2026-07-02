@@ -865,6 +865,16 @@
     <seq>Ctrl+A</seq>
     </SC>
   <SC>
+      <key>unmute-all</key>
+      <seq>Ctrl+Shift+U</seq>
+      <autorepeat>0</autorepeat>
+      </SC>
+  <SC>
+      <key>unsolo-all</key>
+      <seq>Ctrl+Shift+L</seq>
+      <autorepeat>0</autorepeat>
+      </SC>
+  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     <seq>Enter</seq>
