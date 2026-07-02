@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,8 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/dom/system.h"
-#include "engraving/editing/editsystemlocks.h"
+#include "engraving/dom/page.h"
+#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -32,26 +32,26 @@
 
 using namespace mu::engraving;
 
-static const String SYSTEM_LOCKS_DATA_DIR("system_locks_data/");
+static const String PAGE_LOCKS_DATA_DIR("page_locks_data/");
 
-class Engraving_SystemLocksTests : public ::testing::Test
+class Engraving_PageLocksTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
+TEST_F(Engraving_PageLocksTests, readLocksFromFile)
 {
-    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
+    std::vector<const RangeLock*> locks = score->pageLocks()->allLocks();
     EXPECT_FALSE(locks.empty());
 
-    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        EXPECT_TRUE(mb->systemLock());
+    for (MeasureBase* mb = score->first()->next(); mb; mb = mb->next()) {
+        EXPECT_TRUE(mb->pageLock());
     }
 
-    for (System* sys : score->systems()) {
-        EXPECT_TRUE(sys->isLocked());
+    for (Page* page : score->pages()) {
+        EXPECT_TRUE(page->isLocked());
     }
 
     for (const RangeLock* lock : locks) {
@@ -65,49 +65,49 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
     delete score;
 }
 
-TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
+TEST_F(Engraving_PageLocksTests, lockMeasuresPerPage)
 {
-    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    const RangeLocks* systemLocks = score->systemLocks();
-    std::vector<const RangeLock*> allLocks = systemLocks->allLocks();
+    const RangeLocks* pagelocks = score->pageLocks();
+    std::vector<const RangeLock*> allLocks = pagelocks->allLocks();
     EXPECT_FALSE(allLocks.empty());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving page locks tests"));
     score->cmdSelectAll();
     score->endCmd();
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::addRemoveSystemLocks(tx, score, 0, false); // Remove all locks
+        EditPageLocks::addRemovePageLocks(tx, score, 0, false); // Remove all locks
     });
 
-    allLocks = systemLocks->allLocks();
+    allLocks = pagelocks->allLocks();
     EXPECT_TRUE(allLocks.empty());
 
-    std::vector<MeasureBase*> measuresAtSystemStart;
-    std::vector<MeasureBase*> measuresAtSystemEnd;
-    for (System* sys : score->systems()) {
-        measuresAtSystemStart.push_back(sys->first());
-        measuresAtSystemEnd.push_back(sys->last());
+    std::vector<MeasureBase*> measuresAtPageStart;
+    std::vector<MeasureBase*> measuresAtPageEnd;
+    for (Page* page : score->pages()) {
+        measuresAtPageStart.push_back(page->firstMeasureBase());
+        measuresAtPageEnd.push_back(page->lastMeasureBase());
     }
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::addRemoveSystemLocks(tx, score, 0, true); // Lock current layout
+        EditPageLocks::addRemovePageLocks(tx, score, 0, true); // Lock current layout
     });
 
-    for (MeasureBase* mb : measuresAtSystemStart) {
-        EXPECT_TRUE(mb->isStartOfSystemLock());
+    for (MeasureBase* mb : measuresAtPageStart) {
+        EXPECT_TRUE(mb->isStartOfPageLock());
     }
-    for (MeasureBase* mb : measuresAtSystemEnd) {
-        EXPECT_TRUE(mb->isEndOfSystemLock());
+    for (MeasureBase* mb : measuresAtPageEnd) {
+        EXPECT_TRUE(mb->isEndOfPageLock());
     }
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::addRemoveSystemLocks(tx, score, 4, false); // Add locks every 4 measures
+        EditPageLocks::addRemovePageLocks(tx, score, 4, false); // Add locks every 4 measures
     });
 
-    allLocks = systemLocks->allLocks();
+    allLocks = pagelocks->allLocks();
     for (const RangeLock* lock : allLocks) {
         int measureCount = 0;
         for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->next()) {
@@ -119,9 +119,9 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
     delete score;
 }
 
-TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
+TEST_F(Engraving_PageLocksTests, makeIntoPage)
 {
-    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     EXPECT_TRUE(score);
 
     MeasureBase* thirdMeasure = score->first()->next()->next();
@@ -132,22 +132,22 @@ TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::makeIntoSystem(tx, score, thirdMeasure, sixthMeasure);
+        EditPageLocks::makeIntoPage(tx, score, thirdMeasure, sixthMeasure);
     });
 
-    EXPECT_TRUE(thirdMeasure->prev()->isEndOfSystemLock());
+    EXPECT_TRUE(thirdMeasure->prev()->isEndOfPageLock());
 
-    EXPECT_TRUE(thirdMeasure->isStartOfSystemLock());
-    EXPECT_TRUE(sixthMeasure->isEndOfSystemLock());
+    EXPECT_TRUE(thirdMeasure->isStartOfPageLock());
+    EXPECT_TRUE(sixthMeasure->isEndOfPageLock());
 
-    EXPECT_TRUE(sixthMeasure->next()->isStartOfSystemLock());
+    EXPECT_TRUE(sixthMeasure->next()->isStartOfPageLock());
 
     delete score;
 }
 
-TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
+TEST_F(Engraving_PageLocksTests, moveToPreviousNext)
 {
-    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     EXPECT_TRUE(score);
 
     MeasureBase* thirdMeasure = score->first()->next()->next();
@@ -158,57 +158,57 @@ TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::moveMeasureToPrevSystem(tx, score, sixthMeasure);
+        EditPageLocks::moveMeasuresToPrevPage(tx, score, sixthMeasure, sixthMeasure);
     });
 
-    EXPECT_TRUE(sixthMeasure->isEndOfSystemLock());
-    EXPECT_TRUE(sixthMeasure->next()->isStartOfSystemLock());
+    EXPECT_TRUE(sixthMeasure->isEndOfPageLock());
+    EXPECT_TRUE(sixthMeasure->next()->isStartOfPageLock());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::moveMeasureToNextSystem(tx, score, thirdMeasure);
+        EditPageLocks::moveMeasuresToNextPage(tx, score, thirdMeasure, thirdMeasure);
     });
 
-    EXPECT_TRUE(thirdMeasure->prev()->isEndOfSystemLock());
-    EXPECT_TRUE(thirdMeasure->isStartOfSystemLock());
+    EXPECT_TRUE(thirdMeasure->prev()->isEndOfPageLock());
+    EXPECT_TRUE(thirdMeasure->isStartOfPageLock());
 
     delete score;
 }
 
-TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
+TEST_F(Engraving_PageLocksTests, togglePageLock)
 {
-    MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
+    MasterScore* score = ScoreRW::readScore(PAGE_LOCKS_DATA_DIR + u"page_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    EXPECT_TRUE(score->systems().front()->isLocked());
+    EXPECT_TRUE(score->pages().front()->isLocked());
 
-    score->select(score->first(), SelectType::RANGE);
-
-    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
-    });
-
-    EXPECT_FALSE(score->systems().front()->isLocked());
+    score->select(score->firstMeasure(), SelectType::RANGE);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
+        EditPageLocks::togglePageLock(tx, score, score->selection().selectedPages());
     });
 
-    EXPECT_TRUE(score->systems().front()->isLocked());
+    EXPECT_FALSE(score->pages().front()->isLocked());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::toggleScoreLock(tx, score);
+        EditPageLocks::togglePageLock(tx, score, score->selection().selectedPages());
     });
 
-    for (System* sys : score->systems()) {
-        EXPECT_FALSE(sys->isLocked());
+    EXPECT_TRUE(score->pages().front()->isLocked());
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditPageLocks::toggleScoreLock(tx, score);
+    });
+
+    for (Page* page : score->pages()) {
+        EXPECT_FALSE(page->isLocked());
     }
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditSystemLocks::toggleScoreLock(tx, score);
+        EditPageLocks::toggleScoreLock(tx, score);
     });
 
-    for (System* sys : score->systems()) {
-        EXPECT_TRUE(sys->isLocked());
+    for (Page* page : score->pages()) {
+        EXPECT_TRUE(page->isLocked());
     }
 
     delete score;

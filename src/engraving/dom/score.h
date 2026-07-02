@@ -65,7 +65,7 @@
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"
-#include "systemlock.h"
+#include "rangelock.h"
 #include "tuplet.h"
 
 namespace mu::engraving {
@@ -677,6 +677,7 @@ public:
     Fraction pos();
     Measure* tick2measure(const Fraction& tick) const;
     Measure* tick2measureMM(const Fraction& tick) const;
+    Measure* measureAtTick(const Fraction& tick) const;
     MeasureBase* tick2measureBase(const Fraction& tick) const;
     Segment* tick2segment(const Fraction& tick, bool first, SegmentType st, bool useMMrest = false) const;
     Segment* tick2segment(const Fraction& tick) const;
@@ -1054,10 +1055,14 @@ public:
 
     void autoUpdateSpatium();
 
-    const SystemLocks* systemLocks() const { return &m_systemLocks; }
-    void addSystemLock(const SystemLock* lock);
-    void removeSystemLock(const SystemLock* lock);
+    const RangeLocks* systemLocks() const { return &m_systemLocks; }
+    void addSystemLock(const RangeLock* lock);
+    void removeSystemLock(const RangeLock* lock);
     void clearSystemLocks() { m_systemLocks.clear(); }
+
+    const RangeLocks* pageLocks() const { return &m_pageLocks; }
+    void addPageLock(const RangeLock* lock);
+    void removePageLock(const RangeLock* lock);
 
     void rebuildFretBox();
 
@@ -1173,7 +1178,9 @@ private:
     std::vector<Part*> m_parts;
     std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
-    SystemLocks m_systemLocks;
+    RangeLocks m_systemLocks;
+
+    RangeLocks m_pageLocks;
 
     SpannerMap m_spanner;
     std::set<Spanner*> m_unmanagedSpanner;

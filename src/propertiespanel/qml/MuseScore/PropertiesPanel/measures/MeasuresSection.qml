@@ -29,6 +29,7 @@ import Muse.Ui
 import MuseScore.PropertiesPanel
 
 import "../common"
+import "."
 
 PropertiesPanelSection {
     id: root
@@ -83,122 +84,6 @@ PropertiesPanelSection {
                 onClicked: {
                     root.model?.deleteSelectedMeasures?.()
                 }
-            }
-        }
-
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                width: parent.width
-                visible: root.model ? root.model.scoreIsInPageView : false
-                horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("propertiespanel", "Move to system")
-            }
-
-            Row {
-                id: moveSystemLayout
-
-                visible: root.model ? root.model.scoreIsInPageView : false
-
-                width: parent.width
-                spacing: 4
-
-                FlatButton {
-                    id: upSystem
-
-                    width: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
-
-                    navigation.panel: root.navigationPanel
-                    navigation.name: "SystemUp"
-                    navigation.row: deleteButton.navigation.row + 1
-
-                    orientation: Qt.Horizontal
-                    icon: IconCode.ARROW_UP
-                    text: qsTrc("propertiespanel", "Previous")
-
-                    toolTipTitle: qsTrc("propertiespanel", "Move measure(s) to previous system")
-                    toolTipShortcut: root.model?.shortcutMoveMeasureUp ?? ""
-
-                    onClicked: {
-                        root.model?.moveMeasureUp?.()
-                    }
-                }
-
-                FlatButton {
-                    id: downSystem
-
-                    width: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
-
-                    navigation.panel: root.navigationPanel
-                    navigation.name: "SystemDown"
-                    navigation.row: upSystem.navigation.row + 1
-
-                    orientation: Qt.Horizontal
-                    icon: IconCode.ARROW_DOWN
-                    text: qsTrc("propertiespanel", "Next")
-
-                    toolTipTitle: qsTrc("propertiespanel", "Move measure(s) to next system")
-                    toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
-
-                    onClicked: {
-                        root.model?.moveMeasureDown?.()
-                    }
-                }
-            }
-        }
-
-        FlatButton {
-            id: toggleSystemLock
-            visible: root.model ? root.model.scoreIsInPageView : false
-            
-            width: parent.width
-
-            navigation.panel: root.navigationPanel
-            navigation.name: "SystemLock"
-            navigation.row: downSystem.navigation.row + 1
-
-            orientation: Qt.Horizontal
-            icon: root.model && root.model.allSystemsAreLocked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
-            text: root.model ? (root.model.allSystemsAreLocked ? root.model.systemCount > 1 ? qsTrc("propertiespanel", "Unlock selected systems")
-                                                                                            : qsTrc("propertiespanel", "Unlock selected system")
-                                                               : root.model.systemCount > 1 ? qsTrc("propertiespanel", "Lock selected systems")
-                                                                                            : qsTrc("propertiespanel", "Lock selected system"))
-                             : ""
-
-            toolTipTitle: qsTrc("propertiespanel", "Lock/unlock selected system(s)")
-            toolTipDescription: qsTrc("propertiespanel", "Keep measures on the selected system(s) together and prevent them from reflowing to the next system")
-            toolTipShortcut: root.model ? root.model.shortcutToggleSystemLock : ""
-
-            accentButton: root.model ? root.model.allSystemsAreLocked : false
-
-            onClicked: {
-                root.model?.toggleSystemLock?.()
-            }
-        }
-
-        FlatButton {
-            id: makeIntoOneSystem
-            visible: root.model ? root.model.scoreIsInPageView : false
-            enabled: root.model ? root.model.isMakeIntoSystemAvailable : false
-
-            width: parent.width
-
-            navigation.panel: root.navigationPanel
-            navigation.name: "MakeSystem"
-            navigation.row: toggleSystemLock.navigation.row + 1
-
-            orientation: Qt.Horizontal
-            //icon: TODO maybe
-            text: qsTrc("propertiespanel", "Create system from selection")
-
-            toolTipTitle: qsTrc("propertiespanel", "Create system from selection")
-            toolTipDescription: qsTrc("propertiespanel", "Create a system containing only the selected measure(s)")
-            toolTipShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
-
-            onClicked: {
-                root.model?.makeIntoSystem?.()
             }
         }
     }

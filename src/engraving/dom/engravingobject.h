@@ -127,6 +127,7 @@ class Ornament;
 class Ottava;
 class OttavaSegment;
 class Page;
+class PageLockIndicator;
 class PalmMute;
 class PalmMuteSegment;
 class Parenthesis;
@@ -437,6 +438,7 @@ public:
     CONVERT(FretDiagram,   FRET_DIAGRAM)
     CONVERT(HarpPedalDiagram, HARP_DIAGRAM)
     CONVERT(Page,          PAGE)
+    CONVERT(PageLockIndicator, PAGE_LOCK_INDICATOR)
     CONVERT(Text,          TEXT)
     CONVERT(MeasureNumber, MEASURE_NUMBER)
     CONVERT(MMRestRange,   MMREST_RANGE)
@@ -584,7 +586,7 @@ public:
         return isArticulationFamily() || isFermata();
     }
 
-    bool isIndicatorIcon() const { return isSystemLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
 };
 
 //---------------------------------------------------
@@ -766,6 +768,7 @@ CONVERT(ChordLine)
 CONVERT(FretDiagram)
 CONVERT(HarpPedalDiagram)
 CONVERT(Page)
+CONVERT(PageLockIndicator)
 CONVERT(SystemText)
 CONVERT(BracketItem)
 CONVERT(Staff)

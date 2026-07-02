@@ -118,22 +118,31 @@ Measure* Score::tick2measureMM(const Fraction& t) const
 }
 
 //---------------------------------------------------------
-//   tick2measureBase
+//   measureAtTick
 //---------------------------------------------------------
 
-MeasureBase* Score::tick2measureBase(const Fraction& tick) const
+Measure* Score::measureAtTick(const Fraction& tick) const
 {
     std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
     for (MeasureBase* mb : mbList) {
-        Fraction st = mb->tick();
-        Fraction l  = mb->ticks();
-        if (tick >= st && tick < (st + l)) {
-            return mb;
+        if (mb->isMeasure()) {
+            return toMeasure(mb);
         }
     }
-
-    LOGD("tick2measureBase %d not found", tick.ticks());
+    LOGD("measureAtTick %d not found", tick.ticks());
     return nullptr;
+}
+
+MeasureBase* Score::tick2measureBase(const Fraction& tick) const
+{
+    if (tick == Fraction(-1, 1)) {   // special number
+        return m_measures.last();
+    }
+    if (tick <= Fraction(0, 1)) {
+        return m_measures.first();
+    }
+
+    return m_measures.measureBaseByTick(tick.ticks());
 }
 
 //---------------------------------------------------------

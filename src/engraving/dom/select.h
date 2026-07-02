@@ -132,6 +132,7 @@ public:
     MeasureBase* startMeasureBase() const;
     MeasureBase* endMeasureBase() const;
     std::vector<System*> selectedSystems() const;
+    std::vector<Page*> selectedPages() const;
     void update();
     void updateState();
     void dump();

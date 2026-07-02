@@ -422,6 +422,7 @@ enum class ElementType {
     TAB_DURATION_SYMBOL   = int(mu::engraving::ElementType::TAB_DURATION_SYMBOL),
     FSYMBOL               = int(mu::engraving::ElementType::FSYMBOL),
     PAGE                  = int(mu::engraving::ElementType::PAGE),
+    PAGE_LOCK_INDICATOR   = int(mu::engraving::ElementType::PAGE_LOCK_INDICATOR),
     HAIRPIN               = int(mu::engraving::ElementType::HAIRPIN),
     OTTAVA                = int(mu::engraving::ElementType::OTTAVA),
     PEDAL                 = int(mu::engraving::ElementType::PEDAL),

@@ -902,6 +902,12 @@ EngravingItem* Score::nextElement()
             e = toSystemLockIndicator(e)->systemLock()->endMB();
             continue;
         }
+        case ElementType::PAGE_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toPageLockIndicator(e)->pageLock()->endMB();
+            continue;
+        }
         case ElementType::SOUND_FLAG:
             if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
                 return parent;
@@ -1149,6 +1155,12 @@ EngravingItem* Score::prevElement()
         {
             staffId = 0;
             e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
+        }
+        case ElementType::PAGE_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toPageLockIndicator(e)->pageLock()->endMB();
             continue;
         }
         case ElementType::HARMONY: {
