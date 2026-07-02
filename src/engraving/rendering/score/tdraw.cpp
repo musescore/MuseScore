@@ -2062,13 +2062,16 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
             } else {
                 s = item->size() * DPMM;
             }
-            if (opt.isPrinting && !MScore::svgPrinting) {
-                // use original image size for printing, but not for svg for reasonable file size.
+            Transform t = painter->worldTransform();
+            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
+            int maxDim = item->configuration()->maxScaledImageDim();
+            bool useDirectDraw = (opt.isPrinting && !MScore::svgPrinting)
+                                 || (maxDim > 0 && std::max(ss.width(), ss.height()) > maxDim);
+
+            if (useDirectDraw) {
                 painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
                 painter->drawPixmap(PointF(0, 0), *item->rasterImage());
             } else {
-                Transform t = painter->worldTransform();
-                muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
