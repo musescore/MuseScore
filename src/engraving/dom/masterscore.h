@@ -186,9 +186,6 @@ public:
 
     muse::Ret sanityCheck();
 
-    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
-    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
-
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
 
@@ -235,7 +232,6 @@ private:
     int m_midiPortCount = 0; // A count of ALSA midi out ports
     std::vector<MidiMapping> m_midiMapping;
     bool m_isSimpleMidiMapping = false; // midi mapping is simple if all ports and channels don't decrease and don't have gaps
-    double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
 
