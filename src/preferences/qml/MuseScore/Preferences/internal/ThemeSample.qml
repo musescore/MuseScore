@@ -25,7 +25,7 @@ import Muse.UiComponents
 Rectangle {
     id: root
 
-    property var theme
+    required property var theme
 
     signal clicked
 

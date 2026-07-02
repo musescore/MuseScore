@@ -29,10 +29,11 @@ import "internal"
 ListView {
     id: root
 
-    property alias themes: root.model
+    required property var themes // re-read on every color edit, used to paint the samples
+    property alias themeCodes: root.model // does not change on color edits, so that the delegates aren't destroyed & re-created
     property string currentThemeCode
 
-    currentIndex: model.findIndex((theme) => theme.codeKey === currentThemeCode)
+    currentIndex: themeCodes.indexOf(currentThemeCode)
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "ThemeSamplesList"
@@ -70,26 +71,28 @@ ListView {
 
         spacing: 16
 
+        readonly property var themeData: root.themes.find((theme) => theme.codeKey === modelData)
+
         ThemeSample {
-            theme: modelData
+            theme: parent.themeData ?? ui.theme
 
             onClicked: {
-                root.themeChangeRequested(modelData.codeKey)
+                root.themeChangeRequested(modelData)
             }
         }
 
         RoundedRadioButton {
             width: parent.width
-            checked: root.currentThemeCode === modelData.codeKey
-            text: modelData.title
+            checked: root.currentThemeCode === modelData
+            text: parent.themeData ? parent.themeData.title : ""
 
             navigation.name: text
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRow
-            navigation.column: root.navigationColumnStart + model.index
+            navigation.column: root.navigationColumnStart + index
 
             onToggled: {
-                root.themeChangeRequested(modelData.codeKey)
+                root.themeChangeRequested(modelData)
             }
         }
     }

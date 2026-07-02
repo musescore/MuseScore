@@ -36,6 +36,7 @@ BaseSection {
     property alias isFollowSystemTheme: followSystemThemeCheckBox.checked
 
     property alias themes: themeSamplesList.themes
+    property alias themeCodes: themeSamplesList.themeCodes
     property alias currentThemeCode: themeSamplesList.currentThemeCode
 
     property alias accentColors: accentColorsSection.colors
