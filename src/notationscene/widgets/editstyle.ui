@@ -69,6 +69,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Watermark</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Measure numbers</string>
        </property>
       </item>
@@ -3815,6 +3820,40 @@
             </item>
            </layout>
           </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageWatermark">
+       <layout class="QVBoxLayout" name="verticalLayout_Watermark1">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="pageWatermark" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_Watermark2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
          </widget>
         </item>
        </layout>

@@ -50,6 +50,7 @@ public:
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
         BEATS_COLORS,
+        APPLY_WATERMARK,
         WAIT_FOR_COMPLETION,
 
         WITH_AUDIO,
