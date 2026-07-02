@@ -29,14 +29,19 @@ bool PlaybackControllerStub::isPlayAllowed() const
     return false;
 }
 
-muse::async::Notification PlaybackControllerStub::isPlayAllowedChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::isPlayAllowedChanged() const
 {
-    return muse::async::Notification();
+    return {};
 }
 
 bool PlaybackControllerStub::isPlaying() const
 {
     return false;
+}
+
+muse::async::Channel<bool> PlaybackControllerStub::isPlayingChanged() const
+{
+    return {};
 }
 
 bool PlaybackControllerStub::isPlaybackInited() const

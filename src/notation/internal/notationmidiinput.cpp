@@ -30,6 +30,8 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/factory.h"
 
+#include "playback/playbackcommands.h"
+
 #include "notationtypes.h"
 
 #include "defer.h"
@@ -463,7 +465,7 @@ void NotationMidiInput::enableMetronome()
         return;
     }
 
-    dispatcher()->dispatch("metronome");
+    commandsDispatcher()->dispatch(mu::playback::METRONOME_TOGGLE_COMMAND);
     m_shouldDisableMetronome = true;
 }
 
@@ -473,7 +475,7 @@ void NotationMidiInput::disableMetronome()
         return;
     }
 
-    dispatcher()->dispatch("metronome");
+    commandsDispatcher()->dispatch(mu::playback::METRONOME_TOGGLE_COMMAND);
 
     m_shouldDisableMetronome = false;
 }

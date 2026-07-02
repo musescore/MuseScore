@@ -29,9 +29,10 @@ class PlaybackControllerStub : public IPlaybackController
 {
 public:
     bool isPlayAllowed() const override;
-    muse::async::Notification isPlayAllowedChanged() const override;
+    muse::async::Channel<bool> isPlayAllowedChanged() const override;
 
     bool isPlaying() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
 
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;

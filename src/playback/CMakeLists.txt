@@ -33,8 +33,6 @@ target_sources(playback PRIVATE
     internal/playbackcontroller.h
     internal/onlinesoundscontroller.cpp
     internal/onlinesoundscontroller.h
-    internal/playbackuiactions.cpp
-    internal/playbackuiactions.h
     internal/playbackcommandsregister.cpp
     internal/playbackcommandsregister.h
     internal/playbackcommandsstate.cpp

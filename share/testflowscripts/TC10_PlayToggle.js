@@ -30,7 +30,11 @@ var testCase = {
     steps: [
         {name: "PlayToggle", func: function() {
             for (let i = 0; i < 1000; i++) {
-                api.dispatcher.dispatch("play")
+                if (i % 2 === 0) {
+                    api.dispatcher.dispatch("command://playback/play")
+                } else {
+                    api.dispatcher.dispatch("command://playback/pause")
+                }
                 api.testflow.sleep(100)
             }
         }},
