@@ -221,6 +221,22 @@ public:
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
+    enum class FingeringValue : int {
+        NONE = 0,
+        ONE,
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        THUMB_UPPER = 6, //T
+        THUMB_LOWER = 7, //t
+        PULGAR_UPPER = 8, //P
+        PULGAR_LOWER = 9 //p
+    };
+
+    static int fingeringFromChar(Char c);
+    static String fingeringToString(int v);
+
     bool showFingering() const { return m_showFingering; }
     void setShowFingering(bool v) { m_showFingering = v; }
     const std::vector<int>& fingering() const { return m_fingering; }
