@@ -430,16 +430,12 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     slurTieShape.translate(-slurTiePos);
 
     // Use the mask's bbox to break the slur/tie only once, regardless of the mask elements in between:
-    Shape maskBbox = mask.bbox();
+    RectF maskBbox = mask.bbox();
 
     // Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
     // or not masked at all, so we extend the mask vertically to encompass the slur/tie's full height):
     maskBbox.adjust(0.0, slurTieShape.top() - mask.top(), 0.0, slurTieShape.bottom() - mask.bottom());
     maskBbox.pad(maskPadding);
-
-    // If tiny tie/slur bits are left, just remove them:
-    const double minFragmentLength = 0.5 * spatium;
-    cleanupMask(slurTieShape, maskBbox, minFragmentLength);
 
     slurTieSegment->mutldata()->setMask(maskBbox);
 }
