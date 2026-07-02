@@ -100,7 +100,7 @@ Grid {
             navigation.column: root.navigationColumnOf(colorIndex)
             navigation.accessible.name: Utils.accessibleColorDescription(accentColor)
 
-            onClicked: {
+            onToggled: {
                 root.accentColorChangeRequested(colorIndex)
             }
 
