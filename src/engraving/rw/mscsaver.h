@@ -29,6 +29,7 @@
 
 #include "../iengravingconfiguration.h"
 #include "../infrastructure/mscwriter.h"
+#include "../rendering/iscorerenderer.h"
 
 namespace muse::draw {
 class Pixmap;
@@ -45,6 +46,7 @@ class MscSaver : public muse::Contextable
 {
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
     muse::GlobalInject<IEngravingConfiguration> configuration;
+    muse::GlobalInject<rendering::IScoreRenderer> scoreRenderer;
 public:
     MscSaver(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}

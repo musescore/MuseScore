@@ -551,7 +551,6 @@ public:
     void setShowAnchors(const ShowAnchors& showAnchors);
     const ShowAnchors& showAnchors() const { return m_showAnchors; }
 
-    void print(muse::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     std::set<ChordRest*> getSelectedChordRests() const;
     void getSelectedStartEndChordRests(ChordRest*& cr1, ChordRest*& cr2) const;
