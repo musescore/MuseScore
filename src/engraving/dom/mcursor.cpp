@@ -182,4 +182,17 @@ void MCursor::addPart(const String& instrument)
     m_score->appendPart(part);
     m_score->insertStaff(staff, 0);
 }
+
+//---------------------------------------------------------
+//   currentElement
+//   returns the element @ cursor position if
+//   a valid track & tick were set
+//---------------------------------------------------------
+
+EngravingItem* MCursor::currentElement() const
+{
+    auto measure = m_score->tick2measure(m_tick);
+    auto seg = measure->getSegment(SegmentType::ChordRest, m_tick);
+    return seg && seg->element(m_track) ? seg->element(m_track) : nullptr;
+}
 }
