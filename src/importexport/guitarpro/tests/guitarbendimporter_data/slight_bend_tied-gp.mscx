@@ -182,7 +182,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>S_S</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -275,7 +275,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>e_e</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
