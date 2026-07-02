@@ -171,7 +171,7 @@ int Location::track(const EngravingItem* e)
         const MeasureBase* mb = e->findMeasureBase();
         if (mb && !mb->isMeasure()) {
             // Such elements are written in the first staff,
-            // see writeMeasure() in scorefile.cpp
+            // see writeMeasure() in rw/write/measurewrite.cpp
             track = 0;
         }
     }

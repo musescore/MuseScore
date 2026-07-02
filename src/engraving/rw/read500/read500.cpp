@@ -242,7 +242,7 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
             ctx.setScore(curScore);
 
-            s->linkMeasures(m);
+            Excerpt::linkMeasures(s, m);
             ex->setTracksMapping(ctx.tracks());
             m->addExcerpt(ex);
         } else if (tag == "name") {

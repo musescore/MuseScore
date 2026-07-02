@@ -28,6 +28,8 @@
 #include "editing/editsystemlocks.h"
 #include "editing/transaction/transaction.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 static void changeChordStyle(Score* score)
@@ -159,4 +161,30 @@ void ChangeStyleValues::flip()
     if (styleChanged) {
         m_score->styleChanged();
     }
+}
+
+//---------------------------------------------------------
+//   EditStyle
+//---------------------------------------------------------
+
+bool EditStyle::loadStyle(Transaction& tx, Score* score, muse::io::IODevice& dev, bool ign, bool overlap)
+{
+    TRACEFUNC;
+
+    if (!dev.open(muse::io::IODevice::ReadOnly)) {
+        LOGE() << "The style data is not available.";
+        return false;
+    }
+
+    bool success = false;
+    MStyle st = score->style();
+    if (st.read(&dev, ign)) {
+        tx.push(new ChangeStyle(score, st, overlap));
+        success = true;
+    } else {
+        LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
+    }
+
+    dev.close();
+    return success;
 }

@@ -361,7 +361,6 @@ public:
     void cmdRemoveStaff(staff_idx_t staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
-    void linkMeasures(Score* score);
     void setResetAutoplace() { m_resetAutoplace = true; }
     void setResetCrossBeams() { m_resetCrossBeams = true; }
 
@@ -629,8 +628,6 @@ public:
     void resetStyleValues(const StyleIdSet& styleIdSet);
 
     void setStyle(const MStyle& s, const bool overlap = false);
-    bool loadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
-    bool saveStyle(const String&);
 
     TranslatableString getTextStyleUserName(TextStyleType tid) const;
 
