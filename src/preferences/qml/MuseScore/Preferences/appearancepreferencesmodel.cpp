@@ -46,9 +46,17 @@ void AppearancePreferencesModel::init()
         emit isFollowSystemThemeChanged();
     });
 
+    m_lastHighContrast = highContrastEnabled();
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
         emit foregroundColorChanged();
+
+        bool hc = highContrastEnabled();
+        if (hc != m_lastHighContrast) {
+            m_lastHighContrast = hc;
+            emit highContrastEnabledChanged();
+        }
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -101,6 +109,22 @@ void AppearancePreferencesModel::setFollowSystemTheme(bool enabled)
 bool AppearancePreferencesModel::highContrastEnabled() const
 {
     return uiConfiguration()->isHighContrast();
+}
+
+QStringList AppearancePreferencesModel::generalThemeCodes() const
+{
+    return {
+        QString::fromStdString(LIGHT_THEME_CODE),
+        QString::fromStdString(DARK_THEME_CODE)
+    };
+}
+
+QStringList AppearancePreferencesModel::highContrastThemeCodes() const
+{
+    return {
+        QString::fromStdString(HIGH_CONTRAST_WHITE_THEME_CODE),
+        QString::fromStdString(HIGH_CONTRAST_BLACK_THEME_CODE)
+    };
 }
 
 QVariantList AppearancePreferencesModel::generalThemes() const
