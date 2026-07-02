@@ -48,6 +48,10 @@ public:
     Chord* chord() const { return toChord(explicitParent()); }
     PointF smuflAnchor() const;
 
+    PropertyValue getProperty(Pid id) const override;
+    PropertyValue propertyDefault(Pid id) const override;
+    Color color() const override;
+
     //! @p index: the number of flags (positive: upwards, negative: downwards)
     //! @p straight: whether to use straight flags
     static SymId symIdForHookIndex(int index, bool straight);
