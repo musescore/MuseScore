@@ -379,10 +379,6 @@ public:
     void cmdAddGrace(NoteType, int);
     void cmdToggleLayoutBreak(LayoutBreakType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
-    ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
-    ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
-    ChordRest* upStaff(ChordRest* cr);
-    ChordRest* downStaff(ChordRest* cr);
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
     void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
@@ -855,14 +851,6 @@ public:
 
     std::vector<staff_idx_t> uniqueStaves() const;
 
-    EngravingItem* upAlt(EngravingItem*);
-    Note* upAltCtrl(Note*) const;
-    EngravingItem* downAlt(EngravingItem*);
-    Note* downAltCtrl(Note*) const;
-
-    EngravingItem* firstElement(bool frame = true);
-    EngravingItem* lastElement(bool frame = true);
-
     size_t nmeasures() const;
 
     bool hasHarmonies() const;
@@ -880,7 +868,6 @@ public:
     void cmdRemoveEmptyTrailingMeasures();
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
-    ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
     muse::Ret sanityCheckLocal();
 

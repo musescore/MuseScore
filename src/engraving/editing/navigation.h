@@ -28,6 +28,7 @@ namespace mu::engraving {
 class ChordRest;
 class EngravingItem;
 class Lyrics;
+class Note;
 class Score;
 class Segment;
 
@@ -47,5 +48,17 @@ public:
     static Lyrics* nextLyrics(const Lyrics* lyrics);
     static EngravingItem* move(Score* score, const String& cmd);
     static EngravingItem* selectMove(Score* score, const String& cmd);
+
+    static EngravingItem* chordNoteAbove(Score* score, EngravingItem* element);
+    static EngravingItem* chordNoteBelow(Score* score, EngravingItem* element);
+    static Note* topNoteInChord(Note* note);
+    static Note* bottomNoteInChord(Note* note);
+    static EngravingItem* firstElement(Score* score, bool frame = true);
+    static EngravingItem* lastElement(Score* score, bool frame = true);
+    static ChordRest* nextMeasure(Score* score, ChordRest* element, bool selectBehavior = false, bool mmRest = false);
+    static ChordRest* prevMeasure(Score* score, ChordRest* element, bool mmRest = false);
+    static ChordRest* upStaff(ChordRest* cr);
+    static ChordRest* downStaff(Score* score, ChordRest* cr);
+    static ChordRest* topStaff(Score* score, ChordRest* cr = nullptr);
 };
 }

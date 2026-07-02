@@ -163,7 +163,7 @@ bool SlurSegment::edit(EditData& ed)
                     sl->undoSetIncoming(false);
                 }
                 if (ctrlMod) {
-                    cr = score()->prevMeasure(cr, true);
+                    cr = Navigation::prevMeasure(score(), cr, true);
                 } else {
                     cr = Navigation::prevChordRest(e, options);
                 }
@@ -189,7 +189,7 @@ bool SlurSegment::edit(EditData& ed)
                     sl->undoSetOutgoing(false);
                 }
                 if (ctrlMod) {
-                    cr = score()->nextMeasure(cr, false, true);
+                    cr = Navigation::nextMeasure(score(), cr, false, true);
                 } else {
                     cr = Navigation::nextChordRest(e, options);
                 }

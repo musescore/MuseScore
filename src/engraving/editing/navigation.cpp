@@ -306,7 +306,7 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
 }
 
 //---------------------------------------------------------
-//   upAlt
+//   chordNoteAbove
 //    element: Note, Rest, MMRest, or MeasureRepeat
 //    return: Note, Rest, MMRest, or MeasureRepeat
 //
@@ -314,11 +314,11 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
 //    move to previous track if at top of chord
 //---------------------------------------------------------
 
-EngravingItem* Score::upAlt(EngravingItem* element)
+EngravingItem* Navigation::chordNoteAbove(Score* score, EngravingItem* element)
 {
     EngravingItem* re = 0;
     if (element->isRestFamily()) {
-        re = prevTrack(toRest(element));
+        re = score->prevTrack(toRest(element));
     } else if (element->isNote()) {
         Note* note = toNote(element);
         Chord* chord = note->chord();
@@ -328,7 +328,7 @@ EngravingItem* Score::upAlt(EngravingItem* element)
         if (i != notes.end()) {
             re = *i;
         } else {
-            re = prevTrack(chord);
+            re = score->prevTrack(chord);
             if (re->track() == chord->track()) {
                 re = element;
             }
@@ -344,26 +344,25 @@ EngravingItem* Score::upAlt(EngravingItem* element)
 }
 
 //---------------------------------------------------------
-//   upAltCtrl
-//    select top note in chord
+//   topNoteInChord
 //---------------------------------------------------------
 
-Note* Score::upAltCtrl(Note* note) const
+Note* Navigation::topNoteInChord(Note* note)
 {
     return note->chord()->upNote();
 }
 
 //---------------------------------------------------------
-//   downAlt
+//   chordNoteBelow
 //    return next lower pitched note in chord
 //    move to next track if at bottom of chord
 //---------------------------------------------------------
 
-EngravingItem* Score::downAlt(EngravingItem* element)
+EngravingItem* Navigation::chordNoteBelow(Score* score, EngravingItem* element)
 {
     EngravingItem* re = 0;
     if (element->isRestFamily()) {
-        re = nextTrack(toRest(element));
+        re = score->nextTrack(toRest(element));
     } else if (element->isNote()) {
         Note* note   = toNote(element);
         Chord* chord = note->chord();
@@ -373,7 +372,7 @@ EngravingItem* Score::downAlt(EngravingItem* element)
             --i;
             re = *i;
         } else {
-            re = nextTrack(chord);
+            re = score->nextTrack(chord);
             if (re->track() == chord->track()) {
                 re = element;
             }
@@ -389,11 +388,10 @@ EngravingItem* Score::downAlt(EngravingItem* element)
 }
 
 //---------------------------------------------------------
-//   downAltCtrl
-//    niedrigste Note in Chord selektieren
+//   bottomNoteInChord
 //---------------------------------------------------------
 
-Note* Score::downAltCtrl(Note* note) const
+Note* Navigation::bottomNoteInChord(Note* note)
 {
     return note->chord()->downNote();
 }
@@ -402,15 +400,15 @@ Note* Score::downAltCtrl(Note* note) const
 //   firstElement
 //---------------------------------------------------------
 
-EngravingItem* Score::firstElement(bool frame)
+EngravingItem* Navigation::firstElement(Score* score, bool frame)
 {
     if (frame) {
-        MeasureBase* mb = measures()->first();
+        MeasureBase* mb = score->measures()->first();
         if (mb && mb->isBox()) {
             return mb;
         }
     }
-    Segment* s = firstSegmentMM(SegmentType::All);
+    Segment* s = score->firstSegmentMM(SegmentType::All);
     return s ? s->element(0) : nullptr;
 }
 
@@ -418,10 +416,10 @@ EngravingItem* Score::firstElement(bool frame)
 //   lastElement
 //---------------------------------------------------------
 
-EngravingItem* Score::lastElement(bool frame)
+EngravingItem* Navigation::lastElement(Score* score, bool frame)
 {
     if (frame) {
-        MeasureBase* mb = measures()->last();
+        MeasureBase* mb = score->measures()->last();
         if (mb && mb->isBox()) {
             auto boxChildren = toChildPairsSet(mb);
             if (!boxChildren.empty()) {
@@ -431,12 +429,12 @@ EngravingItem* Score::lastElement(bool frame)
         }
     }
     EngravingItem* re = 0;
-    Segment* seg = lastSegmentMM();
+    Segment* seg = score->lastSegmentMM();
     if (!seg) {
         return nullptr;
     }
     while (true) {
-        for (size_t i = (staves().size() - 1) * VOICES; i < staves().size() * VOICES; i++) {
+        for (size_t i = (score->staves().size() - 1) * VOICES; i < score->staves().size() * VOICES; i++) {
             if (seg->element(i)) {
                 re = seg->element(i);
             }
@@ -455,7 +453,7 @@ EngravingItem* Score::lastElement(bool frame)
 //   upStaff
 //---------------------------------------------------------
 
-ChordRest* Score::upStaff(ChordRest* cr)
+ChordRest* Navigation::upStaff(ChordRest* cr)
 {
     Segment* segment = cr->segment();
 
@@ -482,12 +480,12 @@ ChordRest* Score::upStaff(ChordRest* cr)
 //   downStaff
 //---------------------------------------------------------
 
-ChordRest* Score::downStaff(ChordRest* cr)
+ChordRest* Navigation::downStaff(Score* score, ChordRest* cr)
 {
     Segment* segment = cr->segment();
-    track_idx_t tracks = nstaves() * VOICES;
+    track_idx_t tracks = score->nstaves() * VOICES;
 
-    if (cr->staffIdx() == nstaves() - 1) {
+    if (cr->staffIdx() == score->nstaves() - 1) {
         return cr;
     }
 
@@ -504,6 +502,25 @@ ChordRest* Score::downStaff(ChordRest* cr)
         }
     }
     return 0;
+}
+
+//---------------------------------------------------------
+//   topStaff
+//---------------------------------------------------------
+
+ChordRest* Navigation::topStaff(Score* score, ChordRest* cr)
+{
+    // Go to top-most staff of current or first measure depending upon active selection
+    const auto* destinationMeasure = cr ? cr->measure() : score->firstMeasure();
+    if (destinationMeasure) {
+        // Accommodate for MMRest
+        if (score->style().styleB(Sid::createMultiMeasureRests) && destinationMeasure->hasMMRest()) {
+            destinationMeasure = destinationMeasure->coveringMMRestOrThis();
+        }
+        // Get first ChordRest of top staff
+        cr = destinationMeasure->first()->nextChordRest(0, false);
+    }
+    return cr;
 }
 
 //---------------------------------------------------------
@@ -605,7 +622,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
 //   nextMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRest)
+ChordRest* Navigation::nextMeasure(Score* score, ChordRest* element, bool selectBehavior, bool mmRest)
 {
     if (!element) {
         return nullptr;
@@ -621,11 +638,11 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
     Fraction endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
     bool last = false;
 
-    if (selection().isRange()) {
-        if (element->tick() != endTick && selection().tickEnd() <= endTick) {
+    if (score->selection().isRange()) {
+        if (element->tick() != endTick && score->selection().tickEnd() <= endTick) {
             measure = element->measure();
             last = true;
-        } else if (element->tick() == endTick && selection().isEndActive()) {
+        } else if (element->tick() == endTick && score->selection().isEndActive()) {
             last = true;
         }
     } else if (element->tick() != endTick && selectBehavior) {
@@ -656,7 +673,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
 //   prevMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
+ChordRest* Navigation::prevMeasure(Score* score, ChordRest* element, bool mmRest)
 {
     if (!element) {
         return nullptr;
@@ -672,7 +689,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
     Fraction startTick = element->measure()->first()->nextChordRest(element->track())->tick();
     bool last = false;
 
-    if (selection().isRange() && selection().isEndActive() && selection().startSegment()->tick() <= startTick) {
+    if (score->selection().isRange() && score->selection().isEndActive() && score->selection().startSegment()->tick() <= startTick) {
         last = true;
     } else if (element->tick() != startTick) {
         measure = element->measure();
@@ -752,7 +769,7 @@ EngravingItem* Score::nextElement()
             if (next) {
                 return next;
             } else {
-                return score()->firstElement();
+                return Navigation::firstElement(score());
             }
         }
         case ElementType::TAPPING:
@@ -943,7 +960,7 @@ EngravingItem* Score::nextElement()
         }
         e = e->parentItem();
     }
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -1196,7 +1213,7 @@ EngravingItem* Score::prevElement()
         }
         e = e->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //---------------------------------------------------------
@@ -1470,7 +1487,7 @@ EngravingItem* Navigation::move(Score* score, const String& cmd)
                 score->inputState().setBeyondScore(true);
                 el = score->lastMeasure()->lastChordRest(cr->track());
             } else {
-                el = score->nextMeasure(cr);
+                el = Navigation::nextMeasure(score, cr);
             }
         }
         if (el && score->noteEntryMode()) {
@@ -1484,7 +1501,7 @@ EngravingItem* Navigation::move(Score* score, const String& cmd)
             score->inputState().setBeyondScore(false);
             el = score->lastMeasure()->first()->nextChordRest(score->inputState().track(), false);
         } else if (cr) {
-            el = score->prevMeasure(cr);
+            el = Navigation::prevMeasure(score, cr);
         }
         if (el && score->noteEntryMode()) {
             score->inputState().moveInputPos(el);
@@ -1534,7 +1551,7 @@ EngravingItem* Navigation::move(Score* score, const String& cmd)
             score->inputState().moveInputPos(el);
         }
     } else if (cmd == u"top-staff") {
-        el = cr ? score->cmdTopStaff(cr) : score->cmdTopStaff();
+        el = cr ? Navigation::topStaff(score, cr) : Navigation::topStaff(score);
         if (score->noteEntryMode()) {
             score->inputState().moveInputPos(el);
         }
@@ -1610,9 +1627,9 @@ EngravingItem* Navigation::selectMove(Score* score, const String& cmd)
     } else if (cmd == u"select-prev-chord") {
         el = Navigation::prevChordRest(cr, options);
     } else if (cmd == u"select-next-measure") {
-        el = score->nextMeasure(cr, true, true);
+        el = Navigation::nextMeasure(score, cr, true, true);
     } else if (cmd == u"select-prev-measure") {
-        el = score->prevMeasure(cr, true);
+        el = Navigation::prevMeasure(score, cr, true);
     } else if (cmd == u"select-begin-line") {
         Measure* measure = cr->segment()->measure()->system()->firstMeasure();
         if (!measure) {
@@ -1638,9 +1655,9 @@ EngravingItem* Navigation::selectMove(Score* score, const String& cmd)
         }
         el = measure->last()->nextChordRest(cr->track(), true);
     } else if (cmd == u"select-staff-above") {
-        el = score->upStaff(cr);
+        el = Navigation::upStaff(cr);
     } else if (cmd == u"select-staff-below") {
-        el = score->downStaff(cr);
+        el = Navigation::downStaff(score, cr);
     }
     if (el) {
         score->select(el, SelectType::RANGE, el->staffIdx());

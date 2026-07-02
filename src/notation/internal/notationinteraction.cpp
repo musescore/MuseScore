@@ -910,9 +910,9 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
 
     EngravingItem* chordElem;
     if (d == MoveDirection::Up) {
-        chordElem = score()->upAlt(current);
+        chordElem = Navigation::chordNoteAbove(score(), current);
     } else {
-        chordElem = score()->downAlt(current);
+        chordElem = Navigation::chordNoteBelow(score(), current);
     }
 
     if (chordElem == current) {
@@ -935,7 +935,7 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
     }
 
     if (!e || (e = d == MoveDirection::Left ? e->prevSegmentElement() : e->nextSegmentElement()) == nullptr) {
-        e = d == MoveDirection::Left ? score()->firstElement() : score()->lastElement();
+        e = d == MoveDirection::Left ? Navigation::firstElement(score()) : Navigation::lastElement(score());
     }
 
     select({ e }, SelectType::SINGLE);
@@ -960,7 +960,7 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     }
 
     EngravingItem* target = d == MoveDirection::Up
-                            ? score()->upAltCtrl(toNote(current)) : score()->downAltCtrl(toNote(current));
+                            ? Navigation::topNoteInChord(toNote(current)) : Navigation::bottomNoteInChord(toNote(current));
 
     if (target == current) {
         return;
@@ -1163,7 +1163,7 @@ void NotationInteraction::selectSection()
 
 void NotationInteraction::selectFirstElement(bool frame)
 {
-    if (EngravingItem* element = score()->firstElement(frame)) {
+    if (EngravingItem* element = Navigation::firstElement(score(), frame)) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
         showItem(element);
     }
@@ -1171,7 +1171,7 @@ void NotationInteraction::selectFirstElement(bool frame)
 
 void NotationInteraction::selectLastElement()
 {
-    if (EngravingItem* element = score()->lastElement()) {
+    if (EngravingItem* element = Navigation::lastElement(score())) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
         showItem(element);
     }
@@ -3879,16 +3879,16 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
     }
     case MoveSelectionType::Measure:
         if (d == MoveDirection::Right) {
-            el = score()->nextMeasure(cr, true, true);
+            el = mu::engraving::Navigation::nextMeasure(score(), cr, true, true);
         } else {
-            el = score()->prevMeasure(cr, true);
+            el = mu::engraving::Navigation::prevMeasure(score(), cr, true);
         }
         break;
     case MoveSelectionType::Track:
         if (d == MoveDirection::Up) {
-            el = score()->upStaff(cr);
+            el = mu::engraving::Navigation::upStaff(cr);
         } else {
-            el = score()->downStaff(cr);
+            el = mu::engraving::Navigation::downStaff(score(), cr);
         }
     case MoveSelectionType::EngravingItem:
     case MoveSelectionType::Frame:
@@ -3993,7 +3993,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 
 void NotationInteraction::selectTopStaff()
 {
-    EngravingItem* el = score()->cmdTopStaff(activeCr(score()));
+    EngravingItem* el = Navigation::topStaff(score(), activeCr(score()));
     if (score()->noteEntryMode()) {
         score()->inputState().moveInputPos(el);
     }
@@ -4230,7 +4230,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         if (el) {
             toEl = el; // Restoring previous selection.
         } else {
-            toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+            toEl = isLeftDirection ? Navigation::lastElement(score()) : Navigation::firstElement(score());
             if (isHorizontalLayout) {
                 toEl = nextNonVBox(toEl);
             }
@@ -8541,7 +8541,7 @@ void NotationInteraction::getLocation()
         }
     }
     if (!e) {
-        e = score()->firstElement(false);
+        e = Navigation::firstElement(score(), false);
     }
     if (e) {
         if (e->isNote() || e->isHarmony()) {

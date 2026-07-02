@@ -4455,25 +4455,6 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
 }
 
 //---------------------------------------------------------
-//   cmdTopStaff
-//---------------------------------------------------------
-
-ChordRest* Score::cmdTopStaff(ChordRest* cr)
-{
-    // Go to top-most staff of current or first measure depending upon active selection
-    const auto* destinationMeasure = cr ? cr->measure() : firstMeasure();
-    if (destinationMeasure) {
-        // Accommodate for MMRest
-        if (style().styleB(Sid::createMultiMeasureRests) && destinationMeasure->hasMMRest()) {
-            destinationMeasure = destinationMeasure->coveringMMRestOrThis();
-        }
-        // Get first ChordRest of top staff
-        cr = destinationMeasure->first()->nextChordRest(0, false);
-    }
-    return cr;
-}
-
-//---------------------------------------------------------
 //   hasLyrics
 //---------------------------------------------------------
 

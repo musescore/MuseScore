@@ -2134,7 +2134,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         }
         if (!nextSegment) {
             MeasureBase* mb = measure()->next();
-            return mb && mb->isBox() ? mb : score()->lastElement();
+            return mb && mb->isBox() ? mb : Navigation::lastElement(score());
         }
 
         Measure* nsm = nextSegment->measure();
@@ -2348,7 +2348,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
         if (!prevSeg) {
             MeasureBase* mb = measure()->prev();
-            return mb && mb->isBox() ? mb : score()->firstElement();
+            return mb && mb->isBox() ? mb : Navigation::firstElement(score());
         }
 
         Measure* psm = prevSeg->measure();
@@ -2388,7 +2388,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
         if (!prevSeg) {
-            return score()->firstElement();
+            return Navigation::firstElement(score());
         }
 
         if (prevSeg->notChordRestType()) {

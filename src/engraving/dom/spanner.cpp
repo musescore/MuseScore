@@ -23,6 +23,8 @@
 
 #include "translation.h"
 
+#include "../editing/navigation.h"
+
 #include "anchors.h"
 #include "chord.h"
 #include "chordrest.h"
@@ -1354,7 +1356,7 @@ EngravingItem* Spanner::nextSegmentElement()
     if (s) {
         return s->firstElementForNavigation(staffIdx());
     }
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -1367,7 +1369,7 @@ EngravingItem* Spanner::prevSegmentElement()
     if (s) {
         return s->lastElementForNavigation(staffIdx());
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //---------------------------------------------------------
