@@ -60,8 +60,22 @@ StaffLines::StaffLines(Measure* parent)
 
 PointF StaffLines::pagePos() const
 {
-    System* system = measure()->system();
-    return PointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
+    const Measure* m = measure();
+    System* system = m->system();
+    if (!system) {
+        return EngravingItem::pagePos();
+    }
+
+    PointF pagePos(m->x() + system->x(),
+                   system->staff(staffIdx())->y() + system->y());
+
+    // Keep historical behavior for non-transition measures. Transition measures
+    // encode the pre-section y offset in ldata->pos().
+    if (m->isStaffTypeTransitionMeasure(staffIdx())) {
+        pagePos += ldata()->pos();
+    }
+
+    return pagePos;
 }
 
 //---------------------------------------------------------
