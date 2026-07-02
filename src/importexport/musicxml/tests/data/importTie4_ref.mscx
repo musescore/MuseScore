@@ -84,6 +84,8 @@
       <systemTextFontSize>22</systemTextFontSize>
       <staffTextFontFace>Palatino,serif</staffTextFontFace>
       <staffTextFontSize>22</staffTextFontSize>
+      <staveSharingLabelFontFace>Palatino,serif</staveSharingLabelFontFace>
+      <staveSharingLabelFontSize>22</staveSharingLabelFontSize>
       <rehearsalMarkFontFace>Palatino,serif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>22</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>Palatino,serif</repeatPlayCountFontFace>

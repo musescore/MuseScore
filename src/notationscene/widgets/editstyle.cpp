@@ -131,6 +131,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "rehearsal-mark",
     "system",
     "staff",
+    "staveSharing",
     "expression",
     "hairpin",
     "lyrics-odd-lines",

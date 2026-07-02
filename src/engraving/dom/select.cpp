@@ -1150,6 +1150,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
+        case ElementType::STAVE_SHARING_LABEL:
             seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::EXPRESSION:

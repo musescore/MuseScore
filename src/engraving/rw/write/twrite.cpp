@@ -131,6 +131,7 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -323,6 +324,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::STAFF_STATE:  write(item_cast<const StaffState*>(item), xml, ctx);
         break;
     case ElementType::STAFF_TEXT:   write(item_cast<const StaffText*>(item), xml, ctx);
+        break;
+    case ElementType::STAVE_SHARING_LABEL:   write(item_cast<const StaveSharingLabel*>(item), xml, ctx);
         break;
     case ElementType::STAFFTYPE_CHANGE: write(item_cast<const StaffTypeChange*>(item), xml, ctx);
         break;
@@ -2988,6 +2991,19 @@ void TWrite::write(const StaffText* item, XmlWriter& xml, WriteContext& ctx)
     if (const SoundFlag* flag = item->soundFlag()) {
         writeItem(flag, xml, ctx);
     }
+
+    xml.endElement();
+}
+
+void TWrite::write(const StaveSharingLabel* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx);
 
     xml.endElement();
 }

@@ -94,6 +94,8 @@
       <staffTextFontFace>Quicksand</staffTextFontFace>
       <staffTextFontSize>11.9365</staffTextFontSize>
       <staffTextFrameWidth>0.15625</staffTextFrameWidth>
+      <staveSharingLabelFontFace>Quicksand</staveSharingLabelFontFace>
+      <staveSharingLabelFontSize>11.9365</staveSharingLabelFontSize>
       <rehearsalMarkFontFace>Quicksand</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>Quicksand</repeatPlayCountFontFace>

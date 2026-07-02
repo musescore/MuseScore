@@ -218,6 +218,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
         break;
+    case ElementType::STAVE_SHARING_LABEL: layout(toStaveSharingLabel(item), ctx);
+        break;
     case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
         break;
     case ElementType::STICKING:     layout(toSticking(item), ctx);
@@ -1619,6 +1621,11 @@ void SingleLayout::layout(StaffText* item, const Context& ctx)
             }
         }
     }
+}
+
+void SingleLayout::layout(StaveSharingLabel* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx, item->mutldata());
 }
 
 void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)

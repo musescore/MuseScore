@@ -108,6 +108,7 @@ void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* 
         drawSlurTieSegment(item_cast<const SlurTieSegment*>(item), painter, ed, currentViewScaling, opt);
         break;
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
         drawTextBase(item_cast<const TextBase*>(item), painter, currentViewScaling, opt);
         break;
     case ElementType::STICKING:

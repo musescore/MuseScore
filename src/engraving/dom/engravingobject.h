@@ -160,6 +160,7 @@ class Staff;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaveSharingLabel;
 class StaffTextBase;
 class StaffTypeChange;
 class StaffVisibilityIndicator;
@@ -441,6 +442,7 @@ public:
     CONVERT(MeasureNumber, MEASURE_NUMBER)
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
+    CONVERT(StaveSharingLabel, STAVE_SHARING_LABEL)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(SoundFlag,     SOUND_FLAG)
     CONVERT(PlayCountText, PLAY_COUNT_TEXT)
@@ -571,7 +573,8 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
+        return isStaffText() || isStaveSharingLabel() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo()
+               || isStringTunings();
     }
 
     bool isArticulationFamily() const
@@ -672,6 +675,7 @@ CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(StaveSharingLabel);
 CONVERT(StaffTextBase)
 CONVERT(TextBase)
 CONVERT(TextLineBase)

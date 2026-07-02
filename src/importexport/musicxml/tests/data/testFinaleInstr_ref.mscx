@@ -84,6 +84,8 @@
       <staffTextFontFace>Times</staffTextFontFace>
       <staffTextFontSize>7.4</staffTextFontSize>
       <staffTextFrameWidth>0.07682</staffTextFrameWidth>
+      <staveSharingLabelFontFace>Times</staveSharingLabelFontFace>
+      <staveSharingLabelFontSize>7.4</staveSharingLabelFontSize>
       <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>Times</repeatPlayCountFontFace>
