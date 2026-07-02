@@ -118,8 +118,6 @@ Volta::Volta(EngravingItem* parent)
     resetProperty(Pid::END_TEXT_PLACE);
     resetProperty(Pid::BEGIN_HOOK_TYPE);
     resetProperty(Pid::END_HOOK_TYPE);
-
-    setAnchor(VOLTA_ANCHOR);
 }
 
 ///
@@ -247,8 +245,6 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
         return PropertyValue::fromValue(std::vector<int>());
-    case Pid::ANCHOR:
-        return int(VOLTA_ANCHOR);
     case Pid::BEGIN_HOOK_TYPE:
         return HookType::HOOK_90;
     case Pid::END_HOOK_TYPE:

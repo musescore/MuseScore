@@ -78,6 +78,8 @@ public:
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     static Note* guessInitialNote(Chord* chord);
 
     std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }

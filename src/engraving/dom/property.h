@@ -261,7 +261,6 @@ enum class Pid : short {
     USER_STRETCH,
     MEASURE_NUMBER_OFFSET,
     EXCLUDE_FROM_NUMBERING,
-    ANCHOR,
     SLUR_UOFF1,
     SLUR_UOFF2,
     SLUR_UOFF3,

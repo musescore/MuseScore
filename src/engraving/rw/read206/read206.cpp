@@ -1245,7 +1245,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                               // because the glissando is not properly cloned into the linked staves
                 staff && (!ctx.pasteMode() || !staff->links() || staff->links()->empty())) {
                 Spanner* placeholder = new TextLine(ctx.dummy());
-                placeholder->setAnchor(Spanner::Anchor::NOTE);
                 placeholder->setEndElement(note);
                 placeholder->setTrack2(note->track());
                 placeholder->setTick(Fraction(0, 1));
@@ -1262,7 +1261,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         Spanner* placeholder = ctx.findSpanner(id);
         if (placeholder && placeholder->endElement()) {
             // if it is, fill end data from place-holder
-            sp->setAnchor(Spanner::Anchor::NOTE);                 // make sure we can set a Note as end element
             sp->setEndElement(placeholder->endElement());
             sp->setTrack2(placeholder->track2());
             sp->setTick(ctx.tick());                                // make sure tick2 will be correct
@@ -1283,7 +1281,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             ctx.removeSpanner(sp);          // read() added the element to the XMLReader: remove it
             delete sp;
         } else {
-            sp->setAnchor(Spanner::Anchor::NOTE);
             sp->setStartElement(note);
             sp->setTick(ctx.tick());
             note->addSpannerFor(sp);
@@ -1981,7 +1978,6 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         Note* finalNote = ch->upNote();
         Glissando* gliss = Factory::createGlissando(ctx.dummy());
         read400::TRead::read(gliss, e, ctx);
-        gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(nullptr);
         gliss->setEndElement(nullptr);
         // in TAB, use straight line with no text
@@ -2218,11 +2214,6 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
-    }
-    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
-        volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
     CompatUtils::resetHookHeightSign(volta);
     adjustPlacement(volta);

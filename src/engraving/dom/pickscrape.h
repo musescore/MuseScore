@@ -61,6 +61,8 @@ public:
 
     PickScrape* clone() const override { return new PickScrape(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;

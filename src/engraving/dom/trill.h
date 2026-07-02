@@ -82,6 +82,8 @@ public:
     Trill* clone() const override { return new Trill(*this); }
     EngravingItem* linkedClone() override;
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
     void remove(EngravingItem*) override;
 

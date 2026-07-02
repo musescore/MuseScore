@@ -93,6 +93,8 @@ public:
 
     Tie* clone() const override { return new Tie(*this); }
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     virtual ~Tie() {}
 
     virtual Note* startNote() const;

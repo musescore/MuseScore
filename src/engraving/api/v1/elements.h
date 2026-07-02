@@ -2564,10 +2564,6 @@ class Spanner : public EngravingItem
     /// The track this spanner end at.
     API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
 
-    /// The Anchor type for this spanner,
-    /// one of PluginAPI::PluginAPI::Anchor values.
-    API_PROPERTY_T(int, anchor,           ANCHOR)
-
     /// The starting element of the spanner.
     Q_PROPERTY(apiv1::EngravingItem * startElement READ startElement)
     /// The ending element of the spanner.

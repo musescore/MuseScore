@@ -1178,7 +1178,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         } else if (transition == 1) {
         } else if (transition == 3) {
             Slur* slur1 = Factory::createSlur(score->dummy());
-            slur1->setAnchor(Spanner::Anchor::CHORD);
             slur1->setStartElement(gnote->chord());
             slur1->setEndElement(note->chord());
             slur1->setParent(0);
@@ -1720,7 +1719,6 @@ void GuitarPro5::addGlissandos()
         }
 
         Glissando* gliss = mu::engraving::Factory::createGlissando(currentStart);
-        gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(currentStart);
         gliss->setTick(currentStart->tick());
         gliss->setTrack(currentStart->track());

@@ -8379,9 +8379,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             Slur* newSlur = notation.name() == "slur"
                             ? Factory::createSlur(score->dummy())
                             : toSlur(Factory::createHammerOnPullOff(score->dummy()));
-            if (cr->isGrace()) {
-                newSlur->setAnchor(Spanner::Anchor::CHORD);
-            }
             const String lineType = notation.attribute(u"line-type");
             if (lineType == u"dashed") {
                 newSlur->setStyleType(SlurStyleType::Dashed);
@@ -8970,7 +8967,6 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             logger->logError(String(u"no note for glissando/slide number %1 start").arg(glissandoNumber + 1), xmlreader);
         } else {
             gliss = Factory::createGlissando(note);
-            gliss->setAnchor(Spanner::Anchor::NOTE);
             gliss->setStartElement(note);
             gliss->setTick(tick);
             gliss->setTrack(track);

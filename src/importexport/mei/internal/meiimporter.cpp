@@ -2742,7 +2742,6 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
 
     Glissando* gliss = Factory::createGlissando(startNote);
     m_uids->reg(gliss, meiGliss.m_xmlId);
-    gliss->setAnchor(Spanner::Anchor::NOTE);
     gliss->setTick(startNote->chord()->tick());
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
