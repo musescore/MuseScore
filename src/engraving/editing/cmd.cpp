@@ -4167,7 +4167,7 @@ void Score::cmdToggleVisible()
     bool allVisible = true;
 
     for (EngravingItem* item : selection().elements()) {
-        if (!item->visible()) {
+        if (!item->getProperty(Pid::VISIBLE).toBool()) {
             allVisible = false;
             break;
         }
