@@ -75,7 +75,6 @@ private:
     signed char m_port = 0;
     signed char m_channel = 0;
     InstrChannel* m_masterChannel = nullptr;
-    PartChannelSettingsLink m_link;
 };
 
 class MasterScore : public Score
@@ -173,9 +172,6 @@ public:
 
     void initAutomation(); // TODO: Placeholder?
 
-    void setPlaybackScore(Score*);
-    Score* playbackScore() { return m_playbackScore; }
-    const Score* playbackScore() const { return m_playbackScore; }
     InstrChannel* playbackChannel(const InstrChannel* c) { return m_midiMapping[c->channel()].articulation(); }
     const InstrChannel* playbackChannel(const InstrChannel* c) const { return m_midiMapping[c->channel()].articulation(); }
 
@@ -227,21 +223,18 @@ private:
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;
-    std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
-    Score* m_playbackScore = nullptr;
     muse::async::Channel<ScoreChanges> m_changesChannel;
 
     bool m_readOnly = false;
 
-    CmdState m_cmdState;       // modified during cmd processing
+    CmdState m_cmdState; // modified during cmd processing
     bool m_updatesLocked = false;
 
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
-    int m_midiPortCount = 0;                           // A count of ALSA midi out ports
+    int m_midiPortCount = 0; // A count of ALSA midi out ports
     std::vector<MidiMapping> m_midiMapping;
-    bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
-    // don't decrease and don't have gaps
+    bool m_isSimpleMidiMapping = false; // midi mapping is simple if all ports and channels don't decrease and don't have gaps
     double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
