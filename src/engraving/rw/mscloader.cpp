@@ -187,7 +187,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
                 break;
             }
 
-            partScore->linkMeasures(masterScore);
+            Excerpt::linkMeasures(partScore, masterScore);
 
             if (ex->name().empty()) {
                 // If no excerpt name tag was found while reading, try the "partName" meta tag
