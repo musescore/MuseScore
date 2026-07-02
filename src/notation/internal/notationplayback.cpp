@@ -378,11 +378,17 @@ void NotationPlayback::setLoopBoundariesEnabled(bool enabled)
 
     m_loopBoundaries.enabled = enabled;
     m_loopBoundariesChanged.notify();
+    m_loopEnabledChanged.send(enabled);
 }
 
 bool NotationPlayback::isLoopEnabled() const
 {
     return !m_loopBoundaries.isNull() && m_loopBoundaries.enabled;
+}
+
+Channel<bool> NotationPlayback::loopEnabledChanged() const
+{
+    return m_loopEnabledChanged;
 }
 
 const LoopBoundaries& NotationPlayback::loopBoundaries() const

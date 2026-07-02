@@ -309,7 +309,7 @@ void ApplicationActionController::openPreferencesDialog()
 {
     const context::IPlaybackStatePtr state = globalContext()->playbackState();
     if (state->isPlaying()) {
-        dispatcher()->dispatch("stop");
+        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
 
         async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
         statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {

@@ -166,7 +166,7 @@ void MixerPanelContextMenuModel::load()
     viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Title));
 
     MenuItemList items {
-        makeMenuItem("playback-setup"),
+        makeMenuItem("command://playback/show-playback-setup"),
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 

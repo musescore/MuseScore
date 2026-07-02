@@ -180,6 +180,7 @@ public:
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isCountInEnabledChanged() const = 0;
 
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;
