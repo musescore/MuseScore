@@ -986,6 +986,10 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
     onPartsRemoved(parts);
 }
 
+void NotationParts::onPartsAdded(const std::vector<Part*>&)
+{
+}
+
 void NotationParts::onPartsRemoved(const std::vector<Part*>&)
 {
 }
@@ -1218,6 +1222,7 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
     TRACEFUNC;
 
     size_t partIdx = 0;
+    std::vector<Part*> addedParts;
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
@@ -1251,7 +1256,12 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         appendStaves(part, pi.instrumentTemplate, keyList);
         ++partIdx;
 
+        addedParts.push_back(part);
         m_partChangedNotifier.itemAdded(part);
+    }
+
+    if (!addedParts.empty()) {
+        onPartsAdded(addedParts);
     }
 }
 
