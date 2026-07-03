@@ -137,8 +137,8 @@ public:
     void addMMRestEndMeasureEID(Measure* mmrest, EID lastMeasureEID);
     void setMMRestEndMeasures();
 
-    void registerPastedEID(const EID& fileEid, const EID& realEid);
-    EID resolvePastedEID(const EID& fileEid) const;
+    void registerPastedEID(const EID& clipboardEid, const EID& fileEid);
+    EID resolvePastedEID(const EID& clipboardEid) const;
 
 private:
     void addConnectorInfo(std::shared_ptr<ConnectorInfoReader>);

@@ -382,20 +382,20 @@ void ReadContext::setMMRestEndMeasures()
     }
 }
 
-void ReadContext::registerPastedEID(const EID& fileEid, const EID& realEid)
+void ReadContext::registerPastedEID(const EID& clipboardEid, const EID& fileEid)
 {
-    m_pastedEIDs.emplace(fileEid, realEid);
+    m_pastedEIDs.emplace(clipboardEid, fileEid);
 }
 
-EID ReadContext::resolvePastedEID(const EID& fileEid) const
+EID ReadContext::resolvePastedEID(const EID& clipboardEid) const
 {
     if (!_pasteMode) {
-        return fileEid;
+        return clipboardEid;
     }
 
-    auto it = m_pastedEIDs.find(fileEid);
+    auto it = m_pastedEIDs.find(clipboardEid);
     IF_ASSERT_FAILED(it != m_pastedEIDs.end()) {
-        return fileEid;
+        return clipboardEid;
     }
 
     return it->second;
