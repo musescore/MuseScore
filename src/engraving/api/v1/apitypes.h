@@ -1022,6 +1022,7 @@ Q_ENUM_NS(Syllabic);
 enum class Anchor {
     SEGMENT   = int(mu::engraving::Spanner::Anchor::SEGMENT),
     MEASURE   = int(mu::engraving::Spanner::Anchor::MEASURE),
+    CHORD     = int(mu::engraving::Spanner::Anchor::CHORDREST), // Deprecated alias
     CHORDREST = int(mu::engraving::Spanner::Anchor::CHORDREST),
     NOTE      = int(mu::engraving::Spanner::Anchor::NOTE),
 };

@@ -262,6 +262,8 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     }
     ctx.setCurTrack(muse::nidx);
 
+    TWrite::writeScoreSpanners(score, xml, ctx);
+
     hook.onWriteExcerpts302(score, xml, ctx);
 
     TWrite::writePageLocks(score, xml);
@@ -284,8 +286,7 @@ void Writer::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
 
 void Writer::doWriteItem(const EngravingItem* item, XmlWriter& xml)
 {
-    WriteContext ctx(item->score());
-    ctx.setClipboardmode(true);
+    WriteContext ctx(item->score(), /* clipboardMode = */ true);
     TWrite::writeItem(item, xml, ctx);
 }
 
@@ -317,9 +318,9 @@ muse::ByteArray Writer::writeStaffSelection(Score* score, const SelectionFilter&
 
     xml.startElement("StaffList", staffListAttributes);
 
-    WriteContext ctx(score);
-    ctx.setClipboardmode(true);
+    WriteContext ctx(score, /* clipboardMode = */ true);
     ctx.setFilter(filter);
+    ctx.setFirstClipboardTick(tickStart);
 
     for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
         track_idx_t startTrack = staffIdx * VOICES;
@@ -339,6 +340,8 @@ muse::ByteArray Writer::writeStaffSelection(Score* score, const SelectionFilter&
         writeSegments(xml, ctx, startTrack, endTrack, startSegment, endSegment, false, false);
         xml.endElement();
     }
+
+    TWrite::writeScoreSpanners(score, staff2track(staffStart), staff2track(staffEnd), startSegment, endSegment, xml, ctx);
 
     xml.endElement();
     xml.flush();
