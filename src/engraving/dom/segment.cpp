@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -689,10 +689,6 @@ void Segment::add(EngravingItem* el)
     assert(track < score()->ntracks());
     assert(el->score() == score());
     assert(score()->nstaves() * VOICES == m_elist.size());
-    // make sure offset is correct for staff
-    if (el->isStyled(Pid::OFFSET)) {
-        el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
 
     switch (el->type()) {
     case ElementType::MEASURE_REPEAT:
@@ -700,15 +696,15 @@ void Segment::add(EngravingItem* el)
         setEmpty(false);
         break;
 
+    //fallthrough
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
-    //fallthrough
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
     case ElementType::SYMBOL:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -732,7 +728,7 @@ void Segment::add(EngravingItem* el)
     }
 
     case ElementType::PLAY_COUNT_TEXT:
-        assert(isType(SegmentType::BarLineType));
+        assert(isType(SegmentType::BarLineTypes));
         if (!findAnnotation(ElementType::PLAY_COUNT_TEXT, el->track(), el->track())) {
             m_annotations.push_back(el);
         }
@@ -765,7 +761,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::CLEF:
-        assert(m_segmentType & SegmentType::ClefType);
+        assert(m_segmentType & SegmentType::ClefTypes);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
@@ -775,25 +771,25 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::TIMESIG:
-        assert(segmentType() & SegmentType::TimeSigType);
+        assert(segmentType() & SegmentType::TimeSigTypes);
         checkElement(el, track);
         m_elist[track] = el;
         el->staff()->addTimeSig(toTimeSig(el));
         setEmpty(false);
-        if (segmentType() & SegmentType::CourtesyTimeSigType) {
+        if (segmentType() & SegmentType::CourtesyTimeSigTypes) {
             toTimeSig(el)->setIsCourtesy(true);
         }
         break;
 
     case ElementType::KEYSIG:
-        assert(m_segmentType & SegmentType::KeySigType);
+        assert(m_segmentType & SegmentType::KeySigTypes);
         checkElement(el, track);
         m_elist[track] = el;
         if (!el->generated()) {
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
-        if (m_segmentType == SegmentType::CourtesyKeySigType) {
+        if (m_segmentType == SegmentType::CourtesyKeySigTypes) {
             toKeySig(el)->setIsCourtesy(true);
         }
         break;
@@ -823,7 +819,6 @@ void Segment::add(EngravingItem* el)
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }
-            score()->setPlaylistDirty();
         }
     // fall through
 
@@ -891,7 +886,6 @@ void Segment::remove(EngravingItem* el)
                 score()->undo(new ChangeStartEndSpanner(s, start, end));
             }
         }
-        score()->setPlaylistDirty();
     }
     break;
 
@@ -912,6 +906,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::MARKER:
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -1239,7 +1234,7 @@ Fraction Segment::ticksInStaff(staff_idx_t staffIdx) const
     const Fraction segTick = tick();
     Fraction nextSegTick = segTick;
 
-    Segment* nextSeg = nextInStaff(staffIdx, durationSegmentsMask);
+    Segment* nextSeg = nextInStaff(staffIdx, SegmentType::Duration);
     if (nextSeg) {
         nextSegTick = nextSeg->tick();
     } else {
@@ -1363,7 +1358,7 @@ bool Segment::allElementsInvisible() const
         return true;
     }
 
-    if (isType(SegmentType::BarLineType | SegmentType::ChordRest)) {
+    if (isType(SegmentType::BarLineTypes | SegmentType::ChordRest)) {
         return false;
     }
 
@@ -1422,7 +1417,7 @@ EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, t
 //---------------------------------------------------------
 //   findAnnotations
 ///  Returns the list of found annotations
-///  or nullptr if nothing was found.
+///  or an empty list if nothing was found.
 //---------------------------------------------------------
 
 std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const
@@ -1465,7 +1460,7 @@ void Segment::clearAnnotations()
 
 void Segment::scanElements(std::function<void(EngravingItem*)> func)
 {
-    bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
+    bool scanAllTimeSigs = (isType(SegmentType::TimeSigTypes)
                             && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
@@ -1489,6 +1484,9 @@ void Segment::scanElements(std::function<void(EngravingItem*)> func)
         e->scanElements(func);
     }
     for (EngravingItem* e : annotations()) {
+        if (!e->systemFlag() && (!measure() || !measure()->visible(e->staffIdx()))) {
+            continue;
+        }
         e->scanElements(func);
     }
 }
@@ -1981,6 +1979,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
@@ -2199,6 +2198,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
+    case ElementType::STAVE_SHARING_LABEL:
     case ElementType::SOUND_FLAG:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
@@ -2790,7 +2790,7 @@ double Segment::spacing() const
 
 bool Segment::hasTimeSigAboveStaves() const
 {
-    return isType(SegmentType::TimeSigType)
+    return isType(SegmentType::TimeSigTypes)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
 }
 
@@ -2804,7 +2804,7 @@ bool Segment::makeSpaceForTimeSigAboveStaves() const
 
 bool Segment::hasTimeSigAcrossStaves() const
 {
-    return isType(SegmentType::TimeSigType)
+    return isType(SegmentType::TimeSigTypes)
            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
 }
 

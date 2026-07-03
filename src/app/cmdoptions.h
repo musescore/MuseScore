@@ -5,8 +5,8 @@
 #include <string>
 
 #include "global/io/path.h"
-#include "global/iapplication.h"
 #include "global/logger.h"
+#include "global/internal/cmdoptions.h"
 
 namespace mu::app {
 enum class ConvertType {
@@ -31,7 +31,7 @@ enum class DiagnosticType {
     DrawDiffToPng
 };
 
-struct CmdOptions {
+struct MuseScoreCmdOptions : public muse::CmdOptions {
     enum class ParamKey {
         HighlightConfigPath,
         StylePath,
@@ -45,13 +45,8 @@ struct CmdOptions {
         ExtensionUri,
         PageNumber,
         ScoreRegion,
+        NoAudio,
     };
-
-    muse::IApplication::RunMode runMode = muse::IApplication::RunMode::GuiApp;
-
-    struct {
-        std::optional<double> physicalDotsPerInch;
-    } ui;
 
     struct {
         std::optional<bool> templateModeEnabled;
@@ -94,7 +89,6 @@ struct CmdOptions {
 
     struct {
         std::optional<bool> revertToFactorySettings;
-        std::optional<muse::logger::Level> loggerLevel;
     } app;
 
     struct {
@@ -118,13 +112,13 @@ struct CmdOptions {
         QString output;
     } diagnostic;
 
-    struct Autobot {
+    struct Testflow {
         QString testCaseNameOrFile;
         QString testCaseContextNameOrFile;
         QString testCaseContextValue;
         QString testCaseFunc;
         QString testCaseFuncArgs;
-    } autobot;
+    } testflow;
 
     struct AudioPluginRegistration {
         muse::io::path_t pluginPath;

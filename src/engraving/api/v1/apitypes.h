@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,6 +26,7 @@
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
@@ -559,6 +560,44 @@ enum class Orientation {
 Q_ENUM_NS(Orientation);
 
 /** APIDOC
+ * Type of dot in a fretboard diagram.
+ * @memberof Engraving
+ * @enum
+ * @since 4.7
+ */
+enum class FretDotType {
+    NORMAL   = int(mu::engraving::FretDotType::NORMAL),
+    CROSS    = int(mu::engraving::FretDotType::CROSS),
+    SQUARE   = int(mu::engraving::FretDotType::SQUARE),
+    TRIANGLE = int(mu::engraving::FretDotType::TRIANGLE),
+};
+Q_ENUM_NS(FretDotType);
+
+// Pin the API/DOM enum equivalence so a future reorder of either enum
+// fails compilation instead of silently corrupting plugin writes.
+static_assert(int(FretDotType::NORMAL) == int(mu::engraving::FretDotType::NORMAL));
+static_assert(int(FretDotType::CROSS) == int(mu::engraving::FretDotType::CROSS));
+static_assert(int(FretDotType::SQUARE) == int(mu::engraving::FretDotType::SQUARE));
+static_assert(int(FretDotType::TRIANGLE) == int(mu::engraving::FretDotType::TRIANGLE));
+
+/** APIDOC
+ * Type of string marker in a fretboard diagram (open / muted / none).
+ * @memberof Engraving
+ * @enum
+ * @since 4.7
+ */
+enum class FretMarkerType {
+    NONE   = int(mu::engraving::FretMarkerType::NONE),
+    CIRCLE = int(mu::engraving::FretMarkerType::CIRCLE),
+    CROSS  = int(mu::engraving::FretMarkerType::CROSS),
+};
+Q_ENUM_NS(FretMarkerType);
+
+static_assert(int(FretMarkerType::NONE) == int(mu::engraving::FretMarkerType::NONE));
+static_assert(int(FretMarkerType::CIRCLE) == int(mu::engraving::FretMarkerType::CIRCLE));
+static_assert(int(FretMarkerType::CROSS) == int(mu::engraving::FretMarkerType::CROSS));
+
+/** APIDOC
  * Auto-hide flag
  * @memberof Engraving
  * @enum
@@ -682,9 +721,10 @@ enum class HDuration {
 Q_ENUM_NS(HDuration);
 
 enum class FrameType {
-    NO_FRAME = int(mu::engraving::FrameType::NO_FRAME),
-    SQUARE   = int(mu::engraving::FrameType::SQUARE),
-    CIRCLE   = int(mu::engraving::FrameType::CIRCLE),
+    NO_FRAME  = int(mu::engraving::FrameType::NO_FRAME),
+    RECTANGLE = int(mu::engraving::FrameType::RECTANGLE),
+    SQUARE    = int(mu::engraving::FrameType::RECTANGLE), /** deprecated alias */
+    CIRCLE    = int(mu::engraving::FrameType::CIRCLE),
 };
 Q_ENUM_NS(FrameType);
 
@@ -843,13 +883,13 @@ enum class SegmentType {
     //--
     All                        = int(mu::engraving::SegmentType::All),
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType                = int(mu::engraving::SegmentType::BarLineType),
-    CourtesyTimeSigType        = int(mu::engraving::SegmentType::CourtesyTimeSigType),
-    CourtesyKeySigType         = int(mu::engraving::SegmentType::CourtesyKeySigType),
-    CourtesyClefType           = int(mu::engraving::SegmentType::CourtesyClefType),
-    TimeSigType                = int(mu::engraving::SegmentType::TimeSigType),
-    KeySigType                 = int(mu::engraving::SegmentType::KeySigType),
-    ClefType                   = int(mu::engraving::SegmentType::ClefType),
+    BarLineType                = int(mu::engraving::SegmentType::BarLineTypes),
+    CourtesyTimeSigType        = int(mu::engraving::SegmentType::CourtesyTimeSigTypes),
+    CourtesyKeySigType         = int(mu::engraving::SegmentType::CourtesyKeySigTypes),
+    CourtesyClefType           = int(mu::engraving::SegmentType::CourtesyClefTypes),
+    TimeSigType                = int(mu::engraving::SegmentType::TimeSigTypes),
+    KeySigType                 = int(mu::engraving::SegmentType::KeySigTypes),
+    ClefType                   = int(mu::engraving::SegmentType::ClefTypes),
     ///\}
 };
 Q_ENUM_NS(SegmentType);

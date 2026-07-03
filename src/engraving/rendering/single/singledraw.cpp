@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,6 +23,7 @@
 
 #include "draw/painter.h"
 #include "draw/svgrenderer.h"
+#include "draw/types/drawtypes.h"
 
 #include "types/typesconv.h"
 #include "style/style.h"
@@ -106,10 +107,13 @@
 #include "dom/slur.h"
 #include "dom/soundflag.h"
 #include "dom/spacer.h"
+#include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/staffstate.h"
 #include "dom/stafftext.h"
+#include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -299,6 +303,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter, opt);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
+        break;
+    case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter, opt);
         break;
@@ -506,7 +512,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
 
-    Color c(negativeFret ? config->criticalColor() : item->curColor(opt));
+    Color c(negativeFret && !opt.isPrinting ? config->criticalColor() : item->curColor(opt));
     painter->setPen(c);
     bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
 
@@ -922,7 +928,8 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
             int idx = (pitch + 12) / 25;
             const char* l = item->label[idx];
             painter->drawText(RectF(x2, y2, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
 
             y = y2;
@@ -954,7 +961,8 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
             const char* l = item->label[idx];
             double ty = y2;       // - _spatium;
             painter->drawText(RectF(x2, ty, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
         } else {
             // down
@@ -983,6 +991,9 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
 
     const Bracket::LayoutData* ldata = item->ldata();
 
+    painter->save();
+    setMask(item, painter);
+
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         double h = ldata->bracketHeight;
@@ -1010,7 +1021,8 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
         item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
         double bracketWidth = ldata->bracketWidth - lineW / 2;
@@ -1030,9 +1042,23 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
+    case BracketType::GROUP:
+    {
+        double h = ldata->bracketHeight;
+        double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
+        double bracketWidth = ldata->bracketWidth;
+        Pen pen(item->curColor(opt), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
+        painter->drawLine(LineF(0.0, 0.0, bracketWidth, 0.0));
+        painter->drawLine(LineF(0.0, h, bracketWidth, h));
+    }
+    break;
     case BracketType::NO_BRACKET:
         break;
     }
+
+    painter->restore();
 }
 
 void SingleDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)
@@ -1146,7 +1172,10 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
     Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
             PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(),
+                      muse::draw::AlignLeft | muse::draw::AlignTop,
+                      muse::draw::TextDontClip,
+                      ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1191,6 +1220,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
         int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
         painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()),
                           muse::draw::AlignLeft | muse::draw::AlignTop,
+                          muse::draw::TextDontClip,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
@@ -1338,10 +1368,13 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOpti
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
                 painter->drawText(RectF(-ldata->stringDist * .4, .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignVCenter | muse::draw::AlignRight,
+                                  muse::draw::TextDontClip,
+                                  text);
             } else {
                 painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  muse::draw::AlignVCenter | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
                                   String::number(item->fretOffset() + 1));
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1350,11 +1383,14 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter, const PaintOpti
             painter->rotate(90);
             if (item->numPos() == 0) {
                 painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
-                                  muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
                                   text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0),
-                                  muse::draw::AlignBottom | muse::draw::AlignLeft | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignBottom | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
+                                  text);
             }
             painter->restore();
         }
@@ -1530,6 +1566,9 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
 {
     TRACE_DRAW_ITEM;
 
+    painter->save();
+    painter->rotate(item->textAngle());
+
     const TextBase::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
@@ -1557,6 +1596,8 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
     for (const TextBlock& t : ldata->blocks) {
         draw(t, item, painter);
     }
+
+    painter->restore();
 }
 
 void SingleDraw::draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter)
@@ -2239,6 +2280,13 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     }
 }
 
+void SingleDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextBase(item, painter, opt);
+}
+
 void SingleDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions&)
 {
     TRACE_DRAW_ITEM;
@@ -2315,7 +2363,7 @@ void SingleDraw::draw(const SoundFlag* item, Painter* painter, const PaintOption
     TRACE_DRAW_ITEM;
 
     painter->setFont(item->iconFont());
-    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
+    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, muse::draw::TextDontClip, Char(item->iconCode()));
 }
 
 void SingleDraw::draw(const Tapping* item, muse::draw::Painter* painter, const PaintOptions& opt)
@@ -2515,4 +2563,18 @@ void SingleDraw::draw(const WhammyBarSegment* item, Painter* painter, const Pain
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
+}
+
+void SingleDraw::setMask(const EngravingItem* item, Painter* painter)
+{
+    const EngravingItem::LayoutData* ldata = item->ldata();
+
+    const Shape& mask = ldata->mask();
+    if (mask.empty()) {
+        return;
+    }
+
+    RectF background = ldata->bbox().padded(item->spatium());
+
+    painter->setMask(background, mask.toRects());
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,6 +26,7 @@
 #include "dom/factory.h"
 #include "dom/instrtemplate.h"
 #include "dom/measure.h"
+#include "dom/scoreorder.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
@@ -35,12 +36,14 @@
 #include "dom/text.h"
 #include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
+#include "editing/transaction/transaction.h"
 #include "types/typesconv.h"
 
 // api
 #include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
+#include "instrument.h"
 #include "apitypes.h"
 
 using namespace mu::engraving::apiv1;
@@ -344,6 +347,101 @@ void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinati
     mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
 }
 
+Staff* Score::appendStaff(Part* destinationPart)
+{
+    if (!destinationPart) {
+        LOGW("appendStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendStaff(score(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
+Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
+{
+    if (!sourceStaff) {
+        LOGW("appendLinkedStaff: sourceStaff is null");
+        return nullptr;
+    }
+    if (!destinationPart) {
+        LOGW("appendLinkedStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
+bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+{
+    if (!staff) {
+        LOGW("setVoiceVisible: staff is null");
+        return false;
+    }
+
+    return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
+}
+
+void Score::replaceDrumset(Part* part, apiv1::Fraction* tick, Drumset* drumset)
+{
+    if (!part) {
+        LOGW("replaceDrumset: part is null");
+        return;
+    }
+    if (!tick) {
+        LOGW("replaceDrumset: tick is null");
+        return;
+    }
+    if (!drumset) {
+        LOGW("replaceDrumset: drumset is null");
+        return;
+    }
+
+    mu::engraving::EditPart::replaceDrumset(score(), part->part(), tick->fraction(), *drumset->drumset());
+}
+
+void Score::insertPart(const QString& instrumentId, int index)
+{
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("insertPart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::insertPart(score(), t, static_cast<size_t>(index));
+}
+
+void Score::replacePart(Part* part, const QString& instrumentId)
+{
+    if (!part) {
+        LOGW("replacePart: part is null");
+        return;
+    }
+
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("replacePart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::replacePart(score(), part->part(), t);
+}
+
+void Score::setScoreOrder(const QString& orderId)
+{
+    muse::String id = muse::String::fromQString(orderId);
+
+    for (const mu::engraving::ScoreOrder& order : mu::engraving::instrumentOrders) {
+        if (order.id == id) {
+            mu::engraving::EditPart::setScoreOrder(score(), order);
+            return;
+        }
+    }
+
+    LOGW("setScoreOrder: <%s> not found", qPrintable(orderId));
+}
+
 //---------------------------------------------------------
 //   Score::firstSegment
 //---------------------------------------------------------
@@ -531,12 +629,14 @@ void Score::doLayout(Fraction* startTick, Fraction* endTick)
 
 void Score::addRemoveSystemLocks(int interval, bool lock)
 {
-    EditSystemLocks::addRemoveSystemLocks(score(), interval, lock);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::addRemoveSystemLocks(tx, score(), interval, lock);
 }
 
 void Score::makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last)
 {
-    EditSystemLocks::makeIntoSystem(score(), first->measureBase(), last->measureBase());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::makeIntoSystem(tx, score(), first->measureBase(), last->measureBase());
 }
 
 void Score::showElementInScore(apiv1::EngravingItem* wrappedElement, int staffIdx)

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,6 @@
 
 #include "engraving/dom/partialtie.h"
 #include "engraving/dom/tie.h"
-#include "engraving/editing/undo.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -52,7 +51,11 @@ bool PartialTiePopupModel::canOpen(const EngravingItem* element)
     }
 
     Tie* tieItem = toTieSegment(element)->tie();
-    if (!tieItem || !tieItem->tieJumpPoints()) {
+    if (!tieItem) {
+        return false;
+    }
+    tieItem->updatePossibleJumpPoints();
+    if (!tieItem->tieJumpPoints()) {
         return false;
     }
 
@@ -226,6 +229,6 @@ void mu::notation::PartialTiePopupModel::onClosed()
         }
 
         // Combine this with the last undoable action (which will be to remove a tie) so the user cannot undo to get a translucent tie
-        undoStack()->mergeCommands(undoStack()->currentStateIndex() - 2);
+        undoStack()->mergeTransactions(undoStack()->currentStateIndex() - 2);
     }
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,11 +27,12 @@
 
 #include "measure.h"
 
-#include "../editing/mscoreview.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
 #include "../editing/inserttime.h"
+#include "../editing/mscoreview.h"
+#include "../editing/transaction/transaction.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -584,8 +585,8 @@ bool Measure::showMeasureNumberInAutoMode() const
         // Show either if
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is excluded from numbering.
-        return isFirstInSystem()
-               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->isFirstInSystem());
+        return (system() && isFirstInSystem())
+               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->system() && prevMeasure->isFirstInSystem());
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure
@@ -826,7 +827,7 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                if (seg->isType(SegmentType::BarLineType)) {
+                if (seg->isType(SegmentType::BarLineTypes)) {
                     // Barline segments are regenerated every layout
                     // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
                     m_segments.remove(s);
@@ -858,18 +859,12 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::MEASURE_NUMBER:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMeasureNumber(toMeasureNumber(e));
         }
         break;
 
     case ElementType::MMREST_RANGE:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMMRangeText(toMMRestRange(e));
         }
         break;
@@ -1384,7 +1379,7 @@ bool Measure::acceptDrop(EditData& data) const
     MuseScoreView* viewer = data.view();
     const EngravingItem* e = data.dropElement;
 
-    if (data.track == muse::nidx) {
+    if (data.track == muse::nidx || !system()) {
         return false;
     }
 
@@ -1525,6 +1520,8 @@ EngravingItem* Measure::drop(EditData& data)
     Staff* staff = score()->staff(staffIdx);
     //bool fromPalette = (e->track() == -1);
 
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+
     switch (e->type()) {
     case ElementType::MARKER:
     case ElementType::JUMP:
@@ -1541,7 +1538,7 @@ EngravingItem* Measure::drop(EditData& data)
             return nullptr;
         }
         staffIdx = staff->idx();
-        Segment* parentSeg = first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        Segment* parentSeg = first(SegmentType::Duration);
         if (!parentSeg) {
             delete e;
             return nullptr;
@@ -1559,19 +1556,19 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::BRACKET:
     {
-        Bracket* b = toBracket(e);
+        Selection sel = score()->selection();
+        staff_idx_t firstStaff = sel.staffStart();
+        staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
-        staff_idx_t firstStaff = 0;
-        for (Staff* s : score()->staves()) {
-            for (const BracketItem* bi : s->brackets()) {
-                staff_idx_t lastStaff = firstStaff + bi->bracketSpan() - 1;
-                if (staffIdx >= firstStaff && staffIdx <= lastStaff) {
-                    ++level;
+        for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
+            for (const BracketItem* bi : score()->staff(idx)->brackets()) {
+                if (bi->intersects(firstStaff, lastStaff)) {
+                    level = std::max(level, bi->column() + 1);
                 }
             }
-            firstStaff++;
         }
-        Selection sel = score()->selection();
+
+        Bracket* b = toBracket(e);
         if (sel.isRange()) {
             score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {
@@ -1814,7 +1811,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            EditSystemLocks::makeIntoSystem(score(), system()->first(), this);
+            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
             break;
         default:
             break;
@@ -1833,16 +1830,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::TBOX:
     case ElementType::FBOX:
     case ElementType::HBOX:
-    {
-        MeasureBase* newBox = toMeasureBase(e);
-        Measure* m = isMMRest() ? mmRestFirst() : this;
-        newBox->setTick(m->tick());
-        newBox->setNext(m);
-        newBox->setPrev(m->prev());
-        score()->undo(new InsertMeasures(newBox, newBox));
-        return newBox;
-    }
-    break;
+        return score()->insertBox(toMeasureBase(e), this);
 
     default:
         LOGD("Measure: cannot drop %s here", e->typeName());
@@ -1878,7 +1866,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
+                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigTypes | SegmentType::CourtesyKeySigTypes)) {
                     seg->setRtick(nl);
                 }
             }
@@ -2280,6 +2268,7 @@ void Measure::createVoice(int track)
 void Measure::sortStaves(std::vector<staff_idx_t>& dst)
 {
     std::vector<MStaff*> ms;
+    ms.reserve(dst.size());
     for (staff_idx_t idx : dst) {
         ms.push_back(m_mstaves[idx]);
     }
@@ -2303,41 +2292,6 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
     }
 
     score()->undoUpdatePlayCountText(this);
-}
-
-//---------------------------------------------------------
-//   exchangeVoice
-//---------------------------------------------------------
-
-void Measure::exchangeVoice(track_idx_t strack, track_idx_t dtrack, staff_idx_t staffIdx)
-{
-    for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        s->swapElements(strack, dtrack);
-    }
-
-    auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), endTick().ticks() - 1);
-    Fraction start = tick();
-    Fraction end = start + ticks();
-    for (auto i = spanners.begin(); i < spanners.end(); i++) {
-        Spanner* sp = i->value;
-        Fraction spStart = sp->tick();
-        Fraction spEnd = spStart + sp->ticks();
-        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
-             start.ticks(), end.ticks());
-        if (sp->isSlur() && (spStart >= start || spEnd < end)) {
-            if (sp->track() == strack && spStart >= start) {
-                sp->setTrack(dtrack);
-            } else if (sp->track() == dtrack && spStart >= start) {
-                sp->setTrack(strack);
-            }
-            if (sp->track2() == strack && spEnd < end) {
-                sp->setTrack2(dtrack);
-            } else if (sp->track2() == dtrack && spEnd < end) {
-                sp->setTrack2(strack);
-            }
-        }
-    }
-    checkMultiVoices(staffIdx);     // probably true, but check for invisible notes & rests
 }
 
 //---------------------------------------------------------
@@ -2927,12 +2881,10 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
     case Pid::EXCLUDE_FROM_NUMBERING:
         setExcludeFromNumbering(value.toBool());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_OFFSET:
         setMeasureNumberOffset(value.toInt());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_MODE:
         setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -2949,12 +2901,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
+        score()->invalidateRepeatList();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);
@@ -3067,7 +3022,7 @@ Measure* Measure::coveringMMRestOrThis()
         return m_mmRest;
     }
 
-    if (m_mmRestCount != -1) {
+    if (isMMRest()) {
         return this;
     }
 
@@ -3076,11 +3031,11 @@ Measure* Measure::coveringMMRestOrThis()
         m = m->prevMeasure();
     }
 
-    if (m) {
+    if (m && !m->m_mmRest->mmRestLast()->isBefore(this)) {
         return m->m_mmRest;
     }
 
-    return 0;
+    return this;
 }
 
 const Measure* Measure::coveringMMRestOrThis() const
@@ -3422,7 +3377,7 @@ double Measure::endingXForOpenEndedLines() const
     double systemEndX = sys->ldata()->bbox().width();
 
     Segment* lastSeg = last();
-    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineTypes)) {
         lastSeg = lastSeg->prevEnabled();
     }
     if (!lastSeg) {

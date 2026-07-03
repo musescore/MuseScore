@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "engraving/iengravingconfiguration.h"
-#include "shortcuts/ishortcutsconfiguration.h"
+#include "midiremote/imidiremoteconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "ui/iuiactionsregister.h"
@@ -79,7 +79,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Contextable, publ
     Q_PROPERTY(
         bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
 
-    muse::GlobalInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration;
+    muse::GlobalInject<muse::midiremote::IMidiRemoteConfiguration> midiRemoteConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;

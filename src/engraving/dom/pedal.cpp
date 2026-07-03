@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -49,6 +49,12 @@ static const ElementStyle pedalStyle {
     { Sid::pedalFontStyle,                     Pid::BEGIN_FONT_STYLE },
     { Sid::pedalFontStyle,                     Pid::CONTINUE_FONT_STYLE },
     { Sid::pedalFontStyle,                     Pid::END_FONT_STYLE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::pedalTextAlign,                     Pid::BEGIN_TEXT_ALIGN },
     { Sid::pedalTextAlign,                     Pid::CONTINUE_TEXT_ALIGN },
     { Sid::pedalTextAlign,                     Pid::END_TEXT_ALIGN },
@@ -62,7 +68,6 @@ static const ElementStyle pedalStyle {
     { Sid::pedalDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
     { Sid::pedalLineStyle,                     Pid::LINE_STYLE },
-    { Sid::pedalPosBelow,                      Pid::OFFSET },
     { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::pedalEndLineArrowHeight,            Pid::END_LINE_ARROW_HEIGHT },
     { Sid::pedalEndLineArrowWidth,             Pid::END_LINE_ARROW_WIDTH },
@@ -84,23 +89,9 @@ PedalSegment::PedalSegment(Pedal* sp, System* parent)
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
 }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid PedalSegment::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return spanner()->placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
-    }
-    return TextLineBaseSegment::getPropertyStyle(pid);
-}
-
 Sid Pedal::getPropertyStyle(Pid pid) const
 {
     switch (pid) {
-    case Pid::OFFSET:
-        return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
     case Pid::END_TEXT:
         return lineVisible() ? Sid::pedalEndText : Sid::pedalRosetteEndText;
     case Pid::BEGIN_TEXT:
@@ -138,7 +129,6 @@ Pedal::Pedal(EngravingItem* parent)
 //---------------------------------------------------------
 
 static const ElementStyle pedalSegmentStyle {
-    { Sid::pedalPosBelow, Pid::OFFSET },
     { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
 };
 
@@ -194,6 +184,31 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
+}
+
+bool Pedal::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    // Update style flag for text
+    if (propertyId == Pid::BEGIN_HOOK_TYPE) {
+        setBeginHookType(v.value<HookType>());
+
+        PropertyFlags beginTextStyleFlag = beginText() == propertyDefault(Pid::BEGIN_TEXT).value<String>()
+                                           ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::BEGIN_TEXT, beginTextStyleFlag);
+        PropertyFlags continueTextStyleFlag = continueText() == propertyDefault(Pid::CONTINUE_TEXT).value<String>()
+                                              ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::CONTINUE_TEXT, continueTextStyleFlag);
+    } else if (propertyId == Pid::LINE_VISIBLE) {
+        setLineVisible(v.toBool());
+        PropertyFlags endTextStyleFlag = endText() == propertyDefault(Pid::END_TEXT).value<String>()
+                                         ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::END_TEXT, endTextStyleFlag);
+    } else {
+        return TextLineBase::setProperty(propertyId, v);
+    }
+
+    triggerLayout();
+    return true;
 }
 
 Pedal* Pedal::findNextInStaff() const
@@ -286,5 +301,10 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     x -= (endSeg->isChordRestType() && nextPedal ? 1.25 : 0.75) * spatium();
 
     return PointF(x, 0.0);
+}
+
+Sid Pedal::defaultPosSid() const
+{
+    return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
 }
 }

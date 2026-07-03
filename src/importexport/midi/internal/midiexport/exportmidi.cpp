@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -396,9 +396,9 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
             // export RehearsalMarks only for first track
             if (staffIdx == 0) {
-                for (Segment* seg = rs->firstMeasure()->first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+                for (Segment* seg = rs->firstMeasure()->first(SegmentType::Duration);
                      seg && seg->tick().ticks() < endTick;
-                     seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+                     seg = seg->next1(SegmentType::Duration)) {
                     for (EngravingItem* e : seg->annotations()) {
                         if (e->isRehearsalMark()) {
                             RehearsalMark* r = toRehearsalMark(e);

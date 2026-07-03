@@ -21,8 +21,12 @@
  */
 
 #include "notationautomation.h"
+#include "engraving/automation/iautomation.h"
+#include "engraving/dom/masterscore.h"
 
 using namespace mu::notation;
+
+NotationAutomation::NotationAutomation() {}
 
 bool NotationAutomation::isAutomationModeEnabled() const
 {
@@ -34,7 +38,6 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
     if (m_isAutomationModeEnabled == enabled) {
         return;
     }
-
     m_isAutomationModeEnabled = enabled;
     m_automationModeEnabledChanged.notify();
 }

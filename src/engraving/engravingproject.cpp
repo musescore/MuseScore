@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -113,22 +113,11 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
     TRACEFUNC;
 
     m_masterScore->createPaddingTable();
-    m_masterScore->connectTies();
-    m_masterScore->undoRemoveStaleTieJumpPoints(false);
-
-    for (Part* p : m_masterScore->parts()) {
-        p->updateHarmonyChannels(false);
-    }
-
-    m_masterScore->rebuildMidiMapping();
-
     for (Score* s : m_masterScore->scoreList()) {
-        s->setPlaylistDirty();
-        s->setLayoutAll();
         s->createPaddingTable();
     }
 
-    m_masterScore->updateChannel();
+    m_masterScore->setLayoutAll();
     m_masterScore->update();
 
     Ret ret = checkCorrupted();

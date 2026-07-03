@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,10 +32,11 @@
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"
-#include "audio/main/isoundfontcontroller.h"
+#include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
@@ -54,13 +55,14 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::GlobalInject<muse::IApplication> application;
-    muse::GlobalInject<muse::extensions::IExtensionInstaller> extensionInstaller;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
+    muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
-    muse::ContextInject<muse::audio::ISoundFontController> soundFontController = { this };
+    muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };

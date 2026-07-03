@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -101,7 +101,6 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
 #include "editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
@@ -271,13 +270,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         } else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent") {
             sizeIsSpatiumDependent = e.readInt();
         } else if (tag == "frameWidth") {   // obsolete
-            frameType = FrameType::SQUARE;
+            frameType = FrameType::RECTANGLE;
             /*frameWidthMM =*/ e.readDouble();
         } else if (tag == "frameWidthS") {
-            frameType = FrameType::SQUARE;
+            frameType = FrameType::RECTANGLE;
             frameWidth = Spatium(e.readDouble());
         } else if (tag == "frame") {
-            frameType = e.readInt() ? FrameType::SQUARE : FrameType::NO_FRAME;
+            frameType = e.readInt() ? FrameType::RECTANGLE : FrameType::NO_FRAME;
         } else if (tag == "paddingWidth") {          // obsolete
             /*paddingWidthMM =*/
             e.readDouble();
@@ -922,17 +921,11 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             part->instrument()->setLongName(e.readText());
         } else if (tag == "shortName") {
             part->instrument()->setShortName(e.readText());
-        } else if (tag == "trackName") {
-            part->setPartName(e.readText());
         } else if (tag == "show") {
             part->setShow(e.readInt());
         } else {
             e.unknown();
         }
-    }
-
-    if (part->partName().isEmpty()) {
-        part->setPartName(part->instrument()->trackName());
     }
 }
 
@@ -1054,7 +1047,7 @@ static void adjustPlacement(EngravingItem* e)
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
     double normalize;
-    if (defaultPlacement == PlacementV::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+    if (defaultPlacement == PlacementV::BELOW && ee->offset().isNull()) {
         normalize = staffHeight;
     } else {
         normalize = 0.0;
@@ -1079,7 +1072,7 @@ static void adjustPlacement(EngravingItem* e)
         for (auto a : spanner->spannerSegments()) {
             // spanner segments share the placement setting of the spanner
             // just adjust offset
-            if (defaultPlacement == PlacementV::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+            if (defaultPlacement == PlacementV::BELOW && a->offset().isNull()) {
                 normalize = staffHeight;
             } else {
                 normalize = 0.0;
@@ -1184,10 +1177,10 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         read400::TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             note->setParenthesesMode(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             note->setParenthesesMode(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             note->add(s);
         }
@@ -1384,7 +1377,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+        t->setFrameType(e.readBool() ? FrameType::RECTANGLE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "frameRound") {
         read400::TRead::readProperty(t, e, ctx, Pid::FRAME_ROUND);
@@ -1393,7 +1386,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
             t->setFrameType(FrameType::CIRCLE);
         } else {
             if (t->circle()) {
-                t->setFrameType(FrameType::SQUARE);
+                t->setFrameType(FrameType::RECTANGLE);
             }
         }
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
@@ -1515,6 +1508,7 @@ static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingIt
             tctx.reader().unknown();
         }
     }
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1543,6 +1537,8 @@ static void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
         t->setXmlText(t->xmlText().replace(u"<sym>unicode", u"<sym>met"));
     }
 
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
+
     t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
@@ -1567,6 +1563,8 @@ static void readMarker(Marker* m, XmlReader& e, ReadContext& ctx)
         }
     }
     m->setMarkerType(mt);
+
+    CompatUtils::migrateOffsetPre302(m, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1595,6 +1593,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
     if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
         d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
     }
+    CompatUtils::migrateOffsetPre302(d, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1664,7 +1663,8 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
         delete _verseNumber;
     }
     lyrics->setAutoplace(true);
-    if (!lyrics->isStyled(Pid::OFFSET) && !ctx.pasteMode()) {
+
+    if (!lyrics->offset().isNull() && !ctx.pasteMode()) {
         // fix offset for pre-3.1 scores
         // 2.x and earlier: y offset was relative to staff; x offset was relative to center of notehead
         lyrics->rxoffset() -= lyrics->symWidth(SymId::noteheadBlack) * 0.5;
@@ -1674,6 +1674,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
         lyrics->setPlacement(PlacementV::ABOVE);
         adjustPlacement(lyrics);
     }
+    CompatUtils::migrateOffsetPre302(lyrics, ctx.mscVersion());
 }
 
 bool Read206::readDurationProperties206(XmlReader& e, ReadContext& ctx, DurationElement* de)
@@ -2226,6 +2227,7 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
     }
     CompatUtils::resetHookHeightSign(volta);
     adjustPlacement(volta);
+    CompatUtils::migrateOffsetPre302(volta, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -2272,6 +2274,7 @@ static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 
     CompatUtils::resetHookHeightSign(pedal);
     adjustPlacement(pedal);
+    CompatUtils::migrateOffsetPre302(pedal, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -2307,6 +2310,7 @@ static void readOttava(XmlReader& e, ReadContext& ctx, Ottava* ottava)
     ottava->styleChanged();
     CompatUtils::resetHookHeightSign(ottava);
     adjustPlacement(ottava);
+    CompatUtils::migrateOffsetPre302(ottava, ctx.mscVersion());
 }
 
 void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
@@ -2350,6 +2354,7 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
     }
     CompatUtils::resetHookHeightSign(h);
     adjustPlacement(h);
+    CompatUtils::migrateOffsetPre302(h, ctx.mscVersion());
 }
 
 void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
@@ -2375,6 +2380,7 @@ void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
         }
     }
     adjustPlacement(t);
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
@@ -2386,6 +2392,7 @@ void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
     }
     CompatUtils::resetHookHeightSign(tlb);
     adjustPlacement(tlb);
+    CompatUtils::migrateOffsetPre302(tlb, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -2579,8 +2586,8 @@ static bool readSlurTieProperties(XmlReader& e, ReadContext& ctx, SlurTie* st)
         st->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment") {
         SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
-        read400::TRead::read(s, e, ctx);
         st->add(s);
+        read400::TRead::read(s, e, ctx);
     } else if (!TRead::readItemProperties(st, e, ctx)) {
         return false;
     }
@@ -3031,6 +3038,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     tctx.reader().unknown();
                 }
             }
+            CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
             if (t->empty()) {
                 if (t->links()) {
                     if (t->links()->size() == 1) {
@@ -3073,6 +3081,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
                 adjustPlacement(el);
             }
+            CompatUtils::migrateOffsetPre302(el, ctx.mscVersion());
 
             segment->add(el);
         } else if (tag == "Tempo") {
@@ -3573,11 +3582,21 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         return false;
     }
 
-    score->connectTies();
-
     score->setFileDivision(Constants::DIVISION);
 
     score->setUpTempoMap();
+    if (score->isMaster()) {
+        // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+        // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+        // elements still do it).
+        // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+        // up-to-date from that point. But we weren't finished reading the score, so the score will still
+        // change. We need to tell the repeat list about that, so that it will be updated next time
+        // someone uses it.
+        static_cast<MasterScore*>(score)->invalidateRepeatList();
+    }
+    score->connectTies();
+    score->undoRemoveStaleTieJumpPoints(false);
 
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
@@ -3646,7 +3665,7 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     read114::Read114::setBarLineSpanToStaves(score, ctx);
 
     // set local overrides to bar lines
-    constexpr auto st = SegmentType::BarLineType;
+    constexpr auto st = SegmentType::BarLineTypes;
     const size_t numStaves = score->nstaves();
     for (Segment* s = score->firstSegment(st); s; s = s->next1(st)) {
         // optional local bar line span override of this segment

@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -100,7 +100,7 @@ qt_add_qml_module(appshell_qml
         TARGET muse_shortcuts_qml
         TARGET muse_tours_qml
         TARGET engraving_qml
-        TARGET inspector_qml
+        TARGET propertiespanel_qml
         TARGET instrumentsscene_qml
         TARGET musesounds_qml
         TARGET notationscene_qml

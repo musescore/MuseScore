@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -95,6 +95,8 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
+    PointF defaultPos() const override;
+
     Sid getPropertyStyle(Pid id) const override;
     void resetProperty(Pid id) override;
     void styleChanged() override;
@@ -103,6 +105,7 @@ public:
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void setColor(const Color& col) override;
+    void setZ(int val) override;
 
     bool collectForDrawing() const override;
 
@@ -205,7 +208,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     virtual void computeStartElement();
     void computeEndElement();
@@ -247,6 +249,7 @@ public:
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
     virtual void setColor(const Color& col) override;
+    virtual void setZ(int val) override;
     Spanner* nextSpanner(EngravingItem* e, staff_idx_t activeStaff);
     Spanner* prevSpanner(EngravingItem* e, staff_idx_t activeStaff);
     virtual EngravingItem* nextSegmentElement() override;

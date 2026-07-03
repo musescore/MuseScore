@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -84,7 +84,7 @@ i = 0
 while i < len(release_assets):
     asset = release_assets[i]
     name = asset.get("name")
-    if ".AppImage" in name and ("aarch64" in name or "armv7l" in name):
+    if ".AppImage" in name and "aarch64" in name:
         release_new_assets.append(asset)
         del release_assets[i]
     else:

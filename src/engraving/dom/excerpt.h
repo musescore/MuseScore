@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@ class Part;
 class Score;
 class Staff;
 class Spanner;
+class TieMap;
 
 class Excerpt
 {
@@ -100,6 +101,8 @@ private:
     friend class MasterScore;
 
     static void promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx);
+    static void cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                             const TracksMap& trackList, TieMap& tieMap);
 
     void setInited(bool inited);
     void writeNameToMetaTags();

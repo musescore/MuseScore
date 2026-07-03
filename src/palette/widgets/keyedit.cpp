@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 #include <QMouseEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QVBoxLayout>
 
 #include "keyedit.h"
 
@@ -311,12 +312,9 @@ void KeyCanvas::snap(Accidental* a)
 //---------------------------------------------------------
 
 KeyEditor::KeyEditor(QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Contextable(muse::iocCtxForQWidget(this))
+    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
-    setWindowTitle(muse::qtrc("palette", "Key signatures"));
-
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -326,7 +324,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     keySigframe->setLayout(layout);
 
-    m_keySigPaletteWidget = new PaletteWidget(this);
+    m_keySigPaletteWidget = new PaletteWidget(this, true /*setIocContext*/);
     m_keySigPaletteWidget->setPalette(PaletteCreator(iocContext()).newKeySigPalette());
     m_keySigPaletteWidget->setReadOnly(false);
 
@@ -344,7 +342,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     accidentalsFrame->setLayout(layout);
 
-    m_accidentalsPaletteWidget = new PaletteWidget(this);
+    m_accidentalsPaletteWidget = new PaletteWidget(this, true /*setIocContext*/);
     m_accidentalsPaletteWidget->setPalette(PaletteCreator(iocContext()).newAccidentalsPalette());
     qreal adj = m_accidentalsPaletteWidget->mag();
     m_accidentalsPaletteWidget->setGridSize(m_accidentalsPaletteWidget->gridWidth() / adj, m_accidentalsPaletteWidget->gridHeight() / adj);
@@ -451,4 +449,30 @@ void KeyEditor::save()
 bool KeyEditor::showKeyPalette() const
 {
     return m_keySigArea->isVisible();
+}
+
+KeyEditorDialog::KeyEditorDialog(QWidget* parent)
+    : muse::ui::WidgetDialog(parent)
+{
+    setWindowTitle(muse::qtrc("palette", "Key signatures"));
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
+
+void KeyEditorDialog::classBegin()
+{
+    m_keyEditor = new KeyEditor(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+    layout->addWidget(m_keyEditor);
+}
+
+bool KeyEditorDialog::showKeyPalette() const
+{
+    return m_keyEditor->showKeyPalette();
+}
+
+void KeyEditorDialog::setShowKeyPalette(bool showKeyPalette)
+{
+    m_keyEditor->setShowKeyPalette(showKeyPalette);
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -132,7 +132,7 @@ void InputResourceItem::handleMenuItem(const QString& menuItemId)
     if (menuItemId == GET_MORE_SOUNDS_ID) {
         const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
         const QString urlParams("muse-sounds?utm_source=mss-mixer&utm_medium=mh&utm_campaign=mss-mixer-ms-mainpage");
-        interactive()->openUrl(url + urlParams);
+        platformInteractive()->openUrl(url + urlParams);
         return;
     }
 
@@ -181,6 +181,7 @@ void InputResourceItem::setParamsRecourceMeta(const AudioResourceMeta& newMeta)
     requestToCloseNativeEditorView();
 
     m_currentInputParams.resourceMeta = newMeta;
+    m_currentInputParams.configuration.clear();
 
     emit titleChanged();
     emit isBlankChanged();

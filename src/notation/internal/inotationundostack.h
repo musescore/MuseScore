@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 
 namespace mu::engraving {
 class EditData;
+class Transaction;
 enum class ElementType : unsigned char;
 }
 
@@ -46,11 +47,13 @@ public:
 
     virtual void undoRedoToIndex(size_t, mu::engraving::EditData*) = 0;
 
+    virtual void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) = 0;
+
     virtual void prepareChanges(const muse::TranslatableString&) = 0;
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 
-    virtual void mergeCommands(const size_t startIdx) = 0;
+    virtual void mergeTransactions(const size_t startIdx) = 0;
 
     virtual bool isStackClean() const = 0;
 

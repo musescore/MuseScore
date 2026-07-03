@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,12 +23,14 @@
 #include "editchord.h"
 
 #include "../dom/arpeggio.h"
+#include "../dom/articulation.h"
 #include "../dom/chord.h"
 #include "../dom/chordrest.h"
 #include "../dom/factory.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
+#include "../dom/tapping.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/utils.h"
 
@@ -40,6 +42,81 @@ void EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool
         return;
     }
     undoAddParenthesesToNotes(chord, notes, addToLinked, generated);
+}
+
+//---------------------------------------------------------
+//   toggleArticulation
+///   Toggle attribute \a attr for all selected notes/rests.
+///
+///   Called from padToggle() to add note prefix/accent.
+//---------------------------------------------------------
+
+void EditChord::toggleArticulation(Score* score, SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = nullptr;
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            na->setSymId(attr);
+            if (!EditChord::toggleArticulation(score, el, na)) {
+                delete na;
+            }
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+bool EditChord::toggleArticulation(Score* score, EngravingItem* el, Articulation* a)
+{
+    Chord* c;
+    if (el->isNote()) {
+        c = toNote(el)->chord();
+    } else if (el->isChord()) {
+        c = toChord(el);
+    } else {
+        return false;
+    }
+    Articulation* oa = c->hasArticulation(a);
+    if (oa) {
+        score->undoRemoveElement(oa);
+        return false;
+    }
+
+    Tapping* tap = c->tapping();
+    if (tap) {
+        score->undoRemoveElement(tap);
+    }
+
+    if (!a->isDouble()) {
+        a->setParent(c);
+        a->setTrack(c->track());
+        score->undoAddElement(a);
+        return true;
+    }
+
+    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
+    for (const SymId& id : newSubComponentIds) {
+        Articulation* articCopy = a->clone();
+        articCopy->setSymId(id);
+
+        if (!c->hasArticulation(articCopy)) {
+            articCopy->setParent(c);
+            articCopy->setTrack(c->track());
+            score->undoAddElement(articCopy);
+            continue;
+        }
+        delete articCopy;
+    }
+    return true;
 }
 
 void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
@@ -148,6 +225,7 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         linkedParenRight->setTrack(linkedChord->track());
 
         std::vector<Note*> linkedNotes;
+        linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
             linkedNotes.push_back(linkedNote);
@@ -209,6 +287,7 @@ void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes
         }
 
         std::vector<Note*> linkedNotes;
+        linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
             linkedNotes.push_back(linkedNote);
@@ -247,7 +326,7 @@ void EditChord::doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen)
         const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenthesisInfo(leftParen);
 
         chord->removeNoteParenthesisInfo(noteParenInfo);
-        //! HACK: don't delete as it may still be used in Inspector - see Score::doUndoRemoveElement
+        //! HACK: don't delete as it may still be used in PropertiesPanel - see Score::doUndoRemoveElement
         // delete noteParenInfo
 
         chord->triggerLayout();
@@ -263,7 +342,7 @@ void EditChord::doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen)
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
-void ChangeChordStaffMove::flip(EditData*)
+void ChangeChordStaffMove::flip()
 {
     int v = chordRest->staffMove();
     staff_idx_t oldStaff = chordRest->vStaffIdx();
@@ -291,7 +370,7 @@ void ChangeChordStaffMove::flip(EditData*)
 //   SwapCR
 //---------------------------------------------------------
 
-void SwapCR::flip(EditData*)
+void SwapCR::flip()
 {
     Segment* s1 = cr1->segment();
     Segment* s2 = cr2->segment();
@@ -317,7 +396,7 @@ void SwapCR::flip(EditData*)
 //   ChangeSpanArpeggio
 //---------------------------------------------------------
 
-void ChangeSpanArpeggio::flip(EditData*)
+void ChangeSpanArpeggio::flip()
 {
     Arpeggio* f_spanArp = m_chord->spanArpeggio();
 
@@ -325,58 +404,58 @@ void ChangeSpanArpeggio::flip(EditData*)
     m_spanArpeggio = f_spanArp;
 }
 
-void AddNoteParenthesisInfo::redo(EditData*)
+void AddNoteParenthesisInfo::redo()
 {
     m_chord->addNoteParenthesisInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void mu::engraving::AddNoteParenthesisInfo::undo(EditData*)
+void mu::engraving::AddNoteParenthesisInfo::undo()
 {
     m_chord->removeNoteParenthesisInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void AddNoteParenthesisInfo::cleanup(bool undo)
+void AddNoteParenthesisInfo::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_noteParenInfo;
         m_noteParenInfo = nullptr;
     }
 }
 
-void RemoveNoteParenthesisInfo::redo(EditData*)
+void RemoveNoteParenthesisInfo::redo()
 {
     m_chord->removeNoteParenthesisInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void RemoveNoteParenthesisInfo::undo(EditData*)
+void RemoveNoteParenthesisInfo::undo()
 {
     m_chord->addNoteParenthesisInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void RemoveNoteParenthesisInfo::cleanup(bool undo)
+void RemoveNoteParenthesisInfo::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete m_noteParenInfo;
         m_noteParenInfo = nullptr;
     }
 }
 
-void RemoveSingleNoteParentheses::redo(EditData*)
+void RemoveSingleNoteParentheses::redo()
 {
     m_chord->removeNoteFromParenthesisInfo(m_note, m_paren);
 
     m_chord->triggerLayout();
 }
 
-void RemoveSingleNoteParentheses::undo(EditData*)
+void RemoveSingleNoteParentheses::undo()
 {
     m_chord->addNoteToParenthesisInfo(m_note, m_paren);
 

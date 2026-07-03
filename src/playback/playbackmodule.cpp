@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,10 +25,14 @@
 #include "modularity/ioc.h"
 
 #include "ui/iuiactionsregister.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 #include "interactive/iinteractiveuriregister.h"
 
 #include "internal/playbackcontroller.h"
 #include "internal/playbackuiactions.h"
+#include "internal/playbackcommandsregister.h"
+#include "internal/playbackcommandsstate.h"
 #include "internal/playbackconfiguration.h"
 #include "internal/soundprofilesrepository.h"
 
@@ -56,6 +60,11 @@ void PlaybackModule::resolveImports()
     auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://playback/soundprofilesdialog"), "MuseScore.Playback", "SoundProfilesDialog");
+    }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<PlaybackCommandsRegister>());
     }
 }
 
@@ -85,11 +94,15 @@ void PlaybackContext::resolveImports()
     if (ar) {
         ar->reg(m_playbackUiActions);
     }
+
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<PlaybackCommandsState>(iocContext()));
+    }
 }
 
 void PlaybackContext::onInit(const IApplication::RunMode& mode)
 {
-    m_soundProfileRepo->init();
     m_playbackController->init();
 
     if (mode != IApplication::RunMode::GuiApp) {
@@ -97,4 +110,5 @@ void PlaybackContext::onInit(const IApplication::RunMode& mode)
     }
 
     m_playbackUiActions->init();
+    m_soundProfileRepo->init();
 }

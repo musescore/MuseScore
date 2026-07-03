@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,6 +34,7 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 
 #include "playback/iplaybackcontroller.h"
 
@@ -94,6 +95,7 @@ public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };

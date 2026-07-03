@@ -6,7 +6,6 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        # default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
         default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
         required: true
       build_mode:
@@ -24,12 +23,15 @@ on:
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
+        required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
         required: false
   workflow_call:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        # default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
         default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
         type: string
         required: true
@@ -51,6 +53,11 @@ on:
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
+        type: string
+        required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
         type: string
         required: false
 
@@ -67,7 +74,9 @@ jobs:
       build_number: ${{ steps.make_build_number.outputs.build_number }}
     steps:
       - name: Clone repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Generate build number
         id: make_build_number
         run: |
@@ -88,18 +97,6 @@ jobs:
       deploy: ${{ inputs.deploy_backend }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
-  linux_arm32:
-    name: Linux ARM32
-    needs: generate_build_number
-    if: ${{ contains(inputs.platforms, 'linux_arm32') }}
-    uses: ./.github/workflows/build_linux_arm32.yml
-    secrets: inherit
-    with:
-      build_mode: ${{ inputs.build_mode }}
-      publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
-      build_number: ${{ needs.generate_build_number.outputs.build_number }}
-
   linux:
     name: Linux
     needs: generate_build_number
@@ -111,6 +108,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   macos:
     name: macOS
@@ -123,6 +121,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   windows:
     name: Windows
@@ -135,6 +134,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   # Dummy build for testing purposes.
   dummy:
@@ -145,13 +145,15 @@ jobs:
         # Expose edge cases like different command versions, CRLF line endings, etc.
         # Use same OS versions as used in real build workflows.
         os:
-        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
+        - ubuntu-22.04 # linux_x64, backend, linux_arm64
         - macos-latest
         - windows-2025 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
+      with:
+        submodules: recursive
     - name: Prepare dummy artifact
       run: |
         ARTIFACTS_DIR="build.artifacts"

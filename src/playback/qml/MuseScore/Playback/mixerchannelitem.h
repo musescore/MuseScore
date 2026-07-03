@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@
 #include "ui/qml/Muse/Ui/navigationpanel.h"
 
 #include "audio/common/audiotypes.h"
+#include "project/iprojectaudiosettings.h"
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
 #include "auxsenditem.h"
@@ -115,16 +116,16 @@ public:
 
     void setOutputResourceItemCount(size_t count);
 
-    void loadInputParams(const muse::audio::AudioInputParams& newParams);
-    void loadOutputParams(const muse::audio::AudioOutputParams& newParams);
+    void loadInputParams(const project::AudioInputParams& newParams);
+    void loadOutputParams(const project::AudioOutputParams& newParams);
     void loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState);
 
-    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges&& audioSignalChanges);
+    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges& audioSignalChanges);
 
     bool outputOnly() const;
 
-    const muse::audio::AudioInputParams& inputParams() const;
-    const muse::audio::AudioOutputParams& outputParams() const;
+    const project::AudioInputParams& inputParams() const;
+    const project::AudioOutputParams& outputParams() const;
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
@@ -157,8 +158,10 @@ signals:
 
     void panelChanged(muse::ui::NavigationPanel* panel);
 
-    void inputParamsChanged(const muse::audio::AudioInputParams& params);
-    void outputParamsChanged(const muse::audio::AudioOutputParams& params);
+    void inputParamsChanged(const project::AudioInputParams& params);
+    void controlParamsChanged(const project::AudioOutputParams& params);
+    void fxChainParamsChanged(const project::AudioOutputParams& params);
+    void auxSendsParamsChanged(const project::AudioOutputParams& params);
     void soloMuteStateChanged(const notation::INotationSoloMuteState::SoloMuteState& state);
 
     void inputResourceItemChanged();
@@ -195,8 +198,8 @@ protected:
     muse::audio::TrackId m_trackId = -1;
     engraving::InstrumentTrackId m_instrumentTrackId;
 
-    muse::audio::AudioInputParams m_inputParams;
-    muse::audio::AudioOutputParams m_outParams;
+    project::AudioInputParams m_inputParams;
+    project::AudioOutputParams m_outParams;
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<muse::audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -58,9 +58,31 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minSystemDistance,                          8.5_sp),
     styleDef(maxSystemDistance,                          15.0_sp),
     styleDef(alignSystemToMargin,                        true),
+
+    styleDef(instrumentNamesShowTranspositionLong,       true),
+    styleDef(instrumentNamesShowTranspositionShort,      true),
+    styleDef(instrumentNamesFormatLong,                  InstrumentNamesFormat::NAME_IN_TRANSP_NUM),
+    styleDef(instrumentNamesCustomFormatLong,            String(u"$name in $transposition $number")),
+    styleDef(instrumentNamesFormatShort,                 InstrumentNamesFormat::NAME_IN_TRANSP_NUM),
+    styleDef(instrumentNamesCustomFormatShort,           String(u"$name in $transposition $number")),
+
     styleDef(instrumentNamesAlignLong,                   InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesAlignShort,                  InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesStackVertically,             false),
+    styleDef(instrumentNamesAlignIncludeGroupBrackets,   true),
+
+    styleDef(instrumentNumeralsTrailingDotSingle,            false),
+    styleDef(instrumentNumeralsTrailingDotMultiple,          false),
+    styleDef(instrumentNumeralsOrientation,                  SharedLabelOrientation::HORIZONTAL),
+    styleDef(instrumentNumeralsVerticalThreshold,            2),
+    styleDef(instrumentNumeralsHorizontalThreshold,          2),
+    styleDef(instrumentNumeralsHyphenEnable,                 true),
+    styleDef(instrumentNumeralsHyphenThreshold,              1),
+
+    styleDef(windsNameByGroup,                           true),
+    styleDef(vocalsNameByGroup,                          true),
+    styleDef(stringsNameByGroup,                         false),
+    styleDef(othersNameByGroup,                          false),
 
     styleDef(enableVerticalSpread,                       true),
     styleDef(spreadSystem,                               2.5),
@@ -160,6 +182,13 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(bracketDistance,                            0.45_sp),
     styleDef(akkoladeWidth,                              1.5_sp),
     styleDef(akkoladeBarDistance,                        0.35_sp),
+    styleDef(groupBracketLineWidth,                      0.11_sp),
+    styleDef(groupBracketHookLen,                        1.0_sp),
+    styleDef(groupBracketTextOrientation,                Orientation::VERTICAL),
+    styleDef(groupBracketTextAlign,                      DirectionH::AUTO),
+    styleDef(groupBracketHangTextIntoMargin,             true),
+    styleDef(groupBracketDistanceToNames,                1.0_sp),
+    styleDef(groupBracketDistanceToGroupBracket,         1.0_sp),
 
     styleDef(dividerLeft,                                false),
     styleDef(dividerLeftSym,                             String(u"systemDivider")),
@@ -280,6 +309,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(articulationKeepTogether,                   true),
     styleDef(trillAlwaysShowCueNote,                  false),
     styleDef(lastSystemFillLimit,                        PropertyValue(0.3)),
+
+    styleDef(enableStaveSharing,                         false),
+    styleDef(allowVoiceCrossing,                         false),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),
     styleDef(hairpinPosAbove,                            PointF(0.0, -1.75)),
@@ -575,6 +607,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minWigglyGlissandoLength,                   2.0_sp),
     styleDef(slurMinDistance,                            0.5_sp),
     styleDef(tieMinDistance,                             0.5_sp),
+    styleDef(maskSlurs,                                  true),
+    styleDef(maskTies,                                   true),
     styleDef(laissezVibMinDistance,                      0.5_sp),
     styleDef(headerToLineStartDistance,                  1.0_sp),
     styleDef(lineEndToBarlineDistance,                   0.25_sp),
@@ -1112,6 +1146,22 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(partInstrumentFrameBgColor,                 PropertyValue::fromValue(Color::transparent)),
     styleDef(partInstrumentPosition,                     AlignH::LEFT),
 
+    styleDef(groupBracketFontFace,                     "Edwin"),
+    styleDef(groupBracketFontSize,                     10.0),
+    styleDef(groupBracketLineSpacing,                  1.0),
+    styleDef(groupBracketFontSpatiumDependent,         true),
+    styleDef(groupBracketFontStyle,                    int(FontStyle::Normal)),
+    styleDef(groupBracketColor,                        PropertyValue::fromValue(Color::BLACK)),
+    styleDef(groupBracketAlign,                        Align(AlignH::HCENTER, AlignV::VCENTER)),
+    styleDef(groupBracketOffset,                       PointF(.0, .0)),
+    styleDef(groupBracketFrameType,                    int(FrameType::NO_FRAME)),
+    styleDef(groupBracketFramePadding,                 0.2_sp),
+    styleDef(groupBracketFrameWidth,                   0.1_sp),
+    styleDef(groupBracketFrameRound,                   0.0_sp),
+    styleDef(groupBracketFrameFgColor,                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(groupBracketFrameBgColor,                 PropertyValue::fromValue(Color::transparent)),
+    styleDef(groupBracketPosition,                     AlignH::HCENTER),
+
     // OBSOLETE after version 4.1. Dynamic text now takes its setting from expression.
     styleDef(dynamicsFontFace,                           "Edwin"),
     styleDef(dynamicsFontSize,                           10.0),
@@ -1242,7 +1292,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberAlternateAlign,                Align(AlignH::LEFT, AlignV::BASELINE)),
     styleDef(measureNumberAlternatePosAbove,             PointF(0.0, -4.0)),
     styleDef(measureNumberAlternatePosBelow,             PointF(0.0, 4.0)),
-    styleDef(measureNumberAlternateFrameType,            int(FrameType::SQUARE)),
+    styleDef(measureNumberAlternateFrameType,            int(FrameType::RECTANGLE)),
     styleDef(measureNumberAlternateFramePadding,         0.2_sp),
     styleDef(measureNumberAlternateFrameWidth,           0.1_sp),
     styleDef(measureNumberAlternateFrameRound,           0.0_sp),
@@ -1330,6 +1380,26 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(staffTextFrameBgColor,                      PropertyValue::fromValue(Color::transparent)),
     styleDef(staffTextPosition,                          AlignH::LEFT),
 
+    styleDef(staveSharingLabelFontFace,                          "Edwin"),
+    styleDef(staveSharingLabelFontSize,                          10.0),
+    styleDef(staveSharingLabelLineSpacing,                       1.0),
+    styleDef(staveSharingLabelFontSpatiumDependent,              true),
+    styleDef(staveSharingLabelFontStyle,                         int(FontStyle::Normal)),
+    styleDef(staveSharingLabelColor,                             PropertyValue::fromValue(Color::BLACK)),
+    styleDef(staveSharingLabelAlign,                             Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(staveSharingLabelOffsetType,                        int(OffsetType::SPATIUM)),
+    styleDef(staveSharingLabelPlacement,                         PlacementV::ABOVE),
+    styleDef(staveSharingLabelPosAbove,                          PointF(.0, -1.0)),
+    styleDef(staveSharingLabelPosBelow,                          PointF(.0, 2.5)),
+    styleDef(staveSharingLabelMinDistance,                       0.5_sp),
+    styleDef(staveSharingLabelFrameType,                         int(FrameType::NO_FRAME)),
+    styleDef(staveSharingLabelFramePadding,                      0.2_sp),
+    styleDef(staveSharingLabelFrameWidth,                        0.1_sp),
+    styleDef(staveSharingLabelFrameRound,                        0.0_sp),
+    styleDef(staveSharingLabelFrameFgColor,                      PropertyValue::fromValue(Color::BLACK)),
+    styleDef(staveSharingLabelFrameBgColor,                      PropertyValue::fromValue(Color::transparent)),
+    styleDef(staveSharingLabelPosition,                          AlignH::LEFT),
+
     styleDef(fretDiagramFingeringFontFace,               "FreeSans"),
     styleDef(fretDiagramFingeringFontSize,               6.0),
     styleDef(fretDiagramFingeringLineSpacing,            1.0),
@@ -1369,7 +1439,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkFontStyle,                     int(FontStyle::Bold)),
     styleDef(rehearsalMarkColor,                         PropertyValue::fromValue(Color::BLACK)),
     styleDef(rehearsalMarkAlign,                         Align(AlignH::HCENTER, AlignV::BASELINE)),
-    styleDef(rehearsalMarkFrameType,                     int(FrameType::SQUARE)),
+    styleDef(rehearsalMarkFrameType,                     int(FrameType::RECTANGLE)),
     styleDef(rehearsalMarkFramePadding,                  0.5_sp),
     styleDef(rehearsalMarkFrameWidth,                    0.16_sp),
     styleDef(rehearsalMarkFrameRound,                    0.0_sp),
@@ -2034,6 +2104,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(fretDiagramFingeringMusicalSymbolSize,               6.0),
     styleDef(fretDiagramFretNumberMusicalSymbolSize,              6.0),
     styleDef(glissandoMusicalSymbolSize,                          8.0),
+    styleDef(groupBracketMusicalSymbolSize,                       10.0),
     styleDef(hairpinMusicalSymbolSize,                            10.0),
     styleDef(hammerOnPullOffTappingMusicalSymbolSize,             8.0),
     styleDef(harpPedalDiagramMusicalSymbolSize,                   10.0),
@@ -2055,6 +2126,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(ottavaMusicalSymbolSize,                             10.0),
     styleDef(pageNumberMusicalSymbolSize,                         11.0),
     styleDef(palmMuteMusicalSymbolSize,                           10.0),
+    styleDef(whammyBarMusicalSymbolSize,                          10.0),
     styleDef(partInstrumentMusicalSymbolSize,                     14.0),
     styleDef(pedalMusicalSymbolSize,                              10.0),
     styleDef(rehearsalMarkMusicalSymbolSize,                      14.0),

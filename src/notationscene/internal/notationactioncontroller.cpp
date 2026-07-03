@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
 #include "notation/notationtypes.h"
@@ -76,7 +77,8 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
     { "mark-empty-staff-visibility-overrides", &EngravingDebuggingOptions::markEmptyStaffVisibilityOverrides },
     { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures },
-    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests }
+    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests },
+    { "show-both-origin-and-combined", &EngravingDebuggingOptions::showOriginAndCombinedStaves },
 };
 
 //! NOTE Just for more readable
@@ -91,7 +93,7 @@ void NotationActionController::init()
     registerAction("action://notation/cancel", &Controller::resetState, &Controller::isNotationPage);
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
-    registerAction("note-input", &Controller::toggleNoteInput, &Controller::startNoteInputAllowed);
+    registerAction("note-input", &Controller::toggleNoteInput, &Controller::toggleNoteInputAllowed);
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
     registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
@@ -154,7 +156,10 @@ void NotationActionController::init()
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
     for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
-        registerAction(it.key(), [=]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
+        registerAction(it.key(), [this, fraction = it.value()]() {
+            navigateToTextElementByFraction(
+                fraction);
+        }, &Controller::textNavigationByFractionAvailable);
     }
 
     registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay,
@@ -249,6 +254,7 @@ void NotationActionController::init()
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
     registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+    registerAction("select-notes-in-chord", &Controller::selectAllNotesInChord, &Controller::hasSelection);
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
@@ -587,7 +593,7 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
         return false;
     }
 
-    if (playbackController()->isPlaying()) {
+    if (globalContext()->playbackState()->isPlaying()) {
         if (!muse::contains(m_isAllowedDuringPlayback, code)) {
             return false;
         }
@@ -710,8 +716,8 @@ void NotationActionController::resetState()
 {
     TRACEFUNC;
 
-    if (playbackController()->isPlaying()) {
-        playbackController()->reset();
+    if (globalContext()->playbackState()->isPlaying()) {
+        dispatcher()->dispatch("stop");
     }
 
     auto noteInput = currentNotationNoteInput();
@@ -858,7 +864,7 @@ void NotationActionController::padNote(const Pad& pad)
     }
 
     if (interaction->selection()->isNone()) {
-        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
             return;
         }
 
@@ -936,7 +942,7 @@ void NotationActionController::toggleAccidental(AccidentalType type)
     }
 
     if (interaction->selection()->isNone()) {
-        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
             return;
         }
 
@@ -966,7 +972,7 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     }
 
     if (interaction->selection()->isNone()) {
-        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
             return;
         }
 
@@ -1147,7 +1153,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
-        if (playbackController()->isPlaying()) {
+        if (globalContext()->playbackState()->isPlaying()) {
             MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
@@ -1276,7 +1282,7 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     }
 
     if (interaction->selection()->isNone()) {
-        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
             return;
         }
 
@@ -1621,6 +1627,41 @@ void NotationActionController::selectAllSimilarElementsInRange()
     }
 }
 
+void NotationActionController::selectAllNotesInChord()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    std::set<const Chord*> chords;
+    for (const EngravingItem* item : selectedElements) {
+        if (item->isNote()) {
+            chords.insert(toNote(item)->chord());
+        }
+    }
+
+    if (chords.empty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> allNotes;
+    for (const Chord* chord : chords) {
+        for (Note* note : chord->notes()) {
+            allNotes.push_back(note);
+        }
+    }
+
+    interaction->clearSelection();
+    interaction->select(allNotes, SelectType::ADD);
+}
+
 void NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
@@ -1834,7 +1875,9 @@ void NotationActionController::openBreaksDialog()
 
 void NotationActionController::openTransposeDialog()
 {
-    interactive()->open("musescore://notation/transpose");
+    interactive()->open("musescore://notation/transpose").onResolve(this, [this](const Val&) {
+        currentNotationInteraction()->checkAndShowError();
+    });
 }
 
 void NotationActionController::openPartsDialog()
@@ -2238,9 +2281,14 @@ void NotationActionController::playSelectedElement(bool playChord)
     currentNotationScore()->setPlayNote(false);
 }
 
-bool NotationActionController::startNoteInputAllowed() const
+bool NotationActionController::toggleNoteInputAllowed() const
 {
-    if (isEditingElement() || playbackController()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
+    if (globalContext()->playbackState()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
+        return false;
+    }
+
+    //! NOTE: We're more strict about starting note input mode than exiting it.
+    if (!isNoteInputMode() && isEditingElement()) {
         return false;
     }
 
@@ -2426,12 +2474,12 @@ void NotationActionController::registerAction(const ActionCode& code,
 
 void NotationActionController::registerNoteInputAction(const ActionCode& code, NoteInputMethod inputMethod)
 {
-    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &Controller::startNoteInputAllowed);
+    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &Controller::toggleNoteInputAllowed);
 }
 
 bool NotationActionController::noteInputActionAllowed() const
 {
-    if (!isNoteInputMode() && !startNoteInputAllowed()) {
+    if (!isNoteInputMode() && !toggleNoteInputAllowed()) {
         return false;
     }
 

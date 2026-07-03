@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,6 +23,8 @@
 #ifndef MU_NOTATION_BREAKSDIALOG_H
 #define MU_NOTATION_BREAKSDIALOG_H
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_breaksdialog.h"
 
 #include "context/iglobalcontext.h"
@@ -33,7 +35,7 @@ namespace mu::notation {
 //   BreaksDialog
 //---------------------------------------------------------
 
-class BreaksDialog : public QDialog, public Ui::BreaksDialog, public muse::Contextable
+class BreaksDialog : public muse::ui::WidgetDialog, private Ui::BreaksDialog
 {
     Q_OBJECT
 
@@ -41,6 +43,8 @@ class BreaksDialog : public QDialog, public Ui::BreaksDialog, public muse::Conte
 
 public:
     BreaksDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
 private slots:
     void accept() override;

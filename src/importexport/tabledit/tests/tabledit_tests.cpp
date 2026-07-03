@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -114,6 +114,10 @@ TEST_F(TablEdit_Tests, tef_metadata) {
     tefReadTest("metadata");
 }
 
+TEST_F(TablEdit_Tests, tef_multi_track_frets) {
+    tefReadTest("multi_track_frets");
+}
+
 TEST_F(TablEdit_Tests, tef_multi_track_rests) {
     tefReadTest("multi_track_rests");
 }
@@ -205,6 +209,17 @@ TEST_F(TablEdit_Tests, tef_tie_1) {
 TEST_F(TablEdit_Tests, tef_tie_2) {
     tefReadTest("tie_2");
 }
+
+TEST_F(TablEdit_Tests, tef_tie_3) {
+    tefReadTest("tie_3");
+}
+
+#if 0
+// generate reference file and enable when issue #32769 has been solved
+TEST_F(TablEdit_Tests, tef_tie_4) {
+    tefReadTest("tie_4");
+}
+#endif
 
 TEST_F(TablEdit_Tests, tef_time_signatures) {
     tefReadTest("time_signatures");

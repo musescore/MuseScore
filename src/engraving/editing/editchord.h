@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,15 +22,25 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
+
+#include "../dom/chord.h"
 #include "../dom/parenthesis.h"
 
 namespace mu::engraving {
+class Chord;
+class Note;
+class EngravingItem;
+class Articulation;
+enum class SymId;
+
 class EditChord
 {
 public:
     static void addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
     static void removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void toggleArticulation(Score* score, SymId attr);
+    static bool toggleArticulation(Score* score, EngravingItem* el, Articulation* a);
 
 private:
 
@@ -44,14 +54,14 @@ private:
     static void doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen);
 };
 
-class ChangeChordStaffMove : public UndoCommand
+class ChangeChordStaffMove : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeChordStaffMove)
 
     ChordRest* chordRest = nullptr;
     int staffMove = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeChordStaffMove(ChordRest* cr, int v)
@@ -62,14 +72,14 @@ public:
     UNDO_CHANGED_OBJECTS({ chordRest })
 };
 
-class SwapCR : public UndoCommand
+class SwapCR : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SwapCR)
 
     ChordRest* cr1 = nullptr;
     ChordRest* cr2 = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SwapCR(ChordRest* a, ChordRest* b)
@@ -80,14 +90,14 @@ public:
     UNDO_CHANGED_OBJECTS({ cr1, cr2 })
 };
 
-class ChangeSpanArpeggio : public UndoCommand
+class ChangeSpanArpeggio : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpanArpeggio)
 
     Chord* m_chord = nullptr;
     Arpeggio* m_spanArpeggio = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 public:
     ChangeSpanArpeggio(Chord* chord, Arpeggio* spanArp)
         : m_chord(chord), m_spanArpeggio(spanArp) {}
@@ -96,14 +106,14 @@ public:
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
 
-class AddNoteParenthesisInfo : public UndoCommand
+class AddNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddNoteParenthesisInfo)
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;
@@ -116,14 +126,14 @@ public:
     UNDO_TYPE(CommandType::AddNoteParenthesesInfo)
 };
 
-class RemoveNoteParenthesisInfo : public UndoCommand
+class RemoveNoteParenthesisInfo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveNoteParenthesisInfo)
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;
@@ -136,7 +146,7 @@ public:
     UNDO_TYPE(CommandType::RemoveNoteParenthesesInfo)
 };
 
-class RemoveSingleNoteParentheses : public UndoCommand
+class RemoveSingleNoteParentheses : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSingleNoteParentheses)
 
@@ -144,8 +154,8 @@ class RemoveSingleNoteParentheses : public UndoCommand
     Note* m_note = nullptr;
     Parenthesis* m_paren = nullptr;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     RemoveSingleNoteParentheses(Chord* chord, Note* note, Parenthesis* paren)

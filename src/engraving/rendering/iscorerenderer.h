@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -105,6 +105,7 @@ public:
     // Main interface
 
     virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
+    virtual void layoutHeadersFooters(Score* score) const = 0;
 
     struct ScorePaintOptions : public PaintOptions
     {
@@ -198,6 +199,8 @@ public:
 
     virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) = 0;
     virtual void computeBezier(SlurSegment* slurSeg, PointF shoulderOffser = PointF()) = 0;
+
+    virtual bool scoreHasTimestampHeadersFooters(const Score* score) const = 0;
 
 private:
     // Layout Single Item

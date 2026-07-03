@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,17 +36,16 @@ namespace mu::playback {
 class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::audio::IPlayback> playback = { this };
 
 public:
     OnlineSoundsController(const muse::modularity::ContextPtr& iocCtx);
 
     void regActions();
 
-    void setCurrentSequence(muse::audio::TrackSequenceId seqId);
-    void resetCurrentSequence();
+    void reset();
 
     void addOnlineTrack(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
     void removeOnlineTrack(const muse::audio::TrackId trackId);
@@ -65,7 +64,6 @@ private:
     void processOnlineSounds();
     void clearOnlineSoundsCache();
 
-    muse::audio::TrackSequenceId m_currentSequenceId = -1;
     std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::unordered_set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     std::unordered_set<muse::String> m_onlineLibrariesWithExceededLimit;

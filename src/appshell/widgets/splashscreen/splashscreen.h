@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_SPLASHSCREEN_H
-#define MU_APPSHELL_SPLASHSCREEN_H
+#pragma once
 
 #include <QWidget>
 
@@ -47,5 +46,3 @@ private:
     QWidget* m_view = nullptr;
 };
 }
-
-#endif // MU_APPSHELL_SPLASHSCREEN_H

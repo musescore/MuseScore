@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -213,9 +213,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     EXPECT_EQ(diagram1->xmlText(), expText);
 
     // Test undo
-    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     score->undoRedo(true, &dd);
-    score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, initFile));
 }

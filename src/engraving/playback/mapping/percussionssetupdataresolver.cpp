@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -132,11 +132,14 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "xiaoluo", { SoundId::Xiaoluo, SoundCategory::Percussions } },
         { "ban", { SoundId::Ban, SoundCategory::Percussions } },
         { "dabo", { SoundId::Dabo, SoundCategory::Percussions } },
-        { "dabo", { SoundId::Dabo, SoundCategory::Percussions } },
         { "naobo", { SoundId::Naobo, SoundCategory::Percussions } },
         { "bangzi", { SoundId::Bangzi, SoundCategory::Percussions } },
         { "janggu", { SoundId::Janggu, SoundCategory::Percussions } },
+        { "samul-janggu", { SoundId::SamulJanggu, SoundCategory::Percussions, { SoundSubCategory::Korean } } },
+        { "sanjo-janggu", { SoundId::SanjoJanggu, SoundCategory::Percussions, { SoundSubCategory::Korean } } },
         { "buk", { SoundId::Buk, SoundCategory::Percussions } },
+        { "samul-buk", { SoundId::SamulBuk, SoundCategory::Percussions, { SoundSubCategory::Korean } } },
+        { "sori-buk", { SoundId::SoriBuk, SoundCategory::Percussions, { SoundSubCategory::Korean } } },
         { "sogo", { SoundId::Sogo, SoundCategory::Percussions } },
         { "kkwaenggwari", { SoundId::Kkwaenggwari, SoundCategory::Percussions } },
         { "jing", { SoundId::Jing, SoundCategory::Percussions } },

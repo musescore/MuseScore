@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -34,16 +36,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Pickup-bug</metaTag>
     <Part id="1">
+      <eid>g_g</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -89,16 +93,18 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>h_h</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>C Trumpet</trackName>
       <Instrument id="c-trumpet">
-        <longName>C Trumpet</longName>
-        <shortName>C Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>C Trumpet</longName>
+          <shortName>C Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>C Trumpet</trackName>
         <minPitchP>54</minPitchP>
         <maxPitchP>85</maxPitchP>

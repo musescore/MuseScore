@@ -77,6 +77,7 @@ public:
 
     /// \cond PLUGIN_API \private \endcond
     explicit FileIO(QObject* parent = 0);
+    explicit FileIO(const muse::modularity::ContextPtr& ctx, QObject* parent = 0);
 
     /// Reads file contents and returns a string.
     /// In case error occurs, error() signal is emitted

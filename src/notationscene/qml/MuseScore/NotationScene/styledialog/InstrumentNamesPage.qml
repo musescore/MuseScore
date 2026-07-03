@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -50,7 +50,301 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
-            title: qsTrc("notation/editstyle/instrumentnames", "Instrument & staff names alignment")
+            title: qsTrc("notation/editstyle/instrumentnames", "Transposition")
+
+            ColumnLayout {
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Show transposition")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On long names")
+                        styleItem: instrumentNamesModel.instrumentNamesShowTranspositionLong
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On abbreviated names")
+                        styleItem: instrumentNamesModel.instrumentNamesShowTranspositionShort
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    enabled: instrumentNamesModel.instrumentNamesShowTranspositionLong.value === true
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Long name format:")
+                    }
+
+                    ColumnLayout {
+                        spacing : 8
+                        Layout.alignment: Qt.AlignTop
+
+                        Repeater {
+                            model: [
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Horn in F 1"), value: 0 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Horn 1 in F"), value: 1 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "F Horn 1"), value: 2 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Custom:"), value: 3 },
+                            ]
+
+                            RoundedRadioButton {
+                                required property var modelData
+                                text: modelData.text
+                                checked: instrumentNamesModel.instrumentNamesFormatLong.value === modelData.value
+                                onClicked: instrumentNamesModel.instrumentNamesFormatLong.value = modelData.value
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        id: customFormatLong
+                        spacing: 8
+
+                        enabled: instrumentNamesModel.instrumentNamesFormatLong.value === 3
+
+                        TextInputField {
+                            Layout.preferredWidth: 220
+                            currentText: instrumentNamesModel.instrumentNamesCustomFormatLong.value
+                            onTextEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNamesCustomFormatLong.value = newValue
+                            }
+                        }
+
+                        StyleResetButton {
+                            styleItem: instrumentNamesModel.instrumentNamesCustomFormatLong
+                            enabled: !styleItem.isDefault && customFormatLong.enabled
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    enabled: instrumentNamesModel.instrumentNamesShowTranspositionShort.value === true
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Short name format:")
+                    }
+
+                    ColumnLayout {
+                        spacing : 8
+                        Layout.alignment: Qt.AlignTop
+
+                        Repeater {
+                            model: [
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Hn. in F 1"), value: 0 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Hn. 1 in F"), value: 1 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "F Hn. 1"), value: 2 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Custom:"), value: 3 },
+                            ]
+
+                            RoundedRadioButton {
+                                required property var modelData
+                                text: modelData.text
+                                checked: instrumentNamesModel.instrumentNamesFormatShort.value === modelData.value
+                                onClicked: instrumentNamesModel.instrumentNamesFormatShort.value = modelData.value
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        id: customFormatShort
+                        spacing: 8
+
+                        enabled: instrumentNamesModel.instrumentNamesFormatShort.value === 3
+
+                        TextInputField {
+                            Layout.preferredWidth: 220
+                            currentText: instrumentNamesModel.instrumentNamesCustomFormatShort.value
+                            onTextEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNamesCustomFormatShort.value = newValue
+                            }
+                        }
+
+                        StyleResetButton {
+                            styleItem: instrumentNamesModel.instrumentNamesCustomFormatShort
+                            enabled: !styleItem.isDefault && customFormatShort.enabled
+                        }
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Numerals")
+
+            ColumnLayout {
+                spacing: 16
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Add trailing dot")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On single instruments")
+                        styleItem: instrumentNamesModel.instrumentNumeralsTrailingDotSingle
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On multiple combined instruments")
+                        styleItem: instrumentNamesModel.instrumentNumeralsTrailingDotMultiple
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Align combined instrument numerals")
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        RoundedRadioButton {
+                            text: qsTrc("notation/editstyle/instrumentnames", "Horizontally, up to")
+                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 0
+                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 0
+                        }
+
+                        IncrementalPropertyControl {
+                            Layout.preferredWidth: 60
+                            width: 60
+                            decimals: 0
+                            step: 1
+                            minValue: 1
+                            maxValue: 100
+                            currentValue: instrumentNamesModel.instrumentNumeralsHorizontalThreshold.value
+                            onValueEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNumeralsHorizontalThreshold.value = newValue
+                            }
+                        }
+
+                        StyledTextLabel {
+                            horizontalAlignment: Qt.AlignLeft
+                            text: qsTrc("notation/editstyle/instrumentnames", "instruments, then follow voice assignment")
+                        }
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        RoundedRadioButton {
+                            text: qsTrc("notation/editstyle/instrumentnames", "Vertically, up to")
+                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 1
+                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 1
+                        }
+
+                        IncrementalPropertyControl {
+                            Layout.preferredWidth: 60
+                            width: 60
+                            decimals: 0
+                            step: 1
+                            minValue: 1
+                            maxValue: 100
+                            currentValue: instrumentNamesModel.instrumentNumeralsVerticalThreshold.value
+                            onValueEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNumeralsVerticalThreshold.value = newValue
+                            }
+                        }
+
+                        StyledTextLabel {
+                            horizontalAlignment: Qt.AlignLeft
+                            text: qsTrc("notation/editstyle/instrumentnames", "instruments, then follow voice assignment")
+                        }
+                    }
+
+                    RoundedRadioButton {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Always follow voice assignment")
+                        checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 2
+                        onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 2
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: false
+                    spacing: 8
+
+                    CheckBox {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Show numerals as interval when the number of consecutive instruments exceeds")
+                        checked: instrumentNamesModel.instrumentNumeralsHyphenEnable.value === true
+                        onClicked: instrumentNamesModel.instrumentNumeralsHyphenEnable.value = !instrumentNamesModel.instrumentNumeralsHyphenEnable.value
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 60
+                        width: 60
+                        decimals: 0
+                        step: 1
+                        minValue: 1
+                        maxValue: 100
+                        currentValue: instrumentNamesModel.instrumentNumeralsHyphenThreshold.value
+                        onValueEditingFinished: function(newValue) {
+                            instrumentNamesModel.instrumentNumeralsHyphenThreshold.value = newValue
+                        }
+                    }
+
+                    StyleResetButton {
+                        styleItem: instrumentNamesModel.instrumentNumeralsHyphenThreshold
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Group names")
+
+            ColumnLayout {
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Enable group names for")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Winds")
+                        styleItem: instrumentNamesModel.windsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Vocals")
+                        styleItem: instrumentNamesModel.vocalsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Strings")
+                        styleItem: instrumentNamesModel.stringsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Others")
+                        styleItem: instrumentNamesModel.othersNameByGroup
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Alignment")
 
             ColumnLayout {
                 width: parent.width
@@ -179,6 +473,44 @@ StyledFlickable {
                                     text: modelData.text
                                     checked: instrumentNamesModel.instrumentNamesStackVertically.value === modelData.value
                                     onClicked: instrumentNamesModel.instrumentNamesStackVertically.value = modelData.value
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Alignment of names and group brackets")
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        StyledImage {
+                            Layout.alignment: Qt.AlignTop
+                            forceHeight: 145
+                            source: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value === true ? "instrumentNamesImages/groupBracket-align-include.png" : "instrumentNamesImages/groupBracket-align-exclude.png"
+                        }
+
+                        ColumnLayout {
+                            spacing : 8
+                            Layout.alignment: Qt.AlignTop
+
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Include brackets"), value: true },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Exclude brackets"), value: false },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value === modelData.value
+                                    onClicked: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value = modelData.value
                                 }
                             }
                         }

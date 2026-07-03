@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@ df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
+COMPILER="clang" # gcc, clang
 
 mkdir -p $BUILD_TOOLS
 
@@ -49,7 +50,7 @@ apt_packages=(
   wget
   )
 
-sudo apt-get install -y --no-install-recommends "${apt_packages[@]}"
+sudo apt install -y --no-install-recommends "${apt_packages[@]}"
 
 
 ##########################################################################
@@ -57,18 +58,46 @@ sudo apt-get install -y --no-install-recommends "${apt_packages[@]}"
 ##########################################################################
 
 # COMPILER
+if [ "$COMPILER" == "gcc" ]; then
 
-gcc_version="10"
-sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
-sudo update-alternatives \
-  --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
-  --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
+  gcc_version="14"
+  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
 
-echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
-echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
+  for alt in gcc g++; do
+    if update-alternatives --query "$alt" >/dev/null 2>&1; then
+      sudo update-alternatives --remove-all "$alt"
+    fi
+    sudo update-alternatives --install "/usr/bin/$alt" "$alt" "/usr/bin/${alt}-${gcc_version}" 100
+  done
 
-gcc-${gcc_version} --version
-g++-${gcc_version} --version 
+  echo export CC="/usr/bin/gcc" >> "${ENV_FILE}"
+  echo export CXX="/usr/bin/g++" >> "${ENV_FILE}"
+
+  gcc --version
+  g++ --version
+
+elif [ "$COMPILER" == "clang" ]; then
+
+  clang_version="20"
+  sudo apt install -y --no-install-recommends "clang-${clang_version}"
+  sudo apt install -y --no-install-recommends "clang-tools-${clang_version}"
+
+  for alt in clang clang++ clang-scan-deps; do
+    if update-alternatives --query "$alt" >/dev/null 2>&1; then
+      sudo update-alternatives --remove-all "$alt"
+    fi
+    sudo update-alternatives --install "/usr/bin/$alt" "$alt" "/usr/bin/${alt}-${clang_version}" 100
+  done
+
+  echo export CC="/usr/bin/clang" >> "${ENV_FILE}"
+  echo export CXX="/usr/bin/clang++" >> "${ENV_FILE}"
+
+  clang --version
+  clang++ --version
+
+else
+  echo "Unknown compiler: $COMPILER"
+fi
 
 # CMake
 echo "cmake version"

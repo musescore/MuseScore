@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -45,9 +45,9 @@ class AbstractStyleDialogModel : public QObject, public muse::Contextable, publi
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable as it is an abstract base class")
 
+protected:
     muse::ContextInject<context::IGlobalContext> context = { this };
 
-protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
     StyleItem* styleItem(StyleId id) const;
 

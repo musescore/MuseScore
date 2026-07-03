@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -67,7 +67,7 @@ public:
     static System* collectSystem(LayoutContext& ctx);
     static void layoutSystemElements(System* system, LayoutContext& ctx);
 
-    static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
+    static void layoutSystem(System* system, LayoutContext& ctx, double xo1);
 
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
     static bool canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx);
@@ -75,7 +75,6 @@ public:
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, const LayoutContext& ctx);
-    static void layoutBracketsVertical(System* system, LayoutContext& ctx);
 
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
@@ -94,6 +93,7 @@ private:
         double measureWidth = 0.0;
         double measurePos = 0.0;
         std::map<EngravingItem*, PointF> elementPositions;
+        std::map<EngravingItem*, double> elementWidths;
         bool curHeader = false;
         bool curTrailer = false;
 
@@ -103,6 +103,7 @@ private:
             measureWidth = 0.0;
             measurePos = 0.0;
             elementPositions.clear();
+            elementWidths.clear();
         }
 
         void restoreMeasure()
@@ -111,6 +112,9 @@ private:
             measure->setWidth(measureWidth);
             for (auto pair : elementPositions) {
                 pair.first->setPos(pair.second);
+            }
+            for (auto pair : elementWidths) {
+                pair.first->setWidth(pair.second);
             }
         }
     };
@@ -137,7 +141,7 @@ private:
         std::vector<Expression*> expressions;
         std::vector<HarpPedalDiagram*> harpDiagrams;
         std::vector<FretDiagram*> fretDiagrams;
-        std::vector<StaffText*> staffText;
+        std::vector<StaffTextBase*> staffText;
         std::vector<InstrumentChange*> instrChanges;
         std::vector<SystemText*> systemText;
         std::vector<EngravingItem*> playTechCapoStringTunTripletFeel;

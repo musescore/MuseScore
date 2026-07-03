@@ -15,7 +15,7 @@ if(MUSE_APP_UNSTABLE)
     set(DESKTOP_LAUNCHER_NAME "MU ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
 else(MUSE_APP_UNSTABLE)
     # Use full name for stable releases
-    set(DESKTOP_LAUNCHER_NAME "${MUSE_APP_TITLE} ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
+    set(DESKTOP_LAUNCHER_NAME "${MUSE_APP_NAME_HUMAN_READABLE} ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
 endif(MUSE_APP_UNSTABLE)
 
 if(${MUSE_APP_INSTALL_SUFFIX} MATCHES "dev")
@@ -62,9 +62,9 @@ endif(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable")
 # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
 # App's main window to find out what string to use here.
 if(MUSE_APP_UNSTABLE)
-    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}Development")
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR}Development")
 else()
-    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}")
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR}")
 endif()
 
 # Install desktop file (perform variable substitution first)
@@ -132,8 +132,8 @@ endif(GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
 install(FILES ${MAN_BUILD} DESTINATION share/man/man1 COMPONENT doc)
 
 # Create symlink alias for man pages so `man musescore` = `man mscore`
-install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS} -> ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\")
-              execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\" \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS}\")"
+install(CODE "message(STATUS \"Creating symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS} -> ${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\")
+              execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_NAME}\" \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/share/man/man1/${MAN_FULL_ALIAS}\")"
         COMPONENT doc)
 
 # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)

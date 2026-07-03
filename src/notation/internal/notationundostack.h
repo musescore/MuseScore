@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,7 @@
 namespace mu::engraving {
 class Score;
 class MasterScore;
+class TransactionManager;
 class UndoStack;
 class EditData;
 }
@@ -46,13 +47,15 @@ public:
 
     void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) override;
+
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
     void commitChanges() override;
 
     bool isStackClean() const override;
 
-    void mergeCommands(size_t startIdx) override;
+    void mergeTransactions(size_t startIdx) override;
 
     void lock() override;
     void unlock() override;
@@ -75,6 +78,7 @@ private:
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;
+    mu::engraving::TransactionManager* transactionManager() const;
     mu::engraving::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;

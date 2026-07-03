@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -72,7 +72,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show/hide layout panel"),
              Checkable::Yes
              ),
-    UiAction("inspector",
+    UiAction("toggle-properties-panel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
@@ -254,7 +254,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
 
         { "toggle-palettes", PALETTES_PANEL_NAME },
         { "toggle-instruments", LAYOUT_PANEL_NAME },
-        { "inspector", INSPECTOR_PANEL_NAME },
+        { "toggle-properties-panel", PROPERTIES_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
         { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },
 

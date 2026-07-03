@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -107,7 +107,6 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PLAY:
         setPlay(v.toBool());
-        score()->setPlaylistDirty();
         break;
     case Pid::TREMOLOBAR_TYPE:
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));

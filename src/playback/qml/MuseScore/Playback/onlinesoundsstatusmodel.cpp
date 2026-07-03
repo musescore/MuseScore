@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -196,7 +196,7 @@ void OnlineSoundsStatusModel::setManualProcessingAllowed(bool allowed)
     emit manualProcessingAllowedChanged();
 
     if (allowed && m_shouldNotifyToursThatManualProcessingAllowed) {
-        muse::async::Async::call(this, [=]() {
+        muse::async::Async::call(this, [this]() {
             tours()->onEvent(u"online_sounds_manual_processing_allowed");
         });
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "iexportprojectscenario.h"
 #include "iprojectconfiguration.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
@@ -40,6 +41,7 @@ class ExportProjectScenario : public IExportProjectScenario, public muse::async:
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
     muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
 
@@ -54,7 +56,7 @@ public:
 
     muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                                                 muse::io::path_t defaultPath = "") const override;
+                                                 muse::io::path_t defaultDirPath = "") const override;
 
     bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,

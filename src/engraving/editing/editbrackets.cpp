@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,14 +30,14 @@ using namespace mu::engraving;
 //   AddBracket
 //---------------------------------------------------------
 
-void AddBracket::redo(EditData*)
+void AddBracket::redo()
 {
     staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
 
-void AddBracket::undo(EditData*)
+void AddBracket::undo()
 {
     staff->setBracketType(level, BracketType::NO_BRACKET);
     staff->triggerLayout();
@@ -47,13 +47,13 @@ void AddBracket::undo(EditData*)
 //   RemoveBracket
 //---------------------------------------------------------
 
-void RemoveBracket::redo(EditData*)
+void RemoveBracket::redo()
 {
     staff->setBracketType(level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
-void RemoveBracket::undo(EditData*)
+void RemoveBracket::undo()
 {
     staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);

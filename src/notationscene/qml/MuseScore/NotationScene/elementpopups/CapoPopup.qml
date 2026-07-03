@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -112,7 +112,7 @@ AbstractElementPopup {
 
             navigation.name: "TransposeOptions"
             navigation.panel: capoSettingsNavPanel
-            navigation.row: 1
+            navigation.row: capoOnOffButtons.navigationRowEnd + 1
             navigation.accessible.name: titleLabel.text + " " + currentText
 
             model: [
@@ -148,7 +148,7 @@ AbstractElementPopup {
 
             navigation.name: "FretControl"
             navigation.panel: capoSettingsNavPanel
-            navigation.row: capoOnOffButtons.navigationRowEnd + 1
+            navigation.row: transposeOptions.navigation.row + 1
             navigation.accessible.name: fretLabel.text + " " + fretControl.currentValue
 
             currentValue: capoModel.fretPosition

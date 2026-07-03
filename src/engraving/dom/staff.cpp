@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -368,6 +368,10 @@ void Staff::swapBracket(size_t oldIdx, size_t newIdx)
 
 void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
 {
+    if (oldColumn == newColumn) {
+        return;
+    }
+
     size_t idx = std::max(oldColumn, newColumn);
     fillBrackets(idx);
     int step = newColumn > oldColumn ? 1 : -1;
@@ -419,6 +423,23 @@ void Staff::addBracket(BracketItem* b)
                 s->m_brackets.push_back(bi);
             }
         }
+    }
+}
+
+void Staff::insertBracket(BracketItem* b)
+{
+    b->setStaff(this);
+    size_t column = b->column();
+    if (column < m_brackets.size()) {
+        if (m_brackets[column]) {
+            delete m_brackets[column];
+        }
+        m_brackets[column] = b;
+    } else if (column == m_brackets.size()) {
+        m_brackets.push_back(b);
+    } else {
+        fillBrackets(column - 1);
+        m_brackets.push_back(b);
     }
 }
 
@@ -1585,6 +1606,7 @@ std::vector<Staff*> Staff::staffList() const
 {
     std::vector<Staff*> staffList;
     if (m_links) {
+        staffList.reserve(m_links->size());
         for (EngravingObject* e : *m_links) {
             staffList.push_back(toStaff(e));
         }
@@ -1773,7 +1795,6 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::VISIBLE:
         setVisible(v.toBool());
         masterScore()->rebuildMidiMapping();
-        score()->setPlaylistDirty();
         break;
     case Pid::STAFF_CUTAWAY:
         setCutaway(v.toBool());

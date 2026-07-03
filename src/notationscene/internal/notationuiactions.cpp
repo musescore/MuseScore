@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -373,6 +373,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Select sectio&n"),
              TranslatableString("action", "Select section")
              ),
+    UiAction("select-notes-in-chord",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Select all &notes in chord"),
+             TranslatableString("action", "Select all notes in chord")
+             ),
     UiAction("select-similar",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -569,8 +575,8 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction("staff-properties",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Staff/Part properties…"),
-             TranslatableString("action", "Staff/Part properties")
+             TranslatableString("action", "Instrument / Staff properties…"),
+             TranslatableString("action", "Instrument / Staff properties")
              ),
     UiAction("staff-text-properties",
              mu::context::UiCtxProjectOpened,
@@ -2763,6 +2769,13 @@ const UiActionList NotationUiActions::s_engravingDebuggingActions = {
              TranslatableString("action", "Show gap rests"),
              Checkable::Yes
              ),
+    UiAction("show-both-origin-and-combined",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show both origin and combined staves"),
+             TranslatableString("action", "Show both origin and combined staves"),
+             Checkable::Yes
+             ),
     UiAction("check-for-score-corruptions",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2848,7 +2861,7 @@ void NotationUiActions::init()
         }
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
         updateActionsEnabled(actionsList());
     });
 

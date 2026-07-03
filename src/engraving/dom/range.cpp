@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -833,6 +833,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             }
         }
     }
+    m_tracks.reserve(sl.size() * VOICES);
     for (track_idx_t staffIdx : sl) {
         track_idx_t sTrack = staffIdx * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
@@ -1080,7 +1081,7 @@ Fraction ScoreRange::ticks() const
 void ScoreRange::backupBarLines(Segment* first, Segment* last)
 {
     for (Segment* s = first; s && (s->isBefore(last) || s == last); s = s->next1()) {
-        if (!s->isType(SegmentType::BarLineType)) {
+        if (!s->isType(SegmentType::BarLineTypes)) {
             continue;
         }
         for (EngravingItem* e : s->elist()) {

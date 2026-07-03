@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,7 +37,7 @@ ChangeKeySig::ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEv
     : keysig(k), ks(newKeySig), showCourtesy(sc), evtInStaff(addEvtToStaff)
 {}
 
-void ChangeKeySig::flip(EditData*)
+void ChangeKeySig::flip()
 {
     Segment* segment = keysig->segment();
     Fraction tick = segment->tick();

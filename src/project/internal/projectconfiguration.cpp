@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -67,7 +67,6 @@ static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disabl
 static const Settings::Key CREATE_BACKUP_BEFORE_SAVING(module_name, "project/createBackupBeforeSaving");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
-static const std::string DEFAULT_FILE_FILTER("*.mscz");
 
 ProjectConfiguration::ProjectConfiguration(const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx)
@@ -621,11 +620,6 @@ muse::io::path_t ProjectConfiguration::newProjectTemporaryPath() const
     return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
 }
 
-bool ProjectConfiguration::isAccessibleEnabled() const
-{
-    return accessibilityConfiguration()->enabled();
-}
-
 bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
 {
     return settings()->value(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT).toBool();
@@ -646,6 +640,12 @@ QUrl ProjectConfiguration::supportForumUrl() const
     // The general forum page, where the support forum is linked at the top
     // (except in English; there you have the Announcements forum)
     return QUrl("https://musescore.org/forum");
+}
+
+QUrl ProjectConfiguration::dotComBugReportUrl() const
+{
+    // The general .com bug report page
+    return QUrl("https://musescore.com/groups/bug-reports");
 }
 
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const

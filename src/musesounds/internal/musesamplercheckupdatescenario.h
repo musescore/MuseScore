@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -31,15 +31,19 @@
 #include "global/iglobalconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "multiwindows/imultiwindowsprovider.h"
+#include "update/iupdateconfiguration.h"
 
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
     muse::GlobalInject<muse::IProcess> process;
     muse::GlobalInject<IMuseSamplerCheckUpdateService> service;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 

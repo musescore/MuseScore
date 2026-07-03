@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -30,16 +27,13 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
 
-FlatButton {
+PopupButton {
     id: root
 
     property var model: null
     property string currentValueAccessibleName: title.text
 
-    property alias popupAnchorItem: popup.anchorItem
-
     height: 96
-    accentButton: popup.isOpened
 
     StyledTextLabel {
         id: title
@@ -48,7 +42,7 @@ FlatButton {
         anchors.verticalCenter: parent.verticalCenter
 
         property string pickupMessage: {
-            if (withPickupMeasure.checked) {
+            if (root.model.withPickupMeasure) {
                 return qsTrc("project/newscore", "pickup:") + " " +
                         root.model.pickupTimeSignature.numerator + "/" + root.model.pickupTimeSignature.denominator
             }
@@ -60,15 +54,7 @@ FlatButton {
         text: qsTrc("project/newscore", "%Ln measure(s),", "", root.model.measureCount) + "\n" + pickupMessage
     }
 
-    onClicked: {
-        if (!popup.isOpened) {
-            popup.open()
-        } else {
-            popup.close()
-        }
-    }
-
-    StyledPopupView {
+    popupComponent: StyledPopupView {
         id: popup
 
         margins: 0
@@ -190,6 +176,8 @@ FlatButton {
                 text: qsTrc("project/newscore", "Hint: You can also add & delete measures after you have created your score")
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
+
+                displayTruncatedTextOnHover: true
             }
         }
     }

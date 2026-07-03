@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,7 +33,6 @@
 #include "async/async.h"
 #include "audio/common/soundfonttypes.h"
 
-#include "defer.h"
 #include "translation.h"
 #include "log.h"
 
@@ -193,7 +192,7 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
         case DragTarget::SoundFont: {
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
-                    soundFontController()->addSoundFont(Uri::fromLocalFile(filePath));
+                    soundFontInstallScenario()->installSoundFont(Uri::fromLocalFile(filePath));
                 });
         } break;
         case DragTarget::Extension: {
@@ -226,19 +225,17 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
     }
 
     m_quiting = true;
-    DEFER {
-        m_quiting = false;
-    };
 
     if (!projectFilesController()->closeOpenedProject(false)) {
+        m_quiting = false;
         return false;
     }
 
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
 #if defined(Q_OS_LINUX)
-        interactive()->revealInFileBrowser(installerPath);
+        platformInteractive()->revealInFileBrowser(installerPath);
 #else
-        interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+        platformInteractive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
 #endif
     }
 
@@ -246,6 +243,8 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         multiwindowsProvider()->notifyAboutWindowWasQuited();
     }
 
+    //! NOTE the following destroys the IoC context and `this` with it,
+    //! so don't access `this` after this point!
     if (isAllInstances) {
         multiwindowsProvider()->quitForAll();
     } else {
@@ -291,25 +290,25 @@ void ApplicationActionController::openAboutMusicXMLDialog()
 void ApplicationActionController::openOnlineHandbookPage()
 {
     std::string handbookUrl = configuration()->handbookUrl();
-    interactive()->openUrl(handbookUrl);
+    platformInteractive()->openUrl(handbookUrl);
 }
 
 void ApplicationActionController::openAskForHelpPage()
 {
     std::string askForHelpUrl = configuration()->askForHelpUrl();
-    interactive()->openUrl(askForHelpUrl);
+    platformInteractive()->openUrl(askForHelpUrl);
 }
 
 void ApplicationActionController::openAccessibilityStatementPage()
 {
     std::string accessibilityStatementUrl = configuration()->accessibilityStatementUrl();
-    interactive()->openUrl(accessibilityStatementUrl);
+    platformInteractive()->openUrl(accessibilityStatementUrl);
 }
 
 void ApplicationActionController::openPreferencesDialog()
 {
     const context::IPlaybackStatePtr state = globalContext()->playbackState();
-    if (state->playbackStatus() == audio::PlaybackStatus::Running) {
+    if (state->isPlaying()) {
         dispatcher()->dispatch("stop");
 
         async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();

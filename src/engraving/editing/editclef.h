@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/clef.h"
 
 namespace mu::engraving {
-class ChangeClefType : public UndoCommand
+class ChangeClefType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeClefType)
 
@@ -35,7 +35,7 @@ class ChangeClefType : public UndoCommand
     ClefType concertClef;
     ClefType transposingClef;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeClefType(Clef*, ClefType cl, ClefType tc);

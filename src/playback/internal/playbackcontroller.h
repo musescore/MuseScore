@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
+#include "rcommand/commandable.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
@@ -46,14 +48,15 @@
 namespace mu::playback {
 class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::Contextable
+    public muse::rcommand::Commandable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
 
@@ -67,14 +70,9 @@ public:
     muse::async::Notification isPlayAllowedChanged() const override;
 
     bool isPlaying() const override;
-    muse::async::Notification isPlayingChanged() const override;
 
-    void reset() override;
-
-    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
-
-    muse::audio::TrackSequenceId currentTrackSequenceId() const override;
-    muse::async::Notification currentTrackSequenceIdChanged() const override;
+    bool isPlaybackInited() const override;
+    muse::async::Channel<bool> playbackInitedChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -206,11 +204,11 @@ private:
 
     project::IProjectAudioSettingsPtr audioSettings() const;
 
-    void resetCurrentSequence();
-    void setupNewCurrentSequence(const muse::audio::TrackSequenceId sequenceId);
+    void resetPlayback();
+    void setupPlayback();
     void subscribeOnAudioParamsChanges();
-    void setupSequenceTracks();
-    void setupSequencePlayer();
+    void setupTracks();
+    void setupPlayer();
 
     void updateSoloMuteStates();
     void updateAuxMuteStates();
@@ -222,9 +220,7 @@ private:
     void addAuxTrack(muse::audio::aux_channel_idx_t index, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
-    muse::audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
-    engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
-    void removeNonExistingTracks();
+    project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
@@ -234,17 +230,14 @@ private:
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
     muse::audio::IPlayerPtr m_player;
+    bool m_isPlaybackInited = false;
+    muse::async::Channel<bool> m_playbackInited;
 
     muse::async::Notification m_isPlayAllowedChanged;
-    muse::async::Notification m_isPlayingChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
-    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> m_currentPlaybackPositionChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
-    muse::audio::TrackSequenceId m_currentSequenceId = -1;
-
-    muse::async::Notification m_currentSequenceIdChanged;
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
@@ -253,7 +246,7 @@ private:
 
     muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> m_auxChannelNameChanged;
 
-    muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupSequenceTracks
+    muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupTracks
 
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;

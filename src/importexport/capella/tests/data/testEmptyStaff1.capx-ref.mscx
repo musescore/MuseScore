@@ -26,14 +26,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>right hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -42,13 +42,13 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>left hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -59,38 +59,29 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>H_H</eid>
         <LayoutBreak>
-          <eid>G_G</eid>
+          <eid>I_I</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <KeySig>
+            <eid>J_J</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>K_K</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>I_I</eid>
-        <LayoutBreak>
-          <eid>J_J</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Chord>
-            <eid>K_K</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>L_L</eid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -111,28 +102,42 @@
             </Chord>
           </voice>
         </Measure>
-      </Staff>
-    <Staff id="2">
       <Measure>
-        <voice>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
+        <eid>Q_Q</eid>
+        <LayoutBreak>
+          <eid>R_R</eid>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Chord>
             <eid>S_S</eid>
             <durationType>whole</durationType>
             <Note>
               <eid>T_T</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>U_U</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>V_V</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>W_W</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -142,10 +147,23 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>U_U</eid>
+            <eid>Y_Y</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>Z_Z</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>a_a</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>b_b</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

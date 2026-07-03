@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -109,7 +109,14 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Import P&DF…"),
              TranslatableString("action", "Import PDF"),
-             IconCode::Code::IMPORT
+             IconCode::Code::OPEN_LINK
+             ),
+    UiAction("file-import-audio-to-score",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Import A&udio to Score…"),
+             TranslatableString("action", "Import Audio to Score"),
+             IconCode::Code::OPEN_LINK
              ),
     UiAction("project-properties",
              mu::context::UiCtxAny,

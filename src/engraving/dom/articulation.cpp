@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -49,7 +49,6 @@ using namespace muse::draw;
 
 static const ElementStyle articulationStyle {
     { Sid::articulationMinDistance, Pid::MIN_DISTANCE },
-//      { Sid::articulationOffset, Pid::OFFSET },
     { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
 };
 

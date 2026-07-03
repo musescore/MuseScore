@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -287,6 +287,7 @@ private:
     static void draw(const StaffLines* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffState* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffText* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffTypeChange* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Stem* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StemSlash* item, muse::draw::Painter* painter, const PaintOptions& opt);

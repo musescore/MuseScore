@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -35,6 +35,7 @@ class Read206;
 namespace mu::engraving {
 class Staff;
 class Score;
+class SharedPart;
 class InstrumentTemplate;
 
 //---------------------------------------------------------
@@ -57,7 +58,7 @@ class InstrumentTemplate;
 //   @P volume          int
 //---------------------------------------------------------
 
-class Part final : public EngravingObject
+class Part : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Part)
     DECLARE_CLASSOF(ElementType::PART)
@@ -66,7 +67,7 @@ public:
     static const Fraction MAIN_INSTRUMENT_TICK;
     static const int DEFAULT_COLOR = 0x3399ff;
 
-    Part(Score* score = nullptr);
+    Part(Score* score = nullptr, ElementType type = ElementType::PART);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
     const muse::ID& id() const;
@@ -103,6 +104,12 @@ public:
     void setLongNameAll(const String& s);  // For all instruments in _instruments
     void setShortNameAll(const String& s); // For all instruments in _instruments
 
+    int number(const Fraction& tick = { -1, 1 }) const;
+    void setNumber(int v, const Fraction& tick = { -1, 1 });
+
+    String transposition(const Fraction& tick = { -1, 1 }) const;
+    void setTransposition(const String& s, const Fraction& tick = { -1, 1 });
+
     void setPlainLongName(const String& s);
     void setPlainShortName(const String& s);
     void setPlainLongNameAll(const String& s);
@@ -122,7 +129,7 @@ public:
 
     void insertStaff(Staff*, staff_idx_t idx);
     void removeStaff(Staff*);
-    bool show() const { return m_show; }
+    virtual bool show() const;
     void setShow(bool val) { m_show = val; }
     bool soloist() const { return m_soloist; }
     void setSoloist(bool val) { m_soloist = val; }
@@ -153,8 +160,8 @@ public:
     HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
     Fraction currentHarpDiagramTick(const Fraction&) const;
 
-    String partName() const { return m_partName; }
-    void setPartName(const String& s) { m_partName = s; }
+    virtual String partName() const;
+
     int color() const { return m_color; }
     void setColor(int value) { m_color = value; }
 
@@ -193,10 +200,13 @@ public:
 
     const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
 
+    SharedPart* sharedPart() const { return m_sharedPart; }
+    void setSharedPart(SharedPart* p) { m_sharedPart = p; }
+
 private:
     friend class read206::Read206;
+    friend class SharedPart;
 
-    String m_partName;                ///< used in tracklist (mixer)
     InstrumentList m_instruments;
     std::vector<Staff*> m_staves;
     muse::ID m_id = INVALID_ID;       ///< used for MusicXML import
@@ -214,5 +224,7 @@ private:
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
     std::map<int, StringTunings*> m_stringTunings;
+
+    SharedPart* m_sharedPart = nullptr;
 };
 }

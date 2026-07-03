@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MASTERSCORE_H
-#define MU_ENGRAVING_MASTERSCORE_H
+
+#pragma once
 
 #include <array>
+#include <memory>
 
 #include "../infrastructure/ifileinfoprovider.h"
 #include "../infrastructure/eidregister.h"
@@ -35,6 +36,7 @@ class EngravingProject;
 class MscReader;
 class MscWriter;
 class MscLoader;
+class TransactionManager;
 }
 
 namespace mu::engraving::compat {
@@ -97,15 +99,12 @@ public:
 
     bool readOnly() const override { return m_readOnly; }
     void setReadOnly(bool ro) { m_readOnly = ro; }
-    UndoStack* undoStack() const override { return m_undoStack; }
+    TransactionManager* transactionManager() const { return m_transactionManager.get(); }
+    UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
     IAutomation* automation() const override;
-
-    bool playlistDirty() const override { return m_playlistDirty; }
-    void setPlaylistDirty() override;
-    void setPlaylistClean() { m_playlistDirty = false; }
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -115,8 +114,10 @@ public:
     void updateRepeatListTempo();
     void updateRepeatList();
 
-    const RepeatList& repeatList() const override;
-    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const override;
+    const RepeatList& repeatList() const;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+
+    void invalidateRepeatList();
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
@@ -137,6 +138,9 @@ public:
     void setExcerptsChanged(bool val) { m_cmdState.excerptsChanged = val; }
     bool excerptsChanged() const { return m_cmdState.excerptsChanged; }
     bool instrumentsChanged() const { return m_cmdState.instrumentsChanged; }
+
+    void update() { update(true); }
+    void lockUpdates(bool locked);
 
     void setTempomap(TempoMap* tm);
 
@@ -170,6 +174,8 @@ public:
     void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
+    void initAutomation(); // TODO: Placeholder?
+
     void setPlaybackScore(Score*);
     Score* playbackScore() { return m_playbackScore; }
     const Score* playbackScore() const { return m_playbackScore; }
@@ -183,9 +189,6 @@ public:
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    bool saved() const;
-    void setSaved(bool v);
-
     String name() const override;
 
     muse::Ret sanityCheck();
@@ -194,6 +197,7 @@ public:
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 
 private:
+    void update(bool resetCmdState, bool layoutAllParts = false);
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -207,6 +211,7 @@ private:
     friend class compat::ScoreAccess;
     friend class read114::Read114;
     friend class read400::Read400;
+    friend class TransactionManager;
 
     MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
     MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
@@ -215,6 +220,7 @@ private:
     void initParts(Excerpt*);
 
     EIDRegister m_eidRegister;
+    std::unique_ptr<TransactionManager> m_transactionManager;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
     TempoMap* m_tempomap = nullptr;
@@ -222,7 +228,7 @@ private:
     RepeatList* m_nonExpandedRepeatList = nullptr;
     AutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
-    bool m_playlistDirty = true;
+
     std::vector<Excerpt*> m_excerpts;
     std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
     Score* m_playbackScore = nullptr;
@@ -231,6 +237,7 @@ private:
     bool m_readOnly = false;
 
     CmdState m_cmdState;       // modified during cmd processing
+    bool m_updatesLocked = false;
 
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
@@ -247,9 +254,5 @@ private:
     // FIXME: Move to EngravingProject
     // We can't yet, because m_project is not set on every MasterScore
     IFileInfoProviderPtr m_fileInfoProvider;
-
-    bool m_saved = false;
 };
 }
-
-#endif // MU_ENGRAVING_MASTERSCORE_H

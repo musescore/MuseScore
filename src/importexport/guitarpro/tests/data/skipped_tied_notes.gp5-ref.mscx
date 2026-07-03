@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Add. Guitar 1</trackName>
       <Instrument id="electric-guitar">
-        <longName>Add. Guitar 1</longName>
+        <InstrumentLabel>
+          <longName>Add. Guitar 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -50,25 +52,25 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <RehearsalMark>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <text>Intro</text>
             </RehearsalMark>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Dynamic>
           <StringTunings>
             <visibleStrings></visibleStrings>
@@ -82,27 +84,27 @@
               <string>54</string>
               <string>58</string>
               </StringData>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <style>string_tunings</style>
             <text/>
             </StringTunings>
           <Beam>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>M_M</eid>
+                <eid>N_N</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>N_N</eid>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -117,13 +119,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>Q_Q</eid>
+                  <eid>R_R</eid>
                   </Tie>
                 <next>
                   <location>
@@ -144,14 +146,14 @@
               <string>5</string>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>S_S</eid>
+                <eid>T_T</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>T_T</eid>
+                  <eid>U_U</eid>
                   </Tie>
                 <next>
                   <location>
@@ -166,10 +168,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -183,10 +185,10 @@
               <string>5</string>
               </Note>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>X_X</eid>
+                  <eid>Y_Y</eid>
                   </Tie>
                 <next>
                   <location>
@@ -209,10 +211,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -228,7 +230,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

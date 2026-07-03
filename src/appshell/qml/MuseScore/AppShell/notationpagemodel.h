@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,10 +32,9 @@
 #include "dockwindow/idockwindowprovider.h"
 #include "extensions/iextensionsprovider.h"
 #include "context/iglobalcontext.h"
-#include "notation/inotationconfiguration.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
-#include "iappshellconfiguration.h"
+#include "iappshellstate.h"
 
 namespace mu::appshell {
 class NotationPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
@@ -47,11 +46,10 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
 
     QML_ELEMENT
 
-    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<notation::INotationSceneConfiguration> notationSceneConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
-    muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
+    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::ContextInject<IAppShellState> appShellState = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -72,14 +70,13 @@ public:
 
     Q_INVOKABLE QString palettesPanelName() const;
     Q_INVOKABLE QString layoutPanelName() const;
-    Q_INVOKABLE QString inspectorPanelName() const;
+    Q_INVOKABLE QString propertiesPanelName() const;
     Q_INVOKABLE QString selectionFiltersPanelName() const;
     Q_INVOKABLE QString undoHistoryPanelName() const;
 
     Q_INVOKABLE QString mixerPanelName() const;
     Q_INVOKABLE QString pianoKeyboardPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
-    Q_INVOKABLE QString drumsetPanelName() const;
     Q_INVOKABLE QString percussionPanelName() const;
 
     Q_INVOKABLE QString statusBarName() const;
@@ -93,9 +90,6 @@ private:
 
     void toggleDock(const QString& name);
 
-    void scheduleUpdateDrumsetPanelVisibility();
-    void doUpdateDrumsetPanelVisibility();
-
     void scheduleUpdatePercussionPanelVisibility();
     void doUpdatePercussionPanelVisibility();
 
@@ -103,7 +97,6 @@ private:
     void doUpdateExtensionsToolBarVisibility();
 
     bool m_inited = false;
-    bool m_updateDrumsetPanelVisibilityScheduled = false;
     bool m_updatePercussionPanelVisibilityScheduled = false;
     bool m_updateExtensionsToolBarVisibilityScheduled = false;
 };

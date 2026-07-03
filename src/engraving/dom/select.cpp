@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -801,13 +801,14 @@ void Selection::updateSelectedElements()
     for (Chord* singleNoteChord : singleNoteChords) {
         if (!m_rangeContainsMultiNoteChords || selectionFilter().includeSingleNotes()) {
             appendChordRest(singleNoteChord);
+        } else {
+            // Include elements anchored to the note even if the note itself isn't included...
+            const Note* note = singleNoteChord->notes().front();
+            const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
+            appendFiltered(noteAnchored);
+            const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(singleNoteChord);
+            appendFiltered(crAnchored);
         }
-        // Include elements anchored to the note even if the note itself isn't included...
-        const Note* note = singleNoteChord->notes().front();
-        const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
-        appendFiltered(noteAnchored);
-        const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(singleNoteChord);
-        appendFiltered(crAnchored);
     }
 
     for (Tuplet* tuplet : innerTuplets) {
@@ -1048,32 +1049,6 @@ muse::ByteArray Selection::mimeData() const
     return a;
 }
 
-static bool hasElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return seg->tick();
-        }
-    }
-    return Fraction(-1, 1);
-}
-
 muse::ByteArray Selection::staffMimeData() const
 {
     auto buffer = Buffer::opened(IODevice::WriteOnly);
@@ -1121,15 +1096,6 @@ muse::ByteArray Selection::staffMimeData() const
         if (interval.diatonic) {
             xml.tag("transposeDiatonic", interval.diatonic);
         }
-        xml.startElement("voiceOffset");
-        for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
-                Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
-                xml.tag("voice", { { "id", voice } }, offset.ticks());
-            }
-        }
-        xml.endElement();     // </voiceOffset>
-
         rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
         xml.endElement();
     }
@@ -1184,6 +1150,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
+        case ElementType::STAVE_SHARING_LABEL:
             seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::EXPRESSION:

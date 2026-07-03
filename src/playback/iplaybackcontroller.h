@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,14 +47,9 @@ public:
     virtual muse::async::Notification isPlayAllowedChanged() const = 0;
 
     virtual bool isPlaying() const = 0;
-    virtual muse::async::Notification isPlayingChanged() const = 0;
 
-    virtual void reset() = 0;
-
-    virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
-
-    virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
-    virtual muse::async::Notification currentTrackSequenceIdChanged() const = 0;
+    virtual bool isPlaybackInited() const = 0;
+    virtual muse::async::Channel<bool> playbackInitedChanged() const = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;

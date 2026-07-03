@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -924,7 +924,6 @@ void setTrackInfo(MTrack& mt)
     if (mt.staff->isTop()) {
         Part* part  = mt.staff->part();
         part->setLongName(XmlWriter::xmlString(MidiInstr::concatenateWithComma(trackInstrName, mt.name)));
-        part->setPartName(part->longName());
         part->setMidiChannel(mt.mtrack->outChannel());
         int bank = 0;
         if (mt.mtrack->drumTrack()) {

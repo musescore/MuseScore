@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,6 +22,7 @@
 
 #include "audiomidipreferencesmodel.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::preferences;
@@ -33,25 +34,48 @@ AudioMidiPreferencesModel::AudioMidiPreferencesModel(QObject* parent)
 {
 }
 
-int AudioMidiPreferencesModel::currentAudioApiIndex() const
+int AudioMidiPreferencesModel::currentAudioDriverIndex() const
 {
-    QString currentApi = QString::fromStdString(audioDriverController()->currentAudioApi());
-    return audioApiList().indexOf(currentApi);
+    QString current = QString::fromStdString(audioDriverController()->currentAudioDriverName());
+    return audioDrivers().indexOf(current);
 }
 
-void AudioMidiPreferencesModel::setCurrentAudioApiIndex(int index)
+void AudioMidiPreferencesModel::setCurrentAudioDriverIndex(int index)
 {
-    if (index == currentAudioApiIndex()) {
+    if (index == currentAudioDriverIndex()) {
         return;
     }
 
-    std::vector<std::string> apiList = audioDriverController()->availableAudioApiList();
-    if (index < 0 || index >= static_cast<int>(apiList.size())) {
+    std::vector<std::string> drivers = audioDriverController()->availableAudioDrivers();
+    if (index < 0 || index >= static_cast<int>(drivers.size())) {
         return;
     }
 
-    audioDriverController()->changeCurrentAudioApi(apiList.at(index));
-    emit currentAudioApiIndexChanged(index);
+    std::string fallback = audioDriverController()->currentAudioDriverName();
+
+    audioDriverController()->availableOutputDevicesChanged().onNotify(this, [this, fallback]() {
+        audioDriverController()->availableOutputDevicesChanged().disconnect(this);
+
+        if (!audioDriverController()->availableOutputDevices().empty()) {
+            return;
+        }
+
+        auto promise = interactive()->warning(
+            muse::trc("preferences", "No audio devices available"),
+            muse::qtrc("preferences", "The selected audio driver does not have any available audio devices. "
+                                      "MuseScore Studio will use the default audio driver instead. "
+                                      "To use %1, ensure your hardware is set up correctly, "
+                                      "then restart MuseScore Studio and try again.")
+            .arg(QString::fromStdString(audioDriverController()->currentAudioDriverName())).toStdString());
+
+        promise.onResolve(this, [this, fallback](const muse::IInteractive::Result&) {
+            audioDriverController()->changeCurrentAudioDriver(fallback);
+            emit currentAudioDriverIndexChanged(currentAudioDriverIndex());
+        });
+    }, Asyncable::Mode::SetReplace);
+
+    audioDriverController()->changeCurrentAudioDriver(drivers.at(index));
+    emit currentAudioDriverIndexChanged(index);
 }
 
 QString AudioMidiPreferencesModel::midiInputDeviceId() const
@@ -108,24 +132,28 @@ void AudioMidiPreferencesModel::init()
         emit onlineSoundsShowProgressBarModeChanged();
     });
 
-    audioDriverController()->currentAudioApiChanged().onNotify(this, [this]() {
-        emit currentAudioApiIndexChanged(currentAudioApiIndex());
+    audioDriverController()->currentAudioDriverChanged().onNotify(this, [this]() {
+        emit currentAudioDriverIndexChanged(currentAudioDriverIndex());
     });
 
     audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool) {
         emit autoProcessOnlineSoundsInBackgroundChanged();
     });
+
+    audioConfiguration()->useSoundFontLowPassFilterChanged().onReceive(this, [this](bool) {
+        emit useSoundFontLowPassFilterChanged();
+    });
 }
 
-QStringList AudioMidiPreferencesModel::audioApiList() const
+QStringList AudioMidiPreferencesModel::audioDrivers() const
 {
-    const std::vector<std::string> apiList = audioDriverController()->availableAudioApiList();
+    const std::vector<std::string> drivers = audioDriverController()->availableAudioDrivers();
 
     QStringList result;
-    result.reserve(apiList.size());
+    result.reserve(drivers.size());
 
-    for (const std::string& api: apiList) {
-        result.emplace_back(QString::fromStdString(api));
+    for (const std::string& driver: drivers) {
+        result.emplace_back(QString::fromStdString(driver));
     }
 
     return result;
@@ -147,9 +175,11 @@ bool AudioMidiPreferencesModel::onlineSoundsSectionVisible() const
 
 QVariantList AudioMidiPreferencesModel::midiInputDevices() const
 {
-    QVariantList result;
-
     std::vector<MidiDevice> devices = midiInPort()->availableDevices();
+
+    QVariantList result;
+    result.reserve(devices.size());
+
     for (const MidiDevice& device : devices) {
         QVariantMap obj;
         obj["value"] = QString::fromStdString(device.id);
@@ -163,9 +193,11 @@ QVariantList AudioMidiPreferencesModel::midiInputDevices() const
 
 QVariantList AudioMidiPreferencesModel::midiOutputDevices() const
 {
-    QVariantList result;
-
     std::vector<MidiDevice> devices = midiOutPort()->availableDevices();
+
+    QVariantList result;
+    result.reserve(devices.size());
+
     for (const MidiDevice& device : devices) {
         QVariantMap obj;
         obj["value"] = QString::fromStdString(device.id);
@@ -262,4 +294,18 @@ void AudioMidiPreferencesModel::setOnlineSoundsShowProgressBarMode(int mode)
     }
 
     playbackConfiguration()->setOnlineSoundsShowProgressBarMode(static_cast<playback::OnlineSoundsShowProgressBarMode>(mode));
+}
+
+bool AudioMidiPreferencesModel::useSoundFontLowPassFilter() const
+{
+    return audioConfiguration()->useSoundFontLowPassFilter();
+}
+
+void AudioMidiPreferencesModel::setUseSoundFontLowPassFilter(bool value)
+{
+    if (value == useSoundFontLowPassFilter()) {
+        return;
+    }
+
+    audioConfiguration()->setUseSoundFontLowPassFilter(value);
 }

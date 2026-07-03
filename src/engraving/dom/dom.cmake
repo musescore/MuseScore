@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -270,6 +270,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
+    ${CMAKE_CURRENT_LIST_DIR}/sharedpart.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/sharedpart.h
     ${CMAKE_CURRENT_LIST_DIR}/sig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp
@@ -286,13 +288,15 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/staff.h
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.h
-    ${CMAKE_CURRENT_LIST_DIR}/staffname.h
+    ${CMAKE_CURRENT_LIST_DIR}/stafflabel.h
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.h
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.cpp
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.cpp

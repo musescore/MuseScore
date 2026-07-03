@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,6 +30,8 @@ class Page;
 class System;
 class StaffLines;
 class TextBase;
+class SlurTieSegment;
+enum class SegmentType;
 }
 
 namespace mu::engraving::rendering::score {
@@ -43,6 +45,12 @@ private:
                                     LayoutContext& ctx);
     static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
     static std::vector<TextBase*> collectAllSystemText(const System* system);
+
+    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment);
+
+    static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding);
+    static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape,
+                                         const double horizontalCollisionPadding, const double verticalCollisionPadding);
 
     static void cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength);
 

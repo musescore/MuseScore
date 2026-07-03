@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -91,11 +91,12 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const String& txt) override;
+    void paste(const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     void triggerLayout() const override;
 
     double yRelativeToStaff() const;
@@ -109,8 +110,6 @@ private:
     friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
-
-    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     int m_verse = 0;              // row index
     Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
@@ -229,6 +228,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid propertyId) const override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     Lyrics* findLyricsInPreviousRepeatSeg() const;
     Lyrics* findAdjacentLyricsOrDefault() const;

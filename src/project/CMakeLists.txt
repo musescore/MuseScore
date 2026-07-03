@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -40,8 +40,6 @@ target_sources(project PRIVATE
     irecentfilescontroller.h
     imscmetareader.h
     iprojectautosaver.h
-    iprojectrwregister.h
-    iprojectwriter.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -87,8 +85,6 @@ target_sources(project PRIVATE
     internal/projectmigrator.h
     internal/projectfileinfoprovider.cpp
     internal/projectfileinfoprovider.h
-    internal/projectrwregister.cpp
-    internal/projectrwregister.h
 )
 
 if (OS_IS_MAC)

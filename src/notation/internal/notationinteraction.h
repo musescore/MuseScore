@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,6 +34,7 @@
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
+#include "../inotationcontextconfiguration.h"
 #include "notationscene/iselectinstrumentscenario.h"
 #include "inotationundostack.h"
 
@@ -61,6 +62,7 @@ class NotationInteraction : public INotationInteraction, public muse::Contextabl
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
@@ -352,6 +354,7 @@ private:
     void onScoreInited();
     void onViewModeChanged();
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func);
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();

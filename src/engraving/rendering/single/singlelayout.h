@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -105,6 +105,7 @@ class Slur;
 class SoundFlag;
 class Spacer;
 class StaffText;
+class StaveSharingLabel;
 class StaffTypeChange;
 class Sticking;
 class StringTunings;
@@ -224,6 +225,7 @@ public:
     static void layout(SoundFlag* item, const Context& ctx);
     static void layout(Spacer* item, const Context&);
     static void layout(StaffText* item, const Context& ctx);
+    static void layout(StaveSharingLabel* item, const Context& ctx);
     static void layout(StaffTypeChange* item, const Context& ctx);
     static void layout(Stem* item, const Context& ctx);
     static void layout(Sticking* item, const Context& ctx);
@@ -266,6 +268,8 @@ private:
     static void layoutLine(SLine* item, const Context& ctx);
     static void layoutLineSegment(LineSegment* item, const Context& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx);
+
+    static void layoutGroupBracket(Bracket* item, const Context& ctx);
 };
 }
 

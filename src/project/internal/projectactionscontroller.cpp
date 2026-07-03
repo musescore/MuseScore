@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -91,6 +91,7 @@ void ProjectActionsController::init()
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
+    dispatcher()->reg(this, "file-import-audio-to-score", this, &ProjectActionsController::importAudioToScore);
 
     dispatcher()->reg(this, "print", this, &ProjectActionsController::printScore);
 
@@ -133,6 +134,7 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
             "file-new",
             "file-open",
             "file-import-pdf",
+            "file-import-audio-to-score",
             "continue-last-session",
             "clear-recent",
         };
@@ -412,7 +414,7 @@ Ret ProjectActionsController::doFinishOpenProject()
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
     //! Show MuseSounds / MuseSampler update if need
-    auto showUpdateNotification = [=]() {
+    auto showUpdateNotification = [this]() {
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
@@ -426,8 +428,8 @@ Ret ProjectActionsController::doFinishOpenProject()
         showUpdateNotification();
     } else {
         async::Channel<Uri> opened = interactive()->opened();
-        opened.onReceive(this, [=](const Uri&) {
-            async::Async::call(this, [=]() {
+        opened.onReceive(this, [this, opened, showUpdateNotification](const Uri&) {
+            async::Async::call(this, [this, opened, showUpdateNotification]() {
                 async::Channel<Uri> mut = opened;
                 mut.disconnect(this);
 
@@ -696,6 +698,10 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
         return false;
     }
 
+    if (m_isProjectSaving || m_isProjectUploading) {
+        return false;
+    }
+
     m_isProjectClosing = true;
     DEFER {
         m_isProjectClosing = false;
@@ -706,8 +712,8 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
         return true;
     }
 
-    if (playbackController()->isPlaying()) {
-        playbackController()->reset();
+    if (globalContext()->playbackState()->isPlaying()) {
+        dispatcher()->dispatch("stop");
     }
 
     bool result = true;
@@ -725,7 +731,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
     }
 
     if (result) {
-        interactive()->closeAllDialogs();
+        interactive()->closeAllDialogsSync();
         globalContext()->setCurrentProject(nullptr);
 
         if (goToHome) {
@@ -1242,7 +1248,7 @@ void ProjectActionsController::showUploadProgressDialog()
 void ProjectActionsController::closeUploadProgressDialog()
 {
     if (interactive()->isOpened(UPLOAD_PROGRESS_URI).val) {
-        interactive()->close(UPLOAD_PROGRESS_URI);
+        interactive()->closeSync(UriQuery(UPLOAD_PROGRESS_URI));
     }
 }
 
@@ -1374,7 +1380,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     closeUploadProgressDialog();
 
     if (!urlToOpen.isEmpty()) {
-        interactive()->openUrl(urlToOpen);
+        platformInteractive()->openUrl(urlToOpen);
         return;
     }
 
@@ -1402,7 +1408,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
                         static_cast<int>(IInteractive::Button::Ok))
     .onResolve(this, [this, viewOnlineBtn, scoreManagerUrl](const IInteractive::Result& res) {
         if (res.isButton(viewOnlineBtn.btn)) {
-            interactive()->openUrl(scoreManagerUrl);
+            platformInteractive()->openUrl(scoreManagerUrl);
         }
     });
 }
@@ -1450,7 +1456,7 @@ void ProjectActionsController::onAudioSuccessfullyUploaded(const QUrl& urlToOpen
 
     closeUploadProgressDialog();
 
-    interactive()->openUrl(urlToOpen);
+    platformInteractive()->openUrl(urlToOpen);
 }
 
 void ProjectActionsController::onAudioUploadFailed(const Ret& ret)
@@ -1627,7 +1633,7 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
         interactive()->buttonData(IInteractive::Button::Ok)
     }).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
         if (res.isButton(getHelpBtn.btn)) {
-            interactive()->openUrl(configuration()->supportForumUrl());
+            platformInteractive()->openUrl(configuration()->supportForumUrl());
         }
     });
 }
@@ -1815,7 +1821,7 @@ void ProjectActionsController::warnProjectCriticallyCorrupted(const String& proj
         getHelpBtn
     }, getHelpBtn.btn).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
         if (res.isButton(getHelpBtn.btn)) {
-            interactive()->openUrl(configuration()->supportForumUrl());
+            platformInteractive()->openUrl(configuration()->supportForumUrl());
         }
     });
 }
@@ -1846,7 +1852,12 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const m
 
 void ProjectActionsController::importPdf()
 {
-    interactive()->openUrl("https://musescore.com/import");
+    platformInteractive()->openUrl("https://musescore.com/import");
+}
+
+void ProjectActionsController::importAudioToScore()
+{
+    platformInteractive()->openUrl("https://musescore.com/upload?format=audio2score");
 }
 
 void ProjectActionsController::clearRecentScores()

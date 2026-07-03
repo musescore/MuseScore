@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -74,6 +74,7 @@ Beam::Beam(const Beam& b)
     m_growLeft           = b.m_growLeft;
     m_growRight           = b.m_growRight;
     m_beamDist        = b.m_beamDist;
+    m_fragments.reserve(b.m_fragments.size());
     for (const BeamFragment* f : b.m_fragments) {
         m_fragments.push_back(new BeamFragment(*f));
     }
@@ -842,6 +843,7 @@ Shape BeamSegment::shape() const
     double horizontalStep = beamHorizontalLength / subBoxesCount;
     double verticalStep = beamHeightDiff / subBoxesCount;
     std::vector<PointF> pointsOnBeamLine;
+    pointsOnBeamLine.reserve(subBoxesCount);
     pointsOnBeamLine.push_back(startPoint);
     for (int i = 0; i < subBoxesCount - 1; ++i) {
         PointF nextPoint = pointsOnBeamLine.back() + PointF(horizontalStep, verticalStep);

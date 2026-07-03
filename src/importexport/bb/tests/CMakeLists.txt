@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -20,11 +20,18 @@
 
 set(MODULE_TEST iex_bb_tests)
 
+set(ENGRAVING_TEST_UTILS_DIR ${CMAKE_SOURCE_DIR}/src/engraving/tests/utils)
+
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
    # ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp
+
+    ${ENGRAVING_TEST_UTILS_DIR}/scorecomp.cpp
+    ${ENGRAVING_TEST_UTILS_DIR}/scorecomp.h
+    ${ENGRAVING_TEST_UTILS_DIR}/scorerw.cpp
+    ${ENGRAVING_TEST_UTILS_DIR}/scorerw.h
 )
 
 set(MODULE_TEST_LINK
@@ -34,4 +41,4 @@ set(MODULE_TEST_LINK
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)
+include(SetupGTest)

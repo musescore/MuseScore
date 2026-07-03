@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -89,7 +89,7 @@ void EngravingApiV1::setApi(PluginAPI* api)
 PluginAPI* EngravingApiV1::api() const
 {
     if (!m_api) {
-        m_api = new PluginAPI();
+        m_api = new PluginAPI(iocContext());
         m_selfApi = true;
     }
 

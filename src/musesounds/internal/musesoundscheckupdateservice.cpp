@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -54,9 +54,9 @@ Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 #elif defined(Q_OS_MAC)
     //! NOTE: If there is installed MuseHub, but we can't open it, then we shouldn't check update
     static const std::string MUSEHUB_APP_IDENTIFIER = "com.muse.hub";
-    bool isMuseHubExists = interactive()->isAppExists(MUSEHUB_APP_IDENTIFIER);
+    bool isMuseHubExists = platformInteractive()->isAppExists(MUSEHUB_APP_IDENTIFIER);
     if (isMuseHubExists) {
-        bool canOpenMuseHubByUniversalUrl = interactive()->canOpenApp(MUSEHUB_APP_URI);
+        bool canOpenMuseHubByUniversalUrl = platformInteractive()->canOpenApp(MUSEHUB_APP_URI);
         return canOpenMuseHubByUniversalUrl;
     }
 
@@ -78,19 +78,21 @@ Promise<RetVal<ReleaseInfo> > MuseSoundsCheckUpdateService::checkForUpdate()
 
         auto buff = std::make_shared<QBuffer>();
         QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
-        m_networkManager = networkManagerCreator()->makeNetworkManager();
+
+        if (!m_networkManager) {
+            m_networkManager = networkManagerCreator()->makeNetworkManager();
+        }
+
         RetVal<Progress> progress = m_networkManager->get(url, buff);
 
         if (!progress.ret) {
             m_lastCheckResult.ret = progress.ret;
-            m_networkManager = nullptr;
             return resolve(m_lastCheckResult);
         }
 
         progress.val.finished().onReceive(this, [this, buff, resolve](const ProgressResult& res) {
             DEFER {
                 (void)resolve(m_lastCheckResult);
-                m_networkManager = nullptr;
             };
 
             if (!res.ret) {

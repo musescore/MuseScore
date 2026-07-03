@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,6 +22,7 @@
 
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/editnote.h"
 #include "../editing/transpose.h"
 
 #include "accidental.h"
@@ -163,10 +164,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
     auto doChangeEndNotePitch = [&]() {
-        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        EditNote::undoChangePitch(score(), note, pitch, targetTpc1, targetTpc2);
         Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
         while (tiedNote) {
-            score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+            EditNote::undoChangePitch(score(), tiedNote, pitch, targetTpc1, targetTpc2);
             tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
         }
     };
@@ -185,10 +186,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
         if (Accidental::isMicrotonal(accidentalType)) {
             doChangeEndNotePitch();
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
         } else {
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
             doChangeEndNotePitch();
         }
     } else {
@@ -290,7 +291,7 @@ Note* GuitarBend::createEndNote(Note* startNote, GuitarBendType bendType)
         endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
         Chord* endChord = endSegment ? toChord(endSegment->element(track)) : nullptr;
         endNote = endChord ? endChord->upNote() : nullptr;
-    } else { // isChord
+    } else if (item->isChord()) {
         Chord* chord = toChord(item);
         endNote = score->addNote(chord, noteVal);
     }

@@ -586,7 +586,7 @@
       <direction placement="below">
         <direction-type>
           <dynamics>
-            <other-dynamics>n</other-dynamics>
+            <n/>
             </dynamics>
           </direction-type>
         <sound dynamics="54.44"/>

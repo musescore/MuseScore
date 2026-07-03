@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
@@ -236,13 +237,21 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
                     VBox* first = static_cast<VBox*>(mb);
                     VBox* second = static_cast<VBox*>(nextmb);
                     if (first->bottomGap() > 0_sp && second->topGap() > 0_sp) {
-                        first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                        first->setProperty(Pid::BOTTOM_GAP, first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                        first->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
                     }
                 }
             }
         }
     }
 }
+
+static constexpr std::array<ElementType, 6> OFFSET_UNIT_CONVERT_TYPES = {
+    ElementType::FINGERING,
+    ElementType::HAMMER_ON_PULL_OFF_TEXT,
+    ElementType::LYRICS,
+    ElementType::TAPPING
+};
 
 void EngravingCompat::pre470TextCompat(MasterScore* masterScore)
 {
@@ -255,6 +264,17 @@ void EngravingCompat::pre470TextCompat(MasterScore* masterScore)
 
         if (!text->isStyled(Pid::FRAME_ROUND)) {
             text->setFrameRound(compat::CompatUtils::convertPre470FrameRadius(text->frameRound().val()));
+        }
+
+        // Text offset could have been in mm for these types prior to 4.7
+        // Convert actual distance to spatium
+        if (muse::contains(OFFSET_UNIT_CONVERT_TYPES, item->type()) && !item->sizeIsSpatiumDependent()) {
+            PointF offset = item->offset();
+            double spatium = item->style().spatium();
+            offset /= spatium;
+            offset *= DPMM;
+
+            item->setProperty(Pid::OFFSET, offset);
         }
 
         // Staff text, system text, and harp pedal diagrams are the only types which are attached to notes and weren't already
@@ -289,14 +309,51 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
     }
 }
 
+static void doMigrateOffset500(EngravingItem* item)
+{
+    if (item->offset().isNull()
+        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) || !item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    item->setOffset(CompatUtils::getAdjustedOffset(item, item->offset()));
+}
+
+void EngravingCompat::migrateOffset500(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->spannerList()) {
+            if (!sp->hasVoiceAssignmentProperties()) {
+                continue;
+            }
+            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+            doMigrateOffset500(sp);
+            for (SpannerSegment* seg : sp->spannerSegments()) {
+                doMigrateOffset500(seg);
+            }
+        }
+
+        score->scanElements(doMigrateOffset500);
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     bool needRelayout = false;
 
     int mscVersion = score->mscVersion();
 
+    if (mscVersion < 470) {
+        needRelayout |= setLyricLineVisibility(score);
+    }
+
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
+
+    if (mscVersion < 500) {
+        migrateOffset500(score);
+        needRelayout = true;
     }
 
     if (needRelayout) {
@@ -342,5 +399,27 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::setLyricLineVisibility(MasterScore* masterScore)
+{
+    bool needRelayout = false;
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->unmanagedSpanners()) {
+            if (!sp->isLyricsLine()) {
+                continue;
+            }
+
+            LyricsLine* ll = toLyricsLine(sp);
+            if (!ll->lyrics() || ll->visible() == ll->lyrics()->visible()) {
+                continue;
+            }
+
+            ll->setVisible(ll->lyrics()->visible());
+            needRelayout = true;
+        }
+    }
+
+    return needRelayout;
 }
 } // namespace mu::engraving::compat

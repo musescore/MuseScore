@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -166,6 +166,8 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
+
+    staff_idx_t vStaffIdx() const override;
 
     int playTicks() const;
     Fraction playTicksFraction() const;
@@ -375,7 +377,6 @@ public:
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }
     void setScore(Score* s) override;
-    void setDotRelativeLine(int);
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
@@ -385,7 +386,7 @@ public:
     EngravingItem* prevInEl(EngravingItem* e);
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
-    virtual EngravingItem* lastElementBeforeSegment();
+    EngravingItem* lastElementBeforeSegment();
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
@@ -449,6 +450,8 @@ public:
 
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
+
+    bool isExactUnison(Note* other);
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };

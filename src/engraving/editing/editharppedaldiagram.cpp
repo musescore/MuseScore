@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,7 +34,7 @@ using namespace mu::engraving;
 //   ChangeHarpPedalState
 //---------------------------------------------------------
 
-void ChangeHarpPedalState::flip(EditData*)
+void ChangeHarpPedalState::flip()
 {
     std::array<PedalPosition, HARP_STRING_NO> f_state = diagram->getPedalState();
     if (f_state == pedalState) {
@@ -68,7 +68,7 @@ std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
 //   ChangeSingleHarpPedal
 //---------------------------------------------------------
 
-void ChangeSingleHarpPedal::flip(EditData*)
+void ChangeSingleHarpPedal::flip()
 {
     HarpStringType f_type = type;
     PedalPosition f_pos = diagram->getPedalState()[type];

@@ -1,0 +1,1 @@
+GLOBAL - global area

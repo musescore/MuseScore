@@ -4,11 +4,15 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -33,16 +37,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
     <Part id="1">
+      <eid>YE_YE</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -71,16 +77,18 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>ZE_ZE</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -146,7 +154,7 @@
               <Image>
                 <Image>
                   <eid>M_M</eid>
-                  <z>9399</z>
+                  <z>11399</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <size w="32.12" h="32.16"/>
                   </Image>
@@ -830,8 +838,12 @@
       <name>Alto</name>
       <Division>480</Division>
       <Style>
+        <windsNameByGroup>0</windsNameByGroup>
+        <vocalsNameByGroup>0</vocalsNameByGroup>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+        <maskSlurs>0</maskSlurs>
+        <maskTies>0</maskTies>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -840,6 +852,7 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Alto</metaTag>
       <Part id="1">
+        <eid>aE_aE</eid>
         <Staff>
           <eid>7B_7B</eid>
           <linkedTo>C_C</linkedTo>
@@ -847,10 +860,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto</trackName>
         <Instrument id="alto">
-          <longName>Alto</longName>
-          <shortName>A.</shortName>
+          <InstrumentLabel>
+            <longName>Alto</longName>
+            <shortName>A.</shortName>
+            </InstrumentLabel>
           <trackName>Alto</trackName>
           <minPitchP>55</minPitchP>
           <maxPitchP>77</maxPitchP>
@@ -927,7 +941,7 @@
                 <Image>
                   <Image>
                     <eid>FC_FC</eid>
-                    <z>9399</z>
+                    <z>11399</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                     <size w="32.3749" h="32.4152"/>
                     </Image>
@@ -1317,8 +1331,12 @@
       <name>Tenor</name>
       <Division>480</Division>
       <Style>
+        <windsNameByGroup>0</windsNameByGroup>
+        <vocalsNameByGroup>0</vocalsNameByGroup>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+        <maskSlurs>0</maskSlurs>
+        <maskTies>0</maskTies>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1327,6 +1345,7 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Tenor</metaTag>
       <Part id="2">
+        <eid>bE_bE</eid>
         <Staff>
           <eid>LD_LD</eid>
           <linkedTo>D_D</linkedTo>
@@ -1334,10 +1353,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Tenor</trackName>
         <Instrument id="tenor">
-          <longName>Tenor</longName>
-          <shortName>T.</shortName>
+          <InstrumentLabel>
+            <longName>Tenor</longName>
+            <shortName>T.</shortName>
+            </InstrumentLabel>
           <trackName>Tenor</trackName>
           <minPitchP>48</minPitchP>
           <maxPitchP>72</maxPitchP>

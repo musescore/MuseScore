@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -156,6 +156,7 @@ std::vector<int> TConv::fromXml(const String& tag, const std::vector<int>& def)
 String TConv::toXml(const std::vector<string_idx_t>& v)
 {
     std::vector<int> _v;
+    _v.reserve(v.size());
     for (string_idx_t string : v) {
         _v.push_back(static_cast<int>(string));
     }
@@ -166,12 +167,14 @@ String TConv::toXml(const std::vector<string_idx_t>& v)
 std::vector<string_idx_t> TConv::fromXml(const String& tag, const std::vector<string_idx_t>& def)
 {
     std::vector<int> _def;
+    _def.reserve(def.size());
     for (string_idx_t string : def) {
         _def.push_back(static_cast<int>(string));
     }
 
     std::vector<string_idx_t> v;
     std::vector<int> _v = fromXml(tag, _def);
+    v.reserve(_v.size());
 
     for (int string : _v) {
         v.push_back(static_cast<string_idx_t>(string));
@@ -190,6 +193,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::PART, "Part",
           TranslatableString("engraving", "part(s)", nullptr, 1),
           TranslatableString("engraving", "Part(s)", nullptr, 1) },
+    Item{ ElementType::SHARED_PART, "SharedPart",
+          TranslatableString("engraving", "shared part(s)", nullptr, 1),
+          TranslatableString("engraving", "Shared part(s)", nullptr, 1) },
     Item{ ElementType::STAFF, "Staff",
           TranslatableString("engraving", "staff/staves", nullptr, 1),
           TranslatableString("engraving", "Staff/Staves", nullptr, 1) },
@@ -340,6 +346,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::STAFF_TEXT, "StaffText",
           TranslatableString("engraving", "staff text(s)", nullptr, 1),
           TranslatableString("engraving", "Staff text(s)", nullptr, 1) },
+    Item{ ElementType::STAVE_SHARING_LABEL, "StaveSharingLabel",
+          TranslatableString("engraving", "stave sharing label(s)", nullptr, 1),
+          TranslatableString("engraving", "Stave sharing label(s)", nullptr, 1) },
     Item{ ElementType::SYSTEM_TEXT, "SystemText",
           TranslatableString("engraving", "system text(s)", nullptr, 1),
           TranslatableString("engraving", "System text(s)", nullptr, 1) },
@@ -1089,6 +1098,27 @@ Orientation TConv::fromXml(const AsciiStringView& tag, Orientation def)
     return findTypeByXmlTag<Orientation>(ORIENTATION, tag, def);
 }
 
+static const std::array<Item<SharedLabelOrientation>, 3> SHARED_LABEL_ORIENTATION = { {
+    { SharedLabelOrientation::VERTICAL,    "vertical",     muse::TranslatableString("engraving", "Vertical") },
+    { SharedLabelOrientation::HORIZONTAL,  "horizontal",   muse::TranslatableString("engraving", "Horizontal") },
+    { SharedLabelOrientation::VOICE,       "voice",        muse::TranslatableString("engraving", "Voice") },
+} };
+
+String TConv::translatedUserName(SharedLabelOrientation v)
+{
+    return findCapitalizedUserNameByType(SHARED_LABEL_ORIENTATION, v).translated();
+}
+
+AsciiStringView TConv::toXml(SharedLabelOrientation v)
+{
+    return findXmlTagByType<SharedLabelOrientation>(SHARED_LABEL_ORIENTATION, v);
+}
+
+SharedLabelOrientation TConv::fromXml(const AsciiStringView& tag, SharedLabelOrientation def)
+{
+    return findTypeByXmlTag<SharedLabelOrientation>(SHARED_LABEL_ORIENTATION, tag, def);
+}
+
 static const std::array<Item<NoteHeadType>, 5> NOTEHEAD_TYPES = { {
     { NoteHeadType::HEAD_AUTO,      "auto",    muse::TranslatableString("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   muse::TranslatableString("engraving/noteheadtype", "Whole") },
@@ -1706,6 +1736,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::INSTRUMENT_LONG,   "instrument_long",      muse::TranslatableString("engraving", "Instrument name (Long)") },
     { TextStyleType::INSTRUMENT_SHORT,  "instrument_short",     muse::TranslatableString("engraving", "Instrument name (Short)") },
     { TextStyleType::INSTRUMENT_CHANGE, "instrument_change",    muse::TranslatableString("engraving", "Instrument change") },
+    { TextStyleType::GROUP_BRACKET,     "group_bracket",        muse::TranslatableString("engraving", "Group bracket") },
     { TextStyleType::HEADER,            "header",               muse::TranslatableString("engraving", "Header") },
     { TextStyleType::FOOTER,            "footer",               muse::TranslatableString("engraving", "Footer") },
     { TextStyleType::COPYRIGHT,         "copyright",            muse::TranslatableString("engraving", "Copyright") },
@@ -1726,6 +1757,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::SYSTEM,            "system",               muse::TranslatableString("engraving", "System") },
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
+    { TextStyleType::STAVE_SHARING,     "staff",                muse::TranslatableString("engraving", "Stave sharing label") },
     { TextStyleType::EXPRESSION,        "expression",           muse::TranslatableString("engraving", "Expression") },
     { TextStyleType::DYNAMICS,          "dynamics",             muse::TranslatableString("engraving", "Dynamics") },
     { TextStyleType::HAIRPIN,           "hairpin",              muse::TranslatableString("engraving", "Hairpin") },
@@ -2038,6 +2070,44 @@ AccidentalRole TConv::fromXml(const AsciiStringView& tag, AccidentalRole def)
     bool ok = false;
     int r = tag.toInt(&ok);
     return ok ? static_cast<AccidentalRole>(r) : def;
+}
+
+static const std::vector<Item<GuitarBendType> > GUITAR_BEND_TYPES = {
+    { GuitarBendType::BEND,            "bend" },
+    { GuitarBendType::PRE_BEND,        "pre-bend" },
+    { GuitarBendType::GRACE_NOTE_BEND, "grace-note-bend" },
+    { GuitarBendType::SLIGHT_BEND,     "slight-bend" },
+    { GuitarBendType::DIVE,            "dive" },
+    { GuitarBendType::PRE_DIVE,        "pre-dive" },
+    { GuitarBendType::DIP,             "dip" },
+    { GuitarBendType::SCOOP,           "scoop" },
+};
+
+AsciiStringView TConv::toXml(GuitarBendType v)
+{
+    return findXmlTagByType(GUITAR_BEND_TYPES, v);
+}
+
+GuitarBendType TConv::fromXml(const AsciiStringView& tag, GuitarBendType def)
+{
+    return findTypeByXmlTag(GUITAR_BEND_TYPES, tag, def);
+}
+
+static const std::vector<Item<NoteCaseType> > NOTE_CASE_TYPES = {
+    { NoteCaseType::AUTO,    "auto" },
+    { NoteCaseType::CAPITAL, "capital" },
+    { NoteCaseType::LOWER,   "lower" },
+    { NoteCaseType::UPPER,   "upper" },
+};
+
+AsciiStringView TConv::toXml(NoteCaseType v)
+{
+    return findXmlTagByType(NOTE_CASE_TYPES, v);
+}
+
+NoteCaseType TConv::fromXml(const AsciiStringView& tag, NoteCaseType def)
+{
+    return findTypeByXmlTag(NOTE_CASE_TYPES, tag, def);
 }
 
 String TConv::toXml(BeatsPerSecond v, int precision)
@@ -2518,6 +2588,7 @@ static const std::vector<Item<BracketType> > BRACKET_TYPES = {
     { BracketType::BRACE,      "Brace",     muse::TranslatableString("engraving/brackettype", "Brace") },
     { BracketType::SQUARE,     "Square",    muse::TranslatableString("engraving/brackettype", "Square") },
     { BracketType::LINE,       "Line",      muse::TranslatableString("engraving/brackettype", "Line") },
+    { BracketType::GROUP,      "Group",     muse::TranslatableString("engraving/brackettype", "Group") },
     { BracketType::NO_BRACKET, "NoBracket", muse::TranslatableString("engraving/brackettype", "No bracket") }
 };
 
@@ -3411,4 +3482,21 @@ mu::engraving::AsciiStringView mu::engraving::TConv::toXml(InstrumentNamesAlign 
 InstrumentNamesAlign TConv::fromXml(const AsciiStringView& str, InstrumentNamesAlign def)
 {
     return findTypeByXmlTag<InstrumentNamesAlign>(INSTR_LABELS_ALIGN, str, def);
+}
+
+const std::array<Item<InstrumentNamesFormat>, 4> INSTR_NAMES_FORMAT = { {
+    { InstrumentNamesFormat::NAME_IN_TRANSP_NUM, "name-in-transp-num" },
+    { InstrumentNamesFormat::NAME_NUM_IN_TRANSP, "name-num-in-transp" },
+    { InstrumentNamesFormat::TRANSP_NAME_NUM, "transp-name-num" },
+    { InstrumentNamesFormat::CUSTOM, "custom" }
+} };
+
+mu::engraving::AsciiStringView mu::engraving::TConv::toXml(InstrumentNamesFormat v)
+{
+    return findXmlTagByType<InstrumentNamesFormat>(INSTR_NAMES_FORMAT, v);
+}
+
+InstrumentNamesFormat TConv::fromXml(const AsciiStringView& str, InstrumentNamesFormat def)
+{
+    return findTypeByXmlTag<InstrumentNamesFormat>(INSTR_NAMES_FORMAT, str, def);
 }

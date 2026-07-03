@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -543,8 +543,8 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
 
 double HorizontalSpacing::spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx)
 {
-    if (!(firstSeg->isType(SegmentType::ChordRest) && secondSeg->isType(SegmentType::BarLineType))
-        && !(firstSeg->isType(SegmentType::BarLineType) && secondSeg->isType(SegmentType::ChordRest))) {
+    if (!(firstSeg->isType(SegmentType::ChordRest) && secondSeg->isType(SegmentType::BarLineTypes))
+        && !(firstSeg->isType(SegmentType::BarLineTypes) && secondSeg->isType(SegmentType::ChordRest))) {
         return 0.0;
     }
 
@@ -1142,7 +1142,7 @@ void HorizontalSpacing::setPositionsAndWidths(const std::vector<SegmentPosition>
         Measure* nextSegMeasure = nextSeg->measure();
 
         bool leadingNonCRException = ((nextSeg->isKeySigType() || nextSeg->isTimeSigType()
-                                       || nextSeg->isClefType()) && !curSeg->isType(SegmentType::BarLineType));
+                                       || nextSeg->isClefType()) && !curSeg->isType(SegmentType::BarLineTypes));
         bool computeWidthByDifferenceFromNext = curSegMeasure == nextSegMeasure || nextSeg->isStartRepeatBarLineType()
                                                 || leadingNonCRException;
 
@@ -1296,7 +1296,7 @@ double HorizontalSpacing::shapeSpatium(const Shape& s)
 
 double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment* ns, double squeezeFactor)
 {
-    if (f->segmentType() & SegmentType::BarLineType) {
+    if (f->segmentType() & SegmentType::BarLineTypes) {
         if (ns->isStartRepeatBarLineType()) {
             if (f->isBeginBarLineType()) {
                 return 0.0;

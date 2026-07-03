@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,9 @@ target_sources(appshell PRIVATE
     appshellmodule.h
     iappshellconfiguration.h
     appshelltypes.h
+
+    internal/appshellstate.cpp
+    internal/appshellstate.h
     internal/applicationactioncontroller.cpp
     internal/applicationactioncontroller.h
     internal/applicationuiactions.cpp

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,7 +36,7 @@ class ConverterApi : public muse::api::ApiObject, public muse::async::Asyncable
     Q_OBJECT
 
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
-    muse::GlobalInject<IConverterController> converter;
+    muse::ContextInject<IConverterController> converter = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -73,7 +73,6 @@
 #include "../../dom/marker.h"
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumber.h"
-#include "../../dom/measurenumberbase.h"
 #include "../../dom/measurerepeat.h"
 #include "../../dom/mmrest.h"
 #include "../../dom/mmrestrange.h"
@@ -90,7 +89,9 @@
 
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
+#include "../../dom/stafftype.h"
 #include "../../dom/stafftypechange.h"
+#include "../../dom/stavesharinglabel.h"
 #include "../../dom/stem.h"
 #include "../../dom/stemslash.h"
 #include "../../dom/sticking.h"
@@ -323,6 +324,7 @@ public:
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata);
     static void layoutStaffText(const StaffText* item, StaffText::LayoutData* ldata);
+    static void layoutStaveSharingLabel(const StaveSharingLabel* item, StaveSharingLabel::LayoutData* ldata);
     static void layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf);
@@ -397,5 +399,7 @@ private:
     static void doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
 
     static void alignTabGraceNotesToMainStave(GraceNotesGroup* graceNotes, const Staff* notationStaff);
+
+    static void layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
 };
 }

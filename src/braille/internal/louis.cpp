@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,8 +29,8 @@
 
 #include <QString>
 
-#include "braille/thirdparty/liblouis/liblouis/internal.h"
-#include "braille/thirdparty/liblouis/liblouis/liblouis.h"
+#include "internal.h"
+#include "liblouis.h"
 
 #define WIDECHARS_ARE_UCS4
 

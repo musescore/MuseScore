@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,9 +23,13 @@
 #include <gtest/gtest.h>
 
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/scoreorder.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
@@ -35,6 +39,7 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/part.h"
 #include "engraving/api/v1/elements.h"
+#include "engraving/api/v1/instrument.h"
 #include "engraving/api/v1/apistructs.h"
 
 using namespace mu::engraving;
@@ -78,7 +83,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
     newInstrument.setTrackName(u"Replaced Instrument");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"Replaced Part"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     // [THEN] The part's instrument should be changed
@@ -116,7 +121,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
     newInstrument.setTrackName(u"New Instrument");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"New Part"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     // Verify it changed
@@ -155,7 +160,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
     newInstrument.setId(u"test.replaced");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"Replaced"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     EXPECT_EQ(part->instrumentId(), u"test.replaced");
@@ -1006,5 +1011,816 @@ TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
     EXPECT_EQ(domStaff->mergeMatchingRests(), AutoOnOff::AUTO);
     EXPECT_EQ(domStaff->reflectTranspositionInLinkedTab(), true);
 
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testAppendStaff
+//   Test appending a new staff to a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a new staff
+    score->startCmd(TranslatableString::untranslatable("Append staff test"));
+    Staff* newStaff = EditPart::appendStaff(score, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(newStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaff
+//   Test appending a linked staff and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* sourceStaff = Factory::createStaff(part);
+    score->appendStaff(sourceStaff);
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a linked staff
+    score->startCmd(TranslatableString::untranslatable("Append linked staff test"));
+    Staff* linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(linkedStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendStaffApi
+//   Test the Plugin API Score::appendStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a staff via API
+    apiv1::Staff* apiStaff = apiScore.appendStaff(apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaffApi
+//   Test the Plugin API Score::appendLinkedStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Staff* apiSourceStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a linked staff via API
+    apiv1::Staff* apiLinkedStaff = apiScore.appendLinkedStaff(apiSourceStaff, apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiLinkedStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiSourceStaff;
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleOnMainScore
+//   Test that setVoiceVisible returns false on main score
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    // [WHEN] We try to set voice visible on the main score
+    bool result = EditPart::setVoiceVisible(score, staff, 0, false);
+
+    // [THEN] It should return false (only works on excerpts)
+    EXPECT_FALSE(result);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleApi
+//   Test the Plugin API Score::setVoiceVisible() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We try to set voice visible via API on main score
+    bool result = apiScore.setVoiceVisible(apiStaff, 0, false);
+
+    // [THEN] It should return false
+    EXPECT_FALSE(result);
+
+    delete apiStaff;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumset
+//   Test replacing a drumset and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumset)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    part->setInstrument(percInstrument);
+
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    // [WHEN] We replace the drumset with modified values
+    Drumset newDs(ds);
+    newDs.drum(36).name = u"Kick Drum";
+
+    score->startCmd(TranslatableString::untranslatable("Replace drumset test"));
+    EditPart::replaceDrumset(score, part, Fraction(0, 1), newDs);
+    score->endCmd();
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Kick Drum");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The drumset should be back to original
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumsetApi
+//   Test the Plugin API replaceDrumset workflow
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    domPart->setInstrument(percInstrument);
+
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Bass Drum");
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We clone the drumset via API, modify it, and replace
+    apiv1::Instrument apiInstr(domPart->instrument(), domPart);
+    apiv1::Drumset* cloned = apiInstr.cloneDrumset();
+    ASSERT_NE(cloned, nullptr);
+
+    cloned->setName(36, "Kick Drum");
+    apiv1::Fraction tick(Fraction(0, 1));
+
+    apiScore.replaceDrumset(apiPart, &tick, cloned);
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Kick Drum");
+
+    delete cloned;
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testInsertPart
+//   Test inserting a part at a given index and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part1 = new Part(score);
+    score->appendPart(part1);
+    score->appendStaff(Factory::createStaff(part1));
+
+    Instrument instr1;
+    instr1.setId(u"test.first");
+    part1->setInstrument(instr1);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    // Load instrument templates so searchTemplate works
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We insert a part at index 0
+    score->startCmd(TranslatableString::untranslatable("Insert part test"));
+    EditPart::insertPart(score, violinTempl, 0);
+    score->endCmd();
+
+    // [THEN] Two parts should exist, the new one at index 0
+    EXPECT_EQ(score->parts().size(), 2);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to one part
+    EXPECT_EQ(score->parts().size(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplacePart
+//   Test replacing a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    part->setInstrument(instr);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We replace the part
+    score->startCmd(TranslatableString::untranslatable("Replace part test"));
+    EditPart::replacePart(score, part, violinTempl);
+    score->endCmd();
+
+    // [THEN] The part should be replaced with violin
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to the original part
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"test.original");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testInsertPartApi
+//   Test the Plugin API Score::insertPart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We insert a part via API
+    apiScore.insertPart("violin", 0);
+
+    // [THEN] Two parts should exist
+    EXPECT_EQ(domScore->parts().size(), 2);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplacePartApi
+//   Test the Plugin API Score::replacePart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    domPart->setInstrument(instr);
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We replace the part via API
+    apiScore.replacePart(apiPart, "violin");
+
+    // [THEN] The part should be replaced
+    EXPECT_EQ(domScore->parts().size(), 1);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrder
+//   Test setting the score order and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrder)
+{
+    // [GIVEN] A score
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Create a custom score order
+    ScoreOrder testOrder;
+    testOrder.id = u"test-order";
+    testOrder.name = TranslatableString::untranslatable("Test Order");
+
+    String originalOrderId = score->scoreOrder().id;
+
+    // [WHEN] We set the score order
+    score->startCmd(TranslatableString::untranslatable("Set score order test"));
+    EditPart::setScoreOrder(score, testOrder);
+    score->endCmd();
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(score->scoreOrder().id, u"test-order");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The score order should be back to original
+    EXPECT_EQ(score->scoreOrder().id, originalOrderId);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrderApi
+//   Test the Plugin API Score::setScoreOrder() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
+{
+    // [GIVEN] A score and an orchestral order available
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Add a test order to the global list for API lookup
+    ScoreOrder testOrder;
+    testOrder.id = u"test-api-order";
+    testOrder.name = TranslatableString::untranslatable("Test API Order");
+    instrumentOrders.push_back(testOrder);
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We set the score order via API
+    apiScore.setScoreOrder("test-api-order");
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(domScore->scoreOrder().id, u"test-api-order");
+
+    // Clean up the added test order
+    instrumentOrders.pop_back();
+
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyAtDomLevel
+//   Confirm the DOM-level building block: a FretDiagram with
+//   setHarmony() exposes the chord text via harmonyPlainText().
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
+{
+    // [GIVEN] A score and a FretDiagram with no harmony
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+
+    EXPECT_EQ(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), String());
+
+    // [WHEN] We attach a chord symbol to the diagram
+    fd->setHarmony(u"Cm7");
+
+    // [THEN] The diagram exposes the nested Harmony and its plain text
+    ASSERT_NE(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), u"Cm7");
+
+    delete fd;
+    delete score;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyApi
+//   Test the Plugin API wrappers for FretDiagram and Harmony.
+//   Plugins must be able to read the chord name from a fret
+//   diagram annotation and from the nested Harmony directly.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
+{
+    // [GIVEN] A score with a FretDiagram carrying a chord symbol
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setHarmony(u"Fdim7");
+
+    // Construct the wrapper through the public dispatcher so that
+    // the FretDiagram and Harmony branches added in elements.cpp are
+    // exercised.
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN/THEN] The chord symbol is reachable via plainText.
+    // displayText depends on layout state and is empty before layout runs;
+    // we just exercise the call to confirm the wrapper forwards correctly.
+    EXPECT_EQ(apiFd->harmonyPlainText(), QString("Fdim7"));
+    apiFd->harmonyDisplayText();
+
+    // [WHEN/THEN] (A) The plugin-facing accessor returns the nested Harmony
+    // wrapper (this is the path a real plugin would use).
+    apiv1::Harmony* apiHarmony = apiFd->harmony();
+    ASSERT_NE(apiHarmony, nullptr);
+    EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
+    apiHarmony->displayText();
+    EXPECT_FALSE(apiHarmony->harmonyName().isEmpty());
+
+    // [WHEN/THEN] (B) The wrap() dispatcher returns the same wrapper too
+    // (exercises the API_WRAP(Harmony) branch in elements.cpp).
+    apiv1::Harmony* apiHarmonyViaDispatcher
+        = qobject_cast<apiv1::Harmony*>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
+    ASSERT_NE(apiHarmonyViaDispatcher, nullptr);
+    EXPECT_EQ(apiHarmonyViaDispatcher->plainText(), QString("Fdim7"));
+
+    delete apiFd;
+    delete apiHarmony;
+    delete apiHarmonyViaDispatcher;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetDotApi
+//   Test the Plugin API write method FretDiagram::setDot.
+//   Verifies the change is recorded on the undo stack and can
+//   be undone, as required by reviewers of PR #32848.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API.
+    // FretDiagram::dot(s) returns a placeholder Dot(fret=0) when no dot is set,
+    // so we check fret values rather than vector emptiness.
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    // [WHEN] We place a dot through the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set dot test"));
+    apiFd->setDot(0, 3);
+    domScore->endCmd();
+
+    // [THEN] The dot is recorded on the diagram
+    std::vector<FretItem::Dot> dots = domFd->dot(0);
+    ASSERT_EQ(dots.size(), 1u);
+    EXPECT_EQ(dots[0].fret, 3);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The dot is gone, confirming the change went through the undo stack
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setDot(99, 3);
+    apiFd->setDot(0, -1);
+    apiFd->setDot(0, 3, false, 99);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetMarkerApi
+//   Test the Plugin API write method FretDiagram::setMarker.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN] We mute a string via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set marker test"));
+    apiFd->setMarker(0, int(FretMarkerType::CROSS));
+    domScore->endCmd();
+
+    // [THEN] The marker is recorded
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::CROSS);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The marker is gone
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::NONE);
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setMarker(99, int(FretMarkerType::CROSS));
+    apiFd->setMarker(0, 99);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetBarreApi
+//   Test the Plugin API write method FretDiagram::setBarre.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    // [WHEN] We add a barre at fret 2 via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set barre test"));
+    apiFd->setBarre(0, 2);
+    domScore->endCmd();
+
+    // [THEN] The barre is recorded
+    EXPECT_TRUE(domFd->barre(2).exists());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The barre is gone
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setBarre(99, 2);
+    apiFd->setBarre(0, 0);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramClearApi
+//   Test the Plugin API write method FretDiagram::clear and
+//   that the previous content is restored on undo.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
+{
+    // [GIVEN] A score and a FretDiagram populated with a dot and a marker
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+
+    ASSERT_FALSE(domFd->isClear());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN] We clear the diagram via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("clear diagram test"));
+    apiFd->clear();
+    domScore->endCmd();
+
+    // [THEN] The diagram is empty
+    EXPECT_TRUE(domFd->isClear());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The previous dot and marker are restored
+    EXPECT_FALSE(domFd->isClear());
+    ASSERT_EQ(domFd->dot(0).size(), 1u);
+    EXPECT_EQ(domFd->dot(0)[0].fret, 3);
+    EXPECT_EQ(domFd->marker(1).mtype, FretMarkerType::CROSS);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramGettersApi
+//   Test the read-only getters: scalar properties (strings,
+//   frets, fretOffset) and collection methods (dots, markers,
+//   barres) that allow plugins to read back diagram state.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
+{
+    // [GIVEN] A FretDiagram populated with known content
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    // Set a dot on string 0 fret 3, a marker on string 1, and a barre at fret 2
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+    domFd->setBarre(2, 5, 2);     // startString=2, endString=5, fret=2
+    domFd->setFretOffset(3);
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [THEN] Scalar properties match the DOM state
+    EXPECT_EQ(apiFd->strings(), domFd->strings());
+    EXPECT_EQ(apiFd->frets(), domFd->frets());
+    EXPECT_EQ(apiFd->fretOffset(), 3);
+
+    // [THEN] dots() returns the dot we placed
+    QVariantList dotList = apiFd->dots();
+    ASSERT_EQ(dotList.size(), 1);
+    QVariantMap dot0 = dotList[0].toMap();
+    EXPECT_EQ(dot0["string"].toInt(), 0);
+    EXPECT_EQ(dot0["fret"].toInt(), 3);
+    EXPECT_EQ(dot0["dotType"].toInt(), int(FretDotType::NORMAL));
+
+    // [THEN] markers() returns the marker we placed
+    QVariantList markerList = apiFd->markers();
+    ASSERT_EQ(markerList.size(), 1);
+    QVariantMap marker0 = markerList[0].toMap();
+    EXPECT_EQ(marker0["string"].toInt(), 1);
+    EXPECT_EQ(marker0["markerType"].toInt(), int(FretMarkerType::CROSS));
+
+    // [THEN] barres() returns the barre we placed
+    QVariantList barreList = apiFd->barres();
+    ASSERT_EQ(barreList.size(), 1);
+    QVariantMap barre0 = barreList[0].toMap();
+    EXPECT_EQ(barre0["fret"].toInt(), 2);
+    EXPECT_EQ(barre0["startString"].toInt(), 2);
+    EXPECT_EQ(barre0["endString"].toInt(), 5);
+
+    delete apiFd;
+    delete domFd;
     delete domScore;
 }

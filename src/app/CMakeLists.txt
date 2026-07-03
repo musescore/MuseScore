@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021-2024 MuseScore Limited
+# Copyright (C) 2021-2024 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,7 @@ set(EXECUTABLE_NAME mscore)
 ###########################################
 include(GetPlatformInfo)
 if (OS_IS_WIN)
-    set(EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
+    set(EXECUTABLE_NAME ${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR})
 
     include(GetCompilerInfo)
 
@@ -64,13 +64,13 @@ elseif(OS_IS_LIN)
 elseif(OS_IS_MAC)
 
     set(MACOSX_BUNDLE_GUI_IDENTIFIER ${MUSE_APP_GUI_IDENTIFIER})
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_TITLE})
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_NAME_HUMAN_READABLE})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_BUILD_NUMBER})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited. Published under the GNU General Public License version 3.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited and others. Published under the GNU General Public License version 3.")
 
-    set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${QT_INSTALL_LIBS};@loader_path/../Frameworks")
     if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
         list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
     endif()
@@ -120,9 +120,12 @@ endmacro()
 # This function also adds qml parts to the link
 add_to_link_if_exists(muse::accessibility)
 add_to_link_if_exists(muse::actions)
+add_to_link_if_exists(muse::rcommand)
+add_to_link_if_exists(muse::rcontrol)
 add_to_link_if_exists(muse::audio)
 add_to_link_if_exists(muse::audioplugins)
-add_to_link_if_exists(muse::autobot)
+add_to_link_if_exists(muse::testflow)
+add_to_link_if_exists(muse::automation)
 add_to_link_if_exists(muse::cloud)
 add_to_link_if_exists(muse::diagnostics)
 add_to_link_if_exists(muse::dockwindow)
@@ -130,7 +133,9 @@ add_to_link_if_exists(muse::extensions)
 add_to_link_if_exists(muse::interactive)
 add_to_link_if_exists(muse::languages)
 add_to_link_if_exists(muse::learn)
+add_to_link_if_exists(muse::media)
 add_to_link_if_exists(muse::midi)
+add_to_link_if_exists(muse::midiremote)
 add_to_link_if_exists(muse::mpe)
 add_to_link_if_exists(muse::multiwindows)
 add_to_link_if_exists(muse::musesampler)
@@ -167,7 +172,7 @@ add_to_link_if_exists(iex_musicxml)
 add_to_link_if_exists(iex_ove)
 add_to_link_if_exists(iex_tabledit)
 add_to_link_if_exists(iex_videoexport)
-add_to_link_if_exists(inspector)
+add_to_link_if_exists(propertiespanel)
 add_to_link_if_exists(instrumentsscene)
 add_to_link_if_exists(musesounds)
 add_to_link_if_exists(notation)
@@ -244,7 +249,7 @@ set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
     set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
-    set(COVERAGE_LINK_FLAGS -lgcov --coverage)
+    set(COVERAGE_LINK_FLAGS --coverage)
     target_compile_options(MuseScoreStudio PRIVATE ${COVERAGE_FLAGS})
     target_link_options(MuseScoreStudio PRIVATE ${COVERAGE_LINK_FLAGS})
 endif()
@@ -336,12 +341,6 @@ if (OS_IS_WIN)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
     endif()
 
-    # Install ssl
-    install(FILES
-            ${DEPENDENCIES_LIB_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_LIB_DIR}/libssl-1_1-x64.dll
-            DESTINATION bin)
-
     if (WIN_PORTABLE)
         # deploy the files and directory structure needed for the PortableApps.com format
         install(DIRECTORY ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
@@ -367,15 +366,15 @@ if (OS_IS_WIN)
 ###########################################
 elseif(OS_IS_LIN)
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
-                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
+    install(CODE "message(STATUS \"Creating symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
 ###########################################
 # FreeBSD
 ###########################################
 elseif(OS_IS_FBSD)
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+    install(CODE "message(STATUS \"Creating symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
                   execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
 ###########################################

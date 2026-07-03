@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -176,7 +176,7 @@ void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& cou
 {
     muse::mpe::duration_t durationInMicrosecs = 0;
     m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
-    countInDuration = audio::microsecsToSecs(durationInMicrosecs);
+    countInDuration = muse::usecs_to_secs(durationInMicrosecs);
 }
 
 void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick)

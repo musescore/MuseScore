@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -76,8 +76,8 @@ RequestHeaders MuseSoundsConfiguration::headers() const
 UriQuery MuseSoundsConfiguration::soundsUri() const
 {
     return !getSoundsTestMode()
-           ? UriQuery("https://cosmos-customer-webservice.azurewebsites.net/graphql")
-           : UriQuery("https://cosmos-customer-webservice-dev.azurewebsites.net/graphql");
+           ? UriQuery("https://cosmos-customer-webservice.azurewebsites.net/graphql/v3")
+           : UriQuery("https://cosmos-customer-webservice-dev.azurewebsites.net/graphql/v3");
 }
 
 UriQuery MuseSoundsConfiguration::soundPageUri(const muse::String& soundCode) const
@@ -95,7 +95,7 @@ QUrl MuseSoundsConfiguration::checkForMuseSoundsUpdateUrl() const
 
 QUrl MuseSoundsConfiguration::checkForMuseSamplerUpdateUrl() const
 {
-    return QUrl("https://cosmos-customer-webservice.azurewebsites.net/graphql");
+    return QUrl("https://cosmos-customer-webservice.azurewebsites.net/graphql/v3");
 }
 
 QString MuseSoundsConfiguration::getMuseSamplerVersionQuery() const

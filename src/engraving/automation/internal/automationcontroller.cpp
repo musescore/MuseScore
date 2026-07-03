@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -239,6 +239,8 @@ AutomationController::~AutomationController()
 void AutomationController::init(Score* score)
 {
     TRACEFUNC;
+
+    m_automation->clear();
 
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
         const int tickOffset = repeatSegment->utick - repeatSegment->tick;

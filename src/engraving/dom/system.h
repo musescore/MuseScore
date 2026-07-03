@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,7 @@
 */
 
 #include "engravingitem.h"
+#include "instrumentname.h"
 
 namespace mu::engraving {
 class Box;
@@ -50,8 +51,10 @@ public:
     SysStaff() {}
     ~SysStaff();
 
-    InstrumentName* instrumentName = nullptr;
-    InstrumentName* individualStaffName = nullptr;
+    const std::unordered_map<InstrumentNameRole, InstrumentName*>& instrumentNames() const { return m_instrumentNames; }
+    InstrumentName* name(InstrumentNameRole role) const;
+    void addInstrumentName(InstrumentName* n);
+    void removeInstrumentName(InstrumentNameRole role);
 
     const RectF& bbox() const { return m_bbox; }
     RectF& bbox() { return m_bbox; }
@@ -75,6 +78,8 @@ public:
     Skyline& skyline() { return m_skyline; }
 
 private:
+    std::unordered_map<InstrumentNameRole, InstrumentName*> m_instrumentNames;
+
     RectF m_bbox;               // Bbox of StaffLines.
     Skyline m_skyline;
     double m_yOff = 0.0;            // offset of top staff line within bbox
@@ -191,15 +196,16 @@ public:
 
     staff_idx_t firstSysStaffOfPart(const Part* part) const;
     staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstVisibleSysStaffWithInstrument(const String& instrumentId, staff_idx_t startFrom);
     staff_idx_t lastSysStaffOfPart(const Part* part) const;
     staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
     std::vector<staff_idx_t> visibleStavesOfPart(const Part* part) const;
+    std::vector<Part*> visiblePartsOfGroup(staff_idx_t start, staff_idx_t end) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void setBracketsXPosition(const double xOffset);
     size_t getBracketsColumnsCount();
 
     void resetShortestLongestChordRest();
@@ -220,19 +226,38 @@ public:
         void setUseLongNames(bool v) { m_useLongNames = v; }
         double instrumentNameOffset() const { return m_instrumentNameOffset; }
         void setInstrumentNameOffset(double v) { m_instrumentNameOffset = v; }
-        double staffNamesWidth() const { return m_staffNamesWidth; }
-        void setStaffNamesWidth(double v) { m_staffNamesWidth = v; }
-        double instrumentNamesWidth() const { return m_instrumentNamesWidth; }
-        void setInstrumentNamesWidth(double v) { m_instrumentNamesWidth = v; }
+
+        double firstColumnWidth() const { return m_firstColumnWidth; }
+        void setFirstColumnWidth(double v) { m_firstColumnWidth = v; }
+        double secondColumnWidth() const { return m_secondColumnWidth; }
+        void setSecondColumnWidth(double v) { m_secondColumnWidth = v; }
         double totalNamesWidth() const { return m_totalNamesWidth; }
         void setTotalNamesWidth(double v) { m_totalNamesWidth = v; }
+
+        const std::unordered_map<staff_idx_t, double>& groupBracketsWidth() const { return m_groupBracketsWidth; }
+        void setGroupBracketsWidthAtStaffIdx(staff_idx_t i, double w) { m_groupBracketsWidth[i] = w; }
+        double groupBracketsWidthAtStaffIdx(staff_idx_t i) const
+        {
+            return m_groupBracketsWidth.count(i) ? m_groupBracketsWidth.at(i) : 0.0;
+        }
+
+        void clearGroupBracketsWidth() { m_groupBracketsWidth.clear(); }
+
+        const std::unordered_map<Part*, InstrumentName*>& partsWithGroupName() const { return m_partsWithGroupName; }
+        void addPartWithGroupNames(Part* p, InstrumentName* n) { m_partsWithGroupName.emplace(p, n); }
+        void clearPartsWithGroupNames() { m_partsWithGroupName.clear(); }
 
     private:
         bool m_useLongNames = false;
         double m_instrumentNameOffset = 0.0;
-        double m_staffNamesWidth = 0.0;
-        double m_instrumentNamesWidth = 0.0;
+
+        double m_firstColumnWidth = 0.0;
+        double m_secondColumnWidth = 0.0;
         double m_totalNamesWidth = 0.0;
+
+        std::unordered_map<staff_idx_t, double> m_groupBracketsWidth;
+
+        std::unordered_map<Part*, InstrumentName*> m_partsWithGroupName;
     };
     DECLARE_LAYOUTDATA_METHODS(System)
 

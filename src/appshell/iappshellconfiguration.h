@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -70,10 +70,6 @@ public:
 
     virtual std::string museScoreVersion() const = 0;
     virtual std::string museScoreRevision() const = 0;
-
-    virtual bool isNotationNavigatorVisible() const = 0;
-    virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
-    virtual muse::async::Notification isNotationNavigatorVisibleChanged() const = 0;
 
     virtual bool needShowSplashScreen() const = 0;
     virtual void setNeedShowSplashScreen(bool show) = 0;

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -32,6 +32,26 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignLong READ instrumentNamesAlignLong CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignShort READ instrumentNamesAlignShort CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesStackVertically READ instrumentNamesStackVertically CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * windsNameByGroup READ windsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * vocalsNameByGroup READ vocalsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * stringsNameByGroup READ stringsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * othersNameByGroup READ othersNameByGroup CONSTANT)
+
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesShowTranspositionLong READ instrumentNamesShowTranspositionLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesShowTranspositionShort READ instrumentNamesShowTranspositionShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesFormatLong READ instrumentNamesFormatLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatLong READ instrumentNamesCustomFormatLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesFormatShort READ instrumentNamesFormatShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatShort READ instrumentNamesCustomFormatShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignIncludeGroupBrackets READ instrumentNamesAlignIncludeGroupBrackets CONSTANT)
+
+    Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotSingle READ instrumentNumeralsTrailingDotSingle CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotMultiple READ instrumentNumeralsTrailingDotMultiple CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsOrientation READ instrumentNumeralsOrientation CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsVerticalThreshold READ instrumentNumeralsVerticalThreshold CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHorizontalThreshold READ instrumentNumeralsHorizontalThreshold CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHyphenEnable READ instrumentNumeralsHyphenEnable CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHyphenThreshold READ instrumentNumeralsHyphenThreshold CONSTANT)
 
     QML_ELEMENT
 
@@ -41,5 +61,25 @@ public:
     StyleItem* instrumentNamesAlignLong() const;
     StyleItem* instrumentNamesAlignShort() const;
     StyleItem* instrumentNamesStackVertically() const;
+    StyleItem* windsNameByGroup() const;
+    StyleItem* vocalsNameByGroup() const;
+    StyleItem* stringsNameByGroup() const;
+    StyleItem* othersNameByGroup() const;
+
+    StyleItem* instrumentNamesShowTranspositionLong() const;
+    StyleItem* instrumentNamesShowTranspositionShort() const;
+    StyleItem* instrumentNamesFormatLong() const;
+    StyleItem* instrumentNamesCustomFormatLong() const;
+    StyleItem* instrumentNamesFormatShort() const;
+    StyleItem* instrumentNamesCustomFormatShort() const;
+    StyleItem* instrumentNamesAlignIncludeGroupBrackets() const;
+
+    StyleItem* instrumentNumeralsTrailingDotSingle() const;
+    StyleItem* instrumentNumeralsTrailingDotMultiple() const;
+    StyleItem* instrumentNumeralsOrientation() const;
+    StyleItem* instrumentNumeralsHyphenThreshold() const;
+    StyleItem* instrumentNumeralsVerticalThreshold() const;
+    StyleItem* instrumentNumeralsHyphenEnable() const;
+    StyleItem* instrumentNumeralsHorizontalThreshold() const;
 };
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -105,9 +105,14 @@ Item {
     StyledTextLabel {
         id: noOptionsLabel
 
+        width: parent.width
+
         text: qsTrc("playback", "Sound flag options are not available for this sound.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.Wrap
+        maximumLineCount: 2
+
+        displayTruncatedTextOnHover: true
 
         visible: root.noOptions
     }

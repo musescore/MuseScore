@@ -41,17 +41,21 @@ on:
         type: string
         required: false
 
+concurrency:
+  # If run via workflow_call, ${{ github.workflow }} is the root workflow's name (e.g. 'Deploy'),
+  # which is the same for all workflows called in that run, hence we must add a unique suffix here.
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }} backend
+  cancel-in-progress: true
+
 jobs:
   backend:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.13.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
+      with:
+        submodules: recursive
 
     - name: "Configure workflow"
       run: |

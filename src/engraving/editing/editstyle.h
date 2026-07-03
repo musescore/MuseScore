@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class ChangeStyle : public UndoCommand
+class ChangeStyle : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyle)
 
@@ -35,8 +35,8 @@ class ChangeStyle : public UndoCommand
     MStyle style;
     bool overlap = false;
 
-    void flip(EditData*) override;
-    void undo(EditData*) override;
+    void flip() override;
+    void undo() override;
 
 public:
     ChangeStyle(Score*, const MStyle&, const bool overlapOnly = false);
@@ -48,7 +48,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeStyleValues : public UndoCommand
+class ChangeStyleValues : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStyleValues)
 
@@ -63,7 +63,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_score })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Score* m_score = nullptr;
     std::unordered_map<Sid, PropertyValue> m_values;

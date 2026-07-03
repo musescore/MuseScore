@@ -71,8 +71,8 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <words>To Coda
-&lt;sym&gt;coda&lt;/sym&gt;</words>
+          <words>To Coda</words>
+          <symbol>coda</symbol>
           </direction-type>
         <sound tocoda="1"/>
         </direction>

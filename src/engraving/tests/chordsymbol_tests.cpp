@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,6 +33,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"
@@ -202,20 +203,20 @@ TEST_F(Engraving_ChordSymbolTests, testNoSystem)
 TEST_F(Engraving_ChordSymbolTests, testTranspose)
 {
     MasterScore* score = test_pre(u"transpose");
-    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdSelectAll();
-    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving chord symbol tests"), [&](auto& tx) {
+        score->cmdSelectAll();
+        Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    });
     test_post(score, u"transpose");
 }
 
 TEST_F(Engraving_ChordSymbolTests, testTransposePart)
 {
     MasterScore* score = test_pre(u"transpose-part");
-    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdSelectAll();
-    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
-    score->endCmd(false, /*layoutAllParts = */ true);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving chord symbol tests"), [&](auto& tx) {
+        score->cmdSelectAll();
+        Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    });
     test_post(score, u"transpose-part");
 }
 
@@ -302,8 +303,10 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
 {
     MasterScore* score = test_pre(u"transpose");
     //transpose
-    score->cmdSelectAll();
-    Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving chord symbol tests"), [&](auto& tx) {
+        score->cmdSelectAll();
+        Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+    });
 
     //realize all chord symbols
     selectAllChordSymbols(score);

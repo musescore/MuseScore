@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -143,16 +143,9 @@ struct SymbolIcon {
 };
 
 CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName(QStringLiteral("CustomizeKitDialog"));
-
-    m_notation = globalContext()->currentNotation();
-    if (!m_notation) {
-        return;
-    }
-
-    initDrumsetAndKey();
 
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -160,8 +153,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     drumNote->setGridSize(70, 80);
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
-
-    QTreeWidgetItem* itemToSelect = loadPitchesList();
+    drumNote->setIgnoreInputEvents(true);
 
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));
@@ -266,9 +258,6 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     connect(customGbox, &QGroupBox::toggled, this, &CustomizeKitDialog::customGboxToggled);
     connect(quarterCmb, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::customQuarterChanged);
 
-    Q_ASSERT(pitchList->topLevelItemCount() > 0);
-    pitchList->setCurrentItem(itemToSelect ? itemToSelect : pitchList->topLevelItem(0));
-
     quarterCmb->setAccessibleName(quarterLbl->text() + " " + quarterCmb->currentText());
     halfCmb->setAccessibleName(halfLbl->text() + " " + halfCmb->currentText());
     wholeCmb->setAccessibleName(wholeLbl->text() + " " + wholeCmb->currentText());
@@ -276,6 +265,23 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
+}
+
+void CustomizeKitDialog::componentComplete()
+{
+    m_notation = globalContext()->currentNotation();
+    if (!m_notation) {
+        return;
+    }
+
+    initDrumsetAndKey();
+
+    QTreeWidgetItem* itemToSelect = loadPitchesList();
+    itemToSelect = itemToSelect ? itemToSelect : pitchList->topLevelItem(0);
+
+    if (itemToSelect) {
+        pitchList->setCurrentItem(itemToSelect);
+    }
 }
 
 //---------------------------------------------------------

@@ -41,6 +41,11 @@ FileIO::FileIO(QObject* parent)
 {
 }
 
+FileIO::FileIO(const muse::modularity::ContextPtr& ctx, QObject* parent)
+    : QObject(parent), muse::Contextable(ctx)
+{
+}
+
 // User's MuseScore documents directory (default location for scores, plugins, etc.)
 QString FileIO::userDataPath()
 {

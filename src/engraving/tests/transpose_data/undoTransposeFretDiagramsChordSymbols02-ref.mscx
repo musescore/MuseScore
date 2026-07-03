@@ -73,16 +73,18 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>/rObEvI4GlP_/rObEvI4GlP</eid>
       <Staff>
         <eid>xVSmWcXHRCO_x7nzdLq+W7E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -342,7 +344,7 @@
               <string no="3">
                 <dot fret="2">normal</dot>
                 </string>
-              <barre start="0" end="-1">1</barre>
+              <barre start="0" end="5">1</barre>
               </fretDiagram>
             </FretDiagram>
           <Chord>

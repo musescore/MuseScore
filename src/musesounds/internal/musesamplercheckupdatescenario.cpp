@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -129,13 +129,13 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
     const muse::UriQuery MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
 
 #ifdef Q_OS_MACOS
-    if (!interactive()->canOpenApp(MUSEHUB_URI)) {
+    if (!platformInteractive()->canOpenApp(MUSEHUB_URI)) {
         openMuseHubWebsiteAndQuit();
         return;
     }
 #endif
 
-    auto promise = interactive()->openApp(MUSEHUB_URI);
+    auto promise = platformInteractive()->openApp(MUSEHUB_URI);
 
     promise.onResolve(this, [this](const muse::Ret& ret) {
         if (ret) {
@@ -154,9 +154,9 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 void MuseSamplerCheckUpdateScenario::openMuseHubWebsiteAndQuit()
 {
 #ifdef Q_OS_LINUX
-    interactive()->openUrl(globalConfiguration()->museScoreUrl());
+    platformInteractive()->openUrl(updateConfiguration()->appWebSiteUrl());
 #else
-    interactive()->openUrl(globalConfiguration()->museHubWebUrl());
+    platformInteractive()->openUrl(globalConfiguration()->museHubWebUrl());
 #endif
     dispatcher()->dispatch("quit");
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,11 +31,13 @@
 namespace mu::engraving {
 class Chord;
 class ChordRest;
+class Drumset;
 class EngravingItem;
 class KeySig;
 class Lyrics;
 class Measure;
 class Note;
+class PartialLyricsLine;
 class Rest;
 class Score;
 class Score;
@@ -124,10 +126,13 @@ extern bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSe
 extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
 
+extern PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics);
+
 extern bool isElementInFretBox(const EngravingItem* item);
 
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
 extern bool noteIsBefore(const Note* n1, const Note* n2);
+extern void updatePercussionNotes(Chord* c, const Drumset* drumset);
 } // namespace mu::engraving

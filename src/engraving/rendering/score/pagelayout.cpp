@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -126,6 +126,10 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
     LAYOUT_CALL() << "pageNumber: " << page->pageNumber();
 
+    /* The page count will be wrong unless this is the final page, but we need to
+     * take into account the space taken up by headers/footers, when positioning
+     * other elements. If there was a page count involved, all headers/footers will
+     * be re-computed after all pages are laid out */
     HeaderFooterLayout::layoutHeaderFooter(ctx, page);
 
     const double slb = conf.styleAbsolute(Sid::staffLowerBorder);
@@ -251,7 +255,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
                     dist += footerExtension;
                 }
             } else if (!ctx.state().prevSystem()->hasFixedDownDistance()) {
-                double margin = std::max(ctx.state().curSystem()->minBottom(), ctx.state().curSystem()->spacerDistance(false));
+                // Down spacers define distance to the following system, not to the page footer.
+                // Using them here can visually pin/stretch the current system to page edge.
+                double margin = ctx.state().curSystem()->minBottom();
                 // ensure it doesn't collide with footer
                 if (footerExtension > 0) {
                     margin += footerExtension + headerFooterPadding;
@@ -261,7 +267,10 @@ void PageLayout::collectPage(LayoutContext& ctx)
             isPageBreak = (y + dist) >= endY && breakPages;
         }
         if (isPageBreak) {
-            double dist = std::max(ctx.state().prevSystem()->minBottom(), ctx.state().prevSystem()->spacerDistance(false));
+            double dist = ctx.state().prevSystem()->minBottom();
+            if (!ctx.conf().isVerticalSpreadEnabled()) {
+                dist = std::max(dist, ctx.state().prevSystem()->spacerDistance(false));
+            }
             double footerPadding = 0.0;
             // ensure it doesn't collide with footer
             if (footerExtension > 0) {
@@ -375,7 +384,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
     if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > ctx.state().endTick()) {
         for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
-            if (!segment.isType(SegmentType::BarLineType)) {
+            if (!segment.isType(SegmentType::BarLineTypes)) {
                 continue;
             }
             for (EngravingItem* item : segment.elist()) {
@@ -804,7 +813,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
 
     for (System* system : systems) {
         SystemLayout::setMeasureHeight(system, system->height(), ctx);
-        SystemLayout::layoutBracketsVertical(system, ctx);
+        SystemHeaderLayout::layoutBracketsVertical(system, ctx);
         SystemHeaderLayout::setInstrumentNamesVerticalPos(system, ctx);
     }
     vgdl.deleteAll();

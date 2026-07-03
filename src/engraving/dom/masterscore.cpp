@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 
 #include "compat/writescorehook.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/transaction.h"
+#include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -65,6 +67,7 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     : Score(iocCtx)
 {
     m_project = project;
+    m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
@@ -140,16 +143,6 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
-bool MasterScore::saved() const
-{
-    return m_saved;
-}
-
-void MasterScore::setSaved(bool v)
-{
-    m_saved = v;
-}
-
 String MasterScore::name() const
 {
     return fileInfo()->displayName();
@@ -161,12 +154,11 @@ IAutomation* MasterScore::automation() const
 }
 
 //---------------------------------------------------------
-//   setPlaylistDirty
+//   invalidateRepeatLists
 //---------------------------------------------------------
 
-void MasterScore::setPlaylistDirty()
+void MasterScore::invalidateRepeatList()
 {
-    m_playlistDirty = true;
     m_expandedRepeatList->setScoreChanged();
     m_nonExpandedRepeatList->setScoreChanged();
 }
@@ -181,7 +173,7 @@ void MasterScore::setExpandRepeats(bool expand)
         return;
     }
     m_expandRepeats = expand;
-    setPlaylistDirty();
+    invalidateRepeatList();
 }
 
 //---------------------------------------------------------
@@ -383,6 +375,14 @@ void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_
 
         m_cmdState.setElement(e);
     }
+}
+
+void MasterScore::initAutomation()
+{
+    IF_ASSERT_FAILED(m_automationController) {
+        return;
+    }
+    m_automationController->init(this);
 }
 
 //---------------------------------------------------------
@@ -598,6 +598,10 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
 
+            if (measureInsert->hasMMRest() && score->style().value(Sid::createMultiMeasureRests).toBool()) {
+                measureInsert = measureInsert->mmRest();
+            }
+
             if (pm && !options.moveSignaturesClef && !isBeginning) {
                 Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                 if (ps && ps->enabled()) {
@@ -606,6 +610,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         if (pc) {
                             previousClefList.push_back(toClef(pc));
                             doUndoRemoveElement(pc);
+                            pc->undoUnlink();
                             if (ps->empty()) {
                                 undoRemoveElement(ps);
                             }
@@ -690,6 +695,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         }
                         if (ee) {
                             doUndoRemoveElement(ee);
+                            ee->undoUnlink();
                             if (s->empty() && s->isTimeSigType()) {
                                 undoRemoveElement(s);
                             }

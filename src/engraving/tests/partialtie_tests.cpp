@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -92,11 +92,9 @@ protected:
     {
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
-        Tie* t = m_masterScore->cmdToggleTie();
+        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
-        m_masterScore->endCmd();
 
         for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
@@ -112,9 +110,7 @@ protected:
         TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
         EXPECT_TRUE(jumpPointList->size() > 1);
 
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         jumpPointList->toggleJumpPoint(u"jumpPoint1");
-        m_masterScore->endCmd();
 
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
             if (jumpPoint->id() == u"jumpPoint1") {
@@ -199,9 +195,7 @@ protected:
 
         Tie* startTie = jumpPointList->startTie();
 
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        jumpPointList->toggleJumpPoint(u"jumpPoint0");
-        m_masterScore->endCmd();
+        jumpPointList->toggleJumpPoint(u"jumpPoint0"); // calls startCmd/endCmd internally
 
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
             if (jumpPoint->id() == u"jumpPoint0") {
@@ -261,10 +255,8 @@ protected:
         EXPECT_TRUE(initialTie && initialTie->isPartialTie());
 
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
-        m_masterScore->endCmd();
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
 
         bool newTieFound = false;
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
@@ -297,11 +289,9 @@ protected:
     {
         // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(tieBeforeSegno);
-        m_masterScore->endCmd();
 
         Tie* startTie = addTie();
 
@@ -358,12 +348,10 @@ protected:
 
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
-        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
         m_masterScore->select(secondTieNote, SelectType::ADD);
-        Tie* t = m_masterScore->cmdToggleTie();
+        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
-        m_masterScore->endCmd();
 
         for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
@@ -560,9 +548,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie at 4/4
     score->select(tieFromNote);
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdToggleTie();
-    score->endCmd();
+    score->cmdToggleTie(); // calls startCmd/endCmd internally
 
     // Clear the second measure
 
@@ -600,9 +586,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie again at 4/4
     score->select(tieFromNote);
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdToggleTie();
-    score->endCmd();
+    score->cmdToggleTie(); // calls startCmd/endCmd internally
 
     // Verify the tie is now full
     Tie* newTie = tieFromNote->tieFor();
@@ -641,4 +625,61 @@ TEST_F(Engraving_PartialTieTests, deleteAllMeasures)
 
     deleteScoreWithPartialTies(test1);
     deleteScoreWithPartialTies(test2);
+}
+
+TEST_F(Engraving_PartialTieTests, copyPasteRemoveInvalidPartialTies)
+{
+    Score* score = ScoreRW::readScore(PARTIALTIE_DATA_DIR + u"copyPastePartials05.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    Measure* m4 = m3->nextMeasure();
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+    EXPECT_TRUE(m3);
+    EXPECT_TRUE(m4);
+
+    // Select measures 1 and 2
+    score->select(m1, SelectType::RANGE, 0);
+    score->select(m2, SelectType::RANGE, 0);
+
+    EXPECT_TRUE(score->selection().canCopy());
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    QByteArray ba = score->selection().mimeData().toQByteArray();
+    mimeData->setData(mimeType, ba);
+
+    // Paste at measure 4
+    EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
+    score->select(m4->first(SegmentType::ChordRest)->element(0));
+    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+    score->doLayout();
+
+    // Measure 4 beat 1 — no ties expected
+    const Fraction tick1 = Fraction(3, 1);
+    Segment* seg1 = score->tick2segment(tick1, false, SegmentType::ChordRest);
+    EXPECT_TRUE(seg1);
+    EXPECT_TRUE(seg1->element(0) && seg1->element(0)->isChord());
+    Note* note1 = toChord(seg1->element(0))->upNote();
+    EXPECT_TRUE(note1);
+    EXPECT_FALSE(note1->tieBack());
+    EXPECT_FALSE(note1->tieFor());
+
+    // Measure 5 beat 4 — no ties expected
+    const Fraction tick2 = Fraction(19, 4);
+    Segment* seg2 = score->tick2segment(tick2, false, SegmentType::ChordRest);
+    EXPECT_TRUE(seg2);
+    EXPECT_TRUE(seg2->element(0) && seg2->element(0)->isChord());
+    Note* note2 = toChord(seg2->element(0))->upNote();
+    EXPECT_TRUE(note2);
+    EXPECT_FALSE(note2->tieBack());
+    EXPECT_FALSE(note2->tieFor());
+
+    delete score;
 }

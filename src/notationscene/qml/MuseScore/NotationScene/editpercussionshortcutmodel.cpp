@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -22,6 +22,8 @@
 
 #include "editpercussionshortcutmodel.h"
 #include "shortcuts/shortcutstypes.h"
+
+#include "translation.h"
 
 using namespace muse;
 using namespace mu::notation;

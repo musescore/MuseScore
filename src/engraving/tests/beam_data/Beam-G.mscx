@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -33,13 +35,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Beam Test</metaTag>
     <Part id="1">
+      <eid>DE_DE</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>

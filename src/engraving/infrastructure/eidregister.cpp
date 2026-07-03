@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,7 @@ EID EIDRegister::newEIDForItem(const EngravingObject* item)
 
 void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 {
+    std::lock_guard lock(m_mutex);
     IF_ASSERT_FAILED(eid.isValid() && item) {
         return;
     }
@@ -56,8 +57,32 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 #endif
 }
 
+void EIDRegister::removeItem(const EngravingObject* item)
+{
+    std::lock_guard lock(m_mutex);
+    // NOTE: needed only when elements are removed during read (e.g. broken spanners)
+
+    auto itemIter = m_itemToEid.find(const_cast<EngravingObject*>(item));
+    IF_ASSERT_FAILED(itemIter != m_itemToEid.end()) {
+        return;
+    }
+
+    EID eid = (*itemIter).second;
+    DO_ASSERT(eid.isValid());
+
+    m_itemToEid.erase(itemIter);
+
+    auto eidIter = m_eidToItem.find(eid);
+    IF_ASSERT_FAILED(eidIter != m_eidToItem.end()) {
+        return;
+    }
+
+    m_eidToItem.erase(eidIter);
+}
+
 EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
+    std::shared_lock lock(m_mutex);
     auto iter = m_eidToItem.find(eid);
     IF_ASSERT_FAILED(iter != m_eidToItem.end()) {
         return nullptr;
@@ -67,6 +92,7 @@ EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 
 EID EIDRegister::EIDFromItem(const EngravingObject* item) const
 {
+    std::shared_lock lock(m_mutex);
     auto iter = m_itemToEid.find(const_cast<EngravingObject*>(item));
     return iter == m_itemToEid.end() ? EID::invalid() : iter->second;
 }

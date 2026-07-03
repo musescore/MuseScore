@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,7 @@ static constexpr int DEFAULT_INTERVAL = 4;
 //---------------------------------------------------------
 
 BreaksDialog::BreaksDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -51,6 +51,10 @@ BreaksDialog::BreaksDialog(QWidget* parent)
     QString part2 = pieces[1].trimmed();
     intervalButton->setText(part1);
     intervalLabel2->setText(part2);
+}
+
+void BreaksDialog::componentComplete()
+{
 }
 
 //---------------------------------------------------------

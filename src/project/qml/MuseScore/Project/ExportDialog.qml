@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,7 +34,7 @@ StyledDialogView {
     title: qsTrc("project/export", "Export")
 
     contentWidth: 756
-    contentHeight: 372
+    contentHeight: 420
     margins: 24
 
     ExportDialogModel {
@@ -125,6 +125,8 @@ StyledDialogView {
             }
 
             ExportOptionsView {
+                id: exportOptionsView
+
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
@@ -149,7 +151,7 @@ StyledDialogView {
                         text: qsTrc("project/export", "Export…")
                         buttonRole: ButtonBoxModel.AcceptRole
                         buttonId: ButtonBoxModel.Done
-                        enabled: exportModel.selectionLength > 0
+                        enabled: exportModel.selectionLength > 0 && exportOptionsView.isExportAvailable
                         accentButton: true
 
                         onClicked: {

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,59 +22,44 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
+#include "../dom/chord.h"
 #include "../dom/note.h"
 
 namespace mu::engraving {
-class ChangePitch : public UndoCommand
+enum class SymId;
+enum class AccidentalType : unsigned char;
+enum class UpDownMode : char;
+enum class Key : signed char;
+class Score;
+class EngravingItem;
+class Articulation;
+
+class EditNote
 {
-    OBJECT_ALLOCATOR(engraving, ChangePitch)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
 public:
-    ChangePitch(Note* note, int pitch, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangePitch)
-    UNDO_NAME("ChangePitch")
-    UNDO_CHANGED_OBJECTS({ note })
+    static void toggleOrnament(Score* score, SymId attr);
+    static void toggleAccidental(Score* score, AccidentalType at);
+    static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);
+    static void changeAccidental(Score* score, AccidentalType idx);
+    static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
+    static void undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2);
+    static void undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
+    static void upDown(Score* score, bool up, UpDownMode mode);
+private:
+    static void changeAccidental2(Note* n, int pitch, int tpc);
+    static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
-class ChangeFretting : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeFretting)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int string = 0;
-    int fret = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangeFretting)
-    UNDO_NAME("ChangeFretting")
-    UNDO_CHANGED_OBJECTS({ note })
-};
-
-class ChangeVelocity : public UndoCommand
+class ChangeVelocity : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeVelocity)
 
     Note* note = nullptr;
     int userVelocity = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeVelocity(Note*, int);
@@ -84,7 +69,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeNoteEventList : public UndoCommand
+class ChangeNoteEventList : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEventList)
 
@@ -92,7 +77,7 @@ class ChangeNoteEventList : public UndoCommand
     NoteEventList newEvents;
     PlayEventType newPetype;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeNoteEventList(Note* n, NoteEventList& ne)
@@ -101,7 +86,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note });
 };
 
-class ChangeNoteEvent : public UndoCommand
+class ChangeNoteEvent : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEvent)
 
@@ -110,7 +95,7 @@ class ChangeNoteEvent : public UndoCommand
     NoteEvent newEvent;
     PlayEventType newPetype;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeNoteEvent(Note* n, NoteEvent* oe, const NoteEvent& ne)
@@ -119,7 +104,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeChordPlayEventType : public UndoCommand
+class ChangeChordPlayEventType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeChordPlayEventType)
 
@@ -127,7 +112,7 @@ class ChangeChordPlayEventType : public UndoCommand
     PlayEventType petype;
     std::vector<NoteEventList> events;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeChordPlayEventType(Chord* c, PlayEventType pet)

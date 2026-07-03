@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -71,7 +71,6 @@
 #include "../../dom/keysig.h"
 #include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
-#include "../../dom/layoutbreak.h"
 #include "../../dom/ledgerline.h"
 #include "../../dom/letring.h"
 #include "../../dom/line.h"
@@ -93,7 +92,6 @@
 #include "../../dom/palmmute.h"
 #include "../../dom/parenthesis.h"
 #include "../../dom/part.h"
-#include "../../dom/part.h"
 #include "../../dom/partialtie.h"
 #include "../../dom/pedal.h"
 #include "../../dom/playcounttext.h"
@@ -103,12 +101,12 @@
 #include "../../dom/rest.h"
 #include "../../dom/score.h"
 #include "../../dom/segment.h"
-#include "../../dom/sig.h"
 #include "../../dom/slur.h"
 #include "../../dom/slurtie.h"
 #include "../../dom/soundflag.h"
 #include "../../dom/spacer.h"
 #include "../../dom/spanner.h"
+#include "../../dom/staff.h"
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
@@ -121,6 +119,7 @@
 #include "../../dom/system.h"
 #include "../../dom/systemdivider.h"
 #include "../../dom/systemtext.h"
+#include "../../dom/tapping.h"
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
 #include "../../dom/textline.h"
@@ -138,6 +137,7 @@
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
+#include "../read500/tread.h"
 #include "../compat/compatutils.h"
 #include "../compat/tremolocompat.h"
 #include "readcontext.h"
@@ -357,6 +357,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::BOOL:
         return PropertyValue(bool(e.readInt()));
     case P_TYPE::INT:
+    case P_TYPE::SIZE_T:
         return PropertyValue(e.readInt());
     case P_TYPE::REAL:
         return PropertyValue(e.readDouble());
@@ -513,6 +514,10 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
+    }
+
+    if (pid == Pid::OFFSET) {
+        compat::CompatUtils::migrateOffset500(item, v);
     }
 
     if (!ctx.shouldSkipProperty(pid)) {
@@ -781,7 +786,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             d->setPlayDynamic(e.readBool());
         } else if (ctx.mscVersion() < 470 && tag == "dynamicsSize") {
-            d->setSymbolScale(e.readDouble());
+            readProperty(d, e, ctx, Pid::MUSICAL_SYMBOLS_SCALE);
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (readProperty(d, tag, e, ctx, Pid::ANCHOR_TO_END_OF_PREVIOUS)) {
@@ -975,9 +980,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     if (tag == "soundId") {
         item->setSoundId(e.readText());
     } else if (tag == "longName") {
-        item->setLongName(readStaffName(e));
+        item->setLongName(read500::TRead::readLegacyStaffName(e)); // Old implementation
     } else if (tag == "shortName") {
-        item->setShortName(readStaffName(e));
+        item->setShortName(read500::TRead::readLegacyStaffName(e)); // Old implementation
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {
@@ -2256,6 +2261,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(b);
         TRead::read(lb, e, ctx);
+        lb->setTrack(0);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
         case LayoutBreakType::LINE:
@@ -3013,6 +3019,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_BASS_SCALE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DO_NOT_STACK_MODIFIERS)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::EXCLUDE_VERTICAL_ALIGN)) {
         } else if (!readProperties(toTextBase(h), e, ctx)) {
             e.unknown();
         }
@@ -3543,10 +3550,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
 }
 
 void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
@@ -3593,8 +3596,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {
@@ -3711,8 +3712,8 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Segment") {
         LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
         ls->setTrack(l->track());     // needed in read to get the right staff mag
-        TRead::read(ls, e, ctx);
         l->add(ls);
+        TRead::read(ls, e, ctx);
         ls->setVisible(l->visible());
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DIAGONAL)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::ANCHOR)) {
@@ -3762,6 +3763,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
 
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::MASK_SLURTIE)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment"
@@ -3772,8 +3774,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
             s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
         }
         SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
-        TRead::read(sts, e, ctx);
         s->add(sts);
+        TRead::read(sts, e, ctx);
     } else if (!readProperties(toSpanner(s), e, ctx)) {
         return false;
     }
@@ -3819,14 +3821,28 @@ void TRead::readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadCo
     hopoSeg->addHopoText(hopoText);
 }
 
-void TRead::lineBreakFromTag(String& str)
+String TRead::lineBreakFromTag(const String& str)
 {
     // Raw newlines appearing next to tags (<font size="10> or <sym>...) get eaten by XML readers.
-    str.replace(u"<br/>", u"\n");
+    String s = str;
+    return s.replace(u"<br/>", u"\n");
 }
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
+    Staff* staff = ctx.staff(ch->staffIdx());
+    StaffGroup staffGroup = staff ? staff->staffTypeForElement(ch)->group() : StaffGroup::STANDARD;
+    if (staffGroup == StaffGroup::PERCUSSION) {
+        // We should have read all notes by now. They need to be sorted for percussion staves
+        const Instrument* instrument = ch->part()->instrument(ch->tick());
+        const Drumset* drumset = instrument->drumset();
+        if (!drumset) {
+            LOGW("no drumset");
+        }
+        updatePercussionNotes(ch, drumset);
+        ch->sortNotes();
+    }
+
     Parenthesis* leftParen = nullptr;
     Parenthesis* rightParen = nullptr;
     std::vector<Note*> notes;
@@ -3861,6 +3877,24 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
             }
         } else {
             e.unknown();
+        }
+    }
+
+    if (notes.empty()) {
+        LOGW() << "NoteParenGroup has no valid notes, skipping";
+        delete leftParen;
+        delete rightParen;
+        return;
+    }
+
+    for (const NoteParenthesisInfo* existing : ch->noteParentheses()) {
+        for (Note* note : notes) {
+            if (muse::contains(existing->notes(), note)) {
+                LOGW() << "Skipping duplicate NoteParenGroup: note already covered by existing group";
+                delete leftParen;
+                delete rightParen;
+                return;
+            }
         }
     }
 
@@ -3937,10 +3971,6 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "name") {
             t->setXmlName(e.readText());
-        } else if (tag == "longName") {
-            t->setLongName(readStaffName(e));
-        } else if (tag == "shortName") {
-            t->setShortName(readStaffName(e));
         } else if (tag == "lines") {
             t->setLines(e.readInt());
         } else if (tag == "lineDistance") {
@@ -4074,7 +4104,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
         TRead::read(s->keyList(), e, ctx);
-    } else if (tag == "bracket") {
+    } else if (tag == "bracket") { // LEGACY
         Color color = Color::fromString(e.attribute("color"));
         int col = e.intAttribute("col", -1);
         if (col == -1) {
@@ -4131,17 +4161,6 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
-}
-
-String TRead::readStaffName(XmlReader& xml)
-{
-    String name = xml.readXml();
-    lineBreakFromTag(name);
-    if (name.startsWith(u"<html>")) {
-        // compatibility to old html implementation:
-        name = HtmlParser::parse(name);
-    }
-    return name;
 }
 
 void TRead::read(Stem* s, XmlReader& e, ReadContext& ctx)
@@ -4477,8 +4496,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
     }
 
     if (tag == "text") {
-        String str = e.readXml();
-        lineBreakFromTag(str);
+        String str = lineBreakFromTag(e.readXml());
         t->setXmlText(str);
         t->checkCustomFormatting(str);
     } else if (tag == "bold") {

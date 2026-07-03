@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,6 +24,7 @@
 #include <array>
 #include <vector>
 
+#include "../dom/mscore.h"
 #include "global/types/string.h"
 
 #include "../types/propertyvalue.h"
@@ -69,9 +70,30 @@ enum class Sid : short {
     minSystemDistance,
     maxSystemDistance,
     alignSystemToMargin,
+
+    instrumentNamesShowTranspositionLong,
+    instrumentNamesShowTranspositionShort,
+    instrumentNamesFormatLong,
+    instrumentNamesCustomFormatLong,
+    instrumentNamesFormatShort,
+    instrumentNamesCustomFormatShort,
     instrumentNamesAlignLong,
     instrumentNamesAlignShort,
     instrumentNamesStackVertically,
+    instrumentNamesAlignIncludeGroupBrackets,
+
+    instrumentNumeralsTrailingDotSingle,
+    instrumentNumeralsTrailingDotMultiple,
+    instrumentNumeralsOrientation,
+    instrumentNumeralsVerticalThreshold,
+    instrumentNumeralsHorizontalThreshold,
+    instrumentNumeralsHyphenEnable,
+    instrumentNumeralsHyphenThreshold,
+
+    windsNameByGroup,
+    vocalsNameByGroup,
+    stringsNameByGroup,
+    othersNameByGroup,
 
     enableVerticalSpread,
     spreadSystem,
@@ -169,6 +191,13 @@ enum class Sid : short {
     bracketDistance,
     akkoladeWidth,
     akkoladeBarDistance,
+    groupBracketLineWidth,
+    groupBracketHookLen,
+    groupBracketTextOrientation,
+    groupBracketTextAlign,
+    groupBracketHangTextIntoMargin,
+    groupBracketDistanceToNames,
+    groupBracketDistanceToGroupBracket,
     dividerLeft,
     dividerLeftSym,
     dividerLeftX,
@@ -284,6 +313,9 @@ enum class Sid : short {
     articulationKeepTogether,
     trillAlwaysShowCueNote,
     lastSystemFillLimit,
+
+    enableStaveSharing,
+    allowVoiceCrossing,
 
     hairpinPlacement,
     hairpinPosAbove,
@@ -584,6 +616,8 @@ enum class Sid : short {
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
+    maskSlurs,
+    maskTies,
     laissezVibMinDistance,
     headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
     lineEndToBarlineDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) in relation to barlines
@@ -1122,6 +1156,22 @@ enum class Sid : short {
     partInstrumentFrameBgColor,
     partInstrumentPosition,
 
+    groupBracketFontFace,
+    groupBracketFontSize,
+    groupBracketLineSpacing,
+    groupBracketFontSpatiumDependent,
+    groupBracketFontStyle,
+    groupBracketColor,
+    groupBracketAlign,
+    groupBracketOffset,
+    groupBracketFrameType,
+    groupBracketFramePadding,
+    groupBracketFrameWidth,
+    groupBracketFrameRound,
+    groupBracketFrameFgColor,
+    groupBracketFrameBgColor,
+    groupBracketPosition,
+
     dynamicsFontFace,
     dynamicsFontSize,
     dynamicsLineSpacing,
@@ -1337,6 +1387,26 @@ enum class Sid : short {
     staffTextFrameFgColor,
     staffTextFrameBgColor,
     staffTextPosition,
+
+    staveSharingLabelFontFace,
+    staveSharingLabelFontSize,
+    staveSharingLabelLineSpacing,
+    staveSharingLabelFontSpatiumDependent,
+    staveSharingLabelFontStyle,
+    staveSharingLabelColor,
+    staveSharingLabelAlign,
+    staveSharingLabelOffsetType,
+    staveSharingLabelPlacement,
+    staveSharingLabelPosAbove,
+    staveSharingLabelPosBelow,
+    staveSharingLabelMinDistance,
+    staveSharingLabelFrameType,
+    staveSharingLabelFramePadding,
+    staveSharingLabelFrameWidth,
+    staveSharingLabelFrameRound,
+    staveSharingLabelFrameFgColor,
+    staveSharingLabelFrameBgColor,
+    staveSharingLabelPosition,
 
     fretDiagramFingeringFontFace,
     fretDiagramFingeringFontSize,
@@ -2042,6 +2112,7 @@ enum class Sid : short {
     fretDiagramFingeringMusicalSymbolSize,
     fretDiagramFretNumberMusicalSymbolSize,
     glissandoMusicalSymbolSize,
+    groupBracketMusicalSymbolSize,
     hairpinMusicalSymbolSize,
     hammerOnPullOffTappingMusicalSymbolSize,
     harpPedalDiagramMusicalSymbolSize,
@@ -2062,6 +2133,7 @@ enum class Sid : short {
     noteLineMusicalSymbolSize,
     ottavaMusicalSymbolSize,
     pageNumberMusicalSymbolSize,
+    whammyBarMusicalSymbolSize,
     palmMuteMusicalSymbolSize,
     partInstrumentMusicalSymbolSize,
     pedalMusicalSymbolSize,
@@ -2230,5 +2302,14 @@ public:
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;
+
+    static double DEFAULT_SMUFL_POINT_SIZE()
+    {
+        const double DEFAULT_SPATIUM = styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
+        const double DEFAULT_SPATIUM_IN_POINT_UNITS = DEFAULT_SPATIUM / mu::engraving::DPI * mu::engraving::PPI;
+        const double DEFAULT_SMUFL_POINT_SIZE = 4 * DEFAULT_SPATIUM_IN_POINT_UNITS; // By Smufl spec the spatium is 1/4 of the em
+
+        return DEFAULT_SMUFL_POINT_SIZE;
+    }
 };
 }

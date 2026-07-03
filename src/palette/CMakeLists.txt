@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -75,8 +75,6 @@ target_sources(palette PRIVATE
     widgets/specialcharactersdialog.h
     widgets/customizekitdialog.h
     widgets/customizekitdialog.cpp
-    widgets/drumsetpalette.cpp
-    widgets/drumsetpalette.h
 )
 
 target_link_libraries(palette PRIVATE

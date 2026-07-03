@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -125,6 +125,7 @@
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
 #include "dom/staffvisibilityindicator.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -351,6 +352,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
         break;
+    case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
+        break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter, opt);
         break;
     case ElementType::STAFF_VISIBILITY_INDICATOR: draw(item_cast<const StaffVisibilityIndicator*>(item), painter, opt);
@@ -445,7 +448,7 @@ void TDraw::draw(const ActionIcon* item, Painter* painter, const PaintOptions&)
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->ldata();
     painter->setFont(item->iconFont());
-    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
+    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, muse::draw::TextDontClip, Char(item->icon()));
 }
 
 void TDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
@@ -953,7 +956,6 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
     painter->setBrush(Brush(item->curColor(opt)));
 
     Font f = item->font(spatium);
-    painter->setFont(f);
 
     double x  = data->noteWidth + spatium * .2;
     double y  = -spatium * .8;
@@ -978,8 +980,10 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
 
             int idx = (pitch + 12) / 25;
             const char* l = item->label[idx];
+            painter->setFont(f);
             painter->drawText(RectF(x2, y2, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
 
             y = y2;
@@ -1010,8 +1014,10 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
             int idx = (item->points()[pt + 1].pitch + 12) / 25;
             const char* l = item->label[idx];
             double ty = y2;       // - _spatium;
+            painter->setFont(f);
             painter->drawText(RectF(x2, ty, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
         } else {
             // down
@@ -1125,7 +1131,8 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
         double bracketWidth = ldata->bracketWidth - lineW / 2;
@@ -1143,6 +1150,28 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         painter->setPen(pen);
         double bd = item->style().styleAbsolute(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
+    }
+    break;
+    case BracketType::GROUP:
+    {
+        if (!item->bracketItem()->showBracket() && (!item->score()->isShowInvisible() || opt.isPrinting)) {
+            return;
+        }
+
+        painter->save();
+        setMask(item, painter);
+
+        double h = ldata->bracketHeight;
+        double lineW = item->style().styleAbsolute(Sid::groupBracketLineWidth);
+        double hookLen = item->style().styleAbsolute(Sid::groupBracketHookLen);
+        Color color = item->curColor(item->visible() && item->bracketItem()->showBracket(), opt);
+        Pen pen(color, lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
+        painter->drawLine(LineF(0.0, 0.0, hookLen, 0.0));
+        painter->drawLine(LineF(0.0, h, hookLen, h));
+
+        painter->restore();
     }
     break;
     case BracketType::NO_BRACKET:
@@ -1273,7 +1302,10 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
     Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
             PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(),
+                      muse::draw::AlignLeft | muse::draw::AlignTop,
+                      muse::draw::TextDontClip,
+                      ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1318,6 +1350,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
         int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
         painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()),
                           muse::draw::AlignLeft | muse::draw::AlignTop,
+                          muse::draw::TextDontClip,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
@@ -1478,10 +1511,13 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
                 painter->drawText(RectF(-ldata->fretNumPadding, .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignVCenter | muse::draw::AlignRight,
+                                  muse::draw::TextDontClip,
+                                  text);
             } else {
                 painter->drawText(RectF(x2 + ldata->fretNumPadding, .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  muse::draw::AlignVCenter | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
                                   text);
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1490,10 +1526,14 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
             painter->rotate(90);
             if (item->numPos() == 0) {
                 painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
-                                  muse::draw::AlignLeft | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
+                                  text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0),
-                                  muse::draw::AlignBottom | muse::draw::AlignLeft | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignBottom | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
+                                  text);
             }
             painter->restore();
         }
@@ -1701,6 +1741,10 @@ void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const Pain
 void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
+
+    painter->save();
+    painter->rotate(item->textAngle());
+
     const TextBase::LayoutData* ldata = item->ldata();
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
@@ -1727,6 +1771,8 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOpti
     for (const TextBlock& t : ldata->blocks) {
         draw(t, item, painter);
     }
+
+    painter->restore();
 }
 
 void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* painter)
@@ -1807,7 +1853,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         if (tl->beginHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
-            brush.setColor(item->curColor(opt));
+            brush.setColor(color);
             painter->setBrush(brush);
             painter->setNoPen();
             painter->drawPolygon(ldata->beginArrow);
@@ -1840,7 +1886,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         if (tl->endHookType() == HookType::ARROW_FILLED) {
             Brush brush;
             brush.setStyle(BrushStyle::SolidPattern);
-            brush.setColor(item->curColor(opt));
+            brush.setColor(color);
             painter->setBrush(brush);
             painter->setNoPen();
             painter->drawPolygon(ldata->endArrow);
@@ -2016,13 +2062,16 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
             } else {
                 s = item->size() * DPMM;
             }
-            if (opt.isPrinting && !MScore::svgPrinting) {
-                // use original image size for printing, but not for svg for reasonable file size.
+            Transform t = painter->worldTransform();
+            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
+            int maxDim = item->configuration()->maxScaledImageDim();
+            bool useDirectDraw = (opt.isPrinting && !MScore::svgPrinting)
+                                 || (maxDim > 0 && std::max(ss.width(), ss.height()) > maxDim);
+
+            if (useDirectDraw) {
                 painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
                 painter->drawPixmap(PointF(0, 0), *item->rasterImage());
             } else {
-                Transform t = painter->worldTransform();
-                muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
@@ -2119,7 +2168,7 @@ void TDraw::draw(const Lasso* item, Painter* painter, const PaintOptions&)
     const Lasso::LayoutData* ldata = item->ldata();
     painter->setBrush(Brush(item->configuration()->lassoColor()));
     // always 2 pixel width
-    double w = 2.0 / painter->worldTransform().m11() * item->configuration()->guiScaling();
+    double w = 2.0 / painter->worldTransform().m11() * item->contextConfiguration()->guiScaling();
     painter->setPen(Pen(item->configuration()->selectionColor(), w));
     painter->drawRect(ldata->bbox());
 }
@@ -2305,7 +2354,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
 
     const bool isTabStaff = staffType && staffType->isTabStaff();
     const bool negativeFret = isTabStaff && item->negativeFretUsed();
-    const bool useCriticalColor = negativeFret && !item->deadNote() && opt.isPrinting;
+    const bool useCriticalColor = negativeFret && !item->deadNote() && !opt.isPrinting;
 
     painter->setPen(useCriticalColor ? config->criticalColor() : item->curColor(opt));
 
@@ -2317,7 +2366,7 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (negativeFret || (item->fretConflict() && !opt.isPrinting && item->score()->showUnprintable())) { // fret conflict
+        if (!opt.isPrinting && item->score()->showUnprintable() && (negativeFret || item->fretConflict())) { // fret conflict
             painter->save();
             painter->setPen(config->criticalColor());
             painter->setBrush(config->criticalBackgroundColor());
@@ -2722,6 +2771,13 @@ void TDraw::draw(const StaffText* item, Painter* painter, const PaintOptions& op
     }
 }
 
+void TDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextBase(item, painter, opt);
+}
+
 void TDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
@@ -2965,7 +3021,7 @@ void TDraw::draw(const SoundFlag* item, Painter* painter, const PaintOptions& op
 
     painter->setFont(item->iconFont());
     painter->setPen(!item->selected() ? item->curColor(true, opt) : Color::WHITE);
-    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
+    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, muse::draw::TextDontClip, Char(item->iconCode()));
 }
 
 void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOptions& opt)
@@ -3067,6 +3123,10 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
         return;
     }
 
+    painter->save();
+
+    setMask(item, painter);
+
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(), opt);
     if (!opt.isPrinting && item->ldata()->allJumpPointsInactive) {
         penColor.setAlpha(std::min(penColor.alpha(), 85));
@@ -3107,6 +3167,8 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
     }
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());
+
+    painter->restore();
 }
 
 void TDraw::draw(const TimeSig* item, Painter* painter, const PaintOptions& opt)

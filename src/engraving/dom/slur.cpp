@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,10 +23,12 @@
 
 #include "../editing/editspanner.h"
 #include "../editing/mscoreview.h"
+#include "../editing/transaction/transaction.h"
 
 #include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
+#include "masterscore.h"
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
@@ -222,6 +224,8 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
+    Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+
     ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
     ChordRest* scr = spanner()->startCR();
     ChordRest* ecr = spanner()->endCR();
@@ -232,7 +236,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     // save current start/end elements
     for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
-        score()->undoStack()->pushWithoutPerforming(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
+        tx.pushWithoutPerforming(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
 
     if (ed.curGrip == Grip::START) {

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,9 +22,15 @@
 #include "utils.h"
 
 #include "realfn.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/parenthesis.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
+#include "engraving/style/styledef.h"
 
 using namespace mu::engraving;
 
@@ -138,5 +144,67 @@ Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t
     }
 
     return chord;
+}
+
+static void addParenthesesToNotes(Chord* ch, const std::vector<Note*>& notes)
+{
+    auto createParen = [ch](DirectionH dir) {
+        Parenthesis* p = Factory::createParenthesis(ch);
+        p->setParent(ch);
+        p->setTrack(ch->track());
+        p->setDirection(dir);
+        return p;
+    };
+
+    NoteParenthesisInfo* parenInfo = new NoteParenthesisInfo(createParen(DirectionH::LEFT), createParen(DirectionH::RIGHT), notes);
+    ch->addNoteParenthesisInfo(parenInfo);
+
+    for (Note* n : notes) {
+        n->setProperty(Pid::HAS_PARENTHESES, PropertyValue::fromValue(ParenthesesMode::BOTH));
+        n->setHideGeneratedParens(true);
+    }
+}
+
+void createGhostNoteParenGroups(Chord* ch)
+{
+    if (!ch->noteParentheses().empty()) {
+        return;
+    }
+
+    const std::vector<Note*>& notes = ch->notes();
+    const size_t count = notes.size();
+    std::vector<Note*> currentGroup;
+
+    for (size_t i = 0; i <= count; ++i) {
+        if (i < count && notes[i]->ghost()) {
+            currentGroup.push_back(notes[i]);
+        } else if (!currentGroup.empty()) {
+            addParenthesesToNotes(ch, currentGroup);
+            currentGroup.clear();
+        }
+    }
+}
+
+void addPlayCountTexts(Score* score)
+{
+    const bool showText = score->style().styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = score->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        if (!m->repeatEnd()) {
+            continue;
+        }
+        const int playCount = m->repeatCount();
+        if (!showText || (playCount == 2 && !singleRepeats)) {
+            continue;
+        }
+        Segment* endBarSeg = m->last(SegmentType::BarLineTypes);
+        if (!endBarSeg || endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0)) {
+            continue;
+        }
+        PlayCountText* pct = Factory::createPlayCountText(endBarSeg);
+        pct->setTrack(0);
+        pct->setParent(endBarSeg);
+        score->addElement(pct);
+    }
 }
 } // namespace mu::iex::guitarpro

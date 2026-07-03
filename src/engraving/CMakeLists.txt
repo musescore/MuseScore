@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -69,6 +69,7 @@ target_sources(engraving PRIVATE
     engravingproject.h
     iengravingpluginapihelper.h
     iengravingconfiguration.h
+    iengravingcontextconfiguration.h
     iengravingfont.h
     iengravingfontsprovider.h
 
@@ -102,6 +103,8 @@ target_sources(engraving PRIVATE
 
     editing/addremoveelement.cpp
     editing/addremoveelement.h
+    editing/clonevoice.cpp
+    editing/clonevoice.h
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
@@ -141,6 +144,8 @@ target_sources(engraving PRIVATE
     editing/editspanner.h
     editing/editstaff.cpp
     editing/editstaff.h
+    editing/editstavesharing.cpp
+    editing/editstavesharing.h
     editing/editstyle.cpp
     editing/editstyle.h
     editing/editsystemlocks.cpp
@@ -149,8 +154,10 @@ target_sources(engraving PRIVATE
     editing/edittie.h
     editing/edittremolo.cpp
     editing/edittremolo.h
-    editing/editvoicing.cpp
-    editing/editvoicing.h
+    editing/exchangevoices.cpp
+    editing/exchangevoices.h
+    editing/implodeexplode.cpp
+    editing/implodeexplode.h
     editing/inserttime.cpp
     editing/inserttime.h
     editing/elementeditdata.h
@@ -160,10 +167,14 @@ target_sources(engraving PRIVATE
     editing/splitjoinmeasure.h
     editing/textedit.cpp
     editing/textedit.h
+    editing/transaction/transaction.cpp
+    editing/transaction/transaction.h
+    editing/transaction/undoablecommand.cpp
+    editing/transaction/undoablecommand.h
+    editing/transaction/undostack.cpp
+    editing/transaction/undostack.h
     editing/transpose.cpp
     editing/transpose.h
-    editing/undo.cpp
-    editing/undo.h
 
     rw/ireader.h
     rw/iwriter.h
@@ -243,6 +254,19 @@ target_sources(engraving PRIVATE
     rw/read460/tread.h
     rw/read460/connectorinforeader.cpp
     rw/read460/connectorinforeader.h
+
+    rw/read500/read500.cpp
+    rw/read500/read500.h
+    rw/read500/staffread.cpp
+    rw/read500/staffread.h
+    rw/read500/measureread.cpp
+    rw/read500/measureread.h
+    rw/read500/readcontext.cpp
+    rw/read500/readcontext.h
+    rw/read500/tread.cpp
+    rw/read500/tread.h
+    rw/read500/connectorinforeader.cpp
+    rw/read500/connectorinforeader.h
 
     rw/compat/readstyle.cpp
     rw/compat/readstyle.h
@@ -332,10 +356,12 @@ endif()
 if (ENGRAVING_NO_INTERNAL)
     target_compile_definitions(engraving PUBLIC ENGRAVING_NO_INTERNAL ENGRAVING_NO_INTERACTIVE ENGRAVING_NO_API)
 else()
-    include(${CMAKE_CURRENT_LIST_DIR}/api/v1/api_v1.cmake)
+    include(api/v1/api_v1.cmake)
     target_sources(engraving PRIVATE
         internal/engravingconfiguration.cpp
         internal/engravingconfiguration.h
+        internal/engravingcontextconfiguration.cpp
+        internal/engravingcontextconfiguration.h
         internal/qmimedataadapter.cpp
         internal/qmimedataadapter.h
         internal/engravingfontsprovider.cpp
@@ -361,7 +387,7 @@ set_source_files_properties(
     dom/transpose.cpp
     editing/transpose.cpp
     style/style.cpp
-    #${CMAKE_CURRENT_LIST_DIR}/api/vi/style.cpp
+    #api/vi/style.cpp
 
     infrastructure/mscreader.cpp
     infrastructure/mscwriter.cpp
@@ -389,6 +415,13 @@ set_source_files_properties(
     rw/read460/readcontext.cpp
     rw/read460/tread.cpp
     rw/read460/connectorinforeader.cpp
+    
+    #rw/read500/read500.cpp
+    rw/read500/staffread.cpp
+    rw/read500/measureread.cpp
+    rw/read500/readcontext.cpp
+    rw/read500/tread.cpp
+    rw/read500/connectorinforeader.cpp
 
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
 )
@@ -412,7 +445,7 @@ endif()
 
 target_include_directories(engraving PRIVATE
     infrastructure
-    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    thirdparty/dtl
 )
 
 target_link_libraries(engraving PRIVATE muse::draw)

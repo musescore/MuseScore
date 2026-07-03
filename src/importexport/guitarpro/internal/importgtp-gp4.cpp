@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -52,6 +52,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
+
+#include "engraving/editing/editchord.h"
 
 #include "guitarprodrumset.h"
 
@@ -245,7 +247,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
     if (noteBits & NOTE_SFORZATO) {             // 0x40
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }
@@ -742,7 +744,6 @@ bool GuitarPro4::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
 
         int patch = channelDefaults[midiChannel].patch;
@@ -1195,6 +1196,7 @@ bool GuitarPro4::read(IODevice* io)
     m_continiousElementsBuilder->addElementsToScore();
     m_guitarBendImporter->applyBendsToChords();
     addTunings();
+    utils::addPlayCountTexts(score);
 
     return true;
 }

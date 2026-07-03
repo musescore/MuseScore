@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,8 @@
 #include "actionicon.h"
 #include "note.h"
 #include "score.h"
+
+#include "../editing/editnote.h"
 
 #include "log.h"
 
@@ -447,7 +449,7 @@ EngravingItem* Accidental::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ACCIDENTAL:
-        score()->changeAccidental(note(), toAccidental(e)->accidentalType());
+        EditNote::changeAccidental(score(), note(), toAccidental(e)->accidentalType());
         break;
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {

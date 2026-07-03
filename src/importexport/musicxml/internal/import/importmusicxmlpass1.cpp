@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -711,6 +711,7 @@ static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreakType 
 {
     LayoutBreak* lb = Factory::createLayoutBreak(mb);
     lb->setLayoutBreakType(type);
+    lb->setTrack(0);
     mb->add(lb);
 }
 
@@ -1001,7 +1002,7 @@ static void resizeTitleBox(VBox* vbox)
         score->renderer()->layoutItem(e);
     }
 
-    double padding = vbox->spatium();
+    const double padding = vbox->sizeIsSpatiumDependent() ? vbox->style().spatium() : vbox->style().defaultSpatium();
 
     for (EngravingItem* e : elist) {
         if (e->isText()) {

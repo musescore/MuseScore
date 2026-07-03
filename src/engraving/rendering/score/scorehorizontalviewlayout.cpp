@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -272,6 +272,7 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
 void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
+    visibleParts.reserve(ctx.dom().parts().size());
     for (size_t partIdx = 0; partIdx < ctx.dom().parts().size(); partIdx++) {
         if (ctx.dom().parts().at(partIdx)->show()) {
             visibleParts.push_back(static_cast<int>(partIdx));
@@ -279,7 +280,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     }
 
     System* system = ctx.mutDom().systems().front();
-    SystemHeaderLayout::setInstrumentNames(system, ctx, /* longNames */ true);
+    SystemHeaderLayout::setInstrumentNames(system, ctx);
 
     double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleAbsolute(Sid::minMeasureWidth);
     system->setWidth(targetSystemWidth);
@@ -300,9 +301,11 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         if (ctx.state().curMeasure()->isVBoxBase()) {
             ctx.mutState().curMeasure()->resetExplicitParent();
             MeasureLayout::getNextMeasure(ctx);
+            MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
             continue;
         }
         system->appendMeasure(ctx.mutState().curMeasure());
+        MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
         bool createHeader = ctx.state().prevMeasure() && ctx.state().prevMeasure()->isHBox()
                             && toHBox(ctx.state().prevMeasure())->createSystemHeader();
         if (ctx.state().curMeasure()->isMeasure()) {
@@ -311,7 +314,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 m->mmRest()->resetExplicitParent();
             }
             if (firstMeasureInScore) {
-                SystemLayout::layoutSystem(system, ctx, curSystemWidth, true);
+                SystemLayout::layoutSystem(system, ctx, curSystemWidth);
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -510,7 +513,7 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
 
     Segment* nextSeg = s->nextActive();
     if (!nextSeg) {
-        nextSeg = s->next(SegmentType::BarLineType);
+        nextSeg = s->next(SegmentType::BarLineTypes);
     }
 
     if (nextSeg) {

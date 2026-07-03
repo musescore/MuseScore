@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -67,13 +67,15 @@ enum class SegmentType {
     //--
     All                   = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
-    CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
-    CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
-    CourtesyClefType      = ClefRepeatAnnounce | ClefStartRepeatAnnounce,
-    TimeSigType           = TimeSig | CourtesyTimeSigType,
-    KeySigType            = KeySig | CourtesyKeySigType,
-    ClefType              = Clef | HeaderClef | CourtesyClefType,
+    BarLineTypes           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    CourtesyTimeSigTypes   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
+    CourtesyKeySigTypes    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    CourtesyClefTypes      = ClefRepeatAnnounce | ClefStartRepeatAnnounce,
+    TimeSigTypes           = TimeSig | CourtesyTimeSigTypes,
+    KeySigTypes            = KeySig | CourtesyKeySigTypes,
+    ClefTypes              = Clef | HeaderClef | CourtesyClefTypes,
+    // Only types with non-null duration
+    Duration              = TimeTick | ChordRest,
     ///\}
 };
 
@@ -318,15 +320,12 @@ public:
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
     bool isCourtesySegment() const
     {
-        return m_segmentType & (SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType | SegmentType::CourtesyClefType);
+        return m_segmentType & (SegmentType::CourtesyTimeSigTypes | SegmentType::CourtesyKeySigTypes | SegmentType::CourtesyClefTypes);
     }
 
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
     bool isMMRestSegment() const { return isChordRestType() && m_elist.front() && m_elist.front()->isMMRest(); }
-
-    static constexpr SegmentType CHORD_REST_OR_TIME_TICK_TYPE = SegmentType::ChordRest | SegmentType::TimeTick;
-    static constexpr SegmentType durationSegmentsMask = CHORD_REST_OR_TIME_TICK_TYPE; // segment types which may have non-zero tick length
 
     bool canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const;
 

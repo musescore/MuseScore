@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,8 +33,6 @@
 
 namespace mu::engraving {
 struct RenderingContext {
-    RenderingContext() = default;
-
     muse::mpe::timestamp_t nominalTimestamp = 0;
     muse::mpe::duration_t nominalDuration = 0;
     muse::mpe::dynamic_level_t nominalDynamicLevel = 0;

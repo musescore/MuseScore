@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -126,7 +126,7 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
             const ElementInfo::Note& expectedNote = expectedInfo.notes.at(j);
 
             EXPECT_EQ(actualNote.name, expectedNote.name);
-            EXPECT_EQ(actualInfo.data, expectedInfo.data);
+            EXPECT_EQ(actualNote.data, expectedNote.data);
         }
     }
 

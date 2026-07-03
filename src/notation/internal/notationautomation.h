@@ -23,10 +23,24 @@
 
 #include "../inotationautomation.h"
 
+#include "notationtypes.h"
+#include "engraving/automation/automationtypes.h"
+
+#include "async/channel.h"
+
+#include "igetscore.h"
+#include "draw/types/geometry.h"
+
+namespace mu::engraving {
+class IAutomation;
+}
+
 namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {
 public:
+    NotationAutomation();
+
     bool isAutomationModeEnabled() const override;
     void setAutomationModeEnabled(bool enabled) override;
     muse::async::Notification automationModeEnabledChanged() const override;

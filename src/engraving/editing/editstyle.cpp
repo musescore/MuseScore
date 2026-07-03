@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,9 @@
 
 #include "../dom/chordlist.h"
 #include "../dom/score.h"
+
 #include "editing/editsystemlocks.h"
+#include "editing/transaction/transaction.h"
 
 using namespace mu::engraving;
 
@@ -71,7 +73,7 @@ StyleIdSet ChangeStyle::changedIds() const
     return result;
 }
 
-void ChangeStyle::flip(EditData*)
+void ChangeStyle::flip()
 {
     MStyle tmp = score->style();
 
@@ -91,10 +93,10 @@ void ChangeStyle::flip(EditData*)
     style = tmp;
 }
 
-void ChangeStyle::undo(EditData* ed)
+void ChangeStyle::undo()
 {
     overlap = false;
-    UndoCommand::undo(ed);
+    UndoableCommand::undo();
 }
 
 //---------------------------------------------------------
@@ -124,7 +126,8 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         break;
     case Sid::createMultiMeasureRests:
         if (oldValue.toBool() == true && newValue.toBool() == false) {
-            EditSystemLocks::removeSystemLocksContainingMMRests(score);
+            Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
         }
         break;
     default:
@@ -132,7 +135,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     }
 }
 
-void ChangeStyleValues::flip(EditData*)
+void ChangeStyleValues::flip()
 {
     if (!m_score) {
         return;

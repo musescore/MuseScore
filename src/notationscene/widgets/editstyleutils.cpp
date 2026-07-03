@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -176,6 +176,9 @@ QString EditStyleUtils::pageCodeForElement(const EngravingItem* element)
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::STAFF_TEXT:
         return "staff-text";
+
+    case ElementType::STAVE_SHARING_LABEL:
+        return "stave-sharing";
 
     case ElementType::TEMPO_TEXT:
         return "tempo-text";
@@ -433,6 +436,7 @@ QString EditStyleUtils::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::DYNAMICS:
         case TextStyleType::DEFAULT:
+        case TextStyleType::GROUP_BRACKET:
         case TextStyleType::TEXT_TYPES:
         case TextStyleType::IGNORED_TYPES:
             return QString();

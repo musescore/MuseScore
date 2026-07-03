@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -46,7 +46,7 @@ static constexpr double SUPERSCRIPT_OFFSET = -0.9; // of x-height
 //---------------------------------------------------------
 
 enum class FrameType : char {
-    NO_FRAME, SQUARE, CIRCLE
+    NO_FRAME, RECTANGLE, CIRCLE
 };
 
 //---------------------------------------------------------
@@ -330,7 +330,7 @@ public:
     String plainText() const;
     void resetFormatting();
 
-    void insertText(EditData&, const String&);
+    void insertText(const String&);
 
     double lineSpacing() const;
     double lineHeight() const;
@@ -360,19 +360,19 @@ public:
     virtual void endEdit(EditData&) override;
     virtual RectF drag(EditData&) override;
     virtual void endDrag(EditData&) override;
-    void movePosition(EditData&, TextCursor::MoveOperation);
+    void movePosition(TextCursor::MoveOperation);
 
     bool mousePress(EditData& ed);
     void dragTo(EditData& ed);
 
-    bool deleteSelectedText(EditData&);
+    bool deleteSelectedText();
 
-    void selectAll(TextCursor*);
-    void select(EditData&, SelectTextType);
+    void selectAll();
+    void select(SelectTextType);
     bool isPrimed() const { return m_primed; }
     void setPrimed(bool primed) { m_primed = primed; }
 
-    virtual void paste(EditData& ed, const String& txt);
+    virtual void paste(const String& txt);
 
     RectF pageRectangle() const;
 
@@ -399,7 +399,7 @@ public:
 
     static bool validateText(String& s);
     bool inHexState() const { return m_hexState >= 0; }
-    void endHexState(EditData&);
+    void endHexState();
 
     muse::draw::Font font() const;
     muse::draw::FontMetrics fontMetrics() const;
@@ -414,7 +414,6 @@ public:
     void styleChanged() override;
     void editInsertText(TextCursor*, const String&);
 
-    TextCursor* cursorFromEditData(const EditData&);
     TextCursor* cursor() const { return m_cursor; }
 
     void setTextInvalid() { m_textInvalid = true; }
@@ -423,7 +422,7 @@ public:
     // helper functions
     bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
     bool circle() const { return m_frameType == FrameType::CIRCLE; }
-    bool square() const { return m_frameType == FrameType::SQUARE; }
+    bool rectangle() const { return m_frameType == FrameType::RECTANGLE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
@@ -518,6 +517,11 @@ public:
 
     double spatiumScaling() const;
 
+    double textAngle() const { return m_textAngle; }
+    void setTextAngle(double v) { m_textAngle = v; }
+
+    PointF defaultPos() const override;
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -526,7 +530,7 @@ protected:
 
     bool nudge(const EditData& ed);
 
-    void insertSym(EditData& ed, SymId id);
+    void insertSym(SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
 
@@ -540,12 +544,13 @@ private:
 
     virtual int getPropertyFlagsIdx(Pid id) const override;
     String stripText(bool, bool, bool) const;
-    Sid offsetSid() const;
 
     static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
 
     static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
+
+    Sid defaultPosSid() const override;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
@@ -587,6 +592,8 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
     bool m_anchorToEndOfPrevious = false;
+
+    double m_textAngle = 0.0;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

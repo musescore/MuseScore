@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -418,8 +418,8 @@ void Ornament::updateCueNote()
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
 
-        std::vector<Note*> notes = { cueNote };
-        EditChord::addChordParentheses(const_cast<Chord*>(m_cueNoteChord), notes, false, true);
+        std::list<Note*> notes = { cueNote };
+        score()->cmdAddParenthesesToNotes(notes);
     }
     m_cueNoteChord->setTrack(track());
     m_cueNoteChord->setParent(parentChord->segment());

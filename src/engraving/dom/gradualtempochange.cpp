@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,6 +26,7 @@
 #include "rehearsalmark.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "system.h"
 #include "tempotext.h"
 #include "text.h"
@@ -44,7 +45,6 @@ static const ElementStyle tempoStyle {
     { Sid::tempoChangeLineSpacing, Pid::TEXT_LINE_SPACING },
 
     { Sid::tempoChangeColor, Pid::COLOR },
-    { Sid::tempoChangePosAbove, Pid::OFFSET },
 
     { Sid::tempoChangeFontFace, Pid::BEGIN_FONT_FACE },
     { Sid::tempoChangeFontFace, Pid::CONTINUE_FONT_FACE },
@@ -81,10 +81,16 @@ static const ElementStyle tempoStyle {
     { Sid::gradualTempoChangeEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
     { Sid::gradualTempoChangeBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::gradualTempoChangeBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
+
+    { Sid::tempoChangeMusicalSymbolSize,          Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::tempoChangeMusicalSymbolSize,          Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::tempoChangeMusicalSymbolSize,          Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 static const ElementStyle tempoSegmentStyle {
-    { Sid::tempoChangePosAbove, Pid::OFFSET },
     { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE }
 };
 
@@ -277,12 +283,6 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
         return Sid::tempoChangeAlign;
     case Pid::BEGIN_TEXT:
         return Sid::letRingText;
-    case Pid::OFFSET:
-        if (placeAbove()) {
-            return Sid::tempoChangePosAbove;
-        } else {
-            return Sid::tempoChangePosBelow;
-        }
     default:
         break;
     }
@@ -300,12 +300,14 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
     if (!rehearsalMark) {
         return false;
     }
-    RectF thisBbox = ldata()->bbox().translated(pos());
+
+    double staffHeight = staff() && placeBelow() ? staff()->staffHeight(tick()) : 0.0;
+    double tempoChangePos = staffHeight + defaultPos().y() + (autoplace() ? absoluteFromSpatium(minDistance()) : 0.0);
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     const bool sameSide = placeAbove() == rehearsalMark->placeAbove();
-    const bool collision = placeAbove() ? muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), thisBbox.top()) : muse::RealIsEqualOrLess(
-        rehearsalMarkBbox.top(), thisBbox.bottom());
+    const bool collision = muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), tempoChangePos) && muse::RealIsEqualOrLess(
+        rehearsalMarkBbox.top(), tempoChangePos);
 
     return sameSide && collision;
 }
@@ -360,6 +362,11 @@ void GradualTempoChange::removed()
     requestToRebuildTempo();
 }
 
+Sid GradualTempoChange::defaultPosSid() const
+{
+    return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
+}
+
 void GradualTempoChange::requestToRebuildTempo()
 {
     IF_ASSERT_FAILED(score()) {
@@ -386,18 +393,6 @@ GradualTempoChangeSegment* GradualTempoChangeSegment::clone() const
 GradualTempoChange* GradualTempoChangeSegment::tempoChange() const
 {
     return static_cast<GradualTempoChange*>(spanner());
-}
-
-Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
-{
-    if (id == Pid::OFFSET) {
-        if (placeAbove()) {
-            return Sid::tempoPosAbove;
-        } else {
-            return Sid::tempoPosBelow;
-        }
-    }
-    return TextLineBaseSegment::getPropertyStyle(id);
 }
 
 GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() const

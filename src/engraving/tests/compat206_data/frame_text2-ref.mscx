@@ -143,7 +143,6 @@
       <copyrightFramePadding>0</copyrightFramePadding>
       <copyrightFrameWidth>0</copyrightFrameWidth>
       <pageNumberFontSize>11</pageNumberFontSize>
-      <pageNumberOffset x="0" y="0"/>
       <pageNumberFramePadding>0</pageNumberFramePadding>
       <pageNumberFrameWidth>0</pageNumberFrameWidth>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
@@ -176,14 +175,16 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          </InstrumentLabel>
         <trackName>Choir Aahs</trackName>
         <instrumentId>voice.tenor</instrumentId>
         <Channel>
@@ -199,16 +200,16 @@
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>frame</style>
           <text>îèéààéà</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
-          <style>frame</style>
+          <eid>G_G</eid>
           <offset x="55" y="0.5"/>
+          <style>frame</style>
           <text>éééàè</text>
           </Text>
         </VBox>
@@ -216,16 +217,16 @@
         <height>47.762</height>
         <topGap>10</topGap>
         <boxAutoSize>0</boxAutoSize>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <Text>
-          <eid>H_H</eid>
+          <eid>I_I</eid>
           <style>frame</style>
           <text>êêàééééç*éô</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
-          <style>frame</style>
+          <eid>J_J</eid>
           <offset x="55" y="0.5"/>
+          <style>frame</style>
           <text>àéùééé</text>
           </Text>
         </VBox>

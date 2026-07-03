@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
+#include "../editing/editnote.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -268,6 +269,7 @@ std::vector<int> Chord::noteDistances() const
     int staffMiddleLine = staffType->middleLine();
 
     std::vector<int> distances;
+    distances.reserve(m_notes.size());
     for (Note* note : m_notes) {
         int noteLine = isTabStaff ? note->string() : note->line();
         distances.push_back(noteLine - staffMiddleLine);
@@ -410,6 +412,7 @@ Chord::Chord(const Chord& c, bool link)
             }
 
             std::vector<Note*> newNotes;
+            newNotes.reserve(info->notes().size());
             for (Note* note : info->notes()) {
                 newNotes.push_back(findNote(note->pitch()));
             }
@@ -655,8 +658,7 @@ void Chord::add(EngravingItem* e)
             measure()->setHasVoices(staffIdx(), true);
         }
     }
-        score()->setPlaylistDirty();
-        break;
+    break;
     case ElementType::ARPEGGIO:
         m_arpeggio = toArpeggio(e);
         break;
@@ -758,7 +760,6 @@ void Chord::remove(EngravingItem* e)
         if (voice() && measure() && note->visible()) {
             measure()->checkMultiVoices(staffIdx());
         }
-        score()->setPlaylistDirty();
     }
     break;
 
@@ -799,6 +800,9 @@ void Chord::remove(EngravingItem* e)
     case ElementType::CHORD:
     {
         auto i = std::find(m_graceNotes.begin(), m_graceNotes.end(), toChord(e));
+        IF_ASSERT_FAILED(i != m_graceNotes.end()) {
+            break;
+        }
         Chord* grace = *i;
         grace->setGraceIndex(i - m_graceNotes.begin());
         m_graceNotes.erase(i);
@@ -810,8 +814,18 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
-            LOGD("ChordRest::remove(): articulation not found");
+            LOGD("Chord::remove(): articulation not found");
         }
+    }
+    break;
+    case ElementType::PARENTHESIS: {
+        NoteParenthesisInfo* parenInfo = findNoteParenthesisInfo(toParenthesis(e));
+        IF_ASSERT_FAILED(parenInfo) {
+            LOGD() << "Chord::remove(): This parenthesis does not belong to this chord";
+            return;
+        }
+        EditChord::removeChordParentheses(this, parenInfo->notes());
+        break;
     }
     break;
     default:
@@ -1129,34 +1143,6 @@ bool Chord::underBeam() const
 }
 
 //---------------------------------------------------------
-//   updatePercussionNotes
-//---------------------------------------------------------
-
-static void updatePercussionNotes(Chord* c, const Drumset* drumset)
-{
-    TRACEFUNC;
-    for (Chord* ch : c->graceNotes()) {
-        updatePercussionNotes(ch, drumset);
-    }
-    std::vector<Note*> lnotes(c->notes());    // we need a copy!
-    for (Note* note : lnotes) {
-        if (!drumset) {
-            note->setLine(0);
-        } else {
-            int pitch = note->pitch();
-            if (!drumset->isValid(pitch)) {
-                note->setLine(0);
-                //! NOTE May be called too often
-                //LOGW("unmapped drum note %d", pitch);
-            } else if (!note->fixed()) {
-                note->undoChangeProperty(Pid::HEAD_GROUP, drumset->noteHead(pitch));
-                note->setLine(drumset->line(pitch));
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmdUpdateNotes
 //---------------------------------------------------------
 
@@ -1397,7 +1383,7 @@ void Chord::removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren)
 //---------------------------------------------------------
 //   isChordPlayable
 //   @note Now every related to chord element has it's own "PLAY" property,
-//         However, there is no way to control these properties outside the scope of the chord since the new inspector.
+//         However, there is no way to control these properties outside the scope of the chord since the new Properties panel.
 //         So we'll use a chord as a proxy entity for "PLAY" property handling
 //---------------------------------------------------------
 
@@ -1544,7 +1530,7 @@ EngravingItem* Chord::drop(EditData& data)
             if (m_articulations.empty()) {
                 score()->undoAddElement(atr);
             } else {
-                score()->toggleArticulation(this, atr);
+                EditChord::toggleArticulation(score(), this, atr);
             }
         }
         return atr;
@@ -1803,7 +1789,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 newArticulation->setAnchor(artic->anchor());
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
                 if (!hasArticulation(newArticulation)) {
-                    score()->toggleArticulation(this, newArticulation);
+                    EditChord::toggleArticulation(score(), this, newArticulation);
                 } else {
                     delete newArticulation;
                 }
@@ -1855,7 +1841,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
     // newArtics now contains the articulations in the correct direction
     if (updateMode == ArticulationsUpdateMode::Remove) {
-        // remove articulations from _articulations that are found in in newArtics
+        // remove articulations from _articulations that are found in newArtics
         for (const SymId& id : newArtics) {
             switch (id) {
             case SymId::articAccentAbove:
@@ -1892,7 +1878,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
             if (!hasArticulation(newArticulation)) {
-                score()->toggleArticulation(this, newArticulation);
+                EditChord::toggleArticulation(score(), this, newArticulation);
             } else {
                 delete newArticulation;
             }
@@ -1987,7 +1973,6 @@ void Chord::setSlash(bool flag, bool stemless)
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head
         if (!staffType->isDrumStaff()) {
-            // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
             mutldata()->moveY(y);
         } else {
             head = NoteHeadGroup::HEAD_NORMAL;
@@ -2712,6 +2697,7 @@ std::vector<NoteEventList> Chord::getNoteEventLists()
     if (notes().empty()) {
         return ell;
     }
+    ell.reserve(notes().size());
     for (size_t i = 0; i < notes().size(); ++i) {
         ell.push_back(NoteEventList(notes()[i]->playEvents()));
     }

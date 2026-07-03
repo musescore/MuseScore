@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <QDialog>
+#include "ui/view/widgetdialog.h"
 
 #include "ui_editstaff.h"
 #include "engraving/dom/stafftype.h"
@@ -37,7 +37,7 @@
 namespace mu::notation {
 class EditStaffType;
 
-class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Contextable, public muse::async::Asyncable
+class EditStaff : public muse::ui::WidgetDialog, private Ui::EditStaffBase, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -49,6 +49,7 @@ public:
     EditStaff(QWidget* parent = nullptr);
 
 private:
+    void componentComplete() override;
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
     void apply();
@@ -81,6 +82,10 @@ private slots:
     void longNameChanged();
     void shortNameChanged();
 
+    void useCustomNameChanged(bool useCustom);
+    void useCustomGroupNameChanged(bool useCustomGroup);
+    void useCustomIndividualNameChanged(bool useCustomIndividual);
+
 signals:
     void instrumentChanged();
 
@@ -94,6 +99,8 @@ private:
 
     Staff* staff(int staffIndex) const;
     Instrument instrument() const;
+
+    std::vector<InstrumentKey> otherInstrumentsInSameGroup() const;
 
     void applyStaffProperties();
     void applyPartProperties();

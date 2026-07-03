@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -24,8 +24,6 @@ qt_add_qml_module(palette_qml
     URI MuseScore.Palette
     VERSION 1.0
     SOURCES
-        internal/drumsetpanelview.cpp
-        internal/drumsetpanelview.h
         internal/palettepropertiesmodel.cpp
         internal/palettepropertiesmodel.h
         internal/paletterootmodel.cpp
@@ -37,7 +35,6 @@ qt_add_qml_module(palette_qml
         internal/palettecellpropertiesmodel.h
         internal/palettecellpropertiesmodel.cpp
     QML_FILES
-        DrumsetPanel.qml
         internal/AddPalettesPopup.qml
         internal/CreateCustomPalettePopup.qml
         internal/MoreElementsPopup.qml

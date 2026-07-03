@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editexcerpt.h"
 #include "../editing/transpose.h"
+#include "../editing/transaction/transaction.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -350,6 +351,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 {
     MasterScore* masterScore = excerpt->masterScore();
     Score* score = excerpt->excerptScore();
+    Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
 
     std::vector<Part*>& parts = excerpt->parts();
     std::vector<staff_idx_t> srcStaves;
@@ -361,7 +363,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         Part* p = new Part(score);
         p->setId(part->id());
         p->setInstrument(*part->instrument());
-        p->setPartName(part->partName());
         p->setPreferSharpFlat(part->preferSharpFlat());
 
         for (Staff* staff : part->staves()) {
@@ -442,7 +443,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            Transpose::transposeKeys(score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
+            Transpose::transposeKeys(tx, score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
@@ -468,7 +469,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        Transpose::undoTransposeHarmony(score, hh, interval);
+                        Transpose::undoTransposeHarmony(tx, hh, interval);
                     }
                 }
             }
@@ -482,7 +483,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // second layout of score
-    score->setPlaylistDirty();
+    score->invalidateRepeatList();
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
     score->remapBracketsAndBarlines();
@@ -550,7 +551,7 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 
     auto excerptCmd = new AddExcerpt(excerpt);
     if (fakeUndo) {
-        excerptCmd->redo(nullptr);
+        excerptCmd->redo();
     } else {
         excerpt->excerptScore()->undo(excerptCmd);
     }
@@ -774,12 +775,6 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
 
 static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t strack)
 {
-    // reset offset as most likely it will not fit
-    PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
-    if (f == PropertyFlags::UNSTYLED) {
-        ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
-        ne->resetProperty(Pid::OFFSET);
-    }
     ne->setTrack(strack == muse::nidx ? 0 : strack);
     ne->setScore(score);
 }
@@ -1141,6 +1136,35 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     return nmb;
 }
 
+void Excerpt::cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                           const TracksMap& trackList, TieMap& tieMap)
+{
+    // When MMRests are enabled in the main score and we are creating a new part or revealing a hidden stave within one, we must copy MMRests
+    // Elements are moved from underlying measures to MMRest measures. If we do not copy these MMRests, the elements attached to them will be lost
+    // It doesn't matter if the MMRest range is different in the part to the score. As long as the MMRest measure is present in the DOM, MMRestLayout will
+    // correct this, setting the appropriate length and moving the elements to the correct locations
+
+    for (Measure* srcM = sourceScore->firstMeasure(); srcM; srcM = srcM->nextMeasure()) {
+        if (!srcM->hasMMRest()) {
+            continue;
+        }
+
+        Measure* dstM = dstScore->tick2measure(srcM->tick());
+        if (!dstM) {
+            continue;
+        }
+
+        Measure* srcMMRest = srcM->mmRest();
+
+        Measure* dstMMRest = toMeasure(cloneMeasure(srcMMRest, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap));
+        dstMMRest->setMMRestCount(srcMMRest->mmRestCount());
+        dstMMRest->setPrev(dstM->prev());
+        dstMMRest->setNext(dstScore->tick2measure(srcMMRest->tick() + srcMMRest->ticks()));
+
+        dstM->setMMRest(dstMMRest);
+    }
+}
+
 void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
                           const TracksMap& trackList)
 {
@@ -1163,6 +1187,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->append(newMeasure);
     }
+
+    cloneMMRests(sourceScore, dstScore, sourceStavesIndexes, trackList, tieMap);
 
     size_t n = sourceStavesIndexes.size();
     for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
@@ -1228,6 +1254,8 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
         measures->append(newMeasure);
     }
+
+    cloneMMRests(oscore, score, {}, {}, tieMap);
 
     collectTieEndPoints(tieMap);
 }
@@ -1427,6 +1455,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     Score* oscore = srcStaff->score();
     Score* score  = dstStaff->score();
 
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     Excerpt* oex = oscore->excerpt();
     Excerpt* ex  = score->excerpt();
     TracksMap otracks, tracks;
@@ -1553,8 +1583,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     EngravingItem* linkedElement = e->findLinkedInScore(score);
                     Segment* linkedParent = linkedElement ? toSegment(linkedElement->parent()) : nullptr;
                     bool alreadyCloned = linkedParent && (linkedParent == ns
-                                                          || (linkedParent->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
-                                                              && ns->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
+                                                          || (linkedParent->isType(SegmentType::Duration)
+                                                              && ns->isType(SegmentType::Duration)
                                                               && linkedParent->tick() == ns->tick()));
                     bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 
@@ -1701,7 +1731,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             interval.flip();
         }
 
-        Transpose::transposeKeys(score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+        Transpose::transposeKeys(tx, score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 
     collectTieEndPoints(tieMap);
@@ -1738,11 +1768,13 @@ void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t sta
 std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts, MasterScore* score)
 {
     StringList allExcerptLowerNames;
+    allExcerptLowerNames.reserve(score->excerpts().size() + parts.size());
     for (const Excerpt* e : score->excerpts()) {
         allExcerptLowerNames.push_back(e->name().toLower());
     }
 
     std::vector<Excerpt*> result;
+    result.reserve(parts.size());
 
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(score);

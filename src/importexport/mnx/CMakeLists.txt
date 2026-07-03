@@ -9,7 +9,7 @@ muse_create_module(iex_mnx)
 include(FetchContent)
 
 set(mnxdom_BUILD_TESTING OFF CACHE BOOL "Do not build tests for mnx")
-if(MUE_COMPILE_USE_SYSTEM_MNXDOM)
+if(MSS_USE_SYSTEM_MNXDOM)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(mnxdom REQUIRED IMPORTED_TARGET mnxdom)
     set(MNXDOM_LIB PkgConfig::mnxdom)
@@ -19,7 +19,7 @@ else()
     FetchContent_Declare(
         mnxdom
         GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-        GIT_TAG        1557afd19d47b7935ddda2b69131f5c62efab84c
+        GIT_TAG        e7c947bf768caccf315426dcae0dfac02caf738b
     )
     FetchContent_MakeAvailable(mnxdom)
     set(MNXDOM_LIB mnxdom)

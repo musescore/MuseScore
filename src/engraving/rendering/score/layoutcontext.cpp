@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,6 +24,7 @@
 #include "editing/addremoveelement.h"
 #include "editing/editsystemlocks.h"
 #include "editing/mscoreview.h"
+#include "editing/transaction/transaction.h"
 #include "style/defaultstyle.h"
 
 #include "dom/score.h"
@@ -158,6 +159,14 @@ size_t DomAccessor::visiblePartCount() const
         return 0;
     }
     return score()->visiblePartCount();
+}
+
+std::vector<Part*> DomAccessor::visibleParts() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return {};
+    }
+    return score()->visibleParts();
 }
 
 size_t DomAccessor::npages() const
@@ -447,12 +456,12 @@ void DomAccessor::undoRemoveElement(EngravingItem* item)
     score()->undoRemoveElement(item);
 }
 
-void DomAccessor::undo(UndoCommand* cmd, EditData* ed) const
+void DomAccessor::undo(UndoableCommand* cmd) const
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    score()->undo(cmd, ed);
+    score()->undo(cmd);
 }
 
 void DomAccessor::addElement(EngravingItem* item)
@@ -476,7 +485,16 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::updateSystemLocksOnCreateMMRests(tx, score(), first, last);
+}
+
+void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->undoChangeParent(element, parent, staff, changeLinksParents);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

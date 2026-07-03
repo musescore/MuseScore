@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -290,6 +290,31 @@ Sid PartialLyricsLine::getPropertyStyle(Pid propertyId) const
     default:
         return LyricsLine::getPropertyStyle(propertyId);
     }
+}
+
+void PartialLyricsLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::VERSE && verse() != v.toInt()) {
+        ChordRest* endCR = endElement()
+                           && endElement()->isChordRest() ? toChordRest(endElement()) : nullptr;
+        Lyrics* endLyrics = nullptr;
+        if (endCR) {
+            for (Lyrics* lyr : endCR->lyrics()) {
+                if (lyr->verse() == verse()) {
+                    endLyrics = lyr;
+                    break;
+                }
+            }
+        }
+
+        LyricsLine::undoChangeProperty(id, v, ps);
+        if (endLyrics && endLyrics->verse() != v.toInt()) {
+            endLyrics->undoChangeProperty(id, v, ps);
+        }
+        return;
+    }
+
+    LyricsLine::undoChangeProperty(id, v, ps);
 }
 
 void PartialLyricsLine::doComputeEndElement()

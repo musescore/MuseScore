@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -43,6 +43,8 @@ echo $json > $ARTIFACTS_DIR/playlist.json
 cat $ARTIFACTS_DIR/playlist.json
 
 echo "=== Make playlist for YouTube ==="
+
+pip install requests
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 python3 $HERE/make_youtube_playlist_info.py ${YOUTUBE_API_KEY} ${YOUTUBE_PLAYLIST_ID} ${ARTIFACTS_DIR}/playlist.json

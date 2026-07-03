@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,13 +23,15 @@
 
 using namespace mu::iex::videoexport;
 
-static const ViewMode DEFAULT_VIEW_MODE = ViewMode::Auto;
+static const ViewMode DEFAULT_VIEW_MODE = ViewMode::PageFull;
 static const bool DEFAULT_SHOW_PIANO = false;
 static const PianoPosition DEFAULT_PIANO_POSITION = PianoPosition::Bottom;
 static const std::string DEFAULT_RESOLUTION = "1080p";
 static const int DEFAULT_FPS = 24;
 static const double DEFAULT_LEADING_SEC = 3.0;
 static const double DEFAULT_TRAILING_SECONDS = 3.0;
+
+static const std::vector<std::string> AVAILABLE_RESOLUTIONS = { "2160p", "1440p", "1080p" };
 
 ViewMode VideoExportConfiguration::viewMode() const
 {
@@ -69,6 +71,11 @@ std::string VideoExportConfiguration::resolution() const
 void VideoExportConfiguration::setResolution(std::optional<std::string> resolution)
 {
     m_resolution = resolution;
+}
+
+const std::vector<std::string>& VideoExportConfiguration::availableResolutions() const
+{
+    return AVAILABLE_RESOLUTIONS;
 }
 
 int VideoExportConfiguration::fps() const
