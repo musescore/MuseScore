@@ -53,7 +53,7 @@ class Score;
 
 namespace mu::iex::finale {
 static constexpr double FINALE_DEFAULT_SPATIUM = engraving::DPI * musx::dom::EVPU_PER_SPACE / musx::dom::EVPU_PER_INCH;
-static constexpr double SYMBOLS_DEFAULT_SIZE = engraving::MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE * 2;
+static constexpr double SYMBOLS_DEFAULT_SIZE = 24 * (1.75 /*mm*/ * engraving::DPMM) / FINALE_DEFAULT_SPATIUM;
 
 struct FinaleOptions
 {
@@ -399,7 +399,7 @@ private:
     void importBarlines();
     void applyStaffStyles();
 
-    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff,
+    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
     engraving::Clef* createClef(const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& musxStaff,
                                 engraving::staff_idx_t staffIdx, musx::dom::ClefIndex musxClef, engraving::Measure* measure,

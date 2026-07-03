@@ -88,7 +88,7 @@ FrameSettings::FrameSettings(const others::Enclosure* enclosure)
     if (enclosure->shape == others::Enclosure::Shape::Ellipse) {
         frameType = FrameType::CIRCLE;
     } else {
-        frameType = FrameType::SQUARE;
+        frameType = FrameType::RECTANGLE;
     }
 
     frameWidth   = efixToSp(enclosure->lineWidth);
@@ -103,7 +103,7 @@ FrameSettings::FrameSettings(const others::TextBlock* textBlock)
         return;
     }
     if (textBlock->stdLineThickness && textBlock->showShape) {
-        frameType = FrameType::SQUARE;
+        frameType = FrameType::RECTANGLE;
         frameWidth = efixToSp(textBlock->stdLineThickness);
         paddingWidth = efixToSp(textBlock->inset) + 0.5; // fudge factor to ameliorate vertical discrepancy with Finale
         frameRound = Spatium(textBlock->roundCorners ? efixToSp(textBlock->cornerRadius) : 0.0);
@@ -124,7 +124,7 @@ void FrameSettings::setFrameProperties(TextBase* item) const
 
 double FrameSettings::oneSidePaddingWidth() const
 {
-    if (frameType == FrameType::SQUARE) {
+    if (frameType == FrameType::RECTANGLE) {
         return frameWidth + paddingWidth;
     }
     return 0.0;
@@ -776,7 +776,7 @@ void FinaleParser::importTextExpressions()
                 if (item->hasSymbolScale()) {
                     setAndStyleProperty(item, Pid::MUSICAL_SYMBOLS_SCALE, expression->symbolsScale.value(), true);
                 } else if (item->hasSymbolSize()) {
-                    double symbolsSize = expression->symbolsScale.value() * MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+                    double symbolsSize = expression->symbolsScale.value() * SYMBOLS_DEFAULT_SIZE;
                     setAndStyleProperty(item, Pid::MUSIC_SYMBOL_SIZE, symbolsSize, true);
                 }
             }
