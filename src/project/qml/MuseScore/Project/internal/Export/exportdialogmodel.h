@@ -300,6 +300,8 @@ private:
 
     bool isIndexValid(int index) const;
 
+    bool isFormatSelected(const QString& formatSuffix) const;
+
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 

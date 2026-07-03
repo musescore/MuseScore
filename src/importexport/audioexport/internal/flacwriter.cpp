@@ -37,7 +37,7 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
             configuration()->exportBufferSize(),
             2 /* audioChannelsNumber */
         },
-        configuration()->exportSampleFormat(),
+        configuration()->exportFlacSampleFormat(),
         0 /* bitRate */
     };
 
