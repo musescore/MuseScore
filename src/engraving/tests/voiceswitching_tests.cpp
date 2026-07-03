@@ -101,6 +101,97 @@ TEST_F(Engraving_VoiceSwitchingTests, voiceSwitching)
     delete score;
 }
 
+TEST_F(Engraving_VoiceSwitchingTests, articulationsAfterVoiceSwitch)
+{
+    //! [GIVEN] A measure with two voices, each beat having articulations in both voices
+    Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching-articulation.mscx");
+    EXPECT_TRUE(score);
+
+    //! [WHEN] The first bar is range selected and all elements are moved to voice 0
+    score->startCmd(TranslatableString::untranslatable("Engraving voice switching tests"));
+    score->cmdSelectAll();
+    score->changeSelectedElementsVoice(0);
+    score->endCmd();
+
+    //! [THEN] Articulations from both voices are merged into voice 0, with duplicates removed
+
+    Measure* measure = score->firstMeasure();
+    ASSERT_TRUE(measure);
+
+    std::vector<Chord*> chords;
+    for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        EngravingItem* item = seg->element(0);
+        if (item && item->isChord()) {
+            chords.push_back(toChord(item));
+        }
+    }
+    ASSERT_EQ(chords.size(), 4);
+
+    // Beat 1: 1 staccato
+    {
+        const std::vector<Articulation*>& articulations = chords[0]->articulations();
+        int staccatoCount = 0;
+        for (Articulation* a : articulations) {
+            if (a->isStaccato()) {
+                ++staccatoCount;
+            }
+        }
+        EXPECT_EQ(articulations.size(), 1);
+        EXPECT_EQ(staccatoCount, 1);
+    }
+
+    // Beat 2: 1 staccato, 1 accent
+    {
+        const std::vector<Articulation*>& articulations = chords[1]->articulations();
+        int staccatoCount = 0;
+        int accentCount = 0;
+        for (Articulation* a : articulations) {
+            if (a->isStaccato()) {
+                ++staccatoCount;
+            }
+            if (a->isAccent()) {
+                ++accentCount;
+            }
+        }
+        EXPECT_EQ(articulations.size(), 2);
+        EXPECT_EQ(staccatoCount, 1);
+        EXPECT_EQ(accentCount, 1);
+    }
+
+    // Beat 3: 1 tenuto
+    {
+        const std::vector<Articulation*>& articulations = chords[2]->articulations();
+        int tenutoCount = 0;
+        for (Articulation* a : articulations) {
+            if (a->isTenuto()) {
+                ++tenutoCount;
+            }
+        }
+        EXPECT_EQ(articulations.size(), 1);
+        EXPECT_EQ(tenutoCount, 1);
+    }
+
+    // Beat 4: 1 marcato, 1 staccato
+    {
+        const std::vector<Articulation*>& articulations = chords[3]->articulations();
+        int staccatoCount = 0;
+        int marcatoCount = 0;
+        for (Articulation* a : articulations) {
+            if (a->isStaccato()) {
+                ++staccatoCount;
+            }
+            if (a->isMarcato()) {
+                ++marcatoCount;
+            }
+        }
+        EXPECT_EQ(articulations.size(), 2);
+        EXPECT_EQ(staccatoCount, 1);
+        EXPECT_EQ(marcatoCount, 1);
+    }
+
+    delete score;
+}
+
 TEST_F(Engraving_VoiceSwitchingTests, voicesSwitchingGapRests)
 {
     Score* score = ScoreRW::readScore(VOICESWITCHING_DATA_DIR + "voiceswitching-2.mscx");

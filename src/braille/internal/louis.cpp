@@ -29,8 +29,8 @@
 
 #include <QString>
 
-#include "braille/thirdparty/liblouis/liblouis/internal.h"
-#include "braille/thirdparty/liblouis/liblouis/liblouis.h"
+#include "internal.h"
+#include "liblouis.h"
 
 #define WIDECHARS_ARE_UCS4
 

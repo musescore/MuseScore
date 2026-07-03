@@ -25,6 +25,7 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
 #include "notation/notationtypes.h"
@@ -253,6 +254,7 @@ void NotationActionController::init()
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
     registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+    registerAction("select-notes-in-chord", &Controller::selectAllNotesInChord, &Controller::hasSelection);
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
@@ -1625,6 +1627,41 @@ void NotationActionController::selectAllSimilarElementsInRange()
     }
 }
 
+void NotationActionController::selectAllNotesInChord()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    std::set<const Chord*> chords;
+    for (const EngravingItem* item : selectedElements) {
+        if (item->isNote()) {
+            chords.insert(toNote(item)->chord());
+        }
+    }
+
+    if (chords.empty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> allNotes;
+    for (const Chord* chord : chords) {
+        for (Note* note : chord->notes()) {
+            allNotes.push_back(note);
+        }
+    }
+
+    interaction->clearSelection();
+    interaction->select(allNotes, SelectType::ADD);
+}
+
 void NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
@@ -1838,7 +1875,9 @@ void NotationActionController::openBreaksDialog()
 
 void NotationActionController::openTransposeDialog()
 {
-    interactive()->open("musescore://notation/transpose");
+    interactive()->open("musescore://notation/transpose").onResolve(this, [this](const Val&) {
+        currentNotationInteraction()->checkAndShowError();
+    });
 }
 
 void NotationActionController::openPartsDialog()

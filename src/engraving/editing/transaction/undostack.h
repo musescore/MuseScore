@@ -46,8 +46,8 @@ public:
     UndoableTransaction(Score* s, const muse::TranslatableString& actionName);
     ~UndoableTransaction();
 
-    void undo(EditData*);
-    void redo(EditData*);
+    void undo();
+    void redo();
 
     void appendCommand(UndoableCommand* cmd) { m_commands.push_back(cmd); }
     void append(UndoableTransaction&& other);
@@ -123,9 +123,6 @@ public:
     void beginTransaction(Score*, const muse::TranslatableString& actionName);
     void endTransaction(bool rollback);
 
-    void pushAndPerform(UndoableCommand*, EditData*);
-    void pushWithoutPerforming(UndoableCommand*);
-
     bool canUndo() const { return m_currentIndex > 0; }
     bool canRedo() const { return m_currentIndex < m_transactions.size(); }
     bool isClean() const { return m_cleanState == m_states[m_currentIndex]; }
@@ -148,7 +145,7 @@ public:
     }
 
     void undo(EditData*);
-    void redo(EditData*);
+    void redo();
     void reopen();
 
     void mergeTransactions(size_t startIdx);

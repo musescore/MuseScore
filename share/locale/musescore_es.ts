@@ -387,7 +387,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="95"/>
         <source>On</source>
-        <translation>En</translation>
+        <translation>Siempre</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstaff.ui" line="100"/>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="142"/>
         <source>Voltas</source>
-        <translation>Vueltas</translation>
+        <translation>Casillas de repetición</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="147"/>
@@ -9357,7 +9357,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
         <source>&amp;Master palette…</source>
-        <translation type="unfinished"/>
+        <translation>Paleta &amp;maestra...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="42"/>
@@ -10553,7 +10553,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Puede asignar bancos de sonidos a instrumentos usando el panel mezclador.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="121"/>
+        <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="133"/>
         <location filename="../../src/framework/audioplugins/tests/registeraudiopluginsscenariotest.cpp" line="161"/>
         <source>Scanning audio plugins</source>
         <translation>Escaneando complementos de audio</translation>
@@ -11377,7 +11377,7 @@ Traste %1 en cuerdas %2</translation>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation>“%1” volta</translation>
+        <translation>casilla de repetición “%1”</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="124"/>
@@ -12141,12 +12141,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="365"/>
         <source>rehearsal mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>marca de ensayo</numerusform><numerusform>marcas de ensayo</numerusform><numerusform>marcas de ensayo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="366"/>
         <source>Rehearsal mark(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Marca de ensayo</numerusform><numerusform>Marcas de ensayo</numerusform><numerusform>Marcas de ensayo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="368"/>
@@ -12161,12 +12161,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="371"/>
         <source>staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>cambio de tipo de pentagrama</numerusform><numerusform>cambios de tipo de pentagrama</numerusform><numerusform>cambios de tipo de pentagrama</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="372"/>
         <source>Staff type change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Cambio de tipo de pentagrama</numerusform><numerusform>Cambios de tipo de pentagrama</numerusform><numerusform>Cambios de tipo de pentagrama</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
@@ -12191,12 +12191,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
         <source>harp pedal diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>diagrama de pedal de arpa</numerusform><numerusform>diagramas de pedal de arpa</numerusform><numerusform>diagramas de pedal de arpa</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="381"/>
         <source>Harp pedal diagram(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Diagrama de pedal de arpa</numerusform><numerusform>Diagramas de pedal de arpa</numerusform><numerusform>Diagramas de pedal de arpa</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="383"/>
@@ -12211,42 +12211,42 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
         <source>tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>barra de trémolo</numerusform><numerusform>barras de trémolo</numerusform><numerusform>barras de trémolo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
         <source>Tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Barra de trémolo</numerusform><numerusform>Barras de trémolo</numerusform><numerusform>Barras de trémolo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
         <source>volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>casilla de repetición</numerusform><numerusform>casilla(s) de repetición</numerusform><numerusform>casilla(s) de repetición</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="390"/>
         <source>Volta(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Casilla de repetición</numerusform><numerusform>Casillas de repetición</numerusform><numerusform>Casillas de repetición</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="392"/>
         <source>hairpin segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segmento de regulador</numerusform><numerusform>segmentos de regulador</numerusform><numerusform>segmentos de regulador</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="393"/>
         <source>Hairpin segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segmento de regulador</numerusform><numerusform>Segmentos de regulador</numerusform><numerusform>Segmentos de regulador</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="395"/>
         <source>ottava segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segmento de cambio de octava</numerusform><numerusform>segmentos de cambio de octava</numerusform><numerusform>segmentos de cambio de octava</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="396"/>
         <source>Ottava segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segmento de cambio de octava</numerusform><numerusform>Segmentos de cambio de octava</numerusform><numerusform>Segmentos de cambio de octava</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="398"/>
@@ -12271,12 +12271,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>segmento de cambio de tempo gradual</numerusform><numerusform>segmentos de cambio de tempo gradual</numerusform><numerusform>segmentos de cambio de tempo gradual</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
         <source>Gradual tempo change segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Segmento de cambio de tempo gradual</numerusform><numerusform>Segmentos de cambio de tempo gradual</numerusform><numerusform>Segmentos de cambio de tempo gradual</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="407"/>
@@ -12351,12 +12351,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="428"/>
         <source>volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>casilla de repetición</numerusform><numerusform>casillas de repetición</numerusform><numerusform>casillas de repetición</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="429"/>
         <source>Volta segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Casilla de repetición</numerusform><numerusform>Casillas de repetición</numerusform><numerusform>Casillas de repetición</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="431"/>
@@ -12622,12 +12622,12 @@ Traste %1 en cuerdas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="509"/>
         <source>gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>cambio de tempo gradual</numerusform><numerusform>cambios de tempo graduales</numerusform><numerusform>cambios de tempo graduales</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="510"/>
         <source>Gradual tempo change(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Cambio de tempo gradual</numerusform><numerusform>Cambios de tempo graduales</numerusform><numerusform>Cambios de tempo graduales</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="512"/>
@@ -16644,7 +16644,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="169"/>
         <source>tempo align right of rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>alineación del tempo a la derecha de la marca de ensayo.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
@@ -17872,7 +17872,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>tipo de cambio de tempo gradual</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
@@ -28386,48 +28386,48 @@ e intente de nuevo</translation>
         <translation>Insertar Imagen</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1833"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1835"/>
         <source>MuseScore style files</source>
         <translation>Archivos de estilo de MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1834"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1836"/>
         <source>MuseScore style file</source>
         <translation>Archivo de estilo de MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1837"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1839"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="123"/>
         <source>Load style</source>
         <translation>Cargar estilo</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1838"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1840"/>
         <source>Save style</source>
         <translation>Guardar Estilo</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1848"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1850"/>
         <source>The style file could not be loaded.</source>
         <translation>No se pudo cargar el archivo de estilo</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1854"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1856"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>Dado que este archivo de estilo pertenece a una versión diferente de MuseScore, no se garantiza que tu partitura se muestre correctamente.</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1856"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1858"/>
         <source>Click OK to load anyway.</source>
         <translation>Clic en OK para cargar de todos modos.</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1874"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1876"/>
         <source>The style file could not be saved.</source>
         <translation>No se pudo guardar el archivo de estilo.</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1875"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1877"/>
         <source>An error occurred.</source>
         <translation>Ha ocurrido un error.</translation>
     </message>
@@ -30122,7 +30122,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="157"/>
         <source>At start of system, start volta:</source>
-        <translation type="unfinished"/>
+        <translation>Al inicio del sistema, inicio de casilla de repetición:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="162"/>
@@ -33870,6 +33870,11 @@ fallo: %2</translation>
         <translation>Carpetas</translation>
     </message>
     <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FoldersSection.qml" line="86"/>
+        <source>Rescan VST3 plugins</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>
         <source>Video converter</source>
         <translation type="unfinished"/>
@@ -34438,42 +34443,42 @@ fallo: %2</translation>
         <translation>Abajo</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="91"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="100"/>
         <source>Scores</source>
         <translation>Partituras</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="95"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="104"/>
         <source>Styles</source>
         <translation>Estilos</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="99"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="108"/>
         <source>Instruments and score orders</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="104"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="113"/>
         <source>Templates</source>
         <translation>Plantillas</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="108"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="117"/>
         <source>Plugins</source>
         <translation>Complementos</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="112"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="121"/>
         <source>SoundFonts</source>
         <translation>SoundFonts</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="117"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="126"/>
         <source>Musical symbol fonts</source>
         <translation>Tipografías de símbolos musicales</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="123"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="132"/>
         <source>VST3</source>
         <translation>VST3</translation>
     </message>
@@ -34913,23 +34918,23 @@ fallo: %2</translation>
         <translation>Guardar en línea</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2353"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2355"/>
         <source>File “%1” seems not corrupted</source>
         <translation>El archivo &quot;%1&quot; no parece dañado</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2354"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2356"/>
         <source>This file does not seem to contain errors.</source>
         <translation>Este archivo no parece contener errores.</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2357"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2359"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
         <source>File “%1” is corrupted</source>
         <translation>El archivo “%1” está corrupto</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2359"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2361"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
         <translation>Este archivo contiene errores que podrían hacer que MuseScore Studio funcione mal. Por favor, arreglemos antes, para prevenir fallos y corrupciones adicionales.</translation>
     </message>
@@ -38339,12 +38344,12 @@ fallo: %2</translation>
         <translation>Ingresar silencio de compás completo</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2177"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2179"/>
         <source>Display concert pitch</source>
         <translation> Mostrar afinación de concierto</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2178"/>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2180"/>
         <source>Display transposed</source>
         <translation>Mostrar transpuesto</translation>
     </message>

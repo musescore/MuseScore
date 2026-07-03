@@ -57,12 +57,12 @@ std::vector<EngravingObject*> mu::engraving::compoundObjects(EngravingObject* ob
     return objects;
 }
 
-void UndoableCommand::undo(EditData* ed)
+void UndoableCommand::undo()
 {
-    flip(ed);
+    flip();
 }
 
-void UndoableCommand::redo(EditData* ed)
+void UndoableCommand::redo()
 {
-    flip(ed);
+    flip();
 }

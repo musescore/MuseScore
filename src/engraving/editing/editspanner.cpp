@@ -34,7 +34,7 @@ using namespace mu::engraving;
 //   ChangeSpannerElements
 //---------------------------------------------------------
 
-void ChangeSpannerElements::flip(EditData*)
+void ChangeSpannerElements::flip()
 {
     EngravingItem* oldStartElement   = spanner->startElement();
     EngravingItem* oldEndElement     = spanner->endElement();
@@ -84,7 +84,7 @@ void ChangeSpannerElements::flip(EditData*)
 //   ChangeStartEndSpanner
 //---------------------------------------------------------
 
-void ChangeStartEndSpanner::flip(EditData*)
+void ChangeStartEndSpanner::flip()
 {
     EngravingItem* s = spanner->startElement();
     EngravingItem* e = spanner->endElement();

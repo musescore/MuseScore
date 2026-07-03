@@ -83,9 +83,10 @@ target_sources(iex_mei PRIVATE
     thirdparty/libmei/shared.h   
 )
 
+get_property(_pugixml_src GLOBAL PROPERTY pugixml_SOURCE_DIR)
 target_include_directories(iex_mei PRIVATE
     internal
-    ${MUSE_FRAMEWORK_SRC_PATH}/global/thirdparty/pugixml
+    ${_pugixml_src}/pugixml/src
 )
 
 target_link_libraries(iex_mei PRIVATE engraving)

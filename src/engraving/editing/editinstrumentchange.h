@@ -35,7 +35,7 @@ class ChangeInstrument : public UndoableCommand
     InstrumentChange* is = nullptr;
     Instrument* instrument = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrument(InstrumentChange* _is, Instrument* i)

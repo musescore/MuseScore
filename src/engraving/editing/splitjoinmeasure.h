@@ -26,14 +26,15 @@ namespace mu::engraving {
 class MasterScore;
 class Measure;
 class Fraction;
+class Transaction;
 
 class SplitJoinMeasure
 {
 public:
     /// Splits the measure at the given tick, at the given tick.
-    static void splitMeasure(MasterScore* masterScore, const Fraction& tick);
+    static void splitMeasure(Transaction& tx, MasterScore* masterScore, const Fraction& tick);
 
     /// Joins the measures from tick1 up to (including) tick2.
-    static void joinMeasures(MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2);
+    static void joinMeasures(Transaction& tx, MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2);
 };
 }

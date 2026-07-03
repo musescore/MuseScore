@@ -195,28 +195,28 @@
         <source>Large Korean transverse bamboo flute with a distinctive buzzing timbre.</source>
         <comment>daegeum description</comment>
         <extracomment>description for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Velika korejska prečna flavta z značilnim brenčečim zvenom.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
         <source>Daegeum</source>
         <comment>daegeum trackName</comment>
         <extracomment>trackName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Degum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
         <source>Daegeum</source>
         <comment>daegeum longName</comment>
         <extracomment>longName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Degum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="281"/>
         <source>Dg.</source>
         <comment>daegeum shortName</comment>
         <extracomment>shortName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dg.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="284"/>
@@ -769,21 +769,21 @@
         <source>Japanese double-reed instrument used in gagaku court music.</source>
         <comment>hichiriki description</comment>
         <extracomment>description for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japonsko dvojezično glasbilo iz dvorne glasbe gagaku.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="460"/>
         <source>Hichiriki</source>
         <comment>hichiriki trackName</comment>
         <extracomment>trackName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hičiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
         <source>Hichiriki</source>
         <comment>hichiriki longName</comment>
         <extracomment>longName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hičiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
@@ -1980,28 +1980,28 @@
         <source>Spanish double-reed folk instrument from the Castile region. In F♯.</source>
         <comment>fs-castilian-dulzaina description</comment>
         <extracomment>description for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Špansko dvojezično ljudsko glasbilo v Fis-u, ki prihaja iz Kastilije.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
         <source>Castilian Dulzaina</source>
         <comment>fs-castilian-dulzaina trackName</comment>
         <extracomment>trackName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kastilska dulsajna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="847"/>
         <source>Castilian Dulzaina</source>
         <comment>fs-castilian-dulzaina longName</comment>
         <extracomment>longName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kastilska dulsajna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="849"/>
         <source>Cast. Dulz.</source>
         <comment>fs-castilian-dulzaina shortName</comment>
         <extracomment>shortName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kast. Duls.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="851"/>

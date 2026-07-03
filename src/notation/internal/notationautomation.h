@@ -39,40 +39,14 @@ namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {
 public:
-    NotationAutomation(IGetScore* getScore, muse::async::Channel<muse::RectF> notationChanged);
+    NotationAutomation();
 
     bool isAutomationModeEnabled() const override;
     void setAutomationModeEnabled(bool enabled) override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
-    QVariant automationLinesData() const override;
-    muse::async::Notification automationLinesDataChanged() const override; // TODO: probably a channel specifying indices
-
-    void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y) override;
-
 private:
-    enum class PointType : unsigned char {
-        UNKNOWN = 0,
-        IN,
-        OUT,
-        BOTH
-    };
-
-    void initAutomationLinesData();
-
-    QVariantList linesDataForSystem(const System* system) const;
-    QVariantList linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
-
-    mu::engraving::Score* score() const;
-    mu::engraving::IAutomation* automation() const;
-
-    IGetScore* m_getScore = nullptr;
-    muse::async::Channel<muse::RectF> m_notationChanged;
-
     bool m_isAutomationModeEnabled = false;
     muse::async::Notification m_automationModeEnabledChanged;
-
-    QVariantList m_automationLinesData;
-    muse::async::Notification m_automationLinesDataChanged;
 };
 }

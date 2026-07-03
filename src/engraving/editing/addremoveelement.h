@@ -34,8 +34,8 @@ class AddElement : public UndoableCommand
     EngravingItem* element = nullptr;
 
     void endUndoRedo(bool) const;
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     AddElement(EngravingItem*);
@@ -58,8 +58,8 @@ class RemoveElement : public UndoableCommand
 
 public:
     RemoveElement(EngravingItem*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
     const char* name() const override;
 
@@ -77,7 +77,7 @@ class ChangeElement : public UndoableCommand
     EngravingItem* oldElement = nullptr;
     EngravingItem* newElement = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
@@ -95,7 +95,7 @@ class ChangeParent : public UndoableCommand
     EngravingItem* parent = nullptr;
     staff_idx_t staffIdx = muse::nidx;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeParent(EngravingItem* e, EngravingItem* p, staff_idx_t si)
@@ -114,7 +114,7 @@ class ChangeSegmentParent : public UndoableCommand
     Measure* parent = nullptr;
     Fraction tick;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeSegmentParent(Segment* s, Measure* p, Fraction t)
@@ -148,8 +148,8 @@ class Unlink : public LinkUnlink
     OBJECT_ALLOCATOR(engraving, Unlink)
 public:
     Unlink(EngravingObject*);
-    void undo(EditData*) override { link(); }
-    void redo(EditData*) override { unlink(); }
+    void undo() override { link(); }
+    void redo() override { unlink(); }
 
     UNDO_TYPE(CommandType::Unlink)
     UNDO_NAME("Unlink")
@@ -161,8 +161,8 @@ class Link : public LinkUnlink
 public:
     Link(EngravingObject*, EngravingObject*);
 
-    void undo(EditData*) override { unlink(); }
-    void redo(EditData*) override { link(); }
+    void undo() override { unlink(); }
+    void redo() override { link(); }
 
     UNDO_TYPE(CommandType::Link)
     UNDO_NAME("Link")

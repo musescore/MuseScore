@@ -42,7 +42,15 @@ static std::string platformMuseSoundsAppName()
 static muse::UriQuery correctThumbnailSize(const UriQuery& uri)
 {
     String uriStr = String::fromStdString(uri.toString());
-    uriStr.replace(u"/library-images/", u"/cdn-cgi/image/w=240,q=80,f=webp/library-images/");
+
+    // Thumbnails can live under different CDN folders (library-images, bundle-images,
+    // platform-subscription-images, etc.), so resize by host rather than a fixed folder name
+    static const String host(u"muse-cdn.com/");
+    const size_t hostIdx = uriStr.indexOf(host);
+    if (hostIdx != muse::nidx) {
+        uriStr.insert(hostIdx + host.size(), u"cdn-cgi/image/w=240,q=80,f=webp/");
+    }
+
     return UriQuery(uriStr.toStdString());
 }
 
@@ -57,21 +65,28 @@ static QByteArray soundsRequestJson()
             museScoreStudioPageSections {
               ... on ProductPageSectionDynamic {
                 title(locale: {locale: "%1"})
-                productCards {
-                  ... on ProductCardRegular {
-                    iconImageUrl
-                    product(locale: {locale: "%1"}) {
-                      ... on ProductLibrary {
-                        code
-                        title
-                        subtitle
-                        compatibleWith {
-                          museSoundManager
-                          museHub
-                        }
-                      }
-                    }
-                  }
+                productCards { ...CardFields }
+              }
+              ... on ProductPageSectionRegular {
+                title(locale: {locale: "%1"})
+                productCards { ...CardFields }
+              }
+            }
+          }
+        }
+        fragment CardFields on ProductCard {
+          ... on ProductCardRegular {
+            iconImageUrl
+            product(locale: {locale: "%1"}) {
+              ... on ProductBase {
+                code
+                title
+                subtitle
+              }
+              ... on ProductLibrary {
+                compatibleWith {
+                  museSoundManager
+                  museHub
                 }
               }
             }
@@ -175,8 +190,12 @@ SoundCatalogInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sound
             }
 
             JsonObject compatibleWithObj = productObj.value("compatibleWith").toObject();
-            if (!compatibleWithObj.empty() && compatibleWithObj.contains(museSoundsAppName)
-                && !compatibleWithObj.value(museSoundsAppName).toBool()) {
+            if (compatibleWithObj.empty()) {
+                // Products without compatibleWith info are only manageable through MuseHub
+                if (museSoundsAppName != "museHub") {
+                    continue;
+                }
+            } else if (compatibleWithObj.contains(museSoundsAppName) && !compatibleWithObj.value(museSoundsAppName).toBool()) {
                 continue;
             }
 

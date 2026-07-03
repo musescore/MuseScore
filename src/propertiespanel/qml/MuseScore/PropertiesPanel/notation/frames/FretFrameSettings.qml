@@ -56,6 +56,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Chords")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "ChordsTab"
             navigation.panel: root.navigationPanel
@@ -64,6 +65,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Frame")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "FrameTab"
             navigation.panel: root.navigationPanel

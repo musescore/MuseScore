@@ -1,7 +1,6 @@
 muse_create_module(braille)
 
 add_subdirectory(tables)
-add_subdirectory(thirdparty/liblouis)
 
 target_sources(braille PRIVATE
     braillemodule.cpp
@@ -33,6 +32,9 @@ target_link_libraries(braille PRIVATE
     engraving
     liblouis
 )
+
+get_property(_liblouis_tables GLOBAL PROPERTY liblouis_TABLES)
+install(FILES ${_liblouis_tables} DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/tables)
 
 if (MUE_BUILD_BRAILLE_TESTS)
     add_subdirectory(tests)

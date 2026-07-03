@@ -35,7 +35,7 @@ class ChangeSpannerElements : public UndoableCommand
     EngravingItem* startElement = nullptr;
     EngravingItem* endElement = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeSpannerElements(Spanner* s, EngravingItem* se, EngravingItem* ee)
@@ -54,7 +54,7 @@ class ChangeStartEndSpanner : public UndoableCommand
     EngravingItem* start = nullptr;
     EngravingItem* end = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStartEndSpanner(Spanner* sp, EngravingItem* s, EngravingItem* e)

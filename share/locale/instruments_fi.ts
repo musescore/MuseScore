@@ -195,28 +195,28 @@
         <source>Large Korean transverse bamboo flute with a distinctive buzzing timbre.</source>
         <comment>daegeum description</comment>
         <extracomment>description for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Suuri korealainen poikkihuilu, joka on valmistettu bambusta ja jossa on tunnusomainen pörisevä sointiväri.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
         <source>Daegeum</source>
         <comment>daegeum trackName</comment>
         <extracomment>trackName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daegeum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
         <source>Daegeum</source>
         <comment>daegeum longName</comment>
         <extracomment>longName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daegeum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="281"/>
         <source>Dg.</source>
         <comment>daegeum shortName</comment>
         <extracomment>shortName for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dg.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="284"/>
@@ -769,21 +769,21 @@
         <source>Japanese double-reed instrument used in gagaku court music.</source>
         <comment>hichiriki description</comment>
         <extracomment>description for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japanilainen kaksoisruokosoitin, jota käytetään gagaku-hovimusiikissa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="460"/>
         <source>Hichiriki</source>
         <comment>hichiriki trackName</comment>
         <extracomment>trackName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hichiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
         <source>Hichiriki</source>
         <comment>hichiriki longName</comment>
         <extracomment>longName for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hichiriki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
@@ -1980,28 +1980,28 @@
         <source>Spanish double-reed folk instrument from the Castile region. In F♯.</source>
         <comment>fs-castilian-dulzaina description</comment>
         <extracomment>description for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Espanjalainen Kastilian alueen kaksoisruokoinen kansansoitin. F♯.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
         <source>Castilian Dulzaina</source>
         <comment>fs-castilian-dulzaina trackName</comment>
         <extracomment>trackName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kastilian dulzaina</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="847"/>
         <source>Castilian Dulzaina</source>
         <comment>fs-castilian-dulzaina longName</comment>
         <extracomment>longName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kastilian dulzaina</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="849"/>
         <source>Cast. Dulz.</source>
         <comment>fs-castilian-dulzaina shortName</comment>
         <extracomment>shortName for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kast. dulz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="851"/>
@@ -5816,28 +5816,28 @@
         <source>Japanese mouth organ. A free-reed instrument used in gagaku court music.</source>
         <comment>sho description</comment>
         <extracomment>description for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japanilainen suuharmooni. Vapaalehdykkäsoitin, jota käytetään gagaku-hovimusiikissa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2072"/>
         <source>Shō</source>
         <comment>sho trackName</comment>
         <extracomment>trackName for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shō</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2074"/>
         <source>Shō</source>
         <comment>sho longName</comment>
         <extracomment>longName for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shō</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2076"/>
         <source>Shō</source>
         <comment>sho shortName</comment>
         <extracomment>shortName for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shō</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2079"/>
@@ -10590,224 +10590,224 @@
         <source>Korean hourglass-shaped drum used in samulnori percussion ensemble.</source>
         <comment>samul-janggu description</comment>
         <extracomment>description for Samul Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen tiimalasin muotoinen rumpu, jota käytetään samulnori-perkussiokokoonpanossa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3906"/>
         <source>Samul Janggu</source>
         <comment>samul-janggu trackName</comment>
         <extracomment>trackName for Samul Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Samul janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3908"/>
         <source>Samul Janggu</source>
         <comment>samul-janggu longName</comment>
         <extracomment>longName for Samul Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Samul janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3910"/>
         <source>Sm.Jngu.</source>
         <comment>samul-janggu shortName</comment>
         <extracomment>shortName for Samul Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sm. jngu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
         <source>Korean hourglass-shaped drum used in sanjo music.</source>
         <comment>sanjo-janggu description</comment>
         <extracomment>description for Sanjo Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen tiimalasin muotoinen rumpu, jota käytetään sanjo-musiikissa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3915"/>
         <source>Sanjo Janggu</source>
         <comment>sanjo-janggu trackName</comment>
         <extracomment>trackName for Sanjo Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sanjo janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3917"/>
         <source>Sanjo Janggu</source>
         <comment>sanjo-janggu longName</comment>
         <extracomment>longName for Sanjo Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sanjo janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3919"/>
         <source>Sj.Jngu.</source>
         <comment>sanjo-janggu shortName</comment>
         <extracomment>shortName for Sanjo Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sj. jngu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4165"/>
         <source>Korean double-headed barrel drum used in samulnori percussion ensemble.</source>
         <comment>samul-buk description</comment>
         <extracomment>description for Samul Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen kaksikalvoinen tynnyrirumpu, jota käytetään samulnori-perkussiokokoonpanossa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4167"/>
         <source>Samul Buk</source>
         <comment>samul-buk trackName</comment>
         <extracomment>trackName for Samul Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Samul buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4169"/>
         <source>Samul Buk</source>
         <comment>samul-buk longName</comment>
         <extracomment>longName for Samul Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Samul buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4171"/>
         <source>Sm. Buk</source>
         <comment>samul-buk shortName</comment>
         <extracomment>shortName for Samul Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sm. buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4174"/>
         <source>Korean barrel drum used to accompany pansori singing.</source>
         <comment>sori-buk description</comment>
         <extracomment>description for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen tynnyrirumpu, jota käytetään pansori-laulun säestämiseen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4176"/>
         <source>Sori Buk</source>
         <comment>sori-buk trackName</comment>
         <extracomment>trackName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sori buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4178"/>
         <source>Sori Buk</source>
         <comment>sori-buk longName</comment>
         <extracomment>longName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sori buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4180"/>
         <source>So. Buk</source>
         <comment>sori-buk shortName</comment>
         <extracomment>shortName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>So. buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
         <source>Ancient Chinese plucked seven-string zither.</source>
         <comment>guqin description</comment>
         <extracomment>description for Guqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Muinainen kiinalainen näppäiltävä seitsenkielinen sitra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6255"/>
         <source>Guqin</source>
         <comment>guqin trackName</comment>
         <extracomment>trackName for Guqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Guqin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6257"/>
         <source>Guqin</source>
         <comment>guqin longName</comment>
         <extracomment>longName for Guqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Guqin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6259"/>
         <source>Gq.</source>
         <comment>guqin shortName</comment>
         <extracomment>shortName for Guqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gq.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6262"/>
         <source>Chinese four-stringed plucked lute.</source>
         <comment>pipa description</comment>
         <extracomment>description for Pipa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kiinalainen nelikielinen näppäiltävä luuttu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6264"/>
         <source>Pipa</source>
         <comment>pipa trackName</comment>
         <extracomment>trackName for Pipa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pipa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6266"/>
         <source>Pipa</source>
         <comment>pipa longName</comment>
         <extracomment>longName for Pipa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pipa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6268"/>
         <source>Pi.</source>
         <comment>pipa shortName</comment>
         <extracomment>shortName for Pipa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6271"/>
         <source>Chinese hammered dulcimer.</source>
         <comment>yangqin description</comment>
         <extracomment>description for Yangqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kiinalainen lyömäsitra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6273"/>
         <source>Yangqin</source>
         <comment>yangqin trackName</comment>
         <extracomment>trackName for Yangqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Yangqin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6275"/>
         <source>Yangqin</source>
         <comment>yangqin longName</comment>
         <extracomment>longName for Yangqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Yangqin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6277"/>
         <source>Yq.</source>
         <comment>yangqin shortName</comment>
         <extracomment>shortName for Yangqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Yq.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6280"/>
         <source>Korean plucked twelve-string zither.</source>
         <comment>gayageum description</comment>
         <extracomment>description for Gayageum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen näppäiltävä kaksitoistakielinen sitra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6282"/>
         <source>Gayageum</source>
         <comment>gayageum trackName</comment>
         <extracomment>trackName for Gayageum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gayageum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6284"/>
         <source>Gayageum</source>
         <comment>gayageum longName</comment>
         <extracomment>longName for Gayageum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gayageum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6286"/>
         <source>Gyg.</source>
         <comment>gayageum shortName</comment>
         <extracomment>shortName for Gayageum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gyg.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6402"/>
@@ -10856,28 +10856,28 @@
         <source>Korean bowed zither with thick silk strings.</source>
         <comment>ajaeng description</comment>
         <extracomment>description for Ajaeng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korealainen jousella soitettava sitra, jossa on paksut silkkikielet.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6745"/>
         <source>Ajaeng</source>
         <comment>ajaeng trackName</comment>
         <extracomment>trackName for Ajaeng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ajaeng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6747"/>
         <source>Ajaeng</source>
         <comment>ajaeng longName</comment>
         <extracomment>longName for Ajaeng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ajaeng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6749"/>
         <source>Aj.</source>
         <comment>ajaeng shortName</comment>
         <extracomment>shortName for Ajaeng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Aj.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6751"/>
@@ -20272,7 +20272,7 @@
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Suuri viola jonka alin kieli on viritetty G:hen. Joskus kutsutaan G-violoniksi tai suureksi bassoviuluksi. Viuluperheen toiseksi alin jäsen.</translation>
+        <translation>Suuri gambasoitin jonka alin kieli on viritetty G:hen. Joskus kutsutaan G-violoneksi tai suureksi bassoviuluksi. Viuluperheen toiseksi alin jäsen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6666"/>
@@ -20286,7 +20286,7 @@
         <source>G Violone</source>
         <comment>violone longName</comment>
         <extracomment>longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>G-viulu</translation>
+        <translation>G-violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6670"/>
@@ -20328,7 +20328,7 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Suuri viola jonka alin kieli on viritetty D:hen. Kutsutaan joskus D-violoniksi tai kontrabassoviuluksi. Viuluperheen matalin jäsen.</translation>
+        <translation>Suuri gambasoitin, jonka alin kieli on viritetty D-sävelelle. Kutsutaan toisinaan D-violoneksi tai kontrabassogambaksi. Gambaperheen matalaäänisin jäsen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6683"/>
@@ -20542,22 +20542,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
         <source>Dizis</source>
-        <translation>Dizis</translation>
+        <translation>Dizit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>Shakuhachis</source>
-        <translation>Shakuhachis</translation>
+        <translation>Shakuhachit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>Hichikiris</source>
-        <translation type="unfinished"/>
+        <translation>Hichikit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>Fifes</source>
-        <translation>Fifes</translation>
+        <translation>Fifet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
@@ -20567,7 +20567,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
         <source>Flageolets</source>
-        <translation>Flageolets</translation>
+        <translation>Flageoletit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="96"/>
@@ -20592,7 +20592,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="100"/>
         <source>Quenas</source>
-        <translation>Quenas</translation>
+        <translation>Quenat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
@@ -20602,17 +20602,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="102"/>
         <source>Dulzainas</source>
-        <translation type="unfinished"/>
+        <translation>Dulzainat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="103"/>
         <source>Shawms</source>
-        <translation>Shawms</translation>
+        <translation>Schalmeijat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="104"/>
         <source>Cromornes</source>
-        <translation>Cromornes</translation>
+        <translation>Raitapillit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="105"/>
@@ -20622,7 +20622,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="106"/>
         <source>Cornamuses</source>
-        <translation>Cornamuses</translation>
+        <translation>Kornamuusit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="107"/>
@@ -20632,7 +20632,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="108"/>
         <source>Rauschpfeifes</source>
-        <translation>Rauschpfeifes</translation>
+        <translation>Rauschpfeifet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="109"/>
@@ -20642,7 +20642,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="110"/>
         <source>Shenais</source>
-        <translation>Shenais</translation>
+        <translation>Shehnait</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="111"/>
@@ -20657,17 +20657,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="113"/>
         <source>Xaphoons</source>
-        <translation>Xaphoons</translation>
+        <translation>Xaphoonit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="114"/>
         <source>Tarogatos</source>
-        <translation>Tarogatos</translation>
+        <translation>Tárogatót</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="115"/>
         <source>Octavins</source>
-        <translation>Octavins</translation>
+        <translation>Oktaviinit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="116"/>
@@ -20682,22 +20682,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="118"/>
         <source>Reed Contrabasses</source>
-        <translation>Reed kontrabassot</translation>
+        <translation>Reed-kontrabassot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="119"/>
         <source>Dulcians</source>
-        <translation>Dulcians</translation>
+        <translation>Dulsiaanit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="120"/>
         <source>Racketts</source>
-        <translation>Racketts</translation>
+        <translation>Ranketit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Sarrusophones</source>
-        <translation>Sarrusophones</translation>
+        <translation>Sarrusofonit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="122"/>
@@ -20722,7 +20722,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
         <source>Shengs</source>
-        <translation>Suu-urut (Shengs)</translation>
+        <translation>Shengit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
@@ -20777,7 +20777,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
         <source>Bugles</source>
-        <translation>Merkkitorvet</translation>
+        <translation>Signaalitorvet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
@@ -20787,17 +20787,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Ophicleides</source>
-        <translation>Ophicleides</translation>
+        <translation>Ofikleidit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="140"/>
         <source>Cornetts</source>
-        <translation>Renesanssikornetit</translation>
+        <translation>Cornettit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Serpents</source>
-        <translation>Serpents</translation>
+        <translation>Serpentit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
@@ -20807,12 +20807,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
         <source>Cimbassos</source>
-        <translation>Matalat vaskipuhaltimet</translation>
+        <translation>Cimbassot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="144"/>
         <source>Sackbuts</source>
-        <translation>Sackbuts</translation>
+        <translation>Sackbutit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
@@ -20832,7 +20832,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
         <source>Conches</source>
-        <translation>Conches</translation>
+        <translation>Kotilotorvet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="149"/>
@@ -20842,7 +20842,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="150"/>
         <source>Rag Dungs</source>
-        <translation>Rag Dungs</translation>
+        <translation>Rag dungit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="151"/>
@@ -20857,7 +20857,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="153"/>
         <source>Vuvuzelas</source>
-        <translation>Vuvuzelas</translation>
+        <translation>Vuvuzelat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="154"/>
@@ -20877,7 +20877,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Steel Drums</source>
-        <translation>Teräspannu</translation>
+        <translation>Teräsrummut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="158"/>
@@ -20897,7 +20897,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Flexatones</source>
-        <translation>Flexatones</translation>
+        <translation>Fleksatonit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
@@ -21012,7 +21012,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>
         <source>Mtn. Dulcimers</source>
-        <translation>Mtn. Dulcimers</translation>
+        <translation>Mountain dulcimerit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
@@ -21027,7 +21027,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Bouzoukis</source>
-        <translation>Bouzoukis</translation>
+        <translation>Bouzoukit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="188"/>
@@ -21037,22 +21037,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
         <source>Guqins</source>
-        <translation type="unfinished"/>
+        <translation>Guqinit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="190"/>
         <source>Pipas</source>
-        <translation type="unfinished"/>
+        <translation>Pipat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="191"/>
         <source>Yangqins</source>
-        <translation type="unfinished"/>
+        <translation>Yangqinit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="192"/>
         <source>Gayageums</source>
-        <translation type="unfinished"/>
+        <translation>Gayageumit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
@@ -21127,7 +21127,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="207"/>
         <source>Ajaengs</source>
-        <translation type="unfinished"/>
+        <translation>Ajaengit</translation>
     </message>
 </context>
 <context>

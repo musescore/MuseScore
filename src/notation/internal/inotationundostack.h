@@ -29,6 +29,7 @@
 
 namespace mu::engraving {
 class EditData;
+class Transaction;
 enum class ElementType : unsigned char;
 }
 
@@ -45,6 +46,8 @@ public:
     virtual void redo(mu::engraving::EditData*) = 0;
 
     virtual void undoRedoToIndex(size_t, mu::engraving::EditData*) = 0;
+
+    virtual void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) = 0;
 
     virtual void prepareChanges(const muse::TranslatableString&) = 0;
     virtual void rollbackChanges() = 0;

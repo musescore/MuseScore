@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "../editing/editinstrumentchange.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
 #include "keysig.h"
@@ -92,6 +93,8 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         return;
     }
 
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+
     Fraction tickStart = segment()->tick();
     Part* part = staff()->part();
     Interval oldV = part->instrument(tickStart)->transpose();
@@ -135,7 +138,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
     for (EngravingObject* se : linkList()) {
         InstrumentChange* lic = static_cast<InstrumentChange*>(se);
         Instrument* newInstrument = new Instrument(*instrument);
-        lic->score()->undo(new ChangeInstrument(lic, newInstrument));
+        tx.push(new ChangeInstrument(lic, newInstrument));
     }
 
     // transpose for current score only
@@ -148,7 +151,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         } else {
             tickEnd = Fraction::fromTicks(i->first);
         }
-        Transpose::transpositionChanged(score(), part, oldKv, tickStart, tickEnd);
+        Transpose::transpositionChanged(tx, score(), part, oldKv, tickStart, tickEnd);
     }
 
     //: The text of an "instrument change" marking. It is an instruction to the player to switch to another instrument.

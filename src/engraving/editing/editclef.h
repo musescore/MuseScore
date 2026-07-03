@@ -35,7 +35,7 @@ class ChangeClefType : public UndoableCommand
     ClefType concertClef;
     ClefType transposingClef;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeClefType(Clef*, ClefType cl, ClefType tc);

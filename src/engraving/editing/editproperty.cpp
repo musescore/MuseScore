@@ -36,7 +36,7 @@ using namespace mu::engraving;
 //   ChangeProperty::flip
 //---------------------------------------------------------
 
-void ChangeProperty::flip(EditData*)
+void ChangeProperty::flip()
 {
     LOG_UNDO() << element->typeName() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
@@ -59,14 +59,14 @@ std::vector<EngravingObject*> ChangeProperty::objectItems() const
 //   ChangeBracketProperty::flip
 //---------------------------------------------------------
 
-void ChangeBracketProperty::flip(EditData* ed)
+void ChangeBracketProperty::flip()
 {
     if (!staff) {
         return;
     }
 
     element = staff->brackets()[level];
-    ChangeProperty::flip(ed);
+    ChangeProperty::flip();
     level = toBracketItem(element)->column();
 }
 
@@ -74,9 +74,9 @@ void ChangeBracketProperty::flip(EditData* ed)
 //   ChangeTextLineProperty::flip
 //---------------------------------------------------------
 
-void ChangeTextLineProperty::flip(EditData* ed)
+void ChangeTextLineProperty::flip()
 {
-    ChangeProperty::flip(ed);
+    ChangeProperty::flip();
     if (element->isTextLine()) {
         toTextLine(element)->initStyle();
     }

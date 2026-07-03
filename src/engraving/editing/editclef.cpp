@@ -74,7 +74,7 @@ ChangeClefType::ChangeClefType(Clef* c, ClefType cl, ClefType tc)
     transposingClef = tc;
 }
 
-void ChangeClefType::flip(EditData*)
+void ChangeClefType::flip()
 {
     ClefType ocl = clef->concertClef();
     ClefType otc = clef->transposingClef();

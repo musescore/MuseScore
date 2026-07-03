@@ -24,6 +24,7 @@
 #include "editing/addremoveelement.h"
 #include "editing/editsystemlocks.h"
 #include "editing/mscoreview.h"
+#include "editing/transaction/transaction.h"
 #include "style/defaultstyle.h"
 
 #include "dom/score.h"
@@ -455,12 +456,12 @@ void DomAccessor::undoRemoveElement(EngravingItem* item)
     score()->undoRemoveElement(item);
 }
 
-void DomAccessor::undo(UndoableCommand* cmd, EditData* ed) const
+void DomAccessor::undo(UndoableCommand* cmd) const
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    score()->undo(cmd, ed);
+    score()->undo(cmd);
 }
 
 void DomAccessor::addElement(EngravingItem* item)
@@ -484,7 +485,8 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::updateSystemLocksOnCreateMMRests(tx, score(), first, last);
 }
 
 void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents)

@@ -36,6 +36,7 @@
 #include "dom/text.h"
 #include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
+#include "editing/transaction/transaction.h"
 #include "types/typesconv.h"
 
 // api
@@ -628,12 +629,14 @@ void Score::doLayout(Fraction* startTick, Fraction* endTick)
 
 void Score::addRemoveSystemLocks(int interval, bool lock)
 {
-    EditSystemLocks::addRemoveSystemLocks(score(), interval, lock);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::addRemoveSystemLocks(tx, score(), interval, lock);
 }
 
 void Score::makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last)
 {
-    EditSystemLocks::makeIntoSystem(score(), first->measureBase(), last->measureBase());
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::makeIntoSystem(tx, score(), first->measureBase(), last->measureBase());
 }
 
 void Score::showElementInScore(apiv1::EngravingItem* wrappedElement, int staffIdx)

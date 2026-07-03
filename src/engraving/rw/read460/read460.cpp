@@ -22,6 +22,7 @@
 #include "read460.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "../types/types.h"
 
@@ -361,6 +362,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
     assert(dst->isType(SegmentType::Duration));
 
     Score* score = dst->score();
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     ReadContext ctx(score);
     ctx.setPasteMode(true);
 
@@ -670,7 +673,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        Transpose::undoTransposeHarmony(score, harmony, interval);
+                        Transpose::undoTransposeHarmony(tx, harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -812,6 +815,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
     for (Score* s : score->scoreList()) {     // for all parts
         s->connectTies();
+        s->undoRemoveStaleTieJumpPoints(false);
 
         for (Spanner* sp : score->unmanagedSpanners()) {
             if (sp->isLyricsLine() && toLyricsLine(sp)->isDash()) {
@@ -879,6 +883,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
     Score* score = dst->score();
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     ReadContext ctx(score);
     ctx.setPasteMode(true);
 
@@ -1067,7 +1073,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     Interval interval = staffDest->transpose(destTick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        Transpose::undoTransposeHarmony(score, el, interval);
+                        Transpose::undoTransposeHarmony(tx, el, interval);
                     }
                     el->setParent(seg);
                     score->undoAddElement(el);

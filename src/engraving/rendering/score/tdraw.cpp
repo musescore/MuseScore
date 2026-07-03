@@ -125,6 +125,7 @@
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
 #include "dom/staffvisibilityindicator.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -350,6 +351,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter, opt);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
+        break;
+    case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter, opt);
         break;
@@ -2059,13 +2062,16 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
             } else {
                 s = item->size() * DPMM;
             }
-            if (opt.isPrinting && !MScore::svgPrinting) {
-                // use original image size for printing, but not for svg for reasonable file size.
+            Transform t = painter->worldTransform();
+            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
+            int maxDim = item->configuration()->maxScaledImageDim();
+            bool useDirectDraw = (opt.isPrinting && !MScore::svgPrinting)
+                                 || (maxDim > 0 && std::max(ss.width(), ss.height()) > maxDim);
+
+            if (useDirectDraw) {
                 painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
                 painter->drawPixmap(PointF(0, 0), *item->rasterImage());
             } else {
-                Transform t = painter->worldTransform();
-                muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
@@ -2763,6 +2769,13 @@ void TDraw::draw(const StaffText* item, Painter* painter, const PaintOptions& op
     if (item->hasSoundFlag()) {
         draw(item->soundFlag(), painter, opt);
     }
+}
+
+void TDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextBase(item, painter, opt);
 }
 
 void TDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions& opt)

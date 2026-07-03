@@ -59,8 +59,8 @@ class FretDataChange : public UndoableCommand
     FretUndoData m_undoData;
     String m_harmonyName;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretDataChange(FretDiagram* d, const String& harmonyName)
@@ -84,8 +84,8 @@ class FretDot : public UndoableCommand
     FretDotType dtype;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretDot(FretDiagram* d, int _string, int _fret, bool _add = false, FretDotType _dtype = FretDotType::NORMAL)
@@ -105,8 +105,8 @@ class FretMarker : public UndoableCommand
     FretMarkerType mtype;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretMarker(FretDiagram* d, int _string, FretMarkerType _mtype)
@@ -127,8 +127,8 @@ class FretBarre : public UndoableCommand
     bool add = 0;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretBarre(FretDiagram* d, int _string, int _fret, bool _add = false)
@@ -146,8 +146,8 @@ class FretClear : public UndoableCommand
     FretDiagram* diagram = nullptr;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretClear(FretDiagram* d)
@@ -165,8 +165,8 @@ class AddFretDiagramToFretBox : public UndoableCommand
     FretDiagram* m_fretDiagram = nullptr;
     size_t m_idx = muse::nidx;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     AddFretDiagramToFretBox(FretDiagram* f, size_t idx);
@@ -183,8 +183,8 @@ class RemoveFretDiagramFromFretBox : public UndoableCommand
     FretDiagram* m_fretDiagram = nullptr;
     size_t m_idx = muse::nidx;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     RemoveFretDiagramFromFretBox(FretDiagram* f);

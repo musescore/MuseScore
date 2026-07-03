@@ -392,12 +392,6 @@ bool EngravingItem::collectForDrawing() const
         return false;
     }
 
-    bool isAnnotation = parent() && parent()->isSegment() && toSegment(parent())->element(track()) != this;
-    if (isAnnotation) {
-        Segment* segment = toSegment(parent());
-        return systemFlag() || (segment->measure() && segment->measure()->visible(staffIdx()));
-    }
-
     return true;
 }
 
@@ -1325,6 +1319,16 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+EngravingItem* EngravingItem::sharedItem() const
+{
+    return ldata()->m_sharedItem;
+}
+
+const std::vector<EngravingItem*>& EngravingItem::originItems() const
+{
+    return ldata()->m_originItems;
+}
+
 void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
 {
     if (originItem->ldata()->m_sharedItem == sharedItem) {
@@ -1337,10 +1341,6 @@ void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* 
 
     IF_ASSERT_FAILED(sharedItem->ldata()->m_sharedItem == nullptr && originItem->ldata()->m_originItems.empty()) {
         return;
-    }
-
-    if ((originItem->ldata()->m_sharedItem && originItem->ldata()->m_sharedItem != sharedItem)) {
-        disconnectSharedItem(originItem->ldata()->m_sharedItem, originItem);
     }
 
     originItem->mutldata()->m_sharedItem = sharedItem;

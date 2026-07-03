@@ -314,8 +314,6 @@ public:
     void setFamily(const String& val) override { m_fontFamily = val; }
     void setSize(const double& val) override { m_fontSize = val; }
 
-    bool collectForDrawing() const override;
-
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.
         ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
