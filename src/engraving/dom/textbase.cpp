@@ -2270,6 +2270,7 @@ void TextBase::setXmlText(const String& s)
 {
     m_text = s;
     m_textInvalid = false;
+    mutldata()->blocks.clear();
     mutldata()->layoutInvalid = true;
 }
 
