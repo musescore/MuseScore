@@ -1689,6 +1689,10 @@ void TextBase::createBlocks(LayoutData* ldata) const
     String token;
     String sym;
     bool symState = false;
+
+    String prevFontFace;
+    double prevFontSize = 0;
+
     for (size_t i = 0; i < m_text.size(); i++) {
         const Char& c = m_text.at(i);
         if (state == 0) {
@@ -1738,7 +1742,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
         } else if (state == 1) {
             if (c == '>') {
                 state = 0;
-                const_cast<TextBase*>(this)->prepareFormat(token, cursor);
+                const_cast<TextBase*>(this)->prepareFormat(token, cursor, prevFontFace, prevFontSize);
                 if (token == "sym") {
                     symState = true;
                     sym.clear();
@@ -1789,11 +1793,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML and when pasting from clipboard
 //---------------------------------------------------------
-bool TextBase::prepareFormat(const String& token, CharFormat& format)
+bool TextBase::prepareFormat(const String& token, CharFormat& format, String& prevFontFace, double& prevFontSize) const
 {
-    static String prevFontFace;
-    static double prevFontSize = 0;
-
     if (token == "b") {
         format.setBold(true);
         return true;
@@ -1853,9 +1854,10 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML
 //---------------------------------------------------------
-void TextBase::prepareFormat(const String& token, TextCursor& cursor)
+void TextBase::prepareFormat(const String& token, TextCursor& cursor, String& prevFontFace, double& prevFontSize)
 {
-    if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
+    if (prepareFormat(token, *cursor.format(), prevFontFace, prevFontSize)
+        && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
     }
 }
