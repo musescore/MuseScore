@@ -71,6 +71,8 @@ static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 static const ActionCode TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE("toggle-hear-playback-when-editing");
+static const ActionCode UNMUTE_ALL_CODE("unmute-all");
+static const ActionCode UNSOLO_ALL_CODE("unsolo-all");
 
 static AudioOutputParams makeReverbOutputParams()
 {
@@ -129,6 +131,8 @@ void PlaybackController::init()
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
     dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
+    dispatcher()->reg(this, UNMUTE_ALL_CODE, this, &PlaybackController::unmuteAll);
+    dispatcher()->reg(this, UNSOLO_ALL_CODE, this, &PlaybackController::unsoloAll);
 
     m_onlineSoundsController->regActions();
 
@@ -952,6 +956,41 @@ void PlaybackController::reloadPlaybackCache()
     if (nPlayback) {
         nPlayback->reload();
     }
+}
+
+void PlaybackController::unmuteAll()
+{
+    InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
+
+    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+            continue;
+        }
+
+        INotationSoloMuteState::SoloMuteState newState = m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId);
+        if (newState.mute == true) {
+            newState.mute = false;
+
+            setTrackSoloMuteState(instrumentTrackId, newState);
+        }
+    }
+
+    updateSoloMuteStates();
+}
+
+void PlaybackController::unsoloAll()
+{
+    InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
+
+    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        INotationSoloMuteState::SoloMuteState newState = trackSoloMuteState(instrumentTrackId);
+        if (newState.solo == true) {
+            newState.solo = false;
+            setTrackSoloMuteState(instrumentTrackId, newState);
+        }
+    }
+
+    updateSoloMuteStates();
 }
 
 void PlaybackController::openPlaybackSetupDialog()

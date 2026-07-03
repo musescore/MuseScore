@@ -51,6 +51,7 @@ static const Settings::Key MIXER_VOLUME_SECTION_VISIBLE_KEY(moduleName, "playbac
 static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/faderSectionVisible");
 static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
+static const Settings::Key MIXER_UNMUTE_AND_UNSOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/unMuteAndUnSoloSectionVisible");
 
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(moduleName,
                                                                              "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangeSoundWarning");
@@ -78,6 +79,7 @@ static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
     case MixerSectionType::Fader: return MIXER_FADER_SECTION_VISIBLE_KEY;
     case MixerSectionType::MuteAndSolo: return MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY;
     case MixerSectionType::Title: return MIXER_TITLE_SECTION_VISIBLE_KEY;
+    case MixerSectionType::UnMuteAndUnSolo: return MIXER_UNMUTE_AND_UNSOLO_SECTION_VISIBLE_KEY;
     case MixerSectionType::Unknown: break;
     }
 

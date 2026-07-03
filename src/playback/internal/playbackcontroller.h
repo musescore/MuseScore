@@ -188,6 +188,8 @@ private:
     void setMidiUseWrittenPitch(bool useWrittenPitch);
     void toggleLoopPlayback();
     void toggleHearPlaybackWhenEditing();
+    void unmuteAll();
+    void unsoloAll();
 
     void reloadPlaybackCache();
 
