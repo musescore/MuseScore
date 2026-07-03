@@ -117,7 +117,7 @@ static Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data,
         /// @todo see which are needed
         score->connectTies();
         score->setUpTempoMap();
-        score->setPlaylistDirty();
+        static_cast<MasterScore*>(score)->invalidateRepeatList();
         score->setLayoutAll();
         return Err::NoError;
     } catch (const std::exception& ex) {

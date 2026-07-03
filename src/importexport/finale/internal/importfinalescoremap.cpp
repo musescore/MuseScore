@@ -601,7 +601,7 @@ Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxS
     clef->setTrack(staff2track(staffIdx));
     clef->setConcertClef(entryClefType);
     clef->setTransposingClef(transposeClefType);
-    if (Segment* se = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, clefSeg->rtick())) {
+    if (Segment* se = measure->findSegmentR(SegmentType::Duration, clefSeg->rtick())) {
         for (EngravingItem* e : se->annotations()) {
             if (e->isInstrumentChange() && e->staffIdx() == staffIdx) {
                 clef->setForInstrumentChange(true);
