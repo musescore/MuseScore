@@ -24,34 +24,29 @@
 
 #include "dom/linkedobjects.h"
 #include "dom/masterscore.h"
+#include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/score.h"
 #include "dom/trill.h"
-
-#include "connectorinforeader.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::read500;
 
-ReadContext::ReadContext(Score* score)
-    : m_score(score)
+ReadContext::ReadContext(Score* score, bool pasteMode)
+    : m_score(score), _pasteMode(pasteMode)
 {
 }
 
 ReadContext::~ReadContext()
 {
-    if (!_connectors.empty() || !_pendingConnectors.empty()) {
-        LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
-        for (auto& c : _connectors) {
-            EngravingItem* conn = c->releaseConnector();
-            if (conn && !conn->isTuplet()) { // tuplets are added to score even when not finished
-                delete conn;
-            }
+    IF_ASSERT_FAILED(m_incompleteNoteAnchoredSpanners.empty()) {
+        for (auto& [spanner, startEndEIDs] : m_incompleteNoteAnchoredSpanners) {
+            delete spanner;
         }
-        for (auto& c : _pendingConnectors) {
-            delete c->releaseConnector();
-        }
+
+        m_incompleteNoteAnchoredSpanners.clear();
     }
 }
 
@@ -197,162 +192,6 @@ void ReadContext::setLocation(const Location& l)
     }
 }
 
-void ReadContext::removeConnector(const ConnectorInfoReader* c)
-{
-    while (c->prev()) {
-        c = c->prev();
-    }
-    while (c) {
-        ConnectorInfoReader* next = c->next();
-        for (auto it = _connectors.begin(); it != _connectors.end(); ++it) {
-            if (it->get() == c) {
-                _connectors.erase(it);
-                break;
-            }
-        }
-        c = next;
-    }
-}
-
-void ReadContext::addConnectorInfoLater(std::shared_ptr<ConnectorInfoReader> c)
-{
-    _pendingConnectors.push_back(c);
-}
-
-void ReadContext::checkConnectors()
-{
-    for (std::shared_ptr<ConnectorInfoReader>& c : _pendingConnectors) {
-        addConnectorInfo(c);
-    }
-    _pendingConnectors.clear();
-}
-
-void ReadContext::addConnectorInfo(std::shared_ptr<ConnectorInfoReader> c)
-{
-    _connectors.push_back(std::move(c));
-    ConnectorInfoReader* c1 = _connectors.back().get();
-    c1->update();
-    for (std::shared_ptr<ConnectorInfoReader>& c2 : _connectors) {
-        if (c2->connect(c1)) {
-            if (c2->finished()) {
-                c2->addToScore(pasteMode());
-                removeConnector(c2.get());
-            }
-            break;
-        }
-    }
-}
-
-static bool distanceSort(const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p1,
-                         const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p2)
-{
-    return p1.first < p2.first;
-}
-
-//---------------------------------------------------------
-//   reconnectBrokenConnectors
-//---------------------------------------------------------
-
-void ReadContext::reconnectBrokenConnectors()
-{
-    if (_connectors.empty()) {
-        return;
-    }
-    LOGD("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
-    std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
-    for (size_t i = 1; i < _connectors.size(); ++i) {
-        for (size_t j = 0; j < i; ++j) {
-            ConnectorInfoReader* c1 = _connectors[i].get();
-            ConnectorInfoReader* c2 = _connectors[j].get();
-            int d = c1->connectionDistance(*c2);
-            if (d >= 0) {
-                brokenPairs.push_back(std::make_pair(d, std::make_pair(c1, c2)));
-            } else {
-                brokenPairs.push_back(std::make_pair(-d, std::make_pair(c2, c1)));
-            }
-        }
-    }
-    std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
-    std::set<ConnectorInfoReader*> processed;
-    for (auto& distPair : brokenPairs) {
-        if (distPair.first == INT_MAX) {
-            continue;
-        }
-        auto& pair = distPair.second;
-        if (processed.count(pair.first) || processed.count(pair.second)) {
-            continue;
-        }
-        pair.first->forceConnect(pair.second);
-        processed.insert(pair.first);
-        processed.insert(pair.second);
-    }
-    std::set<ConnectorInfoReader*> reconnected;
-    for (auto& conn : _connectors) {
-        ConnectorInfoReader* c = conn.get();
-        if (c->finished()) {
-            reconnected.insert(static_cast<ConnectorInfoReader*>(c->start()));
-        }
-    }
-    for (ConnectorInfoReader* cptr : reconnected) {
-        cptr->addToScore(pasteMode());
-        removeConnector(cptr);
-    }
-    LOGD() << "reconnected broken connectors: " << reconnected.size();
-}
-
-void ReadContext::clearOrphanedConnectors()
-{
-    if (_connectors.empty() && _pendingConnectors.empty()) {
-        return;
-    }
-
-    LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
-
-    std::set<LinkedObjects*> deletedLinks;
-
-    auto deleteConnectors = [&deletedLinks](std::shared_ptr<ConnectorInfoReader> c) {
-        EngravingItem* conn = c ? c->releaseConnector() : nullptr;
-        if (!conn) {
-            return;
-        }
-
-        LinkedObjects* links = conn->links();
-        bool linksWillBeDeleted = links && links->size() == 1;
-
-        if (!conn->isTuplet()) {     // tuplets are added to score even when not finished
-            if (linksWillBeDeleted) {
-                deletedLinks.insert(links);
-                if (conn->isTrill()) {
-                    EngravingItem* ornament = (EngravingItem*)toTrill(conn)->ornament();
-                    if (ornament && ornament->links()) {
-                        deletedLinks.insert(ornament->links());
-                    }
-                }
-            }
-
-            if (conn->eid().isValid()) {
-                conn->masterScore()->eidRegister()->removeItem(conn);
-            }
-
-            delete conn;
-        }
-    };
-
-    if (!_connectors.empty()) {
-        for (auto& c : _connectors) {
-            deleteConnectors(c);
-        }
-        _connectors.clear();
-    }
-
-    if (!_pendingConnectors.empty()) {
-        for (auto& c : _pendingConnectors) {
-            deleteConnectors(c);
-        }
-        _pendingConnectors.clear();
-    }
-}
-
 void ReadContext::addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting)
 {
     if (_settingsCompat.audioSettings.count(partAudioSetting.instrumentId.partId) == 0) {
@@ -399,4 +238,58 @@ EID ReadContext::resolvePastedEID(const EID& clipboardEid) const
     }
 
     return it->second;
+}
+
+void ReadContext::addNoteAnchoredSpannerStartEl(Spanner* spanner, EID startElementEID)
+{
+    auto it = m_incompleteNoteAnchoredSpanners.find(spanner);
+    if (it != m_incompleteNoteAnchoredSpanners.end()) {
+        it->second.first = startElementEID;
+    } else {
+        m_incompleteNoteAnchoredSpanners.emplace(spanner, std::make_pair(startElementEID, EID::invalid()));
+    }
+}
+
+void ReadContext::addNoteAnchoredSpannerEndEl(Spanner* spanner, EID endElementEID)
+{
+    auto it = m_incompleteNoteAnchoredSpanners.find(spanner);
+    if (it != m_incompleteNoteAnchoredSpanners.end()) {
+        it->second.second = endElementEID;
+    } else {
+        m_incompleteNoteAnchoredSpanners.emplace(spanner, std::make_pair(EID::invalid(), endElementEID));
+    }
+}
+
+void ReadContext::connectNoteAnchoredSpanners()
+{
+    EIDRegister* eidRegister = score()->masterScore()->eidRegister();
+    for (auto& [spanner, startEndEIDs] : m_incompleteNoteAnchoredSpanners) {
+        EID startElementEID = startEndEIDs.first;
+        EID endElementEID = startEndEIDs.second;
+        EngravingItem* startElement = toEngravingItem(eidRegister->itemFromEID(startElementEID));
+        EngravingItem* endElement = toEngravingItem(eidRegister->itemFromEID(endElementEID));
+        IF_ASSERT_FAILED(startElement && startElement->isNote()) {
+            LOGD() << "Could not find note element for " << spanner->typeName();
+            delete spanner;
+            continue;
+        }
+        IF_ASSERT_FAILED(endElement && endElement->isNote()) {
+            LOGD() << "Could not find end note for " << spanner->typeName();
+            delete spanner;
+            continue;
+        }
+
+        Note* startNote = toNote(startElement);
+        Note* endNote = toNote(endElement);
+        spanner->setNoteSpan(startNote, endNote);
+
+        if (spanner->isTie()) {
+            Tie* tie = toTie(spanner);
+            startNote->setTieFor(tie);
+            endNote->setTieBack(tie);
+        } else {
+            score()->addElement(spanner);
+        }
+    }
+    m_incompleteNoteAnchoredSpanners.clear();
 }

@@ -46,8 +46,8 @@ class WriteContext
 {
 public:
 
-    WriteContext(const Score* s)
-        : m_score(s) {}
+    WriteContext(const Score* s, bool clipboardMode = false)
+        : m_score(s), _clipboardmode(clipboardMode) {}
 
     std::shared_ptr<IEngravingConfiguration> configuration() const
     {
@@ -67,7 +67,9 @@ public:
     void setTrackDiff(int v) { _trackDiff = v; }
 
     bool clipboardmode() const { return _clipboardmode; }
-    void setClipboardmode(bool v) { _clipboardmode = v; }
+
+    const std::optional<Fraction>& firstClipboardTick() const { return _firstClipboardTick; }
+    void setFirstClipboardTick(const Fraction& v) { _firstClipboardTick = v; }
 
     void setFilter(const SelectionFilter& f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
@@ -86,7 +88,8 @@ public:
                && _trackDiff == c._trackDiff
                && _clipboardmode == c._clipboardmode
                && _filter == c._filter
-               && _range == c._range;
+               && _range == c._range
+               && _firstClipboardTick == c._firstClipboardTick;
     }
 
     inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
@@ -104,5 +107,6 @@ private:
 
     std::optional<WriteRange> _range;
     std::optional<SelectionFilter> _filter;
+    std::optional<Fraction> _firstClipboardTick;
 };
 }
