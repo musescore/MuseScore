@@ -7,7 +7,7 @@
 muse_create_module(iex_finale)
 
 include(FetchContent)
-include(GetCompilerInfo)
+find_package(ZLIB REQUIRED)
 
 # turn on for reference and debugging as needed
 set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Log node names to trace as they are processed" FORCE)
@@ -31,12 +31,6 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(smufl_mapping)
-
-if (CC_IS_MSVC)
-    include(FindZlibStatic)
-    target_link_libraries(iex_finale PRIVATE zlibstat)
-    target_include_directories(iex_finale PRIVATE ${DEPENDENCIES_INC}/zlib)
-endif ()
 
 target_sources(iex_finale PRIVATE
     third_party/score_encoder.h
@@ -69,6 +63,7 @@ target_sources(iex_finale PRIVATE
 target_link_libraries(iex_finale PRIVATE
     musx              # Link musxdom library
     smufl_mapping     # Link smufl_mapping library
+    ZLIB::ZLIB        # Link zlib for direct gunzip support
     engraving         # MuseScore expects importers to link to "engraving" usually
 )
 
