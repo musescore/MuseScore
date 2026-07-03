@@ -135,6 +135,11 @@ namespace mu::engraving {
 #define BRAILLE_BREVE_SUFFIX            QString("k")
 #define BRAILLE_256TH_PREFIX            QString(";<1")
 #define BRAILLE_DURATION_DOT            QString("'")
+#define BRAILLE_SOLID_NOTEHEAD_ONLY     QString("5a")
+#define BRAILLE_X_SHAPED_NOTEHEAD       QString("5b")
+#define BRAILLE_DIAMOND_SHAPED_NOTEHEAD QString("5l")
+#define BRAILLE_INDETERMINATE_PITCH     QString("5k")
+#define BRAILLE_APPROX_PITCH_LINE_END   QString("5'")
 
 // Table 3. Page 4. Music Braille Code 2015.
 #define BRAILLE_BELOW_FIRST_OCTAVE      QString("@@")
@@ -1891,6 +1896,64 @@ QString Braille::brailleBreath(Breath* breath)
     }
 }
 
+static bool isGlissandoEndNote(Note* note)
+{
+    if (!note) {
+        return false;
+    }
+
+    for (Spanner* spanner : note->spannerBack()) {
+        if (spanner->isGlissando()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static QString brailleSpecialNoteheadPrefix(Note* note)
+{
+    if (!note) {
+        return QString();
+    }
+
+    if (isGlissandoEndNote(note)) {
+        return BRAILLE_APPROX_PITCH_LINE_END;
+    }
+
+    switch (note->headGroup()) {
+    case NoteHeadGroup::HEAD_CROSS:
+    case NoteHeadGroup::HEAD_WITHX:
+    case NoteHeadGroup::HEAD_XCIRCLE:
+    case NoteHeadGroup::HEAD_HEAVY_CROSS:
+    case NoteHeadGroup::HEAD_HEAVY_CROSS_HAT:
+        return BRAILLE_X_SHAPED_NOTEHEAD;
+
+    case NoteHeadGroup::HEAD_DIAMOND:
+    case NoteHeadGroup::HEAD_DIAMOND_OLD:
+    case NoteHeadGroup::HEAD_LARGE_DIAMOND:
+        return BRAILLE_DIAMOND_SHAPED_NOTEHEAD;
+
+    case NoteHeadGroup::HEAD_SLASH:
+    case NoteHeadGroup::HEAD_SLASHED1:
+    case NoteHeadGroup::HEAD_SLASHED2:
+        return BRAILLE_INDETERMINATE_PITCH;
+
+    case NoteHeadGroup::HEAD_NORMAL: {
+        Chord* chord = note->chord();
+        if (chord && chord->noStem() && chord->durationType().headType() == NoteHeadType::HEAD_QUARTER) {
+            return BRAILLE_SOLID_NOTEHEAD_ONLY;
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return QString();
+}
+
 QString Braille::brailleChord(Chord* chord)
 {
     // 9.5 Moving notes methods are not implemented as they are optional methods
@@ -2092,6 +2155,7 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     }
 
     QString noteTieBraille = brailleTie(note);
+    QString specialNoteheadPrefix = brailleSpecialNoteheadPrefix(note);
 
     QString fingeringAfterBraille = QString();
     for (EngravingItem* el : rootNote->el()) {
@@ -2108,6 +2172,7 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     switch (state) {
     case SignDoubling::Omit:
         intervalBraille.clear();
+        specialNoteheadPrefix.clear();
         break;
     case SignDoubling::Double:
         intervalBraille += intervalBraille;
@@ -2121,6 +2186,7 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     return
         noteAccidentalBraille
         + noteOctaveBraille
+        + specialNoteheadPrefix
         + intervalBraille
         + fingeringAfterBraille
         + noteTieBraille;
@@ -2157,6 +2223,7 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
         accidentalBraille = brailleAccidentalType(rootNote->accidental()->accidentalType());
     }
 
+    QString specialNoteheadPrefix = brailleSpecialNoteheadPrefix(rootNote);
     QString noteTieBraille = brailleTie(rootNote);
 
     QString fingeringAfterBraille = QString();
@@ -2169,6 +2236,7 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
     return
         accidentalBraille
         + octaveBraille
+        + specialNoteheadPrefix
         + noteBraille
         + fingeringAfterBraille
         + noteTieBraille;
