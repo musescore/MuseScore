@@ -1097,10 +1097,12 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
 
 String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, const StaveSharingContext& ctx)
 {
+    const MStyle& style = ctx.score->style();
+
     String result;
 
     size_t originUnisonsCount = unisonNote->originItems().size();
-    result += u"a " + String::number(originUnisonsCount);
+    result += style.styleSt(Sid::textForUnisonLabel) + String::number(originUnisonsCount);
     bool trailingDot = false; // TODO: style
     if (trailingDot) {
         result += '.';
@@ -1130,10 +1132,20 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         return result;
     }
 
-    const MStyle& style = ctx.score->style();
-    bool trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
-    bool trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
-    int hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    bool trailingDotSingle;
+    bool trailingDotMultiple;
+    int hyphenLimit;
+    if (style.styleB(Sid::sharedOnStaffNumeralsFollowInstrumentNumerals)) {
+        trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    } else {
+        trailingDotSingle = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::sharedOnStaffNumeralsHyphenEnable)
+                      ? style.styleI(Sid::sharedOnStaffNumeralsHyphenThreshold) : INT_MAX;
+    }
+
     String prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     result.prepend(prefix + ' ');

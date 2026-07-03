@@ -90,6 +90,13 @@ enum class Sid : short {
     instrumentNumeralsHyphenEnable,
     instrumentNumeralsHyphenThreshold,
 
+    textForUnisonLabel,
+    sharedOnStaffNumeralsFollowInstrumentNumerals,
+    sharedOnStaffNumeralsTrailingDotSingle,
+    sharedOnStaffNumeralsTrailingDotMultiple,
+    sharedOnStaffNumeralsHyphenEnable,
+    sharedOnStaffNumeralsHyphenThreshold,
+
     windsNameByGroup,
     vocalsNameByGroup,
     stringsNameByGroup,
