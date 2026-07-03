@@ -33,7 +33,7 @@ static const std::string module_name("braille");
 static const Settings::Key BRAILLE_STATUS(module_name, "score/braille/status");
 static const Settings::Key BRAILLE_TABLE(module_name, "score/braille/table");
 static const Settings::Key BRAILLE_INTERVAL_DIRECTION(module_name, "score/braille/intervalDirection");
-static const Settings::Key BRAILLE_ARTICULATION_DOUBLING(module_name, "score/braille/articulationDoubling");
+static const Settings::Key BRAILLE_SIGN_DOUBLING(module_name, "score/braille/signDoubling");
 
 void BrailleConfiguration::init()
 {
@@ -49,9 +49,9 @@ void BrailleConfiguration::init()
     settings()->valueChanged(BRAILLE_INTERVAL_DIRECTION).onReceive(this, [this](const Val&) {
         m_intervalDirectionChanged.notify();
     });
-    settings()->setDefaultValue(BRAILLE_ARTICULATION_DOUBLING, Val(true));
-    settings()->valueChanged(BRAILLE_ARTICULATION_DOUBLING).onReceive(this, [this](const Val&) {
-        m_articulationDoublingChanged.notify();
+    settings()->setDefaultValue(BRAILLE_SIGN_DOUBLING, Val(true));
+    settings()->valueChanged(BRAILLE_SIGN_DOUBLING).onReceive(this, [this](const Val&) {
+        m_signDoublingChanged.notify();
     });
 }
 
@@ -100,19 +100,19 @@ void BrailleConfiguration::setBrailleTable(const QString& table)
     settings()->setSharedValue(BRAILLE_TABLE, Val(table));
 }
 
-muse::async::Notification BrailleConfiguration::articulationDoublingChanged() const
+muse::async::Notification BrailleConfiguration::signDoublingChanged() const
 {
-    return m_articulationDoublingChanged;
+    return m_signDoublingChanged;
 }
 
-bool BrailleConfiguration::articulationDoubling() const
+bool BrailleConfiguration::signDoubling() const
 {
-    return settings()->value(BRAILLE_ARTICULATION_DOUBLING).toBool();
+    return settings()->value(BRAILLE_SIGN_DOUBLING).toBool();
 }
 
-void BrailleConfiguration::setArticulationDoubling(const bool enabled)
+void BrailleConfiguration::setSignDoubling(const bool enabled)
 {
-    settings()->setSharedValue(BRAILLE_ARTICULATION_DOUBLING, Val(enabled));
+    settings()->setSharedValue(BRAILLE_SIGN_DOUBLING, Val(enabled));
 }
 
 QStringList BrailleConfiguration::brailleTableList() const

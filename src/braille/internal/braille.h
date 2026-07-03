@@ -168,8 +168,7 @@ struct BrailleContext {
     std::vector<Key> currentKey;
 
     // Per-sign-instance decisions for the doubling rule, computed once per Braille run.
-    std::map<const Articulation*, SignDoubling> articulationDoubling;
-    std::map<const Note*, SignDoubling> intervalDoubling;
+    std::map<const EngravingItem*, SignDoubling> signDoubling;
     bool signDoublingComputed = false;
 };
 

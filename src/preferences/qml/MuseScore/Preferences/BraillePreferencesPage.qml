@@ -61,7 +61,7 @@ PreferencesPage {
             directions: preferencesModel.intervalDirections()
             brailleTable: preferencesModel.brailleTable
             intervalDirection: preferencesModel.intervalDirection
-            articulationDoubling: preferencesModel.articulationDoubling
+            signDoubling: preferencesModel.signDoubling
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -76,8 +76,8 @@ PreferencesPage {
                 preferencesModel.intervalDirection = direction;
             }
 
-            onArticulationDoublingChangeRequested: function(enabled) {
-                preferencesModel.articulationDoubling = enabled;
+            onSignDoublingChangeRequested: function(enabled) {
+                preferencesModel.signDoubling = enabled;
             }
 
             onFocusChanged: {
