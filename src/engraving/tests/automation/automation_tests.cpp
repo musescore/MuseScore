@@ -278,6 +278,65 @@ TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
     EXPECT_TRUE(automation.isEmpty());
 }
 
+TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
+{
+    // [GIVEN] Three curves: key1 (to be replaced), key2 (to be emptied/removed), key3 (left untouched)
+    Automation automation;
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
+
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
+
+    AutomationCurveKey key3;
+    key3.type = AutomationType::Dynamics;
+    key3.staffId = muse::ID(3);
+
+    automation.addPoint(key1, 100, generatedPoint(0.3, 0.4));
+    automation.addPoint(key1, 200, generatedPoint(0.4, 0.5));
+    automation.addPoint(key2, 150, generatedPoint(0.5, 0.6));
+    AutomationPoint p3 = generatedPoint(0.6, 0.7);
+    automation.addPoint(key3, 250, p3);
+
+    int notifyCount = 0;
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
+        ++notifyCount;
+        lastChanges = ch;
+    });
+
+    // [WHEN] Replace key1 with different points, empty out key2, and don't mention key3
+    AutomationPoint newPoint = generatedPoint(0.7, 0.8);
+    AutomationCurveMap replacement;
+    replacement[key1][300] = newPoint;
+    replacement[key2] = AutomationCurve();
+    automation.replaceCurves(std::move(replacement));
+
+    // [THEN] key1's old points are gone, only the new one remains
+    AutomationCurve expectedKey1;
+    expectedKey1[300] = newPoint;
+    checkCurvesMatch(automation.curve(key1), expectedKey1);
+
+    // [THEN] key2 is fully removed
+    EXPECT_TRUE(automation.curve(key2).empty());
+
+    // [THEN] key3 is untouched
+    AutomationCurve expectedKey3;
+    expectedKey3[250] = p3;
+    checkCurvesMatch(automation.curve(key3), expectedKey3);
+
+    // [THEN] One notification, not a full reset, covering both changed keys and their tick range
+    EXPECT_EQ(notifyCount, 1);
+    EXPECT_FALSE(lastChanges.isFullReset);
+    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key1));
+    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key2));
+    EXPECT_FALSE(muse::contains(lastChanges.affectedKeys, key3));
+    EXPECT_EQ(lastChanges.tickFrom, 100);
+    EXPECT_EQ(lastChanges.tickTo, 300);
+}
+
 TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
 {
     // [GIVEN] A subscriber registered before the change

@@ -41,6 +41,9 @@ public:
 
     virtual void clear() = 0;
 
+    //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
+    virtual void replaceCurves(AutomationCurveMap&& curves) = 0;
+
     virtual void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) = 0;
     virtual void removePoint(const AutomationCurveKey& key, utick_t tick) = 0;
     virtual void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) = 0;

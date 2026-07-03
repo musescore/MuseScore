@@ -54,8 +54,7 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
         return;
     }
 
-    automation.beginTransaction();
-    automation.clear();
+    AutomationCurveMap curves;
 
     const muse::JsonArray rootArray = doc.rootArray();
     for (size_t i = 0; i < rootArray.size(); ++i) {
@@ -72,6 +71,8 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
             continue;
         }
 
+        AutomationCurve& curve = curves[key];
+
         const muse::JsonArray pointArray = curveObj.value("points").toArray();
         for (size_t j = 0; j < pointArray.size(); ++j) {
             const muse::JsonObject pointObj = pointArray.at(j).toObject();
@@ -83,11 +84,11 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
                                             AutomationPoint::InterpolationType::Linear);
 
             const utick_t tick = pointObj.value("tick").toInt();
-            automation.addPoint(key, tick, point);
+            curve.insert_or_assign(tick, point);
         }
     }
 
-    automation.commitTransaction();
+    automation.replaceCurves(std::move(curves));
 }
 
 muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGenerated)

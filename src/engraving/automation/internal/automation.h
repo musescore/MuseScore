@@ -35,6 +35,8 @@ public:
 
     void clear() override;
 
+    void replaceCurves(AutomationCurveMap&& curves) override;
+
     void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) override;
     void removePoint(const AutomationCurveKey& key, utick_t tick) override;
     void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) override;

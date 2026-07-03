@@ -28,6 +28,33 @@
 
 using namespace mu::engraving;
 
+static void diffPoints(const AutomationCurveKey& key, const AutomationCurve& oldCurve, const AutomationCurve& newCurve,
+                       AutomationChanges& changes)
+{
+    if (oldCurve == newCurve) {
+        return;
+    }
+
+    auto oldIt = oldCurve.begin();
+    auto newIt = newCurve.begin();
+
+    while (oldIt != oldCurve.end() || newIt != newCurve.end()) {
+        if (newIt == newCurve.end() || (oldIt != oldCurve.end() && oldIt->first < newIt->first)) {
+            changes.extend(key, oldIt->first, oldIt->first); // point removed
+            ++oldIt;
+        } else if (oldIt == oldCurve.end() || newIt->first < oldIt->first) {
+            changes.extend(key, newIt->first, newIt->first); // point added
+            ++newIt;
+        } else {
+            if (oldIt->second != newIt->second) {
+                changes.extend(key, oldIt->first, oldIt->first); // point changed
+            }
+            ++oldIt;
+            ++newIt;
+        }
+    }
+}
+
 const AutomationCurveMap& Automation::curves() const
 {
     return m_curveMap;
@@ -47,22 +74,8 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
 const AutomationPoint* Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
 {
     const AutomationCurve& keyCurve = curve(key);
-    const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
-
-    if (key.voiceIdx.has_value()) {
-        AutomationCurveKey sharedKey = key;
-        sharedKey.voiceIdx = std::nullopt;
-        const AutomationCurve& sharedCurve = curve(sharedKey);
-        const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
-
-        if (sharedIt != sharedCurve.cend()) {
-            if (keyIt == keyCurve.cend() || sharedIt->first > keyIt->first) {
-                return &sharedIt->second;
-            }
-        }
-    }
-
-    return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
+    const auto it = muse::findLessOrEqual(keyCurve, tick);
+    return it != keyCurve.cend() ? &it->second : nullptr;
 }
 
 bool Automation::isEmpty() const
@@ -78,6 +91,29 @@ void Automation::clear()
 
     m_curveMap.clear();
     m_pendingChanges.isFullReset = true;
+    notifyChanged();
+}
+
+void Automation::replaceCurves(AutomationCurveMap&& curves)
+{
+    static const AutomationCurve EMPTY_CURVE;
+
+    for (auto& [key, newCurve] : curves) {
+        const auto oldIt = m_curveMap.find(key);
+        const AutomationCurve& oldCurve = oldIt != m_curveMap.end() ? oldIt->second : EMPTY_CURVE;
+        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
+
+        if (newCurve.empty()) {
+            if (oldIt != m_curveMap.end()) {
+                m_curveMap.erase(oldIt);
+            }
+        } else if (oldIt != m_curveMap.end()) {
+            oldIt->second = std::move(newCurve);
+        } else {
+            m_curveMap.emplace(key, std::move(newCurve));
+        }
+    }
+
     notifyChanged();
 }
 

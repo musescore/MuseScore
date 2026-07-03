@@ -64,6 +64,9 @@ static const std::unordered_map<DynamicType, double> ORDINARY_DYNAMIC_VALUES {
 
 static constexpr double DYNAMIC_STEP(0.05);
 
+// Dynamics and measure repeats can only appear on these segment types
+static constexpr SegmentType RELEVANT_SEGMENT_TYPES = SegmentType::ChordRest | SegmentType::TimeTick;
+
 static const std::unordered_map<DynamicType, double> SINGLE_NOTE_DYNAMIC_VALUES {
     { DynamicType::SF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
     { DynamicType::SFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
@@ -113,62 +116,6 @@ bool ScoreAutomationController::StaffRange::contains(staff_idx_t staffIdx) const
 bool ScoreAutomationController::StaffRange::contains(const muse::ID& staffId) const
 {
     return isFull || muse::contains(staffIds, staffId);
-}
-
-void ScoreAutomationController::tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range,
-                                               AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
-{
-    if (!range.contains(staffIdx)) {
-        return;
-    }
-
-    const Staff* staff = score ? score->staff(staffIdx) : nullptr;
-    IF_ASSERT_FAILED(staff) {
-        return;
-    }
-
-    if (!staff->isPrimaryStaff()) {
-        return; // ignore linked staves
-    }
-
-    key.staffId = staff->id();
-    result.push_back(key);
-}
-
-std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const EngravingItem* item, AutomationType type,
-                                                                       const StaffRange& range)
-{
-    const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-    const Score* score = item->score();
-
-    std::vector<AutomationCurveKey> result;
-    AutomationCurveKey key;
-    key.type = type;
-
-    switch (voiceAssignment) {
-    case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
-        const Part* part = item->part();
-        IF_ASSERT_FAILED(part) {
-            return result;
-        }
-
-        const staff_idx_t startStaffIdx = track2staff(part->startTrack());
-        const staff_idx_t endStaffIdx = startStaffIdx + part->nstaves();
-        result.reserve(endStaffIdx - startStaffIdx);
-
-        for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
-            tryAddStaffKey(score, staffIdx, range, key, result);
-        }
-    } break;
-    case VoiceAssignment::CURRENT_VOICE_ONLY:
-        key.voiceIdx = item->voice();
-    // fallthrough
-    case VoiceAssignment::ALL_VOICE_IN_STAFF:
-        tryAddStaffKey(score, item->staffIdx(), range, key, result);
-        break;
-    }
-
-    return result;
 }
 
 static std::optional<double> dynamicValue(DynamicType type, bool startValue)
@@ -254,6 +201,42 @@ static int dynamicPriority(const EngravingItem* item)
     return static_cast<int>(item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>());
 }
 
+static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
+{
+    static const AutomationCurve EMPTY_CURVE;
+
+    const auto keyCurveIt = curves.find(key);
+    const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : EMPTY_CURVE;
+    const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
+
+    if (key.voiceIdx.has_value()) {
+        AutomationCurveKey sharedKey = key;
+        sharedKey.voiceIdx = std::nullopt;
+        const auto sharedCurveIt = curves.find(sharedKey);
+        const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : EMPTY_CURVE;
+        const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
+
+        if (sharedIt != sharedCurve.cend()) {
+            if (keyIt == keyCurve.cend() || sharedIt->first > keyIt->first) {
+                return &sharedIt->second;
+            }
+        }
+    }
+
+    return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
+}
+
+static AutomationPoint* findPoint(AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
+{
+    auto curveIt = curves.find(key);
+    if (curveIt == curves.end()) {
+        return nullptr;
+    }
+
+    auto pointIt = curveIt->second.find(tick);
+    return pointIt != curveIt->second.end() ? &pointIt->second : nullptr;
+}
+
 ScoreAutomationController::ScoreAutomationController()
 {
     m_automation = new Automation();
@@ -284,11 +267,7 @@ static bool isRelevantChange(const ScoreChanges& changes)
 
 void ScoreAutomationController::init(const Score* score)
 {
-    TRACEFUNC;
-
-    m_automation->beginTransaction();
     update(score, 0, muse::nidx, muse::nidx);
-    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
@@ -298,15 +277,15 @@ void ScoreAutomationController::insertTime(const Score* score, const Fraction& t
         return;
     }
 
+    TRACEFUNC;
+
     const utick_t utick = score->repeatList().tick2utick(tick.ticks());
 
-    m_automation->beginTransaction();
     if (diff < 0) {
         m_automation->removeTicks(utick + diff, utick);
     } else if (diff > 0) {
         m_automation->moveTicks(utick, diff);
     }
-    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::update(const Score* score, const ScoreChanges& changes)
@@ -321,13 +300,11 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
     // so the old points on staves outside the new assignment must also be cleared
     const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
 
-    m_automation->beginTransaction();
     if (voiceAssignmentChanged) {
         update(score, tickFrom, muse::nidx, muse::nidx);
     } else {
         update(score, tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
     }
-    m_automation->commitTransaction();
 }
 
 void ScoreAutomationController::update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
@@ -351,9 +328,16 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     }
 
     const StaffRange range(score, staffIdxFrom, staffIdxTo);
+    const RepeatSegment* firstSeg = *repeatFromIt;
+
     UpdateContext ctx;
 
-    removeGeneratedPoints(*repeatFromIt, tickFrom, range);
+    // The first utick the rebuild will regenerate; everything before it is kept as is
+    ctx.clearFromUTick = std::max(firstSeg->utick, tickFrom + (firstSeg->utick - firstSeg->tick));
+
+    // Copy only the curves this update can affect, dropping the generated points that the rebuild
+    // below re-creates; all other curves stay untouched in m_automation
+    copyCurvesForRebuild(m_automation->curves(), range, ctx.clearFromUTick, ctx.curves);
 
     // Step 1: segment dynamics: populates ctx.dynamicPriorities, inserts points with deferred inValues
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
@@ -369,7 +353,8 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
                 continue;
             }
 
-            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+            for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment;
+                 segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
                 if (segment->tick().ticks() < measureFrom) {
                     continue;
                 }
@@ -398,30 +383,40 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     }
 
     // Step 3: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
-    copyVoiceCurves(range);
+    fillVoiceCurvesFromBase(ctx.curves);
 
     // Step 4: resolve deferred inValues — shared curves and their voice curve copies
     resolveDeferredInValues(ctx);
 
     // Step 5: measure repeats: source curves fully resolved
     addMeasureRepeatPoints(ctx);
+
+    // Step 6: the new curves are fully built; merge them back, replacing only the affected ones
+    m_automation->replaceCurves(std::move(ctx.curves));
 }
 
-void ScoreAutomationController::removeGeneratedPoints(const RepeatSegment* seg, int tickFrom, const StaffRange& range)
+void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
+                                                     AutomationCurveMap& destCurves)
 {
-    const int tickOffset = seg->utick - seg->tick;
-    const utick_t clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
+    for (const auto& [key, curve] : curves) {
+        if (key.type != AutomationType::Dynamics || !range.contains(key.staffId)) {
+            continue;
+        }
 
-    m_automation->removePoints([clearFromTick, &range](const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point) {
-        return tick >= clearFromTick
-               && key.type == AutomationType::Dynamics
-               && point.itemId.has_value()
-               && range.contains(key.staffId);
-    });
+        AutomationCurve& curveCopy = destCurves.emplace_hint(destCurves.end(), key, AutomationCurve())->second;
+
+        for (const auto& [tick, point] : curve) {
+            if (tick < clearFromUTick || !point.itemId.has_value()) {
+                curveCopy.emplace_hint(curveCopy.end(), tick, point);
+            }
+        }
+    }
 }
 
 void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
+    TRACEFUNC;
+
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->isDynamic()) {
             continue;
@@ -442,6 +437,8 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
 
 void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
+    TRACEFUNC;
+
     if (!dynamic->playDynamic()) {
         return;
     }
@@ -470,12 +467,13 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 
     if (auto it = ORDINARY_DYNAMIC_VALUES.find(dynamicType); it != ORDINARY_DYNAMIC_VALUES.end()) {
         const double value = it->second;
-        // Called after all non-anchored dynamics in this segment, so a regular dynamic at the
-        // same tick has already claimed outValue. Contribute only inValue; otherwise add normally.
-        if (dynamic->anchorToEndOfPrevious() && muse::contains(m_automation->curve(key), dynamicUTick)) {
-            m_automation->setPointInValue(key, dynamicUTick, value);
-            ctx.deferredInValuePoints.erase({ key, dynamicUTick });
-            return;
+        // Anchored dynamics are processed last, so a point already at this tick owns outValue; just add inValue.
+        if (dynamic->anchorToEndOfPrevious()) {
+            if (AutomationPoint* existing = findPoint(ctx.curves, key, dynamicUTick)) {
+                existing->inValue = value;
+                ctx.deferredInValuePoints.erase({ key, dynamicUTick });
+                return;
+            }
         }
         AutomationPoint point;
         point.inValue = 0.0;
@@ -486,7 +484,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     }
 
     if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        const AutomationPoint* prevPoint = m_automation->activePoint(key, dynamicUTick);
+        const AutomationPoint* prevPoint = activePoint(ctx.curves, key, dynamicUTick);
 
         AutomationPoint point;
         point.inValue = 0.0;
@@ -526,12 +524,20 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
 void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick,
                                                  int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
+    TRACEFUNC;
+
     const SpannerMap& spannerMap = score->spannerMap();
     if (spannerMap.empty()) {
         return;
     }
 
-    const auto& intervals = spannerMap.findOverlapping(repeatStartTick + 1, repeatEndTick - 1);
+    const int overlapStart = std::max(repeatStartTick + 1, ctx.clearFromUTick - tickOffset);
+    const int overlapStop = repeatEndTick - 1;
+    if (overlapStart > overlapStop) {
+        return;
+    }
+
+    const auto& intervals = spannerMap.findOverlapping(overlapStart, overlapStop);
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
         if (!spanner->isHairpin() || !spanner->playSpanner()) {
@@ -581,7 +587,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
 
     // --- Determine valueFrom
     const std::optional<double> nominalValueFrom = startHairpinValue(hairpin);
-    const AutomationPoint* prevPoint = m_automation->activePoint(key, hairpinFrom);
+    const AutomationPoint* prevPoint = activePoint(ctx.curves, key, hairpinFrom);
     const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
@@ -611,8 +617,13 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
                            : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
     // Re-fetch curve in case tryAddDynamicPoint above created it
-    const AutomationCurve& curve = m_automation->curve(key);
-    const bool hasPointAtEnd = muse::contains(curve, hairpinTo);
+    const auto curveIt = ctx.curves.find(key);
+    AutomationCurve::iterator endPointIt;
+    bool hasPointAtEnd = false;
+    if (curveIt != ctx.curves.end()) {
+        endPointIt = curveIt->second.find(hairpinTo);
+        hasPointAtEnd = endPointIt != curveIt->second.end();
+    }
 
     if (hasPointAtEnd) {
         // A point already exists at the end tick; encode the hairpin's arrival via inValue, but only
@@ -625,7 +636,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         }
 
         if (canModify) {
-            m_automation->setPointInValue(key, hairpinTo, valueTo);
+            endPointIt->second.inValue = valueTo;
             // Remove from deferred so the resolve pass doesn't overwrite the inValue we just set
             ctx.deferredInValuePoints.erase({ key, hairpinTo });
         }
@@ -641,32 +652,34 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
     }
 }
 
-void ScoreAutomationController::copyVoiceCurves(const StaffRange& range)
+void ScoreAutomationController::fillVoiceCurvesFromBase(AutomationCurveMap& curves)
 {
-    for (const auto& [key, curve] : m_automation->curves()) {
-        if (key.type != AutomationType::Dynamics || !key.voiceIdx.has_value()) {
+    TRACEFUNC;
+
+    for (auto& [key, curve] : curves) {
+        if (!key.voiceIdx.has_value()) {
             continue;
         }
 
-        if (!range.contains(key.staffId)) {
+        AutomationCurveKey baseKey = key;
+        baseKey.voiceIdx = std::nullopt;
+
+        const auto baseIt = curves.find(baseKey);
+        if (baseIt == curves.end()) {
             continue;
         }
 
-        AutomationCurveKey sharedKey = key;
-        sharedKey.voiceIdx = std::nullopt;
-        const AutomationCurve& sharedCurve = m_automation->curve(sharedKey);
-
-        for (const auto& [tick, point] : sharedCurve) {
-            if (!muse::contains(curve, tick)) {
-                m_automation->addPoint(key, tick, point);
-            }
+        for (const auto& [tick, point] : baseIt->second) {
+            curve.try_emplace(tick, point);
         }
     }
 }
 
 void ScoreAutomationController::collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range,
-                                                      std::vector<std::pair<const MeasureRepeat*, int> >& result) const
+                                                      MeasureRepeats& result)
 {
+    TRACEFUNC;
+
     if (!segment->isChordRestType()) {
         return;
     }
@@ -683,26 +696,18 @@ void ScoreAutomationController::collectMeasureRepeats(const Segment* segment, in
 
 void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 {
+    TRACEFUNC;
+
     if (ctx.measureRepeats.empty()) {
         return;
     }
 
-    std::map<muse::ID, std::vector<std::pair<AutomationCurveKey, const AutomationCurve*> > > curvesByStaff;
-    for (const auto& [key, curve] : m_automation->curves()) {
-        curvesByStaff[key.staffId].emplace_back(key, &curve);
+    std::map<muse::ID, std::vector<AutomationCurve*> > curvesByStaff;
+    for (auto& [key, curve] : ctx.curves) {
+        curvesByStaff[key.staffId].push_back(&curve);
     }
 
     for (const auto& [mr, tickOffset] : ctx.measureRepeats) {
-        const Measure* currMeasure = mr->firstMeasureOfGroup();
-        if (!currMeasure) {
-            continue;
-        }
-
-        const Measure* referringMeasure = mr->referringMeasure(currMeasure);
-        if (!referringMeasure) {
-            continue;
-        }
-
         const Staff* staff = mr->staff();
         if (!staff) {
             continue;
@@ -713,40 +718,34 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
             continue;
         }
 
-        const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
         const auto& staffCurves = staffCurvesIt->second;
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
 
-        for (int num = 0; num < mr->numMeasures(); ++num) {
+        for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
+            const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+            IF_ASSERT_FAILED(referringMeasure && referringMeasure != currMeasure) {
+                continue;
+            }
+
+            const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
             const utick_t srcFrom = referringMeasure->tick().ticks() + tickOffset;
             const utick_t srcTo = referringMeasure->endTick().ticks() + tickOffset;
 
-            for (const auto& [key, curvePtr] : staffCurves) {
-                const AutomationCurve& curve = *curvePtr;
-                bool firstPoint = true;
-
-                for (auto it = curve.lower_bound(srcFrom), end = curve.lower_bound(srcTo); it != end; ++it) {
-                    AutomationPoint point = it->second;
-                    const utick_t dstTick = it->first + tickShift;
-
-                    if (firstPoint) {
-                        // Sync the inValue of the first copied point to the level active at the destination
-                        const AutomationPoint* prev = m_automation->activePoint(key, dstTick);
-                        point.inValue = prev ? prev->outValue : 0.0;
-                        firstPoint = false;
-                    }
-
-                    tryAddDynamicPoint(key, dstTick, point, 0, ctx);
+            for (AutomationCurve* curve : staffCurves) {
+                AutomationCurve shifted;
+                for (auto it = curve->lower_bound(srcFrom), end = curve->lower_bound(srcTo); it != end; ++it) {
+                    shifted.emplace_hint(shifted.end(), it->first + tickShift, it->second);
                 }
-            }
 
-            currMeasure = currMeasure->nextMeasure();
-            if (!currMeasure) {
-                break;
-            }
+                if (!shifted.empty()) {
+                    // Sync the inValue of the first copied point to the level active at the destination.
+                    // Voice curves already have the shared curve's points merged in by this point
+                    // (Step 3), so a plain lookup on this curve is enough
+                    const auto prevIt = muse::findLessOrEqual(*curve, shifted.begin()->first);
+                    shifted.begin()->second.inValue = prevIt != curve->end() ? prevIt->second.outValue : 0.0;
+                }
 
-            referringMeasure = mr->referringMeasure(currMeasure);
-            if (!referringMeasure) {
-                break;
+                curve->merge(std::move(shifted));
             }
         }
     }
@@ -754,56 +753,93 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 
 void ScoreAutomationController::resolveDeferredInValues(UpdateContext& ctx)
 {
-    // Segment dynamics are inserted in Step 1 before hairpin endpoints exist in the curve,
-    // so non-hairpin-end points carry inValue=0.0 as a placeholder. Resolve them here after
-    // all points are in the curve so the predecessor lookup finds the correct value.
-    // Voice curves (Step 3) copy these placeholder points, so they need the same treatment
-    auto resolvePoint = [this](const AutomationCurveKey& key, utick_t tick) {
-        const AutomationCurve& curve = m_automation->curve(key);
-        const auto it = curve.find(tick);
-        if (it == curve.end() || it == curve.begin()) {
-            return;
-        }
-        m_automation->setPointInValue(key, tick, std::prev(it)->second.outValue);
-    };
+    TRACEFUNC;
 
+    // inValue=0.0 was a placeholder set before hairpin points existed;
+    // resolve it now that the curve is complete.
+    // Voice curves copied these placeholders too, so fix those as well
     std::map<muse::ID, std::vector<AutomationCurveKey> > voiceCurvesByStaff;
-    for (const auto& [key, curve] : m_automation->curves()) {
-        if (key.type == AutomationType::Dynamics && key.voiceIdx.has_value()) {
+    for (const auto& [key, curve] : ctx.curves) {
+        if (key.voiceIdx.has_value()) {
             voiceCurvesByStaff[key.staffId].push_back(key);
         }
     }
 
     for (const auto& [key, tick] : ctx.deferredInValuePoints) {
-        resolvePoint(key, tick);
-        if (!key.voiceIdx.has_value()) {
-            const auto it = voiceCurvesByStaff.find(key.staffId);
-            if (it != voiceCurvesByStaff.end()) {
-                for (const AutomationCurveKey& voiceKey : it->second) {
-                    if (muse::contains(m_automation->curve(voiceKey), tick)) {
-                        resolvePoint(voiceKey, tick);
-                    }
-                }
+        if (const auto curveIt = ctx.curves.find(key); curveIt != ctx.curves.end()) {
+            AutomationCurve& curve = curveIt->second;
+            if (const auto it = curve.find(tick); it != curve.end() && it != curve.begin()) {
+                it->second.inValue = std::prev(it)->second.outValue;
+            }
+        }
+
+        if (key.voiceIdx.has_value()) {
+            continue;
+        }
+
+        const auto staffIt = voiceCurvesByStaff.find(key.staffId);
+        if (staffIt == voiceCurvesByStaff.end()) {
+            continue;
+        }
+
+        for (const AutomationCurveKey& voiceKey : staffIt->second) {
+            const auto voiceCurveIt = ctx.curves.find(voiceKey);
+            if (voiceCurveIt == ctx.curves.end()) {
+                continue;
+            }
+
+            AutomationCurve& voiceCurve = voiceCurveIt->second;
+            if (const auto it = voiceCurve.find(tick); it != voiceCurve.end() && it != voiceCurve.begin()) {
+                it->second.inValue = std::prev(it)->second.outValue;
             }
         }
     }
 
-    // User-added points (no itemId) act as breakpoints: the curve holds flat before them
-    // (inValue = prev.outValue) and holds flat at their level until the next point
-    // (nextPoint.inValue = outValue).
-    for (const auto& [key, curve] : m_automation->curves()) {
+    for (auto& [key, curve] : ctx.curves) {
         for (auto it = curve.begin(); it != curve.end(); ++it) {
-            const auto& [tick, point] = *it;
-            if (point.itemId.has_value()) {
+            if (it->second.itemId.has_value()) {
                 continue;
             }
-            resolvePoint(key, tick);
+            if (it != curve.begin()) {
+                it->second.inValue = std::prev(it)->second.outValue;
+            }
             const auto nextIt = std::next(it);
             if (nextIt != curve.end()) {
-                m_automation->setPointInValue(key, nextIt->first, point.outValue);
+                nextIt->second.inValue = it->second.outValue;
             }
         }
     }
+}
+
+bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
+                                                   int priority, UpdateContext& ctx)
+{
+    //! See: https://github.com/musescore/MuseScore/issues/23355
+    AutomationCurve& curve = ctx.curves[key];
+    std::map<utick_t, int>& tickPrioMap = ctx.dynamicPriorities[key];
+
+    const auto prioIt = tickPrioMap.lower_bound(tick);
+    const bool hasPrio = prioIt != tickPrioMap.end() && prioIt->first == tick;
+
+    if (hasPrio) {
+        if (priority <= prioIt->second) {
+            return false;
+        }
+
+        curve[tick] = point;
+        prioIt->second = priority;
+        return true;
+    }
+
+    const auto curveIt = curve.lower_bound(tick);
+    if (curveIt != curve.end() && curveIt->first == tick) {
+        return false; // point from a prior update pass — don't overwrite
+    }
+
+    curve.emplace_hint(curveIt, tick, point);
+    tickPrioMap.emplace_hint(prioIt, tick, priority);
+
+    return true;
 }
 
 void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
@@ -814,23 +850,58 @@ void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, 
     }
 }
 
-bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
-                                                   int priority, UpdateContext& ctx)
+void ScoreAutomationController::tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range,
+                                               AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
 {
-    //! See: https://github.com/musescore/MuseScore/issues/23355
-    auto& tickPrioMap = ctx.dynamicPriorities[key];
-    const auto prioIt = tickPrioMap.find(tick);
-
-    if (prioIt != tickPrioMap.end()) {
-        if (priority <= prioIt->second) {
-            return false;
-        }
-    } else if (muse::contains(m_automation->curve(key), tick)) {
-        return false; // point from a prior update pass — don't overwrite
+    if (!range.contains(staffIdx)) {
+        return;
     }
 
-    m_automation->addPoint(key, tick, point);
-    tickPrioMap[tick] = priority;
+    const Staff* staff = score ? score->staff(staffIdx) : nullptr;
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
 
-    return true;
+    if (!staff->isPrimaryStaff()) {
+        return; // ignore linked staves
+    }
+
+    key.staffId = staff->id();
+    result.push_back(key);
+}
+
+std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const EngravingItem* item, AutomationType type,
+                                                                       const StaffRange& range)
+{
+    const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+    const Score* score = item->score();
+
+    std::vector<AutomationCurveKey> result;
+    AutomationCurveKey key;
+    key.type = type;
+
+    switch (voiceAssignment) {
+    case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
+        const Part* part = item->part();
+        IF_ASSERT_FAILED(part) {
+            return result;
+        }
+
+        const staff_idx_t startStaffIdx = track2staff(part->startTrack());
+        const staff_idx_t endStaffIdx = startStaffIdx + part->nstaves();
+        result.reserve(endStaffIdx - startStaffIdx);
+
+        for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
+            tryAddStaffKey(score, staffIdx, range, key, result);
+        }
+    } break;
+    case VoiceAssignment::CURRENT_VOICE_ONLY:
+        key.voiceIdx = item->voice();
+    // fallthrough
+    case VoiceAssignment::ALL_VOICE_IN_STAFF:
+        tryAddStaffKey(score, item->staffIdx(), range, key, result);
+        break;
+    }
+
+    return result;
 }
