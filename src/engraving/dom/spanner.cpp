@@ -755,7 +755,7 @@ void Spanner::doComputeStartElement()
         m_startElement = score()->tick2measure(tick());
         break;
 
-    case Anchor::CHORD:
+    case Anchor::CHORDREST:
         m_startElement = startCR();
         break;
     case Anchor::NOTE:
@@ -816,7 +816,7 @@ void Spanner::doComputeEndElement()
 
     case Anchor::NOTE:
         break;
-    case Anchor::CHORD:
+    case Anchor::CHORDREST:
         m_endElement = endCR();
         break;
     }
@@ -946,7 +946,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    if (anchor() != Anchor::CHORD) {
+    if (anchor() != Anchor::CHORDREST) {
         return nullptr;
     }
     if (!m_startElement) {
@@ -966,7 +966,7 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    if (anchor() != Anchor::CHORD) {
+    if (anchor() != Anchor::CHORDREST) {
         return nullptr;
     }
     if (!m_endElement && type() == ElementType::SLUR) {
@@ -986,7 +986,7 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     if (!m_startElement || m_startElement->score() != score()) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_startElement = findStartCR();
@@ -1000,7 +1000,7 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     if ((!m_endElement || m_endElement->score() != score())) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_endElement = findEndCR();
@@ -1014,7 +1014,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    assert(anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::CHORDREST);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr && cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -1025,7 +1025,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    assert(anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::CHORDREST);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -1040,7 +1040,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     return score()->findCR(tick(), track());
 }
 
@@ -1050,7 +1050,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;

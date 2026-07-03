@@ -3721,7 +3721,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     }
                     if (s->track() == track) {
                         bool end = false;
-                        if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE) {
+                        if (s->anchor() == Spanner::Anchor::CHORDREST || s->anchor() == Spanner::Anchor::NOTE) {
                             end = s->tick2() < endTick;
                         } else {
                             end = s->tick2() <= endTick;

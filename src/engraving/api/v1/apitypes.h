@@ -1020,10 +1020,10 @@ enum class Syllabic {
 Q_ENUM_NS(Syllabic);
 
 enum class Anchor {
-    SEGMENT = int(mu::engraving::Spanner::Anchor::SEGMENT),
-    MEASURE = int(mu::engraving::Spanner::Anchor::MEASURE),
-    CHORD   = int(mu::engraving::Spanner::Anchor::CHORD),
-    NOTE    = int(mu::engraving::Spanner::Anchor::NOTE),
+    SEGMENT   = int(mu::engraving::Spanner::Anchor::SEGMENT),
+    MEASURE   = int(mu::engraving::Spanner::Anchor::MEASURE),
+    CHORDREST = int(mu::engraving::Spanner::Anchor::CHORDREST),
+    NOTE      = int(mu::engraving::Spanner::Anchor::NOTE),
 };
 Q_ENUM_NS(Anchor);
 
