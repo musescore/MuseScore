@@ -34,6 +34,7 @@
 #include "containers.h"
 
 #include "editing/addremoveelement.h"
+#include "editing/editchord.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transpose.h"
@@ -5277,6 +5278,14 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
         return true;
     };
 
+    // Track groups of parentheses to recreate in new chord
+    struct MovedParenGroup {
+        Chord* dstChord = nullptr;
+        bool generated = false;
+        std::vector<Note*> notes;
+    };
+    std::map<const NoteParenthesisInfo*, MovedParenGroup> movedParenGroups;
+
     std::vector<EngravingItem*> newElements;
     std::vector<EngravingItem*> oel = selection().elements();       // make copy
     for (EngravingItem* e : oel) {
@@ -5440,6 +5449,20 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                 }
             }
 
+            // Move paren to corresponding group in new chord
+            if (!chord->noteParentheses().empty()) {
+                const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenthesisInfo(note);
+                if (noteParenInfo) {
+                    bool generated = noteParenInfo->leftParen()->generated();
+                    EditChord::removeChordParentheses(chord, { note }, /*addToLinked*/ true, generated);
+
+                    MovedParenGroup& movedGroup = movedParenGroups[noteParenInfo];
+                    movedGroup.dstChord = dstChord;
+                    movedGroup.generated = generated;
+                    movedGroup.notes.push_back(newNote);
+                }
+            }
+
             // remove original note
             if (notes > 1) {
                 score->undoRemoveElement(note);
@@ -5518,6 +5541,12 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             e->undoChangeProperty(Pid::VOICE_ASSIGNMENT, VoiceAssignment::CURRENT_VOICE_ONLY);
             newElements.push_back(e);
         }
+    }
+
+    // Recreate parenthesis groups
+    for (auto& pair : movedParenGroups) {
+        MovedParenGroup& movedGroup = pair.second;
+        EditChord::addChordParentheses(movedGroup.dstChord, movedGroup.notes, /*addToLinked*/ true, movedGroup.generated);
     }
 
     if (!newElements.empty()) {
