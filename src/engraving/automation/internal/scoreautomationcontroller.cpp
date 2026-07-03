@@ -82,11 +82,43 @@ static const std::unordered_map<DynamicType, std::pair<double, double> > COMPOUN
     { DynamicType::SFPP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::PP) } },
 };
 
-static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx,
-                           staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo,
-                           AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
+ScoreAutomationController::StaffRange::StaffRange(const Score* score, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
-    if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
+    const staff_idx_t lastStaffIdx = score->nstaves() - 1;
+
+    if (staffIdxFrom == muse::nidx) {
+        from = 0;
+        to = lastStaffIdx;
+    } else {
+        from = staffIdxFrom;
+        to = std::min(staffIdxTo, lastStaffIdx);
+    }
+
+    isFull = (from == 0 && to == lastStaffIdx);
+
+    if (!isFull) {
+        for (staff_idx_t staffIdx = from; staffIdx <= to; ++staffIdx) {
+            if (const Staff* staff = score->staff(staffIdx)) {
+                staffIds.insert(staff->id());
+            }
+        }
+    }
+}
+
+bool ScoreAutomationController::StaffRange::contains(staff_idx_t staffIdx) const
+{
+    return isFull || (staffIdx >= from && staffIdx <= to);
+}
+
+bool ScoreAutomationController::StaffRange::contains(const muse::ID& staffId) const
+{
+    return isFull || muse::contains(staffIds, staffId);
+}
+
+void ScoreAutomationController::tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range,
+                                               AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
+{
+    if (!range.contains(staffIdx)) {
         return;
     }
 
@@ -103,14 +135,10 @@ static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx,
     result.push_back(key);
 }
 
-static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type,
-                                                   staff_idx_t staffIdxFrom = muse::nidx,
-                                                   staff_idx_t staffIdxTo = muse::nidx)
+std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const EngravingItem* item, AutomationType type,
+                                                                       const StaffRange& range)
 {
     const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
-    const staff_idx_t from = hasStaffFilter ? staffIdxFrom : 0;
-    const staff_idx_t to = hasStaffFilter ? staffIdxTo : muse::nidx;
     const Score* score = item->score();
 
     std::vector<AutomationCurveKey> result;
@@ -129,14 +157,14 @@ static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, Au
         result.reserve(endStaffIdx - startStaffIdx);
 
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
-            tryAddStaffKey(score, staffIdx, from, to, key, result);
+            tryAddStaffKey(score, staffIdx, range, key, result);
         }
     } break;
     case VoiceAssignment::CURRENT_VOICE_ONLY:
         key.voiceIdx = item->voice();
-        // fallthrough
+    // fallthrough
     case VoiceAssignment::ALL_VOICE_IN_STAFF:
-        tryAddStaffKey(score, item->staffIdx(), from, to, key, result);
+        tryAddStaffKey(score, item->staffIdx(), range, key, result);
         break;
     }
 
@@ -289,8 +317,8 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
 
     const int tickFrom = std::max(changes.tickFrom, 0);
 
-    // VoiceAssignment change shifts which staves a dynamic/hairpin covers, so the old points
-    // on staves outside the new assignment must also be cleared
+    // VoiceAssignment change shifts which staves a dynamic/hairpin covers,
+    // so the old points on staves outside the new assignment must also be cleared
     const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
 
     m_automation->beginTransaction();
@@ -302,7 +330,7 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
     m_automation->commitTransaction();
 }
 
-void ScoreAutomationController::update(const Score* score, int tickFrom, size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
     TRACEFUNC;
 
@@ -322,14 +350,12 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
         return;
     }
 
-    removeGeneratedPoints(score, *repeatFromIt, tickFrom, staffIdxFrom, staffIdxTo);
-    DynamicPriorities dynamicPriorities;
-    DeferredInValuePoints deferredInValuePoints;
-    PendingAnchorDynamics pendingAnchorDynamics;
+    const StaffRange range(score, staffIdxFrom, staffIdxTo);
+    UpdateContext ctx;
 
-    std::vector<std::pair<const MeasureRepeat*, int> > measureRepeats;
+    removeGeneratedPoints(*repeatFromIt, tickFrom, range);
 
-    // Step 1: segment dynamics: populates dynamicPriorities, inserts points with deferred inValues
+    // Step 1: segment dynamics: populates ctx.dynamicPriorities, inserts points with deferred inValues
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
         const int tickOffset = seg->utick - seg->tick;
@@ -348,109 +374,86 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, size_t 
                     continue;
                 }
 
-                collectMeasureRepeats(score, segment, measureRepeats, tickOffset, staffIdxFrom, staffIdxTo);
+                collectMeasureRepeats(segment, tickOffset, range, ctx.measureRepeats);
 
                 if (segment->annotations().empty()) {
                     continue;
                 }
 
-                addSegmentPoints(segment, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints,
-                                 pendingAnchorDynamics);
+                addSegmentPoints(segment, tickOffset, range, ctx);
             }
         }
     }
 
     // Step 1.5: anchored dynamics — processed after all regular dynamics so that a regular dynamic
     // at the same tick (possibly in a different segment) has already claimed outValue
-    for (const auto& [dyn, tickOffset] : pendingAnchorDynamics) {
-        addDynamicPoints(dyn, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
+    for (const auto& [dyn, tickOffset] : ctx.pendingAnchorDynamics) {
+        addDynamicPoints(dyn, tickOffset, range, ctx);
     }
 
-    // Step 2: spanner points: dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
+    // Step 2: spanner points: ctx.dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
-        addSpannerPoints(score, seg->tick, seg->endTick(), seg->utick - seg->tick, staffIdxFrom, staffIdxTo, dynamicPriorities,
-                         deferredInValuePoints);
+        addSpannerPoints(score, seg->tick, seg->endTick(), seg->utick - seg->tick, range, ctx);
     }
 
-    // Step 3: copy shared dynamics points into each voice curve
-    copyVoiceCurves(score, staffIdxFrom, staffIdxTo);
+    // Step 3: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
+    copyVoiceCurves(range);
 
     // Step 4: resolve deferred inValues — shared curves and their voice curve copies
-    resolveDeferredInValues(deferredInValuePoints);
+    resolveDeferredInValues(ctx);
 
     // Step 5: measure repeats: source curves fully resolved
-    addMeasureRepeatPoints(measureRepeats, dynamicPriorities);
+    addMeasureRepeatPoints(ctx);
 }
 
-void ScoreAutomationController::removeGeneratedPoints(const Score* score, const RepeatSegment* seg, int tickFrom,
-                                                      size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::removeGeneratedPoints(const RepeatSegment* seg, int tickFrom, const StaffRange& range)
 {
     const int tickOffset = seg->utick - seg->tick;
     const utick_t clearFromTick = std::max(seg->utick, tickFrom + tickOffset);
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
-    const staff_idx_t fromIdx = hasStaffFilter ? staffIdxFrom : 0;
-    const staff_idx_t toIdx = hasStaffFilter ? staffIdxTo : score->nstaves() - 1;
 
-    std::set<muse::ID> staffIds;
-    for (staff_idx_t staffIdx = fromIdx; staffIdx <= toIdx; ++staffIdx) {
-        if (const Staff* staff = score->staff(staffIdx)) {
-            staffIds.insert(staff->id());
-        }
-    }
-
-    m_automation->removePoints([clearFromTick, &staffIds](const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point) {
+    m_automation->removePoints([clearFromTick, &range](const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point) {
         return tick >= clearFromTick
                && key.type == AutomationType::Dynamics
                && point.itemId.has_value()
-               && muse::contains(staffIds, key.staffId);
+               && range.contains(key.staffId);
     });
 }
 
-void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities,
-                                                 DeferredInValuePoints& deferredInValuePoints,
-                                                 PendingAnchorDynamics& pendingAnchorDynamics)
+void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
-
     for (const EngravingItem* annotation : segment->annotations()) {
         if (!annotation || !annotation->isDynamic()) {
             continue;
         }
 
-        if (hasStaffFilter) {
-            const staff_idx_t staffIdx = annotation->staffIdx();
-            if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
-                continue;
-            }
+        if (!range.contains(annotation->staffIdx())) {
+            continue;
         }
 
         const Dynamic* dyn = toDynamic(annotation);
         if (dyn->anchorToEndOfPrevious()) {
-            pendingAnchorDynamics.emplace_back(dyn, tickOffset);
+            ctx.pendingAnchorDynamics.emplace_back(dyn, tickOffset);
         } else {
-            addDynamicPoints(dyn, tickOffset, staffIdxFrom, staffIdxTo, dynamicPriorities, deferredInValuePoints);
+            addDynamicPoints(dyn, tickOffset, range, ctx);
         }
     }
 }
 
-void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities,
-                                                 DeferredInValuePoints& deferredInValuePoints)
+void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
     if (!dynamic->playDynamic()) {
         return;
     }
 
-    const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, staffIdxFrom, staffIdxTo);
+    const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, range);
     for (const AutomationCurveKey& key : keys) {
-        addDynamicPoints(dynamic, tickOffset, key, dynamicPriorities, deferredInValuePoints);
+        addDynamicPoints(dynamic, tickOffset, key, ctx);
     }
 }
 
 void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
-                                                 DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints)
+                                                 UpdateContext& ctx)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return;
@@ -471,14 +474,14 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         // same tick has already claimed outValue. Contribute only inValue; otherwise add normally.
         if (dynamic->anchorToEndOfPrevious() && muse::contains(m_automation->curve(key), dynamicUTick)) {
             m_automation->setPointInValue(key, dynamicUTick, value);
-            deferredInValuePoints.erase({ key, dynamicUTick });
+            ctx.deferredInValuePoints.erase({ key, dynamicUTick });
             return;
         }
         AutomationPoint point;
         point.inValue = 0.0;
         point.outValue = value;
         point.itemId = eid;
-        addDeferredPoint(key, dynamicUTick, point, priority, dynamicPriorities, deferredInValuePoints);
+        addDeferredPoint(key, dynamicUTick, point, priority, ctx);
         return;
     }
 
@@ -489,12 +492,12 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         point.inValue = 0.0;
         point.outValue = it->second;
         point.itemId = eid;
-        addDeferredPoint(key, dynamicUTick, point, priority, dynamicPriorities, deferredInValuePoints);
+        addDeferredPoint(key, dynamicUTick, point, priority, ctx);
 
         if (const Segment* nextSeg = dynamic->segment()->next()) {
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
-            tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, dynamicPriorities);
+            tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, ctx);
         }
 
         return;
@@ -508,28 +511,25 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         startPoint.inValue = 0.0;
         startPoint.outValue = values.first;
         startPoint.itemId = eid;
-        addDeferredPoint(key, dynamicUTick, startPoint, priority, dynamicPriorities, deferredInValuePoints);
+        addDeferredPoint(key, dynamicUTick, startPoint, priority, ctx);
 
         AutomationPoint endPoint;
         endPoint.inValue = values.second;
         endPoint.outValue = values.second;
         endPoint.itemId = eid;
-        tryAddDynamicPoint(key, endPointTick, endPoint, priority, dynamicPriorities);
+        tryAddDynamicPoint(key, endPointTick, endPoint, priority, ctx);
 
         return;
     }
 }
 
-void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset,
-                                                 size_t staffIdxFrom, size_t staffIdxTo, DynamicPriorities& dynamicPriorities,
-                                                 DeferredInValuePoints& deferredInValuePoints)
+void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick,
+                                                 int tickOffset, const StaffRange& range, UpdateContext& ctx)
 {
     const SpannerMap& spannerMap = score->spannerMap();
     if (spannerMap.empty()) {
         return;
     }
-
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
 
     const auto& intervals = spannerMap.findOverlapping(repeatStartTick + 1, repeatEndTick - 1);
     for (const auto& interval : intervals) {
@@ -538,24 +538,20 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
             continue;
         }
 
-        if (hasStaffFilter) {
-            const staff_idx_t staffIdx = spanner->staffIdx();
-            if (staffIdx < staffIdxFrom || staffIdx > staffIdxTo) {
-                continue;
-            }
+        if (!range.contains(spanner->staffIdx())) {
+            continue;
         }
 
         const Hairpin* hairpin = toHairpin(spanner);
-        const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics,
-                                                                 staffIdxFrom, staffIdxTo);
+        const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics, range);
         for (const AutomationCurveKey& key : keys) {
-            addHairpinPoints(hairpin, tickOffset, key, dynamicPriorities, deferredInValuePoints);
+            addHairpinPoints(hairpin, tickOffset, key, ctx);
         }
     }
 }
 
 void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
-                                                 DynamicPriorities& dynamicPriorities, DeferredInValuePoints& deferredInValuePoints)
+                                                 UpdateContext& ctx)
 {
     utick_t hairpinFrom = hairpin->tick().ticks() + tickOffset;
     const utick_t hairpinTo = hairpinFrom + hairpin->ticks().ticks();
@@ -597,7 +593,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         startPoint.outValue = valueFrom;
         startPoint.inValue = prevOutValue;
         startPoint.itemId = eid;
-        tryAddDynamicPoint(key, hairpinFrom, startPoint, priority, dynamicPriorities);
+        tryAddDynamicPoint(key, hairpinFrom, startPoint, priority, ctx);
     }
 
     // --- Determine valueTo
@@ -622,8 +618,8 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         // A point already exists at the end tick; encode the hairpin's arrival via inValue, but only
         // if this hairpin has at least as much priority as whoever placed that point
         bool canModify = true;
-        const auto prioKeyIt = dynamicPriorities.find(key);
-        if (prioKeyIt != dynamicPriorities.end()) {
+        const auto prioKeyIt = ctx.dynamicPriorities.find(key);
+        if (prioKeyIt != ctx.dynamicPriorities.end()) {
             const auto tickIt = prioKeyIt->second.find(hairpinTo);
             canModify = tickIt == prioKeyIt->second.end() || priority >= tickIt->second;
         }
@@ -631,7 +627,7 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         if (canModify) {
             m_automation->setPointInValue(key, hairpinTo, valueTo);
             // Remove from deferred so the resolve pass doesn't overwrite the inValue we just set
-            deferredInValuePoints.erase({ key, hairpinTo });
+            ctx.deferredInValuePoints.erase({ key, hairpinTo });
         }
         return;
     }
@@ -641,24 +637,19 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         point.inValue = valueTo;
         point.outValue = valueTo;
         point.itemId = eid;
-        tryAddDynamicPoint(key, hairpinTo, point, priority, dynamicPriorities);
+        tryAddDynamicPoint(key, hairpinTo, point, priority, ctx);
     }
 }
 
-void ScoreAutomationController::copyVoiceCurves(const Score* score, size_t staffIdxFrom, size_t staffIdxTo)
+void ScoreAutomationController::copyVoiceCurves(const StaffRange& range)
 {
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
-
     for (const auto& [key, curve] : m_automation->curves()) {
-        if (key.type != AutomationType::Dynamics || !key.voiceIdx.has_value() || curve.empty()) {
+        if (key.type != AutomationType::Dynamics || !key.voiceIdx.has_value()) {
             continue;
         }
 
-        if (hasStaffFilter) {
-            const Staff* staff = score->staffById(key.staffId);
-            if (!staff || staff->idx() < staffIdxFrom || staff->idx() > staffIdxTo) {
-                continue;
-            }
+        if (!range.contains(key.staffId)) {
+            continue;
         }
 
         AutomationCurveKey sharedKey = key;
@@ -673,39 +664,35 @@ void ScoreAutomationController::copyVoiceCurves(const Score* score, size_t staff
     }
 }
 
-void ScoreAutomationController::collectMeasureRepeats(const Score* score, const Segment* segment,
-                                                      std::vector<std::pair<const MeasureRepeat*, int> >& result, int tickOffset,
-                                                      size_t staffIdxFrom, size_t staffIdxTo) const
+void ScoreAutomationController::collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range,
+                                                      std::vector<std::pair<const MeasureRepeat*, int> >& result) const
 {
     if (!segment->isChordRestType()) {
         return;
     }
 
-    const bool hasStaffFilter = (staffIdxFrom != muse::nidx);
-    const size_t nstaves = score->nstaves();
-
-    std::set<std::pair<const MeasureRepeat*, int> > visited;
-    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (hasStaffFilter && (staffIdx < staffIdxFrom || staffIdx > staffIdxTo)) {
-            continue;
-        }
-
+    for (staff_idx_t staffIdx = range.from; staffIdx <= range.to; ++staffIdx) {
         const EngravingItem* item = segment->element(staff2track(staffIdx));
         if (!item || !item->isMeasureRepeat()) {
             continue;
         }
 
-        const MeasureRepeat* mr = toMeasureRepeat(item);
-        if (visited.insert({ mr, tickOffset }).second) {
-            result.emplace_back(mr, tickOffset);
-        }
+        result.emplace_back(toMeasureRepeat(item), tickOffset);
     }
 }
 
-void ScoreAutomationController::addMeasureRepeatPoints(const std::vector<std::pair<const MeasureRepeat*, int> >& measureRepeats,
-                                                       DynamicPriorities& dynamicPriorities)
+void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 {
-    for (const auto& [mr, tickOffset] : measureRepeats) {
+    if (ctx.measureRepeats.empty()) {
+        return;
+    }
+
+    std::map<muse::ID, std::vector<std::pair<AutomationCurveKey, const AutomationCurve*> > > curvesByStaff;
+    for (const auto& [key, curve] : m_automation->curves()) {
+        curvesByStaff[key.staffId].emplace_back(key, &curve);
+    }
+
+    for (const auto& [mr, tickOffset] : ctx.measureRepeats) {
         const Measure* currMeasure = mr->firstMeasureOfGroup();
         if (!currMeasure) {
             continue;
@@ -721,14 +708,13 @@ void ScoreAutomationController::addMeasureRepeatPoints(const std::vector<std::pa
             continue;
         }
 
-        const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
-
-        std::vector<std::pair<AutomationCurveKey, const AutomationCurve*> > staffCurves;
-        for (const auto& [key, curve] : m_automation->curves()) {
-            if (key.staffId == staff->id()) {
-                staffCurves.emplace_back(key, &curve);
-            }
+        const auto staffCurvesIt = curvesByStaff.find(staff->id());
+        if (staffCurvesIt == curvesByStaff.end()) {
+            continue;
         }
+
+        const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
+        const auto& staffCurves = staffCurvesIt->second;
 
         for (int num = 0; num < mr->numMeasures(); ++num) {
             const utick_t srcFrom = referringMeasure->tick().ticks() + tickOffset;
@@ -749,7 +735,7 @@ void ScoreAutomationController::addMeasureRepeatPoints(const std::vector<std::pa
                         firstPoint = false;
                     }
 
-                    tryAddDynamicPoint(key, dstTick, point, 0, dynamicPriorities);
+                    tryAddDynamicPoint(key, dstTick, point, 0, ctx);
                 }
             }
 
@@ -766,7 +752,7 @@ void ScoreAutomationController::addMeasureRepeatPoints(const std::vector<std::pa
     }
 }
 
-void ScoreAutomationController::resolveDeferredInValues(DeferredInValuePoints& deferredInValuePoints)
+void ScoreAutomationController::resolveDeferredInValues(UpdateContext& ctx)
 {
     // Segment dynamics are inserted in Step 1 before hairpin endpoints exist in the curve,
     // so non-hairpin-end points carry inValue=0.0 as a placeholder. Resolve them here after
@@ -788,7 +774,7 @@ void ScoreAutomationController::resolveDeferredInValues(DeferredInValuePoints& d
         }
     }
 
-    for (const auto& [key, tick] : deferredInValuePoints) {
+    for (const auto& [key, tick] : ctx.deferredInValuePoints) {
         resolvePoint(key, tick);
         if (!key.voiceIdx.has_value()) {
             const auto it = voiceCurvesByStaff.find(key.staffId);
@@ -821,19 +807,18 @@ void ScoreAutomationController::resolveDeferredInValues(DeferredInValuePoints& d
 }
 
 void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
-                                                 int priority, DynamicPriorities& dynamicPriorities,
-                                                 DeferredInValuePoints& deferredInValuePoints)
+                                                 int priority, UpdateContext& ctx)
 {
-    if (tryAddDynamicPoint(key, tick, point, priority, dynamicPriorities)) {
-        deferredInValuePoints.emplace(key, tick);
+    if (tryAddDynamicPoint(key, tick, point, priority, ctx)) {
+        ctx.deferredInValuePoints.emplace(key, tick);
     }
 }
 
-bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick,
-                                                   const AutomationPoint& point, int priority, DynamicPriorities& dynamicPriorities)
+bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
+                                                   int priority, UpdateContext& ctx)
 {
     //! See: https://github.com/musescore/MuseScore/issues/23355
-    auto& tickPrioMap = dynamicPriorities[key];
+    auto& tickPrioMap = ctx.dynamicPriorities[key];
     const auto prioIt = tickPrioMap.find(tick);
 
     if (prioIt != tickPrioMap.end()) {
