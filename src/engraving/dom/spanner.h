@@ -154,7 +154,7 @@ class Spanner : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Spanner)
 public:
     enum class Anchor : unsigned char {
-        SEGMENT, MEASURE, CHORD, NOTE
+        SEGMENT, MEASURE, CHORDREST, NOTE
     };
 
     virtual double mag() const override;
