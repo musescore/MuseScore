@@ -231,8 +231,10 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     ctx.setCurTrack(0);
 
-    // Let's decide: write midi mapping to a file or not
-    score->masterScore()->checkMidiMapping();
+    if (score->isMaster()) {
+        // Let's decide: write midi mapping to a file or not
+        score->masterScore()->checkMidiMapping();
+    }
 
     auto shouldWritePart = [&ctx, score, staffStart, staffEnd](const Part* part) {
         if (!ctx.shouldWriteRange()) {
