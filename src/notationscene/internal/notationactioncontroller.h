@@ -21,13 +21,17 @@
  */
 #pragma once
 
+#include "../inotationcommandscontroller.h"
+
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/actiontypes.h"
+#include "rcommand/commandable.h"
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"
 #include "context/iglobalcontext.h"
@@ -39,11 +43,13 @@
 #include "notation/inotation.h"
 
 namespace mu::notation {
-class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class NotationActionController : public INotationCommandsController, public muse::actions::Actionable, public muse::rcommand::Commandable,
+    public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionRegister = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -59,6 +65,9 @@ public:
     void init();
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
+    bool isTextEditing() const override;
+    muse::async::Channel<bool> textEditingChanged() const override;
 
     muse::async::Notification currentNotationChanged() const;
 
@@ -106,6 +115,7 @@ private:
 
     bool moveSelectionAvailable(MoveSelectionType type) const;
     void moveSelection(MoveSelectionType type, MoveDirection direction);
+    muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
     void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
@@ -203,11 +213,11 @@ private:
     bool textNavigationByFractionAvailable() const;
     bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
 
-    void nextTextElement();
-    void prevTextElement();
+    muse::Ret nextTextElement();
+    muse::Ret prevTextElement();
+    muse::Ret nextWord();
     void nextBeatTextElement();
     void prevBeatTextElement();
-    void nextWord();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
@@ -279,6 +289,7 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
     muse::async::Notification m_currentNotationNoteInputChanged;
+    muse::async::Channel<bool> m_textEditingChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

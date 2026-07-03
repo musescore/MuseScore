@@ -1711,24 +1711,6 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::TUNING_FORK,
              Checkable::Yes
              ),
-    UiAction("next-word",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_NOTATION_TEXT_EDITING,
-             TranslatableString("action", "Next word"),
-             TranslatableString("action", "Go to next word")
-             ),
-    UiAction("next-text-element",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_NOTATION_TEXT_EDITING,
-             TranslatableString("action", "Next text element"),
-             TranslatableString("action", "Go to next text element")
-             ),
-    UiAction("prev-text-element",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_NOTATION_TEXT_EDITING,
-             TranslatableString("action", "Previous text element"),
-             TranslatableString("action", "Go to previous text element")
-             ),
     UiAction("next-beat-TEXT",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,

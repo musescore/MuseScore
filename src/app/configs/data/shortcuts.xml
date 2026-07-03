@@ -931,20 +931,6 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
-    <key>next-word</key>
-    <seq>Space</seq>
-    </SC>
-  <SC>
-    <key>next-text-element</key>
-    <seq>Right</seq>
-    </SC>
-  <SC>
-    <key>prev-text-element</key>
-    <seq>Shift+Space</seq>
-    <seq>Left</seq>
-    <seq>Backspace</seq>
-    </SC>
-  <SC>
     <key>next-syllable</key>
     <seq>-</seq>
     <seq>Num+-</seq>

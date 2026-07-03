@@ -21,7 +21,10 @@
  */
 #include "notationactioncontroller.h"
 
-#include "io/file.h"
+#include <QGuiApplication>
+
+#include "global/io/file.h"
+#include "global/translation.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
@@ -34,10 +37,10 @@
 
 #include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 
-#include "translation.h"
-#include "log.h"
+#include "../notationcommands.h"
 
-#include <QGuiApplication>
+#include "log.h"
+#include "types/ret.h"
 
 using namespace mu;
 using namespace muse;
@@ -151,9 +154,6 @@ void NotationActionController::init()
     registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
     registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
 
-    registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
-    registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
-    registerAction("next-word", &Controller::nextWord, &Controller::textNavigationAvailable);
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
@@ -211,14 +211,6 @@ void NotationActionController::init()
     registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
     registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
 
-    registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
-    registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
-    registerAction("pitch-up", &Controller::move, MoveDirection::Up, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-down", &Controller::move, MoveDirection::Down, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-down-octave", &Controller::move, MoveDirection::Down, true, &Controller::isNotEditingOrHasPopup);
     registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
     registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
 
@@ -562,11 +554,20 @@ void NotationActionController::init()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
-            notation->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
+            auto interaction = notation->interaction();
+            interaction->noteInput()->stateChanged().onNotify(this, [this]() {
                 m_currentNotationNoteInputChanged.notify();
+            }, Asyncable::Mode::SetReplace);
+
+            interaction->textEditingStarted().onNotify(this, [this]() {
+                m_textEditingChanged.send(true);
+            }, Asyncable::Mode::SetReplace);
+            interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
+                m_textEditingChanged.send(false);
             }, Asyncable::Mode::SetReplace);
         }
         m_currentNotationNoteInputChanged.notify();
+        m_textEditingChanged.send(isTextEditing());
     });
 
     // Register engraving debugging options actions
@@ -582,6 +583,25 @@ void NotationActionController::init()
         });
     }
     dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });
+
+    // commands
+    {
+        auto d = commandDispatcher();
+
+        d->onRequest(this, MOVE_RIGHT_COMMAND, [this]() { return moveWithRet(MoveDirection::Right, false); });
+        d->onRequest(this, MOVE_LEFT_COMMAND, [this]() { return moveWithRet(MoveDirection::Left, false); });
+        d->onRequest(this, MOVE_RIGHT_QUICKLY_COMMAND, [this]() { return moveWithRet(MoveDirection::Right, true); });
+        d->onRequest(this, MOVE_LEFT_QUICKLY_COMMAND, [this]() { return moveWithRet(MoveDirection::Left, true); });
+
+        d->onRequest(this, PITCH_UP_COMMAND, [this]() { return moveWithRet(MoveDirection::Up, false); });
+        d->onRequest(this, PITCH_DOWN_COMMAND, [this]() { return moveWithRet(MoveDirection::Down, false); });
+        d->onRequest(this, PITCH_UP_OCTAVE_COMMAND, [this]() { return moveWithRet(MoveDirection::Up, true); });
+        d->onRequest(this, PITCH_DOWN_OCTAVE_COMMAND, [this]() { return moveWithRet(MoveDirection::Down, true); });
+
+        d->onRequest(this, EDIT_NEXT_WORD_COMMAND, [this]() { return nextWord(); });
+        d->onRequest(this, EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { return nextTextElement(); });
+        d->onRequest(this, EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { return prevTextElement(); });
+    }
 }
 
 bool NotationActionController::canReceiveAction(const ActionCode& code) const
@@ -1105,12 +1125,12 @@ void NotationActionController::moveSelection(MoveSelectionType type, MoveDirecti
     seekSelectedElement();
 }
 
-void NotationActionController::move(MoveDirection direction, bool quickly)
+muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool quickly)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     const NoteInputState& state = interaction->noteInput()->state();
@@ -1119,7 +1139,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         // Try to restore the previous selection...
         interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
         seekAndPlaySelectedElement(true);
-        return;
+        return muse::make_ok();
     }
 
     const EngravingItem* selectedElement = interaction->selection()->element();
@@ -1137,13 +1157,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudgeAnchors(direction);
         } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
-            return;
+            return muse::make_ok();
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
                 interaction->movePitch(direction, PitchMode::OCTAVE);
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
-            return;
+            return muse::make_ok();
         } else if (interaction->selection()->isNone() && !state.beyondScore()) {
             interaction->selectFirstElement(false);
         } else {
@@ -1182,12 +1202,12 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             }
 
             playbackController()->seekBeat(targetMeasureIdx, targetBeatIdx);
-            return;
+            return muse::make_ok();
         }
 
         if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
             navigateToTextElementInNearMeasure(direction);
-            return;
+            return muse::make_ok();
         }
 
         if (selectedElement && selectedElement->isTextBase()) {
@@ -1207,6 +1227,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     }
 
     seekAndPlaySelectedElement(playChord);
+
+    return muse::make_ok();
+}
+
+void NotationActionController::move(MoveDirection direction, bool quickly)
+{
+    moveWithRet(direction, quickly);
 }
 
 void NotationActionController::moveInputNotes(bool up, PitchMode mode)
@@ -1967,6 +1994,21 @@ bool NotationActionController::toggleLayoutBreakAvailable() const
     return interaction && interaction->toggleLayoutBreakAvailable();
 }
 
+bool NotationActionController::isTextEditing() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->isTextEditingStarted();
+}
+
+muse::async::Channel<bool> NotationActionController::textEditingChanged() const
+{
+    return m_textEditingChanged;
+}
+
 bool NotationActionController::textNavigationAvailable() const
 {
     return resolveTextNavigationAvailable(TextNavigationType::NearNoteOrRest);
@@ -2020,19 +2062,26 @@ bool NotationActionController::resolveTextNavigationAvailable(TextNavigationType
     return false;
 }
 
-void NotationActionController::nextTextElement()
+muse::Ret NotationActionController::nextTextElement()
 {
     navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST);
+    return muse::make_ok();
 }
 
-void NotationActionController::prevTextElement()
+muse::Ret NotationActionController::prevTextElement()
 {
     navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
+    return muse::make_ok();
 }
 
-void NotationActionController::nextWord()
+muse::Ret NotationActionController::nextWord()
 {
+    if (!textNavigationAvailable()) {
+        return muse::make_ret(Ret::Code::NotSupported);
+    }
+
     navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST, false);
+    return muse::make_ok();
 }
 
 void NotationActionController::nextBeatTextElement()

@@ -24,7 +24,6 @@
 
 #include "modularity/ioc.h"
 
-#include "ui/iuiactionsregister.h"
 #include "rcommand/icommandsregister.h"
 #include "rcommand/icommandsstate.h"
 #include "interactive/iinteractiveuriregister.h"

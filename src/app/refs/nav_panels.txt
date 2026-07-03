@@ -1,2 +1,0 @@
-GLOBAL - global (any page, any panel)
-PROJECT_PAGE - project page 

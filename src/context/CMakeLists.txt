@@ -34,4 +34,6 @@ target_sources(context PRIVATE
     internal/playbackstate.h
     internal/uicontextresolver.cpp
     internal/uicontextresolver.h
+    internal/shortcutresolver.cpp 
+    internal/shortcutresolver.h
 )
