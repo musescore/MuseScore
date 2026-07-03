@@ -1827,15 +1827,25 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format, String& pr
         String remainder = token.mid(5).trimmed();
         while (!remainder.empty()) {
             if (remainder.startsWith(u"size=\"")) {
+                const size_t endQuote = remainder.indexOf(u'"', 6);
+                if (endQuote == muse::nidx) {
+                    LOGD("cannot parse html property <%s> in text <%s>", muPrintable(remainder), muPrintable(m_text));
+                    break;
+                }
                 double size = parseNumProperty(remainder.mid(6));
-                remainder = remainder.mid(remainder.indexOf(u'"', 6) + 1).trimmed();
+                remainder = remainder.mid(endQuote + 1).trimmed();
                 if (!token.endsWith(u"/")) {
                     prevFontSize = format.fontSize();
                 }
                 format.setFontSize(size);
             } else if (remainder.startsWith(u"face=\"")) {
+                const size_t endQuote = remainder.indexOf(u'"', 6);
+                if (endQuote == muse::nidx) {
+                    LOGD("cannot parse html property <%s> in text <%s>", muPrintable(remainder), muPrintable(m_text));
+                    break;
+                }
                 String face = unEscape(parseStringProperty(remainder.mid(6)));
-                remainder = remainder.mid(remainder.indexOf(u'"', 6) + 1).trimmed();
+                remainder = remainder.mid(endQuote + 1).trimmed();
                 if (!token.endsWith(u"/")) {
                     prevFontFace = format.fontFamily();
                 }
