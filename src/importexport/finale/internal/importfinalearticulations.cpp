@@ -231,7 +231,7 @@ musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions() const
     // actions such as Page View <-> Continuous View.
     options.skipGraceEntries = true;
     options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
-                                                const musx::util::StaffOriginOffsetRequest& request) {
+                                               const musx::util::StaffOriginOffsetRequest& request) {
         const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
         const staff_idx_t targetStaffIdx = muse::value(m_inst2Staff, request.targetStaffId, muse::nidx);
         const Fraction tick = muse::value(m_meas2Tick, request.measureId, Fraction(-1, 1));
