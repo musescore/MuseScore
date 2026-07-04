@@ -149,16 +149,14 @@ struct RoutedTrack {
 std::optional<RoutedTrack> routeElementStaffVoice(
     const EncMeasureElem* e, bool isNoteOrRest, const std::array<int, 256>& lineSlotByRawByte, const MeasEmitCtx& mc, const BuildCtx& ctx);
 
-// Case-B pickup adjustment: shorten measure 0 if loop placed less than its nominal length. (emitters-fill.cpp)
-void adjustPickupMeasure(BuildCtx& ctx, mu::engraving::Measure* measure, int measIdx);
-// Pre-fill trailing silence with invisible gap rests. (emitters-fill.cpp)
-void fillTrailingGaps(BuildCtx& ctx, mu::engraving::Measure* measure, mu::engraving::Fraction measTick);
+// Reconcile a finalized measure to its shared length on every track: pickup shorten, trailing-gap
+// fill (or irregular shrink), MuseScore's empty-voice fill, small-delta correction, then overfull
+// resolution. The one owner of "every voice sums to the measure length". (emitters-fill.cpp)
+void reconcileMeasureLength(BuildCtx& ctx, mu::engraving::Measure* measure, mu::engraving::Fraction measTick, int measIdx);
 // End-of-score handling of grace chords that never found a principal chord: re-place them as small
 // audible cue notes in the spare cue voice of their own bar (flush to the barline) instead of
 // dropping them. Clears ctx.scratch.pendingGraces. (emitters-fill.cpp)
 void handleDanglingGraces(BuildCtx& ctx);
-// Fix over/undershoots up to 1/24. (emitters-fill.cpp)
-void correctMeasureLength(BuildCtx& ctx, mu::engraving::Measure* measure);
 // Extend the measure to the max voice content (IrregularMeasure / Stretch fallback). (emitters-fill.cpp)
 void extendMeasureIrregular(BuildCtx& ctx, mu::engraving::Measure* measure);
 // Nuclear hard-cap: remove trailing elements and fill deficit. (emitters-fill.cpp)

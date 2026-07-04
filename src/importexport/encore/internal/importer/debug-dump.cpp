@@ -211,6 +211,13 @@ void logEncRootInfo(const EncRoot& enc)
         // screen pixels) is resolved from the PREC page size, same as applyPageMargins.
         std::string marginStr;
         double wIn = 0.0, hIn = 0.0;
+        if (precPageSizeInches(enc.printSetup, wIn, hIn) && wIn > 0.0 && hIn > 0.0) {
+            const double upi = winiUnitsPerInch(ps.rightEdge, ps.left, wIn);
+            marginStr = ("  (in: T=" + QString::number(ps.top / upi, 'f', 3)
+                         + " L=" + QString::number(ps.left / upi, 'f', 3)
+                         + " R=" + QString::number(wIn - ps.rightEdge / upi, 'f', 3)
+                         + " B=" + QString::number(hIn - ps.bottomEdge / upi, 'f', 3) + ")").toStdString();
+        }
         LOGD() << "  WINI: top=" << ps.top << "  left=" << ps.left
                << "  bottomEdge=" << ps.bottomEdge << "  rightEdge=" << ps.rightEdge << marginStr;
     } else if (enc.fmt && enc.fmt->usesUniformPageMargins()) {

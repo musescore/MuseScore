@@ -794,13 +794,7 @@ static void finalizeMeasureAfterNoteLoop(BuildCtx& ctx, MeasEmitCtx& mc,
         mc.closeTupletWithFill(ctx, tt, key);
     }
     attachPendingLyrics(ctx, mc);
-    adjustPickupMeasure(ctx, measure, measIdx);
-    fillTrailingGaps(ctx, measure, measTick);
-    for (int si = 0; si < ctx.totalStaves; ++si) {
-        measure->checkMeasure(static_cast<staff_idx_t>(si));
-    }
-    correctMeasureLength(ctx, measure);
-    fitOverfullMeasure(ctx, measure);
+    reconcileMeasureLength(ctx, measure, measTick, measIdx);
     const EncMeasure* prevMeas = (measIdx > 0) ? &enc.measures[measIdx - 1] : nullptr;
     measSkip = measDisplayCount(encMeas, prevMeas) - 1;
     ++msIdxCounter;

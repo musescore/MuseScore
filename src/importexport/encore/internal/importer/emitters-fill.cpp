@@ -147,7 +147,7 @@ static void addGapRests(Measure* measure, const Fraction& fillTick, const Fracti
 
 // Pickup adjustment: if measure 0 has the same timesig as the full nominal length but the note
 // loop placed less content, shorten it to the actual cumTick (and shift following measures).
-void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
+static void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
 {
     if (!ctx.opts.firstMeasureIsPickup) {
         return;
@@ -172,7 +172,7 @@ void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
 // VisibleRests: normal rests so the user can see the empty beats.
 // IrregularMeasure: no rests added; the measure actual duration is shortened to match content.
 // Only applies to voices that have some content (cumTick > 0).
-void fillTrailingGaps(BuildCtx& ctx, Measure* measure, Fraction measTick)
+static void fillTrailingGaps(BuildCtx& ctx, Measure* measure, Fraction measTick)
 {
     const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests
                           && ctx.opts.underfillMeasureStrategy != UnderfillStrategy::IrregularMeasure);
@@ -233,7 +233,7 @@ static const Fraction kFillMaxDelta(1, 24);
 
 // Fix over/undershoots up to kFillMaxDelta: overshoot removes smallest gap rests, undershoot
 // adds exact-valued gap rests.
-void correctMeasureLength(BuildCtx& ctx, Measure* measure)
+static void correctMeasureLength(BuildCtx& ctx, Measure* measure)
 {
     const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests);
     const Fraction mLen = measure->ticks();
@@ -278,6 +278,22 @@ void correctMeasureLength(BuildCtx& ctx, Measure* measure)
             }
         }
     }
+}
+
+// Single authority that reconciles a finalized measure to its shared length on every track:
+// pickup shorten, trailing-gap fill (or irregular shrink), MuseScore's own empty-voice fill,
+// small-delta correction, then overfull-strategy resolution. This is the one place that owns the
+// invariant "every voice on every staff sums to the measure length". The order is load-bearing:
+// checkMeasure runs between the underfull fill and the small-delta / overfull fixes.
+void reconcileMeasureLength(BuildCtx& ctx, Measure* measure, Fraction measTick, int measIdx)
+{
+    adjustPickupMeasure(ctx, measure, measIdx);
+    fillTrailingGaps(ctx, measure, measTick);
+    for (int si = 0; si < ctx.totalStaves; ++si) {
+        measure->checkMeasure(static_cast<staff_idx_t>(si));
+    }
+    correctMeasureLength(ctx, measure);
+    fitOverfullMeasure(ctx, measure);
 }
 
 // Extend the measure to the maximum voice content (IrregularMeasure behavior), shifting
