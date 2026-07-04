@@ -311,7 +311,11 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                     }
                 }
             }
-            destScore->doUndoAddElement(ns);
+            if (link) {
+                destScore->doUndoAddElement(ns);
+            } else {
+                destScore->undoAddElement(ns);
+            }
         }
     }
 }
