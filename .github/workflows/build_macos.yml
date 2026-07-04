@@ -215,10 +215,6 @@ jobs:
       run: |
         bash ./buildscripts/ci/macos/install_qt.sh
 
-    - name: Download dependencies
-      run: |
-        bash ./buildscripts/ci/macos/download_dependencies.sh
-
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
