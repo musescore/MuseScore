@@ -37,10 +37,8 @@
 #include "engraving/dom/tuplet.h"
 
 namespace mu::iex::enc {
-// Resize `measure` to `newLen` and shift every following measure and every pending element that
-// caches an absolute tick (all carry absolute ticks and would otherwise be corrupted by the resize).
-// Forward ticks at or after the measure's content boundary shift; ticks inside the kept content never
-// move.
+// Resize the measure and shift every following measure and every pending element that caches an
+// absolute tick; ticks inside the kept content never move.
 static void resizeMeasureAndShift(BuildCtx& ctx, Measure* measure, Fraction newLen)
 {
     // Reduce to lowest terms so an irregular measure reads as a sensible time signature (99/96 -> 33/32);
@@ -118,10 +116,8 @@ static void resizeMeasureAndShift(BuildCtx& ctx, Measure* measure, Fraction newL
     }
 }
 
-// Fill a gap of length `len` at absolute tick `fillTick` in `track` with rests of exact rhythmic
-// value, split per the measure's time signature, instead of one whole-measure rest (a V_MEASURE
-// rest renders as a centered whole rest regardless of its actual duration, wrong for a partial
-// gap). `makeGap` marks the rests invisible. No-op if the first segment is already occupied.
+// Exact-value rests split per the time signature, not one whole-measure rest, which renders as a
+// centered whole rest whatever its duration. No-op if the first segment is occupied.
 static void addGapRests(Measure* measure, const Fraction& fillTick, const Fraction& len,
                         track_idx_t track, bool makeGap)
 {
@@ -147,7 +143,7 @@ static void addGapRests(Measure* measure, const Fraction& fillTick, const Fracti
 
 // Pickup adjustment: if measure 0 has the same timesig as the full nominal length but the note
 // loop placed less content, shorten it to the actual cumTick (and shift following measures).
-void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
+static void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
 {
     if (!ctx.opts.firstMeasureIsPickup) {
         return;
@@ -167,12 +163,9 @@ void adjustPickupMeasure(BuildCtx& ctx, Measure* measure, int measIdx)
     resizeMeasureAndShift(ctx, measure, maxCumTick);
 }
 
-// Pre-fill trailing silence with rests so checkMeasure does not add its own.
-// InvisibleRests (default): gap rests keep the score clean.
-// VisibleRests: normal rests so the user can see the empty beats.
-// IrregularMeasure: no rests added; the measure actual duration is shortened to match content.
-// Only applies to voices that have some content (cumTick > 0).
-void fillTrailingGaps(BuildCtx& ctx, Measure* measure, Fraction measTick)
+// Pre-fill trailing silence so checkMeasure does not add its own; the option decides visible rests,
+// invisible ones, or an irregular bar. Only for voices that have content.
+static void fillTrailingGaps(BuildCtx& ctx, Measure* measure, Fraction measTick)
 {
     const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests
                           && ctx.opts.underfillMeasureStrategy != UnderfillStrategy::IrregularMeasure);
@@ -233,7 +226,7 @@ static const Fraction kFillMaxDelta(1, 24);
 
 // Fix over/undershoots up to kFillMaxDelta: overshoot removes smallest gap rests, undershoot
 // adds exact-valued gap rests.
-void correctMeasureLength(BuildCtx& ctx, Measure* measure)
+static void correctMeasureLength(BuildCtx& ctx, Measure* measure)
 {
     const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests);
     const Fraction mLen = measure->ticks();
@@ -280,10 +273,34 @@ void correctMeasureLength(BuildCtx& ctx, Measure* measure)
     }
 }
 
-// Extend the measure to the maximum voice content (IrregularMeasure behavior), shifting
-// later measures and pending hairpins, and filling short voices with a visible rest.
-// Used by the IrregularMeasure strategy and as the Stretch fallback when a tuplet cannot
-// be compressed enough to be musical.
+// The one place that owns "every voice on every staff sums to the measure length". The order is
+// load-bearing: checkMeasure runs between the underfull fill and the overfull fixes.
+// See ENCORE_IMPORTER.md 4.1.
+void reconcileMeasureLength(BuildCtx& ctx, Measure* measure, Fraction measTick, int measIdx)
+{
+    adjustPickupMeasure(ctx, measure, measIdx);
+    fillTrailingGaps(ctx, measure, measTick);
+    for (int si = 0; si < ctx.totalStaves; ++si) {
+        measure->checkMeasure(static_cast<staff_idx_t>(si));
+    }
+    correctMeasureLength(ctx, measure);
+    fitOverfullMeasure(ctx, measure);
+}
+
+// Runs before the marks are resolved: taking an element away is only safe while nothing is anchored
+// to it. See ENCORE_IMPORTER.md §4.1.
+void guaranteeAllMeasures(BuildCtx& ctx)
+{
+    if (ctx.opts.overfillMeasureStrategy == OverfillStrategy::IrregularMeasure) {
+        return;
+    }
+    for (mu::engraving::Measure* m = ctx.score->firstMeasure(); m; m = m->nextMeasure()) {
+        guaranteeMeasureLength(ctx, m);
+    }
+}
+
+// Extend the measure to its longest voice, shifting later measures and pending hairpins. Used by the
+// IrregularMeasure strategy and as the Stretch fallback.
 void extendMeasureIrregular(BuildCtx& ctx, Measure* measure)
 {
     const Fraction mLen = measure->ticks();
@@ -317,11 +334,64 @@ void extendMeasureIrregular(BuildCtx& ctx, Measure* measure)
     }
 }
 
-// Nuclear hard-cap: remove trailing ChordRest elements from any voice that
-// still overshoots after correctMeasureLength, then fill any residual deficit
-// with a rest. Guarantees no measure has wrong total duration.
-// Exception: IrregularMeasure overfill extends the measure to the maximum voice
-// content instead of truncating, preserving all notes and their spanner endpoints.
+// Hard cap: drop trailing elements from any voice that still overshoots, then fill the deficit, so no
+// measure ends with the wrong total. IrregularMeasure extends the bar instead.
+static bool isWritableLength(const Fraction& f)
+{
+    const Fraction r = f.reduced();
+    return r.numerator() >= 0 && (r.denominator() & (r.denominator() - 1)) == 0;
+}
+
+// Last word on the length of a bar: trim past the barline, walk the boundary back to a writable
+// length, fill. See ENCORE_IMPORTER.md §4.1.
+void guaranteeMeasureLength(BuildCtx& ctx, Measure* measure)
+{
+    const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests);
+    const Fraction mLen = measure->ticks();
+    const Fraction measTick = measure->tick();
+
+    const int nStaves = static_cast<int>(ctx.score->nstaves());
+    for (int si = 0; si < nStaves; ++si) {
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
+            const track_idx_t tr = static_cast<track_idx_t>(si * VOICES + v);
+            std::vector<ChordRest*> crs;
+            Fraction sum = collectVoice(measure, tr, crs);
+            if (sum == mLen || (crs.empty() && v != 0)) {
+                continue;
+            }
+            // A bracket member is removed, never the bracket dissolved: dissolving lengthens the
+            // members in place and the sum stops being the room they occupy.
+            auto dropLast = [&]() {
+                if (crs.empty()) {
+                    return false;
+                }
+                ChordRest* last = crs.back();
+                const Fraction was = last->actualTicks();
+                detachSpannersAt(last);
+                if (last->tuplet()) {
+                    last->tuplet()->remove(last);
+                    last->setTuplet(nullptr);
+                }
+                crs.pop_back();
+                Segment* lseg = last->segment();
+                lseg->remove(last);
+                delete last;
+                sum -= was;
+                return true;
+            };
+            int guard = 256;
+            while (sum > mLen && guard-- > 0 && dropLast()) {
+            }
+            guard = 256;
+            while (sum < mLen && !isWritableLength(mLen - sum) && guard-- > 0 && dropLast()) {
+            }
+            if (sum < mLen && isWritableLength(mLen - sum)) {
+                addGapRests(measure, measTick + sum, mLen - sum, tr, makeGap);
+            }
+        }
+    }
+}
+
 void capMeasureLength(BuildCtx& ctx, Measure* measure)
 {
     const bool makeGap = (ctx.opts.underfillMeasureStrategy != UnderfillStrategy::VisibleRests);
@@ -366,10 +436,8 @@ void capMeasureLength(BuildCtx& ctx, Measure* measure)
 
 void handleDanglingGraces(BuildCtx& ctx)
 {
-    // Grace chords that never found a principal chord (no following downbeat to ornament). Rather
-    // than dropping them, re-place them as small audible cue notes in the spare cue voice of their
-    // own bar, flush to the barline, so the figure and its timing survive. The rest of the cue
-    // voice is filled with invisible gap rests.
+    // Grace chords with no principal chord become audible cue notes in the spare cue voice of their own
+    // bar, flush to the barline, so the figure and its timing survive.
     for (auto& [key, vec] : ctx.scratch.pendingGraces) {
         const int staffIdx = key.first;
         const track_idx_t track = static_cast<track_idx_t>(staffIdx * static_cast<int>(VOICES) + kCueVoice);
