@@ -110,6 +110,36 @@ static int firstPageBreakPage(MasterScore* score)
     return -2;
 }
 
+TEST_F(Tst_Structure, page_break_spill_shrinks_staff_space)
+{
+    // structure_page_break_spill.enc: 6 staves, 3 systems. Its first two systems (LINE pageIdx
+    // 0 then 1) belong on the first page, but at the default staff space they do not fit on its
+    // short custom page, so the second system spills onto the second page (leaving a near-empty
+    // page). With imported page breaks the importer shrinks the staff space (by <= 0.01 inch)
+    // until the first page break's measure returns to the first page.
+    MasterScore* score = readEncoreScore("structure_page_break_spill.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    EXPECT_EQ(firstPageBreakPage(score), 0)
+        << "the first page break's measure must be pulled back onto the first page";
+
+    // A reference import with page breaks off does not run the fit pass, so its staff space is
+    // the untouched default. The page-break import must have reduced it, but by no more than the
+    // 0.022-inch budget (1 inch == 1200 engraving units).
+    mu::iex::enc::EncImportOptions noBreaks;
+    noBreaks.importPageBreaks = false;
+    MasterScore* ref = readEncoreScoreWithOpts("structure_page_break_spill.enc", noBreaks);
+    ASSERT_NE(ref, nullptr);
+    const double defaultSp = ref->style().styleD(Sid::spatium);
+    const double sp = score->style().styleD(Sid::spatium);
+    EXPECT_LT(sp, defaultSp) << "staff space must be reduced to make the first page fit";
+    EXPECT_GE(sp, defaultSp - 0.022 * 1200.0) << "the reduction must not exceed 0.022 inch";
+
+    delete ref;
+    delete score;
+}
+
 TEST_F(Tst_Structure, basic_measure_count)
 {
     MasterScore* score = readEncoreScore("bazo.enc");
@@ -344,6 +374,78 @@ TEST_F(Tst_Structure, time_sig_change_2_2_to_4_4_and_back)
 // WINI block / page margin tests
 // ===========================================================================
 
+// bazo.enc has a WINI block: top=18 left=18 bEdge=824 rEdge=577 on A4.
+TEST_F(Tst_Structure, page_margins_wini_standard_a4)
+{
+    MasterScore* score = readEncoreScore("bazo.enc");
+    ASSERT_NE(score, nullptr);
+
+    const double expectedIn = 18.0 / 72.0;   // 0.25"
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddTopMargin),  expectedIn, 0.001);
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenTopMargin), expectedIn, 0.001);
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddLeftMargin),  expectedIn, 0.001);
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenLeftMargin), expectedIn, 0.001);
+
+    // printableWidth = (rEdge - left) / 72 = (577 - 18) / 72 = 559 / 72
+    const double expectedPrintW = 559.0 / 72.0;
+    EXPECT_NEAR(score->style().styleD(Sid::pagePrintableWidth), expectedPrintW, 0.001);
+
+    delete score;
+}
+
+// File with custom left margin (left=7 pts, ~0.097 in).
+// bazo_left_100.enc: top=18 left=7 bEdge=824 rEdge=577.
+TEST_F(Tst_Structure, page_margins_wini_custom_left)
+{
+    MasterScore* score = readEncoreScore("bazo_left_100.enc");
+    ASSERT_NE(score, nullptr);
+
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddTopMargin),   18.0 / 72.0, 0.001);
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddLeftMargin),   7.0 / 72.0, 0.001);
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenLeftMargin),  7.0 / 72.0, 0.001);
+    // printableWidth = (577 - 7) / 72 = 570 / 72
+    EXPECT_NEAR(score->style().styleD(Sid::pagePrintableWidth), 570.0 / 72.0, 0.001);
+
+    delete score;
+}
+
+// File with WINI top=0 left=0 (zero margins, full-page printable area).
+// ornaments_fingering_grandstaff.enc: top=0 left=0 bEdge=842 rEdge=595.
+// Zero margins are clamped to the minimum safe values so staves stay within the page.
+TEST_F(Tst_Structure, page_margins_wini_zero_margins)
+{
+    MasterScore* score = readEncoreScore("ornaments_fingering_grandstaff.enc");
+    ASSERT_NE(score, nullptr);
+
+    // WINI has all-zero margins: all four margins should be 0.
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddTopMargin),    0.0, 0.005);
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenTopMargin),   0.0, 0.005);
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddLeftMargin),   0.0, 0.005);
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenLeftMargin),  0.0, 0.005);
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddBottomMargin), 0.0, 0.005);
+    // printableWidth equals full page width when both side margins are 0.
+    const double pageWIn = score->style().styleD(Sid::pageWidth);
+    EXPECT_NEAR(score->style().styleD(Sid::pagePrintableWidth), pageWIn, 0.01);
+
+    delete score;
+}
+
+// Verify bottom margin is correctly derived from bottomEdge.
+// bazo.enc: top=18 left=18 bEdge=824 rEdge=577 on A4 (842 pts high).
+// bottomMargin = (842 - 824) / 72 = 18 / 72 = 0.25"
+TEST_F(Tst_Structure, page_margins_wini_bottom_margin_derived)
+{
+    MasterScore* score = readEncoreScore("bazo.enc");
+    ASSERT_NE(score, nullptr);
+
+    const double expectedIn = 18.0 / 72.0;
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddBottomMargin),  expectedIn, 0.005)
+        << "bottom margin must be derived from bottomEdge and page height";
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenBottomMargin), expectedIn, 0.005);
+
+    delete score;
+}
+
 // WINI pts format must set the page size explicitly (from its edges), not rely on the MuseScore default,
 // so an A4 file still produces an A4 score on a Letter-default machine.
 TEST_F(Tst_Structure, page_size_detected_from_wini_pts_format)
@@ -357,6 +459,83 @@ TEST_F(Tst_Structure, page_size_detected_from_wini_pts_format)
         << "pts-format WINI with A4 boundary values must set A4 page width";
     EXPECT_NEAR(score->style().styleD(Sid::pageHeight), kA4H, 0.01)
         << "pts-format WINI with A4 boundary values must set A4 page height";
+
+    delete score;
+}
+
+// Page size from the PREC (DEVMODE) block. dmPaperSize is a direct enum, so it is the primary
+// page-size source for all formats (v0xA6/v0xC2 have no WINI, and many v0xC4 files lack it).
+// Unicode DEVMODE variant (32-WCHAR device name): dmPaperSize=1 (Letter).
+TEST_F(Tst_Structure, page_size_from_prec_letter_unicode)
+{
+    MasterScore* score = readEncoreScore("structure_prec_page_letter.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_NEAR(score->style().styleD(Sid::pageWidth),  8.5,  0.02)
+        << "PREC dmPaperSize=1 must set Letter width";
+    EXPECT_NEAR(score->style().styleD(Sid::pageHeight), 11.0, 0.02)
+        << "PREC dmPaperSize=1 must set Letter height";
+    delete score;
+}
+
+// ANSI DEVMODE variant (32-byte device name): dmPaperSize=8 (A3 = 297x420mm).
+TEST_F(Tst_Structure, page_size_from_prec_ansi_a3)
+{
+    MasterScore* score = readEncoreScore("structure_prec_page_a3.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_NEAR(score->style().styleD(Sid::pageWidth),  297.0 / 25.4, 0.03)
+        << "ANSI PREC dmPaperSize=8 must set A3 width";
+    EXPECT_NEAR(score->style().styleD(Sid::pageHeight), 420.0 / 25.4, 0.03)
+        << "ANSI PREC dmPaperSize=8 must set A3 height";
+    delete score;
+}
+
+// Large WINI margins must survive import (they were previously clamped to a tiny 0.6" max). The px-to-inch
+// conversion uses an estimated dpi, so values are approximate; the invariant is that they are not clamped.
+TEST_F(Tst_Structure, page_margins_wini_large_not_clamped)
+{
+    MasterScore* score = readEncoreScore("structure_wini_large_margins_a3.enc");
+    ASSERT_NE(score, nullptr);
+    const double topIn  = score->style().styleD(Sid::pageOddTopMargin);
+    const double leftIn = score->style().styleD(Sid::pageOddLeftMargin);
+    EXPECT_GT(topIn,  1.5) << "large top margin must not be clamped to a tiny maximum";
+    EXPECT_GT(leftIn, 1.5) << "large left margin must not be clamped to a tiny maximum";
+    EXPECT_NEAR(topIn,  2.14, 0.2) << "top margin ~2.1 inches (176 px at ~82 dpi)";
+    EXPECT_NEAR(leftIn, 2.54, 0.2) << "left margin ~2.5 inches (209 px at ~82 dpi)";
+    delete score;
+}
+
+// Some WINI files store page coordinates in monitor pixels, not points, so the right edge exceeds the
+// point-based page width. That must be detected (rightEdge > pageWidth) and symmetric margins computed,
+// rather than clamping the right and bottom margins to near zero.
+TEST_F(Tst_Structure, page_margins_wini_screen_pixel_a4_detected)
+{
+    // structure_wini_screen_pixel_a4.enc: bazo.enc with WINI patched to
+    // screen-pixel coordinates: top=28, left=28, bEdge=962, rEdge=672.
+    // Expected: A4 page (8.2677" x 11.6929"), all margins ~0.331" (8.4mm).
+    MasterScore* score = readEncoreScore("structure_wini_screen_pixel_a4.enc");
+    ASSERT_NE(score, nullptr);
+
+    // Page dimensions must be detected as A4.
+    const double kA4W = 210.0 / 25.4;   // 8.2677"
+    const double kA4H = 297.0 / 25.4;   // 11.6929"
+    EXPECT_NEAR(score->style().styleD(Sid::pageWidth),  kA4W, 0.01)
+        << "Screen-pixel WINI: page must be detected as A4 width";
+    EXPECT_NEAR(score->style().styleD(Sid::pageHeight), kA4H, 0.01)
+        << "Screen-pixel WINI: page must be detected as A4 height";
+
+    // Margins must be symmetric at ~0.331" = 28 / 84.67 DPI.
+    // (Old code: L=T=0.389", R=0.030", B=0.10", all wrong.)
+    const double kExpectedM = 28.0 / (700.0 / kA4W);   // ≈ 0.331"
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddLeftMargin),  kExpectedM, 0.005)
+        << "Screen-pixel WINI: left margin must be ~0.33\"";
+    EXPECT_NEAR(score->style().styleD(Sid::pageEvenLeftMargin), kExpectedM, 0.005);
+    EXPECT_NEAR(score->style().styleD(Sid::pageOddTopMargin),   kExpectedM, 0.005)
+        << "Screen-pixel WINI: top margin must be ~0.33\"";
+    // Right margin: symmetric (pageWidth - left - printableWidth ≈ kExpectedM).
+    const double printW = score->style().styleD(Sid::pagePrintableWidth);
+    const double rightM = kA4W - kExpectedM - printW;
+    EXPECT_NEAR(rightM, kExpectedM, 0.01)
+        << "Screen-pixel WINI: right margin must be ~0.33\"";
 
     delete score;
 }
@@ -379,6 +558,25 @@ TEST_F(Tst_Structure, page_margins_no_wini_uses_defaults)
     EXPECT_NEAR(score->style().styleD(Sid::pageOddTopMargin),   defaultLeftIn, 0.001)
         << "no-WINI file must keep default top margin";
 
+    delete score;
+}
+
+// A no-WINI file with a landscape PREC page must recompute the printable width so the right margin equals
+// the left, rather than keeping the portrait default and leaving a lopsided right margin.
+TEST_F(Tst_Structure, page_margins_no_wini_landscape_right_matches_left)
+{
+    MasterScore* score = readEncoreScore("structure_prec_landscape_no_wini.enc");
+    ASSERT_NE(score, nullptr);
+
+    const double pageW  = score->style().styleD(Sid::pageWidth);
+    const double pageH  = score->style().styleD(Sid::pageHeight);
+    EXPECT_GT(pageW, pageH) << "PREC orientation=2 must yield a landscape page";
+
+    const double leftM  = score->style().styleD(Sid::pageOddLeftMargin);
+    const double printW = score->style().styleD(Sid::pagePrintableWidth);
+    const double rightM = pageW - leftM - printW;
+    EXPECT_NEAR(rightM, leftM, 0.01)
+        << "landscape no-WINI: right margin must match the left, not leave the extra page width";
     delete score;
 }
 
@@ -839,6 +1037,95 @@ TEST_F(Tst_Structure, pickup_caseb_hairpin_maxendtick_not_stale)
     delete score;
 }
 
+// LINE block data becomes SystemLocks so each Encore system keeps its measures together regardless of spatium.
+TEST_F(Tst_Structure, system_breaks_from_line_data)
+{
+    MasterScore* score = readEncoreScore("structure_system_break.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    // Measure 2 is the last measure of the first Encore system → end of a SystemLock.
+    Measure* m2 = measureAt(score, 2);
+    ASSERT_NE(m2, nullptr);
+    EXPECT_TRUE(m2->isEndOfSystemLock())
+        << "measure 2 (end of system 0) must be the end of a SystemLock";
+
+    // Measure 0 is the start of the first system → start of a SystemLock.
+    Measure* m0 = measureAt(score, 0);
+    ASSERT_NE(m0, nullptr);
+    EXPECT_TRUE(m0->isStartOfSystemLock())
+        << "measure 0 (start of system 0) must be the start of a SystemLock";
+
+    delete score;
+}
+
+// ===========================================================================
+// SCO5 (big-endian macOS Encore 5): page size + orientation come from the PREC
+// macOS plist (Letter portrait here); document margins are not stored anywhere
+// importable, so the importer applies a clean, symmetric 0.25" margin (better UX
+// than edge-to-edge 0 or the A4-tuned default, which is asymmetric on Letter).
+// ===========================================================================
+TEST_F(Tst_Structure, sco5_macos_page_letter_default_margins)
+{
+    MasterScore* score = readEncoreScore("structure_sco5_macos.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    const MStyle& st = score->style();
+    EXPECT_NEAR(st.styleD(Sid::pageWidth), 8.5, 1e-3) << "Letter width from PREC plist";
+    EXPECT_NEAR(st.styleD(Sid::pageHeight), 11.0, 1e-3) << "Letter height from PREC plist";
+    EXPECT_NEAR(st.styleD(Sid::pageOddLeftMargin), 0.25, 1e-6) << "SCO5 uses a uniform 0.25\" margin";
+    EXPECT_NEAR(st.styleD(Sid::pageOddTopMargin), 0.25, 1e-6);
+    EXPECT_NEAR(st.styleD(Sid::pageOddBottomMargin), 0.25, 1e-6);
+    EXPECT_NEAR(st.styleD(Sid::pagePrintableWidth), 8.0, 1e-3) << "printable width = page width - 2 x 0.25\"";
+
+    delete score;
+}
+
+// When per-line measureCount reads 0 (e.g. SCO5), each system's span must be derived from the LINE start
+// deltas so system locks still apply.
+TEST_F(Tst_Structure, system_breaks_from_line_start_deltas_when_count_zero)
+{
+    MasterScore* score = readEncoreScore("structure_system_break_mcount_zero.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    Measure* m0 = measureAt(score, 0);
+    ASSERT_NE(m0, nullptr);
+    EXPECT_TRUE(m0->isStartOfSystemLock())
+        << "measure 0 must start a SystemLock derived from the line start delta";
+    Measure* m2 = measureAt(score, 2);
+    ASSERT_NE(m2, nullptr);
+    EXPECT_TRUE(m2->isEndOfSystemLock())
+        << "measure 2 (start[1]-start[0]=3 measures later) must end the first SystemLock";
+
+    delete score;
+}
+
+// Page-break detection must use the same start-delta fallback as system locks when measureCount reads 0,
+// or every page break is dropped.
+TEST_F(Tst_Structure, page_break_from_line_start_deltas_when_count_zero)
+{
+    MasterScore* score = readEncoreScore("structure_page_break_mcount_zero.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    bool foundPageBreak = false;
+    for (Measure* m = score->firstMeasure(); m && !foundPageBreak; m = m->nextMeasure()) {
+        for (EngravingItem* e : m->el()) {
+            if (e && e->isLayoutBreak() && toLayoutBreak(e)->isPageBreak()) {
+                foundPageBreak = true;
+                break;
+            }
+        }
+    }
+    EXPECT_TRUE(foundPageBreak)
+        << "page break must be recovered from line start deltas when measureCount is 0";
+
+    delete score;
+}
+
 // SystemLocks lock each Encore system to exactly its LINE measureCount.
 TEST_F(Tst_Structure, fit_spatium_first_system_measure_count)
 {
@@ -862,6 +1149,36 @@ TEST_F(Tst_Structure, fit_spatium_first_system_measure_count)
     }
     EXPECT_GE(firstSystemMeasureCount, 3)
         << "first system must fit at least enc.lines[0].measureCount (3) measures";
+
+    delete score;
+}
+
+TEST_F(Tst_Structure, fit_spatium_multiple_systems_measure_count)
+{
+    // All 8 lines have measureCount=3; verify the first 4 systems each have exactly 3 measures.
+    MasterScore* score = readEncoreScore("text_tempo_orn_compound_68.enc");
+    ASSERT_NE(score, nullptr);
+
+    std::vector<int> sysCounts;
+    for (const System* sys : score->systems()) {
+        int mc = 0;
+        for (const MeasureBase* mb : sys->measures()) {
+            if (mb->isMeasure()) {
+                ++mc;
+            }
+        }
+        if (mc > 0) {
+            sysCounts.push_back(mc);
+        }
+    }
+
+    // The fixture has 8 lines; we require at least the first 4 to be present.
+    ASSERT_GE(sysCounts.size(), 4u) << "fixture must produce at least 4 music systems";
+
+    for (int j = 0; j < 4; ++j) {
+        EXPECT_GE(sysCounts[j], 3)
+            << "system " << j << " must fit at least 3 measures (enc.lines[" << j << "].measureCount)";
+    }
 
     delete score;
 }

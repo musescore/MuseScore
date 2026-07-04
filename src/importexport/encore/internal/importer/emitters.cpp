@@ -179,37 +179,29 @@ static bool hasPitchedNotes(const EncMeasure& m)
     return false;
 }
 
-static bool hasMultiRest(const EncMeasure& m)
+// The number of empty measures Encore collapsed into this block (its REST mrestCount), or 0 when the
+// block is not an empty multi-measure rest. The block may carry companion elements on the empty span
+// (a key change, a clef); only pitched notes/chords disqualify it. Consecutive empty groups are
+// genuinely separate blocks with their own counts, so each expands independently (no anti-cascade).
+static int measMultiRestCount(const EncMeasure& m)
 {
-    if (m.elements.empty()) {
-        return false;
-    }
+    int maxMrest = 0;
     for (const auto& ep : m.elements) {
-        if (static_cast<EncElemType>(ep->type) != EncElemType::REST) {
-            return false;
+        const EncElemType t = static_cast<EncElemType>(ep->type);
+        if (t == EncElemType::NOTE || t == EncElemType::CHORD) {
+            return 0;
+        }
+        if (t == EncElemType::REST) {
+            maxMrest = std::max(maxMrest, static_cast<int>(static_cast<const EncRest*>(ep.get())->mrestCount));
         }
     }
-    return static_cast<const EncRest*>(m.elements[0].get())->mrestCount > 1;
+    return maxMrest;
 }
 
-static int measDisplayCount(const EncMeasure& m, const EncMeasure* prev)
+static int measDisplayCount(const EncMeasure& m)
 {
-    if (m.elements.empty()) {
-        return 1;
-    }
-    for (const auto& ep : m.elements) {
-        if (static_cast<EncElemType>(ep->type) != EncElemType::REST) {
-            return 1;
-        }
-    }
-    const int cnt = static_cast<int>(static_cast<const EncRest*>(m.elements[0].get())->mrestCount);
-    if (cnt <= 1) {
-        return 1;
-    }
-    if (prev && hasMultiRest(*prev)) {
-        return 1;
-    }
-    return cnt;
+    const int cnt = measMultiRestCount(m);
+    return cnt > 1 ? cnt : 1;
 }
 
 static void sortMeasureElements(const EncMeasure& encMeas, MeasureElemRefVec& sortedElems)
@@ -787,22 +779,14 @@ static void handleKeyChange(BuildCtx& ctx, const MeasEmitCtx& mc,
 static void finalizeMeasureAfterNoteLoop(BuildCtx& ctx, MeasEmitCtx& mc,
                                          Measure* measure, const EncMeasure& encMeas,
                                          const Fraction& measTick, int measIdx,
-                                         int& measSkip, size_t& msIdxCounter,
-                                         const EncRoot& enc)
+                                         int& measSkip, size_t& msIdxCounter)
 {
     for (auto& [key, tt] : ctx.scratch.tuplets) {
         mc.closeTupletWithFill(ctx, tt, key);
     }
     attachPendingLyrics(ctx, mc);
-    adjustPickupMeasure(ctx, measure, measIdx);
-    fillTrailingGaps(ctx, measure, measTick);
-    for (int si = 0; si < ctx.totalStaves; ++si) {
-        measure->checkMeasure(static_cast<staff_idx_t>(si));
-    }
-    correctMeasureLength(ctx, measure);
-    fitOverfullMeasure(ctx, measure);
-    const EncMeasure* prevMeas = (measIdx > 0) ? &enc.measures[measIdx - 1] : nullptr;
-    measSkip = measDisplayCount(encMeas, prevMeas) - 1;
+    reconcileMeasureLength(ctx, measure, measTick, measIdx);
+    measSkip = measDisplayCount(encMeas) - 1;
     ++msIdxCounter;
 }
 
@@ -1056,7 +1040,7 @@ void emitMeasures(BuildCtx& ctx)
         }
 
         finalizeMeasureAfterNoteLoop(ctx, mc, measure, encMeas, measTick, measIdx,
-                                     measSkip, msIdxCounter, enc);
+                                     measSkip, msIdxCounter);
         ++measIdx;
     }
 

@@ -30,6 +30,7 @@
 #include "../internal/parser/readers.h"
 #include "../internal/importer/coords.h"
 #include "../internal/importer/durations.h"
+#include "../internal/importer/page-layout.h"
 
 #include <vector>
 
@@ -310,4 +311,14 @@ TEST(Tst_EncoreParserDurations, computeElementDurations_gap_and_boundary)
     computeElementDurations(elems2, 960, false, { 240 });
     EXPECT_EQ(c.realDuration, 240);
     EXPECT_EQ(d.realDuration, 480);
+}
+
+TEST(Tst_EncorePageLayout, winiUnitsPerInch_detects_points_vs_pixels)
+{
+    // Degenerate page width falls back to typographic points.
+    EXPECT_DOUBLE_EQ(winiUnitsPerInch(500, 50, 0.0), 72.0);
+    // A near-72 ratio (typographic-point WINI) snaps to exactly 72: (560+35)/8.27 = 71.9.
+    EXPECT_DOUBLE_EQ(winiUnitsPerInch(560, 35, 8.27), 72.0);
+    // A clearly larger ratio (~84) is a screen-pixel WINI and is returned as the estimate.
+    EXPECT_GT(winiUnitsPerInch(665, 35, 8.27), 80.0);   // (665+35)/8.27 = 84.6
 }
