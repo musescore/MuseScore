@@ -69,19 +69,21 @@ jobs:
       uses: actions/checkout@v7
       with:
         submodules: recursive
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-        restore-keys: |
-          ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-          ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-    - name: Setup ccache
-      run: |
-        sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+          restore-keys: |
+            ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+            ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+      - name: Setup ccache
+        run: |
+          sudo apt-get install -y ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
@@ -134,19 +136,21 @@ jobs:
       with:
         ref: ${{ needs.setup.outputs.reference_ref }}
         submodules: recursive
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-        restore-keys: |
-          ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-          ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-    - name: Setup ccache
-      run: |
-        sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+          restore-keys: |
+            ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+            ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+      - name: Setup ccache
+        run: |
+          sudo apt-get install -y ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
@@ -197,16 +201,17 @@ jobs:
       uses: actions/checkout@v7
       with:
         submodules: recursive
-    - name: Download current
-      uses: actions/download-artifact@v8
-      with:
-        name: current_build
-        path: ./musescore_current
-    - name: Download reference
-      uses: actions/download-artifact@v8
-      with:
-        name: reference_build
-        path: ./musescore_reference
+    - parallel:
+      - name: Download reference
+        uses: actions/download-artifact@v8
+        with:
+          name: reference_build
+          path: ./musescore_reference
+      - name: Download current
+        uses: actions/download-artifact@v8
+        with:
+          name: current_build
+          path: ./musescore_current
     - name: Generate PNGs
       run: |
         bash ./buildscripts/ci/vtests/generate_pngs.sh
