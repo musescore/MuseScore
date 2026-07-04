@@ -78,11 +78,46 @@ TEST_F(Tst_Options, importPageLayout_false_keeps_ms_default_top_margin)
     delete score;
 }
 
+TEST_F(Tst_Options, importPageLayout_true_overrides_default_top_margin)
+{
+    MasterScore* ref = compat::ScoreAccess::createMasterScoreWithBaseStyle(nullptr);
+    const double defaultTop = ref->style().styleD(Sid::pageOddTopMargin);
+    delete ref;
+
+    MasterScore* score = readEncoreScore("bazo_top_100.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_NE(score->style().styleD(Sid::pageOddTopMargin), defaultTop)
+        << "bazo_top_100 must produce a top margin different from the MS default";
+    delete score;
+}
+
 // ===========================================================================
 // importPageBreaks
 // structure_page_break.enc: 2 LINE blocks, both pageIdx=0 → page break after
 // the last measure of the first system.
 // ===========================================================================
+
+TEST_F(Tst_Options, importPageBreaks_true_places_page_break)
+{
+    MasterScore* score = readEncoreScore("structure_page_break.enc");
+    ASSERT_NE(score, nullptr);
+
+    bool foundPageBreak = false;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (EngravingItem* e : m->el()) {
+            if (e && e->isLayoutBreak() && toLayoutBreak(e)->isPageBreak()) {
+                foundPageBreak = true;
+                break;
+            }
+        }
+        if (foundPageBreak) {
+            break;
+        }
+    }
+    EXPECT_TRUE(foundPageBreak)
+        << "Default (importPageBreaks=true): score must contain at least one page break";
+    delete score;
+}
 
 TEST_F(Tst_Options, importPageBreaks_false_produces_no_page_breaks)
 {
@@ -103,6 +138,17 @@ TEST_F(Tst_Options, importPageBreaks_false_produces_no_page_breaks)
 // ===========================================================================
 // importSystemLocks
 // ===========================================================================
+
+TEST_F(Tst_Options, importSystemLocks_true_creates_system_locks)
+{
+    MasterScore* score = readEncoreScore("structure_system_break.enc");
+    ASSERT_NE(score, nullptr);
+    Measure* m0 = score->firstMeasure();
+    ASSERT_NE(m0, nullptr);
+    EXPECT_TRUE(m0->isStartOfSystemLock())
+        << "Default: first measure must be start of a SystemLock";
+    delete score;
+}
 
 TEST_F(Tst_Options, importSystemLocks_false_produces_no_system_locks)
 {
