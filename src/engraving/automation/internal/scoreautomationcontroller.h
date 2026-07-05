@@ -79,6 +79,16 @@ private:
         MeasureRepeats measureRepeats;
     };
 
+    struct HairpinInfo {
+        utick_t from = 0;
+        utick_t to = 0;
+        EID eid = EID::invalid();
+        int priority = 0;
+        bool isCrescendo = false;
+        std::optional<double> nominalValueFrom;
+        std::optional<double> nominalValueTo;
+    };
+
     void update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
@@ -90,7 +100,8 @@ private:
 
     static void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, const StaffRange& range,
                                  UpdateContext& ctx);
-    static void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key, UpdateContext& ctx);
+    static void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const std::vector<AutomationCurveKey>& keys, UpdateContext& ctx);
+    static void addHairpinPoints(const HairpinInfo& info, const AutomationCurveKey& key, UpdateContext& ctx);
 
     static void fillVoiceCurvesFromBase(AutomationCurveMap& curves);
 

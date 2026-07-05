@@ -550,17 +550,18 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
 
         const Hairpin* hairpin = toHairpin(spanner);
         const std::vector<AutomationCurveKey> keys = resolveKeys(hairpin, AutomationType::Dynamics, range);
-        for (const AutomationCurveKey& key : keys) {
-            addHairpinPoints(hairpin, tickOffset, key, ctx);
+        if (!keys.empty()) {
+            addHairpinPoints(hairpin, tickOffset, keys, ctx);
         }
     }
 }
 
-void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key,
+void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tickOffset, const std::vector<AutomationCurveKey>& keys,
                                                  UpdateContext& ctx)
 {
-    utick_t hairpinFrom = hairpin->tick().ticks() + tickOffset;
-    const utick_t hairpinTo = hairpinFrom + hairpin->ticks().ticks();
+    HairpinInfo info;
+    info.from = hairpin->tick().ticks() + tickOffset;
+    info.to = info.from + hairpin->ticks().ticks();
 
     // --- Check start tick
     {
@@ -572,56 +573,63 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         if (startDynamic && muse::contains(COMPOUND_DYNAMIC_VALUES, startDynamic->dynamicType())) {
             // The hairpin starts with a compound dynamic; we should start the hairpin after the transition is complete
             // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
-            hairpinFrom += startDynamic->velocityChangeLength().ticks();
+            info.from += startDynamic->velocityChangeLength().ticks();
         }
     }
 
-    IF_ASSERT_FAILED(hairpinFrom < hairpinTo) {
+    IF_ASSERT_FAILED(info.from < info.to) {
         return;
     }
 
-    EID eid = hairpin->eid();
-    if (!eid.isValid()) {
-        eid = hairpin->assignNewEID();
+    info.eid = hairpin->eid();
+    if (!info.eid.isValid()) {
+        info.eid = hairpin->assignNewEID();
     }
 
+    info.priority = dynamicPriority(hairpin);
+    info.isCrescendo = hairpin->isCrescendo();
+    info.nominalValueFrom = startHairpinValue(hairpin);
+    info.nominalValueTo = endHairpinValue(hairpin);
+
+    for (const AutomationCurveKey& key : keys) {
+        addHairpinPoints(info, key, ctx);
+    }
+}
+
+void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const AutomationCurveKey& key, UpdateContext& ctx)
+{
     // --- Determine valueFrom
-    const std::optional<double> nominalValueFrom = startHairpinValue(hairpin);
-    const AutomationPoint* prevPoint = activePoint(ctx.curves, key, hairpinFrom);
+    const AutomationPoint* prevPoint = activePoint(ctx.curves, key, info.from);
     const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
-    const double valueFrom = nominalValueFrom.value_or(prevOutValue);
-    const int priority = dynamicPriority(hairpin);
+    const double valueFrom = info.nominalValueFrom.value_or(prevOutValue);
 
     {
         AutomationPoint startPoint;
         startPoint.outValue = valueFrom;
         startPoint.inValue = prevOutValue;
-        startPoint.itemId = eid;
-        tryAddDynamicPoint(key, hairpinFrom, startPoint, priority, ctx);
+        startPoint.itemId = info.eid;
+        tryAddDynamicPoint(key, info.from, startPoint, info.priority, ctx);
     }
 
     // --- Determine valueTo
-    const std::optional<double> nominalValueTo = endHairpinValue(hairpin);
-    const bool isCrescendo = hairpin->isCrescendo();
-
     // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
-    const bool useNominalValueTo = nominalValueTo.has_value()
-                                   && (isCrescendo ? nominalValueTo.value() > valueFrom
-                                       : nominalValueTo.value() < valueFrom);
+    const bool useNominalValueTo = info.nominalValueTo.has_value()
+                                   && (info.isCrescendo ? info.nominalValueTo.value() > valueFrom
+                                       : info.nominalValueTo.value() < valueFrom);
 
     // --- Check end tick
     const double valueTo = useNominalValueTo
-                           ? nominalValueTo.value()
-                           : valueFrom + (isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
+                           ? info.nominalValueTo.value()
+                           : valueFrom + (info.isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
     // Re-fetch curve in case tryAddDynamicPoint above created it
     const auto curveIt = ctx.curves.find(key);
     AutomationCurve::iterator endPointIt;
     bool hasPointAtEnd = false;
     if (curveIt != ctx.curves.end()) {
-        endPointIt = curveIt->second.find(hairpinTo);
+        endPointIt = curveIt->second.find(info.to);
         hasPointAtEnd = endPointIt != curveIt->second.end();
     }
 
@@ -631,24 +639,24 @@ void ScoreAutomationController::addHairpinPoints(const Hairpin* hairpin, int tic
         bool canModify = true;
         const auto prioKeyIt = ctx.dynamicPriorities.find(key);
         if (prioKeyIt != ctx.dynamicPriorities.end()) {
-            const auto tickIt = prioKeyIt->second.find(hairpinTo);
-            canModify = tickIt == prioKeyIt->second.end() || priority >= tickIt->second;
+            const auto tickIt = prioKeyIt->second.find(info.to);
+            canModify = tickIt == prioKeyIt->second.end() || info.priority >= tickIt->second;
         }
 
         if (canModify) {
             endPointIt->second.inValue = valueTo;
             // Remove from deferred so the resolve pass doesn't overwrite the inValue we just set
-            ctx.deferredInValuePoints.erase({ key, hairpinTo });
+            ctx.deferredInValuePoints.erase({ key, info.to });
         }
         return;
     }
 
-    if (hairpinFrom < hairpinTo) {
+    if (info.from < info.to) {
         AutomationPoint point;
         point.inValue = valueTo;
         point.outValue = valueTo;
-        point.itemId = eid;
-        tryAddDynamicPoint(key, hairpinTo, point, priority, ctx);
+        point.itemId = info.eid;
+        tryAddDynamicPoint(key, info.to, point, info.priority, ctx);
     }
 }
 
