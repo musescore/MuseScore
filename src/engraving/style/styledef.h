@@ -91,6 +91,7 @@ enum class Sid : short {
     instrumentNumeralsHyphenThreshold,
 
     textForUnisonLabel,
+    unisonLabelRestateOnNewSystem,
     sharedOnStaffNumeralsFollowInstrumentNumerals,
     sharedOnStaffNumeralsTrailingDotSingle,
     sharedOnStaffNumeralsTrailingDotMultiple,

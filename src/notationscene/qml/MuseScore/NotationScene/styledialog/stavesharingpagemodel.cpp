@@ -37,6 +37,7 @@ StaveSharingPageModel::StaveSharingPageModel(QObject* parent)
                                          StyleId::sharedOnStaffNumeralsTrailingDotMultiple,
                                          StyleId::sharedOnStaffNumeralsHyphenEnable,
                                          StyleId::sharedOnStaffNumeralsHyphenThreshold,
+                                         StyleId::unisonLabelRestateOnNewSystem,
                                })
 {
 }
@@ -89,5 +90,10 @@ StyleItem* StaveSharingPageModel::sharedOnStaffNumeralsHyphenEnable() const
 StyleItem* StaveSharingPageModel::sharedOnStaffNumeralsHyphenThreshold() const
 {
     return styleItem(StyleId::sharedOnStaffNumeralsHyphenThreshold);
+}
+
+StyleItem* StaveSharingPageModel::unisonLabelRestateOnNewSystem() const
+{
+    return styleItem(StyleId::unisonLabelRestateOnNewSystem);
 }
 }
