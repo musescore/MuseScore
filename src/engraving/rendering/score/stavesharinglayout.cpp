@@ -548,7 +548,7 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
                                           StaveSharingContext& ctx)
 {
-    if (ctx.layoutCtx.conf().styleB(Sid::allowVoiceCrossing)) {
+    if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
         return true;
     }
 
@@ -1023,11 +1023,12 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     std::vector<EngravingItem*> updatedStaveSharingLabels;
 
     for (Note* unisonNote : ctx.sharedUnisonNotes) {
-        if (!unisonNoteNeedsLabel(unisonNote)) {
+        bool isForNewSystem = false;
+        if (!unisonNoteNeedsLabel(unisonNote, isForNewSystem, ctx)) {
             continue;
         }
 
-        String text = formatUnisonLabel(unisonNote, trackMap, ctx);
+        String text = formatUnisonLabel(unisonNote, trackMap, isForNewSystem, ctx);
         Segment* segment = unisonNote->chord()->segment();
 
         StaveSharingLabel* label = nullptr;
@@ -1059,8 +1060,9 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     }
 }
 
-bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
+bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSystem, StaveSharingContext& ctx)
 {
+    bool restateOnNewSystem = ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() != AutoOnOff::OFF;
     std::vector<track_idx_t> originTracksOfThisNote;
     for (EngravingItem* originNote : unisonNote->originItems()) {
         originTracksOfThisNote.push_back(originNote->track());
@@ -1070,6 +1072,10 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
     track_idx_t curTrack = unisonNote->track();
     Segment* curSegment = unisonNote->chord()->segment();
     for (Segment* seg = curSegment->prev1(SegmentType::ChordRest); seg; seg = seg->prev1(SegmentType::ChordRest)) {
+        if (seg->system() != curSegment->system() && restateOnNewSystem) {
+            isForNewSystem = true;
+            return true;
+        }
         if (EngravingItem* el = seg->element(curTrack); el && el->isChord()) {
             for (Note* note : toChord(el)->notes()) {
                 if (!note->originItems().empty()) {
@@ -1095,9 +1101,10 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
     return originTracksOfPrevNote != originTracksOfThisNote;
 }
 
-String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, const StaveSharingContext& ctx)
+String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool isForNewSystem,
+                                             const StaveSharingContext& ctx)
 {
-    const MStyle& style = ctx.score->style();
+    const MStyle& style = ctx.style;
 
     String result;
 
@@ -1128,7 +1135,13 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         }
     }
 
+    bool addParenthesis = isForNewSystem && ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() == AutoOnOff::AUTO;
+
     if (tracksMappedToThisStave.size() <= originUnisonsCount) {
+        if (addParenthesis) {
+            result.prepend('(');
+            result.append(')');
+        }
         return result;
     }
 
@@ -1149,6 +1162,11 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
     String prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     result.prepend(prefix + ' ');
+
+    if (addParenthesis) {
+        result.prepend('(');
+        result.append(')');
+    }
 
     return result;
 }
@@ -1293,7 +1311,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
 }
 
 StaveSharingLayout::StaveSharingContext::StaveSharingContext(MeasureBase* first, MeasureBase* last, LayoutContext& ctx)
-    : layoutCtx(ctx)
+    : layoutCtx(ctx), style(ctx.conf().style())
 {
     for (MeasureBase* mb = first; mb; mb = mb->next()) {
         if (!mb->isMeasure()) {

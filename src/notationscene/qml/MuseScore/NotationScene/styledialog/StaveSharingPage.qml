@@ -104,6 +104,25 @@ StyledFlickable {
                                 }
                             }
 
+                            StyledTextLabel {
+                                text: qsTrc("notation/editstyle/instrumentnames", "When continuing onto a new system:")
+                            }
+
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Restate label"), value: 1 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Restate with parenthesis"), value: 0 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Do not restate"), value: 2 },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: staveSharingModel.unisonLabelRestateOnNewSystem.value === modelData.value
+                                    onClicked: staveSharingModel.unisonLabelRestateOnNewSystem.value = modelData.value
+                                }
+                            }
+
                             ToggleButton {
                                 id: followInstrNameToggle
 

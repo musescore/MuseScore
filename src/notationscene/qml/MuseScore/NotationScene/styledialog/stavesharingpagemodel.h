@@ -41,6 +41,7 @@ class StaveSharingPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * sharedOnStaffNumeralsTrailingDotMultiple READ sharedOnStaffNumeralsTrailingDotMultiple CONSTANT)
     Q_PROPERTY(StyleItem * sharedOnStaffNumeralsHyphenEnable READ sharedOnStaffNumeralsHyphenEnable CONSTANT)
     Q_PROPERTY(StyleItem * sharedOnStaffNumeralsHyphenThreshold READ sharedOnStaffNumeralsHyphenThreshold CONSTANT)
+    Q_PROPERTY(StyleItem * unisonLabelRestateOnNewSystem READ unisonLabelRestateOnNewSystem CONSTANT)
 
 public:
     explicit StaveSharingPageModel(QObject* parent = nullptr);
@@ -59,5 +60,6 @@ public:
     StyleItem* sharedOnStaffNumeralsTrailingDotMultiple() const;
     StyleItem* sharedOnStaffNumeralsHyphenEnable() const;
     StyleItem* sharedOnStaffNumeralsHyphenThreshold() const;
+    StyleItem* unisonLabelRestateOnNewSystem() const;
 };
 }
