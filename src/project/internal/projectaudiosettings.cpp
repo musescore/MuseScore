@@ -29,6 +29,7 @@
 #include "types/bytearray.h"
 
 #include "audio/common/audioutils.h"
+#include "vst/vstpluginattrs.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -45,7 +46,7 @@ static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
 
 static void doCompatibilityConversions(AudioResourceMeta& meta)
 {
-    if (meta.type == AudioResourceType::MuseSamplerSoundPack) {
+    if (isResourceType(meta, AudioResourceType::MuseSamplerSoundPack)) {
         // MS 4.5: resource name and category have been excluded from ID
         // Old format: category\\name\\uid
         if (meta.id.find("\\") == std::string::npos) {
@@ -380,7 +381,7 @@ AudioFxParams ProjectAudioSettings::fxParamsFromJson(const QJsonObject& object) 
     result.chainOrder = static_cast<AudioFxChainOrder>(object.value("chainOrder").toInt());
     result.resourceMeta = resourceMetaFromJson(object.value("resourceMeta").toObject());
     result.configuration = unitConfigFromJson(object.value("unitConfiguration").toObject());
-    result.categories = audioFxCategoriesFromString(result.resourceMeta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
+    result.categories = audioFxCategoriesFromString(result.resourceMeta.attributeVal(vst::CATEGORIES_ATTRIBUTE));
 
     return result;
 }
@@ -410,10 +411,16 @@ AudioResourceMeta ProjectAudioSettings::resourceMetaFromJson(const QJsonObject& 
 {
     AudioResourceMeta result;
     result.id = object.value("id").toString().toStdString();
-    result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
     result.vendor = object.value("vendor").toString().toStdString();
     result.type = resourceTypeFromString(object.value("type").toString());
     result.attributes = attributesFromJson(object.value("attributes").toObject());
+
+    // migrate legacy top-level hasNativeEditorSupport into attributes
+    const QString nativeEditorKey = audio::HAS_NATIVE_EDITOR_SUPPORT_ATTRIBUTE.toQString();
+    if (object.contains(nativeEditorKey) && !result.attributes.count(audio::HAS_NATIVE_EDITOR_SUPPORT_ATTRIBUTE)) {
+        const bool b = object.value(nativeEditorKey).toBool();
+        result.attributes.emplace(audio::HAS_NATIVE_EDITOR_SUPPORT_ATTRIBUTE, b ? u"true" : u"false");
+    }
 
     return result;
 }
@@ -519,7 +526,6 @@ QJsonObject ProjectAudioSettings::resourceMetaToJson(const AudioResourceMeta& me
 {
     QJsonObject result;
     result.insert("id", QString::fromStdString(meta.id));
-    result.insert("hasNativeEditorSupport", meta.hasNativeEditorSupport);
     result.insert("vendor", QString::fromStdString(meta.vendor));
     result.insert("type", audioResourceTypeToString(meta.type).toQString());
     result.insert("attributes", attributesToJson(meta.attributes));
@@ -561,15 +567,15 @@ AudioSourceType ProjectAudioSettings::sourceTypeFromString(const QString& string
     return AudioSourceType::Undefined;
 }
 
-AudioResourceType ProjectAudioSettings::resourceTypeFromString(const QString& string) const
+audioplugins::PluginType ProjectAudioSettings::resourceTypeFromString(const QString& string) const
 {
     for (const auto& pair : RESOURCE_TYPE_MAP) {
         if (pair.second == string) {
-            return pair.first;
+            return audio::resourceTypeName(pair.first);
         }
     }
 
-    return AudioResourceType::Undefined;
+    return audioplugins::PluginType();
 }
 
 QString ProjectAudioSettings::sourceTypeToString(const AudioSourceType& type) const
