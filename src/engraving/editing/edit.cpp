@@ -1881,6 +1881,13 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             delete tieBack2;
                         }
                     }
+                    Arpeggio* arp;
+                    if (nchord->arpeggio()) {                         // save and detach arpeggio from cloned chord
+                        arp = nchord->arpeggio();
+                        arp->detachFromChords(arp->track(), arp->endTrack());
+                        undoRemoveElement(arp);
+                        nchord->setSpanArpeggio(nullptr);
+                    }
                     Chord* startChord = nchord;
                     Measure* measure = nullptr;
                     bool firstpart = true;
@@ -1991,6 +1998,9 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             undoAddElement(tie);
                         }
                         connectTies();
+                    }
+                    if (arp) { // reattach arp
+                        arp->findAndAttachToChords();
                     }
                 }
             }
