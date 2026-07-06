@@ -53,6 +53,7 @@ public:
 
     // Visibility
     virtual void toggleVisible() = 0;
+    virtual void setSelectionVisible(bool visible) = 0;
 
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
@@ -198,6 +199,7 @@ public:
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
     virtual void flipSelectionHorizontally() = 0;
+    virtual void mirrorNotes() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;

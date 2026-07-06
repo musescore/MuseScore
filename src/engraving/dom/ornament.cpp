@@ -34,6 +34,8 @@
 #include "utils.h"
 
 #include "editing/editchord.h"
+#include "editing/editparentheses.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
 using namespace mu::engraving;
@@ -418,8 +420,8 @@ void Ornament::updateCueNote()
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
 
-        std::list<Note*> notes = { cueNote };
-        score()->cmdAddParenthesesToNotes(notes);
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditParentheses::addParenthesesToNotes(tx, { cueNote });
     }
     m_cueNoteChord->setTrack(track());
     m_cueNoteChord->setParent(parentChord->segment());

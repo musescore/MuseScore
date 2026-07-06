@@ -24,8 +24,8 @@
 
 #include <QCoreApplication>
 
-#include "async/async.h"
 #include "translation.h"
+#include "types/version.h"
 
 #include "muse_framework_config.h"
 

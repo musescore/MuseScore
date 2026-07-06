@@ -21,7 +21,9 @@
  */
 #include "dynamic.h"
 
+#include "../editing/edithairpin.h"
 #include "../editing/textedit.h"
+#include "../editing/transaction/transaction.h"
 #include "../types/typesconv.h"
 
 #include "dynamichairpingroup.h"
@@ -311,7 +313,8 @@ EngravingItem* Dynamic::drop(EditData& ed)
     EngravingItem* item = ed.dropElement;
 
     if (item->isHairpin()) {
-        score()->addHairpinToDynamic(toHairpin(item), this);
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditHairpin::addHairpinToDynamic(tx, score(), toHairpin(item), this);
         return item;
     }
 

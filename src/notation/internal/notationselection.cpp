@@ -27,6 +27,8 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
 
+#include "engraving/editing/edittie.h"
+
 #include "notationselectionrange.h"
 #include "notationerrors.h"
 
@@ -101,7 +103,7 @@ std::vector<Note*> NotationSelection::notes(NoteFilter filter) const
 {
     switch (filter) {
     case NoteFilter::All: return score()->selection().noteList();
-    case NoteFilter::WithTie: return score()->cmdTieNoteList(score()->selection(), false);
+    case NoteFilter::WithTie: return mu::engraving::EditTie::cmdTieNoteList(score()->selection(), false);
     case NoteFilter::WithSlur: {
         NOT_IMPLEMENTED;
         return {};

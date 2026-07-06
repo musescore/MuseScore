@@ -97,7 +97,7 @@ void StringData::set(const StringData& src)
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, const Staff* staff, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
@@ -115,7 +115,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) c
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, const Staff* staff, const Fraction& tick, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
 }

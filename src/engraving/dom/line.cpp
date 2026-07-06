@@ -27,6 +27,7 @@
 #include "containers.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/navigation.h"
 
 #include "anchors.h"
 #include "barline.h"
@@ -298,16 +299,16 @@ bool LineSegment::edit(EditData& ed)
             break;
         case Key_Up:
             if (moveStart) {
-                note1 = toNote(score()->upAlt(note1));
+                note1 = toNote(Navigation::chordNoteAbove(score(), note1));
             } else if (moveEnd) {
-                note2 = toNote(score()->upAlt(note2));
+                note2 = toNote(Navigation::chordNoteAbove(score(), note2));
             }
             break;
         case Key_Down:
             if (moveStart) {
-                note1 = toNote(score()->downAlt(note1));
+                note1 = toNote(Navigation::chordNoteBelow(score(), note1));
             } else if (moveEnd) {
-                note2 = toNote(score()->downAlt(note2));
+                note2 = toNote(Navigation::chordNoteBelow(score(), note2));
             }
             break;
         default:

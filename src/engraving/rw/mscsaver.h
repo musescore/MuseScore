@@ -22,10 +22,18 @@
 
 #pragma once
 
+#include <memory>
+
 #include "global/modularity/ioc.h"
 #include "draw/iimageprovider.h"
 
+#include "../iengravingconfiguration.h"
 #include "../infrastructure/mscwriter.h"
+#include "../rendering/iscorerenderer.h"
+
+namespace muse::draw {
+class Pixmap;
+}
 
 namespace mu::engraving::write {
 class WriteContext;
@@ -37,6 +45,8 @@ class Score;
 class MscSaver : public muse::Contextable
 {
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
+    muse::GlobalInject<IEngravingConfiguration> configuration;
+    muse::GlobalInject<rendering::IScoreRenderer> scoreRenderer;
 public:
     MscSaver(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
@@ -44,5 +54,8 @@ public:
     bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail, const write::WriteContext* ctx = nullptr);
 
     bool exportPart(Score* partScore, MscWriter& mscWriter);
+
+private:
+    std::shared_ptr<muse::draw::Pixmap> createThumbnail(Score* score);
 };
 }

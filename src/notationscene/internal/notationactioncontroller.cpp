@@ -28,6 +28,8 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
+#include "engraving/editing/noteinput.h"
+
 #include "notation/notationtypes.h"
 
 #include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
@@ -487,8 +489,7 @@ void NotationActionController::init()
     registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty,
                    TranslatableString("undoableAction", "Toggle empty staves"));
 
-    registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead,
-                   TranslatableString("undoableAction", "Mirror notehead"));
+    registerAction("mirror-note", &Interaction::mirrorNotes, &Controller::hasSelection);
 
     registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
     registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
@@ -504,10 +505,8 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
                    TranslatableString("undoableAction", "Enter full-measure rest"));
-    registerAction("set-visible", &Interaction::execute, &mu::engraving::Score::cmdSetVisible,
-                   TranslatableString("undoableAction", "Make element(s) visible"));
-    registerAction("unset-visible", &Interaction::execute, &mu::engraving::Score::cmdUnsetVisible,
-                   TranslatableString("undoableAction", "Make element(s) invisible"));
+    registerAction("set-visible", &Interaction::setSelectionVisible, true);
+    registerAction("unset-visible", &Interaction::setSelectionVisible, false);
     registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
     registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
 
@@ -804,7 +803,7 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
 
     NoteInputParams params;
     const bool addFlag = addingMode == NoteAddingMode::CurrentChord;
-    bool ok = currentNotationScore()->resolveNoteInputParams(static_cast<int>(note), addFlag, params);
+    bool ok = mu::engraving::NoteInput::resolveNoteInputParams(currentNotationScore(), static_cast<int>(note), addFlag, params);
     if (!ok) {
         LOGE() << "Could not resolve note input params, note: " << (int)note << ", addFlag: " << addFlag;
         return;

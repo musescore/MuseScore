@@ -1260,6 +1260,25 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
     collectTieEndPoints(tieMap);
 }
 
+void Excerpt::linkMeasures(Score* excerptScore, Score* masterScore)
+{
+    MeasureBase* mbMaster = masterScore->first();
+    for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        while (mbMaster && !mbMaster->isMeasure()) {
+            mbMaster = mbMaster->next();
+        }
+        if (!mbMaster) {
+            LOGD("Measures in MasterScore and Score are not in sync.");
+            break;
+        }
+        mb->linkTo(mbMaster);
+        mbMaster = mbMaster->next();
+    }
+}
+
 //! NOTE For staves in the same score
 void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
 {

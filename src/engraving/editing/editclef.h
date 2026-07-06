@@ -44,4 +44,20 @@ public:
     UNDO_NAME("ChangeClef")
     UNDO_CHANGED_OBJECTS({ clef })
 };
+
+class ChordRest;
+class EngravingItem;
+class Score;
+class Staff;
+class Transaction;
+
+class EditClef
+{
+public:
+    static bool canInsertClef(const Score* score, ClefType type);
+    static void insertClef(Transaction& tx, Score* score, ClefType type);
+    static void insertClef(Transaction& tx, Score* score, Clef* clef, ChordRest* cr);
+    static void undoChangeClef(Transaction& tx, Score* score, Staff* ostaff, EngravingItem* e, ClefType ct,
+                               bool forInstrumentChange = false, Clef* clefToRelink = nullptr);
+};
 }

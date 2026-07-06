@@ -21,6 +21,8 @@
  */
 #include "noteheadsettingsmodel.h"
 
+#include "engraving/editing/editparentheses.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/types.h"
 
 #include "translation.h"
@@ -52,10 +54,10 @@ void NoteheadSettingsModel::createProperties()
         Score* score = m_elementList.front()->score();
         if (hasParens.toBool()) {
             beginCommand(TranslatableString("undoableAction", "Add notehead parentheses"));
-            score->cmdAddParenthesesToNotes();
+            EditParentheses::addParenthesesToNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         } else {
             beginCommand(TranslatableString("undoableAction", "Remove notehead parentheses"));
-            score->cmdRemoveParenthesesFromNotes();
+            EditParentheses::removeParenthesesFromNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         }
         updateNotation();
         endCommand();
@@ -81,9 +83,9 @@ void NoteheadSettingsModel::createProperties()
         Score* score = m_elementList.front()->score();
         bool addParens = m_elementList.front()->parenthesesMode() == ParenthesesMode::BOTH;
         if (addParens) {
-            score->cmdAddParenthesesToNotes();
+            EditParentheses::addParenthesesToNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         } else {
-            score->cmdRemoveParenthesesFromNotes();
+            EditParentheses::removeParenthesesFromNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         }
         updateNotation();
         endCommand();

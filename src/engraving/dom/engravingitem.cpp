@@ -52,6 +52,7 @@
 #include "../editing/editdata.h"
 #include "../editing/editproperty.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/navigation.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -2043,7 +2044,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //------------------------------------------------------------------------------------------
@@ -2091,7 +2092,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
