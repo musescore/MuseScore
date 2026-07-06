@@ -44,7 +44,27 @@ QString AboutModel::museScoreVersion() const
 
 QString AboutModel::museScoreRevision() const
 {
-    return QString::fromStdString(configuration()->museScoreRevision());
+    return QString("<a href=\"https://github.com/musescore/MuseScore/commit/%1\">%1</a>")
+           .arg(QString::fromStdString(configuration()->museScoreRevision()));
+}
+
+QString AboutModel::museScoreBuildDateTime() const
+{
+    auto buildDateISO = []() -> QString {
+        // Attempt to convert __DATE__ into ISO 8601 format (YYYY-MM-DD)
+        QDate date = QDate::fromString(__DATE__, "MMM dd yyyy");
+        if (!date.isValid()) {
+            date = QDate::fromString(__DATE__, "MMM  d yyyy");
+        }
+        return date.isValid() ? date.toString(Qt::ISODate) : __DATE__;
+    };
+
+    QString dateTime;
+    dateTime += buildDateISO();
+    dateTime += " ";
+    dateTime += __TIME__;
+
+    return dateTime;
 }
 
 QVariantMap AboutModel::museScoreUrl() const
@@ -86,14 +106,14 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 void AboutModel::copyRevisionToClipboard() const
 {
     QApplication::clipboard()->setText(
-        QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: github-musescore-musescore-%6")
+        QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5")
         .arg(QSysInfo::prettyProductName()
              + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
-                ? " or later" : ""))
-        .arg(QSysInfo::currentCpuArchitecture())
+                ? " or later" : ""), QSysInfo::currentCpuArchitecture())
         .arg(QSysInfo::WordSize)
-        .arg(application()->version().toString())
-        .arg(application()->build())
+        .arg(application()->version().toString(), application()->build())
+        +
+        QString(application()->revision().isEmpty() ? "" : ", revision: [%1](https://github.com/musescore/MuseScore/commit/%1)")
         .arg(application()->revision()));
 }
 
