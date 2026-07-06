@@ -23,6 +23,9 @@
 
 #include "async/notifylist.h"
 
+#include "engraving/dom/instrument.h"
+#include "engraving/dom/part.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -256,6 +259,45 @@ void PartTreeItem::replaceInstrument()
 
         masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
     });
+}
+
+void PartTreeItem::duplicateInstrument()
+{
+    // Get the sourcePart
+    const muse::ID sourcePartId = id();
+    const Part* sourcePart = masterNotation()->parts()->part(sourcePartId);
+
+    if (!sourcePart) {
+        LOGD("duplicateInstrument: Unable to find part");
+        return;
+    }
+
+    // Get the audioSettings
+    project::IProjectAudioSettingsPtr audioSettings;
+    if (auto currentProject = globalContext()->currentProject()) {
+        audioSettings = currentProject->audioSettings();
+    } else {
+        audioSettings = nullptr;
+    }
+
+    auto copyAudioStateForNewPart = [audioSettings, sourcePartId, sourcePart](const Part* newPart) {
+        if (!newPart || !audioSettings) {
+            return;
+        }
+
+        for (const auto& [_, instrument] : sourcePart->instruments()) {
+            if (!instrument) {
+                continue;
+            }
+
+            const mu::engraving::InstrumentTrackId srcTrackId{ sourcePartId, instrument->id() };
+            const mu::engraving::InstrumentTrackId dstTrackId{ newPart->id(), instrument->id() };
+
+            audioSettings->duplicateTrackParams(srcTrackId, dstTrackId);
+        }
+    };
+
+    masterNotation()->parts()->duplicatePart(sourcePartId, copyAudioStateForNewPart);
 }
 
 void PartTreeItem::resetAllFormatting()

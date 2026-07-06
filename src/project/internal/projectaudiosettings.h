@@ -62,6 +62,8 @@ public:
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
+    bool duplicateTrackParams(const engraving::InstrumentTrackId& srcTrackId, const engraving::InstrumentTrackId& dstTrackId) override;
+
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
 
@@ -75,8 +77,13 @@ public:
 
 private:
     friend class NotationProject;
+    friend class Project_AudioSettingsTests;
+
     ProjectAudioSettings(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
+
+    bool copyInputParamsBetweenTracks(const engraving::InstrumentTrackId& srcTrackId, const engraving::InstrumentTrackId& dstTrackId);
+    bool copyOutputParamsBetweenTracks(const engraving::InstrumentTrackId& srcTrackId, const engraving::InstrumentTrackId& dstTrackId);
 
     AudioInputParams inputParamsFromJson(const QJsonObject& object) const;
     AudioOutputParams outputParamsFromJson(const QJsonObject& object) const;

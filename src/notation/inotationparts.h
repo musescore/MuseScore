@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include "async/notification.h"
 
 #include "notationtypes.h"
@@ -83,6 +85,8 @@ public:
     virtual bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) = 0;
 
     virtual void insertPart(Part* part, size_t index) = 0;
+
+    virtual const Part* duplicatePart(const muse::ID& partId, std::function<void(const Part* newPart)>) = 0;
 
     virtual void replacePart(const muse::ID& partId, Part* newPart) = 0;
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,

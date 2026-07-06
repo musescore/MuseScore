@@ -27,7 +27,9 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "context/iglobalcontext.h"
 #include "notationscene/iselectinstrumentscenario.h"
+#include "project/iprojectaudiosettings.h"
 
 namespace mu::instrumentsscene {
 class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Contextable, public muse::async::Asyncable
@@ -39,6 +41,7 @@ class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Contextabl
 
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
     muse::ContextInject<muse::IInteractive> interactive { this };
+    muse::ContextInject<context::IGlobalContext> globalContext { this };
 
 public:
     PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent,
@@ -62,6 +65,7 @@ public:
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();
+    Q_INVOKABLE void duplicateInstrument();
 
 protected:
     void listenVisibilityChanged();

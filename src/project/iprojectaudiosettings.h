@@ -102,6 +102,8 @@ public:
 
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
+    virtual bool duplicateTrackParams(const engraving::InstrumentTrackId& srcTrackId, const engraving::InstrumentTrackId& dstTrackId) = 0;
+
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;
 
