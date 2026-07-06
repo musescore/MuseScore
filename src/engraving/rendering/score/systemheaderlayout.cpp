@@ -1228,7 +1228,7 @@ String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrumen
 }
 
 String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle,
-                                       bool trailingDotMultiple, int hyphenLimit)
+                                                  bool trailingDotMultiple, int hyphenLimit)
 {
     String result;
 

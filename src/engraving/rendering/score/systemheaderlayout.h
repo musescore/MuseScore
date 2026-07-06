@@ -54,7 +54,7 @@ public:
     static void setInstrumentNames(System* system, LayoutContext& ctx);
 
     static String formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle, bool trailingDotMultiple,
-                              int hyphenLimit);
+                                         int hyphenLimit);
 
 private:
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
