@@ -458,3 +458,14 @@ bool MscWriter::XmlFileWriter::addFileData(const String& fileName, const ByteArr
 
     return true;
 }
+
+void MscWriter::writeSnapshotIndexFile(const ByteArray& data)
+{
+    addFileData(u"Snapshots/index.xml", data);
+}
+
+void MscWriter::addSnapshotFile(size_t index, const ByteArray& data)
+{
+    String fileName = u"Snapshots/snapshot_" + String::number(static_cast<int>(index)) + u".bin";
+    addFileData(fileName, data);
+}

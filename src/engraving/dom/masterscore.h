@@ -196,6 +196,16 @@ public:
     void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 
+    struct Snapshot {
+        mu::engraving::String name;
+        muse::ByteArray scoreData;
+    };
+
+    void addSnapshot(const mu::engraving::String& name);
+    void removeSnapshot(size_t index);
+    void restoreSnapshot(size_t index);
+    std::vector<Snapshot>& snapshots() { return m_snapshots; }
+
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
 
@@ -254,5 +264,7 @@ private:
     // FIXME: Move to EngravingProject
     // We can't yet, because m_project is not set on every MasterScore
     IFileInfoProviderPtr m_fileInfoProvider;
+
+    std::vector<Snapshot> m_snapshots;
 };
 }

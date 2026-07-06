@@ -21,6 +21,8 @@
  */
 
 #include "undohistorymodel.h"
+#include "engraving/dom/masterscore.h"
+#include "notation/imasternotation.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -42,6 +44,8 @@ void UndoHistoryModel::init()
     context()->currentNotationChanged().onNotify(this, [this] {
         onCurrentNotationChanged();
     });
+
+    emit snapshotsChanged();
 }
 
 void UndoHistoryModel::onCurrentNotationChanged()
@@ -139,4 +143,79 @@ INotationUndoStackPtr UndoHistoryModel::undoStack() const
 {
     INotationPtr notation = context()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
+}
+
+void UndoHistoryModel::addSnapshot(const QString& name)
+{
+    auto masterScore = context()->currentNotation()->masterNotation()->masterScore();
+    mu::engraving::String snapName(name);
+    masterScore->addSnapshot(snapName);
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::removeSnapshot(int index)
+{
+    auto masterScore = context()->currentNotation()->masterNotation()->masterScore();
+    if (!masterScore) {
+        return;
+    }
+
+    if (index < 0 || index >= int(masterScore->snapshots().size())) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    masterScore->removeSnapshot(index);
+    emit snapshotsChanged();
+}
+
+void UndoHistoryModel::restoreSnapshot(int index)
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    IMasterNotationPtr masterNotation = notation->masterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    auto masterScore = masterNotation->masterScore();
+    if (!masterScore) {
+        LOGW() << "Could not get master score for restoring snapshot";
+        return;
+    }
+    if (index < 0 || index >= int(masterScore->snapshots().size())) {
+        LOGW() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    context()->setCurrentNotation(masterNotation->notation());
+
+    muse::IDList partIds;
+    for (const mu::engraving::Part* part : masterScore->parts()) {
+        partIds.push_back(part->id());
+    }
+    if (!partIds.empty()) {
+        masterNotation->parts()->removeParts(partIds);
+    }
+
+    masterScore->restoreSnapshot(index);
+    onCurrentNotationChanged();
+}
+
+QVariantList UndoHistoryModel::snapshots() const
+{
+    QVariantList result;
+    auto masterScore = context()->currentNotation()->masterNotation()->masterScore();
+    if (!masterScore) {
+        return result;
+    }
+    for (auto& snap : masterScore->snapshots()) {
+        QVariantMap item;
+        item["name"] = QString::fromStdString(snap.name.toStdString());
+        result.append(item);
+    }
+    return result;
 }
