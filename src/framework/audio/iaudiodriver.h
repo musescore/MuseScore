@@ -28,6 +28,7 @@
 #include <memory>
 
 #include "global/async/notification.h"
+#include "global/logstream.h"
 
 #include "audio/common/audiotypes.h"
 
@@ -66,4 +67,11 @@ public:
     virtual async::Notification availableOutputDevicesChanged() const = 0;
 };
 using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::audio::IAudioDriver::Spec& spec)
+{
+    s << "deviceId: " << spec.deviceId
+      << ", " << spec.output;
+    return s;
 }

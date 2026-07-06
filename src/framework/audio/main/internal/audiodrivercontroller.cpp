@@ -263,7 +263,7 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
     driver->init();
     setNewDriver(driver);
 
-    LOGI() << "Trying to open audio driver: " << m_audioDriver->name() << ", device: " << spec.deviceId;
+    LOGI() << "Trying to open audio driver: " << m_audioDriver->name() << ", " << spec;
     bool ok = m_audioDriver->open(spec, activeSpec);
     if (!ok) {
         // reset to default device
@@ -278,8 +278,7 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
     }
 
     if (ok) {
-        LOGI() << "Opened audio driver: " << m_audioDriver->name()
-               << ", device: " << m_audioDriver->activeSpec().deviceId;
+        LOGI() << "Opened audio driver: " << m_audioDriver->name() << ", " << m_audioDriver->activeSpec();
     } else {
         LOGE() << "Failed to open any audio driver, last tried: " << m_audioDriver->name();
     }
@@ -336,14 +335,13 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
     }
 
     const IAudioDriver::Spec oldSpec = m_audioDriver->activeSpec();
-    LOGI() << "Trying to change output device"
-           << " from: " << oldSpec.deviceId
-           << ", to: " << deviceId;
 
     IAudioDriver::Spec spec;
     spec.deviceId = deviceId;
     spec.callback = oldSpec.callback;
     spec.output = configuration()->desiredOutputSpec();
+
+    LOGI() << "Trying to change output device from " << oldSpec << " to " << spec;
 
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
@@ -381,10 +379,7 @@ void AudioDriverController::handleOutputDeviceChange()
         }
     }
 
-    LOGI() << "Reopening output device: " << spec.deviceId
-           << ", sampleRate: " << spec.output.sampleRate
-           << ", channels: " << spec.output.audioChannelCount
-           << ", samplesPerChannel: " << spec.output.samplesPerChannel;
+    LOGI() << "Reopening output device, " << spec;
 
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
