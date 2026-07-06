@@ -207,7 +207,8 @@ void TextBase::endEdit(EditData& ed)
             Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setNeedRemoveInvalidSegments();
-                renderer()->layoutItem(prev);
+                prev->triggerLayout();
+                score()->update();
             }
         }
 
