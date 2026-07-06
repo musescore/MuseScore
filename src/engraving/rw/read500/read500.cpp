@@ -123,7 +123,7 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "eid") {
-            TRead::readItemEID(score, e);
+            TRead::readItemEID(score, e, ctx);
         } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
         } else if (tag == "Audio") {

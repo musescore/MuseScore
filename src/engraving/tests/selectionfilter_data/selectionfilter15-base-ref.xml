@@ -5,6 +5,7 @@
       <TextLine>
         <beginText>VII</beginText>
         <ticks_f>1/1</ticks_f>
+        <eid>B_B</eid>
         </TextLine>
       <next>
         <location>
@@ -13,29 +14,37 @@
         </next>
       </Spanner>
     <Chord>
+      <eid>C_C</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>D_D</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>F_F</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>G_G</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>H_H</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>J_J</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>
@@ -48,16 +57,20 @@
         </prev>
       </Spanner>
     <Chord>
+      <eid>K_K</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>L_L</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Rest>
+      <eid>M_M</eid>
       <durationType>quarter</durationType>
       </Rest>
     <Rest>
+      <eid>N_N</eid>
       <durationType>half</durationType>
       </Rest>
     </Staff>
