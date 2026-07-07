@@ -35,7 +35,7 @@ public:
 
     virtual const AutomationCurveMap& curves() const = 0;
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
-    virtual const AutomationPoint* activePoint(const AutomationCurveKey& key, utick_t tick) const = 0;
+    virtual const AutomationPoint* point(const AutomationCurveKey& key, utick_t tick) const = 0;
 
     virtual bool isEmpty() const = 0;
 
@@ -48,7 +48,7 @@ public:
     virtual void removePoint(const AutomationCurveKey& key, utick_t tick) = 0;
     virtual void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) = 0;
 
-    using PointRemoveAccepted = std::function<bool(const AutomationCurveKey&, utick_t tick, const AutomationPoint&)>;
+    using PointRemoveAccepted = std::function<bool (const AutomationCurveKey&, utick_t tick, const AutomationPoint&)>;
     virtual void removePoints(const PointRemoveAccepted& accepted) = 0;
 
     virtual void setPointInValue(const AutomationCurveKey& key, utick_t tick, double value) = 0;

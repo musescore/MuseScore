@@ -341,7 +341,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return;
     }
 
-    const mu::engraving::AutomationPoint* oldPoint = engravingAutomation()->activePoint(curveKey, oldPointData.tick);
+    const mu::engraving::AutomationPoint* oldPoint = engravingAutomation()->point(curveKey, oldPointData.tick);
     const mu::engraving::AutomationPoint newPoint = { newValue, newValue,
                                                       oldPoint ? oldPoint->interpolation
                                                                : mu::engraving::AutomationPoint::InterpolationType::Linear,

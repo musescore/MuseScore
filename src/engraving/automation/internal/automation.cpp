@@ -71,10 +71,10 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
     return curveIt->second;
 }
 
-const AutomationPoint* Automation::activePoint(const AutomationCurveKey& key, utick_t tick) const
+const AutomationPoint* Automation::point(const AutomationCurveKey& key, utick_t tick) const
 {
     const AutomationCurve& keyCurve = curve(key);
-    const auto it = muse::findLessOrEqual(keyCurve, tick);
+    const auto it = keyCurve.find(tick);
     return it != keyCurve.cend() ? &it->second : nullptr;
 }
 
