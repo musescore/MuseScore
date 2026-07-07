@@ -32,6 +32,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/repeatlist.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 using namespace Qt::Literals;
 
 using namespace muse;

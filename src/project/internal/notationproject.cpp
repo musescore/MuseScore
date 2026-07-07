@@ -46,6 +46,9 @@
 #include "engraving/rw/write/writecontext.h"
 
 #include "iprojectautosaver.h"
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationviewstate.h"
 #include "notation/internal/masternotation.h"
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"

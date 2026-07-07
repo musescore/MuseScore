@@ -19,16 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <functional>
 
 #include "async/notification.h"
 
+#include "inotation_fwd.h"
 #include "notationtypes.h"
-#include "inotationnoteinput.h"
-#include "inotationselection.h"
-#include "inotationselectionfilter.h"
 
 class QKeyEvent;
 class QInputMethodEvent;

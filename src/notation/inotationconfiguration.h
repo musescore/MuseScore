@@ -29,8 +29,10 @@
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"
-#include "notationtypes.h"
 #include "global/globaltypes.h"
+
+#include "notationtypes.h"
+#include "types/zoomtype.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE

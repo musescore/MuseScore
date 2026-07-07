@@ -22,6 +22,8 @@
 
 #include "paletteactionscontroller.h"
 
+#include "notation/inotationinteraction.h"
+
 using namespace mu::palette;
 using namespace muse;
 using namespace muse::ui;

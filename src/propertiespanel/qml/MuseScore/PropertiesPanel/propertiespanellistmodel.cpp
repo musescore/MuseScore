@@ -19,7 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "propertiespanellistmodel.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "exportdialogmodel.h"
 
 #include <algorithm>
@@ -26,7 +27,8 @@
 #include <QItemSelectionModel>
 #include <QTimer>
 
-#include "async/async.h"
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+
 #include "translation.h"
 #include "log.h"
 

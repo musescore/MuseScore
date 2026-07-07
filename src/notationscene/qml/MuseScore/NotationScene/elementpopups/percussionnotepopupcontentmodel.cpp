@@ -25,6 +25,9 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/shadownote.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+
 using namespace mu::notation;
 
 PercussionNotePopupContentModel::PercussionNotePopupContentModel(QObject* parent)

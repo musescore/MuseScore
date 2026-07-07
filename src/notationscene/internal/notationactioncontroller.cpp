@@ -33,7 +33,16 @@
 #include "engraving/dom/sig.h"
 #include "engraving/editing/noteinput.h"
 
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationelements.h"
+#include "notation/inotationmidiinput.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationplayback.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationundostack.h"
 #include "notation/notationtypes.h"
+#include "notation/inotationinteraction.h"
 
 #include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 

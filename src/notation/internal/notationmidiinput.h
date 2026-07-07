@@ -26,6 +26,8 @@
 
 #include <QTimer>
 
+#include "midi/midievent.h"
+
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
 #include "inotationconfiguration.h"

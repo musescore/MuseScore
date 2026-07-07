@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationcontextmenumodel.h"
 
 #include "types/translatablestring.h"
@@ -29,6 +30,8 @@
 
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/fret.h"
+
+#include "notation/inotationselection.h"
 
 using namespace mu::notation;
 using namespace muse;

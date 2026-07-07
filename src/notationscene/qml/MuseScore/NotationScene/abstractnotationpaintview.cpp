@@ -26,10 +26,19 @@
 #include <QMimeData>
 
 #include "async/async.h"
+#include "log.h"
 
 #include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
-#include "log.h"
+
+#include "notation/inotationaccessibility.h" // IWYU pragma: keep
+#include "notation/inotationautomation.h"
+#include "notation/inotationelements.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationpainting.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationviewstate.h"
 
 using namespace mu;
 using namespace mu::notation;

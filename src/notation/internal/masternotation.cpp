@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "masternotation.h"
 
 #include <QFileInfo>
@@ -45,6 +46,8 @@
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/transaction/transaction.h"
 
+#include "inotationelements.h" // IWYU pragma: keep
+#include "inotationsolomutestate.h"
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
@@ -532,7 +535,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(excerpts);
 }
 
-void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
+void MasterNotation::resetExcerpt(IExcerptNotationPtr& excerptNotation)
 {
     if (!excerptNotation || !excerptNotation->isInited()) {
         return;

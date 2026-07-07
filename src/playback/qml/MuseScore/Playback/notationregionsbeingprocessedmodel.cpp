@@ -21,8 +21,12 @@
  */
 
 #include "notationregionsbeingprocessedmodel.h"
-#include <QtCore/qvariant.h>
-#include <QtGui/qtransform.h>
+
+#include <QVariant>
+#include <QTransform>
+
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationplayback.h" // IWYU pragma: keep
 
 using namespace muse::audio;
 using namespace mu::playback;

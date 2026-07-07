@@ -24,9 +24,10 @@ target_sources(notation PRIVATE
     notationmodule.cpp
     notationmodule.h
 
+    inotation_fwd.h
+    inotation.h
     imasternotation.h
     iexcerptnotation.h
-    inotation.h
     inotationpainting.h
     inotationviewstate.h
     inotationsolomutestate.h
@@ -40,7 +41,6 @@ target_sources(notation PRIVATE
     inotationundostack.h
     inotationaccessibility.h
     inotationmidiinput.h
-    notationtypes.h
     inotationconfiguration.h
     inotationcontextconfiguration.h
     notationerrors.h
@@ -48,6 +48,10 @@ target_sources(notation PRIVATE
     inotationelements.h
     inotationparts.h
     iinstrumentsrepository.h
+
+    notationtypes.h
+    types/viewmode.h
+    types/zoomtype.h
 
     internal/excerptnotation.cpp
     internal/excerptnotation.h

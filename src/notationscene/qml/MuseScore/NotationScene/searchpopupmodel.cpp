@@ -21,6 +21,10 @@
  */
 #include "searchpopupmodel.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+
 using namespace mu::notation;
 
 SearchPopupModel::SearchPopupModel(QObject* parent)

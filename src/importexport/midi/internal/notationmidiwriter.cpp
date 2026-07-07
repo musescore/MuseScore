@@ -24,6 +24,8 @@
 
 #include <QBuffer>
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "midiexport/exportmidi.h"
 
 #include "log.h"

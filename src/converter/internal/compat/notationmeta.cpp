@@ -27,13 +27,14 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "audio/common/audioutils.h"
+#include "audio/common/audiotypes.h"
+
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
 #include "project/inotationproject.h"
-
-#include "audio/common/audioutils.h"
-#include "audio/common/audiotypes.h"
 
 #include "log.h"
 

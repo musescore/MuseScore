@@ -22,6 +22,10 @@
 
 #include "notesinchordselectionfiltermodel.h"
 
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationselectionfilter.h"
+
 #include "log.h"
 #include "translation.h"
 

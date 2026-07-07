@@ -26,6 +26,10 @@
 #include "engraving/dom/property.h"
 #include "engraving/dom/tempotext.h"
 
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h"
+#include "notation/inotationundostack.h"
+
 #include "modularity/ioc.h"
 #include "shortcuts/shortcutstypes.h"
 

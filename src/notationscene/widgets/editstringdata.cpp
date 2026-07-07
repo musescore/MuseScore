@@ -33,6 +33,9 @@
 #include "engraving/dom/stringtunings.h"
 #include "engraving/editing/editpart.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
 

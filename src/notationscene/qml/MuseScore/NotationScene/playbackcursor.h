@@ -29,7 +29,7 @@
 #include "draw/types/geometry.h"
 #include "midi/miditypes.h"
 
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 
 class QColor;
 

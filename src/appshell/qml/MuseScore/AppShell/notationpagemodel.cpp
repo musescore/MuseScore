@@ -26,6 +26,11 @@
 
 #include "async/async.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationselection.h"
+
 #include "log.h"
 
 using namespace mu::appshell;

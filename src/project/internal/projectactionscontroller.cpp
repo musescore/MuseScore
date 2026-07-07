@@ -39,6 +39,9 @@
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "projecterrors.h"
 #include "projectextensionpoints.h"
 

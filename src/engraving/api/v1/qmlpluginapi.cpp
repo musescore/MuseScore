@@ -31,6 +31,9 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/types/types.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 // api
 #include "engravingapiv1.h"
 #include "score.h"
@@ -498,8 +501,8 @@ void PluginAPI::quit()
 
 mu::engraving::Score* PluginAPI::currentScore() const
 {
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->elements()->msScore();
+    if (notation::INotationPtr notation = context()->currentNotation()) {
+        return notation->elements()->msScore();
     }
 
     return nullptr;

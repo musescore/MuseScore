@@ -27,6 +27,12 @@
 #include "ui/view/iconcodes.h"
 #include "context/shortcutcontext.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+
 using namespace mu;
 using namespace mu::notation;
 using namespace muse;

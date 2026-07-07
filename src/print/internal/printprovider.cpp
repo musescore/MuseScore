@@ -25,6 +25,10 @@
 #include <QPrintDialog>
 #include <QWindow>
 
+#include "draw/painter.h"
+
+#include "notation/inotationpainting.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -43,7 +47,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
         return make_ret(Ret::Code::InternalError);
     }
 
-    auto painting = notation->painting();
+    INotationPaintingPtr painting = notation->painting();
 
     SizeF pageSizeInch = painting->pageSizeInch();
     QPrinter printerDev(QPrinter::HighResolution);

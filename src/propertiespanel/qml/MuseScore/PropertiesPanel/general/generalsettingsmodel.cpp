@@ -27,6 +27,8 @@
 #include "engraving/editing/editvisibility.h"
 #include "engraving/editing/transaction/transaction.h"
 
+#include "notation/inotationelements.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;

@@ -19,12 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationpagemodel.h"
 
 #include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
 #include "async/async.h"
+
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
 
 #include "log.h"
 
@@ -53,7 +57,7 @@ void NotationPageModel::init()
 
     for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
         DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
-        dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
+        dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
     }
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {

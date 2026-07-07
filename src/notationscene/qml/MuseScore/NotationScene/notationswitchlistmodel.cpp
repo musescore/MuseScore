@@ -24,6 +24,8 @@
 
 #include "log.h"
 
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+
 using namespace mu::notation;
 using namespace mu::project;
 

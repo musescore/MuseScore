@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONNOTEINPUT_H
-#define MU_NOTATION_INOTATIONNOTEINPUT_H
+
+#pragma once
 
 #include "async/notification.h"
 #include "types/ret.h"
@@ -83,5 +83,3 @@ public:
 
 using INotationNoteInputPtr = std::shared_ptr<INotationNoteInput>;
 }
-
-#endif // MU_NOTATION_INOTATIONNOTEINPUT_H

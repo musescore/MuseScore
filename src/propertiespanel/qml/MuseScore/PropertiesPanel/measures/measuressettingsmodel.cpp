@@ -23,6 +23,9 @@
 
 #include "engraving/dom/score.h"
 
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;

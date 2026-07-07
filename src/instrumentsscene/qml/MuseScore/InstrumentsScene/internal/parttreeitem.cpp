@@ -23,6 +23,9 @@
 
 #include "async/notifylist.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;

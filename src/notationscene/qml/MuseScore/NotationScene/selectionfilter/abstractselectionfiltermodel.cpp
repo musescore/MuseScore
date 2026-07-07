@@ -24,6 +24,9 @@
 
 #include "log.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselectionfilter.h"
+
 using namespace mu::notation;
 
 AbstractSelectionFilterModel::AbstractSelectionFilterModel(QObject* parent)
