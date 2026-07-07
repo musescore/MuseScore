@@ -174,9 +174,6 @@ public:
     void setTrack2(track_idx_t v);
     track_idx_t effectiveTrack2() const;
 
-    bool broken() const { return m_broken; }
-    void setBroken(bool v) { m_broken = v; }
-
     bool playSpanner() const { return m_playSpanner; }
     void setPlaySpanner(bool p) { m_playSpanner = p; }
 
@@ -289,7 +286,6 @@ private:
     Fraction m_tick = Fraction(-1, 1);
     Fraction m_ticks = Fraction(0, 1);
     track_idx_t m_track2 = muse::nidx;
-    bool m_broken = false;
 
     std::vector<SpannerSegment*> m_segments;
     std::deque<SpannerSegment*> m_unusedSegments;   // Currently unused segments which can be reused later.
