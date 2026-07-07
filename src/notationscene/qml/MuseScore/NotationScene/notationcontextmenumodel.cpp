@@ -96,11 +96,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("action://notation/delete"),
+        makeMenuItem("command://notation/delete"),
     };
 
     return items;
@@ -109,15 +109,15 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem("action://notation/delete");
+    MenuItem* clearItem = makeMenuItem("command://notation/delete");
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
@@ -223,10 +223,10 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/copy")
+        makeMenuItem("command://notation/copy")
     };
 
-    MenuItem* hideItem = makeMenuItem("action://notation/delete");
+    MenuItem* hideItem = makeMenuItem("command://notation/delete");
 
     ui::UiAction action = hideItem->action();
     action.iconCode = ui::IconCode::Code::NONE;

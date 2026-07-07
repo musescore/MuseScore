@@ -114,15 +114,6 @@ private:
 
     void revertToFactorySettings();
 
-    bool hasProjectAndIsFocused() const;
-    void doGlobalCopy();
-    void doGlobalCut();
-    void doGlobalPaste();
-    void doGlobalUndo();
-    void doGlobalRedo();
-    void doGlobalDelete();
-    void doGlobalCancel();
-
     bool m_quiting = false;
 
     muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;

@@ -24,6 +24,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "global/async/channel.h"
+#include "global/async/notification.h"
 
 namespace mu::notation {
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
@@ -31,6 +32,13 @@ class INotationCommandsController : MODULE_CONTEXT_INTERFACE
     INTERFACE_ID(INotationCommandsController)
 public:
     virtual ~INotationCommandsController() = default;
+
+    virtual bool hasSelection() const = 0;
+    virtual muse::async::Channel<bool> hasSelectionChanged() const = 0;
+
+    virtual bool canUndo() const = 0;
+    virtual bool canRedo() const = 0;
+    virtual muse::async::Notification stackChanged() const = 0;
 
     virtual bool isTextEditing() const = 0;
     virtual muse::async::Channel<bool> textEditingChanged() const = 0;

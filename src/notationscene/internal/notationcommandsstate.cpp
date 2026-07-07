@@ -31,6 +31,17 @@ using namespace mu::notation;
 
 static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
 
+static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
+    CUT_COMMAND,
+    COPY_COMMAND,
+    DELETE_COMMAND
+};
+
+static const std::vector<Command> UNDO_REDO_COMMANDS = {
+    UNDO_COMMAND,
+    REDO_COMMAND
+};
+
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
     EDIT_NEXT_TEXT_ELEMENT_COMMAND,
     EDIT_PREV_TEXT_ELEMENT_COMMAND,
@@ -53,7 +64,19 @@ void NotationCommandsState::init()
         updateCommandStates();
     });
 
-    commandsController()->textEditingChanged().onReceive(this, [this](bool) {
+    interactive()->opened().onReceive(this, [this](const muse::Uri&) {
+        updateCommandStates();
+    });
+
+    controller()->hasSelectionChanged().onReceive(this, [this](bool) {
+        updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
+    });
+
+    controller()->stackChanged().onNotify(this, [this]() {
+        updateCommandStates(UNDO_REDO_COMMANDS);
+    });
+
+    controller()->textEditingChanged().onReceive(this, [this](bool) {
         updateCommandStates(TEXT_EDITING_COMMANDS);
     });
 
@@ -63,6 +86,10 @@ void NotationCommandsState::init()
 void NotationCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
+    interactive()->opened().disconnect(this);
+    controller()->hasSelectionChanged().disconnect(this);
+    controller()->stackChanged().disconnect(this);
+    controller()->textEditingChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -88,8 +115,19 @@ CommandState NotationCommandsState::commandState(const Command& command) const
         return CommandState(false, false);
     }
 
+    if (muse::contains(HAS_SELECTION_REQUIRED_COMMANDS, command)) {
+        return CommandState(controller()->hasSelection(), false);
+    }
+
+    if (command == UNDO_COMMAND) {
+        return CommandState(controller()->canUndo(), false);
+    }
+    if (command == REDO_COMMAND) {
+        return CommandState(controller()->canRedo(), false);
+    }
+
     if (muse::contains(TEXT_EDITING_COMMANDS, command)) {
-        return CommandState(commandsController()->isTextEditing(), false);
+        return CommandState(controller()->isTextEditing(), false);
     }
 
     return CommandState(true, false);

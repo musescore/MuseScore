@@ -55,9 +55,6 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
-static const ActionCode UNDO_ACTION_CODE = "action://notation/undo";
-static const ActionCode REDO_ACTION_CODE = "action://notation/redo";
-
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
     { "advance-breve", Fraction(2, 1) },
@@ -93,10 +90,6 @@ using Interaction = INotationInteraction;
 void NotationActionController::init()
 {
     TRACEFUNC;
-
-    //! NOTE For historical reasons, the name of the action does not match what needs to be done
-    registerAction("action://notation/cancel", &Controller::resetState, &Controller::isNotationPage);
-    m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
     registerAction("note-input", &Controller::toggleNoteInput, &Controller::toggleNoteInputAllowed);
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
@@ -224,14 +217,10 @@ void NotationActionController::init()
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
     registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
 
-    registerAction("action://notation/copy", &Interaction::copySelection, &Controller::hasSelection);
-    registerAction("action://notation/cut", &Controller::cutSelection, &Controller::hasSelection);
-    registerAction("action://notation/paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
     registerAction("notation-paste-half", [this]() { pasteSelection(PastingType::Half); });
     registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
-    registerAction("action://notation/delete", &Interaction::deleteSelection, &Controller::hasSelection);
 
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
     registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
@@ -240,9 +229,6 @@ void NotationActionController::init()
     registerAction("lv", &Controller::addLaissezVib);
     registerAction("add-slur", &Controller::addSlur);
     registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
-
-    registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
-    registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
 
     registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
@@ -555,6 +541,11 @@ void NotationActionController::init()
         auto notation = globalContext()->currentNotation();
         if (notation) {
             auto interaction = notation->interaction();
+
+            interaction->selectionChanged().onNotify(this, [this]() {
+                m_hasSelectionChanged.send(hasSelection());
+            }, Asyncable::Mode::SetReplace);
+
             interaction->noteInput()->stateChanged().onNotify(this, [this]() {
                 m_currentNotationNoteInputChanged.notify();
             }, Asyncable::Mode::SetReplace);
@@ -564,6 +555,11 @@ void NotationActionController::init()
             }, Asyncable::Mode::SetReplace);
             interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
                 m_textEditingChanged.send(false);
+            }, Asyncable::Mode::SetReplace);
+
+            auto undoStack = notation->undoStack();
+            undoStack->stackChanged().onNotify(this, [this]() {
+                m_stackChanged.notify();
             }, Asyncable::Mode::SetReplace);
         }
         m_currentNotationNoteInputChanged.notify();
@@ -586,21 +582,31 @@ void NotationActionController::init()
 
     // commands
     {
-        auto d = commandDispatcher();
+        //! NOTE For historical reasons, the name of the action does not match what needs to be done
+        registerCommand(CANCEL_COMMAND, &Controller::resetState);
+        m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
-        d->onRequest(this, MOVE_RIGHT_COMMAND, [this]() { return moveWithRet(MoveDirection::Right, false); });
-        d->onRequest(this, MOVE_LEFT_COMMAND, [this]() { return moveWithRet(MoveDirection::Left, false); });
-        d->onRequest(this, MOVE_RIGHT_QUICKLY_COMMAND, [this]() { return moveWithRet(MoveDirection::Right, true); });
-        d->onRequest(this, MOVE_LEFT_QUICKLY_COMMAND, [this]() { return moveWithRet(MoveDirection::Left, true); });
+        registerCommand(COPY_COMMAND, &Interaction::copySelection);
+        registerCommand(CUT_COMMAND, &Controller::cutSelection);
+        registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
+        registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
 
-        d->onRequest(this, PITCH_UP_COMMAND, [this]() { return moveWithRet(MoveDirection::Up, false); });
-        d->onRequest(this, PITCH_DOWN_COMMAND, [this]() { return moveWithRet(MoveDirection::Down, false); });
-        d->onRequest(this, PITCH_UP_OCTAVE_COMMAND, [this]() { return moveWithRet(MoveDirection::Up, true); });
-        d->onRequest(this, PITCH_DOWN_OCTAVE_COMMAND, [this]() { return moveWithRet(MoveDirection::Down, true); });
+        registerCommand(UNDO_COMMAND, &Interaction::undo);
+        registerCommand(REDO_COMMAND, &Interaction::redo);
 
-        d->onRequest(this, EDIT_NEXT_WORD_COMMAND, [this]() { return nextWord(); });
-        d->onRequest(this, EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { return nextTextElement(); });
-        d->onRequest(this, EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { return prevTextElement(); });
+        registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
+        registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
+        registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
+        registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
+
+        registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
+        registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
+        registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
+        registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+
+        registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
+        registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
+        registerCommand(EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { prevTextElement(); });
     }
 }
 
@@ -616,14 +622,6 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
         if (!muse::contains(m_isAllowedDuringPlayback, code)) {
             return false;
         }
-    }
-
-    if (code == UNDO_ACTION_CODE) {
-        return canUndo();
-    }
-
-    if (code == REDO_ACTION_CODE) {
-        return canRedo();
     }
 
     // Actions other than undo and redo can only be handled when the current
@@ -2361,6 +2359,11 @@ bool NotationActionController::hasSelection() const
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }
 
+muse::async::Channel<bool> NotationActionController::hasSelectionChanged() const
+{
+    return m_hasSelectionChanged;
+}
+
 mu::engraving::EngravingItem* NotationActionController::selectedElement() const
 {
     auto selection = currentNotationSelection();
@@ -2405,6 +2408,11 @@ bool NotationActionController::canUndo() const
 bool NotationActionController::canRedo() const
 {
     return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
+}
+
+muse::async::Notification NotationActionController::stackChanged() const
+{
+    return m_stackChanged;
 }
 
 bool NotationActionController::isNotationPage() const
@@ -2699,4 +2707,46 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
             }
         }
     }, enabler);
+}
+
+// COMMANDS
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command, std::function<void()> handler)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler]() {
+        if (!commandsState()->commandState(command).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+        handler();
+        return muse::make_ok();
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command, void (NotationActionController::* handler)())
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler]() {
+        if (!commandsState()->commandState(command).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+        (this->*handler)();
+        return muse::make_ok();
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (INotationInteraction::* handler)(), PlayMode playMode)
+{
+    registerCommand(command, [this, handler, playMode]()
+    {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)();
+
+            seekSelectedElement();
+
+            if (playMode != PlayMode::NoPlay) {
+                playSelectedElement(playMode == PlayMode::PlayChord);
+            }
+        }
+    });
 }

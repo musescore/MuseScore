@@ -82,39 +82,6 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
 const UiActionList NotationUiActions::s_actions = {
-    UiAction("action://notation/copy",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "&Copy"),
-             TranslatableString("action", "Copy"),
-             IconCode::Code::COPY
-             ),
-    UiAction("action://notation/cut",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Cu&t"),
-             TranslatableString("action", "Cut"),
-             IconCode::Code::CUT
-             ),
-    UiAction("action://notation/paste",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Past&e"),
-             TranslatableString("action", "Paste"),
-             IconCode::Code::PASTE
-             ),
-    UiAction("action://notation/delete",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "De&lete"),
-             TranslatableString("action", "Delete"),
-             IconCode::Code::DELETE_TANK
-             ),
-    UiAction("action://notation/cancel",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED
-             ),
-
     UiAction("put-note", // args: PointF pos, bool replace, bool insert
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2658,23 +2625,6 @@ const UiActionList NotationUiActions::s_scoreConfigActions = {
              )
 };
 
-const UiActionList NotationUiActions::s_undoRedoActions = {
-    UiAction("action://notation/undo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Undo"),
-             TranslatableString("action", "Undo"),
-             IconCode::Code::UNDO
-             ),
-    UiAction("action://notation/redo",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_DISABLED,
-             TranslatableString("action", "Redo"),
-             TranslatableString("action", "Redo"),
-             IconCode::Code::REDO
-             )
-};
-
 const UiActionList NotationUiActions::s_engravingDebuggingActions = {
     UiAction("show-element-bounding-rects",
              mu::context::UiCtxProjectOpened,
@@ -2809,10 +2759,6 @@ void NotationUiActions::init()
                 updateActionsEnabled(s_actions);
             }, Asyncable::Mode::SetReplace);
 
-            m_controller->currentNotationUndoStack()->stackChanged().onNotify(this, [this]() {
-                updateActionsEnabled(s_undoRedoActions);
-            }, Asyncable::Mode::SetReplace);
-
             interaction->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
                 static const std::unordered_map<ScoreConfigType, std::string> configActions {
                     { ScoreConfigType::ShowInvisibleElements, SHOW_INVISIBLE_CODE },
@@ -2864,7 +2810,6 @@ const UiActionList& NotationUiActions::actionsList() const
     static UiActionList alist;
     if (alist.empty()) {
         alist.insert(alist.end(), s_actions.begin(), s_actions.end());
-        alist.insert(alist.end(), s_undoRedoActions.begin(), s_undoRedoActions.end());
         alist.insert(alist.end(), s_scoreConfigActions.begin(), s_scoreConfigActions.end());
         alist.insert(alist.end(), s_engravingDebuggingActions.begin(), s_engravingDebuggingActions.end());
     }

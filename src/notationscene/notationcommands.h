@@ -25,6 +25,14 @@
  #include "rcommand/commandtypes.h"
 
 namespace mu::notation {
+inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
+inline static const muse::rcommand::Command CUT_COMMAND("command://notation/cut");
+inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/paste");
+inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
+inline static const muse::rcommand::Command CANCEL_COMMAND("command://notation/cancel");
+inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/undo");
+inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
+
 inline static const muse::rcommand::Command MOVE_RIGHT_COMMAND("command://notation/move-right");
 inline static const muse::rcommand::Command MOVE_LEFT_COMMAND("command://notation/move-left");
 inline static const muse::rcommand::Command MOVE_RIGHT_QUICKLY_COMMAND("command://notation/move-right-quickly");

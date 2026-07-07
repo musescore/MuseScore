@@ -99,6 +99,34 @@
     ],
     "NOTATION": [
         {
+            "command": "command://notation/copy",
+            "sequences": ["Ctrl+C"]
+        },
+        {
+            "command": "command://notation/cut",
+            "sequences": ["Ctrl+X"]
+        },
+        {
+            "command": "command://notation/paste",
+            "sequences": ["Ctrl+V"]
+        },
+        {
+            "command": "command://notation/delete",
+            "sequences": ["Delete"]
+        },
+        {
+            "command": "command://notation/cancel",
+            "sequences": ["Escape"]
+        },
+        {
+            "command": "command://notation/undo",
+            "sequences": ["Ctrl+Z"]
+        },
+        {
+            "command": "command://notation/redo",
+            "sequences": ["Ctrl+Shift+Z"]
+        },
+        {
             "command": "command://notation/move-right",
             "sequences": ["Right"]
         },
