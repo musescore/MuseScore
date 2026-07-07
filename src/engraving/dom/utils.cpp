@@ -1565,6 +1565,13 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
     const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
     const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
 
+    if (firstMasterMeasure) {
+        firstMasterMeasure = firstMasterMeasure->coveringMMRestOrThis();
+    }
+    if (secondMasterMeasure) {
+        secondMasterMeasure = secondMasterMeasure->coveringMMRestOrThis();
+    }
+
     Score* score = firstSeg->score();
 
     const RepeatList& repeatList = score->repeatList(true, false);
