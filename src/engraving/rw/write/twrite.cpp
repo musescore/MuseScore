@@ -1178,7 +1178,7 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
 
     for (auto i : item->score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
         Spanner* s = i.value;
-        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !ctx.canWrite(s)) {
+        if (s->generated() || !s->isSlur() || !ctx.canWrite(s)) {
             continue;
         }
 
@@ -1746,9 +1746,6 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const HammerOnPullOff* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (item->broken()) {
-        return;
-    }
     if (!ctx.canWrite(item)) {
         return;
     }
@@ -2814,10 +2811,6 @@ void TWrite::write(const Segment* item, XmlWriter& xml, WriteContext&)
 
 void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (item->broken()) {
-        LOGD("broken slur not written");
-        return;
-    }
     if (!ctx.canWrite(item)) {
         return;
     }
