@@ -28,6 +28,8 @@
 #include "draw/types/painterpath.h"
 
 namespace mu::engraving {
+class Transaction;
+
 enum class StaffStateType : char {
     INSTRUMENT,
     TYPE,
@@ -56,7 +58,7 @@ public:
     String staffStateTypeName() const;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     Instrument* instrument() const { return m_instrument; }
     void setInstrument(const Instrument* i) { *m_instrument = *i; }

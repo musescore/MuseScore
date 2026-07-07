@@ -26,6 +26,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -54,13 +55,13 @@ static void dropClef(EngravingItem* m, ClefType t)
     EditData dropData(0);
     dropData.dropElement = clef;
     dropData.track = m->isClef() ? m->track() : 0;
-    m->score()->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
-    if (m->isMeasure()) {
-        toMeasure(m)->drop(dropData);
-    } else {
-        m->findMeasure()->drop(dropData);
-    }
-    m->score()->endCmd();
+    m->score()->transactionManager()->transaction(TranslatableString::untranslatable("Courtesy clef tests"), [&](Transaction& tx) {
+        if (m->isMeasure()) {
+            toMeasure(m)->drop(tx, dropData);
+        } else {
+            m->findMeasure()->drop(tx, dropData);
+        }
+    });
 }
 
 //---------------------------------------------------------
@@ -151,7 +152,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     EditData dropData(0);
     dropData.dropElement = clef;
     dropData.track = 0;
-    m1->drop(dropData);
+    m1->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // 'go' to 7th measure
     Measure* m2 = m1;
@@ -163,7 +164,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     clef->setClefType(ClefType::G);
     dropData.dropElement = clef;
     dropData.track = 0;
-    m2->drop(dropData);
+    m2->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
     score->doLayout();
 
     // check both clef elements are there, but none is shown
@@ -208,7 +209,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
     EditData dropData(0);
     dropData.dropElement = clef;
     dropData.track = 0;
-    m2->drop(dropData);
+    m2->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
     score->doLayout();
 
     // verify the not required courtesy clef element is on end of m1 but is not shown

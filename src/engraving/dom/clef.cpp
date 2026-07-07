@@ -129,7 +129,7 @@ bool Clef::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Clef::drop(EditData& data)
+EngravingItem* Clef::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     Clef* c = 0;
@@ -137,7 +137,6 @@ EngravingItem* Clef::drop(EditData& data)
         Clef* clef = toClef(e);
         ClefType stype  = clef->clefType();
         if (clefType() != stype) {
-            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
             EditClef::undoChangeClef(tx, score(), staff(), this, stype);
             c = this;
         }

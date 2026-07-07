@@ -1740,7 +1740,7 @@ bool Note::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Note::drop(EditData& data)
+EngravingItem* Note::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
 
@@ -1864,7 +1864,6 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES: {
-            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
             EditParentheses::addParenthesesToNotes(tx, { this });
             break;
         }
@@ -1898,7 +1897,7 @@ EngravingItem* Note::drop(EditData& data)
         default:
             break;
         }
-        return ch->drop(data);
+        return ch->drop(tx, data);
     }
 
     case ElementType::GUITAR_BEND:
@@ -2014,7 +2013,6 @@ EngravingItem* Note::drop(EditData& data)
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
         const ChordRest* cr = nullptr;
-        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         if (data.modifiers & ShiftModifier) {
             // add note to chord
             NoteInput::addNote(tx, score(), ch, nval);
@@ -2033,7 +2031,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::CHORDLINE:
         toChordLine(e)->setNote(this);
-        return ch->drop(data);
+        return ch->drop(tx, data);
 
     default:
         Spanner* spanner;
@@ -2047,7 +2045,7 @@ EngravingItem* Note::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        return ch->drop(data);
+        return ch->drop(tx, data);
     }
     return 0;
 }

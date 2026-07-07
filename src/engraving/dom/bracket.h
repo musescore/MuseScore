@@ -28,6 +28,7 @@
 namespace mu::engraving {
 class Factory;
 class System;
+class Transaction;
 enum class BracketType : signed char;
 
 //---------------------------------------------------------
@@ -84,7 +85,7 @@ public:
     Color color() const override { return m_bi->color(); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

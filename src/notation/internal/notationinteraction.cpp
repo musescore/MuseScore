@@ -2032,6 +2032,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
 
     startEdit(TranslatableString("undoableAction", "Drop element: %1").arg(edd.ed.dropElement->typeUserName()));
     score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
     ElementType et = edd.ed.dropElement->type();
     switch (et) {
     case ElementType::VOLTA:
@@ -2051,7 +2052,6 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     {
         systemStavesOnly |=  edd.ed.dropElement->systemFlag();
         mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
-        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         EditSpanner::addSpanner(tx, score(), spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
         accepted = true;
@@ -2064,10 +2064,10 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         [[fallthrough]];
     case ElementType::DYNAMIC:
     case ElementType::HARMONY:
-        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        accepted = doDropTextBaseAndSymbols(tx, pos, applyUserOffset);
         break;
     case ElementType::FRET_DIAGRAM:
-        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        accepted = doDropTextBaseAndSymbols(tx, pos, applyUserOffset);
         if (accepted) {
             doFinishAddFretboardDiagram();
         }
@@ -2123,7 +2123,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::LYRICS:
     case ElementType::HARP_DIAGRAM:
     case ElementType::STAFFTYPE_CHANGE:
-        accepted = doDropStandard();
+        accepted = doDropStandard(tx);
         break;
     case ElementType::SLUR:
     case ElementType::HAMMER_ON_PULL_OFF:
@@ -2158,7 +2158,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
 }
 
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
-bool NotationInteraction::doDropStandard()
+bool NotationInteraction::doDropStandard(engraving::Transaction& tx)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -2176,7 +2176,7 @@ bool NotationInteraction::doDropStandard()
     }
     score()->addRefresh(el->canvasBoundingRect());
 
-    EngravingItem* dropElement = el->drop(edd.ed);
+    EngravingItem* dropElement = el->drop(tx, edd.ed);
 
     if (dropElement && dropElement->isInstrumentChange()) {
         if (!selectInstrument(toInstrumentChange(dropElement))) {
@@ -2196,7 +2196,7 @@ bool NotationInteraction::doDropStandard()
 }
 
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for text base items & symbols (returns "accepted")
-bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset)
+bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, const PointF& pos, bool applyUserOffset)
 {
     IF_ASSERT_FAILED(m_dropData.elementDropData.has_value()) {
         return false;
@@ -2232,7 +2232,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
             return false;
         }
         edd.ed.pos = pos;
-        EngravingItem* dropElement = el->drop(edd.ed);
+        EngravingItem* dropElement = el->drop(tx, edd.ed);
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             selectAndStartEditIfNeeded(dropElement);
@@ -2878,7 +2878,8 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
-        EngravingItem* el = target->drop(*dropData);
+        engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+        EngravingItem* el = target->drop(tx, *dropData);
 
         if (el && el->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(el))) {
@@ -2936,7 +2937,8 @@ void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* n
             dropLine->setEndElement(note2);
             dropLine->styleChanged();
 
-            mu::engraving::EngravingItem* el = note1->drop(*dropData);
+            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            mu::engraving::EngravingItem* el = note1->drop(tx, *dropData);
             if (el && !score->inputState().noteEntryMode()) {
                 doSelect({ el }, mu::engraving::SelectType::SINGLE, 0);
             }

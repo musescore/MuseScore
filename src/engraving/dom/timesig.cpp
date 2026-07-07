@@ -105,15 +105,13 @@ bool TimeSig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TimeSig::drop(EditData& data)
+EngravingItem* TimeSig::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->isTimeSig()) {
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
         // ownership of e is transferred to EditTimeSig::addTimeSig
-
-        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
 
         if (tick() != measure()->endTick()) {
             EditTimeSig::addTimeSig(tx, score(), measure(), staffIdx(), toTimeSig(e), false);

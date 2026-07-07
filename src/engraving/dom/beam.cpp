@@ -491,7 +491,7 @@ bool Beam::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Beam::drop(EditData& data)
+EngravingItem* Beam::drop(Transaction&, EditData& data)
 {
     if (!data.dropElement->isActionIcon()) {
         return nullptr;

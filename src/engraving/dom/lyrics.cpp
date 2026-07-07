@@ -239,11 +239,11 @@ bool Lyrics::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Lyrics::drop(EditData& data)
+EngravingItem* Lyrics::drop(Transaction& tx, EditData& data)
 {
     ElementType type = data.dropElement->type();
     if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
-        TextBase::drop(data);
+        TextBase::drop(tx, data);
         return 0;
     }
     if (!data.dropElement->isText()) {

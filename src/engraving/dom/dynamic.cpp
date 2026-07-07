@@ -308,12 +308,11 @@ bool Dynamic::acceptDrop(EditData& ed) const
     return droppedType == ElementType::DYNAMIC || droppedType == ElementType::EXPRESSION || droppedType == ElementType::HAIRPIN;
 }
 
-EngravingItem* Dynamic::drop(EditData& ed)
+EngravingItem* Dynamic::drop(Transaction& tx, EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
 
     if (item->isHairpin()) {
-        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         EditHairpin::addHairpinToDynamic(tx, score(), toHairpin(item), this);
         return item;
     }

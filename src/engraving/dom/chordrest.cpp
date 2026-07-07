@@ -192,10 +192,8 @@ bool ChordRest::acceptDrop(EditData& data) const
     return measure()->acceptDrop(data);
 }
 
-EngravingItem* ChordRest::drop(EditData& data)
+EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 {
-    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-
     EngravingItem* e = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == muse::nidx);
@@ -238,7 +236,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
 
         if (barLineTick == m->tick() || barLineTick == m->endTick()) {
-            return m->drop(data);
+            return m->drop(tx, data);
         }
 
         bl->setPos(PointF());
@@ -448,7 +446,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
         break;
     }
-    return m->drop(data);
+    return m->drop(tx, data);
 }
 
 //---------------------------------------------------------

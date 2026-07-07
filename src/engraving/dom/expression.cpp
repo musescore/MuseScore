@@ -97,13 +97,13 @@ bool Expression::acceptDrop(EditData& ed) const
     return ed.dropElement->isDynamic() || TextBase::acceptDrop(ed);
 }
 
-EngravingItem* Expression::drop(EditData& ed)
+EngravingItem* Expression::drop(Transaction& tx, EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
     if (item->isDynamic()) {
         Dynamic* snappedDyn = snappedDynamic();
         if (snappedDyn) {
-            return snappedDyn->drop(ed);
+            return snappedDyn->drop(tx, ed);
         }
 
         item->setTrack(track());
@@ -113,7 +113,7 @@ EngravingItem* Expression::drop(EditData& ed)
         return item;
     }
 
-    return TextBase::drop(ed);
+    return TextBase::drop(tx, ed);
 }
 
 PropertyValue Expression::getProperty(Pid propertyId) const

@@ -403,7 +403,7 @@ bool Arpeggio::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Arpeggio::drop(EditData& data)
+EngravingItem* Arpeggio::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {

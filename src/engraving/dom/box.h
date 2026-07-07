@@ -26,6 +26,8 @@
 #include "property.h"
 
 namespace mu::engraving {
+class Transaction;
+
 //---------------------------------------------------------
 //   Box
 //   virtual base class for frames "boxes"
@@ -46,7 +48,7 @@ public:
     virtual void dragGrip(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
-    virtual EngravingItem* drop(EditData&) override;
+    virtual EngravingItem* drop(Transaction& tx, EditData&) override;
     virtual void add(EngravingItem* e) override;
     virtual double absoluteFromSpatium(const Spatium& val) const override;
 
@@ -256,7 +258,7 @@ public:
 
     TBox* clone() const override { return new TBox(*this); }
 
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
     void add(EngravingItem* e) override;
     void remove(EngravingItem* el) override;
 

@@ -375,9 +375,9 @@ MasterScore* Engraving_PartsTests::doAddBreath()
     b->setSymId(SymId::breathMarkComma);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
 
     return score;
 }
@@ -507,9 +507,9 @@ MasterScore* Engraving_PartsTests::doAddFingering()
     b->setXmlText("3");
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -641,9 +641,9 @@ MasterScore* Engraving_PartsTests::doAddSymbol()
     b->setSym(SymId::gClef);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -775,9 +775,9 @@ MasterScore* Engraving_PartsTests::doAddChordline()
     b->setChordLineType(ChordLineType::FALL);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -1034,9 +1034,9 @@ MasterScore* Engraving_PartsTests::doAddImage()
     b->loadFromFile(PARTS_DATA_DIR + u"schnee.png");
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 

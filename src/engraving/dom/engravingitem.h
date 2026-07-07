@@ -54,6 +54,8 @@ class Painter;
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
+class Transaction;
+
 template<typename T>
 inline void dump(const ld_field<T>& f, std::stringstream& ss)
 {
@@ -387,7 +389,7 @@ public:
 
  Reimplemented by elements that accept drops.
 */
-    virtual EngravingItem* drop(EditData&) { return 0; }
+    virtual EngravingItem* drop(Transaction&, EditData&) { return 0; }
 
     mutable bool itemDiscovered = false;       // helper flag for bsp
 

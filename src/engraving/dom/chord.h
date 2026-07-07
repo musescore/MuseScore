@@ -46,8 +46,9 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
-class TremoloTwoChord;
+class Transaction;
 class TremoloSingleChord;
+class TremoloTwoChord;
 
 enum class NoteType : unsigned char {
     ///.\{
@@ -154,7 +155,7 @@ public:
     double mag() const override;
     double noteHeadWidth() const;
 
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void setColor(const Color& c) override;
     void setStemDirection(DirectionV d);

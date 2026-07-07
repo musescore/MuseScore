@@ -838,7 +838,7 @@ void SplitJoinText::split()
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(Transaction&, EditData& ed)
 {
     TextCursor* cursor = this->cursor();
 

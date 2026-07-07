@@ -49,6 +49,7 @@
 
 namespace mu::engraving {
 class Lasso;
+class Transaction;
 }
 
 class QDrag;
@@ -383,8 +384,8 @@ private:
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
                                     Qt::KeyboardModifiers modifiers = {});
 
-    bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
+    bool doDropStandard(mu::engraving::Transaction& tx);
+    bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 

@@ -1505,7 +1505,7 @@ bool Measure::acceptDrop(EditData& data) const
 ///   element \a type and \a subtype.
 //---------------------------------------------------------
 
-EngravingItem* Measure::drop(EditData& data)
+EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     staff_idx_t staffIdx = track2staff(data.track);
@@ -1515,8 +1515,6 @@ EngravingItem* Measure::drop(EditData& data)
     }
     Staff* staff = score()->staff(staffIdx);
     //bool fromPalette = (e->track() == -1);
-
-    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
 
     switch (e->type()) {
     case ElementType::MARKER:
@@ -1706,7 +1704,7 @@ EngravingItem* Measure::drop(EditData& data)
             Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
             BarLine* cbl = toBarLine(seg->element(trackZeroVoice(data.track)));
             if (cbl) {
-                return cbl->drop(data);
+                return cbl->drop(tx, data);
             }
         } else if (bl->barLineType() == BarLineType::START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
@@ -1768,7 +1766,7 @@ EngravingItem* Measure::drop(EditData& data)
                 }
             }
             // drop to barline
-            return seg->element(trackZeroVoice(data.track))->drop(data);
+            return seg->element(trackZeroVoice(data.track))->drop(tx, data);
         }
         break;
     }

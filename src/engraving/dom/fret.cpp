@@ -1038,7 +1038,7 @@ bool FretDiagram::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* FretDiagram::drop(EditData& data)
+EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {

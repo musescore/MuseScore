@@ -350,7 +350,7 @@ bool Box::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Box::drop(EditData& data)
+EngravingItem* Box::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->flag(ElementFlag::ON_STAFF)) {
@@ -990,7 +990,7 @@ void TBox::scanElements(std::function<void(EngravingItem*)> func)
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TBox::drop(EditData& data)
+EngravingItem* TBox::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
@@ -999,7 +999,7 @@ EngravingItem* TBox::drop(EditData& data)
         delete e;
         return m_text;
     default:
-        return VBox::drop(data);
+        return VBox::drop(tx, data);
     }
 }
 
