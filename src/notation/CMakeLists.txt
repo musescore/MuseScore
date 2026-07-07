@@ -33,9 +33,11 @@ target_sources(notation PRIVATE
     inotationnoteinput.h
     inotationselection.h
     inotationselectionfilter.h
+    inotationselectionrange.h
     inotationautomation.h
     inotationinteraction.h
     inotationstyle.h
+    inotationundostack.h
     inotationaccessibility.h
     inotationmidiinput.h
     notationtypes.h
@@ -47,11 +49,9 @@ target_sources(notation PRIVATE
     inotationparts.h
     iinstrumentsrepository.h
 
-    internal/inotationundostack.h
     internal/excerptnotation.cpp
     internal/excerptnotation.h
     internal/igetscore.h
-    internal/inotationselectionrange.h
     internal/instrumentsrepository.cpp
     internal/instrumentsrepository.h
     internal/masternotation.cpp

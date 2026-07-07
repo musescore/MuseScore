@@ -32,7 +32,7 @@
 #include "inotationsolomutestate.h"
 #include "inotationstyle.h"
 #include "inotationviewstate.h"
-#include "internal/inotationundostack.h"
+#include "inotationundostack.h"
 #include "notationtypes.h"
 
 class QString;

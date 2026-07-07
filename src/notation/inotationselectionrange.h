@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONSELECTIONRANGE_H
-#define MU_NOTATION_INOTATIONSELECTIONRANGE_H
+
+#pragma once
 
 #include <vector>
 
-#include "../notationtypes.h"
+#include "notationtypes.h"
 
 namespace mu::notation {
 class INotationSelectionRange
@@ -58,5 +58,3 @@ public:
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;
 }
-
-#endif // MU_NOTATION_INOTATIONSELECTIONRANGE_H

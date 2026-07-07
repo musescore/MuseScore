@@ -23,10 +23,11 @@
 
 #include <vector>
 
-#include "notationtypes.h"
-#include "internal/inotationselectionrange.h"
 #include "types/bytearray.h"
 #include "types/ret.h"
+
+#include "inotationselectionrange.h"
+#include "notationtypes.h"
 
 class QMimeData;
 
