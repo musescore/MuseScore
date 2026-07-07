@@ -32,6 +32,7 @@ ListView {
     required property var themes // re-read on every color edit, used to paint the samples
     property alias themeCodes: root.model // does not change on color edits, so that the delegates aren't destroyed & re-created
     property string currentThemeCode
+    property bool highContrast: false
 
     currentIndex: themeCodes.indexOf(currentThemeCode)
 
@@ -75,6 +76,7 @@ ListView {
 
         ThemeSample {
             theme: parent.themeData ?? ui.theme
+            highContrast: root.highContrast
 
             onClicked: {
                 root.themeChangeRequested(modelData)

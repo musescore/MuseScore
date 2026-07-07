@@ -26,6 +26,7 @@ Rectangle {
     id: root
 
     required property var theme
+    property bool highContrast: false
 
     signal clicked
 
@@ -110,6 +111,7 @@ Rectangle {
 
                     radius: 3
                     color: Utils.colorWithAlpha(root.theme.accentColor, root.theme.buttonOpacityNormal)
+                    border.color: root.highContrast ? root.theme.strokeColor : "transparent"
                 }
 
                 Rectangle {
@@ -118,6 +120,7 @@ Rectangle {
 
                     radius: 3
                     color: Utils.colorWithAlpha(root.theme.buttonColor, root.theme.buttonOpacityNormal)
+                    border.color: root.highContrast ? root.theme.strokeColor : "transparent"
                 }
             }
         }

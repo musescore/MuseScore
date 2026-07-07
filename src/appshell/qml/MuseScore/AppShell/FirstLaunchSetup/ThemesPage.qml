@@ -80,6 +80,7 @@ Page {
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
             themeCodes: model.highContrastEnabled ? model.highContrastThemeCodes : model.generalThemeCodes
             currentThemeCode: model.currentThemeCode
+            highContrast: model.highContrastEnabled
 
             spacing: 48
 

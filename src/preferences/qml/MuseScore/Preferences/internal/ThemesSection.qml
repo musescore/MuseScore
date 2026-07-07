@@ -57,6 +57,7 @@ BaseSection {
             id: themeSamplesList
             width: parent.width
             spacing: root.columnWidth + root.columnSpacing - sampleWidth
+            highContrast: root.highContrastEnabled
 
             navigationPanel: root.navigation
             navigationRow: 0
