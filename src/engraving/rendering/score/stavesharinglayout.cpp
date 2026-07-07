@@ -50,15 +50,15 @@ void StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, M
     updateStaveSharing(ssctx);
 }
 
-void StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
+bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
 {
     if (!system->last()->isMeasure()) {
-        return;
+        return false;
     }
 
     StaveSharingContext ssctx(system->first(), system->last(), ctx);
     if (ssctx.crSegments.empty()) {
-        return;
+        return false;
     }
 
     ssctx.updateForLastAdded = true;
@@ -68,26 +68,48 @@ void StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, L
     if (ssctx.trackMapChanged) {
         SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
 
-        for (MeasureBase* mb = system->first(); mb && mb != system->last(); mb = mb->next()) {
+        for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
             if (mb->isMeasure()) {
-                // TODO: only relayout shared staves
                 toMeasure(mb)->mutldata()->setNeedLayout(true);
+                // TODO: only relayout shared staves
                 MeasureLayout::layoutMeasure(mb, ctx);
+            }
+            if (mb == system->last()) {
+                break;
             }
         }
     }
+
+    return ssctx.trackMapChanged;
+}
+
+void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx)
+{
+    StaveSharingContext ssctx(measure, measure, ctx);
+    if (ssctx.crSegments.empty()) {
+        return;
+    }
+
+    for (Part* p : ssctx.layoutCtx.dom().parts()) {
+        if (p->isSharedPart() && toSharedPart(p)->show()) {
+            SharedPart* sharedPart = toSharedPart(p);
+            ssctx.curSharedPart = sharedPart;
+            updateNotation(ssctx);
+        }
+    }
+
+    measure->mutldata()->setNeedLayout(true);
+    MeasureLayout::layoutMeasure(measure, ctx);
 }
 
 void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
 {
     for (Part* p : ctx.layoutCtx.dom().parts()) {
-        if (p->isSharedPart() && p->show() && toSharedPart(p)->enabled()) {
+        if (p->isSharedPart() && toSharedPart(p)->show()) {
             SharedPart* sharedPart = toSharedPart(p);
-            if (sharedPart->show() && sharedPart->enabled()) {
-                ctx.curSharedPart = sharedPart;
-                updateTrackMaps(ctx);
-                updateNotation(ctx);
-            }
+            ctx.curSharedPart = sharedPart;
+            updateTrackMaps(ctx);
+            updateNotation(ctx);
         }
     }
 }

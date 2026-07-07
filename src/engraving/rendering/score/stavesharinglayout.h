@@ -31,7 +31,8 @@ class StaveSharingLayout
 {
 public:
     static void updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx);
-    static void updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
+    static bool updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
+    static void updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx);
 
 private:
     using TrackGroup = std::vector<track_idx_t>;
