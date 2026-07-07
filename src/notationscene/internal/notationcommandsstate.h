@@ -39,7 +39,7 @@ class NotationCommandsState : public muse::rcommand::IModuleCommandsState, publi
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<INotationCommandsController> commandsController = { this };
+    muse::ContextInject<INotationCommandsController> controller = { this };
 public:
     NotationCommandsState(const muse::modularity::ContextPtr& ctx)
         : muse::Contextable(ctx) {}

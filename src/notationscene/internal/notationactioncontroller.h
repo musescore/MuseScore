@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"
@@ -50,6 +51,7 @@ class NotationActionController : public INotationCommandsController, public muse
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionRegister = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
@@ -65,6 +67,13 @@ public:
     void init();
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
+    bool hasSelection() const override;
+    muse::async::Channel<bool> hasSelectionChanged() const override;
+
+    bool canUndo() const override;
+    bool canRedo() const override;
+    muse::async::Notification stackChanged() const override;
 
     bool isTextEditing() const override;
     muse::async::Channel<bool> textEditingChanged() const override;
@@ -225,16 +234,12 @@ private:
     bool toggleNoteInputAllowed() const;
     void startNoteInput();
 
-    bool hasSelection() const;
     mu::engraving::EngravingItem* selectedElement() const;
     bool noteOrRestSelected() const;
 
     const mu::engraving::Harmony* editedChordSymbol() const;
 
     bool elementHasPopup(const EngravingItem* e) const;
-
-    bool canUndo() const;
-    bool canRedo() const;
 
     bool isNotationPage() const;
     bool isTablatureStaff() const;
@@ -288,8 +293,15 @@ private:
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2, PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
+    // commands
+    void registerCommand(const muse::rcommand::Command&, std::function<void()>);
+    void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
+    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
+
     muse::async::Notification m_currentNotationNoteInputChanged;
+    muse::async::Channel<bool> m_hasSelectionChanged;
     muse::async::Channel<bool> m_textEditingChanged;
+    muse::async::Notification m_stackChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

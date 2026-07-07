@@ -30,6 +30,57 @@ using namespace muse::ui;
 using namespace mu::notation;
 
 static const std::vector<CommandInfo> s_commandInfos = {
+    // copy, cut, paste, delete, cancel
+    CommandInfo{
+        COPY_COMMAND,
+        TranslatableString("notation", "&Copy"),
+        TranslatableString("notation", "Copy the current notation element"),
+        InputSchema(),
+        Decoration(IconCode::Code::COPY)
+    },
+    CommandInfo{
+        CUT_COMMAND,
+        TranslatableString("notation", "Cu&t"),
+        TranslatableString("notation", "Cut the current notation element"),
+        InputSchema(),
+        Decoration(IconCode::Code::CUT)
+    },
+    CommandInfo{
+        PASTE_COMMAND,
+        TranslatableString("notation", "Past&e"),
+        TranslatableString("notation", "Paste the current notation element"),
+        InputSchema(),
+        Decoration(IconCode::Code::PASTE)
+    },
+    CommandInfo{
+        DELETE_COMMAND,
+        TranslatableString("notation", "De&lete"),
+        TranslatableString("notation", "Delete the current notation element"),
+        InputSchema(),
+        Decoration(IconCode::Code::DELETE_TANK)
+    },
+    CommandInfo{
+        CANCEL_COMMAND,
+        TranslatableString("notation", "Cancel"),
+        TranslatableString("notation", "Cancel the current notation operation"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        UNDO_COMMAND,
+        TranslatableString("notation", "Undo"),
+        TranslatableString("notation", "Undo the last notation operation"),
+        InputSchema(),
+        Decoration(IconCode::Code::UNDO)
+    },
+    CommandInfo{
+        REDO_COMMAND,
+        TranslatableString("notation", "Redo"),
+        TranslatableString("notation", "Redo the last notation operation"),
+        InputSchema(),
+        Decoration(IconCode::Code::REDO)
+    },
+
     // navigation
     CommandInfo{
         MOVE_RIGHT_COMMAND,

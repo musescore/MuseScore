@@ -28,8 +28,8 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
-static const actions::ActionCode UNDO_ACTION_CODE("action://notation/undo");
-static const actions::ActionCode REDO_ACTION_CODE("action://notation/redo");
+static const actions::ActionCode UNDO_ACTION_CODE("command://notation/undo");
+static const actions::ActionCode REDO_ACTION_CODE("command://notation/redo");
 
 UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
     : AbstractToolBarModel(parent)
