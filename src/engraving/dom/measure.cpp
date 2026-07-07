@@ -1598,7 +1598,6 @@ EngravingItem* Measure::drop(EditData& data)
     }
 
     case ElementType::TIMESIG: {
-        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
     }
@@ -1778,7 +1777,6 @@ EngravingItem* Measure::drop(EditData& data)
     {
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
-        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         EditMeasureRepeat::addMeasureRepeat(tx, score(), this, numMeasures, staffIdx);
         break;
     }
