@@ -299,7 +299,7 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 void Lyrics::adjustPrevious()
 {
     Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
-    if (prev) {
+    if (prev && prev->ticks().isNotZero()) {
         // search for lyric spanners to split at this point if necessary
         if (prev->tick() + prev->ticks() >= tick()) {
             // the previous lyric has a spanner attached that goes through this one
@@ -312,10 +312,10 @@ void Lyrics::adjustPrevious()
                 } else {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::eps());
                 }
-                prev->setNeedRemoveInvalidSegments();
-                prev->triggerLayout();
             }
         }
+        prev->setNeedRemoveInvalidSegments();
+        prev->triggerLayout();
     }
 }
 
