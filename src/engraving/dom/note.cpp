@@ -4117,7 +4117,7 @@ bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     }
 
     // check pitch is in range
-    newPitch = clampPitch(newPitch, true);
+    newPitch = clampPitchOctaved(newPitch);
 
     // store new data
     EditNote::undoChangePitch(score(), this, newPitch, newTpc1, newTpc2);
