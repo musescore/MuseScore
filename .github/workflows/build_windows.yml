@@ -189,7 +189,7 @@ jobs:
     # - parallel:
     #   - name: Restore ccache files
     #     id: restore-ccache
-    #     uses: actions/cache/restore@v5
+    #     uses: actions/cache/restore@v6
     #     with:
     #       path: ${{ github.workspace }}/.ccache
     #       key: ${{runner.os}}-${{runner.arch}}-ccache-
@@ -354,7 +354,7 @@ jobs:
     - parallel:
       - name: Restore ccache files
         id: restore-ccache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.ccache
           key: ${{runner.os}}-${{runner.arch}}-ccache-
