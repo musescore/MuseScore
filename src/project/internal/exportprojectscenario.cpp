@@ -101,6 +101,20 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     RetVal<muse::io::path_t> exportPath;
     exportPath.val = interactive()->selectSavingFileSync(muse::trc("project/export", "Export"), defaultPath,
                                                          exportType.filter(), isCreatingOnlyOneFile);
+
+    if (!exportPath.val.empty()) {
+        // Some Linux file dialogs don't auto-append the extension the user didn't type,
+        // which would otherwise leave us without a writer for this path in exportScores().
+        std::string actualSuffix = io::suffix(exportPath.val);
+        bool hasKnownSuffix = std::find_if(exportType.suffixes.cbegin(), exportType.suffixes.cend(), [&actualSuffix](const QString& s) {
+            return s.toStdString() == actualSuffix;
+        }) != exportType.suffixes.cend();
+
+        if (!hasKnownSuffix) {
+            exportPath.val = exportPath.val.appendingSuffix(exportType.suffixes.front().toStdString());
+        }
+    }
+
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;

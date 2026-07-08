@@ -100,7 +100,11 @@ int main(int argc, char** argv)
     }
 
 #ifdef Q_OS_LINUX
-    if (qEnvironmentVariable("MU_QT_QPA_PLATFORM") != "offscreen") {
+    // NOTE: gtk3 is forced by default because it fixed keyboard input in file dialogs (#13113).
+    // Respect an explicitly configured theme (e.g. "xdgdesktopportal") instead of overriding it,
+    // so desktop environments that rely on the portal for native/sandboxed dialogs keep working.
+    if (qEnvironmentVariable("MU_QT_QPA_PLATFORM") != "offscreen"
+        && !qEnvironmentVariableIsSet("QT_QPA_PLATFORMTHEME")) {
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
     }
 
