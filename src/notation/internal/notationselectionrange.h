@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONSELECTIONRANGE_H
-#define MU_NOTATION_NOTATIONSELECTIONRANGE_H
+
+#pragma once
 
 #include "inotationselectionrange.h"
 
@@ -38,19 +38,19 @@ public:
 
     engraving::staff_idx_t startStaffIndex() const override;
     engraving::Segment* rangeStartSegment() const override;
-    Fraction startTick() const override;
+    engraving::Fraction startTick() const override;
 
     engraving::staff_idx_t endStaffIndex() const override;
     engraving::Segment* rangeEndSegment() const override;
-    Fraction endTick() const override;
+    engraving::Fraction endTick() const override;
 
     MeasureRange measureRange() const override;
 
-    std::vector<const Part*> selectedParts() const override;
+    std::vector<const engraving::Part*> selectedParts() const override;
 
     std::vector<muse::RectF> boundingArea() const override;
     bool containsPoint(const muse::PointF& point) const override;
-    bool containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const override;
+    bool containsItem(const engraving::EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const override;
 
     bool containsMultiNoteChords() const override;
 
@@ -60,5 +60,3 @@ private:
     IGetScore* m_getScore = nullptr;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSELECTIONRANGE_H

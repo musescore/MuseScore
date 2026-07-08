@@ -35,7 +35,7 @@ class LoopMarker : public muse::Contextable
     muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
-    LoopMarker(LoopBoundaryType type, const muse::modularity::ContextPtr& iocCtx);
+    LoopMarker(engraving::LoopBoundaryType type, const muse::modularity::ContextPtr& iocCtx);
 
     void setNotation(INotationPtr notation);
     void setVisible(bool visible);
@@ -47,7 +47,7 @@ public:
 private:
     muse::RectF resolveMarkerRectByTick(engraving::Fraction tick) const;
 
-    LoopBoundaryType m_type = LoopBoundaryType::Unknown;
+    engraving::LoopBoundaryType m_type = engraving::LoopBoundaryType::Unknown;
     muse::RectF m_rect;
     bool m_visible = false;
     INotationPtr m_notation;

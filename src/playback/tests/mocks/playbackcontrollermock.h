@@ -61,14 +61,14 @@ public:
     MOCK_METHOD(void, setTrackSoloMuteState, (const engraving::InstrumentTrackId&, const SoloMuteState&),
                 (override));
 
-    MOCK_METHOD(void, playElements, (const std::vector<const notation::EngravingItem*>&, const PlayParams&, bool), (override));
-    MOCK_METHOD(void, playNotes, (const notation::NoteValList&, notation::staff_idx_t, const notation::Segment*, const PlayParams&),
+    MOCK_METHOD(void, playElements, (const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool), (override));
+    MOCK_METHOD(void, playNotes, (const engraving::NoteValList&, engraving::staff_idx_t, const engraving::Segment*, const PlayParams&),
                 (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
 
-    MOCK_METHOD(void, triggerControllers, (const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int), (override));
+    MOCK_METHOD(void, triggerControllers, (const muse::mpe::ControllerChangeEventList&, engraving::staff_idx_t, int), (override));
 
-    MOCK_METHOD(void, seekElement, (const notation::EngravingItem*, bool), (override));
+    MOCK_METHOD(void, seekElement, (const engraving::EngravingItem*, bool), (override));
     MOCK_METHOD(void, seekBeat, (int, int, bool), (override));
 
     MOCK_METHOD(bool, actionChecked, (const muse::actions::ActionCode&), (const, override));
@@ -80,7 +80,7 @@ public:
     MOCK_METHOD(const notation::Tempo&, currentTempo, (), (const, override));
     MOCK_METHOD(muse::async::Notification, currentTempoChanged, (), (const, override));
 
-    MOCK_METHOD(notation::MeasureBeat, currentBeat, (), (const, override));
+    MOCK_METHOD(engraving::MeasureBeat, currentBeat, (), (const, override));
     MOCK_METHOD(muse::audio::secs_t, beatToSecs, (int, int), (const, override));
 
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));

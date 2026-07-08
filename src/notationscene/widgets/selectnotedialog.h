@@ -28,6 +28,8 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::engraving {
 struct NotePattern;
 class Note;

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <QAbstractListModel>
@@ -29,6 +30,8 @@
 
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
+
+#include "types/propertyvalue.h"
 
 namespace mu::engraving {
 class EngravingStyleModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable

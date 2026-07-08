@@ -90,11 +90,11 @@ private:
     void setManualProcessingAllowed(bool allowed);
     void setStatus(Status status);
 
-    notation::InstrumentTrackIdSet m_onlineTrackIdSet;
+    engraving::InstrumentTrackIdSet m_onlineTrackIdSet;
     bool m_manualProcessingAllowed = false;
     bool m_shouldNotifyToursThatManualProcessingAllowed = true;
     Status m_status = Status::Success;
     muse::Ret m_ret;
-    muse::async::Channel<notation::InstrumentTrackIdSet> m_tracksDataChanged;
+    muse::async::Channel<engraving::InstrumentTrackIdSet> m_tracksDataChanged;
 };
 }

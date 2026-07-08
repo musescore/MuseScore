@@ -24,7 +24,6 @@
 #include <QQmlParserStatus>
 #include <qqmlintegration.h>
 
-#include "notation/inotation.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"

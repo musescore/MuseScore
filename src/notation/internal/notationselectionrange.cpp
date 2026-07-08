@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include <cfloat>
 
 #include "notationselectionrange.h"
 
 #include "utilities/scorerangeutilities.h"
 
-#include "engraving/dom/segment.h"
-#include "engraving/dom/measure.h"
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/select.h"
 #include "engraving/dom/staff.h"
 
 using namespace mu::notation;

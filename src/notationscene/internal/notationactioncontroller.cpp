@@ -1505,7 +1505,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
     case MoveDirection::Right:
     case MoveDirection::Left:
         if (globalContext()->playbackState()->isPlaying()) {
-            MeasureBeat beat = playbackController()->currentBeat();
+            engraving::MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
             int increment = (direction == MoveDirection::Right ? 1 : -1);

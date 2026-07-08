@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "stemsettingsmodel.h"
 
 #include "engraving/dom/beam.h"
+#include "engraving/dom/stem.h"
 
 #include "translation.h"
 #include "log.h"

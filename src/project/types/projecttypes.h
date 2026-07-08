@@ -34,24 +34,10 @@
 #include "projectmeta.h"
 
 #include "cloud/cloudtypes.h"
-#include "notation/inotation.h"
-#include "notation/notationtypes.h"
+#include "notation/inotation_fwd.h"
 #include "../inotationwriter.h"
 
 namespace mu::project {
-struct ProjectCreateOptions
-{
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-
-    muse::io::path_t templatePath;
-
-    notation::ScoreCreateOptions scoreOptions;
-};
-
 struct OpenParams {
     OpenParams() {}
 

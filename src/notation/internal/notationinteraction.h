@@ -91,7 +91,7 @@ public:
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
     std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const override;
-    Staff* hitStaff(const muse::PointF& pos) const override;
+    engraving::Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
 
@@ -492,8 +492,8 @@ private:
 
     struct HitMeasureData
     {
-        Measure* measure = nullptr;
-        Staff* staff = nullptr;
+        engraving::Measure* measure = nullptr;
+        engraving::Staff* staff = nullptr;
     };
 
     HitMeasureData hitMeasure(const muse::PointF& pos) const;

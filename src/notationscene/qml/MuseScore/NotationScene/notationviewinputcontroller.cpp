@@ -35,9 +35,10 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
-#include "engraving/dom/mscore.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/staff.h"
 
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"

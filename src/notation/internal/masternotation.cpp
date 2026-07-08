@@ -51,6 +51,7 @@
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
+#include "types/scorecreateoptions.h"
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
 #include "notationplayback.h"

@@ -50,6 +50,12 @@ target_sources(notation PRIVATE
     iinstrumentsrepository.h
 
     notationtypes.h
+    types/instrumentstypes.h
+    types/loopboundaries.h
+    types/scorecreateoptions.h
+    types/staffparttypes.h
+    types/stringtunings.h
+    types/tempo.h
     types/viewmode.h
     types/zoomtype.h
 

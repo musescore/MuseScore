@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "accidentalsettingsmodel.h"
 
-#include "translation.h"
-
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/segment.h"
+
+#include "translation.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;

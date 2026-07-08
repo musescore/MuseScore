@@ -19,8 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "noteheadsettingsmodel.h"
 
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/types.h"

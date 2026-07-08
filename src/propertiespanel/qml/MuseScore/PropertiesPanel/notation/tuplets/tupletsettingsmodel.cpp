@@ -22,9 +22,11 @@
 
 #include "tupletsettingsmodel.h"
 
-#include "types/commontypes.h"
+#include "engraving/dom/tuplet.h"
 
 #include "translation.h"
+
+#include "types/commontypes.h"
 
 using namespace mu::propertiespanel;
 

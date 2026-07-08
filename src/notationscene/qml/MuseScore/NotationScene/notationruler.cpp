@@ -23,8 +23,11 @@
 #include "notationruler.h"
 
 #include "draw/types/drawtypes.h"
-#include "notation/notationtypes.h"
+
+#include "engraving/dom/staff.h"
 #include "engraving/dom/sig.h"
+
+#include "notation/notationtypes.h"
 
 #include "ui/view/iconcodes.h"
 #include "draw/painter.h"

@@ -29,6 +29,8 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::notation {
 class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
 {

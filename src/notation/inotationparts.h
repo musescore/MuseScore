@@ -24,7 +24,8 @@
 
 #include "async/notification.h"
 
-#include "notationtypes.h"
+#include "types/instrumentstypes.h"
+#include "types/staffparttypes.h"
 
 namespace muse::async {
 template<typename T>
@@ -48,7 +49,7 @@ public:
     virtual const Staff* staff(const muse::ID& staffId) const = 0;
     virtual bool staffExists(const muse::ID& staffId) const = 0;
 
-    virtual StaffConfig staffConfig(const muse::ID& staffId, Fraction tick = Fraction(0, 1)) const = 0;
+    virtual StaffConfig staffConfig(const muse::ID& staffId, engraving::Fraction tick = { 0, 1 }) const = 0;
     virtual ScoreOrder scoreOrder() const = 0;
 
     virtual void setParts(const PartInstrumentList& instruments, const ScoreOrder& order) = 0;
@@ -63,7 +64,7 @@ public:
                                                const QString& shortName) = 0;
     virtual void setInstrumentNumber(const InstrumentKey& instrumentKey, int v) = 0;
     virtual void setStaffType(const muse::ID& staffId, StaffTypeId type) = 0;
-    virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) = 0;
+    virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, engraving::Fraction tick = { 0, 1 }) = 0;
     virtual void setSharedPartEnabled(const muse::ID& partId, bool enable) = 0;
 
     virtual void removeParts(const muse::IDList& partsIds) = 0;

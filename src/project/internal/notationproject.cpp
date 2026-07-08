@@ -54,6 +54,7 @@
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
+#include "types/projectcreateoptions.h"
 
 #include "global/concurrency/concurrent.h"
 

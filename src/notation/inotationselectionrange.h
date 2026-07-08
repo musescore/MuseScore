@@ -24,7 +24,14 @@
 
 #include <vector>
 
-#include "notationtypes.h"
+#include "engraving/types/types.h"
+
+namespace mu::engraving {
+class EngravingItem;
+class Measure;
+class Part;
+class Segment;
+}
 
 namespace mu::notation {
 class INotationSelectionRange
@@ -34,24 +41,24 @@ public:
 
     virtual engraving::staff_idx_t startStaffIndex() const = 0;
     virtual engraving::Segment* rangeStartSegment() const = 0;
-    virtual Fraction startTick() const = 0;
+    virtual engraving::Fraction startTick() const = 0;
 
     virtual engraving::staff_idx_t endStaffIndex() const = 0;
     virtual engraving::Segment* rangeEndSegment() const = 0;
-    virtual Fraction endTick() const = 0;
+    virtual engraving::Fraction endTick() const = 0;
 
     struct MeasureRange {
-        Measure* startMeasure = nullptr;
-        Measure* endMeasure = nullptr;
+        engraving::Measure* startMeasure = nullptr;
+        engraving::Measure* endMeasure = nullptr;
     };
 
     virtual MeasureRange measureRange() const = 0;
 
-    virtual std::vector<const Part*> selectedParts() const = 0;
+    virtual std::vector<const engraving::Part*> selectedParts() const = 0;
 
     virtual std::vector<muse::RectF> boundingArea() const = 0;
     virtual bool containsPoint(const muse::PointF& point) const = 0;
-    virtual bool containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const = 0;
+    virtual bool containsItem(const engraving::EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const = 0;
 
     virtual bool containsMultiNoteChords() const = 0;
 };

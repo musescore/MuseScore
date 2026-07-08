@@ -55,15 +55,15 @@ public:
     const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
 
-    void playElements(const std::vector<const notation::EngravingItem*>& elements,
+    void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;
-    void playNotes(const notation::NoteValList& notes, notation::staff_idx_t staffIdx, const notation::Segment* segment,
+    void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
                    const PlayParams& params = PlayParams()) override;
     void playMetronome(int tick) override;
 
-    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick) override;
 
-    void seekElement(const notation::EngravingItem* element, bool flushSound = true) override;
+    void seekElement(const engraving::EngravingItem* element, bool flushSound = true) override;
     void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
@@ -75,7 +75,7 @@ public:
     const notation::Tempo& currentTempo() const override;
     muse::async::Notification currentTempoChanged() const override;
 
-    notation::MeasureBeat currentBeat() const override;
+    engraving::MeasureBeat currentBeat() const override;
     muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;

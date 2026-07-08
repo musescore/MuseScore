@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-#include "notation/notationtypes.h"
+#include "notation/types/instrumentstypes.h"
 
 namespace mu::instrumentsscene {
 class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, public muse::Contextable

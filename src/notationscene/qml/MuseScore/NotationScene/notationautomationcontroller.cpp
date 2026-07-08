@@ -26,6 +26,7 @@
 
 #include "engraving/automation/iautomation.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/staff.h"
 
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h"
@@ -33,6 +34,7 @@
 #include "defer.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse::uicomponents;
 
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)

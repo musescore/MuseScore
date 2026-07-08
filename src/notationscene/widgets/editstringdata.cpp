@@ -29,6 +29,7 @@
 
 #include "editpitch.h"
 
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/editing/editpart.h"

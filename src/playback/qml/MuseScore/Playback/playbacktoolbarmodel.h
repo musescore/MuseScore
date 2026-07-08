@@ -100,14 +100,14 @@ private:
     bool isAdditionalAction(const muse::actions::ActionCode& actionCode) const;
 
     muse::secs_t totalPlayTime() const;
-    notation::MeasureBeat measureBeat() const;
+    engraving::MeasureBeat measureBeat() const;
 
     muse::ui::UiAction playAction() const;
 
     void updatePlayPosition(muse::audio::secs_t secs);
 
     void rewind(muse::audio::secs_t secs);
-    void rewindToBeat(const notation::MeasureBeat& beat);
+    void rewindToBeat(const engraving::MeasureBeat& beat);
 
     bool m_isToolbarFloating = false;
     muse::secs_t m_playbackPositionSecs = 0.0;

@@ -19,9 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "newscoremodel.h"
-#include "ui/view/musicalsymbolcodes.h"
+
 #include "log.h"
+
+#include "ui/view/musicalsymbolcodes.h"
+
+#include "types/projectcreateoptions.h"
 
 using namespace mu::project;
 using namespace mu::notation;

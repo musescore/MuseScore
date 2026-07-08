@@ -57,12 +57,12 @@ public:
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
     virtual std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const = 0;
-    virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
+    virtual engraving::Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
     {
-        notation::EngravingItem* element = nullptr;
-        notation::Staff* staff = nullptr;
+        engraving::EngravingItem* element = nullptr;
+        engraving::Staff* staff = nullptr;
 
         bool operator ==(const HitElementContext& other) const
         {

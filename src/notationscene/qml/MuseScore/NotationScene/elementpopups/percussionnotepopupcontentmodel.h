@@ -30,6 +30,11 @@
 
 #include "async/asyncable.h"
 
+namespace mu::engraving {
+class Drumset;
+class ShadowNote;
+}
+
 namespace mu::notation {
 class PercussionNotePopupContentModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
@@ -63,8 +68,8 @@ private:
     INotationInteractionPtr interaction() const;
     INotationNoteInputPtr noteInput() const;
 
-    const mu::engraving::ShadowNote* currentShadowNote() const;
-    const Drumset* currentDrumset() const;
+    const engraving::ShadowNote* currentShadowNote() const;
+    const engraving::Drumset* currentDrumset() const;
 
     int currentDrumPitch() const;
 };

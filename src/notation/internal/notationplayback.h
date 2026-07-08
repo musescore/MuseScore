@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPLAYBACK_H
-#define MU_NOTATION_NOTATIONPLAYBACK_H
+
+#pragma once
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -45,10 +45,10 @@ public:
     void init() override;
     void reload() override;
 
-    void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) override;
+    void setSendEventsOnScoreChange(const engraving::InstrumentTrackId& trackId, bool send) override;
     void sendEventsForChangedTracks() override;
 
-    muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const override;
+    muse::async::Channel<engraving::InstrumentTrackIdSet> tracksDataChanged() const override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
@@ -83,7 +83,7 @@ public:
     muse::async::Notification loopBoundariesChanged() const override;
 
     const Tempo& multipliedTempo(muse::midi::tick_t tick) const override;
-    MeasureBeat beat(muse::midi::tick_t tick) const override;
+    engraving::MeasureBeat beat(muse::midi::tick_t tick) const override;
     muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
@@ -122,5 +122,3 @@ private:
     mutable engraving::PlaybackModel m_playbackModel;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONPLAYBACK_H

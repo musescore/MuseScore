@@ -23,12 +23,14 @@
 #include "percussionnotepopupcontentmodel.h"
 
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/shadownote.h"
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 PercussionNotePopupContentModel::PercussionNotePopupContentModel(QObject* parent)
     : QObject{parent}, muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -47,7 +49,7 @@ void PercussionNotePopupContentModel::init()
 void PercussionNotePopupContentModel::prevDrumNote()
 {
     const Drumset* ds = currentDrumset();
-    const mu::engraving::ShadowNote* shadowNote = currentShadowNote();
+    const ShadowNote* shadowNote = currentShadowNote();
     IF_ASSERT_FAILED(ds && shadowNote) {
         return;
     }
@@ -77,7 +79,7 @@ void PercussionNotePopupContentModel::prevDrumNote()
 void PercussionNotePopupContentModel::nextDrumNote()
 {
     const Drumset* ds = currentDrumset();
-    const mu::engraving::ShadowNote* shadowNote = currentShadowNote();
+    const ShadowNote* shadowNote = currentShadowNote();
     IF_ASSERT_FAILED(ds && shadowNote) {
         return;
     }
@@ -161,14 +163,14 @@ INotationNoteInputPtr PercussionNotePopupContentModel::noteInput() const
     return interaction() ? interaction()->noteInput() : nullptr;
 }
 
-const mu::engraving::ShadowNote* PercussionNotePopupContentModel::currentShadowNote() const
+const ShadowNote* PercussionNotePopupContentModel::currentShadowNote() const
 {
     return interaction() ? interaction()->shadowNote() : nullptr;
 }
 
 const Drumset* PercussionNotePopupContentModel::currentDrumset() const
 {
-    const mu::engraving::ShadowNote* shadowNote = currentShadowNote();
+    const ShadowNote* shadowNote = currentShadowNote();
     if (!shadowNote) {
         return nullptr;
     }
@@ -185,7 +187,7 @@ const Drumset* PercussionNotePopupContentModel::currentDrumset() const
 int PercussionNotePopupContentModel::currentDrumPitch() const
 {
     const Drumset* ds = currentDrumset();
-    const mu::engraving::ShadowNote* shadowNote = currentShadowNote();
+    const ShadowNote* shadowNote = currentShadowNote();
     if (!noteInput() || !ds || !shadowNote) {
         return -1;
     }

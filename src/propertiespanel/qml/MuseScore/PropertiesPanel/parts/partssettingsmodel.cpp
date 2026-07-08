@@ -22,6 +22,8 @@
 
 #include "partssettingsmodel.h"
 
+#include "engraving/dom/score.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;
