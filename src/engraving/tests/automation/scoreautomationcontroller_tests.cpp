@@ -21,7 +21,6 @@
  */
 
 #include <gtest/gtest.h>
-#include <algorithm>
 
 #include "global/async/asyncable.h"
 
@@ -34,6 +33,7 @@
 #include "global/containers.h"
 
 #include "utils/scorerw.h"
+#include "automation/utils/automationtestutils.h"
 
 using namespace mu::engraving;
 
@@ -46,20 +46,6 @@ static constexpr double MP_VALUE(0.475);
 static constexpr double MF_VALUE(0.525);
 static constexpr double F_VALUE(0.575);
 static constexpr double FF_VALUE(0.625);
-
-static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
-{
-    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
-
-    for (const auto& [utick, expectedPoint] : expectedCurve) {
-        ASSERT_TRUE(muse::contains(actualCurve, utick)) << "Missing point at utick " << utick;
-        const AutomationPoint& actualPoint = actualCurve.at(utick);
-
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at utick " << utick;
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at utick " << utick;
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at utick " << utick;
-    }
-}
 
 class ScoreAutomationController_Tests : public ::testing::Test, public muse::async::Asyncable
 {
@@ -156,15 +142,13 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Positive_ShiftsAllPoints)
 
     for (const auto& [key, curveBefore] : curvesBefore) {
         ASSERT_TRUE(muse::contains(curvesAfter, key));
-        const AutomationCurve& curveAfter = curvesAfter.at(key);
-        ASSERT_EQ(curveAfter.size(), curveBefore.size());
 
+        AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
-            const utick_t shiftedTick = tick + 1920;
-            ASSERT_TRUE(muse::contains(curveAfter, shiftedTick)) << "Missing shifted point at utick " << shiftedTick;
-            EXPECT_NEAR(curveAfter.at(shiftedTick).inValue,  point.inValue,  0.0001);
-            EXPECT_NEAR(curveAfter.at(shiftedTick).outValue, point.outValue, 0.0001);
+            expectedCurve[tick + 1920] = point;
         }
+
+        checkCurvesMatch(curvesAfter.at(key), expectedCurve);
     }
 }
 
@@ -184,18 +168,16 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     const AutomationCurveMap& curvesAfter = controller.automation()->curves();
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        const size_t removedCount = std::count_if(curveBefore.begin(), curveBefore.end(),
-                                                   [](const auto& kv) { return kv.first <= 1920; });
-
         ASSERT_TRUE(muse::contains(curvesAfter, key));
-        EXPECT_EQ(curvesAfter.at(key).size(), curveBefore.size() - removedCount);
 
+        AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
             if (tick > 1920) {
-                EXPECT_TRUE(muse::contains(curvesAfter.at(key), tick - 1920))
-                    << "Expected shifted point at utick " << (tick - 1920);
+                expectedCurve[tick - 1920] = point;
             }
         }
+
+        checkCurvesMatch(curvesAfter.at(key), expectedCurve);
     }
 }
 
@@ -280,22 +262,21 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     changes.changedTypes = { ElementType::HAIRPIN };
     controller.update(s_score, changes);
 
-    const AutomationCurve& curve = controller.automation()->curve(key);
+    // [THEN] Measures 1-2 are unaffected by the hairpin-only update, the p dynamic at the hairpin
+    //        start is unchanged, the user midpoint survives with its inValue set to prev.outValue
+    //        (the curve holds flat at p before the breakpoint, then steps to MF_VALUE), and the ff
+    //        dynamic's inValue is overridden to the midpoint's outValue (the curve holds flat at
+    //        MF_VALUE until ff fires its own outValue)
+    AutomationCurve expectedCurve;
+    expectedCurve[480]  = AutomationPoint { 0.0,      P_VALUE,  InterpolationType::Linear };
+    expectedCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };
+    expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };
+    expectedCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };
+    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };
+    expectedCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
+    expectedCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };
+    expectedCurve[5280] = AutomationPoint { P_VALUE,  MF_VALUE, InterpolationType::Linear };
+    expectedCurve[5760] = AutomationPoint { MF_VALUE, FF_VALUE, InterpolationType::Linear };
 
-    // [THEN] The p dynamic at the hairpin start is unchanged
-    ASSERT_TRUE(muse::contains(curve, 4800));
-    EXPECT_NEAR(curve.at(4800).inValue,  F_VALUE,  0.0001);
-    EXPECT_NEAR(curve.at(4800).outValue, P_VALUE,  0.0001);
-
-    // [THEN] The user midpoint survives the update and its inValue is set to prev.outValue
-    //        (the curve holds flat at p before the breakpoint, then steps to MF_VALUE)
-    ASSERT_TRUE(muse::contains(curve, 5280));
-    EXPECT_NEAR(curve.at(5280).inValue,  P_VALUE,  0.0001);
-    EXPECT_NEAR(curve.at(5280).outValue, MF_VALUE, 0.0001);
-
-    // [THEN] The ff dynamic's inValue is overridden to the midpoint's outValue
-    //        (the curve holds flat at MF_VALUE until ff fires its own outValue)
-    ASSERT_TRUE(muse::contains(curve, 5760));
-    EXPECT_NEAR(curve.at(5760).inValue,  MF_VALUE, 0.0001);
-    EXPECT_NEAR(curve.at(5760).outValue, FF_VALUE, 0.0001);
+    checkCurvesMatch(controller.automation()->curve(key), expectedCurve);
 }

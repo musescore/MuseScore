@@ -82,6 +82,9 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
             point.outValue = pointObj.value("outValue").toDouble();
             point.interpolation = muse::key(INTERPOLATION_TYPE_TO_STRING, pointObj.value("interpolation").toString(),
                                             AutomationPoint::InterpolationType::Linear);
+            if (pointObj.contains("itemId")) {
+                point.itemId = EID::fromStdString(pointObj.value("itemId").toString().toStdString());
+            }
 
             const utick_t tick = pointObj.value("tick").toInt();
             curve.insert_or_assign(tick, point);
@@ -116,6 +119,9 @@ muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGen
             pointObj["inValue"] = point.inValue;
             pointObj["outValue"] = point.outValue;
             pointObj["interpolation"] = muse::value(INTERPOLATION_TYPE_TO_STRING, point.interpolation);
+            if (point.itemId.has_value()) {
+                pointObj["itemId"] = point.itemId->toStdString();
+            }
             pointArray << pointObj;
         }
 

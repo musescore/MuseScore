@@ -26,23 +26,11 @@
 #include "global/async/asyncable.h"
 #include "global/containers.h"
 
+#include "automation/utils/automationtestutils.h"
+
 using namespace mu::engraving;
 
 using InterpolationType = AutomationPoint::InterpolationType;
-
-static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
-{
-    EXPECT_EQ(actualCurve.size(), expectedCurve.size());
-
-    for (const auto& [utick, expectedPoint] : expectedCurve) {
-        ASSERT_TRUE(muse::contains(actualCurve, utick)) << "Missing point at utick " << utick;
-        const AutomationPoint& actualPoint = actualCurve.at(utick);
-
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at utick " << utick;
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at utick " << utick;
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at utick " << utick;
-    }
-}
 
 static AutomationPoint generatedPoint(double inVal, double outVal,
                                       InterpolationType interp = InterpolationType::Linear)
