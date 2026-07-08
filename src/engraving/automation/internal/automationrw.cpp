@@ -91,7 +91,7 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
         }
     }
 
-    automation.replaceCurves(std::move(curves));
+    automation.setCurves(std::move(curves));
 }
 
 muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGenerated)

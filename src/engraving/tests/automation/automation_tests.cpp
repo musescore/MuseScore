@@ -325,6 +325,49 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
     EXPECT_EQ(lastChanges.tickTo, 300);
 }
 
+TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
+{
+    // [GIVEN] Two curves: key1 (to be replaced), key2 (absent from the new set)
+    Automation automation;
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
+
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
+
+    automation.addPoint(key1, 100, generatedPoint(0.3, 0.4));
+    automation.addPoint(key2, 150, generatedPoint(0.5, 0.6));
+
+    int notifyCount = 0;
+    AutomationChanges lastChanges;
+    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
+        ++notifyCount;
+        lastChanges = ch;
+    });
+
+    // [WHEN] Setting curves that only mention key1
+    AutomationPoint newPoint = generatedPoint(0.7, 0.8);
+    AutomationCurveMap newCurves;
+    newCurves[key1][300] = newPoint;
+    automation.setCurves(std::move(newCurves));
+
+    // [THEN] key1 has only the new point
+    AutomationCurve expectedKey1;
+    expectedKey1[300] = newPoint;
+    checkCurvesMatch(automation.curve(key1), expectedKey1);
+
+    // [THEN] key2 is gone, it wasn't mentioned in the new curve set
+    EXPECT_TRUE(automation.curve(key2).empty());
+
+    // [THEN] One notification covering both the changed and the removed key
+    EXPECT_EQ(notifyCount, 1);
+    EXPECT_FALSE(lastChanges.isFullReset);
+    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key1));
+    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key2));
+}
+
 TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
 {
     // [GIVEN] A subscriber registered before the change

@@ -116,6 +116,34 @@ void Automation::replaceCurves(AutomationCurveMap&& curves)
     notifyChanged();
 }
 
+void Automation::setCurves(AutomationCurveMap&& curves)
+{
+    static const AutomationCurve EMPTY_CURVE;
+
+    for (auto it = curves.begin(); it != curves.end();) {
+        if (it->second.empty()) {
+            it = curves.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    for (const auto& [key, oldCurve] : m_curveMap) {
+        const auto newIt = curves.find(key);
+        const AutomationCurve& newCurve = newIt != curves.end() ? newIt->second : EMPTY_CURVE;
+        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
+    }
+
+    for (const auto& [key, newCurve] : curves) {
+        if (!muse::contains(m_curveMap, key)) {
+            diffPoints(key, EMPTY_CURVE, newCurve, m_pendingChanges);
+        }
+    }
+
+    m_curveMap = std::move(curves);
+    notifyChanged();
+}
+
 void Automation::addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p)
 {
     auto curveIt = m_curveMap.find(key);
