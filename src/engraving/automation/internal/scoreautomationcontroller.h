@@ -83,8 +83,8 @@ private:
         EID eid = EID::invalid();
         int priority = 0;
         bool isCrescendo = false;
-        std::optional<double> nominalValueFrom;
-        std::optional<double> nominalValueTo;
+        std::optional<real_t> nominalValueFrom;
+        std::optional<real_t> nominalValueTo;
     };
 
     void update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);

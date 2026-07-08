@@ -44,7 +44,7 @@
 using namespace mu::engraving;
 
 // Normalized [0.0, 1.0] dynamic levels, aligned with MPE dynamic level percentages (5% steps starting at 17.5%)
-static const std::unordered_map<DynamicType, double> ORDINARY_DYNAMIC_VALUES {
+static const std::unordered_map<DynamicType, real_t> ORDINARY_DYNAMIC_VALUES {
     { DynamicType::N,      0.000 },
     { DynamicType::PPPPPP, 0.175 },
     { DynamicType::PPPPP,  0.225 },
@@ -62,12 +62,12 @@ static const std::unordered_map<DynamicType, double> ORDINARY_DYNAMIC_VALUES {
     { DynamicType::FFFFFF, 0.825 },
 };
 
-static constexpr double DYNAMIC_STEP(0.05);
+static constexpr real_t DYNAMIC_STEP = real_t::make(0.05);
 
 // Dynamics and measure repeats can only appear on these segment types
 static constexpr SegmentType RELEVANT_SEGMENT_TYPES = SegmentType::ChordRest | SegmentType::TimeTick;
 
-static const std::unordered_map<DynamicType, double> SINGLE_NOTE_DYNAMIC_VALUES {
+static const std::unordered_map<DynamicType, real_t> SINGLE_NOTE_DYNAMIC_VALUES {
     { DynamicType::SF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
     { DynamicType::SFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
     { DynamicType::SFF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FF) },
@@ -78,7 +78,7 @@ static const std::unordered_map<DynamicType, double> SINGLE_NOTE_DYNAMIC_VALUES 
     { DynamicType::RF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
 };
 
-static const std::unordered_map<DynamicType, std::pair<double, double> > COMPOUND_DYNAMIC_VALUES {
+static const std::unordered_map<DynamicType, std::pair<real_t, real_t> > COMPOUND_DYNAMIC_VALUES {
     { DynamicType::FP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
     { DynamicType::PF, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::P), ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) } },
     { DynamicType::SFP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
@@ -118,7 +118,7 @@ bool ScoreAutomationController::StaffRange::contains(const muse::ID& staffId) co
     return isFull || muse::contains(staffIds, staffId);
 }
 
-static std::optional<double> dynamicValue(DynamicType type, bool startValue)
+static std::optional<real_t> dynamicValue(DynamicType type, bool startValue)
 {
     if (auto it = ORDINARY_DYNAMIC_VALUES.find(type); it != ORDINARY_DYNAMIC_VALUES.end()) {
         return it->second;
@@ -135,7 +135,7 @@ static std::optional<double> dynamicValue(DynamicType type, bool startValue)
     return std::nullopt;
 }
 
-static std::optional<double> startHairpinValue(const Hairpin* hairpin)
+static std::optional<real_t> startHairpinValue(const Hairpin* hairpin)
 {
     const DynamicType type = hairpin->dynamicTypeFrom();
     if (type == DynamicType::OTHER) {
@@ -186,7 +186,7 @@ static DynamicType findEndDynamicType(const Hairpin* hairpin)
     return toDynamic(snappedItem)->dynamicType();
 }
 
-static std::optional<double> endHairpinValue(const Hairpin* hairpin)
+static std::optional<real_t> endHairpinValue(const Hairpin* hairpin)
 {
     const DynamicType type = findEndDynamicType(hairpin);
     if (type == DynamicType::OTHER) {
@@ -472,7 +472,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     }
 
     if (auto it = COMPOUND_DYNAMIC_VALUES.find(dynamicType); it != COMPOUND_DYNAMIC_VALUES.end()) {
-        const std::pair<double, double>& values = it->second;
+        const std::pair<real_t, real_t>& values = it->second;
         const utick_t endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
 
         AutomationPoint startPoint;
@@ -566,10 +566,10 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
 {
     // --- Determine valueFrom
     const AutomationPoint* prevPoint = activePoint(ctx.curves, key, info.from);
-    const double prevOutValue = prevPoint ? prevPoint->outValue : 0.0;
+    const real_t prevOutValue = prevPoint ? prevPoint->outValue : real_t(0.0);
 
     // If the hairpin has no specific start value, use the currently-applicable value at the start tick of the hairpin
-    const double valueFrom = info.nominalValueFrom.value_or(prevOutValue);
+    const real_t valueFrom = info.nominalValueFrom.value_or(prevOutValue);
 
     {
         AutomationPoint startPoint;
@@ -586,7 +586,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
                                        : info.nominalValueTo.value() < valueFrom);
 
     // --- Check end tick
-    const double valueTo = useNominalValueTo
+    const real_t valueTo = useNominalValueTo
                            ? info.nominalValueTo.value()
                            : valueFrom + (info.isCrescendo ? DYNAMIC_STEP : -DYNAMIC_STEP);
 
@@ -730,7 +730,7 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
                     // Voice curves already have the shared curve's points merged in by this point
                     // (Step 3), so a plain lookup on this curve is enough
                     const auto prevIt = muse::findLessOrEqual(*curve, shifted.begin()->first);
-                    shifted.begin()->second.inValue = prevIt != curve->end() ? prevIt->second.outValue : 0.0;
+                    shifted.begin()->second.inValue = prevIt != curve->end() ? prevIt->second.outValue : real_t(0.0);
                 }
 
                 curve->merge(std::move(shifted));
@@ -823,7 +823,7 @@ void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, 
         const auto prioIt = prioKeyIt->second.find(tick);
         if (prioIt != prioKeyIt->second.end() && prioIt->second == priority) {
             AutomationPoint& existing = ctx.curves[key][tick];
-            const double arrivalValue = existing.outValue;
+            const real_t arrivalValue = existing.outValue;
             existing = point;
             existing.inValue = arrivalValue;
             removeDeferredInValue(ctx, key, tick);

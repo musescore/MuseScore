@@ -23,7 +23,6 @@
 #include "automation.h"
 
 #include "global/containers.h"
-#include "global/realfn.h"
 #include "global/log.h"
 
 using namespace mu::engraving;
@@ -187,7 +186,7 @@ void Automation::setPointInValue(const AutomationCurveKey& key, utick_t tick, do
         return;
     }
 
-    if (muse::RealIsEqual(pointIt->second.inValue, value)) {
+    if (pointIt->second.inValue == value) {
         return;
     }
 
@@ -209,7 +208,7 @@ void Automation::setPointOutValue(const AutomationCurveKey& key, utick_t tick, d
         return;
     }
 
-    if (muse::RealIsEqual(pointIt->second.outValue, value)) {
+    if (pointIt->second.outValue == value) {
         return;
     }
 

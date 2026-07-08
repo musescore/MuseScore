@@ -185,7 +185,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
 
         // Point in/out values are always between 0 and 1 - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = pair.second;
-        if (muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
+        if (autoPoint.inValue == autoPoint.outValue) {
             const QPointF qpf(pointXInStaff, 1.0 - autoPoint.inValue);
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
             continue;
@@ -344,7 +344,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const mu::engraving::AutomationPoint* oldPoint = engravingAutomation()->point(curveKey, oldPointData.tick);
     const mu::engraving::AutomationPoint newPoint = { newValue, newValue,
                                                       oldPoint ? oldPoint->interpolation
-                                                               : mu::engraving::AutomationPoint::InterpolationType::Linear,
+                                                      : mu::engraving::AutomationPoint::InterpolationType::Linear,
                                                       oldPoint ? oldPoint->itemId : std::nullopt };
     if (oldPoint && pointType == PointData::PointType::IN) {
         engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, oldPoint->outValue);

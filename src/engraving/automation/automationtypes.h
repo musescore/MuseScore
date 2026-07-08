@@ -22,7 +22,7 @@
 #pragma once
 
 #include "global/types/id.h"
-#include "global/realfn.h"
+#include "global/types/number.h"
 
 #include "engraving/infrastructure/eid.h"
 
@@ -38,15 +38,15 @@ struct AutomationPoint {
         Exponential,
     };
 
-    double inValue = 0.; // [0; 1]
-    double outValue = 0.; // [0; 1]
+    muse::real_t inValue = 0.; // [0; 1]
+    muse::real_t outValue = 0.; // [0; 1]
     InterpolationType interpolation = InterpolationType::Linear;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
 
     bool operator==(const AutomationPoint& p) const
     {
-        return muse::RealIsEqual(inValue, p.inValue)
-               && muse::RealIsEqual(outValue, p.outValue)
+        return inValue == p.inValue
+               && outValue == p.outValue
                && interpolation == p.interpolation
                && itemId == p.itemId;
     }
