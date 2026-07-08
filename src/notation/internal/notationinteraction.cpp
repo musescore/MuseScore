@@ -5650,6 +5650,7 @@ void NotationInteraction::addTieToSelection()
     Tie* newTie = mu::engraving::EditTie::cmdToggleTie(score());
 
     notifyAboutNotationChanged();
+    m_selectionChanged.notify();
 
     if (newTie && newTie->tieJumpPoints() && newTie->tieJumpPoints()->size() > 1) {
         selectAndStartEditIfNeeded(newTie);
@@ -5662,6 +5663,7 @@ void NotationInteraction::addLaissezVibToSelection()
     mu::engraving::EditTie::cmdToggleLaissezVib(score());
 
     notifyAboutNotationChanged();
+    m_selectionChanged.notify();
 }
 
 void NotationInteraction::addTiedNoteToChord()
@@ -5680,6 +5682,7 @@ void NotationInteraction::addSlurToSelection()
 
     // Calls `startEdit` internally
     doAddSlur();
+    m_selectionChanged.notify();
 }
 
 void NotationInteraction::addHammerOnPullOffToSelection()

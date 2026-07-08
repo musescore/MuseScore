@@ -182,7 +182,7 @@ void NavigableAppMenuModel::setOpenedMenuId(QString openedMenuId)
 
     //! NOTE: after opening the menu, position on the first control
     if (navigationStarted && menuOpened) {
-        actionsDispatcher()->dispatch("nav-first-control");
+        actionsDispatcher()->dispatch("command://navigation/first-control");
     }
 
     emit openedMenuIdChanged(m_openedMenuId);

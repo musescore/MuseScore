@@ -73,13 +73,6 @@ private:
 
     void updateState();
     void updateNoteInputState();
-    void updateNoteInputModeState();
-    void updateNoteDotState();
-    void updateNoteDurationState();
-    void updateNoteAccidentalState();
-    void updateTieState();
-    void updateLvState();
-    void updateSlurState();
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
@@ -109,12 +102,9 @@ private:
     int resolveCurrentVoiceIndex() const;
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
-    DurationType resolveCurrentDurationType() const;
 
     bool isNoteInputMode() const;
     const NoteInputState& noteInputState() const;
-
-    const ChordRest* elementToChordRest(const EngravingItem* element) const;
 
     INotationPtr m_notation = nullptr;
 };

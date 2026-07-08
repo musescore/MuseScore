@@ -46,16 +46,6 @@ static const ActionCode ADD_ACTION_CODE("add");
 static const ActionCode CROSS_STAFF_BEAMING_CODE("cross-staff-beaming");
 static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
-static const std::unordered_map<ActionCode, NoteInputMethod> NOTE_INPUT_METHOD_ACTIONS {
-    { "note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME },
-    { "note-input-by-duration", NoteInputMethod::BY_DURATION },
-    { "note-input-rhythm", NoteInputMethod::RHYTHM },
-    { "note-input-repitch", NoteInputMethod::REPITCH },
-    { "note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO },
-    { "note-input-realtime-manual", NoteInputMethod::REALTIME_MANUAL },
-    { "note-input-timewise", NoteInputMethod::TIMEWISE },
-};
-
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -206,151 +196,15 @@ void NoteInputBarModel::updateItemsStateChecked(const ActionCode& actionCode, bo
 
 void NoteInputBarModel::updateState()
 {
-    for (int i = 0; i < rowCount(); ++i) {
-        MenuItem& item = this->item(i);
-        UiActionState state = item.state();
-        state.checked = false;
-        item.setState(state);
-    }
-
-    if (isInputAllowed()) {
-        updateNoteInputState();
-    }
+    updateNoteInputState();
 }
 
 void NoteInputBarModel::updateNoteInputState()
 {
-    updateNoteInputModeState();
-    updateNoteDotState();
-    updateNoteDurationState();
-    updateNoteAccidentalState();
-    updateTieState();
-    updateLvState();
-    updateSlurState();
     updateVoicesState();
     updateArticulationsState();
     updateRestState();
     updateAddState();
-}
-
-void NoteInputBarModel::updateNoteInputModeState()
-{
-    bool isNoteInput = isNoteInputMode();
-    NoteInputMethod currInputMethod = noteInputState().noteEntryMethod();
-
-    for (int i = 0; i < rowCount(); ++i) {
-        MenuItem& item = this->item(i);
-
-        auto methodIt = NOTE_INPUT_METHOD_ACTIONS.find(item.action().code);
-        if (methodIt != NOTE_INPUT_METHOD_ACTIONS.end()) {
-            updateItemStateChecked(item, isNoteInput && methodIt->second == currInputMethod);
-        }
-    }
-}
-
-void NoteInputBarModel::updateNoteDotState()
-{
-    static const ActionCodeList dotActions = {
-        "pad-dot",
-        "pad-dot2",
-        "pad-dot3",
-        "pad-dot4"
-    };
-
-    int durationDots = noteInputState().duration().dots();
-
-    for (const ActionCode& actionCode: dotActions) {
-        updateItemsStateChecked(actionCode, durationDots == NotationUiActions::actionDotCount(actionCode));
-    }
-}
-
-void NoteInputBarModel::updateNoteDurationState()
-{
-    static const ActionCodeList noteActions = {
-        "note-longa",
-        "note-breve",
-        "pad-note-1",
-        "pad-note-2",
-        "pad-note-4",
-        "pad-note-8",
-        "pad-note-16",
-        "pad-note-32",
-        "pad-note-64",
-        "pad-note-128",
-        "pad-note-256",
-        "pad-note-512",
-        "pad-note-1024"
-    };
-
-    DurationType durationType = resolveCurrentDurationType();
-    for (const ActionCode& actionCode: noteActions) {
-        updateItemsStateChecked(actionCode, durationType == NotationUiActions::actionDurationType(actionCode));
-    }
-}
-
-void NoteInputBarModel::updateNoteAccidentalState()
-{
-    static const ActionCodeList accidentalActions = {
-        "flat2",
-        "flat",
-        "nat",
-        "sharp",
-        "sharp2"
-    };
-
-    AccidentalType accidentalType = noteInputState().accidentalType();
-
-    for (const ActionCode& actionCode: accidentalActions) {
-        updateItemsStateChecked(actionCode, accidentalType == NotationUiActions::actionAccidentalType(actionCode));
-    }
-}
-
-void NoteInputBarModel::updateTieState()
-{
-    if (!selection()) {
-        return;
-    }
-
-    std::vector<Note*> tiedNotes = selection()->notes(NoteFilter::WithTie);
-
-    bool checked = !tiedNotes.empty();
-    for (const Note* note: tiedNotes) {
-        if (!note->tieFor()) {
-            checked = false;
-            break;
-        }
-        if (note->laissezVib()) {
-            checked = false;
-            break;
-        }
-    }
-
-    updateItemsStateChecked(codeFromQString("tie"), checked); // todo
-}
-
-void NoteInputBarModel::updateLvState()
-{
-    if (!selection()) {
-        return;
-    }
-
-    std::vector<Note*> tiedNotes = selection()->notes(NoteFilter::WithTie);
-
-    bool checked = !tiedNotes.empty();
-    for (const Note* note: tiedNotes) {
-        if (!note->laissezVib()) {
-            checked = false;
-            break;
-        }
-    }
-
-    updateItemsStateChecked(codeFromQString("lv"), checked);
-}
-
-void NoteInputBarModel::updateSlurState()
-{
-    bool checked = m_notation ? m_notation->elements()->msScore()->inputState().slur() != nullptr : false;
-    updateItemsStateChecked(codeFromQString("add-slur"), checked);
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -512,46 +366,6 @@ bool NoteInputBarModel::resolveRestSelected() const
     }
 
     return true;
-}
-
-DurationType NoteInputBarModel::resolveCurrentDurationType() const
-{
-    constexpr DurationType INVALID_DURATION_TYPE = DurationType::V_INVALID;
-
-    if (!noteInput() || !selection()) {
-        return INVALID_DURATION_TYPE;
-    }
-
-    if (isNoteInputMode()) {
-        return noteInputState().duration().type();
-    }
-
-    if (selection()->isNone() || selection()->isRange()) {
-        return INVALID_DURATION_TYPE;
-    }
-
-    const std::vector<EngravingItem*>& selectedElements = selection()->elements();
-    if (selectedElements.empty()) {
-        return INVALID_DURATION_TYPE;
-    }
-
-    DurationType result = INVALID_DURATION_TYPE;
-    bool isFirstElement = true;
-    for (const EngravingItem* element: selectedElements) {
-        const ChordRest* chordRest = elementToChordRest(element);
-        if (!chordRest) {
-            continue;
-        }
-
-        if (isFirstElement) {
-            result = chordRest->durationType().type();
-            isFirstElement = false;
-        } else if (result != chordRest->durationType().type()) {
-            return INVALID_DURATION_TYPE;
-        }
-    }
-
-    return result;
 }
 
 MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section,
@@ -739,7 +553,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
 MenuItemList NoteInputBarModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem("add-slur"),
+        makeMenuItem("command://notation/add-slur"),
         makeMenuItem("add-hairpin"),
         makeMenuItem("add-hairpin-reverse"),
         makeMenuItem("add-8va"),
@@ -796,24 +610,4 @@ const NoteInputState& NoteInputBarModel::noteInputState() const
     }
 
     return input->state();
-}
-
-const ChordRest* NoteInputBarModel::elementToChordRest(const EngravingItem* element) const
-{
-    if (!element) {
-        return nullptr;
-    }
-    if (element->isChordRest()) {
-        return toChordRest(element);
-    }
-    if (element->isNote()) {
-        return toNote(element)->chord();
-    }
-    if (element->isStem()) {
-        return toStem(element)->chord();
-    }
-    if (element->isHook()) {
-        return toHook(element)->chord();
-    }
-    return nullptr;
 }

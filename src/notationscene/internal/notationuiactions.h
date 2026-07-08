@@ -52,9 +52,6 @@ public:
     bool actionChecked(const muse::ui::UiAction& act) const override;
     muse::async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
-    static DurationType actionDurationType(const muse::actions::ActionCode& actionCode);
-    static AccidentalType actionAccidentalType(const muse::actions::ActionCode& actionCode);
-    static int actionDotCount(const muse::actions::ActionCode& actionCode);
     static int actionVoice(const muse::actions::ActionCode& actionCode);
     static SymbolId actionArticulationSymbolId(const muse::actions::ActionCode& actionCode);
 

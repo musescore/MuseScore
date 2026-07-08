@@ -157,6 +157,95 @@
         {
             "command": "command://notation/pitch-down-octave",
             "sequences": ["Ctrl+Down"]
+        },
+        {
+            "command": "command://notation/toggle-note-input-by-note-name",
+            "sequences": ["N"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-by-duration",
+            "sequences": ["M"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-rhythm",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-repitch",
+            "sequences": ["Ctrl+Shift+I"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-realtime-auto",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-realtime-manual",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-timewise",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/note-longa",
+            "sequences": ["9", "Num+9"]
+        },
+        {
+            "command": "command://notation/note-breve",
+            "sequences": ["8", "Num+8"]
+        },
+        {
+            "command": "command://notation/pad-note-1",
+            "sequences": ["7", "Num+7"]
+        },
+        {
+            "command": "command://notation/pad-note-2",
+            "sequences": ["6", "Num+6"]
+        },
+        {
+            "command": "command://notation/pad-note-4",
+            "sequences": ["5", "Num+5"]
+        },
+        {
+            "command": "command://notation/pad-note-8",
+            "sequences": ["4", "Num+4"]
+        },
+        {
+            "command": "command://notation/pad-note-16",
+            "sequences": ["3", "Num+3"]
+        },
+        {
+            "command": "command://notation/pad-note-32",
+            "sequences": ["2", "Num+2"]
+        },
+        {
+            "command": "command://notation/pad-note-64",
+            "sequences": ["1", "Num+1"]
+        },
+        {
+            "command": "command://notation/pad-dot",
+            "sequences": [".", "Num+."]
+        },
+        {
+            "command": "command://notation/pad-dot2",
+            "sequences": [",", "Num+,"]
+        },
+        {
+            "command": "command://notation/add-slur",
+            "sequences": ["S"]
+        }
+    ],
+    "NOTATION_NOTE_INPUT": [
+        {
+            "command": "command://notation/realtime-advance",
+            "sequences": ["Enter"]
         }
     ],
     "NOTATION_TEXT_EDITING": [
