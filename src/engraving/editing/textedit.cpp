@@ -161,12 +161,16 @@ void TextBase::endEdit(EditData& ed)
     }
 
     const bool newlyAdded = ted->oldXmlText.isEmpty();
+    bool rollbackWillDeleteThis = false;
     if (newlyAdded) {
         const UndoableTransaction* transaction = textWasEdited ? undo->prev() : undo->last();
         if (transaction && transaction->hasCommandsMatchingFilter(UndoableCommandFilter::AddElement, this)) {
             // We have just added this element to a score.
             // Combine undo records of text creation with text editing.
             undo->mergeTransactions(ted->startUndoIdx - 1);
+            // The merged transaction now contains the "add element" command for `this`,
+            // so rolling it back below will synchronously delete `this` (see AddElement::cleanup()).
+            rollbackWillDeleteThis = true;
         }
     }
 
@@ -184,6 +188,14 @@ void TextBase::endEdit(EditData& ed)
         undo->reopen();
         if (newlyAdded) {
             score()->endCmd(true); // rollback the "add element" command
+
+            if (rollbackWillDeleteThis) {
+                // `this` (and therefore `ted`, which points to it) was just deleted by the
+                // rollback above. Any further use of them would be a use-after-free, so bail
+                // out immediately instead of falling through to the code below.
+                return;
+            }
+
             ted->deleteText = true;
         } else {
             score()->undoRemoveElement(this);
