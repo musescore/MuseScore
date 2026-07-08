@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTOPTIONS_H
-#define MU_ENGRAVING_LAYOUTOPTIONS_H
+
+#pragma once
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -46,5 +46,3 @@ struct LayoutOptions
     bool isLinearMode() const { return mode == LayoutMode::LINE || mode == LayoutMode::HORIZONTAL_FIXED; }
 };
 }
-
-#endif // MU_ENGRAVING_LAYOUTOPTIONS_H

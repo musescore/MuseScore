@@ -27,7 +27,12 @@
 */
 
 #include "engraving/dom/system.h"
+
+#include "notation/inotationelements.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/notationtypes.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;

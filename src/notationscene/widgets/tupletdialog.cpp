@@ -23,6 +23,8 @@
 
 #include "engraving/dom/tuplet.h"
 
+#include "notation/inotationstyle.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;

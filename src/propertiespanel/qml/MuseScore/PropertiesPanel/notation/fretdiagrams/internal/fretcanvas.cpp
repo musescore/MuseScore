@@ -26,6 +26,8 @@
 
 #include "engraving/dom/fret.h"
 
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 using namespace mu::propertiespanel;
 
 FretCanvas::FretCanvas(QQuickItem* parent)

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationinteraction.h"
 
 #include "log.h"
@@ -69,7 +70,7 @@
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lasso.h"
 #include "engraving/dom/layoutbreak.h"
-#include "engraving/dom/linkedobjects.h"
+#include "engraving/dom/linkedobjects.h" // IWYU pragma: keep
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -124,6 +125,7 @@
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 
+#include "inotationviewstate.h"
 #include "notationerrors.h"
 #include "notation.h"
 #include "notationnoteinput.h"

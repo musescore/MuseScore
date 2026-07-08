@@ -21,6 +21,7 @@
  */
 #include "appmenumodel.h"
 
+#include "log.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -29,7 +30,7 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
-#include "log.h"
+#include "notation/inotationundostack.h"
 
 using namespace muse;
 using namespace mu::appshell;

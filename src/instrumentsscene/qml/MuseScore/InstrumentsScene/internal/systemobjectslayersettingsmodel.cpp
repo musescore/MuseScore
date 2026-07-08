@@ -24,6 +24,9 @@
 
 #include "layoutpanelutils.h"
 
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 

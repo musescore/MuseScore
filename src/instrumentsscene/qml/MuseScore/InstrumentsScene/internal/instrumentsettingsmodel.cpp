@@ -23,6 +23,9 @@
 
 #include "engraving/types/types.h"
 
+#include "notation/inotationparts.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 using namespace muse;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

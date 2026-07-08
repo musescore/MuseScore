@@ -27,7 +27,10 @@
 #include <QList>
 #include <qqmlintegration.h>
 
+#include "types/id.h"
+
 #include "notation/imasternotation.h"
+#include "notation/inotationparts.h"
 
 #include "layoutpanelitemtype.h"
 

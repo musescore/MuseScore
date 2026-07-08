@@ -21,8 +21,14 @@
  */
 
 #include "loopmarker.h"
+
+#include "draw/painter.h"
 #include "draw/types/pen.h"
+
 #include "engraving/iengravingfont.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
 
 using namespace muse;
 using namespace mu;

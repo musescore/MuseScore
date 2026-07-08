@@ -22,24 +22,28 @@
 #include "playbackcontroller.h"
 
 #include "async/notifylist.h"
-
+#include "containers.h"
 #include "modularity/ioc.h"
-#include "onlinesoundscontroller.h"
-
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/stafftext.h"
-#include "engraving/dom/utils.h"
-#include "engraving/dom/factory.h"
+#include "log.h"
+#include "types/ret.h"
 
 #include "audio/common/audioutils.h"
 #include "audio/devtools/inputlag.h"
 
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/dom/utils.h"
+
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationparts.h"
+#include "notation/inotationselection.h"
+
 #include "../playbacktypes.h"
 #include "../playbackcommands.h"
-
-#include "containers.h"
-#include "log.h"
-#include "types/ret.h"
+#include "onlinesoundscontroller.h"
 
 using namespace muse;
 using namespace muse::actions;

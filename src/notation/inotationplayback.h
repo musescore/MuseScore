@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONPLAYBACK_H
-#define MU_NOTATION_INOTATIONPLAYBACK_H
+
+#pragma once
 
 #include "types/retval.h"
 #include "midi/miditypes.h"
@@ -97,5 +97,3 @@ public:
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
 }
-
-#endif // MU_NOTATION_INOTATIONPLAYBACK_H

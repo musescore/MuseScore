@@ -22,7 +22,8 @@
 #include "engravingstylemodel.h"
 
 #include "notation/inotation.h"
-#include "notation/inotationstyle.h"
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "global/types/string.h"
 

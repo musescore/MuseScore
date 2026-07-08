@@ -22,8 +22,12 @@
 #include "barlinesettingsmodel.h"
 
 #include "translation.h"
-#include "types/barlinetypes.h"
+
 #include "engraving/dom/barline.h"
+
+#include "notation/inotationundostack.h"
+
+#include "types/barlinetypes.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;

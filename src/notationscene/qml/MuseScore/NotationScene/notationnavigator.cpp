@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationnavigator.h"
 
 #include "log.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 using namespace muse;
 using namespace mu::notation;

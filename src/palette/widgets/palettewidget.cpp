@@ -60,6 +60,8 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
+#include "notation/inotationinteraction.h"
+
 #include "notationscene/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"

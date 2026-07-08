@@ -59,8 +59,6 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 
-#include "engraving/rendering/layoutoptions.h"
-
 namespace mu::notation {
 using Page = mu::engraving::Page;
 using System = mu::engraving::System;
@@ -75,7 +73,6 @@ using Duration = mu::engraving::TDuration;
 using SelectType = mu::engraving::SelectType;
 using SelectionState = mu::engraving::SelState;
 using Pad = mu::engraving::Pad;
-using ViewMode = engraving::LayoutMode;
 using PitchMode = mu::engraving::UpDownMode;
 using StyleId = mu::engraving::Sid;
 using StyleIdSet = mu::engraving::StyleIdSet;
@@ -254,25 +251,6 @@ enum class NoteFilter : unsigned char
     WithTie,
     WithSlur
 };
-
-enum class ZoomType : unsigned char {
-    Percentage,
-    PageWidth,
-    WholePage,
-    TwoPages
-};
-
-inline muse::TranslatableString zoomTypeTitle(ZoomType type)
-{
-    switch (type) {
-    case ZoomType::Percentage: return muse::TranslatableString("notation", "Percentage");
-    case ZoomType::PageWidth: return muse::TranslatableString("notation", "Page width");
-    case ZoomType::WholePage: return muse::TranslatableString("notation", "Whole page");
-    case ZoomType::TwoPages: return muse::TranslatableString("notation", "Two pages");
-    }
-
-    return {};
-}
 
 struct Tempo
 {

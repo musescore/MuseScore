@@ -28,13 +28,17 @@
 #include "defer.h"
 #include "log.h"
 
+#include "midi/miditypes.h"
+
 #include "engraving/dom/factory.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
-#include "engraving/dom/tie.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
+
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "playback/playbackcommands.h"
 

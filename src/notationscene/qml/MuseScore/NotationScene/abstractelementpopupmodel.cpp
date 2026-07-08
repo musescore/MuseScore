@@ -24,6 +24,11 @@
 
 #include "engraving/dom/property.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h"
+#include "notation/inotationviewstate.h"
+
 #include "elementpopups/partialtiepopupmodel.h"
 #include "elementpopups/shadownotepopupmodel.h"
 

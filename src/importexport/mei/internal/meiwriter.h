@@ -24,6 +24,10 @@
 #include "project/inotationwriter.h"
 #include "engraving/engravingerrors.h"
 
+namespace mu::engraving {
+class Score;
+}
+
 namespace mu::iex::mei {
 class MeiWriter : public project::INotationWriter
 {

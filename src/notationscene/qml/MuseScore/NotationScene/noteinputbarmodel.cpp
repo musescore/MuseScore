@@ -24,6 +24,13 @@
 #include "types/translatablestring.h"
 
 #include "context/shortcutcontext.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h"
+
 #include "internal/notationuiactions.h"
 
 using namespace mu;

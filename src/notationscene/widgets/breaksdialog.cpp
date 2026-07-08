@@ -22,6 +22,9 @@
 
 #include "breaksdialog.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 using namespace mu::notation;
 
 static constexpr int DEFAULT_INTERVAL = 4;

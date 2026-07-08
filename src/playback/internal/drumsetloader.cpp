@@ -22,6 +22,7 @@
 
 #include "drumsetloader.h"
 
+#include "notation/inotationparts.h"
 #include "notation/notationtypes.h"
 #include "notationscene/utilities/percussionutilities.h"
 
@@ -83,7 +84,8 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
 
 void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackId& trackId, const Drumset& drumset)
 {
-    const Part* part = notation->parts()->part(trackId.partId);
+    INotationPartsPtr parts = notation->parts();
+    const Part* part = parts->part(trackId.partId);
     if (!part) {
         return;
     }
@@ -101,6 +103,6 @@ void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackI
         instrumentKey.partId = trackId.partId;
         instrumentKey.tick = Fraction::fromTicks(it->first);
 
-        notation->parts()->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
+        parts->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
     }
 }

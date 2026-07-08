@@ -27,6 +27,7 @@
 #include "ui_editstyle.h"
 
 #include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"

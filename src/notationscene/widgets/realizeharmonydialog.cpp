@@ -23,7 +23,9 @@
 #include "realizeharmonydialog.h"
 
 #include "engraving/dom/harmony.h"
-#include "engraving/dom/staff.h"
+
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "translation.h"
 

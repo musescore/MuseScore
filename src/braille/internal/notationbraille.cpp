@@ -28,11 +28,14 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
-#include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tie.h"
 
 #include "engraving/editing/noteinput.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
 
 #include "braille.h"
 #include "braillecode.h"

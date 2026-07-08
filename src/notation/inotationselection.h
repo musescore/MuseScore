@@ -19,14 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <vector>
 
-#include "notationtypes.h"
-#include "internal/inotationselectionrange.h"
 #include "types/bytearray.h"
 #include "types/ret.h"
+
+#include "inotationselectionrange.h"
+#include "notationtypes.h"
 
 class QMimeData;
 

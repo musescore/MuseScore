@@ -21,6 +21,8 @@
  */
 #include "engravingpluginapihelper.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "inotationwriter.h"
 #include "types/projecttypes.h"
 

@@ -22,16 +22,17 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
-#include "async/notification.h"
-#include "async/channel.h"
-#include "async/promise.h"
-#include "global/progress.h"
-#include "notation/inotation.h"
-#include "notation/notationtypes.h"
-#include "audio/common/audiotypes.h"
 #include "actions/actiontypes.h"
-#include "midi/miditypes.h"
+#include "async/channel.h"
+#include "async/notification.h"
+#include "async/promise.h"
+#include "audio/common/audiotypes.h"
+#include "global/progress.h"
+#include "modularity/imoduleinterface.h"
+
+#include "notation/inotation_fwd.h"
+#include "notation/inotationsolomutestate.h"
+#include "notation/notationtypes.h"
 
 #include "playbacktypes.h"
 

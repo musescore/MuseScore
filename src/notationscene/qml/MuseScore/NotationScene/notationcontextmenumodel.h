@@ -26,6 +26,8 @@
 #include "context/iglobalcontext.h"
 
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
+
+#include "notation/inotationinteraction.h"
 #include "notation/notationtypes.h"
 
 namespace mu::notation {

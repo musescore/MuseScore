@@ -19,11 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "uicontextresolver.h"
 
 #include <QTimer>
 
 #include "diagnostics/diagnosticutils.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "shortcutcontext.h"
 
