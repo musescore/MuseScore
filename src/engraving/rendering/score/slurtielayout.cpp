@@ -2322,7 +2322,7 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
         return !s.item()->addToSkyline() || s.item()->isNoteDot() || (tieSegment->isLaissezVibSegment() && s.item()->isLaissezVibSegment());
     });
     noteShape.translate(note->pos() + chordSystemPos);
-    double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
+    double xNoteEdge = (start ? noteShape.right() : noteShape.left()) + padding;
 
     resultingX = start ? std::max(resultingX, xNoteEdge) : std::min(resultingX, xNoteEdge);
 }
