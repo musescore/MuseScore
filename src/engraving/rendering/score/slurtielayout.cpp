@@ -25,6 +25,7 @@
 
 #include "dom/slur.h"
 #include "dom/chord.h"
+#include "dom/clef.h"
 #include "dom/score.h"
 #include "dom/system.h"
 #include "dom/staff.h"
@@ -268,7 +269,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             }
         }
 
-        double endingX = outgoingPartialSlur ? measure->endingXForOpenEndedLines() : system->endingXForOpenEndedLines();
+        double endingX = endingXForOpenEndedSlurTie(outgoingPartialSlur ? measure : system->lastMeasure(), item->startCR()->vStaffIdx());
         p2 = PointF(endingX, y);
 
         // adjust for ties at the end of the system
@@ -351,6 +352,26 @@ void SlurTieLayout::adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, Point
         double yCur = p2.y();
         p2.setY(up ? std::min(yCur, p1.y() - heightDiff) : std::max(yCur, p1.y() + heightDiff));
     }
+}
+
+double SlurTieLayout::endingXForOpenEndedSlurTie(const Measure* measure, staff_idx_t staffIdx)
+{
+    double endingX = measure->endingXForOpenEndedLines();
+
+    const Segment* clefSeg = measure->findSegmentR(SegmentType::ClefTypes, measure->ticks());
+    if (!clefSeg || !clefSeg->enabled()) {
+        return endingX;
+    }
+
+    const Clef* clef = toClef(clefSeg->element(staff2track(staffIdx)));
+    if (!clef || !clef->addToSkyline()) {
+        return endingX;
+    }
+
+    const double margin = clef->style().styleAbsolute(Sid::lineEndToBarlineDistance);
+    const double clefLeftX = measure->x() + clefSeg->x() + clef->ldata()->shape().translated(clef->pos()).left();
+
+    return std::min(endingX, clefLeftX - margin);
 }
 
 //---------------------------------------------------------
@@ -1562,7 +1583,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 
     int segmentCount = sPos.system1 == sPos.system2 ? 1 : 2;
     if (segmentCount == 2) {
-        sPos.p2 = PointF(system->endingXForOpenEndedLines(), sPos.p1.y());
+        sPos.p2 = PointF(endingXForOpenEndedSlurTie(system->lastMeasure(), item->startNote()->vStaffIdx()), sPos.p1.y());
     } else {
         sPos.p2 = computeDefaultStartOrEndPoint(item, Grip::END);
     }
