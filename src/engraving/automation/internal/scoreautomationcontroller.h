@@ -66,8 +66,7 @@ private:
     };
 
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
-    using DeferredInValuePoints = std::set<std::pair<AutomationCurveKey, utick_t> >;
-    using PendingAnchorDynamics = std::vector<std::pair<const Dynamic*, int> >;
+    using DeferredInValuePoints = std::map<AutomationCurveKey, std::set<utick_t> >;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
     struct UpdateContext {
@@ -75,7 +74,6 @@ private:
         utick_t clearFromUTick = 0;
         DynamicPriorities dynamicPriorities;
         DeferredInValuePoints deferredInValuePoints;
-        PendingAnchorDynamics pendingAnchorDynamics;
         MeasureRepeats measureRepeats;
     };
 
@@ -103,18 +101,18 @@ private:
     static void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const std::vector<AutomationCurveKey>& keys, UpdateContext& ctx);
     static void addHairpinPoints(const HairpinInfo& info, const AutomationCurveKey& key, UpdateContext& ctx);
 
-    static void fillVoiceCurvesFromBase(AutomationCurveMap& curves);
+    static void fillVoiceCurvesFromBase(UpdateContext& ctx);
 
     static void collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range, MeasureRepeats& result);
     static void addMeasureRepeatPoints(UpdateContext& ctx);
 
     static void resolveDeferredInValues(UpdateContext& ctx);
+    static void removeDeferredInValue(UpdateContext& ctx, const AutomationCurveKey& key, utick_t tick);
 
     static bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                                    UpdateContext& ctx);
     static void addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                                  UpdateContext& ctx);
-
     static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range, AutomationCurveKey key,
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);

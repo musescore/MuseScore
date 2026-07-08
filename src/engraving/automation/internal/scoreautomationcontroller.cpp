@@ -226,17 +226,6 @@ static const AutomationPoint* activePoint(const AutomationCurveMap& curves, cons
     return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
 }
 
-static AutomationPoint* findPoint(AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
-{
-    auto curveIt = curves.find(key);
-    if (curveIt == curves.end()) {
-        return nullptr;
-    }
-
-    auto pointIt = curveIt->second.find(tick);
-    return pointIt != curveIt->second.end() ? &pointIt->second : nullptr;
-}
-
 ScoreAutomationController::ScoreAutomationController()
 {
     m_automation = new Automation();
@@ -370,12 +359,6 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
         }
     }
 
-    // Step 1.5: anchored dynamics — processed after all regular dynamics so that a regular dynamic
-    // at the same tick (possibly in a different segment) has already claimed outValue
-    for (const auto& [dyn, tickOffset] : ctx.pendingAnchorDynamics) {
-        addDynamicPoints(dyn, tickOffset, range, ctx);
-    }
-
     // Step 2: spanner points: ctx.dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
@@ -383,7 +366,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     }
 
     // Step 3: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
-    fillVoiceCurvesFromBase(ctx.curves);
+    fillVoiceCurvesFromBase(ctx);
 
     // Step 4: resolve deferred inValues — shared curves and their voice curve copies
     resolveDeferredInValues(ctx);
@@ -426,12 +409,7 @@ void ScoreAutomationController::addSegmentPoints(const Segment* segment, int tic
             continue;
         }
 
-        const Dynamic* dyn = toDynamic(annotation);
-        if (dyn->anchorToEndOfPrevious()) {
-            ctx.pendingAnchorDynamics.emplace_back(dyn, tickOffset);
-        } else {
-            addDynamicPoints(dyn, tickOffset, range, ctx);
-        }
+        addDynamicPoints(toDynamic(annotation), tickOffset, range, ctx);
     }
 }
 
@@ -466,25 +444,17 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     }
 
     if (auto it = ORDINARY_DYNAMIC_VALUES.find(dynamicType); it != ORDINARY_DYNAMIC_VALUES.end()) {
-        const double value = it->second;
-        // Anchored dynamics are processed last, so a point already at this tick owns outValue; just add inValue.
-        if (dynamic->anchorToEndOfPrevious()) {
-            if (AutomationPoint* existing = findPoint(ctx.curves, key, dynamicUTick)) {
-                existing->inValue = value;
-                ctx.deferredInValuePoints.erase({ key, dynamicUTick });
-                return;
-            }
-        }
         AutomationPoint point;
         point.inValue = 0.0;
-        point.outValue = value;
+        point.outValue = it->second;
         point.itemId = eid;
         addDeferredPoint(key, dynamicUTick, point, priority, ctx);
         return;
     }
 
     if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        const AutomationPoint* prevPoint = activePoint(ctx.curves, key, dynamicUTick);
+        const Segment* nextSeg = dynamic->segment()->next();
+        const AutomationPoint* prevPoint = nextSeg ? activePoint(ctx.curves, key, dynamicUTick) : nullptr;
 
         AutomationPoint point;
         point.inValue = 0.0;
@@ -492,7 +462,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         point.itemId = eid;
         addDeferredPoint(key, dynamicUTick, point, priority, ctx);
 
-        if (const Segment* nextSeg = dynamic->segment()->next()) {
+        if (nextSeg) {
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
             tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, ctx);
@@ -541,10 +511,6 @@ void ScoreAutomationController::addSpannerPoints(const Score* score, int repeatS
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
         if (!spanner->isHairpin() || !spanner->playSpanner()) {
-            continue;
-        }
-
-        if (!range.contains(spanner->staffIdx())) {
             continue;
         }
 
@@ -646,7 +612,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         if (canModify) {
             endPointIt->second.inValue = valueTo;
             // Remove from deferred so the resolve pass doesn't overwrite the inValue we just set
-            ctx.deferredInValuePoints.erase({ key, info.to });
+            removeDeferredInValue(ctx, key, info.to);
         }
         return;
     }
@@ -660,11 +626,11 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
     }
 }
 
-void ScoreAutomationController::fillVoiceCurvesFromBase(AutomationCurveMap& curves)
+void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
 {
     TRACEFUNC;
 
-    for (auto& [key, curve] : curves) {
+    for (auto& [key, curve] : ctx.curves) {
         if (!key.voiceIdx.has_value()) {
             continue;
         }
@@ -672,13 +638,27 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(AutomationCurveMap& curv
         AutomationCurveKey baseKey = key;
         baseKey.voiceIdx = std::nullopt;
 
-        const auto baseIt = curves.find(baseKey);
-        if (baseIt == curves.end()) {
+        const auto baseIt = ctx.curves.find(baseKey);
+        if (baseIt == ctx.curves.end()) {
             continue;
         }
 
+        const auto baseDeferredIt = ctx.deferredInValuePoints.find(baseKey);
+        const std::set<utick_t>* baseDeferredTicks
+            = baseDeferredIt != ctx.deferredInValuePoints.end() ? &baseDeferredIt->second : nullptr;
+
+        std::set<utick_t>* voiceDeferredTicks = nullptr;
+
         for (const auto& [tick, point] : baseIt->second) {
-            curve.try_emplace(tick, point);
+            const bool inserted = curve.try_emplace(tick, point).second;
+            if (!inserted || !baseDeferredTicks || !muse::contains(*baseDeferredTicks, tick)) {
+                continue;
+            }
+
+            if (!voiceDeferredTicks) {
+                voiceDeferredTicks = &ctx.deferredInValuePoints[key];
+            }
+            voiceDeferredTicks->insert(tick);
         }
     }
 }
@@ -763,41 +743,16 @@ void ScoreAutomationController::resolveDeferredInValues(UpdateContext& ctx)
 {
     TRACEFUNC;
 
-    // inValue=0.0 was a placeholder set before hairpin points existed;
-    // resolve it now that the curve is complete.
-    // Voice curves copied these placeholders too, so fix those as well
-    std::map<muse::ID, std::vector<AutomationCurveKey> > voiceCurvesByStaff;
-    for (const auto& [key, curve] : ctx.curves) {
-        if (key.voiceIdx.has_value()) {
-            voiceCurvesByStaff[key.staffId].push_back(key);
-        }
-    }
-
-    for (const auto& [key, tick] : ctx.deferredInValuePoints) {
-        if (const auto curveIt = ctx.curves.find(key); curveIt != ctx.curves.end()) {
-            AutomationCurve& curve = curveIt->second;
-            if (const auto it = curve.find(tick); it != curve.end() && it != curve.begin()) {
-                it->second.inValue = std::prev(it)->second.outValue;
-            }
-        }
-
-        if (key.voiceIdx.has_value()) {
+    for (const auto& [key, ticks] : ctx.deferredInValuePoints) {
+        const auto curveIt = ctx.curves.find(key);
+        if (curveIt == ctx.curves.end()) {
             continue;
         }
 
-        const auto staffIt = voiceCurvesByStaff.find(key.staffId);
-        if (staffIt == voiceCurvesByStaff.end()) {
-            continue;
-        }
-
-        for (const AutomationCurveKey& voiceKey : staffIt->second) {
-            const auto voiceCurveIt = ctx.curves.find(voiceKey);
-            if (voiceCurveIt == ctx.curves.end()) {
-                continue;
-            }
-
-            AutomationCurve& voiceCurve = voiceCurveIt->second;
-            if (const auto it = voiceCurve.find(tick); it != voiceCurve.end() && it != voiceCurve.begin()) {
+        AutomationCurve& curve = curveIt->second;
+        for (utick_t tick : ticks) {
+            const auto it = curve.find(tick);
+            if (it != curve.end() && it != curve.begin()) {
                 it->second.inValue = std::prev(it)->second.outValue;
             }
         }
@@ -808,14 +763,22 @@ void ScoreAutomationController::resolveDeferredInValues(UpdateContext& ctx)
             if (it->second.itemId.has_value()) {
                 continue;
             }
+
             if (it != curve.begin()) {
                 it->second.inValue = std::prev(it)->second.outValue;
             }
-            const auto nextIt = std::next(it);
-            if (nextIt != curve.end()) {
+
+            if (auto nextIt = std::next(it); nextIt != curve.end()) {
                 nextIt->second.inValue = it->second.outValue;
             }
         }
+    }
+}
+
+void ScoreAutomationController::removeDeferredInValue(UpdateContext& ctx, const AutomationCurveKey& key, utick_t tick)
+{
+    if (const auto it = ctx.deferredInValuePoints.find(key); it != ctx.deferredInValuePoints.end()) {
+        it->second.erase(tick);
     }
 }
 
@@ -853,8 +816,23 @@ bool ScoreAutomationController::tryAddDynamicPoint(const AutomationCurveKey& key
 void ScoreAutomationController::addDeferredPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point,
                                                  int priority, UpdateContext& ctx)
 {
+    // If a point with the same priority already exists at this tick, merge them:
+    // keep the existing arrival value (inValue) and use this point's departure value (outValue)
+    const auto prioKeyIt = ctx.dynamicPriorities.find(key);
+    if (prioKeyIt != ctx.dynamicPriorities.end()) {
+        const auto prioIt = prioKeyIt->second.find(tick);
+        if (prioIt != prioKeyIt->second.end() && prioIt->second == priority) {
+            AutomationPoint& existing = ctx.curves[key][tick];
+            const double arrivalValue = existing.outValue;
+            existing = point;
+            existing.inValue = arrivalValue;
+            removeDeferredInValue(ctx, key, tick);
+            return;
+        }
+    }
+
     if (tryAddDynamicPoint(key, tick, point, priority, ctx)) {
-        ctx.deferredInValuePoints.emplace(key, tick);
+        ctx.deferredInValuePoints[key].insert(tick);
     }
 }
 
