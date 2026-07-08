@@ -166,8 +166,7 @@ void Automation::movePoint(const AutomationCurveKey& key, utick_t srcTick, utick
         return;
     }
 
-    node.key() = dstTick;
-    curve.insert(std::move(node));
+    curve.insert_or_assign(dstTick, node.mapped());
 
     m_pendingChanges.extend(key, std::min(srcTick, dstTick), std::max(srcTick, dstTick));
     notifyChanged();
