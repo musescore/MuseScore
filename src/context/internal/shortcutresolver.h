@@ -28,11 +28,13 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
+#include "notationscene/inotationcommandscontroller.h"
 
 namespace mu::context {
 class ShortcutResolver : public muse::shortcuts::IShortcutsResolver, public muse::Contextable
 {
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
+    muse::ContextInject<notation::INotationCommandsController> notationCommandsController = { this };
 
 public:
     ShortcutResolver(const muse::modularity::ContextPtr& iocCtx)
@@ -44,6 +46,7 @@ private:
     int scopePriority(const std::string& scope) const;
 
     bool isNotationFocused() const;
+    bool isNotationFocusedAndNoteInputMode() const;
 
     mutable std::map<std::string, std::function<int()> > m_scopePriorityMap;
 };

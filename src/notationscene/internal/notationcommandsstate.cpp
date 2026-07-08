@@ -31,6 +31,17 @@ using namespace mu::notation;
 
 static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
 
+template<typename Map>
+static inline auto commands(const Map& m) -> std::vector<typename Map::key_type>
+{
+    std::vector<typename Map::key_type> result;
+    result.reserve(m.size());
+    for (const auto& p : m) {
+        result.push_back(p.first);
+    }
+    return result;
+}
+
 static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     CUT_COMMAND,
     COPY_COMMAND,
@@ -46,6 +57,54 @@ static const std::vector<Command> TEXT_EDITING_COMMANDS = {
     EDIT_NEXT_TEXT_ELEMENT_COMMAND,
     EDIT_PREV_TEXT_ELEMENT_COMMAND,
     EDIT_NEXT_WORD_COMMAND
+};
+
+static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
+    { TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN },
+    { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, NoteInputMethod::BY_NOTE_NAME },
+    { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, NoteInputMethod::BY_DURATION },
+    { TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, NoteInputMethod::RHYTHM },
+    { TOGGLE_NOTE_INPUT_REPITCH_COMMAND, NoteInputMethod::REPITCH },
+    { TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, NoteInputMethod::REALTIME_AUTO },
+    { TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, NoteInputMethod::REALTIME_MANUAL },
+    { TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, NoteInputMethod::TIMEWISE }
+};
+
+static const std::map<Command, DurationType> DURATION_COMMANDS = {
+    { NOTE_LONGA_COMMAND, DurationType::V_LONG },
+    { NOTE_BREVE_COMMAND, DurationType::V_BREVE },
+    { PAD_NOTE_1_COMMAND, DurationType::V_WHOLE },
+    { PAD_NOTE_2_COMMAND, DurationType::V_HALF },
+    { PAD_NOTE_4_COMMAND, DurationType::V_QUARTER },
+    { PAD_NOTE_8_COMMAND, DurationType::V_EIGHTH },
+    { PAD_NOTE_16_COMMAND, DurationType::V_16TH },
+    { PAD_NOTE_32_COMMAND, DurationType::V_32ND },
+    { PAD_NOTE_64_COMMAND, DurationType::V_64TH },
+    { PAD_NOTE_128_COMMAND, DurationType::V_128TH },
+    { PAD_NOTE_256_COMMAND, DurationType::V_256TH },
+    { PAD_NOTE_512_COMMAND, DurationType::V_512TH },
+    { PAD_NOTE_1024_COMMAND, DurationType::V_1024TH }
+};
+
+static const std::map<Command, int> DOT_COUNT_COMMANDS = {
+    { PAD_DOT_COMMAND, 1 },
+    { PAD_DOT2_COMMAND, 2 },
+    { PAD_DOT3_COMMAND, 3 },
+    { PAD_DOT4_COMMAND, 4 }
+};
+
+static const std::map<Command, AccidentalType> ACCIDENTAL_COMMANDS = {
+    { TOGGLE_FLAT2_COMMAND, AccidentalType::FLAT2 },
+    { TOGGLE_FLAT_COMMAND, AccidentalType::FLAT },
+    { TOGGLE_NAT_COMMAND, AccidentalType::NATURAL },
+    { TOGGLE_SHARP_COMMAND, AccidentalType::SHARP },
+    { TOGGLE_SHARP2_COMMAND, AccidentalType::SHARP2 }
+};
+
+static const std::vector<Command> ADD_COMMANDS = {
+    ADD_TIE_COMMAND,
+    ADD_SLUR_COMMAND,
+    ADD_LV_COMMAND
 };
 
 std::string NotationCommandsState::moduleName() const
@@ -68,8 +127,9 @@ void NotationCommandsState::init()
         updateCommandStates();
     });
 
-    controller()->hasSelectionChanged().onReceive(this, [this](bool) {
+    controller()->selectionChanged().onNotify(this, [this]() {
         updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
+        updateCommandStates(ADD_COMMANDS);
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -80,6 +140,19 @@ void NotationCommandsState::init()
         updateCommandStates(TEXT_EDITING_COMMANDS);
     });
 
+    controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
+        updateCommandStates(commands(NOTE_INPUT_COMMANDS));
+    });
+
+    controller()->noteInputStateChanged().onNotify(this, [this]() {
+        updateCommandStates(commands(NOTE_INPUT_COMMANDS));
+        updateCommandStates(commands(DURATION_COMMANDS));
+        updateCommandStates(commands(DOT_COUNT_COMMANDS));
+        updateCommandStates(commands(ACCIDENTAL_COMMANDS));
+        updateCommandStates({ REALTIME_ADVANCE_COMMAND });
+        updateCommandStates(ADD_COMMANDS);
+    });
+
     updateCommandStates();
 }
 
@@ -87,9 +160,11 @@ void NotationCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
     interactive()->opened().disconnect(this);
-    controller()->hasSelectionChanged().disconnect(this);
+    controller()->selectionChanged().disconnect(this);
     controller()->stackChanged().disconnect(this);
     controller()->textEditingChanged().disconnect(this);
+    controller()->isNoteInputAllowedChanged().disconnect(this);
+    controller()->noteInputStateChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -109,7 +184,7 @@ void NotationCommandsState::updateCommandStates(const std::vector<Command>& comm
     }
 }
 
-CommandState NotationCommandsState::commandState(const Command& command) const
+CommandState NotationCommandsState::doCommandState(const Command& command) const
 {
     if (!isProjectOpened()) {
         return CommandState(false, false);
@@ -130,7 +205,45 @@ CommandState NotationCommandsState::commandState(const Command& command) const
         return CommandState(controller()->isTextEditing(), false);
     }
 
+    if (muse::contains(NOTE_INPUT_COMMANDS, command)) {
+        return CommandState(controller()->isNoteInputAllowed(),
+                            controller()->isNoteInputMode() && controller()->noteInputMethod() == NOTE_INPUT_COMMANDS.at(command));
+    } else if (command == REALTIME_ADVANCE_COMMAND) {
+        return CommandState(controller()->isNoteInputMode(), false);
+    }
+
+    if (muse::contains(DURATION_COMMANDS, command)) {
+        return CommandState(true, controller()->currentDurationType() == DURATION_COMMANDS.at(command));
+    }
+
+    if (muse::contains(DOT_COUNT_COMMANDS, command)) {
+        return CommandState(true, controller()->currentDotCount() == DOT_COUNT_COMMANDS.at(command));
+    }
+
+    if (muse::contains(ACCIDENTAL_COMMANDS, command)) {
+        return CommandState(true, controller()->currentAccidentalType() == ACCIDENTAL_COMMANDS.at(command));
+    }
+
+    if (command == ADD_TIE_COMMAND) {
+        return CommandState(true, controller()->selectionHasTie());
+    }
+    if (command == ADD_SLUR_COMMAND) {
+        return CommandState(true, controller()->selectionHasSlur());
+    }
+    if (command == ADD_LV_COMMAND) {
+        return CommandState(true, controller()->selectionHasLaissezVib());
+    }
+
     return CommandState(true, false);
+}
+
+CommandState NotationCommandsState::commandState(const Command& command) const
+{
+    CommandState state = doCommandState(command);
+    LOGDA() << "command: " << command
+            << ", enabled: " << state.enabled
+            << ", checked: " << state.checked;
+    return state;
 }
 
 async::Channel<Command, CommandState> NotationCommandsState::commandStateChanged() const

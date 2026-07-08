@@ -26,6 +26,8 @@
 #include "global/async/channel.h"
 #include "global/async/notification.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::notation {
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
 {
@@ -34,7 +36,10 @@ public:
     virtual ~INotationCommandsController() = default;
 
     virtual bool hasSelection() const = 0;
-    virtual muse::async::Channel<bool> hasSelectionChanged() const = 0;
+    virtual muse::async::Notification selectionChanged() const = 0;
+    virtual bool selectionHasTie() const = 0;
+    virtual bool selectionHasLaissezVib() const = 0;
+    virtual bool selectionHasSlur() const = 0;
 
     virtual bool canUndo() const = 0;
     virtual bool canRedo() const = 0;
@@ -42,5 +47,15 @@ public:
 
     virtual bool isTextEditing() const = 0;
     virtual muse::async::Channel<bool> textEditingChanged() const = 0;
+
+    virtual bool isNoteInputAllowed() const = 0;
+    virtual muse::async::Channel<bool> isNoteInputAllowedChanged() const = 0;
+
+    virtual muse::async::Notification noteInputStateChanged() const = 0;
+    virtual bool isNoteInputMode() const = 0;
+    virtual NoteInputMethod noteInputMethod() const = 0;
+    virtual DurationType currentDurationType() const = 0;
+    virtual int currentDotCount() const = 0;
+    virtual AccidentalType currentAccidentalType() const = 0;
 };
 }

@@ -1374,7 +1374,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         if (modifiers != Qt::NoModifier) {
             break; // Doesn't support modifiers...
         }
-        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+        dispatcher()->dispatch("command://notation/toggle-note-input");
         break;
     }
     case ElementType::NOTE: {

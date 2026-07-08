@@ -630,7 +630,7 @@ MenuItemList AppMenuModel::appendClearRecentSection(const muse::uicomponents::Me
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("note-input"),
+        makeMenuItem("command://notation/toggle-note-input"),
         makeSeparator(),
         makeMenuItem("note-c"),
         makeMenuItem("note-d"),

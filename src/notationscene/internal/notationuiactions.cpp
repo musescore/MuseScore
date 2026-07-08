@@ -39,8 +39,6 @@ using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
-static const ActionCode NOTE_INPUT_ACTION_CODE("note-input");
-
 static const ActionCode SHOW_INVISIBLE_CODE("show-invisible");
 static const ActionCode SHOW_UNPRINTABLE_CODE("show-unprintable");
 static const ActionCode SHOW_FRAMES_CODE("show-frames");
@@ -2074,166 +2072,11 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "String below (TAB)"),
              TranslatableString("action", "Go to string below (TAB)")
              ),
-    UiAction(NOTE_INPUT_ACTION_CODE,
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Note input"),
-             TranslatableString("action", "Toggle note input mode"),
-             IconCode::Code::EDIT,
-             Checkable::Yes
-             ),
     UiAction("toggle-insert-mode",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Insert/overwrite"),
              TranslatableString("action", "Toggle note input mode: insert/overwrite")
-             ),
-    UiAction("note-input-by-note-name",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Input by note name"),
-             TranslatableString("action", "Toggle note input mode: input by note name"),
-             IconCode::Code::EDIT
-             ),
-    UiAction("note-input-by-duration",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Input by duration"),
-             TranslatableString("action", "Toggle note input mode: input by duration"),
-             IconCode::Code::DURATION_CURSOR
-             ),
-    UiAction("note-input-rhythm",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Rhythm only (not pitch)"),
-             TranslatableString("action", "Toggle note input mode: rhythm only (not pitch)"),
-             IconCode::Code::RHYTHM_ONLY
-             ),
-    UiAction("note-input-repitch",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Re-pitch existing notes"),
-             TranslatableString("action", "Toggle note input mode: re-pitch existing notes"),
-             IconCode::Code::RE_PITCH
-             ),
-    UiAction("note-input-realtime-auto",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Real-time (metronome)"),
-             TranslatableString("action", "Toggle note input mode: real-time (metronome)"),
-             IconCode::Code::METRONOME
-             ),
-    UiAction("note-input-realtime-manual",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Real-time (foot pedal)"),
-             TranslatableString("action", "Toggle note input mode: real-time (foot pedal)"),
-             IconCode::Code::FOOT_PEDAL
-             ),
-    UiAction("note-input-timewise",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Insert"),
-             TranslatableString("action", "Toggle note input mode: insert (increases measure duration)"),
-             IconCode::Code::NOTE_PLUS
-             ),
-    UiAction("realtime-advance",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Real-time advance"),
-             TranslatableString("action", "Real-time advance"),
-             IconCode::Code::METRONOME
-             ),
-    UiAction("note-longa",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Longa"),
-             TranslatableString("action", "Set duration: longa"),
-             IconCode::Code::LONGO
-             ),
-    UiAction("note-breve",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Double whole note"),
-             TranslatableString("action", "Set duration: double whole note"),
-             IconCode::Code::NOTE_WHOLE_DOUBLE
-             ),
-    UiAction("pad-note-1",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Whole note"),
-             TranslatableString("action", "Set duration: whole note"),
-             IconCode::Code::NOTE_WHOLE
-             ),
-    UiAction("pad-note-2",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Half note"),
-             TranslatableString("action", "Set duration: half note"),
-             IconCode::Code::NOTE_HALF
-             ),
-    UiAction("pad-note-4",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Quarter note"),
-             TranslatableString("action", "Set duration: quarter note"),
-             IconCode::Code::NOTE_QUARTER
-             ),
-    UiAction("pad-note-8",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "Eighth note"),
-             TranslatableString("action", "Set duration: eighth note"),
-             IconCode::Code::NOTE_8TH
-             ),
-    UiAction("pad-note-16",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "16th note"),
-             TranslatableString("action", "Set duration: 16th note"),
-             IconCode::Code::NOTE_16TH
-             ),
-    UiAction("pad-note-32",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "32nd note"),
-             TranslatableString("action", "Set duration: 32nd note"),
-             IconCode::Code::NOTE_32ND
-             ),
-    UiAction("pad-note-64",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "64th note"),
-             TranslatableString("action", "Set duration: 64th note"),
-             IconCode::Code::NOTE_64TH
-             ),
-    UiAction("pad-note-128",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "128th note"),
-             TranslatableString("action", "Set duration: 128th note"),
-             IconCode::Code::NOTE_128TH
-             ),
-    UiAction("pad-note-256",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "256th note"),
-             TranslatableString("action", "Set duration: 256th note"),
-             IconCode::Code::NOTE_256TH
-             ),
-    UiAction("pad-note-512",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "512th note"),
-             TranslatableString("action", "Set duration: 512th note"),
-             IconCode::Code::NOTE_512TH
-             ),
-    UiAction("pad-note-1024",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-             TranslatableString("action", "1024th note"),
-             TranslatableString("action", "Set duration: 1024th note"),
-             IconCode::Code::NOTE_1024TH
              ),
     UiAction("pad-note-1-TAB",
              mu::context::UiCtxProjectOpened,
@@ -2358,62 +2201,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Accessibility: Previous segment element"),
              TranslatableString("action", "Select previous in-staff element")
-             ),
-    UiAction("flat",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle flat"),
-             TranslatableString("action", "Toggle accidental: flat"),
-             IconCode::Code::FLAT
-             ),
-    UiAction("flat2",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle double-flat"),
-             TranslatableString("action", "Toggle accidental: double-flat"),
-             IconCode::Code::FLAT_DOUBLE
-             ),
-    UiAction("nat",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle natural"),
-             TranslatableString("action", "Toggle accidental: natural"),
-             IconCode::Code::NATURAL
-             ),
-    UiAction("sharp",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle sharp"),
-             TranslatableString("action", "Toggle accidental: sharp"),
-             IconCode::Code::SHARP
-             ),
-    UiAction("sharp2",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Toggle double-sharp"),
-             TranslatableString("action", "Toggle accidental: double-sharp"),
-             IconCode::Code::SHARP_DOUBLE
-             ),
-    UiAction("tie",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Tie"),
-             TranslatableString("action", "Add tied note"),
-             IconCode::Code::NOTE_TIE
-             ),
-    UiAction("lv",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Laissez vibrer"),
-             TranslatableString("action", "Add laissez vibrer"),
-             IconCode::Code::NOTE_LV
-             ),
-    UiAction("add-slur",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Slur"),
-             TranslatableString("action", "Add slur"),
-             IconCode::Code::NOTE_SLUR
              ),
     UiAction("add-marcato",
              mu::context::UiCtxProjectOpened,
@@ -2732,10 +2519,6 @@ NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> c
 
 void NotationUiActions::init()
 {
-    m_controller->currentNotationNoteInputChanged().onNotify(this, [this]() {
-        m_actionCheckedChanged.send({ NOTE_INPUT_ACTION_CODE });
-    });
-
     m_controller->currentNotationChanged().onNotify(this, [this]() {
         ActionCodeList actions;
         actions.reserve(s_scoreConfigActions.size());
@@ -2890,13 +2673,6 @@ bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const Score
 
 bool NotationUiActions::actionChecked(const UiAction& act) const
 {
-    if (act.code == NOTE_INPUT_ACTION_CODE) {
-        auto noteInput = m_controller->currentNotationNoteInput();
-        if (noteInput) {
-            return noteInput->isNoteInputMode();
-        }
-    }
-
     if (act.code == TOGGLE_CONCERT_PITCH_CODE) {
         auto style = m_controller->currentNotationStyle();
         if (style) {
@@ -2932,67 +2708,6 @@ muse::async::Channel<ActionCodeList> NotationUiActions::actionEnabledChanged() c
 muse::async::Channel<ActionCodeList> NotationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
-}
-
-DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)
-{
-    static const QMap<ActionCode, DurationType> durations = {
-        { "note-longa", DurationType::V_LONG },
-        { "note-breve", DurationType::V_BREVE },
-        { "pad-note-1", DurationType::V_WHOLE },
-        { "pad-note-2", DurationType::V_HALF },
-        { "pad-note-4", DurationType::V_QUARTER },
-        { "pad-note-8", DurationType::V_EIGHTH },
-        { "pad-note-16", DurationType::V_16TH },
-        { "pad-note-32", DurationType::V_32ND },
-        { "pad-note-64", DurationType::V_64TH },
-        { "pad-note-128", DurationType::V_128TH },
-        { "pad-note-256", DurationType::V_256TH },
-        { "pad-note-512", DurationType::V_512TH },
-        { "pad-note-1024", DurationType::V_1024TH }
-    };
-
-    DurationType type = DurationType::V_INVALID;
-    if (durations.contains(actionCode)) {
-        type = durations[actionCode];
-    }
-
-    return type;
-}
-
-AccidentalType NotationUiActions::actionAccidentalType(const ActionCode& actionCode)
-{
-    static const QMap<ActionCode, AccidentalType> accidentals = {
-        { "flat2", AccidentalType::FLAT2 },
-        { "flat", AccidentalType::FLAT },
-        { "nat", AccidentalType::NATURAL },
-        { "sharp", AccidentalType::SHARP },
-        { "sharp2", AccidentalType::SHARP2 }
-    };
-
-    AccidentalType type = AccidentalType::NONE;
-    if (accidentals.contains(actionCode)) {
-        type = accidentals[actionCode];
-    }
-
-    return type;
-}
-
-int NotationUiActions::actionDotCount(const ActionCode& actionCode)
-{
-    static const QMap<ActionCode, int> dots = {
-        { "pad-dot", 1 },
-        { "pad-dot2", 2 },
-        { "pad-dot3", 3 },
-        { "pad-dot4", 4 }
-    };
-
-    int dotCount = 0;
-    if (dots.contains(actionCode)) {
-        dotCount = dots[actionCode];
-    }
-
-    return dotCount;
 }
 
 int NotationUiActions::actionVoice(const ActionCode& actionCode)
@@ -3034,42 +2749,43 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
-            { "note-input-by-note-name", true },
-            { "note-input-by-duration", true },
-            { "note-input-rhythm", false },
-            { "note-input-repitch", false },
-            { "note-input-realtime-auto", false },
-            { "note-input-realtime-manual", false },
-            { "note-input-timewise", false },
+            { "command://notation/toggle-note-input-by-note-name", true },
+            { "command://notation/toggle-note-input-by-duration", true },
+            { "command://notation/toggle-note-input-rhythm", false },
+            { "command://notation/toggle-note-input-repitch", false },
+            { "command://notation/toggle-note-input-realtime-auto", false },
+            { "command://notation/toggle-note-input-realtime-manual", false },
+            { "command://notation/toggle-note-input-timewise", false },
             { "", true },
-            { "pad-note-1024", false },
-            { "pad-note-512", false },
-            { "pad-note-256", false },
-            { "pad-note-128", false },
-            { "pad-note-64", true },
-            { "pad-note-32", true },
-            { "pad-note-16", true },
-            { "pad-note-8", true },
-            { "pad-note-4", true },
-            { "pad-note-2", true },
-            { "pad-note-1", true },
-            { "note-breve", false },
-            { "note-longa", false },
+            { "command://notation/pad-note-1024", false },
+            { "command://notation/pad-note-512", false },
+            { "command://notation/pad-note-256", false },
+            { "command://notation/pad-note-128", false },
+            { "command://notation/pad-note-64", true },
+            { "command://notation/pad-note-32", true },
+            { "command://notation/pad-note-16", true },
+            { "command://notation/pad-note-8", true },
+            { "command://notation/pad-note-4", true },
+            { "command://notation/pad-note-2", true },
+            { "command://notation/pad-note-1", true },
+            { "command://notation/note-breve", false },
+            { "command://notation/note-longa", false },
             { "", true },
-            { "pad-dot", true },
-            { "pad-dot2", false },
-            { "pad-dot3", false },
-            { "pad-dot4", false },
-            { "pad-rest", true },
+            { "command://notation/pad-dot", true },
+            { "command://notation/pad-dot2", false },
+            { "command://notation/pad-dot3", false },
+            { "command://notation/pad-dot4", false },
+            { "command://notation/pad-rest", true },
             { "", true },
-            { "flat2", true },
-            { "flat", true },
-            { "nat", true },
-            { "sharp", true },
-            { "sharp2", true },
+            { "command://notation/toggle-flat2", true },
+            { "command://notation/toggle-flat", true },
+            { "command://notation/toggle-nat", true },
+            { "command://notation/toggle-sharp", true },
+            { "command://notation/toggle-sharp2", true },
             { "", true },
-            { "tie", true },
-            { "add-slur", true },
+            { "command://notation/add-tie", true },
+            { "command://notation/add-slur", true },
+            { "command://notation/add-laissez-vibrer", false },
             { "lv", false },
             { "", true },
             { "add-marcato", true },

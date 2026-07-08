@@ -294,7 +294,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("note-input"),
+        makeMenuItem("command://notation/toggle-note-input"),
         makeSeparator(),
         makeMenuItem("note-c"),
         makeMenuItem("note-d"),
@@ -421,7 +421,7 @@ MenuItemList AppMenuModel::makeTextItems()
 MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem("add-slur"),
+        makeMenuItem("command://notation/add-slur"),
         makeMenuItem("add-hairpin"),
         makeMenuItem("add-hairpin-reverse"),
         makeMenuItem("add-8va"),

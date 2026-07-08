@@ -46,4 +46,43 @@ inline static const muse::rcommand::Command PITCH_DOWN_OCTAVE_COMMAND("command:/
 inline static const muse::rcommand::Command EDIT_NEXT_WORD_COMMAND("command://notation/edit-next-word");
 inline static const muse::rcommand::Command EDIT_NEXT_TEXT_ELEMENT_COMMAND("command://notation/edit-next-text-element");
 inline static const muse::rcommand::Command EDIT_PREV_TEXT_ELEMENT_COMMAND("command://notation/edit-prev-text-element");
+
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_COMMAND("command://notation/toggle-note-input");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND("command://notation/toggle-note-input-by-note-name");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND("command://notation/toggle-note-input-by-duration");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_RHYTHM_COMMAND("command://notation/toggle-note-input-rhythm");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REPITCH_COMMAND("command://notation/toggle-note-input-repitch");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND("command://notation/toggle-note-input-realtime-auto");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND("command://notation/toggle-note-input-realtime-manual");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND("command://notation/toggle-note-input-timewise");
+inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
+
+inline static const muse::rcommand::Command NOTE_LONGA_COMMAND("command://notation/note-longa");
+inline static const muse::rcommand::Command NOTE_BREVE_COMMAND("command://notation/note-breve");
+inline static const muse::rcommand::Command PAD_NOTE_1_COMMAND("command://notation/pad-note-1");
+inline static const muse::rcommand::Command PAD_NOTE_2_COMMAND("command://notation/pad-note-2");
+inline static const muse::rcommand::Command PAD_NOTE_4_COMMAND("command://notation/pad-note-4");
+inline static const muse::rcommand::Command PAD_NOTE_8_COMMAND("command://notation/pad-note-8");
+inline static const muse::rcommand::Command PAD_NOTE_16_COMMAND("command://notation/pad-note-16");
+inline static const muse::rcommand::Command PAD_NOTE_32_COMMAND("command://notation/pad-note-32");
+inline static const muse::rcommand::Command PAD_NOTE_64_COMMAND("command://notation/pad-note-64");
+inline static const muse::rcommand::Command PAD_NOTE_128_COMMAND("command://notation/pad-note-128");
+inline static const muse::rcommand::Command PAD_NOTE_256_COMMAND("command://notation/pad-note-256");
+inline static const muse::rcommand::Command PAD_NOTE_512_COMMAND("command://notation/pad-note-512");
+inline static const muse::rcommand::Command PAD_NOTE_1024_COMMAND("command://notation/pad-note-1024");
+inline static const muse::rcommand::Command PAD_DOT_COMMAND("command://notation/pad-dot");
+inline static const muse::rcommand::Command PAD_DOT2_COMMAND("command://notation/pad-dot2");
+inline static const muse::rcommand::Command PAD_DOT3_COMMAND("command://notation/pad-dot3");
+inline static const muse::rcommand::Command PAD_DOT4_COMMAND("command://notation/pad-dot4");
+inline static const muse::rcommand::Command PAD_REST_COMMAND("command://notation/pad-rest");
+
+inline static const muse::rcommand::Command TOGGLE_FLAT2_COMMAND("command://notation/toggle-flat2");
+inline static const muse::rcommand::Command TOGGLE_FLAT_COMMAND("command://notation/toggle-flat");
+inline static const muse::rcommand::Command TOGGLE_NAT_COMMAND("command://notation/toggle-nat");
+inline static const muse::rcommand::Command TOGGLE_SHARP_COMMAND("command://notation/toggle-sharp");
+inline static const muse::rcommand::Command TOGGLE_SHARP2_COMMAND("command://notation/toggle-sharp2");
+
+inline static const muse::rcommand::Command ADD_TIE_COMMAND("command://notation/add-tie");
+inline static const muse::rcommand::Command ADD_SLUR_COMMAND("command://notation/add-slur");
+inline static const muse::rcommand::Command ADD_LV_COMMAND("command://notation/add-laissez-vibrer");
 }
