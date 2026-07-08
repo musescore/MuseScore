@@ -68,6 +68,10 @@ public:
     void writeViewSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
     void writeAutomationJsonFile(const muse::ByteArray& data);
 
+    void writeSnapshotIndexFile(const muse::ByteArray& data);
+    void addSnapshotFile(size_t index, const muse::ByteArray& data);
+    void addSnapshotAutomationJsonFile(size_t index, const muse::ByteArray& data);
+
 private:
 
     struct IWriter {
