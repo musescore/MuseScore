@@ -110,6 +110,9 @@ public:
 
     Tapping* tapping() const { return toTapping(parent()); }
 
+protected:
+    bool isInSpannerMap() const override { return false; }
+
 private:
     bool m_isHalfSlurAbove = true;
 };

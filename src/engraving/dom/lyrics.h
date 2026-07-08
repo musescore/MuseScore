@@ -150,6 +150,8 @@ public:
 protected:
     LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
+    bool isInSpannerMap() const override { return false; }
+
     Lyrics* m_nextLyrics = nullptr;
 
     void doComputeEndElement() override;
@@ -235,6 +237,7 @@ public:
 
 protected:
     void doComputeEndElement() override;
+    bool isInSpannerMap() const override { return true; }
 
 private:
     bool m_isEndMelisma = false;

@@ -276,6 +276,8 @@ protected:
     virtual void doComputeStartElement();
     virtual void doComputeEndElement();
 
+    virtual bool isInSpannerMap() const { return true; }
+
 private:
     bool canBeCrossStaff() const;
 

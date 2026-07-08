@@ -100,6 +100,9 @@ public:
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
 
+protected:
+    bool isInSpannerMap() const override { return false; }
+
 private:
 
     std::optional<bool> m_isHarpGliss = std::nullopt;
