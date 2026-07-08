@@ -125,11 +125,7 @@ public:
     void setPreferSameStringForTranspose(bool preferSameString) override;
     bool keepDeadNotesUnchangedOnTranspose() const override;
 
-    int maxScaledImageDim() const override;
-    void setMaxScaledImageDim(int maxDim) override;
-
 private:
-    int m_maxScaledImageDim = 4096;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
