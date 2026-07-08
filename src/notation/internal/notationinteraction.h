@@ -47,12 +47,14 @@
 #include "previewmeasure.h"
 #include "scorecallbacks.h"
 
+class QDrag;
+
 namespace mu::engraving {
 class Lasso;
 class Transaction;
-}
 
-class QDrag;
+enum class HarmonyType : unsigned char;
+}
 
 namespace mu::notation {
 class Notation;
@@ -275,7 +277,7 @@ public:
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
 
-    void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) override;
+    void realizeSelectedChordSymbols(bool literal, engraving::Voicing voicing, engraving::HDuration durationType) override;
     void extendToNextNote() override;
     void removeSelectedMeasures() override;
     void removeSelectedRange() override;
@@ -406,8 +408,8 @@ private:
     void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
     void navigateToLyrics(bool, bool, bool);
 
-    Harmony* editedHarmony() const;
-    Segment* harmonySegment(const Harmony* harmony) const;
+    mu::engraving::Harmony* editedHarmony() const;
+    mu::engraving::Segment* harmonySegment(const mu::engraving::Harmony* harmony) const;
     mu::engraving::Harmony* findHarmonyInSegment(const mu::engraving::Segment* segment, engraving::track_idx_t track,
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,

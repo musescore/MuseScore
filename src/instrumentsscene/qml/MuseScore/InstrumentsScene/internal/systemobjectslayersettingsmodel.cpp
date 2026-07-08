@@ -108,7 +108,7 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
         DO_ASSERT(group.staff);
         group.staff->undoSetShowMeasureNumbers(visible);
     } else {
-        for (EngravingItem* item : group.items) {
+        for (engraving::EngravingItem* item : group.items) {
             item->undoSetVisible(visible);
         }
     }

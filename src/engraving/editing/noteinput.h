@@ -41,13 +41,38 @@ class Score;
 class Segment;
 class Transaction;
 
-struct NoteInputParams;
 struct NoteVal;
 struct Position;
 
 enum class AccidentalType : unsigned char;
-enum class Pad : char;
 enum class SymId;
+
+struct NoteInputParams {
+    int step = 0;
+    int drumPitch = -1;
+};
+
+enum class Pad : char {
+    NOTE00,
+    NOTE0,
+    NOTE1,
+    NOTE2,
+    NOTE4,
+    NOTE8,
+    NOTE16,
+    NOTE32,
+    NOTE64,
+    NOTE128,
+    NOTE256,
+    NOTE512,
+    NOTE1024,
+    //--------------------
+    REST,
+    DOT,
+    DOT2,
+    DOT3,
+    DOT4
+};
 
 class NoteInput
 {

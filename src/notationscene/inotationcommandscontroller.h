@@ -26,7 +26,7 @@
 #include "global/async/channel.h"
 #include "global/async/notification.h"
 
-#include "notation/notationtypes.h"
+#include "notation/types/noteinputtypes.h"
 
 namespace mu::notation {
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
@@ -54,11 +54,11 @@ public:
     virtual muse::async::Notification noteInputStateChanged() const = 0;
     virtual bool isNoteInputMode() const = 0;
     virtual NoteInputMethod noteInputMethod() const = 0;
-    virtual DurationType currentDurationType() const = 0;
+    virtual engraving::DurationType currentDurationType() const = 0;
     virtual int currentDotCount() const = 0;
     virtual bool currentIsRest() const = 0;
-    virtual AccidentalType currentAccidentalType() const = 0;
-    virtual std::set<SymbolId> currentArticulations() const = 0;
-    virtual voice_idx_t currentVoice() const = 0;
+    virtual engraving::AccidentalType currentAccidentalType() const = 0;
+    virtual std::set<engraving::SymId> currentArticulations() const = 0;
+    virtual engraving::voice_idx_t currentVoice() const = 0;
 };
 }

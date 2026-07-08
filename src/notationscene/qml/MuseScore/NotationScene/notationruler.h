@@ -48,6 +48,6 @@ private:
 
     static LineType lineType(int lineTicks, int inputTicks, size_t lineIdx);
 
-    void paintLine(muse::draw::Painter* painter, LineType type, const muse::PointF& point, double spatium, voice_idx_t voiceIdx);
+    void paintLine(muse::draw::Painter* painter, LineType type, const muse::PointF& point, double spatium, engraving::voice_idx_t voiceIdx);
 };
 }

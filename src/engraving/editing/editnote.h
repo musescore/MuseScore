@@ -30,11 +30,14 @@
 namespace mu::engraving {
 enum class SymId;
 enum class AccidentalType : unsigned char;
-enum class UpDownMode : char;
 enum class Key : signed char;
 class Score;
 class EngravingItem;
 class Articulation;
+
+enum class UpDownMode : char {
+    CHROMATIC, OCTAVE, DIATONIC
+};
 
 class EditNote
 {

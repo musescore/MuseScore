@@ -28,6 +28,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/iengravingfont.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep
 

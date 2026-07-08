@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 
 #include "notation/inotationundostack.h"

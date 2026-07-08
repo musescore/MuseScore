@@ -29,6 +29,10 @@
 
 #include "engraving/dom/stafftype.h"
 
+namespace mu::engraving {
+class Instrument;
+}
+
 namespace mu::notation {
 class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Contextable
 {

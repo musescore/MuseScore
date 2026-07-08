@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- #pragma once
-
-#include "notation/inotationconfiguration.h"
-#include "modularity/ioc.h"
-
-#include "notation/inotation.h"
+#pragma once
 
 #include "draw/types/geometry.h"
+
+#include "engraving/dom/score.h"
+
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
+#include "notation/inotation_fwd.h"
 
 namespace mu::notation {
 class LoopMarker : public muse::Contextable

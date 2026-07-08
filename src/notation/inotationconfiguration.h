@@ -31,7 +31,7 @@
 #include "io/path.h"
 #include "global/globaltypes.h"
 
-#include "notationtypes.h"
+#include "types/noteinputtypes.h"
 #include "types/zoomtype.h"
 
 namespace mu::notation {

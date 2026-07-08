@@ -202,7 +202,7 @@ INotationPtr AbstractElementPopupModel::currentNotation() const
     return globalContext()->currentNotation();
 }
 
-void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value)
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value)
 {
     IF_ASSERT_FAILED(m_item) {
         return;
@@ -219,7 +219,8 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
     updateNotation();
 }
 
-void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, mu::engraving::PropertyFlags flags)
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value,
+                                                   mu::engraving::PropertyFlags flags)
 {
     IF_ASSERT_FAILED(m_item) {
         return;

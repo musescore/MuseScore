@@ -22,14 +22,15 @@
 
 #pragma once
 
-#include <QPaintEvent>
 #include <QFrame>
+#include <QPaintEvent>
+
+#include "draw/types/transform.h"
 
 #include "engraving/editing/mscoreview.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "draw/types/transform.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -67,7 +68,7 @@ protected:
     muse::PointF toLogical(const QPointF& point);
 
 private:
-    void drawElements(muse::draw::Painter& painter, const std::vector<EngravingItem*>& el);
+    void drawElements(muse::draw::Painter& painter, const std::vector<engraving::EngravingItem*>& el);
     void paintEvent(QPaintEvent*) override;
     void wheelEvent(QWheelEvent*) override;
     void constraintCanvas(int* dxx);

@@ -31,7 +31,6 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
-#include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/measure.h"
@@ -39,32 +38,24 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/page.h"
-#include "engraving/dom/realizedharmony.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tuplet.h"
 
 namespace mu::notation {
 using Page = mu::engraving::Page;
 using System = mu::engraving::System;
-using SysStaff = mu::engraving::SysStaff;
 using EngravingItem = mu::engraving::EngravingItem;
 using ElementType = mu::engraving::ElementType;
-using PropertyValue = engraving::PropertyValue;
 using Note = mu::engraving::Note;
 using Measure = mu::engraving::Measure;
 using DurationType = mu::engraving::DurationType;
 using Duration = mu::engraving::TDuration;
 using SelectType = mu::engraving::SelectType;
 using SelectionState = mu::engraving::SelState;
-using Pad = mu::engraving::Pad;
-using PitchMode = mu::engraving::UpDownMode;
-using StyleId = mu::engraving::Sid;
-using StyleIdSet = mu::engraving::StyleIdSet;
 using SymbolId = mu::engraving::SymId;
 using Key = mu::engraving::Key;
 using KeyMode = mu::engraving::KeyMode;
@@ -77,22 +68,16 @@ using Fraction = mu::engraving::Fraction;
 using ElementPattern = mu::engraving::ElementPattern;
 using Chord = mu::engraving::Chord;
 using ChordRest = mu::engraving::ChordRest;
-using Harmony = mu::engraving::Harmony;
-using RealisedHarmony = mu::engraving::RealizedHarmony;
 using Articulation = mu::engraving::Articulation;
 using SlurSegment = mu::engraving::SlurSegment;
 using Rest = mu::engraving::Rest;
 using Stem = mu::engraving::Stem;
 using Hook = mu::engraving::Hook;
 using Fraction = mu::engraving::Fraction;
-using NoteInputMethod = mu::engraving::NoteEntryMethod;
-using NoteInputParams = mu::engraving::NoteInputParams;
 using AccidentalType = mu::engraving::AccidentalType;
 using OttavaType = mu::engraving::OttavaType;
 using HairpinType = mu::engraving::HairpinType;
 using TextBase = mu::engraving::TextBase;
-using TupletNumberType = mu::engraving::TupletNumberType;
-using TupletBracketType = mu::engraving::TupletBracketType;
 using GraceNoteType = mu::engraving::NoteType;
 using BeamMode = mu::engraving::BeamMode;
 using LayoutBreakType = mu::engraving::LayoutBreakType;
@@ -100,8 +85,6 @@ using Interval = mu::engraving::Interval;
 using BracketType = mu::engraving::BracketType;
 using Segment = mu::engraving::Segment;
 using TextStyleType = mu::engraving::TextStyleType;
-using HarmonyDurationType = mu::engraving::HDuration;
-using Voicing = mu::engraving::Voicing;
 using PageList = std::vector<Page*>;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
@@ -182,24 +165,12 @@ enum class NoteName : unsigned char
     B
 };
 
-using NoteVal = mu::engraving::NoteVal;
-using NoteValList = mu::engraving::NoteValList;
-
-enum class NoteAddingMode : unsigned char
-{
-    CurrentChord,
-    NextChord,
-    InsertChord
-};
-
 enum class PastingType : unsigned char {
     Default,
     Half,
     Double,
     Special
 };
-
-using NoteInputState = mu::engraving::InputState;
 
 enum class NoteFilter : unsigned char
 {
@@ -249,14 +220,6 @@ struct TransposeOptions
     bool needTransposeKeys = false;
     bool needTransposeChordNames = false;
     bool needTransposeDoubleSharpsFlats = false;
-};
-
-struct TupletOptions
-{
-    Fraction ratio = { -1, -1 };
-    TupletNumberType numberType = TupletNumberType::SHOW_NUMBER;
-    TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
-    bool autoBaseLen = false;
 };
 
 enum class ScoreConfigType : unsigned char

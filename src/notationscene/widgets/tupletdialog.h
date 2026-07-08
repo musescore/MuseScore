@@ -29,7 +29,10 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 
-#include "notation/notationtypes.h"
+namespace mu::engraving {
+enum class TupletNumberType : unsigned char;
+enum class TupletBracketType : unsigned char;
+}
 
 namespace mu::notation {
 class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
@@ -49,8 +52,8 @@ public:
 
     void defaultToStyleSettings();
 
-    TupletNumberType numberType() const;
-    TupletBracketType bracketType() const;
+    engraving::TupletNumberType numberType() const;
+    engraving::TupletBracketType bracketType() const;
 
     INotationStylePtr style() const;
     INotationPtr notation() const;

@@ -52,6 +52,8 @@ target_sources(notation PRIVATE
     notationtypes.h
     types/instrumentstypes.h
     types/loopboundaries.h
+    types/noteinputtypes.h
+    types/propertystyletypes.h
     types/scorecreateoptions.h
     types/staffparttypes.h
     types/stringtunings.h

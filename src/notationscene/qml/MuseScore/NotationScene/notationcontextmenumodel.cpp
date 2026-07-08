@@ -28,6 +28,7 @@
 
 #include "engraving/dom/fret.h"
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 

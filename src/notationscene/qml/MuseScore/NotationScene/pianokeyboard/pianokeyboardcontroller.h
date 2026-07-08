@@ -30,6 +30,10 @@
 
 #include "pianokeyboardtypes.h"
 
+namespace mu::engraving {
+class Note;
+}
+
 namespace mu::notation {
 class PianoKeyboardController : public muse::Contextable, public muse::async::Asyncable
 {
@@ -52,7 +56,7 @@ private:
     INotationPtr currentNotation() const;
 
     void onNotationChanged();
-    void updateNotesKeys(const std::vector<const Note*>& receivedNotes);
+    void updateNotesKeys(const std::vector<const engraving::Note*>& receivedNotes);
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);

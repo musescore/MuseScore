@@ -28,6 +28,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
 
 #include "notation/inotationcontextconfiguration.h"

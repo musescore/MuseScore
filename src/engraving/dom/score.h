@@ -170,28 +170,6 @@ enum class LoopBoundaryType : signed char {
     LoopOut = 1
 };
 
-enum class Pad : char {
-    NOTE00,
-    NOTE0,
-    NOTE1,
-    NOTE2,
-    NOTE4,
-    NOTE8,
-    NOTE16,
-    NOTE32,
-    NOTE64,
-    NOTE128,
-    NOTE256,
-    NOTE512,
-    NOTE1024,
-    //--------------------
-    REST,
-    DOT,
-    DOT2,
-    DOT3,
-    DOT4
-};
-
 struct Position {
     Segment* segment = nullptr;
     staff_idx_t staffIdx = muse::nidx;
@@ -199,11 +177,6 @@ struct Position {
     int fret = INVALID_FRET_INDEX;
     PointF pos;
     bool beyondScore = false;
-};
-
-struct NoteInputParams {
-    int step = 0;
-    int drumPitch = -1;
 };
 
 struct ShowAnchors {
