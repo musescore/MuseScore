@@ -442,7 +442,7 @@ int pitch2tpc(int pitch, Key key, Prefer prefer)
 int pitch2absStepByKey(int pitch, int tpc, Key key, int& alter)
 {
     // sanitize input data
-    pitch = clampPitch(pitch, true);
+    pitch = clampPitchOctaved(pitch);
     tpc = clampEnharmonic(tpc);
     key = clampKey(key);
 
@@ -775,11 +775,13 @@ int clampEnharmonic(int tpc, bool useDoubleSharpsFlats)
     return tpc;
 }
 
-int clampPitch(int pitch, bool octaved)
+int clampPitch(int pitch)
 {
-    if (!octaved) {
-        return std::clamp(pitch, MIN_PITCH, MAX_PITCH);
-    }
+    return std::clamp(pitch, MIN_PITCH, MAX_PITCH);
+}
+
+int clampPitchOctaved(int pitch)
+{
     while (pitch > MAX_PITCH) {
         pitch -= PITCH_DELTA_OCTAVE;
     }

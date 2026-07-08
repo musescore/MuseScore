@@ -2774,17 +2774,31 @@ void Note::verticalDrag(EditData& ed)
         }
         int nStep = absStep(ned->line + lineOffset, score()->staff(idx)->clef(_tick));
         nStep = std::max(0, nStep);
-        int octave = nStep / 7;
-        int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
-        newPitch = std::clamp(newPitch, 0, 127);
+        int octave = nStep / STEP_DELTA_OCTAVE;
+        int newPitch = step2pitch(nStep) + octave * PITCH_DELTA_OCTAVE + int(accOffs);
 
-        int newTpc1 = step2tpc(nStep % 7, accOffs);
+        int newTpc1 = step2tpc(nStep % STEP_DELTA_OCTAVE, accOffs);
         int newTpc2 = newTpc1;
         if (concertPitch()) {
             newTpc2 = transposeTpc(newTpc1);
         } else {
             newPitch += staff()->transpose(_tick).chromatic;
             newTpc1 = transposeTpc(newTpc2);
+        }
+
+        int clampedPitch = clampPitch(newPitch);
+        if (clampedPitch != newPitch) {
+            // newTpc1/newTpc2 were derived from a step/accidental that no longer
+            // matches the clamped pitch; respell them so tpc and pitch stay in sync
+            Key key = score()->staff(idx)->key(_tick);
+            if (concertPitch()) {
+                newTpc1 = pitch2tpc(clampedPitch, key, Prefer::NEAREST);
+                newTpc2 = transposeTpc(newTpc1);
+            } else {
+                newTpc2 = pitch2tpc(clampedPitch - staff()->transpose(_tick).chromatic, key, Prefer::NEAREST);
+                newTpc1 = transposeTpc(newTpc2);
+            }
+            newPitch = clampedPitch;
         }
 
         for (Note* nn : tiedNotes()) {
@@ -4103,7 +4117,7 @@ bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     }
 
     // check pitch is in range
-    newPitch = clampPitch(newPitch, true);
+    newPitch = clampPitchOctaved(newPitch);
 
     // store new data
     EditNote::undoChangePitch(score(), this, newPitch, newTpc1, newTpc2);
