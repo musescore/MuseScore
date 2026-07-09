@@ -36,16 +36,15 @@
 #include "dom/staff.h"
 #include "dom/stafftext.h"
 
-#include "global/containers.h"
-
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationutils.h"
-
-#include "global/realfn.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
 #include "types/constants.h"
+
+#include "global/containers.h"
+#include "global/realfn.h"
 
 using namespace mu::engraving;
 using namespace muse;

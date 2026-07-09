@@ -67,10 +67,11 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics
-    ctx.update(parts.front()->id(), score);
+    const TrackRange trackRange = parts.front()->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [GIVEN]
     DynamicLevelMap expectedDynamics;
@@ -126,7 +127,7 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     ASSERT_FALSE(expectedDynamics.empty());
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
     EXPECT_FALSE(layers.empty());
@@ -152,10 +153,11 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics for the 1st instrument (with measure repeats)
-    ctx.update(parts.at(0)->id(), score);
+    const TrackRange track0Range = parts.at(0)->trackRange();
+    ctx.update(track0Range.startTrack, track0Range.endTrack);
 
     DynamicLevelMap expectedDynamics {
         // 1st measure
@@ -179,7 +181,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     };
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers layers = ctx.dynamicLevelLayers(track0Range.startTrack, track0Range.endTrack);
 
     // [THEN] The dynamics match the expectation
     EXPECT_FALSE(layers.empty());
@@ -189,11 +191,12 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     }
 
     // [WHEN] Parse dynamics for the 2nd instrument (without measure repeats)
-    ctx.clear();
-    ctx.update(parts.at(1)->id(), score);
+    ctx.clear(0, muse::nidx);
+    const TrackRange track1Range = parts.at(1)->trackRange();
+    ctx.update(track1Range.startTrack, track1Range.endTrack);
 
     // [WHEN] Get the actual dynamics
-    layers = ctx.dynamicLevelLayers();
+    layers = ctx.dynamicLevelLayers(track1Range.startTrack, track1Range.endTrack);
 
     // [THEN] Measure repeat on the 1st instrument doesn't affect other instruments
     expectedDynamics = {
@@ -226,14 +229,15 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics
     const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
     DynamicLevelLayers expectedLayers;
@@ -294,14 +298,15 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics
     const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -344,14 +349,15 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics
     const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -407,14 +413,15 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     score->initAutomation();
 
     // [GIVEN] Context for parsing dynamics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse dynamics
     const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers();
+    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
     DynamicLevelMap expectedDynamics;
@@ -515,20 +522,23 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
 
+    const TrackRange trackRange = parts.front()->trackRange();
+    const track_idx_t trackIdx = trackRange.startTrack;
+
     // [GIVEN] Context for parsing techniques
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [THEN] No technique parsed, returns the "Natural" type
     int maxTick = score->endTick().ticks();
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(trackIdx, tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
 
     // [WHEN] Parse techniques
-    ctx.update(parts.front()->id(), score);
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The techniques successfully parsed
     constexpr int ticksPerMeasure = 1920;
@@ -569,24 +579,24 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     };
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(trackIdx, tick);
         std::pair<timestamp_t, PlayingTechniqueType> expectedType = findExpectedType(tick);
         EXPECT_EQ(actualType, expectedType);
     }
 
     // [WHEN] Find position of Damp
-    const timestamp_t actualDampPosition = ctx.findPlayingTechniqueTimestamp(PlayingTechniqueType::HandbellsDamp,
+    const timestamp_t actualDampPosition = ctx.findPlayingTechniqueTimestamp(trackIdx, PlayingTechniqueType::HandbellsDamp,
                                                                              ticksPerMeasure * 20);
 
     // [THEN] Position is correct
     EXPECT_EQ(actualDampPosition, timestampFromTicks(score, ticksPerMeasure * 21));
 
     // [WHEN] Clear the context
-    ctx.clear();
+    ctx.clear(0, muse::nidx);
 
     // [THEN] No technique parsed, returns the "Natural" type
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(trackIdx, tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -603,14 +613,17 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
 
+    const TrackRange trackRange = parts.front()->trackRange();
+    const track_idx_t trackIdx = trackRange.startTrack;
+
     // [GIVEN] the 1st measure is repeated
     constexpr int repeatOffsetTick = 1920;
 
     // [GIVEN] Context for parsing playing techniques
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse playing techniques
-    ctx.update(parts.front()->id(), score);
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The playing technique map matches the expectation
     std::map<int, PlayingTechniqueType> expectedTypes {
@@ -631,7 +644,7 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
     };
 
     for (const auto& pair : expectedTypes) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(pair.first);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(trackIdx, pair.first);
         EXPECT_EQ(actualType.first, timestampFromTicks(score, pair.first));
         EXPECT_EQ(actualType.second, pair.second);
     }
@@ -648,14 +661,16 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_TextArticulations)
     ASSERT_FALSE(parts.empty());
 
     // [GIVEN] Context for parsing sound flags
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse the sound flags
     const Part* part = parts.front();
-    ctx.update(part->id(), score);
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [WHEN] Get the actual articulations
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(trackRange.startTrack,
+                                                                                                 trackRange.endTrack);
 
     // [THEN] Expected articulations
     const layer_idx_t secondStaffLayer = static_cast<layer_idx_t>(staff2track(1));
@@ -687,7 +702,6 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_TextArticulations)
     EXPECT_EQ(actualArticulations, expectedArticulations);
 
     // [THEN] We can get articulations for a specific track & tick
-    const TrackRange trackRange = part->trackRange();
     for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
         TextArticulationEvent event = ctx.textArticulation(trackIdx, 0);
         EXPECT_TRUE(event.text.empty());
@@ -743,10 +757,11 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
     ASSERT_FALSE(parts.empty());
 
     // [GIVEN] Context for parsing sound flags
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse sound flags
-    ctx.update(parts.front()->id(), score);
+    const TrackRange trackRange = parts.front()->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The actual text articulations match the expectation
     TextArticulationEvent espressivo, bartok;
@@ -760,7 +775,8 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_MeasureRepeats)
         { timestampFromTicks(score, 7680), { bartok } }, // measure repeat
     };
 
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(trackRange.startTrack,
+                                                                                                 trackRange.endTrack);
     EXPECT_EQ(expectedArticulations, actualArticulations);
 
     delete score;
@@ -780,15 +796,17 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     ASSERT_EQ(parts.size(), 2);
 
     // [GIVEN] Context for parsing sound flags & playing techniques
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse the violin part
     const Part* violinPart = parts.at(0);
-    ctx.update(violinPart->id(), score);
+    const TrackRange violinTrackRange = violinPart->trackRange();
+    const track_idx_t violinTrackIdx = violinTrackRange.startTrack;
+    ctx.update(violinTrackRange.startTrack, violinTrackRange.endTrack);
 
     // [THEN] 1st measure: Pizz.
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(violinTrackIdx, tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Pizzicato);
     }
@@ -797,7 +815,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     const timestamp_t expectedNaturalTimestamp = timestampFromTicks(score, 1920);
     int lastTick = score->lastMeasure()->tick().ticks();
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(violinTrackIdx, tick);
         EXPECT_EQ(actualType.first, expectedNaturalTimestamp);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -817,17 +835,20 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
         { timestampFromTicks(score, 5760), { ordinary } }, // 4th (canceled by Arco)
     };
 
-    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations();
+    std::map<timestamp_t, TextArticulationEventList> actualArticulations = ctx.textArticulations(violinTrackRange.startTrack,
+                                                                                                 violinTrackRange.endTrack);
     EXPECT_EQ(expectedArticulations, actualArticulations);
 
     // [WHEN] Parse the brass part
     const Part* brassPart = parts.at(1);
-    ctx.clear();
-    ctx.update(brassPart->id(), score);
+    const TrackRange brassTrackRange = brassPart->trackRange();
+    const track_idx_t brassTrackIdx = brassTrackRange.startTrack;
+    ctx.clear(0, muse::nidx);
+    ctx.update(brassTrackRange.startTrack, brassTrackRange.endTrack);
 
     // [THEN] 1st measure: Standard
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(brassTrackIdx, tick);
         EXPECT_EQ(actualType.first, 0);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
@@ -835,7 +856,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
     // [THEN] "Open" starting from the 2nd measure
     const timestamp_t expectedOpenTimestamp = timestampFromTicks(score, 1920);
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(brassTrackIdx, tick);
         EXPECT_EQ(actualType.first, expectedOpenTimestamp);
         EXPECT_EQ(actualType.second, PlayingTechniqueType::Open);
     }
@@ -853,7 +874,7 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
         { timestampFromTicks(score, 1920), { ordinary } }, // 2nd measure (canceled by Open)
     };
 
-    actualArticulations = ctx.textArticulations();
+    actualArticulations = ctx.textArticulations(brassTrackRange.startTrack, brassTrackRange.endTrack);
     EXPECT_EQ(expectedArticulations, actualArticulations);
 
     delete score;
@@ -867,10 +888,12 @@ TEST_F(Engraving_PlaybackContextTests, Lyrics_Multiverses)
     ASSERT_EQ(score->parts().size(), 1);
 
     // [GIVEN] Context for parsing lyrics
-    PlaybackContext ctx;
+    PlaybackContext ctx(score);
 
     // [WHEN] Parse lyrics
-    ctx.update(score->parts().front()->id(), score);
+    const Part* part = score->parts().front();
+    const TrackRange trackRange = part->trackRange();
+    ctx.update(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] Lyrics have been parsed correctly
     auto makeSyllable = [](const String& text, bool hyphenedToNext = false) {
@@ -905,7 +928,7 @@ TEST_F(Engraving_PlaybackContextTests, Lyrics_Multiverses)
         { 6500000, { makeSyllable(u"world") } },
     };
 
-    const std::map<timestamp_t, SyllableEventList> actualEvents = ctx.syllables();
+    const std::map<timestamp_t, SyllableEventList> actualEvents = ctx.syllables(trackRange.startTrack, trackRange.endTrack);
     EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
     for (const auto& pair : actualEvents) {

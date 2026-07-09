@@ -33,7 +33,8 @@ class NoteArticulationsParser : public MetaParserBase<NoteArticulationsParser>
 public:
     static void buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
-    static void parsePlayingTechnique(const RenderingContext& ctx, muse::mpe::ArticulationMap& result, bool sustainAllowed = true);
+    static void parsePlayingTechnique(const RenderingContext& ctx, const track_idx_t trackIdx, muse::mpe::ArticulationMap& result,
+                                      bool sustainAllowed = true);
     static void parseGhostNote(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseNoteHead(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseSymbols(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
