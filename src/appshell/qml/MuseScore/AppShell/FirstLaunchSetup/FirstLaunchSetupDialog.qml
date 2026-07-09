@@ -32,7 +32,7 @@ StyledDialogView {
     title: qsTrc("appshell/gettingstarted", "Getting started")
 
     contentWidth: 576
-    contentHeight: 384
+    contentHeight: 416
 
     margins: 20
 

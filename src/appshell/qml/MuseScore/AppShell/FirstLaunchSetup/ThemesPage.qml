@@ -78,7 +78,9 @@ Page {
             Layout.alignment: Qt.AlignCenter
 
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
+            themeCodes: model.highContrastEnabled ? model.highContrastThemeCodes : model.generalThemeCodes
             currentThemeCode: model.currentThemeCode
+            highContrast: model.highContrastEnabled
 
             spacing: 48
 
@@ -98,9 +100,6 @@ Page {
 
             colors: model.accentColors
             currentColorIndex: model.currentAccentColorIndex
-
-            sampleSize: 20
-            spacing: 4
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: root.navigationStartRow + 3
