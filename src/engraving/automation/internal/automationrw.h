@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,32 +21,15 @@
  */
 #pragma once
 
+#include "global/types/bytearray.h"
+
 namespace mu::engraving {
 class IAutomation;
-class Score;
-class Segment;
-class Dynamic;
-class Hairpin;
-struct AutomationCurveKey;
 
-class AutomationController
+class AutomationRW
 {
 public:
-    AutomationController();
-    ~AutomationController();
-
-    void init(Score* score);
-
-    IAutomation* automation() const { return m_automation; }
-
-private:
-    void addSegmentPoints(const Segment* segment, int tickOffset);
-    void addDynamicPoints(const Dynamic* dynamic, int tickOffset);
-    void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key);
-
-    void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset);
-    void addHairpinPoints(const Hairpin* hairpin, int tickOffset, const AutomationCurveKey& key);
-
-    IAutomation* m_automation = nullptr;
+    static void read(IAutomation& automation, const muse::ByteArray& json);
+    static muse::ByteArray write(const IAutomation& automation, bool writeGenerated);
 };
 }

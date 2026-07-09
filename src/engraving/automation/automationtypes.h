@@ -22,11 +22,14 @@
 #pragma once
 
 #include "global/types/id.h"
+#include "global/types/number.h"
 
 #include "engraving/infrastructure/eid.h"
 
+#include <limits>
 #include <map>
 #include <optional>
+#include <set>
 
 namespace mu::engraving {
 struct AutomationPoint {
@@ -35,18 +38,24 @@ struct AutomationPoint {
         Exponential,
     };
 
-    double inValue = 0.; // [0; 1]
-    double outValue = 0.; // [0; 1]
+    muse::real_t inValue = 0.; // [0; 1]
+    muse::real_t outValue = 0.; // [0; 1]
     InterpolationType interpolation = InterpolationType::Linear;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
+
+    bool operator==(const AutomationPoint& p) const
+    {
+        return inValue == p.inValue
+               && outValue == p.outValue
+               && interpolation == p.interpolation
+               && itemId == p.itemId;
+    }
 };
 
 enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
 };
-
-using AutomationCurve = std::map<int /*utick*/, AutomationPoint>;
 
 struct AutomationCurveKey {
     AutomationType type = AutomationType::Unknown;
@@ -66,6 +75,34 @@ struct AutomationCurveKey {
     bool operator<(const AutomationCurveKey& k) const
     {
         return std::tie(type, staffId, voiceIdx) < std::tie(k.type, k.staffId, k.voiceIdx);
+    }
+};
+
+using utick_t = int;
+using AutomationCurve = std::map<utick_t, AutomationPoint>;
+using AutomationCurveMap = std::map<AutomationCurveKey, AutomationCurve>;
+
+struct AutomationChanges {
+    bool isFullReset = false;
+    std::set<AutomationCurveKey> affectedKeys;
+    utick_t tickFrom = -1;
+    utick_t tickTo = -1;
+
+    bool isEmpty() const
+    {
+        return !isFullReset && affectedKeys.empty();
+    }
+
+    void extend(const AutomationCurveKey& key, utick_t from, utick_t to)
+    {
+        affectedKeys.insert(key);
+        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
+        tickTo = std::max(tickTo, to);
+    }
+
+    void clear()
+    {
+        *this = {};
     }
 };
 }

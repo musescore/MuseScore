@@ -4019,15 +4019,11 @@ void Score::insertTime(const Fraction& tick, const Fraction& len)
         part->insertTime(tick, len);
     }
 
-    if (isMaster() && automation() && !automation()->isEmpty()) {
-        const int utick = repeatList().tick2utick(tick.ticks());
+    onTimeInserted(tick, len);
+}
 
-        if (len.negative()) {
-            automation()->removeTicks(utick + len.ticks(), utick);
-        } else if (len.isNotZero()) {
-            automation()->moveTicks(utick, utick + len.ticks());
-        }
-    }
+void Score::onTimeInserted(const Fraction&, const Fraction&)
+{
 }
 
 //---------------------------------------------------------

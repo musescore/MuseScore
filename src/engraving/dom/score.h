@@ -903,6 +903,7 @@ public:
     virtual IAutomation* automation() const;
 
 protected:
+    virtual void onTimeInserted(const Fraction& tick, const Fraction& len);
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);

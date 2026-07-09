@@ -53,7 +53,7 @@ class Revisions;
 class TempoMap;
 class TimeSigMap;
 class UndoStack;
-class AutomationController;
+class ScoreAutomationController;
 
 class MidiMapping
 {
@@ -193,6 +193,10 @@ public:
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
 
+    void updateAutomation(const ScoreChanges& changes);
+
+    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
+
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
@@ -220,7 +224,7 @@ private:
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
-    AutomationController* m_automationController = nullptr;
+    ScoreAutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;

@@ -21,9 +21,11 @@
  */
 #pragma once
 
-#include "automationtypes.h"
+#include <functional>
 
-#include "global/types/bytearray.h"
+#include "global/async/channel.h"
+
+#include "automationtypes.h"
 
 namespace mu::engraving {
 class IAutomation
@@ -31,27 +33,40 @@ class IAutomation
 public:
     virtual ~IAutomation() = default;
 
-    virtual void clear() = 0;
-
+    virtual const AutomationCurveMap& curves() const = 0;
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
-    virtual const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const = 0;
+    virtual const AutomationPoint* point(const AutomationCurveKey& key, utick_t tick) const = 0;
 
     virtual bool isEmpty() const = 0;
 
-    virtual void addPoint(const AutomationCurveKey& key, int utick, const AutomationPoint& p) = 0;
-    virtual void removePoint(const AutomationCurveKey& key, int utick) = 0;
-    virtual void movePoint(const AutomationCurveKey& key, int srcUtick, int dstUtick) = 0;
+    virtual void clear() = 0;
 
-    virtual void setPointInValue(const AutomationCurveKey& key, int utick, double value) = 0;
-    virtual void setPointOutValue(const AutomationCurveKey& key, int utick, double value) = 0;
+    //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
+    virtual void replaceCurves(AutomationCurveMap&& curves) = 0;
 
-    //! NOTE: moves all points with keys >= utickFrom by diff ticks
-    virtual void moveTicks(int utickFrom, int diff) = 0;
+    //! NOTE: full replacement; any existing key absent from the argument is removed
+    virtual void setCurves(AutomationCurveMap&& curves) = 0;
 
-    //! NOTE: removes points in [from, to], moves later points back to close the gap
-    virtual void removeTicks(int utickFrom, int utickTo) = 0;
+    virtual void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) = 0;
+    virtual void removePoint(const AutomationCurveKey& key, utick_t tick) = 0;
+    virtual void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) = 0;
 
-    virtual void read(const muse::ByteArray& json) = 0;
-    virtual muse::ByteArray toJson() const = 0;
+    using PointRemoveAccepted = std::function<bool (const AutomationCurveKey&, utick_t tick, const AutomationPoint&)>;
+    virtual void removePoints(const PointRemoveAccepted& accepted) = 0;
+
+    virtual void setPointInValue(const AutomationCurveKey& key, utick_t tick, double value) = 0;
+    virtual void setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value) = 0;
+
+    //! NOTE: moves all points with tick >= tickFrom by diff ticks
+    virtual void moveTicks(utick_t tickFrom, utick_t diff) = 0;
+
+    //! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
+    virtual void removeTicks(utick_t tickFrom, utick_t tickTo) = 0;
+
+    virtual muse::async::Channel<AutomationChanges> changed() const = 0;
+
+    virtual void beginTransaction() = 0;
+    virtual void commitTransaction() = 0;
+    virtual void rollbackTransaction() = 0;
 };
 }
