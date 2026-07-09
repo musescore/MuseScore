@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "engraving/types/types.h"
+
 #include "project/inotationwriter.h"
 
 #include "../ilyricsexportconfiguration.h"

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
-#define MU_APPSHELL_NOTATIONPAGEMODEL_H
+
+#pragma once
 
 #include <QQuickItem>
 
@@ -89,5 +89,3 @@ private:
     void updatePercussionPanelVisibility();
 };
 }
-
-#endif // MU_APPSHELL_NOTATIONPAGEMODEL_H

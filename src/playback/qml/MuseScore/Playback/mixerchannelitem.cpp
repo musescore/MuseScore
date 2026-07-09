@@ -26,6 +26,8 @@
 #include "translation.h"
 #include "log.h"
 
+#include "notation/inotationplayback.h"
+
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::audio;

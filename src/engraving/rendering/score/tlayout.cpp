@@ -158,6 +158,7 @@
 #include "dom/factory.h"
 
 #include "editing/editchord.h"
+#include "editing/noteinput.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -424,6 +425,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STAFF_TEXT:
         layoutStaffText(item_cast<const StaffText*>(item), static_cast<StaffText::LayoutData*>(ldata));
+        break;
+    case ElementType::STAVE_SHARING_LABEL:
+        layoutStaveSharingLabel(item_cast<const StaveSharingLabel*>(item), static_cast<StaffText::LayoutData*>(ldata));
         break;
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
@@ -2022,7 +2026,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
             const Rest* rest = toRest(e);
             x = rest->x() + rest->centerX();
         } else {
-            x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
+            x = e->x() + e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
         }
     }
 
@@ -2470,8 +2474,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
         } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             double left = note->shape().left();
-            if (left - note->x() > 0.0) {
-                ldata->moveX(-left);
+            if (left + note->x() < 0.0) {
+                ldata->moveX(left);
             } else {
                 ldata->moveX(-note->x());
             }
@@ -4766,7 +4770,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             bool error = !(score && score->getPosition(&pos, item->pos(), item->track()) && pos.segment);
             NoteVal nval;
             if (!error) {
-                nval = score->noteValForPosition(pos, item->accidentalType(), error);
+                nval = NoteInput::noteValForPosition(score, pos, item->accidentalType(), error);
             }
             if (!error) {
                 bool concertPitch = ctx.conf().styleB(Sid::concertPitch);
@@ -5338,6 +5342,13 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     if (SoundFlag* flag = item->soundFlag()) {
         layoutSoundFlag(flag, flag->mutldata());
     }
+}
+
+void TLayout::layoutStaveSharingLabel(const StaveSharingLabel* item, TextBase::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    TextLayout::layoutBaseTextBase(item, ldata);
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)

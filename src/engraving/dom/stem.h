@@ -26,6 +26,7 @@
 
 namespace mu::engraving {
 class Chord;
+class Transaction;
 
 class Stem final : public EngravingItem
 {
@@ -47,7 +48,7 @@ public:
     void dragGrip(EditData&) override;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void reset() override;
     PropertyValue getProperty(Pid propertyId) const override;

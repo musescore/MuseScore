@@ -751,9 +751,9 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         b->setSymId(SymId::breathMarkComma);
         EditData dd(nullptr);
         dd.dropElement = b;
-        score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
-        cr->drop(dd);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+            cr->drop(tx, dd);
+        });
     }
 
     // Check breath at measure 2 in score and part
@@ -777,9 +777,9 @@ TEST_F(Engraving_MeasureTests, breathInPart)
         b->setSymId(SymId::breathMarkTick);
         EditData dd(nullptr);
         dd.dropElement = b;
-        score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
-        cr->drop(dd);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+            cr->drop(tx, dd);
+        });
     }
 
     {

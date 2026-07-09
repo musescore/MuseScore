@@ -24,9 +24,12 @@
 
 #include "audio/common/audioerrors.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 #include "translation.h"
+
+#include "../playbackcommands.h"
+
+#include "log.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -49,8 +52,8 @@ OnlineSoundsController::OnlineSoundsController(const muse::modularity::ContextPt
 
 void OnlineSoundsController::regActions()
 {
-    dispatcher()->reg(this, "process-online-sounds", this, &OnlineSoundsController::processOnlineSounds);
-    dispatcher()->reg(this, "clear-online-sounds-cache", this, &OnlineSoundsController::clearOnlineSoundsCache);
+    commandsDispatcher()->onRequest(this, PROCESS_ONLINESOUNDS_COMMAND, [this]() { return processOnlineSounds(); });
+    commandsDispatcher()->onRequest(this, CLEAR_ONLINESOUNDS_CACHE_COMMAND, [this]() { return clearOnlineSoundsCache(); });
 }
 
 void OnlineSoundsController::reset()
@@ -221,18 +224,20 @@ void OnlineSoundsController::showLimitReachedErrorIfNeed(const InputProcessingPr
     interactive()->warning(muse::trc("playback", "Unable to process online sounds"), text);
 }
 
-void OnlineSoundsController::processOnlineSounds()
+muse::Ret OnlineSoundsController::processOnlineSounds()
 {
     IF_ASSERT_FAILED(playback()) {
-        return;
+        return make_ret(Ret::Code::InternalError);
     }
 
     for (const auto& pair : m_onlineSounds) {
         playback()->processInput(pair.first);
     }
+
+    return make_ok();
 }
 
-void OnlineSoundsController::clearOnlineSoundsCache()
+muse::Ret OnlineSoundsController::clearOnlineSoundsCache()
 {
     auto promise = interactive()->warning(
         muse::trc("playback", "Are you sure you want to clear online sounds cache?"),
@@ -254,4 +259,6 @@ void OnlineSoundsController::clearOnlineSoundsCache()
             playback()->clearCache(pair.first);
         }
     });
+
+    return make_ok();
 }

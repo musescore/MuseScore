@@ -62,7 +62,6 @@ public:
 
 private:
     static const muse::ui::UiActionList s_actions;
-    static const muse::ui::UiActionList s_undoRedoActions;
     static const muse::ui::UiActionList s_scoreConfigActions;
     static const muse::ui::UiActionList s_engravingDebuggingActions;
 

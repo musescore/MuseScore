@@ -23,8 +23,12 @@
 #include "notationautomationcontroller.h"
 
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
+
 #include "engraving/automation/iautomation.h"
 #include "engraving/dom/masterscore.h"
+
+#include "notation/inotationautomation.h"
+#include "notation/inotationelements.h"
 
 using namespace mu::notation;
 using namespace muse::uicomponents;
@@ -72,10 +76,10 @@ void NotationAutomationController::init()
 
     automation()->automationModeEnabledChanged().onNotify(this, [this]() {
         updatePolylinesGeometry();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
-    });
+    }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
 NotationAutomationController::SysStaffToPolylinesMap NotationAutomationController::createPolylinesForSystem(const System* system)

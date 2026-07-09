@@ -23,6 +23,8 @@
 
 #include "translation.h"
 
+#include "../editing/navigation.h"
+
 #include "anchors.h"
 #include "chord.h"
 #include "chordrest.h"
@@ -653,7 +655,7 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
         setTick(v.value<Fraction>());
-        if (score() && score()->spannerMap().removeSpanner(this)) {
+        if (score() && isInSpannerMap() && score()->spannerMap().removeSpanner(this)) {
             score()->addSpanner(this, /*computeStartEnd =*/ false);
         }
         break;
@@ -1354,7 +1356,7 @@ EngravingItem* Spanner::nextSegmentElement()
     if (s) {
         return s->firstElementForNavigation(staffIdx());
     }
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -1367,7 +1369,7 @@ EngravingItem* Spanner::prevSegmentElement()
     if (s) {
         return s->lastElementForNavigation(staffIdx());
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //---------------------------------------------------------
@@ -1384,7 +1386,7 @@ void Spanner::setTick(const Fraction& v)
 
     Score* score = this->score();
 
-    if (score) {
+    if (score && isInSpannerMap()) {
         score->spannerMap().setDirty();
     }
 }
@@ -1421,7 +1423,7 @@ void Spanner::setTicks(const Fraction& f)
 
     Score* score = this->score();
 
-    if (score) {
+    if (score && isInSpannerMap()) {
         score->spannerMap().setDirty();
     }
 }

@@ -22,6 +22,7 @@
 
 #include "drumsetloader.h"
 
+#include "notation/inotationparts.h"
 #include "notation/notationtypes.h"
 #include "notationscene/utilities/percussionutilities.h"
 
@@ -41,7 +42,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
     }
 
     // restore the default drumset when changing from MuseSounds to MS Basic / VST
-    if (resourceMeta.type != AudioResourceType::MuseSamplerSoundPack) {
+    if (!isResourceType(resourceMeta, AudioResourceType::MuseSamplerSoundPack)) {
         const InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(trackId.instrumentId);
         if (!templ.useDrumset) {
             return;
@@ -56,7 +57,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
         return;
     }
 
-    int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+    int instrumentId = muse::audio::intAttribute(resourceMeta, u"museUID");
 
     auto it = m_drumsetCache.find(instrumentId);
     if (it != m_drumsetCache.end()) {
@@ -83,7 +84,8 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
 
 void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackId& trackId, const Drumset& drumset)
 {
-    const Part* part = notation->parts()->part(trackId.partId);
+    INotationPartsPtr parts = notation->parts();
+    const Part* part = parts->part(trackId.partId);
     if (!part) {
         return;
     }
@@ -101,6 +103,6 @@ void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackI
         instrumentKey.partId = trackId.partId;
         instrumentKey.tick = Fraction::fromTicks(it->first);
 
-        notation->parts()->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
+        parts->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
     }
 }

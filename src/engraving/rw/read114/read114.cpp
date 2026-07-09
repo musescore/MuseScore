@@ -278,7 +278,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+        t->setFrameType(e.readBool() ? FrameType::RECTANGLE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
@@ -511,10 +511,12 @@ static void readFingering114(XmlReader& e, Fingering* fing)
         } else if (tag == "frame") {
             auto frame = e.readInt();
             if (frame) {
-                if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
+                if (isStringNumber) {
+                    // default value is circle for string number, rectangle is set in <circle> tag
                     fing->setFrameType(FrameType::CIRCLE);
-                } else {     //default value is square for stringnumber, circle is set in tag circle
-                    fing->setFrameType(FrameType::SQUARE);
+                } else {
+                    // default value is rectangle for string number, circle is set in <circle> tag
+                    fing->setFrameType(FrameType::RECTANGLE);
                 }
             } else {
                 fing->setFrameType(FrameType::NO_FRAME);
@@ -524,7 +526,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             if (circle) {
                 fing->setFrameType(FrameType::CIRCLE);
             } else {
-                fing->setFrameType(FrameType::SQUARE);
+                fing->setFrameType(FrameType::RECTANGLE);
             }
         } else {
             e.skipCurrentElement();
@@ -2816,7 +2818,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 }
             }
         } else if (tag == "playMode") {
-            masterScore->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "SyntiSettings") {
             masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {

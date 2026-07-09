@@ -19,16 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <functional>
 
 #include "async/notification.h"
 
+#include "inotation_fwd.h"
 #include "notationtypes.h"
-#include "inotationnoteinput.h"
-#include "inotationselection.h"
-#include "inotationselectionfilter.h"
 
 class QKeyEvent;
 class QInputMethodEvent;
@@ -53,6 +52,7 @@ public:
 
     // Visibility
     virtual void toggleVisible() = 0;
+    virtual void setSelectionVisible(bool visible) = 0;
 
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
@@ -198,6 +198,7 @@ public:
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
     virtual void flipSelectionHorizontally() = 0;
+    virtual void mirrorNotes() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;

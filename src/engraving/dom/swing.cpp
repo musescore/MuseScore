@@ -24,9 +24,10 @@
 
 #include "realfn.h"
 
+#include "../editing/navigation.h"
+
 #include "chord.h"
 #include "measure.h"
-#include "navigate.h"
 #include "staff.h"
 
 using namespace mu::engraving;
@@ -47,7 +48,7 @@ static bool isSubdivided(const ChordRest* chord, int swingUnit)
         return false;
     }
 
-    const ChordRest* prev = prevChordRest(chord);
+    const ChordRest* prev = Navigation::prevChordRest(chord);
     if (chord->actualTicks().ticks() < swingUnit || (prev && prev->actualTicks().ticks() < swingUnit)) {
         return true;
     }
@@ -75,7 +76,7 @@ void Swing::swingAdjustParams(const Chord* chord, const SwingParameters& params,
 
     int endTick = startTick + ticksDuration;
     if (endTick % swingBeat == params.swingUnit) {
-        const ChordRest* ncr = nextChordRest(chord);
+        const ChordRest* ncr = Navigation::nextChordRest(chord);
 
         if (!isSubdivided(ncr, params.swingUnit)) {
             gateTime = gateTime + (swingActualAdjust / 10);

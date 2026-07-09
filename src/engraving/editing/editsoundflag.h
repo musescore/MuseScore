@@ -37,7 +37,7 @@ public:
     ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::PlayingTechniqueCode& technique)
         : m_soundFlag(soundFlag), m_presets(presets), m_playingTechnique(technique) {}
 
-    void flip(EditData*) override;
+    void flip() override;
     UNDO_NAME("ChangeSoundFlag")
     UNDO_CHANGED_OBJECTS({ m_soundFlag })
 };

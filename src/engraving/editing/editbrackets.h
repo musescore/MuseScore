@@ -27,6 +27,16 @@
 #include "../dom/staff.h"
 
 namespace mu::engraving {
+class Score;
+class Transaction;
+
+class EditBrackets
+{
+public:
+    static void addBracket(Transaction& tx, Score* score);
+    static void addBraces(Transaction& tx, Score* score);
+};
+
 class RemoveBracket : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveBracket)
@@ -36,8 +46,8 @@ class RemoveBracket : public UndoableCommand
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     RemoveBracket(Staff* s, size_t l, BracketType t, size_t sp)
@@ -57,8 +67,8 @@ class AddBracket : public UndoableCommand
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     AddBracket(Staff* s, size_t l, BracketType t, size_t sp)

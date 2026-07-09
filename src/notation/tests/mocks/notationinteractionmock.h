@@ -40,6 +40,7 @@ public:
     MOCK_METHOD(muse::async::Channel<bool>, shadowNoteChanged, (), (const, override));
 
     MOCK_METHOD(void, toggleVisible, (), (override));
+    MOCK_METHOD(void, setSelectionVisible, (bool), (override));
 
     MOCK_METHOD(EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
     MOCK_METHOD(std::vector<EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
@@ -158,6 +159,7 @@ public:
     MOCK_METHOD(void, deleteSelection, (), (override));
     MOCK_METHOD(void, flipSelection, (), (override));
     MOCK_METHOD(void, flipSelectionHorizontally, (), (override));
+    MOCK_METHOD(void, mirrorNotes, (), (override));
     MOCK_METHOD(void, addTieToSelection, (), (override));
     MOCK_METHOD(void, addLaissezVibToSelection, (), (override));
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));

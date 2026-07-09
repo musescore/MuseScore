@@ -21,6 +21,7 @@
  */
 #include "appmenumodel.h"
 
+#include "log.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -29,7 +30,7 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
-#include "log.h"
+#include "notation/inotationundostack.h"
 
 using namespace muse;
 using namespace mu::appshell;
@@ -209,6 +210,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
+        makeMenuItem("file-import-audio-to-score"),
         makeMenuItem("file-export"),
         makeSeparator(),
         makeMenuItem("project-properties"),
@@ -243,17 +245,17 @@ MenuItemList AppMenuModel::makePublishOnlineSubItems()
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem("action://notation/undo"),
-        makeMenuItem("action://notation/redo"),
+        makeMenuItem("command://notation/undo"),
+        makeMenuItem("command://notation/redo"),
         makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-paste-half"),
         makeMenuItem("notation-paste-double"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("action://notation/delete"),
+        makeMenuItem("command://notation/delete"),
         makeSeparator(),
         makeMenuItem("notation-select-all"),
         makeMenuItem("notation-select-section"),
@@ -275,13 +277,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(ActionCode("action://notation/undo"));
+    MenuItem& undoItem = findItem(ActionCode("command://notation/undo"));
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(ActionCode("action://notation/redo"));
+    MenuItem& redoItem = findItem(ActionCode("command://notation/redo"));
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")
@@ -309,7 +311,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
         makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("playback-setup"),
+        makeMenuItem("command://playback/show-playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
@@ -473,7 +475,7 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     if (isMuseSamplerModuleAdded()) {
-        helpItems << makeMenuItem("clear-online-sounds-cache");
+        helpItems << makeMenuItem("command://playback/clear-onlinesounds-cache");
         helpItems << makeSeparator();
     }
 #endif
@@ -493,7 +495,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenuItem("playback-reload-cache"),
+        makeMenuItem("command://playback/reload-playback-cache"),
         makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 

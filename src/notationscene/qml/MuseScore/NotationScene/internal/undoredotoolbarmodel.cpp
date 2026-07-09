@@ -22,14 +22,16 @@
 
 #include "undoredotoolbarmodel.h"
 
+#include "notation/inotationundostack.h"
+
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"
 
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
-static const actions::ActionCode UNDO_ACTION_CODE("action://notation/undo");
-static const actions::ActionCode REDO_ACTION_CODE("action://notation/redo");
+static const actions::ActionCode UNDO_ACTION_CODE("command://notation/undo");
+static const actions::ActionCode REDO_ACTION_CODE("command://notation/redo");
 
 UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
     : AbstractToolBarModel(parent)
@@ -65,7 +67,7 @@ void UndoRedoToolbarModel::load()
 
 void UndoRedoToolbarModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
 {
-    auto stack = undoStack();
+    INotationUndoStackPtr stack = undoStack();
 
     for (const actions::ActionCode& code : codes) {
         if (code == UNDO_ACTION_CODE) {
@@ -103,7 +105,7 @@ void UndoRedoToolbarModel::updateItems()
 
 void UndoRedoToolbarModel::subsribeOnUndoStackChanges()
 {
-    auto stack = undoStack();
+    INotationUndoStackPtr stack = undoStack();
     if (!stack) {
         return;
     }

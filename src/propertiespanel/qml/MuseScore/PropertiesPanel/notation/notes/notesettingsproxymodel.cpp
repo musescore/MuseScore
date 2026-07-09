@@ -19,7 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notesettingsproxymodel.h"
+
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "propertiespanelmodelfactory.h"
 #include "translation.h"

@@ -30,6 +30,9 @@
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
+#include "inotation.h"
+#include "iexcerptnotation.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace muse;

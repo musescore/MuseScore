@@ -22,6 +22,9 @@
 
 #include "transposedialog.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;

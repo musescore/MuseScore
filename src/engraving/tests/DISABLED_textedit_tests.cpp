@@ -761,7 +761,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
 
     EditData dropSMUFL;
     dropSMUFL.dropElement = symbolSMUFL;
-    text->drop(dropSMUFL);
+    text->drop(score->transactionManager()->currentOrDummyTransaction(), dropSMUFL);
 
     // the bug happened when cursor is in symbol mode
     CharFormat* cf = text->cursor()->format();
@@ -771,7 +771,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
     FSymbol* fsymbol = new FSymbol(score);
     fsymbol->setCode(0x0001D10E);   // unicode hex code for '𝄎'
     dropFSymbol.dropElement = fsymbol;
-    text->drop(dropFSymbol);
+    text->drop(score->transactionManager()->currentOrDummyTransaction(), dropFSymbol);
 
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("<sym>noteheadWhole</sym>𝄎"));
@@ -793,7 +793,7 @@ void TestText::testDropBasicUnicodeWhenNotInEditMode()
     FSymbol* fsymbol = new FSymbol(score);
     fsymbol->setCode(0x4D);   // Basic Unicode code for 'M'
     dropFSymbol.dropElement = fsymbol;
-    text->drop(dropFSymbol);
+    text->drop(score->transactionManager()->currentOrDummyTransaction(), dropFSymbol);
 
     QCOMPARE(text->xmlText(), QString("M"));
 }
@@ -814,7 +814,7 @@ void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
     FSymbol* fsymbol = new FSymbol(score);
     fsymbol->setCode(0x0001D10E);   // Supplementary Unicode code for '𝄎'
     dropFSymbol.dropElement = fsymbol;
-    text->drop(dropFSymbol);
+    text->drop(score->transactionManager()->currentOrDummyTransaction(), dropFSymbol);
 
     QCOMPARE(text->xmlText(), QString("𝄎"));
 }

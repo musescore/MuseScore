@@ -224,15 +224,15 @@ void UndoStack::undo(EditData* ed)
     if (m_currentIndex) {
         --m_currentIndex;
         assert(m_currentIndex < m_transactions.size());
-        m_transactions[m_currentIndex]->undo(ed);
+        m_transactions[m_currentIndex]->undo();
     }
 }
 
-void UndoStack::redo(EditData* ed)
+void UndoStack::redo()
 {
     LOG_UNDO() << "called";
     if (canRedo()) {
-        m_transactions[m_currentIndex++]->redo(ed);
+        m_transactions[m_currentIndex++]->redo();
     }
 }
 
@@ -265,7 +265,7 @@ void UndoableTransaction::unwind()
     while (!m_commands.empty()) {
         UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
-        command->undo(nullptr);
+        command->undo();
         command->cleanup(false);
         delete command;
     }
@@ -363,7 +363,7 @@ void UndoableTransaction::applySelectionInfo(const SelectionInfo& info, Selectio
     }
 }
 
-void UndoableTransaction::undo(EditData* ed)
+void UndoableTransaction::undo()
 {
     m_redoInputState = m_score->inputState();
     fillSelectionInfo(m_redoSelectionInfo, m_score->selection());
@@ -371,7 +371,7 @@ void UndoableTransaction::undo(EditData* ed)
 
     for (auto it = m_commands.rbegin(); it != m_commands.rend(); ++it) {
         LOG_UNDO() << "<" << (*it)->name() << ">";
-        (*it)->undo(ed);
+        (*it)->undo();
     }
 
     m_score->setInputState(m_undoInputState);
@@ -381,7 +381,7 @@ void UndoableTransaction::undo(EditData* ed)
     }
 }
 
-void UndoableTransaction::redo(EditData* ed)
+void UndoableTransaction::redo()
 {
     m_undoInputState = m_score->inputState();
     fillSelectionInfo(m_undoSelectionInfo, m_score->selection());
@@ -389,7 +389,7 @@ void UndoableTransaction::redo(EditData* ed)
 
     for (UndoableCommand* command : m_commands) {
         LOG_UNDO() << "<" << command->name() << ">";
-        command->redo(ed);
+        command->redo();
     }
 
     m_score->setInputState(m_redoInputState);

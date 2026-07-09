@@ -681,19 +681,6 @@ NoteCaseType Harmony::bassRenderCase() const
     return noteCase;
 }
 
-bool Harmony::collectForDrawing() const
-{
-    if (!visible() && !score()->isShowInvisible()) {
-        return false;
-    }
-
-    if (Segment* parentSeg = getParentSeg()) {
-        return systemFlag() || (parentSeg->measure() && parentSeg->measure()->visible(staffIdx()));
-    }
-
-    return true;
-}
-
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -1452,7 +1439,7 @@ bool Harmony::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Harmony::drop(EditData& data)
+EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
@@ -1461,7 +1448,7 @@ EngravingItem* Harmony::drop(EditData& data)
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
-        TextBase::drop(data);
+        TextBase::drop(tx, data);
         renderer()->layoutText1(this);
         e = 0;          // cannot select
     } else {

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONPLAYBACK_H
-#define MU_NOTATION_INOTATIONPLAYBACK_H
+
+#pragma once
 
 #include "types/retval.h"
 #include "midi/miditypes.h"
@@ -79,6 +79,7 @@ public:
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) = 0;
     virtual void setLoopBoundariesEnabled(bool enabled) = 0;
     virtual bool isLoopEnabled() const = 0;
+    virtual muse::async::Channel<bool> loopEnabledChanged() const = 0;
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual muse::async::Notification loopBoundariesChanged() const = 0;
 
@@ -96,5 +97,3 @@ public:
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
 }
-
-#endif // MU_NOTATION_INOTATIONPLAYBACK_H

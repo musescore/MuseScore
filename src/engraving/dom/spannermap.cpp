@@ -46,6 +46,7 @@ SpannerMap::SpannerMap()
 
 void SpannerMap::update() const
 {
+    TRACEFUNC;
     IntervalList regularIntervals;
     IntervalList collisionFreeIntervals;
 

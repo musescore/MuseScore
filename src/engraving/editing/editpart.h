@@ -40,8 +40,8 @@ class InsertPart : public UndoableCommand
 
 public:
     InsertPart(Part* p, size_t targetPartIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertPart)
@@ -58,8 +58,8 @@ class RemovePart : public UndoableCommand
 
 public:
     RemovePart(Part*, size_t partIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemovePart)
@@ -76,8 +76,8 @@ class SetSoloist : public UndoableCommand
 
 public:
     SetSoloist(Part* p, bool b);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::SetSoloist)
     UNDO_NAME("SetSoloist")
@@ -91,7 +91,7 @@ class ChangePart : public UndoableCommand
     Part* part = nullptr;
     Instrument* instrument = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePart(Part*, Instrument*);
@@ -110,7 +110,7 @@ class ChangeInstrumentLong : public UndoableCommand
     Fraction tick;
     String longName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentLong(const Fraction&, Part*, const String&);
@@ -128,7 +128,7 @@ class ChangeInstrumentShort : public UndoableCommand
     Fraction tick;
     String shortName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentShort(const Fraction&, Part*, const String&);
@@ -148,7 +148,7 @@ class ChangeInstrumentGroupOptions : public UndoableCommand
     String longName;
     String shortName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentGroupOptions(const Fraction&, Part*, bool, const String&, const String&);
@@ -166,7 +166,7 @@ class ChangeInstrumentNumber : public UndoableCommand
     Fraction tick;
     int number;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentNumber(const Fraction&, Part*, int v);
@@ -184,7 +184,7 @@ class ChangeDrumset : public UndoableCommand
     Drumset drumset;
     Part* part = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeDrumset(Instrument* i, const Drumset& d, Part* p)
@@ -206,7 +206,7 @@ public:
     ChangeStringData(Instrument* instrument, const StringData& stringData)
         : m_instrument(instrument), m_stringData(stringData) {}
 
-    void flip(EditData*) override;
+    void flip() override;
     UNDO_NAME("ChangeStringData")
 };
 
@@ -218,7 +218,7 @@ class ChangePatch : public UndoableCommand
     InstrChannel* channel = nullptr;
     MidiPatch patch;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
@@ -234,7 +234,7 @@ class SetUserBankController : public UndoableCommand
     InstrChannel* channel = nullptr;
     bool val = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SetUserBankController(InstrChannel* c, bool v)

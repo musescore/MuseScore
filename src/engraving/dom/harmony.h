@@ -37,6 +37,7 @@ namespace mu::engraving {
 struct ChordDescription;
 class ParsedChord;
 class Score;
+class Transaction;
 
 enum class HarmonyType : unsigned char {
     STANDARD,
@@ -283,7 +284,7 @@ public:
     String screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
@@ -313,8 +314,6 @@ public:
     void setFontStyle(const FontStyle& val) override { m_fontStyle = val; }
     void setFamily(const String& val) override { m_fontFamily = val; }
     void setSize(const double& val) override { m_fontSize = val; }
-
-    bool collectForDrawing() const override;
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.

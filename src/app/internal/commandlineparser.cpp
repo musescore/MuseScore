@@ -182,7 +182,7 @@ void CommandLineParser::init()
     // Audio plugins
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
-    m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
+    m_parser.addOption(QCommandLineOption("register-audio-plugin-out", "Write audio plugin registration result to file", "path"));
 
     // Internal
     m_parser.addOption(internalCommandLineOption("score-display-name-override",
@@ -297,15 +297,7 @@ void CommandLineParser::parse(int argc, char** argv)
     if (m_parser.isSet("register-audio-plugin")) {
         m_options->runMode = IApplication::RunMode::AudioPluginRegistration;
         m_options->audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-audio-plugin"));
-        m_options->audioPluginRegistration.failedPlugin = false;
-    }
-
-    if (m_parser.isSet("register-failed-audio-plugin")) {
-        QStringList args1 = m_parser.positionalArguments();
-        m_options->runMode = IApplication::RunMode::AudioPluginRegistration;
-        m_options->audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-failed-audio-plugin"));
-        m_options->audioPluginRegistration.failedPlugin = true;
-        m_options->audioPluginRegistration.failCode = !args1.empty() ? args1[0].toInt() : -1;
+        m_options->audioPluginRegistration.outputFile = fromUserInputPath(m_parser.value("register-audio-plugin-out"));
     }
 
     // Converter mode

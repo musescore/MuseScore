@@ -22,14 +22,15 @@
 
 #include "timelineview.h"
 
-#include "widgets/timeline.h"
-
 #include <QApplication>
 #include <QQuickWindow>
 #include <QSplitter>
 #include <QTimer>
 
-#include "log.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
+#include "widgets/timeline.h"
 
 namespace mu::notation {
 class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget

@@ -27,6 +27,18 @@
 #include "../dom/spanner.h"
 
 namespace mu::engraving {
+class Score;
+class Segment;
+class Transaction;
+
+class EditSpanner
+{
+public:
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, const PointF& pos, bool systemStavesOnly = false);
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
+                           Segment* endSegment, bool ctrlModifier = false);
+};
+
 class ChangeSpannerElements : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpannerElements)
@@ -35,7 +47,7 @@ class ChangeSpannerElements : public UndoableCommand
     EngravingItem* startElement = nullptr;
     EngravingItem* endElement = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeSpannerElements(Spanner* s, EngravingItem* se, EngravingItem* ee)
@@ -54,7 +66,7 @@ class ChangeStartEndSpanner : public UndoableCommand
     EngravingItem* start = nullptr;
     EngravingItem* end = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStartEndSpanner(Spanner* sp, EngravingItem* s, EngravingItem* e)

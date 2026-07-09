@@ -35,6 +35,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
 
 #include "engraving/api/v1/score.h"
@@ -78,7 +79,7 @@ TEST_F(Engraving_SpannersTests, spanners01)
     gliss             = new Glissando(score->dummy());   // create a new element each time, as drop() will eventually delete it
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO FROM TOP STAFF TO BOTTOM STAFF
     // go to top note of first chord of next measure
@@ -95,7 +96,7 @@ TEST_F(Engraving_SpannersTests, spanners01)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO FROM BOTTOM STAFF TO TOP STAFF
     // go to bottom note of first chord of next measure
@@ -112,7 +113,7 @@ TEST_F(Engraving_SpannersTests, spanners01)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO OVER INTERVENING NOTES IN ANOTHER VOICE
     // go to top note of first chord of next measure
@@ -129,7 +130,7 @@ TEST_F(Engraving_SpannersTests, spanners01)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO OVER INTERVENING NOTES IN ANOTHER STAFF
     // go to top note of first chord of next measure
@@ -146,7 +147,7 @@ TEST_F(Engraving_SpannersTests, spanners01)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando01.mscx", SPANNERS_DATA_DIR + u"glissando01-ref.mscx"));
     delete score;
@@ -194,7 +195,7 @@ TEST_F(Engraving_SpannersTests, spanners03)
     gliss             = new Glissando(score->dummy());   // create a new element each time, as drop() will eventually delete it
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
     // go to last after-grace of chord and drop a glissando on it
@@ -206,7 +207,7 @@ TEST_F(Engraving_SpannersTests, spanners03)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO FROM MAIN NOTE TO BEFORE-GRACE OF NEXT CHORD
     // go to next chord
@@ -220,7 +221,7 @@ TEST_F(Engraving_SpannersTests, spanners03)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     // GLISSANDO FROM BEFORE-GRACE TO MAIN NOTE
     // go to next chord
@@ -236,7 +237,7 @@ TEST_F(Engraving_SpannersTests, spanners03)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-graces01.mscx", SPANNERS_DATA_DIR + u"glissando-graces01-ref.mscx"));
     delete score;
@@ -324,7 +325,7 @@ TEST_F(Engraving_SpannersTests, spanners06)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning03.mscx", SPANNERS_DATA_DIR + u"glissando-cloning03-ref.mscx"));
     delete score;
@@ -356,7 +357,7 @@ TEST_F(Engraving_SpannersTests, spanners07)
     gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
-    note->drop(dropData);
+    note->drop(score->transactionManager()->currentOrDummyTransaction(), dropData);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning04.mscx", SPANNERS_DATA_DIR + u"glissando-cloning04-ref.mscx"));
     delete score;
@@ -502,7 +503,6 @@ TEST_F(Engraving_SpannersTests, spanners12)
 
 TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
 {
-    EditData dropData(0);
     LayoutBreak* brk;
 
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"lyricsline06.mscx");
@@ -513,11 +513,14 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
     EXPECT_TRUE(msr);
     brk = Factory::createLayoutBreak(score->dummy()->measure());
     brk->setLayoutBreakType(LayoutBreakType::LINE);
+
+    EditData dropData(0);
     dropData.pos      = msr->pagePos();
     dropData.dropElement  = brk;
-    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
-    msr->drop(dropData);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving spanners tests"), [&](Transaction& tx) {
+        msr->drop(tx, dropData);
+    });
+
     // VERIFY SEGMENTS IN SYSTEMS AND THEN SCORE
     for (System* sys : score->systems()) {
         EXPECT_TRUE(sys->spannerSegments().size() == 1);

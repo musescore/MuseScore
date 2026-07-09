@@ -137,6 +137,9 @@ public:
     void addMMRestEndMeasureEID(Measure* mmrest, EID lastMeasureEID);
     void setMMRestEndMeasures();
 
+    void registerPastedEID(const EID& clipboardEid, const EID& fileEid);
+    EID resolvePastedEID(const EID& clipboardEid) const;
+
 private:
     void addConnectorInfo(std::shared_ptr<ConnectorInfoReader>);
     void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
@@ -170,5 +173,9 @@ private:
     Fraction m_timeSigForNextMeasure = Fraction(0, 1);
 
     std::unordered_map<Measure*, EID> m_mmRestEndMeasures;
+
+    // On pasting we must create new EIDs for the elements, as the serialized EIDs could be used elsewhere in the score
+    // This map preserves the link between the old EID used to reference items within the section of the score which was copied and the newly created EID
+    std::unordered_map<EID, EID> m_pastedEIDs;
 };
 }

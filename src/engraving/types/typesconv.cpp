@@ -346,6 +346,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::STAFF_TEXT, "StaffText",
           TranslatableString("engraving", "staff text(s)", nullptr, 1),
           TranslatableString("engraving", "Staff text(s)", nullptr, 1) },
+    Item{ ElementType::STAVE_SHARING_LABEL, "StaveSharingLabel",
+          TranslatableString("engraving", "stave sharing label(s)", nullptr, 1),
+          TranslatableString("engraving", "Stave sharing label(s)", nullptr, 1) },
     Item{ ElementType::SYSTEM_TEXT, "SystemText",
           TranslatableString("engraving", "system text(s)", nullptr, 1),
           TranslatableString("engraving", "System text(s)", nullptr, 1) },
@@ -1760,6 +1763,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::SYSTEM,            "system",               muse::TranslatableString("engraving", "System") },
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
+    { TextStyleType::STAVE_SHARING,     "staff",                muse::TranslatableString("engraving", "Stave sharing label") },
     { TextStyleType::EXPRESSION,        "expression",           muse::TranslatableString("engraving", "Expression") },
     { TextStyleType::DYNAMICS,          "dynamics",             muse::TranslatableString("engraving", "Dynamics") },
     { TextStyleType::HAIRPIN,           "hairpin",              muse::TranslatableString("engraving", "Hairpin") },

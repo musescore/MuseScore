@@ -381,3 +381,22 @@ void ReadContext::setMMRestEndMeasures()
         mmrest->setNext(nextMB);
     }
 }
+
+void ReadContext::registerPastedEID(const EID& clipboardEid, const EID& fileEid)
+{
+    m_pastedEIDs.emplace(clipboardEid, fileEid);
+}
+
+EID ReadContext::resolvePastedEID(const EID& clipboardEid) const
+{
+    if (!_pasteMode) {
+        return clipboardEid;
+    }
+
+    auto it = m_pastedEIDs.find(clipboardEid);
+    IF_ASSERT_FAILED(it != m_pastedEIDs.end()) {
+        return clipboardEid;
+    }
+
+    return it->second;
+}

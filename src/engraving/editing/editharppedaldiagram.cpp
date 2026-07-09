@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include "navigation.h"
+
 #include "../dom/harppedaldiagram.h"
 #include "../dom/part.h"
 #include "../dom/score.h"
@@ -34,7 +36,7 @@ using namespace mu::engraving;
 //   ChangeHarpPedalState
 //---------------------------------------------------------
 
-void ChangeHarpPedalState::flip(EditData*)
+void ChangeHarpPedalState::flip()
 {
     std::array<PedalPosition, HARP_STRING_NO> f_state = diagram->getPedalState();
     if (f_state == pedalState) {
@@ -59,7 +61,7 @@ std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
     if (nextDiagram) {
         objs.push_back(nextDiagram);
     } else {
-        objs.push_back(diagram->score()->lastElement());
+        objs.push_back(Navigation::lastElement(diagram->score()));
     }
     return objs;
 }
@@ -68,7 +70,7 @@ std::vector<EngravingObject*> ChangeHarpPedalState::objectItems() const
 //   ChangeSingleHarpPedal
 //---------------------------------------------------------
 
-void ChangeSingleHarpPedal::flip(EditData*)
+void ChangeSingleHarpPedal::flip()
 {
     HarpStringType f_type = type;
     PedalPosition f_pos = diagram->getPedalState()[type];
@@ -95,7 +97,7 @@ std::vector<EngravingObject*> ChangeSingleHarpPedal::objectItems() const
     if (nextDiagram) {
         objs.push_back(nextDiagram);
     } else {
-        objs.push_back(diagram->score()->lastElement());
+        objs.push_back(Navigation::lastElement(diagram->score()));
     }
     return objs;
 }

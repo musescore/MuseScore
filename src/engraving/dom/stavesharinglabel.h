@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "../types/types.h"
+#include "stafftextbase.h"
 
 namespace mu::engraving {
-class ChordRest;
-class Lyrics;
-class Segment;
+class StaveSharingLabel final : public StaffTextBase
+{
+    OBJECT_ALLOCATOR(engraving, StaveSharingLabel)
+    DECLARE_CLASSOF(ElementType::STAVE_SHARING_LABEL)
 
-struct ChordRestNavigateOptions {
-    bool skipGrace = false;
-    bool skipMeasureRepeatRests = true;
-    bool disableOverRepeats = false;
+public:
+    StaveSharingLabel(Segment* parent = nullptr, TextStyleType tid = TextStyleType::STAVE_SHARING);
+
+    bool isEditAllowed(EditData&) const override { return false; }
+
+    StaveSharingLabel* clone() const override { return new StaveSharingLabel(*this); }
 };
-
-extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
-extern ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = {});
-extern ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = {});
-extern Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement);
-extern Lyrics* prevLyrics(const Lyrics* lyrics);
-extern Lyrics* nextLyrics(const Lyrics* lyrics);
 } // namespace mu::engraving

@@ -23,6 +23,8 @@
 
 #include "midi/miditypes.h"
 
+#include "notation/inotationmidiinput.h"
+
 #include "log.h"
 
 using namespace mu::notation;

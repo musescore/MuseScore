@@ -31,8 +31,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.h
     ${CMAKE_CURRENT_LIST_DIR}/articulation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/articulation.h
-    ${CMAKE_CURRENT_LIST_DIR}/audio.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audio.h
     ${CMAKE_CURRENT_LIST_DIR}/bagpembell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bagpembell.h
     ${CMAKE_CURRENT_LIST_DIR}/barline.cpp
@@ -203,14 +201,11 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mmrestrange.h
     ${CMAKE_CURRENT_LIST_DIR}/mscore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mscore.h
-    ${CMAKE_CURRENT_LIST_DIR}/navigate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/navigate.h
     ${CMAKE_CURRENT_LIST_DIR}/note.cpp
     ${CMAKE_CURRENT_LIST_DIR}/note.h
     ${CMAKE_CURRENT_LIST_DIR}/noteval.h
     ${CMAKE_CURRENT_LIST_DIR}/notedot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notedot.h
-    ${CMAKE_CURRENT_LIST_DIR}/noteentry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.h
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
@@ -232,7 +227,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palmmute.h
     ${CMAKE_CURRENT_LIST_DIR}/part.cpp
     ${CMAKE_CURRENT_LIST_DIR}/part.h
-    ${CMAKE_CURRENT_LIST_DIR}/paste.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.h
     ${CMAKE_CURRENT_LIST_DIR}/pickscrape.cpp
@@ -261,7 +255,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rootitem.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
     ${CMAKE_CURRENT_LIST_DIR}/score.h
-    ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.h
     ${CMAKE_CURRENT_LIST_DIR}/segment.cpp
@@ -299,6 +292,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharinglabel.h
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.cpp
     ${CMAKE_CURRENT_LIST_DIR}/soundflag.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.cpp

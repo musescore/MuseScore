@@ -34,6 +34,9 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
+#include "../editing/editparentheses.h"
+#include "../editing/noteinput.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -56,7 +59,6 @@
 #include "laissezvib.h"
 #include "linkedobjects.h"
 #include "measure.h"
-#include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
 #include "octavedot.h"
@@ -1741,7 +1743,7 @@ bool Note::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Note::drop(EditData& data)
+EngravingItem* Note::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
 
@@ -1865,8 +1867,7 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES: {
-            std::list<Note*> note = { this };
-            score()->cmdAddParenthesesToNotes(note);
+            EditParentheses::addParenthesesToNotes(tx, { this });
             break;
         }
         case ActionIconType::STANDARD_BEND:
@@ -1899,7 +1900,7 @@ EngravingItem* Note::drop(EditData& data)
         default:
             break;
         }
-        return ch->drop(data);
+        return ch->drop(tx, data);
     }
 
     case ElementType::GUITAR_BEND:
@@ -2017,7 +2018,7 @@ EngravingItem* Note::drop(EditData& data)
         const ChordRest* cr = nullptr;
         if (data.modifiers & ShiftModifier) {
             // add note to chord
-            score()->addNote(ch, nval);
+            NoteInput::addNote(tx, score(), ch, nval);
         } else {
             // replace current chord
             Segment* seg = score()->setNoteRest(ch->segment(), t, nval,
@@ -2025,7 +2026,7 @@ EngravingItem* Note::drop(EditData& data)
             cr = seg ? toChordRest(seg->element(t)) : nullptr;
         }
         if (cr) {
-            score()->nextInputPos(cr, false);
+            NoteInput::nextInputPos(tx, score(), cr, false);
         }
         delete e;
     }
@@ -2033,7 +2034,7 @@ EngravingItem* Note::drop(EditData& data)
 
     case ElementType::CHORDLINE:
         toChordLine(e)->setNote(this);
-        return ch->drop(data);
+        return ch->drop(tx, data);
 
     default:
         Spanner* spanner;
@@ -2047,7 +2048,7 @@ EngravingItem* Note::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        return ch->drop(data);
+        return ch->drop(tx, data);
     }
     return 0;
 }
@@ -2780,17 +2781,31 @@ void Note::verticalDrag(EditData& ed)
         }
         int nStep = absStep(ned->line + lineOffset, score()->staff(idx)->clef(_tick));
         nStep = std::max(0, nStep);
-        int octave = nStep / 7;
-        int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
-        newPitch = std::clamp(newPitch, 0, 127);
+        int octave = nStep / STEP_DELTA_OCTAVE;
+        int newPitch = step2pitch(nStep) + octave * PITCH_DELTA_OCTAVE + int(accOffs);
 
-        int newTpc1 = step2tpc(nStep % 7, accOffs);
+        int newTpc1 = step2tpc(nStep % STEP_DELTA_OCTAVE, accOffs);
         int newTpc2 = newTpc1;
         if (concertPitch()) {
             newTpc2 = transposeTpc(newTpc1);
         } else {
             newPitch += staff()->transpose(_tick).chromatic;
             newTpc1 = transposeTpc(newTpc2);
+        }
+
+        int clampedPitch = clampPitch(newPitch);
+        if (clampedPitch != newPitch) {
+            // newTpc1/newTpc2 were derived from a step/accidental that no longer
+            // matches the clamped pitch; respell them so tpc and pitch stay in sync
+            Key key = score()->staff(idx)->key(_tick);
+            if (concertPitch()) {
+                newTpc1 = pitch2tpc(clampedPitch, key, Prefer::NEAREST);
+                newTpc2 = transposeTpc(newTpc1);
+            } else {
+                newTpc2 = pitch2tpc(clampedPitch - staff()->transpose(_tick).chromatic, key, Prefer::NEAREST);
+                newTpc1 = transposeTpc(newTpc2);
+            }
+            newPitch = clampedPitch;
         }
 
         for (Note* nn : tiedNotes()) {
@@ -4112,7 +4127,7 @@ bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     }
 
     // check pitch is in range
-    newPitch = clampPitch(newPitch, true);
+    newPitch = clampPitchOctaved(newPitch);
 
     // store new data
     EditNote::undoChangePitch(score(), this, newPitch, newTpc1, newTpc2);

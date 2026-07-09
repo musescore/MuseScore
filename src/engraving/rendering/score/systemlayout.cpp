@@ -1319,7 +1319,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
-    for (StaffText* st : elementsToLayout.staffText) {
+    for (StaffTextBase* st : elementsToLayout.staffText) {
         TLayout::layoutItem(st, ctx);
     }
 
@@ -1506,7 +1506,8 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 }
                 break;
             case ElementType::STAFF_TEXT:
-                elements.staffText.push_back(toStaffText(item));
+            case ElementType::STAVE_SHARING_LABEL:
+                elements.staffText.push_back(toStaffTextBase(item));
                 break;
             case ElementType::INSTRUMENT_CHANGE:
                 elements.instrChanges.push_back(toInstrumentChange(item));
@@ -2686,7 +2687,7 @@ bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment
 
 bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
 {
-    double elemShapeLeft = -elementShape.left();
+    double elemShapeLeft = elementShape.left();
     double elemShapeRight = elementShape.right();
     double elemShapeTop = elementShape.top();
     double elemShapeBottom = elementShape.bottom();

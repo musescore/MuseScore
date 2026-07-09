@@ -25,8 +25,9 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
-class Factory;
 class Chord;
+class Factory;
+class Transaction;
 
 //---------------------------------------------------------
 //   @@ Arpeggio
@@ -57,7 +58,7 @@ public:
     Chord* chord() const { return (Chord*)explicitParent(); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool isEditable() const override { return true; }
     bool isEditAllowed(EditData&) const override;

@@ -20,25 +20,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "navigate.h"
+#include "navigation.h"
 
-#include "box.h"
-#include "chord.h"
-#include "engravingitem.h"
-#include "fret.h"
-#include "guitarbend.h"
-#include "hammeronpulloff.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "measure.h"
-#include "measurerepeat.h"
-#include "note.h"
-#include "score.h"
-#include "segment.h"
-#include "soundflag.h"
-#include "spanner.h"
-#include "staff.h"
-#include "tapping.h"
+#include "../dom/box.h"
+#include "../dom/chord.h"
+#include "../dom/engravingitem.h"
+#include "../dom/fret.h"
+#include "../dom/guitarbend.h"
+#include "../dom/hammeronpulloff.h"
+#include "../dom/harmony.h"
+#include "../dom/lyrics.h"
+#include "../dom/measure.h"
+#include "../dom/measurerepeat.h"
+#include "../dom/mscore.h"
+#include "../dom/note.h"
+#include "../dom/rest.h"
+#include "../dom/score.h"
+#include "../dom/segment.h"
+#include "../dom/soundflag.h"
+#include "../dom/spanner.h"
+#include "../dom/staff.h"
+#include "../dom/system.h"
+#include "../dom/tapping.h"
+#include "../style/style.h"
+
+#include "mscoreview.h"
 
 using namespace mu;
 
@@ -143,7 +149,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
+ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -226,7 +232,7 @@ ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
+ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -300,7 +306,7 @@ ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
 }
 
 //---------------------------------------------------------
-//   upAlt
+//   chordNoteAbove
 //    element: Note, Rest, MMRest, or MeasureRepeat
 //    return: Note, Rest, MMRest, or MeasureRepeat
 //
@@ -308,11 +314,11 @@ ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& op
 //    move to previous track if at top of chord
 //---------------------------------------------------------
 
-EngravingItem* Score::upAlt(EngravingItem* element)
+EngravingItem* Navigation::chordNoteAbove(Score* score, EngravingItem* element)
 {
     EngravingItem* re = 0;
     if (element->isRestFamily()) {
-        re = prevTrack(toRest(element));
+        re = score->prevTrack(toRest(element));
     } else if (element->isNote()) {
         Note* note = toNote(element);
         Chord* chord = note->chord();
@@ -322,7 +328,7 @@ EngravingItem* Score::upAlt(EngravingItem* element)
         if (i != notes.end()) {
             re = *i;
         } else {
-            re = prevTrack(chord);
+            re = score->prevTrack(chord);
             if (re->track() == chord->track()) {
                 re = element;
             }
@@ -338,26 +344,25 @@ EngravingItem* Score::upAlt(EngravingItem* element)
 }
 
 //---------------------------------------------------------
-//   upAltCtrl
-//    select top note in chord
+//   topNoteInChord
 //---------------------------------------------------------
 
-Note* Score::upAltCtrl(Note* note) const
+Note* Navigation::topNoteInChord(Note* note)
 {
     return note->chord()->upNote();
 }
 
 //---------------------------------------------------------
-//   downAlt
+//   chordNoteBelow
 //    return next lower pitched note in chord
 //    move to next track if at bottom of chord
 //---------------------------------------------------------
 
-EngravingItem* Score::downAlt(EngravingItem* element)
+EngravingItem* Navigation::chordNoteBelow(Score* score, EngravingItem* element)
 {
     EngravingItem* re = 0;
     if (element->isRestFamily()) {
-        re = nextTrack(toRest(element));
+        re = score->nextTrack(toRest(element));
     } else if (element->isNote()) {
         Note* note   = toNote(element);
         Chord* chord = note->chord();
@@ -367,7 +372,7 @@ EngravingItem* Score::downAlt(EngravingItem* element)
             --i;
             re = *i;
         } else {
-            re = nextTrack(chord);
+            re = score->nextTrack(chord);
             if (re->track() == chord->track()) {
                 re = element;
             }
@@ -383,11 +388,10 @@ EngravingItem* Score::downAlt(EngravingItem* element)
 }
 
 //---------------------------------------------------------
-//   downAltCtrl
-//    niedrigste Note in Chord selektieren
+//   bottomNoteInChord
 //---------------------------------------------------------
 
-Note* Score::downAltCtrl(Note* note) const
+Note* Navigation::bottomNoteInChord(Note* note)
 {
     return note->chord()->downNote();
 }
@@ -396,15 +400,15 @@ Note* Score::downAltCtrl(Note* note) const
 //   firstElement
 //---------------------------------------------------------
 
-EngravingItem* Score::firstElement(bool frame)
+EngravingItem* Navigation::firstElement(Score* score, bool frame)
 {
     if (frame) {
-        MeasureBase* mb = measures()->first();
+        MeasureBase* mb = score->measures()->first();
         if (mb && mb->isBox()) {
             return mb;
         }
     }
-    Segment* s = firstSegmentMM(SegmentType::All);
+    Segment* s = score->firstSegmentMM(SegmentType::All);
     return s ? s->element(0) : nullptr;
 }
 
@@ -412,10 +416,10 @@ EngravingItem* Score::firstElement(bool frame)
 //   lastElement
 //---------------------------------------------------------
 
-EngravingItem* Score::lastElement(bool frame)
+EngravingItem* Navigation::lastElement(Score* score, bool frame)
 {
     if (frame) {
-        MeasureBase* mb = measures()->last();
+        MeasureBase* mb = score->measures()->last();
         if (mb && mb->isBox()) {
             auto boxChildren = toChildPairsSet(mb);
             if (!boxChildren.empty()) {
@@ -425,12 +429,12 @@ EngravingItem* Score::lastElement(bool frame)
         }
     }
     EngravingItem* re = 0;
-    Segment* seg = lastSegmentMM();
+    Segment* seg = score->lastSegmentMM();
     if (!seg) {
         return nullptr;
     }
     while (true) {
-        for (size_t i = (staves().size() - 1) * VOICES; i < staves().size() * VOICES; i++) {
+        for (size_t i = (score->staves().size() - 1) * VOICES; i < score->staves().size() * VOICES; i++) {
             if (seg->element(i)) {
                 re = seg->element(i);
             }
@@ -449,7 +453,7 @@ EngravingItem* Score::lastElement(bool frame)
 //   upStaff
 //---------------------------------------------------------
 
-ChordRest* Score::upStaff(ChordRest* cr)
+ChordRest* Navigation::upStaff(ChordRest* cr)
 {
     Segment* segment = cr->segment();
 
@@ -476,12 +480,12 @@ ChordRest* Score::upStaff(ChordRest* cr)
 //   downStaff
 //---------------------------------------------------------
 
-ChordRest* Score::downStaff(ChordRest* cr)
+ChordRest* Navigation::downStaff(Score* score, ChordRest* cr)
 {
     Segment* segment = cr->segment();
-    track_idx_t tracks = nstaves() * VOICES;
+    track_idx_t tracks = score->nstaves() * VOICES;
 
-    if (cr->staffIdx() == nstaves() - 1) {
+    if (cr->staffIdx() == score->nstaves() - 1) {
         return cr;
     }
 
@@ -498,6 +502,25 @@ ChordRest* Score::downStaff(ChordRest* cr)
         }
     }
     return 0;
+}
+
+//---------------------------------------------------------
+//   topStaff
+//---------------------------------------------------------
+
+ChordRest* Navigation::topStaff(Score* score, ChordRest* cr)
+{
+    // Go to top-most staff of current or first measure depending upon active selection
+    const auto* destinationMeasure = cr ? cr->measure() : score->firstMeasure();
+    if (destinationMeasure) {
+        // Accommodate for MMRest
+        if (score->style().styleB(Sid::createMultiMeasureRests) && destinationMeasure->hasMMRest()) {
+            destinationMeasure = destinationMeasure->coveringMMRestOrThis();
+        }
+        // Get first ChordRest of top staff
+        cr = destinationMeasure->first()->nextChordRest(0, false);
+    }
+    return cr;
 }
 
 //---------------------------------------------------------
@@ -599,7 +622,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
 //   nextMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRest)
+ChordRest* Navigation::nextMeasure(Score* score, ChordRest* element, bool selectBehavior, bool mmRest)
 {
     if (!element) {
         return nullptr;
@@ -615,11 +638,11 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
     Fraction endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
     bool last = false;
 
-    if (selection().isRange()) {
-        if (element->tick() != endTick && selection().tickEnd() <= endTick) {
+    if (score->selection().isRange()) {
+        if (element->tick() != endTick && score->selection().tickEnd() <= endTick) {
             measure = element->measure();
             last = true;
-        } else if (element->tick() == endTick && selection().isEndActive()) {
+        } else if (element->tick() == endTick && score->selection().isEndActive()) {
             last = true;
         }
     } else if (element->tick() != endTick && selectBehavior) {
@@ -650,7 +673,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
 //   prevMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
+ChordRest* Navigation::prevMeasure(Score* score, ChordRest* element, bool mmRest)
 {
     if (!element) {
         return nullptr;
@@ -666,7 +689,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
     Fraction startTick = element->measure()->first()->nextChordRest(element->track())->tick();
     bool last = false;
 
-    if (selection().isRange() && selection().isEndActive() && selection().startSegment()->tick() <= startTick) {
+    if (score->selection().isRange() && score->selection().isEndActive() && score->selection().startSegment()->tick() <= startTick) {
         last = true;
     } else if (element->tick() != startTick) {
         measure = element->measure();
@@ -746,7 +769,7 @@ EngravingItem* Score::nextElement()
             if (next) {
                 return next;
             } else {
-                return score()->firstElement();
+                return Navigation::firstElement(score());
             }
         }
         case ElementType::TAPPING:
@@ -937,7 +960,7 @@ EngravingItem* Score::nextElement()
         }
         e = e->parentItem();
     }
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -1190,7 +1213,7 @@ EngravingItem* Score::prevElement()
         }
         e = e->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //---------------------------------------------------------
@@ -1199,7 +1222,7 @@ EngravingItem* Score::prevElement()
 //    - currently used to determine the first lyric of a melisma
 //---------------------------------------------------------
 
-Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
+Lyrics* Navigation::lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
 {
     while (seg) {
         const track_idx_t strack = staffIdx * VOICES;
@@ -1216,7 +1239,7 @@ Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, cons
     return nullptr;
 }
 
-Lyrics* prevLyrics(const Lyrics* lyrics)
+Lyrics* Navigation::prevLyrics(const Lyrics* lyrics)
 {
     Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {
@@ -1236,7 +1259,7 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
     return nullptr;
 }
 
-Lyrics* nextLyrics(const Lyrics* lyrics)
+Lyrics* Navigation::nextLyrics(const Lyrics* lyrics)
 {
     Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {
@@ -1255,5 +1278,390 @@ Lyrics* nextLyrics(const Lyrics* lyrics)
         }
     }
     return nullptr;
+}
+
+//---------------------------------------------------------
+//   move
+//    move current selection
+//---------------------------------------------------------
+
+EngravingItem* Navigation::move(Score* score, const String& cmd)
+{
+    ChordRest* cr { nullptr };
+    Box* box { nullptr };
+    if (score->noteEntryMode()) {
+        // if selection exists and is grace note, use it
+        // otherwise use chord/rest at input position
+        // also use it if we are moving to next chord
+        // to catch up with the cursor and not move the selection by 2 positions
+        cr = score->selection().cr();
+        if (cr && (cr->isGrace() || cmd == u"next-chord" || cmd == u"prev-chord")) {
+        } else {
+            cr = score->inputState().cr();
+        }
+    } else if (score->selection().activeCR()) {
+        cr = score->selection().activeCR();
+    } else {
+        cr = score->selection().lastChordRest();
+    }
+
+    // no chord/rest found? look for another type of element,
+    // but commands [empty-trailing-measure] and [top-staff] don't
+    // necessarily need an active selection for appropriate functioning
+    if (!cr && cmd != u"empty-trailing-measure" && cmd != u"top-staff") {
+        if (score->selection().elements().empty()) {
+            return 0;
+        }
+        // retrieve last element of section list
+        EngravingItem* el = score->selection().elements().back();
+        EngravingItem* trg = nullptr;
+
+        // get parent of element and process accordingly:
+        // trg is the element to select on "next-chord" cmd
+        // cr is the ChordRest to move from on other cmd's
+        track_idx_t track = el->track();                // keep note of element track
+        if (!el->isBox()) {
+            el = el->parentItem();
+        }
+        // element with no parent (eg, a newly-added line) - no way to find context
+        if (!el) {
+            return 0;
+        }
+        switch (el->type()) {
+        case ElementType::NOTE:                     // a note is a valid target
+            trg = el;
+            cr  = toNote(el)->chord();
+            break;
+        case ElementType::CHORD:                    // a chord or a rest are valid targets
+        case ElementType::REST:
+        case ElementType::MMREST:
+            trg = el;
+            cr  = toChordRest(trg);
+            break;
+        case ElementType::SEGMENT: {                // from segment go to top chordrest in segment
+            Segment* seg  = toSegment(el);
+            // if segment is not chord/rest or grace, move to next chord/rest or grace segment
+            if (!seg->isChordRest()) {
+                seg = seg->next1(SegmentType::ChordRest);
+                if (!seg) {                 // if none found, return failure
+                    return 0;
+                }
+            }
+            // segment for sure contains chords/rests,
+            size_t size = seg->elist().size();
+            // if segment has a chord/rest in original element track, use it
+            if (track < size && seg->element(track)) {
+                trg  = seg->element(track);
+                cr = toChordRest(trg);
+                break;
+            }
+            // if not, get topmost chord/rest
+            for (size_t i = 0; i < size; i++) {
+                if (seg->element(i)) {
+                    trg  = seg->element(i);
+                    cr = toChordRest(trg);
+                    break;
+                }
+            }
+            break;
+        }
+        case ElementType::HBOX:           // fallthrough
+        case ElementType::VBOX:           // fallthrough
+        case ElementType::TBOX:
+        case ElementType::FBOX:
+            box = toBox(el);
+            break;
+        default:                                // on anything else, return failure
+            return 0;
+        }
+
+        // if something found and command is forward, the element found is the destination
+        if (trg && cmd == u"next-chord") {
+            // if chord, go to topmost note
+            if (trg->isChord()) {
+                trg = toChord(trg)->upNote();
+            }
+            score->setPlayNote(true);
+            score->select(trg, SelectType::SINGLE, 0);
+            return trg;
+        }
+        // if no chordrest and no box (frame) found, do nothing
+        if (!cr && !box) {
+            return 0;
+        }
+        // if some chordrest found, continue with default processing
+    }
+
+    EngravingItem* el = nullptr;
+    Segment* ois = score->noteEntryMode() ? score->inputState().segment() : nullptr;
+    Measure* oim = ois ? ois->measure() : nullptr;
+
+    if (cmd == u"next-chord" && cr) {
+        // note input cursor
+        if (score->noteEntryMode()) {
+            score->inputState().moveToNextInputPos();
+        }
+
+        // selection "cursor"
+        // find next chordrest, which might be a grace note
+        // this may override note input cursor
+        el = Navigation::nextChordRest(cr);
+
+        // Skip gap rests if we're not in note entry mode...
+        while (!score->noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
+            el = Navigation::nextChordRest(toChordRest(el));
+        }
+        if (el && score->noteEntryMode()) {
+            // do not use if not in original or new measure (don't skip measures)
+            Measure* m = toChordRest(el)->measure();
+            Segment* nis = score->inputState().segment();
+            Measure* nim = nis ? nis->measure() : nullptr;
+            if (m != oim && m != nim) {
+                el = cr;
+            }
+            // do not use if new input segment is current cr
+            // this means input cursor just caught up to current selection
+            else if (cr && nis == cr->segment()) {
+                el = cr;
+            }
+        } else if (!el) {
+            if (score->noteEntryMode()) {
+                score->inputState().setBeyondScore(true);
+            }
+            el = cr;
+        }
+    } else if (cmd == u"prev-chord" && cr) {
+        // note input cursor
+        if (score->noteEntryMode()) {
+            if (score->inputState().beyondScore()) {
+                score->inputState().setBeyondScore(false);
+            } else if (score->inputState().segment()) {
+                Measure* m = score->inputState().segment()->measure();
+                Segment* s = score->inputState().segment()->prev1(SegmentType::ChordRest);
+                track_idx_t track = score->inputState().track();
+                for (; s; s = s->prev1(SegmentType::ChordRest)) {
+                    if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
+                        if (s->element(track)) {
+                            if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
+                                continue;
+                            }
+                        }
+                        break;
+                    }
+                }
+                score->inputState().moveInputPos(s);
+            }
+        }
+
+        // selection "cursor"
+        // find previous chordrest, which might be a grace note
+        // this may override note input cursor
+        el = Navigation::prevChordRest(cr);
+
+        // Skip gap rests if we're not in note entry mode...
+        while (!score->noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
+            el = Navigation::prevChordRest(toChordRest(el));
+        }
+        if (el && score->noteEntryMode()) {
+            // do not use if not in original or new measure (don't skip measures)
+            Measure* m = toChordRest(el)->measure();
+            Segment* nis = score->inputState().segment();
+            Measure* nim = nis ? nis->measure() : nullptr;
+            if (m != oim && m != nim) {
+                el = cr;
+            }
+            // do not use if new input segment is current cr
+            // this means input cursor just caught up to current selection
+            else if (cr && nis == cr->segment()) {
+                el = cr;
+            }
+        } else if (!el) {
+            el = cr;
+        }
+    } else if (cmd == u"next-measure") {
+        if (box && box->nextMeasure() && box->nextMeasure()->first()) {
+            el = box->nextMeasure()->first()->nextChordRest(0, false);
+        }
+        if (cr) {
+            if (score->noteEntryMode() && cr->measure() == score->lastMeasure()) {
+                score->inputState().setBeyondScore(true);
+                el = score->lastMeasure()->lastChordRest(cr->track());
+            } else {
+                el = Navigation::nextMeasure(score, cr);
+            }
+        }
+        if (el && score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"prev-measure") {
+        if (box && box->prevMeasure() && box->prevMeasure()->first()) {
+            el = box->prevMeasure()->first()->nextChordRest(0, false);
+        }
+        if (score->noteEntryMode() && score->inputState().beyondScore()) {
+            score->inputState().setBeyondScore(false);
+            el = score->lastMeasure()->first()->nextChordRest(score->inputState().track(), false);
+        } else if (cr) {
+            el = Navigation::prevMeasure(score, cr);
+        }
+        if (el && score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"next-system" && cr) {
+        if (score->noteEntryMode() && cr->measure()->system()->endTick() == score->endTick()) {
+            score->inputState().setBeyondScore(true);
+            el = score->lastMeasure()->lastChordRest(cr->track());
+        } else {
+            el = score->cmdNextPrevSystem(cr, true);
+        }
+        if (el && score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"prev-system" && cr) {
+        if (score->noteEntryMode() && score->inputState().beyondScore()) {
+            score->inputState().setBeyondScore(false);
+        }
+        el = score->cmdNextPrevSystem(cr, false);
+        if (score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"next-frame") {
+        auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
+        el = measureBase ? score->cmdNextPrevFrame(measureBase, true) : nullptr;
+    } else if (cmd == u"prev-frame") {
+        auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
+        el = measureBase ? score->cmdNextPrevFrame(measureBase, false) : nullptr;
+    } else if (cmd == u"next-section") {
+        if (!(el = box)) {
+            el = cr;
+        }
+        el = score->cmdNextPrevSection(el, true);
+    } else if (cmd == u"prev-section") {
+        if (!(el = box)) {
+            el = cr;
+        }
+        el = score->cmdNextPrevSection(el, false);
+    } else if (cmd == u"next-track" && cr) {
+        el = score->nextTrack(cr);
+        if (score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"prev-track" && cr) {
+        el = score->prevTrack(cr);
+        if (score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"top-staff") {
+        el = cr ? Navigation::topStaff(score, cr) : Navigation::topStaff(score);
+        if (score->noteEntryMode()) {
+            score->inputState().moveInputPos(el);
+        }
+    } else if (cmd == u"empty-trailing-measure") {
+        const Measure* ftm = nullptr;
+        if (!cr) {
+            ftm = score->firstTrailingMeasure() ? score->firstTrailingMeasure() : score->lastMeasure();
+        } else {
+            ftm = score->firstTrailingMeasure(&cr) ? score->firstTrailingMeasure(&cr) : score->lastMeasure();
+        }
+        if (ftm) {
+            if (score->style().styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
+                ftm = ftm->coveringMMRestOrThis();
+            }
+            el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+        }
+        // Note: Due to the nature of this command as being preparatory for input,
+        // Note-Entry is activated from within ScoreView::cmd()
+        score->inputState().moveInputPos(el);
+    }
+
+    if (el) {
+        if (el->isChord()) {
+            el = toChord(el)->upNote();             // originally downNote
+        }
+        score->setPlayNote(true);
+        if (score->noteEntryMode()) {
+            if (score->inputState().beyondScore()) {
+                // don't select el when cursor is beyond score
+                score->deselectAll();
+            } else if (score->inputState().cr() || !el->selected()) {
+                // if cursor moved into a gap, selection cannot follow
+                // only select & play el if it was not already selected (does not normally happen)
+                score->select(el, SelectType::SINGLE, 0);
+            } else {
+                score->setPlayNote(false);
+            }
+            for (MuseScoreView* view : score->getViewer()) {
+                view->moveCursor();
+            }
+        } else {
+            score->select(el, SelectType::SINGLE, 0);
+        }
+    }
+    return el;
+}
+
+//---------------------------------------------------------
+//   selectMove
+//---------------------------------------------------------
+
+EngravingItem* Navigation::selectMove(Score* score, const String& cmd)
+{
+    ChordRest* cr;
+    if (score->selection().activeCR()) {
+        cr = score->selection().activeCR();
+    } else {
+        cr = score->selection().lastChordRest();
+    }
+    if (!cr && score->noteEntryMode()) {
+        cr = score->inputState().cr();
+    }
+    if (!cr) {
+        return 0;
+    }
+
+    ChordRest* el = nullptr;
+    ChordRestNavigateOptions options;
+    options.skipGrace = true;
+    options.skipMeasureRepeatRests = false;
+    if (cmd == u"select-next-chord") {
+        el = Navigation::nextChordRest(cr, options);
+    } else if (cmd == u"select-prev-chord") {
+        el = Navigation::prevChordRest(cr, options);
+    } else if (cmd == u"select-next-measure") {
+        el = Navigation::nextMeasure(score, cr, true, true);
+    } else if (cmd == u"select-prev-measure") {
+        el = Navigation::prevMeasure(score, cr, true);
+    } else if (cmd == u"select-begin-line") {
+        Measure* measure = cr->segment()->measure()->system()->firstMeasure();
+        if (!measure) {
+            return 0;
+        }
+        el = measure->first()->nextChordRest(cr->track());
+    } else if (cmd == u"select-end-line") {
+        Measure* measure = cr->segment()->measure()->system()->lastMeasure();
+        if (!measure) {
+            return 0;
+        }
+        el = measure->last()->nextChordRest(cr->track(), true);
+    } else if (cmd == u"select-begin-score") {
+        Measure* measure = score->firstMeasureMM();
+        if (!measure) {
+            return 0;
+        }
+        el = measure->first()->nextChordRest(cr->track());
+    } else if (cmd == u"select-end-score") {
+        Measure* measure = score->lastMeasureMM();
+        if (!measure) {
+            return 0;
+        }
+        el = measure->last()->nextChordRest(cr->track(), true);
+    } else if (cmd == u"select-staff-above") {
+        el = Navigation::upStaff(cr);
+    } else if (cmd == u"select-staff-below") {
+        el = Navigation::downStaff(score, cr);
+    }
+    if (el) {
+        score->select(el, SelectType::RANGE, el->staffIdx());
+    }
+    return el;
 }
 }

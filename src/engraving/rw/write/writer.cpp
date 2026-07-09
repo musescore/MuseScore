@@ -139,11 +139,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
         xml.tag("layoutMode", "system");
     }
 
-    if (score->m_audio) {
-        xml.tag("playMode", int(score->m_playMode));
-        TWrite::write(score->m_audio, xml, ctx);
-    }
-
     if (score->isMaster() && !MScore::testMode) {
         score->m_synthesizerState.write(xml);
     }
@@ -231,8 +226,10 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     ctx.setCurTrack(0);
 
-    // Let's decide: write midi mapping to a file or not
-    score->masterScore()->checkMidiMapping();
+    if (score->isMaster()) {
+        // Let's decide: write midi mapping to a file or not
+        score->masterScore()->checkMidiMapping();
+    }
 
     auto shouldWritePart = [&ctx, score, staffStart, staffEnd](const Part* part) {
         if (!ctx.shouldWriteRange()) {

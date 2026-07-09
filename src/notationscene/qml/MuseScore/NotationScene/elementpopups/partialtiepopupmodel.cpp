@@ -25,6 +25,9 @@
 #include "engraving/dom/partialtie.h"
 #include "engraving/dom/tie.h"
 
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::uicomponents;
@@ -51,7 +54,11 @@ bool PartialTiePopupModel::canOpen(const EngravingItem* element)
     }
 
     Tie* tieItem = toTieSegment(element)->tie();
-    if (!tieItem || !tieItem->tieJumpPoints()) {
+    if (!tieItem) {
+        return false;
+    }
+    tieItem->updatePossibleJumpPoints();
+    if (!tieItem->tieJumpPoints()) {
         return false;
     }
 

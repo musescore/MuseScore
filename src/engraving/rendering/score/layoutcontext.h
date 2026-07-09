@@ -202,7 +202,7 @@ public:
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);
-    void undo(UndoableCommand* cmd, EditData* ed = nullptr) const;
+    void undo(UndoableCommand* cmd) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
     void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);

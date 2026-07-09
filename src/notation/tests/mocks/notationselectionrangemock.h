@@ -24,7 +24,7 @@
 
 #include <gmock/gmock.h>
 
-#include "notation/internal/inotationselectionrange.h"
+#include "notation/inotationselectionrange.h"
 
 namespace mu::notation {
 class NotationSelectionRangeMock : public INotationSelectionRange

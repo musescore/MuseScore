@@ -199,7 +199,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
             continue;
         }
 
-        double chordX = -chordShape.left();
+        double chordX = chordShape.left();
         double diff = chordX - arpX;
 
         if (!muse::RealIsNull(diff)) {

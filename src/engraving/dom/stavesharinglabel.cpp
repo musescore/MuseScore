@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,34 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_AUDIO_H
-#define MU_ENGRAVING_AUDIO_H
-
-#include "global/allocator.h"
-#include "types/bytearray.h"
-#include "types/string.h"
+#include "stavesharinglabel.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   Audio
-//---------------------------------------------------------
-
-class Audio
-{
-    OBJECT_ALLOCATOR(engraving, Audio)
-
-public:
-    Audio();
-    const muse::String& path() const { return m_path; }
-    void setPath(const muse::String& s) { m_path = s; }
-    const muse::ByteArray& data() const { return m_data; }
-    muse::ByteArray data() { return m_data; }
-    void setData(const muse::ByteArray& ba) { m_data = ba; }
-
-private:
-    muse::String m_path;
-    muse::ByteArray m_data;
+static const ElementStyle STAVE_SHARING_LABEL_STYLE {
+    { Sid::staveSharingLabelPlacement, Pid::PLACEMENT },
+    { Sid::staveSharingLabelMinDistance, Pid::MIN_DISTANCE },
 };
+
+StaveSharingLabel::StaveSharingLabel(Segment* parent, TextStyleType tid)
+    : StaffTextBase(ElementType::STAVE_SHARING_LABEL, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+    initElementStyle(&STAVE_SHARING_LABEL_STYLE);
+}
 } // namespace mu::engraving
-#endif // MU_ENGRAVING_AUDIO_H

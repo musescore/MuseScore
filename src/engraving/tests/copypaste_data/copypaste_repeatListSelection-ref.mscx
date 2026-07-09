@@ -172,7 +172,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>FnxFxecIhwM_/8Z5xhXCfuO</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -189,7 +189,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>jIlSB4LQ97P_jIlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -344,15 +344,15 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
-                <NoteIdx>1</NoteIdx>
+                <NoteEID>0b3xdwlID2F_lE9ZJSjrm3O</NoteEID>
+                <NoteEID>ZNCtP8KEtVL_8Q08arUSHjK</NoteEID>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>2</NoteIdx>
-                <NoteIdx>3</NoteIdx>
-                <NoteIdx>4</NoteIdx>
+                <NoteEID>VNqmebd+ofP_0xyw3HP9W4H</NoteEID>
+                <NoteEID>trrHu3W2RhJ_tCmSx2UkxVE</NoteEID>
+                <NoteEID>ydRx240bFCM_nZmMyOUa2MN</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -387,13 +387,13 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
-                <NoteIdx>1</NoteIdx>
+                <NoteEID>tIlSB4LQ97P_tIlSB4LQ97P</NoteEID>
+                <NoteEID>uIlSB4LQ97P_uIlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>2</NoteIdx>
+                <NoteEID>vIlSB4LQ97P_vIlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -502,7 +502,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>xSeIF5GSGDH_50j5/Y//e5N</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -529,7 +529,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>4IlSB4LQ97P_4IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -568,7 +568,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>7IlSB4LQ97P_7IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -591,7 +591,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>+IlSB4LQ97P_+IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>

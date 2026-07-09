@@ -22,11 +22,14 @@
 
 #include "playbackcommandsstate.h"
 
+#include "notation/inotationinteraction.h"
+
 #include "../playbackcommands.h"
 
 using namespace muse;
 using namespace muse::rcommand;
 using namespace mu::playback;
+using namespace mu::notation;
 
 static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
 
@@ -41,17 +44,73 @@ void PlaybackCommandsState::init()
         updateCommandStates();
     });
 
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        const INotationPtr currNotation = globalContext()->currentNotation();
+        if (!currNotation) {
+            return;
+        }
+
+        const INotationInteractionPtr interaction = currNotation->interaction();
+        interaction->selectionChanged().onNotify(this, [this]() {
+            updateCommandStates({ PLAY_SELECTION_COMMAND });
+        }, Asyncable::Mode::SetReplace);
+
+        interaction->isEditingElementChanged().onNotify(this, [this]() {
+            updateCommandStates({ PLAY_SELECTION_COMMAND });
+        }, Asyncable::Mode::SetReplace);
+    });
+
     interactive()->opened().onReceive(this, [this](const muse::Uri&) {
         updateCommandStates();
     });
 
-    playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
+    playbackController()->isPlayAllowedChanged().onReceive(this, [this](bool) {
         updateCommandStates();
     });
 
-    // playbackController()->isPlayingChanged().onNotify(this, [this]() {
-    //     updateCommandStates();
-    // });
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
+        updateCommandStates();
+    });
+
+    playbackController()->loopEnabledChanged().onReceive(this, [this](bool) {
+        updateCommandStates({ LOOP_TOGGLE_COMMAND });
+    });
+
+    playbackController()->onlineSoundsChanged().onNotify(this, [this]() {
+        updateCommandStates({ CLEAR_ONLINESOUNDS_CACHE_COMMAND });
+    });
+
+    notationConfiguration()->isMetronomeEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ METRONOME_TOGGLE_COMMAND });
+    });
+
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ MIDI_TOGGLE_COMMAND });
+    });
+
+    notationConfiguration()->midiUseWrittenPitch().ch.onReceive(this, [this](bool) {
+        updateCommandStates({ MIDI_INPUT_WRITTEN_PITCH_COMMAND, MIDI_INPUT_SOUNDING_PITCH_COMMAND });
+    });
+
+    notationConfiguration()->isPlayRepeatsChanged().onNotify(this, [this]() {
+        updateCommandStates({ REPEATS_TOGGLE_COMMAND });
+    });
+
+    notationConfiguration()->isPlayChordSymbolsChanged().onNotify(this, [this]() {
+        updateCommandStates({ CHORDSYMBOLS_TOGGLE_COMMAND });
+    });
+
+    notationConfiguration()->isAutomaticallyPanEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ PAN_TOGGLE_COMMAND });
+    });
+
+    notationConfiguration()->isCountInEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ COUNTIN_TOGGLE_COMMAND });
+    });
+
+    playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
+        updateCommandStates({ HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND });
+    });
 
     m_moduleRegister = commandsRegister()->moduleRegister(moduleName());
     IF_ASSERT_FAILED(m_moduleRegister) {
@@ -64,17 +123,31 @@ void PlaybackCommandsState::init()
 void PlaybackCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
+    globalContext()->currentNotationChanged().disconnect(this);
     interactive()->opened().disconnect(this);
     playbackController()->isPlayAllowedChanged().disconnect(this);
-    //playbackController()->isPlayingChanged().disconnect(this);
+    playbackController()->isPlayingChanged().disconnect(this);
+    playbackController()->loopEnabledChanged().disconnect(this);
+    playbackController()->onlineSoundsChanged().disconnect(this);
+    playbackConfiguration()->playNotesWhenEditingChanged().disconnect(this);
+    notationConfiguration()->isMetronomeEnabledChanged().disconnect(this);
+    notationConfiguration()->isMidiInputEnabledChanged().disconnect(this);
+    notationConfiguration()->midiUseWrittenPitch().ch.disconnect(this);
+    notationConfiguration()->isPlayRepeatsChanged().disconnect(this);
+    notationConfiguration()->isPlayChordSymbolsChanged().disconnect(this);
+    notationConfiguration()->isAutomaticallyPanEnabledChanged().disconnect(this);
+    notationConfiguration()->isCountInEnabledChanged().disconnect(this);
 }
 
-void PlaybackCommandsState::updateCommandStates()
+void PlaybackCommandsState::updateCommandStates(const std::vector<Command>& commands)
 {
     IF_ASSERT_FAILED(m_moduleRegister) {
         return;
     }
-    for (const auto& command : m_moduleRegister->commandList()) {
+
+    const auto& commandList = commands.empty() ? m_moduleRegister->commandList() : commands;
+
+    for (const auto& command : commandList) {
         CommandState newState = commandState(command);
         if (m_commandStates[command] != newState) {
             m_commandStates[command] = newState;
@@ -95,13 +168,36 @@ CommandState PlaybackCommandsState::commandState(const Command& command) const
 
     if (command == PLAY_COMMAND) {
         return CommandState(true, playbackController()->isPlaying());
-    } else if (command == PAUSE_COMMAND) {
-        return CommandState(true, false);
-    } else if (command == STOP_COMMAND) {
-        return CommandState(true, false);
+    } else if (command == PLAY_SELECTION_COMMAND) {
+        const INotationPtr currNotation = globalContext()->currentNotation();
+        const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
+        bool enabled = interaction && !interaction->isEditingElement();
+        return CommandState(enabled, false);
+    } else if (command == LOOP_TOGGLE_COMMAND) {
+        return CommandState(true, playbackController()->isLoopEnabled());
+    } else if (command == METRONOME_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isMetronomeEnabled());
+    } else if (command == MIDI_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isMidiInputEnabled());
+    } else if (command == MIDI_INPUT_WRITTEN_PITCH_COMMAND) {
+        return CommandState(true, notationConfiguration()->midiUseWrittenPitch().val);
+    } else if (command == MIDI_INPUT_SOUNDING_PITCH_COMMAND) {
+        return CommandState(true, !notationConfiguration()->midiUseWrittenPitch().val);
+    } else if (command == REPEATS_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isPlayRepeatsEnabled());
+    } else if (command == CHORDSYMBOLS_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isPlayChordSymbolsEnabled());
+    } else if (command == HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND) {
+        return CommandState(true, playbackConfiguration()->playNotesWhenEditing());
+    } else if (command == PAN_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isAutomaticallyPanEnabled());
+    } else if (command == COUNTIN_TOGGLE_COMMAND) {
+        return CommandState(true, notationConfiguration()->isCountInEnabled());
+    } else if (command == CLEAR_ONLINESOUNDS_CACHE_COMMAND) {
+        return CommandState(true, !playbackController()->onlineSounds().empty());
     }
 
-    return CommandState();
+    return CommandState(true, false);
 }
 
 async::Channel<Command, CommandState> PlaybackCommandsState::commandStateChanged() const

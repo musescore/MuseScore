@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -1858,17 +1857,6 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
         return false;
     }
     return true;
-}
-
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)

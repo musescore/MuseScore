@@ -60,7 +60,7 @@ public:
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
-    void resetExcerpt(IExcerptNotationPtr excerptNotation) override;
+    void resetExcerpt(IExcerptNotationPtr& excerptNotation) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;
 
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;

@@ -29,6 +29,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -126,14 +127,14 @@ void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
     TimeSig* ts        = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
-    EditData dd(0);
-    dd.dropElement = ts;
-    dd.modifiers = {};
-    dd.dragOffset = QPointF();
-    dd.track = 0;
-    m->drop(dd);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving tuplet tests"), [&](Transaction& tx) {
+        EditData dd(0);
+        dd.dropElement = ts;
+        dd.modifiers = {};
+        dd.dragOffset = QPointF();
+        dd.track = 0;
+        m->drop(tx, dd);
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
     delete score;

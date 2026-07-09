@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "masternotation.h"
 
 #include <QFileInfo>
@@ -41,6 +42,12 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 
+#include "engraving/editing/editkeysig.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "inotationelements.h" // IWYU pragma: keep
+#include "inotationsolomutestate.h"
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
@@ -241,11 +248,12 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         // Add timesigs...
         TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
         timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
-        masterScore->cmdAddTimeSig(measure, /*staffIdx*/ 0, timesig, /*local*/ false);
+        Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
+        EditTimeSig::addTimeSig(tx, masterScore, measure, /*staffIdx*/ 0, timesig, /*local*/ false);
 
         for (Staff* staff : masterScore->staves()) {
             // Add keysig for each staff...
-            masterScore->undoChangeKeySig(staff, measure->tick(), keySigEvent);
+            mu::engraving::EditKeySig::undoChangeKeySig(tx, masterScore, staff, measure->tick(), keySigEvent);
         }
     }
 }
@@ -527,7 +535,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(excerpts);
 }
 
-void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
+void MasterNotation::resetExcerpt(IExcerptNotationPtr& excerptNotation)
 {
     if (!excerptNotation || !excerptNotation->isInited()) {
         return;

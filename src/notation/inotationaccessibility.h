@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INOTATIONACCESSIBILITY_H
-#define MU_NOTATION_INOTATIONACCESSIBILITY_H
+#pragma once
 
 #include "types/retval.h"
-#include "notationtypes.h"
 
 #include "engraving/accessibility/accessibleroot.h"
 
@@ -43,5 +41,3 @@ public:
 
 using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
 }
-
-#endif // MU_NOTATION_INOTATIONACCESSIBILITY_H

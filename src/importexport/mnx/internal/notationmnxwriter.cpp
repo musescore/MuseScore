@@ -26,6 +26,9 @@
 #include "notationmnxwriter.h"
 
 #include "engraving/dom/score.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace mu::iex::mnxio;

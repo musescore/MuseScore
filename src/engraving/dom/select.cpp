@@ -456,13 +456,12 @@ void Selection::clear()
     }
 
     for (EngravingItem* e : m_el) {
+        e->score()->addRefresh(changeSelection(e, false));
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
                 e->score()->addRefresh(changeSelection(s, false));
             }
-        } else {
-            e->score()->addRefresh(changeSelection(e, false));
         }
     }
     m_el.clear();
@@ -1150,6 +1149,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
+        case ElementType::STAVE_SHARING_LABEL:
             seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::EXPRESSION:
@@ -1563,9 +1563,9 @@ const std::list<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-std::list<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
+std::vector<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
 {
-    std::list<Note*> l;
+    std::vector<Note*> l;
 
     auto addNote = [&l](Note* note) {
         bool alreadyThere = false;

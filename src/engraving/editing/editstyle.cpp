@@ -28,6 +28,8 @@
 #include "editing/editsystemlocks.h"
 #include "editing/transaction/transaction.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 static void changeChordStyle(Score* score)
@@ -73,7 +75,7 @@ StyleIdSet ChangeStyle::changedIds() const
     return result;
 }
 
-void ChangeStyle::flip(EditData*)
+void ChangeStyle::flip()
 {
     MStyle tmp = score->style();
 
@@ -93,10 +95,10 @@ void ChangeStyle::flip(EditData*)
     style = tmp;
 }
 
-void ChangeStyle::undo(EditData* ed)
+void ChangeStyle::undo()
 {
     overlap = false;
-    UndoableCommand::undo(ed);
+    UndoableCommand::undo();
 }
 
 //---------------------------------------------------------
@@ -135,7 +137,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     }
 }
 
-void ChangeStyleValues::flip(EditData*)
+void ChangeStyleValues::flip()
 {
     if (!m_score) {
         return;
@@ -159,4 +161,30 @@ void ChangeStyleValues::flip(EditData*)
     if (styleChanged) {
         m_score->styleChanged();
     }
+}
+
+//---------------------------------------------------------
+//   EditStyle
+//---------------------------------------------------------
+
+bool EditStyle::loadStyle(Transaction& tx, Score* score, muse::io::IODevice& dev, bool ign, bool overlap)
+{
+    TRACEFUNC;
+
+    if (!dev.open(muse::io::IODevice::ReadOnly)) {
+        LOGE() << "The style data is not available.";
+        return false;
+    }
+
+    bool success = false;
+    MStyle st = score->style();
+    if (st.read(&dev, ign)) {
+        tx.push(new ChangeStyle(score, st, overlap));
+        success = true;
+    } else {
+        LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
+    }
+
+    dev.close();
+    return success;
 }

@@ -49,6 +49,7 @@
 
 namespace mu::engraving {
 class Lasso;
+class Transaction;
 }
 
 class QDrag;
@@ -85,6 +86,7 @@ public:
 
     // Visibility
     void toggleVisible() override;
+    void setSelectionVisible(bool visible) override;
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
@@ -213,6 +215,7 @@ public:
     void deleteSelection() override;
     void flipSelection() override;
     void flipSelectionHorizontally() override;
+    void mirrorNotes() override;
     void addTieToSelection() override;
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
@@ -381,8 +384,8 @@ private:
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
                                     Qt::KeyboardModifiers modifiers = {});
 
-    bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
+    bool doDropStandard(mu::engraving::Transaction& tx);
+    bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 

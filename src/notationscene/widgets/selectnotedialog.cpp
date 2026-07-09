@@ -38,6 +38,10 @@
 #include "engraving/dom/select.h"
 #include "engraving/dom/system.h"
 
+#include "notation/inotationelements.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
 #include "ui/view/widgetstatestore.h"
 
 #include "log.h"

@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
@@ -59,6 +60,7 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
@@ -111,15 +113,6 @@ private:
     void doOpenPreferencesDialog();
 
     void revertToFactorySettings();
-
-    bool hasProjectAndIsFocused() const;
-    void doGlobalCopy();
-    void doGlobalCut();
-    void doGlobalPaste();
-    void doGlobalUndo();
-    void doGlobalRedo();
-    void doGlobalDelete();
-    void doGlobalCancel();
 
     bool m_quiting = false;
 

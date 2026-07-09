@@ -805,21 +805,6 @@
     <seq>Ctrl+M</seq>
     </SC>
   <SC>
-    <key>play</key>
-    <seq>Space</seq>
-    <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
-    <key>play-from-selection</key>
-    <seq>Shift+Space</seq>
-    <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
-    <key>pause-and-select</key>
-    <seq>Ctrl+Space</seq>
-    <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
     <key>notation-select-all</key>
     <seq>Ctrl+A</seq>
     </SC>
@@ -918,10 +903,12 @@
   <SC>
     <key>toggle-piano-keyboard</key>
     <seq>P</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-percussion-panel</key>
     <seq>O</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-properties-panel</key>
@@ -942,20 +929,6 @@
     <key>masterpalette</key>
     <seq>Shift+F9</seq>
     <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
-    <key>next-word</key>
-    <seq>Space</seq>
-    </SC>
-  <SC>
-    <key>next-text-element</key>
-    <seq>Right</seq>
-    </SC>
-  <SC>
-    <key>prev-text-element</key>
-    <seq>Shift+Space</seq>
-    <seq>Left</seq>
-    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>next-syllable</key>

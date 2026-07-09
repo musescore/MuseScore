@@ -681,7 +681,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             measureShape.remove_if([] (const ShapeElement& shapeEl) {
                 const EngravingItem* shapeItem = shapeEl.item();
                 return shapeItem && ((shapeItem->isRest() && toRest(shapeItem)->isFullMeasureRest())
-                                     || shapeItem->isBarLine() || shapeItem->isAccidental());
+                                     || shapeItem->isBarLine() || shapeItem->isAccidental() || shapeItem->isFermata());
             });
 
             if (measureShape.size() == 0) {

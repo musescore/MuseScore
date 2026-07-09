@@ -3,7 +3,7 @@ crash:
   - DmitryArefiev
   - zacjansheski
 engraving:
-  - mike-spa
+  - davidstephengrant
 VST:
   - RomanPudashkin
 "MuseSounds":
@@ -12,6 +12,5 @@ VST:
 playback:
   - RomanPudashkin
 cloud:
-  - bkunda
   - shoogle
   - Eism

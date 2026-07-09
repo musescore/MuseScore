@@ -43,7 +43,6 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
-#include "navigate.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -58,6 +57,10 @@
 #include "utils.h"
 #include "volta.h"
 
+#include "editing/editclef.h"
+#include "editing/editkeysig.h"
+#include "editing/editrehearsalmark.h"
+#include "editing/navigation.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
@@ -191,10 +194,8 @@ bool ChordRest::acceptDrop(EditData& data) const
     return measure()->acceptDrop(data);
 }
 
-EngravingItem* ChordRest::drop(EditData& data)
+EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
 {
-    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-
     EngravingItem* e = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == muse::nidx);
@@ -237,7 +238,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
 
         if (barLineTick == m->tick() || barLineTick == m->endTick()) {
-            return m->drop(data);
+            return m->drop(tx, data);
         }
 
         bl->setPos(PointF());
@@ -265,7 +266,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     }
 
     case ElementType::CLEF:
-        score()->cmdInsertClef(toClef(e), this);
+        EditClef::insertClef(tx, score(), toClef(e), this);
         return nullptr;
 
     case ElementType::FERMATA:
@@ -348,7 +349,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         e->setTrack(trackZeroVoice(track()));
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
-            r->setXmlText(score()->createRehearsalMarkText(r));
+            r->setXmlText(EditRehearsalMark::createRehearsalMarkText(score(), r));
         } else if (e->isHarpPedalDiagram() && fromPalette && part()) {
             // Match pedal config with previous diagram's
             if (HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick())) {
@@ -424,7 +425,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         if (data.modifiers & ControlModifier) {
             // apply only to this stave
             KeySigEvent k = toKeySig(e)->keySigEvent();
-            score()->undoChangeKeySig(staff(), tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);
             delete e;
             return nullptr;
         }
@@ -447,7 +448,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
         break;
     }
-    return m->drop(data);
+    return m->drop(tx, data);
 }
 
 //---------------------------------------------------------
@@ -657,7 +658,7 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
     if (secondChordRest == nullptr) {
         ChordRestNavigateOptions options;
         options.disableOverRepeats = true;
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), options);
+        secondChordRest = Navigation::nextChordRest(const_cast<ChordRest*>(this), options);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;

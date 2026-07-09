@@ -721,9 +721,10 @@ enum class HDuration {
 Q_ENUM_NS(HDuration);
 
 enum class FrameType {
-    NO_FRAME = int(mu::engraving::FrameType::NO_FRAME),
-    SQUARE   = int(mu::engraving::FrameType::SQUARE),
-    CIRCLE   = int(mu::engraving::FrameType::CIRCLE),
+    NO_FRAME  = int(mu::engraving::FrameType::NO_FRAME),
+    RECTANGLE = int(mu::engraving::FrameType::RECTANGLE),
+    SQUARE    = int(mu::engraving::FrameType::RECTANGLE), /** deprecated alias */
+    CIRCLE    = int(mu::engraving::FrameType::CIRCLE),
 };
 Q_ENUM_NS(FrameType);
 

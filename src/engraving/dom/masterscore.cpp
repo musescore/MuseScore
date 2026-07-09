@@ -24,6 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
@@ -671,7 +672,8 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                EditKeySig::undoChangeKeySig(transactionManager()->currentOrDummyTransaction(), this, ks->staff(),
+                                                             e->tick(), ke);
                             } else {
                                 ee = e;
                             }

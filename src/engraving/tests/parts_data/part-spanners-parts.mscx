@@ -365,7 +365,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>g_g</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -629,7 +629,7 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
+                <NoteEID>EB_EB</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
@@ -994,7 +994,7 @@
                 </Note>
               <NoteParenGroup>
                 <Notes>
-                  <NoteIdx>0</NoteIdx>
+                  <NoteEID>2B_2B</NoteEID>
                   </Notes>
                 </NoteParenGroup>
               </Chord>
@@ -1368,7 +1368,7 @@
                 </Note>
               <NoteParenGroup>
                 <Notes>
-                  <NoteIdx>0</NoteIdx>
+                  <NoteEID>hC_hC</NoteEID>
                   </Notes>
                 </NoteParenGroup>
               </Chord>

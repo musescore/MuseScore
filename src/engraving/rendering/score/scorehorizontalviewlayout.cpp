@@ -454,7 +454,9 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
     Fraction quantum = calculateQuantumCell(s->measure(), visibleParts);
 
     auto calculateWidth = [quantum, sc = s->score()->masterScore()](ChordRest* cr) {
-        return sc->widthOfSegmentCell()
+        //! width of a segment cell, in spatiums per quantum unit
+        static constexpr double WIDTH_OF_SEGMENT_CELL = 3;
+        return WIDTH_OF_SEGMENT_CELL
                * sc->style().spatium()
                * cr->globalTicks().numerator() / cr->globalTicks().denominator()
                * quantum.denominator() / quantum.numerator();

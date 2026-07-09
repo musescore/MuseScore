@@ -22,11 +22,12 @@
 
 #include "lyrics.h"
 
+#include "../editing/navigation.h"
+
 #include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"
-#include "navigate.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
@@ -382,7 +383,7 @@ Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg() const
     const std::vector<Measure*> measures = findPreviousRepeatMeasures(findStartMeasure());
 
     for (const Measure* measure : measures) {
-        Lyrics* prev = lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), verse(), placement());
+        Lyrics* prev = Navigation::lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), verse(), placement());
 
         if (!prev) {
             continue;

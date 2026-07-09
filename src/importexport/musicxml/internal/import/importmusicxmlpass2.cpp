@@ -87,6 +87,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
 
@@ -3034,7 +3036,8 @@ void MusicXmlParserPass2::setMeasureRepeats(const staff_idx_t scoreRelStaff, Mea
                 || (!(m_measureRepeatNumMeasures[i] % 2) && (m_measureRepeatCount[i] == m_measureRepeatNumMeasures[i] / 2))) {
                 // MeasureRepeat element goes in center measure of group if odd-numbered,
                 // or last measure of first half of group if even-numbered
-                m_score->addMeasureRepeat(measure->tick(), track, m_measureRepeatNumMeasures[i]);
+                Transaction& tx = m_score->transactionManager()->currentOrDummyTransaction();
+                EditMeasureRepeat::addMeasureRepeat(tx, m_score, measure->tick(), track, m_measureRepeatNumMeasures[i]);
             } else {
                 // measures that are part of group but do not contain the element have undisplayed whole rests
                 m_score->addRest(measure->tick(), track, TDuration(DurationType::V_MEASURE), 0);
@@ -3616,7 +3619,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             } else if (m_enclosure == "none") {
                 t->setFrameType(FrameType::NO_FRAME);
             } else if (m_enclosure == "rectangle") {
-                t->setFrameType(FrameType::SQUARE);
+                t->setFrameType(FrameType::RECTANGLE);
                 t->setFrameRound(0_sp);
             }
 
@@ -3714,7 +3717,7 @@ void MusicXmlParserDirection::direction(const String& partId,
         } else if (m_enclosure == "none") {
             dynamic->setFrameType(FrameType::NO_FRAME);
         } else if (m_enclosure == "rectangle") {
-            dynamic->setFrameType(FrameType::SQUARE);
+            dynamic->setFrameType(FrameType::RECTANGLE);
             dynamic->setFrameRound(0_sp);
         }
 
@@ -4647,26 +4650,27 @@ static String countSegno(const String& plainWords)
 void MusicXmlParserDirection::handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda,
                                             SegnoStack& segnos, DelayedDirectionsList& delayedDirections)
 {
-    if (!configuration()->inferTextType()) {
-        return;
-    }
     // Try to recognize the various repeats
+    // The explicit repeat attributes of the <sound> element are always honoured;
+    // only the purely text-based fallback depends on the inferTextType preference
     String repeat;
     const String plainWords = MScoreTextToMusicXml::toPlainText(m_wordsText.toLower().simplified());
+    const String wordsRepeat = matchRepeat(plainWords);
     if (!m_sndCoda.empty()) {
         repeat = u"coda";
     } else if (!m_sndDacapo.empty()) {
-        repeat = u"daCapo";
+        // the accompanying words may refine the jump type (e.g. "D.C. al Fine")
+        repeat = wordsRepeat.startsWith(u"daCapo") ? wordsRepeat : u"daCapo";
     } else if (!m_sndDalsegno.empty()) {
-        repeat = u"dalSegno";
+        repeat = wordsRepeat.startsWith(u"dalSegno") ? wordsRepeat : u"dalSegno";
     } else if (!m_sndFine.empty()) {
         repeat = u"fine";
     } else if (!m_sndSegno.empty()) {
         repeat = u"segno";
     } else if (!m_sndToCoda.empty()) {
         repeat = u"toCoda";
-    } else {
-        repeat = matchRepeat(plainWords);
+    } else if (configuration()->inferTextType()) {
+        repeat = wordsRepeat;
     }
     // Check if repeat number has become detached
     if (repeat == u"coda" || repeat == u"segno") {

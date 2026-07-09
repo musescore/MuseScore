@@ -42,6 +42,10 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/editvoice.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
@@ -371,9 +375,9 @@ MasterScore* Engraving_PartsTests::doAddBreath()
     b->setSymId(SymId::breathMarkComma);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
 
     return score;
 }
@@ -503,9 +507,9 @@ MasterScore* Engraving_PartsTests::doAddFingering()
     b->setXmlText("3");
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -637,9 +641,9 @@ MasterScore* Engraving_PartsTests::doAddSymbol()
     b->setSym(SymId::gClef);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -771,9 +775,9 @@ MasterScore* Engraving_PartsTests::doAddChordline()
     b->setChordLineType(ChordLineType::FALL);
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -899,7 +903,7 @@ MasterScore* Engraving_PartsTests::doAddMeasureRepeat()
     Measure* m = score->firstMeasure()->nextMeasure();
 
     score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    score->cmdAddMeasureRepeat(m, 4, 0); // test with 4-measure repeat in first staff
+    EditMeasureRepeat::addMeasureRepeat(score->transactionManager()->currentOrDummyTransaction(), score, m, 4, 0); // test with 4-measure repeat in first staff
     score->setLayoutAll();
     score->endCmd();
 
@@ -1030,9 +1034,9 @@ MasterScore* Engraving_PartsTests::doAddImage()
     b->loadFromFile(PARTS_DATA_DIR + u"schnee.png");
     dd.dropElement = b;
 
-    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    note->drop(dd);
-    score->endCmd();          // does layout
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving parts tests"), [&](Transaction& tx) {
+        note->drop(tx, dd);
+    }); // does layout
     return score;
 }
 
@@ -1282,7 +1286,7 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
 
     part->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     part->select(n);
-    part->changeSelectedElementsVoice(1);
+    EditVoice::changeSelectedElementsVoice(part->transactionManager()->currentOrDummyTransaction(), part, 1);
     part->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",

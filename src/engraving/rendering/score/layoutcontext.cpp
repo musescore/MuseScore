@@ -456,12 +456,12 @@ void DomAccessor::undoRemoveElement(EngravingItem* item)
     score()->undoRemoveElement(item);
 }
 
-void DomAccessor::undo(UndoableCommand* cmd, EditData* ed) const
+void DomAccessor::undo(UndoableCommand* cmd) const
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    score()->undo(cmd, ed);
+    score()->undo(cmd);
 }
 
 void DomAccessor::addElement(EngravingItem* item)

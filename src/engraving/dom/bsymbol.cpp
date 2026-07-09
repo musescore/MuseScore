@@ -118,7 +118,7 @@ bool BSymbol::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* BSymbol::drop(EditData& data)
+EngravingItem* BSymbol::drop(Transaction&, EditData& data)
 {
     EngravingItem* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {

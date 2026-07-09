@@ -551,7 +551,7 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 
     auto excerptCmd = new AddExcerpt(excerpt);
     if (fakeUndo) {
-        excerptCmd->redo(nullptr);
+        excerptCmd->redo();
     } else {
         excerpt->excerptScore()->undo(excerptCmd);
     }
@@ -1258,6 +1258,25 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
     cloneMMRests(oscore, score, {}, {}, tieMap);
 
     collectTieEndPoints(tieMap);
+}
+
+void Excerpt::linkMeasures(Score* excerptScore, Score* masterScore)
+{
+    MeasureBase* mbMaster = masterScore->first();
+    for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        while (mbMaster && !mbMaster->isMeasure()) {
+            mbMaster = mbMaster->next();
+        }
+        if (!mbMaster) {
+            LOGD("Measures in MasterScore and Score are not in sync.");
+            break;
+        }
+        mb->linkTo(mbMaster);
+        mbMaster = mbMaster->next();
+    }
 }
 
 //! NOTE For staves in the same score

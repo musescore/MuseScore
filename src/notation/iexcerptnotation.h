@@ -20,15 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_IEXCERPTNOTATION_H
-#define MU_NOTATION_IEXCERPTNOTATION_H
+#pragma once
 
-#include "inotation.h"
+#include "async/notification.h"
+#include "types/string.h"
+
+#include "inotation_fwd.h"
 
 namespace mu::notation {
-class IExcerptNotation;
-using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
-
 class IExcerptNotation
 {
 public:
@@ -50,5 +49,3 @@ public:
     virtual IExcerptNotationPtr clone() const = 0;
 };
 }
-
-#endif // MU_NOTATION_IEXCERPTNOTATION_H

@@ -26,6 +26,10 @@
 #include <QImage>
 #include <QBuffer>
 
+#include "engraving/dom/mscore.h"
+
+#include "notation/inotationpainting.h"
+
 #include "log.h"
 
 using namespace mu::iex::imagesexport;

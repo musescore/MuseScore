@@ -151,6 +151,7 @@ class Staff;
 class StaffLabel;
 class StaffState;
 class StaffText;
+class StaveSharingLabel;
 class StaffTextBase;
 class StaffType;
 class StaffTypeChange;
@@ -305,6 +306,7 @@ public:
     static void read(Staff* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
+    static void read(StaveSharingLabel* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffType* t, XmlReader& xml, ReadContext& ctx);
     static void read(StaffTypeChange* c, XmlReader& xml, ReadContext& ctx);
@@ -394,7 +396,7 @@ public:
     static void readSystemLocks(Score* score, XmlReader& e);
     static void readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx);
 
-    static void readItemEID(EngravingObject* item, XmlReader& xml);
+    static void readItemEID(EngravingObject* item, XmlReader& xml, ReadContext& ctx);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
 
     static String readLegacyStaffName(XmlReader& xml);

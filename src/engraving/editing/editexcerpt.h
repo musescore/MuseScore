@@ -40,8 +40,8 @@ public:
     AddExcerpt(Excerpt* ex);
     ~AddExcerpt() override;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -61,8 +61,8 @@ public:
     RemoveExcerpt(Excerpt* ex);
     ~RemoveExcerpt() override;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -78,7 +78,7 @@ class SwapExcerpt : public UndoableCommand
     int pos1 = 0;
     int pos2 = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SwapExcerpt(MasterScore* s, int p1, int p2)
@@ -96,7 +96,7 @@ class ChangeExcerptTitle : public UndoableCommand
     Excerpt* excerpt = nullptr;
     String title;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeExcerptTitle(Excerpt* x, const String& t)
@@ -116,8 +116,8 @@ class AddPartToExcerpt : public UndoableCommand
 
 public:
     AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool wasDone) override;
 
     UNDO_TYPE(CommandType::AddPartToExcerpt)

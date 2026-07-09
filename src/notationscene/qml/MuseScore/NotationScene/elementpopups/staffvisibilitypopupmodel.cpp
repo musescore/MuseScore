@@ -37,6 +37,9 @@
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace mu::notation;
