@@ -1476,7 +1476,7 @@ ChordLine* Chord::chordLine() const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Chord::drop(EditData& data)
+EngravingItem* Chord::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
@@ -1606,7 +1606,7 @@ EngravingItem* Chord::drop(EditData& data)
         return e;
 
     default:
-        return ChordRest::drop(data);
+        return ChordRest::drop(tx, data);
     }
     return 0;
 }

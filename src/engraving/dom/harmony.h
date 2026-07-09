@@ -37,6 +37,7 @@ namespace mu::engraving {
 struct ChordDescription;
 class ParsedChord;
 class Score;
+class Transaction;
 
 enum class HarmonyType : unsigned char {
     STANDARD,
@@ -283,7 +284,7 @@ public:
     String screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;

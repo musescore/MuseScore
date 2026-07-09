@@ -203,7 +203,7 @@ bool Bracket::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Bracket::drop(EditData& data)
+EngravingItem* Bracket::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     Bracket* b = 0;

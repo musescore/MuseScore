@@ -486,9 +486,9 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     dropData.dropElement = barLine;
     dropData.track = 0;
 
-    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
-    endBl->drop(dropData);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Timesig tests"), [&](Transaction& tx) {
+        endBl->drop(tx, dropData);
+    });
 
     // Check part1 m1 (mmr) has end of measure ts
     Segment* part1M1MMREndSeg = part1M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M1MM->ticks());
@@ -499,9 +499,9 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     EXPECT_FALSE(part1M2MMREndSeg);
 
     // Change style setting
-    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
-    score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Timesig tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
+    });
 
     // Check part2 m1 (mmr) ts is 6/8
     Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigTypes, part2M1MM->ticks());
@@ -531,11 +531,11 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     EXPECT_TRUE(tie);
     EXPECT_TRUE(tie->endNote());
 
-    score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-    TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
-    newSig->setSig(Fraction(3, 4));
-    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m1, 0, newSig, false);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+        TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
+        newSig->setSig(Fraction(3, 4));
+        EditTimeSig::addTimeSig(tx, score, m1, 0, newSig, false);
+    });
 
     // No suitable note to tie to after time sig has been changed, no tie should be present
 
@@ -584,9 +584,9 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
         EXPECT_TRUE(ts);
 
-        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-        EditTimeSig::removeTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, ts);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+            EditTimeSig::removeTimeSig(tx, score, ts);
+        });
 
         // Check timesig has been removed
         Measure* tsMeasure2 = score->firstMeasureMM()->nextMeasureMM();
@@ -606,9 +606,9 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
         EXPECT_TRUE(ts);
 
-        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-        EditTimeSig::removeTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, ts);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+            EditTimeSig::removeTimeSig(tx, score, ts);
+        });
 
         // Check timesig has been removed
         Measure* tsMeasure2 = score->lastMeasureMM();

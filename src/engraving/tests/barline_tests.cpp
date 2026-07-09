@@ -325,9 +325,9 @@ void dropNormalBarline(EngravingItem* e)
     dropData.dropElement = barLine;
     dropData.track = 0;
 
-    e->score()->startCmd(TranslatableString::untranslatable("Drop normal barline test"));
-    e->drop(dropData);
-    e->score()->endCmd();
+    e->score()->transactionManager()->transaction(TranslatableString::untranslatable("Drop normal barline test"), [&](Transaction& tx) {
+        e->drop(tx, dropData);
+    });
 }
 
 //---------------------------------------------------------

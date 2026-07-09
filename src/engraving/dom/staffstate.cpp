@@ -105,7 +105,7 @@ bool StaffState::acceptDrop(EditData&) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* StaffState::drop(EditData& data)
+EngravingItem* StaffState::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);

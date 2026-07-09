@@ -65,6 +65,7 @@ class Spacer;
 class Staff;
 class System;
 class TieMap;
+class Transaction;
 
 //---------------------------------------------------------
 //   MeasureNumberMode
@@ -282,7 +283,7 @@ public:
     void sortStaves(std::vector<staff_idx_t>& dst);
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     int repeatCount() const { return m_repeatCount; }
     void setRepeatCount(int val) { m_repeatCount = val; }

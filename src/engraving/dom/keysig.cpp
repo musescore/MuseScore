@@ -81,7 +81,7 @@ bool KeySig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* KeySig::drop(EditData& data)
+EngravingItem* KeySig::drop(Transaction& tx, EditData& data)
 {
     KeySig* ks = toKeySig(data.dropElement);
     if (!ks->isKeySig()) {
@@ -90,7 +90,6 @@ EngravingItem* KeySig::drop(EditData& data)
     }
     KeySigEvent k = ks->keySigEvent();
     delete ks;
-    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
     if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {

@@ -34,17 +34,18 @@
 #include "tiejumppointlist.h"
 
 namespace mu::engraving {
-class Factory;
-class Tie;
-class Chord;
-class Text;
-class Score;
-class AccidentalState;
 class Accidental;
+class AccidentalState;
+class Chord;
+class Factory;
 class NoteDot;
+class NoteEditData;
+class Score;
 class Spanner;
 class StaffType;
-class NoteEditData;
+class Text;
+class Tie;
+class Transaction;
 enum class AccidentalType : unsigned char;
 enum class NoteType : unsigned char;
 struct NoteParenthesisInfo;
@@ -298,7 +299,7 @@ public:
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool hidden() const { return m_hidden; }
     void setHidden(bool val) { m_hidden = val; }

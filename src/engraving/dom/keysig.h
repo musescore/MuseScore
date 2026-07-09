@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_KEYSIG_H
-#define MU_ENGRAVING_KEYSIG_H
+#pragma once
 
 #include "key.h"
 #include "engravingitem.h"
@@ -29,6 +28,7 @@
 namespace mu::engraving {
 class Factory;
 class Segment;
+class Transaction;
 
 class KeySig final : public EngravingItem
 {
@@ -42,7 +42,7 @@ public:
     KeySig* clone() const override { return new KeySig(*this); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     double mag() const override;
 
@@ -108,5 +108,4 @@ private:
     bool m_hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent m_sig;
 };
-} // namespace mu::engraving
-#endif
+}

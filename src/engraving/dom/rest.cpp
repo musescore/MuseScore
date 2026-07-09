@@ -194,7 +194,7 @@ bool Rest::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Rest::drop(EditData& data)
+EngravingItem* Rest::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
@@ -221,7 +221,7 @@ EngravingItem* Rest::drop(EditData& data)
             if (seg) {
                 const ChordRest* cr = toChordRest(seg->element(track()));
                 if (cr) {
-                    NoteInput::nextInputPos(score()->transactionManager()->currentOrDummyTransaction(), score(), cr, false);
+                    NoteInput::nextInputPos(tx, score(), cr, false);
                 }
             }
         }
@@ -232,14 +232,13 @@ EngravingItem* Rest::drop(EditData& data)
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
         if (durationType().type() == DurationType::V_MEASURE) {
-            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
             EditMeasureRepeat::addMeasureRepeat(tx, score(), measure(), numMeasures, staffIdx());
         }
         break;
     }
 
     default:
-        return ChordRest::drop(data);
+        return ChordRest::drop(tx, data);
     }
     return 0;
 }

@@ -466,7 +466,7 @@ static EngravingItem* pasteSystemObject(Transaction& tx, EditData& srcData, Engr
     }
 
     if (targetStaff == targetScore->staff(0) || targetStaff->isSystemObjectStaff()) {
-        return target->drop(srcData);
+        return target->drop(tx, srcData);
     }
 
     tx.push(new AddSystemObjectStaff(targetStaff));
@@ -491,7 +491,7 @@ static EngravingItem* pasteSystemObject(Transaction& tx, EditData& srcData, Engr
     }
 
     if (!pastedItem) {
-        pastedItem = target->drop(srcData);
+        pastedItem = target->drop(tx, srcData);
     }
 
     return pastedItem;
@@ -551,7 +551,7 @@ bool Paste::paste(Transaction& tx, Score* score, const IMimeData* ms, MuseScoreV
             ddata.dropElement = nel;
 
             if (target->acceptDrop(ddata)) {
-                EngravingItem* dropped = target->drop(ddata);
+                EngravingItem* dropped = target->drop(tx, ddata);
                 if (dropped) {
                     droppedElements.emplace_back(dropped);
                 }
@@ -629,7 +629,7 @@ bool Paste::pasteSymbol(Transaction& tx, Score* score, muse::ByteArray& data, Mu
         if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
             ddata.dropElement = el->clone();
 
-            EngravingItem* dropped = systemObj ? pasteSystemObject(tx, ddata, target) : target->drop(ddata);
+            EngravingItem* dropped = systemObj ? pasteSystemObject(tx, ddata, target) : target->drop(tx, ddata);
             if (dropped) {
                 droppedElements.emplace_back(dropped);
             }

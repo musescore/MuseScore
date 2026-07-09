@@ -108,7 +108,7 @@ bool HairpinSegment::acceptDrop(EditData& data) const
     return false;
 }
 
-EngravingItem* HairpinSegment::drop(EditData& data)
+EngravingItem* HairpinSegment::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (!e->isDynamic()) {
@@ -117,7 +117,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
     if (EngravingItem* item = ldata()->itemSnappedAfter()) {
         if (item->isDynamic()) {
-            return item->drop(data);
+            return item->drop(tx, data);
         }
     }
 

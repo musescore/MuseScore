@@ -27,6 +27,8 @@
 #include "textbase.h"
 
 namespace mu::engraving {
+class Transaction;
+
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -52,7 +54,7 @@ public:
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }

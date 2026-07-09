@@ -28,6 +28,7 @@
 
 namespace mu::engraving {
 class Segment;
+class Transaction;
 
 //---------------------------------------------------------
 //   TimeSigType
@@ -83,7 +84,7 @@ public:
     int denominatorStretch() const { return m_stretch.denominator(); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
