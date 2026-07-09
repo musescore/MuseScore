@@ -43,6 +43,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "engraving/types/symnames.h"
 
@@ -911,20 +912,22 @@ void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::pa
 
 void MnxImporter::importMnx()
 {
-    if (!m_mnxDocument.hasEntityMap()) {
-        auto policies = mnx::EntityMapPolicies();
-        policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
-        policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
-        m_mnxDocument.buildEntityMap(policies);
-    }
-    if (const auto& support = m_mnxDocument.mnx().support()) {
-        m_useBeams = support->useBeams();
-        m_useAccidentalDisplay = support->useAccidentalDisplay();
-    }
-    importSettings();
-    importParts();
-    importBrackets();
-    importGlobalMeasures();
-    importPartMeasures();
+    m_score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX import"), [&](Transaction&) {
+        if (!m_mnxDocument.hasEntityMap()) {
+            auto policies = mnx::EntityMapPolicies();
+            policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
+            policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
+            m_mnxDocument.buildEntityMap(policies);
+        }
+        if (const auto& support = m_mnxDocument.mnx().support()) {
+            m_useBeams = support->useBeams();
+            m_useAccidentalDisplay = support->useAccidentalDisplay();
+        }
+        importSettings();
+        importParts();
+        importBrackets();
+        importGlobalMeasures();
+        importPartMeasures();
+    });
 }
 } // namespace mu::iex::mnxio

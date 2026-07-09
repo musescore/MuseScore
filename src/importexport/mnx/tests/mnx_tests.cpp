@@ -53,6 +53,7 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "types/bytearray.h"
 #include "types/ret.h"
 #include "engraving/rw/rwregister.h"
@@ -287,28 +288,30 @@ static void fixupScore(MasterScore* score)
 
 MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath)
 {
-    auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
-        NotationMnxReader reader(muse::modularity::globalCtx());
-        Ret ret = reader.read(score, path);
-        if (ret.success()) {
-            return Err::NoError;
-        }
+    const muse::io::path_t path = isAbsolutePath ? fileName : (ScoreRW::rootPath() + u"/" + fileName);
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(muse::modularity::globalCtx());
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
+    NotationMnxReader reader(muse::modularity::globalCtx());
+    Ret ret = reader.read(score, path);
+    if (!ret.success()) {
         const int code = ret.code();
         if (code >= static_cast<int>(Ret::Code::EngravingFirst)
             && code <= static_cast<int>(Ret::Code::EngravingLast)) {
-            return static_cast<Err>(code);
+            delete score;
+            return nullptr;
         }
 
         if (code == static_cast<int>(Ret::Code::NotSupported)
             || code == static_cast<int>(Ret::Code::BadData)) {
-            return Err::FileBadFormat;
+            delete score;
+            return nullptr;
         }
 
-        return Err::UnknownError;
-    };
+        delete score;
+        return nullptr;
+    }
 
-    MasterScore* score = ScoreRW::readScore(fileName, isAbsolutePath, importFunc);
     return score;
 }
 
@@ -367,8 +370,10 @@ MasterScore* Mnx_Tests::roundTripMnxScore(Score* sourceScore, const String& expo
 
     MasterScore* roundTrip = importMnxFromJson(json, exportedFile);
     if (roundTrip) {
-        fixupScore(roundTrip);
-        roundTrip->doLayout();
+        roundTrip->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+            fixupScore(roundTrip);
+            roundTrip->doLayout();
+        });
     }
 
     return roundTrip;
@@ -388,7 +393,11 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
 #else
     auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
 
-    if (!rw::RWRegister::writer()->writeScore(score, &buffer)) {
+    bool writeOk = false;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test compare"), [&](Transaction&) {
+        writeOk = rw::RWRegister::writer()->writeScore(score, &buffer);
+    });
+    if (!writeOk) {
         ADD_FAILURE() << "Failed to serialize score to MSCX.";
         return false;
     }
@@ -552,8 +561,10 @@ std::unique_ptr<MasterScore> Mnx_Tests::importReferenceExample(const String& bas
         return nullptr;
     }
 
-    fixupScore(score.get());
-    score->doLayout();
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+        fixupScore(score.get());
+        score->doLayout();
+    });
 
     return score;
 }
@@ -571,8 +582,10 @@ void Mnx_Tests::runProjectFileTest(const char* name)
     std::unique_ptr<MasterScore> score(readMnxScore(sourcePath));
     ASSERT_TRUE(score);
 
-    fixupScore(score.get());
-    score->doLayout();
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+        fixupScore(score.get());
+        score->doLayout();
+    });
 
     const String referencePath = projectRefPath(baseName);
     EXPECT_TRUE(compareWithMscxReference(score.get(), referencePath, testName.c_str()));
