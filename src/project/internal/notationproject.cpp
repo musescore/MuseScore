@@ -38,6 +38,7 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/measurebase.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editscoreproperties.h"
@@ -590,7 +591,10 @@ muse::Ret NotationProject::savePage(const muse::io::path_t& path, const size_t p
     range.startStaffIdx = 0;
     range.endStaffIdx = score->nstaves();
     range.startMeasure = systems.front()->first();
-    range.endMeasure = systems.back()->last();
+    // StaffWrite::writeStaff stops before reaching endMeasure, so use the measure after
+    // the last one we want, otherwise the page's last measure/frame is dropped
+    MeasureBase* lastMeasure = systems.back()->last();
+    range.endMeasure = lastMeasure ? lastMeasure->next() : nullptr;
 
     write::WriteContext ctx(score);
     ctx.setRange(range);
