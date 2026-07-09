@@ -43,6 +43,10 @@ void FxResolverStub::registerResolver(const AudioFxType, IResolverPtr)
 {
 }
 
+void FxResolverStub::unregisterResolver(const AudioFxType)
+{
+}
+
 void FxResolverStub::clearAllFx()
 {
 }

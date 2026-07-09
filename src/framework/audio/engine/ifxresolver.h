@@ -58,6 +58,7 @@ public:
     virtual AudioResourceMetaList resolveAvailableResources() const = 0;
 
     virtual void registerResolver(const AudioFxType type, IResolverPtr resolver) = 0;
+    virtual void unregisterResolver(const AudioFxType type) = 0;
     virtual void clearAllFx() = 0;
 };
 

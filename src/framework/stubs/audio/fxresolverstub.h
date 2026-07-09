@@ -32,6 +32,7 @@ public:
     std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
     AudioResourceMetaList resolveAvailableResources() const override;
     void registerResolver(const AudioFxType type, IResolverPtr resolver) override;
+    void unregisterResolver(const AudioFxType type) override;
     void clearAllFx() override;
 };
 }
