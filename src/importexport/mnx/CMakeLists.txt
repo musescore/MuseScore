@@ -16,7 +16,7 @@ if(MSS_USE_SYSTEM_MNXDOM)
     target_compile_definitions(iex_mnx PRIVATE MNXDOM_SYSTEM)
     message(STATUS "Using system-installed mnxdom")
 else()
-    set(MNXDOM_GIT_TAG 97ed39ac5f7f0b38878d8ea9d48290929e0eeba7)
+    set(MNXDOM_GIT_TAG 12d09d298d347e29f56098e3f10d900c5f55be79)
     string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
