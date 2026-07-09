@@ -2294,13 +2294,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     }
 
     layoutSegmentElements(segment, partStartTrack, partEndTrack, staffIdx, ctx);
-
-    for (Chord* chord : posInfo.chords) {
-        Ornament* ornament = chord->findOrnament();
-        if (ornament && ornament->showCueNote()) {
-            TLayout::layoutOrnamentCueNote(ornament, ctx);
-        }
-    }
 }
 
 //---------------------------------------------------------
