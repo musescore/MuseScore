@@ -337,7 +337,8 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
         return nullptr;
     }
 
-    EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
+    const TrackRange trackRange = part->trackRange();
+    EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, trackRange.startTrack, trackRange.endTrack - 1);
     return item ? toInstrumentChange(item) : nullptr;
 }
 

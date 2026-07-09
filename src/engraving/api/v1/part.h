@@ -129,8 +129,8 @@ public:
     mu::engraving::Part* part() { return toPart(e); }
     const mu::engraving::Part* part() const { return toPart(e); }
 
-    int startTrack() const { return static_cast<int>(part()->startTrack()); }
-    int endTrack()   const { return static_cast<int>(part()->endTrack()); }
+    int startTrack() const { return static_cast<int>(part()->trackRange().startTrack); }
+    int endTrack()   const { return static_cast<int>(part()->trackRange().endTrack); }
     QString instrumentId() const { return part()->instrument()->id(); }
     QString musicXmlId() const { return part()->instrument()->musicXmlId(); }
     int harmonyCount() const { return part()->harmonyCount(); }

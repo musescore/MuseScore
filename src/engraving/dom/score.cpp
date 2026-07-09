@@ -329,7 +329,8 @@ Score* Score::clone()
     for (Part* part : m_parts) {
         excerpt->parts().push_back(part);
 
-        for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+        const TrackRange range = part->trackRange();
+        for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
             tracks.insert({ track, track });
         }
     }
@@ -4664,7 +4665,8 @@ std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, c
     std::set<staff_idx_t> result;
 
     for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+        const TrackRange range = part->trackRange();
+        if (trackTo < range.startTrack || trackFrom >= range.endTrack) {
             continue;
         }
 

@@ -38,6 +38,11 @@ class Score;
 class SharedPart;
 class InstrumentTemplate;
 
+struct TrackRange {
+    track_idx_t startTrack = muse::nidx;
+    track_idx_t endTrack = muse::nidx;
+};
+
 //---------------------------------------------------------
 //   @@ Part
 //   @P endTrack        int         (read only)
@@ -88,8 +93,7 @@ public:
     Staff* staff(staff_idx_t idx) const;
     String familyId() const;
 
-    track_idx_t startTrack() const;
-    track_idx_t endTrack() const;
+    TrackRange trackRange() const;
 
     InstrumentTrackIdList instrumentTrackIdList() const;
     InstrumentTrackIdSet instrumentTrackIdSet() const;

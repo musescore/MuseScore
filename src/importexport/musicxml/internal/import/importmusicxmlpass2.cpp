@@ -1887,7 +1887,8 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
         const Segment* nextSeg = score->tick2leftSegment(unterminatedChord->tick() + unterminatedChord->ticks());
         if (nextSeg) {
             const Part* part = unterminatedTieNote->part();
-            for (track_idx_t track = part->startTrack(); track <= part->endTrack(); ++track) {
+            const TrackRange trackRange = part->trackRange();
+            for (track_idx_t track = trackRange.startTrack; track <= trackRange.endTrack; ++track) {
                 const EngravingItem* el = nextSeg->element(track);
                 if (el && el->isChord()) {
                     Note* matchingNote = toChord(el)->findNote(unterminatedTieNote->pitch());
@@ -2385,7 +2386,8 @@ void MusicXmlParserPass2::part()
             } else if (startChord) {
                 // try other voices in the stave
                 const Part* p = startChord->part();
-                for (track_idx_t track = p->startTrack(); track < p->endTrack() + VOICES; track++) {
+                const TrackRange trackRange = p->trackRange();
+                for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack + VOICES; track++) {
                     nextEl = nextSeg ? nextSeg->element(track) : nullptr;
                     nextChord = nextEl && nextEl->isChord() ? toChord(nextEl) : nullptr;
                     if (nextChord && nextChord->vStaffIdx() != startChord->vStaffIdx()) {

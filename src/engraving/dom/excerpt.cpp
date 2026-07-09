@@ -1799,10 +1799,9 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         Excerpt* excerpt = new Excerpt(score);
         excerpt->parts().push_back(part);
 
-        track_idx_t startTrack = part->startTrack();
-        track_idx_t endTrack = part->endTrack();
+        const TrackRange range = part->trackRange();
 
-        for (track_idx_t i = startTrack, j = 0; i < endTrack; ++i, ++j) {
+        for (track_idx_t i = range.startTrack, j = 0; i < range.endTrack; ++i, ++j) {
             excerpt->m_tracksMapping.insert({ i, j });
         }
 

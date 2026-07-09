@@ -2244,8 +2244,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     // we need to check all the notes in all the staves of the part so that we don't get weird collisions
     // between accidentals etc with moved notes
     const Part* part = staff->part();
-    const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
-    const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
+    const TrackRange partTrackRangeOrDefault = part ? part->trackRange() : TrackRange { startTrack, endTrack };
+    const track_idx_t partStartTrack = partTrackRangeOrDefault.startTrack;
+    const track_idx_t partEndTrack = partTrackRangeOrDefault.endTrack;
 
     if (isTab) {
         skipAccidentals(segment, startTrack, endTrack);
@@ -2854,8 +2855,9 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
     bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks(), true);
     bool hasUpperCrossNotes = false;
     bool hasLowerCrossNotes = false;
-    staff_idx_t partTopStaff = c->part()->startTrack() / VOICES;
-    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
+    const TrackRange partTrackRange = c->part()->trackRange();
+    staff_idx_t partTopStaff = track2staff(partTrackRange.startTrack);
+    staff_idx_t partBottomStaff = track2staff(partTrackRange.endTrack);
     track_idx_t startVoice = c->track() - c->voice();
     // Get the last track we need to check for cross staff notes.
     // Either 1 stave away from the stave we are laying out or the bottom staff of the part

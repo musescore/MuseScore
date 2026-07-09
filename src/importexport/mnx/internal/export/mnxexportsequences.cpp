@@ -1028,11 +1028,12 @@ void MnxExporter::appendContent(mnx::ContentArray content, ExportContext& ctx,
 void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
 {
     const size_t staves = part->nstaves();
+    const track_idx_t partStartTrack = part->trackRange().startTrack;
     auto mnxSequences = mnxMeasure.sequences();
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-            const track_idx_t curTrackIdx = part->startTrack() + VOICES * staffIdx + voice;
+            const track_idx_t curTrackIdx = partStartTrack + VOICES * staffIdx + voice;
             std::vector<ChordRest*> chordRests;
 
             for (Segment* segment = measure->first(SegmentType::ChordRest);

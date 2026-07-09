@@ -583,7 +583,8 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 
     int idx1 = note->unisonIndex();
     Part* part = chord->part();
-    for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+    const TrackRange trackRange = part->trackRange();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
         EngravingItem* e = nextSegment->element(track);
         if (!e || !e->isChord()) {
             continue;
