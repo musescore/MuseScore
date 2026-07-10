@@ -33,19 +33,11 @@ public:
 
     bool isEmpty() const override;
 
-    void clear() override;
-
-    void replaceCurves(AutomationCurveMap&& curves) override;
     void setCurves(AutomationCurveMap&& curves) override;
+    void replaceCurves(AutomationCurveMap&& curves) override;
 
-    void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) override;
-    void removePoint(const AutomationCurveKey& key, utick_t tick) override;
-    void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) override;
-
-    void removePoints(const PointRemoveAccepted& accepted) override;
-
-    void setPointInValue(const AutomationCurveKey& key, utick_t tick, double value) override;
-    void setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value) override;
+    void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits) override;
+    void removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks) override;
 
     void moveTicks(utick_t tickFrom, utick_t diff) override;
     void removeTicks(utick_t tickFrom, utick_t tickTo) override;

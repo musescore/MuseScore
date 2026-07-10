@@ -31,8 +31,6 @@
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h"
 
-#include "defer.h"
-
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::uicomponents;
@@ -300,25 +298,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return;
     }
 
-    // STEP 2 - Update the point value using the y parameter...
-    // TODO: Not always dynamics...
-    const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
-
-    engravingAutomation()->beginTransaction();
-    DEFER {
-        engravingAutomation()->commitTransaction();
-    };
-
-    //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
-    const double newValue = 1.0 - y;
-    if (pointType == PointData::PointType::IN || pointType == PointData::PointType::BOTH) {
-        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, newValue);
-    }
-    if (pointType == PointData::PointType::OUT || pointType == PointData::PointType::BOTH) {
-        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, newValue);
-    }
-
-    // STEP 3 - Determine the new tick value based on the x parameter...
+    // STEP 2 - Determine the new tick value based on the x parameter...
     const double segStartCanvasX = newSeg->canvasX();
     const double setEndCanvasX = segStartCanvasX + newSeg->width();
 
@@ -327,34 +307,50 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     const double tickRatio = (pointCanvasX - segStartCanvasX) / (setEndCanvasX - segStartCanvasX);
     const int newTick = segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
-    if (newTick == oldPointData.tick) {
-        // Nothing to update - tick didn't change...
+    const bool tickChanged = newTick != oldPointData.tick;
+
+    // STEP 3 - Fetch the point being edited...
+    // TODO: Not always dynamics...
+    const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
+
+    const mu::engraving::AutomationPoint* existingPoint = engravingAutomation()->point(curveKey, oldPointData.tick);
+    IF_ASSERT_FAILED(existingPoint) {
         return;
     }
 
-    // STEP 4 - Update the tick....
+    //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
+    const double newValue = 1.0 - y;
 
-    //! NOTE: Moving a BOTH point is the simplest case - we can simply change the tick. Moving IN/OUT points is slightly
-    //! more complex. In this case we need to set the in/out values to be equal at oldTick (effectively converting the
-    //! original point to a BOTH point) and create a new point at newTick...
+    // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 
-    if (pointType == PointData::PointType::BOTH) {
-        engravingAutomation()->movePoint(curveKey, oldPointData.tick, newTick);
+    //! NOTE: Moving a BOTH point is the simplest case - we can update its value then simply change the tick.
+    //! Moving IN/OUT points is slightly more complex. In this case we need to set the in/out values to be
+    //! equal at oldTick (effectively converting the original point to a BOTH point) and create a new point
+    //! at newTick...
+
+    if (!tickChanged || pointType == PointData::PointType::BOTH) {
+        mu::engraving::AutomationPoint editedPoint = *existingPoint;
+        if (pointType == PointData::PointType::IN || pointType == PointData::PointType::BOTH) {
+            editedPoint.inValue = newValue;
+        }
+        if (pointType == PointData::PointType::OUT || pointType == PointData::PointType::BOTH) {
+            editedPoint.outValue = newValue;
+        }
+        editedPoint.generated = false;
+        engravingAutomation()->editPoints(curveKey, { { newTick, editedPoint, oldPointData.tick } });
         return;
     }
 
-    const mu::engraving::AutomationPoint* oldPoint = engravingAutomation()->point(curveKey, oldPointData.tick);
-    const mu::engraving::AutomationPoint newPoint = { newValue, newValue,
-                                                      oldPoint ? oldPoint->interpolation
-                                                      : mu::engraving::AutomationPoint::InterpolationType::Linear,
-                                                      oldPoint ? oldPoint->itemId : std::nullopt };
-    if (oldPoint && pointType == PointData::PointType::IN) {
-        engravingAutomation()->setPointInValue(curveKey, oldPointData.tick, oldPoint->outValue);
+    mu::engraving::AutomationPoint updatedOldPoint = *existingPoint;
+    if (pointType == PointData::PointType::IN) {
+        updatedOldPoint.inValue = existingPoint->outValue;
+    } else {
+        updatedOldPoint.outValue = existingPoint->inValue;
     }
-    if (oldPoint && pointType == PointData::PointType::OUT) {
-        engravingAutomation()->setPointOutValue(curveKey, oldPointData.tick, oldPoint->inValue);
-    }
-    engravingAutomation()->addPoint(curveKey, newTick, newPoint);
+    updatedOldPoint.generated = false;
+
+    const mu::engraving::AutomationPoint newPoint = { newValue, newValue, existingPoint->interpolation, existingPoint->itemId };
+    engravingAutomation()->editPoints(curveKey, { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } });
 }
 
 INotationAutomationPtr NotationAutomationController::automation() const

@@ -30,6 +30,7 @@
 #include <map>
 #include <optional>
 #include <set>
+#include <vector>
 
 namespace mu::engraving {
 struct AutomationPoint {
@@ -42,13 +43,15 @@ struct AutomationPoint {
     muse::real_t outValue = 0.; // [0; 1]
     InterpolationType interpolation = InterpolationType::Linear;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
+    bool generated = false; // true if the point was generated automatically and hasn't been edited by the user
 
     bool operator==(const AutomationPoint& p) const
     {
         return inValue == p.inValue
                && outValue == p.outValue
                && interpolation == p.interpolation
-               && itemId == p.itemId;
+               && itemId == p.itemId
+               && generated == p.generated;
     }
 };
 
@@ -81,6 +84,14 @@ struct AutomationCurveKey {
 using utick_t = int;
 using AutomationCurve = std::map<utick_t, AutomationPoint>;
 using AutomationCurveMap = std::map<AutomationCurveKey, AutomationCurve>;
+
+struct AutomationPointEdit {
+    utick_t tick = 0; // tick to write the point at
+    AutomationPoint point; // the point's final value
+    std::optional<utick_t> moveFrom; // if set, the point currently at this tick is removed as part of this edit
+};
+
+using AutomationPointEdits = std::vector<AutomationPointEdit>;
 
 struct AutomationChanges {
     bool isFullReset = false;

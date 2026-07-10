@@ -27,6 +27,33 @@
 #include "global/containers.h"
 
 namespace mu::engraving {
+using InterpolationType = AutomationPoint::InterpolationType;
+
+inline AutomationPoint generatedPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+{
+    static uint64_t lastId = 0;
+
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+    p.itemId = EID::newUniqueTestMode(lastId);
+    p.generated = true;
+
+    return p;
+}
+
+inline AutomationPoint customPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+{
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+    p.generated = false;
+
+    return p;
+}
+
 inline void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
 {
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
@@ -38,6 +65,7 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
         EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at tick " << tick;
         EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at tick " << tick;
+        EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;
     }
 }
 }

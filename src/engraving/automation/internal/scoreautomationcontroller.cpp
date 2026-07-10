@@ -300,8 +300,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
 {
     TRACEFUNC;
 
-    if (!score) {
-        m_automation->clear();
+    IF_ASSERT_FAILED(score) {
         return;
     }
 
@@ -311,8 +310,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
         return seg->endTick() > tickFrom;
     });
 
-    if (repeatFromIt == repeatList.cend()) {
-        m_automation->clear();
+    IF_ASSERT_FAILED(repeatFromIt != repeatList.cend()) {
         return;
     }
 
@@ -389,7 +387,7 @@ void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& c
         AutomationCurve& curveCopy = destCurves.emplace_hint(destCurves.end(), key, AutomationCurve())->second;
 
         for (const auto& [tick, point] : curve) {
-            if (tick < clearFromUTick || !point.itemId.has_value()) {
+            if (tick < clearFromUTick || !point.generated) {
                 curveCopy.emplace_hint(curveCopy.end(), tick, point);
             }
         }
@@ -448,6 +446,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         point.inValue = 0.0;
         point.outValue = it->second;
         point.itemId = eid;
+        point.generated = true;
         addDeferredPoint(key, dynamicUTick, point, priority, ctx);
         return;
     }
@@ -460,11 +459,13 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         point.inValue = 0.0;
         point.outValue = it->second;
         point.itemId = eid;
+        point.generated = true;
         addDeferredPoint(key, dynamicUTick, point, priority, ctx);
 
         if (nextSeg) {
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
+            nextPoint.generated = true;
             tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, ctx);
         }
 
@@ -479,12 +480,14 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         startPoint.inValue = 0.0;
         startPoint.outValue = values.first;
         startPoint.itemId = eid;
+        startPoint.generated = true;
         addDeferredPoint(key, dynamicUTick, startPoint, priority, ctx);
 
         AutomationPoint endPoint;
         endPoint.inValue = values.second;
         endPoint.outValue = values.second;
         endPoint.itemId = eid;
+        endPoint.generated = true;
         tryAddDynamicPoint(key, endPointTick, endPoint, priority, ctx);
 
         return;
@@ -576,6 +579,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         startPoint.outValue = valueFrom;
         startPoint.inValue = prevOutValue;
         startPoint.itemId = info.eid;
+        startPoint.generated = true;
         tryAddDynamicPoint(key, info.from, startPoint, info.priority, ctx);
     }
 
@@ -622,6 +626,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
         point.inValue = valueTo;
         point.outValue = valueTo;
         point.itemId = info.eid;
+        point.generated = true;
         tryAddDynamicPoint(key, info.to, point, info.priority, ctx);
     }
 }

@@ -21,8 +21,6 @@
  */
 #pragma once
 
-#include <functional>
-
 #include "global/async/channel.h"
 
 #include "automationtypes.h"
@@ -39,23 +37,17 @@ public:
 
     virtual bool isEmpty() const = 0;
 
-    virtual void clear() = 0;
+    //! NOTE: full replacement; any existing key absent from the argument is removed; notifies as a full reset
+    virtual void setCurves(AutomationCurveMap&& curves) = 0;
 
     //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
     virtual void replaceCurves(AutomationCurveMap&& curves) = 0;
 
-    //! NOTE: full replacement; any existing key absent from the argument is removed
-    virtual void setCurves(AutomationCurveMap&& curves) = 0;
+    //! NOTE: creates, updates, and/or moves points in one batch
+    virtual void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits) = 0;
 
-    virtual void addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p) = 0;
-    virtual void removePoint(const AutomationCurveKey& key, utick_t tick) = 0;
-    virtual void movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick) = 0;
-
-    using PointRemoveAccepted = std::function<bool (const AutomationCurveKey&, utick_t tick, const AutomationPoint&)>;
-    virtual void removePoints(const PointRemoveAccepted& accepted) = 0;
-
-    virtual void setPointInValue(const AutomationCurveKey& key, utick_t tick, double value) = 0;
-    virtual void setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value) = 0;
+    //! NOTE: removes the points at the given ticks from the given curve, if present
+    virtual void removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks) = 0;
 
     //! NOTE: moves all points with tick >= tickFrom by diff ticks
     virtual void moveTicks(utick_t tickFrom, utick_t diff) = 0;

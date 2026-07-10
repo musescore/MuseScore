@@ -47,16 +47,13 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     key2.staffId = muse::ID(2);
     key2.voiceIdx = 2;
 
-    uint64_t lastId = 0;
-    AutomationPoint p1;
-    p1.inValue = 0.3;
-    p1.outValue = 0.5;
-    p1.itemId = EID::newUniqueTestMode(lastId);
-    AutomationPoint p2;
-    p2.inValue = 0.6;
-    p2.outValue = 0.8;
-    automation.addPoint(key1, 100, p1);
-    automation.addPoint(key2, 200, p2);
+    const AutomationPoint p1 = generatedPoint(0.3, 0.5);
+    const AutomationPoint p2 = customPoint(0.6, 0.8);
+
+    AutomationCurveMap curves;
+    curves[key1] = { { 100, p1 } };
+    curves[key2] = { { 200, p2 } };
+    automation.setCurves(std::move(curves));
 
     // [WHEN] Serialized (including generated points) and deserialized
     Automation loaded;
