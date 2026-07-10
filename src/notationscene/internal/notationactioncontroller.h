@@ -89,7 +89,10 @@ public:
     NoteInputMethod noteInputMethod() const override;
     DurationType currentDurationType() const override;
     int currentDotCount() const override;
+    bool currentIsRest() const override;
     AccidentalType currentAccidentalType() const override;
+    std::set<SymbolId> currentArticulations() const override;
+    voice_idx_t currentVoice() const override;
 
     muse::async::Notification currentNotationChanged() const;
 

@@ -85,4 +85,16 @@ inline static const muse::rcommand::Command TOGGLE_SHARP2_COMMAND("command://not
 inline static const muse::rcommand::Command ADD_TIE_COMMAND("command://notation/add-tie");
 inline static const muse::rcommand::Command ADD_SLUR_COMMAND("command://notation/add-slur");
 inline static const muse::rcommand::Command ADD_LV_COMMAND("command://notation/add-laissez-vibrer");
+inline static const muse::rcommand::Command ADD_MARCATO_COMMAND("command://notation/add-marcato");
+inline static const muse::rcommand::Command ADD_SFORZATO_COMMAND("command://notation/add-sforzato");
+inline static const muse::rcommand::Command ADD_TENUTO_COMMAND("command://notation/add-tenuto");
+inline static const muse::rcommand::Command ADD_STACCATO_COMMAND("command://notation/add-staccato");
+
+inline static const muse::rcommand::Command USE_VOICE_1_COMMAND("command://notation/use-voice-1");
+inline static const muse::rcommand::Command USE_VOICE_2_COMMAND("command://notation/use-voice-2");
+inline static const muse::rcommand::Command USE_VOICE_3_COMMAND("command://notation/use-voice-3");
+inline static const muse::rcommand::Command USE_VOICE_4_COMMAND("command://notation/use-voice-4");
+
+inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
+inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
 }

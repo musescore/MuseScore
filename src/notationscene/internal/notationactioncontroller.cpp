@@ -139,6 +139,18 @@ void NotationActionController::init()
     registerCommand(ADD_TIE_COMMAND, &Controller::addTie);
     registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
     registerCommand(ADD_LV_COMMAND, &Controller::addLaissezVib);
+    registerCommand(ADD_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
+    registerCommand(ADD_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
+    registerCommand(ADD_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
+    registerCommand(ADD_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
+
+    registerCommand(USE_VOICE_1_COMMAND, [this]() { changeVoice(0); });
+    registerCommand(USE_VOICE_2_COMMAND, [this]() { changeVoice(1); });
+    registerCommand(USE_VOICE_3_COMMAND, [this]() { changeVoice(2); });
+    registerCommand(USE_VOICE_4_COMMAND, [this]() { changeVoice(3); });
+
+    registerCommand(FLIP_COMMAND, &Interaction::flipSelection);
+    registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
 
     registerAction("note-action", &Controller::handleNoteAction);
 
@@ -187,11 +199,6 @@ void NotationActionController::init()
 
     registerAction("rest", &Interaction::putRestToSelection);
 
-    registerAction("add-marcato", [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
-    registerAction("add-sforzato", [this]() { toggleArticulation(SymbolId::articAccentAbove); });
-    registerAction("add-tenuto", [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
-    registerAction("add-staccato", [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
-
     registerAction("duplet", [this]() { putTuplet(2); }, &Controller::noteOrRestSelected);
     registerAction("triplet", [this]() { putTuplet(3); }, &Controller::noteOrRestSelected);
     registerAction("quadruplet", [this]() { putTuplet(4); }, &Controller::noteOrRestSelected);
@@ -234,9 +241,6 @@ void NotationActionController::init()
     registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
-
-    registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
-    registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
 
     registerAction("chord-tie", &Controller::chordTie);
 
@@ -504,10 +508,6 @@ void NotationActionController::init()
         if (isNotesIntervalValid(i)) {
             registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
         }
-    }
-
-    for (voice_idx_t i = 0; i < mu::engraving::VOICES; ++i) {
-        registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(static_cast<int>(i)); });
     }
 
     registerAction("voice-assignment-all-in-instrument", &Interaction::changeSelectedElementsVoiceAssignment,
@@ -1015,6 +1015,40 @@ int NotationActionController::currentDotCount() const
     return interaction->noteInput()->state().duration().dots();
 }
 
+bool NotationActionController::currentIsRest() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return false;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return noteInput->state().rest();
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return false;
+    }
+
+    if (selection->isNone() || selection->isRange()) {
+        return false;
+    }
+
+    for (const EngravingItem* element: selection->elements()) {
+        if (!element->isRest()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 AccidentalType NotationActionController::currentAccidentalType() const
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
@@ -1023,6 +1057,119 @@ AccidentalType NotationActionController::currentAccidentalType() const
     }
 
     return interaction->noteInput()->state().accidentalType();
+}
+
+std::set<SymbolId> NotationActionController::currentArticulations() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return {};
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return {};
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return mu::engraving::splitArticulations(noteInput->state().articulationIds());
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return {};
+    }
+
+    if (selection->isNone()) {
+        return {};
+    }
+
+    auto chordArticulations = [](const Chord* chord) {
+        std::set<SymbolId> result;
+        for (Articulation* articulation: chord->articulations()) {
+            result.insert(articulation->symId());
+        }
+
+        result = mu::engraving::flipArticulations(result, mu::engraving::PlacementV::ABOVE);
+        return mu::engraving::splitArticulations(result);
+    };
+
+    std::set<SymbolId> result;
+    bool isFirstNote = true;
+    for (const EngravingItem* element: selection->elements()) {
+        if (!element->isNote()) {
+            continue;
+        }
+
+        const Note* note = toNote(element);
+        if (isFirstNote) {
+            result = chordArticulations(note->chord());
+            isFirstNote = false;
+        } else {
+            std::set<SymbolId> currentNoteArticulations = chordArticulations(note->chord());
+            for (auto it = result.begin(); it != result.end();) {
+                if (std::find(currentNoteArticulations.begin(), currentNoteArticulations.end(),
+                              *it) == currentNoteArticulations.end()) {
+                    it = result.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+voice_idx_t NotationActionController::currentVoice() const
+{
+    constexpr voice_idx_t INVALID_VOICE = muse::nidx;
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return INVALID_VOICE;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return INVALID_VOICE;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return noteInput->state().voice();
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return INVALID_VOICE;
+    }
+
+    if (selection->isNone()) {
+        return INVALID_VOICE;
+    }
+
+    const std::vector<EngravingItem*>& selectedElements = selection->elements();
+    if (selectedElements.empty()) {
+        return INVALID_VOICE;
+    }
+
+    voice_idx_t voice = INVALID_VOICE;
+    for (const EngravingItem* element : selectedElements) {
+        if (element->hasVoiceAssignmentProperties()) {
+            VoiceAssignment voiceAssignment = element->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
+                return INVALID_VOICE;
+            }
+        }
+        voice_idx_t elementVoice = element->voice();
+        if (elementVoice != voice && voice != INVALID_VOICE) {
+            return INVALID_VOICE;
+        }
+
+        voice = elementVoice;
+    }
+
+    return voice;
 }
 
 muse::async::Notification NotationActionController::selectionChanged() const

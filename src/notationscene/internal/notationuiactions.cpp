@@ -1662,18 +1662,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Change enharmonic spelling (current pitch mode only)"),
              IconCode::Code::NONE
              ),
-    UiAction("flip",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Flip direction"),
-             TranslatableString("action", "Flip direction"),
-             IconCode::Code::NOTE_FLIP
-             ),
-    UiAction("flip-horizontally",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Flip horizontally"),
-             TranslatableString("action", "Flip horizontally")),
     UiAction(TOGGLE_CONCERT_PITCH_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2202,34 +2190,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Accessibility: Previous segment element"),
              TranslatableString("action", "Select previous in-staff element")
              ),
-    UiAction("add-marcato",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Marcato"),
-             TranslatableString("action", "Add articulation: marcato"),
-             IconCode::Code::MARCATO
-             ),
-    UiAction("add-sforzato",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Accent"),
-             TranslatableString("action", "Add articulation: accent"),
-             IconCode::Code::ACCENT
-             ),
-    UiAction("add-tenuto",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Tenuto"),
-             TranslatableString("action", "Add articulation: tenuto"),
-             IconCode::Code::TENUTO
-             ),
-    UiAction("add-staccato",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Staccato"),
-             TranslatableString("action", "Add articulation: staccato"),
-             IconCode::Code::STACCATO
-             ),
     UiAction("cross-staff-beaming",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2241,34 +2201,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Tuplet"),
              IconCode::Code::NOTE_TUPLET
-             ),
-    UiAction("voice-1",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Voice 1"),
-             TranslatableString("action", "Use voice 1"),
-             IconCode::Code::VOICE_1
-             ),
-    UiAction("voice-2",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Voice 2"),
-             TranslatableString("action", "Use voice 2"),
-             IconCode::Code::VOICE_2
-             ),
-    UiAction("voice-3",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Voice 3"),
-             TranslatableString("action", "Use voice 3"),
-             IconCode::Code::VOICE_3
-             ),
-    UiAction("voice-4",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Voice 4"),
-             TranslatableString("action", "Use voice 4"),
-             IconCode::Code::VOICE_4
              ),
     UiAction("voice-assignment-all-in-instrument",
              mu::context::UiCtxProjectOpened,
@@ -2727,23 +2659,6 @@ int NotationUiActions::actionVoice(const ActionCode& actionCode)
     return voice;
 }
 
-SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionCode)
-{
-    static const QMap<ActionCode, SymbolId> articulations {
-        { "add-marcato", SymbolId::articMarcatoAbove },
-        { "add-sforzato", SymbolId::articAccentAbove },
-        { "add-tenuto", SymbolId::articTenutoAbove },
-        { "add-staccato", SymbolId::articStaccatoAbove }
-    };
-
-    SymbolId symbolId = SymbolId::noSym;
-    if (articulations.contains(actionCode)) {
-        symbolId = articulations[actionCode];
-    }
-
-    return symbolId;
-}
-
 const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
 {
     static ToolConfig config;
@@ -2786,21 +2701,20 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "command://notation/add-tie", true },
             { "command://notation/add-slur", true },
             { "command://notation/add-laissez-vibrer", false },
-            { "lv", false },
             { "", true },
-            { "add-marcato", true },
-            { "add-sforzato", true },
-            { "add-tenuto", true },
-            { "add-staccato", true },
+            { "command://notation/add-marcato", true },
+            { "command://notation/add-sforzato", true },
+            { "command://notation/add-tenuto", true },
+            { "command://notation/add-staccato", true },
             { "", true },
-            { "cross-staff-beaming", false },
-            { "tuplet", true },
-            { "flip", true },
+            { "cross-staff-beaming", false }, // virtual action
+            { "tuplet", true },               // virtual action
+            { "command://notation/flip", true },
             { "", true },
-            { "voice-1", true },
-            { "voice-2", true },
-            { "voice-3", false },
-            { "voice-4", false }
+            { "command://notation/use-voice-1", true },
+            { "command://notation/use-voice-2", true },
+            { "command://notation/use-voice-3", false },
+            { "command://notation/use-voice-4", false }
         };
     }
     return config;
