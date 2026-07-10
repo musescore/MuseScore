@@ -373,7 +373,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     addMeasureRepeatPoints(ctx);
 
     // Step 6: the new curves are fully built; merge them back, replacing only the affected ones
-    m_automation->replaceCurves(std::move(ctx.curves));
+    m_automation->replaceCurves(ctx.curves);
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
@@ -738,7 +738,7 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
                     shifted.begin()->second.inValue = prevIt != curve->end() ? prevIt->second.outValue : real_t(0.0);
                 }
 
-                curve->merge(std::move(shifted));
+                curve->merge(shifted);
             }
         }
     }

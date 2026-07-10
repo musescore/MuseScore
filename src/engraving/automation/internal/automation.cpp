@@ -81,31 +81,23 @@ bool Automation::isEmpty() const
     return m_curveMap.empty();
 }
 
-void Automation::setCurves(AutomationCurveMap&& curves)
+void Automation::setCurves(const AutomationCurveMap& curves)
 {
-    for (auto it = curves.begin(); it != curves.end();) {
-        if (it->second.empty()) {
-            it = curves.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
     if (curves == m_curveMap) {
         return;
     }
 
-    m_curveMap = std::move(curves);
+    m_curveMap = curves;
 
     m_pendingChanges.isFullReset = true;
     notifyChanged();
 }
 
-void Automation::replaceCurves(AutomationCurveMap&& curves)
+void Automation::replaceCurves(const AutomationCurveMap& curves)
 {
     static const AutomationCurve EMPTY_CURVE;
 
-    for (auto& [key, newCurve] : curves) {
+    for (const auto& [key, newCurve] : curves) {
         const auto oldIt = m_curveMap.find(key);
         const AutomationCurve& oldCurve = oldIt != m_curveMap.end() ? oldIt->second : EMPTY_CURVE;
         diffPoints(key, oldCurve, newCurve, m_pendingChanges);
@@ -115,9 +107,9 @@ void Automation::replaceCurves(AutomationCurveMap&& curves)
                 m_curveMap.erase(oldIt);
             }
         } else if (oldIt != m_curveMap.end()) {
-            oldIt->second = std::move(newCurve);
+            oldIt->second = newCurve;
         } else {
-            m_curveMap.emplace(key, std::move(newCurve));
+            m_curveMap.emplace(key, newCurve);
         }
     }
 
@@ -292,7 +284,8 @@ void Automation::rollbackTransaction()
         return;
     }
 
-    m_curveMap = std::move(m_snapshot);
+    m_curveMap = m_snapshot;
+    m_snapshot.clear();
     m_transactionStarted = false;
     m_notifyPending = false;
     m_pendingChanges.clear();

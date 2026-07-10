@@ -53,7 +53,7 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     AutomationCurveMap curves;
     curves[key1] = { { 100, p1 } };
     curves[key2] = { { 200, p2 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Serialized (including generated points) and deserialized
     Automation loaded;

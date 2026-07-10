@@ -24,7 +24,6 @@
 #include <gtest/gtest.h>
 
 #include "engraving/automation/automationtypes.h"
-#include "global/containers.h"
 
 namespace mu::engraving {
 using InterpolationType = AutomationPoint::InterpolationType;
@@ -59,7 +58,7 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
 
     for (const auto& [tick, expectedPoint] : expectedCurve) {
-        ASSERT_TRUE(muse::contains(actualCurve, tick)) << "Missing point at tick " << tick;
+        ASSERT_TRUE(actualCurve.contains(tick)) << "Missing point at tick " << tick;
         const AutomationPoint& actualPoint = actualCurve.at(tick);
 
         EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at tick " << tick;

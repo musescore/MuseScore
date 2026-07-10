@@ -47,7 +47,7 @@ TEST_F(Automation_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
     AutomationCurveMap curves;
     curves[key] = { { 100, p1 }, { 200, p2 }, { 300, p3 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Move ticks starting at 200 by +100
     automation.moveTicks(200, 100);
@@ -73,7 +73,7 @@ TEST_F(Automation_Tests, MoveTicks_NegativeDiff_ShiftsPointsBack)
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
     AutomationCurveMap curves;
     curves[key] = { { 100, p1 }, { 500, p2 }, { 700, p3 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Move ticks starting at 500 by -200
     automation.moveTicks(500, -200);
@@ -103,7 +103,7 @@ TEST_F(Automation_Tests, MoveTicks_AcrossMultipleCurves)
     AutomationCurveMap curves;
     curves[key1] = { { 200, p1 } };
     curves[key2] = { { 200, p2 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Ticks from 100 shifted by +500
     automation.moveTicks(100, 500);
@@ -131,7 +131,7 @@ TEST_F(Automation_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     AutomationPoint p700 = generatedPoint(0.6, 0.7);
     AutomationCurveMap curves;
     curves[key] = { { 100, p100 }, { 300, p300 }, { 500, p500 }, { 700, p700 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
     automation.removeTicks(300, 500);
@@ -153,7 +153,7 @@ TEST_F(Automation_Tests, RemoveTicks_CleansUpEmptyCurves)
 
     AutomationCurveMap curves;
     curves[key] = { { 200, generatedPoint(0.4, 0.5) }, { 400, generatedPoint(0.5, 0.6) } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Remove ticks in range [100, 500]
     automation.removeTicks(100, 500);
@@ -179,7 +179,7 @@ TEST_F(Automation_Tests, RemovePoints_RemovesGivenTicksPreservesOthers)
         { 300, custom300 },
         { 400, generatedPoint(0.6, 0.7) }
     };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Remove points at ticks 200 and 400
     automation.removePoints(key, { 200, 400 });
@@ -208,7 +208,7 @@ TEST_F(Automation_Tests, RemovePoints_ScopedToGivenKey)
     AutomationCurveMap curves;
     curves[key1] = { { 100, p_key1_100 }, { 300, generatedPoint(0.4, 0.5) } };
     curves[key2] = { { 300, p_key2_300 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Remove tick 300 from key1 only
     automation.removePoints(key1, { 300 });
@@ -232,7 +232,7 @@ TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
 
     AutomationCurveMap curves;
     curves[key] = { { 100, generatedPoint(0.4, 0.5) }, { 200, generatedPoint(0.5, 0.6) } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [WHEN] Remove both points
     automation.removePoints(key, { 100, 200 });
@@ -262,7 +262,7 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
     curves[key1] = { { 100, generatedPoint(0.3, 0.4) }, { 200, generatedPoint(0.4, 0.5) } };
     curves[key2] = { { 150, generatedPoint(0.5, 0.6) } };
     curves[key3] = { { 250, p3 } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     int notifyCount = 0;
     AutomationChanges lastChanges;
@@ -276,7 +276,7 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
     AutomationCurveMap replacement;
     replacement[key1][300] = newPoint;
     replacement[key2] = AutomationCurve();
-    automation.replaceCurves(std::move(replacement));
+    automation.replaceCurves(replacement);
 
     // [THEN] key1's old points are gone, only the new one remains
     AutomationCurve expectedKey1;
@@ -316,7 +316,7 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
     AutomationCurveMap curves;
     curves[key1] = { { 100, generatedPoint(0.3, 0.4) } };
     curves[key2] = { { 150, generatedPoint(0.5, 0.6) } };
-    automation.replaceCurves(std::move(curves));
+    automation.replaceCurves(curves);
 
     int notifyCount = 0;
     AutomationChanges lastChanges;
@@ -329,7 +329,7 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
     AutomationPoint newPoint = generatedPoint(0.7, 0.8);
     AutomationCurveMap newCurves;
     newCurves[key1][300] = newPoint;
-    automation.setCurves(std::move(newCurves));
+    automation.setCurves(newCurves);
 
     // [THEN] key1 has only the new point
     AutomationCurve expectedKey1;
@@ -354,7 +354,7 @@ TEST_F(Automation_Tests, SetCurves_SameContent_NotFired)
 
     AutomationCurveMap curves;
     curves[key] = { { 100, generatedPoint(0.3, 0.4) } };
-    automation.replaceCurves(AutomationCurveMap(curves));
+    automation.replaceCurves(curves);
 
     int notifyCount = 0;
     automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
@@ -362,7 +362,7 @@ TEST_F(Automation_Tests, SetCurves_SameContent_NotFired)
     });
 
     // [WHEN] Setting identical curves
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     // [THEN] No notification fired
     EXPECT_EQ(notifyCount, 0);
@@ -405,7 +405,7 @@ TEST_F(Automation_Tests, Notify_EditPoints_SameValue_NotFired)
     const AutomationPoint point = generatedPoint(0.5, 0.5);
     AutomationCurveMap curves;
     curves[key] = { { 100, point } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     int notifyCount = 0;
     automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
@@ -429,7 +429,7 @@ TEST_F(Automation_Tests, Notify_MoveTicks_OpenEndedRange)
 
     AutomationCurveMap curves;
     curves[key] = { { 100, generatedPoint(0.3, 0.4) }, { 200, generatedPoint(0.5, 0.6) } };
-    automation.setCurves(std::move(curves));
+    automation.setCurves(curves);
 
     AutomationChanges lastChanges;
     automation.changed().onReceive(this, [&lastChanges](const AutomationChanges& ch) {

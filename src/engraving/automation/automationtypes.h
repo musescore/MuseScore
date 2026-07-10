@@ -23,11 +23,11 @@
 
 #include "global/types/id.h"
 #include "global/types/number.h"
+#include "global/types/sharedmap.h"
 
 #include "engraving/infrastructure/eid.h"
 
 #include <limits>
-#include <map>
 #include <optional>
 #include <set>
 #include <vector>
@@ -82,8 +82,8 @@ struct AutomationCurveKey {
 };
 
 using utick_t = int;
-using AutomationCurve = std::map<utick_t, AutomationPoint>;
-using AutomationCurveMap = std::map<AutomationCurveKey, AutomationCurve>;
+using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
+using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
 
 struct AutomationPointEdit {
     utick_t tick = 0; // tick to write the point at

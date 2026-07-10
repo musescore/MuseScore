@@ -30,7 +30,6 @@
 #include "engraving/dom/staff.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
-#include "global/containers.h"
 
 #include "utils/scorerw.h"
 #include "automation/utils/automationtestutils.h"
@@ -139,7 +138,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Positive_ShiftsAllPoints)
     EXPECT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
 
         AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
@@ -166,7 +165,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     const AutomationCurveMap& curvesAfter = controller.automation()->curves();
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
 
         AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
@@ -205,7 +204,7 @@ TEST_F(ScoreAutomationController_Tests, Update_IsTextEditing_DoesNothing)
     ASSERT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
         checkCurvesMatch(curvesAfter.at(key), curveBefore);
     }
 }
@@ -235,7 +234,7 @@ TEST_F(ScoreAutomationController_Tests, Update_NoRelevantTypes_DoesNothing)
     ASSERT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
         checkCurvesMatch(curvesAfter.at(key), curveBefore);
     }
 }

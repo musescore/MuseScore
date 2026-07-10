@@ -38,10 +38,10 @@ public:
     virtual bool isEmpty() const = 0;
 
     //! NOTE: full replacement; any existing key absent from the argument is removed; notifies as a full reset
-    virtual void setCurves(AutomationCurveMap&& curves) = 0;
+    virtual void setCurves(const AutomationCurveMap& curves) = 0;
 
     //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
-    virtual void replaceCurves(AutomationCurveMap&& curves) = 0;
+    virtual void replaceCurves(const AutomationCurveMap& curves) = 0;
 
     //! NOTE: creates, updates, and/or moves points in one batch
     virtual void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits) = 0;
