@@ -53,7 +53,6 @@ public:
     muse::async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
     static int actionVoice(const muse::actions::ActionCode& actionCode);
-    static SymbolId actionArticulationSymbolId(const muse::actions::ActionCode& actionCode);
 
     static const muse::ui::ToolConfig& defaultNoteInputBarConfig();
 

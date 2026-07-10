@@ -407,7 +407,77 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("notation", "Add laissez vibrer"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_LV)
-    }
+    },
+    CommandInfo{
+        ADD_MARCATO_COMMAND,
+        TranslatableString("notation", "Marcato"),
+        TranslatableString("notation", "Add articulation: marcato"),
+        InputSchema(),
+        Decoration(IconCode::Code::MARCATO)
+    },
+    CommandInfo{
+        ADD_SFORZATO_COMMAND,
+        TranslatableString("notation", "Accent"),
+        TranslatableString("notation", "Add articulation: accent"),
+        InputSchema(),
+        Decoration(IconCode::Code::ACCENT)
+    },
+    CommandInfo{
+        ADD_TENUTO_COMMAND,
+        TranslatableString("notation", "Tenuto"),
+        TranslatableString("notation", "Add articulation: tenuto"),
+        InputSchema(),
+        Decoration(IconCode::Code::TENUTO)
+    },
+    CommandInfo{
+        ADD_STACCATO_COMMAND,
+        TranslatableString("notation", "Staccato"),
+        TranslatableString("notation", "Add articulation: staccato"),
+        InputSchema(),
+        Decoration(IconCode::Code::STACCATO)
+    },
+    CommandInfo{
+        USE_VOICE_1_COMMAND,
+        TranslatableString("notation", "Voice 1"),
+        TranslatableString("notation", "Use voice 1"),
+        InputSchema(),
+        Decoration(IconCode::Code::VOICE_1)
+    },
+    CommandInfo{
+        USE_VOICE_2_COMMAND,
+        TranslatableString("notation", "Voice 2"),
+        TranslatableString("notation", "Use voice 2"),
+        InputSchema(),
+        Decoration(IconCode::Code::VOICE_2)
+    },
+    CommandInfo{
+        USE_VOICE_3_COMMAND,
+        TranslatableString("notation", "Voice 3"),
+        TranslatableString("notation", "Use voice 3"),
+        InputSchema(),
+        Decoration(IconCode::Code::VOICE_3)
+    },
+    CommandInfo{
+        USE_VOICE_4_COMMAND,
+        TranslatableString("notation", "Voice 4"),
+        TranslatableString("notation", "Use voice 4"),
+        InputSchema(),
+        Decoration(IconCode::Code::VOICE_4)
+    },
+    CommandInfo{
+        FLIP_COMMAND,
+        TranslatableString("notation", "Flip direction"),
+        TranslatableString("notation", "Flip direction"),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_FLIP)
+    },
+    CommandInfo{
+        FLIP_HORIZONTALLY_COMMAND,
+        TranslatableString("notation", "Flip horizontally"),
+        TranslatableString("notation", "Flip horizontally"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const

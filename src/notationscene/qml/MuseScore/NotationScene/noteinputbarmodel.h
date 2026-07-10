@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuistate.h"
+#include "notationscene/inotationcommandscontroller.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public QQmlParserStatus
@@ -42,6 +43,7 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public Q
 
     muse::ContextInject<muse::ui::IUiState> uiState = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<INotationCommandsController> commandsController = { this };
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
@@ -63,20 +65,7 @@ private:
     void classBegin() override;
     void componentComplete() override {}
     void init();
-
-    void setNotation(const INotationPtr& notation);
-
     void load() override;
-
-    void updateItemStateChecked(muse::uicomponents::MenuItem& item, bool checked);
-    void updateItemsStateChecked(const muse::actions::ActionCode& actionCode, bool checked);
-
-    void updateState();
-    void updateNoteInputState();
-    void updateVoicesState();
-    void updateArticulationsState();
-    void updateRestState();
-    void updateAddState();
 
     muse::uicomponents::MenuItem* makeActionItem(const muse::ui::UiAction& action, const QString& section,
                                                  const muse::uicomponents::MenuItemList& subitems = {});
@@ -93,19 +82,5 @@ private:
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
-
-    INotationNoteInputPtr noteInput() const;
-    INotationInteractionPtr interaction() const;
-    INotationSelectionPtr selection() const;
-    INotationUndoStackPtr undoStack() const;
-
-    int resolveCurrentVoiceIndex() const;
-    std::set<SymbolId> resolveCurrentArticulations() const;
-    bool resolveRestSelected() const;
-
-    bool isNoteInputMode() const;
-    const NoteInputState& noteInputState() const;
-
-    INotationPtr m_notation = nullptr;
 };
 }

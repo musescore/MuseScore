@@ -56,6 +56,9 @@ public:
     virtual NoteInputMethod noteInputMethod() const = 0;
     virtual DurationType currentDurationType() const = 0;
     virtual int currentDotCount() const = 0;
+    virtual bool currentIsRest() const = 0;
     virtual AccidentalType currentAccidentalType() const = 0;
+    virtual std::set<SymbolId> currentArticulations() const = 0;
+    virtual voice_idx_t currentVoice() const = 0;
 };
 }
