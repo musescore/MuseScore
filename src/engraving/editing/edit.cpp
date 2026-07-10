@@ -1111,8 +1111,9 @@ void Score::deleteItem(EngravingItem* el)
     {
         KeySig* k = toKeySig(el);
         Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
+        const TrackRange trackRange = el->part()->trackRange();
         bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                         el->part()->startTrack(), el->part()->endTrack() - 1);
+                                                         trackRange.startTrack, trackRange.endTrack - 1);
         undoRemoveElement(k);
         if (ic) {
             KeySigEvent ke = k->keySigEvent();
@@ -4643,7 +4644,12 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     for (const Staff* staff : ostaff->staffList()) {
         track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
 
-        if (linkedTrack == muse::nidx || linkedTrack < staff->part()->startTrack() || linkedTrack >= staff->part()->endTrack()) {
+        if (linkedTrack == muse::nidx) {
+            continue;
+        }
+
+        const TrackRange trackRange = staff->part()->trackRange();
+        if (linkedTrack < trackRange.startTrack || linkedTrack >= trackRange.endTrack) {
             continue;
         }
 

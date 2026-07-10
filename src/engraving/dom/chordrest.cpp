@@ -1320,8 +1320,9 @@ void ChordRest::checkStaffMoveValidity()
     const Staff* targetStaff  = score()->staff(idx);
     const StaffType* targetStaffType = targetStaff ? targetStaff->staffTypeForElement(this) : nullptr;
     // check that destination staff makes sense
-    staff_idx_t minStaff = part()->startTrack() / VOICES;
-    staff_idx_t maxStaff = part()->endTrack() / VOICES;
+    const TrackRange trackRange = part()->trackRange();
+    staff_idx_t minStaff = track2staff(trackRange.startTrack);
+    staff_idx_t maxStaff = track2staff(trackRange.endTrack);
     bool isDestinationValid = targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
                               && targetStaffType->group() == baseStaffType->group() && targetStaff->isLinked() == baseStaff->isLinked();
     if (!isDestinationValid) {

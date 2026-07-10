@@ -873,8 +873,9 @@ std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const Eng
             return result;
         }
 
-        const staff_idx_t startStaffIdx = track2staff(part->startTrack());
-        const staff_idx_t endStaffIdx = startStaffIdx + part->nstaves();
+        const TrackRange trackRange = part->trackRange();
+        const staff_idx_t startStaffIdx = track2staff(trackRange.startTrack);
+        const staff_idx_t endStaffIdx = track2staff(trackRange.endTrack);
         result.reserve(endStaffIdx - startStaffIdx);
 
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {

@@ -675,30 +675,14 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
     return true;
 }
 
-//---------------------------------------------------------
-//   startTrack
-//---------------------------------------------------------
-
-track_idx_t Part::startTrack() const
+TrackRange Part::trackRange() const
 {
     IF_ASSERT_FAILED(!m_staves.empty()) {
-        return muse::nidx;
+        return {};
     }
 
-    return m_staves.front()->idx() * VOICES;
-}
-
-//---------------------------------------------------------
-//   endTrack
-//---------------------------------------------------------
-
-track_idx_t Part::endTrack() const
-{
-    IF_ASSERT_FAILED(!m_staves.empty()) {
-        return muse::nidx;
-    }
-
-    return m_staves.back()->idx() * VOICES + VOICES;
+    const track_idx_t startTrack = m_staves.front()->idx() * VOICES;
+    return { startTrack, startTrack + m_staves.size() * VOICES };
 }
 
 InstrumentTrackIdList Part::instrumentTrackIdList() const
@@ -902,8 +886,9 @@ int Part::lyricCount() const
 
     size_t count = 0;
     SegmentType st = SegmentType::ChordRest;
+    const TrackRange range = trackRange();
     for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (track_idx_t i = startTrack(); i < endTrack(); ++i) {
+        for (track_idx_t i = range.startTrack; i < range.endTrack; ++i) {
             ChordRest* cr = toChordRest(seg->element(i));
             if (cr) {
                 count += cr->lyrics().size();
@@ -930,10 +915,11 @@ int Part::harmonyCount() const
 
     SegmentType st = SegmentType::ChordRest;
     int count = 0;
+    const TrackRange range = trackRange();
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
         for (const EngravingItem* e : seg->annotations()) {
-            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack()
-                && e->track() < endTrack()) {
+            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= range.startTrack
+                && e->track() < range.endTrack) {
                 count++;
             }
         }

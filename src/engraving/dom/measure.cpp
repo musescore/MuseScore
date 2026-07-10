@@ -389,9 +389,8 @@ AccidentalVal Measure::findAccidental(const Note* note) const
     AccidentalState tversatz;    // state of already set accidentals for this measure
     tversatz.init(vStaff->keySigEvent(tick()));
 
-    track_idx_t startTrack = vStaff->part()->startTrack();
+    const TrackRange trackRange = vStaff->part()->trackRange();
     track_idx_t mainTrack = chord->vStaffIdx() * VOICES;
-    track_idx_t endTrack = vStaff->part()->endTrack();
 
     for (const Segment* segment = first(); segment; segment = segment->next()) {
         if (segment->isKeySigType()) {
@@ -401,7 +400,7 @@ AccidentalVal Measure::findAccidental(const Note* note) const
             }
             tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
                 const EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
@@ -465,15 +464,14 @@ AccidentalVal Measure::findAccidental(const Segment* s, staff_idx_t staffIdx, in
     tversatz.init(staff->keySigEvent(tick()));
 
     SegmentType st = SegmentType::ChordRest;
-    track_idx_t startTrack = staff->part()->startTrack();
-    track_idx_t endTrack = staff->part()->endTrack();
+    const TrackRange trackRange = staff->part()->trackRange();
     for (const Segment* segment = first(st); segment; segment = segment->next(st)) {
         if (segment == s && staff->isPitchedStaff(tick())) {
             ClefType clef = staff->clef(s->tick());
             int l = relStep(line, clef);
             return tversatz.accidentalVal(l, error);
         }
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
             const EngravingItem* e = segment->element(track);
             if (!e || !e->isChord()) {
                 continue;

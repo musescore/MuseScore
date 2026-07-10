@@ -2791,9 +2791,11 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t elementTrack, const 
         return false;
     }
 
-    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (part->startTrack() <= refTrack
-                                                                        && part->endTrack() - 1 >= refTrack)) {
-        return true;
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT) {
+        const TrackRange range = part->trackRange();
+        if (range.startTrack <= refTrack && range.endTrack - 1 >= refTrack) {
+            return true;
+        }
     }
     return false;
 }

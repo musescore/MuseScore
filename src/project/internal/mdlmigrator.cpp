@@ -45,8 +45,7 @@ void MdlMigrator::remapPercussion()
     }
 
     for (Part* part : m_score->parts()) {
-        const track_idx_t startTrack = part->startTrack();
-        const track_idx_t endTrack = part->endTrack();
+        const TrackRange trackRange = part->trackRange();
         const InstrumentList& instruments = part->instruments();
 
         // First instrument in list is the "default instrument".
@@ -70,7 +69,7 @@ void MdlMigrator::remapPercussion()
                 continue;
             }
 
-            remapPitches(startTrack, endTrack, startTick, endTick, repitch);
+            remapPitches(trackRange.startTrack, trackRange.endTrack, startTick, endTick, repitch);
 
             Drumset* drumset = instr->drumset();
 

@@ -422,7 +422,8 @@ void Transpose::transpositionChanged(Transaction& tx, Score* score, Part* part, 
         scores.insert(lsScore);
         Part* lp = ls->part();
         if (!lsScore->style().styleB(Sid::concertPitch)) {
-            transposeKeys(tx, lsScore, lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
+            const TrackRange trackRange = lp->trackRange();
+            transposeKeys(tx, lsScore, track2staff(trackRange.startTrack), track2staff(trackRange.endTrack), tickStart, tickEnd, true);
         }
     }
 

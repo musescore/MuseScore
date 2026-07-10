@@ -263,7 +263,8 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& t
         return empty;
     }
 
-    update(0, m_score->lastMeasure()->tick().ticks(), part->startTrack(), part->endTrack());
+    const TrackRange trackRange = part->trackRange();
+    update(0, m_score->lastMeasure()->tick().ticks(), trackRange.startTrack, trackRange.endTrack);
 
     return m_playbackDataMap[trackId];
 }
@@ -440,7 +441,8 @@ void PlaybackModel::updateSetupData()
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+        const TrackRange trackRange = part->trackRange();
+        if (trackTo < trackRange.startTrack || trackFrom >= trackRange.endTrack) {
             continue;
         }
 
@@ -820,7 +822,8 @@ void PlaybackModel::clearExpiredTracks()
 void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     for (const Part* part : m_score->parts()) {
-        if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
+        const TrackRange trackRange = part->trackRange();
+        if (trackRange.startTrack > trackTo || trackRange.endTrack <= trackFrom) {
             continue;
         }
 
@@ -842,7 +845,8 @@ void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t track
                                                          ChangedTrackIdSet* trackChanges)
 {
     for (const Part* part : m_score->parts()) {
-        if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
+        const TrackRange trackRange = part->trackRange();
+        if (trackRange.startTrack > trackTo || trackRange.endTrack <= trackFrom) {
             continue;
         }
 
