@@ -37,6 +37,7 @@ public:
     audio::AudioResourceMetaList resolveAvailableResources() const override;
     SoundPresetList resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
     void registerResolver(const AudioSourceType type, IResolverPtr resolver) override;
+    void unregisterResolver(const AudioSourceType type) override;
     void clearSources() override;
 
 private:

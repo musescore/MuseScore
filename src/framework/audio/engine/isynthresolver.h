@@ -62,6 +62,7 @@ public:
     virtual AudioResourceMetaList resolveAvailableResources() const = 0;
     virtual SoundPresetList resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const = 0;
     virtual void registerResolver(const AudioSourceType type, IResolverPtr resolver) = 0;
+    virtual void unregisterResolver(const AudioSourceType type) = 0;
     virtual void clearSources() = 0;
 };
 

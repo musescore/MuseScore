@@ -62,6 +62,10 @@ void SynthResolverStub::registerResolver(const AudioSourceType, IResolverPtr)
 {
 }
 
+void SynthResolverStub::unregisterResolver(const AudioSourceType)
+{
+}
+
 void SynthResolverStub::clearSources()
 {
 }

@@ -160,6 +160,8 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 void EngineController::deinit()
 {
     //! AUDIO THREAD
+    m_synthResolver->unregisterResolver(AudioSourceType::Fluid);
+    m_fxResolver->unregisterResolver(AudioFxType::MuseFx);
     m_playback->deinit();
     m_rpcController->deinit();
     m_audioEngine->deinit();

@@ -128,6 +128,15 @@ void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr re
     m_resolvers.insert_or_assign(type, std::move(resolver));
 }
 
+void SynthResolver::unregisterResolver(const AudioSourceType type)
+{
+    ONLY_AUDIO_MAIN_OR_ENGINE_THREAD;
+
+    std::lock_guard lock(m_mutex);
+
+    m_resolvers.erase(type);
+}
+
 void SynthResolver::clearSources()
 {
     ONLY_AUDIO_ENGINE_THREAD;
