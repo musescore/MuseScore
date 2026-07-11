@@ -2,10 +2,11 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>Alls octave-shifts</work-title>
+    <work-title>All octave-shifts</work-title>
     </work>
   <identification>
     <encoding>
+      <encoder>Klaus Rettinghaus</encoder>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
       <supports element="accidental" type="yes"/>
@@ -20,7 +21,6 @@
       <part-name>Piano</part-name>
       <score-instrument id="P1-I1">
         <instrument-name>Piano</instrument-name>
-        <instrument-sound>keyboard.piano</instrument-sound>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
@@ -509,85 +509,13 @@
     <measure number="11">
       <direction>
         <direction-type>
-          <octave-shift type="up" size="22" number="1"/>
-          </direction-type>
-        </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>7</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>7</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>7</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>7</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-        <direction>
-          <direction-type>
-            <octave-shift type="stop" size="22" number="1"/>
-            </direction-type>
-          </direction>
-      </measure>
-    <measure number="12">
-      <direction>
-        <direction-type>
           <octave-shift type="down" size="22" number="1"/>
           </direction-type>
         </direction>
       <note>
         <pitch>
-          <step>G</step>
-          <octave>1</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>1</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>1</octave>
+          <step>C</step>
+          <octave>7</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
@@ -597,7 +525,27 @@
       <note>
         <pitch>
           <step>D</step>
-          <octave>1</octave>
+          <octave>7</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>7</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>7</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
@@ -605,31 +553,11 @@
         <stem>up</stem>
         </note>
       </measure>
-    <measure number="13">
+    <measure number="12">
       <note>
         <pitch>
-          <step>C</step>
-          <octave>1</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>1</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>1</octave>
+          <step>G</step>
+          <octave>7</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
@@ -639,7 +567,27 @@
       <note>
         <pitch>
           <step>F</step>
-          <octave>1</octave>
+          <octave>7</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>7</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>7</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
@@ -652,31 +600,16 @@
           </direction-type>
         </direction>
       </measure>
-    <measure number="14">
+    <measure number="13">
+      <direction>
+        <direction-type>
+          <octave-shift type="up" size="22" number="1"/>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>1</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
@@ -686,13 +619,80 @@
       <note>
         <pitch>
           <step>D</step>
-          <octave>4</octave>
+          <octave>1</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
         </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      </measure>
+    <measure number="14">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>1</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <direction>
+        <direction-type>
+          <octave-shift type="stop" size="22" number="1"/>
+          </direction-type>
+        </direction>
       </measure>
     <measure number="15">
       <note>
