@@ -5701,7 +5701,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
         const Fraction tickToWrite = isStart ? ot->tick() : ot->tick2();
         moveToTickIfNeed(tickToWrite, ot->track(), measureStart);
 
-        directionTag(m_xml, m_attr, ot);
+        directionTag(m_xml, m_attr, 0);
         m_xml.startElement("direction-type");
         octaveShiftXml += color2xml(ot);
         octaveShiftXml += positioningAttributes(ot, ot->tick() == tick);
