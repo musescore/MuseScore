@@ -5288,6 +5288,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VA);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MA);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MA);
                 }
             } else if (type == u"up") {
                 m_placement = m_placement.empty() ? u"below" : m_placement;
@@ -5295,6 +5297,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VB);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MB);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MB);
                 }
             }
 
