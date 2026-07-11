@@ -5672,12 +5672,20 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
             sz = u"15";
             tp = u"down";
             break;
+        case OttavaType::OTTAVA_22MA:
+            sz = u"22";
+            tp = u"down";
+            break;
         case OttavaType::OTTAVA_8VB:
             sz = u"8";
             tp = u"up";
             break;
         case OttavaType::OTTAVA_15MB:
             sz = u"15";
+            tp = u"up";
+            break;
+        case OttavaType::OTTAVA_22MB:
+            sz = u"22";
             tp = u"up";
             break;
         default:
