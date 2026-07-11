@@ -274,7 +274,7 @@
           <words color="#945200" font-style="italic">Ausdruck</words>
           </direction-type>
         </direction>
-      <direction placement="below">
+      <direction>
         <direction-type>
           <octave-shift type="up" size="8" number="1" color="#73FCD6"/>
           </direction-type>
@@ -363,7 +363,7 @@
         <voice>1</voice>
         <type>quarter</type>
         </note>
-      <direction placement="below">
+      <direction>
         <direction-type>
           <octave-shift type="stop" size="8" number="1" color="#73FCD6"/>
           </direction-type>
