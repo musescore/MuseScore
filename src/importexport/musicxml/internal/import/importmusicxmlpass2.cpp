@@ -5277,7 +5277,7 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
             return;
         }
         int ottavasize = m_e.intAttribute("size");
-        if (!(ottavasize == 8 || ottavasize == 15)) {
+        if (!(ottavasize == 8 || ottavasize == 15 || ottavasize == 22)) {
             m_logger->logError(String(u"unknown octave-shift size %1").arg(ottavasize), &m_e);
         } else {
             Ottava* o = spdesc.isStopped ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
