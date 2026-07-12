@@ -136,6 +136,7 @@ if(NOT OS_IS_WASM)
 endif()
 
 target_link_libraries(notation PRIVATE
+    Qt::Widgets # for QApplication::cursorFlashTime() in notationinteraction.cpp
     muse::draw
     engraving
 )
