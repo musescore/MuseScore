@@ -26,16 +26,18 @@
 
 #include <memory>
 #include <limits>
-#include <QRectF>
-#include <QPainter>
+
+#include <QApplication> // for QApplication::cursorFlashTime()
 #include <QClipboard>
-#include <QApplication>
+#include <QDrag>
+#include <QEventLoop>
+#include <QGuiApplication>
 #include <QKeyEvent>
 #include <QMimeData>
-#include <QDrag>
+#include <QPainter>
+#include <QRectF>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
-#include <QEventLoop>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -5391,7 +5393,7 @@ void NotationInteraction::copySelection()
         if (!mimeData) {
             return;
         }
-        QApplication::clipboard()->setMimeData(mimeData);
+        QGuiApplication::clipboard()->setMimeData(mimeData);
     }
 }
 
@@ -5494,7 +5496,7 @@ void NotationInteraction::repeatSelection()
 void NotationInteraction::copyLyrics()
 {
     QString text = score()->extractLyrics();
-    QApplication::clipboard()->setText(text);
+    QGuiApplication::clipboard()->setText(text);
 }
 
 void NotationInteraction::pasteSelection(const Fraction& scale)
@@ -5505,7 +5507,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (isTextEditingStarted()) {
         pasteIntoTextEdit();
     } else {
-        const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+        const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
         succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), &ma, nullptr, scale);
         m_editData.element = nullptr;
@@ -5525,7 +5527,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 
 void NotationInteraction::pasteIntoTextEdit()
 {
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+    const QMimeData* mimeData = QGuiApplication::clipboard()->mimeData();
     if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
         const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
         toTextBase(m_editData.element)->paste(txt);
@@ -5574,7 +5576,7 @@ void NotationInteraction::swapSelection()
     // Save old selection to clipboard...
     QMimeData* mimeData = new QMimeData();
     mimeData->setData(selection.mimeType(), oldSelection);
-    QApplication::clipboard()->setMimeData(mimeData);
+    QGuiApplication::clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::deleteSelection()
