@@ -3282,11 +3282,11 @@ void MusicXmlParserPass1::handleOctaveShift(const Fraction& cTime,
     short sz = 0;
 
     switch (size) {
-    case  22: sz =  3;
+    case 22: sz =  3;
         break;
-    case  15: sz =  2;
+    case 15: sz =  2;
         break;
-    case   8: 
+    case 8:
     default:
         sz =  1;
     }
