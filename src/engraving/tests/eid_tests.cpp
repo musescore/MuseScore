@@ -22,8 +22,11 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/masterscore.h"
 
+#include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -53,5 +56,45 @@ TEST_F(Engraving_EIDTests, testRegisteredItems)
         checkRegister(mb);
     }
 
+    delete score;
+}
+
+TEST_F(Engraving_EIDTests, deletedItemIsUnregistered)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    EngravingItem* item = new Dynamic(score->dummy()->segment());
+    EID eid = item->assignNewEID();
+    EXPECT_TRUE(eid.isValid());
+    EXPECT_EQ(score->eidRegister()->itemFromEID(eid), item);
+
+    delete item;
+
+    // The register must not keep a stale entry for the deleted item; a later
+    // allocation could reuse the same address and collide with the stale entry
+    EXPECT_FALSE(score->eidRegister()->EIDFromItem(item).isValid());
+
+    delete score;
+}
+
+TEST_F(Engraving_EIDTests, writeReadElementDoesNotLeakRegisterEntries)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
+    dynamic->setDynamicType(DynamicType(1));
+
+    // writeReadElement round trips through clipboard write and paste read,
+    // which assigns a new EID to the newly created element
+    Dynamic* d = toDynamic(ScoreRW::writeReadElement(dynamic));
+    EID eid = d->eid();
+    EXPECT_TRUE(eid.isValid());
+    EXPECT_EQ(score->eidRegister()->itemFromEID(eid), d);
+
+    delete d;
+
+    EXPECT_FALSE(score->eidRegister()->EIDFromItem(d).isValid());
+
+    delete dynamic;
     delete score;
 }

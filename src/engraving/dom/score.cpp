@@ -385,6 +385,8 @@ void Score::onElementDestruction(EngravingItem* e)
         onBracketItemDestruction(score, toBracketItem(e));
     }
 
+    score->masterScore()->eidRegister()->onItemDestroyed(e);
+
     score->selection().remove(e);
     score->cmdState().unsetElement(e);
     score->elementDestroyed().send(e);
