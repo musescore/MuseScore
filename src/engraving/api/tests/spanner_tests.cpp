@@ -65,13 +65,11 @@ TEST(Engraving_ApiSpannerTests, scoreSpanners)
     for (int i = 0; i < spannerCount; i++) {
         auto* item = scoreSpanners.at(&scoreSpanners, i);
         apiv1::Spanner* apiItem = qobject_cast<apiv1::Spanner*>(item);
-        ASSERT_TRUE(apiItem != nullptr) << "Spanner " << i << " should be a valid Spanner";
+        ASSERT_TRUE(apiItem) << "Spanner " << i << " should be a valid Spanner API object";
+        ASSERT_TRUE(apiItem->spanner()) << "Spanner " << i << " should have a valid underlying Spanner";
 
-        if (apiItem && apiItem->spanner()) {
-            // Verify we can access the track property (spanners have tracks)
-            track_idx_t track = apiItem->spanner()->track();
-            EXPECT_GE(track, 0) << "Spanner " << i << " should have a valid track";
-        }
+        track_idx_t track = apiItem->spanner()->track();
+        EXPECT_LT(track, score->ntracks()) << "Spanner " << i << "'s underlying Spanner should not be garbage";
     }
 
     delete score;
