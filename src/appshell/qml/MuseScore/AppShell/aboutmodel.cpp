@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "aboutmodel.h"
 
-#include "translation.h"
-
-#include <QApplication>
 #include <QClipboard>
+#include <QGuiApplication>
 #include <QUrl>
+
+#include "translation.h"
 
 using namespace mu::appshell;
 
@@ -85,7 +86,7 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 
 void AboutModel::copyRevisionToClipboard() const
 {
-    QApplication::clipboard()->setText(
+    QGuiApplication::clipboard()->setText(
         QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: github-musescore-musescore-%6")
         .arg(QSysInfo::prettyProductName()
              + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
