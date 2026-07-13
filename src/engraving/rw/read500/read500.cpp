@@ -594,19 +594,20 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     return false;
                                 }
                             }
-                            for (size_t i = 0; i < graceNotes.size(); ++i) {
-                                Chord* gc = graceNotes.at(i);
-                                gc->setGraceIndex(i);
-                                if (gc->vStaffIdx() >= gc->score()->nstaves()) {
-                                    // check if staffMove moves a note to a
-                                    // nonexistent staff
-                                    gc->setStaffMove(0);
-                                }
-                                Transpose::transposeChord(gc, tick);
-                                chord->add(gc);
-                            }
-                            graceNotes.clear();
                         }
+                        // grace notes (always chords) may be hosted by a chord or a rest
+                        for (size_t i = 0; i < graceNotes.size(); ++i) {
+                            Chord* gc = graceNotes.at(i);
+                            gc->setGraceIndex(i);
+                            if (gc->vStaffIdx() >= gc->score()->nstaves()) {
+                                // check if staffMove moves a note to a
+                                // nonexistent staff
+                                gc->setStaffMove(0);
+                            }
+                            Transpose::transposeChord(gc, tick);
+                            cr->add(gc);
+                        }
+                        graceNotes.clear();
                         // delete pending ties, they are not selected when copy
                         if ((tick - dstTick) + cr->actualTicksAt(tick) >= tickLen) {
                             if (cr->isChord()) {

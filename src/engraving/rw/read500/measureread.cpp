@@ -315,6 +315,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 }
 
                 segment->add(rest);
+                for (size_t i = 0; i < graceNotes.size(); ++i) {
+                    Chord* gc = graceNotes[i];
+                    gc->setGraceIndex(static_cast<int>(i));
+                    rest->add(gc);
+                }
+                graceNotes.clear();
                 if (fermata) {
                     segment->add(fermata);
                     fermata = nullptr;

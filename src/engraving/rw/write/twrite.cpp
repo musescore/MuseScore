@@ -2768,6 +2768,9 @@ void TWrite::write(const Rest* item, XmlWriter& xml, WriteContext& ctx)
     if (item->isGap()) {
         return;
     }
+    for (Chord* ch : item->graceNotes()) {
+        write(ch, xml, ctx);
+    }
     writeChordRestBeam(item, xml, ctx);
     xml.startElement(item);
     writeStyledProperties(item, xml);
