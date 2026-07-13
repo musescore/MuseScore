@@ -54,6 +54,8 @@ PropertiesPanelSection {
                 navigation.name: "SystemTab"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1
+
+                maxWidth: tabBar.truncatedItemWidth
             }
 
             PropertiesPanelTabButton {
@@ -62,6 +64,8 @@ PropertiesPanelSection {
                 navigation.name: "PageTab"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 2
+
+                maxWidth: tabBar.truncatedItemWidth
             }
         }
 
