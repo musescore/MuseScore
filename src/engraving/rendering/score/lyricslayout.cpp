@@ -777,6 +777,9 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     const System* system = item->system();
     const LyricsLine* lyricsLine = item->lyricsLine();
     const ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    if (!endChordRest) {
+        return system->endingXForOpenEndedLines();
+    }
     const double systemPageX = system->pageX();
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
