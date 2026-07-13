@@ -95,7 +95,7 @@ TEST_F(Engraving_EIDTests, deletedExcerptScoreItemsAreUnregistered)
     // its items from the master score's register, which stays alive
     delete partScore;
 
-    EXPECT_FALSE(master->eidRegister()->EIDFromItem(measure).isValid());
+    EXPECT_EQ(master->eidRegister()->itemFromEID(eid), nullptr);
 
     delete master;
 }
