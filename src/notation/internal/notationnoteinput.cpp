@@ -478,19 +478,41 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
     m_interaction->showItem(state().cr());
 }
 
-void NotationNoteInput::padNote(const Pad& pad)
+void NotationNoteInput::applyNoteValueChange(const muse::TranslatableString& actionName,
+                                             const std::function<void(mu::engraving::Transaction&)>& change)
 {
     TRACEFUNC;
 
     m_interaction->hideShadowNote();
 
-    startEdit(TranslatableString("undoableAction", "Pad note"));
-    NoteInput::padToggle(score()->transactionManager()->currentOrDummyTransaction(), score(), pad);
+    startEdit(actionName);
+    change(score()->transactionManager()->currentOrDummyTransaction());
     apply();
 
     notifyAboutStateChanged();
 
     m_interaction->checkAndShowError();
+}
+
+void NotationNoteInput::setDuration(DurationType duration)
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Set duration"), [this, duration](mu::engraving::Transaction& tx) {
+        NoteInput::setDuration(tx, score(), duration);
+    });
+}
+
+void NotationNoteInput::toggleRest()
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Toggle rest"), [this](mu::engraving::Transaction& tx) {
+        NoteInput::toggleRest(tx, score());
+    });
+}
+
+void NotationNoteInput::toggleDots(int dots)
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Toggle dots"), [this, dots](mu::engraving::Transaction& tx) {
+        NoteInput::toggleDots(tx, score(), dots);
+    });
 }
 
 Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
@@ -991,7 +1013,7 @@ void NotationNoteInput::doubleNoteInputDuration()
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Double note input duration"));
-    NoteInput::padNoteIncreaseTAB(score()->transactionManager()->currentOrDummyTransaction(), score());
+    NoteInput::increaseDuration(score()->transactionManager()->currentOrDummyTransaction(), score());
     apply();
 
     notifyAboutStateChanged();
@@ -1003,7 +1025,7 @@ void NotationNoteInput::halveNoteInputDuration()
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Halve note input duration"));
-    NoteInput::padNoteDecreaseTAB(score()->transactionManager()->currentOrDummyTransaction(), score());
+    NoteInput::decreaseDuration(score()->transactionManager()->currentOrDummyTransaction(), score());
     apply();
 
     notifyAboutStateChanged();

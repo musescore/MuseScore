@@ -23,6 +23,7 @@
 #include "noteinput.h"
 
 #include <algorithm>
+#include <iterator>
 #include <tuple>
 
 #include "translation.h"
@@ -1322,190 +1323,207 @@ void NoteInput::addFret(Transaction& tx, Score* score, int fret)
 }
 
 //---------------------------------------------------------
-//   padToggle
+//   noteValueChangeAllowed
+//    Note value changes are disallowed while a trill cue note is selected outside note entry mode.
 //---------------------------------------------------------
 
-void NoteInput::padToggle(Transaction& tx, Score* score, Pad p, bool toggleForSelectionOnly)
+bool NoteInput::noteValueChangeAllowed(const Score* score)
 {
-    InputState& is = score->inputState();
+    if (score->noteEntryMode()) {
+        return true;
+    }
 
-    if (!score->noteEntryMode()) {
-        for (ChordRest* cr : score->getSelectedChordRests()) {
-            if (cr->isChord() && toChord(cr)->isTrillCueNote()) {
-                return;
-            }
+    for (const ChordRest* cr : score->getSelectedChordRests()) {
+        if (cr->isChord() && toChord(cr)->isTrillCueNote()) {
+            return false;
         }
     }
+
+    return true;
+}
+
+//---------------------------------------------------------
+//   durationTooShortForDots
+//    A duration cannot hold `dots` augmentation dots when it is one of the `dots` shortest
+//    representable durations (the shortest being V_1024TH).
+//---------------------------------------------------------
+
+static bool durationTooShortForDots(const TDuration& duration, int dots)
+{
+    // Ordered shortest-first; a duration cannot hold `dots` dots if it is one of the `dots` shortest.
+    static constexpr DurationType shortestTypes[] = {
+        DurationType::V_1024TH,
+        DurationType::V_512TH,
+        DurationType::V_256TH,
+        DurationType::V_128TH,
+    };
+
+    const int count = std::min(dots, int(std::size(shortestTypes)));
+    for (int i = 0; i < count; ++i) {
+        if (duration == shortestTypes[i]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
+//   setDuration
+//    Set the note input duration (and apply it to the selection).
+//---------------------------------------------------------
+
+void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration, bool toggleForSelectionOnly)
+{
+    if (!noteValueChangeAllowed(score)) {
+        return;
+    }
+
+    InputState& is = score->inputState();
 
     const TDuration oldDuration = is.duration();
     const bool oldRest = is.rest();
     const AccidentalType oldAccidentalType = is.accidentalType();
 
-    switch (p) {
-    case Pad::NOTE00:
-        is.setDuration(DurationType::V_LONG);
-        break;
-    case Pad::NOTE0:
-        is.setDuration(DurationType::V_BREVE);
-        break;
-    case Pad::NOTE1:
-        is.setDuration(DurationType::V_WHOLE);
-        break;
-    case Pad::NOTE2:
-        is.setDuration(DurationType::V_HALF);
-        break;
-    case Pad::NOTE4:
-        is.setDuration(DurationType::V_QUARTER);
-        break;
-    case Pad::NOTE8:
-        is.setDuration(DurationType::V_EIGHTH);
-        break;
-    case Pad::NOTE16:
-        is.setDuration(DurationType::V_16TH);
-        break;
-    case Pad::NOTE32:
-        is.setDuration(DurationType::V_32ND);
-        break;
-    case Pad::NOTE64:
-        is.setDuration(DurationType::V_64TH);
-        break;
-    case Pad::NOTE128:
-        is.setDuration(DurationType::V_128TH);
-        break;
-    case Pad::NOTE256:
-        is.setDuration(DurationType::V_256TH);
-        break;
-    case Pad::NOTE512:
-        is.setDuration(DurationType::V_512TH);
-        break;
-    case Pad::NOTE1024:
-        is.setDuration(DurationType::V_1024TH);
-        break;
-    case Pad::REST:
-        if (score->noteEntryMode()) {
-            is.setRest(!is.rest());
-            is.setAccidentalType(AccidentalType::NONE);
-        } else if (score->selection().isNone()) {
-            is.setDuration(DurationType::V_QUARTER);
-            is.setRest(true);
-        } else {
-            for (ChordRest* cr : score->getSelectedChordRests()) {
-                if (!cr->isRest()) {
-                    score->setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks(), DirectionV::AUTO, false,
-                                       is.articulationIds());
-                }
+    is.setDuration(duration);
+    is.setDots(0);
+
+    //
+    // if in "note enter" mode, reset rest flag
+    //
+    if (score->noteEntryMode() && !toggleForSelectionOnly) {
+        if (score->usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+            // Preserve the number of dots from the previous duration
+            if (oldDuration.dots() > 0) {
+                toggleDots(tx, score, oldDuration.dots());
             }
-        }
-        break;
-    case Pad::DOT:
-        if ((is.duration().dots() == 1) || (is.duration() == DurationType::V_1024TH)) {
-            is.setDots(0);
-        } else {
-            is.setDots(1);
-        }
-        break;
-    case Pad::DOT2:
-        if ((is.duration().dots() == 2)
-            || (is.duration() == DurationType::V_512TH)
-            || (is.duration() == DurationType::V_1024TH)) {
-            is.setDots(0);
-        } else {
-            is.setDots(2);
-        }
-        break;
-    case Pad::DOT3:
-        if ((is.duration().dots() == 3)
-            || (is.duration() == DurationType::V_256TH)
-            || (is.duration() == DurationType::V_512TH)
-            || (is.duration() == DurationType::V_1024TH)) {
-            is.setDots(0);
-        } else {
-            is.setDots(3);
-        }
-        break;
-    case Pad::DOT4:
-        if ((is.duration().dots() == 4)
-            || (is.duration() == DurationType::V_128TH)
-            || (is.duration() == DurationType::V_256TH)
-            || (is.duration() == DurationType::V_512TH)
-            || (is.duration() == DurationType::V_1024TH)) {
-            is.setDots(0);
-        } else {
-            is.setDots(4);
-        }
-        break;
-    }
-    if (p >= Pad::NOTE00 && p <= Pad::NOTE1024) {
-        is.setDots(0);
-        //
-        // if in "note enter" mode, reset
-        // rest flag
-        //
-        if (score->noteEntryMode() && !toggleForSelectionOnly) {
-            if (score->usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-                switch (oldDuration.dots()) {
-                case 1:
-                    padToggle(tx, score, Pad::DOT);
-                    break;
-                case 2:
-                    padToggle(tx, score, Pad::DOT2);
-                    break;
-                case 3:
-                    padToggle(tx, score, Pad::DOT3);
-                    break;
-                case 4:
-                    padToggle(tx, score, Pad::DOT4);
-                    break;
-                }
 
-                if (is.rest()) {
-                    // Enter a rest
-                    score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction());
-                    is.moveToNextInputPos();
-                } else {
-                    if (score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-                        const EngravingItem* selectedItem = score->selection().element();
-                        if (selectedItem && selectedItem->isNote()) {
-                            is.setNotes({ toNote(selectedItem)->noteVal() });
-                        }
-                    }
-
-                    if (is.beyondScore()) {
-                        score->appendMeasures(1);
-                        is.moveToNextInputPos();
-                    }
-                    ChordRest* cr = is.cr();
-                    Chord* chord = nullptr;
-
-                    if (cr && cr->isChord() && cr->durationType() == is.duration()) {
-                        chord = toChord(cr);
-                    }
-
-                    for (const NoteVal& nval : is.notes()) {
-                        if (chord && chord->findNote(nval.pitch)) {
-                            is.moveToNextInputPos();
-                            continue;
-                        }
-
-                        NoteVal copy(nval);
-                        const Note* note = nullptr;
-
-                        if (chord) {
-                            note = addPitchToChord(tx, score, copy, chord);
-                        } else {
-                            note = addPitch(tx, score, copy, false /*addFlag*/);
-                        }
-
-                        if (note) {
-                            chord = note->chord();
-                        }
-                    }
-                }
+            if (is.rest()) {
+                // Enter a rest
+                score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction());
+                is.moveToNextInputPos();
             } else {
-                is.setRest(false);
+                if (score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                    const EngravingItem* selectedItem = score->selection().element();
+                    if (selectedItem && selectedItem->isNote()) {
+                        is.setNotes({ toNote(selectedItem)->noteVal() });
+                    }
+                }
+
+                if (is.beyondScore()) {
+                    score->appendMeasures(1);
+                    is.moveToNextInputPos();
+                }
+                ChordRest* cr = is.cr();
+                Chord* chord = nullptr;
+
+                if (cr && cr->isChord() && cr->durationType() == is.duration()) {
+                    chord = toChord(cr);
+                }
+
+                for (const NoteVal& nval : is.notes()) {
+                    if (chord && chord->findNote(nval.pitch)) {
+                        is.moveToNextInputPos();
+                        continue;
+                    }
+
+                    NoteVal copy(nval);
+                    const Note* note = nullptr;
+
+                    if (chord) {
+                        note = addPitchToChord(tx, score, copy, chord);
+                    } else {
+                        note = addPitch(tx, score, copy, false /*addFlag*/);
+                    }
+
+                    if (note) {
+                        chord = note->chord();
+                    }
+                }
+            }
+        } else {
+            is.setRest(false);
+        }
+    }
+
+    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, toggleForSelectionOnly, false /*restToggle*/);
+}
+
+//---------------------------------------------------------
+//   toggleRest
+//    Toggle the note input rest flag (or turn the selection into rests).
+//---------------------------------------------------------
+
+void NoteInput::toggleRest(Transaction& /*tx*/, Score* score, bool toggleForSelectionOnly)
+{
+    if (!noteValueChangeAllowed(score)) {
+        return;
+    }
+
+    InputState& is = score->inputState();
+
+    const TDuration oldDuration = is.duration();
+    const bool oldRest = is.rest();
+    const AccidentalType oldAccidentalType = is.accidentalType();
+
+    if (score->noteEntryMode()) {
+        is.setRest(!is.rest());
+        is.setAccidentalType(AccidentalType::NONE);
+    } else if (score->selection().isNone()) {
+        is.setDuration(DurationType::V_QUARTER);
+        is.setRest(true);
+    } else {
+        for (ChordRest* cr : score->getSelectedChordRests()) {
+            if (!cr->isRest()) {
+                score->setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks(), DirectionV::AUTO, false,
+                                   is.articulationIds());
             }
         }
     }
+
+    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, toggleForSelectionOnly, true /*restToggle*/);
+}
+
+//---------------------------------------------------------
+//   toggleDots
+//    Toggle `dots` augmentation dots (1..4) on the note input duration and the selection.
+//---------------------------------------------------------
+
+void NoteInput::toggleDots(Transaction& /*tx*/, Score* score, int dots, bool toggleForSelectionOnly)
+{
+    IF_ASSERT_FAILED(dots >= 1 && dots <= 4) {
+        return;
+    }
+
+    if (!noteValueChangeAllowed(score)) {
+        return;
+    }
+
+    InputState& is = score->inputState();
+
+    const TDuration oldDuration = is.duration();
+    const bool oldRest = is.rest();
+    const AccidentalType oldAccidentalType = is.accidentalType();
+
+    if (is.duration().dots() == dots || durationTooShortForDots(is.duration(), dots)) {
+        is.setDots(0);
+    } else {
+        is.setDots(dots);
+    }
+
+    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, toggleForSelectionOnly, false /*restToggle*/);
+}
+
+//---------------------------------------------------------
+//   applyToSelection
+//    Shared epilogue for setDuration/toggleRest/toggleDots: apply the (possibly changed) input state
+//    duration/dots to the current selection.
+//---------------------------------------------------------
+
+void NoteInput::applyToSelection(Score* score, const TDuration& oldDuration, bool oldRest,
+                                 AccidentalType oldAccidentalType, bool toggleForSelectionOnly, bool restToggle)
+{
+    InputState& is = score->inputState();
 
     if (score->noteEntryMode()) {
         if (!toggleForSelectionOnly || score->selection().isNone()) {
@@ -1541,7 +1559,7 @@ void NoteInput::padToggle(Transaction& tx, Score* score, Pad p, bool toggleForSe
         } else {
             score->deselect(e);
         }
-    } else if (score->selection().isNone() && p != Pad::REST) {
+    } else if (score->selection().isNone() && !restToggle) {
         TDuration td = is.duration();
         is.setDuration(td);
         is.setAccidentalType(AccidentalType::NONE);
@@ -1633,96 +1651,96 @@ void NoteInput::padToggle(Transaction& tx, Score* score, Pad p, bool toggleForSe
     }
 }
 
-void NoteInput::padNoteIncreaseTAB(Transaction& tx, Score* score)
+void NoteInput::increaseDuration(Transaction& tx, Score* score)
 {
     switch (score->inputState().duration().type()) {
 // cycle back from longest to shortest?
 //          case TDuration::V_LONG:
-//                padToggle(tx, score, Pad::NOTE128);
+//                setDuration(tx, score, DurationType::V_128TH);
 //                break;
     case DurationType::V_BREVE:
-        padToggle(tx, score, Pad::NOTE00);
+        setDuration(tx, score, DurationType::V_LONG);
         break;
     case DurationType::V_WHOLE:
-        padToggle(tx, score, Pad::NOTE0);
+        setDuration(tx, score, DurationType::V_BREVE);
         break;
     case DurationType::V_HALF:
-        padToggle(tx, score, Pad::NOTE1);
+        setDuration(tx, score, DurationType::V_WHOLE);
         break;
     case DurationType::V_QUARTER:
-        padToggle(tx, score, Pad::NOTE2);
+        setDuration(tx, score, DurationType::V_HALF);
         break;
     case DurationType::V_EIGHTH:
-        padToggle(tx, score, Pad::NOTE4);
+        setDuration(tx, score, DurationType::V_QUARTER);
         break;
     case DurationType::V_16TH:
-        padToggle(tx, score, Pad::NOTE8);
+        setDuration(tx, score, DurationType::V_EIGHTH);
         break;
     case DurationType::V_32ND:
-        padToggle(tx, score, Pad::NOTE16);
+        setDuration(tx, score, DurationType::V_16TH);
         break;
     case DurationType::V_64TH:
-        padToggle(tx, score, Pad::NOTE32);
+        setDuration(tx, score, DurationType::V_32ND);
         break;
     case DurationType::V_128TH:
-        padToggle(tx, score, Pad::NOTE64);
+        setDuration(tx, score, DurationType::V_64TH);
         break;
     case DurationType::V_256TH:
-        padToggle(tx, score, Pad::NOTE128);
+        setDuration(tx, score, DurationType::V_128TH);
         break;
     case DurationType::V_512TH:
-        padToggle(tx, score, Pad::NOTE256);
+        setDuration(tx, score, DurationType::V_256TH);
         break;
     case DurationType::V_1024TH:
-        padToggle(tx, score, Pad::NOTE512);
+        setDuration(tx, score, DurationType::V_512TH);
         break;
     default:
         break;
     }
 }
 
-void NoteInput::padNoteDecreaseTAB(Transaction& tx, Score* score)
+void NoteInput::decreaseDuration(Transaction& tx, Score* score)
 {
     switch (score->inputState().duration().type()) {
     case DurationType::V_LONG:
-        padToggle(tx, score, Pad::NOTE0);
+        setDuration(tx, score, DurationType::V_BREVE);
         break;
     case DurationType::V_BREVE:
-        padToggle(tx, score, Pad::NOTE1);
+        setDuration(tx, score, DurationType::V_WHOLE);
         break;
     case DurationType::V_WHOLE:
-        padToggle(tx, score, Pad::NOTE2);
+        setDuration(tx, score, DurationType::V_HALF);
         break;
     case DurationType::V_HALF:
-        padToggle(tx, score, Pad::NOTE4);
+        setDuration(tx, score, DurationType::V_QUARTER);
         break;
     case DurationType::V_QUARTER:
-        padToggle(tx, score, Pad::NOTE8);
+        setDuration(tx, score, DurationType::V_EIGHTH);
         break;
     case DurationType::V_EIGHTH:
-        padToggle(tx, score, Pad::NOTE16);
+        setDuration(tx, score, DurationType::V_16TH);
         break;
     case DurationType::V_16TH:
-        padToggle(tx, score, Pad::NOTE32);
+        setDuration(tx, score, DurationType::V_32ND);
         break;
     case DurationType::V_32ND:
-        padToggle(tx, score, Pad::NOTE64);
+        setDuration(tx, score, DurationType::V_64TH);
         break;
     case DurationType::V_64TH:
-        padToggle(tx, score, Pad::NOTE128);
+        setDuration(tx, score, DurationType::V_128TH);
         break;
     case DurationType::V_128TH:
-        padToggle(tx, score, Pad::NOTE256);
+        setDuration(tx, score, DurationType::V_256TH);
         break;
     case DurationType::V_256TH:
-        padToggle(tx, score, Pad::NOTE512);
+        setDuration(tx, score, DurationType::V_512TH);
         break;
     case DurationType::V_512TH:
-        padToggle(tx, score, Pad::NOTE1024);
+        setDuration(tx, score, DurationType::V_1024TH);
         break;
 // cycle back from shortest to longest?
 //          case DurationType::V_1024TH:
-//                padToggle(tx, score, Pad::NOTE00);
+//                setDuration(tx, score, DurationType::V_LONG);
 //                break;
     default:
         break;

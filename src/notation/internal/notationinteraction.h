@@ -242,7 +242,7 @@ public:
     void addBracketsToSelection(BracketsType type) override;
     void toggleAccidentalForSelection(AccidentalType type) override;
     void toggleArticulationForSelection(SymbolId articulationSymbolId) override;
-    void toggleDotsForSelection(Pad dots) override;
+    void toggleDotsForSelection(int dots) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
     bool canAddTupletToSelectedChordRests() const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;

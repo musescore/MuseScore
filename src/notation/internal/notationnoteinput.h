@@ -35,6 +35,7 @@
 
 namespace mu::engraving {
 class Score;
+class Transaction;
 }
 
 namespace mu::notation {
@@ -61,7 +62,9 @@ public:
     void setNoteInputMethod(NoteInputMethod method) override;
 
     void addNote(const NoteInputParams& params, NoteAddingMode addingMode) override;
-    void padNote(const Pad& pad) override;
+    void setDuration(DurationType duration) override;
+    void toggleRest() override;
+    void toggleDots(int dots) override;
     muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
     void removeNote(const muse::PointF& pos) override;
 
@@ -96,6 +99,8 @@ public:
 
 private:
     mu::engraving::Score* score() const;
+
+    void applyNoteValueChange(const muse::TranslatableString& actionName, const std::function<void(mu::engraving::Transaction&)>& change);
 
     EngravingItem* resolveNoteInputStartPosition() const;
 

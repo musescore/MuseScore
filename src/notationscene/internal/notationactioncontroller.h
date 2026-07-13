@@ -129,7 +129,9 @@ private:
     void handleNoteAction(const muse::actions::ActionData& args);
     void handleNoteAction(const muse::rcommand::CommandQuery& query);
     void handleNoteAction(const NoteInputParams& params, const NoteAddingMode& addingMode);
-    void padNote(const Pad& pad);
+    void setDuration(engraving::DurationType duration);
+    void toggleRest();
+    void toggleDots(int dots);
     void putNote(const muse::actions::ActionData& args);
     void removeNote(const muse::actions::ActionData& args);
     void doubleNoteInputDuration();
@@ -278,9 +280,6 @@ private:
 
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
 
-    void registerPadNoteAction(const muse::actions::ActionCode&, Pad padding);
-    void registerTabPadNoteAction(const muse::actions::ActionCode&, Pad padding);
-
     void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
     void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 
@@ -308,7 +307,6 @@ private:
 
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
-    void registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
 
     void select(const muse::rcommand::CommandQuery& query);
