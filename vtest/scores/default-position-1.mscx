@@ -141,33 +141,6 @@
       <Measure>
         <eid>FlL/NX00iiJ_byYc3TP9ItL</eid>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <snapBefore>0</snapBefore>
-              <snapAfter>0</snapAfter>
-              <eid>Lz2zxh3ZHsE_PX3+/1LbHDM</eid>
-            </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-              </location>
-            </next>
-          </Spanner>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <direction>up</direction>
-              <snapBefore>0</snapBefore>
-              <snapAfter>0</snapAfter>
-              <eid>g6GkswO8l8K_Kro/I/eWfPB</eid>
-            </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-              </location>
-            </next>
-          </Spanner>
           <Rest>
             <eid>w7D+1q5phFL_jTPvlHpVo5D</eid>
             <durationType>measure</durationType>
@@ -188,21 +161,7 @@
             <velocity>64</velocity>
             <direction>up</direction>
             <eid>rpR/ZyRmfHD_CoP6G2gZR2D</eid>
-          </Dynamic>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-              </location>
-            </prev>
-          </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-              </location>
-            </prev>
-          </Spanner>
+            </Dynamic>
           <Rest>
             <eid>1kCpOKMB0NI_GDnexI4eJqE</eid>
             <durationType>measure</durationType>
@@ -213,64 +172,53 @@
       <Measure>
         <eid>e1gSdK1yOxC_Nz9sGur42DO</eid>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>2</subtype>
-              <eid>Ar83OOycfoO_1O7VFDxOCLK</eid>
-            </HairPin>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-              </location>
-            </next>
-          </Spanner>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>2</subtype>
-              <direction>up</direction>
-              <eid>RG9fa0lvNXD_iM2Nf4BMfoH</eid>
-            </HairPin>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-              </location>
-            </next>
-          </Spanner>
           <Rest>
             <eid>v0hbUkGHgyP_h8rldg8BXkE</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-          </Rest>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-              </location>
-            </prev>
-          </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-              </location>
-            </prev>
-          </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-              </location>
-            </prev>
-          </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-              </location>
-            </prev>
-          </Spanner>
-        </voice>
-      </Measure>
-    </Staff>
-  </Score>
-</museScore>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <snapBefore>0</snapBefore>
+        <snapAfter>0</snapAfter>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>Lz2zxh3ZHsE_PX3+/1LbHDM</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>0</subtype>
+        <direction>up</direction>
+        <snapBefore>0</snapBefore>
+        <snapAfter>0</snapAfter>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>g6GkswO8l8K_Kro/I/eWfPB</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>2</subtype>
+        <track2>0</track2>
+        <startTick>3/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>Ar83OOycfoO_1O7VFDxOCLK</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>2</subtype>
+        <direction>up</direction>
+        <track2>0</track2>
+        <startTick>3/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>RG9fa0lvNXD_iM2Nf4BMfoH</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
+    </Score>
+  </museScore>
