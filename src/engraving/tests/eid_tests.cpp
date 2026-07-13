@@ -24,7 +24,9 @@
 
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
@@ -75,6 +77,27 @@ TEST_F(Engraving_EIDTests, deletedItemIsUnregistered)
     EXPECT_FALSE(score->eidRegister()->EIDFromItem(item).isValid());
 
     delete score;
+}
+
+TEST_F(Engraving_EIDTests, deletedExcerptScoreItemsAreUnregistered)
+{
+    MasterScore* master = compat::ScoreAccess::createMasterScore(nullptr);
+    Score* partScore = master->createScore();
+
+    Measure* measure = Factory::createMeasure(partScore->dummy()->system());
+    partScore->measures()->append(measure);
+
+    EID eid = measure->assignNewEID();
+    EXPECT_TRUE(eid.isValid());
+    EXPECT_EQ(master->eidRegister()->itemFromEID(eid), measure);
+
+    // Deleting the part score (as when an excerpt is removed) must unregister
+    // its items from the master score's register, which stays alive
+    delete partScore;
+
+    EXPECT_FALSE(master->eidRegister()->EIDFromItem(measure).isValid());
+
+    delete master;
 }
 
 TEST_F(Engraving_EIDTests, writeReadElementDoesNotLeakRegisterEntries)
