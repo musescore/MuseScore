@@ -92,8 +92,8 @@ public:
     static void addPitch(Transaction& tx, Score* score, int step, bool addFlag, bool insert);
     static void addFret(Transaction& tx, Score* score, int fret);
 
-    static void setDuration(Transaction& tx, Score* score, DurationType duration, bool toggleForSelectionOnly = false);
-    static void toggleRest(Transaction& tx, Score* score, bool toggleForSelectionOnly = false);
+    static void setDuration(Transaction& tx, Score* score, DurationType duration);
+    static void toggleRest(Transaction& tx, Score* score);
     static void toggleDots(Transaction& tx, Score* score, int dots, bool toggleForSelectionOnly = false);
     static void increaseDuration(Transaction& tx, Score* score);
     static void decreaseDuration(Transaction& tx, Score* score);

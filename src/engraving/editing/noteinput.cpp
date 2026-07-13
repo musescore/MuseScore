@@ -1373,7 +1373,7 @@ static bool durationTooShortForDots(const TDuration& duration, int dots)
 //    Set the note input duration (and apply it to the selection).
 //---------------------------------------------------------
 
-void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration, bool toggleForSelectionOnly)
+void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration)
 {
     if (!noteValueChangeAllowed(score)) {
         return;
@@ -1391,7 +1391,7 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
     //
     // if in "note enter" mode, reset rest flag
     //
-    if (score->noteEntryMode() && !toggleForSelectionOnly) {
+    if (score->noteEntryMode()) {
         if (score->usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
             // Preserve the number of dots from the previous duration
             if (oldDuration.dots() > 0) {
@@ -1446,7 +1446,7 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
         }
     }
 
-    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, toggleForSelectionOnly, false /*restToggle*/);
+    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, false /*toggleForSelectionOnly*/, false /*restToggle*/);
 }
 
 //---------------------------------------------------------
@@ -1454,7 +1454,7 @@ void NoteInput::setDuration(Transaction& tx, Score* score, DurationType duration
 //    Toggle the note input rest flag (or turn the selection into rests).
 //---------------------------------------------------------
 
-void NoteInput::toggleRest(Transaction& /*tx*/, Score* score, bool toggleForSelectionOnly)
+void NoteInput::toggleRest(Transaction& /*tx*/, Score* score)
 {
     if (!noteValueChangeAllowed(score)) {
         return;
@@ -1481,7 +1481,7 @@ void NoteInput::toggleRest(Transaction& /*tx*/, Score* score, bool toggleForSele
         }
     }
 
-    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, toggleForSelectionOnly, true /*restToggle*/);
+    applyToSelection(score, oldDuration, oldRest, oldAccidentalType, false /*toggleForSelectionOnly*/, true /*restToggle*/);
 }
 
 //---------------------------------------------------------
