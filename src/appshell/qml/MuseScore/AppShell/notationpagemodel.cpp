@@ -26,6 +26,7 @@
 #include "log.h"
 
 #include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 
 #include "notation/inotationelements.h" // IWYU pragma: keep

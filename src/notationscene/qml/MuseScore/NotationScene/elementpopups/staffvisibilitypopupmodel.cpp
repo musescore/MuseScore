@@ -31,6 +31,7 @@
 
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/staffvisibilityindicator.h"
 #include "engraving/dom/system.h"

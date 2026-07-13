@@ -24,6 +24,7 @@
 #include "engraving/dom/barline.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tempotext.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep

@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_BRAILLE_BRAILLEINPUT_H
-#define MU_BRAILLE_BRAILLEINPUT_H
+#pragma once
+
+#include "engraving/dom/accidental.h"
 
 #include "notation/notationtypes.h"
 
@@ -68,7 +69,7 @@ public:
     bool isDurationMatch();
     DurationType getCloseDuration();
 
-    notation::SymbolId articulation();
+    engraving::SymId articulation();
     int octave();
     int dots();
     int addedOctave();
@@ -83,7 +84,7 @@ public:
     void setNoteName(const notation::NoteName notename, const bool chord_base = true);
     void setCurrentDuration(const DurationType duration);
     void setNoteDurations(const std::vector<DurationType> durations);
-    void setArticulation(const notation::SymbolId articulation);
+    void setArticulation(const engraving::SymId articulation);
     void setOctave(const int octave, const bool chord_base = false);
     void setDots(const int dots);
     void setAddedOctave(const int octave);
@@ -116,16 +117,16 @@ public:
 
     int tupletNumber();
     void setTupletNumber(const int num);
-    notation::Duration tupletDuration();
-    void setTupletDuration(const notation::Duration d);
+    engraving::TDuration tupletDuration();
+    void setTupletDuration(const engraving::TDuration d);
     void clearTuplet();
     bool tupletIndicator();
     void setTupletIndicator(bool val);
 private:
-    AccidentalType _accidental = AccidentalType::NONE;
+    engraving::AccidentalType _accidental = engraving::AccidentalType::NONE;
     notation::NoteName _note_name = notation::NoteName::C;
     notation::NoteName _chordbase_note_name = notation::NoteName::C;
-    notation::SymbolId _articulation = notation::SymbolId::noSym;
+    engraving::SymId _articulation = engraving::SymId::noSym;
     int _octave = 4;
     int _chordbase_note_octave = 4;
     int _added_octave = -1;
@@ -149,7 +150,7 @@ private:
 
     bool _accord;
     int _tuplet_number = -1;
-    notation::Duration _tuplet_duration;
+    engraving::TDuration _tuplet_duration;
     bool _tuplet_indicator = false;
 };
 
@@ -162,9 +163,8 @@ int getInterval(const braille_code* code);
 bool isNoteName(const braille_code* code);
 QString fromNoteName(notation::NoteName);
 AccidentalType getAccidentalType(const braille_code* code);
-notation::SymbolId getArticulation(const braille_code* code);
+engraving::SymId getArticulation(const braille_code* code);
 int getOctave(const braille_code* code);
 int getOctaveDiff(notation::NoteName source, notation::NoteName note);
 std::pair<notation::NoteName, int> applyInterval(notation::NoteName source, int interval, IntervalDirection direction);
 }
-#endif // MU_BRAILLE_BRAILLEINPUT_H

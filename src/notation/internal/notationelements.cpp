@@ -25,6 +25,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/rehearsalmark.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 
 #include "searchcommandsparser.h"
@@ -182,7 +183,7 @@ std::vector<EngravingItem*> NotationElements::allScoreElements() const
 
 std::vector<EngravingItem*> NotationElements::filterElements(const FilterElementsOptions* elementsOptions) const
 {
-    ElementPattern pattern = constructElementPattern(elementsOptions);
+    mu::engraving::ElementPattern pattern = constructElementPattern(elementsOptions);
 
     score()->scanElements([&](EngravingItem* item) { mu::engraving::Score::collectMatch(&pattern, item); });
 
@@ -217,7 +218,7 @@ mu::engraving::Score* NotationElements::score() const
     return m_getScore->score();
 }
 
-ElementPattern NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
+mu::engraving::ElementPattern NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
 {
     mu::engraving::ElementPattern pattern;
     pattern.type = static_cast<int>(elementOptions->elementType);

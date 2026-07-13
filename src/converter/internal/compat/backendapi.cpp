@@ -34,6 +34,7 @@
 
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/score.h"
 #include "engraving/rw/mscsaver.h"
 #include "engraving/types/typesconv.h"
 

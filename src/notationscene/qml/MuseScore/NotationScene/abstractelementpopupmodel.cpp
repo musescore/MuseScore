@@ -23,6 +23,7 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
@@ -260,7 +261,7 @@ void AbstractElementPopupModel::init()
 
     m_item = selection->element();
 
-    undoStack->changesChannel().onReceive(this, [this] (const ScoreChanges& changes) {
+    undoStack->changesChannel().onReceive(this, [this] (const engraving::ScoreChanges& changes) {
         if (ignoreTextEditingChanges() && changes.isTextEditing) {
             return;
         }

@@ -31,6 +31,7 @@
 #include "audio/common/audiotypes.h"
 
 #include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 

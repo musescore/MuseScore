@@ -39,11 +39,11 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/rest.h"
-#include "engraving/dom/score.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/types/types.h"
 
 namespace mu::notation {
 using Page = mu::engraving::Page;
@@ -55,7 +55,6 @@ using Measure = mu::engraving::Measure;
 using DurationType = mu::engraving::DurationType;
 using Duration = mu::engraving::TDuration;
 using SelectType = mu::engraving::SelectType;
-using SelectionState = mu::engraving::SelState;
 using SymbolId = mu::engraving::SymId;
 using Key = mu::engraving::Key;
 using KeyMode = mu::engraving::KeyMode;
@@ -65,7 +64,6 @@ using NoteHead = mu::engraving::NoteHead;
 using TransposeMode = mu::engraving::TransposeMode;
 using TransposeDirection = mu::engraving::TransposeDirection;
 using Fraction = mu::engraving::Fraction;
-using ElementPattern = mu::engraving::ElementPattern;
 using Chord = mu::engraving::Chord;
 using ChordRest = mu::engraving::ChordRest;
 using Articulation = mu::engraving::Articulation;
@@ -89,7 +87,6 @@ using PageList = std::vector<Page*>;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using staff_idx_t = mu::engraving::staff_idx_t;
-using ScoreChanges = mu::engraving::ScoreChanges;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using Pid = mu::engraving::Pid;
 using VoiceAssignment = mu::engraving::VoiceAssignment;
@@ -170,13 +167,6 @@ enum class PastingType : unsigned char {
     Half,
     Double,
     Special
-};
-
-enum class NoteFilter : unsigned char
-{
-    All,
-    WithTie,
-    WithSlur
 };
 
 struct FilterElementsOptions

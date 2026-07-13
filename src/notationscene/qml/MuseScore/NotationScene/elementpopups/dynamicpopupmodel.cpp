@@ -24,6 +24,7 @@
 
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/score.h"
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/symnames.h"

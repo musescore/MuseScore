@@ -25,6 +25,11 @@
 #include "inotationelements.h"
 #include "igetscore.h"
 
+namespace mu::engraving {
+struct ElementPattern;
+struct NotePattern;
+}
+
 namespace mu::notation {
 class NotationElements : public INotationElements
 {
@@ -51,7 +56,7 @@ private:
     std::vector<EngravingItem*> filterElements(const FilterElementsOptions* elementsOptions) const;
     std::vector<EngravingItem*> filterNotes(const FilterNotesOptions* notesOptions) const;
 
-    ElementPattern constructElementPattern(const FilterElementsOptions* elementsOptions) const;
+    mu::engraving::ElementPattern constructElementPattern(const FilterElementsOptions* elementsOptions) const;
     mu::engraving::NotePattern constructNotePattern(const FilterNotesOptions* notesOptions) const;
 
     IGetScore* m_getScore = nullptr;

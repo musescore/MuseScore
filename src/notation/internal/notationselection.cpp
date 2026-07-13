@@ -23,7 +23,7 @@
 
 #include <QMimeData>
 
-#include "engraving/dom/masterscore.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
 
@@ -36,6 +36,7 @@
 
 using namespace muse;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 NotationSelection::NotationSelection(IGetScore* getScore)
     : m_getScore(getScore)
@@ -137,7 +138,7 @@ INotationSelectionRangePtr NotationSelection::range() const
     return m_range;
 }
 
-mu::engraving::Score* NotationSelection::score() const
+Score* NotationSelection::score() const
 {
     return m_getScore->score();
 }
@@ -147,17 +148,17 @@ void NotationSelection::onElementHit(EngravingItem* el)
     m_lastElementHit = el;
 }
 
-mu::engraving::MeasureBase* NotationSelection::startMeasureBase() const
+MeasureBase* NotationSelection::startMeasureBase() const
 {
     return score()->selection().startMeasureBase();
 }
 
-mu::engraving::MeasureBase* NotationSelection::endMeasureBase() const
+MeasureBase* NotationSelection::endMeasureBase() const
 {
     return score()->selection().endMeasureBase();
 }
 
-std::vector<mu::engraving::System*> NotationSelection::selectedSystems() const
+std::vector<System*> NotationSelection::selectedSystems() const
 {
     return score()->selection().selectedSystems();
 }

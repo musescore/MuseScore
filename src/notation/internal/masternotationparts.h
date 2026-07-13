@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_MASTERNOTATIONPARTS_H
-#define MU_NOTATION_MASTERNOTATIONPARTS_H
+#pragma once
 
 #include "notationparts.h"
-#include "imasternotation.h"
 
 namespace mu::notation {
 class MasterNotationParts : public NotationParts
@@ -65,5 +63,3 @@ private:
     ExcerptNotationList m_excerpts;
 };
 }
-
-#endif // MU_NOTATION_MASTERNOTATIONPARTS_H

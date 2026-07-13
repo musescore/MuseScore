@@ -26,7 +26,9 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/select.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tie.h"

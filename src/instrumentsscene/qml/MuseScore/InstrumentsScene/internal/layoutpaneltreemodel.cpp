@@ -28,6 +28,8 @@
 
 #include "translation.h"
 
+#include "engraving/dom/score.h"
+
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep

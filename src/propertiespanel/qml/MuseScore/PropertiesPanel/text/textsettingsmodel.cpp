@@ -27,6 +27,7 @@
 #include "types/texttypes.h"
 
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/textbase.h"
 #include "engraving/types/typesconv.h"
 

@@ -42,6 +42,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
+#include "engraving/dom/score.h"
 #include "engraving/rendering/paintoptions.h"
 #include "engraving/types/symid.h"
 #include "previewmeasure.h"
