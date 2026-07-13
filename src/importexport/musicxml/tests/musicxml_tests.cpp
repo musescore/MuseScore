@@ -401,6 +401,9 @@ TEST_F(MusicXml_Tests, barlineFermatas) {
 TEST_F(MusicXml_Tests, barlineLoc) {
     musicXmlImportTestRef("testBarlineLoc");
 }
+TEST_F(MusicXml_Tests, noteflightStartRepeatBarline) {
+    musicXmlImportTestRef("testNoteflightStartRepeatBarline");
+}
 TEST_F(MusicXml_Tests, barlineSpan) {
     musicXmlIoTest("testBarlineSpan");
 }

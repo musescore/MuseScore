@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 2.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="2.0">
+  <work>
+    <work-title>Untitled score</work-title>
+  </work>
+  <identification>
+    <creator type="composer">Composer / arranger</creator>
+    <encoding>
+      <software>Noteflight version 0.4</software>
+      <encoding-date>2026-07-06</encoding-date>
+      <supports attribute="new-system" element="print" type="no" value="no"></supports>
+      <supports attribute="new-page" element="print" type="no" value="no"></supports>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>1.411111112</millimeters>
+      <tenths>10</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>1980</page-height>
+      <page-width>1530</page-width>
+      <page-margins type="both">
+        <left-margin>89.375</left-margin>
+        <right-margin>85</right-margin>
+        <top-margin>145</top-margin>
+        <bottom-margin>120</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>89.375</left-margin>
+        <right-margin>40</right-margin>
+      </system-margins>
+      <system-distance>130</system-distance>
+      <top-system-distance>210</top-system-distance>
+    </system-layout>
+    <staff-layout>
+      <staff-distance>65</staff-distance>
+    </staff-layout>
+  </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words default-x="765" default-y="1870" font-size="24" justify="right" valign="top">
+      Untitled score
+    </credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-words default-x="1377" default-y="1870" font-size="12" justify="right" valign="top">
+      Composer / arranger
+    </credit-words>
+  </credit>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Violin</part-name>
+      <part-abbreviation>Vln.</part-abbreviation>
+      <score-instrument id="P1I1">
+        <instrument-name>Violin</instrument-name>
+        <instrument-sound>strings.violin</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P1I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>41</midi-program>
+      </midi-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>64</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time print-object="yes">
+          <beats>2</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        <repeat direction="backward"></repeat>
+      </barline>
+    </measure>
+    <measure number="2">
+      <print new-system="no"></print>
+      <barline location="left">
+        <bar-style>light-heavy</bar-style>
+        <repeat direction="forward"></repeat>
+      </barline>
+      <attributes></attributes>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        <repeat direction="backward"></repeat>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>
