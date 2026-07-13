@@ -123,16 +123,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>J_J</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>K_K</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -142,13 +132,12 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>M_M</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>J_J</startElement>
+                <endElement>M_M</endElement>
+                <eid>K_K</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -168,15 +157,6 @@
             <appoggiatura/>
             <Note>
               <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>R_R</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -186,13 +166,12 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>T_T</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>T_T</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -207,12 +186,12 @@
             <grace8after/>
             <Note>
               <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>Y_Y</startElement>
+                <endElement>W_W</endElement>
+                <eid>Z_Z</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -222,16 +201,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>Y_Y</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Z_Z</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -263,17 +232,6 @@
             <Note>
               <eid>e_e</eid>
               <linkedTo>J_J</linkedTo>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>f_f</eid>
-                  <linkedTo>K_K</linkedTo>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -285,13 +243,13 @@
             <Note>
               <eid>h_h</eid>
               <linkedTo>M_M</linkedTo>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>e_e</startElement>
+                <endElement>h_h</endElement>
+                <eid>f_f</eid>
+                <linkedTo>K_K</linkedTo>
+                <track>4</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -313,16 +271,6 @@
             <Note>
               <eid>k_k</eid>
               <linkedTo>Q_Q</linkedTo>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>l_l</eid>
-                  <linkedTo>R_R</linkedTo>
-                  </Tie>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -334,13 +282,13 @@
             <Note>
               <eid>n_n</eid>
               <linkedTo>T_T</linkedTo>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>k_k</startElement>
+                <endElement>n_n</endElement>
+                <eid>l_l</eid>
+                <linkedTo>R_R</linkedTo>
+                <track>4</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -358,12 +306,13 @@
             <Note>
               <eid>q_q</eid>
               <linkedTo>W_W</linkedTo>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>s_s</startElement>
+                <endElement>q_q</endElement>
+                <eid>t_t</eid>
+                <linkedTo>Z_Z</linkedTo>
+                <track>4</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -375,17 +324,6 @@
             <Note>
               <eid>s_s</eid>
               <linkedTo>Y_Y</linkedTo>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>t_t</eid>
-                  <linkedTo>Z_Z</linkedTo>
-                  </Tie>
-                <next>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -474,17 +412,6 @@
               <Note>
                 <eid>6_6</eid>
                 <linkedTo>J_J</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>7_7</eid>
-                    <linkedTo>K_K</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      <fractions>1/4</fractions>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -496,13 +423,13 @@
               <Note>
                 <eid>9_9</eid>
                 <linkedTo>M_M</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      <fractions>-1/4</fractions>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>6_6</startElement>
+                  <endElement>9_9</endElement>
+                  <eid>7_7</eid>
+                  <linkedTo>K_K</linkedTo>
+                  <track>0</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -525,16 +452,6 @@
               <Note>
                 <eid>BB_BB</eid>
                 <linkedTo>Q_Q</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>CB_CB</eid>
-                    <linkedTo>R_R</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -546,13 +463,13 @@
               <Note>
                 <eid>EB_EB</eid>
                 <linkedTo>T_T</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      <grace>0</grace>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>BB_BB</startElement>
+                  <endElement>EB_EB</endElement>
+                  <eid>CB_CB</eid>
+                  <linkedTo>R_R</linkedTo>
+                  <track>0</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -570,12 +487,13 @@
               <Note>
                 <eid>HB_HB</eid>
                 <linkedTo>W_W</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>JB_JB</startElement>
+                  <endElement>HB_HB</endElement>
+                  <eid>KB_KB</eid>
+                  <linkedTo>Z_Z</linkedTo>
+                  <track>0</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -587,17 +505,6 @@
               <Note>
                 <eid>JB_JB</eid>
                 <linkedTo>Y_Y</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>KB_KB</eid>
-                    <linkedTo>Z_Z</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      <grace>0</grace>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -631,17 +538,6 @@
               <Note>
                 <eid>PB_PB</eid>
                 <linkedTo>J_J</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>QB_QB</eid>
-                    <linkedTo>K_K</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      <fractions>1/4</fractions>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -653,13 +549,13 @@
               <Note>
                 <eid>SB_SB</eid>
                 <linkedTo>M_M</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      <fractions>-1/4</fractions>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>PB_PB</startElement>
+                  <endElement>SB_SB</endElement>
+                  <eid>QB_QB</eid>
+                  <linkedTo>K_K</linkedTo>
+                  <track>4</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -681,16 +577,6 @@
               <Note>
                 <eid>VB_VB</eid>
                 <linkedTo>Q_Q</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>WB_WB</eid>
-                    <linkedTo>R_R</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -702,13 +588,13 @@
               <Note>
                 <eid>YB_YB</eid>
                 <linkedTo>T_T</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      <grace>0</grace>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>VB_VB</startElement>
+                  <endElement>YB_YB</endElement>
+                  <eid>WB_WB</eid>
+                  <linkedTo>R_R</linkedTo>
+                  <track>4</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -726,12 +612,13 @@
               <Note>
                 <eid>bB_bB</eid>
                 <linkedTo>W_W</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>dB_dB</startElement>
+                  <endElement>bB_bB</endElement>
+                  <eid>eB_eB</eid>
+                  <linkedTo>Z_Z</linkedTo>
+                  <track>4</track>
+                  </Tie>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -743,17 +630,6 @@
               <Note>
                 <eid>dB_dB</eid>
                 <linkedTo>Y_Y</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>eB_eB</eid>
-                    <linkedTo>Z_Z</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      <grace>0</grace>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>

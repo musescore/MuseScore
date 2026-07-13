@@ -144,59 +144,21 @@
         <startRepeat/>
         <endRepeat>2</endRepeat>
         <voice>
-          <Spanner type="PartialLyricsLine">
-            <PartialLyricsLine>
-              <isEndMelisma>1</isEndMelisma>
-              <eid>N_N</eid>
-              </PartialLyricsLine>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>Q_Q</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>R_R</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>S_S</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
+                <endElement>S_S</endElement>
                 <eid>T_T</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>71</pitch>
               <tpc>19</tpc>
-              <Spanner type="NoteLine">
-                <NoteLine>
-                  <eid>U_U</eid>
-                  <diagonal>1</diagonal>
-                  </NoteLine>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
-          <Spanner type="PartialLyricsLine">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>V_V</eid>
             <durationType>quarter</durationType>
@@ -205,35 +167,17 @@
               <eid>W_W</eid>
               <text>oo</text>
               </Lyrics>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>X_X</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>Y_Y</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="NoteLine">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <NoteLine>
+                <startElement>S_S</startElement>
+                <endElement>X_X</endElement>
+                <eid>U_U</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </NoteLine>
               </Note>
             </Chord>
           <Dynamic>
@@ -245,8 +189,6 @@
             </Dynamic>
           <Beam>
             <eid>Z_Z</eid>
-            <l1>44</l1>
-            <l2>44</l2>
             </Beam>
           <Chord>
             <eid>a_a</eid>
@@ -258,25 +200,15 @@
               </Lyrics>
             <Note>
               <eid>c_c</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>d_d</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>67</pitch>
               <tpc>15</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>X_X</startElement>
+                <endElement>c_c</endElement>
+                <eid>Y_Y</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
@@ -285,15 +217,16 @@
             <Note>
               <eid>f_f</eid>
               <LaissezVib>
+                <startElement>f_f</startElement>
                 <eid>g_g</eid>
+                <track>0</track>
                 </LaissezVib>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>c_c</startElement>
+                <endElement>f_f</endElement>
+                <eid>d_d</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -310,7 +243,9 @@
             <Note>
               <eid>j_j</eid>
               <PartialTie>
+                <startElement>j_j</startElement>
                 <eid>k_k</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -329,5 +264,22 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <PartialLyricsLine>
+        <isEndMelisma>1</isEndMelisma>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/4</ticks>
+        <eid>N_N</eid>
+        <track>0</track>
+        </PartialLyricsLine>
+      <Slur>
+        <partialSpannerDirection>incoming</partialSpannerDirection>
+        <startElement>Q_Q</startElement>
+        <endElement>V_V</endElement>
+        <eid>R_R</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

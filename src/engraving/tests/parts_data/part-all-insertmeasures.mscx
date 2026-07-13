@@ -193,20 +193,6 @@
       <Measure>
         <eid>S_S</eid>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <veloChange>10</veloChange>
-              <beginText>cresc.</beginText>
-              <continueText>(cresc.)</continueText>
-              <eid>T_T</eid>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>U_U</eid>
             <durationType>quarter</durationType>
@@ -216,13 +202,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>W_W</eid>
             <durationType>quarter</durationType>
@@ -320,16 +299,6 @@
           <Chord>
             <eid>q_q</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>r_r</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>s_s</eid>
               <pitch>67</pitch>
@@ -357,13 +326,6 @@
           <Chord>
             <eid>x_x</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>y_y</eid>
               <pitch>67</pitch>
@@ -384,16 +346,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>2_2</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>3_3</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -403,13 +355,12 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>5_5</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>2_2</startElement>
+                <endElement>5_5</endElement>
+                <eid>3_3</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -1277,21 +1228,6 @@
         <Measure>
           <eid>MD_MD</eid>
           <voice>
-            <Spanner type="HairPin">
-              <HairPin>
-                <subtype>0</subtype>
-                <veloChange>10</veloChange>
-                <beginText>cresc.</beginText>
-                <continueText>(cresc.)</continueText>
-                <eid>ND_ND</eid>
-                <linkedTo>T_T</linkedTo>
-                </HairPin>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Chord>
               <eid>OD_OD</eid>
               <linkedTo>U_U</linkedTo>
@@ -1303,13 +1239,6 @@
                 <tpc>15</tpc>
                 </Note>
               </Chord>
-            <Spanner type="HairPin">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Chord>
               <eid>QD_QD</eid>
               <linkedTo>W_W</linkedTo>
@@ -1426,17 +1355,6 @@
               <eid>kD_kD</eid>
               <linkedTo>q_q</linkedTo>
               <durationType>quarter</durationType>
-              <Spanner type="Slur">
-                <Slur>
-                  <eid>lD_lD</eid>
-                  <linkedTo>r_r</linkedTo>
-                  </Slur>
-                <next>
-                  <location>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <Note>
                 <eid>mD_mD</eid>
                 <linkedTo>s_s</linkedTo>
@@ -1470,13 +1388,6 @@
               <eid>rD_rD</eid>
               <linkedTo>x_x</linkedTo>
               <durationType>quarter</durationType>
-              <Spanner type="Slur">
-                <prev>
-                  <location>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
               <Note>
                 <eid>sD_sD</eid>
                 <linkedTo>y_y</linkedTo>
@@ -1496,17 +1407,6 @@
               <Note>
                 <eid>vD_vD</eid>
                 <linkedTo>2_2</linkedTo>
-                <Spanner type="Tie">
-                  <Tie>
-                    <eid>wD_wD</eid>
-                    <linkedTo>3_3</linkedTo>
-                    </Tie>
-                  <next>
-                    <location>
-                      <fractions>1/4</fractions>
-                      </location>
-                    </next>
-                  </Spanner>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
                 </Note>
@@ -1518,13 +1418,13 @@
               <Note>
                 <eid>yD_yD</eid>
                 <linkedTo>5_5</linkedTo>
-                <Spanner type="Tie">
-                  <prev>
-                    <location>
-                      <fractions>-1/4</fractions>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Tie>
+                  <startElement>vD_vD</startElement>
+                  <endElement>yD_yD</endElement>
+                  <eid>wD_wD</eid>
+                  <linkedTo>3_3</linkedTo>
+                  <track>0</track>
+                  </Tie>
                 <pitch>67</pitch>
                 <tpc>15</tpc>
                 </Note>
@@ -1877,6 +1777,27 @@
             </voice>
           </Measure>
         </Staff>
+      <SpannerMap>
+        <HairPin>
+          <subtype>0</subtype>
+          <veloChange>10</veloChange>
+          <beginText>cresc.</beginText>
+          <continueText>(cresc.)</continueText>
+          <track2>0</track2>
+          <startTick>2/1</startTick>
+          <ticks>1/4</ticks>
+          <eid>ND_ND</eid>
+          <linkedTo>T_T</linkedTo>
+          <track>0</track>
+          </HairPin>
+        <Slur>
+          <startElement>kD_kD</startElement>
+          <endElement>rD_rD</endElement>
+          <eid>lD_lD</eid>
+          <linkedTo>r_r</linkedTo>
+          <track>0</track>
+          </Slur>
+        </SpannerMap>
       </Score>
     <Score>
       <eid>yE_yE</eid>
@@ -2439,5 +2360,24 @@
           </Measure>
         </Staff>
       </Score>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <veloChange>10</veloChange>
+        <beginText>cresc.</beginText>
+        <continueText>(cresc.)</continueText>
+        <track2>0</track2>
+        <startTick>2/1</startTick>
+        <ticks>1/4</ticks>
+        <eid>T_T</eid>
+        <track>0</track>
+        </HairPin>
+      <Slur>
+        <startElement>q_q</startElement>
+        <endElement>x_x</endElement>
+        <eid>r_r</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>
