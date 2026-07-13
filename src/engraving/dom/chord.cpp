@@ -313,10 +313,6 @@ Chord::Chord(const Chord& c, bool link)
         Note* nnote = Factory::copyNote(*onote, link);
         add(nnote);
     }
-    for (Chord* gn : c.graceNotes()) {
-        Chord* nc = new Chord(*gn, link);
-        add(nc);
-    }
     for (Articulation* a : c.m_articulations) {      // make deep copy
         Articulation* na = a->clone();
         if (link) {
@@ -432,9 +428,6 @@ void Chord::undoUnlink()
     for (Note* n : m_notes) {
         n->undoUnlink();
     }
-    for (Chord* gn : graceNotes()) {
-        gn->undoUnlink();
-    }
     for (Articulation* a : m_articulations) {
         a->undoUnlink();
     }
@@ -476,7 +469,6 @@ Chord::~Chord()
     delete m_stem;
     delete m_hook;
     muse::DeleteAll(m_ledgerLines);
-    muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
     muse::DeleteAll(m_noteParens);
 }
@@ -688,15 +680,6 @@ void Chord::add(EngravingItem* e)
         assert(!m_stemSlash);
         m_stemSlash = toStemSlash(e);
         break;
-    case ElementType::CHORD:
-    {
-        Chord* gc = toChord(e);
-        assert(gc->noteType() != NoteType::NORMAL);
-        size_t idx = gc->graceIndex();
-        gc->setFlag(ElementFlag::MOVABLE, true);
-        m_graceNotes.insert(m_graceNotes.begin() + idx, gc);
-    }
-    break;
     case ElementType::LEDGER_LINE:
         ASSERT_X("Chord::add ledgerline");
         break;
@@ -797,17 +780,6 @@ void Chord::remove(EngravingItem* e)
     case ElementType::CHORDLINE:
         removeEl(e);
         break;
-    case ElementType::CHORD:
-    {
-        auto i = std::find(m_graceNotes.begin(), m_graceNotes.end(), toChord(e));
-        IF_ASSERT_FAILED(i != m_graceNotes.end()) {
-            break;
-        }
-        Chord* grace = *i;
-        grace->setGraceIndex(i - m_graceNotes.begin());
-        m_graceNotes.erase(i);
-    }
-    break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::TAPPING:
@@ -2111,70 +2083,18 @@ Measure* Chord::measure() const
 }
 
 //---------------------------------------------------------
-//   graceNotesBefore
-//---------------------------------------------------------
-
-GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayable) const
-{
-    m_graceNotesBefore.clear();
-    for (Chord* c : m_graceNotes) {
-        assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
-        if (c->noteType() & (
-                NoteType::ACCIACCATURA
-                | NoteType::APPOGGIATURA
-                | NoteType::GRACE4
-                | NoteType::GRACE16
-                | NoteType::GRACE32)) {
-            if (filterUnplayable && !c->isChordPlayable()) {
-                continue;
-            }
-
-            m_graceNotesBefore.push_back(c);
-        }
-    }
-    return m_graceNotesBefore;
-}
-
-//---------------------------------------------------------
-//   graceNotesAfter
-//---------------------------------------------------------
-
-GraceNotesGroup& Chord::graceNotesAfter(bool filterUnplayable) const
-{
-    m_graceNotesAfter.clear();
-    for (int i = static_cast<int>(m_graceNotes.size()) - 1; i >= 0; i--) {
-        Chord* c = m_graceNotes[i];
-        assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
-        if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
-            if (filterUnplayable && !c->isChordPlayable()) {
-                continue;
-            }
-
-            m_graceNotesAfter.push_back(c);
-        }
-    }
-    return m_graceNotesAfter;
-}
-
-Chord* Chord::graceNoteAt(size_t idx) const
-{
-    if (idx > m_graceNotes.size()) {
-        return nullptr;
-    }
-
-    return m_graceNotes.at(idx);
-}
-
-//---------------------------------------------------------
 //   allGraceChordsOfMainChord
 //   returns a list containing all grace notes (chords) attached to the main chord and the main chord itself, in order
 //---------------------------------------------------------
 std::vector<Chord*> Chord::allGraceChordsOfMainChord()
 {
-    Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
-    std::vector<Chord*> chords = { mainChord };
-    const GraceNotesGroup& gnBefore = mainChord->graceNotesBefore();
-    const GraceNotesGroup& gnAfter = mainChord->graceNotesAfter();
+    ChordRest* mainCr = isGrace() ? toChordRest(explicitParent()) : this;
+    std::vector<Chord*> chords;
+    if (mainCr->isChord()) {
+        chords.push_back(toChord(mainCr));
+    }
+    const GraceNotesGroup& gnBefore = mainCr->graceNotesBefore();
+    const GraceNotesGroup& gnAfter = mainCr->graceNotesAfter();
     chords.insert(chords.begin(), gnBefore.begin(), gnBefore.end());
     chords.insert(chords.end(), gnAfter.begin(), gnAfter.end());
     return chords;
@@ -2797,7 +2717,7 @@ Note* Chord::firstGraceOrNote()
 // GRACE NOTES
 //---------------------------------
 
-GraceNotesGroup::GraceNotesGroup(Chord* c)
+GraceNotesGroup::GraceNotesGroup(ChordRest* c)
     : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
 
 void GraceNotesGroup::setPos(double x, double y)

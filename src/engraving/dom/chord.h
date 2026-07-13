@@ -82,25 +82,6 @@ enum class PlayEventType : unsigned char {
     ///.\}
 };
 
-class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
-{
-    OBJECT_ALLOCATOR(engraving, GraceNotesGroup)
-public:
-    GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
-    GraceNotesGroup(Chord* c);
-
-    Chord* parent() const { return _parent; }
-
-    void setPos(double x, double y) override;
-    Segment* appendedSegment() const { return _appendedSegment; }
-    void setAppendedSegment(Segment* s) { _appendedSegment = s; }
-    void addToShape();
-
-private:
-    Chord* _parent = nullptr;
-    Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
-};
-
 //---------------------------------------------------------
 //   @@ Chord
 ///    Graphic representation of a chord.
@@ -228,18 +209,10 @@ public:
     void setSlash(bool flag, bool stemless);
     void removeMarkings(bool keepTremolo = false) override;
 
-    const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
-    std::vector<Chord*>& graceNotes() { return m_graceNotes; }
     std::vector<Chord*> allGraceChordsOfMainChord();
-    void removeAllGraceNotes() { m_graceNotes.clear(); }
-
-    GraceNotesGroup& graceNotesBefore(bool filterUnplayable = false) const;
-    GraceNotesGroup& graceNotesAfter(bool filterUnplayable = false) const;
 
     size_t graceIndex() const { return m_graceIndex; }
     void setGraceIndex(size_t val) { m_graceIndex = val; }
-
-    Chord* graceNoteAt(size_t idx) const;
 
     int line(bool up) const { return up ? upLine() : downLine(); }
     int line() const { return ldata()->up ? upLine() : downLine(); }
@@ -408,9 +381,6 @@ private:
     TremoloSingleChord* m_tremoloSingleChord = nullptr;
 
     bool m_endsNoteAnchoredLine = false;        // true if this chord is the ending point of a glissando (needed for layout)
-    std::vector<Chord*> m_graceNotes;    // storage for all grace notes
-    mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
-    mutable GraceNotesGroup m_graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
     size_t m_graceIndex = 0;             // if this is a grace note, index in parent list
 
     bool m_isTrillCueNote = false;

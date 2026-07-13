@@ -629,7 +629,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     double graceMag = ctx.conf().styleD(Sid::graceNoteMag);
 
-    std::vector<Chord*> graceNotesBefore = item->Chord::graceNotesBefore();
+    std::vector<Chord*> graceNotesBefore = item->graceNotesBefore();
     size_t nb = graceNotesBefore.size();
     if (nb) {
         double xl = -(item->spaceLw() + minNoteDistance);

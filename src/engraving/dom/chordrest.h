@@ -40,6 +40,8 @@ enum class CrossMeasure : signed char {
 class Articulation;
 class BeamBase;
 class BeamSegment;
+class Chord;
+class ChordRest;
 class Lyrics;
 class Measure;
 class Score;
@@ -48,6 +50,32 @@ class Slur;
 class TabDurationSymbol;
 class Transaction;
 enum class SegmentType;
+
+//-------------------------------------------------------------------
+//   GraceNotesGroup
+//    Holds the grace note chords attached to a ChordRest (before or
+//    after group). Members are always Chords; the parent may be a
+//    Chord or a Rest.
+//-------------------------------------------------------------------
+
+class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
+{
+    OBJECT_ALLOCATOR(engraving, GraceNotesGroup)
+public:
+    GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
+    GraceNotesGroup(ChordRest* c);
+
+    ChordRest* parent() const { return _parent; }
+
+    void setPos(double x, double y) override;
+    Segment* appendedSegment() const { return _appendedSegment; }
+    void setAppendedSegment(Segment* s) { _appendedSegment = s; }
+    void addToShape();
+
+private:
+    ChordRest* _parent = nullptr;
+    Segment* _appendedSegment = nullptr; // the graceNoteGroup is appended to this segment
+};
 
 //-------------------------------------------------------------------
 //   ChordRest
@@ -163,6 +191,15 @@ public:
     bool isGraceAfter() const;
     Breath* hasBreathMark() const;
 
+    const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
+    std::vector<Chord*>& graceNotes() { return m_graceNotes; }
+    void removeAllGraceNotes() { m_graceNotes.clear(); }
+
+    GraceNotesGroup& graceNotesBefore(bool filterUnplayable = false) const;
+    GraceNotesGroup& graceNotesAfter(bool filterUnplayable = false) const;
+
+    Chord* graceNoteAt(size_t idx) const;
+
     Segment* nextSegmentAfterCR(SegmentType types) const;
 
     void setScore(Score* s) override;
@@ -211,6 +248,10 @@ protected:
 
     std::vector<Lyrics*> m_lyrics;
     TabDurationSymbol* m_tabDur = nullptr;  // stores a duration symbol in tablature staves
+
+    std::vector<Chord*> m_graceNotes;    // storage for all grace notes attached to this chord or rest
+    mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before grace notes
+    mutable GraceNotesGroup m_graceNotesAfter = GraceNotesGroup(this); // will store after grace notes
 
     Beam* m_beam = nullptr;
     BeamSegment* m_beamlet = nullptr;

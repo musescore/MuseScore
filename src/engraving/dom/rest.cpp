@@ -419,6 +419,9 @@ void Rest::scanElements(std::function<void(EngravingItem*)> func)
     if (rightParen()) {
         func(rightParen());
     }
+    for (Chord* grace : graceNotes()) {
+        grace->scanElements(func);
+    }
 }
 
 //---------------------------------------------------------
@@ -430,6 +433,9 @@ void Rest::setTrack(track_idx_t val)
     ChordRest::setTrack(val);
     for (NoteDot* dot : m_dots) {
         dot->setTrack(val);
+    }
+    for (Chord* grace : graceNotes()) {
+        grace->setTrack(val);
     }
 }
 
@@ -594,6 +600,9 @@ void Rest::localSpatiumChanged(double oldValue, double newValue)
         e->localSpatiumChanged(oldValue, newValue);
     }
     for (EngravingItem* e : el()) {
+        e->localSpatiumChanged(oldValue, newValue);
+    }
+    for (EngravingItem* e : graceNotes()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
 }

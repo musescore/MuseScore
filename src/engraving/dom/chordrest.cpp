@@ -109,6 +109,10 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
         nl->setTrack(track());
         m_lyrics.push_back(nl);
     }
+    for (Chord* gn : cr.graceNotes()) {      // grace notes are always chords; parent may be a chord or a rest
+        Chord* nc = link ? toChord(gn->linkedClone()) : gn->clone();
+        add(nc);
+    }
 }
 
 //---------------------------------------------------------
@@ -121,6 +125,9 @@ void ChordRest::undoUnlink()
     for (Lyrics* l : m_lyrics) {
         l->undoUnlink();
     }
+    for (Chord* gn : graceNotes()) {
+        gn->undoUnlink();
+    }
 }
 
 //---------------------------------------------------------
@@ -131,6 +138,7 @@ ChordRest::~ChordRest()
 {
     muse::DeleteAll(m_lyrics);
     muse::DeleteAll(m_el);
+    muse::DeleteAll(m_graceNotes);
     delete m_tabDur;
 
     if (m_beam) {
@@ -572,6 +580,16 @@ void ChordRest::add(EngravingItem* e)
         m_lyrics.push_back(toLyrics(e));
         e->added();
         break;
+    case ElementType::CHORD:
+    {
+        Chord* gc = toChord(e);
+        assert(gc->noteType() != NoteType::NORMAL);
+        size_t idx = gc->graceIndex();
+        gc->setFlag(ElementFlag::MOVABLE, true);
+        m_graceNotes.insert(m_graceNotes.begin() + idx, gc);
+        e->added();
+    }
+    break;
     default:
         EngravingItem::add(e);
         break;
@@ -596,9 +614,76 @@ void ChordRest::remove(EngravingItem* e)
         }
     }
     break;
+    case ElementType::CHORD:
+    {
+        auto i = std::find(m_graceNotes.begin(), m_graceNotes.end(), toChord(e));
+        IF_ASSERT_FAILED(i != m_graceNotes.end()) {
+            break;
+        }
+        Chord* grace = *i;
+        grace->setGraceIndex(i - m_graceNotes.begin());
+        m_graceNotes.erase(i);
+        e->removed();
+    }
+    break;
     default:
         EngravingItem::remove(e);
     }
+}
+
+//---------------------------------------------------------
+//   graceNotesBefore
+//---------------------------------------------------------
+
+GraceNotesGroup& ChordRest::graceNotesBefore(bool filterUnplayable) const
+{
+    m_graceNotesBefore.clear();
+    for (Chord* c : m_graceNotes) {
+        assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
+        if (c->noteType() & (
+                NoteType::ACCIACCATURA
+                | NoteType::APPOGGIATURA
+                | NoteType::GRACE4
+                | NoteType::GRACE16
+                | NoteType::GRACE32)) {
+            if (filterUnplayable && !c->isChordPlayable()) {
+                continue;
+            }
+
+            m_graceNotesBefore.push_back(c);
+        }
+    }
+    return m_graceNotesBefore;
+}
+
+//---------------------------------------------------------
+//   graceNotesAfter
+//---------------------------------------------------------
+
+GraceNotesGroup& ChordRest::graceNotesAfter(bool filterUnplayable) const
+{
+    m_graceNotesAfter.clear();
+    for (int i = static_cast<int>(m_graceNotes.size()) - 1; i >= 0; i--) {
+        Chord* c = m_graceNotes[i];
+        assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
+        if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
+            if (filterUnplayable && !c->isChordPlayable()) {
+                continue;
+            }
+
+            m_graceNotesAfter.push_back(c);
+        }
+    }
+    return m_graceNotesAfter;
+}
+
+Chord* ChordRest::graceNoteAt(size_t idx) const
+{
+    if (idx >= m_graceNotes.size()) {
+        return nullptr;
+    }
+
+    return m_graceNotes.at(idx);
 }
 
 //---------------------------------------------------------
