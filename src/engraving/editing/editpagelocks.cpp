@@ -47,13 +47,13 @@ public:
     AddPageLock(const RangeLock* pageLock)
         : m_pageLock(pageLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_pageLock->startMB()->score();
         score->removePageLock(m_pageLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_pageLock->startMB()->score();
         score->addPageLock(m_pageLock);
@@ -88,13 +88,13 @@ public:
     RemovePageLock(const RangeLock* pageLock)
         : m_pageLock(pageLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_pageLock->startMB()->score();
         score->addPageLock(m_pageLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_pageLock->startMB()->score();
         score->removePageLock(m_pageLock);

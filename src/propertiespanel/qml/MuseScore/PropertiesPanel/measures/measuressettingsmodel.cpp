@@ -21,6 +21,9 @@
  */
 #include "measuressettingsmodel.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;

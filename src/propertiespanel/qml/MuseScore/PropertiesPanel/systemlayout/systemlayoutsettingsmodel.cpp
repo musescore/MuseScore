@@ -22,6 +22,9 @@
 
 #include "systemlayoutsettingsmodel.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "engraving/dom/score.h"
 #include "engraving/dom/page.h"
 
