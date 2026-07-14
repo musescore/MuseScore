@@ -661,24 +661,25 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
 //---------------------------------------------------------
 
-Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
+Note* Score::setGraceNote(ChordRest* ch, int pitch, NoteType type, int len)
 {
     Chord* chord = Factory::createChord(this->dummy()->segment());
     Note* note = Factory::createNote(chord);
 
     // allow grace notes to be added to other grace notes
-    // by really adding to parent chord
-    if (ch->noteType() != NoteType::NORMAL) {
-        ch = toChord(ch->explicitParent());
+    // by really adding to the parent chord or rest
+    if (ch->isChord() && toChord(ch)->noteType() != NoteType::NORMAL) {
+        ch = toChordRest(ch->explicitParent());
     }
 
     chord->setTrack(ch->track());
     chord->setParent(ch);
     chord->add(note);
 
-    // find corresponding note within chord and use its tpc information
-    // if no note with same pitch found, derive tpc from pitch / key
-    if (Note* n = ch->findNote(pitch)) {
+    // find corresponding note within the host chord and use its tpc information
+    // if no note with same pitch found (or the host is a rest), derive tpc from pitch / key
+    Note* n = ch->isChord() ? toChord(ch)->findNote(pitch) : nullptr;
+    if (n) {
         note->setNval(n->noteVal(), ch->tick());
     } else {
         note->setPitch(pitch);
@@ -967,8 +968,9 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 chord->setTicks(d.fraction());
                 chord->setStemDirection(stemDirection);
                 chord->add(note);
-                if (cr && cr->isChord()) {
-                    std::vector<Chord*> graceNotes = toChord(cr)->graceNotes();
+                if (cr) {
+                    // transfer grace notes from the replaced chord or rest to the new chord
+                    std::vector<Chord*> graceNotes = cr->graceNotes();
                     for (Chord* grace : graceNotes) {
                         undoChangeParent(grace, chord, chord->staffIdx());
                     }
@@ -1707,6 +1709,27 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
         if (e->isNote()) {
             Note* n = toNote(e);
             Note* graceNote = setGraceNote(n->chord(), n->pitch(), graceType, duration);
+            select(graceNote, SelectType::SINGLE, 0);
+        } else if (e->isRest()) {
+            Rest* rest = toRest(e);
+            const Staff* st = rest->staff();
+            if (!st || st->isDrumStaff(rest->tick())) {
+                // percussion has no meaningful default pitch for a grace on a rest
+                continue;
+            }
+            // derive a pitch from the previous chord on the same track, else the middle staff line
+            int pitch = -1;
+            for (Segment* s = rest->segment()->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {
+                EngravingItem* prev = s->element(rest->track());
+                if (prev && prev->isChord()) {
+                    pitch = toChord(prev)->upNote()->pitch();
+                    break;
+                }
+            }
+            if (pitch < 0) {
+                pitch = line2pitch(4, st->clef(rest->tick()), st->key(rest->tick()));
+            }
+            Note* graceNote = setGraceNote(rest, pitch, graceType, duration);
             select(graceNote, SelectType::SINGLE, 0);
         }
     }

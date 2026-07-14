@@ -371,6 +371,34 @@ TEST_F(Engraving_NoteTests, graceAfterSlashSave)
 }
 
 //---------------------------------------------------------
+///   graceOnRest
+///   grace notes attached to a rest (before and after), issue #19701
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRest)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    // measure 1, staff 0: half note at tick 0, half rest at tick 1/2
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    // grace-after on the rest (the nachschlag-before-barline case)
+    score->setGraceNote(rest, 72, NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+    // grace-before on the rest
+    score->setGraceNote(rest, 74, NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+
+    EXPECT_EQ(rest->graceNotes().size(), 2u);
+    EXPECT_EQ(rest->graceNotesBefore().size(), 1u);
+    EXPECT_EQ(rest->graceNotesAfter().size(), 1u);
+
+    score->doLayout();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"grace-on-rest-test.mscx", NOTE_DATA_DIR + u"grace-on-rest-ref.mscx"));
+}
+
+//---------------------------------------------------------
 ///   tpc
 ///   test of note tpc values
 //---------------------------------------------------------

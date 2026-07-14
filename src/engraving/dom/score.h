@@ -416,7 +416,7 @@ public:
 
     Measure* undoGetMeasure(const Fraction& tick);
 
-    Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
+    Note* setGraceNote(ChordRest*,  int pitch, NoteType type, int len);
 
     GuitarBend* addGuitarBend(GuitarBendType type, Note* note, Note* endNote = nullptr);
 
