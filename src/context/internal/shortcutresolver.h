@@ -24,7 +24,7 @@
 #include <map>
 #include <functional>
 
-#include "shortcuts/ishortcutsresolver.h"
+#include "shortcuts_v2/ishortcutsresolver.h"
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
