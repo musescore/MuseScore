@@ -24,6 +24,7 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/actionicon.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordrest.h"
@@ -37,6 +38,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
 
+#include "engraving/editing/editdata.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
@@ -396,6 +398,32 @@ TEST_F(Engraving_NoteTests, graceOnRest)
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"grace-on-rest-test.mscx", NOTE_DATA_DIR + u"grace-on-rest-ref.mscx"));
+}
+
+//---------------------------------------------------------
+///   graceOnRestDrop
+///   dropping a grace-note palette icon onto a rest attaches a grace note (issue #19701)
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRestDrop)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving note tests"), [&](Transaction& tx) {
+        EditData dd(0);
+        ActionIcon* icon = new ActionIcon(score->dummy());
+        icon->setActionType(ActionIconType::GRACE8_AFTER);
+        dd.dropElement = icon;
+        ASSERT_TRUE(rest->acceptDrop(dd));
+        rest->drop(tx, dd);
+    });
+
+    EXPECT_EQ(rest->graceNotes().size(), 1u);
+    EXPECT_EQ(rest->graceNotesAfter().size(), 1u);
 }
 
 //---------------------------------------------------------

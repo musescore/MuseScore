@@ -1702,6 +1702,28 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 ///   adds grace note of specified type to selected notes
 //---------------------------------------------------------
 
+Note* Score::addGraceNoteToRest(Rest* rest, NoteType graceType, int duration)
+{
+    const Staff* st = rest->staff();
+    if (!st || st->isDrumStaff(rest->tick())) {
+        // percussion has no meaningful default pitch for a grace on a rest
+        return nullptr;
+    }
+    // derive a pitch from the previous chord on the same track, else the middle staff line
+    int pitch = -1;
+    for (Segment* s = rest->segment()->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {
+        EngravingItem* prev = s->element(rest->track());
+        if (prev && prev->isChord()) {
+            pitch = toChord(prev)->upNote()->pitch();
+            break;
+        }
+    }
+    if (pitch < 0) {
+        pitch = line2pitch(4, st->clef(rest->tick()), st->key(rest->tick()));
+    }
+    return setGraceNote(rest, pitch, graceType, duration);
+}
+
 void Score::cmdAddGrace(NoteType graceType, int duration)
 {
     const std::vector<EngravingItem*> copyOfElements = selection().elements();
@@ -1711,26 +1733,9 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
             Note* graceNote = setGraceNote(n->chord(), n->pitch(), graceType, duration);
             select(graceNote, SelectType::SINGLE, 0);
         } else if (e->isRest()) {
-            Rest* rest = toRest(e);
-            const Staff* st = rest->staff();
-            if (!st || st->isDrumStaff(rest->tick())) {
-                // percussion has no meaningful default pitch for a grace on a rest
-                continue;
+            if (Note* graceNote = addGraceNoteToRest(toRest(e), graceType, duration)) {
+                select(graceNote, SelectType::SINGLE, 0);
             }
-            // derive a pitch from the previous chord on the same track, else the middle staff line
-            int pitch = -1;
-            for (Segment* s = rest->segment()->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {
-                EngravingItem* prev = s->element(rest->track());
-                if (prev && prev->isChord()) {
-                    pitch = toChord(prev)->upNote()->pitch();
-                    break;
-                }
-            }
-            if (pitch < 0) {
-                pitch = line2pitch(4, st->clef(rest->tick()), st->key(rest->tick()));
-            }
-            Note* graceNote = setGraceNote(rest, pitch, graceType, duration);
-            select(graceNote, SelectType::SINGLE, 0);
         }
     }
 }

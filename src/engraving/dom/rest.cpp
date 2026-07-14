@@ -174,6 +174,21 @@ bool Rest::acceptDrop(EditData& data) const
         return true;
     case ElementType::MEASURE_REPEAT:
         return durationType().type() == DurationType::V_MEASURE;
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::ACCIACCATURA:
+        case ActionIconType::APPOGGIATURA:
+        case ActionIconType::GRACE4:
+        case ActionIconType::GRACE16:
+        case ActionIconType::GRACE32:
+        case ActionIconType::GRACE8_AFTER:
+        case ActionIconType::GRACE16_AFTER:
+        case ActionIconType::GRACE32_AFTER:
+            return true;
+        default:
+            break;
+        }
+        break;
     default:
         // prevent 'hanging' slurs, avoid crash on tie
         if (e->isSpanner()) {
@@ -233,6 +248,44 @@ EngravingItem* Rest::drop(Transaction& tx, EditData& data)
         delete e;
         if (durationType().type() == DurationType::V_MEASURE) {
             EditMeasureRepeat::addMeasureRepeat(tx, score(), measure(), numMeasures, staffIdx());
+        }
+        break;
+    }
+
+    case ElementType::ACTION_ICON: {
+        NoteType graceType = NoteType::NORMAL;
+        int len = 0;
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::ACCIACCATURA: graceType = NoteType::ACCIACCATURA;
+            len = Constants::DIVISION / 2;
+            break;
+        case ActionIconType::APPOGGIATURA: graceType = NoteType::APPOGGIATURA;
+            len = Constants::DIVISION / 2;
+            break;
+        case ActionIconType::GRACE4: graceType = NoteType::GRACE4;
+            len = Constants::DIVISION;
+            break;
+        case ActionIconType::GRACE16: graceType = NoteType::GRACE16;
+            len = Constants::DIVISION / 4;
+            break;
+        case ActionIconType::GRACE32: graceType = NoteType::GRACE32;
+            len = Constants::DIVISION / 8;
+            break;
+        case ActionIconType::GRACE8_AFTER: graceType = NoteType::GRACE8_AFTER;
+            len = Constants::DIVISION / 2;
+            break;
+        case ActionIconType::GRACE16_AFTER: graceType = NoteType::GRACE16_AFTER;
+            len = Constants::DIVISION / 4;
+            break;
+        case ActionIconType::GRACE32_AFTER: graceType = NoteType::GRACE32_AFTER;
+            len = Constants::DIVISION / 8;
+            break;
+        default:
+            return ChordRest::drop(tx, data);
+        }
+        delete e;
+        if (Note* graceNote = score()->addGraceNoteToRest(this, graceType, len)) {
+            score()->select(graceNote, SelectType::SINGLE, 0);
         }
         break;
     }
