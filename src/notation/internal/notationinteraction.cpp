@@ -5762,6 +5762,33 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
         select({ segment });
         startEditGrip(segment, mu::engraving::Grip::END);
     }
+};
+
+void NotationInteraction::increaseDecreaseDynamicsForSelection(int delta)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+    startEdit(TranslatableString("undoableAction", delta > 0 ? "Increase dynamics" : "Decrease dynamics"));
+
+    for (EngravingItem* item : selection()->elements()) {
+        if (!item->isDynamic()) {
+            continue;
+        }
+        Dynamic* dynamic = toDynamic(item);
+        DynamicType newType;
+        if (delta > 0 && dynamic->dynamicType() <= DynamicType::FFFF) {
+            newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) + 1);
+        } else if (delta < 0 && dynamic->dynamicType() >= DynamicType::PPPPP) {
+            newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) - 1);
+        } else {
+            continue;
+        }
+        dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
+        dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
+        autoFlipHairpinsTypeImpl(dynamic);
+    }
+    apply();
 }
 
 void NotationInteraction::putRestToSelection()
@@ -6026,19 +6053,8 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
-{
-    if (!selDyn) {
-        return;
-    }
-
-    if (selDyn->dynamicType() == DynamicType::OTHER || selDyn->dynamicType() >= DynamicType::FP) {
-        return;
-    }
-
+void NotationInteraction::autoFlipHairpinsTypeImpl(Dynamic* selDyn) {
     selDyn->findAdjacentHairpins();
-
-    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
 
     if (Hairpin* leftHp = selDyn->leftHairpin()) {
         const Dynamic* startDyn = leftHp->dynamicSnappedBefore();
@@ -6065,6 +6081,21 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
             }
         }
     }
+
+}
+
+void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
+{
+    if (!selDyn) {
+        return;
+    }
+
+    if (selDyn->dynamicType() == DynamicType::OTHER || selDyn->dynamicType() >= DynamicType::FP) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Change hairpin type"));
+    autoFlipHairpinsTypeImpl(selDyn);
 
     apply();
 }

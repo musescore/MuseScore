@@ -239,8 +239,11 @@ public:
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
     void autoFlipHairpinsType(engraving::Dynamic* selDyn) override;
+    void autoFlipHairpinsTypeImpl(engraving::Dynamic* selDyn);
 
     void toggleDynamicPopup() override;
+    void increaseDecreaseDynamicsForSelection(int delta) override;
+
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void moveMeasureToPrevSystem() override;
