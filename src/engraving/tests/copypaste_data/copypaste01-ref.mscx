@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>T_T</eid>
+    <eid>R_R</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
@@ -22,9 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
-      <eid>U_U</eid>
+      <eid>S_S</eid>
       <Staff>
-        <eid>V_V</eid>
+        <eid>T_T</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -62,41 +62,41 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>W_W</eid>
+        <eid>U_U</eid>
         <Text>
-          <eid>X_X</eid>
+          <eid>V_V</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>Y_Y</eid>
+          <eid>W_W</eid>
           <style>subtitle</style>
           <text>Copy-Paste</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>Z_Z</eid>
+        <eid>X_X</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>a_a</eid>
+            <eid>Y_Y</eid>
             </Clef>
           <TimeSig>
-            <eid>b_b</eid>
+            <eid>Z_Z</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>c_c</eid>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>d_d</eid>
+        <eid>b_b</eid>
         <voice>
           <Chord>
             <eid>B_B</eid>
@@ -128,47 +128,37 @@
           <Chord>
             <eid>H_H</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>I_I</eid>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>J_J</eid>
+              <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <span>1</span>
-            <eid>e_e</eid>
+            <eid>c_c</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>f_f</eid>
+        <eid>d_d</eid>
         <voice>
+          <Chord>
+            <eid>e_e</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>g_g</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>h_h</eid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -176,8 +166,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>j_j</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -185,60 +175,51 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>l_l</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>m_m</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>n_n</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <BarLine>
             <span>1</span>
-            <eid>o_o</eid>
+            <eid>m_m</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>p_p</eid>
+        <eid>n_n</eid>
         <voice>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>Q_Q</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -246,10 +227,18 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>q_q</eid>
+            <eid>o_o</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>H_H</startElement>
+        <endElement>e_e</endElement>
+        <eid>p_p</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

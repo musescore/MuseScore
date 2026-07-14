@@ -132,46 +132,35 @@
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <text></text>
-                  <glissandoShift>1</glissandoShift>
-                  <eid>W_W</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>3/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             </Dynamic>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>Y_Y</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>a_a</eid>
+                <eid>Z_Z</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>7</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-3/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <text></text>
+                <glissandoShift>1</glissandoShift>
+                <startElement>V_V</startElement>
+                <endElement>Y_Y</endElement>
+                <eid>a_a</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>

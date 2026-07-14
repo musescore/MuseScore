@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
-  <programVersion>5.0.0</programVersion>
-  <programRevision></programRevision>
   <Score>
     <eid>B_B</eid>
     <Division>480</Division>
+    <Style>
+      <spatium>1.75</spatium>
+      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <open>1</open>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2026-07-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="source"></metaTag>
-    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="subtitle">Subtitle</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -101,7 +98,6 @@
         <instrumentId>wind.flutes.flute</instrumentId>
         <Channel>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -128,14 +124,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <Tie>
                 <startElement>J_J</startElement>
-                <endElement>M_M</endElement>
-                <eid>K_K</eid>
+                <endElement>L_L</endElement>
+                <eid>M_M</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -162,14 +158,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <Tie>
                 <startElement>Q_Q</startElement>
-                <endElement>T_T</endElement>
-                <eid>R_R</eid>
+                <endElement>S_S</endElement>
+                <eid>T_T</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -187,9 +183,9 @@
             <Note>
               <eid>W_W</eid>
               <Tie>
-                <startElement>Y_Y</startElement>
+                <startElement>X_X</startElement>
                 <endElement>W_W</endElement>
-                <eid>Z_Z</eid>
+                <eid>Y_Y</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -197,10 +193,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>X_X</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -237,17 +233,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
-            <linkedTo>L_L</linkedTo>
+            <eid>f_f</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
-              <linkedTo>M_M</linkedTo>
+              <eid>g_g</eid>
+              <linkedTo>L_L</linkedTo>
               <Tie>
                 <startElement>e_e</startElement>
-                <endElement>h_h</endElement>
-                <eid>f_f</eid>
-                <linkedTo>K_K</linkedTo>
+                <endElement>g_g</endElement>
+                <eid>h_h</eid>
+                <linkedTo>M_M</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -276,17 +272,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
-            <linkedTo>S_S</linkedTo>
+            <eid>l_l</eid>
+            <linkedTo>R_R</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
-              <linkedTo>T_T</linkedTo>
+              <eid>m_m</eid>
+              <linkedTo>S_S</linkedTo>
               <Tie>
                 <startElement>k_k</startElement>
-                <endElement>n_n</endElement>
-                <eid>l_l</eid>
-                <linkedTo>R_R</linkedTo>
+                <endElement>m_m</endElement>
+                <eid>n_n</eid>
+                <linkedTo>T_T</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -307,10 +303,10 @@
               <eid>q_q</eid>
               <linkedTo>W_W</linkedTo>
               <Tie>
-                <startElement>s_s</startElement>
+                <startElement>r_r</startElement>
                 <endElement>q_q</endElement>
-                <eid>t_t</eid>
-                <linkedTo>Z_Z</linkedTo>
+                <eid>s_s</eid>
+                <linkedTo>Y_Y</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -318,12 +314,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
-            <linkedTo>X_X</linkedTo>
+            <eid>t_t</eid>
+            <linkedTo>Z_Z</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>s_s</eid>
-              <linkedTo>Y_Y</linkedTo>
+              <eid>r_r</eid>
+              <linkedTo>X_X</linkedTo>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>

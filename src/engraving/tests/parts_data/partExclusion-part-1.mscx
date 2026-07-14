@@ -151,45 +151,45 @@
         <eid>EB_EB</eid>
         <voice>
           <Chord>
-            <eid>GB_GB</eid>
-            <linkedTo>f_f</linkedTo>
+            <eid>FB_FB</eid>
+            <linkedTo>e_e</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>HB_HB</eid>
-              <linkedTo>g_g</linkedTo>
+              <eid>GB_GB</eid>
+              <linkedTo>f_f</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>IB_IB</eid>
-            <linkedTo>h_h</linkedTo>
+            <eid>HB_HB</eid>
+            <linkedTo>g_g</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>JB_JB</eid>
-              <linkedTo>i_i</linkedTo>
+              <eid>IB_IB</eid>
+              <linkedTo>h_h</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>KB_KB</eid>
-            <linkedTo>j_j</linkedTo>
+            <eid>JB_JB</eid>
+            <linkedTo>i_i</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>LB_LB</eid>
-              <linkedTo>k_k</linkedTo>
+              <eid>KB_KB</eid>
+              <linkedTo>j_j</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>MB_MB</eid>
-            <linkedTo>l_l</linkedTo>
+            <eid>LB_LB</eid>
+            <linkedTo>k_k</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>NB_NB</eid>
-              <linkedTo>m_m</linkedTo>
+              <eid>MB_MB</eid>
+              <linkedTo>l_l</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>

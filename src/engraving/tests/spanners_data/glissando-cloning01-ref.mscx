@@ -96,33 +96,22 @@
               <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>J_J</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>I_I</startElement>
+                <endElement>K_K</endElement>
+                <eid>L_L</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>
@@ -155,36 +144,25 @@
               <linkedTo>I_I</linkedTo>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>R_R</eid>
-                  <linkedTo>J_J</linkedTo>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
-            <linkedTo>K_K</linkedTo>
+            <eid>R_R</eid>
+            <linkedTo>J_J</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
-              <linkedTo>L_L</linkedTo>
+              <eid>S_S</eid>
+              <linkedTo>K_K</linkedTo>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>Q_Q</startElement>
+                <endElement>S_S</endElement>
+                <eid>T_T</eid>
+                <linkedTo>L_L</linkedTo>
+                <track>4</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>

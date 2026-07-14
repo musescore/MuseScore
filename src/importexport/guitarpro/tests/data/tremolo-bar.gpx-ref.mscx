@@ -74,30 +74,21 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>J_J</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <measures>3</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>M_M</eid>
             <durationType>quarter</durationType>
@@ -106,29 +97,29 @@
             <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>O_O</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <BarLine>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
               <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>T_T</eid>
             <durationType>quarter</durationType>
@@ -137,23 +128,19 @@
             <eid>U_U</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>V_V</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <BarLine>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>X_X</eid>
+        <eid>W_W</eid>
         <voice>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>Y_Y</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -161,10 +148,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>a_a</eid>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>a_a</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -172,26 +159,26 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>c_c</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>d_d</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>e_e</eid>
+            <eid>d_d</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>f_f</eid>
+        <eid>e_e</eid>
         <voice>
           <Chord>
-            <eid>g_g</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>g_g</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -199,34 +186,36 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>i_i</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <measures>-3</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>k_k</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <WhammyBar>
+        <beginTextOffset x="0" y="0"/>
+        <track2>0</track2>
+        <ticks>14/4</ticks>
+        <eid>l_l</eid>
+        <track>0</track>
+        <placement>below</placement>
+        </WhammyBar>
+      </SpannerMap>
     </Score>
   </museScore>

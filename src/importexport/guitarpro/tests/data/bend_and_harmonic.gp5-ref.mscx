@@ -91,71 +91,48 @@
             <velocity>96</velocity>
             <eid>M_M</eid>
             </Dynamic>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>AH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>AH</continueText>
-              <eid>N_N</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <parentheses>both</parentheses>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
               <string>2</string>
               <ghost>1</ghost>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>pre-bend</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>Q_Q</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>P_P</NoteEID>
+                <NoteEID>O_O</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>Q_Q</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>4</fret>
               <string>2</string>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>pre-bend</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>1</bendEndTimeFactor>
+                <startElement>O_O</startElement>
+                <endElement>Q_Q</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <head>diamond</head>
@@ -164,19 +141,23 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HarmonicMark>
+        <beginText>AH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>AH</continueText>
+        <track2>0</track2>
+        <ticks>1/2</ticks>
+        <eid>U_U</eid>
+        <track>0</track>
+        </HarmonicMark>
+      </SpannerMap>
     </Score>
   </museScore>

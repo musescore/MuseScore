@@ -206,6 +206,8 @@
             <TremoloTwoChord>
               <subtype>c16</subtype>
               <eid>W_W</eid>
+              <l1>0</l1>
+              <l2>2</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
@@ -391,6 +393,8 @@
             <TremoloTwoChord>
               <subtype>c16</subtype>
               <eid>7_7</eid>
+              <l1>0</l1>
+              <l2>2</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
@@ -505,32 +509,34 @@
         </Measure>
       </Staff>
     <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <track2>0</track2>
+        <startTick>-1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>H_H</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>0</subtype>
+        <track2>4</track2>
+        <startTick>-1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>u_u</eid>
+        <track>4</track>
+        </HairPin>
       <Slur>
         <startElement>I_I</startElement>
         <endElement>L_L</endElement>
         <eid>J_J</eid>
         <track>0</track>
         </Slur>
-      <HairPin>
-        <subtype>0</subtype>
-        <track2>0</track2>
-        <ticks>1/1</ticks>
-        <eid>H_H</eid>
-        <track>0</track>
-        </HairPin>
       <Slur>
         <startElement>v_v</startElement>
         <endElement>y_y</endElement>
         <eid>w_w</eid>
         <track>4</track>
         </Slur>
-      <HairPin>
-        <subtype>0</subtype>
-        <track2>4</track2>
-        <ticks>1/1</ticks>
-        <eid>u_u</eid>
-        <track>4</track>
-        </HairPin>
       <GradualTempoChange>
         <tempoChangeType>ritardando</tempoChangeType>
         <beginHookHeight>1.9</beginHookHeight>

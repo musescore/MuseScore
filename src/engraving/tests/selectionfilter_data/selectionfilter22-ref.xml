@@ -16,28 +16,28 @@
         </Note>
       </Chord>
     <Chord>
-      <eid>F_F</eid>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>G_G</eid>
+        <eid>F_F</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
-      <eid>H_H</eid>
+      <eid>G_G</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>I_I</eid>
+        <eid>H_H</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
-      <eid>J_J</eid>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>K_K</eid>
+        <eid>J_J</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

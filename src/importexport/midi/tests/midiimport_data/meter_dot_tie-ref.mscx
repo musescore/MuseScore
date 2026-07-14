@@ -100,38 +100,27 @@
             <durationType>half</durationType>
             <Note>
               <eid>H_H</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>I_I</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>100</velocity>
               </Note>
             </Chord>
           <Beam>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <l1>-12</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>L_L</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>K_K</eid>
+              <Tie>
+                <startElement>H_H</startElement>
+                <endElement>K_K</endElement>
+                <eid>L_L</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>100</velocity>

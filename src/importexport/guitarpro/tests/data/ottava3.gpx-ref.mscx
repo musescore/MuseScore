@@ -111,25 +111,14 @@
             <eid>K_K</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>L_L</eid>
-              </Ottava>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>O_O</eid>
+                <eid>N_N</eid>
                 </Accidental>
               <pitch>49</pitch>
               <tpc>21</tpc>
@@ -137,13 +126,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
@@ -151,25 +133,25 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             </Dynamic>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -179,5 +161,14 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <ticks>1/1</ticks>
+        <eid>T_T</eid>
+        <track>0</track>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

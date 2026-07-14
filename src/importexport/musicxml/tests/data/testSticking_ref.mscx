@@ -443,18 +443,9 @@
           <Chord>
             <eid>p_p</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>q_q</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <acciaccatura/>
             <Note>
-              <eid>r_r</eid>
+              <eid>q_q</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -465,90 +456,74 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
-            <eid>t_t</eid>
+            <eid>s_s</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
-              <eid>u_u</eid>
+              <eid>t_t</eid>
               </Articulation>
             <Note>
-              <eid>v_v</eid>
+              <eid>u_u</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
-            <eid>w_w</eid>
+            <eid>v_v</eid>
             <text>L</text>
             </Sticking>
           <Chord>
-            <eid>x_x</eid>
+            <eid>w_w</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>y_y</eid>
+              <eid>x_x</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
-            <eid>z_z</eid>
+            <eid>y_y</eid>
             <text>R</text>
             </Sticking>
           <Beam>
-            <eid>0_0</eid>
+            <eid>z_z</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
-            <eid>1_1</eid>
+            <eid>0_0</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>1_1</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
-            <eid>3_3</eid>
+            <eid>2_2</eid>
             <offset x="-2" y="0"/>
             <text>L</text>
             </Sticking>
           <Sticking>
-            <eid>4_4</eid>
+            <eid>3_3</eid>
             <text>R</text>
             </Sticking>
           <Chord>
-            <eid>5_5</eid>
+            <eid>4_4</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>6_6</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <acciaccatura/>
             <Note>
-              <eid>7_7</eid>
+              <eid>5_5</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -559,64 +534,72 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>8_8</eid>
+            <eid>6_6</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
-              <eid>9_9</eid>
+              <eid>7_7</eid>
               </Articulation>
             <Note>
-              <eid>+_+</eid>
+              <eid>8_8</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>AB_AB</eid>
+        <eid>+_+</eid>
         <voice>
           <Sticking>
-            <eid>BB_BB</eid>
+            <eid>/_/</eid>
             <offset x="-5" y="0"/>
             <text>l</text>
             </Sticking>
           <Sticking>
-            <eid>CB_CB</eid>
+            <eid>AB_AB</eid>
             <offset x="-4" y="0"/>
             <text>r</text>
             </Sticking>
           <Sticking>
-            <eid>DB_DB</eid>
+            <eid>BB_BB</eid>
             <offset x="-2.5" y="0"/>
             <text>l</text>
             </Sticking>
           <Sticking>
-            <eid>EB_EB</eid>
+            <eid>CB_CB</eid>
             <offset x="-1" y="0"/>
             <text>r</text>
             </Sticking>
           <Sticking>
-            <eid>FB_FB</eid>
+            <eid>DB_DB</eid>
             <text>l</text>
             </Sticking>
           <Beam>
-            <eid>GB_GB</eid>
+            <eid>EB_EB</eid>
             <l1>-6</l1>
             <l2>-6</l2>
             </Beam>
+          <Chord>
+            <eid>FB_FB</eid>
+            <durationType>16th</durationType>
+            <grace16/>
+            <Note>
+              <eid>GB_GB</eid>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>HB_HB</eid>
             <durationType>16th</durationType>
@@ -664,48 +647,47 @@
             </Chord>
           <Chord>
             <eid>NB_NB</eid>
-            <durationType>16th</durationType>
-            <grace16/>
-            <Note>
-              <eid>OB_OB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>PB_PB</eid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
-              <eid>QB_QB</eid>
+              <eid>OB_OB</eid>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>RB_RB</eid>
+              <eid>PB_PB</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>SB_SB</eid>
+            <eid>QB_QB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>TB_TB</eid>
+            <eid>RB_RB</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>UB_UB</eid>
+            <eid>SB_SB</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>p_p</startElement>
+        <endElement>s_s</endElement>
+        <eid>TB_TB</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>4_4</startElement>
+        <endElement>6_6</endElement>
+        <eid>UB_UB</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

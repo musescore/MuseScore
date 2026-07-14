@@ -122,41 +122,28 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>K_K</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>L_L</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    <notes>1</notes>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <velocity>80</velocity>
               </Note>
             <Note>
-              <eid>O_O</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    <notes>-1</notes>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>N_N</eid>
+              <Tie>
+                <startElement>K_K</startElement>
+                <endElement>N_N</endElement>
+                <eid>O_O</eid>
+                <track>0</track>
+                </Tie>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>

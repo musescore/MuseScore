@@ -128,14 +128,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <Tie>
                 <startElement>J_J</startElement>
-                <endElement>M_M</endElement>
-                <eid>K_K</eid>
+                <endElement>L_L</endElement>
+                <eid>M_M</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -162,14 +162,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <Tie>
                 <startElement>Q_Q</startElement>
-                <endElement>T_T</endElement>
-                <eid>R_R</eid>
+                <endElement>S_S</endElement>
+                <eid>T_T</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -187,9 +187,9 @@
             <Note>
               <eid>W_W</eid>
               <Tie>
-                <startElement>Y_Y</startElement>
+                <startElement>X_X</startElement>
                 <endElement>W_W</endElement>
-                <eid>Z_Z</eid>
+                <eid>Y_Y</eid>
                 <track>0</track>
                 </Tie>
               <pitch>71</pitch>
@@ -197,10 +197,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>X_X</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -237,17 +237,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
-            <linkedTo>L_L</linkedTo>
+            <eid>f_f</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
-              <linkedTo>M_M</linkedTo>
+              <eid>g_g</eid>
+              <linkedTo>L_L</linkedTo>
               <Tie>
                 <startElement>e_e</startElement>
-                <endElement>h_h</endElement>
-                <eid>f_f</eid>
-                <linkedTo>K_K</linkedTo>
+                <endElement>g_g</endElement>
+                <eid>h_h</eid>
+                <linkedTo>M_M</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -276,17 +276,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
-            <linkedTo>S_S</linkedTo>
+            <eid>l_l</eid>
+            <linkedTo>R_R</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
-              <linkedTo>T_T</linkedTo>
+              <eid>m_m</eid>
+              <linkedTo>S_S</linkedTo>
               <Tie>
                 <startElement>k_k</startElement>
-                <endElement>n_n</endElement>
-                <eid>l_l</eid>
-                <linkedTo>R_R</linkedTo>
+                <endElement>m_m</endElement>
+                <eid>n_n</eid>
+                <linkedTo>T_T</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -307,10 +307,10 @@
               <eid>q_q</eid>
               <linkedTo>W_W</linkedTo>
               <Tie>
-                <startElement>s_s</startElement>
+                <startElement>r_r</startElement>
                 <endElement>q_q</endElement>
-                <eid>t_t</eid>
-                <linkedTo>Z_Z</linkedTo>
+                <eid>s_s</eid>
+                <linkedTo>Y_Y</linkedTo>
                 <track>4</track>
                 </Tie>
               <pitch>71</pitch>
@@ -318,12 +318,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
-            <linkedTo>X_X</linkedTo>
+            <eid>t_t</eid>
+            <linkedTo>Z_Z</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>s_s</eid>
-              <linkedTo>Y_Y</linkedTo>
+              <eid>r_r</eid>
+              <linkedTo>X_X</linkedTo>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -417,17 +417,17 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>8_8</eid>
-              <linkedTo>L_L</linkedTo>
+              <eid>7_7</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>9_9</eid>
-                <linkedTo>M_M</linkedTo>
+                <eid>8_8</eid>
+                <linkedTo>L_L</linkedTo>
                 <Tie>
                   <startElement>6_6</startElement>
-                  <endElement>9_9</endElement>
-                  <eid>7_7</eid>
-                  <linkedTo>K_K</linkedTo>
+                  <endElement>8_8</endElement>
+                  <eid>9_9</eid>
+                  <linkedTo>M_M</linkedTo>
                   <track>0</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -457,17 +457,17 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>DB_DB</eid>
-              <linkedTo>S_S</linkedTo>
+              <eid>CB_CB</eid>
+              <linkedTo>R_R</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>EB_EB</eid>
-                <linkedTo>T_T</linkedTo>
+                <eid>DB_DB</eid>
+                <linkedTo>S_S</linkedTo>
                 <Tie>
                   <startElement>BB_BB</startElement>
-                  <endElement>EB_EB</endElement>
-                  <eid>CB_CB</eid>
-                  <linkedTo>R_R</linkedTo>
+                  <endElement>DB_DB</endElement>
+                  <eid>EB_EB</eid>
+                  <linkedTo>T_T</linkedTo>
                   <track>0</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -488,10 +488,10 @@
                 <eid>HB_HB</eid>
                 <linkedTo>W_W</linkedTo>
                 <Tie>
-                  <startElement>JB_JB</startElement>
+                  <startElement>IB_IB</startElement>
                   <endElement>HB_HB</endElement>
-                  <eid>KB_KB</eid>
-                  <linkedTo>Z_Z</linkedTo>
+                  <eid>JB_JB</eid>
+                  <linkedTo>Y_Y</linkedTo>
                   <track>0</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -499,12 +499,12 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>IB_IB</eid>
-              <linkedTo>X_X</linkedTo>
+              <eid>KB_KB</eid>
+              <linkedTo>Z_Z</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>JB_JB</eid>
-                <linkedTo>Y_Y</linkedTo>
+                <eid>IB_IB</eid>
+                <linkedTo>X_X</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -543,17 +543,17 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>RB_RB</eid>
-              <linkedTo>L_L</linkedTo>
+              <eid>QB_QB</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>SB_SB</eid>
-                <linkedTo>M_M</linkedTo>
+                <eid>RB_RB</eid>
+                <linkedTo>L_L</linkedTo>
                 <Tie>
                   <startElement>PB_PB</startElement>
-                  <endElement>SB_SB</endElement>
-                  <eid>QB_QB</eid>
-                  <linkedTo>K_K</linkedTo>
+                  <endElement>RB_RB</endElement>
+                  <eid>SB_SB</eid>
+                  <linkedTo>M_M</linkedTo>
                   <track>4</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -582,17 +582,17 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>XB_XB</eid>
-              <linkedTo>S_S</linkedTo>
+              <eid>WB_WB</eid>
+              <linkedTo>R_R</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>YB_YB</eid>
-                <linkedTo>T_T</linkedTo>
+                <eid>XB_XB</eid>
+                <linkedTo>S_S</linkedTo>
                 <Tie>
                   <startElement>VB_VB</startElement>
-                  <endElement>YB_YB</endElement>
-                  <eid>WB_WB</eid>
-                  <linkedTo>R_R</linkedTo>
+                  <endElement>XB_XB</endElement>
+                  <eid>YB_YB</eid>
+                  <linkedTo>T_T</linkedTo>
                   <track>4</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -613,10 +613,10 @@
                 <eid>bB_bB</eid>
                 <linkedTo>W_W</linkedTo>
                 <Tie>
-                  <startElement>dB_dB</startElement>
+                  <startElement>cB_cB</startElement>
                   <endElement>bB_bB</endElement>
-                  <eid>eB_eB</eid>
-                  <linkedTo>Z_Z</linkedTo>
+                  <eid>dB_dB</eid>
+                  <linkedTo>Y_Y</linkedTo>
                   <track>4</track>
                   </Tie>
                 <pitch>71</pitch>
@@ -624,12 +624,12 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>cB_cB</eid>
-              <linkedTo>X_X</linkedTo>
+              <eid>eB_eB</eid>
+              <linkedTo>Z_Z</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>dB_dB</eid>
-                <linkedTo>Y_Y</linkedTo>
+                <eid>cB_cB</eid>
+                <linkedTo>X_X</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>

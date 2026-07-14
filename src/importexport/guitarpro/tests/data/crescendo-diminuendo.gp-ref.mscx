@@ -85,23 +85,11 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <eid>L_L</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -109,10 +97,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -120,48 +108,29 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>Q_Q</eid>
         <voice>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>1</subtype>
-              <eid>U_U</eid>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>U_U</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -169,32 +138,36 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>W_W</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <track2>0</track2>
+        <startTick>1/4</startTick>
+        <ticks>3/4</ticks>
+        <eid>X_X</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>1</subtype>
+        <track2>0</track2>
+        <startTick>5/4</startTick>
+        <ticks>3/4</ticks>
+        <eid>Y_Y</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -577,161 +577,115 @@
             <autoplace>0</autoplace>
             <text>Instrument</text>
             </InstrumentChange>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>BB_BB</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>CB_CB</eid>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>DB_DB</eid>
+              <eid>CB_CB</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>EB_EB</eid>
+            <eid>DB_DB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>FB_FB</eid>
+            <eid>EB_EB</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>GB_GB</eid>
+        <eid>FB_FB</eid>
         <voice>
           <SystemText>
             <swing unit="eighth" ratio="60"/>
-            <eid>HB_HB</eid>
+            <eid>GB_GB</eid>
             <style>tempo</style>
             <text>Swing</text>
             </SystemText>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>IB_IB</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>JB_JB</eid>
+            <eid>HB_HB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>KB_KB</eid>
+              <eid>IB_IB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>LB_LB</eid>
+            <eid>JB_JB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>MB_MB</eid>
+            <eid>KB_KB</eid>
             <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>LB_LB</eid>
+        <voice>
+          <Rest>
+            <eid>MB_MB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
         <eid>NB_NB</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1.</beginText>
-              <eid>OB_OB</eid>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
-            <eid>PB_PB</eid>
+            <eid>OB_OB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>QB_QB</eid>
-        <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="TextLine">
-            <TextLine>
-              <endHookType>1</endHookType>
-              <beginText>VII</beginText>
-              <eid>RB_RB</eid>
-              </TextLine>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
-          <Rest>
-            <eid>SB_SB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <Spanner type="TextLine">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="TextLine">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <BarLine>
             <subtype>end</subtype>
-            <eid>TB_TB</eid>
+            <eid>PB_PB</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Pedal>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>0</track2>
+        <startTick>13/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>QB_QB</eid>
+        <track>0</track>
+        </Pedal>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>0</track2>
+        <startTick>14/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>RB_RB</eid>
+        <track>0</track>
+        </Ottava>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>1.</beginText>
+        <startElement>LB_LB</startElement>
+        <endElement>LB_LB</endElement>
+        <eid>SB_SB</eid>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <TextLine>
+        <endHookType>1</endHookType>
+        <beginText>VII</beginText>
+        <track2>0</track2>
+        <startTick>16/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>TB_TB</eid>
+        <track>0</track>
+        </TextLine>
+      </SpannerMap>
     </Score>
   </museScore>
