@@ -22,6 +22,9 @@
 
 #include "gracechordcontext.h"
 
+#include "dom/chord.h"
+#include "dom/chordrest.h"
+
 #include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
@@ -125,6 +128,43 @@ GraceChordCtx GraceChordCtx::buildCtx(const Chord* chord, const mpe::Articulatio
 
         RenderingContext graceNoteCtx = buildGraceRenderingCtx(ctx, graceChordTimestamp, duration);
         result.graceChordCtxList.emplace_back(std::make_pair(graceChord, graceNoteCtx));
+
+        graceChordTimestamp += duration;
+    }
+
+    return result;
+}
+
+std::vector<std::pair<const Chord*, RenderingContext> > GraceChordCtx::buildRestGraceCtxList(const ChordRest* rest, bool after,
+                                                                                             const RenderingContext& ctx)
+{
+    std::vector<std::pair<const Chord*, RenderingContext> > result;
+
+    std::vector<Chord*> graceChords = after
+                                      ? rest->graceNotesAfter(true /*filterUnplayable*/)
+                                      : rest->graceNotesBefore(true /*filterUnplayable*/);
+    if (graceChords.empty()) {
+        return result;
+    }
+
+    const duration_t halvedDuration = 0.5 * ctx.nominalDuration;
+    const duration_t accumulatedGraceNotesDuration = graceNotesTotalDuration(graceChords, ctx.beatsPerSecond);
+    const duration_t actualGraceNotesDuration = std::min(halvedDuration, accumulatedGraceNotesDuration);
+
+    // grace-before sounds at the start of the rest; grace-after ends at the rest's end (before the barline)
+    timestamp_t graceChordTimestamp = after
+                                      ? ctx.nominalTimestamp + ctx.nominalDuration - actualGraceNotesDuration
+                                      : ctx.nominalTimestamp;
+
+    const double graceNotesDurationFactor = double(actualGraceNotesDuration) / accumulatedGraceNotesDuration;
+
+    for (const Chord* graceChord : graceChords) {
+        const int durationTicks = graceChord->durationTypeTicks().ticks();
+        const duration_t duration = muse::RealRound(
+            graceNotesDurationFactor * durationFromTempoAndTicks(ctx.beatsPerSecond.val, durationTicks), 0);
+
+        RenderingContext graceNoteCtx = buildGraceRenderingCtx(ctx, graceChordTimestamp, duration);
+        result.emplace_back(std::make_pair(graceChord, graceNoteCtx));
 
         graceChordTimestamp += duration;
     }

@@ -28,6 +28,7 @@
 
 namespace mu::engraving {
 class Chord;
+class ChordRest;
 class Score;
 class Note;
 
@@ -62,6 +63,9 @@ public:
 private:
     void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
                           const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
+
+    void renderGraceNotesOfRest(const ChordRest* rest, const int tickPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
+                                const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderFixedNoteEvent(const Note* note, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
                               const muse::mpe::dynamic_level_t actualDynamicLevel, const PlaybackContextPtr playbackCtx,

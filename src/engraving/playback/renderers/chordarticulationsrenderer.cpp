@@ -70,6 +70,17 @@ void ChordArticulationsRenderer::doRender(const EngravingItem* item, const mpe::
     renderChord(toChord(item), ctx, result);
 }
 
+void ChordArticulationsRenderer::renderGraceChordsOfRest(const ChordRest* rest, const RenderingContext& ctx,
+                                                         muse::mpe::PlaybackEventList& result)
+{
+    for (const auto& pair : GraceChordCtx::buildRestGraceCtxList(rest, false /*grace-before*/, ctx)) {
+        renderChord(pair.first, pair.second, result);
+    }
+    for (const auto& pair : GraceChordCtx::buildRestGraceCtxList(rest, true /*grace-after*/, ctx)) {
+        renderChord(pair.first, pair.second, result);
+    }
+}
+
 void ChordArticulationsRenderer::renderChord(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result)
 {
     if (renderChordArticulations(chord, ctx, result)) {

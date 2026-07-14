@@ -34,6 +34,9 @@ public:
     static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType type, const RenderingContext& ctx,
                          muse::mpe::PlaybackEventList& result);
 
+    // Render the grace notes hosted by a rest (the rest itself is silent).
+    static void renderGraceChordsOfRest(const ChordRest* rest, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
+
 private:
     static void renderChord(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
     static void renderChordWithGraceChords(const Chord* chord, const muse::mpe::ArticulationType type, const RenderingContext& ctx,

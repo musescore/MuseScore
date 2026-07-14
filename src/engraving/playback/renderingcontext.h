@@ -61,7 +61,7 @@ struct RenderingContext {
     }
 };
 
-inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPositionOffset,
+inline RenderingContext buildRenderingCtx(const ChordRest* chord, const int tickPositionOffset,
                                           const muse::mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
                                           const muse::mpe::ArticulationMap& articulations = {})
 {

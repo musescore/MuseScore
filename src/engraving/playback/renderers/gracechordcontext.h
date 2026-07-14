@@ -28,10 +28,17 @@
 
 namespace mu::engraving {
 class Chord;
+class ChordRest;
 struct GraceChordCtx {
     RenderingContext principalChordCtx;
     std::vector<std::pair<const Chord*, RenderingContext> > graceChordCtxList;
 
     static GraceChordCtx buildCtx(const Chord* chord, const muse::mpe::ArticulationType type, const RenderingContext& ctx);
+
+    // Build the rendering contexts for grace notes hosted by a rest (no principal note sounds).
+    // `after` selects the grace-after group (played at the end of the rest, before the barline);
+    // otherwise the grace-before group (played at the start of the rest).
+    static std::vector<std::pair<const Chord*, RenderingContext> > buildRestGraceCtxList(const ChordRest* rest, bool after,
+                                                                                         const RenderingContext& ctx);
 };
 }

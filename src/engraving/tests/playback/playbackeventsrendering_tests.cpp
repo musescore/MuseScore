@@ -1500,6 +1500,38 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_Rest_WithGraceNotes
+ * @details A rest that hosts grace notes (issue #19701): the rest is silent, but its
+ *          grace-before and grace-after notes must still be rendered as note events.
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Rest_WithGraceNotes)
+{
+    // [GIVEN] A score whose first measure has a half note followed by a half rest that
+    //         carries one grace-before (D5) and one grace-after (C5) note
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "rest_with_grace_notes/rest_with_grace_notes.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    ChordRest* rest = firstMeasure->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    // [WHEN] Rendering the rest
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackEventsMap result;
+    m_renderer.render(rest, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] The rest itself is silent, but its two grace notes produced note events
+    size_t noteEventCount = 0;
+    for (const auto& pair : result) {
+        noteEventCount += pair.second.size();
+    }
+    EXPECT_EQ(noteEventCount, 2u);
+}
+
+/**
  * @brief PlaybackEventsRendererTests_SingleNote_Appoggiatura_Post
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with G4 8-th appoggiatura note

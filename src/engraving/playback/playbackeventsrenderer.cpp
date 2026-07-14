@@ -92,11 +92,11 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPos
                                     const ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
                                     PlaybackEventsMap& result) const
 {
-    IF_ASSERT_FAILED(item->isChord()) {
-        return;
+    if (item->isChord()) {
+        renderNoteEvents(toChord(item), tickPositionOffset, profile, playbackCtx, result);
+    } else if (item->isRest()) {
+        renderGraceNotesOfRest(toChordRest(item), tickPositionOffset, profile, playbackCtx, result);
     }
-
-    renderNoteEvents(toChord(item), tickPositionOffset, profile, playbackCtx, result);
 }
 
 void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timestamp_t actualTimestamp,
@@ -331,6 +331,29 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     PlaybackEventList newEvents;
     ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, newEvents);
+
+    if (!newEvents.empty()) {
+        PlaybackEventList& list = result[ctx.nominalTimestamp];
+        list.insert(list.end(), std::make_move_iterator(newEvents.begin()), std::make_move_iterator(newEvents.end()));
+    }
+}
+
+void PlaybackEventsRenderer::renderGraceNotesOfRest(const ChordRest* rest, const int tickPositionOffset,
+                                                    const mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
+                                                    PlaybackEventsMap& result) const
+{
+    IF_ASSERT_FAILED(rest) {
+        return;
+    }
+
+    if (rest->graceNotes().empty()) {
+        return;
+    }
+
+    RenderingContext ctx = engraving::buildRenderingCtx(rest, tickPositionOffset, profile, playbackCtx);
+
+    PlaybackEventList newEvents;
+    ChordArticulationsRenderer::renderGraceChordsOfRest(rest, ctx, newEvents);
 
     if (!newEvents.empty()) {
         PlaybackEventList& list = result[ctx.nominalTimestamp];

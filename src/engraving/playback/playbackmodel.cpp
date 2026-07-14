@@ -560,6 +560,15 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         if (item->isRestFamily()) {
+            // a rest is silent, but it may host grace notes that must still be rendered
+            if (item->isRest() && !toRest(item)->graceNotes().empty()) {
+                ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
+                if (profile) {
+                    const PlaybackContextPtr ctx = playbackCtx(trackId);
+                    m_renderer.render(item, tickPositionOffset, profile, ctx, m_playbackDataMap[trackId].originEvents);
+                    collectChangesTracks(trackId, trackChanges);
+                }
+            }
             continue;
         }
 
