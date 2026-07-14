@@ -1656,6 +1656,26 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+static void relayoutChordBracketsAfterSegmentLayout(const std::vector<Chord*>& chords, LayoutContext& ctx)
+{
+    for (Chord* chord : chords) {
+        bool hasChordBracket = false;
+
+        for (EngravingItem* e : chord->el()) {
+            if (!e->isChordBracket()) {
+                continue;
+            }
+
+            hasChordBracket = true;
+            TLayout::layoutItem(e, ctx);
+        }
+
+        if (hasChordBracket) {
+            ChordLayout::fillShape(chord, chord->mutldata(), ctx.conf());
+        }
+    }
+}
+
 void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
@@ -2302,6 +2322,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             TLayout::layoutOrnamentCueNote(ornament, ctx);
         }
     }
+
+    // Chord brackets depend on the final layouts of all voices in the same segment and visual staff.
+    // Re-layout them after the segment elements have been laid out.
+    relayoutChordBracketsAfterSegmentLayout(posInfo.chords, ctx);
 }
 
 //---------------------------------------------------------
