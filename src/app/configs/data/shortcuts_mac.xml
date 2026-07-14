@@ -604,6 +604,14 @@
     <key>add-hairpin-reverse</key>
     <seq>Shift+.</seq>
     </SC>
+      <SC>
+    <key>increase-dynamic</key>
+    <seq>Alt+.</seq>
+    </SC>
+  <SC>
+    <key>decrease-dynamic</key>
+    <seq>Alt+,</seq>
+    </SC>
   <SC>
     <key>time-delete</key>
     <seq>Ctrl+Del</seq>
