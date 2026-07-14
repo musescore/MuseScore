@@ -2612,13 +2612,17 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
  from grace notes.
  */
 
-static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
+static void coerceGraceCue(ChordRest* mainChord, Chord* graceChord)
 {
     if (mainChord->isSmall()) {
         graceChord->setSmall(true);
     }
+    if (!mainChord->isChord()) {
+        // a rest host is silent by itself; do not mute its grace notes
+        return;
+    }
     bool anyPlays = false;
-    for (const Note* n : mainChord->notes()) {
+    for (const Note* n : toChord(mainChord)->notes()) {
         anyPlays |= n->play();
     }
     if (!anyPlays) {
@@ -2637,7 +2641,7 @@ static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
  to the chord \a c grace note after list
  */
 
-static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
+static void addGraceChordsAfter(ChordRest* c, GraceChordList& gcl, size_t& gac)
 {
     if (!c) {
         return;
@@ -2672,7 +2676,7 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
  to the chord \a c grace note before list
  */
 
-static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
+static void addGraceChordsBefore(ChordRest* c, GraceChordList& gcl)
 {
     for (int i = static_cast<int>(gcl.size()) - 1; i >= 0; i--) {
         Chord* gc = gcl.at(i);
@@ -2766,7 +2770,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
 
     Fraction mTime;   // current time stamp within measure
     Fraction prevTime;   // time stamp within measure previous chord
-    Chord* prevChord = 0;         // previous chord
+    ChordRest* prevChord = 0;         // previous chord or rest
     Fraction mDura;   // current total measure duration
     GraceChordList gcl;   // grace chords collected sofar
     size_t gac = 0;         // grace after count in the grace chord list
@@ -2838,10 +2842,11 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             int alt = -10;                          // any number outside range of xml-tag "alter"
             // note: chord and grace note handling done in note()
             // dura > 0 iff valid rest or first note of chord found
+            ChordRest* createdCr = nullptr;
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
-                           tupletStates, tuplets, arpMap, delayedArps);
-            if (n && !n->chord()->isGrace()) {
-                prevChord = n->chord();          // remember last non-grace chord
+                           tupletStates, tuplets, arpMap, delayedArps, createdCr);
+            if (createdCr && !createdCr->isGrace()) {
+                prevChord = createdCr;          // remember last non-grace chord or rest
             }
             if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE) {
                 alterMap.insert({ n, alt });
@@ -6973,8 +6978,9 @@ Note* MusicXmlParserPass2::note(const String& partId,
                                 FiguredBassList& fbl,
                                 int& alt,
                                 MusicXmlTupletStates& tupletStates,
-                                Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
+                                Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps, ChordRest*& createdCr)
 {
+    createdCr = nullptr;
     if (m_e.asciiAttribute("print-spacing") == "no") {
         notePrintSpacingNo(dura);
         return 0;
@@ -7251,6 +7257,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         cr = c;
     }
     // end allocation
+    createdCr = cr;
 
     if (rest) {
         const track_idx_t track = msTrack + msVoice;
@@ -7269,6 +7276,14 @@ Note* MusicXmlParserPass2::note(const String& partId,
             colorItem(cr, noteColor);
             cr->setVisible(printObject);
             handleDisplayStep(cr, mnp.displayStep(), mnp.displayOctave(), noteStartTime, m_score->style().spatium());
+
+            // a rest can host grace notes: attach grace-after to the previous chord/rest,
+            // grace-before to this rest
+            ChordRest* const prevCR = measure->findChordRest(prevSTime, track);
+            if (prevCR && prevCR != cr) {
+                addGraceChordsAfter(prevCR, gcl, gac);
+            }
+            addGraceChordsBefore(cr, gcl);
         }
     } else {
         handleSmallness(cue || isSmall, note, c);
@@ -7302,10 +7317,10 @@ Note* MusicXmlParserPass2::note(const String& partId,
                 handleBeamAndStemDir(c, bm, stemDir, currBeam, m_pass1.hasBeamingInfo(), beamColor, beamFan);
             }
 
-            // append any grace chord after chord to the previous chord
-            Chord* const prevChord = measure->findChord(prevSTime, msTrack + msVoice);
-            if (prevChord && prevChord != c) {
-                addGraceChordsAfter(prevChord, gcl, gac);
+            // append any grace chord after chord to the previous chord or rest
+            ChordRest* const prevCR = measure->findChordRest(prevSTime, msTrack + msVoice);
+            if (prevCR && prevCR != c) {
+                addGraceChordsAfter(prevCR, gcl, gac);
             }
 
             // append any grace chord

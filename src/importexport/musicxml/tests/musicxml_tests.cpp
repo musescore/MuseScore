@@ -705,6 +705,12 @@ TEST_F(MusicXml_Tests, graceAfter3) {
 TEST_F(MusicXml_Tests, DISABLED_graceAfter4) {
     musicXmlIoTest("testGraceAfter4");
 }
+TEST_F(MusicXml_Tests, graceBeforeRest) {
+    musicXmlImportTestRef("testGraceBeforeRest");
+}
+TEST_F(MusicXml_Tests, graceRestSkipped) {
+    musicXmlImportTestRef("testGraceRestSkipped");
+}
 TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }

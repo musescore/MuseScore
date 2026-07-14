@@ -465,7 +465,7 @@ private:
                           const engraving::Fraction prevTime, engraving::Fraction& missingPrev, engraving::Fraction& dura,
                           engraving::Fraction& missingCurr, muse::String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams,
                           FiguredBassList& fbl, int& alt, MusicXmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap,
-                          DelayedArpMap& delayedArps);
+                          DelayedArpMap& delayedArps, engraving::ChordRest*& createdCr);
     void notePrintSpacingNo(engraving::Fraction& dura);
     engraving::FiguredBassItem* figure(const int idx, const bool paren, engraving::FiguredBass* parent);
     engraving::FiguredBass* figuredBass();
