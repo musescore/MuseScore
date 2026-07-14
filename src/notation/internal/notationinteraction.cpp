@@ -5431,7 +5431,7 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
         select({ segment });
         startEditGrip(segment, mu::engraving::Grip::END);
     }
-};
+}
 
 void NotationInteraction::increaseDecreaseDynamicsForSelection(int delta)
 {
@@ -5726,7 +5726,8 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::autoFlipHairpinsTypeImpl(Dynamic* selDyn) {
+void NotationInteraction::autoFlipHairpinsTypeImpl(Dynamic* selDyn)
+{
     selDyn->findAdjacentHairpins();
 
     if (Hairpin* leftHp = selDyn->leftHairpin()) {
@@ -5754,7 +5755,6 @@ void NotationInteraction::autoFlipHairpinsTypeImpl(Dynamic* selDyn) {
             }
         }
     }
-
 }
 
 void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
