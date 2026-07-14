@@ -2154,7 +2154,7 @@ QString Braille::brailleGraceNoteMarking(Chord* chord)
     // TODO: doubling the grace note sign where there are more than 4 grace notes.
     //       the book is not very clear how this doubling is done and how the user
     //       understands where do grace notes end.
-    if (!chord->isGrace() || !chord->explicitParent()->isChord()) {
+    if (!chord->isGrace() || !chord->explicitParent()->isChordRest()) {
         return QString();
     }
 
@@ -2658,12 +2658,24 @@ QString Braille::brailleRest(Rest* rest)
 
     QString tupletBraille = brailleTuplet(rest->tuplet(), rest);
 
+    // a rest can host grace notes (before and after); each grace chord carries its own marking
+    QString graceNotesBefore = QString();
+    for (Chord* graceChord : rest->graceNotesBefore()) {
+        graceNotesBefore += brailleChord(graceChord);
+    }
+    QString graceNotesAfter = QString();
+    for (Chord* graceChord : rest->graceNotesAfter()) {
+        graceNotesAfter += brailleChord(graceChord);
+    }
+
     QString result = QString();
     result += hairpinBrailleBefore;
+    result += graceNotesBefore;
     result += slurBrailleBefore;
     result += tupletBraille;
     result += restBraille;
     result += slurBrailleAfter;
+    result += graceNotesAfter;
     result += hairpinBrailleAfter;
     result += fermata;
 

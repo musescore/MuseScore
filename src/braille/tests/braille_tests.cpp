@@ -237,3 +237,6 @@ TEST_F(Braille_Tests, hairpins) {
 TEST_F(Braille_Tests, sectionBreak) {
     brailleSaveTest("testSectionBreak");
 }
+TEST_F(Braille_Tests, graceOnRest) {
+    brailleSaveTest("testGraceOnRest");
+}
