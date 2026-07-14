@@ -288,6 +288,15 @@ bool ExportDialogModel::isIndexValid(int index) const
     return index >= 0 && index < m_notations.size();
 }
 
+bool ExportDialogModel::isFormatSelected(const QString& formatSuffix) const
+{
+    IF_ASSERT_FAILED(!m_selectedExportType.suffixes.empty()) {
+        return false;
+    }
+
+    return m_selectedExportType.suffixes.contains(formatSuffix);
+}
+
 int ExportDialogModel::selectionLength() const
 {
     return m_selectionModel->selectedIndexes().size();
@@ -310,8 +319,6 @@ void ExportDialogModel::setExportType(const ExportType& type)
     }
 
     m_selectedExportType = type;
-
-    audioExportConfiguration()->loadSampleFormatSetting(type.suffixes[0]);
 
     emit selectedExportTypeChanged(type.toMap());
     emit availableSampleFormatsChanged();
@@ -924,7 +931,15 @@ void ExportDialogModel::updateExportInfo()
 
 QVariantList ExportDialogModel::availableSampleFormats() const
 {
-    const auto& formats = audioExportConfiguration()->availableSampleFormats(m_selectedExportType.suffixes[0]);
+    std::vector<muse::audio::AudioSampleFormat> formats;
+
+    if (isFormatSelected("wav")) {
+        formats = audioExportConfiguration()->availableWavSampleFormats();
+    }
+    if (isFormatSelected("flac")) {
+        formats = audioExportConfiguration()->availableFlacSampleFormats();
+    }
+
     QVariantList result;
     for (const auto& format : formats) {
         QVariantMap obj;
@@ -937,24 +952,38 @@ QVariantList ExportDialogModel::availableSampleFormats() const
 
 int ExportDialogModel::selectedSampleFormat() const
 {
-    return static_cast<int>(audioExportConfiguration()->exportSampleFormat());
+    if (isFormatSelected("wav")) {
+        return static_cast<int>(audioExportConfiguration()->exportWavSampleFormat());
+    }
+    if (isFormatSelected("flac")) {
+        return static_cast<int>(audioExportConfiguration()->exportFlacSampleFormat());
+    }
+    return static_cast<int>(muse::audio::AudioSampleFormat::Undefined);
 }
 
 void ExportDialogModel::setSelectedSampleFormat(int format)
 {
     const auto audioFormat = static_cast<muse::audio::AudioSampleFormat>(format);
-    if (audioFormat == audioExportConfiguration()->exportSampleFormat()) {
+    if (isFormatSelected("wav")) {
+        if (audioFormat == audioExportConfiguration()->exportWavSampleFormat()) {
+            return;
+        }
+        audioExportConfiguration()->setExportWavSampleFormat(audioFormat);
+    } else if (isFormatSelected("flac")) {
+        if (audioFormat == audioExportConfiguration()->exportFlacSampleFormat()) {
+            return;
+        }
+        audioExportConfiguration()->setExportFlacSampleFormat(audioFormat);
+    } else {
         return;
     }
-
-    audioExportConfiguration()->setExportSampleFormat(m_selectedExportType.suffixes[0], audioFormat);
     emit selectedSampleFormatChanged();
 }
 
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 void ExportDialogModel::updateVideoExportSettingMode()
 {
-    videoEncoderResolver()->setIsSettingMode(m_selectedExportType.id == QLatin1String("mp4"));
+    videoEncoderResolver()->setIsSettingMode(isFormatSelected("mp4"));
 }
 
 void ExportDialogModel::disableVideoExportSettingMode()
