@@ -843,11 +843,8 @@ size_t MnxExporter::appendTuplet(mnx::ContentArray content, ExportContext& ctx,
         return idx;
     }
 
-    if (chordRest->isChord()) {
-        const Chord* chord = toChord(chordRest);
-        if (ctx.graceBeforeEmitted.insert(chordRest).second) {
-            appendGrace(content, ctx, chord->graceNotesBefore());
-        }
+    if (ctx.graceBeforeEmitted.insert(chordRest).second) {
+        appendGrace(content, ctx, chordRest->graceNotesBefore());
     }
 
     auto inner = mnx::NoteValueQuantity::make(static_cast<unsigned>(ratio.numerator()),
@@ -863,9 +860,9 @@ size_t MnxExporter::appendTuplet(mnx::ContentArray content, ExportContext& ctx,
     appendContent(mnxTuplet.content(), ctx, tupletChordRests, ContentContext::Tuplet);
     ctx.tupletStack.pop_back();
     const ChordRest* lastTupletCR = tupletChordRests.back();
-    if (lastTupletCR && lastTupletCR->isChord()) {
+    if (lastTupletCR) {
         if (ctx.graceAfterEmitted.insert(lastTupletCR).second) {
-            appendGrace(content, ctx, toChord(lastTupletCR)->graceNotesAfter());
+            appendGrace(content, ctx, lastTupletCR->graceNotesAfter());
         }
     }
     return lastTupletIdx; // shift index to last idx in tuplet
@@ -1005,17 +1002,17 @@ void MnxExporter::appendContent(mnx::ContentArray content, ExportContext& ctx,
 
         // Tremolos manage their own grace content. Grace notes cannot have grace notes.
         // Tuplet boundaries are handled via graceBeforeEmitted/graceAfterEmitted in appendTuplet.
-        if (!inTremolo && !inGrace && chordRest->isChord()) {
+        if (!inTremolo && !inGrace) {
             if (ctx.graceBeforeEmitted.insert(chordRest).second) {
-                appendGrace(content, ctx, toChord(chordRest)->graceNotesBefore());
+                appendGrace(content, ctx, chordRest->graceNotesBefore());
             }
         }
 
         const bool eventAppended = appendEvent(content, ctx, chordRest);
 
-        if (eventAppended && !inTremolo && !inGrace && chordRest->isChord()) {
+        if (eventAppended && !inTremolo && !inGrace) {
             if (ctx.graceAfterEmitted.insert(chordRest).second) {
-                appendGrace(content, ctx, toChord(chordRest)->graceNotesAfter());
+                appendGrace(content, ctx, chordRest->graceNotesAfter());
             }
         }
     }

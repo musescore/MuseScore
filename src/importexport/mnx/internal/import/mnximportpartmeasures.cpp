@@ -909,8 +909,12 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
             }
             auto grace = event.container<mnx::sequence::Grace>();
             auto [leftNeighbor, rightNeighbor] = muse::value(graceNeighbors, grace.pointer().to_string());
-            const bool useRight = rightNeighbor && rightNeighbor->isChord();
-            const bool useLeft = !useRight && leftNeighbor && leftNeighbor->isChord();
+            // prefer a chord host (grace-before on the following chord, else grace-after on the
+            // previous chord); fall back to a rest host so a grace can attach to a rest
+            const bool rightIsChord = rightNeighbor && rightNeighbor->isChord();
+            const bool leftIsChord = leftNeighbor && leftNeighbor->isChord();
+            const bool useRight = rightNeighbor && (rightIsChord || !leftIsChord);
+            const bool useLeft = !useRight && leftNeighbor;
             if (useRight || useLeft) {
                 if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, {}, nullptr)) {
                     engraving::Chord* gc = toChord(cr);
@@ -922,11 +926,11 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
                         gc->setShowStemSlash(grace.slash());
                     }
                     if (useRight) {
-                        Chord* graceParent = toChord(rightNeighbor);
+                        ChordRest* graceParent = rightNeighbor;
                         gc->setGraceIndex(graceParent->graceNotesBefore().size());
                         graceParent->add(gc);
                     } else if (useLeft) {
-                        Chord* graceParent = toChord(leftNeighbor);
+                        ChordRest* graceParent = leftNeighbor;
                         gc->setGraceIndex(0);
                         graceParent->add(gc);
                     }
