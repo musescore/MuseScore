@@ -259,7 +259,7 @@ private:
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;
     engraving::BeamMode m_graceBeamBeginMode;
-    engraving::Chord* m_lastChord;
+    engraving::ChordRest* m_lastCR;
     std::string m_tremoloId;
     engraving::TremoloType m_tremoloType;
 

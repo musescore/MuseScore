@@ -116,7 +116,7 @@ private:
     bool writeFTrem(const engraving::TremoloTwoChord* tremolo);
     bool writeClef(const engraving::Clef* clef);
     bool writeChord(const engraving::Chord* chord, const engraving::Staff* staff);
-    bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);
+    bool writeGraceGrp(const engraving::ChordRest* chord, const engraving::Staff* staff, bool isAfter = false);
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
     bool writeMRpt(const engraving::MeasureRepeat* measureRepeat);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);

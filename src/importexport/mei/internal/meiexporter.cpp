@@ -1331,7 +1331,7 @@ bool MeiExporter::writeFTrem(const TremoloTwoChord* tremolo)
  * Loop through the notes of the group and write them.
  */
 
-bool MeiExporter::writeGraceGrp(const Chord* chord, const Staff* staff, bool isAfter)
+bool MeiExporter::writeGraceGrp(const ChordRest* chord, const Staff* staff, bool isAfter)
 {
     IF_ASSERT_FAILED(chord) {
         return false;
@@ -1458,6 +1458,9 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         return false;
     }
 
+    // a rest can host grace notes (before and after)
+    this->writeGraceGrp(rest, staff);
+
     // measure rest
     if (rest->durationType() == DurationType::V_MEASURE) {
         pugi::xml_node mRestNode = m_currentNode.append_child();
@@ -1496,6 +1499,8 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
             restNode.set_name("space");
         }
     }
+
+    this->writeGraceGrp(rest, staff, true);
 
     return true;
 }

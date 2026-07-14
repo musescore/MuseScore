@@ -112,7 +112,7 @@ bool MeiImporter::read(const muse::io::path_t& path)
     m_graceBeamBeginMode = BeamMode::AUTO;
 
     m_readingGraceNotes = GraceNone;
-    m_lastChord = nullptr;
+    m_lastCR = nullptr;
 
     m_readingEnding = false;
     m_endingStart = nullptr;
@@ -321,19 +321,21 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     chordRest->setDurationType(TDuration(duration));
 
     if (m_readingGraceNotes) {
-        // non critical assert
-        assert(chordRest->isChord());
-        m_graceNotes.push_front(toChord(chordRest));
+        // grace group members are always chords; a grace rest is not supported, so drop it
+        if (chordRest->isChord()) {
+            m_graceNotes.push_front(toChord(chordRest));
+        } else {
+            delete chordRest;
+            return nullptr;
+        }
     } else {
         if (m_graceNotes.size() > 0) {
-            // pre grace groups have to be added to the chord - if it is a rest they will be ignored (deleted)
+            // pre grace groups are attached to the following chord or rest
             this->addGraceNotesToChord(chordRest);
         }
         segment->add(chordRest);
-        // Keep a pointer to the last chord read for adding post grace groups
-        if (chordRest->isChord()) {
-            m_lastChord = toChord(chordRest);
-        }
+        // Keep a pointer to the last chord or rest read for adding post grace groups
+        m_lastCR = chordRest;
     }
 
     BeamMode beamMode = Convert::beamFromMEI(typedAtt->GetType(), BEAM_ELEMENT_TYPE, warning);
@@ -377,8 +379,8 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
 }
 
 /**
- * Add grace notes to a ChordRest When a grace group was previously read and added to MeiImporter::m_graceNotes
- * Ignore (delete) the grace notes if the ChordRest is a Rest.
+ * Add grace notes to a ChordRest when a grace group was previously read and added to MeiImporter::m_graceNotes.
+ * The host may be a chord or a rest.
  * Look at m_graceNoteType for setting the acciaccatura note type (when grace notes precede only)
  */
 
@@ -388,10 +390,7 @@ bool MeiImporter::addGraceNotesToChord(ChordRest* chordRest, bool isAfter)
         return false;
     }
 
-    if (!chordRest->isChord()) {
-        this->clearGraceNotes();
-        return false;
-    } else {
+    {
         if (isAfter) {
             NoteType noteType = NoteType::GRACE8_AFTER;
             // For after grace notes, the order of insertion is flipped
@@ -1607,7 +1606,7 @@ bool MeiImporter::readStaves(pugi::xml_node parentNode, Measure* measure, Fracti
 /**
  * Read the layer and its content.
  * Also read grace notes not within a graceGrp for MEI files not written by MuseScore.
- * Relies on the m_lastChord pointer for adding grace notes to the correct ChordRest
+ * Relies on the m_lastCR pointer for adding grace notes to the correct ChordRest
  */
 
 bool MeiImporter::readLayers(pugi::xml_node parentNode, Measure* measure, int staffN, Fraction& measureTicks)
@@ -1635,7 +1634,7 @@ bool MeiImporter::readLayers(pugi::xml_node parentNode, Measure* measure, int st
         libmei::Layer meiLayer;
         meiLayer.Read(xpathNode.node());
 
-        m_lastChord = nullptr;
+        m_lastCR = nullptr;
         Fraction ticks;
         int track = staffN * VOICES + static_cast<int>(i);
         success = success && this->readElements(xpathNode.node(), measure, track, ticks);
@@ -1931,7 +1930,7 @@ bool MeiImporter::readFTrem(pugi::xml_node fTremNode, Measure* measure, int trac
 
 /**
  * Read a <graceGrp> and adjust the MeiImporter::m_readingGraceNotes flag.
- * For <graceGrp> with @attach="pre", add the grace notes read recursively (through readElements) to m_lastChord (if any)
+ * For <graceGrp> with @attach="pre", add the grace notes read recursively (through readElements) to m_lastCR (if any)
  * Otherwise, only reset the flag and adding the grace notes will be performed in MeiImporter::addChordRest when the next <chord> / <note> is read
  */
 
@@ -1953,8 +1952,8 @@ bool MeiImporter::readGraceGrp(pugi::xml_node graceGrpNode, Measure* measure, in
     this->readElements(graceGrpNode, measure, track, ticks);
 
     if (isAfter) {
-        if (m_lastChord) {
-            this->addGraceNotesToChord(m_lastChord, true);
+        if (m_lastCR) {
+            this->addGraceNotesToChord(m_lastCR, true);
         } else {
             this->clearGraceNotes();
         }
@@ -2146,9 +2145,9 @@ bool MeiImporter::readRest(pugi::xml_node restNode, Measure* measure, int track,
     meiRest.Read(restNode);
 
     Rest* rest = toRest(addChordRest(restNode, measure, track, meiRest, ticks, true));
-    Convert::colorFromMEI(rest, meiRest);
-
-    UNUSED(rest);
+    if (rest) {
+        Convert::colorFromMEI(rest, meiRest);
+    }
 
     return true;
 }
@@ -2167,7 +2166,9 @@ bool MeiImporter::readSpace(pugi::xml_node spaceNode, Measure* measure, int trac
     meiSpace.Read(spaceNode);
 
     Rest* space = toRest(addChordRest(spaceNode, measure, track, meiSpace, ticks, true));
-    space->setVisible(false);
+    if (space) {
+        space->setVisible(false);
+    }
 
     return true;
 }
