@@ -106,8 +106,9 @@ void PropertiesPanelAbstractProxyModel::setModels(const QList<PropertiesPanelAbs
 
         auto oldModel = m_models.take(model->modelType());
 
-        delete oldModel;
-        oldModel = nullptr;
+        //! NOTE: may run synchronously from a model's own property-change callback;
+        //! deleting immediately would destroy "this" mid-call, so defer it
+        oldModel->deleteLater();
     }
 
     for (PropertiesPanelAbstractModel* model : models) {

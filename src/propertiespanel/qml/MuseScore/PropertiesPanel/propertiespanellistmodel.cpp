@@ -298,8 +298,9 @@ void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElemen
 
         m_modelList.removeAt(index);
 
-        delete model;
-        model = nullptr;
+        //! NOTE: may run synchronously from a model's own property-change callback;
+        //! deleting immediately would destroy "this" mid-call, so defer it
+        model->deleteLater();
 
         endRemoveRows();
     }
