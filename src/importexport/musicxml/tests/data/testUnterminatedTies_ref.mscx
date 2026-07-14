@@ -186,17 +186,6 @@
             <StemDirection>down</StemDirection>
             <Note>
               <eid>S_S</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>T_T</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -204,22 +193,20 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>V_V</eid>
+              <Tie>
+                <startElement>S_S</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -251,7 +238,9 @@
             <Note>
               <eid>c_c</eid>
               <LaissezVib>
+                <startElement>c_c</startElement>
                 <eid>d_d</eid>
+                <track>0</track>
                 </LaissezVib>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -269,7 +258,9 @@
             <Note>
               <eid>g_g</eid>
               <LaissezVib>
+                <startElement>g_g</startElement>
                 <eid>h_h</eid>
+                <track>0</track>
                 </LaissezVib>
               <pitch>76</pitch>
               <tpc>18</tpc>
@@ -295,7 +286,9 @@
             <Note>
               <eid>m_m</eid>
               <LaissezVib>
+                <startElement>m_m</startElement>
                 <eid>n_n</eid>
+                <track>0</track>
                 </LaissezVib>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -453,7 +446,9 @@
             <Note>
               <eid>IB_IB</eid>
               <LaissezVib>
+                <startElement>IB_IB</startElement>
                 <eid>JB_JB</eid>
+                <track>0</track>
                 </LaissezVib>
               <pitch>67</pitch>
               <tpc>15</tpc>

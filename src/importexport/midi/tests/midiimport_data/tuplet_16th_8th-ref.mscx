@@ -253,17 +253,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>l_l</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>m_m</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-11/12</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>70</pitch>
               <tpc>24</tpc>
               <velocity>80</velocity>
@@ -273,21 +262,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>n_n</eid>
+        <eid>m_m</eid>
         <voice>
           <Chord>
-            <eid>o_o</eid>
+            <eid>n_n</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>p_p</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>11/12</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>o_o</eid>
+              <Tie>
+                <startElement>l_l</startElement>
+                <endElement>o_o</endElement>
+                <eid>p_p</eid>
+                <track>0</track>
+                </Tie>
               <pitch>70</pitch>
               <tpc>24</tpc>
               <velocity>80</velocity>

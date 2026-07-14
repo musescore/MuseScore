@@ -1103,23 +1103,11 @@
         <eid>yC_yC</eid>
         <endRepeat>2</endRepeat>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>1</beginText>
-              <eid>zC_zC</eid>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>0C_0C</eid>
+            <eid>zC_zC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1C_1C</eid>
+              <eid>0C_0C</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1127,24 +1115,24 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>2C_2C</eid>
+            <eid>1C_1C</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>3C_3C</eid>
+              <eid>2C_2C</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>4C_4C</eid>
+              <eid>3C_3C</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>5C_5C</eid>
+              <eid>4C_4C</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1154,11 +1142,11 @@
           </voice>
         <voice>
           <Chord>
-            <eid>6C_6C</eid>
+            <eid>5C_5C</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>7C_7C</eid>
+              <eid>6C_6C</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1168,68 +1156,42 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>8C_8C</eid>
+        <eid>7C_7C</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>2,3,6,8</beginText>
-              <eid>9C_9C</eid>
-              <endings>2,3,6,8</endings>
-              </Volta>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
-            <eid>+C_+C</eid>
+            <eid>8C_8C</eid>
             <durationType>measure</durationType>
             <duration>3/4</duration>
             </Rest>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         <voice>
           <Chord>
-            <eid>/C_/C</eid>
+            <eid>9C_9C</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>AD_AD</eid>
+              <eid>+C_+C</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
               <string>5</string>
               </Note>
             <Note>
-              <eid>BD_BD</eid>
+              <eid>/C_/C</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>CD_CD</eid>
+              <eid>AD_AD</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>DD_DD</eid>
+              <eid>BD_BD</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1239,5 +1201,23 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <beginText>1</beginText>
+        <startElement>yC_yC</startElement>
+        <endElement>yC_yC</endElement>
+        <eid>CD_CD</eid>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <Volta>
+        <beginText>2,3,6,8</beginText>
+        <startElement>7C_7C</startElement>
+        <endElement>7C_7C</endElement>
+        <eid>DD_DD</eid>
+        <track>0</track>
+        <endings>2,3,6,8</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

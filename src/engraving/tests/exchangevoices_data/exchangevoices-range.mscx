@@ -189,6 +189,8 @@
             </Dynamic>
           <Beam>
             <eid>Z_Z</eid>
+            <l1>44</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <eid>a_a</eid>

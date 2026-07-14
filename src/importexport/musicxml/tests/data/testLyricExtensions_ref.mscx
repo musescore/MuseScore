@@ -236,21 +236,9 @@
               <eid>j_j</eid>
               <text>dawn's</text>
               </Lyrics>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>k_k</eid>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>l_l</eid>
+              <eid>k_k</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -258,51 +246,41 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>m_m</eid>
+        <eid>l_l</eid>
         <voice>
           <Chord>
-            <eid>n_n</eid>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>o_o</eid>
+              <eid>n_n</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>p_p</eid>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <eid>q_q</eid>
+              <eid>p_p</eid>
               <text>ear</text>
               </Lyrics>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>r_r</eid>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>q_q</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>r_r</eid>
+            <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>s_s</eid>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -311,16 +289,6 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>u_u</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>v_v</eid>
-            <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>w_w</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
@@ -328,62 +296,70 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>x_x</eid>
+        <eid>v_v</eid>
         <voice>
           <Chord>
-            <eid>y_y</eid>
+            <eid>w_w</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>z_z</eid>
+              <eid>x_x</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>0_0</eid>
+            <eid>y_y</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
-              <eid>1_1</eid>
+              <eid>z_z</eid>
               <text>ly</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>2_2</eid>
+              <eid>0_0</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>3_3</eid>
+            <eid>1_1</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <eid>4_4</eid>
+              <eid>2_2</eid>
               <text>light?</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>5_5</eid>
+              <eid>3_3</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>6_6</eid>
+            <eid>4_4</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>i_i</startElement>
+        <endElement>m_m</endElement>
+        <eid>5_5</eid>
+        <track>0</track>
+        <up>down</up>
+        </Slur>
+      <Slur>
+        <startElement>o_o</startElement>
+        <endElement>w_w</endElement>
+        <eid>6_6</eid>
+        <track>0</track>
+        <up>down</up>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>
