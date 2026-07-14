@@ -206,6 +206,11 @@ void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTra
             }
 
             ChordLayout::computeUp(chord, ctx);
+        } else {
+            // grace notes hosted by a rest are always chords
+            for (Chord* c : cr->graceNotes()) {
+                ChordLayout::computeUp(c, ctx);
+            }
         }
     }
 }
@@ -231,6 +236,11 @@ void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTr
 
             ChordLayout::layoutStem(chord, ctx);
             // stem direction can change later during beam processing
+        } else {
+            // grace notes hosted by a rest are always chords
+            for (Chord* c : cr->graceNotes()) {
+                ChordLayout::layoutStem(c, ctx);
+            }
         }
     }
 }

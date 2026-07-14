@@ -197,19 +197,20 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                         }
                     }
 
-                    if (cr->isChord()) {
-                        Chord* c = toChord(cr);
-                        for (Chord* cc : c->graceNotes()) {
-                            if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                TLayout::layoutBeam(cc->beam(), ctx);
-                            }
-                            ChordLayout::layoutSpanners(cc, ctx);
-                            for (EngravingItem* element : cc->el()) {
-                                if (element->isSlur()) {
-                                    TLayout::layoutItem(element, ctx);
-                                }
+                    for (Chord* cc : cr->graceNotes()) {
+                        if (cc->beam() && cc->beam()->elements().front() == cc) {
+                            TLayout::layoutBeam(cc->beam(), ctx);
+                        }
+                        ChordLayout::layoutSpanners(cc, ctx);
+                        for (EngravingItem* element : cc->el()) {
+                            if (element->isSlur()) {
+                                TLayout::layoutItem(element, ctx);
                             }
                         }
+                    }
+
+                    if (cr->isChord()) {
+                        Chord* c = toChord(cr);
                         ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                         ChordLayout::layoutSpanners(c, ctx);
                         if (c->tremoloSingleChord()) {

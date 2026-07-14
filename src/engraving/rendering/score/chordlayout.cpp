@@ -1700,6 +1700,14 @@ ChordPosInfo ChordLayout::calculateChordPosInfo(Segment* segment, staff_idx_t st
 
     for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
         EngravingItem* e = segment->element(track);
+        // Grace notes hosted by a rest are always chords; lay out their noteheads here.
+        // They do not participate in the rest's own stem/note positioning below.
+        if (e && e->isRest() && toRest(e)->vStaffIdx() == staffIdx) {
+            for (Chord* c : toRest(e)->graceNotes()) {
+                layoutChords2(c->notes(), c->up(), ctx);
+                layoutChords3({ c }, c->notes(), staff, ctx);
+            }
+        }
         const bool calcChordPos = e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx;
         if (!calcChordPos) {
             continue;
@@ -2970,7 +2978,7 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
               [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
 }
 
-void ChordLayout::appendGraceNotes(Chord* chord)
+void ChordLayout::appendGraceNotes(ChordRest* chord)
 {
     Segment* segment = chord->segment();
     Measure* measure = chord->measure();

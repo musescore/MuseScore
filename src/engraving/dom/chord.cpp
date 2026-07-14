@@ -1095,7 +1095,7 @@ bool Chord::underBeam() const
     if (m_noteType == NoteType::NORMAL) {
         return false;
     }
-    const Chord* cr = toChord(explicitParent());
+    const ChordRest* cr = toChordRest(explicitParent());
     Beam* beam = cr->beam();
     if (!beam || !cr->beam()->up()) {
         return false;
@@ -1222,7 +1222,7 @@ PointF Chord::pagePos() const
     }
     p.rx() = pageX();
 
-    const Chord* pc = toChord(explicitParent());
+    const ChordRest* pc = toChordRest(explicitParent());
     System* system = pc->segment()->system();
     if (!system) {
         return p;
@@ -2110,14 +2110,14 @@ void Chord::setShowStemSlashInAdvance()
         return;
     }
     if (isGraceBefore()) {
-        GraceNotesGroup& graceBefore = toChord(explicitParent())->graceNotesBefore();
+        GraceNotesGroup& graceBefore = toChordRest(explicitParent())->graceNotesBefore();
         Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
         if (grace && grace->beamMode() != BeamMode::NONE && grace->beamMode() != BeamMode::BEGIN) {
             grace->requestShowStemSlash(showStemSlash());
         }
     }
     if (isGraceAfter()) {
-        GraceNotesGroup& graceAfter = toChord(explicitParent())->graceNotesAfter();
+        GraceNotesGroup& graceAfter = toChordRest(explicitParent())->graceNotesAfter();
         Chord* grace = graceAfter.empty() ? nullptr : graceAfter.back();
         if (grace && grace->beamMode() != BeamMode::NONE) {
             grace->requestShowStemSlash(showStemSlash());

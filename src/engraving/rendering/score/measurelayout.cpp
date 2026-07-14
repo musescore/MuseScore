@@ -364,8 +364,8 @@ void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
             continue;
         }
         for (auto el : s.elist()) {
-            if (el && el->isChord() && !toChord(el)->graceNotes().empty()) {
-                ChordLayout::appendGraceNotes(toChord(el));
+            if (el && el->isChordRest() && !toChordRest(el)->graceNotes().empty()) {
+                ChordLayout::appendGraceNotes(toChordRest(el));
             }
         }
     }

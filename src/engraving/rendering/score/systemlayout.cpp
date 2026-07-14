@@ -1987,11 +1987,9 @@ bool SystemLayout::measureHasCrossStuffOrModifiedBeams(const Measure* measure)
                     return true;
                 }
             }
-            if (e->isChord() && !toChord(e)->graceNotes().empty()) {
-                for (const Chord* grace : toChord(e)->graceNotes()) {
-                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                        return true;
-                    }
+            for (const Chord* grace : toChordRest(e)->graceNotes()) {
+                if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                    return true;
                 }
             }
         }
@@ -2015,10 +2013,10 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                 continue;
             }
             for (EngravingItem* e : seg.elist()) {
-                if (!e || !e->isChord()) {
+                if (!e || !e->isChordRest()) {
                     continue;
                 }
-                for (Chord* grace : toChord(e)->graceNotes()) {
+                for (Chord* grace : toChordRest(e)->graceNotes()) {
                     if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())
                         && grace->beam()->elements().front() == grace) {
                         BeamLayout::layout(grace->beam(), ctx);

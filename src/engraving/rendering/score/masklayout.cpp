@@ -352,12 +352,15 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
             EngravingItem* el = seg->element(track);
-            if (!el || !el->isChord()) {
+            if (!el || !el->isChordRest()) {
                 continue;
             }
-            maskFret(toChord(el));
-            maskParens(toChord(el));
-            for (Chord* grace : toChord(el)->graceNotes()) {
+            ChordRest* cr = toChordRest(el);
+            if (cr->isChord()) {
+                maskFret(toChord(cr));
+                maskParens(toChord(cr));
+            }
+            for (Chord* grace : cr->graceNotes()) {
                 maskFret(grace);
                 maskParens(grace);
             }
