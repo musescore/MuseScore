@@ -531,6 +531,25 @@ static Segment* createAndAddTimeSig(Score*, Measure* m, Fraction f, int track, F
 }
 
 //---------------------------------------------------------
+//   attachPendingGraceNotes
+//    attach pending grace chords that match the host voice; delete the rest so
+//    voice-mismatched Factory-allocated chords are not leaked
+//---------------------------------------------------------
+
+static void attachPendingGraceNotes(ChordRest* cr, QList<Chord*>& graceNotes)
+{
+    for (int ii = graceNotes.size() - 1; ii >= 0; ii--) {
+        Chord* gc = graceNotes[ii];
+        if (gc->voice() == cr->voice()) {
+            cr->add(gc);
+        } else {
+            delete gc;
+        }
+    }
+    graceNotes.clear();
+}
+
+//---------------------------------------------------------
 //   readCapVoice
 //---------------------------------------------------------
 
@@ -618,6 +637,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 rest->setTrack(track);
                 rest->setVisible(!o->invisible);
                 s->add(rest);
+                // append any pending grace notes before this rest
+                attachPendingGraceNotes(rest, graceNotes);
                 if (tuplet) {
                     tuplet->add(rest);
                     if (++tupletCurrentSequence >= tupletNotesSpanned) {
@@ -707,14 +728,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             } else {
                 s->add(chord);
                 // append grace notes before
-                int ii = -1;
-                for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
-                    Chord* gc = graceNotes[ii];
-                    if (gc->voice() == chord->voice()) {
-                        chord->add(gc);
-                    }
-                }
-                graceNotes.clear();
+                attachPendingGraceNotes(chord, graceNotes);
             }
             if (tuplet) {
                 tuplet->add(chord);

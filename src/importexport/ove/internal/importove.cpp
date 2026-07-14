@@ -1504,6 +1504,21 @@ Drumset* getDrumset(Score* score, int part)
     return const_cast<Drumset*>(p->instrument()->drumset()); // TODO: remove cast
 }
 
+// attach pending grace chords that match the host voice; delete the rest so
+// voice-mismatched Factory-allocated chords are not leaked
+static void attachPendingGraceNotes(ChordRest* cr, QList<mu::engraving::Chord*>& graceNotes)
+{
+    for (int ii = graceNotes.size() - 1; ii >= 0; ii--) {
+        mu::engraving::Chord* gc = graceNotes[ii];
+        if (gc->voice() == cr->voice()) {
+            cr->add(gc);
+        } else {
+            delete gc;
+        }
+    }
+    graceNotes.clear();
+}
+
 void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 {
     int j;
@@ -1542,6 +1557,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             cr->setTrack(noteTrack);
             cr->setVisible(container->getShow());
             s->add(cr);
+            // append any pending grace notes before this rest
+            attachPendingGraceNotes(cr, graceNotes);
 
             QList<ovebase::Note*> notes = container->getNotesRests();
             for (j = 0; j < notes.size(); ++j) {
@@ -1592,14 +1609,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     }
                     cr->setDurationType(duration);
                     // append grace notes before
-                    int ii = -1;
-                    for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
-                        mu::engraving::Chord* gc = graceNotes[ii];
-                        if (gc->voice() == cr->voice()) {
-                            cr->add(gc);
-                        }
-                    }
-                    graceNotes.clear();
+                    attachPendingGraceNotes(cr, graceNotes);
                 }
                 cr->setTicks(cr->durationType().fraction());
 
