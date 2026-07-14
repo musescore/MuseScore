@@ -702,6 +702,9 @@ TEST_F(MusicXml_Tests, graceAfter2) {
 TEST_F(MusicXml_Tests, graceAfter3) {
     musicXmlIoTest("testGraceAfter3");
 }
+// Disabled since it was added: the trill's wavy-line stop lands on a grace note, which the
+// exporter can only emit on a main note, so the round-trip moves the stop and the files differ.
+// This is a trill-endpoint export limitation, unrelated to grace notes on rests.
 TEST_F(MusicXml_Tests, DISABLED_graceAfter4) {
     musicXmlIoTest("testGraceAfter4");
 }
@@ -710,6 +713,9 @@ TEST_F(MusicXml_Tests, graceBeforeRest) {
 }
 TEST_F(MusicXml_Tests, graceRestSkipped) {
     musicXmlImportTestRef("testGraceRestSkipped");
+}
+TEST_F(MusicXml_Tests, graceAfterOnRest) {
+    musicXmlIoTest("testGraceAfterOnRest");
 }
 TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");

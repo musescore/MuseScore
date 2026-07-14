@@ -7992,7 +7992,13 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
         Rest* r = toRest(el);
         if (!(r->isGap())) {
             const auto ll = r->lyrics();
+            for (Chord* g : r->graceNotesBefore()) {
+                chord(g, sstaff, ll, useDrumset);
+            }
             rest(r, sstaff, ll);
+            for (Chord* g : r->graceNotesAfter()) {
+                chord(g, sstaff, ll, useDrumset);
+            }
         }
     } else if (el->isBarLine()) {
         const BarLine* barln = toBarLine(el);
