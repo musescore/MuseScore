@@ -57,11 +57,15 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
 {
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
 
-    for (const auto& [tick, expectedPoint] : expectedCurve) {
-        ASSERT_TRUE(actualCurve.contains(tick)) << "Missing point at tick " << tick;
-        const AutomationPoint& actualPoint = actualCurve.at(tick);
+    for (auto expectedIt = expectedCurve.cbegin(); expectedIt != expectedCurve.cend(); ++expectedIt) {
+        const utick_t tick = expectedIt->first;
+        const auto actualIt = actualCurve.find(tick);
+        ASSERT_TRUE(actualIt != actualCurve.cend()) << "Missing point at tick " << tick;
+        const AutomationPoint& actualPoint = actualIt->second;
+        const AutomationPoint& expectedPoint = expectedIt->second;
 
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at tick " << tick;
+        EXPECT_NEAR(resolvedInValue(actualCurve, actualIt), resolvedInValue(expectedCurve, expectedIt), 0.0001)
+            << "inValue mismatch at tick " << tick;
         EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;

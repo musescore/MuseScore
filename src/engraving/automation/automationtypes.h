@@ -30,6 +30,8 @@
 #include <limits>
 #include <optional>
 #include <set>
+#include <type_traits>
+#include <variant>
 #include <vector>
 
 namespace mu::engraving {
@@ -39,7 +41,17 @@ struct AutomationPoint {
         Exponential,
     };
 
-    muse::real_t inValue = 0.; // [0; 1]
+    //! NOTE: arrival value equals whatever precedes this point in the curve, resolved live
+    struct FromPrevious {
+        bool operator==(const FromPrevious&) const { return true; }
+    };
+    //! NOTE: arrival value equals this point's own outValue (a flat, held point)
+    struct SameAsOut {
+        bool operator==(const SameAsOut&) const { return true; }
+    };
+    using InValue = std::variant<FromPrevious, SameAsOut, muse::real_t>;
+
+    InValue inValue = FromPrevious {};
     muse::real_t outValue = 0.; // [0; 1]
     InterpolationType interpolation = InterpolationType::Linear;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
@@ -84,6 +96,21 @@ struct AutomationCurveKey {
 using utick_t = int;
 using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
 using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
+
+//! NOTE: resolves what a point's arrival value actually is, given where it sits in its curve
+inline muse::real_t resolvedInValue(const AutomationCurve& curve, AutomationCurve::const_iterator it)
+{
+    return std::visit([&](const auto& v) -> muse::real_t {
+        using T = std::decay_t<decltype(v)>;
+        if constexpr (std::is_same_v<T, AutomationPoint::FromPrevious>) {
+            return it == curve.begin() ? muse::real_t(0.0) : std::prev(it)->second.outValue;
+        } else if constexpr (std::is_same_v<T, AutomationPoint::SameAsOut>) {
+            return it->second.outValue;
+        } else {
+            return v;
+        }
+    }, it->second.inValue);
+}
 
 struct AutomationPointEdit {
     utick_t tick = 0; // tick to write the point at

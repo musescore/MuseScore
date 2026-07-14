@@ -258,10 +258,8 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     controller.update(s_score, changes);
 
     // [THEN] Measures 1-2 are unaffected by the hairpin-only update, the p dynamic at the hairpin
-    //        start is unchanged, the user midpoint survives with its inValue set to prev.outValue
-    //        (the curve holds flat at p before the breakpoint, then steps to MF_VALUE), and the ff
-    //        dynamic's inValue is overridden to the midpoint's outValue (the curve holds flat at
-    //        MF_VALUE until ff fires its own outValue)
+    //        start is unchanged, the user midpoint's own data is untouched by the rebuild, and the
+    //        ff dynamic keeps its own independently-computed arrival value regardless of the midpoint
     AutomationCurve expectedCurve;
     expectedCurve[480]  = generatedPoint(0.0,      P_VALUE);
     expectedCurve[1440] = generatedPoint(P_VALUE,  MP_VALUE);
@@ -270,8 +268,8 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     expectedCurve[2880] = generatedPoint(MP_VALUE, P_VALUE);
     expectedCurve[3264] = generatedPoint(F_VALUE,  F_VALUE);
     expectedCurve[4800] = generatedPoint(F_VALUE,  P_VALUE);
-    expectedCurve[5280] = customPoint(P_VALUE,     MF_VALUE);
-    expectedCurve[5760] = generatedPoint(MF_VALUE, FF_VALUE);
+    expectedCurve[5280] = customPoint(0.0,         MF_VALUE);
+    expectedCurve[5760] = generatedPoint(FF_VALUE, FF_VALUE);
 
     checkCurvesMatch(controller.automation()->curve(key), expectedCurve);
 }

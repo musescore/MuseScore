@@ -78,7 +78,14 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
             const muse::JsonObject pointObj = pointArray.at(j).toObject();
 
             AutomationPoint point;
-            point.inValue = pointObj.value("inValue").toDouble();
+            const muse::String inValueKind = pointObj.contains("inValueKind") ? pointObj.value("inValueKind").toString() : muse::String();
+            if (inValueKind == u"FromPrevious") {
+                point.inValue = AutomationPoint::FromPrevious {};
+            } else if (inValueKind == u"SameAsOut") {
+                point.inValue = AutomationPoint::SameAsOut {};
+            } else {
+                point.inValue = pointObj.value("inValue").toDouble();
+            }
             point.outValue = pointObj.value("outValue").toDouble();
             point.interpolation = muse::key(INTERPOLATION_TYPE_TO_STRING, pointObj.value("interpolation").toString(),
                                             AutomationPoint::InterpolationType::Linear);
@@ -119,7 +126,13 @@ muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGen
 
             muse::JsonObject pointObj;
             pointObj["tick"] = tick;
-            pointObj["inValue"] = point.inValue;
+            if (std::holds_alternative<AutomationPoint::FromPrevious>(point.inValue)) {
+                pointObj["inValueKind"] = muse::String(u"FromPrevious");
+            } else if (std::holds_alternative<AutomationPoint::SameAsOut>(point.inValue)) {
+                pointObj["inValueKind"] = muse::String(u"SameAsOut");
+            } else {
+                pointObj["inValue"] = std::get<muse::real_t>(point.inValue);
+            }
             pointObj["outValue"] = point.outValue;
             pointObj["interpolation"] = muse::value(INTERPOLATION_TYPE_TO_STRING, point.interpolation);
             if (point.itemId.has_value()) {

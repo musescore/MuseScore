@@ -161,8 +161,12 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
 
     int currentPointIndex = 0;
     const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staffId, std::nullopt };
-    for (const auto& pair : engravingAutomation()->curve(key)) {
-        const int tick = pair.first;
+    const mu::engraving::AutomationCurve& curve = engravingAutomation()->curve(key);
+
+    // Walk the whole curve (not just [startTick, endTick]) so a FromPrevious point at the edge of the
+    // visible range still resolves against its true predecessor, even if that predecessor is off-screen
+    for (auto it = curve.begin(); it != curve.end(); ++it) {
+        const int tick = it->first;
         if (tick < startTick || tick > endTick) {
             continue;
         }
@@ -184,14 +188,15 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
         const double pointXInStaff = (segXInStaff + pointXInSeg) / sysStaffCanvasRect.width();
 
         // Point in/out values are always between 0 and 1 - higher value == lower Y...
-        const mu::engraving::AutomationPoint& autoPoint = pair.second;
-        if (autoPoint.inValue == autoPoint.outValue) {
-            const QPointF qpf(pointXInStaff, 1.0 - autoPoint.inValue);
+        const mu::engraving::AutomationPoint& autoPoint = it->second;
+        const mu::engraving::real_t resolvedIn = mu::engraving::resolvedInValue(curve, it);
+        if (resolvedIn == autoPoint.outValue) {
+            const QPointF qpf(pointXInStaff, 1.0 - resolvedIn);
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
             continue;
         }
 
-        const QPointF qpfIn(pointXInStaff, 1.0 - autoPoint.inValue);
+        const QPointF qpfIn(pointXInStaff, 1.0 - resolvedIn);
         points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
 
         const QPointF qpfOut(pointXInStaff, 1.0 - autoPoint.outValue);
@@ -313,10 +318,13 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     // TODO: Not always dynamics...
     const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
 
-    const mu::engraving::AutomationPoint* existingPoint = engravingAutomation()->point(curveKey, oldPointData.tick);
-    IF_ASSERT_FAILED(existingPoint) {
+    const mu::engraving::AutomationCurve& curve = engravingAutomation()->curve(curveKey);
+    const auto existingIt = curve.find(oldPointData.tick);
+    IF_ASSERT_FAILED(existingIt != curve.end()) {
         return;
     }
+    const mu::engraving::AutomationPoint& existingPoint = existingIt->second;
+    const mu::engraving::real_t existingInValue = mu::engraving::resolvedInValue(curve, existingIt);
 
     //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
     const double newValue = 1.0 - y;
@@ -329,11 +337,14 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     //! at newTick...
 
     if (!tickChanged || pointType == PointData::PointType::BOTH) {
-        mu::engraving::AutomationPoint editedPoint = *existingPoint;
-        if (pointType == PointData::PointType::IN || pointType == PointData::PointType::BOTH) {
+        mu::engraving::AutomationPoint editedPoint = existingPoint;
+        if (pointType == PointData::PointType::IN) {
+            // The user explicitly chose this arrival value; it no longer follows whatever precedes it
             editedPoint.inValue = newValue;
-        }
-        if (pointType == PointData::PointType::OUT || pointType == PointData::PointType::BOTH) {
+        } else if (pointType == PointData::PointType::BOTH) {
+            editedPoint.outValue = newValue;
+            editedPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+        } else {
             editedPoint.outValue = newValue;
         }
         editedPoint.generated = false;
@@ -341,15 +352,20 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return;
     }
 
-    mu::engraving::AutomationPoint updatedOldPoint = *existingPoint;
-    if (pointType == PointData::PointType::IN) {
-        updatedOldPoint.inValue = existingPoint->outValue;
-    } else {
-        updatedOldPoint.outValue = existingPoint->inValue;
+    // oldTick becomes a flat BOTH point via SameAsOut, so its inValue keeps following outValue
+    // even if outValue changes again later
+    mu::engraving::AutomationPoint updatedOldPoint = existingPoint;
+    updatedOldPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+    if (pointType == PointData::PointType::OUT) {
+        updatedOldPoint.outValue = existingInValue;
     }
     updatedOldPoint.generated = false;
 
-    const mu::engraving::AutomationPoint newPoint = { newValue, newValue, existingPoint->interpolation, existingPoint->itemId };
+    mu::engraving::AutomationPoint newPoint;
+    newPoint.outValue = newValue;
+    newPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+    newPoint.interpolation = existingPoint.interpolation;
+    newPoint.itemId = existingPoint.itemId;
     engravingAutomation()->editPoints(curveKey, { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } });
 }
 
