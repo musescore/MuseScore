@@ -268,6 +268,16 @@ TEST_F(MidiRenderer_Tests, graceAfter)
     checkEventInterval(events, 240, 479, 62, defVol);
 }
 
+TEST_F(MidiRenderer_Tests, graceAfterOnRest)
+{
+    // quarter note (60) followed by a rest that hosts a grace-after (62), issue #19701.
+    // The rest is silent, but its grace note must still sound within the rest window.
+    EventsHolder events = renderMidiEvents(u"grace_after_rest.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
+}
+
 TEST_F(MidiRenderer_Tests, graceBeforeBeatGroup)
 {
     constexpr int defVol = 80; // mf

@@ -780,12 +780,20 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     };
 
     int tieLen = calculateTieLength(note);
+    int hostTicks = -1;
     if (chord->isGrace()) {
         assert(!CompatMidiRendererInternal::graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
-        chord = toChord(chord->explicitParent());
+        EngravingItem* graceParent = chord->parentItem();
+        if (graceParent && graceParent->isChord()) {
+            chord = toChord(graceParent);
+        } else if (graceParent) {
+            // grace note hosted by a rest: the rest is silent, so use its duration as the
+            // timing reference but keep the grace chord itself for score/part lookups
+            hostTicks = toChordRest(graceParent)->actualTicks().ticks();
+        }
     }
 
-    int ticks = chord->actualTicks().ticks();   // ticks of the actual note
+    int ticks = hostTicks >= 0 ? hostTicks : chord->actualTicks().ticks();   // ticks of the actual note
     // calculate additional length due to ties forward
     // taking NoteEvent length adjustments into account
 
@@ -1219,6 +1227,23 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
             size_t voice = track % VOICES;
             EngravingItem* cr = seg->element(track);
             if (!cr || !cr->isChord()) {
+                // a rest is silent, but it may host grace notes that must still be emitted
+                if (cr && cr->isRest() && !toChordRest(cr)->graceNotes().empty()) {
+                    ChordRest* rest = toChordRest(cr);
+                    const double veloMultiplier = NoteEvent::DEFAULT_VELOCITY_MULTIPLIER;
+                    auto collectRestGraces = [&](const std::vector<Chord*>& graces) {
+                        for (const Chord* c : graces) {
+                            for (const Note* note : c->notes()) {
+                                CollectNoteParams params;
+                                params.velocityMultiplier = veloMultiplier;
+                                params.tickOffset = tickOffset;
+                                collectNote(events, note, params, st1, pitchWheelRenderer, m_context);
+                            }
+                        }
+                    };
+                    collectRestGraces(rest->graceNotesBefore());
+                    collectRestGraces(rest->graceNotesAfter());
+                }
                 prevChords[voice] = nullptr;
                 continue;
             }

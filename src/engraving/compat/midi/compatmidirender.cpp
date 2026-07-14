@@ -63,6 +63,36 @@ int CompatMidiRender::getControllerForSnd(Score* score, int globalSndController)
     return controller;
 }
 
+// Set play events for grace notes hosted by a rest. The rest is silent, so the grace notes
+// play within the rest's own window (per-mille of the rest duration): grace-before in the
+// first half, grace-after in the last half (just before the barline / next beat).
+static void createRestGracePlayEvents(ChordRest* rest)
+{
+    auto setGraceEvents = [](const std::vector<Chord*>& graces, int windowStart, int window) {
+        int count = int(graces.size());
+        if (count == 0) {
+            return;
+        }
+        int graceDuration = window / count;
+        int on = windowStart;
+        for (Chord* gc : graces) {
+            std::vector<NoteEventList> el;
+            for (size_t ii = 0; ii < gc->notes().size(); ++ii) {
+                NoteEventList nel;
+                nel.push_back(NoteEvent(0, on, graceDuration));
+                el.push_back(nel);
+            }
+            if (gc->playEventType() == PlayEventType::Auto) {
+                gc->setNoteEventLists(el);
+            }
+            on += graceDuration;
+        }
+    };
+
+    setGraceEvents(rest->graceNotesBefore(true), 0, 500);
+    setGraceEvents(rest->graceNotesAfter(true), 500, 500);
+}
+
 void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start, Measure const* const end,
                                         const CompatMidiRendererInternal::Context& context)
 {
@@ -110,6 +140,9 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 }
 
                 if (!item->isChord()) {
+                    if (item->isRest() && !toChordRest(item)->graceNotes().empty()) {
+                        createRestGracePlayEvents(toChordRest(item));
+                    }
                     prevChord = nullptr;
                     continue;
                 }
