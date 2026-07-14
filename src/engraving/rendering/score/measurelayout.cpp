@@ -209,7 +209,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     ModifyDom::connectTremolo(measure);
     ModifyDom::cmdUpdateNotes(measure, ctx.dom());
     ModifyDom::createStems(measure,  ctx);
-    ModifyDom::setTrackForChordGraceNotes(measure, ctx.dom());
+    ModifyDom::setTrackForGraceNotes(measure, ctx.dom());
     ModifyDom::sortMeasureSegments(measure, ctx);
     // --------------------
     //

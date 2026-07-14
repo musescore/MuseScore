@@ -1289,6 +1289,16 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const Chor
     for (EngravingItem* lyric : cr->lyrics()) {
         elems.emplace(lyric);
     }
+    // grace notes (always chords) may be hosted by a chord or a rest
+    for (Chord* grace : cr->graceNotes()) {
+        elems.emplace(grace);
+        for (Articulation* gArt : grace->articulations()) {
+            elems.emplace(gArt);
+        }
+        if (TremoloSingleChord* gTremSing = grace->tremoloSingleChord()) {
+            elems.emplace(gTremSing);
+        }
+    }
     if (!cr->isChord()) {
         return elems;
     }
@@ -1308,15 +1318,6 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const Chor
     // Chord brackets and chord lines
     for (EngravingItem* e : chord->el()) {
         elems.emplace(e);
-    }
-    for (Chord* grace : chord->graceNotes()) {
-        elems.emplace(grace);
-        for (Articulation* gArt : grace->articulations()) {
-            elems.emplace(gArt);
-        }
-        if (TremoloSingleChord* gTremSing = grace->tremoloSingleChord()) {
-            elems.emplace(gTremSing);
-        }
     }
     return elems;
 }

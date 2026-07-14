@@ -397,6 +397,14 @@ TEST_F(Engraving_NoteTests, graceOnRest)
 
     score->doLayout();
 
+    // the grace notes on the rest must be laid out: non-empty geometry, on-page position, and a stem
+    for (Chord* gc : rest->graceNotes()) {
+        Note* gn = gc->notes().front();
+        EXPECT_FALSE(gn->ldata()->bbox().isEmpty());
+        EXPECT_GT(gn->pageBoundingRect().y(), 0.0);
+        EXPECT_TRUE(gc->stem());
+    }
+
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"grace-on-rest-test.mscx", NOTE_DATA_DIR + u"grace-on-rest-ref.mscx"));
 }
 
@@ -424,6 +432,102 @@ TEST_F(Engraving_NoteTests, graceOnRestDrop)
 
     EXPECT_EQ(rest->graceNotes().size(), 1u);
     EXPECT_EQ(rest->graceNotesAfter().size(), 1u);
+}
+
+//---------------------------------------------------------
+///   graceOnRestBeam
+///   two 16th grace notes on a rest are beamed together (issue #19701)
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRestBeam)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    // two consecutive 16th grace notes before the rest should share a beam
+    score->setGraceNote(rest, 72, NoteType::GRACE16, Constants::DIVISION / 4);
+    score->setGraceNote(rest, 74, NoteType::GRACE16, Constants::DIVISION / 4);
+    score->doLayout();
+
+    const GraceNotesGroup& gnb = rest->graceNotesBefore();
+    ASSERT_EQ(gnb.size(), 2u);
+    EXPECT_TRUE(gnb.front()->beam());
+    EXPECT_TRUE(gnb.back()->beam());
+    EXPECT_EQ(gnb.front()->beam(), gnb.back()->beam());
+}
+
+//---------------------------------------------------------
+///   graceOnRestSelect
+///   a range selection includes the grace notes hosted by a rest (issue #19701)
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRestSelect)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+    score->setGraceNote(rest, 72, NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+    Note* graceNote = rest->graceNotesAfter().front()->notes().front();
+
+    score->cmdSelectAll();
+
+    const std::vector<EngravingItem*>& sel = score->selection().elements();
+    EXPECT_TRUE(std::find(sel.begin(), sel.end(), static_cast<EngravingItem*>(graceNote)) != sel.end());
+}
+
+//---------------------------------------------------------
+///   graceOnRestTie
+///   adding a tie to a grace note before a rest must not crash (issue #19701)
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRestTie)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    score->setGraceNote(rest, 74, NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+    Note* graceNote = rest->graceNotesBefore().front()->notes().front();
+
+    // A grace note before a rest has no main note to tie to; adding a tie must be
+    // a no-op rather than casting the rest host to a chord and asserting.
+    score->select(graceNote);
+    EditTie::cmdAddTie(score);
+
+    EXPECT_FALSE(graceNote->tieFor());
+}
+
+//---------------------------------------------------------
+///   graceOnRestSlur
+///   laying out a slur whose endpoint is a grace note after a rest must not crash (issue #19701)
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, graceOnRestSlur)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"grace.mscx");
+    score->doLayout();
+
+    ChordRest* rest = score->firstMeasure()->findChordRest(Fraction(1, 2), 0);
+    ASSERT_TRUE(rest && rest->isRest());
+
+    score->setGraceNote(rest, 72, NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+    Chord* grace = rest->graceNotesAfter().front();
+
+    // Slur layout reads the appended segment of a grace-after via its host; the host
+    // is a rest here, so it must not be cast to a chord (issue #19701).
+    score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
+    score->addSlur(grace, grace, nullptr);
+    score->endCmd();
+
+    score->doLayout();
+    SUCCEED();
 }
 
 //---------------------------------------------------------

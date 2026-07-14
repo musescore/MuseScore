@@ -102,12 +102,10 @@ void SegmentLayout::setChordMag(const Staff* staff, const Segment& segment, trac
             m *= smallNoteMag;
         }
 
-        if (cr->isChord()) {
-            double graceMag = m * graceNoteMag;
-            Chord* chord = toChord(cr);
-            for (Chord* c : chord->graceNotes()) {
-                c->mutldata()->setMag(graceMag);
-            }
+        // grace notes (always chords) may be hosted by a chord or a rest
+        double graceMag = m * graceNoteMag;
+        for (Chord* c : cr->graceNotes()) {
+            c->mutldata()->setMag(graceMag);
         }
         cr->mutldata()->setMag(m);
     }

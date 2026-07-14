@@ -1651,6 +1651,13 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
         if (EngravingItem* e = segment->element(track)) {
             if (e->vStaffIdx() == staffIdx) {
                 TLayout::layoutItem(e, ctx);
+                // A chord lays out its own grace notes via layoutPitched recursion; a rest does
+                // not, so lay out the grace notes hosted by a rest here (they are always chords).
+                if (e->isRest()) {
+                    for (Chord* gc : toChordRest(e)->graceNotes()) {
+                        ChordLayout::layout(gc, ctx);
+                    }
+                }
             }
         }
     }

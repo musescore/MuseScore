@@ -399,14 +399,17 @@ double Slur::scalingFactor() const
         return style().styleD(Sid::graceNoteMag);
     }
 
+    // a grace note scales to its host, which may be a chord or a rest
+    ChordRest* startCr = startC;
     if (startC->isGrace()) {
-        startC = toChord(startC->parent());
+        startCr = toChordRest(startC->parent());
     }
+    ChordRest* endCr = endC;
     if (endC->isGrace()) {
-        endC = toChord(endC->parent());
+        endCr = toChordRest(endC->parent());
     }
 
-    return 0.5 * (startC->intrinsicMag() + endC->intrinsicMag());
+    return 0.5 * (startCr->intrinsicMag() + endCr->intrinsicMag());
 }
 
 void Slur::undoSetIncoming(bool incoming)

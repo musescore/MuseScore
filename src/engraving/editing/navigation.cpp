@@ -157,10 +157,10 @@ ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigat
 
     if (cr->isGrace()) {
         const Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->explicitParent());
+        ChordRest* pc = toChordRest(cr->explicitParent());
 
         if (options.skipGrace) {
-            cr = toChordRest(cr->explicitParent());
+            cr = pc;
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
             auto i = std::find(group.begin(), group.end(), c);
@@ -187,13 +187,10 @@ ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigat
             cr = pc;
         }
     } else { // cr is not a grace note
-        if (cr->isChord() && !options.skipGrace) {
-            const Chord* c = toChord(cr);
-            if (!c->graceNotes().empty()) {
-                const GraceNotesGroup& group = c->graceNotesAfter();
-                if (!group.empty()) {
-                    return group.front();
-                }
+        if (!options.skipGrace) {
+            const GraceNotesGroup& group = cr->graceNotesAfter();
+            if (!group.empty()) {
+                return group.front();
             }
         }
     }
@@ -210,13 +207,10 @@ ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigat
             if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !options.skipGrace) {
-                Chord* c = toChord(e);
-                if (!c->graceNotes().empty()) {
-                    const GraceNotesGroup& group = c->graceNotesBefore();
-                    if (!group.empty()) {
-                        return group.front();
-                    }
+            if (!options.skipGrace) {
+                const GraceNotesGroup& group = e->graceNotesBefore();
+                if (!group.empty()) {
+                    return group.front();
                 }
             }
             return e;
@@ -240,10 +234,10 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
 
     if (cr->isGrace()) {
         const Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->explicitParent());
+        ChordRest* pc = toChordRest(cr->explicitParent());
 
         if (options.skipGrace) {
-            cr = toChordRest(cr->explicitParent());
+            cr = pc;
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
             auto i = std::find(group.begin(), group.end(), c);
@@ -270,9 +264,8 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
     } else {
         //
         // cr is not a grace note
-        if (cr->isChord() && !options.skipGrace) {
-            const Chord* c = toChord(cr);
-            const GraceNotesGroup& group = c->graceNotesBefore();
+        if (!options.skipGrace) {
+            const GraceNotesGroup& group = cr->graceNotesBefore();
             if (!group.empty()) {
                 return group.back();
             }
@@ -292,8 +285,8 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
             if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !options.skipGrace) {
-                const GraceNotesGroup& group = toChord(e)->graceNotesAfter();
+            if (!options.skipGrace) {
+                const GraceNotesGroup& group = e->graceNotesAfter();
                 if (!group.empty()) {
                     return group.back();
                 }

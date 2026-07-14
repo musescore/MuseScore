@@ -121,9 +121,18 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
                 }
             } else if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = trackRange.startTrack; t < trackRange.endTrack; ++t) {
-                    Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
+                    EngravingItem* el = segment.element(t);
+                    Chord* chord = item_cast<Chord*>(el, CastMode::MAYBE_BAD); // maybe Rest
                     if (chord) {
                         chord->cmdUpdateNotes(&as, staffIdx);
+                    } else if (el && el->isRest()) {
+                        // a rest hosts grace notes (chords); update their notes too
+                        for (Chord* gc : toChordRest(el)->graceNotesBefore()) {
+                            gc->cmdUpdateNotes(&as, staffIdx);
+                        }
+                        for (Chord* gc : toChordRest(el)->graceNotesAfter()) {
+                            gc->cmdUpdateNotes(&as, staffIdx);
+                        }
                     }
                 }
             }
@@ -165,14 +174,13 @@ void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
                     }
                 };
 
+                // grace notes (always chords) may be hosted by a chord or a rest
+                for (Chord* c : cr->graceNotes()) {
+                    createStems(c);
+                }
+
                 if (cr->isChord()) {
-                    Chord* chord = toChord(cr);
-
-                    for (Chord* c : chord->graceNotes()) {
-                        createStems(c);
-                    }
-
-                    createStems(chord);     // create stems needed to calculate spacing
+                    createStems(toChord(cr));     // create stems needed to calculate spacing
                     // stem direction can change later during beam processing
                 }
             }
@@ -180,7 +188,7 @@ void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
     }
 }
 
-void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& dom)
+void ModifyDom::setTrackForGraceNotes(Measure* measure, const DomAccessor& dom)
 {
     for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
         track_idx_t startTrack = staffIdx * VOICES;
@@ -197,11 +205,9 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
                     continue;
                 }
 
-                if (cr->isChord()) {
-                    Chord* chord = toChord(cr);
-                    for (Chord* c : chord->graceNotes()) {
-                        c->setTrack(t);
-                    }
+                // grace notes (always chords) may be hosted by a chord or a rest
+                for (Chord* c : cr->graceNotes()) {
+                    c->setTrack(t);
                 }
             }
         }

@@ -1136,7 +1136,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleBeginType()) {
         if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(startCR->parentItem());
+            ChordRest* parent = toChordRest(startCR->parentItem());
             if (parent) {
                 startSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -1151,7 +1151,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleEndType()) {
         if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(endCR->parentItem());
+            ChordRest* parent = toChordRest(endCR->parentItem());
             if (parent) {
                 endSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -2924,7 +2924,8 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
         return true;
     }
     if (c1->isGraceBefore() && c2->isGraceAfter() && c1->parentItem() == c2->parentItem()) {
-        if (toChord(c1->parentItem())->stem() && toChord(c1->parentItem())->up() != up) {
+        ChordRest* parent = toChordRest(c1->parentItem());
+        if (parent->isChord() && toChord(parent)->stem() && parent->up() != up) {
             return true;
         }
     }

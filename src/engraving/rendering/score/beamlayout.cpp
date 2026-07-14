@@ -552,7 +552,7 @@ static bool beamNoContinue(BeamMode mode)
 //   beamGraceNotes
 //---------------------------------------------------------
 
-void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
+void BeamLayout::beamGraceNotes(LayoutContext& ctx, ChordRest* mainNote, bool after)
 {
     ChordRest* a1    = 0;        // start of (potential) beam
     Beam* beam       = 0;        // current beam
@@ -668,11 +668,9 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 continue;
             }
 
-            if (cr->isChord()) {
-                Chord* chord = toChord(cr);
-                for (Chord* c : chord->graceNotes()) {
-                    c->setBeamlet(nullptr); // Will be defined during beam layout
-                }
+            // grace notes (always chords) may be hosted by a chord or a rest
+            for (Chord* c : cr->graceNotes()) {
+                c->setBeamlet(nullptr); // Will be defined during beam layout
             }
             cr->setBeamlet(nullptr); // Will be defined during beam layout
 
@@ -715,13 +713,10 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 cr->removeDeleteBeam(false);
             }
 
-            // handle grace notes
+            // handle grace notes (a rest may host them too)
             // (tied chords?)
-            if (cr->isChord()) {
-                Chord* chord = toChord(cr);
-                beamGraceNotes(ctx, chord, false);         // grace before
-                beamGraceNotes(ctx, chord, true);          // grace after
-            }
+            beamGraceNotes(ctx, cr, false);         // grace before
+            beamGraceNotes(ctx, cr, true);          // grace after
 
             bm = Groups::actualBeamMode(cr, prev, &beatSubdivision);
 
@@ -809,10 +804,9 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
 void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
 {
-    if (cr->isChord()) {
-        for (Chord* grace : toChord(cr)->graceNotes()) {
-            layoutNonCrossBeams(grace, ctx);
-        }
+    // grace notes (always chords) may be hosted by a chord or a rest
+    for (Chord* grace : cr->graceNotes()) {
+        layoutNonCrossBeams(grace, ctx);
     }
 
     if (!BeamLayout::isStartOfNonCrossBeam(cr)) {

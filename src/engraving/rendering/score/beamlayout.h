@@ -63,7 +63,7 @@ public:
     static void setTremAnchors(Beam* item, const LayoutContext& ctx);
 
 private:
-    static void beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after);
+    static void beamGraceNotes(LayoutContext& ctx, ChordRest* mainNote, bool after);
 
     static void layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
 

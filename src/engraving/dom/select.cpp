@@ -1330,19 +1330,21 @@ std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
                         continue;
                     }
                     EngravingItem* e = seg->element(track);
-                    if (e == 0 || !e->isChord()
+                    if (e == 0 || !e->isChordRest()
                         || (selTrack != muse::nidx && selTrack != track)) {
                         continue;
                     }
-                    Chord* c = toChord(e);
-                    const std::vector<Note*> notes = c->notes();
-                    for (size_t noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
-                        Note* note = notes.at(noteIdx);
-                        if (selectionFilter().canSelectNoteIdx(noteIdx, notes.size(), rangeContainsMultiNoteChords())) {
-                            nl.push_back(note);
+                    ChordRest* cr = toChordRest(e);
+                    if (cr->isChord()) {
+                        const std::vector<Note*> notes = toChord(cr)->notes();
+                        for (size_t noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
+                            Note* note = notes.at(noteIdx);
+                            if (selectionFilter().canSelectNoteIdx(noteIdx, notes.size(), rangeContainsMultiNoteChords())) {
+                                nl.push_back(note);
+                            }
                         }
                     }
-                    for (Chord* g : c->graceNotes()) {
+                    for (Chord* g : cr->graceNotes()) {
                         nl.insert(nl.end(), g->notes().begin(), g->notes().end());
                     }
                 }
