@@ -180,6 +180,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <lineVisible>0</lineVisible>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>d_d</eid>
               </Pedal>
             <next>
@@ -244,6 +246,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>m_m</eid>
               </Pedal>
             <next>
@@ -307,8 +311,10 @@
         <voice>
           <Spanner type="Pedal">
             <Pedal>
-              <endHookType>1</endHookType>
               <beginHookType>1</beginHookType>
+              <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>v_v</eid>
               </Pedal>
             <next>
@@ -374,6 +380,8 @@
             <Pedal>
               <lineVisible>0</lineVisible>
               <beginText>&lt;sym&gt;keyboardPedalSost&lt;/sym&gt;</beginText>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>4_4</eid>
               </Pedal>
             <next>

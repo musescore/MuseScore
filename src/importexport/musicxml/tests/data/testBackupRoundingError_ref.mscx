@@ -2152,6 +2152,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>gF_gF</eid>
               </Pedal>
             <next>
