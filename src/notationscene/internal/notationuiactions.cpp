@@ -1264,17 +1264,17 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Add hairpin: diminuendo")
              ),
     UiAction("increase-dynamic",
-        mu::context::UiCtxProjectOpened,
-        mu::context::CTX_NOTATION_OPENED,
-        TranslatableString("action", "Increase dynamics"),
-        TranslatableString("action", "Increase dynamics by one step")
-    ),
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Increase dynamics"),
+             TranslatableString("action", "Increase dynamics by one step")
+             ),
     UiAction("decrease-dynamic",
-        mu::context::UiCtxProjectOpened,
-        mu::context::CTX_NOTATION_OPENED,
-        TranslatableString("action", "Decrease dynamics"),
-        TranslatableString("action", "Decrease dynamics by one step")
-    ),
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Decrease dynamics"),
+             TranslatableString("action", "Decrease dynamics by one step")
+             ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
