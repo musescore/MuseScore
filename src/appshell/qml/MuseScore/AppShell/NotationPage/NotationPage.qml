@@ -180,6 +180,9 @@ DockPage {
             contentBottomPadding: floating ? 8 : 2
             contentTopPadding: floating ? 8 : 0
 
+            //! NOTE: Opened by page model when there are extensions with toolbar actions
+            visible: false
+
             dropDestinations: [
                 { "dock": notationToolBar, "dropLocation": Location.Right },
                 { "dock": playbackToolBar, "dropLocation": Location.Right }
