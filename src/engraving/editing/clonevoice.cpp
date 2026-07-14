@@ -201,11 +201,12 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             };
             if (oe->isChord()) {
                 cloneChord(toChord(ocr), toChord(ncr));
-                for (size_t i = 0; i < toChord(ocr)->graceNotes().size(); ++i) {
-                    Chord* ogc = toChord(ocr)->graceNotes().at(i);
-                    Chord* ngc = toChord(ncr)->graceNotes().at(i);
-                    cloneChord(ogc, ngc);
-                }
+            }
+            // grace notes are always chords, but their host may be a chord or a rest
+            for (size_t i = 0; i < ocr->graceNotes().size(); ++i) {
+                Chord* ogc = ocr->graceNotes().at(i);
+                Chord* ngc = ncr->graceNotes().at(i);
+                cloneChord(ogc, ngc);
             }
 
             // Add element

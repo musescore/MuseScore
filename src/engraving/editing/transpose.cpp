@@ -215,19 +215,22 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
                 continue;
             }
 
-            if (e->isChord()) {
-                Chord* chord = toChord(e);
-                const std::vector<Note*> nl = chord->notes();
-                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
-                    if (!score->selectionFilter().canSelectNoteIdx(noteIdx, nl.size(), selection.rangeContainsMultiNoteChords())) {
-                        continue;
-                    }
-                    Note* note = nl.at(noteIdx);
-                    if (!transposeNote(note, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
-                        result = false;
+            if (e->isChordRest()) {
+                if (e->isChord()) {
+                    Chord* chord = toChord(e);
+                    const std::vector<Note*> nl = chord->notes();
+                    for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                        if (!score->selectionFilter().canSelectNoteIdx(noteIdx, nl.size(), selection.rangeContainsMultiNoteChords())) {
+                            continue;
+                        }
+                        Note* note = nl.at(noteIdx);
+                        if (!transposeNote(note, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
+                            result = false;
+                        }
                     }
                 }
-                for (Chord* g : chord->graceNotes()) {
+                // grace notes are always chords, but their host may be a chord or a rest
+                for (Chord* g : toChordRest(e)->graceNotes()) {
                     for (Note* n : g->notes()) {
                         if (!transposeNote(n, mode, transposeInterval, trKeys, useDoubleSharpsFlats, interval)) {
                             result = false;
@@ -446,17 +449,19 @@ void Transpose::transpositionChanged(Transaction& tx, Score* score, Part* part, 
             track_idx_t t2 = t1 + VOICES;
             for (track_idx_t track = t1; track < t2; ++track) {
                 EngravingItem* e = s->element(track);
-                if (e && e->isChord()) {
-                    Chord* c = toChord(e);
-                    for (Chord* gc : c->graceNotes()) {
+                if (e && e->isChordRest()) {
+                    // grace notes are always chords, but their host may be a chord or a rest
+                    for (Chord* gc : toChordRest(e)->graceNotes()) {
                         for (Note* n : gc->notes()) {
                             int tpc = transposeTpc(n->tpc1(), v, true);
                             n->undoChangeProperty(Pid::TPC2, tpc);
                         }
                     }
-                    for (Note* n : c->notes()) {
-                        int tpc = transposeTpc(n->tpc1(), v, true);
-                        n->undoChangeProperty(Pid::TPC2, tpc);
+                    if (e->isChord()) {
+                        for (Note* n : toChord(e)->notes()) {
+                            int tpc = transposeTpc(n->tpc1(), v, true);
+                            n->undoChangeProperty(Pid::TPC2, tpc);
+                        }
                     }
                 }
                 // find chord symbols

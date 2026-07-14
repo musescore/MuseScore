@@ -54,13 +54,16 @@ static void updateNoteLines(Segment* segment, track_idx_t track)
         }
         for (track_idx_t t = track; t < track + VOICES; ++t) {
             EngravingItem* e = s->element(t);
-            if (e && e->isChord()) {
-                Chord* chord = toChord(e);
-                for (Note* n : chord->notes()) {
-                    n->updateLine();
+            if (e && e->isChordRest()) {
+                if (e->isChord()) {
+                    Chord* chord = toChord(e);
+                    for (Note* n : chord->notes()) {
+                        n->updateLine();
+                    }
+                    chord->sortNotes();
                 }
-                chord->sortNotes();
-                for (Chord* gc : chord->graceNotes()) {
+                // grace notes are always chords, but their host may be a chord or a rest
+                for (Chord* gc : toChordRest(e)->graceNotes()) {
                     for (Note* gn : gc->notes()) {
                         gn->updateLine();
                     }

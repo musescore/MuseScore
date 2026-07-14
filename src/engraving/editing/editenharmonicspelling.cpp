@@ -371,16 +371,20 @@ void EditEnharmonicSpelling::spell(Score* score)
             track_idx_t etrack = strack + VOICES;
             for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
-                if (!e || !e->isChord()) {
+                if (!e || !e->isChordRest()) {
                     continue;
                 }
 
-                Chord* chord = toChord(e);
-                std::copy_if(chord->notes().begin(), chord->notes().end(), std::back_inserter(notes), [score](EngravingItem* chordElement) {
-                    return score->selection().isNone() || chordElement->selected();
-                });
+                if (e->isChord()) {
+                    Chord* chord = toChord(e);
+                    std::copy_if(chord->notes().begin(), chord->notes().end(), std::back_inserter(notes),
+                                 [score](EngravingItem* chordElement) {
+                        return score->selection().isNone() || chordElement->selected();
+                    });
+                }
 
-                for (Chord* graceChord : chord->graceNotes()) {
+                // grace notes are always chords, but their host may be a chord or a rest
+                for (Chord* graceChord : toChordRest(e)->graceNotes()) {
                     std::copy_if(graceChord->notes().begin(), graceChord->notes().end(), std::back_inserter(notes),
                                  [score](EngravingItem* chordElement) {
                         return score->selection().isNone() || chordElement->selected();

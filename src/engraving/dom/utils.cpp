@@ -542,12 +542,12 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
     }
 
     if (chord->isGraceBefore()) {
-        chord = toChord(chord->explicitParent());
+        ChordRest* host = toChordRest(chord->explicitParent());
 
         // try to tie to next grace note
 
         size_t index = note->chord()->graceIndex();
-        for (Chord* c : chord->graceNotes()) {
+        for (Chord* c : host->graceNotes()) {
             if (c->graceIndex() == index + 1) {
                 note2 = c->findNote(note->pitch());
                 if (note2) {
@@ -556,16 +556,22 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
             }
         }
 
-        // try to tie to note in parent chord
-        note2 = chord->findNote(note->pitch());
-        if (note2) {
-            return note2;
+        // try to tie to note in parent chord (a rest host has no note to match)
+        if (host->isChord()) {
+            chord = toChord(host);
+            note2 = chord->findNote(note->pitch());
+            if (note2) {
+                return note2;
+            }
         }
     } else if (chord->isGraceAfter()) {
         // grace after
         // we will try to tie to note in next normal chord, below
         // meanwhile, set chord to parent chord so the endTick calculation will make sense
-        chord = toChord(chord->explicitParent());
+        ChordRest* host = toChordRest(chord->explicitParent());
+        if (host->isChord()) {
+            chord = toChord(host);
+        }
     } else {
         // normal chord
         // try to tie to grace note after if present

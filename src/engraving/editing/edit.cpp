@@ -3780,7 +3780,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     }
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
-        Chord* pc = toChord(c->explicitParent());
+        ChordRest* pc = toChordRest(c->explicitParent());
         size_t index = 0;
         for (Chord* gc : pc->graceNotes()) {
             if (c == gc) {
