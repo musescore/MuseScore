@@ -5445,14 +5445,18 @@ void NotationInteraction::increaseDecreaseDynamicsForSelection(int delta)
             continue;
         }
         Dynamic* dynamic = toDynamic(item);
-        DynamicType newType;
-        if (delta > 0 && dynamic->dynamicType() <= DynamicType::FFFF) {
-            newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) + 1);
-        } else if (delta < 0 && dynamic->dynamicType() >= DynamicType::PPPPP) {
-            newType = static_cast<DynamicType>(static_cast<int>(dynamic->dynamicType()) - 1);
-        } else {
+        const DynamicType currentType = dynamic->dynamicType();
+        auto inRange = [](DynamicType type) {
+            return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
+        };
+        if (!inRange(currentType)) {
             continue;
         }
+        DynamicType newType = static_cast<DynamicType>(static_cast<int>(currentType) + delta);
+        if (!inRange(newType)) {
+            continue;
+        }
+
         dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
         dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
         autoFlipHairpinsTypeImpl(dynamic);
