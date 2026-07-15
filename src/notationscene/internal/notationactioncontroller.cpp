@@ -51,6 +51,7 @@
 #include "../notationcommands.h"
 
 #include "log.h"
+#include "rcommand/commandtypes.h"
 #include "types/ret.h"
 
 using namespace mu;
@@ -185,31 +186,30 @@ void NotationActionController::init()
     registerCommand(FLIP_COMMAND, &Interaction::flipSelection);
     registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
 
-    registerAction("note-action", &Controller::handleNoteAction);
+    registerCommand(ADD_NOTE_COMMAND, &Controller::handleNoteAction);
+    registerNoteCommand(ENTER_NOTE_C_COMMAND, NoteName::C);
+    registerNoteCommand(ENTER_NOTE_D_COMMAND, NoteName::D);
+    registerNoteCommand(ENTER_NOTE_E_COMMAND, NoteName::E);
+    registerNoteCommand(ENTER_NOTE_F_COMMAND, NoteName::F);
+    registerNoteCommand(ENTER_NOTE_G_COMMAND, NoteName::G);
+    registerNoteCommand(ENTER_NOTE_A_COMMAND, NoteName::A);
+    registerNoteCommand(ENTER_NOTE_B_COMMAND, NoteName::B);
+    registerNoteCommand(ADD_NOTE_C_COMMAND, NoteName::C, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_D_COMMAND, NoteName::D, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_E_COMMAND, NoteName::E, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_F_COMMAND, NoteName::F, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_G_COMMAND, NoteName::G, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::CurrentChord);
+    registerNoteCommand(INSERT_NOTE_C_COMMAND, NoteName::C, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_D_COMMAND, NoteName::D, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_E_COMMAND, NoteName::E, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_F_COMMAND, NoteName::F, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_G_COMMAND, NoteName::G, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::InsertChord);
 
-    registerNoteAction("note-c", NoteName::C);
-    registerNoteAction("note-d", NoteName::D);
-    registerNoteAction("note-e", NoteName::E);
-    registerNoteAction("note-f", NoteName::F);
-    registerNoteAction("note-g", NoteName::G);
-    registerNoteAction("note-a", NoteName::A);
-    registerNoteAction("note-b", NoteName::B);
-
-    registerNoteAction("chord-c", NoteName::C, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-d", NoteName::D, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-e", NoteName::E, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-f", NoteName::F, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-g", NoteName::G, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-a", NoteName::A, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-b", NoteName::B, NoteAddingMode::CurrentChord);
-
-    registerNoteAction("insert-c", NoteName::C, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-d", NoteName::D, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-e", NoteName::E, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-f", NoteName::F, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-g", NoteName::G, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
+    registerAction("note-action", &Controller::handleNoteAction); // used for drums
 
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
@@ -707,6 +707,27 @@ void NotationActionController::init()
             { "voice-4", USE_VOICE_4_COMMAND },
             { "flip", FLIP_COMMAND },
             { "flip-horizontally", FLIP_HORIZONTALLY_COMMAND },
+            { "note-c", ENTER_NOTE_C_COMMAND },
+            { "note-d", ENTER_NOTE_D_COMMAND },
+            { "note-e", ENTER_NOTE_E_COMMAND },
+            { "note-f", ENTER_NOTE_F_COMMAND },
+            { "note-g", ENTER_NOTE_G_COMMAND },
+            { "note-a", ENTER_NOTE_A_COMMAND },
+            { "note-b", ENTER_NOTE_B_COMMAND },
+            { "chord-c", ADD_NOTE_C_COMMAND },
+            { "chord-d", ADD_NOTE_D_COMMAND },
+            { "chord-e", ADD_NOTE_E_COMMAND },
+            { "chord-f", ADD_NOTE_F_COMMAND },
+            { "chord-g", ADD_NOTE_G_COMMAND },
+            { "chord-a", ADD_NOTE_A_COMMAND },
+            { "chord-b", ADD_NOTE_B_COMMAND },
+            { "insert-c", INSERT_NOTE_C_COMMAND },
+            { "insert-d", INSERT_NOTE_D_COMMAND },
+            { "insert-e", INSERT_NOTE_E_COMMAND },
+            { "insert-f", INSERT_NOTE_F_COMMAND },
+            { "insert-g", INSERT_NOTE_G_COMMAND },
+            { "insert-a", INSERT_NOTE_A_COMMAND },
+            { "insert-b", INSERT_NOTE_B_COMMAND },
         };
 
         auto ad = dispatcher();
@@ -940,8 +961,6 @@ void NotationActionController::toggleNoteInputInsert()
 
 void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode addingMode)
 {
-    startNoteInput();
-
     NoteInputParams params;
     const bool addFlag = addingMode == NoteAddingMode::CurrentChord;
     bool ok = mu::engraving::NoteInput::resolveNoteInputParams(currentNotationScore(), static_cast<int>(note), addFlag, params);
@@ -955,11 +974,22 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
 
 void NotationActionController::handleNoteAction(const muse::actions::ActionData& args)
 {
+    handleNoteAction(args.arg<NoteInputParams>(0), args.arg<NoteAddingMode>(1));
+}
+
+void NotationActionController::handleNoteAction(const muse::rcommand::CommandQuery& query)
+{
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(args.count() > 1) {
-        return;
-    }
+    NoteName note = str_conv(query.param("note").toString(), NoteName::C);
+    NoteAddingMode mode = str_conv(query.param("mode").toString(), NoteAddingMode::CurrentChord);
+
+    handleNoteAction(note, mode);
+}
+
+void NotationActionController::handleNoteAction(const NoteInputParams& params, const NoteAddingMode& addingMode)
+{
+    TRACEFUNC;
 
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
@@ -967,9 +997,6 @@ void NotationActionController::handleNoteAction(const muse::actions::ActionData&
     }
 
     startNoteInput();
-
-    const NoteInputParams params = args.arg<NoteInputParams>(0);
-    const NoteAddingMode addingMode = args.arg<NoteAddingMode>(1);
 
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
@@ -2933,21 +2960,13 @@ void NotationActionController::registerNoteInputAction(const ActionCode& code, N
     registerAction(code, [this, inputMethod]() { toggleNoteInput(inputMethod); }, &Controller::toggleNoteInputAllowed);
 }
 
-bool NotationActionController::noteInputActionAllowed() const
+bool NotationActionController::isNoteInputActionAllowed() const
 {
     if (!isNoteInputMode() && !toggleNoteInputAllowed()) {
         return false;
     }
 
     return !isTablatureStaff();
-}
-
-void NotationActionController::registerNoteAction(const ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
-{
-    registerAction(code, [this, noteName, addingMode]()
-    {
-        handleNoteAction(noteName, addingMode);
-    }, &Controller::noteInputActionAllowed);
 }
 
 void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)
@@ -3158,6 +3177,20 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
 }
 
 void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (NotationActionController::* handler)(const muse::rcommand::CommandQuery&))
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler](const rcommand::Request& request) {
+        if (!commandsState()->commandState(command).enabled) {
+            return rcommand::make_response(request, muse::make_ret(Ret::Code::NotSupported));
+        }
+
+        (this->*handler)(request.query);
+
+        return rcommand::make_response(request, muse::make_ok());
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
                                                void (INotationInteraction::* handler)(), PlayMode playMode)
 {
     registerCommand(command, [this, handler, playMode]()
@@ -3183,4 +3216,14 @@ void NotationActionController::registerNoteInputCommand(const muse::rcommand::Co
 void NotationActionController::registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding)
 {
     registerCommand(command, [this, padding]() { padNote(padding); });
+}
+
+void NotationActionController::registerNoteCommand(const muse::rcommand::Command& command,
+                                                   NoteName noteName,
+                                                   NoteAddingMode addingMode)
+{
+    registerCommand(command, [this, noteName, addingMode]()
+    {
+        handleNoteAction(noteName, addingMode);
+    });
 }

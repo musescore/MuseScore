@@ -97,4 +97,27 @@ inline static const muse::rcommand::Command USE_VOICE_4_COMMAND("command://notat
 
 inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
 inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
+
+inline static const muse::rcommand::Command ADD_NOTE_COMMAND("command://notation/add-note"); // with params
+inline static const muse::rcommand::Command ENTER_NOTE_C_COMMAND("command://notation/enter-note-c");
+inline static const muse::rcommand::Command ENTER_NOTE_D_COMMAND("command://notation/enter-note-d");
+inline static const muse::rcommand::Command ENTER_NOTE_E_COMMAND("command://notation/enter-note-e");
+inline static const muse::rcommand::Command ENTER_NOTE_F_COMMAND("command://notation/enter-note-f");
+inline static const muse::rcommand::Command ENTER_NOTE_G_COMMAND("command://notation/enter-note-g");
+inline static const muse::rcommand::Command ENTER_NOTE_A_COMMAND("command://notation/enter-note-a");
+inline static const muse::rcommand::Command ENTER_NOTE_B_COMMAND("command://notation/enter-note-b");
+inline static const muse::rcommand::Command ADD_NOTE_C_COMMAND("command://notation/add-note-c");
+inline static const muse::rcommand::Command ADD_NOTE_D_COMMAND("command://notation/add-note-d");
+inline static const muse::rcommand::Command ADD_NOTE_E_COMMAND("command://notation/add-note-e");
+inline static const muse::rcommand::Command ADD_NOTE_F_COMMAND("command://notation/add-note-f");
+inline static const muse::rcommand::Command ADD_NOTE_G_COMMAND("command://notation/add-note-g");
+inline static const muse::rcommand::Command ADD_NOTE_A_COMMAND("command://notation/add-note-a");
+inline static const muse::rcommand::Command ADD_NOTE_B_COMMAND("command://notation/add-note-b");
+inline static const muse::rcommand::Command INSERT_NOTE_C_COMMAND("command://notation/insert-note-c");
+inline static const muse::rcommand::Command INSERT_NOTE_D_COMMAND("command://notation/insert-note-d");
+inline static const muse::rcommand::Command INSERT_NOTE_E_COMMAND("command://notation/insert-note-e");
+inline static const muse::rcommand::Command INSERT_NOTE_F_COMMAND("command://notation/insert-note-f");
+inline static const muse::rcommand::Command INSERT_NOTE_G_COMMAND("command://notation/insert-note-g");
+inline static const muse::rcommand::Command INSERT_NOTE_A_COMMAND("command://notation/insert-note-a");
+inline static const muse::rcommand::Command INSERT_NOTE_B_COMMAND("command://notation/insert-note-b");
 }

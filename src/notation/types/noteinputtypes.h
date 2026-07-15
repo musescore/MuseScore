@@ -45,6 +45,18 @@ enum class NoteAddingMode : unsigned char
     InsertChord
 };
 
+inline NoteAddingMode str_conv(const std::string& mode, NoteAddingMode def)
+{
+    if (mode == "current") {
+        return NoteAddingMode::CurrentChord;
+    } else if (mode == "next") {
+        return NoteAddingMode::NextChord;
+    } else if (mode == "insert") {
+        return NoteAddingMode::InsertChord;
+    }
+    return def;
+}
+
 struct TupletOptions
 {
     engraving::Fraction ratio = { -1, -1 };
