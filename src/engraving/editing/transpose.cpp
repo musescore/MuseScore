@@ -610,42 +610,39 @@ void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Scor
 
     String name = findBestEnharmonicFit(names, key, score->style());
 
-    diagram->setHarmony(name);
-    harmony = diagram->harmony();
-    IF_ASSERT_FAILED(harmony) {
-        return;
-    }
-
     // Transpose harmony without undo
-    Interval kv = harmony->staff()->transpose(harmony->tick());
-    Interval iv = harmony->part()->instrument(harmony->tick())->transpose();
+    Interval kv = diagram->staff()->transpose(tick);
+    Interval iv = diagram->part()->instrument(tick)->transpose();
     Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
 
-    for (HarmonyInfo* info : harmony->chords()) {
+    String transposed = transposedChordName(score, name, [&](int tpc) {
         if (mode == TransposeMode::DIATONICALLY) {
-            info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
-            info->setBassTpc(Transpose::transposeTpcDiatonicByKey(info->bassTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
-        } else {
-            info->setRootTpc(Transpose::transposeTpc(info->rootTpc(), hInterval, useDoubleSharpsFlats));
-            info->setBassTpc(Transpose::transposeTpc(info->bassTpc(), hInterval, useDoubleSharpsFlats));
+            return transposeTpcDiatonicByKey(tpc, transposeInterval, key, trKeys, useDoubleSharpsFlats);
         }
-    }
-    harmony->setXmlText(harmony->harmonyName());
+        return transposeTpc(tpc, hInterval, useDoubleSharpsFlats);
+    });
 
-    std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
+    std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(transposed);
     if (availableDiagrams.empty()) {
         diagram->undoFretClear();
         MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
         return;
     }
-    tx.push(new FretDataChange(diagram, harmony->plainText()));
-
-    diagram->remove(harmony);
-    delete harmony;
+    tx.push(new FretDataChange(diagram, transposed));
 
     score->rebuildFretBox();
+}
 
-    return;
+String Transpose::transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc)
+{
+    Harmony h(score->dummy()->segment());
+    h.setHarmony(name);
+    for (HarmonyInfo* info : h.chords()) {
+        info->setRootTpc(transformTpc(info->rootTpc()));
+        info->setBassTpc(transformTpc(info->bassTpc()));
+    }
+    h.setXmlText(h.harmonyName());
+    return h.harmonyName();
 }
 
 String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style)
