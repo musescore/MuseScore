@@ -245,6 +245,7 @@ public:
     void autoFlipHairpinsTypeImpl(engraving::Dynamic* selDyn);
 
     void toggleDynamicPopup() override;
+    void increaseDecreaseDynamic(engraving::Dynamic* dynamic, int delta) override;
     void increaseDecreaseDynamicsForSelection(int delta) override;
 
     bool toggleLayoutBreakAvailable() const override;
