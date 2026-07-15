@@ -25,6 +25,7 @@
 #include "containers.h"
 #include "modularity/ioc.h"
 #include "log.h"
+#include "rcommand/commandtypes.h"
 #include "types/ret.h"
 
 #include "audio/common/audioutils.h"
@@ -117,6 +118,38 @@ void PlaybackController::init()
     d->onRequest(this, PAN_TOGGLE_COMMAND, [this]() { return toggleAutomaticallyPan(); });
     d->onRequest(this, COUNTIN_TOGGLE_COMMAND, [this]() { return toggleCountIn(); });
     d->onRequest(this, RELOAD_PLAYBACK_CACHE_COMMAND, [this]() { return reloadPlaybackCache(); });
+
+    // compat
+    {
+        static std::map<ActionCode, rcommand::Command> actionToCommand = {
+            { "play", PLAY_TOGGLE_COMMAND },
+            { "play-from-selection", PLAY_SELECTION_COMMAND },
+            { "pause", PAUSE_COMMAND },
+            { "pause-and-select", PAUSE_AND_SELECT_COMMAND },
+            { "stop", STOP_COMMAND },
+            { "rewind", REWIND_COMMAND },
+            { "loop", LOOP_TOGGLE_COMMAND },
+            { "loop-in", LOOP_IN_COMMAND },
+            { "loop-out", LOOP_OUT_COMMAND },
+            { "metronome", METRONOME_TOGGLE_COMMAND },
+            { "playback-setup", SHOW_PLAYBACK_SETUP_COMMAND },
+            { "midi-on", MIDI_TOGGLE_COMMAND },
+            { "midi-input-written-pitch", MIDI_INPUT_WRITTEN_PITCH_COMMAND },
+            { "midi-input-sounding-pitch", MIDI_INPUT_SOUNDING_PITCH_COMMAND },
+            { "repeats", REPEATS_TOGGLE_COMMAND },
+            { "play-chord-symbols", CHORDSYMBOLS_TOGGLE_COMMAND },
+            { "toggle-hear-playback-when-editing", HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND },
+            { "pan", PAN_TOGGLE_COMMAND },
+            { "countin", COUNTIN_TOGGLE_COMMAND },
+            { "reload-playback-cache", RELOAD_PLAYBACK_CACHE_COMMAND },
+            { "clear-online-sounds-cache", CLEAR_ONLINESOUNDS_CACHE_COMMAND },
+        };
+
+        auto ad = dispatcher();
+        for (const auto& [actionCode, command] : actionToCommand) {
+            ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
+        }
+    }
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();

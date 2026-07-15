@@ -29,6 +29,8 @@ target_sources(playback PRIVATE
     playbacktypes.h
     playbackcommands.h
 
+    internal/playbackuiactions.cpp
+    internal/playbackuiactions.h
     internal/playbackcontroller.cpp
     internal/playbackcontroller.h
     internal/onlinesoundscontroller.cpp
