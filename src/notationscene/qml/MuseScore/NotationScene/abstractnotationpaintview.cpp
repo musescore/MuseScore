@@ -93,7 +93,20 @@ void AbstractNotationPaintView::load()
 
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
-    m_notationAutomationController = std::make_unique<NotationAutomationController>(this, iocContext());
+
+    // Clip automation lines to the view bounds
+    m_automationLinesContainer = new QQuickItem(this);
+    m_automationLinesContainer->setClip(true);
+    m_automationLinesContainer->setWidth(width());
+    m_automationLinesContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setHeight(height());
+    });
+
+    m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
