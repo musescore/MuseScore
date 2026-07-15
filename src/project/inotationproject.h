@@ -33,6 +33,8 @@
 #include "types/projecttypes.h"
 
 namespace mu::project {
+struct ProjectCreateOptions;
+
 class INotationProject
 {
 public:

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationviewinputcontroller.h"
 
 #include <set>
@@ -35,9 +36,11 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
-#include "engraving/dom/mscore.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/staff.h"
 
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"

@@ -80,6 +80,7 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/realizedharmony.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/slur.h"
@@ -6575,7 +6576,7 @@ void NotationInteraction::implodeSelectedStaff()
     checkAndShowError();
 }
 
-void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType)
+void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voicing, HDuration durationType)
 {
     if (selection()->isNone()) {
         return;

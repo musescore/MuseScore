@@ -41,7 +41,8 @@
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
+#include "notation/notationtypes.h"
 
 namespace mu::notation {
 class NotationActionController : public INotationCommandsController, public muse::actions::Actionable, public muse::rcommand::Commandable,
@@ -87,12 +88,12 @@ public:
     muse::async::Notification noteInputStateChanged() const override;
     bool isNoteInputMode() const override;
     NoteInputMethod noteInputMethod() const override;
-    DurationType currentDurationType() const override;
+    engraving::DurationType currentDurationType() const override;
     int currentDotCount() const override;
     bool currentIsRest() const override;
-    AccidentalType currentAccidentalType() const override;
-    std::set<SymbolId> currentArticulations() const override;
-    voice_idx_t currentVoice() const override;
+    engraving::AccidentalType currentAccidentalType() const override;
+    std::set<engraving::SymId> currentArticulations() const override;
+    engraving::voice_idx_t currentVoice() const override;
 
     muse::async::Notification currentNotationChanged() const;
 
@@ -128,7 +129,7 @@ private:
     void halveNoteInputDuration();
     void realtimeAdvance();
 
-    void toggleAccidental(AccidentalType type);
+    void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(const muse::actions::ActionData& data);

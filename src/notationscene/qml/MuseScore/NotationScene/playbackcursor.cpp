@@ -24,6 +24,9 @@
 
 #include "draw/painter.h"
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 
 #include "notation/inotation.h"

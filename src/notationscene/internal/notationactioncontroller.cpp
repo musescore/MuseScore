@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationactioncontroller.h"
 
 #include <QGuiApplication>
@@ -26,6 +27,7 @@
 #include "global/io/file.h"
 #include "global/translation.h"
 
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/chord.h"
@@ -1384,9 +1386,9 @@ void NotationActionController::putTuplet(int tupletCount)
     // get the bracket type from score style settings
     if (INotationStylePtr style = currentNotationStyle()) {
         int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
-        options.bracketType = static_cast<TupletBracketType>(bracketType);
+        options.bracketType = static_cast<engraving::TupletBracketType>(bracketType);
         int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
-        options.numberType = static_cast<TupletNumberType>(numberType);
+        options.numberType = static_cast<engraving::TupletNumberType>(numberType);
     }
 
     putTuplet(options);
@@ -1505,7 +1507,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
     case MoveDirection::Right:
     case MoveDirection::Left:
         if (globalContext()->playbackState()->isPlaying()) {
-            MeasureBeat beat = playbackController()->currentBeat();
+            engraving::MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
             int increment = (direction == MoveDirection::Right ? 1 : -1);
@@ -2436,7 +2438,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     if (element->isLyrics()) {
         currentNotationInteraction()->navigateToLyrics(direction, moveOnly);
     } else if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();
@@ -2461,7 +2463,7 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
     }
 
     if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();
@@ -2484,7 +2486,7 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
     }
 
     if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();

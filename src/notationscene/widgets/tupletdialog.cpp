@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "tupletdialog.h"
 
 #include "engraving/dom/tuplet.h"
 
 #include "notation/inotationstyle.h"
+#include "notation/types/noteinputtypes.h"
 
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse::ui;
 using namespace muse::actions;
 

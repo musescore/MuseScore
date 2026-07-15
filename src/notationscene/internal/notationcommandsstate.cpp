@@ -28,6 +28,7 @@
 using namespace muse;
 using namespace muse::rcommand;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static const muse::Uri PROJECT_PAGE_URI("musescore://notation");
 
@@ -109,11 +110,11 @@ static const std::vector<Command> ADD_COMMANDS = {
     ADD_LV_COMMAND
 };
 
-static const std::map<Command, SymbolId> ADD_ARTICULATION_COMMANDS = {
-    { ADD_MARCATO_COMMAND, SymbolId::articMarcatoAbove },
-    { ADD_SFORZATO_COMMAND, SymbolId::articAccentAbove },
-    { ADD_TENUTO_COMMAND, SymbolId::articTenutoAbove },
-    { ADD_STACCATO_COMMAND, SymbolId::articStaccatoAbove }
+static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
+    { ADD_MARCATO_COMMAND, SymId::articMarcatoAbove },
+    { ADD_SFORZATO_COMMAND, SymId::articAccentAbove },
+    { ADD_TENUTO_COMMAND, SymId::articTenutoAbove },
+    { ADD_STACCATO_COMMAND, SymId::articStaccatoAbove }
 };
 
 static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {

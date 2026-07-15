@@ -26,12 +26,15 @@
 
 #include "ui/view/iconcodes.h"
 
-#include "widgets/editstyleutils.h"
-
-#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
 
 #include "notation/inotationselection.h"
+
+#include "widgets/editstyleutils.h"
 
 using namespace mu::notation;
 using namespace muse;

@@ -42,9 +42,9 @@ public:
     MOCK_METHOD(void, toggleVisible, (), (override));
     MOCK_METHOD(void, setSelectionVisible, (bool), (override));
 
-    MOCK_METHOD(EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
-    MOCK_METHOD(std::vector<EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
-    MOCK_METHOD(Staff*, hitStaff, (const muse::PointF&), (const, override));
+    MOCK_METHOD(engraving::EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
+    MOCK_METHOD(std::vector<engraving::EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
+    MOCK_METHOD(engraving::Staff*, hitStaff, (const muse::PointF&), (const, override));
 
     MOCK_METHOD(const HitElementContext&, hitElementContext, (), (const, override));
     MOCK_METHOD(void, setHitElementContext, (const HitElementContext&), (override));
@@ -219,7 +219,7 @@ public:
     MOCK_METHOD(void, explodeSelectedStaff, (), (override));
     MOCK_METHOD(void, implodeSelectedStaff, (), (override));
 
-    MOCK_METHOD(void, realizeSelectedChordSymbols, (bool, Voicing, HarmonyDurationType), (override));
+    MOCK_METHOD(void, realizeSelectedChordSymbols, (bool, engraving::Voicing, engraving::HDuration), (override));
     MOCK_METHOD(void, extendToNextNote, (), (override));
     MOCK_METHOD(void, removeSelectedMeasures, (), (override));
     MOCK_METHOD(void, removeSelectedRange, (), (override));

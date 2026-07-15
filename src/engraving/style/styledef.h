@@ -2270,6 +2270,7 @@ Q_ENUM_NS(Sid)
 using _Sid::Sid;
 #endif
 
+using StyleId = Sid;
 using StyleIdSet = std::unordered_set<Sid>;
 
 //---------------------------------------------------------

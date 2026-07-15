@@ -27,6 +27,7 @@
 
 #include "global/types/string.h"
 
+#include "engraving/style/style.h"
 #include "engraving/style/styledef.h"
 
 #include "log.h"

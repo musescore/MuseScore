@@ -35,7 +35,9 @@
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
+#include "engraving/dom/system.h"
 #include "engraving/editing/editscoreproperties.h"
 #include "engraving/editing/editstyle.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -54,6 +56,7 @@
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
+#include "types/projectcreateoptions.h"
 
 #include "global/concurrency/concurrent.h"
 

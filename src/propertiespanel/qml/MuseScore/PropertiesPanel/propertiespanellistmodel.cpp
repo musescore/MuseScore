@@ -27,6 +27,8 @@
 #include "notation/inotationselection.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 
+#include "engraving/dom/score.h"
+
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
 #include "emptystaves/emptystavesvisiblitysettingsmodel.h"
@@ -114,7 +116,7 @@ bool PropertiesPanelListModel::alwaysUpdateModelList(const QList<engraving::Engr
 }
 
 void PropertiesPanelListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                                              SelectionState selectionState)
+                                              engraving::SelState selectionState)
 {
     TRACEFUNC;
 
@@ -391,7 +393,7 @@ void PropertiesPanelListModel::listenScoreChanges()
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const engraving::ScoreChanges& changes) {
         if (changes.isTextEditing) {
             return;
         }

@@ -28,7 +28,7 @@
 #include "playback/playbackcommands.h"
 
 using namespace mu::playback;
-using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
@@ -345,7 +345,7 @@ QVariant PlaybackToolBarModel::tempo() const
         { DurationType::V_16TH, MusicalSymbolCodes::Code::SEMIQUAVER },
     };
 
-    const Tempo& tempo = playbackController()->currentTempo();
+    const notation::Tempo& tempo = playbackController()->currentTempo();
     const MusicalSymbolCodes::Code noteIcon = muse::value(DURATION_TO_ICON, tempo.duration,
                                                           MusicalSymbolCodes::Code::CROTCHET);
 

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "selectdialog.h"
 
 /**
@@ -26,6 +27,7 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
 
 #include "notation/inotationelements.h"

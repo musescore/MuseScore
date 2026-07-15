@@ -28,9 +28,19 @@
 
 #include "inotation_fwd.h"
 #include "notationtypes.h"
+#include "types/noteinputtypes.h"
 
 class QKeyEvent;
 class QInputMethodEvent;
+
+namespace mu::engraving {
+class EngravingItem;
+class ShadowNote;
+class Staff;
+
+enum class HDuration : signed char;
+enum class Voicing : signed char;
+}
 
 namespace mu::notation {
 class INotationInteraction
@@ -57,12 +67,12 @@ public:
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
     virtual std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const = 0;
-    virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
+    virtual engraving::Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
     {
-        notation::EngravingItem* element = nullptr;
-        notation::Staff* staff = nullptr;
+        engraving::EngravingItem* element = nullptr;
+        engraving::Staff* staff = nullptr;
 
         bool operator ==(const HitElementContext& other) const
         {
@@ -259,7 +269,7 @@ public:
     virtual void explodeSelectedStaff() = 0;
     virtual void implodeSelectedStaff() = 0;
 
-    virtual void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) = 0;
+    virtual void realizeSelectedChordSymbols(bool literal, engraving::Voicing voicing, engraving::HDuration durationType) = 0;
     virtual void extendToNextNote() = 0;
     virtual void removeSelectedMeasures() = 0;
     virtual void removeSelectedRange() = 0;

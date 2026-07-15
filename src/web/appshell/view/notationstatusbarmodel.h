@@ -38,8 +38,6 @@
 #include "notation/inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 
-#include "notation/notationtypes.h"
-
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {

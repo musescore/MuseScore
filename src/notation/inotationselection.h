@@ -28,11 +28,27 @@
 #include "types/ret.h"
 
 #include "inotationselectionrange.h"
-#include "notationtypes.h"
 
 class QMimeData;
 
+namespace mu::engraving {
+class EngravingItem;
+class MeasureBase;
+class Note;
+class System;
+enum class SelState : char;
+}
+
 namespace mu::notation {
+using SelectionState = mu::engraving::SelState;
+
+enum class NoteFilter : unsigned char
+{
+    All,
+    WithTie,
+    WithSlur
+};
+
 class INotationSelection
 {
 public:
@@ -46,16 +62,16 @@ public:
     virtual muse::ByteArray mimeData() const = 0;
     virtual QMimeData* qMimeData() const = 0;
 
-    virtual EngravingItem* element() const = 0;
-    virtual const std::vector<EngravingItem*>& elements() const = 0;
+    virtual engraving::EngravingItem* element() const = 0;
+    virtual const std::vector<engraving::EngravingItem*>& elements() const = 0;
 
-    virtual std::vector<Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
+    virtual std::vector<engraving::Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
 
     virtual muse::RectF canvasBoundingRect() const = 0;
 
     virtual INotationSelectionRangePtr range() const = 0;
 
-    virtual EngravingItem* lastElementHit() const = 0;
+    virtual engraving::EngravingItem* lastElementHit() const = 0;
 
     virtual mu::engraving::MeasureBase* startMeasureBase() const = 0;
     virtual mu::engraving::MeasureBase* endMeasureBase() const = 0;
