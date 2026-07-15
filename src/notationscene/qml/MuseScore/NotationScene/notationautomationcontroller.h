@@ -31,6 +31,8 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "notation/notationtypes.h"
+#include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 
 namespace muse::uicomponents {
 class PolylinePlot;
@@ -44,6 +46,8 @@ namespace mu::notation {
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
+    muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
 
 public:
     NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx);
@@ -101,6 +105,9 @@ private:
 
     SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
     QVector<PointData> pointsDataInStaff(const muse::ID& staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
+
+    void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline) const;
+    void applyPolylineSizes(muse::uicomponents::PolylinePlot* polyline) const;
 
     void updatePolylinesGeometry();
     void onCurrentNotationChanged();

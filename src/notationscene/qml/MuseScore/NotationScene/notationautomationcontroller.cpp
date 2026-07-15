@@ -22,6 +22,9 @@
 
 #include "notationautomationcontroller.h"
 
+#include <algorithm>
+#include <cmath>
+
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/automation/iautomation.h"
@@ -136,7 +139,7 @@ NotationAutomationController::SysStaffToPolylinesMap NotationAutomationControlle
         }
         polyline->setPoints(pointsForPolyline);
 
-        polyline->setDrawBackground(false);
+        applyPolylineStyle(polyline);
         polyline->setVisible(false);
 
         const SysStaffKey key(system, staffIdx);
@@ -222,6 +225,66 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     return points;
 }
 
+void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) const
+{
+    IF_ASSERT_FAILED(polyline) {
+        return;
+    }
+
+    const QColor lineColor = notationConfiguration()->notationColor();
+    const QColor pointFillColor = Qt::white;
+
+    polyline->setLineColor(lineColor);
+    polyline->setDrawBackground(false);
+
+    PolylinePointStyle* standard = polyline->standardPointStyle();
+    standard->setCenterColor(pointFillColor);
+    standard->setOutlineColor(lineColor);
+
+    PolylinePointStyle* hovered = polyline->hoveredPointStyle();
+    hovered->setCenterColor(pointFillColor);
+    hovered->setOutlineColor(lineColor);
+
+    PolylinePointStyle* ghost = polyline->ghostPointStyle();
+    QColor ghostColor = lineColor;
+    ghostColor.setAlphaF(0.4f);
+    ghost->setCenterColor(ghostColor);
+
+    applyPolylineSizes(polyline);
+}
+
+void NotationAutomationController::applyPolylineSizes(PolylinePlot* polyline) const
+{
+    IF_ASSERT_FAILED(polyline) {
+        return;
+    }
+
+    // Point/line sizes are raw pixels, so scale them with zoom manually
+    // and clamp so they don't get huge or vanish at extreme zoom
+    constexpr qreal baseLineWidth = 1.5;
+    constexpr qreal baseStandardRadius = 3.0;
+    constexpr qreal baseHoveredRadius = 4.0;
+    constexpr qreal minZoomScale = 0.5;
+    constexpr qreal maxZoomScale = 2.0;
+    const qreal hundredPercentScale = notationContextConfiguration()->scalingFromZoomPercentage(100);
+    const qreal zoomRatio = m_viewMatrix.m11() / hundredPercentScale;
+    const qreal zoomScale = std::clamp(std::sqrt(zoomRatio), minZoomScale, maxZoomScale);
+    const qreal lineWidth = baseLineWidth * zoomScale;
+
+    polyline->setLineWidth(lineWidth);
+
+    PolylinePointStyle* standard = polyline->standardPointStyle();
+    standard->setCenterRadius(baseStandardRadius * zoomScale);
+    standard->setOutlineWidth(lineWidth);
+
+    PolylinePointStyle* hovered = polyline->hoveredPointStyle();
+    hovered->setCenterRadius(baseHoveredRadius * zoomScale);
+    hovered->setOutlineWidth(lineWidth);
+
+    PolylinePointStyle* ghost = polyline->ghostPointStyle();
+    ghost->setCenterRadius(baseStandardRadius * zoomScale);
+}
+
 void NotationAutomationController::updatePolylinesGeometry()
 {
     const bool visible = automation() && automation()->isAutomationModeEnabled();
@@ -253,6 +316,8 @@ void NotationAutomationController::updatePolylinesGeometry()
         polyline->setHeight(staffCanvasRect.height());
         polyline->setX(staffCanvasRect.x());
         polyline->setY(staffCanvasRect.y());
+
+        applyPolylineSizes(polyline);
     }
 }
 
