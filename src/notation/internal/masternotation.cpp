@@ -277,6 +277,8 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
 
     applyOptions(score, scoreOptions);
 
+    score->initAutomation();
+
     initAfterSettingScore(score);
     addExcerptsToMasterScore(score->excerpts());
 

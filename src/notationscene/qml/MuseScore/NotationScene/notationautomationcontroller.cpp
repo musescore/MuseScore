@@ -413,10 +413,6 @@ void NotationAutomationController::rebuildAllPolylines()
         return;
     }
 
-    if (score()->masterScore()) { // HACK - needs to happen somewhere...
-        score()->masterScore()->initAutomation();
-    }
-
     for (const System* system : score()->systems()) {
         m_stavesToLinesMap.merge(createPolylinesForSystem(system));
     }
