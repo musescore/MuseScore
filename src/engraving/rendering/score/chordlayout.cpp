@@ -1698,6 +1698,15 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+// lay out the noteheads of the grace notes (always chords) hosted by a chord or a rest
+void ChordLayout::layoutGraceNoteHeads(ChordRest* cr, const Staff* staff, LayoutContext& ctx)
+{
+    for (Chord* c : cr->graceNotes()) {
+        layoutChords2(c->notes(), c->up(), ctx);         // layout grace note noteheads
+        layoutChords3({ c }, c->notes(), staff, ctx);    // layout grace note chords
+    }
+}
+
 ChordPosInfo ChordLayout::calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack,
                                                 track_idx_t partEndTrack, LayoutContext& ctx)
 {
@@ -1707,29 +1716,22 @@ ChordPosInfo ChordLayout::calculateChordPosInfo(Segment* segment, staff_idx_t st
 
     for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
         EngravingItem* e = segment->element(track);
-        // Grace notes hosted by a rest are always chords; lay out their noteheads here.
-        // They do not participate in the rest's own stem/note positioning below.
-        if (e && e->isRest() && toRest(e)->vStaffIdx() == staffIdx) {
-            for (Chord* c : toRest(e)->graceNotes()) {
-                layoutChords2(c->notes(), c->up(), ctx);
-                layoutChords3({ c }, c->notes(), staff, ctx);
-            }
-        }
-        const bool calcChordPos = e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx;
-        if (!calcChordPos) {
+        if (!e || !e->isChordRest() || toChordRest(e)->vStaffIdx() != staffIdx) {
             continue;
         }
 
-        Chord* chord = toChord(e);
-        posInfo.chords.push_back(chord);
-        bool hasGraceBefore = false;
-        for (Chord* c : chord->graceNotes()) {
-            if (c->isGraceBefore()) {
-                hasGraceBefore = true;
-            }
-            layoutChords2(c->notes(), c->up(), ctx);     // layout grace note noteheads
-            layoutChords3({ c }, c->notes(), staff, ctx);     // layout grace note chords
+        // Grace note heads are laid out the same way whether the host is a chord or a rest.
+        // A rest does not participate in the stem/note positioning below.
+        ChordRest* cr = toChordRest(e);
+        layoutGraceNoteHeads(cr, staff, ctx);
+
+        if (!cr->isChord()) {
+            continue;
         }
+
+        Chord* chord = toChord(cr);
+        posInfo.chords.push_back(chord);
+        const bool hasGraceBefore = !chord->graceNotesBefore().empty();
         if (chord->up()) {
             ++posInfo.upVoices;
             posInfo.upStemNotes.insert(posInfo.upStemNotes.end(), chord->notes().begin(), chord->notes().end());

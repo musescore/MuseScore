@@ -196,19 +196,13 @@ void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTra
             continue;
         }
 
+        // grace notes (always chords) may be hosted by a chord or a rest
+        for (Chord* c : cr->graceNotes()) {
+            ChordLayout::computeUp(c, ctx);
+        }
+
         if (cr->isChord()) {
-            Chord* chord = toChord(cr);
-
-            for (Chord* c : chord->graceNotes()) {
-                ChordLayout::computeUp(c, ctx);
-            }
-
-            ChordLayout::computeUp(chord, ctx);
-        } else {
-            // grace notes hosted by a rest are always chords
-            for (Chord* c : cr->graceNotes()) {
-                ChordLayout::computeUp(c, ctx);
-            }
+            ChordLayout::computeUp(toChord(cr), ctx);
         }
     }
 }
@@ -225,20 +219,14 @@ void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTr
             continue;
         }
 
+        // grace notes (always chords) may be hosted by a chord or a rest
+        for (Chord* c : cr->graceNotes()) {
+            ChordLayout::layoutStem(c, ctx);
+        }
+
         if (cr->isChord()) {
-            Chord* chord = toChord(cr);
-
-            for (Chord* c : chord->graceNotes()) {
-                ChordLayout::layoutStem(c, ctx);
-            }
-
-            ChordLayout::layoutStem(chord, ctx);
+            ChordLayout::layoutStem(toChord(cr), ctx);
             // stem direction can change later during beam processing
-        } else {
-            // grace notes hosted by a rest are always chords
-            for (Chord* c : cr->graceNotes()) {
-                ChordLayout::layoutStem(c, ctx);
-            }
         }
     }
 }
