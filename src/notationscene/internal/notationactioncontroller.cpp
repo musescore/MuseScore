@@ -102,6 +102,37 @@ void NotationActionController::init()
 {
     TRACEFUNC;
 
+    //! NOTE For historical reasons, the name of the action does not match what needs to be done
+    registerCommand(CANCEL_COMMAND, &Controller::resetState);
+    m_isAllowedDuringPlayback.insert("action://notation/cancel");
+
+    // edit commands
+
+    registerCommand(COPY_COMMAND, &Interaction::copySelection);
+    registerCommand(CUT_COMMAND, &Controller::cutSelection);
+    registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
+    registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
+
+    registerCommand(UNDO_COMMAND, &Interaction::undo);
+    registerCommand(REDO_COMMAND, &Interaction::redo);
+
+    // navigation commands
+    registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
+    registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
+    registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
+    registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
+
+    registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
+    registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
+    registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
+    registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+
+    registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
+    registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
+    registerCommand(EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { prevTextElement(); });
+
+    // note input commands
+
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN /*default*/);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, NoteInputMethod::BY_DURATION);
@@ -598,33 +629,86 @@ void NotationActionController::init()
     }
     dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });
 
-    // commands
+    // compat
     {
-        //! NOTE For historical reasons, the name of the action does not match what needs to be done
-        registerCommand(CANCEL_COMMAND, &Controller::resetState);
-        m_isAllowedDuringPlayback.insert("action://notation/cancel");
+        static std::map<ActionCode, rcommand::Command> actionToCommand = {
+            { "action://notation/copy", COPY_COMMAND },
+            { "action://notation/cut", CUT_COMMAND },
+            { "action://notation/paste", PASTE_COMMAND },
+            { "action://notation/delete", DELETE_COMMAND },
+            { "action://notation/cancel", CANCEL_COMMAND },
+            { "action://notation/undo", UNDO_COMMAND },
+            { "action://notation/redo", REDO_COMMAND },
+            { "action://copy", COPY_COMMAND },
+            { "action://cut", CUT_COMMAND },
+            { "action://paste", PASTE_COMMAND },
+            { "action://delete", DELETE_COMMAND },
+            { "action://cancel", CANCEL_COMMAND },
+            { "action://undo", UNDO_COMMAND },
+            { "action://redo", REDO_COMMAND },
+            { "notation-move-right", MOVE_RIGHT_COMMAND },
+            { "notation-move-left", MOVE_LEFT_COMMAND },
+            { "notation-move-right-quickly", MOVE_RIGHT_QUICKLY_COMMAND },
+            { "notation-move-left-quickly", MOVE_LEFT_QUICKLY_COMMAND },
+            { "pitch-up", PITCH_UP_COMMAND },
+            { "pitch-down", PITCH_DOWN_COMMAND },
+            { "pitch-up-octave", PITCH_UP_OCTAVE_COMMAND },
+            { "pitch-down-octave", PITCH_DOWN_OCTAVE_COMMAND },
+            { "next-word", EDIT_NEXT_WORD_COMMAND },
+            { "next-text-element", EDIT_NEXT_TEXT_ELEMENT_COMMAND },
+            { "prev-text-element", EDIT_PREV_TEXT_ELEMENT_COMMAND },
+            { "note-input", TOGGLE_NOTE_INPUT_COMMAND },
+            { "note-input-by-note-name", TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND },
+            { "note-input-by-duration", TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND },
+            { "note-input-rhythm", TOGGLE_NOTE_INPUT_RHYTHM_COMMAND },
+            { "note-input-repitch", TOGGLE_NOTE_INPUT_REPITCH_COMMAND },
+            { "note-input-realtime-auto", TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND },
+            { "note-input-realtime-manual", TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND },
+            { "note-input-timewise", TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND },
+            { "realtime-advance", REALTIME_ADVANCE_COMMAND },
+            { "note-longa", NOTE_LONGA_COMMAND },
+            { "note-breve", NOTE_BREVE_COMMAND },
+            { "pad-note-1", PAD_NOTE_1_COMMAND },
+            { "pad-note-2", PAD_NOTE_2_COMMAND },
+            { "pad-note-4", PAD_NOTE_4_COMMAND },
+            { "pad-note-8", PAD_NOTE_8_COMMAND },
+            { "pad-note-16", PAD_NOTE_16_COMMAND },
+            { "pad-note-32", PAD_NOTE_32_COMMAND },
+            { "pad-note-64", PAD_NOTE_64_COMMAND },
+            { "pad-note-128", PAD_NOTE_128_COMMAND },
+            { "pad-note-256", PAD_NOTE_256_COMMAND },
+            { "pad-note-512", PAD_NOTE_512_COMMAND },
+            { "pad-note-1024", PAD_NOTE_1024_COMMAND },
+            { "pad-dot", PAD_DOT_COMMAND },
+            { "pad-dot2", PAD_DOT2_COMMAND },
+            { "pad-dot3", PAD_DOT3_COMMAND },
+            { "pad-dot4", PAD_DOT4_COMMAND },
+            { "pad-rest", PAD_REST_COMMAND },
+            { "flat2", TOGGLE_FLAT2_COMMAND },
+            { "flat", TOGGLE_FLAT_COMMAND },
+            { "nat", TOGGLE_NAT_COMMAND },
+            { "sharp", TOGGLE_SHARP_COMMAND },
+            { "sharp2", TOGGLE_SHARP2_COMMAND },
+            { "tie", ADD_TIE_COMMAND },
+            { "lv", ADD_LV_COMMAND },
+            { "add-slur", ADD_SLUR_COMMAND },
+            { "add-marcato", ADD_MARCATO_COMMAND },
+            { "add-sforzato", ADD_SFORZATO_COMMAND },
+            { "add-tenuto", ADD_TENUTO_COMMAND },
+            { "add-staccato", ADD_STACCATO_COMMAND },
+            { "voice-1", USE_VOICE_1_COMMAND },
+            { "voice-2", USE_VOICE_2_COMMAND },
+            { "voice-3", USE_VOICE_3_COMMAND },
+            { "voice-4", USE_VOICE_4_COMMAND },
+            { "flip", FLIP_COMMAND },
+            { "flip-horizontally", FLIP_HORIZONTALLY_COMMAND },
+        };
 
-        registerCommand(COPY_COMMAND, &Interaction::copySelection);
-        registerCommand(CUT_COMMAND, &Controller::cutSelection);
-        registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
-        registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
-
-        registerCommand(UNDO_COMMAND, &Interaction::undo);
-        registerCommand(REDO_COMMAND, &Interaction::redo);
-
-        registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
-        registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
-        registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
-        registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
-
-        registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
-        registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
-        registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
-        registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
-
-        registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
-        registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
-        registerCommand(EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { prevTextElement(); });
+        auto ad = dispatcher();
+        auto d = commandDispatcher();
+        for (const auto& [actionCode, command] : actionToCommand) {
+            ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
+        }
     }
 }
 
