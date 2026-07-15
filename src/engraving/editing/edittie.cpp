@@ -137,12 +137,21 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
 
         // set cursor at position after note
         if (c->isGraceBefore()) {
-            // tie grace note before to main note; a grace note before a rest has no note to tie to
-            ChordRest* host = toChordRest(c->explicitParent());
-            if (!host->isChord()) {
-                continue;
+        if (c->isGraceBefore()) {
+            // tie grace note before to next grace note or main note
+            Note* nextNote = searchTieNote(note);
+            if (nextNote && nextNote->chord()->isGrace()) {
+                cr = nextNote->chord();
+                addToChord = true;
+            } else {
+                ChordRest* host = toChordRest(c->explicitParent());
+                if (!host->isChord()) {
+                    continue; // rest has no main note to tie to
+                }
+                cr = host;
+                addToChord = true;
             }
-            cr = host;
+        } else {
             addToChord = true;
         } else {
             is.setTrack(note->chord()->track());
