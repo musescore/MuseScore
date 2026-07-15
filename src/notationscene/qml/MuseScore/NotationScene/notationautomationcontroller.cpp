@@ -43,6 +43,22 @@ static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx
     return pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size());
 }
 
+// Rescale between the common dynamic value range [PPPP, FFFF] and the full [0, 1] display range
+// (the staff box), so those points fill the staff
+static const muse::real_t DISPLAY_VALUE_RANGE_MIN = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPPP);
+static const muse::real_t DISPLAY_VALUE_RANGE_MAX = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFFF);
+
+static double automationValueToDisplay(muse::real_t value)
+{
+    const double display = (value - DISPLAY_VALUE_RANGE_MIN) / (DISPLAY_VALUE_RANGE_MAX - DISPLAY_VALUE_RANGE_MIN);
+    return std::clamp(display, 0.0, 1.0);
+}
+
+static muse::real_t automationValueFromDisplay(double displayValue)
+{
+    return DISPLAY_VALUE_RANGE_MIN + displayValue * (DISPLAY_VALUE_RANGE_MAX - DISPLAY_VALUE_RANGE_MIN);
+}
+
 // TODO: This will do for now, but it needs to be smarter because there will be gaps between ChordRest/TimeTick segment types (e.g.
 // barlines). This method effectively needs to return the closest segment of the desired type (and probably whether canvasX is before
 // or after the segment). If the canvasX is before the closest segment, then we'll go on to use the start tick of the segment. If it's
@@ -187,19 +203,19 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
         const double segXInStaff = seg->canvasX() - sysStaffCanvasRect.x(); // The segment's x relative to the staff
         const double pointXInStaff = (segXInStaff + pointXInSeg) / sysStaffCanvasRect.width();
 
-        // Point in/out values are always between 0 and 1 - higher value == lower Y...
+        // Point in/out values are rescaled to the display range - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = it->second;
         const mu::engraving::real_t resolvedIn = mu::engraving::resolvedInValue(curve, it);
         if (resolvedIn == autoPoint.outValue) {
-            const QPointF qpf(pointXInStaff, 1.0 - resolvedIn);
+            const QPointF qpf(pointXInStaff, 1.0 - automationValueToDisplay(resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
             continue;
         }
 
-        const QPointF qpfIn(pointXInStaff, 1.0 - resolvedIn);
+        const QPointF qpfIn(pointXInStaff, 1.0 - automationValueToDisplay(resolvedIn));
         points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
 
-        const QPointF qpfOut(pointXInStaff, 1.0 - autoPoint.outValue);
+        const QPointF qpfOut(pointXInStaff, 1.0 - automationValueToDisplay(autoPoint.outValue));
         points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
     }
 
@@ -326,8 +342,8 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const mu::engraving::AutomationPoint& existingPoint = existingIt->second;
     const mu::engraving::real_t existingInValue = mu::engraving::resolvedInValue(curve, existingIt);
 
-    //! NOTE: Point in/out values are always between 0 and 1 - higher value == lower Y...
-    const double newValue = 1.0 - y;
+    //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
+    const mu::engraving::real_t newValue = automationValueFromDisplay(1.0 - y);
 
     // STEP 4 - Update the point's value, and move it to the new tick if necessary...
 
