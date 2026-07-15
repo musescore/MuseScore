@@ -92,10 +92,11 @@ TEST_F(Engraving_EIDTests, deletedExcerptScoreItemsAreUnregistered)
     EXPECT_EQ(master->eidRegister()->itemFromEID(eid), measure);
 
     // Deleting the part score (as when an excerpt is removed) must unregister
-    // its items from the master score's register, which stays alive
+    // its items from the master score's register, which stays alive.
+    // itemFromEID() asserts on a missing entry, so query by item instead.
     delete partScore;
 
-    EXPECT_EQ(master->eidRegister()->itemFromEID(eid), nullptr);
+    EXPECT_FALSE(master->eidRegister()->EIDFromItem(measure).isValid());
 
     delete master;
 }
