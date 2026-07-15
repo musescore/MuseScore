@@ -60,5 +60,7 @@ public:
     virtual engraving::AccidentalType currentAccidentalType() const = 0;
     virtual std::set<engraving::SymId> currentArticulations() const = 0;
     virtual engraving::voice_idx_t currentVoice() const = 0;
+
+    virtual bool isNoteInputActionAllowed() const = 0;
 };
 }

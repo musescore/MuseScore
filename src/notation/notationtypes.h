@@ -162,6 +162,26 @@ enum class NoteName : unsigned char
     B
 };
 
+inline NoteName str_conv(const std::string& name, NoteName def)
+{
+    if (name == "c") {
+        return NoteName::C;
+    } else if (name == "d") {
+        return NoteName::D;
+    } else if (name == "e") {
+        return NoteName::E;
+    } else if (name == "f") {
+        return NoteName::F;
+    } else if (name == "g") {
+        return NoteName::G;
+    } else if (name == "a") {
+        return NoteName::A;
+    } else if (name == "b") {
+        return NoteName::B;
+    }
+    return def;
+}
+
 enum class PastingType : unsigned char {
     Default,
     Half,

@@ -28,6 +28,13 @@
 #include "context/shortcutcontext.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
+#include "notation/inotationautomation.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotation.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationundostack.h"
+
+#include "engraving/style/styledef.h"
 
 using namespace mu;
 using namespace mu::notation;

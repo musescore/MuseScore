@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/commandtypes.h"
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
 #include "ui/inavigationcontroller.h"
@@ -95,6 +96,8 @@ public:
     std::set<engraving::SymId> currentArticulations() const override;
     engraving::voice_idx_t currentVoice() const override;
 
+    bool isNoteInputActionAllowed() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -122,6 +125,8 @@ private:
     void toggleNoteInputInsert();
     void handleNoteAction(NoteName note, NoteAddingMode addingMode);
     void handleNoteAction(const muse::actions::ActionData& args);
+    void handleNoteAction(const muse::rcommand::CommandQuery& query);
+    void handleNoteAction(const NoteInputParams& params, const NoteAddingMode& addingMode);
     void padNote(const Pad& pad);
     void putNote(const muse::actions::ActionData& args);
     void removeNote(const muse::actions::ActionData& args);
@@ -278,9 +283,6 @@ private:
 
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
 
-    bool noteInputActionAllowed() const;
-    void registerNoteAction(const muse::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
-
     void registerPadNoteAction(const muse::actions::ActionCode&, Pad padding);
     void registerTabPadNoteAction(const muse::actions::ActionCode&, Pad padding);
 
@@ -311,10 +313,12 @@ private:
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
+    void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(const muse::rcommand::CommandQuery&));
 
+    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding);
+    void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
 
     muse::async::Channel<bool> m_hasSelectionChanged;
     muse::async::Channel<bool> m_textEditingChanged;

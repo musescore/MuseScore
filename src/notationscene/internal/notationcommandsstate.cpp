@@ -124,6 +124,30 @@ static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
     { USE_VOICE_4_COMMAND, 3 }
 };
 
+static const std::vector<Command> NOTE_COMMANDS = {
+    ENTER_NOTE_C_COMMAND,
+    ENTER_NOTE_D_COMMAND,
+    ENTER_NOTE_E_COMMAND,
+    ENTER_NOTE_F_COMMAND,
+    ENTER_NOTE_G_COMMAND,
+    ENTER_NOTE_A_COMMAND,
+    ENTER_NOTE_B_COMMAND,
+    ADD_NOTE_C_COMMAND,
+    ADD_NOTE_D_COMMAND,
+    ADD_NOTE_E_COMMAND,
+    ADD_NOTE_F_COMMAND,
+    ADD_NOTE_G_COMMAND,
+    ADD_NOTE_A_COMMAND,
+    ADD_NOTE_B_COMMAND,
+    INSERT_NOTE_C_COMMAND,
+    INSERT_NOTE_D_COMMAND,
+    INSERT_NOTE_E_COMMAND,
+    INSERT_NOTE_F_COMMAND,
+    INSERT_NOTE_G_COMMAND,
+    INSERT_NOTE_A_COMMAND,
+    INSERT_NOTE_B_COMMAND
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -173,6 +197,7 @@ void NotationCommandsState::init()
         updateCommandStates(ADD_COMMANDS);
         updateCommandStates(commands(ADD_ARTICULATION_COMMANDS));
         updateCommandStates(commands(VOICE_COMMANDS));
+        updateCommandStates(NOTE_COMMANDS);
     });
 
     updateCommandStates();
@@ -221,6 +246,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
     }
     if (command == REDO_COMMAND) {
         return CommandState(controller()->canRedo(), false);
+    }
+
+    if (muse::contains(NOTE_COMMANDS, command)) {
+        return CommandState(controller()->isNoteInputActionAllowed(), false);
     }
 
     if (muse::contains(TEXT_EDITING_COMMANDS, command)) {
