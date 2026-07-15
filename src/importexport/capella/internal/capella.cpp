@@ -530,25 +530,15 @@ static Segment* createAndAddTimeSig(Score*, Measure* m, Fraction f, int track, F
     return s;
 }
 
-//---------------------------------------------------------
-//   attachPendingGraceNotes
-//    attach pending grace chords that match the host voice; delete the rest so
-//    voice-mismatched Factory-allocated chords are not leaked
-//---------------------------------------------------------
-
 static void attachPendingGraceNotes(ChordRest* cr, QList<Chord*>& graceNotes)
 {
     for (int ii = graceNotes.size() - 1; ii >= 0; ii--) {
-        Chord* gc = graceNotes[ii];
-        if (gc->voice() == cr->voice()) {
-            cr->add(gc);
-        } else {
-            delete gc;
+        if (graceNotes[ii]->voice() == cr->voice()) {
+            cr->add(graceNotes[ii]);
+            graceNotes.removeAt(ii);
         }
     }
-    graceNotes.clear();
 }
-
 //---------------------------------------------------------
 //   readCapVoice
 //---------------------------------------------------------
