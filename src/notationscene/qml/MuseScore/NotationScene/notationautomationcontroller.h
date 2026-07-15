@@ -112,7 +112,7 @@ private:
     void updatePolylinesGeometry();
     void onCurrentNotationChanged();
 
-    void requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
+    bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
 
     INotationAutomationPtr automation() const;
     mu::engraving::IAutomation* engravingAutomation() const;

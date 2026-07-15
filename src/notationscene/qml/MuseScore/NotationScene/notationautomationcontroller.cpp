@@ -82,6 +82,18 @@ static const Segment* segmentForCanvasX(const System* system, double canvasX)
     return nullptr;
 }
 
+static const Segment* lastSegmentOfSystem(const System* system)
+{
+    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration;
+    const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
+    const Segment* last = nullptr;
+    while (seg && seg->system() == system) {
+        last = seg;
+        seg = seg->next1(type);
+    }
+    return last;
+}
+
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_linesParent(linesParent)
 {
@@ -113,6 +125,10 @@ NotationAutomationController::SysStaffToPolylinesMap NotationAutomationControlle
     const int systemStartTick = system->first()->tick().ticks();
     const int systemEndTick = system->last()->endTick().ticks();
 
+    const Measure* firstMeasure = system->firstMeasure();
+    const Segment* firstSeg = firstMeasure ? firstMeasure->first(mu::engraving::SegmentType::Duration) : nullptr;
+    const Segment* lastSeg = lastSegmentOfSystem(system);
+
     staff_idx_t staffIdx = system->firstVisibleStaff();
     while (staffIdx != muse::nidx) {
         const Staff* staff = score()->staff(staffIdx);
@@ -134,6 +150,7 @@ NotationAutomationController::SysStaffToPolylinesMap NotationAutomationControlle
         //! as 1 polyline point, whereas a point with different in/out values will be represented with 2
         //! separate polyline points...
         QVector<QPointF> pointsForPolyline;
+        pointsForPolyline.reserve(pointsData.size());
         for (const PointData& pointData : pointsData) {
             pointsForPolyline.emplace_back(pointData.qPointF);
         }
@@ -145,22 +162,32 @@ NotationAutomationController::SysStaffToPolylinesMap NotationAutomationControlle
         const SysStaffKey key(system, staffIdx);
         map.emplace(key, PolylinesSet({ polyline }));
 
+        // Points can't be dragged past the system's first/last segment
+        const qreal minX = firstSeg ? (firstSeg->canvasX() - staffCanvasRect.x()) / staffCanvasRect.width() : 0.0;
+        const qreal maxX = lastSeg ? (lastSeg->canvasX() + lastSeg->width() - staffCanvasRect.x()) / staffCanvasRect.width() : 1.0;
+
         QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
-                         [this, key, polyline, pointsData](int pointIdx, qreal x, qreal y, bool completed) {
+                         [this, key, polyline, pointsData, minX, maxX](int pointIdx, qreal x, qreal y, bool completed) {
             IF_ASSERT_FAILED(polylinePointIndexIsValid(polyline, pointIdx)) {
                 return;
             }
-            QVector<QPointF> points = polyline->points();
-            points.replace(pointIdx, { x, y });
-            polyline->setPoints(points);
-            polyline->update(); // TODO: pass update rect?
+            const qreal clampedX = std::clamp(x, minX, maxX);
+
             if (completed) {
-                // Only request to update the model when completed...
+                // Only request to update the model when completed... If rejected, leave the point
+                // where the live drag preview last put it rather than moving it any further
                 IF_ASSERT_FAILED(pointIdx < pointsData.size()) {
                     return;
                 }
-                requestEditPoint(pointsData.at(pointIdx), key, x, y);
+                if (!requestEditPoint(pointsData.at(pointIdx), key, clampedX, y)) {
+                    return;
+                }
             }
+
+            QVector<QPointF> points = polyline->points();
+            points.replace(pointIdx, { clampedX, y });
+            polyline->setPoints(points);
+            polyline->update(); // TODO: pass update rect?
         });
 
         staffIdx = system->nextVisibleStaff(staffIdx);
@@ -359,18 +386,18 @@ void NotationAutomationController::onCurrentNotationChanged()
     updatePolylinesGeometry();
 }
 
-void NotationAutomationController::requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y)
+bool NotationAutomationController::requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y)
 {
     // STEP 1 - Check that all of our parameters are valid...
     const PointData::PointType pointType = oldPointData.pointType;
     IF_ASSERT_FAILED(key.isValid() && pointType != PointData::PointType::UNKNOWN) {
-        return;
+        return false;
     }
     const System* system = key.system;
     const SysStaff* sysStaff = system ? system->staff(key.staffIdx) : nullptr;
     const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
     IF_ASSERT_FAILED(sysStaff && staff) {
-        return;
+        return false;
     }
 
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
@@ -378,10 +405,10 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
     const double pointCanvasX = staffStartCanvasX + x * (staffEndCanvasX - staffStartCanvasX);
 
-    // TODO: See segmentForCanvasX - it needs to be a bit smarter...
+    // No segment at this position - reject the move rather than guessing where it should go
     const Segment* newSeg = segmentForCanvasX(system, pointCanvasX);
-    IF_ASSERT_FAILED(newSeg) {
-        return;
+    if (!newSeg) {
+        return false;
     }
 
     // STEP 2 - Determine the new tick value based on the x parameter...
@@ -402,7 +429,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     const mu::engraving::AutomationCurve& curve = engravingAutomation()->curve(curveKey);
     const auto existingIt = curve.find(oldPointData.tick);
     IF_ASSERT_FAILED(existingIt != curve.end()) {
-        return;
+        return false;
     }
     const mu::engraving::AutomationPoint& existingPoint = existingIt->second;
     const mu::engraving::real_t existingInValue = mu::engraving::resolvedInValue(curve, existingIt);
@@ -430,7 +457,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         }
         editedPoint.generated = false;
         engravingAutomation()->editPoints(curveKey, { { newTick, editedPoint, oldPointData.tick } });
-        return;
+        return true;
     }
 
     // oldTick becomes a flat BOTH point via SameAsOut, so its inValue keeps following outValue
@@ -448,6 +475,7 @@ void NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     newPoint.interpolation = existingPoint.interpolation;
     newPoint.itemId = existingPoint.itemId;
     engravingAutomation()->editPoints(curveKey, { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } });
+    return true;
 }
 
 INotationAutomationPtr NotationAutomationController::automation() const
