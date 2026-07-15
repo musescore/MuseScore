@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"

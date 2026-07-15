@@ -585,6 +585,10 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
+    <key>add-slur</key>
+    <seq>S</seq>
+    </SC>
+  <SC>
     <key>hammer-on-pull-off</key>
     <seq>Alt+H</seq>
     </SC>
@@ -801,6 +805,21 @@
     <seq>Ctrl+M</seq>
     </SC>
   <SC>
+    <key>play</key>
+    <seq>Space</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
+    <key>play-from-selection</key>
+    <seq>Shift+Space</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
+    <key>pause-and-select</key>
+    <seq>Ctrl+Space</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
     <key>notation-select-all</key>
     <seq>Ctrl+A</seq>
     </SC>
@@ -925,6 +944,20 @@
     <key>masterpalette</key>
     <seq>Shift+F9</seq>
     <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
+    <key>next-word</key>
+    <seq>Space</seq>
+    </SC>
+  <SC>
+    <key>next-text-element</key>
+    <seq>Right</seq>
+    </SC>
+  <SC>
+    <key>prev-text-element</key>
+    <seq>Shift+Space</seq>
+    <seq>Left</seq>
+    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>next-syllable</key>
