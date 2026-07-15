@@ -22,12 +22,14 @@ echo "Publish Docker MuseScore"
 
 ARTIFACTS_DIR=build.artifacts
 MU_VERSION=""
+PACKARCH="" # architecture (x86_64, aarch64)
 ACCESS_USER="igorkorsukov" # For test, should be replaced with muse-bot
 ACCESS_TOKEN=$GITHUB_TOKEN
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) MU_VERSION="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         -t|--token) ACCESS_TOKEN="$2"; shift ;;
         -u|--user) ACCESS_USER="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -36,16 +38,21 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ -z "$MU_VERSION" ]; then MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env); fi
+if [ -z "$PACKARCH" ]; then PACKARCH="x86_64"; fi
 
 if [ -z "$MU_VERSION" ]; then echo "Error: Version not set"; exit 1; fi
 if [ -z "$ACCESS_TOKEN" ]; then echo "Error: Token not set"; exit 1; fi
 if [ -z "$ACCESS_USER" ]; then echo "Error: User not set"; exit 1; fi
 
+ARCH_SUFFIX=""
+if [ "$PACKARCH" != "x86_64" ]; then ARCH_SUFFIX="_${PACKARCH}"; fi
+DOCKER_TAG=${MU_VERSION}${ARCH_SUFFIX}
+
 echo "Login Docker"
 echo $ACCESS_TOKEN | docker login ghcr.io -u $ACCESS_USER --password-stdin
 
 echo "Push Docker"
-docker push ghcr.io/musescore/converter_4:${MU_VERSION}
+docker push ghcr.io/musescore/converter_4:${DOCKER_TAG}
 
 echo "Done!!"
 
