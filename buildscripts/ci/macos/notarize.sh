@@ -80,3 +80,13 @@ echo "Stapling and running packaging up"
 xcrun stapler staple $ARTIFACTS_DIR/$ARTIFACT_NAME
 echo "Staple finished!"
 xcrun stapler validate $ARTIFACTS_DIR/$ARTIFACT_NAME
+
+echo "Checking Gatekeeper policy..."
+MOUNT_POINT=$(mktemp -d)
+hdiutil attach "$ARTIFACTS_DIR/$ARTIFACT_NAME" -mountpoint "$MOUNT_POINT" -nobrowse -readonly
+APP_PATH="$(ls -d "$MOUNT_POINT"/*.app)"
+c=0
+xcrun syspolicy_check distribution "$APP_PATH" || c=$?
+hdiutil detach "$MOUNT_POINT"
+if [ $c -ne 0 ]; then echo "syspolicy_check failed"; exit 1; fi
+echo "syspolicy_check passed!"
