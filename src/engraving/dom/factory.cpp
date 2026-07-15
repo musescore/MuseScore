@@ -75,6 +75,7 @@
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
+#include "pagelockindicator.h"
 #include "palmmute.h"
 #include "parenthesis.h"
 #include "partialtie.h"
@@ -102,7 +103,7 @@
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "rangelock.h"
+#include "systemlockindicator.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tapping.h"
@@ -480,9 +481,9 @@ CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
 
 PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
-    PageLockIndicator* sli = new PageLockIndicator(parent, lock);
-    sli->setAccessibleEnabled(isAccessibleEnabled);
-    return sli;
+    PageLockIndicator* pli = new PageLockIndicator(parent, lock);
+    pli->setAccessibleEnabled(isAccessibleEnabled);
+    return pli;
 }
 
 COPY_ITEM_IMPL(PageLockIndicator)

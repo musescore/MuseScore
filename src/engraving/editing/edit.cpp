@@ -64,6 +64,7 @@
 #include "../dom/note.h"
 #include "../dom/noteline.h"
 #include "../dom/ottava.h"
+#include "../dom/pagelockindicator.h"
 #include "../dom/part.h"
 #include "../dom/partialtie.h"
 #include "../dom/playcounttext.h"
@@ -80,6 +81,7 @@
 #include "../dom/sticking.h"
 #include "../dom/stringtunings.h"
 #include "../dom/system.h"
+#include "../dom/systemlockindicator.h"
 #include "../dom/systemtext.h"
 #include "../dom/tapping.h"
 #include "../dom/tempotext.h"
@@ -2706,7 +2708,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     MeasureBase* localInsertMeasureBase = nullptr;
     if (type == ElementType::MEASURE) {
         if (MeasureBase* masterInsertMeasure = masterScore()->insertMeasure(beforeMeasure, options)) {
-            localInsertMeasureBase = measureAtTick(masterInsertMeasure->tick());
+            localInsertMeasureBase = tick2measure(masterInsertMeasure->tick());
         }
     } else {
         localInsertMeasureBase = insertBox(type, beforeMeasure, options);

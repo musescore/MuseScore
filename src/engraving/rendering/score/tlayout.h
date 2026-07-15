@@ -80,6 +80,7 @@
 #include "../../dom/note.h"
 #include "../../dom/notedot.h"
 
+#include "../../dom/pagelockindicator.h"
 #include "../../dom/parenthesis.h"
 #include "../../dom/playcounttext.h"
 #include "../../dom/playtechannotation.h"

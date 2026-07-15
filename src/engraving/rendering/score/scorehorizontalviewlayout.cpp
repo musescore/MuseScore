@@ -28,6 +28,7 @@
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/system.h"
+#include "dom/systemlockindicator.h"
 #include "dom/spanner.h"
 #include "dom/page.h"
 #include "dom/durationelement.h"

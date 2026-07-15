@@ -100,6 +100,7 @@
 #include "dom/ottava.h"
 
 #include "dom/page.h"
+#include "dom/pagelockindicator.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 #include "dom/palmmute.h"
@@ -131,8 +132,8 @@
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
+#include "dom/systemlockindicator.h"
 #include "dom/systemtext.h"
-#include "dom/rangelock.h"
 #include "dom/soundflag.h"
 
 #include "dom/tapping.h"

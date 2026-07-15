@@ -53,6 +53,7 @@
 #include "staff.h"
 #include "staffstate.h"
 #include "system.h"
+#include "systemlockindicator.h"
 #include "timesig.h"
 #include "tuplet.h"
 #include "utils.h"

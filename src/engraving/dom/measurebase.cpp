@@ -143,7 +143,7 @@ Page* MeasureBase::page() const
 
 Page* MeasureBase::prevPage() const
 {
-    Page* curPage = system() ? system()->page() : nullptr;
+    Page* curPage = page();
     IF_ASSERT_FAILED(curPage) {
         return nullptr;
     }
@@ -158,7 +158,7 @@ Page* MeasureBase::prevPage() const
 
 Page* MeasureBase::nextPage() const
 {
-    Page* curPage = system() ? system()->page() : nullptr;
+    Page* curPage = page();
     IF_ASSERT_FAILED(curPage) {
         return nullptr;
     }
@@ -952,7 +952,7 @@ Measure* MeasureBaseList::measureByTick(int tick) const
     return nullptr;
 }
 
-MeasureBase* MeasureBaseList::measureBaseByTick(int tick) const
+MeasureBase* MeasureBaseList::firstMeasureBaseAtTick(int tick) const
 {
     if (empty() || tick > m_last->endTick().ticks()) {
         return nullptr;

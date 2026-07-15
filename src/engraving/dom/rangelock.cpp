@@ -22,14 +22,9 @@
 
 #include "measure.h"
 #include "measurebase.h"
-#include "page.h"
-#include "score.h"
-#include "system.h"
 #include "rangelock.h"
 
 #include "log.h"
-
-using namespace muse::draw;
 
 namespace mu::engraving {
 bool RangeLock::contains(const MeasureBase* mb) const
@@ -97,12 +92,7 @@ std::vector<const RangeLock*> RangeLocks::locksContainedInRange(const MeasureBas
 
 std::vector<const RangeLock*> RangeLocks::allLocks() const
 {
-    std::vector <const RangeLock* > locks;
-    locks.reserve(m_rangeLocks.size());
-    for (auto& pair : m_rangeLocks) {
-        locks.push_back(pair.second);
-    }
-    return locks;
+    return muse::values(m_rangeLocks);
 }
 
 #ifndef NDEBUG
@@ -141,51 +131,4 @@ void RangeLocks::dump() const
 }
 
 #endif
-
-SystemLockIndicator::SystemLockIndicator(System* parent, const RangeLock* lock)
-    : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
-
-void SystemLockIndicator::setSelected(bool v)
-{
-    EngravingItem::setSelected(v);
-    renderer()->layoutItem(this);
-    system()->page()->invalidateBspTree();
-}
-
-String SystemLockIndicator::formatBarsAndBeats() const
-{
-    const MeasureBase* startMB = m_systemLock->startMB();
-    const MeasureBase* endMB = m_systemLock->endMB();
-    const Measure* startMeasure = startMB->isMeasure() ? toMeasure(startMB) : toMeasure(startMB->prevMeasure());
-    const Measure* endMeasure = endMB->isMeasure() ? toMeasure(endMB) : toMeasure(endMB->prevMeasure());
-    const int startMeasureNum = startMeasure ? startMeasure->measureNumber() : -1;
-    const int endMeasureNum = endMeasure ? endMeasure->measureNumber() : -1;
-    return muse::mtrc("engraving", "Start measure: %1; End measure: %2").arg(startMeasureNum).arg(endMeasureNum);
-}
-
-PageLockIndicator::PageLockIndicator(System* parent, const RangeLock* lock)
-    : IndicatorIcon(ElementType::PAGE_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_pageLock(lock) {}
-
-void PageLockIndicator::setSelected(bool v)
-{
-    EngravingItem::setSelected(v);
-    renderer()->layoutItem(this);
-    system()->page()->invalidateBspTree();
-}
-
-const Page* PageLockIndicator::page() const
-{
-    return system() ? system()->page() : nullptr;
-}
-
-String PageLockIndicator::formatBarsAndBeats() const
-{
-    const MeasureBase* startMB = m_pageLock->startMB();
-    const MeasureBase* endMB = m_pageLock->endMB();
-    const Measure* startMeasure = startMB->isMeasure() ? toMeasure(startMB) : toMeasure(startMB->prevMeasure());
-    const Measure* endMeasure = endMB->isMeasure() ? toMeasure(endMB) : toMeasure(endMB->prevMeasure());
-    const int startMeasureNum = startMeasure ? startMeasure->measureNumber() : -1;
-    const int endMeasureNum = endMeasure ? endMeasure->measureNumber() : -1;
-    return muse::mtrc("engraving", "Start measure: %1; End measure: %2").arg(startMeasureNum).arg(endMeasureNum);
-}
 } // namespace mu::engraving

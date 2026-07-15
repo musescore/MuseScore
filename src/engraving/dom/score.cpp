@@ -1921,8 +1921,8 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     Fraction tickOfAppend = last()->endTick();
     TieMap tieMap;
 
-    MeasureBase* fmb = score->measureAtTick(startTick);
-    MeasureBase* emb = score->measureAtTick(endTick);
+    MeasureBase* fmb = score->tick2measure(startTick);
+    MeasureBase* emb = score->tick2measure(endTick);
     Fraction curTick = tickOfAppend;
     for (MeasureBase* cmb = fmb; cmb != emb; cmb = cmb->next()) {
         MeasureBase* nmb;

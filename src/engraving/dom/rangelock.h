@@ -24,7 +24,6 @@
 
 #include <map>
 
-#include "indicatoricon.h"
 #include "measurebase.h"
 
 namespace mu::engraving {
@@ -76,51 +75,5 @@ private:
     };
 
     std::map<const MeasureBase*, const RangeLock*, Ordering> m_rangeLocks;
-};
-
-class SystemLockIndicator : public IndicatorIcon
-{
-    OBJECT_ALLOCATOR(engraving, SystemLockIndicator)
-    DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
-
-public:
-    SystemLockIndicator(System* parent, const RangeLock* lock);
-
-    void setSelected(bool v) override;
-
-    const RangeLock* systemLock() const { return m_systemLock; }
-
-    char16_t iconCode() const override { return 0xF487; }
-
-    String formatBarsAndBeats() const override;
-
-private:
-    const RangeLock* m_systemLock = nullptr;
-};
-
-class PageLockIndicator : public IndicatorIcon
-{
-    OBJECT_ALLOCATOR(engraving, PageLockIndicator)
-    DECLARE_CLASSOF(ElementType::PAGE_LOCK_INDICATOR)
-
-public:
-    PageLockIndicator(System* parent, const RangeLock* lock);
-
-    void setSelected(bool v) override;
-
-    const RangeLock* pageLock() const { return m_pageLock; }
-    const Page* page() const;
-
-    char16_t iconCode() const override { return 0xF4C3; }
-
-    String formatBarsAndBeats() const override;
-
-    struct LayoutData : public IndicatorIcon::LayoutData {
-        ld_field<RectF> innerRangeRect = { "[PageLockIndicator] innerRangeRect", RectF() };
-    };
-    DECLARE_LAYOUTDATA_METHODS(PageLockIndicator)
-
-private:
-    const RangeLock* m_pageLock = nullptr;
 };
 } // namespace mu::engraving

@@ -46,6 +46,7 @@
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
+#include "dom/pagelockindicator.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
@@ -57,6 +58,7 @@
 #include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
+#include "dom/systemlockindicator.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolosinglechord.h"
@@ -523,6 +525,10 @@ void SystemLayout::layoutPageLockIndicators(System* system)
 {
     Page* page = system->page();
     system->deletePageLockIndicator();
+
+    IF_ASSERT_FAILED(!page->systems().empty()) {
+        return;
+    }
 
     const RangeLock* lock = page->pageLock();
     if (!lock || page->systems().back() != system) {

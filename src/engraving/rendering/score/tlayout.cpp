@@ -132,6 +132,7 @@
 #include "dom/symbol.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
+#include "dom/systemlockindicator.h"
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 

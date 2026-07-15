@@ -40,6 +40,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "page.h"
+#include "pagelockindicator.h"
 #include "part.h"
 #include "score.h"
 #include "segment.h"
@@ -49,6 +50,7 @@
 #include "staffvisibilityindicator.h"
 #include "system.h"
 #include "systemdivider.h"
+#include "systemlockindicator.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

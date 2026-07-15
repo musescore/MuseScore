@@ -55,6 +55,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "notedot.h"
+#include "pagelockindicator.h"
 #include "part.h"
 #include "partialtie.h"
 #include "rest.h"
@@ -425,7 +426,7 @@ std::vector<System*> Selection::selectedSystems() const
     return systems;
 }
 
-std::vector<Page*> mu::engraving::Selection::selectedPages() const
+std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
 {
     EngravingItem* el = element();
     if (el && (el->isPageLockIndicator())) {

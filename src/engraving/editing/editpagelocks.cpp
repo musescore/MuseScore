@@ -28,9 +28,10 @@
 
 #include "../dom/measurebase.h"
 #include "../dom/page.h"
+#include "../dom/pagelockindicator.h"
+#include "../dom/rangelock.h"
 #include "../dom/score.h"
 #include "../dom/system.h"
-#include "../dom/rangelock.h"
 
 using namespace mu::engraving;
 

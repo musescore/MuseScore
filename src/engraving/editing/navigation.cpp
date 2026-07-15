@@ -34,6 +34,7 @@
 #include "../dom/measurerepeat.h"
 #include "../dom/mscore.h"
 #include "../dom/note.h"
+#include "../dom/pagelockindicator.h"
 #include "../dom/rest.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
@@ -41,6 +42,7 @@
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
+#include "../dom/systemlockindicator.h"
 #include "../dom/tapping.h"
 #include "../style/style.h"
 

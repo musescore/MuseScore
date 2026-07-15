@@ -1963,7 +1963,7 @@ bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool>
         // Invalidate BSP tree of affected pages
         System* lastSeenSystem = nullptr;
         Page* lastSeenPage = nullptr;
-        for (MeasureBase* mb = score()->measureAtTick(showAnchors.startTickExtendedRegion);
+        for (MeasureBase* mb = score()->tick2measure(showAnchors.startTickExtendedRegion);
              mb && mb->tick() <= showAnchors.endTickExtendedRegion;
              mb = mb->next()) {
             System* s = mb->system();
@@ -6231,7 +6231,7 @@ void NotationInteraction::moveSystemToNextPage()
 void NotationInteraction::togglePageLock()
 {
     transaction(TranslatableString("undoableAction", "Lock/unlock selected page(s)"), [&](auto& tx) {
-        EditPageLocks::togglePageLock(tx, score(), selection()->selectedPages());
+        EditPageLocks::togglePageLock(tx, score(), selection()->pagesContainingSelection());
     });
 }
 

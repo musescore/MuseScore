@@ -38,10 +38,8 @@ Column {
     property bool isLocked: false
     property int itemCount: 0
 
-    property string lockLabelSingular: ""
-    property string lockLabelPlural: ""
-    property string unlockLabelSingular: ""
-    property string unlockLabelPlural: ""
+    property string lockLabel: ""
+    property string unlockLabel: ""
 
     property string lockToolTipTitle: ""
     property string lockToolTipDescription: ""
@@ -82,8 +80,8 @@ Column {
         orientation: Qt.Horizontal
         icon: root.isLocked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
         text: root.isLocked
-            ? (root.itemCount > 1 ? root.unlockLabelPlural : root.unlockLabelSingular)
-            : (root.itemCount > 1 ? root.lockLabelPlural : root.lockLabelSingular)
+            ? (root.itemCount > 1 ? root.unlockLabel : root.unlockLabel)
+            : (root.itemCount > 1 ? root.lockLabel : root.lockLabel)
 
         toolTipTitle: root.lockToolTipTitle
         toolTipDescription: root.lockToolTipDescription

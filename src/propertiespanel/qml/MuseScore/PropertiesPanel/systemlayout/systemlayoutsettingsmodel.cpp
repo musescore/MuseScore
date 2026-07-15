@@ -39,7 +39,7 @@ SystemLayoutSettingsModel::SystemLayoutSettingsModel(QObject* parent, const muse
     : PropertiesPanelAbstractModel(parent, iocCtx, repository)
 {
     setSectionType(PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT);
-    setTitle(muse::qtrc("inspector", "System layout"));
+    setTitle(muse::qtrc("propertiespanel", "System layout"));
 }
 
 void SystemLayoutSettingsModel::loadProperties()
@@ -205,7 +205,7 @@ void SystemLayoutSettingsModel::updateAllPagesAreLocked()
         return;
     }
 
-    std::vector<Page*> pages = selection()->selectedPages();
+    std::vector<Page*> pages = selection()->pagesContainingSelection();
 
     bool allLocked = true;
     for (Page* page : pages) {
@@ -312,7 +312,7 @@ void SystemLayoutSettingsModel::updatePageCount()
         return;
     }
 
-    size_t count = selection()->selectedPages().size();
+    size_t count = selection()->pagesContainingSelection().size();
     if (count != m_pageCount) {
         m_pageCount = count;
         emit pageCountChanged(static_cast<int>(count));

@@ -49,7 +49,7 @@ PropertiesPanelSection {
             id: tabBar
 
             PropertiesPanelTabButton {
-                text: qsTrc("inspector", "System")
+                text: qsTrc("propertiespanel", "System")
 
                 navigation.name: "SystemTab"
                 navigation.panel: root.navigationPanel
@@ -59,7 +59,7 @@ PropertiesPanelSection {
             }
 
             PropertiesPanelTabButton {
-                text: qsTrc("inspector", "Page")
+                text: qsTrc("propertiespanel", "Page")
 
                 navigation.name: "PageTab"
                 navigation.panel: root.navigationPanel
@@ -83,28 +83,26 @@ PropertiesPanelSection {
                 navigationRowStart: root.navigationRowStart
                 isLocked: root.model ? root.model.allSystemsAreLocked : false
                 itemCount: root.model ? root.model.systemCount : 0
-                lockLabelSingular: qsTrc("inspector", "Lock selected system")
-                lockLabelPlural: qsTrc("inspector", "Lock selected systems")
-                unlockLabelSingular: qsTrc("inspector", "Unlock selected system")
-                unlockLabelPlural: qsTrc("inspector", "Unlock selected systems")
-                lockToolTipTitle: qsTrc("inspector", "Lock/unlock selected system(s)")
-                lockToolTipDescription: qsTrc("inspector", "Keep measures on the selected system(s) together and prevent them from reflowing to the next system")
+                lockLabel: qsTrc("propertiespanel", "Lock selected system(s)", "", root.model ? root.model.systemCount : 0)
+                unlockLabel: qsTrc("propertiespanel", "Unlock selected system(s)", "", root.model ? root.model.systemCount : 0)
+                lockToolTipTitle: qsTrc("propertiespanel", "Lock/unlock selected system(s)", "", root.model ? root.model.systemCount : 0)
+                lockToolTipDescription: qsTrc("propertiespanel", "Keep measures on the selected system(s) together and prevent them from reflowing to the next system", root.model ? root.model.systemCount : 0)
                 lockToolTipShortcut: root.model ? root.model.shortcutToggleSystemLock : ""
                 lockNavigationName: "SystemLock"
 
-                moveSectionTitle: qsTrc("inspector", "Move measures across systems")
-                movePrevText: qsTrc("inspector", "Previous")
-                moveNextText: qsTrc("inspector", "Next")
-                movePreviousToolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
-                moveNextToolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
+                moveSectionTitle: qsTrc("propertiespanel", "Move measures across systems")
+                movePrevText: qsTrc("propertiespanel", "Previous")
+                moveNextText: qsTrc("propertiespanel", "Next")
+                movePreviousToolTipTitle: qsTrc("propertiespanel", "Move measure(s) to previous system")
+                moveNextToolTipTitle: qsTrc("propertiespanel", "Move measure(s) to next system")
                 movePreviousShortcut: root.model?.shortcutMoveMeasureUpSystem ?? ""
                 moveNextShortcut: root.model ? root.model.shortcutMoveMeasureDownSystem : ""
                 previousNavigationName: "SystemUp"
                 nextNavigationName: "SystemDown"
 
-                makeIntoText: qsTrc("inspector", "New system from selection")
-                makeIntoToolTipTitle: qsTrc("inspector", "New system from selection")
-                makeIntoToolTipDescription: qsTrc("inspector", "Create a system containing only the selected measure(s)")
+                makeIntoText: qsTrc("propertiespanel", "New system from selection")
+                makeIntoToolTipTitle: qsTrc("propertiespanel", "New system from selection")
+                makeIntoToolTipDescription: qsTrc("propertiespanel", "Create a system containing only the selected measure(s)")
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
                 makeIntoNavigationName: "MakeSystem"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoSystemAvailable : false
@@ -124,28 +122,26 @@ PropertiesPanelSection {
                 navigationRowStart: root.navigationRowStart
                 isLocked: root.model ? root.model.allPagesAreLocked : false
                 itemCount: root.model ? root.model.pageCount : 0
-                lockLabelSingular: qsTrc("inspector", "Lock selected page")
-                lockLabelPlural: qsTrc("inspector", "Lock selected pages")
-                unlockLabelSingular: qsTrc("inspector", "Unlock selected page")
-                unlockLabelPlural: qsTrc("inspector", "Unlock selected pages")
-                lockToolTipTitle: qsTrc("inspector", "Lock/unlock selected page(s)")
-                lockToolTipDescription: qsTrc("inspector", "Keep measures on the selected page(s) together and prevent them from reflowing to the next page")
+                lockLabel: qsTrc("propertiespanel", "Lock selected page(s)", "", root.model ? root.model.pageCount : 0)
+                unlockLabel: qsTrc("propertiespanel", "Unlock selected page(s)", "", root.model ? root.model.pageCount : 0)
+                lockToolTipTitle: qsTrc("propertiespanel", "Lock/unlock selected page(s)", root.model ? root.model.pageCount : 0)
+                lockToolTipDescription: qsTrc("propertiespanel", "Keep measures on the selected page(s) together and prevent them from reflowing to the next page", root.model ? root.model.pageCount : 0)
                 lockToolTipShortcut: root.model ? root.model.shortcutTogglePageLock : ""
                 lockNavigationName: "PageLock"
 
-                moveSectionTitle: qsTrc("inspector", "Move systems across pages")
-                movePrevText: qsTrc("inspector", "Previous")
-                moveNextText: qsTrc("inspector", "Next")
-                movePreviousToolTipTitle: qsTrc("inspector", "Move system(s) to previous page")
-                moveNextToolTipTitle: qsTrc("inspector", "Move system(s) to next page")
+                moveSectionTitle: qsTrc("propertiespanel", "Move systems across pages")
+                movePrevText: qsTrc("propertiespanel", "Previous")
+                moveNextText: qsTrc("propertiespanel", "Next")
+                movePreviousToolTipTitle: qsTrc("propertiespanel", "Move system(s) to previous page")
+                moveNextToolTipTitle: qsTrc("propertiespanel", "Move system(s) to next page")
                 movePreviousShortcut: root.model?.shortcutMoveSystemUpPage ?? ""
                 moveNextShortcut: root.model ? root.model.shortcutMoveSystemDownPage : ""
                 previousNavigationName: "PageUp"
                 nextNavigationName: "PageDown"
 
-                makeIntoText: qsTrc("inspector", "New page from selection")
-                makeIntoToolTipTitle: qsTrc("inspector", "New page from selection")
-                makeIntoToolTipDescription: qsTrc("inspector", "Create a page containing only the selected measure(s)")
+                makeIntoText: qsTrc("propertiespanel", "New page from selection")
+                makeIntoToolTipTitle: qsTrc("propertiespanel", "New page from selection")
+                makeIntoToolTipDescription: qsTrc("propertiespanel", "Create a page containing only the selected measure(s)")
                 makeIntoShortcut: root.model ? root.model.shortcutMakeIntoPage : ""
                 makeIntoNavigationName: "MakePage"
                 isMakeIntoAvailable: root.model ? root.model.isMakeIntoPageAvailable : false

@@ -210,7 +210,7 @@ public:
     void updateTickIndex();
 
     Measure* measureByTick(int tick) const;
-    MeasureBase* measureBaseByTick(int tick) const;
+    MeasureBase* firstMeasureBaseAtTick(int tick) const;
     std::vector<MeasureBase*> measureBasesAtTick(int tick) const;
 
 private:

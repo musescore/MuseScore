@@ -184,13 +184,13 @@ TEST_F(Engraving_PageLocksTests, togglePageLock)
     score->select(score->firstMeasure(), SelectType::RANGE);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditPageLocks::togglePageLock(tx, score, score->selection().selectedPages());
+        EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
     });
 
     EXPECT_FALSE(score->pages().front()->isLocked());
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
-        EditPageLocks::togglePageLock(tx, score, score->selection().selectedPages());
+        EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
     });
 
     EXPECT_TRUE(score->pages().front()->isLocked());

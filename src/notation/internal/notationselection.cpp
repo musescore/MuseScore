@@ -163,9 +163,9 @@ std::vector<System*> NotationSelection::selectedSystems() const
     return score()->selection().selectedSystems();
 }
 
-std::vector<mu::engraving::Page*> NotationSelection::selectedPages() const
+std::vector<mu::engraving::Page*> NotationSelection::pagesContainingSelection() const
 {
-    return score()->selection().selectedPages();
+    return score()->selection().pagesContainingSelection();
 }
 
 EngravingItem* NotationSelection::lastElementHit() const

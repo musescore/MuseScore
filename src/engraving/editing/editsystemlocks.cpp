@@ -27,9 +27,10 @@
 #include "transaction/undoablecommand.h"
 
 #include "../dom/measurebase.h"
+#include "../dom/rangelock.h"
 #include "../dom/score.h"
 #include "../dom/system.h"
-#include "../dom/rangelock.h"
+#include "../dom/systemlockindicator.h"
 
 using namespace mu::engraving;
 

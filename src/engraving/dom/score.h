@@ -548,7 +548,6 @@ public:
     Fraction pos();
     Measure* tick2measure(const Fraction& tick) const;
     Measure* tick2measureMM(const Fraction& tick) const;
-    Measure* measureAtTick(const Fraction& tick) const;
     MeasureBase* tick2measureBase(const Fraction& tick) const;
     Segment* tick2segment(const Fraction& tick, bool first, SegmentType st, bool useMMrest = false) const;
     Segment* tick2segment(const Fraction& tick) const;
