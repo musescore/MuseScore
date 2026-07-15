@@ -232,6 +232,15 @@ done
 # Convert the disk image to read-only
 hdiutil convert "applebuild/${DMG_NAME}" -format UDBZ -o "applebuild/${COMPRESSED_DMG_NAME}"
 
+if $DO_SIGN; then
+    echo "Codesign DMG"
+    codesign --timestamp \
+        -s "Developer ID Application: MuseScore" \
+        "applebuild/${COMPRESSED_DMG_NAME}"
+
+    codesign --verify --verbose=2 "applebuild/${COMPRESSED_DMG_NAME}"
+fi
+
 shasum -a 256 "applebuild/${COMPRESSED_DMG_NAME}"
 
 rm "applebuild/${DMG_NAME}"
