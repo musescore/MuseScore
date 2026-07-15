@@ -584,7 +584,7 @@ void ChordRest::add(EngravingItem* e)
     {
         Chord* gc = toChord(e);
         assert(gc->noteType() != NoteType::NORMAL);
-        size_t idx = gc->graceIndex();
+        size_t idx = std::min<size_t>(gc->graceIndex(), m_graceNotes.size());
         gc->setFlag(ElementFlag::MOVABLE, true);
         m_graceNotes.insert(m_graceNotes.begin() + idx, gc);
         e->added();
