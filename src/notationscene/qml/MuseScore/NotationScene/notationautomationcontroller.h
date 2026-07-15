@@ -33,6 +33,7 @@
 #include "notation/notationtypes.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "engraving/automation/automationtypes.h"
 
 namespace muse::uicomponents {
 class PolylinePlot;
@@ -103,7 +104,10 @@ private:
         PointType pointType = PointType::UNKNOWN;
     };
 
+    using PointsDataMap = std::map<SysStaffKey, QVector<PointData> >;
+
     SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
+    muse::uicomponents::PolylinePlot* createPolylineForStaff(const System* system, staff_idx_t staffIdx);
     QVector<PointData> pointsDataInStaff(const muse::ID& staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
 
     void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline) const;
@@ -111,6 +115,13 @@ private:
 
     void updatePolylinesGeometry();
     void onCurrentNotationChanged();
+    void rebuildAllPolylines();
+
+    void updateStaffPointsInRange(const SysStaffKey& key, int tickFrom, int tickTo);
+
+    void onAutomationChanged(const mu::engraving::AutomationChanges& changes);
+    void mergePendingChanges(const mu::engraving::AutomationChanges& changes);
+    void applyAutomationChanges(const mu::engraving::AutomationChanges& changes);
 
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
 
@@ -121,6 +132,9 @@ private:
 
     QQuickItem* m_linesParent = nullptr;
     SysStaffToPolylinesMap m_stavesToLinesMap;
+    PointsDataMap m_pointsDataByStaff;
     muse::draw::Transform m_viewMatrix;
+    bool m_isApplyingOwnEdit = false;
+    mu::engraving::AutomationChanges m_pendingChanges;
 };
 }
