@@ -1267,13 +1267,13 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Increase dynamics"),
-             TranslatableString("action", "Increase dynamics by one step")
+             TranslatableString("action", "Increase selected dynamics")
              ),
     UiAction("decrease-dynamic",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Decrease dynamics"),
-             TranslatableString("action", "Decrease dynamics by one step")
+             TranslatableString("action", "Decrease selected dynamics")
              ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,

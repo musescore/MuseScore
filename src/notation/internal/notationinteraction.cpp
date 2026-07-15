@@ -5764,33 +5764,78 @@ void NotationInteraction::addHairpinsToSelection(HairpinType type)
     }
 }
 
+void NotationInteraction::increaseDecreaseDynamic(Dynamic* dynamic, int delta)
+{
+    const DynamicType currentType = dynamic->dynamicType();
+    auto inRange = [](DynamicType type) {
+        return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
+    };
+    if (!inRange(currentType)) {
+        return;
+    }
+    DynamicType newType = static_cast<DynamicType>(static_cast<int>(currentType) + delta);
+    if (!inRange(newType)) {
+        return;
+    }
+
+    dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
+    dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
+    autoFlipHairpinsTypeImpl(dynamic);
+}
+
+std::vector<Dynamic*> findDynamicsForElement(const EngravingItem* element)
+{
+    const ChordRest* cr = nullptr;
+
+    if (element->isChordRest()) {
+        cr = toChordRest(element);
+    } else if (element->isNote()) {
+        auto parent = element->parent();
+        if (parent && parent->isChordRest()) {
+            cr = toChordRest(parent);
+        }
+    }
+
+    if (!cr) {
+        return {};
+    }
+
+    Segment* segment = cr->segment();
+
+    std::vector<Dynamic*> dynamics;
+    for (EngravingItem* item : segment->annotations()) {
+        if (!item->isDynamic()) {
+            continue;
+        }
+
+        Dynamic* dynamic = toDynamic(item);
+        if (dynamic->elementAppliesToTrack(cr->track())
+            && (dynamic->staffIdx() == cr->staffIdx() || dynamic->appliesToAllVoicesInInstrument())) {
+            dynamics.push_back(dynamic);
+        }
+    }
+
+    return dynamics;
+}
+
 void NotationInteraction::increaseDecreaseDynamicsForSelection(int delta)
 {
     if (selection()->isNone()) {
         return;
     }
     startEdit(TranslatableString("undoableAction", delta > 0 ? "Increase dynamics" : "Decrease dynamics"));
-
-    for (EngravingItem* item : selection()->elements()) {
-        if (!item->isDynamic()) {
-            continue;
+    if (selection()->element() && !selection()->element()->isDynamic()) {
+        std::vector<Dynamic*> dynamics = findDynamicsForElement(selection()->element());
+        for (Dynamic* dynamic : dynamics) {
+            increaseDecreaseDynamic(dynamic, delta);
         }
-        Dynamic* dynamic = toDynamic(item);
-        const DynamicType currentType = dynamic->dynamicType();
-        auto inRange = [](DynamicType type) {
-            return type >= DynamicType::PPPPP && type <= DynamicType::FFFFF;
-        };
-        if (!inRange(currentType)) {
-            continue;
+    } else {
+        for (EngravingItem* item : selection()->elements()) {
+            if (!item->isDynamic()) {
+                continue;
+            }
+            increaseDecreaseDynamic(toDynamic(item), delta);
         }
-        DynamicType newType = static_cast<DynamicType>(static_cast<int>(currentType) + delta);
-        if (!inRange(newType)) {
-            continue;
-        }
-
-        dynamic->undoChangeProperty(Pid::DYNAMIC_TYPE, newType);
-        dynamic->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(newType));
-        autoFlipHairpinsTypeImpl(dynamic);
     }
     apply();
 }
