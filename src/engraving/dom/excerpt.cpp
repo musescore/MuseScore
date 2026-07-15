@@ -822,10 +822,10 @@ static void addBackSpanners(Note* on, Note* nn, Score* score)
     }
 }
 
-static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, ChordRest* newHost, TieMap& tieMap, Score* score)
 {
     for (Chord* oldGrace : originalGraceNotes) {
-        Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
+        Chord* newGrace = newHost->graceNoteAt(oldGrace->graceIndex());
         if (!newGrace) {
             continue;
         }
@@ -1018,10 +1018,10 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 cloneTuplets(ocr, ncr, ot, tupletMap, nm, track);
                             }
 
+                            addGraceNoteTiesAndBackSpanners(ocr->graceNotesBefore(), ncr, tieMap, score);
                             if (oe->isChord()) {
                                 Chord* och = toChord(ocr);
                                 Chord* nch = toChord(ncr);
-                                addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                                 size_t n = och->notes().size();
                                 for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
@@ -1060,9 +1060,9 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
-                                addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                                 addTremoloTwoChord(och, nch, prevTremolo);
                             }
+                            addGraceNoteTiesAndBackSpanners(ocr->graceNotesAfter(), ncr, tieMap, score);
                         }
                         if (!ns) {
                             ns = nm->getSegment(oseg->segmentType(), oseg->tick());
@@ -1403,10 +1403,10 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             score->undoAddElement(ne1);
                         }
                     }
+                    addGraceNoteTiesAndBackSpanners(ocr->graceNotesBefore(), ncr, tieMap, score);
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
-                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
@@ -1426,19 +1426,20 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
-                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
 
-                        // Check grace note staff move validity
-                        for (Chord* gn : nch->graceNotes()) {
-                            gn->checkStaffMoveValidity();
-                        }
                         if (Ornament* o = nch->findOrnament()) {
                             Chord* cueChord = o->cueNoteChord();
                             if (cueChord) {
                                 cueChord->checkStaffMoveValidity();
                             }
                         }
+                    }
+                    addGraceNoteTiesAndBackSpanners(ocr->graceNotesAfter(), ncr, tieMap, score);
+
+                    // Check grace note staff move validity
+                    for (Chord* gn : ncr->graceNotes()) {
+                        gn->checkStaffMoveValidity();
                     }
                 }
             }
@@ -1643,47 +1644,45 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
                 }
 
-                if (!oe->isChord()) {
-                    continue;
-                }
-
-                Chord* och = toChord(ocr);
-                Chord* nch = toChord(ncr);
-                addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
-                size_t n = och->notes().size();
-                for (size_t i = 0; i < n; ++i) {
-                    Note* on = och->notes().at(i);
-                    Note* nn = nch->notes().at(i);
-                    addTies(on, nn, tieMap, score);
-                    addBackSpanners(on, nn, score);
-                    GuitarBend* bendBack = on->bendBack();
-                    Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
-                    if (bendBack && newStartNote) {
-                        GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
-                        newBend->setScore(score);
-                        newBend->setParent(newStartNote);
-                        newBend->setTrack(newStartNote->track());
-                        newBend->setTrack2(nn->track());
-                        newBend->setStartElement(newStartNote);
-                        newBend->setEndElement(nn);
-                        newStartNote->addSpannerFor(newBend);
-                        nn->addSpannerBack(newBend);
+                addGraceNoteTiesAndBackSpanners(ocr->graceNotesBefore(), ncr, tieMap, score);
+                if (oe->isChord()) {
+                    Chord* och = toChord(ocr);
+                    Chord* nch = toChord(ncr);
+                    size_t n = och->notes().size();
+                    for (size_t i = 0; i < n; ++i) {
+                        Note* on = och->notes().at(i);
+                        Note* nn = nch->notes().at(i);
+                        addTies(on, nn, tieMap, score);
+                        addBackSpanners(on, nn, score);
+                        GuitarBend* bendBack = on->bendBack();
+                        Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
+                        if (bendBack && newStartNote) {
+                            GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
+                            newBend->setScore(score);
+                            newBend->setParent(newStartNote);
+                            newBend->setTrack(newStartNote->track());
+                            newBend->setTrack2(nn->track());
+                            newBend->setStartElement(newStartNote);
+                            newBend->setEndElement(nn);
+                            newStartNote->addSpannerFor(newBend);
+                            nn->addSpannerBack(newBend);
+                        }
+                        GuitarBend* bendFor = on->bendFor();
+                        if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
+                            // Because slight bends aren't detected as "bendBack"
+                            GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
+                            newBend->setScore(score);
+                            newBend->setParent(nn);
+                            newBend->setTrack(nn->track());
+                            newBend->setTrack2(nn->track());
+                            newBend->setStartElement(nn);
+                            newBend->setEndElement(nn);
+                            nn->addSpannerFor(newBend);
+                        }
                     }
-                    GuitarBend* bendFor = on->bendFor();
-                    if (bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-                        // Because slight bends aren't detected as "bendBack"
-                        GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
-                        newBend->setScore(score);
-                        newBend->setParent(nn);
-                        newBend->setTrack(nn->track());
-                        newBend->setTrack2(nn->track());
-                        newBend->setStartElement(nn);
-                        newBend->setEndElement(nn);
-                        nn->addSpannerFor(newBend);
-                    }
+                    addTremoloTwoChord(och, nch, prevTremolo);
                 }
-                addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
-                addTremoloTwoChord(och, nch, prevTremolo);
+                addGraceNoteTiesAndBackSpanners(ocr->graceNotesAfter(), ncr, tieMap, score);
             }
         }
         std::vector<Segment*> emptySegments;
