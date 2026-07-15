@@ -7341,7 +7341,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     }
 
     // handle grace after state: remember current grace list size
-    if (grace && notations.mustStopGraceAFter()) {
+    if (grace && notations.mustStopGraceAfter()) {
         gac = gcl.size();
     }
 
