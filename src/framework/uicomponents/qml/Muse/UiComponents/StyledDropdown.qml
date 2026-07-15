@@ -50,10 +50,10 @@ Item {
 
     property int popupItemsCount: 18
 
-    property alias dropIcon: mainItem.dropIcon
-    property alias label: mainItem.label
+    property alias dropIcon: dropIconItem
+    property alias label: labelItem
 
-    property alias navigation: mainItem.navigation
+    property alias navigation: navCtrl
 
     property alias isOpened: dropdownLoader.isOpened
     property alias dropdown: dropdownLoader.dropdown
