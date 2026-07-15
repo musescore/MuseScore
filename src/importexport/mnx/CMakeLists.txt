@@ -19,7 +19,7 @@ else()
     FetchContent_Declare(
         mnxdom
         GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-        GIT_TAG        e7c947bf768caccf315426dcae0dfac02caf738b
+        GIT_TAG        488aa8757ec602c20ff8cf599a2c6857339d8e93
     )
     FetchContent_MakeAvailable(mnxdom)
     set(MNXDOM_LIB mnxdom)
