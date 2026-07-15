@@ -5131,6 +5131,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::BEGIN_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setBeginHookType(HookType::HOOK_90);
@@ -5192,6 +5193,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setEndHookType(HookType::HOOK_90);
