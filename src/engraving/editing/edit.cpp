@@ -3780,7 +3780,29 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     }
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
-        ChordRest* pc = toChordRest(c->explicitParent());
+        EngravingItem* ne = ns ? ns->element(dtrack) : nullptr;
+        if (!ne || !ne->isChordRest()) {
+            return nullptr;
+        }
+        ChordRest* ncr = toChordRest(ne);
+        if (!c->isGrace()) {
+            return ncr->isChord() ? toChord(ncr) : nullptr;
+        }
+
+        if (c->isGrace()) {
+            ChordRest* pc = toChordRest(c->explicitParent());
+            size_t index = 0;
+            for (Chord* gc : pc->graceNotes()) {
+                if (c == gc) {
+                    break;
+                }
+                index++;
+            }
+            if (index < ncr->graceNotes().size()) {
+                return ncr->graceNotes().at(index);
+            }
+        }
+        return nullptr;
         size_t index = 0;
         for (Chord* gc : pc->graceNotes()) {
             if (c == gc) {
