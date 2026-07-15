@@ -6961,6 +6961,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
     bool graceSlash = false;
+    double graceStealFollowing = -1.0;
+    double graceStealPrevious  = -1.0;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
     bool printLyric = (printObject && m_e.asciiAttribute("print-lyric") != "no") || m_e.asciiAttribute("print-lyric") == "yes";
     bool isSingleDrumset = false;
@@ -6996,6 +6998,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (m_e.name() == "grace") {
             grace = true;
             graceSlash = m_e.asciiAttribute("slash") == "yes";
+            graceStealFollowing = m_e.doubleAttribute("steal-time-following", -1.0);
+            graceStealPrevious  = m_e.doubleAttribute("steal-time-previous", -1.0);
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "instrument") {
             instrumentId = m_e.attribute("id");
@@ -7340,9 +7344,12 @@ Note* MusicXmlParserPass2::note(const String& partId,
         }
     }
 
-    // handle grace after state: remember current grace list size
-    if (grace && notations.mustStopGraceAfter()) {
-        gac = gcl.size();
+    if (grace) {
+        const bool afterByStealTime = graceStealPrevious >= 0.0 && c && c->noteType() != NoteType::ACCIACCATURA;
+        if (graceStealFollowing < 0.0 && (afterByStealTime || notations.mustStopGraceAfter())) {
+            // handle grace after state: remember current grace list size
+            gac = gcl.size();
+        }
     }
 
     // handle tremolo before handling tuplet (two note tremolos modify timeMod)
