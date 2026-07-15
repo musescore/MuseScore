@@ -25,18 +25,29 @@ ORIGIN_DIR=${PWD}
 ARTIFACTS_DIR=build.artifacts
 DOCKER_WORK_DIR=$ARTIFACTS_DIR/docker
 MU_VERSION=""
+PACKARCH="" # architecture (x86_64, aarch64)
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) MU_VERSION="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
 if [ -z "$MU_VERSION" ]; then MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env); fi
+if [ -z "$PACKARCH" ]; then PACKARCH="x86_64"; fi
 
 if [ -z "$MU_VERSION" ]; then echo "Error: Version not set"; exit 1; fi
+
+case "$PACKARCH" in
+    x86_64) DOCKER_PLATFORM="linux/amd64"; ARCH_SUFFIX="" ;;
+    aarch64) DOCKER_PLATFORM="linux/arm64"; ARCH_SUFFIX="_aarch64" ;;
+    *) echo "Unknown architecture: $PACKARCH"; exit 1 ;;
+esac
+
+DOCKER_TAG=${MU_VERSION}${ARCH_SUFFIX}
 
 # Make MU docker files
 echo "Prepare Docker files"
@@ -47,6 +58,7 @@ cp $HERE/docker/setup.sh $DOCKER_WORK_DIR/setup.sh
 cp $HERE/docker/install_mu_template.sh $DOCKER_WORK_DIR/install_mu.sh
 
 sed -i 's|x.x.x.xxxxxx|'${MU_VERSION}'|' $DOCKER_WORK_DIR/install_mu.sh
+sed -i 's|MU_ARCH_SUFFIX=""|MU_ARCH_SUFFIX="'${ARCH_SUFFIX}'"|' $DOCKER_WORK_DIR/install_mu.sh
 
 cd $DOCKER_WORK_DIR
 echo "Build Docker"
@@ -55,8 +67,8 @@ echo "Build Docker"
 docker buildx create --use >/dev/null 2>&1 || true
 
 docker buildx build \
-    --platform linux/amd64\
-    -t ghcr.io/musescore/converter_4:${MU_VERSION} \
+    --platform ${DOCKER_PLATFORM} \
+    -t ghcr.io/musescore/converter_4:${DOCKER_TAG} \
     --load .
 
 cd $ORIGIN_DIR
