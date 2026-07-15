@@ -6,6 +6,14 @@ on:
 
   workflow_dispatch:
     inputs:
+      arch:
+        description: 'Architecture to build'
+        type: choice
+        options:
+          - x86_64
+          - aarch64
+        default: 'x86_64'
+        required: true
       build_mode:
         description: 'Build mode: devel, testing, stable'
         default: 'devel'
@@ -20,6 +28,11 @@ on:
         required: false
   workflow_call:
     inputs:
+      arch:
+        description: 'Architecture to build: x86_64, aarch64'
+        default: 'x86_64'
+        type: string
+        required: false
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
         default: 'devel'
@@ -43,7 +56,7 @@ on:
 
 jobs:
   backend:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ (inputs.arch || 'x86_64') == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-22.04' }}
     if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
     - name: Cancel Previous Runs
@@ -55,6 +68,9 @@ jobs:
 
     - name: "Configure workflow"
       run: |
+        ARCH="${{ inputs.arch }}"
+        if [ -z "$ARCH" ]; then ARCH="x86_64"; fi
+
         bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
@@ -83,14 +99,21 @@ jobs:
         if [ "${{ inputs.deploy }}" = "on" ]; then
             DO_DEPLOY='true'
         fi
+        if [ "$ARCH" != "x86_64" ]; then
+          if [ "$DO_DEPLOY" = "true" ]; then
+            echo "::warning::Deploy to musescore.com is only supported for x86_64; disabling for $ARCH"
+          fi
+          DO_DEPLOY='false'
+        fi
 
         bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
-        GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}"
+        GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}_${ARCH}"
 
         VERSION_MAJOR_MINOR=$(echo "$VERSION" | cut -d '.' -f 1,2)
 
         echo "github.repository: ${{ github.repository }}"
+        echo "ARCH=$ARCH" | tee -a $GITHUB_ENV
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
@@ -103,15 +126,15 @@ jobs:
       uses: jurplel/install-qt-action@v4
       with:
         version: 6.10.2
-        host: 'linux'
+        host: ${{ env.ARCH == 'aarch64' && 'linux_arm64' || 'linux' }}
         target: 'desktop'
-        arch: 'linux_gcc_64'
+        arch: ${{ env.ARCH == 'aarch64' && 'linux_gcc_arm64' || 'linux_gcc_64' }}
         modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
         cache: true
 
     - name: Setup environment
       run: |
-        bash ./buildscripts/ci/backend/setup.sh
+        bash ./buildscripts/ci/backend/setup.sh --arch ${{ env.ARCH }}
 
     - name: Build
       run: |
@@ -119,7 +142,7 @@ jobs:
 
     - name: Package
       run: |
-        bash ./buildscripts/ci/backend/package.sh
+        bash ./buildscripts/ci/backend/package.sh --arch ${{ env.ARCH }}
 
     - name: Send package to S3
       if: env.DO_PUBLISH == 'true'
@@ -131,12 +154,12 @@ jobs:
     - name: Build Docker (used package from S3)
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./buildscripts/ci/backend/build_docker.sh
+        bash ./buildscripts/ci/backend/build_docker.sh --arch ${{ env.ARCH }}
 
     - name: Publish to Registry
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
+        bash ./buildscripts/ci/backend/publish_to_registry.sh --arch ${{ env.ARCH }} --token ${{ secrets.PACKAGES_PAT }}
 
     - name: Check and update config on S3
       if: env.DO_DEPLOY == 'true'
