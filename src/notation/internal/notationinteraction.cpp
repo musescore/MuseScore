@@ -117,6 +117,7 @@
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
+#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
@@ -1962,7 +1963,7 @@ bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool>
         // Invalidate BSP tree of affected pages
         System* lastSeenSystem = nullptr;
         Page* lastSeenPage = nullptr;
-        for (MeasureBase* mb = score()->tick2measureBase(showAnchors.startTickExtendedRegion);
+        for (MeasureBase* mb = score()->tick2measure(showAnchors.startTickExtendedRegion);
              mb && mb->tick() <= showAnchors.endTickExtendedRegion;
              mb = mb->next()) {
             System* s = mb->system();
@@ -2512,7 +2513,8 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         const ActionIcon* icon = toActionIcon(element);
         switch (icon->actionType()) {
         case ActionIconType::SYSTEM_LOCK: {
-            EditSystemLocks::applyLockToSelection(tx, score);
+            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PARENTHESES: {
@@ -2760,7 +2762,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         const ActionIconType actionType = toActionIcon(element)->actionType();
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
-            EditSystemLocks::applyLockToSelection(tx, score);
+            EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PARENTHESES: {
@@ -6191,6 +6193,65 @@ void NotationInteraction::applySystemLock()
 {
     transaction(TranslatableString("undoableAction", "Apply system lock to selection"), [&](auto& tx) {
         EditSystemLocks::applyLockToSelection(tx, score());
+    });
+}
+
+void NotationInteraction::moveSystemToPrevPage()
+{
+    MeasureBase* firstMeas = score()->selection().startMeasureBase();
+    MeasureBase* endMeas = score()->selection().endMeasureBase();
+    System* startSys = firstMeas ? firstMeas->system() : nullptr;
+    System* endSys = endMeas ? endMeas->system() : nullptr;
+    if (!startSys || !endSys) {
+        return;
+    }
+    MeasureBase* firstMb = startSys->first();
+    MeasureBase* lastMb = endSys->last();
+    transaction(TranslatableString("undoableAction", "Move system to previous page"), [&](auto& tx) {
+        EditPageLocks::moveMeasuresToPrevPage(tx, score(), firstMb, lastMb);
+    });
+}
+
+void NotationInteraction::moveSystemToNextPage()
+{
+    MeasureBase* firstMeas = score()->selection().startMeasureBase();
+    MeasureBase* endMeas = score()->selection().endMeasureBase();
+    System* startSys = firstMeas ? firstMeas->system() : nullptr;
+    System* endSys = endMeas ? endMeas->system() : nullptr;
+    if (!startSys || !endSys) {
+        return;
+    }
+    MeasureBase* firstMb = startSys->first();
+    MeasureBase* lastMb = endSys->last();
+    transaction(TranslatableString("undoableAction", "Move system to next page"), [&](auto& tx) {
+        EditPageLocks::moveMeasuresToNextPage(tx, score(), firstMb, lastMb);
+    });
+}
+
+void NotationInteraction::togglePageLock()
+{
+    transaction(TranslatableString("undoableAction", "Lock/unlock selected page(s)"), [&](auto& tx) {
+        EditPageLocks::togglePageLock(tx, score(), selection()->pagesContainingSelection());
+    });
+}
+
+void NotationInteraction::makeIntoPage()
+{
+    MeasureBase* first = score()->selection().startMeasureBase();
+    MeasureBase* last = score()->selection().endMeasureBase();
+    if (!first || !last) {
+        return;
+    }
+
+    transaction(TranslatableString("undoableAction", "Create page from selection"), [&](auto& tx) {
+        EditPageLocks::makeIntoPage(tx, score(), first, last);
+    });
+}
+
+void NotationInteraction::applyPageLock()
+{
+    transaction(TranslatableString("undoableAction", "Apply page lock to selection"), [&](auto& tx) {
+        EditPageLocks::applyLockToSelection(tx, score());
     });
 }
 

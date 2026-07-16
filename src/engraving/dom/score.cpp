@@ -271,6 +271,9 @@ Score::~Score()
     muse::DeleteAll(m_systemLocks.allLocks());
     m_systemLocks.clear();
 
+    muse::DeleteAll(m_pageLocks.allLocks());
+    m_pageLocks.clear();
+
     muse::DeleteAll(m_parts);
     m_parts.clear();
 
@@ -1918,8 +1921,8 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     Fraction tickOfAppend = last()->endTick();
     TieMap tieMap;
 
-    MeasureBase* fmb = score->tick2measureBase(startTick);
-    MeasureBase* emb = score->tick2measureBase(endTick);
+    MeasureBase* fmb = score->tick2measure(startTick);
+    MeasureBase* emb = score->tick2measure(endTick);
     Fraction curTick = tickOfAppend;
     for (MeasureBase* cmb = fmb; cmb != emb; cmb = cmb->next()) {
         MeasureBase* nmb;
@@ -5184,7 +5187,7 @@ void Score::autoUpdateSpatium()
     createPaddingTable();
 }
 
-void Score::addSystemLock(const SystemLock* lock)
+void Score::addSystemLock(const RangeLock* lock)
 {
     m_systemLocks.add(lock);
 
@@ -5192,9 +5195,25 @@ void Score::addSystemLock(const SystemLock* lock)
     lock->endMB()->triggerLayout();
 }
 
-void Score::removeSystemLock(const SystemLock* lock)
+void Score::removeSystemLock(const RangeLock* lock)
 {
     m_systemLocks.remove(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::addPageLock(const RangeLock* lock)
+{
+    m_pageLocks.add(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::removePageLock(const RangeLock* lock)
+{
+    m_pageLocks.remove(lock);
 
     lock->startMB()->triggerLayout();
     lock->endMB()->triggerLayout();

@@ -188,6 +188,7 @@ enum class ElementType : unsigned char {
     TAB_DURATION_SYMBOL,
     FSYMBOL,
     PAGE,
+    PAGE_LOCK_INDICATOR,
     TEXTLINE_BASE,
     BRACKET,
     SEGMENT,

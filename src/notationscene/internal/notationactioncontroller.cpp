@@ -312,6 +312,11 @@ void NotationActionController::init()
     registerAction("toggle-system-lock", &Interaction::toggleSystemLock);
     registerAction("toggle-score-lock", &Interaction::toggleScoreLock);
     registerAction("make-into-system", &Interaction::makeIntoSystem);
+    registerAction("apply-page-lock", &Interaction::applyPageLock);
+    registerAction("move-system-to-prev-page", &Interaction::moveSystemToPrevPage);
+    registerAction("move-system-to-next-page", &Interaction::moveSystemToNextPage);
+    registerAction("toggle-page-lock", &Interaction::togglePageLock);
+    registerAction("make-into-page", &Interaction::makeIntoPage);
 
     registerAction("split-measure", &Interaction::splitSelectedMeasure);
     registerAction("join-measures", &Interaction::joinSelectedMeasures);

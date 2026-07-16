@@ -64,6 +64,7 @@
 #include "../dom/note.h"
 #include "../dom/noteline.h"
 #include "../dom/ottava.h"
+#include "../dom/pagelockindicator.h"
 #include "../dom/part.h"
 #include "../dom/partialtie.h"
 #include "../dom/playcounttext.h"
@@ -80,6 +81,7 @@
 #include "../dom/sticking.h"
 #include "../dom/stringtunings.h"
 #include "../dom/system.h"
+#include "../dom/systemlockindicator.h"
 #include "../dom/systemtext.h"
 #include "../dom/tapping.h"
 #include "../dom/tempotext.h"
@@ -103,6 +105,7 @@
 #include "editkeysig.h"
 #include "editmeasures.h"
 #include "editnote.h"
+#include "editpagelocks.h"
 #include "editpart.h"
 #include "editproperty.h"
 #include "editrehearsalmark.h"
@@ -1068,6 +1071,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::KEYSIG:
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
+        case ElementType::PAGE_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
         case ElementType::LYRICSLINE_SEGMENT:
@@ -1552,8 +1556,8 @@ void Score::deleteItem(EngravingItem* el)
     break;
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
-        const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
-        EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
+        const RangeLock* systemLock = toSystemLockIndicator(el)->systemLock();
+        EditSystemLocks::undoRemoveSystemLock(tx, this, systemLock);
     }
     break;
     case ElementType::PARENTHESIS: {
@@ -1574,6 +1578,13 @@ void Score::deleteItem(EngravingItem* el)
             break;
         }
     }
+    break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+    {
+        const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
+        EditPageLocks::undoRemovePageLock(tx, this, pageLock);
+    }
+    break;
 
     default:
         undoRemoveElement(el);
@@ -2697,7 +2708,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     MeasureBase* localInsertMeasureBase = nullptr;
     if (type == ElementType::MEASURE) {
         if (MeasureBase* masterInsertMeasure = masterScore()->insertMeasure(beforeMeasure, options)) {
-            localInsertMeasureBase = tick2measureBase(masterInsertMeasure->tick());
+            localInsertMeasureBase = tick2measure(masterInsertMeasure->tick());
         }
     } else {
         localInsertMeasureBase = insertBox(type, beforeMeasure, options);
@@ -5177,6 +5188,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     }
 
     EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
+    EditPageLocks::removePageLocksOnRemoveMeasures(tx, this, m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }

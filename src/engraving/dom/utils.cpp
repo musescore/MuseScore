@@ -117,23 +117,16 @@ Measure* Score::tick2measureMM(const Fraction& t) const
     return measure->coveringMMRestOrThis();
 }
 
-//---------------------------------------------------------
-//   tick2measureBase
-//---------------------------------------------------------
-
 MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 {
-    std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
-    for (MeasureBase* mb : mbList) {
-        Fraction st = mb->tick();
-        Fraction l  = mb->ticks();
-        if (tick >= st && tick < (st + l)) {
-            return mb;
-        }
+    if (tick == Fraction(-1, 1)) {   // special number
+        return m_measures.last();
+    }
+    if (tick <= Fraction(0, 1)) {
+        return m_measures.first();
     }
 
-    LOGD("tick2measureBase %d not found", tick.ticks());
-    return nullptr;
+    return m_measures.firstMeasureBaseAtTick(tick.ticks());
 }
 
 //---------------------------------------------------------

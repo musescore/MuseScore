@@ -55,6 +55,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "notedot.h"
+#include "pagelockindicator.h"
 #include "part.h"
 #include "partialtie.h"
 #include "rest.h"
@@ -66,6 +67,7 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
+#include "system.h"
 #include "tie.h"
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -364,7 +366,7 @@ MeasureBase* Selection::startMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -377,17 +379,14 @@ MeasureBase* Selection::startMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickStart();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    return m_score->tick2measureBase(tickStart());
 }
 
 MeasureBase* Selection::endMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -400,16 +399,13 @@ MeasureBase* Selection::endMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickEnd() - Fraction::eps();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    return m_score->tick2measureBase(tickEnd() - Fraction::eps());
 }
 
 std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
-    if (el && (el->isSystemLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
+    if (el && (el->isSystemLockIndicator() || el->isPageLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
         return { const_cast<System*>(toIndicatorIcon(el)->system()) };
     }
 
@@ -419,9 +415,8 @@ std::vector<System*> Selection::selectedSystems() const
         return {};
     }
 
-    bool mmrests = score()->style().styleB(Sid::createMultiMeasureRests);
     std::vector<System*> systems;
-    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
         System* sys = mb->system();
         if ((mb->isMeasure() || mb->isHBox()) && (systems.empty() || sys != systems.back())) {
             systems.push_back(sys);
@@ -429,6 +424,25 @@ std::vector<System*> Selection::selectedSystems() const
     }
 
     return systems;
+}
+
+std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
+{
+    EngravingItem* el = element();
+    if (el && (el->isPageLockIndicator())) {
+        return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
+    }
+
+    std::vector<System*> systems = selectedSystems();
+    std::vector<Page*> pages;
+    for (System* system : systems) {
+        Page* page = system->page();
+        if (page && std::find(pages.begin(), pages.end(), page) == pages.end()) {
+            pages.push_back(page);
+        }
+    }
+
+    return pages;
 }
 
 void Selection::deselectAll()

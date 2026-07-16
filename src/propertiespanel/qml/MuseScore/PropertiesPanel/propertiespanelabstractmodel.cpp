@@ -405,6 +405,7 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
 
     if (isRange) {
         types << PropertiesPanelSectionType::SECTION_MEASURES;
+        types << PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT;
         types << PropertiesPanelSectionType::SECTION_EMPTY_STAVES;
     }
 

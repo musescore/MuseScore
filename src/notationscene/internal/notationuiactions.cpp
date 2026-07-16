@@ -725,6 +725,32 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Create system from selection"),
              TranslatableString("action", "Create system from selection")
              ),
+    UiAction("apply-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Add/remove page lock"),
+             TranslatableString("action", "Add/remove page lock")
+             ),
+    UiAction("move-measure-to-prev-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to previous page"),
+             TranslatableString("action", "Move measure to previous page"),
+             IconCode::Code::ARROW_UP
+             ),
+    UiAction("move-measure-to-next-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to next page"),
+             TranslatableString("action", "Move measure to next page"),
+             IconCode::Code::ARROW_DOWN
+             ),
+    UiAction("make-into-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Create page from selection"),
+             TranslatableString("action", "Create page from selection")
+             ),
     UiAction("section-break",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

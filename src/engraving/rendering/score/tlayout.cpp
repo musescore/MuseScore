@@ -132,6 +132,7 @@
 #include "dom/symbol.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
+#include "dom/systemlockindicator.h"
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
@@ -383,6 +384,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::PALM_MUTE:        layoutPalmMute(item_cast<PalmMute*>(item), ctx);
         break;
     case ElementType::PALM_MUTE_SEGMENT: layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
+        break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+        layoutPageLockIndicator(item_cast<const PageLockIndicator*>(item), static_cast<PageLockIndicator::LayoutData*>(ldata));
         break;
     case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item), static_cast<Parenthesis::LayoutData*>(ldata), ctx);
         break;
@@ -3749,7 +3753,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         endMB = sli->systemLock()->endMB();
         if (item->selected()) {
             // Draw the range rect...
-            const SystemLock* lock = sli->systemLock();
+            const RangeLock* lock = sli->systemLock();
 
             double xStart = lock->startMB()->x();
             double xEnd = lock->endMB()->x() + lock->endMB()->width();
@@ -4376,6 +4380,56 @@ void TLayout::layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+}
+
+void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockIndicator::LayoutData* ldata)
+{
+    if (!item->configuration()->canLayoutIcons()) {
+        return;
+    }
+    const Page* page = item->page();
+    const System* sys = item->system();
+
+    IF_ASSERT_FAILED(page && sys) {
+        return;
+    }
+
+    Shape shape;
+
+    const double spatium = item->spatium();
+
+    const FontMetrics metrics(item->font());
+    const RectF iconBox = metrics.boundingRect(item->iconCode());
+    shape.add(iconBox, item);
+
+    // Inset 2.5sp from edge of page
+    PointF posOnPage = PointF(page->width() - iconBox.width() - iconBox.left() - 2.5 * spatium, page->height() - 2.5 * spatium);
+    PointF posOnSystem = posOnPage - sys->pos();
+    ldata->setPos(posOnSystem);
+
+    if (item->selected()) {
+        // Outer range rectangle
+        RectF rangeRect = page->shape().bbox();
+        PointF rectPagePos = rangeRect.topLeft() - ldata->pos() - sys->pos();
+        rangeRect.translate(rectPagePos);
+        rangeRect.adjust(spatium * 2, spatium * 2, -spatium * 2, -spatium * 2);
+        ldata->rangeRect = rangeRect;
+
+        // Inner rectangle cutout
+        // Leaves border with rounded corners when painted
+        double borderWidth = iconBox.height() + spatium;
+        RectF innerRect = rangeRect.adjusted(borderWidth, borderWidth, -borderWidth, -borderWidth);
+        ldata->innerRangeRect = innerRect;
+        shape.add(RectF(PointF(rangeRect.left(),  rangeRect.top()),     PointF(rangeRect.right(),   innerRect.top())));       // top
+        shape.add(RectF(PointF(rangeRect.left(),  innerRect.bottom()),  PointF(rangeRect.right(),   rangeRect.bottom())));    // bottom
+        shape.add(RectF(PointF(rangeRect.left(),  innerRect.top()),     PointF(innerRect.left(),    innerRect.bottom())));    // left
+        shape.add(RectF(PointF(innerRect.right(), innerRect.top()),     PointF(rangeRect.right(),   innerRect.bottom())));     // right
+    }
+
+    ldata->setShape(shape);
+
+    // Ensure it goes behind notation and LayoutBreak
+    const_cast<PageLockIndicator*>(item)->setZ(-100);
 }
 
 void TLayout::layoutPalmMute(PalmMute* item, LayoutContext& ctx)

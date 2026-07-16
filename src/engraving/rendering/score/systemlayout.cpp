@@ -45,6 +45,8 @@
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
+#include "dom/page.h"
+#include "dom/pagelockindicator.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
@@ -56,6 +58,7 @@
 #include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
+#include "dom/systemlockindicator.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolosinglechord.h"
@@ -144,8 +147,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
-    const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
-                                   ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
+    const RangeLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
+                                  ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
 
     if (systemLock) {
         StaveSharingLayout::updateStaveSharingForFullSystem(systemLock->startMB(), systemLock->endMB(), ctx);
@@ -263,8 +266,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
-            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
-                        || (next && next->isStartOfSystemLock());
+            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock() || mb->isEndOfPageLock()
+                        || (next && next->isStartOfSystemLock()) || (next && next->isStartOfPageLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
@@ -506,7 +509,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     assert(lockIndicators.size() <= 1);
     system->deleteLockIndicators();
 
-    const SystemLock* lock = system->systemLock();
+    const RangeLock* lock = system->systemLock();
     if (!lock) {
         return;
     }
@@ -516,6 +519,27 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     system->addLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+}
+
+void SystemLayout::layoutPageLockIndicators(System* system)
+{
+    Page* page = system->page();
+    system->deletePageLockIndicator();
+
+    IF_ASSERT_FAILED(!page->systems().empty()) {
+        return;
+    }
+
+    const RangeLock* lock = page->pageLock();
+    if (!lock || page->systems().back() != system) {
+        return;
+    }
+
+    PageLockIndicator* lockIndicator = new PageLockIndicator(system, lock);
+    lockIndicator->setParent(system);
+    system->setPageLockIndicator(lockIndicator);
+
+    TLayout::layoutPageLockIndicator(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------

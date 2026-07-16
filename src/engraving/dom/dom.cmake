@@ -215,6 +215,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp
     ${CMAKE_CURRENT_LIST_DIR}/page.h
+    ${CMAKE_CURRENT_LIST_DIR}/pagelockindicator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/pagelockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/parenthesis.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parenthesis.h
     ${CMAKE_CURRENT_LIST_DIR}/partialtie.cpp
@@ -237,6 +239,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/property.h
     ${CMAKE_CURRENT_LIST_DIR}/range.cpp
     ${CMAKE_CURRENT_LIST_DIR}/range.h
+    ${CMAKE_CURRENT_LIST_DIR}/rangelock.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rangelock.h
     ${CMAKE_CURRENT_LIST_DIR}/rasgueado.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rasgueado.h
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.cpp
@@ -316,12 +320,12 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.h
-    ${CMAKE_CURRENT_LIST_DIR}/systemlock.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/systemlock.h
     ${CMAKE_CURRENT_LIST_DIR}/system.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.h
+    ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.h
     ${CMAKE_CURRENT_LIST_DIR}/tapping.cpp

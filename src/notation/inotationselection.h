@@ -35,6 +35,7 @@ namespace mu::engraving {
 class EngravingItem;
 class MeasureBase;
 class Note;
+class Page;
 class System;
 enum class SelState : char;
 }
@@ -76,6 +77,7 @@ public:
     virtual mu::engraving::MeasureBase* startMeasureBase() const = 0;
     virtual mu::engraving::MeasureBase* endMeasureBase() const = 0;
     virtual std::vector<mu::engraving::System*> selectedSystems() const = 0;
+    virtual std::vector<mu::engraving::Page*> pagesContainingSelection() const = 0;
 
     virtual bool elementsSelected(const mu::engraving::ElementTypeSet& types) const = 0;
 };
