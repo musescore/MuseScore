@@ -62,5 +62,6 @@ public:
     virtual engraving::voice_idx_t currentVoice() const = 0;
 
     virtual bool isNoteInputActionAllowed() const = 0;
+    virtual bool isNoteOrRestSelected() const = 0;
 };
 }

@@ -25,28 +25,26 @@
  #include "rcommand/commandtypes.h"
 
 namespace mu::notation {
-inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
-inline static const muse::rcommand::Command CUT_COMMAND("command://notation/cut");
-inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/paste");
-inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
+// global commands
 inline static const muse::rcommand::Command CANCEL_COMMAND("command://notation/cancel");
 inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/undo");
 inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
 
-inline static const muse::rcommand::Command MOVE_RIGHT_COMMAND("command://notation/move-right");
-inline static const muse::rcommand::Command MOVE_LEFT_COMMAND("command://notation/move-left");
-inline static const muse::rcommand::Command MOVE_RIGHT_QUICKLY_COMMAND("command://notation/move-right-quickly");
-inline static const muse::rcommand::Command MOVE_LEFT_QUICKLY_COMMAND("command://notation/move-left-quickly");
-
-inline static const muse::rcommand::Command PITCH_UP_COMMAND("command://notation/pitch-up");
-inline static const muse::rcommand::Command PITCH_DOWN_COMMAND("command://notation/pitch-down");
-inline static const muse::rcommand::Command PITCH_UP_OCTAVE_COMMAND("command://notation/pitch-up-octave");
-inline static const muse::rcommand::Command PITCH_DOWN_OCTAVE_COMMAND("command://notation/pitch-down-octave");
+// navigation commands
+inline static const muse::rcommand::Command GOTO_NEXT_ELEMENT_COMMAND("command://notation/goto-next-element");
+inline static const muse::rcommand::Command GOTO_PREV_ELEMENT_COMMAND("command://notation/goto-prev-element");
+inline static const muse::rcommand::Command GOTO_NEXT_TRACK_COMMAND("command://notation/goto-next-track");
+inline static const muse::rcommand::Command GOTO_PREV_TRACK_COMMAND("command://notation/goto-prev-track");
+inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://notation/goto-next-frame");
+inline static const muse::rcommand::Command GOTO_PREV_FRAME_COMMAND("command://notation/goto-prev-frame");
+inline static const muse::rcommand::Command GOTO_NEXT_SYSTEM_COMMAND("command://notation/goto-next-system");
+inline static const muse::rcommand::Command GOTO_PREV_SYSTEM_COMMAND("command://notation/goto-prev-system");
 
 inline static const muse::rcommand::Command EDIT_NEXT_WORD_COMMAND("command://notation/edit-next-word");
 inline static const muse::rcommand::Command EDIT_NEXT_TEXT_ELEMENT_COMMAND("command://notation/edit-next-text-element");
 inline static const muse::rcommand::Command EDIT_PREV_TEXT_ELEMENT_COMMAND("command://notation/edit-prev-text-element");
 
+// note input commands
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_COMMAND("command://notation/toggle-note-input");
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND("command://notation/toggle-note-input-by-note-name");
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND("command://notation/toggle-note-input-by-duration");
@@ -120,4 +118,32 @@ inline static const muse::rcommand::Command INSERT_NOTE_F_COMMAND("command://not
 inline static const muse::rcommand::Command INSERT_NOTE_G_COMMAND("command://notation/insert-note-g");
 inline static const muse::rcommand::Command INSERT_NOTE_A_COMMAND("command://notation/insert-note-a");
 inline static const muse::rcommand::Command INSERT_NOTE_B_COMMAND("command://notation/insert-note-b");
+
+inline static const muse::rcommand::Command SHOW_TUPLET_CONFIGURE_COMMAND("command://notation/show-tuplet-configure");
+inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
+inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
+inline static const muse::rcommand::Command ADD_TRIPLET_COMMAND("command://notation/add-triplet");
+inline static const muse::rcommand::Command ADD_QUADRUPLET_COMMAND("command://notation/add-quadruplet");
+inline static const muse::rcommand::Command ADD_QUINTUPLET_COMMAND("command://notation/add-quintuplet");
+inline static const muse::rcommand::Command ADD_SEXTUPLET_COMMAND("command://notation/add-sextuplet");
+inline static const muse::rcommand::Command ADD_SEPTUPLET_COMMAND("command://notation/add-septuplet");
+inline static const muse::rcommand::Command ADD_OCTUPLET_COMMAND("command://notation/add-octuplet");
+inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://notation/add-nonuplet");
+
+// editing commands
+inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
+inline static const muse::rcommand::Command CUT_COMMAND("command://notation/cut");
+inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/paste");
+inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
+
+// move commands
+inline static const muse::rcommand::Command MOVE_RIGHT_COMMAND("command://notation/move-right");
+inline static const muse::rcommand::Command MOVE_LEFT_COMMAND("command://notation/move-left");
+inline static const muse::rcommand::Command MOVE_RIGHT_QUICKLY_COMMAND("command://notation/move-right-quickly");
+inline static const muse::rcommand::Command MOVE_LEFT_QUICKLY_COMMAND("command://notation/move-left-quickly");
+
+inline static const muse::rcommand::Command PITCH_UP_COMMAND("command://notation/pitch-up");
+inline static const muse::rcommand::Command PITCH_DOWN_COMMAND("command://notation/pitch-down");
+inline static const muse::rcommand::Command PITCH_UP_OCTAVE_COMMAND("command://notation/pitch-up-octave");
+inline static const muse::rcommand::Command PITCH_DOWN_OCTAVE_COMMAND("command://notation/pitch-down-octave");
 }

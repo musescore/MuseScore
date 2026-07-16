@@ -125,6 +125,7 @@ static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
 };
 
 static const std::vector<Command> NOTE_COMMANDS = {
+    ADD_NOTE_COMMAND,
     ENTER_NOTE_C_COMMAND,
     ENTER_NOTE_D_COMMAND,
     ENTER_NOTE_E_COMMAND,
@@ -146,6 +147,19 @@ static const std::vector<Command> NOTE_COMMANDS = {
     INSERT_NOTE_G_COMMAND,
     INSERT_NOTE_A_COMMAND,
     INSERT_NOTE_B_COMMAND
+};
+
+static const std::vector<Command> TUPLET_COMMANDS = {
+    SHOW_TUPLET_CONFIGURE_COMMAND,
+    ADD_TUPLET_COMMAND,
+    ADD_DUPLET_COMMAND,
+    ADD_TRIPLET_COMMAND,
+    ADD_QUADRUPLET_COMMAND,
+    ADD_QUINTUPLET_COMMAND,
+    ADD_SEXTUPLET_COMMAND,
+    ADD_SEPTUPLET_COMMAND,
+    ADD_OCTUPLET_COMMAND,
+    ADD_NONUPLET_COMMAND
 };
 
 std::string NotationCommandsState::moduleName() const
@@ -173,6 +187,7 @@ void NotationCommandsState::init()
         updateCommandStates(ADD_COMMANDS);
         updateCommandStates({ PAD_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
+        updateCommandStates(TUPLET_COMMANDS);
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -198,6 +213,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(ADD_ARTICULATION_COMMANDS));
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
+        updateCommandStates(TUPLET_COMMANDS);
     });
 
     updateCommandStates();
@@ -295,6 +311,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(VOICE_COMMANDS, command)) {
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
+    }
+
+    if (muse::contains(TUPLET_COMMANDS, command)) {
+        return CommandState(controller()->isNoteOrRestSelected(), false);
     }
 
     return CommandState(true, false);

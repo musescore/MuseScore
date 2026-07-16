@@ -29,6 +29,8 @@
 #include "workspace/view/workspacesmenumodel.h"
 #endif
 
+#include "notationscene/notationcommands.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -347,15 +349,15 @@ MenuItemList AppMenuModel::makeIntervalsItems()
 MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
-        makeMenuItem("duplet"),
-        makeMenuItem("triplet"),
-        makeMenuItem("quadruplet"),
-        makeMenuItem("quintuplet"),
-        makeMenuItem("sextuplet"),
-        makeMenuItem("septuplet"),
-        makeMenuItem("octuplet"),
-        makeMenuItem("nonuplet"),
-        makeMenuItem("tuplet-dialog")
+        makeMenuItem(notation::ADD_DUPLET_COMMAND),
+        makeMenuItem(notation::ADD_TRIPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUADRUPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUINTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEXTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_NONUPLET_COMMAND),
+        makeMenuItem(notation::SHOW_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;

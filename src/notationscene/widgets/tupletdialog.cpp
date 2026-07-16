@@ -26,13 +26,14 @@
 
 #include "notation/inotationstyle.h"
 #include "notation/types/noteinputtypes.h"
+#include "notationcommands.h"
 
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::ui;
-using namespace muse::actions;
+using namespace muse;
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -127,13 +128,12 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    TupletOptions options;
-    options.ratio = Fraction(actualNotes->value(), normalNotes->value());
-    options.numberType = numberType();
-    options.bracketType = bracketType();
+    rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
+    query.addParam("ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()));
+    query.addParam("number-type", Val(engraving::str_conv(numberType())));
+    query.addParam("bracket-type", Val(engraving::str_conv(bracketType())));
 
-    ActionData data_ = ActionData::make_arg1<TupletOptions>(options);
-    dispatcher()->dispatch("custom-tuplet", data_);
+    dispatcher()->dispatch(query);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)
