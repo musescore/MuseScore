@@ -440,7 +440,7 @@ private:
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
-    PlayingTechniqueType m_currPlayTechnique;
+    PlayingTechniqueType m_currPlayTechnique = PlayingTechniqueType::Undefined;
     bool m_isMxl = false;
 };
 
