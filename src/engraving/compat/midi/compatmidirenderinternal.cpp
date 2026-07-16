@@ -1230,19 +1230,43 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
                 // a rest is silent, but it may host grace notes that must still be emitted
                 if (cr && cr->isRest() && !toChordRest(cr)->graceNotes().empty()) {
                     ChordRest* rest = toChordRest(cr);
+                    const int hostTicks = rest->actualTicks().ticks();
                     const double veloMultiplier = NoteEvent::DEFAULT_VELOCITY_MULTIPLIER;
-                    auto collectRestGraces = [&](const std::vector<Chord*>& graces) {
+                    // Stagger the rest's grace notes so they play in sequence instead of all at the
+                    // rest onset. Mirrors the placement of GraceChordCtx::buildRestGraceCtxList:
+                    // grace-before packs from the rest start, grace-after ends at the rest end, and the
+                    // group is capped at half the rest. Each grace keeps its own play-event length and
+                    // is shifted later as a whole (equal on/off offset), so onTime < offTime is preserved.
+                    auto collectRestGraces = [&](const std::vector<Chord*>& graces, bool after) {
+                        if (graces.empty() || hostTicks <= 0) {
+                            return;
+                        }
+                        int accumulatedTicks = 0;
                         for (const Chord* c : graces) {
+                            accumulatedTicks += c->durationTypeTicks().ticks();
+                        }
+                        if (accumulatedTicks <= 0) {
+                            return;
+                        }
+                        const int totalTicks = std::min(hostTicks / 2, accumulatedTicks);
+                        int startAbs = after ? std::max(0, hostTicks - totalTicks) : 0;
+                        for (const Chord* c : graces) {
+                            const int slot = std::max(1, c->durationTypeTicks().ticks() * totalTicks / accumulatedTicks);
                             for (const Note* note : c->notes()) {
                                 CollectNoteParams params;
                                 params.velocityMultiplier = veloMultiplier;
                                 params.tickOffset = tickOffset;
+                                // negative offset delays the note; applying it to both edges shifts the
+                                // whole note later by startAbs without changing its length.
+                                params.graceOffsetOn = -startAbs;
+                                params.graceOffsetOff = -startAbs;
                                 collectNote(events, note, params, st1, pitchWheelRenderer, m_context);
                             }
+                            startAbs += slot;
                         }
                     };
-                    collectRestGraces(rest->graceNotesBefore());
-                    collectRestGraces(rest->graceNotesAfter());
+                    collectRestGraces(rest->graceNotesBefore(), false /*grace-before*/);
+                    collectRestGraces(rest->graceNotesAfter(), true /*grace-after*/);
                 }
                 prevChords[voice] = nullptr;
                 continue;
