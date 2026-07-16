@@ -103,30 +103,20 @@ void NotationActionController::init()
 {
     TRACEFUNC;
 
-    //! NOTE For historical reasons, the name of the action does not match what needs to be done
+    // global commands
     registerCommand(CANCEL_COMMAND, &Controller::resetState);
-    m_isAllowedDuringPlayback.insert("action://notation/cancel");
-
-    // edit commands
-
-    registerCommand(COPY_COMMAND, &Interaction::copySelection);
-    registerCommand(CUT_COMMAND, &Controller::cutSelection);
-    registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
-    registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
-
     registerCommand(UNDO_COMMAND, &Interaction::undo);
     registerCommand(REDO_COMMAND, &Interaction::redo);
 
     // navigation commands
-    registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
-    registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
-    registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
-    registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
-
-    registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
-    registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
-    registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
-    registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+    registerMoveSelection(GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
+    registerMoveSelection(GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
+    registerMoveSelection(GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
+    registerMoveSelection(GOTO_PREV_TRACK_COMMAND, MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
+    registerMoveSelection(GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame, MoveDirection::Right);
+    registerMoveSelection(GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame, MoveDirection::Left);
+    registerMoveSelection(GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Right);
+    registerMoveSelection(GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Left);
 
     registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -209,6 +199,38 @@ void NotationActionController::init()
     registerNoteCommand(INSERT_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::InsertChord);
     registerNoteCommand(INSERT_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::InsertChord);
 
+    registerCommand(SHOW_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
+    registerCommand(ADD_TUPLET_COMMAND, &Controller::putTuplet);
+    registerCommand(ADD_DUPLET_COMMAND, [this]() { putTuplet(2); });
+    registerCommand(ADD_TRIPLET_COMMAND, [this]() { putTuplet(3); });
+    registerCommand(ADD_QUADRUPLET_COMMAND, [this]() { putTuplet(4); });
+    registerCommand(ADD_QUINTUPLET_COMMAND, [this]() { putTuplet(5); });
+    registerCommand(ADD_SEXTUPLET_COMMAND, [this]() { putTuplet(6); });
+    registerCommand(ADD_SEPTUPLET_COMMAND, [this]() { putTuplet(7); });
+    registerCommand(ADD_OCTUPLET_COMMAND, [this]() { putTuplet(8); });
+    registerCommand(ADD_NONUPLET_COMMAND, [this]() { putTuplet(9); });
+
+    // editing commands
+    registerCommand(COPY_COMMAND, &Interaction::copySelection);
+    registerCommand(CUT_COMMAND, &Controller::cutSelection);
+    registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
+    registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
+
+    // move commands
+    registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
+    registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
+    registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
+    registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
+
+    registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
+    registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
+    registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
+    registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+
+    // --------------------
+
+    m_isAllowedDuringPlayback.insert("action://notation/cancel");
+
     registerAction("note-action", &Controller::handleNoteAction); // used for drums
 
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
@@ -232,30 +254,10 @@ void NotationActionController::init()
 
     registerAction("rest", &Interaction::putRestToSelection);
 
-    registerAction("duplet", [this]() { putTuplet(2); }, &Controller::noteOrRestSelected);
-    registerAction("triplet", [this]() { putTuplet(3); }, &Controller::noteOrRestSelected);
-    registerAction("quadruplet", [this]() { putTuplet(4); }, &Controller::noteOrRestSelected);
-    registerAction("quintuplet", [this]() { putTuplet(5); }, &Controller::noteOrRestSelected);
-    registerAction("sextuplet", [this]() { putTuplet(6); }, &Controller::noteOrRestSelected);
-    registerAction("septuplet", [this]() { putTuplet(7); }, &Controller::noteOrRestSelected);
-    registerAction("octuplet", [this]() { putTuplet(8); }, &Controller::noteOrRestSelected);
-    registerAction("nonuplet", [this]() { putTuplet(9); }, &Controller::noteOrRestSelected);
-    registerAction("custom-tuplet", &Controller::putTuplet, &Controller::noteOrRestSelected);
-    registerAction("tuplet-dialog", &Controller::openTupletOtherDialog, &Controller::noteOrRestSelected);
-
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
 
     registerAction("toggle-visible", &Interaction::toggleVisible, &Controller::isToggleVisibleAllowed);
-
-    registerMoveSelectionAction("next-element", MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
-    registerMoveSelectionAction("prev-element", MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
-    registerMoveSelectionAction("next-track", MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
-    registerMoveSelectionAction("prev-track", MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
-    registerMoveSelectionAction("next-frame", MoveSelectionType::Frame, MoveDirection::Right);
-    registerMoveSelectionAction("prev-frame", MoveSelectionType::Frame, MoveDirection::Left);
-    registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
-    registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
 
     registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
     registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
@@ -375,10 +377,10 @@ void NotationActionController::init()
 
     registerAction("add-8va", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
     registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
-    registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::noteOrRestSelected);
-    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::noteOrRestSelected);
+    registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::isNoteOrRestSelected);
+    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::isNoteOrRestSelected);
     registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
-                   &Controller::noteOrRestSelected);
+                   &Controller::isNoteOrRestSelected);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
     registerAction("add-image", [this]() { addImage(); });
@@ -728,6 +730,23 @@ void NotationActionController::init()
             { "insert-g", INSERT_NOTE_G_COMMAND },
             { "insert-a", INSERT_NOTE_A_COMMAND },
             { "insert-b", INSERT_NOTE_B_COMMAND },
+            { "duplet", ADD_DUPLET_COMMAND },
+            { "triplet", ADD_TRIPLET_COMMAND },
+            { "quadruplet", ADD_QUADRUPLET_COMMAND },
+            { "quintuplet", ADD_QUINTUPLET_COMMAND },
+            { "sextuplet", ADD_SEXTUPLET_COMMAND },
+            { "septuplet", ADD_SEPTUPLET_COMMAND },
+            { "octuplet", ADD_OCTUPLET_COMMAND },
+            { "nonuplet", ADD_NONUPLET_COMMAND },
+            { "tuplet-dialog", SHOW_TUPLET_CONFIGURE_COMMAND },
+            { "next-element", GOTO_NEXT_ELEMENT_COMMAND },
+            { "prev-element", GOTO_PREV_ELEMENT_COMMAND },
+            { "next-track", GOTO_NEXT_TRACK_COMMAND },
+            { "prev-track", GOTO_PREV_TRACK_COMMAND },
+            { "next-frame", GOTO_NEXT_FRAME_COMMAND },
+            { "prev-frame", GOTO_PREV_FRAME_COMMAND },
+            { "next-system", GOTO_NEXT_SYSTEM_COMMAND },
+            { "prev-system", GOTO_PREV_SYSTEM_COMMAND },
         };
 
         auto ad = dispatcher();
@@ -735,6 +754,21 @@ void NotationActionController::init()
         for (const auto& [actionCode, command] : actionToCommand) {
             ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
         }
+
+        ad->reg(this, "custom-tuplet", [d](const ActionData& args) {
+            IF_ASSERT_FAILED(args.count() < 0) {
+                return;
+            }
+
+            TupletOptions options = args.arg<TupletOptions>();
+
+            rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
+            query.addParam("ratio", Val(options.ratio.toString().toStdString()));
+            query.addParam("number-type", Val(engraving::str_conv(options.numberType)));
+            query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
+            query.addParam("auto-baselen", Val(options.autoBaseLen));
+            d->dispatch(query);
+        });
     }
 }
 
@@ -1455,13 +1489,13 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     }
 }
 
-void NotationActionController::putTuplet(const ActionData& data)
+void NotationActionController::putTuplet(const muse::rcommand::CommandQuery& query)
 {
-    IF_ASSERT_FAILED(data.count() == 1) {
-        return;
-    }
-
-    TupletOptions options = data.arg<TupletOptions>(0);
+    TupletOptions options;
+    options.ratio = engraving::Fraction::fromString(muse::String::fromStdString(query.param("ratio").toString()));
+    options.numberType = engraving::str_conv(query.param("number-type").toString(), engraving::TupletNumberType::SHOW_NUMBER);
+    options.bracketType = engraving::str_conv(query.param("bracket-type").toString(), engraving::TupletBracketType::AUTO_BRACKET);
+    options.autoBaseLen = query.param("auto-baselen", Val(false)).toBool();
 
     putTuplet(options);
 }
@@ -2797,7 +2831,7 @@ mu::engraving::EngravingItem* NotationActionController::selectedElement() const
     return selection ? selection->element() : nullptr;
 }
 
-bool NotationActionController::noteOrRestSelected() const
+bool NotationActionController::isNoteOrRestSelected() const
 {
     if (isNoteInputMode()) {
         return true;
@@ -3003,6 +3037,20 @@ void NotationActionController::registerMoveSelectionAction(const ActionCode& cod
     m_isEnabledMap[code] = moveSelectionAvailableFunc;
     m_isAllowedDuringPlayback.insert(code);
     dispatcher()->reg(this, code, moveSelectionFunc);
+}
+
+void NotationActionController::registerMoveSelection(const muse::rcommand::Command& command,
+                                                     MoveSelectionType type,
+                                                     MoveDirection direction,
+                                                     PlayMode playMode)
+{
+    registerCommand(command, [this, type, direction, playMode]() {
+        moveSelection(type, direction);
+
+        if (playMode != PlayMode::NoPlay) {
+            playSelectedElement(playMode == PlayMode::PlayChord);
+        }
+    });
 }
 
 void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type, MoveDirection direction)

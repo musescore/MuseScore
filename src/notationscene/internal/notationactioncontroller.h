@@ -97,6 +97,7 @@ public:
     engraving::voice_idx_t currentVoice() const override;
 
     bool isNoteInputActionAllowed() const override;
+    bool isNoteOrRestSelected() const override;
 
     muse::async::Notification currentNotationChanged() const;
 
@@ -137,7 +138,7 @@ private:
     void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
-    void putTuplet(const muse::actions::ActionData& data);
+    void putTuplet(const muse::rcommand::CommandQuery& query);
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
@@ -253,7 +254,6 @@ private:
     void startNoteInput();
 
     mu::engraving::EngravingItem* selectedElement() const;
-    bool noteOrRestSelected() const;
 
     const mu::engraving::Harmony* editedChordSymbol() const;
 
@@ -319,6 +319,7 @@ private:
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+    void registerMoveSelection(const muse::rcommand::Command&, MoveSelectionType, MoveDirection, PlayMode playMode = PlayMode::NoPlay);
 
     muse::async::Channel<bool> m_hasSelectionChanged;
     muse::async::Channel<bool> m_textEditingChanged;

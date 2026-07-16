@@ -661,6 +661,142 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+
+    // tuplet
+    CommandInfo{
+        SHOW_TUPLET_CONFIGURE_COMMAND,
+        TranslatableString("action", "Othe&r…"),
+        TranslatableString("action", "Show tuplet configure"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TUPLET_COMMAND,
+        TranslatableString("action", "Tuplet"),
+        TranslatableString("action", "Enter tuplet"),
+        InputSchema({
+            { "ratio", Arg(DataType::String, u"Tuplet ratio (e.g. 3/2, 4/3, 5/4, 6/5, 7/6, 8/7, 9/8)") },
+            { "number-type", Arg(DataType::String, u"Tuplet number type (number, relation, none)") },
+            { "bracket-type", Arg(DataType::String, u"Tuplet bracket type (auto, show, none)") },
+            { "auto-baselen", Arg(DataType::Boolean, u"Auto base length") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_DUPLET_COMMAND,
+        TranslatableString("action", "Duplet"),
+        TranslatableString("action", "Enter tuplet: duplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TRIPLET_COMMAND,
+        TranslatableString("action", "Triplet"),
+        TranslatableString("action", "Enter tuplet: triplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_QUADRUPLET_COMMAND,
+        TranslatableString("action", "Quadruplet"),
+        TranslatableString("action", "Enter tuplet: quadruplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_QUINTUPLET_COMMAND,
+        TranslatableString("action", "Quintuplet"),
+        TranslatableString("action", "Enter tuplet: quintuplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SEXTUPLET_COMMAND,
+        TranslatableString("action", "Sextuplet"),
+        TranslatableString("action", "Enter tuplet: sextuplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SEPTUPLET_COMMAND,
+        TranslatableString("action", "Septuplet"),
+        TranslatableString("action", "Enter tuplet: septuplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_OCTUPLET_COMMAND,
+        TranslatableString("action", "Octuplet"),
+        TranslatableString("action", "Enter tuplet: octuplet"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_NONUPLET_COMMAND,
+        TranslatableString("action", "Nonuplet"),
+        TranslatableString("action", "Enter tuplet: nonuplet"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // navigation commands
+    CommandInfo{
+        GOTO_NEXT_ELEMENT_COMMAND,
+        TranslatableString("action", "Next element"),
+        TranslatableString("action", "Select next element in score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_ELEMENT_COMMAND,
+        TranslatableString("action", "Previous element"),
+        TranslatableString("action", "Select previous element in score"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        GOTO_NEXT_TRACK_COMMAND,
+        TranslatableString("action", "Next staff or voice"),
+        TranslatableString("action", "Go to next staff or voice"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_TRACK_COMMAND,
+        TranslatableString("action", "Previous staff or voice"),
+        TranslatableString("action", "Go to previous staff or voice"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_NEXT_FRAME_COMMAND,
+        TranslatableString("action", "Next frame"),
+        TranslatableString("action", "Go to next frame"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_FRAME_COMMAND,
+        TranslatableString("action", "Previous frame"),
+        TranslatableString("action", "Go to previous frame"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_NEXT_SYSTEM_COMMAND,
+        TranslatableString("action", "Next system"),
+        TranslatableString("action", "Go to next system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_SYSTEM_COMMAND,
+        TranslatableString("action", "Previous system"),
+        TranslatableString("action", "Go to previous system"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const
