@@ -151,6 +151,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>K_K</eid>
               </Pedal>
             <next>
@@ -234,6 +236,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>Y_Y</eid>
               </Pedal>
             <next>
@@ -324,6 +328,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>2</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>n_n</eid>
               </Pedal>
             <next>
@@ -361,8 +367,10 @@
             </Spanner>
           <Spanner type="Pedal">
             <Pedal>
-              <endHookType>2</endHookType>
               <beginHookType>2</beginHookType>
+              <endHookType>2</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>s_s</eid>
               </Pedal>
             <next>
@@ -407,8 +415,10 @@
             </Spanner>
           <Spanner type="Pedal">
             <Pedal>
-              <endHookType>1</endHookType>
               <beginHookType>2</beginHookType>
+              <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>y_y</eid>
               </Pedal>
             <next>

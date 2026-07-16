@@ -447,6 +447,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>IB_IB</eid>
               <color r="148" g="33" b="146" a="255"/>
               </Pedal>
