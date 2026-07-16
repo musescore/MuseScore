@@ -539,6 +539,7 @@ static void attachPendingGraceNotes(ChordRest* cr, QList<Chord*>& graceNotes)
         }
     }
 }
+
 //---------------------------------------------------------
 //   readCapVoice
 //---------------------------------------------------------
@@ -982,6 +983,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             break;
         }
     }
+    qDeleteAll(graceNotes);   // free any grace chords left unattached at the end of the voice
+    graceNotes.clear();
     Fraction endTick = tick;
 
     //

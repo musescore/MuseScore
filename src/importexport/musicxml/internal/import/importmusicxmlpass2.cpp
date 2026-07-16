@@ -7283,6 +7283,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             if (prevCR && prevCR != cr) {
                 addGraceChordsAfter(prevCR, gcl, gac);
             }
+            gac = 0;   // reset grace-after count so it cannot leak into the next note
             addGraceChordsBefore(cr, gcl);
         }
     } else {
@@ -7324,6 +7325,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
 
             // append any grace chord
+            gac = 0;   // reset grace-after count so it cannot leak into the next note
             addGraceChordsBefore(c, gcl);
         }
 
