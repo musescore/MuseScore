@@ -960,29 +960,10 @@ MeasureBase* MeasureBaseList::firstMeasureBaseAtTick(int tick) const
 
     auto it = m_tickIndex.upper_bound(tick);
 
-    if (it == m_tickIndex.begin()) {
-        MeasureBase* mb = it->second;
-
-        return mb;
+    if (it != m_tickIndex.begin()) {
+        --it;
     }
-
-    --it;
-    for (;; --it) {
-        if (it == m_tickIndex.begin()) {
-            MeasureBase* mb = it->second;
-
-            return mb;
-        }
-
-        MeasureBase* mb = it->second;
-        if (!mb) {
-            break;
-        }
-
-        return mb;
-    }
-
-    return nullptr;
+    return it->second;
 }
 
 std::vector<MeasureBase*> MeasureBaseList::measureBasesAtTick(int tick) const
