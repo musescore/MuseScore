@@ -101,6 +101,8 @@ enum class DragMode : unsigned char
 enum class MoveDirection : unsigned char
 {
     Undefined = 0,
+    First,
+    Last,
     Left,
     Right,
     Up,

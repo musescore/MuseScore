@@ -109,6 +109,8 @@ void NotationActionController::init()
     registerCommand(REDO_COMMAND, &Interaction::redo);
 
     // navigation commands
+    registerMoveSelection(GOTO_FIRST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::First, PlayMode::PlayChord);
+    registerMoveSelection(GOTO_LAST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Last, PlayMode::PlayChord);
     registerMoveSelection(GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
     registerMoveSelection(GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
     registerMoveSelection(GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
@@ -117,6 +119,10 @@ void NotationActionController::init()
     registerMoveSelection(GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame, MoveDirection::Left);
     registerMoveSelection(GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Right);
     registerMoveSelection(GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Left);
+    registerCommand(GOTO_UP_CHORD_COMMAND, [this]() { moveWithinChord(MoveDirection::Up); });
+    registerCommand(GOTO_DOWN_CHORD_COMMAND, [this]() { moveWithinChord(MoveDirection::Down); });
+    registerCommand(GOTO_TOP_CHORD_COMMAND, [this]() { selectTopOrBottomOfChord(MoveDirection::Up); });
+    registerCommand(GOTO_BOTTOM_CHORD_COMMAND, [this]() { selectTopOrBottomOfChord(MoveDirection::Down); });
 
     registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -259,9 +265,6 @@ void NotationActionController::init()
 
     registerAction("toggle-visible", &Interaction::toggleVisible, &Controller::isToggleVisibleAllowed);
 
-    registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
-    registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
-
     m_isAllowedDuringPlayback.insert({
         "notation-move-right", "notation-move-left",
         "notation-move-right-quickly", "notation-move-left-quickly",
@@ -288,10 +291,6 @@ void NotationActionController::init()
     registerAction("select-notes-in-chord", &Controller::selectAllNotesInChord, &Controller::hasSelection);
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
-    registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
-    registerAction("last-element", &Interaction::selectLastElement, PlayMode::PlayChord);
-    registerAction("top-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Up); }, &Controller::hasSelection);
-    registerAction("bottom-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Down); }, &Controller::hasSelection);
     registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
@@ -739,6 +738,8 @@ void NotationActionController::init()
             { "octuplet", ADD_OCTUPLET_COMMAND },
             { "nonuplet", ADD_NONUPLET_COMMAND },
             { "tuplet-dialog", SHOW_TUPLET_CONFIGURE_COMMAND },
+            { "first-element", GOTO_FIRST_ELEMENT_COMMAND },
+            { "last-element", GOTO_LAST_ELEMENT_COMMAND },
             { "next-element", GOTO_NEXT_ELEMENT_COMMAND },
             { "prev-element", GOTO_PREV_ELEMENT_COMMAND },
             { "next-track", GOTO_NEXT_TRACK_COMMAND },
@@ -747,6 +748,10 @@ void NotationActionController::init()
             { "prev-frame", GOTO_PREV_FRAME_COMMAND },
             { "next-system", GOTO_NEXT_SYSTEM_COMMAND },
             { "prev-system", GOTO_PREV_SYSTEM_COMMAND },
+            { "up-chord", GOTO_UP_CHORD_COMMAND },
+            { "down-chord", GOTO_DOWN_CHORD_COMMAND },
+            { "top-chord", GOTO_TOP_CHORD_COMMAND },
+            { "bottom-chord", GOTO_BOTTOM_CHORD_COMMAND },
         };
 
         auto ad = dispatcher();
@@ -756,11 +761,11 @@ void NotationActionController::init()
         }
 
         ad->reg(this, "custom-tuplet", [d](const ActionData& args) {
-            IF_ASSERT_FAILED(args.count() < 0) {
+            IF_ASSERT_FAILED(args.count() > 0) {
                 return;
             }
 
-            TupletOptions options = args.arg<TupletOptions>();
+            TupletOptions options = args.arg<TupletOptions>(0);
 
             rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
             query.addParam("ratio", Val(options.ratio.toString().toStdString()));
@@ -1592,7 +1597,7 @@ void NotationActionController::realtimeAdvance()
     midiInput->onRealtimeAdvance();
 }
 
-bool NotationActionController::moveSelectionAvailable(MoveSelectionType type) const
+bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) const
 {
     auto interaction = currentNotationInteraction();
     return interaction && interaction->moveSelectionAvailable(type);
@@ -3017,26 +3022,6 @@ void NotationActionController::registerTabPadNoteAction(const ActionCode& code, 
     {
         padNote(padding);
     }, &NotationActionController::isTablatureStaff);
-}
-
-void NotationActionController::registerMoveSelectionAction(const ActionCode& code, MoveSelectionType type,
-                                                           MoveDirection direction, PlayMode playMode)
-{
-    auto moveSelectionFunc = [this, type, direction, playMode]() {
-        moveSelection(type, direction);
-
-        if (playMode != PlayMode::NoPlay) {
-            playSelectedElement(playMode == PlayMode::PlayChord);
-        }
-    };
-
-    auto moveSelectionAvailableFunc = [this, type]() {
-        return moveSelectionAvailable(type);
-    };
-
-    m_isEnabledMap[code] = moveSelectionAvailableFunc;
-    m_isAllowedDuringPlayback.insert(code);
-    dispatcher()->reg(this, code, moveSelectionFunc);
 }
 
 void NotationActionController::registerMoveSelection(const muse::rcommand::Command& command,

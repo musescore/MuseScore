@@ -31,6 +31,8 @@ inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/und
 inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
 
 // navigation commands
+inline static const muse::rcommand::Command GOTO_FIRST_ELEMENT_COMMAND("command://notation/goto-first-element");
+inline static const muse::rcommand::Command GOTO_LAST_ELEMENT_COMMAND("command://notation/goto-last-element");
 inline static const muse::rcommand::Command GOTO_NEXT_ELEMENT_COMMAND("command://notation/goto-next-element");
 inline static const muse::rcommand::Command GOTO_PREV_ELEMENT_COMMAND("command://notation/goto-prev-element");
 inline static const muse::rcommand::Command GOTO_NEXT_TRACK_COMMAND("command://notation/goto-next-track");
@@ -39,6 +41,10 @@ inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://n
 inline static const muse::rcommand::Command GOTO_PREV_FRAME_COMMAND("command://notation/goto-prev-frame");
 inline static const muse::rcommand::Command GOTO_NEXT_SYSTEM_COMMAND("command://notation/goto-next-system");
 inline static const muse::rcommand::Command GOTO_PREV_SYSTEM_COMMAND("command://notation/goto-prev-system");
+inline static const muse::rcommand::Command GOTO_UP_CHORD_COMMAND("command://notation/goto-up-chord");
+inline static const muse::rcommand::Command GOTO_DOWN_CHORD_COMMAND("command://notation/goto-down-chord");
+inline static const muse::rcommand::Command GOTO_TOP_CHORD_COMMAND("command://notation/goto-top-chord");
+inline static const muse::rcommand::Command GOTO_BOTTOM_CHORD_COMMAND("command://notation/goto-bottom-chord");
 
 inline static const muse::rcommand::Command EDIT_NEXT_WORD_COMMAND("command://notation/edit-next-word");
 inline static const muse::rcommand::Command EDIT_NEXT_TEXT_ELEMENT_COMMAND("command://notation/edit-next-text-element");

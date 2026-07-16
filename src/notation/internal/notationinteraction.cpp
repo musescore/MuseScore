@@ -4187,6 +4187,16 @@ void NotationInteraction::toggleSnapToNext()
 
 void NotationInteraction::moveElementSelection(MoveDirection d)
 {
+    if (d == MoveDirection::First) {
+        selectFirstElement(false);
+        return;
+    }
+
+    if (d == MoveDirection::Last) {
+        selectLastElement();
+        return;
+    }
+
     EngravingItem* el = score()->selection().element();
     if (!el && !score()->selection().elements().empty()) {
         el = score()->selection().elements().back();
