@@ -2333,12 +2333,10 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         const ActionIcon* icon = toActionIcon(element);
         switch (icon->actionType()) {
         case ActionIconType::SYSTEM_LOCK: {
-            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
         case ActionIconType::PAGE_LOCK: {
-            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
             return;
         }
