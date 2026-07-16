@@ -3346,11 +3346,12 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
         if (position == AlignH::LEFT) {
             const BarLine* blAbove = startRepeat || !measure->prevMeasure()
                                      ? measure->startBarLine(blAboveIdx) : measure->prevMeasure()->endBarLine(blAboveIdx);
-            double blWidth = startRepeat ? blAbove->width() : 0.0;
+            double blWidth = (startRepeat && blAbove) ? blAbove->width() : 0.0;
             xAdj += padding + blWidth;
         } else if (position == AlignH::RIGHT) {
             const BarLine* blAbove = measure->endBarLine(blAboveIdx);
-            xAdj -= blAbove->width() + padding;
+            double blWidth = blAbove ? blAbove->width() : 0.0;
+            xAdj -= blWidth + padding;
         }
     }
     ldata->moveX(xAdj);
