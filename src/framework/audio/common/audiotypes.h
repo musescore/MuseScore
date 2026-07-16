@@ -578,3 +578,11 @@ struct TransportEvent {
 };
 using TransportEvents = std::vector<TransportEvent>;
 }
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::audio::OutputSpec& spec)
+{
+    s << "sampleRate: " << spec.sampleRate
+      << ", channels: " << spec.audioChannelCount
+      << ", samplesPerChannel: " << spec.samplesPerChannel;
+    return s;
+}

@@ -80,6 +80,7 @@ private:
 
     IAudioDriver::Callback m_callback;
     IAudioDriverPtr m_audioDriver;
+    IAudioDriver::Spec m_lastValidSpec;
     async::Notification m_currentAudioApiChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Channel<IAudioDriver::Spec> m_activeSpecChanged;
