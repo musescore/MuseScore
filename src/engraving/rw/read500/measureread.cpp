@@ -301,6 +301,12 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 mmr->setParent(segment);
                 TRead::read(mmr, e, ctx);
                 segment->add(mmr);
+                for (size_t i = 0; i < graceNotes.size(); ++i) {
+                    Chord* gc = graceNotes[i];
+                    gc->setGraceIndex(static_cast<int>(i));
+                    mmr->add(gc);
+                }
+                graceNotes.clear();
                 ctx.incTick(mmr->actualTicks());
             } else {
                 segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());

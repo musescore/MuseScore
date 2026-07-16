@@ -3775,46 +3775,27 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Measure* nm = nstaff->score()->tick2measure(s->tick());
     Segment* ns = nm->findSegment(s->segmentType(), s->tick());
     EngravingItem* ne = ns ? ns->element(dtrack) : nullptr;
-    if (!ne || !ne->isChord()) {
+    if (!ne || !ne->isChordRest()) {
         return nullptr;
     }
-    Chord* nc = toChord(ne);
-    if (c->isGrace()) {
-        EngravingItem* ne = ns ? ns->element(dtrack) : nullptr;
-        if (!ne || !ne->isChordRest()) {
-            return nullptr;
-        }
-        ChordRest* ncr = toChordRest(ne);
-        if (!c->isGrace()) {
-            return ncr->isChord() ? toChord(ncr) : nullptr;
-        }
+    ChordRest* ncr = toChordRest(ne);
+    if (!c->isGrace()) {
+        return ncr->isChord() ? toChord(ncr) : nullptr;
+    }
 
-        if (c->isGrace()) {
-            ChordRest* pc = toChordRest(c->explicitParent());
-            size_t index = 0;
-            for (Chord* gc : pc->graceNotes()) {
-                if (c == gc) {
-                    break;
-                }
-                index++;
-            }
-            if (index < ncr->graceNotes().size()) {
-                return ncr->graceNotes().at(index);
-            }
+    // grace host: resolve the linked grace chord by its index in the host's grace list
+    ChordRest* pc = toChordRest(c->explicitParent());
+    size_t index = 0;
+    for (Chord* gc : pc->graceNotes()) {
+        if (c == gc) {
+            break;
         }
-        return nullptr;
-        size_t index = 0;
-        for (Chord* gc : pc->graceNotes()) {
-            if (c == gc) {
-                break;
-            }
-            index++;
-        }
-        if (index < nc->graceNotes().size()) {
-            nc = nc->graceNotes().at(index);
-        }
+        index++;
     }
-    return nc;
+    if (index < ncr->graceNotes().size()) {
+        return ncr->graceNotes().at(index);
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

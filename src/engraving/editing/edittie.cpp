@@ -137,7 +137,6 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
 
         // set cursor at position after note
         if (c->isGraceBefore()) {
-        if (c->isGraceBefore()) {
             // tie grace note before to next grace note or main note
             Note* nextNote = searchTieNote(note);
             if (nextNote && nextNote->chord()->isGrace()) {
@@ -151,8 +150,6 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
                 cr = host;
                 addToChord = true;
             }
-        } else {
-            addToChord = true;
         } else {
             is.setTrack(note->chord()->track());
             is.setSegment(note->chord()->segment());
