@@ -22,7 +22,6 @@
 
 #include "automation.h"
 
-#include "global/containers.h"
 #include "global/log.h"
 
 using namespace mu::engraving;
@@ -82,22 +81,23 @@ bool Automation::isEmpty() const
     return m_curveMap.empty();
 }
 
-void Automation::clear()
+void Automation::setCurves(const AutomationCurveMap& curves)
 {
-    if (m_curveMap.empty()) {
+    if (curves == m_curveMap) {
         return;
     }
 
-    m_curveMap.clear();
+    m_curveMap = curves;
+
     m_pendingChanges.isFullReset = true;
     notifyChanged();
 }
 
-void Automation::replaceCurves(AutomationCurveMap&& curves)
+void Automation::replaceCurves(const AutomationCurveMap& curves)
 {
     static const AutomationCurve EMPTY_CURVE;
 
-    for (auto& [key, newCurve] : curves) {
+    for (const auto& [key, newCurve] : curves) {
         const auto oldIt = m_curveMap.find(key);
         const AutomationCurve& oldCurve = oldIt != m_curveMap.end() ? oldIt->second : EMPTY_CURVE;
         diffPoints(key, oldCurve, newCurve, m_pendingChanges);
@@ -107,158 +107,82 @@ void Automation::replaceCurves(AutomationCurveMap&& curves)
                 m_curveMap.erase(oldIt);
             }
         } else if (oldIt != m_curveMap.end()) {
-            oldIt->second = std::move(newCurve);
+            oldIt->second = newCurve;
         } else {
-            m_curveMap.emplace(key, std::move(newCurve));
+            m_curveMap.emplace(key, newCurve);
         }
     }
 
     notifyChanged();
 }
 
-void Automation::setCurves(AutomationCurveMap&& curves)
+void Automation::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
 {
-    static const AutomationCurve EMPTY_CURVE;
+    if (edits.empty()) {
+        return;
+    }
 
-    for (auto it = curves.begin(); it != curves.end();) {
-        if (it->second.empty()) {
-            it = curves.erase(it);
+    AutomationCurve& curve = m_curveMap.try_emplace(key).first->second;
+
+    for (const auto& edit : edits) {
+        utick_t rangeFrom = edit.tick;
+        utick_t rangeTo = edit.tick;
+        bool moved = false;
+
+        if (edit.moveFrom && *edit.moveFrom != edit.tick) {
+            curve.erase(*edit.moveFrom);
+            rangeFrom = std::min(rangeFrom, *edit.moveFrom);
+            rangeTo = std::max(rangeTo, *edit.moveFrom);
+            moved = true;
+        }
+
+        auto pointIt = curve.lower_bound(edit.tick);
+        const bool exists = pointIt != curve.end() && pointIt->first == edit.tick;
+
+        if (exists && pointIt->second == edit.point) {
+            if (moved) {
+                m_pendingChanges.extend(key, rangeFrom, rangeTo);
+            }
+            continue;
+        }
+
+        if (exists) {
+            pointIt->second = edit.point;
         } else {
-            ++it;
+            curve.emplace_hint(pointIt, edit.tick, edit.point);
         }
+
+        m_pendingChanges.extend(key, rangeFrom, rangeTo);
     }
 
-    for (const auto& [key, oldCurve] : m_curveMap) {
-        const auto newIt = curves.find(key);
-        const AutomationCurve& newCurve = newIt != curves.end() ? newIt->second : EMPTY_CURVE;
-        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
-    }
-
-    for (const auto& [key, newCurve] : curves) {
-        if (!muse::contains(m_curveMap, key)) {
-            diffPoints(key, EMPTY_CURVE, newCurve, m_pendingChanges);
-        }
-    }
-
-    m_curveMap = std::move(curves);
     notifyChanged();
 }
 
-void Automation::addPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& p)
+void Automation::removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks)
 {
-    auto curveIt = m_curveMap.find(key);
+    if (ticks.empty()) {
+        return;
+    }
+
+    const auto curveIt = m_curveMap.find(key);
     if (curveIt == m_curveMap.end()) {
-        curveIt = m_curveMap.try_emplace(key).first;
-    }
-
-    curveIt->second.insert_or_assign(tick, p);
-    m_pendingChanges.extend(key, tick, tick);
-    notifyChanged();
-}
-
-void Automation::removePoint(const AutomationCurveKey& key, utick_t tick)
-{
-    auto curveIt = m_curveMap.find(key);
-    IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
         return;
     }
 
     AutomationCurve& curve = curveIt->second;
-    bool ok = muse::remove(curve, tick);
-    IF_ASSERT_FAILED(ok) {
-        return;
+
+    for (utick_t tick : ticks) {
+        const auto pointIt = curve.find(tick);
+        if (pointIt == curve.end()) {
+            continue;
+        }
+
+        curve.erase(pointIt);
+        m_pendingChanges.extend(key, tick, tick);
     }
 
     if (curve.empty()) {
         m_curveMap.erase(curveIt);
-    }
-
-    m_pendingChanges.extend(key, tick, tick);
-    notifyChanged();
-}
-
-void Automation::movePoint(const AutomationCurveKey& key, utick_t srcTick, utick_t dstTick)
-{
-    if (srcTick == dstTick) {
-        return;
-    }
-
-    auto curveIt = m_curveMap.find(key);
-    IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
-        return;
-    }
-
-    AutomationCurve& curve = curveIt->second;
-    auto node = curve.extract(srcTick);
-    IF_ASSERT_FAILED(!node.empty()) {
-        return;
-    }
-
-    curve.insert_or_assign(dstTick, node.mapped());
-
-    m_pendingChanges.extend(key, std::min(srcTick, dstTick), std::max(srcTick, dstTick));
-    notifyChanged();
-}
-
-void Automation::setPointInValue(const AutomationCurveKey& key, utick_t tick, double value)
-{
-    auto curveIt = m_curveMap.find(key);
-    IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
-        return;
-    }
-
-    AutomationCurve& curve = curveIt->second;
-    auto pointIt = curve.find(tick);
-    IF_ASSERT_FAILED(pointIt != curve.end()) {
-        return;
-    }
-
-    if (pointIt->second.inValue == value) {
-        return;
-    }
-
-    pointIt->second.inValue = value;
-    m_pendingChanges.extend(key, tick, tick);
-    notifyChanged();
-}
-
-void Automation::setPointOutValue(const AutomationCurveKey& key, utick_t tick, double value)
-{
-    auto curveIt = m_curveMap.find(key);
-    IF_ASSERT_FAILED(curveIt != m_curveMap.end()) {
-        return;
-    }
-
-    AutomationCurve& curve = curveIt->second;
-    auto pointIt = curve.find(tick);
-    IF_ASSERT_FAILED(pointIt != curve.end()) {
-        return;
-    }
-
-    if (pointIt->second.outValue == value) {
-        return;
-    }
-
-    pointIt->second.outValue = value;
-    m_pendingChanges.extend(key, tick, tick);
-    notifyChanged();
-}
-
-void Automation::removePoints(const PointRemoveAccepted& accepted)
-{
-    for (auto& [key, curve] : m_curveMap) {
-        for (auto it = curve.begin(); it != curve.end();) {
-            if (accepted(key, it->first, it->second)) {
-                m_pendingChanges.extend(key, it->first, it->first);
-                it = curve.erase(it);
-            } else {
-                ++it;
-            }
-        }
-    }
-
-    for (auto it = m_curveMap.begin(); it != m_curveMap.end();) {
-        it = it->second.empty() ? m_curveMap.erase(it) : std::next(it);
     }
 
     notifyChanged();
@@ -360,7 +284,8 @@ void Automation::rollbackTransaction()
         return;
     }
 
-    m_curveMap = std::move(m_snapshot);
+    m_curveMap = m_snapshot;
+    m_snapshot.clear();
     m_transactionStarted = false;
     m_notifyPending = false;
     m_pendingChanges.clear();

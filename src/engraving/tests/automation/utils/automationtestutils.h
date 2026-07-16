@@ -24,20 +24,51 @@
 #include <gtest/gtest.h>
 
 #include "engraving/automation/automationtypes.h"
-#include "global/containers.h"
 
 namespace mu::engraving {
+using InterpolationType = AutomationPoint::InterpolationType;
+
+inline AutomationPoint generatedPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+{
+    static uint64_t lastId = 0;
+
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+    p.itemId = EID::newUniqueTestMode(lastId);
+    p.generated = true;
+
+    return p;
+}
+
+inline AutomationPoint customPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+{
+    AutomationPoint p;
+    p.inValue = inVal;
+    p.outValue = outVal;
+    p.interpolation = interp;
+    p.generated = false;
+
+    return p;
+}
+
 inline void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
 {
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
 
-    for (const auto& [tick, expectedPoint] : expectedCurve) {
-        ASSERT_TRUE(muse::contains(actualCurve, tick)) << "Missing point at tick " << tick;
-        const AutomationPoint& actualPoint = actualCurve.at(tick);
+    for (auto expectedIt = expectedCurve.cbegin(); expectedIt != expectedCurve.cend(); ++expectedIt) {
+        const utick_t tick = expectedIt->first;
+        const auto actualIt = actualCurve.find(tick);
+        ASSERT_TRUE(actualIt != actualCurve.cend()) << "Missing point at tick " << tick;
+        const AutomationPoint& actualPoint = actualIt->second;
+        const AutomationPoint& expectedPoint = expectedIt->second;
 
-        EXPECT_NEAR(actualPoint.inValue, expectedPoint.inValue, 0.0001) << "inValue mismatch at tick " << tick;
+        EXPECT_NEAR(resolvedInValue(actualCurve, actualIt), resolvedInValue(expectedCurve, expectedIt), 0.0001)
+            << "inValue mismatch at tick " << tick;
         EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at tick " << tick;
+        EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;
     }
 }
 }

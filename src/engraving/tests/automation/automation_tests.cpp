@@ -30,33 +30,6 @@
 
 using namespace mu::engraving;
 
-using InterpolationType = AutomationPoint::InterpolationType;
-
-static AutomationPoint generatedPoint(double inVal, double outVal,
-                                      InterpolationType interp = InterpolationType::Linear)
-{
-    static uint64_t lastId = 0;
-
-    AutomationPoint p;
-    p.inValue = inVal;
-    p.outValue = outVal;
-    p.interpolation = interp;
-    p.itemId = EID::newUniqueTestMode(lastId);
-
-    return p;
-}
-
-static AutomationPoint customPoint(double inVal, double outVal,
-                                   InterpolationType interp = InterpolationType::Linear)
-{
-    AutomationPoint p;
-    p.inValue = inVal;
-    p.outValue = outVal;
-    p.interpolation = interp;
-
-    return p;
-}
-
 class Automation_Tests : public ::testing::Test, public muse::async::Asyncable
 {
 };
@@ -72,9 +45,9 @@ TEST_F(Automation_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
     AutomationPoint p1 = generatedPoint(0.3, 0.4);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
-    automation.addPoint(key, 100, p1);
-    automation.addPoint(key, 200, p2);
-    automation.addPoint(key, 300, p3);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, p1 }, { 200, p2 }, { 300, p3 } };
+    automation.setCurves(curves);
 
     // [WHEN] Move ticks starting at 200 by +100
     automation.moveTicks(200, 100);
@@ -98,9 +71,9 @@ TEST_F(Automation_Tests, MoveTicks_NegativeDiff_ShiftsPointsBack)
     AutomationPoint p1 = generatedPoint(0.3, 0.4);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
-    automation.addPoint(key, 100, p1);
-    automation.addPoint(key, 500, p2);
-    automation.addPoint(key, 700, p3);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, p1 }, { 500, p2 }, { 700, p3 } };
+    automation.setCurves(curves);
 
     // [WHEN] Move ticks starting at 500 by -200
     automation.moveTicks(500, -200);
@@ -127,8 +100,10 @@ TEST_F(Automation_Tests, MoveTicks_AcrossMultipleCurves)
 
     AutomationPoint p1 = generatedPoint(0.3, 0.5);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
-    automation.addPoint(key1, 200, p1);
-    automation.addPoint(key2, 200, p2);
+    AutomationCurveMap curves;
+    curves[key1] = { { 200, p1 } };
+    curves[key2] = { { 200, p2 } };
+    automation.setCurves(curves);
 
     // [WHEN] Ticks from 100 shifted by +500
     automation.moveTicks(100, 500);
@@ -154,10 +129,9 @@ TEST_F(Automation_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     AutomationPoint p300 = generatedPoint(0.4, 0.5);
     AutomationPoint p500 = generatedPoint(0.5, 0.6);
     AutomationPoint p700 = generatedPoint(0.6, 0.7);
-    automation.addPoint(key, 100, p100);
-    automation.addPoint(key, 300, p300);
-    automation.addPoint(key, 500, p500);
-    automation.addPoint(key, 700, p700);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, p100 }, { 300, p300 }, { 500, p500 }, { 700, p700 } };
+    automation.setCurves(curves);
 
     // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
     automation.removeTicks(300, 500);
@@ -177,8 +151,9 @@ TEST_F(Automation_Tests, RemoveTicks_CleansUpEmptyCurves)
     key.type = AutomationType::Dynamics;
     key.staffId = muse::ID(1);
 
-    automation.addPoint(key, 200, generatedPoint(0.4, 0.5));
-    automation.addPoint(key, 400, generatedPoint(0.5, 0.6));
+    AutomationCurveMap curves;
+    curves[key] = { { 200, generatedPoint(0.4, 0.5) }, { 400, generatedPoint(0.5, 0.6) } };
+    automation.setCurves(curves);
 
     // [WHEN] Remove ticks in range [100, 500]
     automation.removeTicks(100, 500);
@@ -187,9 +162,9 @@ TEST_F(Automation_Tests, RemoveTicks_CleansUpEmptyCurves)
     EXPECT_TRUE(automation.isEmpty());
 }
 
-TEST_F(Automation_Tests, RemovePoints_RemovesGeneratedPreservesCustom)
+TEST_F(Automation_Tests, RemovePoints_RemovesGivenTicksPreservesOthers)
 {
-    // [GIVEN] A mix of generated (itemId set) and custom (no itemId) points
+    // [GIVEN] Four points on a single curve
     Automation automation;
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
@@ -197,26 +172,28 @@ TEST_F(Automation_Tests, RemovePoints_RemovesGeneratedPreservesCustom)
 
     AutomationPoint custom100 = customPoint(0.3, 0.4);
     AutomationPoint custom300 = customPoint(0.5, 0.6);
-    automation.addPoint(key, 100, custom100);
-    automation.addPoint(key, 200, generatedPoint(0.4, 0.5));
-    automation.addPoint(key, 300, custom300);
-    automation.addPoint(key, 400, generatedPoint(0.6, 0.7));
+    AutomationCurveMap curves;
+    curves[key] = {
+        { 100, custom100 },
+        { 200, generatedPoint(0.4, 0.5) },
+        { 300, custom300 },
+        { 400, generatedPoint(0.6, 0.7) }
+    };
+    automation.setCurves(curves);
 
-    // [WHEN] Remove only generated points
-    automation.removePoints([](const AutomationCurveKey&, int, const AutomationPoint& point) {
-        return point.itemId.has_value();
-    });
+    // [WHEN] Remove points at ticks 200 and 400
+    automation.removePoints(key, { 200, 400 });
 
-    // [THEN] Only custom points remain
+    // [THEN] Only points at 100 and 300 remain
     AutomationCurve expected;
     expected[100] = custom100;
     expected[300] = custom300;
     checkCurvesMatch(automation.curve(key), expected);
 }
 
-TEST_F(Automation_Tests, RemovePoints_FilterByKeyAndTick)
+TEST_F(Automation_Tests, RemovePoints_ScopedToGivenKey)
 {
-    // [GIVEN] Two curves; remove generated points from key1 at tick >= 300 only
+    // [GIVEN] Two curves sharing the same tick
     Automation automation;
     AutomationCurveKey key1;
     key1.type = AutomationType::Dynamics;
@@ -228,14 +205,13 @@ TEST_F(Automation_Tests, RemovePoints_FilterByKeyAndTick)
 
     AutomationPoint p_key1_100 = generatedPoint(0.3, 0.4);
     AutomationPoint p_key2_300 = generatedPoint(0.5, 0.6);
-    automation.addPoint(key1, 100, p_key1_100);
-    automation.addPoint(key1, 300, generatedPoint(0.4, 0.5));
-    automation.addPoint(key2, 300, p_key2_300);
+    AutomationCurveMap curves;
+    curves[key1] = { { 100, p_key1_100 }, { 300, generatedPoint(0.4, 0.5) } };
+    curves[key2] = { { 300, p_key2_300 } };
+    automation.setCurves(curves);
 
-    // [WHEN] Remove generated points from key1 at tick >= 300
-    automation.removePoints([&key1](const AutomationCurveKey& key, int utick, const AutomationPoint& point) {
-        return key == key1 && utick >= 300 && point.itemId.has_value();
-    });
+    // [WHEN] Remove tick 300 from key1 only
+    automation.removePoints(key1, { 300 });
 
     // [THEN] key1/300 removed, key1/100 and key2/300 untouched
     AutomationCurve expectedKey1;
@@ -248,19 +224,18 @@ TEST_F(Automation_Tests, RemovePoints_FilterByKeyAndTick)
 
 TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
 {
-    // [GIVEN] A curve where all points will be removed by the filter
+    // [GIVEN] A curve whose only points will all be removed
     Automation automation;
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
     key.staffId = muse::ID(1);
 
-    automation.addPoint(key, 100, generatedPoint(0.4, 0.5));
-    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
+    AutomationCurveMap curves;
+    curves[key] = { { 100, generatedPoint(0.4, 0.5) }, { 200, generatedPoint(0.5, 0.6) } };
+    automation.setCurves(curves);
 
-    // [WHEN] Remove all generated points
-    automation.removePoints([](const AutomationCurveKey&, int, const AutomationPoint& point) {
-        return point.itemId.has_value();
-    });
+    // [WHEN] Remove both points
+    automation.removePoints(key, { 100, 200 });
 
     // [THEN] Curve entry is removed from the map
     EXPECT_TRUE(automation.isEmpty());
@@ -282,11 +257,12 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
     key3.type = AutomationType::Dynamics;
     key3.staffId = muse::ID(3);
 
-    automation.addPoint(key1, 100, generatedPoint(0.3, 0.4));
-    automation.addPoint(key1, 200, generatedPoint(0.4, 0.5));
-    automation.addPoint(key2, 150, generatedPoint(0.5, 0.6));
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
-    automation.addPoint(key3, 250, p3);
+    AutomationCurveMap curves;
+    curves[key1] = { { 100, generatedPoint(0.3, 0.4) }, { 200, generatedPoint(0.4, 0.5) } };
+    curves[key2] = { { 150, generatedPoint(0.5, 0.6) } };
+    curves[key3] = { { 250, p3 } };
+    automation.setCurves(curves);
 
     int notifyCount = 0;
     AutomationChanges lastChanges;
@@ -300,7 +276,7 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
     AutomationCurveMap replacement;
     replacement[key1][300] = newPoint;
     replacement[key2] = AutomationCurve();
-    automation.replaceCurves(std::move(replacement));
+    automation.replaceCurves(replacement);
 
     // [THEN] key1's old points are gone, only the new one remains
     AutomationCurve expectedKey1;
@@ -337,8 +313,10 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
     key2.type = AutomationType::Dynamics;
     key2.staffId = muse::ID(2);
 
-    automation.addPoint(key1, 100, generatedPoint(0.3, 0.4));
-    automation.addPoint(key2, 150, generatedPoint(0.5, 0.6));
+    AutomationCurveMap curves;
+    curves[key1] = { { 100, generatedPoint(0.3, 0.4) } };
+    curves[key2] = { { 150, generatedPoint(0.5, 0.6) } };
+    automation.replaceCurves(curves);
 
     int notifyCount = 0;
     AutomationChanges lastChanges;
@@ -351,7 +329,7 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
     AutomationPoint newPoint = generatedPoint(0.7, 0.8);
     AutomationCurveMap newCurves;
     newCurves[key1][300] = newPoint;
-    automation.setCurves(std::move(newCurves));
+    automation.setCurves(newCurves);
 
     // [THEN] key1 has only the new point
     AutomationCurve expectedKey1;
@@ -361,14 +339,36 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
     // [THEN] key2 is gone, it wasn't mentioned in the new curve set
     EXPECT_TRUE(automation.curve(key2).empty());
 
-    // [THEN] One notification covering both the changed and the removed key
+    // [THEN] One notification, reported as a full reset
     EXPECT_EQ(notifyCount, 1);
-    EXPECT_FALSE(lastChanges.isFullReset);
-    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key1));
-    EXPECT_TRUE(muse::contains(lastChanges.affectedKeys, key2));
+    EXPECT_TRUE(lastChanges.isFullReset);
 }
 
-TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
+TEST_F(Automation_Tests, SetCurves_SameContent_NotFired)
+{
+    // [GIVEN] A curve already matching what's about to be set
+    Automation automation;
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationCurveMap curves;
+    curves[key] = { { 100, generatedPoint(0.3, 0.4) } };
+    automation.replaceCurves(curves);
+
+    int notifyCount = 0;
+    automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
+        ++notifyCount;
+    });
+
+    // [WHEN] Setting identical curves
+    automation.setCurves(curves);
+
+    // [THEN] No notification fired
+    EXPECT_EQ(notifyCount, 0);
+}
+
+TEST_F(Automation_Tests, Notify_EditPoints_FiresWithCorrectRange)
 {
     // [GIVEN] A subscriber registered before the change
     Automation automation;
@@ -384,7 +384,7 @@ TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
     });
 
     // [WHEN] Add a point
-    automation.addPoint(key, 200, generatedPoint(0.5, 0.5));
+    automation.editPoints(key, { { 200, generatedPoint(0.5, 0.5) } });
 
     // [THEN] Exactly one notification with the correct range
     EXPECT_EQ(notifyCount, 1);
@@ -394,7 +394,7 @@ TEST_F(Automation_Tests, Notify_AddPoint_FiresWithCorrectRange)
     EXPECT_EQ(lastChanges.tickTo, 200);
 }
 
-TEST_F(Automation_Tests, Notify_SetPointInValue_SameValue_NotFired)
+TEST_F(Automation_Tests, Notify_EditPoints_SameValue_NotFired)
 {
     // [GIVEN] A point already at 0.5
     Automation automation;
@@ -402,43 +402,21 @@ TEST_F(Automation_Tests, Notify_SetPointInValue_SameValue_NotFired)
     key.type = AutomationType::Dynamics;
     key.staffId = muse::ID(1);
 
-    automation.addPoint(key, 100, generatedPoint(0.5, 0.5));
+    const AutomationPoint point = generatedPoint(0.5, 0.5);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, point } };
+    automation.setCurves(curves);
 
     int notifyCount = 0;
     automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
         ++notifyCount;
     });
 
-    // [WHEN] Set the same inValue
-    automation.setPointInValue(key, 100, 0.5);
+    // [WHEN] Set an identical point
+    automation.editPoints(key, { { 100, point } });
 
     // [THEN] No notification fired
     EXPECT_EQ(notifyCount, 0);
-}
-
-TEST_F(Automation_Tests, Notify_Clear_IsFullReset)
-{
-    // [GIVEN] A non-empty automation with a subscriber
-    Automation automation;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
-
-    automation.addPoint(key, 100, generatedPoint(0.5, 0.5));
-
-    int notifyCount = 0;
-    AutomationChanges lastChanges;
-    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
-        ++notifyCount;
-        lastChanges = ch;
-    });
-
-    // [WHEN] Clear automation
-    automation.clear();
-
-    // [THEN] One notification and a full reset
-    EXPECT_EQ(notifyCount, 1);
-    EXPECT_TRUE(lastChanges.isFullReset);
 }
 
 TEST_F(Automation_Tests, Notify_MoveTicks_OpenEndedRange)
@@ -449,8 +427,9 @@ TEST_F(Automation_Tests, Notify_MoveTicks_OpenEndedRange)
     key.type = AutomationType::Dynamics;
     key.staffId = muse::ID(1);
 
-    automation.addPoint(key, 100, generatedPoint(0.3, 0.4));
-    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
+    AutomationCurveMap curves;
+    curves[key] = { { 100, generatedPoint(0.3, 0.4) }, { 200, generatedPoint(0.5, 0.6) } };
+    automation.setCurves(curves);
 
     AutomationChanges lastChanges;
     automation.changed().onReceive(this, [&lastChanges](const AutomationChanges& ch) {
@@ -463,65 +442,4 @@ TEST_F(Automation_Tests, Notify_MoveTicks_OpenEndedRange)
     // [THEN] tickTo is open-ended (all points from tickFrom forward are affected)
     EXPECT_EQ(lastChanges.tickFrom, 100);
     EXPECT_EQ(lastChanges.tickTo, std::numeric_limits<utick_t>::max());
-}
-
-TEST_F(Automation_Tests, Transaction_CommitFiresSingleNotification)
-{
-    // [GIVEN] A subscriber before the transaction
-    Automation automation;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
-
-    int notifyCount = 0;
-    AutomationChanges lastChanges;
-    automation.changed().onReceive(this, [&notifyCount, &lastChanges](const AutomationChanges& ch) {
-        ++notifyCount;
-        lastChanges = ch;
-    });
-
-    // [WHEN] Two changes inside a transaction
-    automation.beginTransaction();
-    automation.addPoint(key, 100, generatedPoint(0.3, 0.4));
-    automation.addPoint(key, 300, generatedPoint(0.5, 0.6));
-
-    // [THEN] No notification yet
-    EXPECT_EQ(notifyCount, 0);
-
-    // [WHEN] Commit
-    automation.commitTransaction();
-
-    // [THEN] Exactly one notification with the merged range
-    EXPECT_EQ(notifyCount, 1);
-    EXPECT_EQ(lastChanges.tickFrom, 100);
-    EXPECT_EQ(lastChanges.tickTo, 300);
-}
-
-TEST_F(Automation_Tests, Transaction_RollbackRestoresStateAndSilent)
-{
-    // [GIVEN] One existing point, a subscriber, then a transaction that adds two more
-    Automation automation;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
-
-    AutomationPoint original = generatedPoint(0.3, 0.4);
-    automation.addPoint(key, 100, original);
-
-    int notifyCount = 0;
-    automation.changed().onReceive(this, [&notifyCount](const AutomationChanges&) {
-        ++notifyCount;
-    });
-
-    // [WHEN] Transaction started, two points added, then rolled back
-    automation.beginTransaction();
-    automation.addPoint(key, 200, generatedPoint(0.5, 0.6));
-    automation.addPoint(key, 300, generatedPoint(0.7, 0.8));
-    automation.rollbackTransaction();
-
-    // [THEN] No notification fired and only the original point survives
-    EXPECT_EQ(notifyCount, 0);
-    AutomationCurve expected;
-    expected[100] = original;
-    checkCurvesMatch(automation.curve(key), expected);
 }

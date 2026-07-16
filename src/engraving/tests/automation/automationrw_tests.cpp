@@ -35,8 +35,8 @@ class AutomationRW_Tests : public ::testing::Test
 
 TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
 {
-    // [GIVEN] Two curves on different staves: p1 is a generated point
-    // (itemId set, from an engraving item), p2 is custom (no itemId)
+    // [GIVEN] Two curves on different staves: key1 holds a generated point (itemId set) plus
+    // a SameAsOut and a FromPrevious point; key2 holds a custom point (no itemId)
     Automation automation;
     AutomationCurveKey key1;
     key1.type = AutomationType::Dynamics;
@@ -47,16 +47,23 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     key2.staffId = muse::ID(2);
     key2.voiceIdx = 2;
 
-    uint64_t lastId = 0;
-    AutomationPoint p1;
-    p1.inValue = 0.3;
-    p1.outValue = 0.5;
-    p1.itemId = EID::newUniqueTestMode(lastId);
-    AutomationPoint p2;
-    p2.inValue = 0.6;
-    p2.outValue = 0.8;
-    automation.addPoint(key1, 100, p1);
-    automation.addPoint(key2, 200, p2);
+    const AutomationPoint p1 = generatedPoint(0.3, 0.5);
+    const AutomationPoint p2 = customPoint(0.6, 0.8);
+
+    AutomationPoint sameAsOut;
+    sameAsOut.inValue = AutomationPoint::SameAsOut {};
+    sameAsOut.outValue = 0.5;
+    sameAsOut.generated = true;
+
+    AutomationPoint fromPrevious;
+    fromPrevious.inValue = AutomationPoint::FromPrevious {};
+    fromPrevious.outValue = 0.7;
+    fromPrevious.generated = true;
+
+    AutomationCurveMap curves;
+    curves[key1] = { { 100, p1 }, { 300, sameAsOut }, { 400, fromPrevious } };
+    curves[key2] = { { 200, p2 } };
+    automation.setCurves(curves);
 
     // [WHEN] Serialized (including generated points) and deserialized
     Automation loaded;
@@ -69,4 +76,9 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     // [THEN] itemId presence and exact value survive the round trip
     EXPECT_EQ(loaded.curve(key1).at(100).itemId, p1.itemId);
     EXPECT_FALSE(loaded.curve(key2).at(200).itemId.has_value());
+
+    // [THEN] Each point's inValue type survives the round trip
+    const AutomationCurve& loadedCurve1 = loaded.curve(key1);
+    EXPECT_TRUE(std::holds_alternative<AutomationPoint::SameAsOut>(loadedCurve1.at(300).inValue));
+    EXPECT_TRUE(std::holds_alternative<AutomationPoint::FromPrevious>(loadedCurve1.at(400).inValue));
 }

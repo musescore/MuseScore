@@ -393,11 +393,7 @@ void MasterScore::initAutomation()
 
 void MasterScore::updateAutomation(const ScoreChanges& changes)
 {
-    NOT_IMPLEMENTED;
-    UNUSED(changes);
-
-    //! TODO
-    //m_automationController->update(this, changes);
+    m_automationController->update(this, changes);
 }
 
 //---------------------------------------------------------

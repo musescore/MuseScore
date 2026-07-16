@@ -30,14 +30,11 @@
 #include "engraving/dom/staff.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
-#include "global/containers.h"
 
 #include "utils/scorerw.h"
 #include "automation/utils/automationtestutils.h"
 
 using namespace mu::engraving;
-
-using InterpolationType = AutomationPoint::InterpolationType;
 
 static const String AUTOMATION_DATA_DIR(u"automation/data/");
 
@@ -83,20 +80,20 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     AutomationCurve expectedCurve;
 
     // 1st measure
-    expectedCurve[480]  = AutomationPoint { 0.0,      P_VALUE,  InterpolationType::Linear };      // 2nd beat: p
-    expectedCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };      // 4th beat: mp
+    expectedCurve[480]  = generatedPoint(0.0,      P_VALUE);  // 2nd beat: p
+    expectedCurve[1440] = generatedPoint(P_VALUE,  MP_VALUE); // 4th beat: mp
 
     // 2nd measure
-    expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };      // 1st beat: sf
-    expectedCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };      // 2nd beat: mp (sf recovery)
-    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };      // 3rd beat: pf start
-    expectedCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };      // 4th beat: pf end
+    expectedCurve[1920] = generatedPoint(MP_VALUE, F_VALUE);  // 1st beat: sf
+    expectedCurve[2400] = generatedPoint(F_VALUE,  MP_VALUE); // 2nd beat: mp (sf recovery)
+    expectedCurve[2880] = generatedPoint(MP_VALUE, P_VALUE);  // 3rd beat: pf start
+    expectedCurve[3264] = generatedPoint(F_VALUE,  F_VALUE);  // 4th beat: pf end
 
     // 3rd measure
-    expectedCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };      // 3rd beat: p (hairpin start)
+    expectedCurve[4800] = generatedPoint(F_VALUE,  P_VALUE);  // 3rd beat: p (hairpin start)
 
     // 4th measure
-    expectedCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear };      // 1st beat: ff (hairpin end)
+    expectedCurve[5760] = generatedPoint(FF_VALUE, FF_VALUE); // 1st beat: ff (hairpin end)
 
     checkCurvesMatch(controller.automation()->curve(key), expectedCurve);
 
@@ -107,19 +104,19 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     AutomationCurve expectedVoiceCurve;
 
     // Shared points copied in by the second pass
-    expectedVoiceCurve[480]  = AutomationPoint { 0.0,      P_VALUE,  InterpolationType::Linear };
-    expectedVoiceCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };
-    expectedVoiceCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };
-    expectedVoiceCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };
-    expectedVoiceCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };
-    expectedVoiceCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[480]  = generatedPoint(0.0,      P_VALUE);
+    expectedVoiceCurve[1440] = generatedPoint(P_VALUE,  MP_VALUE);
+    expectedVoiceCurve[1920] = generatedPoint(MP_VALUE, F_VALUE);
+    expectedVoiceCurve[2400] = generatedPoint(F_VALUE,  MP_VALUE);
+    expectedVoiceCurve[2880] = generatedPoint(MP_VALUE, P_VALUE);
+    expectedVoiceCurve[3264] = generatedPoint(F_VALUE,  F_VALUE);
 
     // CURRENT_VOICE_ONLY f; inValue comes from the shared active point at tick 3264 (outValue = F_VALUE)
-    expectedVoiceCurve[3840] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
+    expectedVoiceCurve[3840] = generatedPoint(F_VALUE,  F_VALUE);
 
     // Remaining shared points copied in by the second pass
-    expectedVoiceCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };
-    expectedVoiceCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear };
+    expectedVoiceCurve[4800] = generatedPoint(F_VALUE,  P_VALUE);
+    expectedVoiceCurve[5760] = generatedPoint(FF_VALUE, FF_VALUE);
 
     checkCurvesMatch(controller.automation()->curve(key), expectedVoiceCurve);
 }
@@ -141,7 +138,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Positive_ShiftsAllPoints)
     EXPECT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
 
         AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
@@ -168,7 +165,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     const AutomationCurveMap& curvesAfter = controller.automation()->curves();
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
 
         AutomationCurve expectedCurve;
         for (const auto& [tick, point] : curveBefore) {
@@ -207,7 +204,7 @@ TEST_F(ScoreAutomationController_Tests, Update_IsTextEditing_DoesNothing)
     ASSERT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
         checkCurvesMatch(curvesAfter.at(key), curveBefore);
     }
 }
@@ -237,7 +234,7 @@ TEST_F(ScoreAutomationController_Tests, Update_NoRelevantTypes_DoesNothing)
     ASSERT_EQ(curvesAfter.size(), curvesBefore.size());
 
     for (const auto& [key, curveBefore] : curvesBefore) {
-        ASSERT_TRUE(muse::contains(curvesAfter, key));
+        ASSERT_TRUE(curvesAfter.contains(key));
         checkCurvesMatch(curvesAfter.at(key), curveBefore);
     }
 }
@@ -253,9 +250,7 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     key.staffId = s_score->staff(0)->id();
 
     // [WHEN] The user inserts a custom automation point at the midpoint of the hairpin
-    AutomationPoint midpoint;
-    midpoint.outValue = MF_VALUE;
-    controller.automation()->addPoint(key, 5280, midpoint);
+    controller.automation()->editPoints(key, { { 5280, customPoint(0.0, MF_VALUE) } });
 
     // [WHEN] The score is re-processed (simulates any subsequent score change)
     ScoreChanges changes;
@@ -263,20 +258,18 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     controller.update(s_score, changes);
 
     // [THEN] Measures 1-2 are unaffected by the hairpin-only update, the p dynamic at the hairpin
-    //        start is unchanged, the user midpoint survives with its inValue set to prev.outValue
-    //        (the curve holds flat at p before the breakpoint, then steps to MF_VALUE), and the ff
-    //        dynamic's inValue is overridden to the midpoint's outValue (the curve holds flat at
-    //        MF_VALUE until ff fires its own outValue)
+    //        start is unchanged, the user midpoint's own data is untouched by the rebuild, and the
+    //        ff dynamic keeps its own independently-computed arrival value regardless of the midpoint
     AutomationCurve expectedCurve;
-    expectedCurve[480]  = AutomationPoint { 0.0,      P_VALUE,  InterpolationType::Linear };
-    expectedCurve[1440] = AutomationPoint { P_VALUE,  MP_VALUE, InterpolationType::Linear };
-    expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE,  InterpolationType::Linear };
-    expectedCurve[2400] = AutomationPoint { F_VALUE,  MP_VALUE, InterpolationType::Linear };
-    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE,  InterpolationType::Linear };
-    expectedCurve[3264] = AutomationPoint { F_VALUE,  F_VALUE,  InterpolationType::Linear };
-    expectedCurve[4800] = AutomationPoint { F_VALUE,  P_VALUE,  InterpolationType::Linear };
-    expectedCurve[5280] = AutomationPoint { P_VALUE,  MF_VALUE, InterpolationType::Linear };
-    expectedCurve[5760] = AutomationPoint { MF_VALUE, FF_VALUE, InterpolationType::Linear };
+    expectedCurve[480]  = generatedPoint(0.0,      P_VALUE);
+    expectedCurve[1440] = generatedPoint(P_VALUE,  MP_VALUE);
+    expectedCurve[1920] = generatedPoint(MP_VALUE, F_VALUE);
+    expectedCurve[2400] = generatedPoint(F_VALUE,  MP_VALUE);
+    expectedCurve[2880] = generatedPoint(MP_VALUE, P_VALUE);
+    expectedCurve[3264] = generatedPoint(F_VALUE,  F_VALUE);
+    expectedCurve[4800] = generatedPoint(F_VALUE,  P_VALUE);
+    expectedCurve[5280] = customPoint(0.0,         MF_VALUE);
+    expectedCurve[5760] = generatedPoint(FF_VALUE, FF_VALUE);
 
     checkCurvesMatch(controller.automation()->curve(key), expectedCurve);
 }
