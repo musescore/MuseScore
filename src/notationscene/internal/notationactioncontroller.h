@@ -98,6 +98,7 @@ public:
 
     bool isNoteInputActionAllowed() const override;
     bool isNoteOrRestSelected() const override;
+    bool isMoveSelectionAvailable(MoveSelectionType type) const override;
 
     muse::async::Notification currentNotationChanged() const;
 
@@ -142,7 +143,6 @@ private:
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
-    bool moveSelectionAvailable(MoveSelectionType type) const;
     void moveSelection(MoveSelectionType type, MoveDirection direction);
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
@@ -290,8 +290,6 @@ private:
         NoPlay, PlayNote, PlayChord
     };
 
-    void registerMoveSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction,
-                                     PlayMode playMode = PlayMode::NoPlay);
     void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
     void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 

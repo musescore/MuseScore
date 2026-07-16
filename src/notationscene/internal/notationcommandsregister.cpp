@@ -741,6 +741,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
 
     // navigation commands
     CommandInfo{
+        GOTO_FIRST_ELEMENT_COMMAND,
+        TranslatableString("action", "First element"),
+        TranslatableString("action", "Go to first element in score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_LAST_ELEMENT_COMMAND,
+        TranslatableString("action", "Last element"),
+        TranslatableString("action", "Go to last element in score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         GOTO_NEXT_ELEMENT_COMMAND,
         TranslatableString("action", "Next element"),
         TranslatableString("action", "Select next element in score"),
@@ -794,6 +808,34 @@ static const std::vector<CommandInfo> s_commandInfos = {
         GOTO_PREV_SYSTEM_COMMAND,
         TranslatableString("action", "Previous system"),
         TranslatableString("action", "Go to previous system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_UP_CHORD_COMMAND,
+        TranslatableString("action", "Up note in chord"),
+        TranslatableString("action", "Select note/rest above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_DOWN_CHORD_COMMAND,
+        TranslatableString("action", "Down note in chord"),
+        TranslatableString("action", "Select note/rest below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_TOP_CHORD_COMMAND,
+        TranslatableString("action", "Top note in chord"),
+        TranslatableString("action", "Select top note in chord"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_BOTTOM_CHORD_COMMAND,
+        TranslatableString("action", "Bottom note in chord"),
+        TranslatableString("action", "Select bottom note in chord"),
         InputSchema(),
         Decoration()
     },

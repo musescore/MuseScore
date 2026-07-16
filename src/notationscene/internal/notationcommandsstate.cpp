@@ -48,7 +48,11 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     COPY_COMMAND,
     DELETE_COMMAND,
     FLIP_COMMAND,
-    FLIP_HORIZONTALLY_COMMAND
+    FLIP_HORIZONTALLY_COMMAND,
+    GOTO_UP_CHORD_COMMAND,
+    GOTO_DOWN_CHORD_COMMAND,
+    GOTO_TOP_CHORD_COMMAND,
+    GOTO_BOTTOM_CHORD_COMMAND
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -162,6 +166,19 @@ static const std::vector<Command> TUPLET_COMMANDS = {
     ADD_NONUPLET_COMMAND
 };
 
+static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
+    { GOTO_FIRST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
+    { GOTO_LAST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
+    { GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
+    { GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem },
+    { GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track },
+    { GOTO_PREV_TRACK_COMMAND, MoveSelectionType::Track },
+    { GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame },
+    { GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame },
+    { GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System },
+    { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System }
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -188,6 +205,7 @@ void NotationCommandsState::init()
         updateCommandStates({ PAD_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(TUPLET_COMMANDS);
+        updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -255,6 +273,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(HAS_SELECTION_REQUIRED_COMMANDS, command)) {
         return CommandState(controller()->hasSelection(), false);
+    }
+
+    if (muse::contains(MOVE_SELECTION_COMMANDS, command)) {
+        return CommandState(controller()->isMoveSelectionAvailable(MOVE_SELECTION_COMMANDS.at(command)), false);
     }
 
     if (command == UNDO_COMMAND) {

@@ -27,6 +27,7 @@
 #include "global/async/notification.h"
 
 #include "notation/types/noteinputtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu::notation {
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
@@ -63,5 +64,6 @@ public:
 
     virtual bool isNoteInputActionAllowed() const = 0;
     virtual bool isNoteOrRestSelected() const = 0;
+    virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
 };
 }
