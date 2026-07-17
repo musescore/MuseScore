@@ -5663,7 +5663,8 @@ String MusicXmlParserDirection::metronome(double& r)
 //---------------------------------------------------------
 
 static bool determineBarLineType(const String& barStyle, const String& repeat,
-                                 BarLineType& type, bool& visible)
+                                 BarLineType& type, bool& visible,
+                                 const MusicXmlExporterSoftware& exporter)
 {
     // set defaults
     type = BarLineType::NORMAL;
@@ -5672,6 +5673,8 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
     if (barStyle == u"light-heavy" && repeat == u"backward") {
         type = BarLineType::END_REPEAT;
     } else if (barStyle == u"heavy-light" && repeat == u"forward") {
+        type = BarLineType::START_REPEAT;
+    } else if (barStyle == u"light-heavy" && repeat == u"forward" && exporter == MusicXmlExporterSoftware::NOTEFLIGHT) {
         type = BarLineType::START_REPEAT;
     } else if (barStyle == u"light-heavy" && repeat.empty()) {
         type = BarLineType::END;
@@ -5807,7 +5810,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
 
     BarLineType type = BarLineType::NORMAL;
     bool visible = true;
-    if (determineBarLineType(barStyle, repeat, type, visible)) {
+    if (determineBarLineType(barStyle, repeat, type, visible, m_pass1.exporterSoftware())) {
         const track_idx_t track = m_pass1.trackForPart(partId);
         if (type & BarLineType::START_REPEAT) {
             // combine start_repeat flag with current state initialized during measure parsing
