@@ -462,6 +462,47 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
             } else {
                 group = NoteHeadGroup::HEAD_G_FLAT;
             }
+        } else if (no_accidentals) {
+            // for TPCs that don't have their own heads (i.e. with 2 or 3 accidentals),
+            // fall back to using the corresponding ones without accidentals
+            // rather than using the (smaller!) normal noteheads
+            if (tpc == Tpc::TPC_A_SS || tpc == Tpc::TPC_A_SSS) {
+                group = NoteHeadGroup::HEAD_A;
+            } else if (tpc == Tpc::TPC_B_SS || tpc == Tpc::TPC_B_SSS) {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H;
+                } else {
+                    group = NoteHeadGroup::HEAD_B;
+                }
+            } else if (tpc == Tpc::TPC_C_SS || tpc == Tpc::TPC_C_SSS) {
+                group = NoteHeadGroup::HEAD_C;
+            } else if (tpc == Tpc::TPC_D_SS || tpc == Tpc::TPC_D_SSS) {
+                group = NoteHeadGroup::HEAD_D;
+            } else if (tpc == Tpc::TPC_E_SS || tpc == Tpc::TPC_E_SSS) {
+                group = NoteHeadGroup::HEAD_E;
+            } else if (tpc == Tpc::TPC_F_SS || tpc == Tpc::TPC_F_SSS) {
+                group = NoteHeadGroup::HEAD_F;
+            } else if (tpc == Tpc::TPC_G_SS || tpc == Tpc::TPC_G_SSS) {
+                group = NoteHeadGroup::HEAD_G;
+            } else if (tpc == Tpc::TPC_A_BB || tpc == Tpc::TPC_A_BBB) {
+                group = NoteHeadGroup::HEAD_A;
+            } else if (tpc == Tpc::TPC_B_BB || tpc == Tpc::TPC_B_BBB) {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H;
+                } else {
+                    group = NoteHeadGroup::HEAD_B;
+                }
+            } else if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_BBB) {
+                group = NoteHeadGroup::HEAD_C;
+            } else if (tpc == Tpc::TPC_D_BB || tpc == Tpc::TPC_D_BBB) {
+                group = NoteHeadGroup::HEAD_D;
+            } else if (tpc == Tpc::TPC_E_BB || tpc == Tpc::TPC_E_BBB) {
+                group = NoteHeadGroup::HEAD_E;
+            } else if (tpc == Tpc::TPC_F_BB || tpc == Tpc::TPC_F_BBB) {
+                group = NoteHeadGroup::HEAD_F;
+            } else if (tpc == Tpc::TPC_G_BB || tpc == Tpc::TPC_G_BBB) {
+                group = NoteHeadGroup::HEAD_G;
+            }
         }
     } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
         int degree = tpc2degree(tpc, key);
