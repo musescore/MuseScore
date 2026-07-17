@@ -26,6 +26,8 @@
 
 using namespace mu::engraving;
 
+static const AutomationCurve EMPTY_CURVE;
+
 static void diffPoints(const AutomationCurveKey& key, const AutomationCurve& oldCurve, const AutomationCurve& newCurve,
                        AutomationChanges& changes)
 {
@@ -62,8 +64,7 @@ const AutomationCurve& AutomationData::curve(const AutomationCurveKey& key) cons
 {
     auto curveIt = m_curveMap.find(key);
     if (curveIt == m_curveMap.end()) {
-        static const AutomationCurve dummy;
-        return dummy;
+        return EMPTY_CURVE;
     }
 
     return curveIt->second;
@@ -87,30 +88,66 @@ void AutomationData::setCurves(const AutomationCurveMap& curves)
         return;
     }
 
+    size_t overlapCount = 0;
+
+    for (const auto& [key, newCurve] : curves) {
+        const auto oldIt = m_curveMap.find(key);
+        const bool existed = oldIt != m_curveMap.end();
+        if (existed) {
+            ++overlapCount;
+        }
+
+        const AutomationCurve& oldCurve = existed ? oldIt->second : EMPTY_CURVE;
+        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
+    }
+
+    for (const auto& [key, oldCurve] : m_curveMap) {
+        if (!curves.contains(key)) {
+            diffPoints(key, oldCurve, EMPTY_CURVE, m_pendingChanges);
+        }
+    }
+
+    // Every key was touched by this change
+    const size_t allKeysCount = curves.size() + m_curveMap.size() - overlapCount;
+    if (m_pendingChanges.affectedKeys.size() == allKeysCount) {
+        m_pendingChanges.isFullReset = true;
+    }
+
     m_curveMap = curves;
 
-    m_pendingChanges.isFullReset = true;
     notifyChanged();
 }
 
 void AutomationData::replaceCurves(const AutomationCurveMap& curves)
 {
-    static const AutomationCurve EMPTY_CURVE;
+    const size_t oldSize = m_curveMap.size();
+    size_t overlapCount = 0;
 
     for (const auto& [key, newCurve] : curves) {
         const auto oldIt = m_curveMap.find(key);
-        const AutomationCurve& oldCurve = oldIt != m_curveMap.end() ? oldIt->second : EMPTY_CURVE;
+        const bool existed = oldIt != m_curveMap.end();
+        if (existed) {
+            ++overlapCount;
+        }
+
+        const AutomationCurve& oldCurve = existed ? oldIt->second : EMPTY_CURVE;
         diffPoints(key, oldCurve, newCurve, m_pendingChanges);
 
         if (newCurve.empty()) {
-            if (oldIt != m_curveMap.end()) {
+            if (existed) {
                 m_curveMap.erase(oldIt);
             }
-        } else if (oldIt != m_curveMap.end()) {
+        } else if (existed) {
             oldIt->second = newCurve;
         } else {
             m_curveMap.emplace(key, newCurve);
         }
+    }
+
+    // Every key was touched by this change
+    const size_t allKeysCount = oldSize + curves.size() - overlapCount;
+    if (allKeysCount > 0 && m_pendingChanges.affectedKeys.size() == allKeysCount) {
+        m_pendingChanges.isFullReset = true;
     }
 
     notifyChanged();
@@ -183,65 +220,6 @@ void AutomationData::removePoints(const AutomationCurveKey& key, const std::set<
 
     if (curve.empty()) {
         m_curveMap.erase(curveIt);
-    }
-
-    notifyChanged();
-}
-
-void AutomationData::moveTicks(utick_t tickFrom, utick_t diff)
-{
-    for (auto& [key, curve] : m_curveMap) {
-        const auto startIt = curve.lower_bound(tickFrom);
-        if (startIt == curve.end()) {
-            continue;
-        }
-
-        m_pendingChanges.extend(key, startIt->first, std::numeric_limits<utick_t>::max());
-        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
-        for (auto it = startIt; it != curve.end(); ++it) {
-            toMove.emplace_back(it->first + diff, it->second);
-        }
-
-        curve.erase(startIt, curve.end());
-        for (auto& pair : toMove) {
-            curve.insert(curve.end(), std::move(pair));
-        }
-    }
-
-    notifyChanged();
-}
-
-void AutomationData::removeTicks(utick_t tickFrom, utick_t tickTo)
-{
-    IF_ASSERT_FAILED(tickFrom <= tickTo) {
-        return;
-    }
-
-    const utick_t diff = tickFrom - tickTo;
-
-    for (auto& [key, curve] : m_curveMap) {
-        const auto eraseFromIt = curve.lower_bound(tickFrom);
-        if (eraseFromIt == curve.end()) {
-            continue;
-        }
-
-        m_pendingChanges.extend(key, eraseFromIt->first, std::numeric_limits<utick_t>::max());
-        curve.erase(eraseFromIt, curve.upper_bound(tickTo));
-
-        const auto startIt = curve.lower_bound(tickTo);
-        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
-        for (auto it = startIt; it != curve.end(); ++it) {
-            toMove.emplace_back(it->first + diff, it->second);
-        }
-
-        curve.erase(startIt, curve.end());
-        for (auto& pair : toMove) {
-            curve.insert(curve.end(), std::move(pair));
-        }
-    }
-
-    for (auto it = m_curveMap.begin(); it != m_curveMap.end();) {
-        it = it->second.empty() ? m_curveMap.erase(it) : std::next(it);
     }
 
     notifyChanged();

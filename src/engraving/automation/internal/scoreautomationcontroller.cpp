@@ -184,17 +184,17 @@ static int dynamicPriority(const EngravingItem* item)
 
 static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
 {
-    static const AutomationCurve EMPTY_CURVE;
+    static const AutomationCurve NO_CURVE;
 
     const auto keyCurveIt = curves.find(key);
-    const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : EMPTY_CURVE;
+    const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : NO_CURVE;
     const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
 
     if (key.voiceIdx.has_value()) {
         AutomationCurveKey sharedKey = key;
         sharedKey.voiceIdx = std::nullopt;
         const auto sharedCurveIt = curves.find(sharedKey);
-        const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : EMPTY_CURVE;
+        const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : NO_CURVE;
         const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
 
         if (sharedIt != sharedCurve.cend()) {
@@ -241,28 +241,32 @@ static bool isRelevantChange(const ScoreChanges& changes)
 
 void ScoreAutomationController::init(const Score* score)
 {
-    update(score, 0, muse::nidx, muse::nidx);
+    m_score = score;
+    update(0, muse::nidx, muse::nidx);
 }
 
-void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
+void ScoreAutomationController::insertTime(const Fraction& tick, const Fraction& len)
 {
+    TRACEFUNC;
+
     const utick_t diff = len.ticks();
-    if (!m_automationData || m_automationData->isEmpty() || diff == 0) {
+    if (!m_score || !m_automationData || m_automationData->isEmpty() || diff == 0) {
         return;
     }
 
-    TRACEFUNC;
-
-    const utick_t utick = score->repeatList().tick2utick(tick.ticks());
+    const utick_t utick = m_score->repeatList().tick2utick(tick.ticks());
+    AutomationCurveMap curves = m_automationData->curves();
 
     if (diff < 0) {
-        m_automationData->removeTicks(utick + diff, utick);
+        removeTicks(utick + diff, utick, curves);
     } else if (diff > 0) {
-        m_automationData->moveTicks(utick, diff);
+        moveTicks(utick, diff, curves);
     }
+
+    m_automationData->setCurves(curves);
 }
 
-void ScoreAutomationController::update(const Score* score, const ScoreChanges& changes)
+void ScoreAutomationController::update(const ScoreChanges& changes)
 {
     if (changes.isTextEditing || !isRelevantChange(changes)) {
         return;
@@ -275,21 +279,21 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
     const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
 
     if (voiceAssignmentChanged) {
-        update(score, tickFrom, muse::nidx, muse::nidx);
+        update(tickFrom, muse::nidx, muse::nidx);
     } else {
-        update(score, tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
+        update(tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
     }
 }
 
-void ScoreAutomationController::update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
+void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(score) {
+    if (!m_score) {
         return;
     }
 
-    const RepeatList& repeatList = score->repeatList();
+    const RepeatList& repeatList = m_score->repeatList();
     if (repeatList.empty()) {
         return;
     }
@@ -307,7 +311,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
         m_automationData = std::make_shared<AutomationData>();
     }
 
-    const StaffRange range(score, staffIdxFrom, staffIdxTo);
+    const StaffRange range(m_score, staffIdxFrom, staffIdxTo);
     const RepeatSegment* firstSeg = *repeatFromIt;
 
     UpdateContext ctx;
@@ -353,7 +357,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     // Step 2: spanner points: ctx.dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
-        addSpannerPoints(score, seg->tick, seg->endTick(), seg->utick - seg->tick, range, ctx);
+        addSpannerPoints(m_score, seg->tick, seg->endTick(), seg->utick - seg->tick, range, ctx);
     }
 
     // Step 3: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
@@ -364,6 +368,65 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
 
     // Step 5: the new curves are fully built; merge them back, replacing only the affected ones
     m_automationData->replaceCurves(ctx.curves);
+}
+
+//! NOTE: moves all points with tick >= tickFrom by diff ticks
+void ScoreAutomationController::moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves)
+{
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto startIt = curve.lower_bound(tickFrom);
+        if (startIt == curve.end()) {
+            continue;
+        }
+
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+}
+
+//! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
+void ScoreAutomationController::removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves)
+{
+    IF_ASSERT_FAILED(tickFrom <= tickTo) {
+        return;
+    }
+
+    const utick_t diff = tickFrom - tickTo;
+
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto eraseFromIt = curve.lower_bound(tickFrom);
+        if (eraseFromIt == curve.end()) {
+            continue;
+        }
+
+        curve.erase(eraseFromIt, curve.upper_bound(tickTo));
+
+        const auto startIt = curve.lower_bound(tickTo);
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+
+    for (auto it = curves.begin(); it != curves.end();) {
+        it = it->second.empty() ? curves.erase(it) : std::next(it);
+    }
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,

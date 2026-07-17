@@ -37,7 +37,7 @@ public:
 
     bool isEmpty() const;
 
-    //! NOTE: full replacement; any existing key absent from the argument is removed; notifies as a full reset
+    //! NOTE: full replacement; any existing key absent from the argument is removed
     void setCurves(const AutomationCurveMap& curves);
 
     //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
@@ -48,12 +48,6 @@ public:
 
     //! NOTE: removes the points at the given ticks from the given curve, if present
     void removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks);
-
-    //! NOTE: moves all points with tick >= tickFrom by diff ticks
-    void moveTicks(utick_t tickFrom, utick_t diff);
-
-    //! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
-    void removeTicks(utick_t tickFrom, utick_t tickTo);
 
     muse::async::Channel<AutomationChanges> changed() const;
 

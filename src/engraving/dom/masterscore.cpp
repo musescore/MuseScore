@@ -166,7 +166,7 @@ void MasterScore::editAutomationPoints(const AutomationCurveKey& key, const Auto
 
 void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
 {
-    m_automationController->insertTime(this, tick, len);
+    m_automationController->insertTime(tick, len);
 }
 
 //---------------------------------------------------------
@@ -403,7 +403,7 @@ void MasterScore::initAutomation()
 
 void MasterScore::updateAutomation(const ScoreChanges& changes)
 {
-    m_automationController->update(this, changes);
+    m_automationController->update(changes);
 }
 
 //---------------------------------------------------------

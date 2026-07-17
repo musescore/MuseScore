@@ -177,6 +177,116 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     }
 }
 
+TEST_F(ScoreAutomationController_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
+{
+    // [GIVEN] Three points on a single curve
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationPoint p1 = generatedPoint(0.3, 0.4);
+    AutomationPoint p2 = generatedPoint(0.4, 0.6);
+    AutomationPoint p3 = generatedPoint(0.6, 0.7);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, p1 }, { 200, p2 }, { 300, p3 } };
+    s_score->automationData().setCurves(curves);
+
+    // [WHEN] Move ticks starting at 200 by +100
+    controller.insertTime(Fraction::fromTicks(200), Fraction::fromTicks(100));
+
+    // [THEN] Point before 200 is unchanged; points at 200 and 300 shift to 300 and 400
+    AutomationCurve expected;
+    expected[100] = p1;
+    expected[300] = p2;
+    expected[400] = p3;
+    checkCurvesMatch(s_score->automationData().curve(key), expected);
+}
+
+TEST_F(ScoreAutomationController_Tests, MoveTicks_AcrossMultipleCurves)
+{
+    // [GIVEN] Two curves with points on different staves
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key1;
+    key1.type = AutomationType::Dynamics;
+    key1.staffId = muse::ID(1);
+
+    AutomationCurveKey key2;
+    key2.type = AutomationType::Dynamics;
+    key2.staffId = muse::ID(2);
+
+    AutomationPoint p1 = generatedPoint(0.3, 0.5);
+    AutomationPoint p2 = generatedPoint(0.4, 0.6);
+    AutomationCurveMap curves;
+    curves[key1] = { { 200, p1 } };
+    curves[key2] = { { 200, p2 } };
+    s_score->automationData().setCurves(curves);
+
+    // [WHEN] Ticks from 100 shifted by +500
+    controller.insertTime(Fraction::fromTicks(100), Fraction::fromTicks(500));
+
+    // [THEN] Both curves shift from 200 to 700
+    AutomationCurve expected1;
+    expected1[700] = p1;
+    AutomationCurve expected2;
+    expected2[700] = p2;
+    checkCurvesMatch(s_score->automationData().curve(key1), expected1);
+    checkCurvesMatch(s_score->automationData().curve(key2), expected2);
+}
+
+TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
+{
+    // [GIVEN] Points at 100, 300, 500, 700
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationPoint p100 = generatedPoint(0.3, 0.4);
+    AutomationPoint p300 = generatedPoint(0.4, 0.5);
+    AutomationPoint p500 = generatedPoint(0.5, 0.6);
+    AutomationPoint p700 = generatedPoint(0.6, 0.7);
+    AutomationCurveMap curves;
+    curves[key] = { { 100, p100 }, { 300, p300 }, { 500, p500 }, { 700, p700 } };
+    s_score->automationData().setCurves(curves);
+
+    // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
+    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-200));
+
+    // [THEN] Points at 300 and 500 removed; 700 shifts to 500
+    AutomationCurve expected;
+    expected[100] = p100;
+    expected[500] = p700;
+    checkCurvesMatch(s_score->automationData().curve(key), expected);
+}
+
+TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
+{
+    // [GIVEN] A curve with all its points inside the removed range
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = muse::ID(1);
+
+    AutomationCurveMap curves;
+    curves[key] = { { 200, generatedPoint(0.4, 0.5) }, { 400, generatedPoint(0.5, 0.6) } };
+    s_score->automationData().setCurves(curves);
+
+    // [WHEN] Remove ticks in range [100, 500]
+    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-400));
+
+    // [THEN] Curve entry is removed from the map
+    EXPECT_TRUE(s_score->automationData().isEmpty());
+}
+
 TEST_F(ScoreAutomationController_Tests, Update_IsTextEditing_DoesNothing)
 {
     // [GIVEN] A score initialised with dynamics

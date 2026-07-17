@@ -44,8 +44,8 @@ class ScoreAutomationController
 public:
     void init(const Score* score);
 
-    void insertTime(const Score* score, const Fraction& tick, const Fraction& len);
-    void update(const Score* score, const ScoreChanges& changes);
+    void insertTime(const Fraction& tick, const Fraction& len);
+    void update(const ScoreChanges& changes);
 
     AutomationDataConstPtr automationData() const { return m_automationData; }
     void setAutomationData(AutomationDataPtr data);
@@ -84,7 +84,10 @@ private:
         std::optional<real_t> nominalValueTo;
     };
 
-    void update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
+    void update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
+
+    static void moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves);
+    static void removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves);
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
                                      AutomationCurveMap& destCurves);
@@ -111,6 +114,7 @@ private:
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
+    const Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
 };
 }
