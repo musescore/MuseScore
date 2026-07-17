@@ -553,6 +553,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     }
 
     sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
+    sp->appendActionIcon(ActionIconType::PAGE_LOCK, "toggle-page-lock");
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,

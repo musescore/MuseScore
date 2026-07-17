@@ -80,7 +80,7 @@ public:
     MOCK_METHOD(bool, dropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&, bool), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
-    MOCK_METHOD(void, setDropRect, (const muse::RectF&), (override));
+    MOCK_METHOD(void, setDropRects, (const std::vector<muse::RectF>&), (override));
     MOCK_METHOD(void, endDrop, (), (override));
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
 

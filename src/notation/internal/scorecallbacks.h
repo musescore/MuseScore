@@ -35,7 +35,7 @@ public:
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
     qreal selectionProximity() const override;
     void setDropTarget(mu::engraving::EngravingItem* dropTarget) override;
-    void setDropRectangle(const muse::RectF& rect) override;
+    void setDropRectangles(const std::vector<muse::RectF>& rects) override;
     void changeEditElement(mu::engraving::EngravingItem* newElement) override;
     void adjustCanvasPosition(const mu::engraving::EngravingItem*, int staffIdx = -1) override;
 

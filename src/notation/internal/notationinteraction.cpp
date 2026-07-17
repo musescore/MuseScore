@@ -1590,6 +1590,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
         case ActionIconType::SYSTEM_LOCK:
+        case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
             edd.ed.modifiers = keyboardModifier(modifiers);
             return prepareDropMeasureAnchorElement(pos);
@@ -2331,6 +2332,11 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
+        case ActionIconType::PAGE_LOCK: {
+            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
+            return;
+        }
         case ActionIconType::PARENTHESES: {
             if (!sel.noteList().empty()) {
                 EditParentheses::addParenthesesToNotes(tx, score);
@@ -2577,6 +2583,10 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
+            return;
+        }
+        case ActionIconType::PAGE_LOCK: {
+            EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
             return;
         }
         case ActionIconType::PARENTHESES: {
@@ -3217,8 +3227,8 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
 
     resetAnchorLines();
 
-    if (edd.dropRect.isValid()) {
-        edd.dropRect = RectF();
+    if (!edd.dropRects.empty()) {
+        edd.dropRects.clear();
     }
 
     if (notify) {
@@ -3226,8 +3236,8 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
     }
 }
 
-//! NOTE: Copied from ScoreView::setDropRectangle
-void NotationInteraction::setDropRect(const RectF& rect)
+//! NOTE: Copied from ScoreView::setDropRectangles
+void NotationInteraction::setDropRects(const std::vector<RectF>& rects)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return;
@@ -3235,14 +3245,16 @@ void NotationInteraction::setDropRect(const RectF& rect)
 
     ElementDropData& edd = m_dropData.elementDropData.value();
 
-    if (edd.dropRect == rect) {
+    if (edd.dropRects == rects) {
         return;
     }
 
-    edd.dropRect = rect;
+    edd.dropRects = rects;
 
-    if (rect.isValid()) {
-        score()->addRefresh(rect);
+    for (const RectF& rect : rects) {
+        if (rect.isValid()) {
+            score()->addRefresh(rect);
+        }
     }
 
     if (edd.dropTarget) {
@@ -3596,8 +3608,10 @@ void NotationInteraction::drawDrop(muse::draw::Painter* painter)
     if (m_dropData.elementDropData.has_value()) {
         const ElementDropData& edd = m_dropData.elementDropData.value();
 
-        if (edd.dropRect.isValid()) {
-            painter->fillRect(edd.dropRect, configuration()->dropRectColor());
+        for (const RectF& rect : edd.dropRects) {
+            if (rect.isValid()) {
+                painter->fillRect(rect, configuration()->dropRectColor());
+            }
         }
     }
 

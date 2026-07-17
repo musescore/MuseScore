@@ -38,8 +38,8 @@ enum class LayoutBreakType : unsigned char;
 class EditPageLocks
 {
 public:
-    static void undoAddPageLock(Transaction& tx, Score* score, const RangeLock* lock);
-    static void undoRemovePageLock(Transaction& tx, Score* score, const RangeLock* lock);
+    static void undoAddPageLock(Transaction& tx, const RangeLock* lock);
+    static void undoRemovePageLock(Transaction& tx, const RangeLock* lock);
     static void undoRemoveAllLocks(Transaction& tx, Score* score);
 
     static void togglePageLock(Transaction& tx, Score* score, const std::vector<Page*>& pages);

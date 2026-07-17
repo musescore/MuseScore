@@ -433,10 +433,10 @@ void EditSystemLocks::updateLayoutBreaksOnAddSystemLock(Transaction& tx, Score* 
             const RangeLock* pageLock = mb->pageLock();
             MeasureBase* pageLockStartMb = pageLock->startMB();
 
-            EditPageLocks::undoRemovePageLock(tx, score, pageLock);
+            EditPageLocks::undoRemovePageLock(tx, pageLock);
 
             RangeLock* newPageLock = new RangeLock(pageLockStartMb, lock->endMB());
-            EditPageLocks::undoAddPageLock(tx, score, newPageLock);
+            EditPageLocks::undoAddPageLock(tx, newPageLock);
         }
     }
 

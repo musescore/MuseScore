@@ -460,6 +460,7 @@ void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* 
 void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
 {
     bool containsFFrame = false;
+    bool containsLock = false;
     for (const PaletteCellPtr& cell : layoutPalette.cells()) {
         const ElementPtr element = cell->element;
         if (!element) {
@@ -469,11 +470,19 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
         if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::FFRAME) {
             containsFFrame = true;
         }
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::PAGE_LOCK) {
+            containsLock = true;
+        }
     }
 
     if (!containsFFrame) {
         int defaultPosition = std::min(10, layoutPalette.cellsCount());
         layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+    }
+
+    if (!containsLock) {
+        int defaultPosition = std::min(4, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK, "toggle-page-lock", COMPAT_FRAME_MAG);
     }
 }
 
