@@ -23,10 +23,12 @@
 
 #include "global/async/channel.h"
 
-#include "engraving/automation/automationtypes.h"
+#include "automationtypes.h"
+
+#include <memory>
 
 namespace mu::engraving {
-class Automation
+class AutomationData
 {
 public:
     const AutomationCurveMap& curves() const;
@@ -70,4 +72,7 @@ private:
     AutomationChanges m_pendingChanges;
     muse::async::Channel<AutomationChanges> m_changesChannel;
 };
+
+using AutomationDataPtr = std::shared_ptr<AutomationData>;
+using AutomationDataConstPtr = std::shared_ptr<const AutomationData>;
 }

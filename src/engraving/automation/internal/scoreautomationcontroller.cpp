@@ -37,7 +37,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/types/typesconv.h"
 
-#include "engraving/automation/automation.h"
+#include "engraving/automation/automationdata.h"
 
 #include "log.h"
 
@@ -207,14 +207,18 @@ static const AutomationPoint* activePoint(const AutomationCurveMap& curves, cons
     return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
 }
 
-ScoreAutomationController::ScoreAutomationController()
+void ScoreAutomationController::setAutomationData(AutomationDataPtr data)
 {
-    m_automation = new Automation();
+    m_automationData = std::move(data);
 }
 
-ScoreAutomationController::~ScoreAutomationController()
+void ScoreAutomationController::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
 {
-    delete m_automation;
+    IF_ASSERT_FAILED(m_automationData) {
+        return;
+    }
+
+    m_automationData->editPoints(key, edits);
 }
 
 static bool isRelevantChange(const ScoreChanges& changes)
@@ -243,7 +247,7 @@ void ScoreAutomationController::init(const Score* score)
 void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
 {
     const utick_t diff = len.ticks();
-    if (m_automation->isEmpty() || diff == 0) {
+    if (!m_automationData || m_automationData->isEmpty() || diff == 0) {
         return;
     }
 
@@ -252,9 +256,9 @@ void ScoreAutomationController::insertTime(const Score* score, const Fraction& t
     const utick_t utick = score->repeatList().tick2utick(tick.ticks());
 
     if (diff < 0) {
-        m_automation->removeTicks(utick + diff, utick);
+        m_automationData->removeTicks(utick + diff, utick);
     } else if (diff > 0) {
-        m_automation->moveTicks(utick, diff);
+        m_automationData->moveTicks(utick, diff);
     }
 }
 
@@ -299,6 +303,10 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
         return;
     }
 
+    if (!m_automationData) {
+        m_automationData = std::make_shared<AutomationData>();
+    }
+
     const StaffRange range(score, staffIdxFrom, staffIdxTo);
     const RepeatSegment* firstSeg = *repeatFromIt;
 
@@ -308,8 +316,8 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     ctx.clearFromUTick = std::max(firstSeg->utick, tickFrom + (firstSeg->utick - firstSeg->tick));
 
     // Copy only the curves this update can affect, dropping the generated points that the rebuild
-    // below re-creates; all other curves stay untouched in m_automation
-    copyCurvesForRebuild(m_automation->curves(), range, ctx.clearFromUTick, ctx.curves);
+    // below re-creates; all other curves stay untouched in m_automationData
+    copyCurvesForRebuild(m_automationData->curves(), range, ctx.clearFromUTick, ctx.curves);
 
     // Step 1: segment dynamics: populates ctx.dynamicPriorities
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
@@ -355,7 +363,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     addMeasureRepeatPoints(ctx);
 
     // Step 5: the new curves are fully built; merge them back, replacing only the affected ones
-    m_automation->replaceCurves(ctx.curves);
+    m_automationData->replaceCurves(ctx.curves);
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,

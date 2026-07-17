@@ -368,8 +368,9 @@ target_sources(engraving PRIVATE
     rendering/paddingtable.h
 
     automation/automationtypes.h
-    automation/automation.cpp
-    automation/automation.h
+    automation/automationtypes_fwd.h
+    automation/automationdata.cpp
+    automation/automationdata.h
     automation/internal/automationrw.cpp
     automation/internal/automationrw.h
     automation/internal/scoreautomationcontroller.cpp

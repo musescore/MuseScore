@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "automation.h"
+#include "automationdata.h"
 
 #include "global/log.h"
 
@@ -53,12 +53,12 @@ static void diffPoints(const AutomationCurveKey& key, const AutomationCurve& old
     }
 }
 
-const AutomationCurveMap& Automation::curves() const
+const AutomationCurveMap& AutomationData::curves() const
 {
     return m_curveMap;
 }
 
-const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
+const AutomationCurve& AutomationData::curve(const AutomationCurveKey& key) const
 {
     auto curveIt = m_curveMap.find(key);
     if (curveIt == m_curveMap.end()) {
@@ -69,19 +69,19 @@ const AutomationCurve& Automation::curve(const AutomationCurveKey& key) const
     return curveIt->second;
 }
 
-const AutomationPoint* Automation::point(const AutomationCurveKey& key, utick_t tick) const
+const AutomationPoint* AutomationData::point(const AutomationCurveKey& key, utick_t tick) const
 {
     const AutomationCurve& keyCurve = curve(key);
     const auto it = keyCurve.find(tick);
     return it != keyCurve.cend() ? &it->second : nullptr;
 }
 
-bool Automation::isEmpty() const
+bool AutomationData::isEmpty() const
 {
     return m_curveMap.empty();
 }
 
-void Automation::setCurves(const AutomationCurveMap& curves)
+void AutomationData::setCurves(const AutomationCurveMap& curves)
 {
     if (curves == m_curveMap) {
         return;
@@ -93,7 +93,7 @@ void Automation::setCurves(const AutomationCurveMap& curves)
     notifyChanged();
 }
 
-void Automation::replaceCurves(const AutomationCurveMap& curves)
+void AutomationData::replaceCurves(const AutomationCurveMap& curves)
 {
     static const AutomationCurve EMPTY_CURVE;
 
@@ -116,7 +116,7 @@ void Automation::replaceCurves(const AutomationCurveMap& curves)
     notifyChanged();
 }
 
-void Automation::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
+void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
 {
     if (edits.empty()) {
         return;
@@ -158,7 +158,7 @@ void Automation::editPoints(const AutomationCurveKey& key, const AutomationPoint
     notifyChanged();
 }
 
-void Automation::removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks)
+void AutomationData::removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks)
 {
     if (ticks.empty()) {
         return;
@@ -188,7 +188,7 @@ void Automation::removePoints(const AutomationCurveKey& key, const std::set<utic
     notifyChanged();
 }
 
-void Automation::moveTicks(utick_t tickFrom, utick_t diff)
+void AutomationData::moveTicks(utick_t tickFrom, utick_t diff)
 {
     for (auto& [key, curve] : m_curveMap) {
         const auto startIt = curve.lower_bound(tickFrom);
@@ -211,7 +211,7 @@ void Automation::moveTicks(utick_t tickFrom, utick_t diff)
     notifyChanged();
 }
 
-void Automation::removeTicks(utick_t tickFrom, utick_t tickTo)
+void AutomationData::removeTicks(utick_t tickFrom, utick_t tickTo)
 {
     IF_ASSERT_FAILED(tickFrom <= tickTo) {
         return;
@@ -247,12 +247,12 @@ void Automation::removeTicks(utick_t tickFrom, utick_t tickTo)
     notifyChanged();
 }
 
-muse::async::Channel<AutomationChanges> Automation::changed() const
+muse::async::Channel<AutomationChanges> AutomationData::changed() const
 {
     return m_changesChannel;
 }
 
-void Automation::beginTransaction()
+void AutomationData::beginTransaction()
 {
     IF_ASSERT_FAILED(!m_transactionStarted) {
         return;
@@ -262,7 +262,7 @@ void Automation::beginTransaction()
     m_transactionStarted = true;
 }
 
-void Automation::commitTransaction()
+void AutomationData::commitTransaction()
 {
     IF_ASSERT_FAILED(m_transactionStarted) {
         return;
@@ -278,7 +278,7 @@ void Automation::commitTransaction()
     }
 }
 
-void Automation::rollbackTransaction()
+void AutomationData::rollbackTransaction()
 {
     IF_ASSERT_FAILED(m_transactionStarted) {
         return;
@@ -291,7 +291,7 @@ void Automation::rollbackTransaction()
     m_pendingChanges.clear();
 }
 
-void Automation::notifyChanged()
+void AutomationData::notifyChanged()
 {
     if (m_pendingChanges.isEmpty()) {
         return;

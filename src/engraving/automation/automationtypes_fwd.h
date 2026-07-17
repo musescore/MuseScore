@@ -21,15 +21,16 @@
  */
 #pragma once
 
-#include "global/types/bytearray.h"
+#include <memory>
+#include <vector>
 
 namespace mu::engraving {
-class AutomationData;
+struct AutomationCurveKey;
 
-class AutomationRW
-{
-public:
-    static void read(AutomationData& data, const muse::ByteArray& json);
-    static muse::ByteArray write(const AutomationData& data, bool writeGenerated);
-};
+struct AutomationPointEdit;
+using AutomationPointEdits = std::vector<AutomationPointEdit>;
+
+class AutomationData;
+using AutomationDataPtr = std::shared_ptr<AutomationData>;
+using AutomationDataConstPtr = std::shared_ptr<const AutomationData>;
 }

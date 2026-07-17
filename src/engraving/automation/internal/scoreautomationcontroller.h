@@ -25,11 +25,11 @@
 #include <set>
 #include <vector>
 
+#include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-class Automation;
 class Score;
 class Fraction;
 class EngravingItem;
@@ -42,15 +42,14 @@ struct ScoreChanges;
 class ScoreAutomationController
 {
 public:
-    ScoreAutomationController();
-    ~ScoreAutomationController();
-
     void init(const Score* score);
 
     void insertTime(const Score* score, const Fraction& tick, const Fraction& len);
     void update(const Score* score, const ScoreChanges& changes);
 
-    Automation* automation() const { return m_automation; }
+    AutomationDataConstPtr automationData() const { return m_automationData; }
+    void setAutomationData(AutomationDataPtr data);
+    void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits);
 
 private:
     struct StaffRange {
@@ -112,6 +111,6 @@ private:
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
-    Automation* m_automation = nullptr;
+    AutomationDataPtr m_automationData;
 };
 }
