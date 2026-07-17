@@ -29,7 +29,7 @@
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-class IAutomation;
+class Automation;
 class Score;
 class Fraction;
 class EngravingItem;
@@ -50,7 +50,7 @@ public:
     void insertTime(const Score* score, const Fraction& tick, const Fraction& len);
     void update(const Score* score, const ScoreChanges& changes);
 
-    IAutomation* automation() const { return m_automation; }
+    Automation* automation() const { return m_automation; }
 
 private:
     struct StaffRange {
@@ -112,6 +112,6 @@ private:
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
-    IAutomation* m_automation = nullptr;
+    Automation* m_automation = nullptr;
 };
 }

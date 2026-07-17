@@ -25,7 +25,6 @@
 #include "global/async/asyncable.h"
 
 #include "engraving/automation/internal/scoreautomationcontroller.h"
-#include "engraving/automation/iautomation.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
 #include "engraving/types/fraction.h"

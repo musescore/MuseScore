@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/automation.h"
 #include "engraving/automation/internal/automationrw.h"
 
 #include "automation/utils/automationtestutils.h"

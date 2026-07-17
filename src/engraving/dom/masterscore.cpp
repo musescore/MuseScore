@@ -149,7 +149,7 @@ String MasterScore::name() const
     return fileInfo()->displayName();
 }
 
-IAutomation* MasterScore::automation() const
+Automation* MasterScore::automation() const
 {
     return m_automationController->automation();
 }

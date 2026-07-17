@@ -37,7 +37,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/types/typesconv.h"
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/automation.h"
 
 #include "log.h"
 

@@ -26,7 +26,7 @@
 #include "global/containers.h"
 #include "global/log.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/automation.h"
 
 using namespace mu::engraving;
 
@@ -39,7 +39,7 @@ static const std::unordered_map<AutomationPoint::InterpolationType, muse::String
     { AutomationPoint::InterpolationType::Exponential, u"Exponential" },
 };
 
-void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
+void AutomationRW::read(Automation& automation, const muse::ByteArray& json)
 {
     TRACEFUNC;
 
@@ -104,7 +104,7 @@ void AutomationRW::read(IAutomation& automation, const muse::ByteArray& json)
     automation.setCurves(curves);
 }
 
-muse::ByteArray AutomationRW::write(const IAutomation& automation, bool writeGenerated)
+muse::ByteArray AutomationRW::write(const Automation& automation, bool writeGenerated)
 {
     TRACEFUNC;
 

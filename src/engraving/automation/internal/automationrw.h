@@ -24,12 +24,12 @@
 #include "global/types/bytearray.h"
 
 namespace mu::engraving {
-class IAutomation;
+class Automation;
 
 class AutomationRW
 {
 public:
-    static void read(IAutomation& automation, const muse::ByteArray& json);
-    static muse::ByteArray write(const IAutomation& automation, bool writeGenerated);
+    static void read(Automation& automation, const muse::ByteArray& json);
+    static muse::ByteArray write(const Automation& automation, bool writeGenerated);
 };
 }

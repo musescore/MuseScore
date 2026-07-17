@@ -40,7 +40,7 @@ class PolylinePlot;
 }
 
 namespace mu::engraving {
-class IAutomation;
+class Automation;
 }
 
 namespace mu::notation {
@@ -126,7 +126,7 @@ private:
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
 
     INotationAutomationPtr automation() const;
-    mu::engraving::IAutomation* engravingAutomation() const;
+    mu::engraving::Automation* engravingAutomation() const;
     INotationPtr currentNotation() const;
     mu::engraving::Score* score() const;
 

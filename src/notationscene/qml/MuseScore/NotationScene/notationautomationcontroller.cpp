@@ -28,7 +28,7 @@
 
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/automation.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
 
@@ -647,7 +647,7 @@ INotationPtr NotationAutomationController::currentNotation() const
     return globalContext()->currentNotation();
 }
 
-mu::engraving::IAutomation* NotationAutomationController::engravingAutomation() const
+mu::engraving::Automation* NotationAutomationController::engravingAutomation() const
 {
     return score() ? score()->automation() : nullptr;
 }

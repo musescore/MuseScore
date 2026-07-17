@@ -25,10 +25,6 @@
 
 #include "async/notification.h"
 
-namespace mu::engraving {
-class IAutomation;
-}
-
 namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {

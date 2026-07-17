@@ -148,7 +148,7 @@ class UndoStack;
 
 class ShadowNote;
 
-class IAutomation;
+class Automation;
 
 struct Interval;
 struct NoteVal;
@@ -877,7 +877,7 @@ public:
     SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
-    virtual IAutomation* automation() const;
+    virtual Automation* automation() const;
 
 protected:
     virtual void onTimeInserted(const Fraction& tick, const Fraction& len);

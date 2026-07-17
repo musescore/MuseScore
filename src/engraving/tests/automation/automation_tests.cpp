@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/automation.h"
 #include "global/async/asyncable.h"
 #include "global/containers.h"
 
