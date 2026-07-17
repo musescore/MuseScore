@@ -5,6 +5,8 @@
       <Pedal>
         <beginText>&lt;sym&gt;keyboardPedalPed&lt;sym&gt;</beginText>
         <continueText></continueText>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
         <ticks_f>3/4</ticks_f>
         <eid>B_B</eid>
         </Pedal>
