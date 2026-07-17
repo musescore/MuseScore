@@ -24,6 +24,7 @@
 
 #include <QPixmap>
 #include <QDate>
+#include <string>
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
@@ -101,13 +102,87 @@ enum class DragMode : unsigned char
 enum class MoveDirection : unsigned char
 {
     Undefined = 0,
-    First,
-    Last,
     Left,
     Right,
     Up,
     Down
 };
+
+enum class SelectionTarget : unsigned char
+{
+    Undefined = 0,
+    FirstItem,
+    LastItem,
+    NextItem,
+    PrevItem,
+    NextTrack,
+    PrevTrack,
+    NextFrame,
+    PrevFrame,
+    NextSystem,
+    PrevSystem,
+    UpNoteInChord,
+    DownNoteInChord,
+    TopNoteInChord,
+    BottomNoteInChord,
+    Similar,
+    SimilarInStaff,
+    SimilarInRange,
+    NotesInChord,
+    All,
+    Section,
+};
+
+static const std::map<std::string, SelectionTarget> STR_SELECTION_TARGET = {
+    { "first-item", SelectionTarget::FirstItem },
+    { "last-item", SelectionTarget::LastItem },
+    { "next-item", SelectionTarget::NextItem },
+    { "prev-item", SelectionTarget::PrevItem },
+    { "next-track", SelectionTarget::NextTrack },
+    { "prev-track", SelectionTarget::PrevTrack },
+    { "next-frame", SelectionTarget::NextFrame },
+    { "prev-frame", SelectionTarget::PrevFrame },
+    { "next-system", SelectionTarget::NextSystem },
+    { "prev-system", SelectionTarget::PrevSystem },
+    { "up-note-in-chord", SelectionTarget::UpNoteInChord },
+    { "down-note-in-chord", SelectionTarget::DownNoteInChord },
+    { "top-note-in-chord", SelectionTarget::TopNoteInChord },
+    { "bottom-note-in-chord", SelectionTarget::BottomNoteInChord },
+    { "notes-in-chord", SelectionTarget::NotesInChord },
+    { "similar", SelectionTarget::Similar },
+    { "similar-in-staff", SelectionTarget::SimilarInStaff },
+    { "similar-in-range", SelectionTarget::SimilarInRange },
+    { "all", SelectionTarget::All },
+    { "section", SelectionTarget::Section },
+};
+
+inline SelectionTarget str_conv(const std::string& str, SelectionTarget def)
+{
+    auto it = STR_SELECTION_TARGET.find(str);
+    if (it != STR_SELECTION_TARGET.end()) {
+        return it->second;
+    }
+    return def;
+}
+
+enum PlayMode {
+    NoPlay, PlayNote, PlayChord
+};
+
+inline static const std::map<std::string, PlayMode> STR_PLAY_MODE = {
+    { "none", PlayMode::NoPlay },
+    { "note", PlayMode::PlayNote },
+    { "chord", PlayMode::PlayChord },
+};
+
+inline PlayMode str_conv(const std::string& str, PlayMode def)
+{
+    auto it = STR_PLAY_MODE.find(str);
+    if (it != STR_PLAY_MODE.end()) {
+        return it->second;
+    }
+    return def;
+}
 
 enum class MoveSelectionType : unsigned char
 {

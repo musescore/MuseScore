@@ -99,20 +99,38 @@ public:
     void setHitElementContext(const HitElementContext& context) override;
 
     // Select
+    INotationSelectionPtr selection() const override;
+    muse::async::Notification selectionChanged() const override;
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
+    void select(SelectionTarget target) override;
+
     void moveChordNoteSelection(MoveDirection d) override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE,
-                engraving::staff_idx_t staffIndex = 0) override;
+
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
     void selectAll() override;
     void selectSection() override;
     void selectFirstElement(bool frame = false) override;
     void selectLastElement() override;
-    INotationSelectionPtr selection() const override;
+
     void clearSelection() override;
-    muse::async::Notification selectionChanged() const override;
+
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void findAndSelectChordRest(const Fraction& tick) override;
     void moveSegmentSelection(MoveDirection d) override;
+
+    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
+    void selectAllSimilarElements();
+    void selectAllSimilarElementsInStaff();
+    void selectAllSimilarElementsInRange();
+    void selectAllNotesInChord();
+
+    // Change selection
+    bool moveSelectionAvailable(MoveSelectionType type) const override;
+    void moveSelection(MoveDirection d, MoveSelectionType type) override;
+    void expandSelection(ExpandSelectionMode mode) override;
+    void addToSelection(MoveDirection d, MoveSelectionType type) override;
+    void selectTopStaff() override;
+    void selectEmptyTrailingMeasure() override;
 
     EngravingItem* contextItem() const override;
 
@@ -151,14 +169,6 @@ public:
     void undo() override;
     void redo() override;
     void undoRedoToIndex(size_t idx) override;
-
-    // Change selection
-    bool moveSelectionAvailable(MoveSelectionType type) const override;
-    void moveSelection(MoveDirection d, MoveSelectionType type) override;
-    void expandSelection(ExpandSelectionMode mode) override;
-    void addToSelection(MoveDirection d, MoveSelectionType type) override;
-    void selectTopStaff() override;
-    void selectEmptyTrailingMeasure() override;
 
     // Move
     void movePitch(MoveDirection d, PitchMode mode) override;

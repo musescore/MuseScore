@@ -136,6 +136,7 @@
 #include "notationselection.h"
 #include "notationselectionfilter.h"
 #include "scorecallbacks.h"
+#include "inotationelements.h"
 
 #include "utilities/scorerangeutilities.h"
 
@@ -948,6 +949,128 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
     showItem(e);
 }
 
+FilterElementsOptions NotationInteraction::elementsFilterOptions(const EngravingItem* element) const
+{
+    TRACEFUNC;
+    FilterElementsOptions options;
+    options.elementType = element->type();
+
+    if (element->isNote()) {
+        const mu::engraving::Note* note = dynamic_cast<const mu::engraving::Note*>(element);
+        if (note->chord()->isGrace()) {
+            options.subtype = -1;
+        } else {
+            options.subtype = element->subtype();
+        }
+    } else if (element->isHairpinSegment() || element->isHarmony()) {
+        options.subtype = element->subtype();
+        options.bySubtype = true;
+    }
+
+    return options;
+}
+
+void NotationInteraction::selectAllSimilarElements()
+{
+    TRACEFUNC;
+    auto notationElements = m_notation->elements();
+    if (!notationElements) {
+        return;
+    }
+
+    EngravingItem* selectedElement = selection()->element();
+    if (!selectedElement) {
+        return;
+    }
+
+    FilterElementsOptions options = elementsFilterOptions(selectedElement);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
+    if (elements.empty()) {
+        return;
+    }
+
+    clearSelection();
+
+    select(elements, SelectType::ADD);
+}
+
+void NotationInteraction::selectAllSimilarElementsInStaff()
+{
+    TRACEFUNC;
+    auto notationElements = m_notation->elements();
+    if (!notationElements) {
+        return;
+    }
+
+    EngravingItem* selectedElement = selection()->element();
+    if (!selectedElement) {
+        return;
+    }
+
+    FilterElementsOptions options = elementsFilterOptions(selectedElement);
+    options.staffStart = static_cast<int>(selectedElement->staffIdx());
+    options.staffEnd = options.staffStart + 1;
+
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
+    if (elements.empty()) {
+        return;
+    }
+
+    clearSelection();
+
+    select(elements, SelectType::ADD);
+}
+
+void NotationInteraction::selectAllSimilarElementsInRange()
+{
+    auto elements = m_notation->elements();
+    if (!elements) {
+        return;
+    }
+
+    mu::engraving::EngravingItem* lastHit = selection()->lastElementHit();
+    if (!lastHit) {
+        return;
+    }
+
+    mu::engraving::Score* score = elements->msScore();
+    score->selectSimilarInRange(lastHit);
+    if (score->selectionChanged()) {
+        selectionChanged().notify();
+    }
+}
+
+void NotationInteraction::selectAllNotesInChord()
+{
+    TRACEFUNC;
+
+    const std::vector<EngravingItem*>& selectedElements = selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    std::set<const Chord*> chords;
+    for (const EngravingItem* item : selectedElements) {
+        if (item->isNote()) {
+            chords.insert(toNote(item)->chord());
+        }
+    }
+
+    if (chords.empty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> allNotes;
+    for (const Chord* chord : chords) {
+        for (Note* note : chord->notes()) {
+            allNotes.push_back(note);
+        }
+    }
+
+    clearSelection();
+    select(allNotes, SelectType::ADD);
+}
+
 EngravingItem* NotationInteraction::contextItem() const
 {
     EngravingItem* item = selection()->element();
@@ -1112,6 +1235,78 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
     }
 
     score()->select(elements, type, staffIndex);
+}
+
+void NotationInteraction::select(SelectionTarget target)
+{
+    //! TODO It's better to change the implementation,
+    // instead of calling different methods, it's better to do this:
+    // 1. get target elements
+    // 2. call select method with the elements
+    switch (target) {
+    case SelectionTarget::Undefined:
+        break;
+    case SelectionTarget::FirstItem:
+        selectFirstElement();
+        break;
+    case SelectionTarget::LastItem:
+        selectLastElement();
+        break;
+    case SelectionTarget::NextItem:
+        moveSelection(MoveDirection::Right, MoveSelectionType::EngravingItem);
+        break;
+    case SelectionTarget::PrevItem:
+        moveSelection(MoveDirection::Left, MoveSelectionType::EngravingItem);
+        break;
+    case SelectionTarget::NextTrack:
+        moveSelection(MoveDirection::Right, MoveSelectionType::Track);
+        break;
+    case SelectionTarget::PrevTrack:
+        moveSelection(MoveDirection::Left, MoveSelectionType::Track);
+        break;
+    case SelectionTarget::NextFrame:
+        moveSelection(MoveDirection::Right, MoveSelectionType::Frame);
+        break;
+    case SelectionTarget::PrevFrame:
+        moveSelection(MoveDirection::Left, MoveSelectionType::Frame);
+        break;
+    case SelectionTarget::NextSystem:
+        moveSelection(MoveDirection::Right, MoveSelectionType::System);
+        break;
+    case SelectionTarget::PrevSystem:
+        moveSelection(MoveDirection::Left, MoveSelectionType::System);
+        break;
+    case SelectionTarget::UpNoteInChord:
+        moveChordNoteSelection(MoveDirection::Up);
+        break;
+    case SelectionTarget::DownNoteInChord:
+        moveChordNoteSelection(MoveDirection::Down);
+        break;
+    case SelectionTarget::TopNoteInChord:
+        selectTopOrBottomOfChord(MoveDirection::Up);
+        break;
+    case SelectionTarget::BottomNoteInChord:
+        selectTopOrBottomOfChord(MoveDirection::Down);
+        break;
+    case SelectionTarget::Similar:
+        selectAllSimilarElements();
+        break;
+    case SelectionTarget::SimilarInStaff:
+        selectAllSimilarElementsInStaff();
+        break;
+    case SelectionTarget::SimilarInRange:
+        selectAllSimilarElementsInRange();
+        break;
+    case SelectionTarget::NotesInChord:
+        selectAllNotesInChord();
+        break;
+    case SelectionTarget::All:
+        selectAll();
+        break;
+    case SelectionTarget::Section:
+        selectSection();
+        break;
+    }
 }
 
 void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
@@ -4187,16 +4382,6 @@ void NotationInteraction::toggleSnapToNext()
 
 void NotationInteraction::moveElementSelection(MoveDirection d)
 {
-    if (d == MoveDirection::First) {
-        selectFirstElement(false);
-        return;
-    }
-
-    if (d == MoveDirection::Last) {
-        selectLastElement();
-        return;
-    }
-
     EngravingItem* el = score()->selection().element();
     if (!el && !score()->selection().elements().empty()) {
         el = score()->selection().elements().back();

@@ -108,21 +108,59 @@ void NotationActionController::init()
     registerCommand(UNDO_COMMAND, &Interaction::undo);
     registerCommand(REDO_COMMAND, &Interaction::redo);
 
-    // navigation commands
-    registerMoveSelection(GOTO_FIRST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::First, PlayMode::PlayChord);
-    registerMoveSelection(GOTO_LAST_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Last, PlayMode::PlayChord);
-    registerMoveSelection(GOTO_NEXT_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
-    registerMoveSelection(GOTO_PREV_ELEMENT_COMMAND, MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
-    registerMoveSelection(GOTO_NEXT_TRACK_COMMAND, MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
-    registerMoveSelection(GOTO_PREV_TRACK_COMMAND, MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
-    registerMoveSelection(GOTO_NEXT_FRAME_COMMAND, MoveSelectionType::Frame, MoveDirection::Right);
-    registerMoveSelection(GOTO_PREV_FRAME_COMMAND, MoveSelectionType::Frame, MoveDirection::Left);
-    registerMoveSelection(GOTO_NEXT_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Right);
-    registerMoveSelection(GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System, MoveDirection::Left);
-    registerCommand(GOTO_UP_CHORD_COMMAND, [this]() { moveWithinChord(MoveDirection::Up); });
-    registerCommand(GOTO_DOWN_CHORD_COMMAND, [this]() { moveWithinChord(MoveDirection::Down); });
-    registerCommand(GOTO_TOP_CHORD_COMMAND, [this]() { selectTopOrBottomOfChord(MoveDirection::Up); });
-    registerCommand(GOTO_BOTTOM_CHORD_COMMAND, [this]() { selectTopOrBottomOfChord(MoveDirection::Down); });
+    // navigation and selection commands
+    static const rcommand::CommandQuery SELECT_QUERY(SELECT_COMMAND);
+
+    static const std::map<rcommand::Command, rcommand::CommandQuery> SELECTION_ALIASES {
+        { GOTO_FIRST_ELEMENT_COMMAND, SELECT_QUERY.set("target", "first-item").set("play-mode", "chord") },
+        { GOTO_LAST_ELEMENT_COMMAND, SELECT_QUERY.set("target", "last-item").set("play-mode", "chord") },
+        { GOTO_NEXT_ELEMENT_COMMAND, SELECT_QUERY.set("target", "next-item").set("play-mode", "note") },
+        { GOTO_PREV_ELEMENT_COMMAND, SELECT_QUERY.set("target", "prev-item").set("play-mode", "note") },
+        { GOTO_NEXT_TRACK_COMMAND, SELECT_QUERY.set("target", "next-track").set("play-mode", "chord") },
+        { GOTO_PREV_TRACK_COMMAND, SELECT_QUERY.set("target", "prev-track").set("play-mode", "chord") },
+        { GOTO_NEXT_FRAME_COMMAND, SELECT_QUERY.set("target", "next-frame") },
+        { GOTO_PREV_FRAME_COMMAND, SELECT_QUERY.set("target", "prev-frame") },
+        { GOTO_NEXT_SYSTEM_COMMAND, SELECT_QUERY.set("target", "next-system") },
+        { GOTO_PREV_SYSTEM_COMMAND, SELECT_QUERY.set("target", "prev-system") },
+        { GOTO_UPNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "up-note-in-chord") },
+        { GOTO_DOWNNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "down-note-in-chord") },
+        { GOTO_TOPNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "top-note-in-chord") },
+        { GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "bottom-note-in-chord") },
+        { SELECT_SIMILAR_COMMAND, SELECT_QUERY.set("target", "similar") },
+        { SELECT_SIMILAR_IN_STAFF_COMMAND, SELECT_QUERY.set("target", "similar-in-staff") },
+        { SELECT_SIMILAR_IN_RANGE_COMMAND, SELECT_QUERY.set("target", "similar-in-range") },
+        { SELECT_NOTES_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "notes-in-chord") },
+        { SELECT_ALL_COMMAND, SELECT_QUERY.set("target", "all") },
+        { SELECT_SECTION_COMMAND, SELECT_QUERY.set("target", "section") },
+    };
+
+    registerCommand(SELECT_COMMAND, &Controller::select);
+    registerAliases(SELECTION_ALIASES, &Controller::select);
+
+    //! TODO remove, for example
+    // registerSelectionCommand(GOTO_FIRST_ELEMENT_COMMAND, SelectionTarget::FirstItem, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_LAST_ELEMENT_COMMAND, SelectionTarget::LastItem, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_NEXT_ELEMENT_COMMAND, SelectionTarget::NextItem, PlayMode::PlayNote);
+    // registerSelectionCommand(GOTO_PREV_ELEMENT_COMMAND, SelectionTarget::PrevItem, PlayMode::PlayNote);
+    // registerSelectionCommand(GOTO_NEXT_TRACK_COMMAND, SelectionTarget::NextTrack, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_PREV_TRACK_COMMAND, SelectionTarget::PrevTrack, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_NEXT_FRAME_COMMAND, SelectionTarget::NextFrame);
+    // registerSelectionCommand(GOTO_PREV_FRAME_COMMAND, SelectionTarget::PrevFrame);
+    // registerSelectionCommand(GOTO_NEXT_SYSTEM_COMMAND, SelectionTarget::NextSystem);
+    // registerSelectionCommand(GOTO_PREV_SYSTEM_COMMAND, SelectionTarget::PrevSystem);
+    // registerSelectionCommand(GOTO_UPNOTE_IN_CHORD_COMMAND, SelectionTarget::UpNoteInChord);
+    // registerSelectionCommand(GOTO_DOWNNOTE_IN_CHORD_COMMAND, SelectionTarget::DownNoteInChord);
+    // registerSelectionCommand(GOTO_TOPNOTE_IN_CHORD_COMMAND, SelectionTarget::TopNoteInChord);
+    // registerSelectionCommand(GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SelectionTarget::BottomNoteInChord);
+
+    // registerSelectionCommand(SELECT_SIMILAR_COMMAND, SelectionTarget::Similar);
+    // registerSelectionCommand(SELECT_SIMILAR_IN_STAFF_COMMAND, SelectionTarget::SimilarInStaff);
+    // registerSelectionCommand(SELECT_SIMILAR_IN_RANGE_COMMAND, SelectionTarget::SimilarInRange);
+    // registerSelectionCommand(SELECT_NOTES_IN_CHORD_COMMAND, SelectionTarget::NotesInChord);
+    // registerSelectionCommand(SELECT_ALL_COMMAND, SelectionTarget::All);
+    // registerSelectionCommand(SELECT_SECTION_COMMAND, SelectionTarget::Section);
+
+    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
 
     registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
     registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
@@ -284,13 +322,6 @@ void NotationActionController::init()
 
     registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
 
-    registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
-    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
-    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
-    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
-    registerAction("select-notes-in-chord", &Controller::selectAllNotesInChord, &Controller::hasSelection);
-    registerAction("notation-select-all", &Interaction::selectAll);
-    registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
@@ -748,10 +779,16 @@ void NotationActionController::init()
             { "prev-frame", GOTO_PREV_FRAME_COMMAND },
             { "next-system", GOTO_NEXT_SYSTEM_COMMAND },
             { "prev-system", GOTO_PREV_SYSTEM_COMMAND },
-            { "up-chord", GOTO_UP_CHORD_COMMAND },
-            { "down-chord", GOTO_DOWN_CHORD_COMMAND },
-            { "top-chord", GOTO_TOP_CHORD_COMMAND },
-            { "bottom-chord", GOTO_BOTTOM_CHORD_COMMAND },
+            { "up-chord", GOTO_UPNOTE_IN_CHORD_COMMAND },
+            { "down-chord", GOTO_DOWNNOTE_IN_CHORD_COMMAND },
+            { "top-chord", GOTO_TOPNOTE_IN_CHORD_COMMAND },
+            { "bottom-chord", GOTO_BOTTOMNOTE_IN_CHORD_COMMAND },
+            { "select-similar", SELECT_SIMILAR_COMMAND },
+            { "select-similar-staff", SELECT_SIMILAR_IN_STAFF_COMMAND },
+            { "select-similar-range", SELECT_SIMILAR_IN_RANGE_COMMAND },
+            { "select-notes-in-chord", SELECT_NOTES_IN_CHORD_COMMAND },
+            { "notation-select-all", SELECT_ALL_COMMAND },
+            { "notation-select-section", SELECT_SECTION_COMMAND },
         };
 
         auto ad = dispatcher();
@@ -1603,14 +1640,14 @@ bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) 
     return interaction && interaction->moveSelectionAvailable(type);
 }
 
-void NotationActionController::moveSelection(MoveSelectionType type, MoveDirection direction)
+void NotationActionController::select(SelectionTarget target)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->moveSelection(direction, type);
+    interaction->select(target);
     seekSelectedElement();
 }
 
@@ -2074,109 +2111,6 @@ void NotationActionController::addFretboardDiagram()
     interaction->addFretboardDiagram();
 }
 
-void NotationActionController::selectAllSimilarElements()
-{
-    TRACEFUNC;
-    auto notationElements = currentNotationElements();
-    auto interaction = currentNotationInteraction();
-    if (!notationElements || !interaction) {
-        return;
-    }
-
-    EngravingItem* selectedElement = interaction->selection()->element();
-    if (!selectedElement) {
-        return;
-    }
-
-    FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    std::vector<EngravingItem*> elements = notationElements->elements(options);
-    if (elements.empty()) {
-        return;
-    }
-
-    interaction->clearSelection();
-
-    interaction->select(elements, SelectType::ADD);
-}
-
-void NotationActionController::selectAllSimilarElementsInStaff()
-{
-    TRACEFUNC;
-    auto notationElements = currentNotationElements();
-    auto interaction = currentNotationInteraction();
-    if (!notationElements || !interaction) {
-        return;
-    }
-
-    EngravingItem* selectedElement = interaction->selection()->element();
-    if (!selectedElement) {
-        return;
-    }
-
-    FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    options.staffStart = static_cast<int>(selectedElement->staffIdx());
-    options.staffEnd = options.staffStart + 1;
-
-    std::vector<EngravingItem*> elements = notationElements->elements(options);
-    if (elements.empty()) {
-        return;
-    }
-
-    interaction->clearSelection();
-
-    interaction->select(elements, SelectType::ADD);
-}
-
-void NotationActionController::selectAllSimilarElementsInRange()
-{
-    auto elements = currentNotationElements();
-    mu::engraving::EngravingItem* lastHit = currentNotationSelection()->lastElementHit();
-    if (!elements || !lastHit) {
-        return;
-    }
-
-    mu::engraving::Score* score = elements->msScore();
-    score->selectSimilarInRange(lastHit);
-    if (score->selectionChanged()) {
-        currentNotationInteraction()->selectionChanged().notify();
-    }
-}
-
-void NotationActionController::selectAllNotesInChord()
-{
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
-    if (selectedElements.empty()) {
-        return;
-    }
-
-    std::set<const Chord*> chords;
-    for (const EngravingItem* item : selectedElements) {
-        if (item->isNote()) {
-            chords.insert(toNote(item)->chord());
-        }
-    }
-
-    if (chords.empty()) {
-        return;
-    }
-
-    std::vector<EngravingItem*> allNotes;
-    for (const Chord* chord : chords) {
-        for (Note* note : chord->notes()) {
-            allNotes.push_back(note);
-        }
-    }
-
-    interaction->clearSelection();
-    interaction->select(allNotes, SelectType::ADD);
-}
-
 void NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
@@ -2449,27 +2383,6 @@ void NotationActionController::saveStyle()
                                  muse::trc("notation", "An error occurred."));
         }
     }
-}
-
-FilterElementsOptions NotationActionController::elementsFilterOptions(const EngravingItem* element) const
-{
-    TRACEFUNC;
-    FilterElementsOptions options;
-    options.elementType = element->type();
-
-    if (element->isNote()) {
-        const mu::engraving::Note* note = dynamic_cast<const mu::engraving::Note*>(element);
-        if (note->chord()->isGrace()) {
-            options.subtype = -1;
-        } else {
-            options.subtype = element->subtype();
-        }
-    } else if (element->isHairpinSegment() || element->isHarmony()) {
-        options.subtype = element->subtype();
-        options.bySubtype = true;
-    }
-
-    return options;
 }
 
 bool NotationActionController::measureNavigationAvailable() const
@@ -3024,15 +2937,32 @@ void NotationActionController::registerTabPadNoteAction(const ActionCode& code, 
     }, &NotationActionController::isTablatureStaff);
 }
 
-void NotationActionController::registerMoveSelection(const muse::rcommand::Command& command,
-                                                     MoveSelectionType type,
-                                                     MoveDirection direction,
-                                                     PlayMode playMode)
+void NotationActionController::select(const muse::rcommand::CommandQuery& query)
 {
-    registerCommand(command, [this, type, direction, playMode]() {
-        moveSelection(type, direction);
+    LOGDA() << query.toString();
+
+    SelectionTarget target = str_conv(query.param("target").toString(), SelectionTarget::Undefined);
+    if (target == SelectionTarget::Undefined) {
+        return;
+    }
+
+    select(target);
+
+    PlayMode playMode = str_conv(query.param("play-mode").toString(), PlayMode::NoPlay);
+    if (playMode != PlayMode::NoPlay) {
+        seekSelectedElement();
+        playSelectedElement(playMode == PlayMode::PlayChord);
+    }
+}
+
+void NotationActionController::registerSelectionCommand(const muse::rcommand::Command& command,
+                                                        SelectionTarget target, PlayMode playMode)
+{
+    registerCommand(command, [this, target, playMode]() {
+        select(target);
 
         if (playMode != PlayMode::NoPlay) {
+            seekSelectedElement();
             playSelectedElement(playMode == PlayMode::PlayChord);
         }
     });
@@ -3239,6 +3169,24 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
             }
         }
     });
+}
+
+void NotationActionController::registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
+                                               void (NotationActionController::*handler)(const muse::rcommand::CommandQuery&))
+{
+    for (auto it = aliases.cbegin(); it != aliases.cend(); ++it) {
+        auto alias = it->first;
+        auto query = it->second;
+
+        commandDispatcher()->onRequest(this, alias, [this, query, handler]() {
+            if (!commandsState()->commandState(query.uri()).enabled) {
+                return muse::make_ret(Ret::Code::NotSupported);
+            }
+
+            (this->*handler)(query);
+            return muse::make_ok();
+        });
+    }
 }
 
 void NotationActionController::registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method)

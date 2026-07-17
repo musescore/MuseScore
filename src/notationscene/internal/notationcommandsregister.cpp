@@ -739,7 +739,23 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
-    // navigation commands
+    // navigation and selection commands
+
+    CommandInfo{
+        SELECT_COMMAND,
+        TranslatableString("action", "Select"),
+        TranslatableString("action", "Select items by target"),
+        InputSchema({
+            { "target",
+              Arg(DataType::String,
+                  u"Selection target (first-item, last-item, next-item, prev-item, "
+                  u"next-track, prev-track, next-frame, prev-frame, next-system, prev-system, "
+                  u"up-note-in-chord, down-note-in-chord, top-note-in-chord, bottom-note-in-chord, notes-in-chord, "
+                  u"similar, similar-in-staff, similar-in-range, all, section)") },
+            { "play-mode", Arg(DataType::String, u"Play mode (none, note, chord)") },
+        }),
+        Decoration()
+    },
     CommandInfo{
         GOTO_FIRST_ELEMENT_COMMAND,
         TranslatableString("action", "First element"),
@@ -812,30 +828,74 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
-        GOTO_UP_CHORD_COMMAND,
+        GOTO_UPNOTE_IN_CHORD_COMMAND,
         TranslatableString("action", "Up note in chord"),
         TranslatableString("action", "Select note/rest above"),
         InputSchema(),
         Decoration()
     },
     CommandInfo{
-        GOTO_DOWN_CHORD_COMMAND,
+        GOTO_DOWNNOTE_IN_CHORD_COMMAND,
         TranslatableString("action", "Down note in chord"),
         TranslatableString("action", "Select note/rest below"),
         InputSchema(),
         Decoration()
     },
     CommandInfo{
-        GOTO_TOP_CHORD_COMMAND,
+        GOTO_TOPNOTE_IN_CHORD_COMMAND,
         TranslatableString("action", "Top note in chord"),
         TranslatableString("action", "Select top note in chord"),
         InputSchema(),
         Decoration()
     },
     CommandInfo{
-        GOTO_BOTTOM_CHORD_COMMAND,
+        GOTO_BOTTOMNOTE_IN_CHORD_COMMAND,
         TranslatableString("action", "Bottom note in chord"),
         TranslatableString("action", "Select bottom note in chord"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // selection commands
+    CommandInfo{
+        SELECT_SIMILAR_COMMAND,
+        TranslatableString("action", "Similar"),
+        TranslatableString("action", "Select similar elements"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SELECT_SIMILAR_IN_STAFF_COMMAND,
+        TranslatableString("action", "Similar on this staff"),
+        TranslatableString("action", "Select similar elements on the same staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SELECT_SIMILAR_IN_RANGE_COMMAND,
+        TranslatableString("action", "Similar in this range"),
+        TranslatableString("action", "Select similar elements in the selected range"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SELECT_NOTES_IN_CHORD_COMMAND,
+        TranslatableString("action", "Notes in chord"),
+        TranslatableString("action", "Select notes in chord"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SELECT_ALL_COMMAND,
+        TranslatableString("action", "Select &all"),
+        TranslatableString("action", "Select all"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SELECT_SECTION_COMMAND,
+        TranslatableString("action", "Select sectio&n"),
+        TranslatableString("action", "Select section"),
         InputSchema(),
         Decoration()
     },
