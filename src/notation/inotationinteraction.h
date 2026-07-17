@@ -84,19 +84,34 @@ public:
     virtual void setHitElementContext(const HitElementContext& context) = 0;
 
     // Select
+    virtual INotationSelectionPtr selection() const = 0;
+    virtual muse::async::Notification selectionChanged() const = 0;
+    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) = 0;
+    virtual void select(SelectionTarget target) = 0;
+
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
-    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE,
-                        engraving::staff_idx_t staffIndex = 0) = 0;
+
     virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
     virtual void selectFirstElement(bool frame = true) = 0;
     virtual void selectLastElement() = 0;
-    virtual INotationSelectionPtr selection() const = 0;
+
     virtual void clearSelection() = 0;
-    virtual muse::async::Notification selectionChanged() const = 0;
+
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
     virtual void findAndSelectChordRest(const Fraction& tick) = 0;
+
+    // Change selection
+    virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
+    virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
+
+    virtual void moveLyrics(MoveDirection d) = 0;
+    virtual void expandSelection(ExpandSelectionMode mode) = 0;
+    virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
+    virtual void selectTopStaff() = 0;
+    virtual void selectEmptyTrailingMeasure() = 0;
+    virtual void moveSegmentSelection(MoveDirection d) = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 
@@ -137,17 +152,6 @@ public:
     virtual void undo() = 0;
     virtual void redo() = 0;
     virtual void undoRedoToIndex(size_t idx) = 0;
-
-    // Change selection
-    virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
-    virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
-
-    virtual void moveLyrics(MoveDirection d) = 0;
-    virtual void expandSelection(ExpandSelectionMode mode) = 0;
-    virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
-    virtual void selectTopStaff() = 0;
-    virtual void selectEmptyTrailingMeasure() = 0;
-    virtual void moveSegmentSelection(MoveDirection d) = 0;
 
     // Move/nudge elements
     virtual void movePitch(MoveDirection d, PitchMode mode) = 0;

@@ -143,7 +143,8 @@ private:
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
-    void moveSelection(MoveSelectionType type, MoveDirection direction);
+    void select(SelectionTarget target);
+
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
     void moveInputNotes(bool up, PitchMode mode);
@@ -170,10 +171,6 @@ private:
     void addGuitarBend(GuitarBendType bendType);
     void addFretboardDiagram();
 
-    void selectAllSimilarElements();
-    void selectAllSimilarElementsInStaff();
-    void selectAllSimilarElementsInRange();
-    void selectAllNotesInChord();
     void openSelectionMoreOptions();
 
     void startEditSelectedElement(const muse::actions::ActionData& args);
@@ -224,8 +221,6 @@ private:
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
-
-    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
     bool measureNavigationAvailable() const;
     bool toggleLayoutBreakAvailable() const;
@@ -286,10 +281,6 @@ private:
     void registerPadNoteAction(const muse::actions::ActionCode&, Pad padding);
     void registerTabPadNoteAction(const muse::actions::ActionCode&, Pad padding);
 
-    enum PlayMode {
-        NoPlay, PlayNote, PlayChord
-    };
-
     void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
     void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 
@@ -312,12 +303,16 @@ private:
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(const muse::rcommand::CommandQuery&));
+    void registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
+                         void (NotationActionController::*handler)(const muse::rcommand::CommandQuery&));
 
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
-    void registerMoveSelection(const muse::rcommand::Command&, MoveSelectionType, MoveDirection, PlayMode playMode = PlayMode::NoPlay);
+
+    void select(const muse::rcommand::CommandQuery& query);
+    void registerSelectionCommand(const muse::rcommand::Command&, SelectionTarget, PlayMode playMode = PlayMode::NoPlay);
 
     muse::async::Channel<bool> m_hasSelectionChanged;
     muse::async::Channel<bool> m_textEditingChanged;

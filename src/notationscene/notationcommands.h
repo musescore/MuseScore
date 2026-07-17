@@ -30,7 +30,9 @@ inline static const muse::rcommand::Command CANCEL_COMMAND("command://notation/c
 inline static const muse::rcommand::Command UNDO_COMMAND("command://notation/undo");
 inline static const muse::rcommand::Command REDO_COMMAND("command://notation/redo");
 
-// navigation commands
+// navigation and selection commands
+inline static const muse::rcommand::Command SELECT_COMMAND("command://notation/select"); // with params
+// aliases for select command
 inline static const muse::rcommand::Command GOTO_FIRST_ELEMENT_COMMAND("command://notation/goto-first-element");
 inline static const muse::rcommand::Command GOTO_LAST_ELEMENT_COMMAND("command://notation/goto-last-element");
 inline static const muse::rcommand::Command GOTO_NEXT_ELEMENT_COMMAND("command://notation/goto-next-element");
@@ -41,10 +43,17 @@ inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://n
 inline static const muse::rcommand::Command GOTO_PREV_FRAME_COMMAND("command://notation/goto-prev-frame");
 inline static const muse::rcommand::Command GOTO_NEXT_SYSTEM_COMMAND("command://notation/goto-next-system");
 inline static const muse::rcommand::Command GOTO_PREV_SYSTEM_COMMAND("command://notation/goto-prev-system");
-inline static const muse::rcommand::Command GOTO_UP_CHORD_COMMAND("command://notation/goto-up-chord");
-inline static const muse::rcommand::Command GOTO_DOWN_CHORD_COMMAND("command://notation/goto-down-chord");
-inline static const muse::rcommand::Command GOTO_TOP_CHORD_COMMAND("command://notation/goto-top-chord");
-inline static const muse::rcommand::Command GOTO_BOTTOM_CHORD_COMMAND("command://notation/goto-bottom-chord");
+inline static const muse::rcommand::Command GOTO_UPNOTE_IN_CHORD_COMMAND("command://notation/goto-upnote-in-chord");
+inline static const muse::rcommand::Command GOTO_DOWNNOTE_IN_CHORD_COMMAND("command://notation/goto-downnote-in-chord");
+inline static const muse::rcommand::Command GOTO_TOPNOTE_IN_CHORD_COMMAND("command://notation/goto-topnote-in-chord");
+inline static const muse::rcommand::Command GOTO_BOTTOMNOTE_IN_CHORD_COMMAND("command://notation/goto-bottomnote-in-chord");
+inline static const muse::rcommand::Command SELECT_SIMILAR_COMMAND("command://notation/select-similar");
+inline static const muse::rcommand::Command SELECT_SIMILAR_IN_STAFF_COMMAND("command://notation/select-similar-in-staff");
+inline static const muse::rcommand::Command SELECT_SIMILAR_IN_RANGE_COMMAND("command://notation/select-similar-in-range");
+inline static const muse::rcommand::Command SELECT_NOTES_IN_CHORD_COMMAND("command://notation/select-notes-in-chord");
+inline static const muse::rcommand::Command SELECT_ALL_COMMAND("command://notation/select-all");
+inline static const muse::rcommand::Command SELECT_SECTION_COMMAND("command://notation/select-section");
+// ------------------------------------------------------------
 
 inline static const muse::rcommand::Command EDIT_NEXT_WORD_COMMAND("command://notation/edit-next-word");
 inline static const muse::rcommand::Command EDIT_NEXT_TEXT_ELEMENT_COMMAND("command://notation/edit-next-text-element");
