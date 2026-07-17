@@ -51,7 +51,7 @@ apt_packages_runtime=(
   libcups2
   libdbus-1-3
   libegl1-mesa-dev
-  libodbc1
+  libodbc2
   libpq-dev
   libxcomposite-dev
   libxcursor-dev
