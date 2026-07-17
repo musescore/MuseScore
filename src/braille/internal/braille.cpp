@@ -956,6 +956,8 @@ void Braille::resetOctaves()
     }
 }
 
+static QString brailleSpecialNoteheadPrefix(Note* note);
+
 // 22. Doubling of Signs. Music Braille Code 2015.
 // When the same sign appears on more than three consecutive notes
 // (ignoring any rests between them), it is written twice before the first note of the group
@@ -974,17 +976,17 @@ void Braille::computeSignDoubling()
         return;
     }
 
-    auto finalizeRun = [this](const std::vector<const EngravingItem*>& run) {
+    auto finalizeRun = [this](const QString& signKey, const std::vector<const EngravingItem*>& run) {
         if (run.size() < SIGN_DOUBLING_MIN_GROUP) {
             return;
         }
-        // Double (prefix) on the first note, omit on the middle notes, and a single closing sign
-        // as a suffix after the last note. run.size() >= 4 here, so front and back differ.
-        m_context.signDoubling[run.front()] = SignDoubling::Double;
+        // Double on the first note, omit on the middle notes, and terminate doubling with a
+        // single sign at the last note. Each renderer determines the sign's correct position.
+        m_context.signDoubling[run.front()][signKey] = SignDoubling::Double;
         for (size_t i = 1; i + 1 < run.size(); ++i) {
-            m_context.signDoubling[run[i]] = SignDoubling::Omit;
+            m_context.signDoubling[run[i]][signKey] = SignDoubling::Omit;
         }
-        m_context.signDoubling[run.back()] = SignDoubling::CloseSuffix;
+        m_context.signDoubling[run.back()][signKey] = SignDoubling::Terminate;
     };
 
     const size_t ntracks = m_score->staves().size() * VOICES;
@@ -1034,6 +1036,15 @@ void Braille::computeSignDoubling()
             }
 
             Note* rootNote = notes.empty() ? nullptr : notes.front();
+
+            for (Note* note : notes) {
+                const QString key = brailleSpecialNoteheadPrefix(note);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                presentSigns.insert(QStringLiteral("notehead:") + key);
+            }
+
             if (notes.size() > 1) {
                 for (auto it = notes.begin() + 1; it != notes.end(); ++it) {
                     const QString key = brailleIntervalSign(computeInterval(rootNote, *it, true));
@@ -1047,7 +1058,7 @@ void Braille::computeSignDoubling()
             // End any open run whose typed sign is not present on this chord.
             for (auto it = openSignRuns.begin(); it != openSignRuns.end();) {
                 if (presentSigns.find(it->first) == presentSigns.end()) {
-                    finalizeRun(it->second);
+                    finalizeRun(it->first, it->second);
                     it = openSignRuns.erase(it);
                 } else {
                     ++it;
@@ -1067,6 +1078,14 @@ void Braille::computeSignDoubling()
                 openSignRuns[QStringLiteral("arpeggio:") + arpeggioCode].push_back(chord->arpeggio());
             }
 
+            for (Note* note : notes) {
+                const QString key = brailleSpecialNoteheadPrefix(note);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                openSignRuns[QStringLiteral("notehead:") + key].push_back(note);
+            }
+
             if (notes.size() > 1) {
                 for (auto it = notes.begin() + 1; it != notes.end(); ++it) {
                     const QString key = brailleIntervalSign(computeInterval(rootNote, *it, true));
@@ -1079,9 +1098,20 @@ void Braille::computeSignDoubling()
         }
 
         for (const auto& pair : openSignRuns) {
-            finalizeRun(pair.second);
+            finalizeRun(pair.first, pair.second);
         }
     }
+}
+
+SignDoubling Braille::signDoublingState(const EngravingItem* item, const QString& signKey) const
+{
+    auto itemIt = m_context.signDoubling.find(item);
+    if (itemIt == m_context.signDoubling.end()) {
+        return SignDoubling::Single;
+    }
+
+    auto signIt = itemIt->second.find(signKey);
+    return signIt != itemIt->second.end() ? signIt->second : SignDoubling::Single;
 }
 
 void Braille::credits(QIODevice& device)
@@ -1954,6 +1984,32 @@ static QString brailleSpecialNoteheadPrefix(Note* note)
     return QString();
 }
 
+QString Braille::brailleSpecialNoteheadSign(Note* note)
+{
+    const QString code = brailleSpecialNoteheadPrefix(note);
+    if (code.isEmpty()) {
+        return QString();
+    }
+
+    if (!m_context.signDoublingComputed) {
+        computeSignDoubling();
+    }
+
+    const QString signKey = QStringLiteral("notehead:") + code;
+    switch (signDoublingState(note, signKey)) {
+    case SignDoubling::Double:
+        // MBC 2015, 2.5.1: only the second half of a special-note-shape sign is repeated.
+        return code + code.right(1);
+    case SignDoubling::Omit:
+        return QString();
+    case SignDoubling::Terminate:
+    case SignDoubling::Single:
+    default:
+        // The terminating sign retains its normal position before the last note.
+        return code;
+    }
+}
+
 QString Braille::brailleChord(Chord* chord)
 {
     // 9.5 Moving notes methods are not implemented as they are optional methods
@@ -1989,7 +2045,8 @@ QString Braille::brailleChord(Chord* chord)
     }
 
     Note* rootNote = notes.front();
-    QString rootNoteBraille = brailleChordRootNote(chord, rootNote);
+    QString specialNoteheadBraille = brailleSpecialNoteheadSign(rootNote);
+    QString rootNoteBraille = brailleChordRootNote(chord, rootNote, false);
 
     QString intervals = QString();
     for (auto it = notes.begin() + 1; it != notes.end(); ++it) {
@@ -2016,9 +2073,9 @@ QString Braille::brailleChord(Chord* chord)
     QString articulationsBraille = QString();        // prefix, before the note
     QString articulationsBrailleAfter = QString();   // suffix, after the note (doubling closing sign)
     for (Articulation* artic : chord->articulations()) {
-        auto it = m_context.signDoubling.find(artic);
-        SignDoubling state = (it != m_context.signDoubling.end()) ? it->second : SignDoubling::Single;
         const QString code = brailleArticulation(artic);
+        const QString signKey = QStringLiteral("articulation:") + code;
+        SignDoubling state = signDoublingState(artic, signKey);
         switch (state) {
         case SignDoubling::Omit:
             // Middle of a doubled group: the sign is not written.
@@ -2027,7 +2084,7 @@ QString Braille::brailleChord(Chord* chord)
             // First note of a doubled group: write the sign twice, before the note.
             articulationsBraille += code + code;
             break;
-        case SignDoubling::CloseSuffix:
+        case SignDoubling::Terminate:
             // Last note of a doubled group: write the closing sign once, after the note.
             articulationsBrailleAfter += code;
             break;
@@ -2047,9 +2104,9 @@ QString Braille::brailleChord(Chord* chord)
     QString arpeggioBraille = QString();        // prefix, before the note
     QString arpeggioBrailleAfter = QString();   // suffix, after the note (doubling closing sign)
     if (Arpeggio* arpeggio = chord->arpeggio()) {
-        auto it = m_context.signDoubling.find(arpeggio);
-        SignDoubling state = (it != m_context.signDoubling.end()) ? it->second : SignDoubling::Single;
         const QString code = brailleArpeggio(arpeggio);
+        const QString signKey = QStringLiteral("arpeggio:") + code;
+        SignDoubling state = signDoublingState(arpeggio, signKey);
         switch (state) {
         case SignDoubling::Omit:
             // Middle of a doubled group: the sign is not written.
@@ -2058,7 +2115,7 @@ QString Braille::brailleChord(Chord* chord)
             // First note of a doubled group: write the sign twice, before the note.
             arpeggioBraille += code + code;
             break;
-        case SignDoubling::CloseSuffix:
+        case SignDoubling::Terminate:
             // Last note of a doubled group: write the closing sign once, after the note.
             arpeggioBrailleAfter += code;
             break;
@@ -2073,9 +2130,12 @@ QString Braille::brailleChord(Chord* chord)
 
     // In Braille the order of elements is clearly defined
     QString result = QString();
-    result += hairpinBrailleBefore;
     result += graceNotesBefore;
     result += graceNoteMarking;
+    // MBC 2015, 2.5: a special-note-shape prefix precedes nuances, ornaments,
+    // accidentals, and octave marks belonging to the affected note.
+    result += specialNoteheadBraille;
+    result += hairpinBrailleBefore;
     result += arpeggioBraille;
     result += articulationsBraille;
     result += slurBrailleBefore;
@@ -2155,7 +2215,7 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     }
 
     QString noteTieBraille = brailleTie(note);
-    QString specialNoteheadPrefix = brailleSpecialNoteheadPrefix(note);
+    QString specialNoteheadBraille = brailleSpecialNoteheadSign(note);
 
     QString fingeringAfterBraille = QString();
     for (EngravingItem* el : rootNote->el()) {
@@ -2167,32 +2227,31 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     if (!m_context.signDoublingComputed) {
         computeSignDoubling();
     }
-    auto it = m_context.signDoubling.find(note);
-    SignDoubling state = (it != m_context.signDoubling.end()) ? it->second : SignDoubling::Single;
+    const QString intervalSignKey = QStringLiteral("interval:") + intervalBraille;
+    SignDoubling state = signDoublingState(note, intervalSignKey);
     switch (state) {
     case SignDoubling::Omit:
         intervalBraille.clear();
-        specialNoteheadPrefix.clear();
         break;
     case SignDoubling::Double:
         intervalBraille += intervalBraille;
         break;
-    case SignDoubling::CloseSuffix:
+    case SignDoubling::Terminate:
     case SignDoubling::Single:
     default:
         break;
     }
 
     return
-        noteAccidentalBraille
+        specialNoteheadBraille
+        + noteAccidentalBraille
         + noteOctaveBraille
-        + specialNoteheadPrefix
         + intervalBraille
         + fingeringAfterBraille
         + noteTieBraille;
 }
 
-QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
+QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote, bool includeSpecialNotehead)
 {
     String pitchName;
     String accidental; //TODO, do we need this for anything?
@@ -2223,7 +2282,7 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
         accidentalBraille = brailleAccidentalType(rootNote->accidental()->accidentalType());
     }
 
-    QString specialNoteheadPrefix = brailleSpecialNoteheadPrefix(rootNote);
+    QString specialNoteheadBraille = includeSpecialNotehead ? brailleSpecialNoteheadSign(rootNote) : QString();
     QString noteTieBraille = brailleTie(rootNote);
 
     QString fingeringAfterBraille = QString();
@@ -2234,9 +2293,9 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
     }
 
     return
-        accidentalBraille
+        specialNoteheadBraille
+        + accidentalBraille
         + octaveBraille
-        + specialNoteheadPrefix
         + noteBraille
         + fingeringAfterBraille
         + noteTieBraille;

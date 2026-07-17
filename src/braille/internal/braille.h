@@ -159,7 +159,7 @@ enum class SignDoubling {
     Single = 0,        // default: write the sign once
     Double = 1,        // first note of a group: write the sign twice
     Omit = 2,          // middle notes of a group: do not write the sign
-    CloseSuffix = 3,   // last note of a group: write the sign once after the note
+    Terminate = 3,     // last note of a group: terminate doubling with one sign
 };
 
 struct BrailleContext {
@@ -167,8 +167,8 @@ struct BrailleContext {
     std::vector<ClefType> currentClefType;
     std::vector<Key> currentKey;
 
-    // Per-sign-instance decisions for the doubling rule, computed once per Braille run.
-    std::map<const EngravingItem*, SignDoubling> signDoubling;
+    // Per-sign-instance and typed-sign decisions, computed once per Braille run.
+    std::map<const EngravingItem*, std::map<QString, SignDoubling> > signDoubling;
     bool signDoublingComputed = false;
 };
 
@@ -199,6 +199,7 @@ private:
     void resetOctaves();
 
     void computeSignDoubling();
+    SignDoubling signDoublingState(const EngravingItem* item, const QString& signKey) const;
 
     void credits(QIODevice& device);
     void instruments(QIODevice& device);
@@ -231,7 +232,8 @@ private:
     QString brailleBreath(Breath* breath);
     QString brailleChord(Chord* chord);
     QString brailleChordInterval(Note* rootNote, const std::vector<Note*>& notes, Note* note);
-    QString brailleChordRootNote(Chord* chord, Note* rootNote);
+    QString brailleChordRootNote(Chord* chord, Note* rootNote, bool includeSpecialNotehead = true);
+    QString brailleSpecialNoteheadSign(Note* note);
     QString brailleClef(Clef* clef);
     QString brailleDynamic(Dynamic* dynamic);
     QString brailleFermata(Fermata* fermata);
