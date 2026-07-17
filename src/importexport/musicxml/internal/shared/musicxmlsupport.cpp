@@ -520,8 +520,8 @@ AccidentalType musicXmlString2accidentalType(const String mxmlName, const String
         { u"sharp-sharp", AccidentalType::SHARP2 },
         //{ u"double-flat", AccidentalType::FLAT2 }, // shouldn't harm, but doesn't exist in MusicXML
         { u"flat-flat", AccidentalType::FLAT2 },
-        { u"natural-sharp", AccidentalType::SHARP },
-        { u"natural-flat", AccidentalType::FLAT },
+        { u"natural-sharp", AccidentalType::NATURAL_SHARP },
+        { u"natural-flat", AccidentalType::NATURAL_FLAT },
 
         { u"quarter-flat", AccidentalType::MIRRORED_FLAT },
         { u"quarter-sharp", AccidentalType::SHARP_SLASH },
