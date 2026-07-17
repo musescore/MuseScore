@@ -539,17 +539,12 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
         LayoutBreakType::SECTION,
+        LayoutBreakType::NOBREAK
     };
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
         auto lb = Factory::makeLayoutBreak(paletteScore()->dummy()->measure());
         lb->setLayoutBreakType(layoutBreakType);
         sp->appendElement(lb, TConv::userName(layoutBreakType));
-    }
-
-    if (!defaultPalette) {
-        auto lb = Factory::makeLayoutBreak(paletteScore()->dummy()->measure());
-        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-        sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
     }
 
     sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
