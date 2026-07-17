@@ -33,7 +33,6 @@ class AutomationData
 public:
     const AutomationCurveMap& curves() const;
     const AutomationCurve& curve(const AutomationCurveKey& key) const;
-    const AutomationPoint* point(const AutomationCurveKey& key, utick_t tick) const;
 
     bool isEmpty() const;
 
@@ -51,19 +50,10 @@ public:
 
     muse::async::Channel<AutomationChanges> changed() const;
 
-    void beginTransaction();
-    void commitTransaction();
-    void rollbackTransaction();
-
 private:
-    void notifyChanged();
+    void notifyChanged(const AutomationChanges& changes);
 
     AutomationCurveMap m_curveMap;
-    AutomationCurveMap m_snapshot;
-
-    bool m_transactionStarted = false;
-    bool m_notifyPending = false;
-    AutomationChanges m_pendingChanges;
     muse::async::Channel<AutomationChanges> m_changesChannel;
 };
 

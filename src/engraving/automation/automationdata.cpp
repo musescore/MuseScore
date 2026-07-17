@@ -22,8 +22,6 @@
 
 #include "automationdata.h"
 
-#include "global/log.h"
-
 using namespace mu::engraving;
 
 static const AutomationCurve EMPTY_CURVE;
@@ -70,13 +68,6 @@ const AutomationCurve& AutomationData::curve(const AutomationCurveKey& key) cons
     return curveIt->second;
 }
 
-const AutomationPoint* AutomationData::point(const AutomationCurveKey& key, utick_t tick) const
-{
-    const AutomationCurve& keyCurve = curve(key);
-    const auto it = keyCurve.find(tick);
-    return it != keyCurve.cend() ? &it->second : nullptr;
-}
-
 bool AutomationData::isEmpty() const
 {
     return m_curveMap.empty();
@@ -89,6 +80,7 @@ void AutomationData::setCurves(const AutomationCurveMap& curves)
     }
 
     size_t overlapCount = 0;
+    AutomationChanges changes;
 
     for (const auto& [key, newCurve] : curves) {
         const auto oldIt = m_curveMap.find(key);
@@ -98,30 +90,31 @@ void AutomationData::setCurves(const AutomationCurveMap& curves)
         }
 
         const AutomationCurve& oldCurve = existed ? oldIt->second : EMPTY_CURVE;
-        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
+        diffPoints(key, oldCurve, newCurve, changes);
     }
 
     for (const auto& [key, oldCurve] : m_curveMap) {
         if (!curves.contains(key)) {
-            diffPoints(key, oldCurve, EMPTY_CURVE, m_pendingChanges);
+            diffPoints(key, oldCurve, EMPTY_CURVE, changes);
         }
     }
 
     // Every key was touched by this change
     const size_t allKeysCount = curves.size() + m_curveMap.size() - overlapCount;
-    if (m_pendingChanges.affectedKeys.size() == allKeysCount) {
-        m_pendingChanges.isFullReset = true;
+    if (changes.affectedKeys.size() == allKeysCount) {
+        changes.isFullReset = true;
     }
 
     m_curveMap = curves;
 
-    notifyChanged();
+    notifyChanged(changes);
 }
 
 void AutomationData::replaceCurves(const AutomationCurveMap& curves)
 {
     const size_t oldSize = m_curveMap.size();
     size_t overlapCount = 0;
+    AutomationChanges changes;
 
     for (const auto& [key, newCurve] : curves) {
         const auto oldIt = m_curveMap.find(key);
@@ -131,7 +124,7 @@ void AutomationData::replaceCurves(const AutomationCurveMap& curves)
         }
 
         const AutomationCurve& oldCurve = existed ? oldIt->second : EMPTY_CURVE;
-        diffPoints(key, oldCurve, newCurve, m_pendingChanges);
+        diffPoints(key, oldCurve, newCurve, changes);
 
         if (newCurve.empty()) {
             if (existed) {
@@ -146,11 +139,11 @@ void AutomationData::replaceCurves(const AutomationCurveMap& curves)
 
     // Every key was touched by this change
     const size_t allKeysCount = oldSize + curves.size() - overlapCount;
-    if (allKeysCount > 0 && m_pendingChanges.affectedKeys.size() == allKeysCount) {
-        m_pendingChanges.isFullReset = true;
+    if (allKeysCount > 0 && changes.affectedKeys.size() == allKeysCount) {
+        changes.isFullReset = true;
     }
 
-    notifyChanged();
+    notifyChanged(changes);
 }
 
 void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
@@ -160,6 +153,7 @@ void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationP
     }
 
     AutomationCurve& curve = m_curveMap.try_emplace(key).first->second;
+    AutomationChanges changes;
 
     for (const auto& edit : edits) {
         utick_t rangeFrom = edit.tick;
@@ -178,7 +172,7 @@ void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationP
 
         if (exists && pointIt->second == edit.point) {
             if (moved) {
-                m_pendingChanges.extend(key, rangeFrom, rangeTo);
+                changes.extend(key, rangeFrom, rangeTo);
             }
             continue;
         }
@@ -189,10 +183,10 @@ void AutomationData::editPoints(const AutomationCurveKey& key, const AutomationP
             curve.emplace_hint(pointIt, edit.tick, edit.point);
         }
 
-        m_pendingChanges.extend(key, rangeFrom, rangeTo);
+        changes.extend(key, rangeFrom, rangeTo);
     }
 
-    notifyChanged();
+    notifyChanged(changes);
 }
 
 void AutomationData::removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks)
@@ -207,6 +201,7 @@ void AutomationData::removePoints(const AutomationCurveKey& key, const std::set<
     }
 
     AutomationCurve& curve = curveIt->second;
+    AutomationChanges changes;
 
     for (utick_t tick : ticks) {
         const auto pointIt = curve.find(tick);
@@ -215,14 +210,14 @@ void AutomationData::removePoints(const AutomationCurveKey& key, const std::set<
         }
 
         curve.erase(pointIt);
-        m_pendingChanges.extend(key, tick, tick);
+        changes.extend(key, tick, tick);
     }
 
     if (curve.empty()) {
         m_curveMap.erase(curveIt);
     }
 
-    notifyChanged();
+    notifyChanged(changes);
 }
 
 muse::async::Channel<AutomationChanges> AutomationData::changed() const
@@ -230,55 +225,11 @@ muse::async::Channel<AutomationChanges> AutomationData::changed() const
     return m_changesChannel;
 }
 
-void AutomationData::beginTransaction()
+void AutomationData::notifyChanged(const AutomationChanges& changes)
 {
-    IF_ASSERT_FAILED(!m_transactionStarted) {
+    if (changes.isEmpty()) {
         return;
     }
 
-    m_snapshot = m_curveMap;
-    m_transactionStarted = true;
-}
-
-void AutomationData::commitTransaction()
-{
-    IF_ASSERT_FAILED(m_transactionStarted) {
-        return;
-    }
-
-    m_transactionStarted = false;
-    m_snapshot.clear();
-
-    if (m_notifyPending) {
-        m_notifyPending = false;
-        m_changesChannel.send(m_pendingChanges);
-        m_pendingChanges.clear();
-    }
-}
-
-void AutomationData::rollbackTransaction()
-{
-    IF_ASSERT_FAILED(m_transactionStarted) {
-        return;
-    }
-
-    m_curveMap = m_snapshot;
-    m_snapshot.clear();
-    m_transactionStarted = false;
-    m_notifyPending = false;
-    m_pendingChanges.clear();
-}
-
-void AutomationData::notifyChanged()
-{
-    if (m_pendingChanges.isEmpty()) {
-        return;
-    }
-
-    if (m_transactionStarted) {
-        m_notifyPending = true;
-    } else {
-        m_changesChannel.send(m_pendingChanges);
-        m_pendingChanges.clear();
-    }
+    m_changesChannel.send(changes);
 }
