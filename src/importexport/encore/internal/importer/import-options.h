@@ -47,6 +47,12 @@ enum class InstrumentSearchMode {
     Piano,        // assign Grand Piano to all instruments
 };
 
+enum class TablatureImportMode {
+    Separate,  // import each tablature staff as its own independent staff
+    Linked,    // link a tablature staff to its notation staff, sharing notes (shipped default)
+    Ignore,    // drop tablature staves entirely
+};
+
 struct EncImportOptions {
     // Layout group
     bool importPageLayout = true;   // apply page size and margins from the Encore file
@@ -62,6 +68,10 @@ struct EncImportOptions {
 
     // Instrument search
     InstrumentSearchMode instrumentSearchMode = InstrumentSearchMode::NameAndMidi;
+
+    // Tablature handling. In-code default (test fallback) is Separate so existing fixtures keep
+    // one staff per Encore staff; the shipped GUI default is Linked (see enc-importconfiguration.cpp).
+    TablatureImportMode tablatureImportMode = TablatureImportMode::Separate;
 
     // Measure correction group. These struct values are the in-code fallback used by tests;
     // the shipped (GUI) default for both is IrregularMeasure (see enc-importconfiguration.cpp).

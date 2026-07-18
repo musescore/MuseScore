@@ -74,6 +74,8 @@ class ImportPreferencesModel : public QObject, public muse::Contextable, public 
     Q_PROPERTY(bool encoreFirstMeasureIsPickup READ encoreFirstMeasureIsPickup WRITE setEncoreFirstMeasureIsPickup
                NOTIFY encoreFirstMeasureIsPickupChanged)
     Q_PROPERTY(bool encoreMergeVoices READ encoreMergeVoices WRITE setEncoreMergeVoices NOTIFY encoreMergeVoicesChanged)
+    Q_PROPERTY(int encoreTablatureImportMode READ encoreTablatureImportMode WRITE setEncoreTablatureImportMode
+               NOTIFY encoreTablatureImportModeChanged)
 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
@@ -100,6 +102,7 @@ public:
     Q_INVOKABLE QVariantList encoreInstrumentSearchModeModel() const;
     Q_INVOKABLE QVariantList encoreUnderfillStrategyModel() const;
     Q_INVOKABLE QVariantList encoreOverfillStrategyModel() const;
+    Q_INVOKABLE QVariantList encoreTablatureImportModeModel() const;
     Q_INVOKABLE QStringList stylePathFilter() const;
     Q_INVOKABLE QString styleChooseTitle() const;
     Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
@@ -131,6 +134,7 @@ public:
     int encoreOverfillStrategy() const;
     bool encoreFirstMeasureIsPickup() const;
     bool encoreMergeVoices() const;
+    int encoreTablatureImportMode() const;
 
 public slots:
     void setStyleFileImportPath(QString path);
@@ -160,6 +164,7 @@ public slots:
     void setEncoreOverfillStrategy(int value);
     void setEncoreFirstMeasureIsPickup(bool value);
     void setEncoreMergeVoices(bool value);
+    void setEncoreTablatureImportMode(int value);
 
 signals:
     void styleFileImportPathChanged(QString styleFileImportPath);
@@ -185,5 +190,6 @@ signals:
     void encoreOverfillStrategyChanged(int value);
     void encoreFirstMeasureIsPickupChanged(bool value);
     void encoreMergeVoicesChanged(bool value);
+    void encoreTablatureImportModeChanged(int value);
 };
 }

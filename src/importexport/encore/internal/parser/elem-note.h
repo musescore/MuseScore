@@ -51,7 +51,7 @@ struct EncMeasureElem {
     quint8 xoffset  { 0 };
     qint16 realDuration { -1 };
     // Bytes to add to every body field from offset +8 onward, from EncFormatReader::elementBodyShift().
-    // -2 for pre-Encore-4.0 files, 0 otherwise. Set before read(); see parsers-measure.cpp.
+    // -2 for files older than format 3.07, 0 otherwise. Set before read(); see parsers-measure.cpp.
     qint8 bodyShift { 0 };
 
     // Raw staff byte (staffWithin<<6)|staffIdx, identical to instrStaffIdx in the LINE block.
@@ -111,7 +111,9 @@ struct EncNote : EncMeasureElem {
     // (rdur/faceValue mismatch gives the ratio). Explicit flag so incidental MIDI timing drift
     // in other formats is never misread as a tuplet.
     bool isImpliedTupletMember  { false };
-
+    // Note materialized from a tab-only staff's pitch-bearing REST element (rest byte layout, so
+    // faceValue is derived from realDuration later; see parsers-measure.cpp / EncRoot::read).
+    bool fromTabFingering       { false };
 
     using EncMeasureElem::EncMeasureElem;
 
@@ -122,8 +124,8 @@ struct EncNote : EncMeasureElem {
     int normalNotes() const { return tuplet & 0x0F; }
 
     EncGraceType graceType() const;
-    // grace1 bit 0x20 = small note (a grace or a cue). grace2 bit 0x01 = muted (playback off), a
-    // per-note Encore flag independent of size; a cue is small and muted by default.
+    // grace1 bit 0x20 = small note (a grace or a cue). grace2 bit 0x01 = muted (playback off): the
+    // per-note Play switch, independent of size.
     bool isSmall() const { return grace1 & 0x20; }
     bool isMuted() const { return grace2 & 0x01; }
 
