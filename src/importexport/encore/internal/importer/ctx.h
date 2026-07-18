@@ -233,6 +233,16 @@ struct PendingGrace {
     mu::engraving::Measure* measure { nullptr };
 };
 
+// A fret position a tab staff stated for one note, kept until the staff is linked to its notation
+// staff and the two share their notes.
+struct PendingTabFingering {
+    int staffIdx { -1 };     // tab staff, in Encore staff order
+    int measIdx { -1 };
+    int encTick { 0 };
+    int stringByte { 0 };
+    int fret { 0 };
+};
+
 // Shared importer context threaded through builders, emitters and resolvers: the target score,
 // the parsed Encore model, import options, derived staff/measure tables, the resolver "pending"
 // queues drained in the post-pass, and (grouped in EmitState scratch) the emitter-only state.
@@ -271,6 +281,11 @@ struct BuildCtx
     std::vector<PendingBreath> pendingBreaths {};
     std::vector<PendingMeasureRepeat> pendingMeasureRepeats {};
     std::vector<PendingBowing> pendingBowings {};
+    std::vector<PendingTabFingering> pendingTabFingerings {};
+    // (measIdx, staffIdx) -> the notes emitted there with the Encore tick they came from. Filled only
+    // when a tab staff may hand its fingerings over, which is the only reader of it.
+    bool trackNotesForTab { false };
+    std::map<std::pair<int, int>, std::vector<std::pair<int, mu::engraving::Note*> > > notesByMeasStaff {};
     // (measIdx, staffIdx) → list of (enc_tick, note.xoffset) for bowing xoffset clustering.
     std::map<std::pair<int, int>, std::vector<std::pair<int, int> > > noteXoffByMeasStaff {};
     std::vector<PendingOrnFingering> pendingOrnFingerings {};

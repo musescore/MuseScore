@@ -852,6 +852,13 @@ static void emitMeasureElement(BuildCtx& ctx, MeasEmitCtx& mc, const EncMeasureE
     const std::pair<int, int> trackKey = routed->trackKey;
     const std::pair<int, int> encVoiceKey = routed->encVoiceKey;
 
+    // A tab staff's fingering keeps its string and fret until the staff is linked to the notation
+    // staff that carries the notes; the element itself stays the rest it is.
+    if (const auto* tabRest = dynamic_cast<const EncRest*>(e); tabRest && tabRest->isTabFingering) {
+        ctx.pendingTabFingerings.push_back({ staffIdx, mc.measIdx, static_cast<int>(e->tick),
+                                             tabRest->tabString, tabRest->tabFret });
+    }
+
     // Encore's "voice 4" is a silent-voice placeholder that routing folds into voice 0. A voice-4
     // rest on a staff that already carries a real note is redundant: merged into voice 0 it collides
     // with the notes and pushes content past the barline. Drop it here.
