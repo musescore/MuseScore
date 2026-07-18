@@ -106,6 +106,9 @@ struct EncNote : EncMeasureElem {
     // Set by fixDottedEighthPattern() (v0xC2): forces dots=1 for the dotted-eighth in the
     // dotted-eighth+sixteenth anomaly, bypassing the unreliable dotControl bit-0 fallback.
     bool forceDotted            { false };
+    // Note materialized from a tab-only staff's pitch-bearing REST element (rest byte layout, so
+    // faceValue is derived from realDuration later; see parsers-measure.cpp / EncRoot::read).
+    bool fromTabFingering       { false };
 
     using EncMeasureElem::EncMeasureElem;
 

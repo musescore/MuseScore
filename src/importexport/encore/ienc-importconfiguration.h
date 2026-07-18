@@ -80,5 +80,9 @@ public:
     virtual bool mergeVoices() const = 0;
     virtual void setMergeVoices(bool value) = 0;
     virtual muse::async::Channel<bool> mergeVoicesChanged() const = 0;
+
+    virtual TablatureImportMode tablatureImportMode() const = 0;
+    virtual void setTablatureImportMode(TablatureImportMode value) = 0;
+    virtual muse::async::Channel<TablatureImportMode> tablatureImportModeChanged() const = 0;
 };
 } // namespace mu::iex::enc

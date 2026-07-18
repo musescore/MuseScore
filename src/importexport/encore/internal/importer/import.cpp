@@ -371,6 +371,10 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
 
     resolveAll(ctx);
 
+    // Apply the tablature import mode (link tab staves to their notation staff, or drop them).
+    // Runs after notes are emitted and spanners resolved, before MIDI mapping and layout.
+    applyTablatureImportMode(ctx);
+
     EditEnharmonicSpelling::spell(score);
     respellTransposingStaves(score);
     addTitleFrame(score, enc.titleBlock);

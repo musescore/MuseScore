@@ -283,6 +283,35 @@ Consequences:
 Magic `PAGE`. Page geometry. Not decoded; a parser skips it. Page count comes from header `0x30`,
 and page size / orientation / scale from the [PREC block](#prec-block).
 
+### Tab tuning (per track, at the end of each TK block)
+
+Each track carries its own tab tuning in the eight bytes at the end of its `TK` block's content,
+immediately before the next block's eight-byte header (the block's declared size counts those eight
+trailing header bytes, so the tuning sits sixteen bytes before the block's nominal end). For the last
+track this places the tuning in the eight bytes just before the first `PAGE` block. Those eight slots
+hold the open-string MIDI pitches from lowest string to highest, followed by pad bytes: `0x7F` when
+the tuning has been customised and `0x58` for the untouched 6-string guitar default. The string count
+is the number of leading non-pad slots, so a 4-string mandolin reads `37 3E 45 4C 7F 7F 7F 7F`
+(G3 D4 A4 E5) and a 6-string guitar reads `34 39 3E 43 47 4C 7F 7F` (the tab-display pitches, an octave
+above concert).
+
+Because the tuning is per track, a file that mixes differently tuned tablature staves (for example a
+bandurria tab and a guitar tab) carries a distinct tuning in each track's block; each tab staff must
+use the tuning from its own `TK` block. A near-identical block also appears once in the SCO5 header
+(around offset `0x1A1`, always the 6-string guitar default padded with `0x58`); that copy is a global
+default and is not a per-staff tuning.
+
+Encore stores no per-note string or fret, only this tuning; the fingering is computed from the note
+pitches.
+
+A tablature staff is normally a derived view: its notes live on the paired notation staff and the
+tab staff's own element stream carries only rests. The exception is a tab-only score (no notation
+staff at all): there Encore materializes the tab staff's notes as pitch-bearing REST elements. Such
+an element uses the REST byte layout (type nibble `8`) but sets bit `0x8` of the voice nibble (byte
+`0x88`) and stores the MIDI pitch at element offset `+15`, the same slot a NOTE uses. It has no face
+value; the duration is implied by the tick gaps to the next element. A genuine rest has a voice
+nibble below `4` and no pitch, so the `0x8` voice bit distinguishes the two.
+
 ---
 
 ## Measure block (MEAS)

@@ -40,6 +40,16 @@ int faceValue2ticks(quint8 fv)
     }
 }
 
+quint8 ticks2faceValue(int ticks)
+{
+    for (quint8 fv = 1; fv <= 8; ++fv) {
+        if (faceValue2ticks(fv) <= ticks) {
+            return fv;
+        }
+    }
+    return 3;   // quarter fallback
+}
+
 int detectImpliedTuplet(qint16 realDur, quint8 fv, int& normalNotes)
 {
     int base = faceValue2ticks(fv);

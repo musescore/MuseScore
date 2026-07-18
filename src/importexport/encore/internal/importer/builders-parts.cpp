@@ -32,14 +32,20 @@
 #include <set>
 #include <vector>
 #include <QDataStream>
+#include "engraving/dom/chord.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/engravingerrors.h"
 #include "log.h"
 
@@ -297,6 +303,64 @@ static const InstrumentTemplate* applyBestInstrument(Part* part,
     return tmpl;
 }
 
+// Pick a TAB StaffType preset by string count (FULL for 4/5/6, COMMON for 7-10, else 6FULL);
+// the line count is set separately via Staff::setLines.
+static StaffTypes tabPresetForStringCount(int n)
+{
+    switch (n) {
+    case 4:  return StaffTypes::TAB_4FULL;
+    case 5:  return StaffTypes::TAB_5FULL;
+    case 6:  return StaffTypes::TAB_6FULL;
+    case 7:  return StaffTypes::TAB_7COMMON;
+    case 8:  return StaffTypes::TAB_8COMMON;
+    case 9:  return StaffTypes::TAB_9COMMON;
+    case 10: return StaffTypes::TAB_10COMMON;
+    default: return StaffTypes::TAB_6FULL;
+    }
+}
+
+// Make an Encore tab staff a real MuseScore tab: attach StringData + a TAB StaffType so notes
+// auto-fret at layout. Tuning source: Encore's stored tuning, else template StringData, else guitar.
+static void setupTablatureStaff(Staff* staff, Instrument* instrument, const EncTabTuning& tuning)
+{
+    if (!staff || !instrument) {
+        return;
+    }
+    const char* source = "Encore tuning";
+    std::vector<int> pitches = tuning.hasData ? tuning.openStringPitches : std::vector<int>();
+    if (pitches.empty()) {
+        const StringData* tmplSd = instrument->stringData();
+        if (tmplSd && tmplSd->strings() > 0) {
+            for (const instrString& is : tmplSd->stringList()) {
+                pitches.push_back(is.pitch);
+            }
+            source = "template";
+        }
+    }
+    if (pitches.empty()) {
+        pitches = { 40, 45, 50, 55, 59, 64 };   // standard 6-string guitar (sounding pitches)
+        source = "default guitar";
+    }
+    const int nStrings = static_cast<int>(pitches.size());
+
+    std::vector<instrString> strings;
+    strings.reserve(pitches.size());
+    std::string tuningStr;
+    for (int p : pitches) {
+        strings.push_back(instrString(p));
+        tuningStr += std::to_string(p) + " ";
+    }
+    static constexpr int kTabFrets = 24;
+    instrument->setStringData(StringData(kTabFrets, strings));
+
+    const Fraction t0(0, 1);
+    if (const StaffType* preset = StaffType::preset(tabPresetForStringCount(nStrings))) {
+        staff->setStaffType(t0, *preset);
+    }
+    staff->setLines(t0, nStrings);
+    LOGD() << "  tab staff: " << nStrings << " strings, tuning [ " << tuningStr << "] (" << source << ")";
+}
+
 void buildParts(BuildCtx& ctx)
 {
     MasterScore* score = ctx.score;
@@ -373,6 +437,13 @@ void buildParts(BuildCtx& ctx)
                     }
                 }
             }
+            // Tablature is per staff (one Encore instrument may carry both a notation and a tab staff).
+            const EncLineStaffData* staffLsd = lineStaffDataAt(enc, cumStaffIdx + s);
+            const bool staffWantsTab = staffLsd && (staffLsd->clef == EncClefType::TAB
+                                                    || staffLsd->staffType == EncStaffType::TAB);
+            if (staffWantsTab) {
+                setupTablatureStaff(staff, instrument, instr.tabTuning.hasData ? instr.tabTuning : enc.tabTuning);
+            }
             ctx.staffPitchOffset.push_back(pitchOffset);
             ClefType cClef = ClefType::INVALID;
             if (tmpl) {
@@ -391,6 +462,189 @@ void buildParts(BuildCtx& ctx)
         score->appendStaff(staff);
         score->appendPart(part);
         ctx.totalStaves = 1;
+    }
+}
+
+// --- Tablature import mode post-pass -----------------------------------------
+
+static bool encStaffIsTab(const EncRoot& enc, int i)
+{
+    const EncLineStaffData* d = lineStaffDataAt(enc, i);
+    return d && (d->clef == EncClefType::TAB || d->staffType == EncStaffType::TAB);
+}
+
+static bool encStaffIsNotation(const EncRoot& enc, int i)
+{
+    const EncLineStaffData* d = lineStaffDataAt(enc, i);
+    return d && d->staffType == EncStaffType::MELODY
+           && d->clef != EncClefType::TAB && d->clef != EncClefType::PERC;
+}
+
+// A tab staff is a derived view with no notes of its own (frets come from the notation staff),
+// so a mixed-file tab staff imports empty; this detects that emptiness.
+static bool staffHasChords(Score* score, staff_idx_t staffIdx)
+{
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
+            const EngravingItem* e = s->element(staffIdx * VOICES + v);
+            if (e && e->isChord()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static void removeTabStaff(Score* score, Staff* tab)
+{
+    // Full removal path (raw removeStaff leaves measures inconsistent -> layout crash). A tab staff is
+    // its own single-staff part, so drop the whole part; fall back to per-staff removal if it shares one.
+    Part* part = tab->part();
+    if (part->nstaves() == 1) {
+        score->cmdRemovePart(part);
+    } else {
+        score->cmdRemoveStaff(tab->idx());
+    }
+}
+
+// Turn a tab staff into a standard 5-line notation staff: drop the StringData and swap the TAB
+// StaffType and clef for standard ones. Used by Ignore mode on a tab-only score, where there is no
+// notation staff to fall back to, so the tab's notes are shown as notation (guitar-family G8vb clef).
+static void convertTabStaffToStandard(Score* score, Staff* staff)
+{
+    const Fraction t0(0, 1);
+    if (const StaffType* stdType = StaffType::getDefaultPreset(StaffGroup::STANDARD)) {
+        staff->setStaffType(t0, *stdType);
+    }
+    staff->setLines(t0, 5);
+    if (Instrument* ins = staff->part()->instrument()) {
+        ins->setStringData(StringData());
+    }
+    staff->setDefaultClefType(ClefTypeList(ClefType::G8_VB));
+    if (Measure* m = score->tick2measure(t0)) {
+        if (Segment* seg = m->findSegment(SegmentType::HeaderClef, t0)) {
+            if (Clef* clef = toClef(seg->element(staff->idx() * VOICES))) {
+                clef->setClefType(ClefType::G8_VB);
+            }
+        }
+    }
+}
+
+// Merge an empty tab staff into its notation staff as one instrument (guitar+tab idiom): clone the
+// notation's notes as linked clones (the tab renders them as frets), reparent the tab, drop its part.
+static void linkTabToNotation(Score* score, Staff* notation, Staff* tab, bool notationVisible, bool tabVisible)
+{
+    Part* notPart = notation->part();
+    Part* tabPart = tab->part();
+
+    // Clear the tab's rest fill + key signature before cloning so the clone lands in an empty staff;
+    // otherwise stale rests overflow an irregular bar and the key signature duplicates.
+    const track_idx_t tabBase = tab->idx() * VOICES;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* seg = m->first(); seg; seg = seg->next()) {
+            const SegmentType st = seg->segmentType();
+            if (st != SegmentType::ChordRest && st != SegmentType::KeySig) {
+                continue;
+            }
+            for (voice_idx_t v = 0; v < VOICES; ++v) {
+                if (EngravingItem* e = seg->element(tabBase + v)) {
+                    seg->remove(e);
+                    delete e;
+                }
+            }
+        }
+    }
+
+    Excerpt::cloneStaff(notation, tab, true);
+
+    if (const StringData* sd = tabPart->instrument()->stringData()) {
+        notPart->instrument()->setStringData(*sd);
+    }
+
+    tabPart->removeStaff(tab);
+    notPart->appendStaff(tab);
+    tab->setPart(notPart);
+    score->removePart(tabPart);
+
+    notPart->setShow(true);
+    notation->setVisible(notationVisible);
+    tab->setVisible(tabVisible);
+}
+
+void applyTablatureImportMode(BuildCtx& ctx)
+{
+    if (ctx.opts.tablatureImportMode == TablatureImportMode::Separate) {
+        return;   // buildParts already produced independent tab staves
+    }
+    Score* score = ctx.score;
+    const EncRoot& enc = ctx.enc;
+    const bool ignore = ctx.opts.tablatureImportMode == TablatureImportMode::Ignore;
+    LOGD() << "---- Tablature (" << (ignore ? "Ignore" : "Linked") << " mode) ----";
+
+    // Snapshot the staff list because the merge/removal below mutates it. Identify targets by
+    // pointer and by their pre-mutation index (which still maps 1:1 to the Encore staff order).
+    const std::vector<Staff*> staves(score->staves().begin(), score->staves().end());
+    const int n = static_cast<int>(staves.size());
+
+    std::vector<Staff*> tabsToRemove;
+    struct Pair {
+        Staff* notation;
+        Staff* tab;
+        bool notationVisible;
+        bool tabVisible;
+    };
+    std::vector<Pair> pairs;
+
+    for (int i = 0; i < n; ++i) {
+        if (!encStaffIsTab(enc, i)) {
+            continue;
+        }
+        if (ignore) {
+            tabsToRemove.push_back(staves[i]);
+            LOGD() << "  drop tab staff " << i;
+            continue;
+        }
+        // Pair the tab with the notation staff immediately above and merge, but only for separate
+        // single-staff parts with the tab empty and the notation carrying the music.
+        if (i > 0 && encStaffIsNotation(enc, i - 1)
+            && staves[i]->part() != staves[i - 1]->part()
+            && staves[i - 1]->part()->nstaves() == 1 && staves[i]->part()->nstaves() == 1
+            && !staffHasChords(score, static_cast<staff_idx_t>(i))
+            && staffHasChords(score, static_cast<staff_idx_t>(i - 1))) {
+            const EncLineStaffData* notLsd = lineStaffDataAt(enc, i - 1);
+            const EncLineStaffData* tabLsd = lineStaffDataAt(enc, i);
+            pairs.push_back({ staves[i - 1], staves[i],
+                              !notLsd || notLsd->showStaff, !tabLsd || tabLsd->showStaff });
+            LOGD() << "  linked tab: staff " << i << " <- notation staff " << (i - 1);
+        }
+    }
+
+    if (ignore) {
+        // A tab-only score (every staff is tablature) has no notation staff to fall back to. "Ignore"
+        // means no tablature staff, so show the notes as standard notation rather than dropping them
+        // (an empty score has no playable part and crashes playback).
+        if (static_cast<int>(tabsToRemove.size()) >= n) {
+            for (Staff* t : tabsToRemove) {
+                convertTabStaffToStandard(score, t);
+            }
+            return;
+        }
+        for (Staff* t : tabsToRemove) {
+            removeTabStaff(score, t);
+        }
+        // Dropping the tab can leave only hidden parts (e.g. a tab shown over a hidden notation
+        // staff); an all-hidden score has no playable part and crashes playback. Reveal what remains.
+        const bool anyShown = std::any_of(score->parts().begin(), score->parts().end(),
+                                          [](const Part* p) { return p->show(); });
+        if (!anyShown) {
+            for (Part* p : score->parts()) {
+                p->setShow(true);
+            }
+        }
+        return;
+    }
+    for (const Pair& p : pairs) {
+        linkTabToNotation(score, p.notation, p.tab, p.notationVisible, p.tabVisible);
     }
 }
 } // namespace mu::iex::enc

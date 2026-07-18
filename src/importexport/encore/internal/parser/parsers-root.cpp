@@ -243,6 +243,80 @@ void addSpannerEnds(std::vector<EncMeasure>& measures)
     }
 }
 
+// Parse the 8 tuning slots ending at file offset `blockEnd`: open-string MIDI pitches (low -> high)
+// then pad bytes (0x7F/0x58); the count is the leading non-pad slots. See ENCORE_FORMAT.md.
+static void parseTabTuningBefore(QIODevice* dev, qint64 blockEnd, EncTabTuning& out)
+{
+    if (!dev || blockEnd < 8) {
+        return;
+    }
+    const qint64 saved = dev->pos();
+    if (!dev->seek(blockEnd - 8)) {
+        return;
+    }
+    const QByteArray tuningBytes = dev->read(8);
+    dev->seek(saved);
+    if (tuningBytes.size() < 8) {
+        return;
+    }
+    auto isPad = [](quint8 b) { return b == 0x7F || b == 0x58; };
+    std::vector<int> pitches;
+    for (int i = 0; i < 8; ++i) {
+        const quint8 b = static_cast<quint8>(tuningBytes.at(i));
+        if (isPad(b)) {
+            break;                       // pad marks the end of the tuning
+        }
+        if (b < 20 || b > 108) {
+            pitches.clear();             // implausible open-string pitch: not a tuning array
+            break;
+        }
+        pitches.push_back(b);
+    }
+    if (!pitches.empty()) {
+        out.hasData = true;
+        out.openStringPitches = std::move(pitches);
+    }
+}
+
+// Score-level fallback tuning: the 8 slots before the first PAGE block (the last TK block's tail).
+static void readTabTuning(QDataStream& ds, EncTabTuning& out)
+{
+    QIODevice* dev = ds.device();
+    if (!dev) {
+        return;
+    }
+    const qint64 saved = dev->pos();
+    if (!dev->seek(0)) {
+        return;
+    }
+    const int page = dev->readAll().indexOf("PAGE");
+    dev->seek(saved);
+    if (page >= 9) {
+        parseTabTuningBefore(dev, page, out);
+    }
+}
+
+// True when the score has a tab staff but no notation staff; such files store the tab's notes as
+// pitch-bearing REST elements that must be read as notes (mixed files keep the tab as a note-less view).
+static bool isTabOnlyScore(const std::vector<EncLine>& lines)
+{
+    if (lines.empty()) {
+        return false;
+    }
+    bool hasTab = false;
+    for (const auto& sd : lines[0].staffData) {
+        const bool isNotation = sd.staffType == EncStaffType::MELODY
+                                && sd.clef != EncClefType::TAB && sd.clef != EncClefType::PERC;
+        if (isNotation) {
+            return false;
+        }
+        if (sd.clef == EncClefType::TAB || sd.staffType == EncStaffType::TAB) {
+            hasTab = true;
+        }
+    }
+    return hasTab;
+}
+
 bool EncRoot::read(QDataStream& ds)
 {
     if (!header.readMagicAndVersion(ds)) {
@@ -252,6 +326,7 @@ bool EncRoot::read(QDataStream& ds)
     if (!header.read(ds, *fmt)) {
         return false;
     }
+    readTabTuning(ds, tabTuning);
     EncCharSize charsize = EncCharSize::ONE_BYTE;
 
     while (!ds.atEnd()) {
@@ -277,7 +352,7 @@ bool EncRoot::read(QDataStream& ds)
             lines.push_back(std::move(line));
         } else if (nextId == "MEAS") {
             EncMeasure meas;
-            meas.read(ds, varSize, *fmt);
+            meas.read(ds, varSize, *fmt, isTabOnlyScore(lines));
             meas.calculateRealDurations(fmt->hasGraceTimeBorrowing(), *fmt);
             // Skip extra "ghost" MEAS blocks beyond the declared measureCount.
             if (header.measureCount > 0
@@ -317,9 +392,23 @@ bool EncRoot::read(QDataStream& ds)
             // v0xC4: Encore 5.0.2 may use UTF-16 LE names; probe determines the encoding.
             instr.read(ds, varSize, fmt->probeInstrumentEncoding());
             charsize = instr.charSize();
+            // Each TK block carries its own 8-slot tab tuning just before the trailing 8-byte header
+            // of the next block; read the one for this track.
+            parseTabTuningBefore(ds.device(), instr.contentFilePos + varSize - 8, instr.tabTuning);
             instruments.push_back(std::move(instr));
         } else {
             skipBlock(ds, varSize);
+        }
+    }
+
+    // Tab-only notes come from REST-layout elements with no face value; derive it from the
+    // realDuration now known from tick gaps (the pitch was already read).
+    for (auto& meas : measures) {
+        for (auto& elem : meas.elements) {
+            auto* note = dynamic_cast<EncNote*>(elem.get());
+            if (note && note->fromTabFingering && note->faceValue == 0) {
+                note->faceValue = ticks2faceValue(note->realDuration > 0 ? note->realDuration : 240);
+            }
         }
     }
 
