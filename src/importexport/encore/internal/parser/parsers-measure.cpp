@@ -36,8 +36,16 @@ namespace mu::iex::enc {
 
 static std::unique_ptr<EncMeasureElem> createMeasureElement(
     quint16 tick, quint8 tp, quint8 vo,
-    const EncFormatReader& fmt)
+    const EncFormatReader& fmt, bool pureTabFile)
 {
+    // Tab-only files store the tab's notes as REST-type elements with the MIDI pitch at +15, tagged by
+    // voice bit 0x8 (0x88...); read them as notes so a standalone tab shows frets.
+    if (pureTabFile && static_cast<EncElemType>(tp) == EncElemType::REST && (vo & 0x08)) {
+        auto note = std::make_unique<EncNote>(tick, static_cast<quint8>(EncElemType::NOTE), vo & 0x07);
+        // Rest byte layout: faceValue reads 0 here, derived from realDuration later (see EncRoot::read).
+        note->fromTabFingering = true;
+        return note;
+    }
     switch (static_cast<EncElemType>(tp)) {
     case EncElemType::NOTE:
         return std::make_unique<EncNote>(tick, tp, vo);
@@ -186,7 +194,7 @@ static void normalizeChordColumnTicks(std::vector<EncMeasureElem*>& elems)
 // EncMeasure
 // ---------------------------------------------------------------------------
 
-bool EncMeasure::read(QDataStream& ds, const quint32 vs, const EncFormatReader& fmt)
+bool EncMeasure::read(QDataStream& ds, const quint32 vs, const EncFormatReader& fmt, bool pureTabFile)
 {
     varsize = vs;
     qint64 measStart = ds.device()->pos();
@@ -256,7 +264,7 @@ bool EncMeasure::read(QDataStream& ds, const quint32 vs, const EncFormatReader& 
         const quint8 tp = typeVoice >> 4;
         const quint8 vo = typeVoice & 0x0F;
 
-        auto elem = createMeasureElement(tick, tp, vo, fmt);
+        auto elem = createMeasureElement(tick, tp, vo, fmt, pureTabFile);
 
         elem->read(ds);
         EncMeasureElem* elemRaw = elem.get();

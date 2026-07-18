@@ -283,6 +283,35 @@ Consequences:
 Magic `PAGE`. Page geometry. Not decoded; a parser skips it. Page count comes from header `0x30`,
 and page size / orientation / scale from the [PREC block](#prec-block).
 
+### Tab tuning (per track, at the end of each TK block)
+
+Each track carries its own tab tuning in the eight bytes at the end of its `TK` block's content,
+immediately before the next block's eight-byte header (the block's declared size counts those eight
+trailing header bytes, so the tuning sits sixteen bytes before the block's nominal end). For the last
+track this places the tuning in the eight bytes just before the first `PAGE` block. Those eight slots
+hold the open-string MIDI pitches from lowest string to highest, followed by pad bytes: `0x7F` when
+the tuning has been customised and `0x58` for the untouched 6-string guitar default. The string count
+is the number of leading non-pad slots, so a 4-string mandolin reads `37 3E 45 4C 7F 7F 7F 7F`
+(G3 D4 A4 E5) and a 6-string guitar reads `34 39 3E 43 47 4C 7F 7F` (the tab-display pitches, an octave
+above concert).
+
+Because the tuning is per track, a file that mixes differently tuned tablature staves (for example a
+bandurria tab and a guitar tab) carries a distinct tuning in each track's block; each tab staff must
+use the tuning from its own `TK` block. A near-identical block also appears once in the SCO5 header
+(around offset `0x1A1`, always the 6-string guitar default padded with `0x58`); that copy is a global
+default and is not a per-staff tuning.
+
+Encore stores no per-note string or fret, only this tuning; the fingering is computed from the note
+pitches.
+
+A tablature staff is normally a derived view: its notes live on the paired notation staff and the
+tab staff's own element stream carries only rests. The exception is a tab-only score (no notation
+staff at all): there Encore materializes the tab staff's notes as pitch-bearing REST elements. Such
+an element uses the REST byte layout (type nibble `8`) but sets bit `0x8` of the voice nibble (byte
+`0x88`) and stores the MIDI pitch at element offset `+15`, the same slot a NOTE uses. It has no face
+value; the duration is implied by the tick gaps to the next element. A genuine rest has a voice
+nibble below `4` and no pitch, so the `0x8` voice bit distinguishes the two.
+
 ---
 
 ## Measure block (MEAS)
@@ -558,7 +587,7 @@ The grace/cue flags come from Encore's "Grace / Cue Note" dialog `[verified]`.
 | Bit             | Meaning                                                                     |
 |-----------------|-----------------------------------------------------------------------------|
 | `grace1 & 0x20` | small note (grace or cue); an ordinary note leaves it clear                 |
-| `grace1 & 0x10` | member of a beamed grace group (e.g. a percussion ruff); does not change kind |
+| `grace1 & 0x10` | member of a beamed grace group (e.g. a percussion ruff); does not change kind. Its members are a melodic run of separate grace notes joined by a beam, so two beamed graces at the same tick stay two grace notes (two stems), not one stacked grace chord |
 | `grace1 & 0x40` | attribute of the top chord member; unrelated to grace/cue (also a chord-extension marker, see [Known quirks](#known-quirks)) |
 | `grace2 & 0x04` | slash (acciaccatura)                                                        |
 | `grace2 & 0x01` | muted (playback off); a per-note flag independent of size and kind          |
@@ -571,6 +600,13 @@ context. A cue is small and muted by default, but any note can be muted and a cu
 The played length is the playback duration at `+16`, equal to the dialog's "Scale duration by N%"
 applied to the face value. A cue keeps its full beat value in the measure (a normal note drawn
 small, muted by default); a grace occupies no measure time and borrows from an adjacent note.
+
+In **v0xC2** the small-note bit (`grace1 & 0x20`) and the mute bit (`grace2 & 0x01`) are not reliable
+on their own: some files set both on the bulk of ordinary, full-value, audible notes (they travel
+coupled, and Encore renders those notes at normal size). The only dependable small-note signal there
+is the slash (`grace2 & 0x04`, an acciaccatura). A v0xC2 note with `grace1 & 0x20` but no slash is
+therefore treated as a normal note, not small, cue, grace, or muted; same-tick notes still form a
+chord. v0xC4 and v0xA6 honor `grace1 & 0x20` directly, as above.
 
 A slur can begin on a grace note stored at the same tick as its parent chord (a grace shares its
 parent's written tick), so such a slur has no distinct start tick of its own. In v0xC4 Encore
@@ -814,7 +850,7 @@ Subtype byte at `+5`. Sorted by value.
 | `0x2B`       | guitar prebend-release                                                    |
 | `0x30`       | guitar V-shape bend                                                       |
 | `0x32`       | tempo mark (BPM at `+30` in the beat unit at `+28`)                       |
-| `0x35`       | trill-span end (no visible glyph)                                         |
+| `0x35`       | trill-span end. Closing a same-measure trill-span start (`0x36`) it is the invisible endpoint; a lone `0x35` (no start in its own measure) is a standalone trill and draws a tr + wavy line on its own note (e.g. a terminal trill). It never pairs with a start in another measure (those spans use the `alMezuro` measure-count field). |
 | `0x36`       | trill-span start (tr + wavy line)                                         |
 | `0x37`       | secondary trill mark within a span (plain trill glyph)                    |
 | `0x41`       | slur stop (reserved; not emitted in practice)                             |
@@ -832,10 +868,10 @@ Subtype byte at `+5`. Sorted by value.
 | `0xAA`       | dynamic fz                                                                |
 | `0xAB`       | dynamic sf                                                                |
 | `0xAF`       | single-chord triple tremolo (3 slashes = 32nd); always voice 0            |
-| `0xB0`       | standalone "tr" mark (size 16; plain trill, never a span)                 |
+| `0xB0`       | standalone "tr" mark (size 16; plain trill, never a span). The "tr" text is drawn left of its note, so its stored xoffset sits left of the notehead; when a note shares the mark's tick, that note is the target (no xoffset snap). Only when no note sits at the mark's tick does it snap to the note it visually rests on. |
 | `0xB6`       | standalone short-trill mark (size 16; never a span)                       |
-| `0xB8`       | double lower mordent                                                      |
-| `0xB9`-`0xBD`| standalone fingering digit 1 to 5 (size 16)                               |
+| `0xB8`       | standalone trill zigzag (imports as a short-trill). Despite the "double mordent" name once assumed, it is not a genuine double mordent: in the corpus it appears only as a trill mark (once, right after a `0x36` trill-start, where Encore draws a wavy trill). Real mordents use the note-articulation bytes (`0x0A`/`0x0B`/`0x0C`/`0x2F`) |
+| `0xB9`-`0xBD`| standalone fingering digit 1 to 5 (size 16). Always stored on voice 0, but the digit belongs to the note it visually sits over, which may be in another voice of the same staff (a chord in voice 0, or a single note in voice 1/2). It attaches to that note; only a genuine overflow (more digits than notes at the tick) belongs to the second staff or the next measure's downbeat. |
 | `0xBE`       | accent (>) (v0xC4; v0xC2 uses `0xC4`)                                     |
 | `0xBF`       | marcato (^, vertex up)                                                     |
 | `0xC0`       | marcato + staccato below                                                  |

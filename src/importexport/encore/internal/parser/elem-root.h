@@ -42,6 +42,14 @@ struct EncFormatReader;   // defined in reader.h
 // Instrument / part
 // ---------------------------------------------------------------------------
 
+// Tablature tuning: open-string MIDI pitches (low -> high). See ENCORE_FORMAT.md §Tab tuning.
+struct EncTabTuning {
+    bool hasData { false };
+    std::vector<int> openStringPitches;   // low -> high, as stored by Encore
+
+    int strings() const { return static_cast<int>(openStringPitches.size()); }
+};
+
 struct EncInstrument {
     QString name;
     quint32 offset    { 0 };
@@ -51,6 +59,8 @@ struct EncInstrument {
     // Signed chromatic offset from Encore's Staff Sheet "Key" field.
     // 0=written, -12=octave lower, +12=octave higher. v0xC4 only.
     qint8 keyTransposeSemitones { 0 };
+    // Per-instrument tab tuning, from the last 8 bytes of this TK block (each track carries its own).
+    EncTabTuning tabTuning;
 
     EncCharSize charSize() const { return (offset > 250) ? EncCharSize::TWO_BYTES : EncCharSize::ONE_BYTE; }
 
@@ -210,6 +220,7 @@ struct EncRoot {
     EncHeader header;
     std::vector<EncInstrument> instruments;
     std::vector<EncLine> lines;
+    EncTabTuning tabTuning;
     std::vector<EncMeasure> measures;
     EncTitle titleBlock;
     EncTextBlock textBlock;

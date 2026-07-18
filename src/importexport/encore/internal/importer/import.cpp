@@ -332,15 +332,17 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     // otherwise show individual whole rests.
     const bool hasMMRest = std::any_of(enc.measures.begin(), enc.measures.end(),
                                        [](const EncMeasure& m) {
-        if (m.elements.empty()) {
-            return false;
-        }
+        int maxMrest = 0;
         for (const auto& ep : m.elements) {
-            if (static_cast<EncElemType>(ep->type) != EncElemType::REST) {
+            const EncElemType t = static_cast<EncElemType>(ep->type);
+            if (t == EncElemType::NOTE || t == EncElemType::CHORD) {
                 return false;
             }
+            if (t == EncElemType::REST) {
+                maxMrest = std::max(maxMrest, static_cast<int>(static_cast<const EncRest*>(ep.get())->mrestCount));
+            }
         }
-        return static_cast<const EncRest*>(m.elements[0].get())->mrestCount > 1;
+        return maxMrest > 1;
     });
     score->style().set(Sid::createMultiMeasureRests, hasMMRest);
 
@@ -370,6 +372,10 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     }
 
     resolveAll(ctx);
+
+    // Apply the tablature import mode (link tab staves to their notation staff, or drop them).
+    // Runs after notes are emitted and spanners resolved, before MIDI mapping and layout.
+    applyTablatureImportMode(ctx);
 
     EditEnharmonicSpelling::spell(score);
     respellTransposingStaves(score);

@@ -43,6 +43,7 @@ static const Settings::Key ENC_UNDERFILL_STRATEGY_KEY(module_name, "import/encor
 static const Settings::Key ENC_OVERFILL_STRATEGY_KEY(module_name, "import/encore/overfillMeasureStrategy");
 static const Settings::Key ENC_FIRST_MEASURE_PICKUP_KEY(module_name, "import/encore/firstMeasureIsPickup");
 static const Settings::Key ENC_MERGE_VOICES_KEY(module_name, "import/encore/mergeVoices");
+static const Settings::Key ENC_TABLATURE_IMPORT_MODE_KEY(module_name, "import/encore/tablatureImportMode");
 
 void EncImportConfiguration::init()
 {
@@ -102,6 +103,12 @@ void EncImportConfiguration::init()
     settings()->setDefaultValue(ENC_MERGE_VOICES_KEY, Val(true));
     settings()->valueChanged(ENC_MERGE_VOICES_KEY).onReceive(this, [this](const Val& val) {
         m_mergeVoicesChanged.send(val.toBool());
+    });
+
+    settings()->setDefaultValue(ENC_TABLATURE_IMPORT_MODE_KEY,
+                                Val(static_cast<int>(TablatureImportMode::Linked)));
+    settings()->valueChanged(ENC_TABLATURE_IMPORT_MODE_KEY).onReceive(this, [this](const Val& val) {
+        m_tablatureImportModeChanged.send(static_cast<TablatureImportMode>(val.toInt()));
     });
 }
 
@@ -269,4 +276,19 @@ void EncImportConfiguration::setMergeVoices(bool value)
 async::Channel<bool> EncImportConfiguration::mergeVoicesChanged() const
 {
     return m_mergeVoicesChanged;
+}
+
+TablatureImportMode EncImportConfiguration::tablatureImportMode() const
+{
+    return static_cast<TablatureImportMode>(settings()->value(ENC_TABLATURE_IMPORT_MODE_KEY).toInt());
+}
+
+void EncImportConfiguration::setTablatureImportMode(TablatureImportMode value)
+{
+    settings()->setSharedValue(ENC_TABLATURE_IMPORT_MODE_KEY, Val(static_cast<int>(value)));
+}
+
+async::Channel<TablatureImportMode> EncImportConfiguration::tablatureImportModeChanged() const
+{
+    return m_tablatureImportModeChanged;
 }

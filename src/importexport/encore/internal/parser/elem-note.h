@@ -106,6 +106,13 @@ struct EncNote : EncMeasureElem {
     // Set by fixDottedEighthPattern() (v0xC2): forces dots=1 for the dotted-eighth in the
     // dotted-eighth+sixteenth anomaly, bypassing the unreliable dotControl bit-0 fallback.
     bool forceDotted            { false };
+    // Note materialized from a tab-only staff's pitch-bearing REST element (rest byte layout, so
+    // faceValue is derived from realDuration later; see parsers-measure.cpp / EncRoot::read).
+    bool fromTabFingering       { false };
+    // Set by the v0xC2 reader when grace1 & 0x20 is set without the acciaccatura slash (grace2 &
+    // 0x04): in that format the small/cue/mute bits then travel on ordinary full-value notes and
+    // must not be honored. See ENCORE_FORMAT.md §Grace and cue notes.
+    bool smallCueMuteSpurious   { false };
 
     using EncMeasureElem::EncMeasureElem;
 
@@ -118,8 +125,8 @@ struct EncNote : EncMeasureElem {
     EncGraceType graceType() const;
     // grace1 bit 0x20 = small note (a grace or a cue). grace2 bit 0x01 = muted (playback off), a
     // per-note Encore flag independent of size; a cue is small and muted by default.
-    bool isSmall() const { return grace1 & 0x20; }
-    bool isMuted() const { return grace2 & 0x01; }
+    bool isSmall() const { return (grace1 & 0x20) && !smallCueMuteSpurious; }
+    bool isMuted() const { return (grace2 & 0x01) && !smallCueMuteSpurious; }
 
     bool read(QDataStream& ds) override;
 };

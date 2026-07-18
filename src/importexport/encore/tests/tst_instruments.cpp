@@ -35,6 +35,7 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/dom/tuplet.h"
 
 #include "engraving/dom/instrtemplate.h"
@@ -114,6 +115,222 @@ TEST_F(Tst_Instruments, standard_template_swapped_to_tablature_when_clef_tab)
     ASSERT_NE(st, nullptr);
     EXPECT_EQ(st->group(), StaffGroup::TAB)
         << "EncClefType::TAB must select the tablature template variant";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: a TAB-clef staff whose instrument name matches no fretted template
+// (generic "Melody") must still become a real tablature staff. The importer
+// reads the per-staff tuning stored before the first PAGE block and sets up a
+// TAB StaffType plus StringData with the correct string count and tuning, so
+// the notes are fretted at layout. Before the feature the staff stayed a plain
+// 5-line STANDARD staff with empty StringData (no fret numbers).
+// ===========================================================================
+static Note* firstImportedNote(MasterScore* score, track_idx_t track)
+{
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        EngravingItem* e = s->element(track);
+        if (e && e->isChord()) {
+            return toChord(e)->notes().front();
+        }
+    }
+    return nullptr;
+}
+
+TEST_F(Tst_Instruments, tab_generic_name_reads_mandolin_tuning)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_tuning_mandolin.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+
+    Staff* staff = score->staff(0);
+    const StaffType* st = staff->staffType(Fraction(0, 1));
+    ASSERT_NE(st, nullptr);
+    EXPECT_EQ(st->group(), StaffGroup::TAB)
+        << "a TAB clef must yield a tablature staff even when the instrument name matches no fretted template";
+    EXPECT_EQ(st->lines(), 4)
+        << "a 4-string mandolin tuning must produce a 4-line tab staff";
+
+    const Instrument* inst = staff->part()->instrument();
+    ASSERT_NE(inst, nullptr);
+    const StringData* sd = inst->stringData();
+    ASSERT_NE(sd, nullptr);
+    EXPECT_EQ(sd->strings(), 4)
+        << "StringData must be populated from the Encore tuning (was empty, so no frets were drawn)";
+
+    std::vector<int> pitches;
+    for (const instrString& is : sd->stringList()) {
+        pitches.push_back(is.pitch);
+    }
+    std::sort(pitches.begin(), pitches.end());
+    EXPECT_EQ(pitches, (std::vector<int> { 55, 62, 69, 76 }))
+        << "mandolin GDAE tuning (G3 D4 A4 E5) must be read verbatim from the file";
+
+    Note* n = firstImportedNote(score, 0);
+    ASSERT_NE(n, nullptr);
+    EXPECT_GE(n->fret(), 0) << "notes on the tab staff must be fretted at layout";
+    EXPECT_GE(n->string(), 0);
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_generic_name_reads_guitar_tuning)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_tuning_guitar.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+
+    Staff* staff = score->staff(0);
+    const StaffType* st = staff->staffType(Fraction(0, 1));
+    ASSERT_NE(st, nullptr);
+    EXPECT_EQ(st->group(), StaffGroup::TAB);
+    EXPECT_EQ(st->lines(), 6)
+        << "a 6-string guitar tuning must produce a 6-line tab staff";
+
+    const Instrument* inst = staff->part()->instrument();
+    ASSERT_NE(inst, nullptr);
+    const StringData* sd = inst->stringData();
+    ASSERT_NE(sd, nullptr);
+    EXPECT_EQ(sd->strings(), 6)
+        << "StringData must be populated with all six guitar strings";
+    delete score;
+}
+
+// Two TAB staves, each its own instrument with a DIFFERENT stored tuning, must each keep their own.
+// The bug applied one (last-block / global) tuning to every tab staff, so the first tab was wrong.
+TEST_F(Tst_Instruments, tab_two_staves_keep_own_tunings)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_two_tunings.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(score->nstaves(), size_t(2));
+
+    auto tuningOf = [](const Staff* staff) {
+        std::vector<int> t;
+        if (const StringData* sd = staff->part()->instrument()->stringData()) {
+            for (const instrString& is : sd->stringList()) {
+                t.push_back(is.pitch);
+            }
+        }
+        return t;
+    };
+    EXPECT_EQ(tuningOf(score->staff(0)), (std::vector<int> { 55, 62, 69, 76 }))
+        << "first tab staff must keep its own 4-string tuning";
+    EXPECT_EQ(tuningOf(score->staff(1)), (std::vector<int> { 52, 57, 62, 67, 71, 76 }))
+        << "second tab staff must keep its own 6-string tuning";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: tablature import mode. Encore stores a notation staff and its tab staff as separate
+// single-staff instruments, with the tab staff empty (a derived view). In Linked mode the pair
+// merges into one instrument with the tab linked to the notation; Separate keeps two parts; Ignore
+// drops the tab. instruments_tab_linked_pair.enc has instrument 0 = notation (with notes) and
+// instrument 1 = an empty tab staff immediately below it.
+// ===========================================================================
+TEST_F(Tst_Instruments, tab_linked_pair_merges_into_one_instrument)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Linked;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), size_t(1)) << "notation + tab must merge into one instrument";
+    Part* part = score->parts().front();
+    ASSERT_EQ(part->nstaves(), size_t(2));
+    EXPECT_NE(part->staff(0)->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+        << "staff 0 stays notation";
+    EXPECT_EQ(part->staff(1)->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+        << "staff 1 is the linked tab";
+    Note* n = firstImportedNote(score, part->staff(1)->idx() * VOICES);
+    ASSERT_NE(n, nullptr) << "the linked tab staff must share the notation's notes";
+    EXPECT_GE(n->fret(), 0) << "shared notes are fretted on the tab staff";
+    EXPECT_TRUE(score->sanityCheck());
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_separate_keeps_two_instruments)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Separate;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_EQ(score->parts().size(), size_t(2)) << "Separate mode leaves the staves unmerged";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_ignore_drops_tab_staff)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    for (const Staff* st : score->staves()) {
+        EXPECT_NE(st->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+            << "Ignore mode drops every tablature staff";
+    }
+    delete score;
+}
+
+// Ignore mode on a tab-ONLY score (no notation to fall back to) converts the tab staff to standard
+// notation instead of dropping it (dropping would empty the score and crash playback), so "Ignore"
+// leaves no tablature staff anywhere.
+TEST_F(Tst_Instruments, tab_ignore_converts_tab_only_to_notation)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_standalone_frets.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_GT(score->nstaves(), size_t(0)) << "Ignore must not empty a tab-only score";
+    for (const Staff* st : score->staves()) {
+        EXPECT_NE(st->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+            << "Ignore must leave no tablature staff; a standalone tab becomes standard notation";
+    }
+    delete score;
+}
+
+// Ignore on a tab shown over a HIDDEN notation staff must reveal the notation, not leave an
+// all-hidden score (which has no playable part and crashes playback).
+TEST_F(Tst_Instruments, tab_ignore_reveals_hidden_notation)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_hidden_notation.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    const bool anyShown = std::any_of(score->parts().begin(), score->parts().end(),
+                                      [](const Part* p) { return p->show(); });
+    EXPECT_TRUE(anyShown) << "Ignore must leave at least one visible part";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_linked_overfull_measure_stays_consistent)
+{
+    // An overfilled notation bar is widened by the IrregularMeasure strategy; the linked tab must be
+    // cloned into a cleared staff or the stale fill rests plus the clone overflow the irregular bar.
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Linked;
+    opts.overfillMeasureStrategy = mu::iex::enc::OverfillStrategy::IrregularMeasure;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_overfull.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck())
+        << "the linked tab of an irregular measure must not overflow";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: a tab-only score (no notation staff) stores the tab's notes as pitch-bearing REST
+// elements (voice bit 0x8, MIDI pitch at +15, no face value). They must be read as notes so the
+// standalone tab shows fret numbers.
+// ===========================================================================
+TEST_F(Tst_Instruments, tab_standalone_reads_own_notes)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_standalone_frets.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+    Staff* staff = score->staff(0);
+    EXPECT_EQ(staff->staffType(Fraction(0, 1))->group(), StaffGroup::TAB);
+    Note* n = firstImportedNote(score, 0);
+    ASSERT_NE(n, nullptr) << "a tab-only staff must import its own notes";
+    EXPECT_GE(n->fret(), 0);
+    EXPECT_TRUE(score->sanityCheck());
     delete score;
 }
 
