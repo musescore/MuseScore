@@ -51,7 +51,7 @@ struct EncMeasureElem {
     qint16 xoffset  { 0 };   // column, signed: a wide measure runs past a byte
     qint16 realDuration { -1 };
     // Bytes to add to every body field from offset +8 onward, from EncFormatReader::elementBodyShift().
-    // -2 for pre-Encore-4.0 files, 0 otherwise. Set before read(); see parsers-measure.cpp.
+    // -2 for files older than format 3.07, 0 otherwise. Set before read(); see parsers-measure.cpp.
     qint8 bodyShift { 0 };
 
     // Raw staff byte (staffWithin<<6)|staffIdx, identical to instrStaffIdx in the LINE block.
@@ -147,6 +147,12 @@ struct EncRest : EncMeasureElem {
     quint8 mrestCount { 1 };
     // Set by calculateRealDurations() Phase 4 for v0xC2 (same semantics as EncNote::isImpliedTupletMember).
     bool isImpliedTupletMember { false };
+    // A tab staff writes its fingering as a rest (voice bit 0x8): the string and the fret take the
+    // slots a plain rest uses for the tuplet ratio and the multi-measure count, so neither is read
+    // for one of these. See ENCORE_FORMAT.md 6.4 Rest.
+    bool isTabFingering { false };
+    quint8 tabString  { 0 };
+    quint8 tabFret    { 0 };
 
     using EncMeasureElem::EncMeasureElem;
 

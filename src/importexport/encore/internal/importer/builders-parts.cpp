@@ -31,14 +31,20 @@
 #include <map>
 #include <set>
 #include <vector>
+#include "engraving/dom/chord.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/editing/editstaffbrackets.h"
 #include "engraving/engravingerrors.h"
 #include "log.h"
@@ -78,6 +84,7 @@ enum class MatchStep {
     RhythmStaff,    // RHYTHM staff -> snare-drum
     MidiProgram,    // MIDI program lookup
     MidiFamily,     // nearest template in the same GM family (fallback before Grand Piano)
+    TabGuitar,      // the tab proves a guitar whatever the name and program say
 };
 
 static const char* matchStepLabel(MatchStep step)
@@ -91,15 +98,14 @@ static const char* matchStepLabel(MatchStep step)
     case MatchStep::PercKeyword:   return "perc keyword";
     case MatchStep::RhythmStaff:   return "RHYTHM staff";
     case MatchStep::MidiProgram:   return "MIDI program";
+    case MatchStep::TabGuitar:     return "tab proves a guitar";
     case MatchStep::MidiFamily:    return "MIDI family";
     }
     return "";
 }
 
-// Describe an Encore MIDI program for the debug log using MuseScore's own instrument names
-// (localized like everything else: the template trackName is translated at load). Encore stores
-// a 1-indexed GM program; map it to the template whose primary sound is that program and show its
-// track name. No hardcoded GM table; an unmapped program shows just the number.
+// Names a program for the log through MuseScore's own templates, so it is localized like everything
+// else and needs no hardcoded GM table.
 static std::string midiProgramInfo(const EncInstrument& instr)
 {
     if (instr.midiProgram <= 0) {
@@ -117,7 +123,9 @@ static void applyInstrumentOrFallback(Part* part, const InstrumentTemplate* tmpl
                                       const EncInstrument& instr, MatchStep matchStep)
 {
     auto setInstrName = [&](Instrument& ins) {
-        if (!instr.name.isEmpty()) {
+        // A proven guitar the file never named keeps the template's name rather than "Part N".
+        const bool keepTemplateName = matchStep == MatchStep::TabGuitar && instr.nameIsPlaceholder;
+        if (!instr.name.isEmpty() && !keepTemplateName) {
             ins.setLongName(String(instr.name));
         }
         ins.setShortName(String());
@@ -225,6 +233,7 @@ static const InstrumentTemplate* applyBestInstrument(Part* part,
                                                      bool isPercByClef,
                                                      bool isRhythm,
                                                      bool encWantsTab,
+                                                     bool provenGuitar,
                                                      InstrumentSearchMode searchMode)
 {
     // Piano mode: skip all matching and go straight to fallback.
@@ -247,6 +256,15 @@ static const InstrumentTemplate* applyBestInstrument(Part* part,
         }
     };
 
+    // Step 0: the tab proved a guitar. The program picks the kind when it already names a guitar, GM
+    // 25 to 32; otherwise it is the classical guitar.
+    if (provenGuitar) {
+        if (instr.midiProgram >= 25 && instr.midiProgram <= 32) {
+            tryStep(MatchStep::TabGuitar, tryMidiProgram(instr, -12));
+        }
+        tryStep(MatchStep::TabGuitar, searchTemplate(String(u"guitar-nylon")));
+    }
+
     // Step 1: PERC clef or GM Percussive range (113 to 128 1-indexed) -> drumset.
     static constexpr int GM_PERC_FIRST = 113;
     if (isPercByClef || instr.midiProgram >= GM_PERC_FIRST) {
@@ -266,11 +284,9 @@ static const InstrumentTemplate* applyBestInstrument(Part* part,
         if (!tmpl) {
             tryStep(MatchStep::NameMidiScore, tryNameMidiScore(instr, encMidi, encKey, isRhythm));
         }
-        // Step 3: name scoring over drumset templates. A pitched GM program outvotes a name that
-        // merely resembles a percussion instrument: "Slap Ucillee" on Acoustic Bass is a bass and
-        // "Con." on Piano is a piano, however well they score against Slap and Congas, and the file
-        // draws both on a pitched clef. A name with no program behind it, or a percussive one, still
-        // reaches this step, which is where "Congas" and "Maracas" are recognised.
+        // Name scoring over drumset templates. A pitched program outvotes a name that merely sounds
+        // percussive, since the file draws those on a pitched clef; a name with no program behind it still
+        // reaches here, which is where Congas and Maracas are recognised.
         const bool pitchedProgram = (instr.midiProgram > 0 && instr.midiProgram < GM_PERC_FIRST);
         if (!nameTooShort && !pitchedProgram) {
             tryStep(MatchStep::DrumsetName, findDrumsetTemplate(instr.name));
@@ -313,6 +329,74 @@ static const InstrumentTemplate* applyBestInstrument(Part* part,
     return tmpl;
 }
 
+// Pick a TAB StaffType preset by string count (FULL for 4/5/6, COMMON for 7-10, else 6FULL);
+// the line count is set separately via Staff::setLines.
+static StaffTypes tabPresetForStringCount(int n)
+{
+    switch (n) {
+    case 4:  return StaffTypes::TAB_4FULL;
+    case 5:  return StaffTypes::TAB_5FULL;
+    case 6:  return StaffTypes::TAB_6FULL;
+    case 7:  return StaffTypes::TAB_7COMMON;
+    case 8:  return StaffTypes::TAB_8COMMON;
+    case 9:  return StaffTypes::TAB_9COMMON;
+    case 10: return StaffTypes::TAB_10COMMON;
+    default: return StaffTypes::TAB_6FULL;
+    }
+}
+
+// Make an Encore tab staff a real MuseScore tab: attach StringData + a TAB StaffType so notes
+// auto-fret at layout. Tuning source: Encore's stored tuning, else template StringData, else guitar.
+// The file writes the tuning as written pitches, like the notes, and MuseScore frets a note against
+// the string table after undoing the instrument's transposition. The Key moves the tuning into the
+// note pitches, the transposition back out again. Template and fallback tunings are already in
+// MuseScore's own terms and are taken as they are.
+static void setupTablatureStaff(Staff* staff, Instrument* instrument, const EncTabTuning& tuning, int keyOffset)
+{
+    if (!staff || !instrument) {
+        return;
+    }
+    const char* source = "Encore tuning";
+    std::vector<int> pitches;
+    if (tuning.hasData) {
+        const int shift = keyOffset - instrument->transpose().chromatic;
+        for (int p : tuning.openStringPitches) {
+            pitches.push_back(p + shift);
+        }
+    }
+    if (pitches.empty()) {
+        const StringData* tmplSd = instrument->stringData();
+        if (tmplSd && tmplSd->strings() > 0) {
+            for (const instrString& is : tmplSd->stringList()) {
+                pitches.push_back(is.pitch);
+            }
+            source = "template";
+        }
+    }
+    if (pitches.empty()) {
+        pitches = { 40, 45, 50, 55, 59, 64 };   // standard 6-string guitar (sounding pitches)
+        source = "default guitar";
+    }
+    const int nStrings = static_cast<int>(pitches.size());
+
+    std::vector<instrString> strings;
+    strings.reserve(pitches.size());
+    std::string tuningStr;
+    for (int p : pitches) {
+        strings.push_back(instrString(p));
+        tuningStr += std::to_string(p) + " ";
+    }
+    static constexpr int kTabFrets = 24;
+    instrument->setStringData(StringData(kTabFrets, strings));
+
+    const Fraction t0(0, 1);
+    if (const StaffType* preset = StaffType::preset(tabPresetForStringCount(nStrings))) {
+        staff->setStaffType(t0, *preset);
+    }
+    staff->setLines(t0, nStrings);
+    LOGD() << "  tab staff: " << nStrings << " strings, tuning [ " << tuningStr << "] (" << source << ")";
+}
+
 void buildParts(BuildCtx& ctx)
 {
     MasterScore* score = ctx.score;
@@ -323,7 +407,9 @@ void buildParts(BuildCtx& ctx)
           : "name then MIDI";
     LOGD() << "---- Instrument assignment (using " << searchModeLabel << ") ----";
     int cumStaffIdx = 0;  // running index into enc.lines[0].staffData
-    for (const auto& instr : enc.instruments) {
+    for (int instrIdx = 0; instrIdx < static_cast<int>(enc.instruments.size()); ++instrIdx) {
+        const EncInstrument& instr = enc.instruments[instrIdx];
+        const bool provenGuitar = ctx.provenGuitars.count(instrIdx) > 0;
         int ns = instr.nstaves > 0 ? instr.nstaves : 1;
         Part* part = new Part(score);
 
@@ -335,19 +421,17 @@ void buildParts(BuildCtx& ctx)
         const bool encWantsTab = lsd && (lsd->clef == EncClefType::TAB
                                          || lsd->staffType == EncStaffType::TAB);
         const InstrumentTemplate* tmpl = applyBestInstrument(part, instr, isPercByClef, isRhythm,
-                                                             encWantsTab, ctx.opts.instrumentSearchMode);
+                                                             encWantsTab, provenGuitar, ctx.opts.instrumentSearchMode);
 
         const bool showFromLine = !lsd || lsd->showStaff;
         if (!showFromLine) {
             part->setShow(false);
         }
 
-        const int pitchOffset = static_cast<int>(instr.keyTransposeSemitones);
-        // Transposition handling depends on the offset:
-        //  - non-octave and positive octave: set on the instrument so the display keeps the written
-        //    pitch under a plain clef (the octave is a playback transposition, no 8va clef).
-        //  - negative octave: left to the octave-down clef from pickStaffClef()/applyOctaveToClef()
-        //    plus the template's own transposition.
+        // A proven guitar takes the Key a guitar declares in Encore.
+        const int pitchOffset = provenGuitar ? -12 : static_cast<int>(instr.keyTransposeSemitones);
+        // A non-octave or upward offset goes on the instrument, so a plain clef keeps the written pitch. A
+        // downward octave is left to the octave clef instead. See ENCORE_IMPORTER.md 3.5.
         Instrument* instrument = part->instrument();
         if (instrument) {
             if (pitchOffset != 0 && (std::abs(pitchOffset) % 12 != 0 || pitchOffset > 0)) {
@@ -389,6 +473,15 @@ void buildParts(BuildCtx& ctx)
                     }
                 }
             }
+            // Tablature is per staff (one Encore instrument may carry both a notation and a tab staff).
+            const EncLineStaffData* staffLsd = lineStaffDataAt(enc, cumStaffIdx + s);
+            const bool staffWantsTab = staffLsd && (staffLsd->clef == EncClefType::TAB
+                                                    || staffLsd->staffType == EncStaffType::TAB);
+            if (staffWantsTab) {
+                setupTablatureStaff(staff, instrument, instr.tabTuning.hasData ? instr.tabTuning : enc.tabTuning,
+                                    pitchOffset);
+                ctx.trackNotesForTab = ctx.opts.tablatureImportMode == TablatureImportMode::Linked;
+            }
             ctx.staffPitchOffset.push_back(pitchOffset);
             ClefType cClef = ClefType::INVALID;
             if (tmpl) {
@@ -407,6 +500,363 @@ void buildParts(BuildCtx& ctx)
         score->appendStaff(staff);
         score->appendPart(part);
         ctx.totalStaves = 1;
+    }
+}
+
+// --- Tablature import mode post-pass -----------------------------------------
+
+static bool encStaffIsTab(const EncRoot& enc, int i)
+{
+    const EncLineStaffData* d = lineStaffDataAt(enc, i);
+    return d && (d->clef == EncClefType::TAB || d->staffType == EncStaffType::TAB);
+}
+
+static bool encStaffIsNotation(const EncRoot& enc, int i)
+{
+    const EncLineStaffData* d = lineStaffDataAt(enc, i);
+    return d && d->staffType == EncStaffType::MELODY
+           && d->clef != EncClefType::TAB && d->clef != EncClefType::PERC;
+}
+
+// The six open strings as Encore writes a guitar's, an octave above the sound: standard and drop D.
+static bool isEncoreGuitarTuning(const EncTabTuning& tuning)
+{
+    static const std::vector<int> standard { 52, 57, 62, 67, 71, 76 };
+    static const std::vector<int> dropD { 50, 57, 62, 67, 71, 76 };
+    return tuning.hasData && (tuning.openStringPitches == standard || tuning.openStringPitches == dropD);
+}
+
+// The share of the tab's fingerings that land on a note of the notation staff at the same measure and
+// tick, with the written pitch the tuning and the fret give; and how many fingerings there were.
+static std::pair<double, int> tabFingeringsOnNotes(const EncRoot& enc, int notationStaff, int tabStaff,
+                                                   const std::vector<int>& tuning)
+{
+    int total = 0;
+    int matched = 0;
+    for (const EncMeasure& m : enc.measures) {
+        std::multimap<int, int> pitchesByTick;
+        for (const auto& e : m.elements) {
+            if (const EncNote* n = dynamic_cast<const EncNote*>(e.get()); n && n->staffIdx == notationStaff) {
+                pitchesByTick.emplace(n->tick, n->semiTonePitch);
+            }
+        }
+        for (const auto& e : m.elements) {
+            const EncRest* r = dynamic_cast<const EncRest*>(e.get());
+            if (!r || !r->isTabFingering || r->staffIdx != tabStaff) {
+                continue;
+            }
+            ++total;
+            const int lowIdx = r->tabString / 2 - 1;
+            if (lowIdx < 0 || lowIdx >= static_cast<int>(tuning.size())) {
+                continue;
+            }
+            const int written = tuning[lowIdx] + r->tabFret;
+            auto [from, to] = pitchesByTick.equal_range(r->tick);
+            if (std::any_of(from, to, [written](const auto& tp) { return tp.second == written; })) {
+                ++matched;
+            }
+        }
+    }
+    return { total ? static_cast<double>(matched) / total : 0.0, total };
+}
+
+// The guitar tuning is also the one Encore gives a new tab, so a staff its author named after another
+// instrument, a bandurria or a voice, keeps that instrument. Only a confident name match counts.
+static bool namesAnotherInstrument(const EncInstrument& instr)
+{
+    if (instr.nameIsPlaceholder) {
+        return false;
+    }
+    bool exact = false;
+    bool unique = false;
+    const InstrumentTemplate* named = findEncoreInstrumentTemplate(instr.name, -1, ENC_KEY_NO_FILTER, &exact, &unique);
+    return named && (exact || unique) && !named->id.contains(u"guitar");
+}
+
+void findGuitarsProvenByTablature(BuildCtx& ctx)
+{
+    const EncRoot& enc = ctx.enc;
+    if (enc.lines.empty()) {
+        return;
+    }
+    const int nstaves = static_cast<int>(enc.lines[0].staffData.size());
+    auto instrumentOf = [&](int staff) { return static_cast<int>(enc.lines[0].staffData[staff].instrumentIndex()); };
+    auto singleStaff = [&](int ii) {
+        return ii < static_cast<int>(enc.instruments.size()) && enc.instruments[ii].nstaves <= 1;
+    };
+    for (int t = 1; t < nstaves; ++t) {
+        const int n = t - 1;
+        if (!encStaffIsTab(enc, t) || !encStaffIsNotation(enc, n)) {
+            continue;
+        }
+        const int notationInstr = instrumentOf(n);
+        const int tabInstr = instrumentOf(t);
+        if (notationInstr == tabInstr || !singleStaff(notationInstr) || !singleStaff(tabInstr)) {
+            continue;
+        }
+        if (enc.instruments[notationInstr].keyTransposeSemitones != 0
+            || namesAnotherInstrument(enc.instruments[notationInstr]) || namesAnotherInstrument(enc.instruments[tabInstr])) {
+            continue;
+        }
+        const EncTabTuning& tuning = enc.instruments[tabInstr].tabTuning.hasData ? enc.instruments[tabInstr].tabTuning
+                                     : enc.tabTuning;
+        if (!isEncoreGuitarTuning(tuning)) {
+            continue;
+        }
+        const auto [share, total] = tabFingeringsOnNotes(enc, n, t, tuning.openStringPitches);
+        static constexpr double kMinShare = 0.9;
+        static constexpr int kMinFingerings = 4;
+        if (total < kMinFingerings || share < kMinShare) {
+            continue;
+        }
+        ctx.provenGuitars.insert(notationInstr);
+        ctx.provenGuitars.insert(tabInstr);
+        LOGD() << "  staff " << n << " is a guitar left at Key 0: the tab below states the guitar tuning and "
+               << static_cast<int>(share * 100 + 0.5) << "% of its " << total << " fingerings land on its notes";
+    }
+}
+
+// A tab staff is a derived view with no notes of its own (frets come from the notation staff),
+// so a mixed-file tab staff imports empty; this detects that emptiness.
+static bool staffHasChords(Score* score, staff_idx_t staffIdx)
+{
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
+            const EngravingItem* e = s->element(staffIdx * VOICES + v);
+            if (e && e->isChord()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static void removeTabStaff(Score* score, Staff* tab)
+{
+    // Full removal path (raw removeStaff leaves measures inconsistent -> layout crash). A tab staff is
+    // its own single-staff part, so drop the whole part; fall back to per-staff removal if it shares one.
+    Part* part = tab->part();
+    if (part->nstaves() == 1) {
+        score->cmdRemovePart(part);
+    } else {
+        score->cmdRemoveStaff(tab->idx());
+    }
+}
+
+// Turn a tab staff into a standard 5-line notation staff: drop the StringData and swap the TAB
+// StaffType and clef for standard ones. Used by Ignore mode on a tab-only score, where there is no
+// notation staff to fall back to, so the tab's notes are shown as notation (guitar-family G8vb clef).
+static void convertTabStaffToStandard(Score* score, Staff* staff)
+{
+    const Fraction t0(0, 1);
+    if (const StaffType* stdType = StaffType::getDefaultPreset(StaffGroup::STANDARD)) {
+        staff->setStaffType(t0, *stdType);
+    }
+    staff->setLines(t0, 5);
+    if (Instrument* ins = staff->part()->instrument()) {
+        ins->setStringData(StringData());
+    }
+    staff->setDefaultClefType(ClefTypeList(ClefType::G8_VB));
+    if (Measure* m = score->tick2measure(t0)) {
+        if (Segment* seg = m->findSegment(SegmentType::HeaderClef, t0)) {
+            if (Clef* clef = toClef(seg->element(staff->idx() * VOICES))) {
+                clef->setClefType(ClefType::G8_VB);
+            }
+        }
+    }
+}
+
+// Merge an empty tab staff into its notation staff as one instrument (guitar+tab idiom): clone the
+// notation's notes as linked clones (the tab renders them as frets), reparent the tab, drop its part.
+// pitchShift moves the tab's tuning into the notation staff's pitch space. The two are separate Encore
+// instruments and can state different Keys, and the tuning has to sound where the notes it reads do.
+static void linkTabToNotation(Score* score, Staff* notation, Staff* tab, bool notationVisible, bool tabVisible,
+                              int pitchShift)
+{
+    Part* notPart = notation->part();
+    Part* tabPart = tab->part();
+
+    // Clear the tab's rest fill + key signature before cloning so the clone lands in an empty staff;
+    // otherwise stale rests overflow an irregular bar and the key signature duplicates.
+    const track_idx_t tabBase = tab->idx() * VOICES;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* seg = m->first(); seg; seg = seg->next()) {
+            const SegmentType st = seg->segmentType();
+            if (st != SegmentType::ChordRest && st != SegmentType::KeySig) {
+                continue;
+            }
+            for (voice_idx_t v = 0; v < VOICES; ++v) {
+                if (EngravingItem* e = seg->element(tabBase + v)) {
+                    seg->remove(e);
+                    delete e;
+                }
+            }
+        }
+    }
+
+    Excerpt::cloneStaff(notation, tab, true);
+
+    if (const StringData* sd = tabPart->instrument()->stringData()) {
+        std::vector<instrString> strings;
+        for (const instrString& is : sd->stringList()) {
+            instrString moved = is;
+            moved.pitch = is.pitch + pitchShift;
+            strings.push_back(moved);
+        }
+        notPart->instrument()->setStringData(StringData(sd->frets(), strings));
+    }
+
+    tabPart->removeStaff(tab);
+    notPart->appendStaff(tab);
+    tab->setPart(notPart);
+    score->removePart(tabPart);
+
+    notPart->setShow(true);
+    notation->setVisible(notationVisible);
+    tab->setVisible(tabVisible);
+}
+
+// Put the fret positions the tab staff stated on the notes it now shares with its notation staff, so
+// the tab draws Encore's own fingering instead of the one MuseScore would choose. Encore numbers the
+// strings from the lowest and writes twice the number, MuseScore numbers them from the highest, and a
+// position is used only where its string and fret really produce the note it lands on.
+static void applyTabFingerings(BuildCtx& ctx, const Staff* notation, int notationStaffIdx, int tabStaffIdx)
+{
+    const StringData* sd = notation->part()->instrument()->stringData();
+    if (!sd || sd->strings() < 1) {
+        return;
+    }
+    const int nStrings = sd->strings();
+    std::map<int, std::vector<const PendingTabFingering*> > byMeasure;
+    for (const PendingTabFingering& f : ctx.pendingTabFingerings) {
+        if (f.staffIdx == tabStaffIdx) {
+            byMeasure[f.measIdx].push_back(&f);
+        }
+    }
+    for (const auto& [measIdx, fingerings] : byMeasure) {
+        auto notesIt = ctx.notesByMeasStaff.find({ measIdx, notationStaffIdx });
+        if (notesIt == ctx.notesByMeasStaff.end()) {
+            continue;
+        }
+        const std::vector<std::pair<int, Note*> >& notes = notesIt->second;
+        std::vector<bool> taken(notes.size(), false);
+        // A position goes to the note of that pitch whose Encore tick is nearest, which is its own tick
+        // in all but a small fraction: the tab and the notation staff hold the same music but their
+        // elements are stamped separately. A note no position lands on keeps MuseScore's fretting.
+        for (const PendingTabFingering* f : fingerings) {
+            const int lowIdx = f->stringByte / 2 - 1;
+            if (lowIdx < 0 || lowIdx >= nStrings || f->fret < 0 || f->fret > sd->frets()) {
+                continue;
+            }
+            const int pitch = sd->stringList()[static_cast<size_t>(lowIdx)].pitch + f->fret;
+            size_t best = notes.size();
+            int bestGap = 0;
+            for (size_t i = 0; i < notes.size(); ++i) {
+                if (taken[i] || notes[i].second->pitch() != pitch) {
+                    continue;
+                }
+                const int gap = std::abs(notes[i].first - f->encTick);
+                if (best == notes.size() || gap < bestGap) {
+                    best = i;
+                    bestGap = gap;
+                }
+            }
+            if (best == notes.size()) {
+                continue;
+            }
+            taken[best] = true;
+            // The tab staff holds linked clones of these notes and frets them itself at layout; the
+            // position has to reach the clone too, or the one it computes replaces this one.
+            for (EngravingObject* linked : notes[best].second->linkList()) {
+                toNote(linked)->setString(nStrings - lowIdx - 1);
+                toNote(linked)->setFret(f->fret);
+            }
+        }
+    }
+}
+
+void applyTablatureImportMode(BuildCtx& ctx)
+{
+    if (ctx.opts.tablatureImportMode == TablatureImportMode::Separate) {
+        return;   // buildParts already produced independent tab staves
+    }
+    Score* score = ctx.score;
+    const EncRoot& enc = ctx.enc;
+    const bool ignore = ctx.opts.tablatureImportMode == TablatureImportMode::Ignore;
+    LOGD() << "---- Tablature (" << (ignore ? "Ignore" : "Linked") << " mode) ----";
+
+    // Snapshot the staff list because the merge/removal below mutates it. Identify targets by
+    // pointer and by their pre-mutation index (which still maps 1:1 to the Encore staff order).
+    const std::vector<Staff*> staves(score->staves().begin(), score->staves().end());
+    const int n = static_cast<int>(staves.size());
+
+    std::vector<Staff*> tabsToRemove;
+    struct Pair {
+        Staff* notation;
+        Staff* tab;
+        bool notationVisible;
+        bool tabVisible;
+        int notationStaffIdx;
+        int tabStaffIdx;
+    };
+    std::vector<Pair> pairs;
+
+    for (int i = 0; i < n; ++i) {
+        if (!encStaffIsTab(enc, i)) {
+            continue;
+        }
+        if (ignore) {
+            tabsToRemove.push_back(staves[i]);
+            LOGD() << "  drop tab staff " << i;
+            continue;
+        }
+        // Pair the tab with the notation staff immediately above and merge, but only for separate
+        // single-staff parts with the tab empty and the notation carrying the music.
+        if (i > 0 && encStaffIsNotation(enc, i - 1)
+            && staves[i]->part() != staves[i - 1]->part()
+            && staves[i - 1]->part()->nstaves() == 1 && staves[i]->part()->nstaves() == 1
+            && !staffHasChords(score, static_cast<staff_idx_t>(i))
+            && staffHasChords(score, static_cast<staff_idx_t>(i - 1))) {
+            const EncLineStaffData* notLsd = lineStaffDataAt(enc, i - 1);
+            const EncLineStaffData* tabLsd = lineStaffDataAt(enc, i);
+            pairs.push_back({ staves[i - 1], staves[i],
+                              !notLsd || notLsd->showStaff, !tabLsd || tabLsd->showStaff, i - 1, i });
+            LOGD() << "  linked tab: staff " << i << " <- notation staff " << (i - 1);
+        }
+    }
+
+    if (ignore) {
+        // A tab-only score (every staff is tablature) has no notation staff to fall back to. "Ignore"
+        // means no tablature staff, so show the notes as standard notation rather than dropping them
+        // (an empty score has no playable part and crashes playback).
+        if (static_cast<int>(tabsToRemove.size()) >= n) {
+            for (Staff* t : tabsToRemove) {
+                convertTabStaffToStandard(score, t);
+            }
+            return;
+        }
+        for (Staff* t : tabsToRemove) {
+            removeTabStaff(score, t);
+        }
+        // Dropping the tab can leave only hidden parts (e.g. a tab shown over a hidden notation
+        // staff); an all-hidden score has no playable part and crashes playback. Reveal what remains.
+        const bool anyShown = std::any_of(score->parts().begin(), score->parts().end(),
+                                          [](const Part* p) { return p->show(); });
+        if (!anyShown) {
+            for (Part* p : score->parts()) {
+                p->setShow(true);
+            }
+        }
+        return;
+    }
+    for (const Pair& p : pairs) {
+        const auto offsetOf = [&ctx](const Staff* st) {
+            const size_t i = static_cast<size_t>(st->idx());
+            return i < ctx.staffPitchOffset.size() ? ctx.staffPitchOffset[i] : 0;
+        };
+        linkTabToNotation(score, p.notation, p.tab, p.notationVisible, p.tabVisible,
+                          offsetOf(p.notation) - offsetOf(p.tab));
+        applyTabFingerings(ctx, p.notation, p.notationStaffIdx, p.tabStaffIdx);
     }
 }
 } // namespace mu::iex::enc

@@ -37,6 +37,10 @@ inline constexpr int kEncWholeTicks = 960;
 // derived from these ticks (DurationType, dot count, tuplet shape) live in importer/durations.h.
 int faceValue2ticks(quint8 fv);
 
+// Inverse of faceValue2ticks, taking the largest base that fits, so a dotted or tuplet duration maps
+// to its undotted base. For notes materialized from tab staves, which store no face value.
+quint8 ticks2faceValue(int ticks);
+
 // Pure-integer implied-tuplet probe: returns the tuplet's actualN (with normalNotes set) when
 // realDur is a 3:2 or 5:4 augmentation of the face value, else 0. Used by the v0xC2 parser pass
 // and by the importer; carries no engraving dependency, so it stays in the parser layer.
