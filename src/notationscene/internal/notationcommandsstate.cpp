@@ -199,9 +199,12 @@ void NotationCommandsState::init()
         updateCommandStates();
     });
 
-    interactive()->opened().onReceive(this, [this](const muse::Uri&) {
-        updateCommandStates();
-    });
+    //! NOTE: IInteractive is not available in console mode
+    if (interactive()) {
+        interactive()->opened().onReceive(this, [this](const muse::Uri&) {
+            updateCommandStates();
+        });
+    }
 
     controller()->selectionChanged().onNotify(this, [this]() {
         updateCommandStates(HAS_SELECTION_REQUIRED_COMMANDS);
@@ -244,7 +247,9 @@ void NotationCommandsState::init()
 void NotationCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
-    interactive()->opened().disconnect(this);
+    if (interactive()) {
+        interactive()->opened().disconnect(this);
+    }
     controller()->selectionChanged().disconnect(this);
     controller()->stackChanged().disconnect(this);
     controller()->textEditingChanged().disconnect(this);
@@ -366,7 +371,8 @@ bool NotationCommandsState::isProjectOpened() const
         return false;
     }
 
-    if (!interactive()->isOpened(PROJECT_PAGE_URI).val) {
+    //! NOTE: IInteractive is not available in console mode; in that case there is no page to check
+    if (interactive() && !interactive()->isOpened(PROJECT_PAGE_URI).val) {
         return false;
     }
 
