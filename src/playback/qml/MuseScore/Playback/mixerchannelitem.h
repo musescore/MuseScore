@@ -121,7 +121,7 @@ public:
     void loadOutputParams(const project::AudioOutputParams& newParams);
     void loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState);
 
-    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges&& audioSignalChanges);
+    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges& audioSignalChanges);
 
     bool outputOnly() const;
 

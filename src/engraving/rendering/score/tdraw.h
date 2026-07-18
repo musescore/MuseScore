@@ -112,6 +112,7 @@ class Ornament;
 class Ottava;
 class OttavaSegment;
 
+class PageLockIndicator;
 class PalmMute;
 class PalmMuteSegment;
 class Parenthesis;
@@ -268,6 +269,7 @@ private:
     static void draw(const Ornament* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
+    static void draw(const PageLockIndicator* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const PartialTieSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const PalmMuteSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
@@ -287,6 +289,7 @@ private:
     static void draw(const StaffLines* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffState* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffText* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffTypeChange* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Stem* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StemSlash* item, muse::draw::Painter* painter, const PaintOptions& opt);

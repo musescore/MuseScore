@@ -107,10 +107,13 @@
 #include "dom/slur.h"
 #include "dom/soundflag.h"
 #include "dom/spacer.h"
+#include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/staffstate.h"
 #include "dom/stafftext.h"
+#include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/stavesharinglabel.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -300,6 +303,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter, opt);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter, opt);
+        break;
+    case ElementType::STAVE_SHARING_LABEL:  draw(item_cast<const StaveSharingLabel*>(item), painter, opt);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter, opt);
         break;
@@ -1890,19 +1895,8 @@ void SingleDraw::draw(const Image* item, Painter* painter, const PaintOptions&)
                 s = item->size() * DPMM;
             }
 
-            Transform t = painter->worldTransform();
-            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
-            t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-            painter->setWorldTransform(t);
-            if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
-                item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
-                item->setDirty(false);
-            }
-            if (item->buffer().isNull()) {
-                emptyImage = true;
-            } else {
-                painter->drawPixmap(PointF(0.0, 0.0), item->buffer());
-            }
+            painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
+            painter->drawPixmap(PointF(0, 0), *item->rasterImage());
 
             painter->restore();
         }
@@ -2273,6 +2267,13 @@ void SingleDraw::draw(const StaffText* item, Painter* painter, const PaintOption
     if (item->hasSoundFlag()) {
         draw(item->soundFlag(), painter, opt);
     }
+}
+
+void SingleDraw::draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextBase(item, painter, opt);
 }
 
 void SingleDraw::draw(const StaffTypeChange* item, Painter* painter, const PaintOptions&)

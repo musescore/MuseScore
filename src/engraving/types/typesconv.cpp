@@ -346,6 +346,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::STAFF_TEXT, "StaffText",
           TranslatableString("engraving", "staff text(s)", nullptr, 1),
           TranslatableString("engraving", "Staff text(s)", nullptr, 1) },
+    Item{ ElementType::STAVE_SHARING_LABEL, "StaveSharingLabel",
+          TranslatableString("engraving", "stave sharing label(s)", nullptr, 1),
+          TranslatableString("engraving", "Stave sharing label(s)", nullptr, 1) },
     Item{ ElementType::SYSTEM_TEXT, "SystemText",
           TranslatableString("engraving", "system text(s)", nullptr, 1),
           TranslatableString("engraving", "System text(s)", nullptr, 1) },
@@ -493,6 +496,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::PAGE, "Page",
           TranslatableString("engraving", "page(s)", nullptr, 1),
           TranslatableString("engraving", "Page(s)", nullptr, 1) },
+    Item{ ElementType::PAGE_LOCK_INDICATOR, "pageLockIndicator",
+          TranslatableString("engraving", "page lock(s)", nullptr, 1),
+          TranslatableString("engraving", "Page lock(s)", nullptr, 1) },
     Item{ ElementType::PARENTHESIS, "Parenthesis",
           TranslatableString("engraving", "parenthesis", nullptr, 1),
           TranslatableString("engraving", "Parenthesis", nullptr, 1) },
@@ -1144,7 +1150,9 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_AUTO,                "auto",              muse::TranslatableString("engraving", "Auto") },
     { NoteHeadScheme::HEAD_NORMAL,              "normal",            muse::TranslatableString("engraving/noteheadscheme", "Normal") },
     { NoteHeadScheme::HEAD_PITCHNAME,           "name-pitch",        muse::TranslatableString("engraving/noteheadscheme", "Pitch names") },
+    { NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS, "name-pitch-no-acc", muse::TranslatableString("engraving/noteheadscheme", "Pitch names, no accidentals") },
     { NoteHeadScheme::HEAD_PITCHNAME_GERMAN,    "name-pitch-german", muse::TranslatableString("engraving/noteheadscheme", "German pitch names") },
+    { NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS, "name-pitch-german-no-acc", muse::TranslatableString("engraving/noteheadscheme", "German pitch names, no accidentals") },
     { NoteHeadScheme::HEAD_SOLFEGE,             "solfege-movable",   muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge movable Do") },  // &egrave;
     { NoteHeadScheme::HEAD_SOLFEGE_FIXED,       "solfege-fixed",     muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge fixed Do") },    // &egrave;
     { NoteHeadScheme::HEAD_SHAPE_NOTE_4,        "shape-4",           muse::TranslatableString("engraving/noteheadscheme", "4-shape (Walker)") },
@@ -1755,6 +1763,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::VIDEO_HIT_POINT,   "video_hit_point",      muse::TranslatableString("engraving", "Video hit point") },
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
+    { TextStyleType::STAVE_SHARING,     "staff",                muse::TranslatableString("engraving", "Stave sharing label") },
     { TextStyleType::EXPRESSION,        "expression",           muse::TranslatableString("engraving", "Expression") },
     { TextStyleType::DYNAMICS,          "dynamics",             muse::TranslatableString("engraving", "Dynamics") },
     { TextStyleType::HAIRPIN,           "hairpin",              muse::TranslatableString("engraving", "Hairpin") },

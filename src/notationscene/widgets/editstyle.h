@@ -27,6 +27,7 @@
 #include "ui_editstyle.h"
 
 #include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
@@ -94,7 +95,7 @@ private:
     void setHeaderFooterMacroInfoText();
     void adjustPagesStackSize(int currentPageIndex);
 
-    bool isBoolStyleRepresentedByButtonGroup(StyleId id);
+    bool isBoolStyleRepresentedByButtonGroup(engraving::Sid id);
 
     struct WidgetAndView {
         QWidget* widget = nullptr;
@@ -109,14 +110,14 @@ private:
     typedef QWidget* EditStyle::* EditStylePage;
 
     struct StyleWidget {
-        StyleId idx = StyleId::NOSTYLE;
+        engraving::Sid idx = engraving::Sid::NOSTYLE;
         bool showPercent = false;
         QObject* widget = nullptr;
         QToolButton* reset = nullptr;
     };
 
     QVector<StyleWidget> styleWidgets;
-    const StyleWidget& styleWidget(StyleId id) const;
+    const StyleWidget& styleWidget(engraving::Sid id) const;
 
     class LineStyleSelect;
     std::vector<LineStyleSelect*> m_lineStyleSelects;
@@ -132,20 +133,20 @@ private:
     QToolButton* resetVideoHitPointLineColor = nullptr;
 
     void unhandledType(const StyleWidget);
-    PropertyValue getValue(StyleId idx);
+    engraving::PropertyValue getValue(engraving::Sid idx);
     void setValues();
 
-    const PropertyValue& styleValue(StyleId id) const;
-    const PropertyValue& defaultStyleValue(StyleId id) const;
-    bool hasDefaultStyleValue(StyleId id) const;
+    const engraving::PropertyValue& styleValue(engraving::Sid id) const;
+    const engraving::PropertyValue& defaultStyleValue(engraving::Sid id) const;
+    bool hasDefaultStyleValue(engraving::Sid id) const;
     bool dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const;
-    void setStyleQVariantValue(StyleId id, const QVariant& value);
-    void setStyleValue(StyleId id, const PropertyValue& value);
+    void setStyleQVariantValue(engraving::Sid id, const QVariant& value);
+    void setStyleValue(engraving::Sid id, const engraving::PropertyValue& value);
 
 private slots:
     // void selectChordDescriptionFile();
     // void setChordStyle(bool);
-    void enableStyleWidget(const StyleId idx, bool enable);
+    void enableStyleWidget(const engraving::Sid idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);
     void toggleHeaderOddEven(bool);

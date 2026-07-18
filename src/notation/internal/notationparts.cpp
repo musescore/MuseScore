@@ -26,19 +26,20 @@
 #include "engraving/dom/barline.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
-#include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editpart.h"
-#include "engraving/editing/editscoreproperties.h"
 #include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "igetscore.h"
+#include "inotationnoteinput.h" // IWYU pragma: keep
 
 #include "log.h"
 
@@ -246,7 +247,9 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     mu::engraving::EditPart::setPartVisible(score(), part, visible);
 
     if (visible) {
-        EditSystemLocks::removeSystemLocksContainingMMRests(score());
+        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditPageLocks::removePageLocksContainingMMRests(tx, score());
+        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
     apply();
@@ -570,7 +573,9 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     doSetStaffConfig(staff, config);
 
     if (visible) {
-        EditSystemLocks::removeSystemLocksContainingMMRests(score());
+        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditPageLocks::removePageLocksContainingMMRests(tx, score());
+        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
     apply();
@@ -730,7 +735,9 @@ void NotationParts::insertPart(Part* part, size_t index)
 
     startEdit(TranslatableString("undoableAction", "Add instrument"));
 
-    EditSystemLocks::removeSystemLocksContainingMMRests(score());
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditPageLocks::removePageLocksContainingMMRests(tx, score());
+    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
 
     doInsertPart(part, index);
 
@@ -892,11 +899,10 @@ void NotationParts::moveSystemObjectLayerAboveBottomStaff()
 
 void NotationParts::toggleStaveSharing(bool on)
 {
-    startEdit(TranslatableString("undoableAction", "Toggle stave sharing"));
-
-    EditStaveSharing::toggleStaveSharing(score(), on);
-
-    apply();
+    undoStack()->transaction(TranslatableString("undoableAction", "Toggle stave sharing"), [&](engraving::Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score(), on);
+    });
+    m_partsChanged.notify();
 }
 
 Notification NotationParts::sharedPartsChanged() const

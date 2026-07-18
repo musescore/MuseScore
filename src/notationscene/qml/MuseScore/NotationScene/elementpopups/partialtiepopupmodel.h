@@ -29,6 +29,7 @@
 #include "../abstractelementpopupmodel.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Tie;
 class TieJumpPoint;
 }
@@ -48,7 +49,7 @@ public:
 
     QVariantList items() const;
     bool tieDirection() const;
-    static bool canOpen(const EngravingItem* element);
+    static bool canOpen(const engraving::EngravingItem* element);
     QPointF dialogPosition() const;
 
     Q_INVOKABLE void init() override;

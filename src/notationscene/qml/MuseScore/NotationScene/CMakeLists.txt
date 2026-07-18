@@ -64,6 +64,8 @@ qt_add_qml_module(notationscene_qml
         internal/undoredotoolbarmodel.h
         loopmarker.cpp
         loopmarker.h
+        notationautomationcontroller.h
+        notationautomationcontroller.cpp
         notationcontextmenumodel.cpp
         notationcontextmenumodel.h
         notationnavigator.cpp
@@ -319,6 +321,7 @@ target_include_directories(notationscene_qml PRIVATE
 )
 
 target_link_libraries(notationscene_qml PRIVATE
+    Qt::Widgets # for QApplication
     muse::uicomponents_qml
 )
 

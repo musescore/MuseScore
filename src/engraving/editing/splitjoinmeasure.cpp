@@ -36,6 +36,7 @@
 
 #include "addremoveelement.h"
 #include "editspanner.h"
+#include "transaction/transaction.h"
 
 using namespace mu::engraving;
 
@@ -43,7 +44,7 @@ using namespace mu::engraving;
 //   splitMeasure
 //---------------------------------------------------------
 
-void SplitJoinMeasure::splitMeasure(MasterScore* masterScore, const Fraction& tick)
+void SplitJoinMeasure::splitMeasure(Transaction& tx, MasterScore* masterScore, const Fraction& tick)
 {
     Segment* segment = masterScore->tick2segment(tick, false, SegmentType::ChordRest);
 
@@ -84,7 +85,7 @@ void SplitJoinMeasure::splitMeasure(MasterScore* masterScore, const Fraction& ti
         }
         if (start != s->startElement() || end != s->endElement()) {
             spanners.push_back(std::make_tuple(s, s->tick(), s->ticks()));
-            masterScore->undo(new ChangeStartEndSpanner(s, start, end));
+            tx.push(new ChangeStartEndSpanner(s, start, end));
         }
         if (s->tick() < stick && s->tick2() > stick) {
             spanners.push_back(std::make_tuple(s, s->tick(), s->ticks()));
@@ -186,7 +187,7 @@ void SplitJoinMeasure::splitMeasure(MasterScore* masterScore, const Fraction& ti
 //   joinMeasure
 //---------------------------------------------------------
 
-void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2)
+void SplitJoinMeasure::joinMeasures(Transaction& tx, MasterScore* masterScore, const Fraction& tick1, const Fraction& tick2)
 {
     Measure* m1 = masterScore->tick2measure(tick1);
     Measure* m2 = masterScore->tick2measure(tick2);
@@ -329,7 +330,7 @@ void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& ti
                             if (!lts) {
                                 lts = nsig;
                             } else {
-                                linkedScore->undo(new Link(lts, nsig));
+                                tx.push(new Link(lts, nsig));
                             }
                         }
                         linkedScore->doUndoRemoveElement(timeSig);

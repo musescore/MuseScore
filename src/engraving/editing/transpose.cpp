@@ -33,12 +33,15 @@
 #include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
 #include "../dom/fret.h"
-#include "editing/editfretboarddiagram.h"
-#include "editing/editkeysig.h"
+
+#include "editenharmonicspelling.h"
+#include "editfretboarddiagram.h"
+#include "editkeysig.h"
+#include "transaction/transaction.h"
 
 using namespace mu::engraving;
 
-bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval,
+bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, TransposeDirection direction, Key trKey, int transposeInterval,
                           bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
 {
     const Selection& selection = score->selection();
@@ -124,12 +127,12 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     }
 
                     FretDiagram* fd = toFretDiagram(parent);
-                    transposeFretDiagram(toFretDiagram(fd), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                    transposeFretDiagram(tx, toFretDiagram(fd), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
                 } else {
-                    transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                    transposeHarmony(tx, toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
                 }
             } else if (e->isFretDiagram() && transposeChordNames) {
-                transposeFretDiagram(toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                transposeFretDiagram(tx, toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
                 // TODO: this currently is disabled in dialog
                 // if we enabled it, then it will need work
@@ -141,7 +144,7 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     KeySigEvent ke = ks->keySigEvent();
                     ke.setConcertKey(cKey);
                     ke.setKey(key);
-                    score->undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                    tx.push(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                 }
             }
         }
@@ -248,7 +251,7 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                     // undoChangeKey handles linked staves/parts and generating new keysigs as needed
                     // it always sets the keysig non-generated
                     // so only call it when needed
-                    score->undoChangeKeySig(staff, tick, ke);
+                    EditKeySig::undoChangeKeySig(tx, score, staff, tick, ke);
                 }
             }
         }
@@ -261,11 +264,11 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
                 }
 
                 if (e->isHarmony()) {
-                    transposeHarmony(toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                    transposeHarmony(tx, toHarmony(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
                 }
 
                 if (e->isFretDiagram()) {
-                    transposeFretDiagram(toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+                    transposeFretDiagram(tx, toFretDiagram(e), score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
                 }
             }
         }
@@ -298,7 +301,8 @@ bool Transpose::transpose(Score* score, TransposeMode mode, TransposeDirection d
 //    key -   -7(Cb) - +7(C#)
 //---------------------------------------------------------
 
-void Transpose::transposeKeys(Score* score, staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts, const Fraction& tickEnd,
+void Transpose::transposeKeys(Transaction& tx, Score* score, staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts,
+                              const Fraction& tickEnd,
                               bool flip)
 {
     Fraction tickStart(ts);
@@ -334,7 +338,7 @@ void Transpose::transposeKeys(Score* score, staff_idx_t staffStart, staff_idx_t 
                 }
 
                 ke.setKey(nKey);
-                score->undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                tx.push(new ChangeKeySig(ks, ke, ks->showCourtesy()));
             }
             if (s->tick().isZero()) {
                 createKey = false;
@@ -368,7 +372,7 @@ void Transpose::transposeKeys(Score* score, staff_idx_t staffStart, staff_idx_t 
 //   transposeSemitone
 //---------------------------------------------------------
 
-void Transpose::transposeSemitone(Score* score, int step)
+void Transpose::transposeSemitone(Transaction& tx, Score* score, int step)
 {
     if (step == 0) {
         return;
@@ -376,7 +380,7 @@ void Transpose::transposeSemitone(Score* score, int step)
 
     TransposeDirection dir = step > 0 ? TransposeDirection::UP : TransposeDirection::DOWN;
 
-    if (!transpose(score, TransposeMode::BY_INTERVAL, dir, Key::C, 1, true, true, false)) {
+    if (!transpose(tx, score, TransposeMode::BY_INTERVAL, dir, Key::C, 1, true, true, false)) {
         LOGD("Score::transposeSemitone: failed");
     } else {
         score->setSelectionChanged(true);
@@ -386,12 +390,12 @@ void Transpose::transposeSemitone(Score* score, int step)
 //---------------------------------------------------------
 //   transposeDiatonicAlterations
 //---------------------------------------------------------
-void Transpose::transposeDiatonicAlterations(Score* score, TransposeDirection direction)
+void Transpose::transposeDiatonicAlterations(Transaction& tx, Score* score, TransposeDirection direction)
 {
     // Transpose current selection diatonically (up/down) while keeping degree alterations
     // Note: Score::transpose() absolutely requires valid selection before invocation.
     if (!score->selection().isNone()) {
-        transpose(score, TransposeMode::DIATONICALLY, direction, Key::C, 1, true, true, true);
+        transpose(tx, score, TransposeMode::DIATONICALLY, direction, Key::C, 1, true, true, true);
         score->setPlayNote(true);     // For when selection is a single note, also playback that note
         score->setSelectionChanged(true);     // This will update the on-screen keyboard
     }
@@ -400,7 +404,7 @@ void Transpose::transposeDiatonicAlterations(Score* score, TransposeDirection di
 //---------------------------------------------------------
 //   transpositionChanged
 //---------------------------------------------------------
-void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fraction tickStart, Fraction tickEnd)
+void Transpose::transpositionChanged(Transaction& tx, Score* score, Part* part, Interval oldV, Fraction tickStart, Fraction tickEnd)
 {
     if (tickStart == Fraction(-1, 1)) {
         tickStart = Fraction(0, 1);
@@ -418,7 +422,8 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
         scores.insert(lsScore);
         Part* lp = ls->part();
         if (!lsScore->style().styleB(Sid::concertPitch)) {
-            transposeKeys(lsScore, lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
+            const TrackRange trackRange = lp->trackRange();
+            transposeKeys(tx, lsScore, track2staff(trackRange.startTrack), track2staff(trackRange.endTrack), tickStart, tickEnd, true);
         }
     }
 
@@ -462,7 +467,7 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
                     Harmony* h  = toHarmony(element);
                     for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->style().styleB(Sid::concertPitch)) {
-                            undoTransposeHarmony(score, toHarmony(scoreElement), diffV, false);
+                            undoTransposeHarmony(tx, toHarmony(scoreElement), diffV, false);
                         }
                     }
                 }
@@ -471,7 +476,7 @@ void Transpose::transpositionChanged(Score* score, Part* part, Interval oldV, Fr
     }
 }
 
-void Transpose::transpositionChanged(Score* score, Part* part, const Fraction& instrumentTick, Interval oldTransposition)
+void Transpose::transpositionChanged(Transaction& tx, Score* score, Part* part, const Fraction& instrumentTick, Interval oldTransposition)
 {
     Fraction tickStart = instrumentTick;
     Fraction tickEnd = { -1, 1 };
@@ -481,7 +486,7 @@ void Transpose::transpositionChanged(Score* score, Part* part, const Fraction& i
         tickEnd = Fraction::fromTicks(mainInstrumentEndIt->first);
     }
 
-    transpositionChanged(score, part, oldTransposition, tickStart, tickEnd);
+    transpositionChanged(tx, score, part, oldTransposition, tickStart, tickEnd);
 }
 
 //---------------------------------------------------------
@@ -541,7 +546,8 @@ bool Transpose::transposeNote(Note* note, TransposeMode mode, int transposeInter
     return note->transpose(interval, useDoubleSharpsFlats);
 }
 
-void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interval, TransposeMode mode, int transposeInterval, bool trKeys,
+void Transpose::transposeHarmony(Transaction& tx, Harmony* harmony, Score* score, Interval interval, TransposeMode mode,
+                                 int transposeInterval, bool trKeys,
                                  bool useDoubleSharpsFlats)
 {
     // TODO also source interval should reflect modified key (f.ex. by prefer flat)
@@ -558,21 +564,21 @@ void Transpose::transposeHarmony(Harmony* harmony, Score* score, Interval interv
     for (EngravingObject* se : harmony->linkList()) {
         Harmony* h = toHarmony(se);
         if (mode == TransposeMode::DIATONICALLY) {
-            undoTransposeHarmonyDiatonic(score, h, transposeInterval, useDoubleSharpsFlats, trKeys);
+            undoTransposeHarmonyDiatonic(tx, h, transposeInterval, useDoubleSharpsFlats, trKeys);
         } else {
-            undoTransposeHarmony(score, h, hInterval, useDoubleSharpsFlats);
+            undoTransposeHarmony(tx, h, hInterval, useDoubleSharpsFlats);
         }
     }
     score->rebuildFretBox();
 }
 
-void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interval interval, TransposeMode mode,
+void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Score* score, Interval interval, TransposeMode mode,
                                      int transposeInterval, bool trKeys, bool useDoubleSharpsFlats)
 {
     Harmony* harmony = diagram->harmony();
 
     if (harmony) {
-        transposeHarmony(harmony, score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
+        transposeHarmony(tx, harmony, score, interval, mode, transposeInterval, trKeys, useDoubleSharpsFlats);
 
         std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
         if (availableDiagrams.empty()) {
@@ -580,7 +586,7 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
             MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
             return;
         }
-        score->undo(new FretDataChange(diagram, harmony->plainText()));
+        tx.push(new FretDataChange(diagram, harmony->plainText()));
 
         score->rebuildFretBox();
         return;
@@ -632,7 +638,7 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
         MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
         return;
     }
-    score->undo(new FretDataChange(diagram, harmony->plainText()));
+    tx.push(new FretDataChange(diagram, harmony->plainText()));
 
     diagram->remove(harmony);
     delete harmony;
@@ -654,7 +660,7 @@ String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key ke
         tpcs.push_back(tpc);
     }
 
-    int tpc = bestEnharmonicFit(tpcs, key);
+    int tpc = EditEnharmonicSpelling::bestEnharmonicFit(tpcs, key);
 
     if (tpc == Tpc::TPC_INVALID) {
         return notes.front();
@@ -734,7 +740,7 @@ int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlat
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmony : public UndoCommand
+class TransposeHarmony : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
@@ -751,7 +757,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_harmony })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Harmony* m_harmony = nullptr;
 
@@ -760,7 +766,7 @@ private:
 };
 }
 
-void TransposeHarmony::flip(EditData*)
+void TransposeHarmony::flip()
 {
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 
@@ -774,9 +780,9 @@ void TransposeHarmony::flip(EditData*)
     m_interval.flip();
 }
 
-void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat)
+void Transpose::undoTransposeHarmony(Transaction& tx, Harmony* harmony, Interval interval, bool doubleSharpFlat)
 {
-    score->undo(new TransposeHarmony(harmony, interval, doubleSharpFlat));
+    tx.push(new TransposeHarmony(harmony, interval, doubleSharpFlat));
 }
 
 //---------------------------------------------------------
@@ -784,7 +790,7 @@ void Transpose::undoTransposeHarmony(Score* score, Harmony* harmony, Interval in
 //---------------------------------------------------------
 
 namespace {
-class TransposeHarmonyDiatonic : public UndoCommand
+class TransposeHarmonyDiatonic : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
 
@@ -802,7 +808,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_harmony })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Harmony* m_harmony = nullptr;
     int m_interval = 0;
@@ -811,7 +817,7 @@ private:
 };
 }
 
-void TransposeHarmonyDiatonic::flip(EditData*)
+void TransposeHarmonyDiatonic::flip()
 {
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 
@@ -833,7 +839,7 @@ void TransposeHarmonyDiatonic::flip(EditData*)
     m_interval *= -1;
 }
 
-void Transpose::undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
+void Transpose::undoTransposeHarmonyDiatonic(Transaction& tx, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
 {
-    score->undo(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
+    tx.push(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
 }

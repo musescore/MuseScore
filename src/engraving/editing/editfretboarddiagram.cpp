@@ -86,14 +86,14 @@ void FretUndoData::updateDiagram()
 //   FretDataChange
 //---------------------------------------------------------
 
-void FretDataChange::redo(EditData*)
+void FretDataChange::redo()
 {
     m_undoData = FretUndoData(m_diagram);
 
     m_diagram->updateDiagram(m_harmonyName);
 }
 
-void FretDataChange::undo(EditData*)
+void FretDataChange::undo()
 {
     m_undoData.updateDiagram();
 }
@@ -102,7 +102,7 @@ void FretDataChange::undo(EditData*)
 //   FretDot
 //---------------------------------------------------------
 
-void FretDot::redo(EditData*)
+void FretDot::redo()
 {
     undoData = FretUndoData(diagram);
 
@@ -110,7 +110,7 @@ void FretDot::redo(EditData*)
     diagram->triggerLayout();
 }
 
-void FretDot::undo(EditData*)
+void FretDot::undo()
 {
     undoData.updateDiagram();
     diagram->triggerLayout();
@@ -120,7 +120,7 @@ void FretDot::undo(EditData*)
 //   FretMarker
 //---------------------------------------------------------
 
-void FretMarker::redo(EditData*)
+void FretMarker::redo()
 {
     undoData = FretUndoData(diagram);
 
@@ -128,7 +128,7 @@ void FretMarker::redo(EditData*)
     diagram->triggerLayout();
 }
 
-void FretMarker::undo(EditData*)
+void FretMarker::undo()
 {
     undoData.updateDiagram();
     diagram->triggerLayout();
@@ -138,7 +138,7 @@ void FretMarker::undo(EditData*)
 //   FretBarre
 //---------------------------------------------------------
 
-void FretBarre::redo(EditData*)
+void FretBarre::redo()
 {
     undoData = FretUndoData(diagram);
 
@@ -146,7 +146,7 @@ void FretBarre::redo(EditData*)
     diagram->triggerLayout();
 }
 
-void FretBarre::undo(EditData*)
+void FretBarre::undo()
 {
     undoData.updateDiagram();
     diagram->triggerLayout();
@@ -156,7 +156,7 @@ void FretBarre::undo(EditData*)
 //   FretClear
 //---------------------------------------------------------
 
-void FretClear::redo(EditData*)
+void FretClear::redo()
 {
     undoData = FretUndoData(diagram);
 
@@ -164,7 +164,7 @@ void FretClear::redo(EditData*)
     diagram->triggerLayout();
 }
 
-void FretClear::undo(EditData*)
+void FretClear::undo()
 {
     undoData.updateDiagram();
     diagram->triggerLayout();
@@ -179,13 +179,13 @@ AddFretDiagramToFretBox::AddFretDiagramToFretBox(FretDiagram* f, size_t idx)
 {
 }
 
-void AddFretDiagramToFretBox::redo(EditData*)
+void AddFretDiagramToFretBox::redo()
 {
     FBox* fbox = toFBox(m_fretDiagram->parent());
     fbox->addAtIdx(m_fretDiagram, m_idx);
 }
 
-void AddFretDiagramToFretBox::undo(EditData*)
+void AddFretDiagramToFretBox::undo()
 {
     FBox* fbox = toFBox(m_fretDiagram->parent());
     fbox->remove(m_fretDiagram);
@@ -203,13 +203,13 @@ RemoveFretDiagramFromFretBox::RemoveFretDiagramFromFretBox(FretDiagram* f)
     m_idx = muse::indexOf(el, m_fretDiagram);
 }
 
-void RemoveFretDiagramFromFretBox::redo(EditData*)
+void RemoveFretDiagramFromFretBox::redo()
 {
     FBox* fbox = toFBox(m_fretDiagram->parent());
     fbox->remove(m_fretDiagram);
 }
 
-void RemoveFretDiagramFromFretBox::undo(EditData*)
+void RemoveFretDiagramFromFretBox::undo()
 {
     FBox* fbox = toFBox(m_fretDiagram->parent());
     fbox->addAtIdx(m_fretDiagram, m_idx);

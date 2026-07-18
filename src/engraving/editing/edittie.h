@@ -22,22 +22,41 @@
 
 #pragma once
 
-#include "undo.h"
+#include <vector>
+
+#include "global/allocator.h"
+#include "global/types/string.h"
+
+#include "transaction/undoablecommand.h"
 
 namespace mu::engraving {
+class Note;
+class Score;
+class Selection;
+class Tie;
 class TieJumpPointList;
-class ChangeTieJumpPointActive : public UndoCommand
+
+class EditTie
+{
+public:
+    static void cmdAddTie(Score* score, bool addToChord = false);
+    static Tie* cmdToggleTie(Score* score);
+    static void cmdToggleLaissezVib(Score* score);
+    static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
+};
+
+class ChangeTieJumpPointActive : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeTieJumpPointActive)
 
     TieJumpPointList* m_jumpPointList = nullptr;
-    String m_id;
+    muse::String m_id;
     bool m_active = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
-    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, String& id, bool active)
+    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, muse::String id, bool active)
         : m_jumpPointList(jumpPointList), m_id(id), m_active(active) {}
 
     UNDO_TYPE(CommandType::ChangeTieEndPointActive)

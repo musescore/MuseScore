@@ -27,11 +27,17 @@
 
 #include "measure.h"
 
-#include "../editing/mscoreview.h"
+#include "../editing/editclef.h"
+#include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
+#include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
+#include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
+#include "../editing/mscoreview.h"
+#include "../editing/navigation.h"
+#include "../editing/transaction/transaction.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -372,49 +378,39 @@ void Measure::setParent(System* s)
 }
 
 //---------------------------------------------------------
-//   AcEl
-//---------------------------------------------------------
-
-struct AcEl {
-    Note* note;
-    double x;
-};
-
-//---------------------------------------------------------
 //   findAccidental
 ///   return current accidental value at note position
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Note* note) const
+AccidentalVal Measure::findAccidental(const Note* note) const
 {
-    Chord* chord = note->chord();
-    Staff* vStaff = chord->score()->staff(chord->vStaffIdx());
+    const Chord* chord = note->chord();
+    const Staff* vStaff = chord->score()->staff(chord->vStaffIdx());
     AccidentalState tversatz;    // state of already set accidentals for this measure
     tversatz.init(vStaff->keySigEvent(tick()));
 
-    track_idx_t startTrack = vStaff->part()->startTrack();
+    const TrackRange trackRange = vStaff->part()->trackRange();
     track_idx_t mainTrack = chord->vStaffIdx() * VOICES;
-    track_idx_t endTrack = vStaff->part()->endTrack();
 
-    for (Segment* segment = first(); segment; segment = segment->next()) {
+    for (const Segment* segment = first(); segment; segment = segment->next()) {
         if (segment->isKeySigType()) {
-            KeySig* ks = toKeySig(segment->element(mainTrack));
+            const KeySig* ks = toKeySig(segment->element(mainTrack));
             if (!ks) {
                 continue;
             }
             tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* e = segment->element(track);
+            for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
+                const EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
                 }
-                Chord* crd = toChord(e);
-                for (Chord* chord1 : crd->graceNotes()) {
+                const Chord* crd = toChord(e);
+                for (const Chord* chord1 : crd->graceNotes()) {
                     if (chord1->vStaffIdx() != chord->vStaffIdx()) {
                         continue;
                     }
-                    for (Note* note1 : chord1->notes()) {
+                    for (const Note* note1 : chord1->notes()) {
                         if (note1->tieBack() && !note1->accidental()) {
                             continue;
                         }
@@ -433,7 +429,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                 if (crd->vStaffIdx() != chord->vStaffIdx()) {
                     continue;
                 }
-                for (Note* note1 : crd->notes()) {
+                for (const Note* note1 : crd->notes()) {
                     if (note1->tieBack() && !note1->accidental()) {
                         continue;
                     }
@@ -451,7 +447,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
             }
         }
     }
-    LOGD("Measure::findAccidental: note not found");
+    LOGD() << "Measure::findAccidental: note not found";
     return AccidentalVal::NATURAL;
 }
 
@@ -461,32 +457,31 @@ AccidentalVal Measure::findAccidental(Note* note) const
 ///   relative staff line.
 //---------------------------------------------------------
 
-AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line, bool& error) const
+AccidentalVal Measure::findAccidental(const Segment* s, staff_idx_t staffIdx, int line, bool& error) const
 {
     AccidentalState tversatz;    // state of already set accidentals for this measure
-    Staff* staff = score()->staff(staffIdx);
+    const Staff* staff = score()->staff(staffIdx);
     tversatz.init(staff->keySigEvent(tick()));
 
     SegmentType st = SegmentType::ChordRest;
-    track_idx_t startTrack = staff->part()->startTrack();
-    track_idx_t endTrack = staff->part()->endTrack();
-    for (Segment* segment = first(st); segment; segment = segment->next(st)) {
+    const TrackRange trackRange = staff->part()->trackRange();
+    for (const Segment* segment = first(st); segment; segment = segment->next(st)) {
         if (segment == s && staff->isPitchedStaff(tick())) {
             ClefType clef = staff->clef(s->tick());
             int l = relStep(line, clef);
             return tversatz.accidentalVal(l, error);
         }
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* e = segment->element(track);
+        for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
+            const EngravingItem* e = segment->element(track);
             if (!e || !e->isChord()) {
                 continue;
             }
-            Chord* chord = toChord(e);
-            for (Chord* chord1 : chord->graceNotes()) {
+            const Chord* chord = toChord(e);
+            for (const Chord* chord1 : chord->graceNotes()) {
                 if (chord1->vStaffIdx() != staffIdx) {
                     continue;
                 }
-                for (Note* note : chord1->notes()) {
+                for (const Note* note : chord1->notes()) {
                     if (note->tieBack() && !note->accidental()) {
                         continue;
                     }
@@ -498,7 +493,7 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             if (chord->vStaffIdx() != staffIdx) {
                 continue;
             }
-            for (Note* note : chord->notes()) {
+            for (const Note* note : chord->notes()) {
                 if (note->tieBack() && !note->accidental()) {
                     continue;
                 }
@@ -508,7 +503,7 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             }
         }
     }
-    LOGD("segment not found");
+    LOGD() << "segment not found";
     return AccidentalVal::NATURAL;
 }
 
@@ -1508,7 +1503,7 @@ bool Measure::acceptDrop(EditData& data) const
 ///   element \a type and \a subtype.
 //---------------------------------------------------------
 
-EngravingItem* Measure::drop(EditData& data)
+EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     staff_idx_t staffIdx = track2staff(data.track);
@@ -1576,7 +1571,7 @@ EngravingItem* Measure::drop(EditData& data)
     break;
 
     case ElementType::CLEF:
-        score()->undoChangeClef(staff, this, toClef(e)->clefType());
+        EditClef::undoChangeClef(tx, score(), staff, this, toClef(e)->clefType());
         delete e;
         break;
 
@@ -1587,20 +1582,21 @@ EngravingItem* Measure::drop(EditData& data)
 
         if (data.modifiers & ControlModifier) {
             // apply only to this stave
-            score()->undoChangeKeySig(staff, tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff, tick(), k);
         } else {
             // apply to all staves:
             for (Staff* s : score()->staves()) {
-                score()->undoChangeKeySig(s, tick(), k);
+                EditKeySig::undoChangeKeySig(tx, score(), s, tick(), k);
             }
         }
 
         break;
     }
 
-    case ElementType::TIMESIG:
-        score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
+    case ElementType::TIMESIG: {
+        EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
+    }
 
     case ElementType::LAYOUT_BREAK: {
         LayoutBreak* b = toLayoutBreak(e);
@@ -1706,7 +1702,7 @@ EngravingItem* Measure::drop(EditData& data)
             Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
             BarLine* cbl = toBarLine(seg->element(trackZeroVoice(data.track)));
             if (cbl) {
-                return cbl->drop(data);
+                return cbl->drop(tx, data);
             }
         } else if (bl->barLineType() == BarLineType::START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
@@ -1768,7 +1764,7 @@ EngravingItem* Measure::drop(EditData& data)
                 }
             }
             // drop to barline
-            return seg->element(trackZeroVoice(data.track))->drop(data);
+            return seg->element(trackZeroVoice(data.track))->drop(tx, data);
         }
         break;
     }
@@ -1777,7 +1773,7 @@ EngravingItem* Measure::drop(EditData& data)
     {
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
-        score()->cmdAddMeasureRepeat(this, numMeasures, staffIdx);
+        EditMeasureRepeat::addMeasureRepeat(tx, score(), this, numMeasures, staffIdx);
         break;
     }
     case ElementType::ACTION_ICON:
@@ -1808,7 +1804,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            EditSystemLocks::makeIntoSystem(score(), system()->first(), this);
+            EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
             break;
         default:
             break;
@@ -2878,12 +2874,10 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
     case Pid::EXCLUDE_FROM_NUMBERING:
         setExcludeFromNumbering(value.toBool());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_OFFSET:
         setMeasureNumberOffset(value.toInt());
         triggerLayoutAll();
-        score()->setPlaylistDirty();
         return true;
     case Pid::MEASURE_NUMBER_MODE:
         setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -2900,15 +2894,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
-        score()->setPlaylistDirty();
+        score()->invalidateRepeatList();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);
@@ -3030,7 +3024,7 @@ Measure* Measure::coveringMMRestOrThis()
         m = m->prevMeasure();
     }
 
-    if (m) {
+    if (m && !m->m_mmRest->mmRestLast()->isBefore(this)) {
         return m->m_mmRest;
     }
 
@@ -3274,7 +3268,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
         return next;
     }
 
-    return score()->lastElement();
+    return Navigation::lastElement(score());
 }
 
 //---------------------------------------------------------
@@ -3308,7 +3302,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
             return seg->lastElementForNavigation(staff);
         }
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 double Measure::firstNoteRestSegmentX(bool leading) const

@@ -30,7 +30,7 @@ using namespace mu::engraving;
 //   ChangeSoundFlag
 //---------------------------------------------------------
 
-void ChangeSoundFlag::flip(EditData*)
+void ChangeSoundFlag::flip()
 {
     IF_ASSERT_FAILED(m_soundFlag) {
         return;

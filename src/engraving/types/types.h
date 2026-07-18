@@ -123,6 +123,7 @@ enum class ElementType : unsigned char {
     TEMPO_TEXT,
     STAFF_TEXT,
     SYSTEM_TEXT,
+    STAVE_SHARING_LABEL,
     SOUND_FLAG,
     PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
@@ -187,6 +188,7 @@ enum class ElementType : unsigned char {
     TAB_DURATION_SYMBOL,
     FSYMBOL,
     PAGE,
+    PAGE_LOCK_INDICATOR,
     TEXTLINE_BASE,
     BRACKET,
     SEGMENT,
@@ -224,6 +226,36 @@ enum class ElementType : unsigned char {
 };
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
+
+const static std::unordered_set<ElementType> TEXTBASE_TYPES {
+    ElementType::TEXT,
+    ElementType::LYRICS,
+    ElementType::DYNAMIC,
+    ElementType::EXPRESSION,
+    ElementType::FINGERING,
+    ElementType::HARMONY,
+    ElementType::MARKER,
+    ElementType::JUMP,
+    ElementType::STAFF_TEXT,
+    ElementType::STAVE_SHARING_LABEL,
+    ElementType::SYSTEM_TEXT,
+    ElementType::TRIPLET_FEEL,
+    ElementType::PLAY_COUNT_TEXT,
+    ElementType::PLAYTECH_ANNOTATION,
+    ElementType::CAPO,
+    ElementType::STRING_TUNINGS,
+    ElementType::REHEARSAL_MARK,
+    ElementType::INSTRUMENT_CHANGE,
+    ElementType::FIGURED_BASS,
+    ElementType::TEMPO_TEXT,
+    ElementType::INSTRUMENT_NAME,
+    ElementType::MEASURE_NUMBER,
+    ElementType::MMREST_RANGE,
+    ElementType::STICKING,
+    ElementType::HARP_DIAGRAM,
+    ElementType::GUITAR_BEND_TEXT,
+    ElementType::HAMMER_ON_PULL_OFF_TEXT,
+};
 
 using ElementTypeSet = std::unordered_set<ElementType>;
 
@@ -478,7 +510,9 @@ enum class NoteHeadScheme : signed char {
     HEAD_AUTO = -1,
     HEAD_NORMAL,
     HEAD_PITCHNAME,
+    HEAD_PITCHNAME_NO_ACCIDENTALS,
     HEAD_PITCHNAME_GERMAN,
+    HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
     HEAD_SOLFEGE,
     HEAD_SOLFEGE_FIXED,
     HEAD_SHAPE_NOTE_4,
@@ -867,6 +901,7 @@ enum class TextStyleType : unsigned char {
 
     // Staff oriented styles
     STAFF,
+    STAVE_SHARING,
     EXPRESSION,
     DYNAMICS,
     HAIRPIN,

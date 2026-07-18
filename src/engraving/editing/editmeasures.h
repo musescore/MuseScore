@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measure.h"
 
 namespace mu::engraving {
-class InsertRemoveMeasures : public UndoCommand
+class InsertRemoveMeasures : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertRemoveMeasures)
 
@@ -44,8 +45,8 @@ protected:
 public:
     InsertRemoveMeasures(MeasureBase* _fm, MeasureBase* _lm, bool _moveStc)
         : fm(_fm), lm(_lm), moveStc(_moveStc) {}
-    virtual void undo(EditData*) override = 0;
-    virtual void redo(EditData*) override = 0;
+    virtual void undo() override = 0;
+    virtual void redo() override = 0;
     UNDO_CHANGED_OBJECTS({ fm, lm })
 };
 
@@ -55,8 +56,8 @@ class RemoveMeasures : public InsertRemoveMeasures
 public:
     RemoveMeasures(MeasureBase* m1, MeasureBase* m2, bool moveStc = true)
         : InsertRemoveMeasures(m1, m2, moveStc) {}
-    void undo(EditData*) override { insertMeasures(); }
-    void redo(EditData*) override { removeMeasures(); }
+    void undo() override { insertMeasures(); }
+    void redo() override { removeMeasures(); }
 
     UNDO_TYPE(CommandType::RemoveMeasures)
     UNDO_NAME("RemoveMeasures")
@@ -68,21 +69,21 @@ class InsertMeasures : public InsertRemoveMeasures
 public:
     InsertMeasures(MeasureBase* m1, MeasureBase* m2, bool moveStc = true)
         : InsertRemoveMeasures(m1, m2, moveStc) {}
-    void redo(EditData*) override { insertMeasures(); }
-    void undo(EditData*) override { removeMeasures(); }
+    void redo() override { insertMeasures(); }
+    void undo() override { removeMeasures(); }
 
     UNDO_TYPE(CommandType::InsertMeasures)
     UNDO_NAME("InsertMeasures")
 };
 
-class ChangeMeasureLen : public UndoCommand
+class ChangeMeasureLen : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureLen)
 
     Measure* measure = nullptr;
     Fraction len;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMeasureLen(Measure*, Fraction);
@@ -92,14 +93,14 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class ChangeMMRest : public UndoCommand
+class ChangeMMRest : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMMRest)
 
     Measure* m;
     Measure* mmrest;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMMRest(Measure* _m, Measure* _mmr)
@@ -110,7 +111,44 @@ public:
     UNDO_CHANGED_OBJECTS({ m, mmrest })
 };
 
-class ChangeMeasureRepeatCount : public UndoCommand
+// ChangeMMRestNext & ChangeMMRestPrev SHOULD ONLY BE USED FOR MMRests
+// Setting m_next & m_prev involves the score's MeasureList for regular measures
+// This is handled through undo commands above
+class ChangeMMRestNext : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMMRestNext)
+
+    Measure* m_mmrest = nullptr;
+    MeasureBase* m_next = nullptr;
+
+    void flip() override;
+
+public:
+    ChangeMMRestNext(Measure* mmrest, MeasureBase* next)
+        : m_mmrest(mmrest), m_next(next) {}
+
+    UNDO_NAME("ChangeMMRestNext")
+    UNDO_CHANGED_OBJECTS({ m_mmrest })
+};
+
+class ChangeMMRestPrev : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMMRestPrev)
+
+    Measure* m_mmrest = nullptr;
+    MeasureBase* m_prev = nullptr;
+
+    void flip() override;
+
+public:
+    ChangeMMRestPrev(Measure* mmrest, MeasureBase* prev)
+        : m_mmrest(mmrest), m_prev(prev) {}
+
+    UNDO_NAME("ChangeMMRestPrev")
+    UNDO_CHANGED_OBJECTS({ m_mmrest })
+};
+
+class ChangeMeasureRepeatCount : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureRepeatCount)
 
@@ -118,7 +156,7 @@ class ChangeMeasureRepeatCount : public UndoCommand
     int count = 0;
     staff_idx_t staffIdx = muse::nidx;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMeasureRepeatCount(Measure* _m, int _count, staff_idx_t _staffIdx)

@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../compat/midi/midipatch.h"
 #include "../dom/drumset.h"
@@ -31,7 +31,7 @@
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class InsertPart : public UndoCommand
+class InsertPart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertPart)
 
@@ -40,8 +40,8 @@ class InsertPart : public UndoCommand
 
 public:
     InsertPart(Part* p, size_t targetPartIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertPart)
@@ -49,7 +49,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class RemovePart : public UndoCommand
+class RemovePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
@@ -58,8 +58,8 @@ class RemovePart : public UndoCommand
 
 public:
     RemovePart(Part*, size_t partIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemovePart)
@@ -67,7 +67,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class SetSoloist : public UndoCommand
+class SetSoloist : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetSoloist)
 
@@ -76,22 +76,22 @@ class SetSoloist : public UndoCommand
 
 public:
     SetSoloist(Part* p, bool b);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::SetSoloist)
     UNDO_NAME("SetSoloist")
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangePart : public UndoCommand
+class ChangePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePart)
 
     Part* part = nullptr;
     Instrument* instrument = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePart(Part*, Instrument*);
@@ -102,7 +102,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentLong : public UndoCommand
+class ChangeInstrumentLong : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentLong)
 
@@ -110,7 +110,7 @@ class ChangeInstrumentLong : public UndoCommand
     Fraction tick;
     String longName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentLong(const Fraction&, Part*, const String&);
@@ -120,7 +120,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentShort : public UndoCommand
+class ChangeInstrumentShort : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentShort)
 
@@ -128,7 +128,7 @@ class ChangeInstrumentShort : public UndoCommand
     Fraction tick;
     String shortName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentShort(const Fraction&, Part*, const String&);
@@ -138,7 +138,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentGroupOptions : public UndoCommand
+class ChangeInstrumentGroupOptions : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentGroupOptions)
 
@@ -148,7 +148,7 @@ class ChangeInstrumentGroupOptions : public UndoCommand
     String longName;
     String shortName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentGroupOptions(const Fraction&, Part*, bool, const String&, const String&);
@@ -158,7 +158,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentNumber : public UndoCommand
+class ChangeInstrumentNumber : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentNumber)
 
@@ -166,7 +166,7 @@ class ChangeInstrumentNumber : public UndoCommand
     Fraction tick;
     int number;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentNumber(const Fraction&, Part*, int v);
@@ -176,7 +176,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeDrumset : public UndoCommand
+class ChangeDrumset : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeDrumset)
 
@@ -184,7 +184,7 @@ class ChangeDrumset : public UndoCommand
     Drumset drumset;
     Part* part = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeDrumset(Instrument* i, const Drumset& d, Part* p)
@@ -194,7 +194,7 @@ public:
     UNDO_NAME("ChangeDrumset")
 };
 
-class ChangeStringData : public UndoCommand
+class ChangeStringData : public UndoableCommand
 {
     Instrument* m_instrument = nullptr;
     StringTunings* m_stringTunings = nullptr;
@@ -206,11 +206,11 @@ public:
     ChangeStringData(Instrument* instrument, const StringData& stringData)
         : m_instrument(instrument), m_stringData(stringData) {}
 
-    void flip(EditData*) override;
+    void flip() override;
     UNDO_NAME("ChangeStringData")
 };
 
-class ChangePatch : public UndoCommand
+class ChangePatch : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePatch)
 
@@ -218,7 +218,7 @@ class ChangePatch : public UndoCommand
     InstrChannel* channel = nullptr;
     MidiPatch patch;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
@@ -227,14 +227,14 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class SetUserBankController : public UndoCommand
+class SetUserBankController : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetUserBankController)
 
     InstrChannel* channel = nullptr;
     bool val = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SetUserBankController(InstrChannel* c, bool v)

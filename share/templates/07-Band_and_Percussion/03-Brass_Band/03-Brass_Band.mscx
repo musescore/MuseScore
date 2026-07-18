@@ -936,6 +936,7 @@
         <instrumentId>brass.trombone</instrumentId>
         <concertClef>F</concertClef>
         <transposingClef>G</transposingClef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1015,6 +1016,7 @@
         <instrumentId>brass.trombone</instrumentId>
         <concertClef>F</concertClef>
         <transposingClef>G</transposingClef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1089,6 +1091,7 @@
         <maxPitchA>68</maxPitchA>
         <instrumentId>brass.trombone.bass</instrumentId>
         <clef>F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1384,6 +1387,8 @@
         <maxPitchA>60</maxPitchA>
         <instrumentId>drum.timpani</instrumentId>
         <clef>F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1846,6 +1851,7 @@
             <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

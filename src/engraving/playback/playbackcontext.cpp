@@ -24,18 +24,18 @@
 
 #include "dom/dynamic.h"
 #include "dom/hairpin.h"
+#include "dom/lyrics.h"
 #include "dom/measure.h"
+#include "dom/measurerepeat.h"
 #include "dom/part.h"
 #include "dom/playtechannotation.h"
-#include "dom/stafftext.h"
-#include "dom/soundflag.h"
 #include "dom/repeatlist.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/soundflag.h"
 #include "dom/spanner.h"
-#include "dom/measurerepeat.h"
-#include "dom/lyrics.h"
-#include "dom/sticking.h"
+#include "dom/staff.h"
+#include "dom/stafftext.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
@@ -314,8 +314,9 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
     }
 
     // cache them for optimization
-    m_partStartTrack = part->startTrack();
-    m_partEndTrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
+    m_partStartTrack = trackRange.startTrack;
+    m_partEndTrack = trackRange.endTrack;
 
     IF_ASSERT_FAILED(m_partStartTrack <= m_partEndTrack) {
         return;

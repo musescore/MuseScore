@@ -70,6 +70,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: root.headModel?.title ?? ""
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "HeadTab"
             navigation.panel: root.navigationPanel
@@ -79,6 +80,7 @@ Column {
         PropertiesPanelTabButton {
             visible: root.headModel ? !root.headModel.isTrillCueNote : true
             text: root.stemModel ? root.stemModel.title : ""
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "StemTab"
             navigation.panel: root.navigationPanel
@@ -88,6 +90,7 @@ Column {
         PropertiesPanelTabButton {
             visible: root.headModel ? !root.headModel.isTrillCueNote : true
             text: root.beamModel ? root.beamModel.title : ""
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "BeamTab"
             navigation.panel: root.navigationPanel

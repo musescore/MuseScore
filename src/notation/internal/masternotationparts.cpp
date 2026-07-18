@@ -27,7 +27,11 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+
+#include "inotation.h"
+#include "iexcerptnotation.h" // IWYU pragma: keep
 
 #include "log.h"
 
@@ -203,7 +207,8 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     }
 
     // this also transposes all linked parts
-    engraving::Transpose::transpositionChanged(score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    engraving::Transpose::transpositionChanged(tx, score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {

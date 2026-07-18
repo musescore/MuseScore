@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CAPO_H
-#define MU_ENGRAVING_CAPO_H
+#pragma once
 
 #include "stafftextbase.h"
 
@@ -49,11 +48,12 @@ public:
     bool shouldAutomaticallyGenerateText() const;
     String generateText(size_t stringCount) const;
 
+    void added() override;
+    void removed() override;
+
 private:
     CapoParams m_params;
     bool m_shouldAutomaticallyGenerateText = true;
     String m_customText;
 };
-} // namespace mu::engraving
-
-#endif // MU_ENGRAVING_CAPO_H
+}

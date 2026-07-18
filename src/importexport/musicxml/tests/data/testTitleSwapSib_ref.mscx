@@ -77,6 +77,8 @@
       <systemTextFontSize>11.9365</systemTextFontSize>
       <staffTextFontFace>Plantin MT Std</staffTextFontFace>
       <staffTextFontSize>11.9365</staffTextFontSize>
+      <staveSharingLabelFontFace>Plantin MT Std</staveSharingLabelFontFace>
+      <staveSharingLabelFontSize>11.9365</staveSharingLabelFontSize>
       <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>Plantin MT Std</repeatPlayCountFontFace>

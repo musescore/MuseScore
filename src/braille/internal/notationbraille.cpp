@@ -26,11 +26,18 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/select.h"
 #include "engraving/dom/slur.h"
-#include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tie.h"
+
+#include "engraving/editing/noteinput.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
 
 #include "braille.h"
 #include "braillecode.h"
@@ -550,7 +557,7 @@ void NotationBraille::setKeys(const QString& sequence)
 
             NoteInputParams params;
             const int note = static_cast<int>(brailleInput()->noteName());
-            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ false, params);
+            bool ok = mu::engraving::NoteInput::resolveNoteInputParams(score(), note, /*addFlag*/ false, params);
             if (!ok) {
                 return;
             }
@@ -613,7 +620,7 @@ void NotationBraille::setKeys(const QString& sequence)
 
             NoteInputParams params;
             const int note = static_cast<int>(brailleInput()->noteName());
-            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ true, params);
+            bool ok = mu::engraving::NoteInput::resolveNoteInputParams(score(), note, /*addFlag*/ true, params);
             if (!ok) {
                 return;
             }
@@ -873,7 +880,7 @@ void NotationBraille::toggleMode()
         break;
     }
 
-    dispatcher()->dispatch("note-input");
+    dispatcher()->dispatch("command://notation/toggle-note-input");
 
     const QString stateTitle = interaction()->noteInput()->isNoteInputMode()
                                //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.

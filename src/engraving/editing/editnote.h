@@ -22,18 +22,22 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
+#include "../dom/chord.h"
 #include "../dom/note.h"
 
 namespace mu::engraving {
 enum class SymId;
 enum class AccidentalType : unsigned char;
-enum class UpDownMode : char;
 enum class Key : signed char;
 class Score;
 class EngravingItem;
 class Articulation;
+
+enum class UpDownMode : char {
+    CHROMATIC, OCTAVE, DIATONIC
+};
 
 class EditNote
 {
@@ -51,14 +55,14 @@ private:
     static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
-class ChangeVelocity : public UndoCommand
+class ChangeVelocity : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeVelocity)
 
     Note* note = nullptr;
     int userVelocity = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeVelocity(Note*, int);
@@ -68,7 +72,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeNoteEventList : public UndoCommand
+class ChangeNoteEventList : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEventList)
 
@@ -76,7 +80,7 @@ class ChangeNoteEventList : public UndoCommand
     NoteEventList newEvents;
     PlayEventType newPetype;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeNoteEventList(Note* n, NoteEventList& ne)
@@ -85,7 +89,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note });
 };
 
-class ChangeNoteEvent : public UndoCommand
+class ChangeNoteEvent : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeNoteEvent)
 
@@ -94,7 +98,7 @@ class ChangeNoteEvent : public UndoCommand
     NoteEvent newEvent;
     PlayEventType newPetype;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeNoteEvent(Note* n, NoteEvent* oe, const NoteEvent& ne)
@@ -103,7 +107,7 @@ public:
     UNDO_CHANGED_OBJECTS({ note })
 };
 
-class ChangeChordPlayEventType : public UndoCommand
+class ChangeChordPlayEventType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeChordPlayEventType)
 
@@ -111,7 +115,7 @@ class ChangeChordPlayEventType : public UndoCommand
     PlayEventType petype;
     std::vector<NoteEventList> events;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeChordPlayEventType(Chord* c, PlayEventType pet)

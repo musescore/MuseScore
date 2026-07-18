@@ -25,6 +25,8 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/editing/editstyle.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {
@@ -41,7 +43,7 @@ muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::i
     }
 
     muse::io::File styleFile(":/engraving/styles/gp-style.mss");
-    score->loadStyle(styleFile);
+    mu::engraving::EditStyle::loadStyle(score->transactionManager()->currentOrDummyTransaction(), score, styleFile);
 
     return mu::engraving::make_ret(err, path);
 }

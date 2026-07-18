@@ -19,14 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <memory>
 
 #include "async/channel.h"
+#include "io/path.h"
 #include "types/retval.h"
 
-#include "notationtypes.h"
+#include "types/viewmode.h"
+#include "types/zoomtype.h"
 
 namespace muse::draw {
 class Transform;

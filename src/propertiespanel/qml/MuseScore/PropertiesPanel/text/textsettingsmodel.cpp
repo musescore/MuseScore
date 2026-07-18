@@ -27,8 +27,12 @@
 #include "types/texttypes.h"
 
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/textbase.h"
 #include "engraving/types/typesconv.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
 
 #include "translation.h"
 #include "log.h"
@@ -708,7 +712,7 @@ void TextSettingsModel::updateIsPositionAvailable()
 {
     bool available = false;
     for (EngravingItem* item : m_elementList) {
-        if (item->isTextLineBase()) {
+        if (item->isTextLineBase() || item->isMeasureNumber()) {
             available = false;
             break;
         } else if (!item->hasVoiceAssignmentProperties()) {

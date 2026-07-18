@@ -817,6 +817,28 @@ const TextStyle staffTextStyle {
     { Sid::staffTextPosAbove, Sid::staffTextPosBelow }
 };
 
+const TextStyle staveSharingLabelStyle {
+    { {
+        { TextStylePropertyType::FontFace,             Sid::staveSharingLabelFontFace,                      Pid::FONT_FACE },
+        { TextStylePropertyType::FontSize,             Sid::staveSharingLabelFontSize,                      Pid::FONT_SIZE },
+        { TextStylePropertyType::LineSpacing,          Sid::staveSharingLabelLineSpacing,                   Pid::TEXT_LINE_SPACING },
+        { TextStylePropertyType::SizeSpatiumDependent, Sid::staveSharingLabelFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+        { TextStylePropertyType::FontStyle,            Sid::staveSharingLabelFontStyle,                     Pid::FONT_STYLE },
+        { TextStylePropertyType::Color,                Sid::staveSharingLabelColor,                         Pid::COLOR },
+        { TextStylePropertyType::TextAlign,            Sid::staveSharingLabelAlign,                         Pid::ALIGN },
+        { TextStylePropertyType::FrameType,            Sid::staveSharingLabelFrameType,                     Pid::FRAME_TYPE },
+        { TextStylePropertyType::FramePadding,         Sid::staveSharingLabelFramePadding,                  Pid::FRAME_PADDING },
+        { TextStylePropertyType::FrameWidth,           Sid::staveSharingLabelFrameWidth,                    Pid::FRAME_WIDTH },
+        { TextStylePropertyType::FrameRound,           Sid::staveSharingLabelFrameRound,                    Pid::FRAME_ROUND },
+        { TextStylePropertyType::FrameBorderColor,     Sid::staveSharingLabelFrameFgColor,                  Pid::FRAME_FG_COLOR },
+        { TextStylePropertyType::FrameFillColor,       Sid::staveSharingLabelFrameBgColor,                  Pid::FRAME_BG_COLOR },
+        { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                       Pid::MUSICAL_SYMBOLS_SCALE },
+        { TextStylePropertyType::MusicalSymbolsSize,   Sid::staffTextMusicalSymbolSize,                     Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::staveSharingLabelPosition,                      Pid::POSITION },
+    } },
+    { Sid::staveSharingLabelPosAbove, Sid::staveSharingLabelPosBelow }
+};
+
 const TextStyle chordSymbolTextStyleA {
     { {
         { TextStylePropertyType::FontFace,             Sid::chordSymbolAFontFace,                   Pid::FONT_FACE },
@@ -1711,6 +1733,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::VIDEO_HIT_POINT: return &videoHitPointTextStyle;
 
     case TextStyleType::STAFF: return &staffTextStyle;
+    case TextStyleType::STAVE_SHARING: return &staveSharingLabelStyle;
     case TextStyleType::EXPRESSION: return &expressionTextStyle;
     case TextStyleType::DYNAMICS: return &dynamicsTextStyle;
     case TextStyleType::HAIRPIN: return &hairpinTextStyle;
@@ -1794,6 +1817,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::REHEARSAL_MARK,
     TextStyleType::SYSTEM,
     TextStyleType::STAFF,
+    TextStyleType::STAVE_SHARING,
     TextStyleType::EXPRESSION,
     TextStyleType::DYNAMICS,
     TextStyleType::HAIRPIN,

@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
@@ -33,7 +34,6 @@
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "playback/iplaybackcontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
@@ -42,6 +42,7 @@
 
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
+#include "notationautomationcontroller.h"
 #include "noteinputcursor.h"
 #include "notationruler.h"
 #include "playbackcursor.h"
@@ -65,8 +66,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
-    Q_PROPERTY(QVariant automationLinesData READ automationLinesData NOTIFY automationLinesDataChanged)
-
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
     Q_PROPERTY(bool automationMode READ automationMode NOTIFY automationModeChanged)
 
@@ -79,7 +78,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
@@ -104,8 +102,6 @@ public:
     Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
-
-    Q_INVOKABLE void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y);
 
     qreal width() const override;
     qreal height() const override;
@@ -155,8 +151,6 @@ public:
     muse::RectF viewport() const;
     QRectF viewport_property() const;
 
-    QVariant automationLinesData() const;
-
     bool publishMode() const;
     void setPublishMode(bool arg);
 
@@ -181,8 +175,6 @@ signals:
     void viewportChanged();
     void publishModeChanged();
     void automationModeChanged();
-
-    void automationLinesDataChanged();
 
     void activeFocusRequested();
 
@@ -271,8 +263,9 @@ private:
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
+    void updatePlaybackCursorInterpolated();
     void movePlaybackCursor(muse::midi::tick_t tick);
-    bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
+    bool shouldAdjustCanvasVerticallyDuringPlayback(const muse::RectF& cursorRect);
 
     void onPlaybackCursorRectChanged();
 
@@ -294,6 +287,8 @@ private:
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
+    QQuickItem* m_automationLinesContainer = nullptr;
+    std::unique_ptr<NotationAutomationController> m_notationAutomationController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;
@@ -320,6 +315,21 @@ private:
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
 
+    struct PageCache {
+        const Page* page = nullptr;
+        std::optional<bool> adjustVerticallyDuringPlayback;
+
+        void clear()
+        {
+            *this = PageCache();
+        }
+    } mutable m_pageCache;
+
     QQuickItem* m_playbackCursorItem = nullptr;
+
+    muse::secs_t m_lastPlaybackPosition = 0.;
+    qint64 m_lastPlaybackPositionUpdateTimeNs = 0;
+    QTimer m_updatePlaybackCursorInterpolatedTimer;
+    QElapsedTimer m_elapsedTimer;
 };
 }

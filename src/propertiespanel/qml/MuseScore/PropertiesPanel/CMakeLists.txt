@@ -58,6 +58,8 @@ qt_add_qml_module(propertiespanel_qml
         propertiespanelpopupcontrollermodel.h
         measures/measuressettingsmodel.cpp
         measures/measuressettingsmodel.h
+        systemlayout/systemlayoutsettingsmodel.cpp
+        systemlayout/systemlayoutsettingsmodel.h
         notation/accidentals/accidentalsettingsmodel.cpp
         notation/accidentals/accidentalsettingsmodel.h
         notation/ambituses/ambitussettingsmodel.cpp
@@ -275,6 +277,8 @@ qt_add_qml_module(propertiespanel_qml
         PropertiesPanelSectionDelegate.qml
         measures/InsertMeasuresPopup.qml
         measures/MeasuresSection.qml
+        measures/MeasuresFlowSection.qml
+        systemlayout/SystemLayoutSection.qml
         notation/accidentals/AccidentalSettings.qml
         notation/ambituses/AmbitusSettings.qml
         notation/articulations/ArticulationSettings.qml
@@ -437,4 +441,5 @@ target_include_directories(propertiespanel_qml PRIVATE
     text
     text/textstylepopup
     types
+    systemlayout
 )

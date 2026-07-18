@@ -45,6 +45,7 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         { "flute", { SoundId::Flute, SoundCategory::Winds } },
         { "traverso", { SoundId::Traverso, SoundCategory::Winds, { SoundSubCategory::Baroque } } },
         { "danso", { SoundId::Danso, SoundCategory::Winds } },
+        { "daegeum", { SoundId::Daegeum, SoundCategory::Winds, { SoundSubCategory::Korean } } },
 
         { "a-dizi", { SoundId::Dizi, SoundCategory::Winds, { SoundSubCategory::Chinese } } },
         { "g-dizi", { SoundId::Dizi, SoundCategory::Winds, { SoundSubCategory::Chinese } } },
@@ -54,6 +55,7 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         { "c-dizi", { SoundId::Dizi, SoundCategory::Winds, { SoundSubCategory::Chinese } } },
 
         { "shakuhachi", { SoundId::Shakuhachi, SoundCategory::Winds, { SoundSubCategory::Japanese } } },
+        { "hichiriki", { SoundId::Hichiriki, SoundCategory::Winds, { SoundSubCategory::Japanese } } },
         { "fife", { SoundId::Fife, SoundCategory::Winds } },
 
         { "d-tin-whistle", { SoundId::Whistle, SoundCategory::Winds, { SoundSubCategory::Tin } } },
@@ -264,6 +266,7 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
 
         { "melodica", { SoundId::Melodica, SoundCategory::Winds } },
 
+        { "sho", { SoundId::Sho, SoundCategory::Winds, { SoundSubCategory::Japanese } } },
         { "alto-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Alto } } },
         { "tenor-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Tenor } } },
         { "bass-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Bass } } },

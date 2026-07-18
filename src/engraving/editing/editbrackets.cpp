@@ -22,22 +22,45 @@
 
 #include "editbrackets.h"
 
+#include "../dom/accidental.h"
+#include "../dom/score.h"
+#include "../dom/select.h"
 #include "../dom/staff.h"
 
 using namespace mu::engraving;
+
+void EditBrackets::addBracket(Transaction&, Score* score)
+{
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isAccidental()) {
+            Accidental* acc = toAccidental(el);
+            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
+        }
+    }
+}
+
+void EditBrackets::addBraces(Transaction&, Score* score)
+{
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isAccidental()) {
+            Accidental* acc = toAccidental(el);
+            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   AddBracket
 //---------------------------------------------------------
 
-void AddBracket::redo(EditData*)
+void AddBracket::redo()
 {
     staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);
     staff->triggerLayout();
 }
 
-void AddBracket::undo(EditData*)
+void AddBracket::undo()
 {
     staff->setBracketType(level, BracketType::NO_BRACKET);
     staff->triggerLayout();
@@ -47,13 +70,13 @@ void AddBracket::undo(EditData*)
 //   RemoveBracket
 //---------------------------------------------------------
 
-void RemoveBracket::redo(EditData*)
+void RemoveBracket::redo()
 {
     staff->setBracketType(level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
-void RemoveBracket::undo(EditData*)
+void RemoveBracket::undo()
 {
     staff->setBracketType(level, bracketType);
     staff->setBracketSpan(level, span);

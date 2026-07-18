@@ -24,8 +24,11 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
-#include "engraving/editing/undo.h"
 #include "engraving/rendering/score/systemlayout.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;

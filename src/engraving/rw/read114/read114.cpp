@@ -278,7 +278,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+        t->setFrameType(e.readBool() ? FrameType::RECTANGLE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
@@ -511,10 +511,12 @@ static void readFingering114(XmlReader& e, Fingering* fing)
         } else if (tag == "frame") {
             auto frame = e.readInt();
             if (frame) {
-                if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
+                if (isStringNumber) {
+                    // default value is circle for string number, rectangle is set in <circle> tag
                     fing->setFrameType(FrameType::CIRCLE);
-                } else {     //default value is square for stringnumber, circle is set in tag circle
-                    fing->setFrameType(FrameType::SQUARE);
+                } else {
+                    // default value is rectangle for string number, circle is set in <circle> tag
+                    fing->setFrameType(FrameType::RECTANGLE);
                 }
             } else {
                 fing->setFrameType(FrameType::NO_FRAME);
@@ -524,7 +526,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             if (circle) {
                 fing->setFrameType(FrameType::CIRCLE);
             } else {
-                fing->setFrameType(FrameType::SQUARE);
+                fing->setFrameType(FrameType::RECTANGLE);
             }
         } else {
             e.skipCurrentElement();
@@ -2816,7 +2818,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 }
             }
         } else if (tag == "playMode") {
-            masterScore->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "SyntiSettings") {
             masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {
@@ -3038,8 +3040,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    masterScore->connectTies();
-
     //
     // remove "middle beam" flags from first ChordRest in
     // measure
@@ -3131,6 +3131,18 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
+    masterScore->setUpTempoMap();
+    // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+    // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+    // elements still do it).
+    // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+    // up-to-date from that point. But we weren't finished reading the score, so the score will still
+    // change. We need to tell the repeat list about that, so that it will be updated next time
+    // someone uses it.
+    masterScore->invalidateRepeatList();
+    masterScore->connectTies();
+    masterScore->undoRemoveStaleTieJumpPoints(false);
+
     // create excerpts
     {
         std::vector<Excerpt*> readExcerpts;
@@ -3155,8 +3167,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     if (masterScore->style().styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
-
-    masterScore->setUpTempoMap();
 
     for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);

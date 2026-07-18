@@ -75,6 +75,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"

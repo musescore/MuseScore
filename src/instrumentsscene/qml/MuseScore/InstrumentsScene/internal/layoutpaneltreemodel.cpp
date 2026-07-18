@@ -27,6 +27,14 @@
 #include "async/notifylist.h"
 
 #include "translation.h"
+
+#include "engraving/dom/score.h"
+
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 #include "roottreeitem.h"
 #include "parttreeitem.h"
 #include "sharedparttreeitem.h"
@@ -447,12 +455,12 @@ void LayoutPanelTreeModel::toggleStaveSharing(bool on)
     updateIsStaveSharingEnabled();
 }
 
-void LayoutPanelTreeModel::sortParts(notation::PartList& parts, notation::PartList& referenceParts)
+void LayoutPanelTreeModel::sortParts(PartList& parts, const PartList& referenceParts)
 {
     // First collect ids of referenceParts to use in sorting further
 
     std::vector<ID> referenceIdOrder;
-    referenceParts.reserve(referenceParts.size());
+    referenceIdOrder.reserve(referenceParts.size());
 
     for (const Part* part : referenceParts) {
         referenceIdOrder.push_back(part->id());
@@ -487,7 +495,7 @@ void LayoutPanelTreeModel::setLayoutPanelVisible(bool visible)
         updateSelectedRows();
 
         if (m_scoreChanged) {
-            onScoreChanged();
+            onScoreChanged({});
             m_shouldUpdateSystemObjectLayers = true;
             updateSystemObjectLayers();
         }

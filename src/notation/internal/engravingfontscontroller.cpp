@@ -101,25 +101,36 @@ void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool 
 
     while (iterator.hasNext()) {
         iterator.next();
-        QString fontDir = iterator.filePath();
-        muse::io::path_t metadataPath;
-
-        {
-            QDirIterator jsonFilesIterator(fontDir, { "*.json" }, QDir::Files);
-            while (jsonFilesIterator.hasNext()) {
-                jsonFilesIterator.next();
-                metadataPath = jsonFilesIterator.filePath();
+        const QString fontDir = iterator.filePath();
+        const QString fontName = iterator.fileName();
+        muse::io::path_t metadataPath = fontDir + "/" + fontName + ".json";
+        QFile fi(metadataPath.toQString());
+        if (!fi.exists()) {
+            if (!isPrivate) {
+                continue;
             }
-        }
-
-        if (metadataPath.empty()) {
-            continue;
+            metadataPath = fontDir + "/" + fontName.toLower().replace(" ", "_") + "_metadata.json";
+            fi.setFileName(metadataPath.toQString());
+            if (!fi.exists()) {
+                metadataPath = fontDir + "/" + "metadata.json";
+                fi.setFileName(metadataPath.toQString());
+            }
+            if (!fi.exists()) {
+                metadataPath = muse::io::path_t();
+                QDirIterator jsonFilesIterator(fontDir, { "*.json" }, QDir::Files);
+                while (jsonFilesIterator.hasNext()) {
+                    jsonFilesIterator.next();
+                    metadataPath = jsonFilesIterator.filePath();
+                }
+                if (metadataPath.empty()) {
+                    continue;
+                }
+            }
         }
 
         // We assume the font name is the same as the directory name,
         // but maybe we should instead read the metadata.json file to get the font name
 
-        QString fontName = iterator.fileName();
         QString fontFamily = fontName;
 
         if (fontName.contains(u"Text")) {
@@ -141,19 +152,19 @@ void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool 
             symbolFontPath = findFontPath(tmp.replace(" ", ""));
         }
 
-        muse::io::path_t textFontPath = findFontPath(fontName + " Text");
         if (symbolFontPath.empty()) {
+            LOGE() << "Music font \"" << fontName << "\" for " << metadataPath << " not found";
+            continue;
+        }
+
+        muse::io::path_t textFontPath = findFontPath(fontName + " Text");
+        if (textFontPath.empty()) {
             QString tmp = fontName;
-            symbolFontPath = findFontPath(tmp.replace(" ", "") + "Text");
+            textFontPath = findFontPath(tmp.replace(" ", "") + "Text");
         }
 
         if (textFontPath.empty()) {
             textFontPath = symbolFontPath;
-        }
-
-        if (symbolFontPath.empty()) {
-            LOGE() << "Music font \"" << fontName << "\" for " << metadataPath << " not found";
-            continue;
         }
 
         LOGI() << "Adding custom SMuFL font: " << fontName

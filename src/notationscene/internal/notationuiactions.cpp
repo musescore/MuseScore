@@ -26,6 +26,15 @@
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 #include "context/shortcutcontext.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+#include "notation/inotationautomation.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotation.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationundostack.h"
+
+#include "engraving/style/styledef.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -82,6 +91,59 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
 const UiActionList NotationUiActions::s_actions = {
+    UiAction("action://copy",
+             { "action://notation/copy" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Copy"),
+             TranslatableString("action", "Copy"),
+             IconCode::Code::COPY
+             ),
+    UiAction("action://cut",
+             { "action://notation/cut" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Cu&t"),
+             TranslatableString("action", "Cut"),
+             IconCode::Code::CUT
+             ),
+    UiAction("action://paste",
+             { "action://notation/paste" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Past&e"),
+             TranslatableString("action", "Paste"),
+             IconCode::Code::PASTE
+             ),
+    UiAction("action://undo",
+             { "action://notation/undo" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Undo"),
+             TranslatableString("action", "Undo"),
+             IconCode::Code::UNDO
+             ),
+    UiAction("action://redo",
+             { "action://notation/redo" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Redo"),
+             TranslatableString("action", "Redo"),
+             IconCode::Code::REDO
+             ),
+    UiAction("action://delete",
+             { "action://notation/delete" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "De&lete"),
+             TranslatableString("action", "Delete"),
+             IconCode::Code::DELETE_TANK
+             ),
+    UiAction("action://cancel",
+             { "action://notation/cancel" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY
+             ),
     UiAction("action://notation/copy",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
@@ -669,6 +731,32 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Create system from selection"),
              TranslatableString("action", "Create system from selection")
+             ),
+    UiAction("apply-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Add/remove page lock"),
+             TranslatableString("action", "Add/remove page lock")
+             ),
+    UiAction("move-measure-to-prev-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to previous page"),
+             TranslatableString("action", "Move measure to previous page"),
+             IconCode::Code::ARROW_UP
+             ),
+    UiAction("move-measure-to-next-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to next page"),
+             TranslatableString("action", "Move measure to next page"),
+             IconCode::Code::ARROW_DOWN
+             ),
+    UiAction("make-into-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Create page from selection"),
+             TranslatableString("action", "Create page from selection")
              ),
     UiAction("section-break",
              mu::context::UiCtxProjectOpened,
@@ -2788,7 +2876,7 @@ NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> c
 
 void NotationUiActions::init()
 {
-    m_controller->currentNotationNoteInputChanged().onNotify(this, [this]() {
+    m_controller->noteInputStateChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ NOTE_INPUT_ACTION_CODE });
     });
 
@@ -2855,7 +2943,7 @@ void NotationUiActions::init()
         }
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         updateActionsEnabled(actionsList());
     });
 

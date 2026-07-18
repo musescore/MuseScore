@@ -22,6 +22,12 @@
 
 #include "corruptscoredevtoolsmodel.h"
 
+#include "engraving/dom/measurebase.h"
+#include "engraving/dom/score.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 using namespace mu::engraving;
 
 CorruptScoreDevToolsModel::CorruptScoreDevToolsModel(QObject* parent)
@@ -38,31 +44,23 @@ void CorruptScoreDevToolsModel::corruptOpenScore()
 
     LOGW() << "Score corruption on demand!";
 
-    mu::notation::INotationPtr notation = project->masterNotation()->notation();
+    notation::INotationPtr notation = project->masterNotation()->notation();
+    Score* score = notation->elements()->msScore();
 
     //: "Corrupt" is used as a verb here, i.e. "Make the current score corrupted" (for testing purposes).
-    notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Corrupt score"));
+    notation->undoStack()->transaction(TranslatableString("undoableAction", "Corrupt score"), [&](auto&) {
+        for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            Segment* firstSegment = measure->first(SegmentType::ChordRest);
 
-    for (engraving::System* system : notation->elements()->msScore()->systems()) {
-        for (engraving::MeasureBase* measureBase : system->measures()) {
-            if (!measureBase->isMeasure()) {
-                continue;
-            }
-
-            mu::engraving::Measure* measure = mu::engraving::toMeasure(measureBase);
-            mu::engraving::Segment* firstSegment = measure->first(mu::engraving::SegmentType::ChordRest);
-
-            for (mu::engraving::Segment* s = firstSegment; s; s = s->next(mu::engraving::SegmentType::ChordRest)) {
-                mu::engraving::EngravingItem* element = s->element(0);
+            for (Segment* s = firstSegment; s; s = s->next(SegmentType::ChordRest)) {
+                EngravingItem* element = s->element(0);
                 if (!element) {
                     continue;
                 }
 
-                mu::engraving::ChordRest* cr = toChordRest(element);
-                cr->undoChangeProperty(mu::engraving::Pid::DURATION, mu::engraving::Fraction::fromString(u"0/4"));
+                ChordRest* cr = toChordRest(element);
+                cr->undoChangeProperty(Pid::DURATION, Fraction(0, 4));
             }
         }
-    }
-
-    notation->undoStack()->commitChanges();
+    });
 }

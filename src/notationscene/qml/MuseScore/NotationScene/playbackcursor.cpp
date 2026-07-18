@@ -19,12 +19,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "playbackcursor.h"
 
+#include "draw/painter.h"
+
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
+using namespace mu::engraving;
 using namespace mu::notation;
 using namespace muse;
+
+static double systemBottomY(const Score* score, const System* system)
+{
+    double systemBottomY = 0.0;
+
+    for (size_t i = 0; i < score->nstaves(); ++i) {
+        const SysStaff* ss = system->staff(i);
+        if (!ss->show() || !score->staff(i)->show()) {
+            continue;
+        }
+
+        systemBottomY = ss->bbox().bottom();
+    }
+
+    return systemBottomY;
+}
+
+static RectF calculateRect(double x, const Score* score, const System* system, double systemBottomY)
+{
+    const double spatium = score->style().spatium();
+
+    return RectF {
+        x - spatium,
+        system->staffCanvasYpage(0) - 3.0 * spatium,
+        0.4 * spatium,
+        systemBottomY + 6.0 * spatium
+    };
+}
 
 void PlaybackCursor::paint(muse::draw::Painter* painter)
 {
@@ -37,7 +75,26 @@ void PlaybackCursor::paint(muse::draw::Painter* painter)
 
 void PlaybackCursor::setNotation(INotationPtr notation)
 {
+    if (m_notation == notation) {
+        return;
+    }
+
+    if (m_notation) {
+        m_notation->elements()->msScore()->changesChannel().disconnect(this);
+    }
+
+    if (notation) {
+        notation->elements()->msScore()->changesChannel().onReceive(this, [this](const ScoreChanges&) {
+            m_cache.clear();
+        });
+
+        notation->viewModeChanged().onNotify(this, [this]() {
+            m_cache.clear();
+        });
+    }
+
     m_notation = notation;
+    m_cache.clear();
 }
 
 void PlaybackCursor::move(muse::midi::tick_t tick)
@@ -45,89 +102,98 @@ void PlaybackCursor::move(muse::midi::tick_t tick)
     m_rect = resolveCursorRectByTick(tick);
 }
 
-//! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) const
+muse::RectF PlaybackCursor::resolveCursorRectByTick(int _tick) const
 {
-    if (!m_notation) {
+    const Score* score = m_notation ? m_notation->elements()->msScore() : nullptr;
+    if (!score) {
         return RectF();
     }
 
-    const mu::engraving::Score* score = m_notation->elements()->msScore();
+    auto interpolateXByTicks = [](int tick, int startTick, int endTick,
+                                  double segmentStartX, double segmentEndX) {
+        const int durationTicks = endTick - startTick;
+        return durationTicks > 0
+               ? segmentStartX + (segmentEndX - segmentStartX) * double(tick - startTick) / double(durationTicks)
+               : segmentStartX;
+    };
 
     const Fraction tick = Fraction::fromTicks(_tick);
 
-    const Measure* measure = score->tick2measureMM(tick);
-    if (!measure) {
-        return RectF();
+    if (m_cache.segment && tick >= m_cache.segmentStartTick && tick < m_cache.segmentEndTick) {
+        const double x = interpolateXByTicks(_tick, m_cache.segmentStartTick.ticks(), m_cache.segmentEndTick.ticks(),
+                                             m_cache.segmentStartX, m_cache.segmentEndX);
+        return calculateRect(x, score, m_cache.system, m_cache.systemBottomY);
     }
 
-    const mu::engraving::System* system = measure->system();
-    if (!system || !system->page() || system->staves().empty()) {
-        return RectF();
-    }
+    const Measure* measure = nullptr;
+    const System* system = nullptr;
 
-    qreal x = 0.0;
-    mu::engraving::Segment* s = nullptr;
-    for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
-        Fraction t1 = s->tick();
-        int x1 = s->canvasPos().x();
-        qreal x2 = 0.0;
-        Fraction t2;
-
-        mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
-        while (ns && !ns->visible()) {
-            ns = ns->next(mu::engraving::SegmentType::ChordRest);
+    if (m_cache.measure && tick >= m_cache.measure->tick() && tick < m_cache.measure->endTick()) {
+        measure = m_cache.measure;
+        system = m_cache.system;
+    } else {
+        measure = score->tick2measureMM(tick);
+        if (!measure) {
+            m_cache.clear();
+            return RectF();
         }
 
-        if (ns) {
-            t2 = ns->tick();
-            x2 = ns->canvasPos().x();
+        system = measure->system();
+        if (!system || !system->page() || system->staves().empty()) {
+            m_cache.clear();
+            return RectF();
+        }
+    }
+
+    for (const Segment* s = measure->first(SegmentType::ChordRest); s;) {
+        const Fraction segmentStartTick = s->tick();
+        const double segmentStartX = s->canvasPos().x();
+
+        const Segment* nextSegment = s->next(SegmentType::ChordRest);
+        while (nextSegment && !nextSegment->visible()) {
+            nextSegment = nextSegment->next(SegmentType::ChordRest);
+        }
+
+        Fraction segmentEndTick;
+        double segmentEndX = 0.0;
+
+        if (nextSegment) {
+            segmentEndTick = nextSegment->tick();
+            segmentEndX = nextSegment->canvasPos().x();
         } else {
-            t2 = measure->endTick();
-            // measure->width is not good enough because of courtesy keysig, timesig
-            const mu::engraving::Segment* seg = measure->findSegment(mu::engraving::SegmentType::EndBarLine, measure->endTick());
-            if (seg) {
-                x2 = seg->canvasPos().x();
-            } else {
-                x2 = measure->canvasPos().x() + measure->width(); // safety, should not happen
-            }
+            segmentEndTick = measure->endTick();
+
+            const Segment* endBar = measure->findSegment(SegmentType::EndBarLine, segmentEndTick);
+
+            segmentEndX = endBar ? endBar->canvasPos().x()
+                          : measure->canvasPos().x() + measure->width();
         }
 
-        if (tick >= t1 && tick < t2) {
-            Fraction dt = t2 - t1;
-            qreal dx = x2 - x1;
-            x = x1 + dx * (tick - t1).ticks() / dt.ticks();
-            break;
-        }
-        s = ns;
-    }
-
-    if (!s) {
-        return RectF();
-    }
-
-    const double _spatium = score->style().spatium();
-
-    x -= _spatium;
-
-    const double y = system->staffCanvasYpage(0) - 3 * _spatium;
-    const double w = 0.4 * _spatium;
-    //
-    // set cursor height for whole system
-    //
-    double y2 = 0.0;
-
-    for (size_t i = 0; i < score->nstaves(); ++i) {
-        mu::engraving::SysStaff* ss = system->staff(i);
-        if (!ss->show() || !score->staff(i)->show()) {
+        if (tick < segmentStartTick || tick >= segmentEndTick) {
+            s = nextSegment;
             continue;
         }
-        y2 = ss->bbox().bottom();
+
+        if (m_cache.system != system) {
+            m_cache.system = system;
+            m_cache.systemBottomY = systemBottomY(score, system);
+        }
+
+        m_cache.measure = measure;
+        m_cache.segment = s;
+        m_cache.segmentStartTick = segmentStartTick;
+        m_cache.segmentEndTick = segmentEndTick;
+        m_cache.segmentStartX = segmentStartX;
+        m_cache.segmentEndX = segmentEndX;
+
+        const double x = interpolateXByTicks(_tick, segmentStartTick.ticks(), segmentEndTick.ticks(),
+                                             segmentStartX, segmentEndX);
+        return calculateRect(x, score, system, m_cache.systemBottomY);
     }
 
-    const double h = y2 + 6 * _spatium;
+    m_cache.clear();
 
-    return RectF { x, y, w, h };
+    return RectF();
 }
 
 bool PlaybackCursor::visible() const

@@ -28,8 +28,10 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/score.h"
+#include "engraving/editing/editvoice.h"
 #include "engraving/editing/exchangevoices.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -131,7 +133,7 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
     }
     // change voice
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->changeSelectedElementsVoice(1);
+    EditVoice::changeSelectedElementsVoice(score->transactionManager()->currentOrDummyTransaction(), score, 1);
     score->endCmd(false, /*layoutAllParts = */ true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

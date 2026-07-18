@@ -28,6 +28,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/editing/splitjoinmeasure.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -52,9 +53,9 @@ void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
         s = s->next1(SegmentType::ChordRest);
     }
 
-    score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    SplitJoinMeasure::splitMeasure(score, s->tick());
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving split tests"), [&](auto& tx) {
+        SplitJoinMeasure::splitMeasure(tx, score, s->tick());
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(f1), SPLIT_DATA_DIR + String::fromUtf8(ref)));
     delete score;
@@ -153,9 +154,9 @@ TEST_F(Engraving_SplitTests, splitTieAtStart) {
 
     Tie* tie1 = checkTie();
 
-    score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
-    SplitJoinMeasure::splitMeasure(score, Fraction(3, 2));
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving split tests"), [&](auto& tx) {
+        SplitJoinMeasure::splitMeasure(tx, score, Fraction(3, 2));
+    });
 
     Tie* tie2 = checkTie();
     EXPECT_NE(tie2, tie1);

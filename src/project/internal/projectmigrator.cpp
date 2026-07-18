@@ -29,6 +29,8 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/editing/editscoreproperties.h"
+#include "engraving/editing/editstyle.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/rw/compat/readstyle.h"
 #include "engraving/types/constants.h"
 
@@ -212,25 +214,27 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 bool ProjectMigrator::applyLelandStyle(mu::engraving::MasterScore* score)
 {
     muse::io::File styleFile(LELAND_STYLE_PATH);
+    mu::engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
+        if (!mu::engraving::EditStyle::loadStyle(tx, excerpt->excerptScore(), styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
+    return mu::engraving::EditStyle::loadStyle(tx, score, styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
 {
     muse::io::File styleFile(EDWIN_STYLE_PATH);
+    mu::engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
+        if (!mu::engraving::EditStyle::loadStyle(tx, excerpt->excerptScore(), styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
+    return mu::engraving::EditStyle::loadStyle(tx, score, styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::resetAllElementsPositions(mu::engraving::MasterScore* score)

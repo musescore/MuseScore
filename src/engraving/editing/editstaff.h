@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measure.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
 
 namespace mu::engraving {
-class InsertStaff : public UndoCommand
+class InsertStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertStaff)
 
@@ -38,8 +38,8 @@ class InsertStaff : public UndoCommand
 
 public:
     InsertStaff(Staff*, staff_idx_t idx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertStaff)
@@ -47,7 +47,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class RemoveStaff : public UndoCommand
+class RemoveStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveStaff)
 
@@ -57,8 +57,8 @@ class RemoveStaff : public UndoCommand
 
 public:
     RemoveStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemoveStaff)
@@ -66,7 +66,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class AddSystemObjectStaff : public UndoCommand
+class AddSystemObjectStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddSystemObjectStaff)
 
@@ -74,15 +74,15 @@ class AddSystemObjectStaff : public UndoCommand
 
 public:
     AddSystemObjectStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::AddSystemObjectStaff)
     UNDO_NAME("AddSystemObjectStaff")
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class RemoveSystemObjectStaff : public UndoCommand
+class RemoveSystemObjectStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSystemObjectStaff)
 
@@ -90,15 +90,15 @@ class RemoveSystemObjectStaff : public UndoCommand
 
 public:
     RemoveSystemObjectStaff(Staff*);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveSystemObjectStaff)
     UNDO_NAME("RemoveSystemObjectStaff")
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class InsertMStaff : public UndoCommand
+class InsertMStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertMStaff)
 
@@ -108,15 +108,15 @@ class InsertMStaff : public UndoCommand
 
 public:
     InsertMStaff(Measure*, MStaff*, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::InsertMStaff)
     UNDO_NAME("InsertMStaff")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class RemoveMStaff : public UndoCommand
+class RemoveMStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveMStaff)
 
@@ -126,15 +126,15 @@ class RemoveMStaff : public UndoCommand
 
 public:
     RemoveMStaff(Measure*, MStaff*, int);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveMStaff)
     UNDO_NAME("RemoveMStaff")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class InsertStaves : public UndoCommand
+class InsertStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertStaves)
 
@@ -144,15 +144,15 @@ class InsertStaves : public UndoCommand
 
 public:
     InsertStaves(Measure*, staff_idx_t, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::InsertStaves)
     UNDO_NAME("InsertStaves")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class RemoveStaves : public UndoCommand
+class RemoveStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveStaves)
 
@@ -162,15 +162,15 @@ class RemoveStaves : public UndoCommand
 
 public:
     RemoveStaves(Measure*, staff_idx_t, staff_idx_t);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::RemoveStaves)
     UNDO_NAME("RemoveStaves")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class SortStaves : public UndoCommand
+class SortStaves : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SortStaves)
 
@@ -180,8 +180,8 @@ class SortStaves : public UndoCommand
 
 public:
     SortStaves(Score*, const std::vector<staff_idx_t>&);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::SortStaves)
     UNDO_NAME("SortStaves")
@@ -192,7 +192,7 @@ public:
 //   ChangeStaff
 //---------------------------------------------------------
 
-class ChangeStaff : public UndoCommand
+class ChangeStaff : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStaff)
 
@@ -206,7 +206,7 @@ class ChangeStaff : public UndoCommand
     AutoOnOff mergeMatchingRests = AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStaff(Staff*);
@@ -223,7 +223,7 @@ public:
 //   ChangeStaffType
 //---------------------------------------------------------
 
-class ChangeStaffType : public UndoCommand
+class ChangeStaffType : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStaffType)
 
@@ -231,7 +231,7 @@ class ChangeStaffType : public UndoCommand
     StaffType staffType;
     Fraction tick;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStaffType(Staff* s, const StaffType& t, Fraction tick = Fraction(0, 1))
@@ -242,7 +242,7 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
-class ChangeMStaffProperties : public UndoCommand
+class ChangeMStaffProperties : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMStaffProperties)
 
@@ -251,7 +251,7 @@ class ChangeMStaffProperties : public UndoCommand
     bool visible = false;
     bool stemless = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMStaffProperties(Measure*, staff_idx_t staffIdx, bool visible, bool stemless);
@@ -261,7 +261,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class ChangeMStaffHideIfEmpty : public UndoCommand
+class ChangeMStaffHideIfEmpty : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMStaffHideIfEmpty)
 
@@ -269,7 +269,7 @@ class ChangeMStaffHideIfEmpty : public UndoCommand
     staff_idx_t staffIdx = 0;
     AutoOnOff hideIfEmpty = AutoOnOff::AUTO;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMStaffHideIfEmpty(Measure*, staff_idx_t staffIdx, AutoOnOff hideIfEmpty);

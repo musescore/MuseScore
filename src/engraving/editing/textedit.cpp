@@ -23,13 +23,14 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
+#include "navigation.h"
+#include "transaction/undostack.h"
 
 #include "iengravingfont.h"
 #include "types/symnames.h"
 
 #include "../dom/fret.h"
 #include "../dom/lyrics.h"
-#include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
@@ -49,19 +50,6 @@ TextEditData::~TextEditData()
             toTextBase(se)->deleteLater();
         }
     }
-}
-
-//---------------------------------------------------------
-//   cursor
-//---------------------------------------------------------
-
-TextCursor* TextEditData::cursor() const
-{
-    IF_ASSERT_FAILED(m_textBase) {
-        return nullptr;
-    }
-
-    return m_textBase->cursor();
 }
 
 //---------------------------------------------------------
@@ -109,9 +97,9 @@ void TextBase::startEdit(EditData& ed)
 {
     std::shared_ptr<TextEditData> ted = std::make_shared<TextEditData>(this);
     ted->e = this;
-    ted->cursor()->startEdit();
+    cursor()->startEdit();
 
-    assert(!score()->undoStack()->hasActiveCommand()); // make sure we are not in a Cmd
+    assert(!score()->undoStack()->hasActiveTransaction());
 
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->currentIndex();
@@ -122,7 +110,7 @@ void TextBase::startEdit(EditData& ed)
     }
 
     //! NOTE: startMove will be null if we didn't use the mouse (e.g. we added a lyric with the spacebar)
-    if (!ed.startMove.isNull() && !ted->cursor()->set(ed.startMove)) {
+    if (!ed.startMove.isNull() && !cursor()->set(ed.startMove)) {
         resetFormatting();
     }
     double _spatium = spatium();
@@ -138,11 +126,11 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    IF_ASSERT_FAILED(ted && ted->cursor()) {
+    IF_ASSERT_FAILED(ted) {
         return;
     }
 
-    ted->cursor()->endEdit();
+    cursor()->endEdit();
 
     UndoStack* undo = score()->undoStack();
     IF_ASSERT_FAILED(undo) {
@@ -155,14 +143,12 @@ void TextBase::endEdit(EditData& ed)
     // replace all undo/redo records collected during text editing with
     // one property change
 
-    using Filter = UndoCommand::Filter;
-
     //! NOTE: Current index can be less than the start index if the text element is newly added and immediately removed through
     //! undo (the "add element" command will have been popped from the stack before the calling of this method)...
     const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
     if (textWasEdited) {
-        undo->mergeCommands(ted->startUndoIdx);
-        undo->last()->filterChildren(Filter::TextEdit, this);
+        undo->mergeTransactions(ted->startUndoIdx);
+        undo->last()->removeCommandsMatchingFilter(UndoableCommandFilter::TextEdit, this);
     } else {
         // No text changes in "undo" part of undo stack,
         // hence nothing to merge and filter.
@@ -176,11 +162,11 @@ void TextBase::endEdit(EditData& ed)
 
     const bool newlyAdded = ted->oldXmlText.isEmpty();
     if (newlyAdded) {
-        UndoCommand* ucmd = textWasEdited ? undo->prev() : undo->last();
-        if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
+        const UndoableTransaction* transaction = textWasEdited ? undo->prev() : undo->last();
+        if (transaction && transaction->hasCommandsMatchingFilter(UndoableCommandFilter::AddElement, this)) {
             // We have just added this element to a score.
             // Combine undo records of text creation with text editing.
-            undo->mergeCommands(ted->startUndoIdx - 1);
+            undo->mergeTransactions(ted->startUndoIdx - 1);
         }
     }
 
@@ -216,7 +202,7 @@ void TextBase::endEdit(EditData& ed)
         ed.element = 0;
 
         if (isLyrics()) {
-            Lyrics* prev = prevLyrics(toLyrics(this));
+            Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setNeedRemoveInvalidSegments();
                 renderer()->layoutItem(prev);
@@ -268,26 +254,21 @@ void TextBase::commitText()
 //   insertSym
 //---------------------------------------------------------
 
-void TextBase::insertSym(EditData& ed, SymId id)
+void TextBase::insertSym(SymId id)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-
-    deleteSelectedText(ed);
+    deleteSelectedText();
     String s = score()->engravingFont()->toString(id);
-    cursor->format()->setFontFamily(u"ScoreText");
-    score()->undo(new InsertText(cursor, s), &ed);
+    cursor()->format()->setFontFamily(u"ScoreText");
+    score()->undo(new InsertText(cursor(), s));
 }
 
 //---------------------------------------------------------
 //   insertText
 //---------------------------------------------------------
 
-void TextBase::insertText(EditData& ed, const String& s)
+void TextBase::insertText(const String& s)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-    score()->undo(new InsertText(cursor, s), &ed);
+    score()->undo(new InsertText(cursor(), s));
 }
 
 bool TextBase::isEditAllowed(EditData& ed) const
@@ -426,7 +407,7 @@ bool TextBase::edit(EditData& ed)
     if (!ted) {
         return false;
     }
-    TextCursor* cursor = ted->cursor();
+    TextCursor* cursor = this->cursor();
     CharFormat* currentFormat = cursor->format();
 
     String s         = ed.s;
@@ -481,8 +462,8 @@ bool TextBase::edit(EditData& ed)
         switch (ed.key) {
         case Key_Enter:
         case Key_Return:
-            deleteSelectedText(ed);
-            score()->undo(new SplitText(cursor), &ed);
+            deleteSelectedText();
+            score()->undo(new SplitText(cursor));
 
             notifyAboutTextCursorChanged();
 
@@ -499,23 +480,23 @@ bool TextBase::edit(EditData& ed)
 
                 s.clear();
 
-                if (deleteSelectedText(ed)) {
+                if (deleteSelectedText()) {
                     notifyAboutTextRemoved(startPosition, endPosition, text);
                 }
             } else {
                 String text = cursor->selectedText();
 
-                if (!deleteSelectedText(ed)) {
+                if (!deleteSelectedText()) {
                     // if you are on the end of the line, delete the newline char
                     if (cursor->column() == cursor->columns()) {
                         size_t cursorRow = cursor->row();
                         cursor->movePosition(TextCursor::MoveOperation::Down);
                         if (cursor->row() != cursorRow) {
                             cursor->movePosition(TextCursor::MoveOperation::StartOfLine);
-                            score()->undo(new JoinText(cursor), &ed);
+                            score()->undo(new JoinText(cursor));
                         }
                     } else {
-                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
+                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())));
                     }
                 } else {
                     notifyAboutTextRemoved(startPosition + 1, startPosition, text);
@@ -535,20 +516,20 @@ bool TextBase::edit(EditData& ed)
 
                 s.clear();
 
-                if (deleteSelectedText(ed)) {
+                if (deleteSelectedText()) {
                     notifyAboutTextRemoved(startPosition, endPosition, text);
                 }
             } else {
                 String text = cursor->selectedText();
 
-                if (!deleteSelectedText(ed)) {
+                if (!deleteSelectedText()) {
                     if (cursor->column() == 0 && m_cursor->row() != 0) {
-                        score()->undo(new JoinText(cursor), &ed);
+                        score()->undo(new JoinText(cursor));
                     } else {
                         if (!cursor->movePosition(TextCursor::MoveOperation::Left)) {
                             return false;
                         }
-                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
+                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())));
                     }
                 } else {
                     notifyAboutTextRemoved(startPosition, startPosition - 1, text);
@@ -705,47 +686,47 @@ bool TextBase::edit(EditData& ed)
                 s = u"\u266e";               // Unicode natural
                 break;
             case Key_Space:
-                insertSym(ed, SymId::space);
+                insertSym(SymId::space);
                 return true;
             case Key_F:
-                insertSym(ed, SymId::dynamicForte);
+                insertSym(SymId::dynamicForte);
                 return true;
             case Key_M:
-                insertSym(ed, SymId::dynamicMezzo);
+                insertSym(SymId::dynamicMezzo);
                 return true;
             case Key_N:
-                insertSym(ed, SymId::dynamicNiente);
+                insertSym(SymId::dynamicNiente);
                 return true;
             case Key_P:
-                insertSym(ed, SymId::dynamicPiano);
+                insertSym(SymId::dynamicPiano);
                 return true;
             case Key_S:
-                insertSym(ed, SymId::dynamicSforzando);
+                insertSym(SymId::dynamicSforzando);
                 return true;
             case Key_R:
-                insertSym(ed, SymId::dynamicRinforzando);
+                insertSym(SymId::dynamicRinforzando);
                 return true;
             case Key_Z:
                 // Ctrl+Z is normally "undo"
                 // but this code gets hit even if you are also holding Shift
                 // so Shift+Ctrl+Z works
-                insertSym(ed, SymId::dynamicZ);
+                insertSym(SymId::dynamicZ);
                 return true;
             }
         }
         if (ctrlPressed && altPressed) {
             if (ed.key == Key_Minus || ed.key == Key_Underscore) {
-                insertSym(ed, SymId::lyricsElision);
+                insertSym(SymId::lyricsElision);
                 return true;
             }
         }
     }
     if (!s.isEmpty()) {
-        deleteSelectedText(ed);
+        deleteSelectedText();
         if (currentFormat->fontFamily() == u"ScoreText") {
             currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
         }
-        score()->undo(new InsertText(m_cursor, s), &ed);
+        score()->undo(new InsertText(m_cursor, s));
 
         int startPosition = cursor->currentPosition();
         notifyAboutTextInserted(startPosition, startPosition + static_cast<int>(s.size()), s);
@@ -757,11 +738,9 @@ bool TextBase::edit(EditData& ed)
 //   movePosition
 //---------------------------------------------------------
 
-void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
+void TextBase::movePosition(TextCursor::MoveOperation op)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
-    cursor->movePosition(op);
+    cursor()->movePosition(op);
     score()->addRefresh(canvasBoundingRect());
     score()->update();
 }
@@ -770,22 +749,19 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 //  ChangeText::insertText
 //---------------------------------------------------------
 
-void ChangeText::insertText(EditData* ed)
+void ChangeText::insertText()
 {
     TextCursor tc = m_cursor;
     tc.setFormat(m_format);                              // To undo TextCursor::updateCursorFormat()
     tc.text()->editInsertText(&tc, m_s);
-    if (ed) {
-        TextCursor* ttc = tc.text()->cursorFromEditData(*ed);
-        *ttc = tc;
-    }
+    *tc.text()->cursor() = tc;
 }
 
 //---------------------------------------------------------
 //  ChangeText::removeText
 //---------------------------------------------------------
 
-void ChangeText::removeText(EditData* ed)
+void ChangeText::removeText()
 {
     TextCursor tc = m_cursor;
     TextBlock& l  = m_cursor.curLine();
@@ -796,9 +772,7 @@ void ChangeText::removeText(EditData* ed)
         l.remove(static_cast<int>(column), &m_cursor);
     }
     m_cursor.text()->triggerLayout();
-    if (ed) {
-        *m_cursor.text()->cursorFromEditData(*ed) = tc;
-    }
+    *m_cursor.text()->cursor() = tc;
     m_cursor.text()->setTextInvalid();
 }
 
@@ -806,7 +780,7 @@ void ChangeText::removeText(EditData* ed)
 //   SplitJoinText
 //---------------------------------------------------------
 
-void SplitJoinText::join(EditData* ed)
+void SplitJoinText::join()
 {
     TextBase* t   = m_cursor.text();
     size_t line   = m_cursor.row();
@@ -832,13 +806,11 @@ void SplitJoinText::join(EditData* ed)
     m_cursor.setFormat(*charFmt);             // restore orig. format at new line
     m_cursor.clearSelection();
 
-    if (ed) {
-        *t->cursorFromEditData(*ed) = m_cursor;
-    }
-    m_cursor.text()->setTextInvalid();
+    *t->cursor() = m_cursor;
+    t->setTextInvalid();
 }
 
-void SplitJoinText::split(EditData* ed)
+void SplitJoinText::split()
 {
     TextBase* t   = m_cursor.text();
     size_t line   = m_cursor.row();
@@ -849,7 +821,7 @@ void SplitJoinText::split(EditData* ed)
     TextBase::LayoutData* ldata = t->mutldata();
     CharFormat* charFmt = m_cursor.format();           // take current format
     ldata->blocks.insert(ldata->blocks.begin() + line + 1,
-                         m_cursor.curLine().split(static_cast<int>(m_cursor.column()), t->cursorFromEditData(*ed)));
+                         m_cursor.curLine().split(static_cast<int>(m_cursor.column()), t->cursor()));
     m_cursor.curLine().setEol(true);
 
     m_cursor.setRow(line + 1);
@@ -858,19 +830,17 @@ void SplitJoinText::split(EditData* ed)
     m_cursor.setFormat(*charFmt);               // restore orig. format at new line
     m_cursor.clearSelection();
 
-    if (ed) {
-        *t->cursorFromEditData(*ed) = m_cursor;
-    }
-    m_cursor.text()->setTextInvalid();
+    *t->cursor() = m_cursor;
+    t->setTextInvalid();
 }
 
 //---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(Transaction&, EditData& ed)
 {
-    TextCursor* cursor = cursorFromEditData(ed);
+    TextCursor* cursor = this->cursor();
 
     EngravingItem* e = ed.dropElement;
 
@@ -880,7 +850,7 @@ EngravingItem* TextBase::drop(EditData& ed)
         SymId id = toSymbol(e)->sym();
         delete e;
 
-        insertSym(ed, id);
+        insertSym(id);
     }
     break;
 
@@ -894,8 +864,8 @@ EngravingItem* TextBase::drop(EditData& ed)
             currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
         }
 
-        deleteSelectedText(ed);
-        score()->undo(new InsertText(cursor, s), &ed);
+        deleteSelectedText();
+        score()->undo(new InsertText(cursor, s));
     }
     break;
 
@@ -910,7 +880,7 @@ EngravingItem* TextBase::drop(EditData& ed)
 //   paste
 //---------------------------------------------------------
 
-void TextBase::paste(EditData& ed, const String& txt)
+void TextBase::paste(const String& txt)
 {
     if (MScore::debugMode) {
         LOGD("<%s>", muPrintable(txt));
@@ -920,7 +890,7 @@ void TextBase::paste(EditData& ed, const String& txt)
     String token;
     String sym;
     bool symState = false;
-    CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
+    CharFormat format = *cursor()->format();
 
     score()->startCmd(TranslatableString("undoableAction", "Paste text"));
     for (size_t i = 0; i < txt.size(); i++) {
@@ -936,22 +906,20 @@ void TextBase::paste(EditData& ed, const String& txt)
                 if (symState) {
                     sym += c;
                 } else {
-                    deleteSelectedText(ed);
-                    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-                    TextCursor* cursor = ted->cursor();
-                    cursor->setFormat(format);
+                    deleteSelectedText();
+                    cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
                         Char highSurrogate = c;
                         assert(i + 1 < txt.size());
                         i++;
                         Char lowSurrogate = txt.at(i);
-                        insertText(ed, String::fromUcs4(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                        insertText(String::fromUcs4(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
                     } else if (c == '\r') {
                         continue;
                     } else if (c == '\n') {
-                        score()->undo(new SplitText(cursor), &ed);
+                        score()->undo(new SplitText(cursor()));
                     } else {
-                        insertText(ed, String(c));
+                        insertText(String(c));
                     }
                 }
             }
@@ -963,8 +931,8 @@ void TextBase::paste(EditData& ed, const String& txt)
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
-                    static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
-                    insertSym(ed, SymNames::symIdByName(sym));
+                    cursor()->setFormat(format);
+                    insertSym(SymNames::symIdByName(sym));
                 } else {
                     prepareFormat(token, format);
                 }
@@ -975,29 +943,29 @@ void TextBase::paste(EditData& ed, const String& txt)
             if (c == ';') {
                 state = 0;
                 if (token == "lt") {
-                    insertText(ed, u"<");
+                    insertText(u"<");
                 } else if (token == "gt") {
-                    insertText(ed, u">");
+                    insertText(u">");
                 } else if (token == "amp") {
-                    insertText(ed, u"&");
+                    insertText(u"&");
                 } else if (token == "quot") {
-                    insertText(ed, u"\"");
+                    insertText(u"\"");
                 } else {
-                    insertSym(ed, SymNames::symIdByName(token));
+                    insertSym(SymNames::symIdByName(token));
                 }
             } else if (!c.isLetter()) {
                 state = 0;
-                insertText(ed, u"&");
-                insertText(ed, token);
-                insertText(ed, c);
+                insertText(u"&");
+                insertText(token);
+                insertText(c);
             } else {
                 token += c;
             }
         }
     }
     if (state == 2) {
-        insertText(ed, u"&");
-        insertText(ed, token);
+        insertText(u"&");
+        insertText(token);
     }
     score()->endCmd();
 }
@@ -1006,10 +974,9 @@ void TextBase::paste(EditData& ed, const String& txt)
 //   endHexState
 //---------------------------------------------------------
 
-void TextBase::endHexState(EditData& ed)
+void TextBase::endHexState()
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    TextCursor* cursor = ted->cursor();
+    TextCursor* cursor = this->cursor();
 
     if (m_hexState >= 0) {
         if (m_hexState > 0) {
@@ -1037,9 +1004,9 @@ void TextBase::endHexState(EditData& ed)
 //   deleteSelectedText
 //---------------------------------------------------------
 
-bool TextBase::deleteSelectedText(EditData& ed)
+bool TextBase::deleteSelectedText()
 {
-    TextCursor* cursor = cursorFromEditData(ed);
+    TextCursor* cursor = this->cursor();
 
     if (!cursor->hasSelection()) {
         return false;
@@ -1062,14 +1029,14 @@ bool TextBase::deleteSelectedText(EditData& ed)
             break;
         }
         if (cursor->column() == 0 && cursor->row() != 0) {
-            score()->undo(new JoinText(cursor), &ed);
+            score()->undo(new JoinText(cursor));
         } else {
             // move cursor left:
             if (!m_cursor->movePosition(TextCursor::MoveOperation::Left)) {
                 break;
             }
             TextCursor undoCursor(*m_cursor);
-            score()->undo(new RemoveText(&undoCursor, String(m_cursor->currentCharacter())), &ed);
+            score()->undo(new RemoveText(&undoCursor, String(m_cursor->currentCharacter())));
         }
     }
     return true;
@@ -1089,7 +1056,7 @@ void ChangeTextProperties::restoreSelection()
 }
 
 ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
-    : TextEditUndoCommand(*tc)
+    : TextEditUndoableCommand(*tc)
 {
     m_propertyId = propId;
     m_propertyVal = propVal;
@@ -1099,7 +1066,7 @@ ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, con
     }
 }
 
-void ChangeTextProperties::undo(EditData*)
+void ChangeTextProperties::undo()
 {
     cursor().text()->resetFormatting();
     cursor().text()->setXmlText(m_xmlText);
@@ -1107,7 +1074,7 @@ void ChangeTextProperties::undo(EditData*)
     cursor().text()->renderer()->layoutText1(cursor().text());
 }
 
-void ChangeTextProperties::redo(EditData*)
+void ChangeTextProperties::redo()
 {
     m_xmlText = cursor().text()->xmlText();
     restoreSelection();

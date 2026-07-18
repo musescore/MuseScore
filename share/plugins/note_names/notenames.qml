@@ -137,7 +137,7 @@ MuseScore {
                 // Then apply new names
                 var text = newElement(Element.TEXT) // This adds the text to the note: Better for grace notes and easier to remove
                 text.text = nameNote(note)
-                text.autoplace = false
+                text.subStyle = Tid.STAFF
                 if (note.noteType != NoteType.NORMAL) {
                     text.fontSize *= curScore.style.value("graceNoteMag")
                 }

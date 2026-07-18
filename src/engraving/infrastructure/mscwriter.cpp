@@ -188,11 +188,6 @@ void MscWriter::addImageFile(const String& fileName, const ByteArray& data)
     addFileData(u"Pictures/" + fileName, data);
 }
 
-void MscWriter::writeAudioFile(const ByteArray& data)
-{
-    addFileData(u"audio.ogg", data);
-}
-
 void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data, const muse::io::path_t& pathPrefix)
 {
     addFileData(pathPrefix.toString() + u"audiosettings.json", data);

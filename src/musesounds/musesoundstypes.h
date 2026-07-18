@@ -31,13 +31,23 @@ struct SoundLibraryInfo {
     muse::String subtitle;
     muse::UriQuery thumbnail;
     muse::UriQuery uri;
+
+    bool operator==(const SoundLibraryInfo& o) const
+    {
+        return code == o.code && title == o.title && subtitle == o.subtitle
+               && thumbnail == o.thumbnail && uri == o.uri;
+    }
 };
 using SoundLibraryInfoList = std::vector<SoundLibraryInfo>;
 
 struct SoundCatalogInfo {
     muse::String title;
-
     SoundLibraryInfoList soundLibraries;
+
+    bool operator==(const SoundCatalogInfo& o) const
+    {
+        return title == o.title && soundLibraries == o.soundLibraries;
+    }
 };
 using SoundCatalogInfoList = std::vector<SoundCatalogInfo>;
 }

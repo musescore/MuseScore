@@ -27,19 +27,26 @@ target_sources(playback PRIVATE
     iplaybackconfiguration.h
     isoundprofilesrepository.h
     playbacktypes.h
+    playbackcommands.h
 
+    internal/playbackuiactions.cpp
+    internal/playbackuiactions.h
     internal/playbackcontroller.cpp
     internal/playbackcontroller.h
     internal/onlinesoundscontroller.cpp
     internal/onlinesoundscontroller.h
-    internal/playbackuiactions.cpp
-    internal/playbackuiactions.h
+    internal/playbackcommandsregister.cpp
+    internal/playbackcommandsregister.h
+    internal/playbackcommandsstate.cpp
+    internal/playbackcommandsstate.h
     internal/playbackconfiguration.cpp
     internal/playbackconfiguration.h
     internal/soundprofilesrepository.cpp
     internal/soundprofilesrepository.h
     internal/drumsetloader.cpp
     internal/drumsetloader.h
+    internal/knownaudiopluginsconfigurator.cpp
+    internal/knownaudiopluginsconfigurator.h
 )
 
 if (MUE_BUILD_PLAYBACK_TESTS)

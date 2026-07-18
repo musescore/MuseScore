@@ -22,14 +22,17 @@
 
 #include "previewmeasure.h"
 
-#include "engraving/dom/staff.h"
-#include "engraving/dom/measure.h"
-#include "engraving/dom/shadownote.h"
+#include <QPainter>
+#include <QLinearGradient>
+
 #include "draw/painter.h"
 #include "draw/internal/qpainterprovider.h"
 
-#include <QPainter>
-#include <QLinearGradient>
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/shadownote.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/system.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

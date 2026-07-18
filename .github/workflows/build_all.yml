@@ -24,6 +24,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
+        required: false
   workflow_call:
     inputs:
       platforms:
@@ -51,6 +55,11 @@ on:
         default: ''
         type: string
         required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
+        type: string
+        required: false
 
 defaults:
   run:
@@ -65,7 +74,7 @@ jobs:
       build_number: ${{ steps.make_build_number.outputs.build_number }}
     steps:
       - name: Clone repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Generate build number
@@ -99,6 +108,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   macos:
     name: macOS
@@ -111,6 +121,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   windows:
     name: Windows
@@ -123,6 +134,7 @@ jobs:
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
+      dockwidgets_v2: ${{ inputs.dockwidgets_v2 }}
 
   # Dummy build for testing purposes.
   dummy:
@@ -139,7 +151,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         submodules: recursive
     - name: Prepare dummy artifact

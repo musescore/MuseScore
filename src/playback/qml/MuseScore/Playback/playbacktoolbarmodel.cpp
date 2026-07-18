@@ -25,17 +25,33 @@
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
-#include "playback/internal/playbackuiactions.h"
+#include "playback/playbackcommands.h"
 
 using namespace mu::playback;
-using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::audio;
 
-static const ActionCode PLAY_ACTION_CODE("play");
+static const QString PLAY_TOGGLE_ID("play-toggle");
+
+static const ToolConfig& defaultPlaybackToolConfig()
+{
+    static ToolConfig config;
+    if (!config.isValid()) {
+        config.items = {
+            { "command://playback/rewind", true },
+            { "play-toggle", true }, // virtual code
+            { "command://playback/loop-toggle", true },
+            { "command://playback/loop-in", true },
+            { "command://playback/loop-out", true },
+            { "command://playback/metronome-toggle", true },
+        };
+    }
+    return config;
+}
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -54,15 +70,15 @@ void PlaybackToolBarModel::load()
 
 void PlaybackToolBarModel::setupConnections()
 {
-    playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
+    playbackController()->isPlayAllowedChanged().onReceive(this, [this](bool) {
         emit isPlayAllowedChanged();
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        onActionsStateChanges({ PLAY_ACTION_CODE });
+    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
+        onActionsStateChanges({ PLAY_TOGGLE_ID.toStdString() });
     });
 
-    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](secs_t secs, midi::tick_t) {
+    globalContext()->playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         updatePlayPosition(secs);
     });
 
@@ -82,32 +98,34 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList result;
     MenuItemList settingsItems;
 
-    for (const UiAction& action : PlaybackUiActions::midiInputActions()) {
-        settingsItems << makeMenuItem(action.code);
-    }
-
+    settingsItems << makeMenuItem(MIDI_TOGGLE_COMMAND.toString());
     settingsItems << makeInputPitchMenu();
     settingsItems << makeSeparator();
 
-    for (const UiAction& action : PlaybackUiActions::settingsActions()) {
-        settingsItems << makeMenuItem(action.code);
-    }
+    settingsItems << makeMenuItem(REPEATS_TOGGLE_COMMAND.toString());
+    settingsItems << makeMenuItem(CHORDSYMBOLS_TOGGLE_COMMAND.toString());
+    settingsItems << makeMenuItem(HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND.toString());
+    settingsItems << makeMenuItem(PAN_TOGGLE_COMMAND.toString());
+    settingsItems << makeMenuItem(COUNTIN_TOGGLE_COMMAND.toString());
 
     if (!m_isToolbarFloating) {
         settingsItems << makeSeparator();
     }
 
     //! NOTE At the moment no customization ability
-    ToolConfig config = PlaybackUiActions::defaultPlaybackToolConfig();
+    ToolConfig config = defaultPlaybackToolConfig();
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
             //! NOTE In this case, we want to see the actions' description instead of the title
             settingsItems << makeMenuItem(item.action);
         } else {
-            MenuItem* menuItem = makeMenuItem(item.action);
-
-            if (item.action == PLAY_ACTION_CODE) {
-                menuItem->setAction(playAction());
+            MenuItem* menuItem = nullptr;
+            if (item.action == PLAY_TOGGLE_ID) {
+                const UiAction& action = playAction();
+                menuItem = makeMenuItem(action.code);
+                menuItem->setId(PLAY_TOGGLE_ID);
+            } else {
+                menuItem = makeMenuItem(item.action);
             }
 
             result << menuItem;
@@ -128,13 +146,10 @@ void PlaybackToolBarModel::updateActions()
 MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
 {
     MenuItemList items;
-    items.reserve(PlaybackUiActions::midiInputPitchActions().size());
+    items << makeMenuItem(MIDI_INPUT_WRITTEN_PITCH_COMMAND.toString());
+    items << makeMenuItem(MIDI_INPUT_SOUNDING_PITCH_COMMAND.toString());
 
-    for (const UiAction& action : PlaybackUiActions::midiInputPitchActions()) {
-        items << makeMenuItem(action.code);
-    }
-
-    MenuItem* menu = makeMenu(muse::TranslatableString("notation", "MIDI input pitch"), items);
+    MenuItem* menu = makeMenu(muse::TranslatableString("playback", "MIDI input pitch"), items);
     UiAction action = menu->action();
     action.iconCode = IconCode::Code::MUSIC_NOTES;
     menu->setAction(action);
@@ -146,17 +161,26 @@ void PlaybackToolBarModel::onActionsStateChanges(const ActionCodeList& codes)
 {
     AbstractMenuModel::onActionsStateChanges(codes);
 
-    if (isPlayAllowed() && containsAction(codes, PLAY_ACTION_CODE)) {
-        MenuItem& item = findItem(PLAY_ACTION_CODE);
-        item.setAction(playAction());
+    if (!isPlayAllowed()) {
+        return;
+    }
+
+    if (containsAction(codes, PLAY_TOGGLE_ID.toStdString())) {
+        MenuItem& item = findItem(PLAY_TOGGLE_ID);
+        UiAction action = playAction();
+        item.setAction(action);
+        item.setQuery(ActionQuery(action.code));
     }
 }
 
 bool PlaybackToolBarModel::isAdditionalAction(const ActionCode& code) const
 {
-    return muse::contains_if(PlaybackUiActions::loopBoundaryActions(), [code](const UiAction& a) {
-        return a.code == code;
-    });
+    static const ActionCodeList additionalActions = {
+        LOOP_IN_COMMAND.toString(),
+        LOOP_OUT_COMMAND.toString(),
+    };
+
+    return containsAction(additionalActions, code);
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const
@@ -222,12 +246,12 @@ MeasureBeat PlaybackToolBarModel::measureBeat() const
 
 UiAction PlaybackToolBarModel::playAction() const
 {
-    UiAction action = uiActionsRegister()->action(PLAY_ACTION_CODE);
-
-    bool isPlaying = playbackController()->isPlaying();
-    action.iconCode =  isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
-
-    return action;
+    const bool isPlaying = globalContext()->playbackState()->isPlaying();
+    if (isPlaying) {
+        return uiActionsRegister()->action(PAUSE_COMMAND.toString());
+    } else {
+        return uiActionsRegister()->action(PLAY_COMMAND.toString());
+    }
 }
 
 void PlaybackToolBarModel::updatePlayPosition(secs_t secs)
@@ -246,7 +270,7 @@ void PlaybackToolBarModel::rewind(secs_t secs)
         return;
     }
 
-    dispatch("rewind", ActionData::make_arg1<secs_t>(secs));
+    dispatch(rcommand::make_query("command://playback/rewind", { { "position", Val(secs) } }));
 }
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)
@@ -321,7 +345,7 @@ QVariant PlaybackToolBarModel::tempo() const
         { DurationType::V_16TH, MusicalSymbolCodes::Code::SEMIQUAVER },
     };
 
-    const Tempo& tempo = playbackController()->currentTempo();
+    const notation::Tempo& tempo = playbackController()->currentTempo();
     const MusicalSymbolCodes::Code noteIcon = muse::value(DURATION_TO_ICON, tempo.duration,
                                                           MusicalSymbolCodes::Code::CROTCHET);
 

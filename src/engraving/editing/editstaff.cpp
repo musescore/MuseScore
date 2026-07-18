@@ -42,19 +42,19 @@ InsertStaff::InsertStaff(Staff* p, staff_idx_t _ridx)
     ridx  = _ridx;
 }
 
-void InsertStaff::undo(EditData*)
+void InsertStaff::undo()
 {
     staff->score()->removeStaff(staff);
 }
 
-void InsertStaff::redo(EditData*)
+void InsertStaff::redo()
 {
     staff->score()->insertStaff(staff, ridx);
 }
 
-void InsertStaff::cleanup(bool undo)
+void InsertStaff::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete staff;
         staff = nullptr;
     }
@@ -71,7 +71,7 @@ RemoveStaff::RemoveStaff(Staff* p)
     wasSystemObjectStaff = staff->isSystemObjectStaff();
 }
 
-void RemoveStaff::undo(EditData*)
+void RemoveStaff::undo()
 {
     staff->score()->insertStaff(staff, ridx);
     if (wasSystemObjectStaff) {
@@ -79,7 +79,7 @@ void RemoveStaff::undo(EditData*)
     }
 }
 
-void RemoveStaff::redo(EditData*)
+void RemoveStaff::redo()
 {
     staff->score()->removeStaff(staff);
     if (wasSystemObjectStaff) {
@@ -87,9 +87,9 @@ void RemoveStaff::redo(EditData*)
     }
 }
 
-void RemoveStaff::cleanup(bool undo)
+void RemoveStaff::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete staff;
         staff = nullptr;
     }
@@ -104,12 +104,12 @@ AddSystemObjectStaff::AddSystemObjectStaff(Staff* s)
 {
 }
 
-void AddSystemObjectStaff::undo(EditData*)
+void AddSystemObjectStaff::undo()
 {
     staff->score()->removeSystemObjectStaff(staff);
 }
 
-void AddSystemObjectStaff::redo(EditData*)
+void AddSystemObjectStaff::redo()
 {
     staff->score()->addSystemObjectStaff(staff);
 }
@@ -123,12 +123,12 @@ RemoveSystemObjectStaff::RemoveSystemObjectStaff(Staff* s)
 {
 }
 
-void RemoveSystemObjectStaff::undo(EditData*)
+void RemoveSystemObjectStaff::undo()
 {
     staff->score()->addSystemObjectStaff(staff);
 }
 
-void RemoveSystemObjectStaff::redo(EditData*)
+void RemoveSystemObjectStaff::redo()
 {
     staff->score()->removeSystemObjectStaff(staff);
 }
@@ -144,12 +144,12 @@ InsertMStaff::InsertMStaff(Measure* m, MStaff* ms, staff_idx_t i)
     idx     = i;
 }
 
-void InsertMStaff::undo(EditData*)
+void InsertMStaff::undo()
 {
     measure->removeMStaff(mstaff, idx);
 }
 
-void InsertMStaff::redo(EditData*)
+void InsertMStaff::redo()
 {
     measure->insertMStaff(mstaff, idx);
 }
@@ -165,12 +165,12 @@ RemoveMStaff::RemoveMStaff(Measure* m, MStaff* ms, int i)
     idx     = i;
 }
 
-void RemoveMStaff::undo(EditData*)
+void RemoveMStaff::undo()
 {
     measure->insertMStaff(mstaff, idx);
 }
 
-void RemoveMStaff::redo(EditData*)
+void RemoveMStaff::redo()
 {
     measure->removeMStaff(mstaff, idx);
 }
@@ -186,12 +186,12 @@ InsertStaves::InsertStaves(Measure* m, staff_idx_t _a, staff_idx_t _b)
     b       = _b;
 }
 
-void InsertStaves::undo(EditData*)
+void InsertStaves::undo()
 {
     measure->removeStaves(a, b);
 }
 
-void InsertStaves::redo(EditData*)
+void InsertStaves::redo()
 {
     measure->insertStaves(a, b);
 }
@@ -207,12 +207,12 @@ RemoveStaves::RemoveStaves(Measure* m, staff_idx_t _a, staff_idx_t _b)
     b       = _b;
 }
 
-void RemoveStaves::undo(EditData*)
+void RemoveStaves::undo()
 {
     measure->insertStaves(a, b);
 }
 
-void RemoveStaves::redo(EditData*)
+void RemoveStaves::redo()
 {
     measure->removeStaves(a, b);
 }
@@ -231,12 +231,12 @@ SortStaves::SortStaves(Score* s, const std::vector<staff_idx_t>& l)
     list  = l;
 }
 
-void SortStaves::redo(EditData*)
+void SortStaves::redo()
 {
     score->sortStaves(list);
 }
 
-void SortStaves::undo(EditData*)
+void SortStaves::undo()
 {
     score->sortStaves(rlist);
 }
@@ -274,7 +274,7 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType, S
 //   flip
 //---------------------------------------------------------
 
-void ChangeStaff::flip(EditData*)
+void ChangeStaff::flip()
 {
     bool oldVisible = staff->visible();
     ClefTypeList oldClefType = staff->defaultClefType();
@@ -302,14 +302,13 @@ void ChangeStaff::flip(EditData*)
 
     staff->triggerLayout();
     staff->masterScore()->rebuildMidiMapping();
-    staff->score()->setPlaylistDirty();
 }
 
 //---------------------------------------------------------
 //   ChangeStaffType::flip
 //---------------------------------------------------------
 
-void ChangeStaffType::flip(EditData*)
+void ChangeStaffType::flip()
 {
     StaffType oldStaffType = *staff->staffType(tick);
 
@@ -344,7 +343,7 @@ ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, staff_idx_t i, bool v
 {
 }
 
-void ChangeMStaffProperties::flip(EditData*)
+void ChangeMStaffProperties::flip()
 {
     bool v = measure->visible(staffIdx);
     bool s = measure->stemless(staffIdx);
@@ -363,7 +362,7 @@ ChangeMStaffHideIfEmpty::ChangeMStaffHideIfEmpty(Measure* m, staff_idx_t i, Auto
 {
 }
 
-void ChangeMStaffHideIfEmpty::flip(EditData*)
+void ChangeMStaffHideIfEmpty::flip()
 {
     AutoOnOff h = measure->hideStaffIfEmpty(staffIdx);
     measure->setHideStaffIfEmpty(staffIdx, hideIfEmpty);

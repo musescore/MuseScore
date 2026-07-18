@@ -19,22 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationactioncontroller.h"
 
-#include "io/file.h"
+#include <QGuiApplication>
 
+#include "global/io/file.h"
+#include "global/translation.h"
+
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
+#include "engraving/editing/noteinput.h"
+
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationelements.h"
+#include "notation/inotationmidiinput.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationplayback.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationundostack.h"
 #include "notation/notationtypes.h"
+#include "notation/inotationinteraction.h"
 
 #include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
 
-#include "translation.h"
-#include "log.h"
+#include "../notationcommands.h"
 
-#include <QGuiApplication>
+#include "log.h"
+#include "rcommand/commandtypes.h"
+#include "types/ret.h"
 
 using namespace mu;
 using namespace muse;
@@ -48,9 +66,6 @@ static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
-
-static const ActionCode UNDO_ACTION_CODE = "action://notation/undo";
-static const ActionCode REDO_ACTION_CODE = "action://notation/redo";
 
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
@@ -88,69 +103,180 @@ void NotationActionController::init()
 {
     TRACEFUNC;
 
-    //! NOTE For historical reasons, the name of the action does not match what needs to be done
-    registerAction("action://notation/cancel", &Controller::resetState, &Controller::isNotationPage);
+    // global commands
+    registerCommand(CANCEL_COMMAND, &Controller::resetState);
+    registerCommand(UNDO_COMMAND, &Interaction::undo);
+    registerCommand(REDO_COMMAND, &Interaction::redo);
+
+    // navigation and selection commands
+    static const rcommand::CommandQuery SELECT_QUERY(SELECT_COMMAND);
+
+    static const std::map<rcommand::Command, rcommand::CommandQuery> SELECTION_ALIASES {
+        { GOTO_FIRST_ELEMENT_COMMAND, SELECT_QUERY.set("target", "first-item").set("play-mode", "chord") },
+        { GOTO_LAST_ELEMENT_COMMAND, SELECT_QUERY.set("target", "last-item").set("play-mode", "chord") },
+        { GOTO_NEXT_ELEMENT_COMMAND, SELECT_QUERY.set("target", "next-item").set("play-mode", "note") },
+        { GOTO_PREV_ELEMENT_COMMAND, SELECT_QUERY.set("target", "prev-item").set("play-mode", "note") },
+        { GOTO_NEXT_TRACK_COMMAND, SELECT_QUERY.set("target", "next-track").set("play-mode", "chord") },
+        { GOTO_PREV_TRACK_COMMAND, SELECT_QUERY.set("target", "prev-track").set("play-mode", "chord") },
+        { GOTO_NEXT_FRAME_COMMAND, SELECT_QUERY.set("target", "next-frame") },
+        { GOTO_PREV_FRAME_COMMAND, SELECT_QUERY.set("target", "prev-frame") },
+        { GOTO_NEXT_SYSTEM_COMMAND, SELECT_QUERY.set("target", "next-system") },
+        { GOTO_PREV_SYSTEM_COMMAND, SELECT_QUERY.set("target", "prev-system") },
+        { GOTO_UPNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "up-note-in-chord") },
+        { GOTO_DOWNNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "down-note-in-chord") },
+        { GOTO_TOPNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "top-note-in-chord") },
+        { GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "bottom-note-in-chord") },
+        { SELECT_SIMILAR_COMMAND, SELECT_QUERY.set("target", "similar") },
+        { SELECT_SIMILAR_IN_STAFF_COMMAND, SELECT_QUERY.set("target", "similar-in-staff") },
+        { SELECT_SIMILAR_IN_RANGE_COMMAND, SELECT_QUERY.set("target", "similar-in-range") },
+        { SELECT_NOTES_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "notes-in-chord") },
+        { SELECT_ALL_COMMAND, SELECT_QUERY.set("target", "all") },
+        { SELECT_SECTION_COMMAND, SELECT_QUERY.set("target", "section") },
+    };
+
+    registerCommand(SELECT_COMMAND, &Controller::select);
+    registerAliases(SELECTION_ALIASES, &Controller::select);
+
+    //! TODO remove, for example
+    // registerSelectionCommand(GOTO_FIRST_ELEMENT_COMMAND, SelectionTarget::FirstItem, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_LAST_ELEMENT_COMMAND, SelectionTarget::LastItem, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_NEXT_ELEMENT_COMMAND, SelectionTarget::NextItem, PlayMode::PlayNote);
+    // registerSelectionCommand(GOTO_PREV_ELEMENT_COMMAND, SelectionTarget::PrevItem, PlayMode::PlayNote);
+    // registerSelectionCommand(GOTO_NEXT_TRACK_COMMAND, SelectionTarget::NextTrack, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_PREV_TRACK_COMMAND, SelectionTarget::PrevTrack, PlayMode::PlayChord);
+    // registerSelectionCommand(GOTO_NEXT_FRAME_COMMAND, SelectionTarget::NextFrame);
+    // registerSelectionCommand(GOTO_PREV_FRAME_COMMAND, SelectionTarget::PrevFrame);
+    // registerSelectionCommand(GOTO_NEXT_SYSTEM_COMMAND, SelectionTarget::NextSystem);
+    // registerSelectionCommand(GOTO_PREV_SYSTEM_COMMAND, SelectionTarget::PrevSystem);
+    // registerSelectionCommand(GOTO_UPNOTE_IN_CHORD_COMMAND, SelectionTarget::UpNoteInChord);
+    // registerSelectionCommand(GOTO_DOWNNOTE_IN_CHORD_COMMAND, SelectionTarget::DownNoteInChord);
+    // registerSelectionCommand(GOTO_TOPNOTE_IN_CHORD_COMMAND, SelectionTarget::TopNoteInChord);
+    // registerSelectionCommand(GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SelectionTarget::BottomNoteInChord);
+
+    // registerSelectionCommand(SELECT_SIMILAR_COMMAND, SelectionTarget::Similar);
+    // registerSelectionCommand(SELECT_SIMILAR_IN_STAFF_COMMAND, SelectionTarget::SimilarInStaff);
+    // registerSelectionCommand(SELECT_SIMILAR_IN_RANGE_COMMAND, SelectionTarget::SimilarInRange);
+    // registerSelectionCommand(SELECT_NOTES_IN_CHORD_COMMAND, SelectionTarget::NotesInChord);
+    // registerSelectionCommand(SELECT_ALL_COMMAND, SelectionTarget::All);
+    // registerSelectionCommand(SELECT_SECTION_COMMAND, SelectionTarget::Section);
+
+    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+
+    registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
+    registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
+    registerCommand(EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { prevTextElement(); });
+
+    // note input commands
+
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN /*default*/);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, NoteInputMethod::BY_NOTE_NAME);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, NoteInputMethod::BY_DURATION);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, NoteInputMethod::RHYTHM);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_REPITCH_COMMAND, NoteInputMethod::REPITCH);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, NoteInputMethod::REALTIME_AUTO);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, NoteInputMethod::REALTIME_MANUAL);
+    registerNoteInputCommand(TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, NoteInputMethod::TIMEWISE);
+
+    registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
+
+    registerPadNoteCommand(NOTE_LONGA_COMMAND, Pad::NOTE00);
+    registerPadNoteCommand(NOTE_BREVE_COMMAND, Pad::NOTE0);
+    registerPadNoteCommand(PAD_NOTE_1_COMMAND, Pad::NOTE1);
+    registerPadNoteCommand(PAD_NOTE_2_COMMAND, Pad::NOTE2);
+    registerPadNoteCommand(PAD_NOTE_4_COMMAND, Pad::NOTE4);
+    registerPadNoteCommand(PAD_NOTE_8_COMMAND, Pad::NOTE8);
+    registerPadNoteCommand(PAD_NOTE_16_COMMAND, Pad::NOTE16);
+    registerPadNoteCommand(PAD_NOTE_32_COMMAND, Pad::NOTE32);
+    registerPadNoteCommand(PAD_NOTE_64_COMMAND, Pad::NOTE64);
+    registerPadNoteCommand(PAD_NOTE_128_COMMAND, Pad::NOTE128);
+    registerPadNoteCommand(PAD_NOTE_256_COMMAND, Pad::NOTE256);
+    registerPadNoteCommand(PAD_NOTE_512_COMMAND, Pad::NOTE512);
+    registerPadNoteCommand(PAD_NOTE_1024_COMMAND, Pad::NOTE1024);
+    registerPadNoteCommand(PAD_DOT_COMMAND, Pad::DOT);
+    registerPadNoteCommand(PAD_DOT2_COMMAND, Pad::DOT2);
+    registerPadNoteCommand(PAD_DOT3_COMMAND, Pad::DOT3);
+    registerPadNoteCommand(PAD_DOT4_COMMAND, Pad::DOT4);
+    registerPadNoteCommand(PAD_REST_COMMAND, Pad::REST);
+
+    registerCommand(TOGGLE_FLAT2_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT2); });
+    registerCommand(TOGGLE_FLAT_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT); });
+    registerCommand(TOGGLE_NAT_COMMAND, [this]() { toggleAccidental(AccidentalType::NATURAL); });
+    registerCommand(TOGGLE_SHARP_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP); });
+    registerCommand(TOGGLE_SHARP2_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP2); });
+
+    registerCommand(ADD_TIE_COMMAND, &Controller::addTie);
+    registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
+    registerCommand(ADD_LV_COMMAND, &Controller::addLaissezVib);
+    registerCommand(ADD_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
+    registerCommand(ADD_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
+    registerCommand(ADD_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
+    registerCommand(ADD_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
+
+    registerCommand(USE_VOICE_1_COMMAND, [this]() { changeVoice(0); });
+    registerCommand(USE_VOICE_2_COMMAND, [this]() { changeVoice(1); });
+    registerCommand(USE_VOICE_3_COMMAND, [this]() { changeVoice(2); });
+    registerCommand(USE_VOICE_4_COMMAND, [this]() { changeVoice(3); });
+
+    registerCommand(FLIP_COMMAND, &Interaction::flipSelection);
+    registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
+
+    registerCommand(ADD_NOTE_COMMAND, &Controller::handleNoteAction);
+    registerNoteCommand(ENTER_NOTE_C_COMMAND, NoteName::C);
+    registerNoteCommand(ENTER_NOTE_D_COMMAND, NoteName::D);
+    registerNoteCommand(ENTER_NOTE_E_COMMAND, NoteName::E);
+    registerNoteCommand(ENTER_NOTE_F_COMMAND, NoteName::F);
+    registerNoteCommand(ENTER_NOTE_G_COMMAND, NoteName::G);
+    registerNoteCommand(ENTER_NOTE_A_COMMAND, NoteName::A);
+    registerNoteCommand(ENTER_NOTE_B_COMMAND, NoteName::B);
+    registerNoteCommand(ADD_NOTE_C_COMMAND, NoteName::C, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_D_COMMAND, NoteName::D, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_E_COMMAND, NoteName::E, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_F_COMMAND, NoteName::F, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_G_COMMAND, NoteName::G, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::CurrentChord);
+    registerNoteCommand(ADD_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::CurrentChord);
+    registerNoteCommand(INSERT_NOTE_C_COMMAND, NoteName::C, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_D_COMMAND, NoteName::D, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_E_COMMAND, NoteName::E, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_F_COMMAND, NoteName::F, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_G_COMMAND, NoteName::G, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::InsertChord);
+    registerNoteCommand(INSERT_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::InsertChord);
+
+    registerCommand(SHOW_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
+    registerCommand(ADD_TUPLET_COMMAND, &Controller::putTuplet);
+    registerCommand(ADD_DUPLET_COMMAND, [this]() { putTuplet(2); });
+    registerCommand(ADD_TRIPLET_COMMAND, [this]() { putTuplet(3); });
+    registerCommand(ADD_QUADRUPLET_COMMAND, [this]() { putTuplet(4); });
+    registerCommand(ADD_QUINTUPLET_COMMAND, [this]() { putTuplet(5); });
+    registerCommand(ADD_SEXTUPLET_COMMAND, [this]() { putTuplet(6); });
+    registerCommand(ADD_SEPTUPLET_COMMAND, [this]() { putTuplet(7); });
+    registerCommand(ADD_OCTUPLET_COMMAND, [this]() { putTuplet(8); });
+    registerCommand(ADD_NONUPLET_COMMAND, [this]() { putTuplet(9); });
+
+    // editing commands
+    registerCommand(COPY_COMMAND, &Interaction::copySelection);
+    registerCommand(CUT_COMMAND, &Controller::cutSelection);
+    registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
+    registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
+
+    // move commands
+    registerCommand(MOVE_RIGHT_COMMAND, [this]() { move(MoveDirection::Right, false); });
+    registerCommand(MOVE_LEFT_COMMAND, [this]() { move(MoveDirection::Left, false); });
+    registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
+    registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
+
+    registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
+    registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
+    registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
+    registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+
+    // --------------------
+
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
-    registerAction("note-input", &Controller::toggleNoteInput, &Controller::toggleNoteInputAllowed);
-    registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
-    registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
-    registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
-    registerNoteInputAction("note-input-repitch", NoteInputMethod::REPITCH);
-    registerNoteInputAction("note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO);
-    registerNoteInputAction("note-input-realtime-manual", NoteInputMethod::REALTIME_MANUAL);
-    registerNoteInputAction("note-input-timewise", NoteInputMethod::TIMEWISE);
+    registerAction("note-action", &Controller::handleNoteAction); // used for drums
 
-    registerAction("realtime-advance", &Controller::realtimeAdvance, &Controller::isNoteInputMode);
-
-    registerPadNoteAction("note-longa", Pad::NOTE00);
-    registerPadNoteAction("note-breve", Pad::NOTE0);
-    registerPadNoteAction("pad-note-1", Pad::NOTE1);
-    registerPadNoteAction("pad-note-2", Pad::NOTE2);
-    registerPadNoteAction("pad-note-4", Pad::NOTE4);
-    registerPadNoteAction("pad-note-8", Pad::NOTE8);
-    registerPadNoteAction("pad-note-16", Pad::NOTE16);
-    registerPadNoteAction("pad-note-32", Pad::NOTE32);
-    registerPadNoteAction("pad-note-64", Pad::NOTE64);
-    registerPadNoteAction("pad-note-128", Pad::NOTE128);
-    registerPadNoteAction("pad-note-256", Pad::NOTE256);
-    registerPadNoteAction("pad-note-512", Pad::NOTE512);
-    registerPadNoteAction("pad-note-1024", Pad::NOTE1024);
-    registerPadNoteAction("pad-dot", Pad::DOT);
-    registerPadNoteAction("pad-dot2", Pad::DOT2);
-    registerPadNoteAction("pad-dot3", Pad::DOT3);
-    registerPadNoteAction("pad-dot4", Pad::DOT4);
-    registerPadNoteAction("pad-rest", Pad::REST);
-
-    registerAction("note-action", &Controller::handleNoteAction);
-
-    registerNoteAction("note-c", NoteName::C);
-    registerNoteAction("note-d", NoteName::D);
-    registerNoteAction("note-e", NoteName::E);
-    registerNoteAction("note-f", NoteName::F);
-    registerNoteAction("note-g", NoteName::G);
-    registerNoteAction("note-a", NoteName::A);
-    registerNoteAction("note-b", NoteName::B);
-
-    registerNoteAction("chord-c", NoteName::C, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-d", NoteName::D, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-e", NoteName::E, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-f", NoteName::F, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-g", NoteName::G, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-a", NoteName::A, NoteAddingMode::CurrentChord);
-    registerNoteAction("chord-b", NoteName::B, NoteAddingMode::CurrentChord);
-
-    registerNoteAction("insert-c", NoteName::C, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-d", NoteName::D, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-e", NoteName::E, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-f", NoteName::F, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-g", NoteName::G, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
-    registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
-
-    registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
-    registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
-    registerAction("next-word", &Controller::nextWord, &Controller::textNavigationAvailable);
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
@@ -170,54 +296,12 @@ void NotationActionController::init()
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
-    registerAction("flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
-    registerAction("flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
-    registerAction("nat", [this]() { toggleAccidental(AccidentalType::NATURAL); });
-    registerAction("sharp", [this]() { toggleAccidental(AccidentalType::SHARP); });
-    registerAction("sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
-
     registerAction("rest", &Interaction::putRestToSelection);
-
-    registerAction("add-marcato", [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
-    registerAction("add-sforzato", [this]() { toggleArticulation(SymbolId::articAccentAbove); });
-    registerAction("add-tenuto", [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
-    registerAction("add-staccato", [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
-
-    registerAction("duplet", [this]() { putTuplet(2); }, &Controller::noteOrRestSelected);
-    registerAction("triplet", [this]() { putTuplet(3); }, &Controller::noteOrRestSelected);
-    registerAction("quadruplet", [this]() { putTuplet(4); }, &Controller::noteOrRestSelected);
-    registerAction("quintuplet", [this]() { putTuplet(5); }, &Controller::noteOrRestSelected);
-    registerAction("sextuplet", [this]() { putTuplet(6); }, &Controller::noteOrRestSelected);
-    registerAction("septuplet", [this]() { putTuplet(7); }, &Controller::noteOrRestSelected);
-    registerAction("octuplet", [this]() { putTuplet(8); }, &Controller::noteOrRestSelected);
-    registerAction("nonuplet", [this]() { putTuplet(9); }, &Controller::noteOrRestSelected);
-    registerAction("custom-tuplet", &Controller::putTuplet, &Controller::noteOrRestSelected);
-    registerAction("tuplet-dialog", &Controller::openTupletOtherDialog, &Controller::noteOrRestSelected);
 
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
 
     registerAction("toggle-visible", &Interaction::toggleVisible, &Controller::isToggleVisibleAllowed);
-
-    registerMoveSelectionAction("next-element", MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
-    registerMoveSelectionAction("prev-element", MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
-    registerMoveSelectionAction("next-track", MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
-    registerMoveSelectionAction("prev-track", MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
-    registerMoveSelectionAction("next-frame", MoveSelectionType::Frame, MoveDirection::Right);
-    registerMoveSelectionAction("prev-frame", MoveSelectionType::Frame, MoveDirection::Left);
-    registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
-    registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
-
-    registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
-    registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
-    registerAction("pitch-up", &Controller::move, MoveDirection::Up, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-down", &Controller::move, MoveDirection::Down, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true, &Controller::isNotEditingOrHasPopup);
-    registerAction("pitch-down-octave", &Controller::move, MoveDirection::Down, true, &Controller::isNotEditingOrHasPopup);
-    registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
-    registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
 
     m_isAllowedDuringPlayback.insert({
         "notation-move-right", "notation-move-left",
@@ -229,36 +313,15 @@ void NotationActionController::init()
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
     registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
 
-    registerAction("action://notation/copy", &Interaction::copySelection, &Controller::hasSelection);
-    registerAction("action://notation/cut", &Controller::cutSelection, &Controller::hasSelection);
-    registerAction("action://notation/paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
     registerAction("notation-paste-half", [this]() { pasteSelection(PastingType::Half); });
     registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
-    registerAction("action://notation/delete", &Interaction::deleteSelection, &Controller::hasSelection);
 
-    registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
-    registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
-    registerAction("tie", &Controller::addTie);
     registerAction("chord-tie", &Controller::chordTie);
-    registerAction("lv", &Controller::addLaissezVib);
-    registerAction("add-slur", &Controller::addSlur);
+
     registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
 
-    registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
-    registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
-
-    registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
-    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
-    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
-    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
-    registerAction("notation-select-all", &Interaction::selectAll);
-    registerAction("notation-select-section", &Interaction::selectSection);
-    registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
-    registerAction("last-element", &Interaction::selectLastElement, PlayMode::PlayChord);
-    registerAction("top-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Up); }, &Controller::hasSelection);
-    registerAction("bottom-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Down); }, &Controller::hasSelection);
     registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
@@ -281,6 +344,11 @@ void NotationActionController::init()
     registerAction("toggle-system-lock", &Interaction::toggleSystemLock);
     registerAction("toggle-score-lock", &Interaction::toggleScoreLock);
     registerAction("make-into-system", &Interaction::makeIntoSystem);
+    registerAction("apply-page-lock", &Interaction::applyPageLock);
+    registerAction("move-system-to-prev-page", &Interaction::moveSystemToPrevPage);
+    registerAction("move-system-to-next-page", &Interaction::moveSystemToNextPage);
+    registerAction("toggle-page-lock", &Interaction::togglePageLock);
+    registerAction("make-into-page", &Interaction::makeIntoPage);
 
     registerAction("split-measure", &Interaction::splitSelectedMeasure);
     registerAction("join-measures", &Interaction::joinSelectedMeasures);
@@ -339,10 +407,10 @@ void NotationActionController::init()
 
     registerAction("add-8va", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
     registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
-    registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::noteOrRestSelected);
-    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::noteOrRestSelected);
+    registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::isNoteOrRestSelected);
+    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::isNoteOrRestSelected);
     registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
-                   &Controller::noteOrRestSelected);
+                   &Controller::isNoteOrRestSelected);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
     registerAction("add-image", [this]() { addImage(); });
@@ -485,8 +553,7 @@ void NotationActionController::init()
     registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty,
                    TranslatableString("undoableAction", "Toggle empty staves"));
 
-    registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead,
-                   TranslatableString("undoableAction", "Mirror notehead"));
+    registerAction("mirror-note", &Interaction::mirrorNotes, &Controller::hasSelection);
 
     registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
     registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
@@ -502,10 +569,8 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
                    TranslatableString("undoableAction", "Enter full-measure rest"));
-    registerAction("set-visible", &Interaction::execute, &mu::engraving::Score::cmdSetVisible,
-                   TranslatableString("undoableAction", "Make element(s) visible"));
-    registerAction("unset-visible", &Interaction::execute, &mu::engraving::Score::cmdUnsetVisible,
-                   TranslatableString("undoableAction", "Make element(s) invisible"));
+    registerAction("set-visible", &Interaction::setSelectionVisible, true);
+    registerAction("unset-visible", &Interaction::setSelectionVisible, false);
     registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
     registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
 
@@ -513,10 +578,6 @@ void NotationActionController::init()
         if (isNotesIntervalValid(i)) {
             registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
         }
-    }
-
-    for (voice_idx_t i = 0; i < mu::engraving::VOICES; ++i) {
-        registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(static_cast<int>(i)); });
     }
 
     registerAction("voice-assignment-all-in-instrument", &Interaction::changeSelectedElementsVoiceAssignment,
@@ -561,12 +622,35 @@ void NotationActionController::init()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
-            notation->interaction()->noteInput()->stateChanged().onNotify(this, [this]() {
-                m_currentNotationNoteInputChanged.notify();
+            auto interaction = notation->interaction();
+
+            interaction->selectionChanged().onNotify(this, [this]() {
+                m_selectionChanged.notify();
+            }, Asyncable::Mode::SetReplace);
+
+            interaction->noteInput()->stateChanged().onNotify(this, [this]() {
+                m_noteInputStateChanged.notify();
+            }, Asyncable::Mode::SetReplace);
+
+            interaction->textEditingStarted().onNotify(this, [this]() {
+                m_textEditingChanged.send(true);
+            }, Asyncable::Mode::SetReplace);
+            interaction->textEditingEnded().onReceive(this, [this](TextBase*) {
+                m_textEditingChanged.send(false);
+            }, Asyncable::Mode::SetReplace);
+
+            auto undoStack = notation->undoStack();
+            undoStack->stackChanged().onNotify(this, [this]() {
+                m_stackChanged.notify();
             }, Asyncable::Mode::SetReplace);
         }
-        m_currentNotationNoteInputChanged.notify();
+        m_textEditingChanged.send(isTextEditing());
+        m_noteInputStateChanged.notify();
     });
+
+    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
+        m_isNoteInputAllowedChanged.send(isNoteInputAllowed());
+    }, Asyncable::Mode::SetReplace);
 
     // Register engraving debugging options actions
     for (auto& [code, member] : engravingDebuggingActions) {
@@ -581,6 +665,153 @@ void NotationActionController::init()
         });
     }
     dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });
+
+    // compat
+    {
+        static std::map<ActionCode, rcommand::Command> actionToCommand = {
+            { "action://notation/copy", COPY_COMMAND },
+            { "action://notation/cut", CUT_COMMAND },
+            { "action://notation/paste", PASTE_COMMAND },
+            { "action://notation/delete", DELETE_COMMAND },
+            { "action://notation/cancel", CANCEL_COMMAND },
+            { "action://notation/undo", UNDO_COMMAND },
+            { "action://notation/redo", REDO_COMMAND },
+            { "action://copy", COPY_COMMAND },
+            { "action://cut", CUT_COMMAND },
+            { "action://paste", PASTE_COMMAND },
+            { "action://delete", DELETE_COMMAND },
+            { "action://cancel", CANCEL_COMMAND },
+            { "action://undo", UNDO_COMMAND },
+            { "action://redo", REDO_COMMAND },
+            { "notation-move-right", MOVE_RIGHT_COMMAND },
+            { "notation-move-left", MOVE_LEFT_COMMAND },
+            { "notation-move-right-quickly", MOVE_RIGHT_QUICKLY_COMMAND },
+            { "notation-move-left-quickly", MOVE_LEFT_QUICKLY_COMMAND },
+            { "pitch-up", PITCH_UP_COMMAND },
+            { "pitch-down", PITCH_DOWN_COMMAND },
+            { "pitch-up-octave", PITCH_UP_OCTAVE_COMMAND },
+            { "pitch-down-octave", PITCH_DOWN_OCTAVE_COMMAND },
+            { "next-word", EDIT_NEXT_WORD_COMMAND },
+            { "next-text-element", EDIT_NEXT_TEXT_ELEMENT_COMMAND },
+            { "prev-text-element", EDIT_PREV_TEXT_ELEMENT_COMMAND },
+            { "note-input", TOGGLE_NOTE_INPUT_COMMAND },
+            { "note-input-by-note-name", TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND },
+            { "note-input-by-duration", TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND },
+            { "note-input-rhythm", TOGGLE_NOTE_INPUT_RHYTHM_COMMAND },
+            { "note-input-repitch", TOGGLE_NOTE_INPUT_REPITCH_COMMAND },
+            { "note-input-realtime-auto", TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND },
+            { "note-input-realtime-manual", TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND },
+            { "note-input-timewise", TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND },
+            { "realtime-advance", REALTIME_ADVANCE_COMMAND },
+            { "note-longa", NOTE_LONGA_COMMAND },
+            { "note-breve", NOTE_BREVE_COMMAND },
+            { "pad-note-1", PAD_NOTE_1_COMMAND },
+            { "pad-note-2", PAD_NOTE_2_COMMAND },
+            { "pad-note-4", PAD_NOTE_4_COMMAND },
+            { "pad-note-8", PAD_NOTE_8_COMMAND },
+            { "pad-note-16", PAD_NOTE_16_COMMAND },
+            { "pad-note-32", PAD_NOTE_32_COMMAND },
+            { "pad-note-64", PAD_NOTE_64_COMMAND },
+            { "pad-note-128", PAD_NOTE_128_COMMAND },
+            { "pad-note-256", PAD_NOTE_256_COMMAND },
+            { "pad-note-512", PAD_NOTE_512_COMMAND },
+            { "pad-note-1024", PAD_NOTE_1024_COMMAND },
+            { "pad-dot", PAD_DOT_COMMAND },
+            { "pad-dot2", PAD_DOT2_COMMAND },
+            { "pad-dot3", PAD_DOT3_COMMAND },
+            { "pad-dot4", PAD_DOT4_COMMAND },
+            { "pad-rest", PAD_REST_COMMAND },
+            { "flat2", TOGGLE_FLAT2_COMMAND },
+            { "flat", TOGGLE_FLAT_COMMAND },
+            { "nat", TOGGLE_NAT_COMMAND },
+            { "sharp", TOGGLE_SHARP_COMMAND },
+            { "sharp2", TOGGLE_SHARP2_COMMAND },
+            { "tie", ADD_TIE_COMMAND },
+            { "lv", ADD_LV_COMMAND },
+            { "add-slur", ADD_SLUR_COMMAND },
+            { "add-marcato", ADD_MARCATO_COMMAND },
+            { "add-sforzato", ADD_SFORZATO_COMMAND },
+            { "add-tenuto", ADD_TENUTO_COMMAND },
+            { "add-staccato", ADD_STACCATO_COMMAND },
+            { "voice-1", USE_VOICE_1_COMMAND },
+            { "voice-2", USE_VOICE_2_COMMAND },
+            { "voice-3", USE_VOICE_3_COMMAND },
+            { "voice-4", USE_VOICE_4_COMMAND },
+            { "flip", FLIP_COMMAND },
+            { "flip-horizontally", FLIP_HORIZONTALLY_COMMAND },
+            { "note-c", ENTER_NOTE_C_COMMAND },
+            { "note-d", ENTER_NOTE_D_COMMAND },
+            { "note-e", ENTER_NOTE_E_COMMAND },
+            { "note-f", ENTER_NOTE_F_COMMAND },
+            { "note-g", ENTER_NOTE_G_COMMAND },
+            { "note-a", ENTER_NOTE_A_COMMAND },
+            { "note-b", ENTER_NOTE_B_COMMAND },
+            { "chord-c", ADD_NOTE_C_COMMAND },
+            { "chord-d", ADD_NOTE_D_COMMAND },
+            { "chord-e", ADD_NOTE_E_COMMAND },
+            { "chord-f", ADD_NOTE_F_COMMAND },
+            { "chord-g", ADD_NOTE_G_COMMAND },
+            { "chord-a", ADD_NOTE_A_COMMAND },
+            { "chord-b", ADD_NOTE_B_COMMAND },
+            { "insert-c", INSERT_NOTE_C_COMMAND },
+            { "insert-d", INSERT_NOTE_D_COMMAND },
+            { "insert-e", INSERT_NOTE_E_COMMAND },
+            { "insert-f", INSERT_NOTE_F_COMMAND },
+            { "insert-g", INSERT_NOTE_G_COMMAND },
+            { "insert-a", INSERT_NOTE_A_COMMAND },
+            { "insert-b", INSERT_NOTE_B_COMMAND },
+            { "duplet", ADD_DUPLET_COMMAND },
+            { "triplet", ADD_TRIPLET_COMMAND },
+            { "quadruplet", ADD_QUADRUPLET_COMMAND },
+            { "quintuplet", ADD_QUINTUPLET_COMMAND },
+            { "sextuplet", ADD_SEXTUPLET_COMMAND },
+            { "septuplet", ADD_SEPTUPLET_COMMAND },
+            { "octuplet", ADD_OCTUPLET_COMMAND },
+            { "nonuplet", ADD_NONUPLET_COMMAND },
+            { "tuplet-dialog", SHOW_TUPLET_CONFIGURE_COMMAND },
+            { "first-element", GOTO_FIRST_ELEMENT_COMMAND },
+            { "last-element", GOTO_LAST_ELEMENT_COMMAND },
+            { "next-element", GOTO_NEXT_ELEMENT_COMMAND },
+            { "prev-element", GOTO_PREV_ELEMENT_COMMAND },
+            { "next-track", GOTO_NEXT_TRACK_COMMAND },
+            { "prev-track", GOTO_PREV_TRACK_COMMAND },
+            { "next-frame", GOTO_NEXT_FRAME_COMMAND },
+            { "prev-frame", GOTO_PREV_FRAME_COMMAND },
+            { "next-system", GOTO_NEXT_SYSTEM_COMMAND },
+            { "prev-system", GOTO_PREV_SYSTEM_COMMAND },
+            { "up-chord", GOTO_UPNOTE_IN_CHORD_COMMAND },
+            { "down-chord", GOTO_DOWNNOTE_IN_CHORD_COMMAND },
+            { "top-chord", GOTO_TOPNOTE_IN_CHORD_COMMAND },
+            { "bottom-chord", GOTO_BOTTOMNOTE_IN_CHORD_COMMAND },
+            { "select-similar", SELECT_SIMILAR_COMMAND },
+            { "select-similar-staff", SELECT_SIMILAR_IN_STAFF_COMMAND },
+            { "select-similar-range", SELECT_SIMILAR_IN_RANGE_COMMAND },
+            { "select-notes-in-chord", SELECT_NOTES_IN_CHORD_COMMAND },
+            { "notation-select-all", SELECT_ALL_COMMAND },
+            { "notation-select-section", SELECT_SECTION_COMMAND },
+        };
+
+        auto ad = dispatcher();
+        auto d = commandDispatcher();
+        for (const auto& [actionCode, command] : actionToCommand) {
+            ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
+        }
+
+        ad->reg(this, "custom-tuplet", [d](const ActionData& args) {
+            IF_ASSERT_FAILED(args.count() > 0) {
+                return;
+            }
+
+            TupletOptions options = args.arg<TupletOptions>(0);
+
+            rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
+            query.addParam("ratio", Val(options.ratio.toString().toStdString()));
+            query.addParam("number-type", Val(engraving::str_conv(options.numberType)));
+            query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
+            query.addParam("auto-baselen", Val(options.autoBaseLen));
+            d->dispatch(query);
+        });
+    }
 }
 
 bool NotationActionController::canReceiveAction(const ActionCode& code) const
@@ -591,18 +822,10 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
         return false;
     }
 
-    if (playbackController()->isPlaying()) {
+    if (globalContext()->playbackState()->isPlaying()) {
         if (!muse::contains(m_isAllowedDuringPlayback, code)) {
             return false;
         }
-    }
-
-    if (code == UNDO_ACTION_CODE) {
-        return canUndo();
-    }
-
-    if (code == REDO_ACTION_CODE) {
-        return canRedo();
     }
 
     // Actions other than undo and redo can only be handled when the current
@@ -665,11 +888,6 @@ INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
     return interaction->noteInput();
 }
 
-muse::async::Notification NotationActionController::currentNotationNoteInputChanged() const
-{
-    return m_currentNotationNoteInputChanged;
-}
-
 INotationUndoStackPtr NotationActionController::currentNotationUndoStack() const
 {
     auto notation = currentNotation();
@@ -714,8 +932,8 @@ void NotationActionController::resetState()
 {
     TRACEFUNC;
 
-    if (playbackController()->isPlaying()) {
-        playbackController()->reset();
+    if (globalContext()->playbackState()->isPlaying()) {
+        dispatcher()->dispatch("stop");
     }
 
     auto noteInput = currentNotationNoteInput();
@@ -724,7 +942,7 @@ void NotationActionController::resetState()
     }
 
     if (noteInput->isNoteInputMode()) {
-        toggleNoteInput();
+        noteInput->endNoteInput();
         return;
     }
 
@@ -751,37 +969,58 @@ void NotationActionController::resetState()
     }
 }
 
-void NotationActionController::toggleNoteInput()
+bool NotationActionController::isNoteInputAllowed() const
 {
-    TRACEFUNC;
-
-    INotationNoteInputPtr noteInput = currentNotationNoteInput();
-    if (!noteInput) {
-        return;
-    }
-
-    if (noteInput->isNoteInputMode()) {
-        noteInput->endNoteInput();
-        return;
-    }
-
-    // If the Braille panel or Note Input toolbar has focus, stay there.
-    noteInput->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
+    return !globalContext()->playbackState()->isPlaying();
 }
 
-void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
+muse::async::Channel<bool> NotationActionController::isNoteInputAllowedChanged() const
+{
+    return m_isNoteInputAllowedChanged;
+}
+
+muse::async::Notification NotationActionController::noteInputStateChanged() const
+{
+    return m_noteInputStateChanged;
+}
+
+bool NotationActionController::isNoteInputMode() const
+{
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return false;
+    }
+
+    return noteInput->isNoteInputMode();
+}
+
+NoteInputMethod NotationActionController::noteInputMethod() const
+{
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return NoteInputMethod::UNKNOWN;
+    }
+
+    return noteInput->state().noteEntryMethod();
+}
+
+void NotationActionController::toggleNoteInput(NoteInputMethod method)
 {
     TRACEFUNC;
 
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
+    }
+
+    if (method == NoteInputMethod::UNKNOWN) {
+        method = configuration()->defaultNoteInputMethod();
     }
 
     if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput(method);
     } else if (noteInput->usingNoteInputMethod(method)) {
-        toggleNoteInput();
+        noteInput->endNoteInput();
     } else {
         noteInput->setNoteInputMethod(method);
     }
@@ -790,19 +1029,17 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 void NotationActionController::toggleNoteInputInsert()
 {
     if (!currentNotationNoteInput()->usingNoteInputMethod(NoteInputMethod::TIMEWISE)) {
-        toggleNoteInputMethod(NoteInputMethod::TIMEWISE);
+        toggleNoteInput(NoteInputMethod::TIMEWISE);
     } else {
-        toggleNoteInputMethod(NoteInputMethod::BY_NOTE_NAME);
+        toggleNoteInput(NoteInputMethod::BY_NOTE_NAME);
     }
 }
 
 void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode addingMode)
 {
-    startNoteInput();
-
     NoteInputParams params;
     const bool addFlag = addingMode == NoteAddingMode::CurrentChord;
-    bool ok = currentNotationScore()->resolveNoteInputParams(static_cast<int>(note), addFlag, params);
+    bool ok = mu::engraving::NoteInput::resolveNoteInputParams(currentNotationScore(), static_cast<int>(note), addFlag, params);
     if (!ok) {
         LOGE() << "Could not resolve note input params, note: " << (int)note << ", addFlag: " << addFlag;
         return;
@@ -813,11 +1050,22 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
 
 void NotationActionController::handleNoteAction(const muse::actions::ActionData& args)
 {
+    handleNoteAction(args.arg<NoteInputParams>(0), args.arg<NoteAddingMode>(1));
+}
+
+void NotationActionController::handleNoteAction(const muse::rcommand::CommandQuery& query)
+{
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(args.count() > 1) {
-        return;
-    }
+    NoteName note = str_conv(query.param("note").toString(), NoteName::C);
+    NoteAddingMode mode = str_conv(query.param("mode").toString(), NoteAddingMode::CurrentChord);
+
+    handleNoteAction(note, mode);
+}
+
+void NotationActionController::handleNoteAction(const NoteInputParams& params, const NoteAddingMode& addingMode)
+{
+    TRACEFUNC;
 
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
@@ -825,9 +1073,6 @@ void NotationActionController::handleNoteAction(const muse::actions::ActionData&
     }
 
     startNoteInput();
-
-    const NoteInputParams params = args.arg<NoteInputParams>(0);
-    const NoteAddingMode addingMode = args.arg<NoteAddingMode>(1);
 
     if (addingMode == NoteAddingMode::NextChord) {
         if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
@@ -882,6 +1127,308 @@ void NotationActionController::padNote(const Pad& pad)
         || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
         seekAndPlaySelectedElement();
     }
+}
+
+DurationType NotationActionController::currentDurationType() const
+{
+    constexpr DurationType INVALID_DURATION_TYPE = DurationType::V_INVALID;
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return noteInput->state().duration().type();
+    }
+
+    if (selection->isNone() || selection->isRange()) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    const std::vector<EngravingItem*>& selectedElements = selection->elements();
+    if (selectedElements.empty()) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    auto elementToChordRest = [](const EngravingItem* element) -> const ChordRest* {
+        if (!element) {
+            return nullptr;
+        }
+        if (element->isChordRest()) {
+            return toChordRest(element);
+        }
+        if (element->isNote()) {
+            return toNote(element)->chord();
+        }
+        if (element->isStem()) {
+            return toStem(element)->chord();
+        }
+        if (element->isHook()) {
+            return toHook(element)->chord();
+        }
+        return nullptr;
+    };
+
+    DurationType result = INVALID_DURATION_TYPE;
+    bool isFirstElement = true;
+    for (const EngravingItem* element: selectedElements) {
+        const ChordRest* chordRest = elementToChordRest(element);
+        if (!chordRest) {
+            continue;
+        }
+
+        if (isFirstElement) {
+            result = chordRest->durationType().type();
+            isFirstElement = false;
+        } else if (result != chordRest->durationType().type()) {
+            return INVALID_DURATION_TYPE;
+        }
+    }
+
+    return result;
+}
+
+int NotationActionController::currentDotCount() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return 0;
+    }
+
+    return interaction->noteInput()->state().duration().dots();
+}
+
+bool NotationActionController::currentIsRest() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return false;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return noteInput->state().rest();
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return false;
+    }
+
+    if (selection->isNone() || selection->isRange()) {
+        return false;
+    }
+
+    for (const EngravingItem* element: selection->elements()) {
+        if (!element->isRest()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+AccidentalType NotationActionController::currentAccidentalType() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return AccidentalType::NONE;
+    }
+
+    return interaction->noteInput()->state().accidentalType();
+}
+
+std::set<SymbolId> NotationActionController::currentArticulations() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return {};
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return {};
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return mu::engraving::splitArticulations(noteInput->state().articulationIds());
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return {};
+    }
+
+    if (selection->isNone()) {
+        return {};
+    }
+
+    auto chordArticulations = [](const Chord* chord) {
+        std::set<SymbolId> result;
+        for (Articulation* articulation: chord->articulations()) {
+            result.insert(articulation->symId());
+        }
+
+        result = mu::engraving::flipArticulations(result, mu::engraving::PlacementV::ABOVE);
+        return mu::engraving::splitArticulations(result);
+    };
+
+    std::set<SymbolId> result;
+    bool isFirstNote = true;
+    for (const EngravingItem* element: selection->elements()) {
+        if (!element->isNote()) {
+            continue;
+        }
+
+        const Note* note = toNote(element);
+        if (isFirstNote) {
+            result = chordArticulations(note->chord());
+            isFirstNote = false;
+        } else {
+            std::set<SymbolId> currentNoteArticulations = chordArticulations(note->chord());
+            for (auto it = result.begin(); it != result.end();) {
+                if (std::find(currentNoteArticulations.begin(), currentNoteArticulations.end(),
+                              *it) == currentNoteArticulations.end()) {
+                    it = result.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+voice_idx_t NotationActionController::currentVoice() const
+{
+    constexpr voice_idx_t INVALID_VOICE = muse::nidx;
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return INVALID_VOICE;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return INVALID_VOICE;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        return noteInput->state().voice();
+    }
+
+    INotationSelectionPtr selection = interaction->selection();
+    if (!selection) {
+        return INVALID_VOICE;
+    }
+
+    if (selection->isNone()) {
+        return INVALID_VOICE;
+    }
+
+    const std::vector<EngravingItem*>& selectedElements = selection->elements();
+    if (selectedElements.empty()) {
+        return INVALID_VOICE;
+    }
+
+    voice_idx_t voice = INVALID_VOICE;
+    for (const EngravingItem* element : selectedElements) {
+        if (element->hasVoiceAssignmentProperties()) {
+            VoiceAssignment voiceAssignment = element->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
+                return INVALID_VOICE;
+            }
+        }
+        voice_idx_t elementVoice = element->voice();
+        if (elementVoice != voice && voice != INVALID_VOICE) {
+            return INVALID_VOICE;
+        }
+
+        voice = elementVoice;
+    }
+
+    return voice;
+}
+
+muse::async::Notification NotationActionController::selectionChanged() const
+{
+    return m_selectionChanged;
+}
+
+bool NotationActionController::selectionHasTie() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    std::vector<Note*> tiedNotes = interaction->selection()->notes(NoteFilter::WithTie);
+    if (tiedNotes.empty()) {
+        return false;
+    }
+
+    bool hasTie = true;
+    for (const Note* note: tiedNotes) {
+        if (!note->tieFor()) {
+            hasTie = false;
+            break;
+        }
+        if (note->laissezVib()) {
+            hasTie = false;
+            break;
+        }
+    }
+
+    return hasTie;
+}
+
+bool NotationActionController::selectionHasLaissezVib() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    std::vector<Note*> tiedNotes = interaction->selection()->notes(NoteFilter::WithTie);
+    if (tiedNotes.empty()) {
+        return false;
+    }
+
+    bool hasLaissezVib = true;
+    for (const Note* note: tiedNotes) {
+        if (!note->laissezVib()) {
+            hasLaissezVib = false;
+            break;
+        }
+    }
+    return hasLaissezVib;
+}
+
+bool NotationActionController::selectionHasSlur() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    bool hasSlur = interaction->noteInput()->state().slur() != nullptr;
+    return hasSlur;
 }
 
 void NotationActionController::putNote(const ActionData& args)
@@ -984,13 +1531,13 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     }
 }
 
-void NotationActionController::putTuplet(const ActionData& data)
+void NotationActionController::putTuplet(const muse::rcommand::CommandQuery& query)
 {
-    IF_ASSERT_FAILED(data.count() == 1) {
-        return;
-    }
-
-    TupletOptions options = data.arg<TupletOptions>(0);
+    TupletOptions options;
+    options.ratio = engraving::Fraction::fromString(muse::String::fromStdString(query.param("ratio").toString()));
+    options.numberType = engraving::str_conv(query.param("number-type").toString(), engraving::TupletNumberType::SHOW_NUMBER);
+    options.bracketType = engraving::str_conv(query.param("bracket-type").toString(), engraving::TupletBracketType::AUTO_BRACKET);
+    options.autoBaseLen = query.param("auto-baselen", Val(false)).toBool();
 
     putTuplet(options);
 }
@@ -1031,9 +1578,9 @@ void NotationActionController::putTuplet(int tupletCount)
     // get the bracket type from score style settings
     if (INotationStylePtr style = currentNotationStyle()) {
         int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
-        options.bracketType = static_cast<TupletBracketType>(bracketType);
+        options.bracketType = static_cast<engraving::TupletBracketType>(bracketType);
         int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
-        options.numberType = static_cast<TupletNumberType>(numberType);
+        options.numberType = static_cast<engraving::TupletNumberType>(numberType);
     }
 
     putTuplet(options);
@@ -1087,29 +1634,29 @@ void NotationActionController::realtimeAdvance()
     midiInput->onRealtimeAdvance();
 }
 
-bool NotationActionController::moveSelectionAvailable(MoveSelectionType type) const
+bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) const
 {
     auto interaction = currentNotationInteraction();
     return interaction && interaction->moveSelectionAvailable(type);
 }
 
-void NotationActionController::moveSelection(MoveSelectionType type, MoveDirection direction)
+void NotationActionController::select(SelectionTarget target)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->moveSelection(direction, type);
+    interaction->select(target);
     seekSelectedElement();
 }
 
-void NotationActionController::move(MoveDirection direction, bool quickly)
+muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool quickly)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
-        return;
+        return muse::make_ret(muse::Ret::Code::InternalError);
     }
 
     const NoteInputState& state = interaction->noteInput()->state();
@@ -1118,7 +1665,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         // Try to restore the previous selection...
         interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
         seekAndPlaySelectedElement(true);
-        return;
+        return muse::make_ok();
     }
 
     const EngravingItem* selectedElement = interaction->selection()->element();
@@ -1136,13 +1683,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->nudgeAnchors(direction);
         } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
-            return;
+            return muse::make_ok();
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
                 interaction->movePitch(direction, PitchMode::OCTAVE);
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
-            return;
+            return muse::make_ok();
         } else if (interaction->selection()->isNone() && !state.beyondScore()) {
             interaction->selectFirstElement(false);
         } else {
@@ -1151,8 +1698,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
-        if (playbackController()->isPlaying()) {
-            MeasureBeat beat = playbackController()->currentBeat();
+        if (globalContext()->playbackState()->isPlaying()) {
+            engraving::MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
             int increment = (direction == MoveDirection::Right ? 1 : -1);
@@ -1181,12 +1728,12 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             }
 
             playbackController()->seekBeat(targetMeasureIdx, targetBeatIdx);
-            return;
+            return muse::make_ok();
         }
 
         if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
             navigateToTextElementInNearMeasure(direction);
-            return;
+            return muse::make_ok();
         }
 
         if (selectedElement && selectedElement->isTextBase()) {
@@ -1206,6 +1753,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     }
 
     seekAndPlaySelectedElement(playChord);
+
+    return muse::make_ok();
+}
+
+void NotationActionController::move(MoveDirection direction, bool quickly)
+{
+    moveWithRet(direction, quickly);
 }
 
 void NotationActionController::moveInputNotes(bool up, PitchMode mode)
@@ -1557,74 +2111,6 @@ void NotationActionController::addFretboardDiagram()
     interaction->addFretboardDiagram();
 }
 
-void NotationActionController::selectAllSimilarElements()
-{
-    TRACEFUNC;
-    auto notationElements = currentNotationElements();
-    auto interaction = currentNotationInteraction();
-    if (!notationElements || !interaction) {
-        return;
-    }
-
-    EngravingItem* selectedElement = interaction->selection()->element();
-    if (!selectedElement) {
-        return;
-    }
-
-    FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    std::vector<EngravingItem*> elements = notationElements->elements(options);
-    if (elements.empty()) {
-        return;
-    }
-
-    interaction->clearSelection();
-
-    interaction->select(elements, SelectType::ADD);
-}
-
-void NotationActionController::selectAllSimilarElementsInStaff()
-{
-    TRACEFUNC;
-    auto notationElements = currentNotationElements();
-    auto interaction = currentNotationInteraction();
-    if (!notationElements || !interaction) {
-        return;
-    }
-
-    EngravingItem* selectedElement = interaction->selection()->element();
-    if (!selectedElement) {
-        return;
-    }
-
-    FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    options.staffStart = static_cast<int>(selectedElement->staffIdx());
-    options.staffEnd = options.staffStart + 1;
-
-    std::vector<EngravingItem*> elements = notationElements->elements(options);
-    if (elements.empty()) {
-        return;
-    }
-
-    interaction->clearSelection();
-
-    interaction->select(elements, SelectType::ADD);
-}
-
-void NotationActionController::selectAllSimilarElementsInRange()
-{
-    auto elements = currentNotationElements();
-    mu::engraving::EngravingItem* lastHit = currentNotationSelection()->lastElementHit();
-    if (!elements || !lastHit) {
-        return;
-    }
-
-    mu::engraving::Score* score = elements->msScore();
-    score->selectSimilarInRange(lastHit);
-    if (score->selectionChanged()) {
-        currentNotationInteraction()->selectionChanged().notify();
-    }
-}
-
 void NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
@@ -1838,7 +2324,9 @@ void NotationActionController::openBreaksDialog()
 
 void NotationActionController::openTransposeDialog()
 {
-    interactive()->open("musescore://notation/transpose");
+    interactive()->open("musescore://notation/transpose").onResolve(this, [this](const Val&) {
+        currentNotationInteraction()->checkAndShowError();
+    });
 }
 
 void NotationActionController::openPartsDialog()
@@ -1897,27 +2385,6 @@ void NotationActionController::saveStyle()
     }
 }
 
-FilterElementsOptions NotationActionController::elementsFilterOptions(const EngravingItem* element) const
-{
-    TRACEFUNC;
-    FilterElementsOptions options;
-    options.elementType = element->type();
-
-    if (element->isNote()) {
-        const mu::engraving::Note* note = dynamic_cast<const mu::engraving::Note*>(element);
-        if (note->chord()->isGrace()) {
-            options.subtype = -1;
-        } else {
-            options.subtype = element->subtype();
-        }
-    } else if (element->isHairpinSegment() || element->isHarmony()) {
-        options.subtype = element->subtype();
-        options.bySubtype = true;
-    }
-
-    return options;
-}
-
 bool NotationActionController::measureNavigationAvailable() const
 {
     return isNotEditingOrHasPopup() || textNavigationAvailable();
@@ -1927,6 +2394,21 @@ bool NotationActionController::toggleLayoutBreakAvailable() const
 {
     INotationInteractionPtr interaction = currentNotationInteraction();
     return interaction && interaction->toggleLayoutBreakAvailable();
+}
+
+bool NotationActionController::isTextEditing() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->isTextEditingStarted();
+}
+
+muse::async::Channel<bool> NotationActionController::textEditingChanged() const
+{
+    return m_textEditingChanged;
 }
 
 bool NotationActionController::textNavigationAvailable() const
@@ -1982,19 +2464,26 @@ bool NotationActionController::resolveTextNavigationAvailable(TextNavigationType
     return false;
 }
 
-void NotationActionController::nextTextElement()
+muse::Ret NotationActionController::nextTextElement()
 {
     navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST);
+    return muse::make_ok();
 }
 
-void NotationActionController::prevTextElement()
+muse::Ret NotationActionController::prevTextElement()
 {
     navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
+    return muse::make_ok();
 }
 
-void NotationActionController::nextWord()
+muse::Ret NotationActionController::nextWord()
 {
+    if (!textNavigationAvailable()) {
+        return muse::make_ret(Ret::Code::NotSupported);
+    }
+
     navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST, false);
+    return muse::make_ok();
 }
 
 void NotationActionController::nextBeatTextElement()
@@ -2017,7 +2506,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     if (element->isLyrics()) {
         currentNotationInteraction()->navigateToLyrics(direction, moveOnly);
     } else if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();
@@ -2042,7 +2531,7 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
     }
 
     if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();
@@ -2065,7 +2554,7 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
     }
 
     if (element->isHarmony()) {
-        const Harmony* chordSymbol = editedChordSymbol();
+        const engraving::Harmony* chordSymbol = editedChordSymbol();
 
         // otherwise, chord symbol will be deleted when navigating away from it
         const bool canPlay = chordSymbol && !chordSymbol->harmonyName().empty();
@@ -2099,21 +2588,6 @@ bool NotationActionController::isEditingLyrics() const
 
     return interaction->isTextEditingStarted() && interaction->selection()->element()
            && interaction->selection()->element()->isLyrics();
-}
-
-bool NotationActionController::isNoteInputMode() const
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return false;
-    }
-
-    auto noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return false;
-    }
-
-    return noteInput->isNoteInputMode();
 }
 
 bool NotationActionController::isNotNoteInputMode() const
@@ -2244,7 +2718,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::toggleNoteInputAllowed() const
 {
-    if (playbackController()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
+    if (globalContext()->playbackState()->isPlaying()) {
         return false;
     }
 
@@ -2253,12 +2727,7 @@ bool NotationActionController::toggleNoteInputAllowed() const
         return false;
     }
 
-    const UiContext& ctx = uiContextResolver()->currentUiContext();
-    const INavigationControl* ctrl = navigationController()->activeControl();
-
-    return ctx == ui::UiCtxProjectFocused
-           || ctx == ui::UiCtxBrailleFocused
-           || (ctrl && ctrl->name().startsWith("note-input")); // Toolbar buttons.
+    return true;
 }
 
 void NotationActionController::startNoteInput()
@@ -2280,7 +2749,7 @@ mu::engraving::EngravingItem* NotationActionController::selectedElement() const
     return selection ? selection->element() : nullptr;
 }
 
-bool NotationActionController::noteOrRestSelected() const
+bool NotationActionController::isNoteOrRestSelected() const
 {
     if (isNoteInputMode()) {
         return true;
@@ -2318,6 +2787,11 @@ bool NotationActionController::canUndo() const
 bool NotationActionController::canRedo() const
 {
     return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
+}
+
+muse::async::Notification NotationActionController::stackChanged() const
+{
+    return m_stackChanged;
 }
 
 bool NotationActionController::isNotationPage() const
@@ -2435,24 +2909,16 @@ void NotationActionController::registerAction(const ActionCode& code,
 
 void NotationActionController::registerNoteInputAction(const ActionCode& code, NoteInputMethod inputMethod)
 {
-    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &Controller::toggleNoteInputAllowed);
+    registerAction(code, [this, inputMethod]() { toggleNoteInput(inputMethod); }, &Controller::toggleNoteInputAllowed);
 }
 
-bool NotationActionController::noteInputActionAllowed() const
+bool NotationActionController::isNoteInputActionAllowed() const
 {
     if (!isNoteInputMode() && !toggleNoteInputAllowed()) {
         return false;
     }
 
     return !isTablatureStaff();
-}
-
-void NotationActionController::registerNoteAction(const ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
-{
-    registerAction(code, [this, noteName, addingMode]()
-    {
-        handleNoteAction(noteName, addingMode);
-    }, &Controller::noteInputActionAllowed);
 }
 
 void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)
@@ -2471,24 +2937,35 @@ void NotationActionController::registerTabPadNoteAction(const ActionCode& code, 
     }, &NotationActionController::isTablatureStaff);
 }
 
-void NotationActionController::registerMoveSelectionAction(const ActionCode& code, MoveSelectionType type,
-                                                           MoveDirection direction, PlayMode playMode)
+void NotationActionController::select(const muse::rcommand::CommandQuery& query)
 {
-    auto moveSelectionFunc = [this, type, direction, playMode]() {
-        moveSelection(type, direction);
+    LOGDA() << query.toString();
+
+    SelectionTarget target = str_conv(query.param("target").toString(), SelectionTarget::Undefined);
+    if (target == SelectionTarget::Undefined) {
+        return;
+    }
+
+    select(target);
+
+    PlayMode playMode = str_conv(query.param("play-mode").toString(), PlayMode::NoPlay);
+    if (playMode != PlayMode::NoPlay) {
+        seekSelectedElement();
+        playSelectedElement(playMode == PlayMode::PlayChord);
+    }
+}
+
+void NotationActionController::registerSelectionCommand(const muse::rcommand::Command& command,
+                                                        SelectionTarget target, PlayMode playMode)
+{
+    registerCommand(command, [this, target, playMode]() {
+        select(target);
 
         if (playMode != PlayMode::NoPlay) {
+            seekSelectedElement();
             playSelectedElement(playMode == PlayMode::PlayChord);
         }
-    };
-
-    auto moveSelectionAvailableFunc = [this, type]() {
-        return moveSelectionAvailable(type);
-    };
-
-    m_isEnabledMap[code] = moveSelectionAvailableFunc;
-    m_isAllowedDuringPlayback.insert(code);
-    dispatcher()->reg(this, code, moveSelectionFunc);
+    });
 }
 
 void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type, MoveDirection direction)
@@ -2612,4 +3089,122 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
             }
         }
     }, enabler);
+}
+
+// COMMANDS
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command, std::function<void()> handler)
+{
+    registerCommand(command, handler, nullptr);
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               std::function<void()> handler,
+                                               bool (NotationActionController::* enabler)() const)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler, enabler]() {
+        if (!commandsState()->commandState(command).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
+        if (enabler && !(this->*enabler)()) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
+        handler();
+        return muse::make_ok();
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command, void (NotationActionController::* handler)())
+{
+    registerCommand(command, handler, nullptr);
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (NotationActionController::* handler)(),
+                                               bool (NotationActionController::* enabler)() const)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler, enabler]() {
+        if (!commandsState()->commandState(command).enabled) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
+        if (enabler && !(this->*enabler)()) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
+        (this->*handler)();
+        return muse::make_ok();
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (NotationActionController::* handler)(const muse::rcommand::CommandQuery&))
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler](const rcommand::Request& request) {
+        if (!commandsState()->commandState(command).enabled) {
+            return rcommand::make_response(request, muse::make_ret(Ret::Code::NotSupported));
+        }
+
+        (this->*handler)(request.query);
+
+        return rcommand::make_response(request, muse::make_ok());
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (INotationInteraction::* handler)(), PlayMode playMode)
+{
+    registerCommand(command, [this, handler, playMode]()
+    {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)();
+
+            seekSelectedElement();
+
+            if (playMode != PlayMode::NoPlay) {
+                playSelectedElement(playMode == PlayMode::PlayChord);
+            }
+        }
+    });
+}
+
+void NotationActionController::registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
+                                               void (NotationActionController::*handler)(const muse::rcommand::CommandQuery&))
+{
+    for (auto it = aliases.cbegin(); it != aliases.cend(); ++it) {
+        auto alias = it->first;
+        auto query = it->second;
+
+        commandDispatcher()->onRequest(this, alias, [this, query, handler]() {
+            if (!commandsState()->commandState(query.uri()).enabled) {
+                return muse::make_ret(Ret::Code::NotSupported);
+            }
+
+            (this->*handler)(query);
+            return muse::make_ok();
+        });
+    }
+}
+
+void NotationActionController::registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method)
+{
+    registerCommand(command, [this, method]() { toggleNoteInput(method); }, &NotationActionController::toggleNoteInputAllowed);
+}
+
+void NotationActionController::registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding)
+{
+    registerCommand(command, [this, padding]() { padNote(padding); });
+}
+
+void NotationActionController::registerNoteCommand(const muse::rcommand::Command& command,
+                                                   NoteName noteName,
+                                                   NoteAddingMode addingMode)
+{
+    registerCommand(command, [this, noteName, addingMode]()
+    {
+        handleNoteAction(noteName, addingMode);
+    });
 }

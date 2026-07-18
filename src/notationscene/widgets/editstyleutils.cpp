@@ -177,6 +177,9 @@ QString EditStyleUtils::pageCodeForElement(const EngravingItem* element)
     case ElementType::STAFF_TEXT:
         return "staff-text";
 
+    case ElementType::STAVE_SHARING_LABEL:
+        return "stave-sharing";
+
     case ElementType::TEMPO_TEXT:
         return "tempo-text";
 

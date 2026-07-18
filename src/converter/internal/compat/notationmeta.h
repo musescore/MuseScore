@@ -22,7 +22,9 @@
 
 #pragma once
 
-#include "notation/inotation.h"
+#include "types/retval.h"
+
+#include "notation/inotation_fwd.h"
 
 namespace mu::engraving {
 class Score;

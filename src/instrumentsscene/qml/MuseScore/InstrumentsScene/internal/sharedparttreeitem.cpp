@@ -21,9 +21,9 @@
  */
 #include "sharedparttreeitem.h"
 
-#include "async/notifylist.h"
+#include "engraving/dom/sharedpart.h"
 
-#include "log.h"
+#include "notation/inotation.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

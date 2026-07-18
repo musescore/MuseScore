@@ -25,6 +25,8 @@
 #include "async/asyncable.h"
 #include "async/notifylist.h"
 
+#include "engraving/dom/score.h"
+
 #include "inotationparts.h"
 #include "inotationstyle.h"
 #include "inotationundostack.h"

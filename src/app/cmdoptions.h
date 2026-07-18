@@ -122,8 +122,7 @@ struct MuseScoreCmdOptions : public muse::CmdOptions {
 
     struct AudioPluginRegistration {
         muse::io::path_t pluginPath;
-        bool failedPlugin = false;
-        int failCode = 0;
+        muse::io::path_t outputFile;
     } audioPluginRegistration;
 };
 }

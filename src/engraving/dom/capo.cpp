@@ -22,6 +22,8 @@
 
 #include "capo.h"
 
+#include "score.h"
+
 #include "translation.h"
 
 using namespace mu::engraving;
@@ -109,6 +111,11 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
     }
 
     triggerLayout();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
+
     return true;
 }
 
@@ -170,4 +177,22 @@ muse::String Capo::generateText(size_t stringCount) const
                   .arg(stringsToApply.join(u", "));
 
     return text;
+}
+
+void Capo::added()
+{
+    StaffTextBase::added();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
+}
+
+void Capo::removed()
+{
+    StaffTextBase::removed();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
 }

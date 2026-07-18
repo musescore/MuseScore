@@ -22,22 +22,22 @@
 
 #pragma once
 
-#include "actions/actionable.h"
 #include "async/asyncable.h"
+#include "rcommand/commandable.h"
 
 #include "modularity/ioc.h"
 
 #include "playback/iplaybackconfiguration.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "audio/main/iplayback.h"
 #include "interactive/iinteractive.h"
 
 namespace mu::playback {
-class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class OnlineSoundsController : public muse::rcommand::Commandable, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
@@ -61,8 +61,8 @@ private:
     void listenProcessingProgress(const muse::audio::TrackId trackId);
     void showLimitReachedErrorIfNeed(const muse::audio::InputProcessingProgress::StatusInfo& status);
 
-    void processOnlineSounds();
-    void clearOnlineSoundsCache();
+    muse::Ret processOnlineSounds();
+    muse::Ret clearOnlineSoundsCache();
 
     std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::unordered_set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;

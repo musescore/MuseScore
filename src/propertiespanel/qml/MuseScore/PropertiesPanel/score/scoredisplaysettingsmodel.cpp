@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "scoredisplaysettingsmodel.h"
 
-#include "log.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;

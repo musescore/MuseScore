@@ -22,8 +22,9 @@
 
 #include "systemobjectslayertreeitem.h"
 
+#include "engraving/dom/score.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undoablecommand.h"
 
 #include "layoutpanelutils.h"
 #include "translation.h"

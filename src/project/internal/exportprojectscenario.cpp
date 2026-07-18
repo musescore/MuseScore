@@ -28,6 +28,12 @@
 #include "defer.h"
 #include "log.h"
 
+#include "engraving/dom/score.h"
+
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationpainting.h" // IWYU pragma: keep
+
 using namespace muse;
 using namespace muse::io;
 using namespace mu::project;

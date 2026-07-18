@@ -39,6 +39,10 @@ include_directories(
 set(MUSE_QT_SUPPORT OFF)
 include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 
+set(EXTDEPS_DIR "${MU_ROOT}/muse_deps")
+include(${EXTDEPS_DIR}/buildtools/manifest.cmake)
+include(${MUSE_FRAMEWORK_PATH}/buildscripts/cmake/ExtDepsManifest.cmake)
+
 set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH}/global global)
 

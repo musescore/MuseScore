@@ -109,7 +109,7 @@ private:
 
     MixerChannelItem* findChannelItem(const muse::audio::TrackId& trackId) const;
 
-    void loadOutputParams(MixerChannelItem* item, project::AudioOutputParams&& params);
+    void loadOutputParams(MixerChannelItem* item, const project::AudioOutputParams& params);
     void updateOutputResourceItemCount();
 
     project::INotationProjectPtr currentProject() const;

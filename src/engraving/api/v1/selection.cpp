@@ -22,7 +22,7 @@
 
 #include "selection.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 // api
 #include "score.h"
@@ -83,8 +83,8 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
     mu::engraving::EngravingItem* e = elWrapper->element();
 
     // Check whether it's safe to select this element:
-    // use types list from UndoMacro for now
-    if (!mu::engraving::UndoMacro::canRecordSelectedElement(e)) {
+    // use types list from UndoableTransaction for now
+    if (!mu::engraving::UndoableTransaction::canRecordSelectedElement(e)) {
         LOGW("Cannot select element of type %s", e->typeName());
         return false;
     }
@@ -136,7 +136,7 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    if (segEnd && m_selection->score()->undoStack()->hasActiveCommand()) {
+    if (segEnd && m_selection->score()->undoStack()->hasActiveTransaction()) {
         m_selection->setRangeTicks(segStart->tick(), segEnd->tick(), startStaff, endStaff);
     } else {
         m_selection->setRange(segStart, segEnd, startStaff, endStaff);

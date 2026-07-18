@@ -422,6 +422,7 @@ enum class ElementType {
     TAB_DURATION_SYMBOL   = int(mu::engraving::ElementType::TAB_DURATION_SYMBOL),
     FSYMBOL               = int(mu::engraving::ElementType::FSYMBOL),
     PAGE                  = int(mu::engraving::ElementType::PAGE),
+    PAGE_LOCK_INDICATOR   = int(mu::engraving::ElementType::PAGE_LOCK_INDICATOR),
     HAIRPIN               = int(mu::engraving::ElementType::HAIRPIN),
     OTTAVA                = int(mu::engraving::ElementType::OTTAVA),
     PEDAL                 = int(mu::engraving::ElementType::PEDAL),
@@ -721,9 +722,10 @@ enum class HDuration {
 Q_ENUM_NS(HDuration);
 
 enum class FrameType {
-    NO_FRAME = int(mu::engraving::FrameType::NO_FRAME),
-    SQUARE   = int(mu::engraving::FrameType::SQUARE),
-    CIRCLE   = int(mu::engraving::FrameType::CIRCLE),
+    NO_FRAME  = int(mu::engraving::FrameType::NO_FRAME),
+    RECTANGLE = int(mu::engraving::FrameType::RECTANGLE),
+    SQUARE    = int(mu::engraving::FrameType::RECTANGLE), /** deprecated alias */
+    CIRCLE    = int(mu::engraving::FrameType::CIRCLE),
 };
 Q_ENUM_NS(FrameType);
 

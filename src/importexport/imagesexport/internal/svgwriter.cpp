@@ -34,6 +34,8 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/repeatlist.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "svggenerator.h"
 
 #include "log.h"
@@ -141,7 +143,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
             mu::engraving::StaffLines* concatenatedSL = nullptr;
             mu::engraving::Shape concatenatedShape;
             mu::engraving::Shape concatenatedMask;
-            StaffType* prevStaffType = nullptr;
+            mu::engraving::StaffType* prevStaffType = nullptr;
             for (mu::engraving::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
                 if (!measure->isMeasure()) {
                     if (concatenatedSL != nullptr) {
@@ -236,7 +238,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     for (const mu::engraving::EngravingItem* element : elements) {
         // Always exclude invisible elements
-        if (!element->visible()) {
+        if (!element->collectForDrawing()) {
             continue;
         }
 

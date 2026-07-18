@@ -31,11 +31,10 @@
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"
-#include "../dom/audio.h"
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"
@@ -188,7 +187,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
                 break;
             }
 
-            partScore->linkMeasures(masterScore);
+            Excerpt::linkMeasures(partScore, masterScore);
 
             if (ex->name().empty()) {
                 // If no excerpt name tag was found while reading, try the "partName" meta tag
@@ -210,19 +209,11 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
     // NOTE: must be done after all score and parts have been read
     compat::CompatUtils::doCompatibilityConversions(masterScore);
 
-    //  Read audio
-    {
-        if (masterScore->audio()) {
-            ByteArray dbuf1 = mscReader.readAudioFile();
-            masterScore->audio()->setData(dbuf1);
-        }
-    }
-
     // Read automation
     {
         if (masterScore->automation()) {
             ByteArray ba = mscReader.readAutomationJsonFile();
-            masterScore->automation()->read(ba);
+            AutomationRW::read(*masterScore->automation(), ba);
         }
     }
 

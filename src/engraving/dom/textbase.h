@@ -36,6 +36,7 @@
 namespace mu::engraving {
 class TextBase;
 class TextBlock;
+class Transaction;
 
 static constexpr double SUBSCRIPT_SIZE     = 0.6;
 static constexpr double SUBSCRIPT_OFFSET   = 0.5;  // of x-height
@@ -46,7 +47,7 @@ static constexpr double SUPERSCRIPT_OFFSET = -0.9; // of x-height
 //---------------------------------------------------------
 
 enum class FrameType : char {
-    NO_FRAME, SQUARE, CIRCLE
+    NO_FRAME, RECTANGLE, CIRCLE
 };
 
 //---------------------------------------------------------
@@ -330,7 +331,7 @@ public:
     String plainText() const;
     void resetFormatting();
 
-    void insertText(EditData&, const String&);
+    void insertText(const String&);
 
     double lineSpacing() const;
     double lineHeight() const;
@@ -360,19 +361,19 @@ public:
     virtual void endEdit(EditData&) override;
     virtual RectF drag(EditData&) override;
     virtual void endDrag(EditData&) override;
-    void movePosition(EditData&, TextCursor::MoveOperation);
+    void movePosition(TextCursor::MoveOperation);
 
     bool mousePress(EditData& ed);
     void dragTo(EditData& ed);
 
-    bool deleteSelectedText(EditData&);
+    bool deleteSelectedText();
 
-    void selectAll(TextCursor*);
-    void select(EditData&, SelectTextType);
+    void selectAll();
+    void select(SelectTextType);
     bool isPrimed() const { return m_primed; }
     void setPrimed(bool primed) { m_primed = primed; }
 
-    virtual void paste(EditData& ed, const String& txt);
+    virtual void paste(const String& txt);
 
     RectF pageRectangle() const;
 
@@ -381,7 +382,7 @@ public:
     std::vector<LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
-    virtual EngravingItem* drop(EditData&) override;
+    virtual EngravingItem* drop(Transaction& tx, EditData&) override;
 
     friend class TextBlock;
     friend class TextFragment;
@@ -399,7 +400,7 @@ public:
 
     static bool validateText(String& s);
     bool inHexState() const { return m_hexState >= 0; }
-    void endHexState(EditData&);
+    void endHexState();
 
     muse::draw::Font font() const;
     muse::draw::FontMetrics fontMetrics() const;
@@ -414,7 +415,6 @@ public:
     void styleChanged() override;
     void editInsertText(TextCursor*, const String&);
 
-    TextCursor* cursorFromEditData(const EditData&);
     TextCursor* cursor() const { return m_cursor; }
 
     void setTextInvalid() { m_textInvalid = true; }
@@ -423,7 +423,7 @@ public:
     // helper functions
     bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
     bool circle() const { return m_frameType == FrameType::CIRCLE; }
-    bool square() const { return m_frameType == FrameType::SQUARE; }
+    bool rectangle() const { return m_frameType == FrameType::RECTANGLE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
@@ -531,7 +531,7 @@ protected:
 
     bool nudge(const EditData& ed);
 
-    void insertSym(EditData& ed, SymId id);
+    void insertSym(SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
 

@@ -25,7 +25,8 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -52,18 +53,18 @@ TEST_F(Engraving_BreathTests, breath)
     score->doLayout();
 
     // do
-    score->startCmd(TranslatableString::untranslatable("Engraving breath tests"));
-    score->cmdSelectAll();
-    for (EngravingItem* e : score->selection().elements()) {
-        EditData dd(0);
-        Breath* b = Factory::createBreath(score->dummy()->segment());
-        b->setSymId(SymId::breathMarkComma);
-        dd.dropElement = b;
-        if (e->acceptDrop(dd)) {
-            e->drop(dd);
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving breath tests"), [&](Transaction& tx) {
+        score->cmdSelectAll();
+        for (EngravingItem* e : score->selection().elements()) {
+            EditData dd(0);
+            Breath* b = Factory::createBreath(score->dummy()->segment());
+            b->setSymId(SymId::breathMarkComma);
+            dd.dropElement = b;
+            if (e->acceptDrop(dd)) {
+                e->drop(tx, dd);
+            }
         }
-    }
-    score->endCmd();
+    });
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo

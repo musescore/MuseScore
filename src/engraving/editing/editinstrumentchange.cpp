@@ -36,7 +36,7 @@ using namespace mu::engraving;
 //   ChangeInstrument
 //---------------------------------------------------------
 
-void ChangeInstrument::flip(EditData*)
+void ChangeInstrument::flip()
 {
     Part* part = is->staff()->part();
     Fraction tickStart = is->segment()->tick();

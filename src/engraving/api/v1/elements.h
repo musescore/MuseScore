@@ -54,8 +54,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
 
-#include "engraving/editing/undo.h"
-
 #include "playevent.h"
 
 // api

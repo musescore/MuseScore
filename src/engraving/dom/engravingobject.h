@@ -127,6 +127,7 @@ class Ornament;
 class Ottava;
 class OttavaSegment;
 class Page;
+class PageLockIndicator;
 class PalmMute;
 class PalmMuteSegment;
 class Parenthesis;
@@ -160,6 +161,7 @@ class Staff;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaveSharingLabel;
 class StaffTextBase;
 class StaffTypeChange;
 class StaffVisibilityIndicator;
@@ -437,10 +439,12 @@ public:
     CONVERT(FretDiagram,   FRET_DIAGRAM)
     CONVERT(HarpPedalDiagram, HARP_DIAGRAM)
     CONVERT(Page,          PAGE)
+    CONVERT(PageLockIndicator, PAGE_LOCK_INDICATOR)
     CONVERT(Text,          TEXT)
     CONVERT(MeasureNumber, MEASURE_NUMBER)
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
+    CONVERT(StaveSharingLabel, STAVE_SHARING_LABEL)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(SoundFlag,     SOUND_FLAG)
     CONVERT(PlayCountText, PLAY_COUNT_TEXT)
@@ -571,7 +575,8 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
+        return isStaffText() || isStaveSharingLabel() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo()
+               || isStringTunings();
     }
 
     bool isArticulationFamily() const
@@ -584,7 +589,7 @@ public:
         return isArticulationFamily() || isFermata();
     }
 
-    bool isIndicatorIcon() const { return isSystemLockIndicator() || isStaffVisibilityIndicator(); }
+    bool isIndicatorIcon() const { return isSystemLockIndicator() || isPageLockIndicator() || isStaffVisibilityIndicator(); }
 };
 
 //---------------------------------------------------
@@ -672,6 +677,7 @@ CONVERT(TripletFeel)
 CONVERT(Harmony)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(StaveSharingLabel);
 CONVERT(StaffTextBase)
 CONVERT(TextBase)
 CONVERT(TextLineBase)
@@ -766,6 +772,7 @@ CONVERT(ChordLine)
 CONVERT(FretDiagram)
 CONVERT(HarpPedalDiagram)
 CONVERT(Page)
+CONVERT(PageLockIndicator)
 CONVERT(SystemText)
 CONVERT(BracketItem)
 CONVERT(Staff)

@@ -24,7 +24,6 @@ ARTIFACTS_DIR=build.artifacts
 S3_KEY=""
 S3_SECRET=""
 S3_URL=""
-S3_BUCKET=""
 
 LOCAL_FILE_NAME=""
 
@@ -33,7 +32,6 @@ while [[ "$#" -gt 0 ]]; do
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         --s3_url) S3_URL="$2"; shift ;;
-        --s3_bucket) S3_BUCKET="$2"; shift ;;
         --local_file_name) LOCAL_FILE_NAME="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -54,9 +52,6 @@ cat >~/.s3cfg <<EOL
 [default]
 access_key = ${S3_KEY}
 secret_key = ${S3_SECRET}
-host_base = ${S3_BUCKET}
-host_bucket = ${S3_BUCKET}
-website_endpoint = https://${S3_BUCKET}
 EOL
 
 echo "=== Get file from S3 ==="

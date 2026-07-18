@@ -22,6 +22,7 @@
 
 #include "soundprofilesmodel.h"
 
+#include "notation/inotationplayback.h"
 #include "project/inotationproject.h"
 
 using namespace mu::playback;

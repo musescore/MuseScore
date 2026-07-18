@@ -22,20 +22,20 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/instrchange.h"
 
 namespace mu::engraving {
 /// change instrument in an InstrumentChange element
-class ChangeInstrument : public UndoCommand
+class ChangeInstrument : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrument)
 
     InstrumentChange* is = nullptr;
     Instrument* instrument = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrument(InstrumentChange* _is, Instrument* i)

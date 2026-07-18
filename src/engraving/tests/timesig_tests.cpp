@@ -29,7 +29,9 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -58,7 +60,7 @@ TEST_F(Engraving_TimesigTests, timesig01)
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
     int staffIdx = 0;
     bool local   = false;
-    score->cmdAddTimeSig(m, staffIdx, ts, local);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, staffIdx, ts, local);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig01.mscx", TIMESIG_DATA_DIR + u"timesig01-ref.mscx"));
@@ -80,7 +82,7 @@ TEST_F(Engraving_TimesigTests, timesig02)
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
     score->endCmd();
 
@@ -105,7 +107,7 @@ TEST_F(Engraving_TimesigTests, timesig03)
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-03.mscx", TIMESIG_DATA_DIR + u"timesig-03-ref.mscx"));
@@ -126,7 +128,7 @@ TEST_F(Engraving_TimesigTests, timesig04)
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(6, 4), TimeSigType::NORMAL);
 
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-04.mscx", TIMESIG_DATA_DIR + u"timesig-04-ref.mscx"));
@@ -150,7 +152,7 @@ TEST_F(Engraving_TimesigTests, timesig05)
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-05.mscx", TIMESIG_DATA_DIR + u"timesig-05-ref.mscx"));
@@ -171,7 +173,7 @@ TEST_F(Engraving_TimesigTests, timesig06)
     ts->setSig(Fraction(5, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-06.mscx", TIMESIG_DATA_DIR + u"timesig-06-ref.mscx"));
     score->endCmd();
@@ -197,7 +199,7 @@ TEST_F(Engraving_TimesigTests, timesig07)
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-07.mscx", TIMESIG_DATA_DIR + u"timesig-07-ref.mscx"));
     score->endCmd();
@@ -242,7 +244,7 @@ TEST_F(Engraving_TimesigTests, DISABLED_timesig09)
     ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(m, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m, 0, ts, false);
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-09-1.mscx", TIMESIG_DATA_DIR + u"timesig-09-ref.mscx"));
     score->endCmd();
@@ -269,7 +271,7 @@ TEST_F(Engraving_TimesigTests, timesig10)
     ts1->setSig(Fraction(2, 2), TimeSigType::ALLA_BREVE);
 
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(m1, 0, ts1, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m1, 0, ts1, false);
 
     Measure* m2 = m1->nextMeasure();
     TimeSig* ts2 = Factory::createTimeSig(score->dummy()->segment());
@@ -277,9 +279,9 @@ TEST_F(Engraving_TimesigTests, timesig10)
     TimeSig* ts3 = Factory::createTimeSig(score->dummy()->segment());
     ts3->setSig(Fraction(4, 4), TimeSigType::FOUR_FOUR);
 
-    score->cmdAddTimeSig(m2, 0, ts2, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m2, 0, ts2, false);
     m2 = score->firstMeasure()->nextMeasure();
-    score->cmdAddTimeSig(m2, 0, ts3, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, m2, 0, ts3, false);
 
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"timesig-10.mscx", TIMESIG_DATA_DIR + u"timesig-10-ref.mscx"));
@@ -331,7 +333,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     // Add local timeSig to Clarinet staff at meas 3
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(thirdMeas, clarinetStaff, timeSig1, true);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, thirdMeas, clarinetStaff, timeSig1, true);
     score->endCmd();
     // Check timeSig exist at meas 3 and is only on Clarinet
     Segment* timeSigSegment = thirdMeas->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
@@ -347,7 +349,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     // Add local timeSig to Clarinet staff at meas 2
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(secondMeas, clarinetStaff, timeSig2, true);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, secondMeas, clarinetStaff, timeSig2, true);
     score->endCmd();
     // Check timeSig exist at meas 2 and is only on Clarinet
     Segment* timeSigSegment2 = secondMeas->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
@@ -372,7 +374,7 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     // Add local timeSig to Oboe staff at meas 2
     score->startCmd(TranslatableString::untranslatable("Engraving time signature tests"));
-    score->cmdAddTimeSig(secondMeas, oboeStaff, timeSig3, true);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, secondMeas, oboeStaff, timeSig3, true);
     score->endCmd();
     // Check timeSig exist at meas 2 on Oboe and Clarinet
     for (staff_idx_t stfIdx = 0; stfIdx < score->nstaves(); ++stfIdx) {
@@ -484,9 +486,9 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     dropData.dropElement = barLine;
     dropData.track = 0;
 
-    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
-    endBl->drop(dropData);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Timesig tests"), [&](Transaction& tx) {
+        endBl->drop(tx, dropData);
+    });
 
     // Check part1 m1 (mmr) has end of measure ts
     Segment* part1M1MMREndSeg = part1M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M1MM->ticks());
@@ -497,9 +499,9 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     EXPECT_FALSE(part1M2MMREndSeg);
 
     // Change style setting
-    score->startCmd(TranslatableString::untranslatable("Timesig tests"));
-    score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Timesig tests"), [&](Transaction&) {
+        score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
+    });
 
     // Check part2 m1 (mmr) ts is 6/8
     Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigTypes, part2M1MM->ticks());
@@ -529,11 +531,11 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     EXPECT_TRUE(tie);
     EXPECT_TRUE(tie->endNote());
 
-    score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-    TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
-    newSig->setSig(Fraction(3, 4));
-    score->cmdAddTimeSig(m1, 0, newSig, false);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+        TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
+        newSig->setSig(Fraction(3, 4));
+        EditTimeSig::addTimeSig(tx, score, m1, 0, newSig, false);
+    });
 
     // No suitable note to tie to after time sig has been changed, no tie should be present
 
@@ -582,9 +584,9 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
         EXPECT_TRUE(ts);
 
-        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-        score->cmdRemoveTimeSig(ts);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+            EditTimeSig::removeTimeSig(tx, score, ts);
+        });
 
         // Check timesig has been removed
         Measure* tsMeasure2 = score->firstMeasureMM()->nextMeasureMM();
@@ -604,9 +606,9 @@ TEST_F(Engraving_TimesigTests, deleteMMRTimeSig)
         TimeSig* ts = tsSeg ? toTimeSig(tsSeg->element(0)) : nullptr;
         EXPECT_TRUE(ts);
 
-        score->startCmd(TranslatableString::untranslatable("TimesigTests"));
-        score->cmdRemoveTimeSig(ts);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("TimesigTests"), [&](Transaction& tx) {
+            EditTimeSig::removeTimeSig(tx, score, ts);
+        });
 
         // Check timesig has been removed
         Measure* tsMeasure2 = score->lastMeasureMM();

@@ -33,12 +33,12 @@ using namespace mu::engraving;
 //   InsertTime
 //---------------------------------------------------------
 
-void InsertTime::redo(EditData*)
+void InsertTime::redo()
 {
     score->insertTime(tick, len);
 }
 
-void InsertTime::undo(EditData*)
+void InsertTime::undo()
 {
     score->insertTime(tick, -len);
 }
@@ -47,7 +47,7 @@ void InsertTime::undo(EditData*)
 //   InsertTimeUnmanagedSpanner
 //---------------------------------------------------------
 
-void InsertTimeUnmanagedSpanner::flip(EditData*)
+void InsertTimeUnmanagedSpanner::flip()
 {
     for (Score* s : score->scoreList()) {
         std::set<Spanner*> spannersCopy = s->unmanagedSpanners();

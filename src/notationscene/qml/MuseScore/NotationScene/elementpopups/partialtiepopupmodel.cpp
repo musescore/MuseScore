@@ -23,8 +23,11 @@
 #include "partialtiepopupmodel.h"
 
 #include "engraving/dom/partialtie.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tie.h"
-#include "engraving/editing/undo.h"
+
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -52,7 +55,11 @@ bool PartialTiePopupModel::canOpen(const EngravingItem* element)
     }
 
     Tie* tieItem = toTieSegment(element)->tie();
-    if (!tieItem || !tieItem->tieJumpPoints()) {
+    if (!tieItem) {
+        return false;
+    }
+    tieItem->updatePossibleJumpPoints();
+    if (!tieItem->tieJumpPoints()) {
         return false;
     }
 
@@ -226,6 +233,6 @@ void mu::notation::PartialTiePopupModel::onClosed()
         }
 
         // Combine this with the last undoable action (which will be to remove a tie) so the user cannot undo to get a translucent tie
-        undoStack()->mergeCommands(undoStack()->currentStateIndex() - 2);
+        undoStack()->mergeTransactions(undoStack()->currentStateIndex() - 2);
     }
 }

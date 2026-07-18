@@ -132,6 +132,7 @@
 #include "dom/symbol.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
+#include "dom/systemlockindicator.h"
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
@@ -384,6 +385,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::PALM_MUTE_SEGMENT: layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
         break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+        layoutPageLockIndicator(item_cast<const PageLockIndicator*>(item), static_cast<PageLockIndicator::LayoutData*>(ldata));
+        break;
     case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item), static_cast<Parenthesis::LayoutData*>(ldata), ctx);
         break;
     case ElementType::PEDAL:            layoutPedal(item_cast<Pedal*>(item), ctx);
@@ -417,6 +421,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STAFF_TEXT:
         layoutStaffText(item_cast<const StaffText*>(item), static_cast<StaffText::LayoutData*>(ldata));
+        break;
+    case ElementType::STAVE_SHARING_LABEL:
+        layoutStaveSharingLabel(item_cast<const StaveSharingLabel*>(item), static_cast<StaffText::LayoutData*>(ldata));
         break;
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
@@ -867,6 +874,42 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     }
 }
 
+static Shape getChordsShape(const ChordBracket* item)
+{
+    Chord* owner = item->chord();
+    Shape result = owner->shape();
+    result.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+    if (!owner->segment() || !owner->staff()) {
+        return result;
+    }
+
+    const track_idx_t startTrack = staff2track(owner->staffIdx());
+    const track_idx_t endTrack = startTrack + VOICES;
+
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* e = owner->segment()->element(track);
+        if (track == owner->track()) {
+            continue;
+        }
+
+        if (!e || !e->isChord()) {
+            continue;
+        }
+
+        Chord* chord = toChord(e);
+        if (chord->vStaffIdx() != owner->vStaffIdx()) {
+            continue;
+        }
+
+        Shape chordShape = chord->shape();
+        chordShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+        chordShape.translate(chord->pos() - owner->pos());
+        result.add(chordShape);
+    }
+
+    return result;
+}
+
 void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     double spatium = item->spatium();
@@ -893,8 +936,7 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     const Note* upnote = item->chord()->upNote();
     ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
 
-    Shape chordShape = item->chord()->shape();
-    chordShape.removeTypes({ ElementType::CHORD_BRACKET, ElementType::ARPEGGIO });
+    Shape chordShape = getChordsShape(item);
     Shape itemShape = item->shape().translated(PointF(0.0, item->ldata()->pos().y()));
     if (item->rightSide()) {
         double x = HorizontalSpacing::minHorizontalDistance(chordShape, itemShape, spatium);
@@ -1991,7 +2033,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
             const Rest* rest = toRest(e);
             x = rest->x() + rest->centerX();
         } else {
-            x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
+            x = e->x() + e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
         }
     }
 
@@ -2439,8 +2481,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
         } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             double left = note->shape().left();
-            if (left - note->x() > 0.0) {
-                ldata->moveX(-left);
+            if (left + note->x() < 0.0) {
+                ldata->moveX(left);
             } else {
                 ldata->moveX(-note->x());
             }
@@ -3711,7 +3753,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         endMB = sli->systemLock()->endMB();
         if (item->selected()) {
             // Draw the range rect...
-            const SystemLock* lock = sli->systemLock();
+            const RangeLock* lock = sli->systemLock();
 
             double xStart = lock->startMB()->x();
             double xEnd = lock->endMB()->x() + lock->endMB()->width();
@@ -4338,6 +4380,56 @@ void TLayout::layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx)
     layoutTextLineBaseSegment(item, ctx);
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+}
+
+void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockIndicator::LayoutData* ldata)
+{
+    if (!item->configuration()->canLayoutIcons()) {
+        return;
+    }
+    const Page* page = item->page();
+    const System* sys = item->system();
+
+    IF_ASSERT_FAILED(page && sys) {
+        return;
+    }
+
+    Shape shape;
+
+    const double spatium = item->spatium();
+
+    const FontMetrics metrics(item->font());
+    const RectF iconBox = metrics.boundingRect(item->iconCode());
+    shape.add(iconBox, item);
+
+    // Inset 2.5sp from edge of page
+    PointF posOnPage = PointF(page->width() - iconBox.width() - iconBox.left() - 2.5 * spatium, page->height() - 2.5 * spatium);
+    PointF posOnSystem = posOnPage - sys->pos();
+    ldata->setPos(posOnSystem);
+
+    if (item->selected()) {
+        // Outer range rectangle
+        RectF rangeRect = page->shape().bbox();
+        PointF rectPagePos = rangeRect.topLeft() - ldata->pos() - sys->pos();
+        rangeRect.translate(rectPagePos);
+        rangeRect.adjust(spatium * 2, spatium * 2, -spatium * 2, -spatium * 2);
+        ldata->rangeRect = rangeRect;
+
+        // Inner rectangle cutout
+        // Leaves border with rounded corners when painted
+        double borderWidth = iconBox.height() + spatium;
+        RectF innerRect = rangeRect.adjusted(borderWidth, borderWidth, -borderWidth, -borderWidth);
+        ldata->innerRangeRect = innerRect;
+        shape.add(RectF(PointF(rangeRect.left(),  rangeRect.top()),     PointF(rangeRect.right(),   innerRect.top())));       // top
+        shape.add(RectF(PointF(rangeRect.left(),  innerRect.bottom()),  PointF(rangeRect.right(),   rangeRect.bottom())));    // bottom
+        shape.add(RectF(PointF(rangeRect.left(),  innerRect.top()),     PointF(innerRect.left(),    innerRect.bottom())));    // left
+        shape.add(RectF(PointF(innerRect.right(), innerRect.top()),     PointF(rangeRect.right(),   innerRect.bottom())));     // right
+    }
+
+    ldata->setShape(shape);
+
+    // Ensure it goes behind notation and LayoutBreak
+    const_cast<PageLockIndicator*>(item)->setZ(-100);
 }
 
 void TLayout::layoutPalmMute(PalmMute* item, LayoutContext& ctx)
@@ -5205,6 +5297,13 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     if (SoundFlag* flag = item->soundFlag()) {
         layoutSoundFlag(flag, flag->mutldata());
     }
+}
+
+void TLayout::layoutStaveSharingLabel(const StaveSharingLabel* item, TextBase::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    TextLayout::layoutBaseTextBase(item, ldata);
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)

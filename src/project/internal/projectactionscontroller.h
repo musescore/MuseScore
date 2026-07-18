@@ -33,11 +33,11 @@
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
-#include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "iexportprojectscenario.h"
 #include "inotationreadersregister.h"
@@ -78,9 +78,9 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<print::IPrintProvider> printProvider = { this };
 
 public:
@@ -196,6 +196,7 @@ private:
     void moveProject(INotationProjectPtr project, const muse::io::path_t& newPath, bool replace);
 
     void importPdf();
+    void importAudioToScore();
 
     void clearRecentScores();
 

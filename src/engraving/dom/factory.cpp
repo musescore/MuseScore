@@ -75,6 +75,7 @@
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
+#include "pagelockindicator.h"
 #include "palmmute.h"
 #include "parenthesis.h"
 #include "partialtie.h"
@@ -95,13 +96,14 @@
 #include "stafftext.h"
 #include "stafftypechange.h"
 #include "staffvisibilityindicator.h"
+#include "stavesharinglabel.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "systemlock.h"
+#include "systemlockindicator.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tapping.h"
@@ -180,6 +182,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::STAVE_SHARING_LABEL: return new StaveSharingLabel(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::CAPO:              return new Capo(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -300,6 +303,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
     case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::PAGE_LOCK_INDICATOR:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
     case ElementType::HAMMER_ON_PULL_OFF_TEXT:
     case ElementType::TAPPING_HALF_SLUR:
@@ -475,6 +479,15 @@ MAKE_ITEM_IMPL(NoteLine, Note);
 
 CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
 
+PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
+{
+    PageLockIndicator* pli = new PageLockIndicator(parent, lock);
+    pli->setAccessibleEnabled(isAccessibleEnabled);
+    return pli;
+}
+
+COPY_ITEM_IMPL(PageLockIndicator)
+
 CREATE_ITEM_IMPL(PartialTie, Note, isAccessibleEnabled)
 COPY_ITEM_IMPL(PartialTie)
 
@@ -536,6 +549,13 @@ StaffText* Factory::createStaffText(Segment * parent, TextStyleType textStyleTyp
     staffText->setAccessibleEnabled(isAccessibleEnabled);
 
     return staffText;
+}
+
+StaveSharingLabel* Factory::createStaveSharingLabel(Segment* parent, TextStyleType textStyleType, bool isAccessibleEnabled)
+{
+    StaveSharingLabel* staveSharingLabel = new StaveSharingLabel(parent, textStyleType);
+    staveSharingLabel->setAccessibleEnabled(isAccessibleEnabled);
+    return staveSharingLabel;
 }
 
 CREATE_ITEM_IMPL(SoundFlag, EngravingItem, isAccessibleEnabled)
@@ -738,7 +758,7 @@ CREATE_ITEM_IMPL(TimeTickAnchor, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(StaffVisibilityIndicator, System, isAccessibleEnabled)
 
-SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
     SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
     sli->setAccessibleEnabled(isAccessibleEnabled);

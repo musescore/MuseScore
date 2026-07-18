@@ -21,13 +21,16 @@
  */
 
 #include "editsystemlocks.h"
+#include "editpagelocks.h"
 
-#include "undo.h"
+#include "transaction/transaction.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measurebase.h"
+#include "../dom/rangelock.h"
 #include "../dom/score.h"
 #include "../dom/system.h"
-#include "../dom/systemlock.h"
+#include "../dom/systemlockindicator.h"
 
 using namespace mu::engraving;
 
@@ -35,30 +38,30 @@ using namespace mu::engraving;
 //   AddSystemLock
 //---------------------------------------------------------
 
-class AddSystemLock : public UndoCommand
+class AddSystemLock : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddSystemLock)
 
-    const SystemLock* m_systemLock;
+    const RangeLock* m_systemLock;
 public:
-    AddSystemLock(const SystemLock* systemLock)
+    AddSystemLock(const RangeLock* systemLock)
         : m_systemLock(systemLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->removeSystemLock(m_systemLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->addSystemLock(m_systemLock);
     }
 
-    void cleanup(bool undo) override
+    void cleanup(bool wasDone) override
     {
-        if (!undo) {
+        if (!wasDone) {
             delete m_systemLock;
             m_systemLock = nullptr;
         }
@@ -76,30 +79,30 @@ public:
 //   RemoveSystemLock
 //---------------------------------------------------------
 
-class RemoveSystemLock : public UndoCommand
+class RemoveSystemLock : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
 
-    const SystemLock* m_systemLock;
+    const RangeLock* m_systemLock;
 public:
-    RemoveSystemLock(const SystemLock* systemLock)
+    RemoveSystemLock(const RangeLock* systemLock)
         : m_systemLock(systemLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->addSystemLock(m_systemLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->removeSystemLock(m_systemLock);
     }
 
-    void cleanup(bool undo) override
+    void cleanup(bool wasDone) override
     {
-        if (undo) {
+        if (wasDone) {
             delete m_systemLock;
             m_systemLock = nullptr;
         }
@@ -116,26 +119,26 @@ public:
 //   EditSystemLocks
 //---------------------------------------------------------
 
-void EditSystemLocks::undoAddSystemLock(Score* score, const SystemLock* lock)
+void EditSystemLocks::undoAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
-    removeLayoutBreaksOnAddSystemLock(score, lock);
-    score->undo(new AddSystemLock(lock));
+    updateLayoutBreaksOnAddSystemLock(tx, score, lock);
+    tx.push(new AddSystemLock(lock));
 }
 
-void EditSystemLocks::undoRemoveSystemLock(Score* score, const SystemLock* lock)
+void EditSystemLocks::undoRemoveSystemLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
-    score->undo(new RemoveSystemLock(lock));
+    tx.push(new RemoveSystemLock(lock));
 }
 
-void EditSystemLocks::undoRemoveAllLocks(Score* score)
+void EditSystemLocks::undoRemoveAllLocks(Transaction& tx, Score* score)
 {
-    std::vector<const SystemLock*> allLocks = score->systemLocks()->allLocks(); // copy
-    for (const SystemLock* lock : allLocks) {
-        undoRemoveSystemLock(score, lock);
+    std::vector<const RangeLock*> allLocks = score->systemLocks()->allLocks(); // copy
+    for (const RangeLock* lock : allLocks) {
+        undoRemoveSystemLock(tx, score, lock);
     }
 }
 
-void EditSystemLocks::toggleSystemLock(Score* score, const std::vector<System*>& systems)
+void EditSystemLocks::toggleSystemLock(Transaction& tx, Score* score, const std::vector<System*>& systems)
 {
     bool unlockAll = true;
     for (const System* system : systems) {
@@ -147,18 +150,18 @@ void EditSystemLocks::toggleSystemLock(Score* score, const std::vector<System*>&
 
     for (System* system : systems) {
         MeasureBase* startMeas = system->first();
-        const SystemLock* currentLock = score->systemLocks()->lockStartingAt(startMeas);
+        const RangeLock* currentLock = score->systemLocks()->lockStartingAt(startMeas);
         if (currentLock && unlockAll) {
-            undoRemoveSystemLock(score, currentLock);
+            undoRemoveSystemLock(tx, score, currentLock);
             continue;
         } else if (!currentLock && !unlockAll) {
-            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
-            undoAddSystemLock(score, newSystemLock);
+            RangeLock* newSystemLock = new RangeLock(startMeas, system->last());
+            undoAddSystemLock(tx, score, newSystemLock);
         }
     }
 }
 
-void EditSystemLocks::toggleScoreLock(Score* score)
+void EditSystemLocks::toggleScoreLock(Transaction& tx, Score* score)
 {
     bool unlockAll = true;
     for (const System* system : score->systems()) {
@@ -177,25 +180,23 @@ void EditSystemLocks::toggleScoreLock(Score* score)
         if (!(startMeas->isMeasure() || startMeas->isHBox())) {
             continue;
         }
-        const SystemLock* currentLock = score->systemLocks()->lockStartingAt(startMeas);
+        const RangeLock* currentLock = score->systemLocks()->lockStartingAt(startMeas);
         if (currentLock && unlockAll) {
-            undoRemoveSystemLock(score, currentLock);
+            undoRemoveSystemLock(tx, score, currentLock);
             continue;
         } else if (!currentLock && !unlockAll) {
-            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
-            undoAddSystemLock(score, newSystemLock);
+            RangeLock* newSystemLock = new RangeLock(startMeas, system->last());
+            undoAddSystemLock(tx, score, newSystemLock);
         }
     }
 }
 
-void EditSystemLocks::addRemoveSystemLocks(Score* score, int interval, bool lock)
+void EditSystemLocks::addRemoveSystemLocks(Transaction& tx, Score* score, int interval, bool lock)
 {
-    const bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-
     MeasureBase* startMeasure = score->selection().startMeasureBase();
     MeasureBase* endMeasure = score->selection().endMeasureBase();
     if (!endMeasure) {
-        endMeasure = mmrests ? score->lastMeasureMM() : score->lastMeasure();
+        endMeasure = score->lastMeasureMM();
     }
 
     if (!startMeasure || !endMeasure) {
@@ -211,15 +212,15 @@ void EditSystemLocks::addRemoveSystemLocks(Score* score, int interval, bool lock
                 break;
             }
             if (!system->isLocked()) {
-                undoAddSystemLock(score, new SystemLock(system->first(), system->last()));
+                undoAddSystemLock(tx, score, new RangeLock(system->first(), system->last()));
             }
         }
         return;
     }
 
-    std::vector<const SystemLock*> currentLocks = score->systemLocks()->locksContainedInRange(startMeasure, endMeasure);
-    for (const SystemLock* l : currentLocks) {
-        undoRemoveSystemLock(score, l);
+    std::vector<const RangeLock*> currentLocks = score->systemLocks()->locksContainedInRange(startMeasure, endMeasure);
+    for (const RangeLock* l : currentLocks) {
+        undoRemoveSystemLock(tx, score, l);
     }
 
     if (interval == 0) {
@@ -228,13 +229,13 @@ void EditSystemLocks::addRemoveSystemLocks(Score* score, int interval, bool lock
 
     int count = 0;
     MeasureBase* lockStart = nullptr;
-    for (MeasureBase* mb = startMeasure; mb; mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (MeasureBase* mb = startMeasure; mb; mb = mb->nextMM()) {
         if (count == 0) {
             lockStart = mb;
         }
         count++;
         if (count == interval || mb == endMeasure) {
-            undoAddSystemLock(score, new SystemLock(lockStart, mb));
+            undoAddSystemLock(tx, score, new RangeLock(lockStart, mb));
             lockStart = nullptr;
             count = 0;
         }
@@ -244,45 +245,62 @@ void EditSystemLocks::addRemoveSystemLocks(Score* score, int interval, bool lock
     }
 }
 
-void EditSystemLocks::makeIntoSystem(Score* score, MeasureBase* first, MeasureBase* last)
+void EditSystemLocks::makeIntoSystem(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last)
 {
-    bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-
-    const SystemLock* lockContainingfirst = score->systemLocks()->lockContaining(first);
-    const SystemLock* lockContaininglast = score->systemLocks()->lockContaining(last);
+    const RangeLock* lockContainingfirst = score->systemLocks()->lockContaining(first);
+    const RangeLock* lockContaininglast = score->systemLocks()->lockContaining(last);
 
     if (lockContainingfirst) {
-        undoRemoveSystemLock(score, lockContainingfirst);
+        undoRemoveSystemLock(tx, score, lockContainingfirst);
         if (lockContainingfirst->startMB()->isBefore(first)) {
-            MeasureBase* oneBeforeFirst = mmrests ? first->prevMM() : first->prev();
-            SystemLock* newLockBefore = new SystemLock(lockContainingfirst->startMB(), oneBeforeFirst);
-            undoAddSystemLock(score, newLockBefore);
+            MeasureBase* oneBeforeFirst = first->prevMM();
+            RangeLock* newLockBefore = new RangeLock(lockContainingfirst->startMB(), oneBeforeFirst);
+            undoAddSystemLock(tx, score, newLockBefore);
         }
     }
 
     if (lockContaininglast) {
         if (lockContaininglast != lockContainingfirst) {
-            undoRemoveSystemLock(score, lockContaininglast);
+            undoRemoveSystemLock(tx, score, lockContaininglast);
         }
         if (last->isBefore(lockContaininglast->endMB())) {
-            MeasureBase* oneAfterLast = mmrests ? last->nextMM() : last->next();
-            SystemLock* newLockAfter = new SystemLock(oneAfterLast, lockContaininglast->endMB());
-            undoAddSystemLock(score, newLockAfter);
+            MeasureBase* oneAfterLast = last->nextMM();
+            RangeLock* newLockAfter = new RangeLock(oneAfterLast, lockContaininglast->endMB());
+            undoAddSystemLock(tx, score, newLockAfter);
         }
     }
 
-    std::vector<const SystemLock*> locksContainedInRange = score->systemLocks()->locksContainedInRange(first, last);
-    for (const SystemLock* lock : locksContainedInRange) {
+    std::vector<const RangeLock*> locksContainedInRange = score->systemLocks()->locksContainedInRange(first, last);
+    for (const RangeLock* lock : locksContainedInRange) {
         if (lock != lockContainingfirst && lock != lockContaininglast) {
-            undoRemoveSystemLock(score, lock);
+            undoRemoveSystemLock(tx, score, lock);
         }
     }
 
-    SystemLock* newLock = new SystemLock(first, last);
-    undoAddSystemLock(score, newLock);
+    MeasureBase* firstMB = first;
+    MeasureBase* lastMB = last;
+
+    // If a section break is within this range, create a new system lock after it
+    for (MeasureBase* mb = first; mb && mb->isBeforeOrEqual(last); mb = mb->nextMM()) {
+        if (!firstMB) {
+            firstMB = mb;
+        }
+        lastMB = mb;
+
+        if (mb->sectionBreak()) {
+            RangeLock* newLock = new RangeLock(firstMB, lastMB);
+            undoAddSystemLock(tx, score, newLock);
+
+            firstMB = nullptr;
+            lastMB = nullptr;
+        }
+    }
+
+    RangeLock* newLock = new RangeLock(firstMB, lastMB);
+    undoAddSystemLock(tx, score, newLock);
 }
 
-void EditSystemLocks::moveMeasureToPrevSystem(Score* score, MeasureBase* m)
+void EditSystemLocks::moveMeasureToPrevSystem(Transaction& tx, Score* score, MeasureBase* m)
 {
     const System* prevSystem = m->prevNonVBoxSystem();
     if (!prevSystem) {
@@ -291,62 +309,52 @@ void EditSystemLocks::moveMeasureToPrevSystem(Score* score, MeasureBase* m)
 
     MeasureBase* prevSystemFirstMeas = prevSystem->first();
 
-    const SystemLock* prevSystemLock = score->systemLocks()->lockStartingAt(prevSystemFirstMeas);
-    if (prevSystemLock) {
-        undoRemoveSystemLock(score, prevSystemLock);
-    }
-
-    const System* curSystem = m->system();
-    const SystemLock* curSystemLock = score->systemLocks()->lockStartingAt(curSystem->first());
-    if (curSystemLock) {
-        undoRemoveSystemLock(score, curSystemLock);
-        if (curSystemLock->endMB() != m) {
-            const bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-            MeasureBase* nextMB = mmrests ? m->nextMM() : m->next();
-            SystemLock* newLockOnCurSystem = new SystemLock(nextMB, curSystemLock->endMB());
-            undoAddSystemLock(score, newLockOnCurSystem);
-        }
-    }
-
-    SystemLock* sysLock = new SystemLock(prevSystemFirstMeas, m);
-    undoAddSystemLock(score, sysLock);
+    makeIntoSystem(tx, score, prevSystemFirstMeas, m);
 }
 
-void EditSystemLocks::moveMeasureToNextSystem(Score* score, MeasureBase* m)
+void EditSystemLocks::moveMeasureToNextSystem(Transaction& tx, Score* score, MeasureBase* m)
 {
     const System* curSystem = m->system();
     MeasureBase* startMeas = curSystem->first();
-    bool refMeasureIsStartOfSystem = m == startMeas;
-
-    const SystemLock* curLock = score->systemLocks()->lockStartingAt(startMeas);
-    if (curLock) {
-        undoRemoveSystemLock(score, curLock);
-    }
-
-    if (!refMeasureIsStartOfSystem) {
-        bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-        MeasureBase* prevMeas = mmrests ? m->prevMM() : m->prev();
-        SystemLock* sysLock = new SystemLock(startMeas, prevMeas);
-        undoAddSystemLock(score, sysLock);
-    }
+    MeasureBase* systemCurEndMeasure = curSystem->last();
 
     const System* nextSystem = m->nextNonVBoxSystem();
     if (!nextSystem) {
         return;
     }
 
-    const SystemLock* nextSysLock = score->systemLocks()->lockStartingAt(nextSystem->first());
-    if (nextSysLock) {
-        undoRemoveSystemLock(score, nextSysLock);
+    const RangeLock* curLock = score->systemLocks()->lockStartingAt(startMeas);
+    const RangeLock* nextSysLock = score->systemLocks()->lockStartingAt(nextSystem->first());
+
+    MeasureBase* prevMeas = m->prevMM();
+
+    if (!curLock && !nextSysLock) {
+        if (systemCurEndMeasure->pageBreak()) {
+            // Move page break to measure preceding selection
+            systemCurEndMeasure->undoSetBreak(false, LayoutBreakType::PAGE);
+            prevMeas->undoSetBreak(true, LayoutBreakType::PAGE);
+        } else {
+            // Add a system break
+            prevMeas->undoSetBreak(true, LayoutBreakType::LINE);
+        }
+        return;
     }
 
-    if (nextSysLock || refMeasureIsStartOfSystem) {
-        SystemLock* newNextSysLock = new SystemLock(m, nextSystem->last());
-        undoAddSystemLock(score, newNextSysLock);
+    if (curLock && !nextSysLock) {
+        undoRemoveSystemLock(tx, score, curLock);
+
+        MeasureBase* firstMeasure = curSystem->first();
+        MeasureBase* lastMeasure = m->prev();
+
+        undoAddSystemLock(tx, score, new RangeLock(firstMeasure, lastMeasure));
+        return;
     }
+
+    MeasureBase* lastMeasure = nextSystem->last();
+    makeIntoSystem(tx, score, m, lastMeasure);
 }
 
-void EditSystemLocks::applyLockToSelection(Score* score)
+void EditSystemLocks::applyLockToSelection(Transaction& tx, Score* score)
 {
     MeasureBase* first = nullptr;
     MeasureBase* last = nullptr;
@@ -357,7 +365,7 @@ void EditSystemLocks::applyLockToSelection(Score* score)
     } else {
         for (EngravingItem* el : score->selection().elements()) {
             if (el->isSystemLockIndicator()) {
-                const SystemLock* lock = toSystemLockIndicator(el)->systemLock();
+                const RangeLock* lock = toSystemLockIndicator(el)->systemLock();
                 first = lock->startMB();
                 last = lock->endMB();
                 break;
@@ -379,73 +387,99 @@ void EditSystemLocks::applyLockToSelection(Score* score)
         return;
     }
 
-    const SystemLock* lockOnLast = score->systemLocks()->lockContaining(last);
+    const RangeLock* lockOnLast = score->systemLocks()->lockContaining(last);
     if (lockOnLast && lockOnLast->endMB() == last) {
-        undoRemoveSystemLock(score, lockOnLast);
+        undoRemoveSystemLock(tx, score, lockOnLast);
     } else if (first != last) {
-        makeIntoSystem(score, first, last);
+        makeIntoSystem(tx, score, first, last);
     } else {
-        makeIntoSystem(score, first->system()->first(), last);
+        makeIntoSystem(tx, score, first->system()->first(), last);
     }
 }
 
-void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Score* score, LayoutBreakType breakType, const MeasureBase* measure)
+void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Transaction& tx, Score* score, LayoutBreakType breakType,
+                                                        const MeasureBase* measure)
 {
     IF_ASSERT_FAILED(breakType != LayoutBreakType::NOBREAK) {
         return; // NOBREAK not allowed on locked measures
     }
 
-    const SystemLock* lock = score->systemLocks()->lockContaining(measure);
+    const RangeLock* lock = score->systemLocks()->lockContaining(measure);
     if (lock && (breakType == LayoutBreakType::LINE || measure != lock->endMB())) {
-        undoRemoveSystemLock(score, lock);
+        undoRemoveSystemLock(tx, score, lock);
     }
 }
 
-void EditSystemLocks::removeLayoutBreaksOnAddSystemLock(Score* score, const SystemLock* lock)
+void EditSystemLocks::updateLayoutBreaksOnAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
-    bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mmrests ? mb->nextMM() : mb->next()) {
+    bool moveSectionBreak = false;
+    bool movePageBreak = false;
+    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->nextMM()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);
-        mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         if (mb != lock->endMB()) {
+            // Move existing page breaks and section breaks to the end of the new range
+            moveSectionBreak |= mb->sectionBreak();
+            movePageBreak |= mb->pageBreak();
             mb->undoSetBreak(false, LayoutBreakType::SECTION);
             mb->undoSetBreak(false, LayoutBreakType::PAGE);
+        } else {
+            // End of system lock
+            // System lock and no-break would conflict
+            mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         }
+
+        if (mb->isEndOfPageLock()) {
+            // Create an updated page lock which extends to the end of the new range
+            const RangeLock* pageLock = mb->pageLock();
+            MeasureBase* pageLockStartMb = pageLock->startMB();
+
+            EditPageLocks::undoRemovePageLock(tx, score, pageLock);
+
+            RangeLock* newPageLock = new RangeLock(pageLockStartMb, lock->endMB());
+            EditPageLocks::undoAddPageLock(tx, score, newPageLock);
+        }
+    }
+
+    if (moveSectionBreak) {
+        lock->endMB()->undoSetBreak(true, LayoutBreakType::SECTION);
+    }
+    if (movePageBreak) {
+        lock->endMB()->undoSetBreak(true, LayoutBreakType::PAGE);
     }
 }
 
-void EditSystemLocks::removeSystemLocksOnRemoveMeasures(Score* score, const MeasureBase* m1, const MeasureBase* m2)
+void EditSystemLocks::removeSystemLocksOnRemoveMeasures(Transaction& tx, Score* score, const MeasureBase* m1, const MeasureBase* m2)
 {
-    std::vector<const SystemLock*> allSysLocks = score->systemLocks()->allLocks();
-    for (const SystemLock* lock : allSysLocks) {
+    std::vector<const RangeLock*> allSysLocks = score->systemLocks()->allLocks();
+    for (const RangeLock* lock : allSysLocks) {
         MeasureBase* lockStart = lock->startMB();
         MeasureBase* lockEnd = lock->endMB();
         bool lockStartIsInRange = lockStart->isAfterOrEqual(m1) && lockStart->isBeforeOrEqual(m2);
         bool lockEndIsInRange = lockEnd->isAfterOrEqual(m1) && lockEnd->isBeforeOrEqual(m2);
         if (lockStartIsInRange || lockEndIsInRange) {
-            undoRemoveSystemLock(score, lock);
+            undoRemoveSystemLock(tx, score, lock);
         }
         if (lockStartIsInRange && !lockEndIsInRange) {
             MeasureBase* newLockStart = m2->nextMeasure();
             if (newLockStart) {
-                undoAddSystemLock(score, new SystemLock(newLockStart, lockEnd));
+                undoAddSystemLock(tx, score, new RangeLock(newLockStart, lockEnd));
             }
         } else if (!lockStartIsInRange && lockEndIsInRange) {
             MeasureBase* newLockEnd = m1->prevMeasure();
             if (newLockEnd) {
-                undoAddSystemLock(score, new SystemLock(lockStart, newLockEnd));
+                undoAddSystemLock(tx, score, new RangeLock(lockStart, newLockEnd));
             }
         }
     }
 }
 
-void EditSystemLocks::removeSystemLocksContainingMMRests(Score* score)
+void EditSystemLocks::removeSystemLocksContainingMMRests(Transaction& tx, Score* score)
 {
-    std::vector<const SystemLock*> allLocks = score->systemLocks()->allLocks(); // copy
-    for (const SystemLock* lock : allLocks) {
+    std::vector<const RangeLock*> allLocks = score->systemLocks()->allLocks(); // copy
+    for (const RangeLock* lock : allLocks) {
         for (MeasureBase* mb = lock->startMB(); mb; mb = mb->next()) {
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
-                undoRemoveSystemLock(score, lock);
+                undoRemoveSystemLock(tx, score, lock);
                 break;
             }
             if (mb->isAfter(lock->endMB())) {
@@ -455,17 +489,17 @@ void EditSystemLocks::removeSystemLocksContainingMMRests(Score* score)
     }
 }
 
-void EditSystemLocks::updateSystemLocksOnCreateMMRests(Score* score, Measure* first, Measure* last)
+void EditSystemLocks::updateSystemLocksOnCreateMMRests(Transaction& tx, Score* score, Measure* first, Measure* last)
 {
     // NOTE: this must be done during layout as the mmRests get created.
 
-    for (const SystemLock* lock : score->systemLocks()->locksContainedInRange(first, last)) {
+    for (const RangeLock* lock : score->systemLocks()->locksContainedInRange(first, last)) {
         // These locks are inside the range of the mmRest so remove them
-        undoRemoveSystemLock(score, lock);
+        undoRemoveSystemLock(tx, score, lock);
     }
 
-    const SystemLock* lockOnFirst = score->systemLocks()->lockContaining(first);
-    const SystemLock* lockOnLast = score->systemLocks()->lockContaining(last);
+    const RangeLock* lockOnFirst = score->systemLocks()->lockContaining(first);
+    const RangeLock* lockOnLast = score->systemLocks()->lockContaining(last);
 
     if (lockOnFirst) {
         MeasureBase* startMB = lockOnFirst->startMB();
@@ -482,8 +516,8 @@ void EditSystemLocks::updateSystemLocksOnCreateMMRests(Score* score, Measure* fi
         }
 
         if (startMB != lockOnFirst->startMB() || endMB != lockOnFirst->endMB()) {
-            undoRemoveSystemLock(score, lockOnFirst);
-            undoAddSystemLock(score, new SystemLock(startMB, endMB));
+            undoRemoveSystemLock(tx, score, lockOnFirst);
+            undoAddSystemLock(tx, score, new RangeLock(startMB, endMB));
         }
     }
 
@@ -495,7 +529,7 @@ void EditSystemLocks::updateSystemLocksOnCreateMMRests(Score* score, Measure* fi
     MeasureBase* endMB = lockOnLast->endMB();
     assert(startMB->isAfter(first) && endMB->isAfter(last));
 
-    undoRemoveSystemLock(score, lockOnLast);
+    undoRemoveSystemLock(tx, score, lockOnLast);
     startMB = last->nextMM();
-    undoAddSystemLock(score, new SystemLock(startMB, endMB));
+    undoAddSystemLock(tx, score, new RangeLock(startMB, endMB));
 }

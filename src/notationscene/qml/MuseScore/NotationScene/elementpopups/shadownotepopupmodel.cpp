@@ -21,7 +21,11 @@
  */
 
 #include "shadownotepopupmodel.h"
+
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/staff.h"
+
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 

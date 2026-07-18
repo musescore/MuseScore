@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/fret.h"
 
@@ -51,7 +51,7 @@ private:
     double m_userMag = 1.0;
 };
 
-class FretDataChange : public UndoCommand
+class FretDataChange : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, FretDataChange)
 
@@ -59,8 +59,8 @@ class FretDataChange : public UndoCommand
     FretUndoData m_undoData;
     String m_harmonyName;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretDataChange(FretDiagram* d, const String& harmonyName)
@@ -73,7 +73,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_diagram })
 };
 
-class FretDot : public UndoCommand
+class FretDot : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, FretDot)
 
@@ -84,8 +84,8 @@ class FretDot : public UndoCommand
     FretDotType dtype;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretDot(FretDiagram* d, int _string, int _fret, bool _add = false, FretDotType _dtype = FretDotType::NORMAL)
@@ -96,7 +96,7 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
-class FretMarker : public UndoCommand
+class FretMarker : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, FretMarker)
 
@@ -105,8 +105,8 @@ class FretMarker : public UndoCommand
     FretMarkerType mtype;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretMarker(FretDiagram* d, int _string, FretMarkerType _mtype)
@@ -117,7 +117,7 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
-class FretBarre : public UndoCommand
+class FretBarre : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, FretBarre)
 
@@ -127,8 +127,8 @@ class FretBarre : public UndoCommand
     bool add = 0;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretBarre(FretDiagram* d, int _string, int _fret, bool _add = false)
@@ -139,15 +139,15 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
-class FretClear : public UndoCommand
+class FretClear : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, FretClear)
 
     FretDiagram* diagram = nullptr;
     FretUndoData undoData;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     FretClear(FretDiagram* d)
@@ -158,15 +158,15 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
-class AddFretDiagramToFretBox : public UndoCommand
+class AddFretDiagramToFretBox : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddFretDiagramToFretBox)
 
     FretDiagram* m_fretDiagram = nullptr;
     size_t m_idx = muse::nidx;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     AddFretDiagramToFretBox(FretDiagram* f, size_t idx);
@@ -176,15 +176,15 @@ public:
     UNDO_CHANGED_OBJECTS({ m_fretDiagram })
 };
 
-class RemoveFretDiagramFromFretBox : public UndoCommand
+class RemoveFretDiagramFromFretBox : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveFretDiagramFromFretBox)
 
     FretDiagram* m_fretDiagram = nullptr;
     size_t m_idx = muse::nidx;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     RemoveFretDiagramFromFretBox(FretDiagram* f);

@@ -48,6 +48,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "General")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "GeneralTab"
             navigation.panel: root.navigationPanel
@@ -56,6 +57,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Settings")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "SettingsTab"
             navigation.panel: root.navigationPanel

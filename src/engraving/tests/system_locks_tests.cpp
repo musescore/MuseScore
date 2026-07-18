@@ -24,6 +24,7 @@
 
 #include "engraving/dom/system.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -42,7 +43,7 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    std::vector<const SystemLock*> locks = score->systemLocks()->allLocks();
+    std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
     EXPECT_FALSE(locks.empty());
 
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
@@ -53,7 +54,7 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
         EXPECT_TRUE(sys->isLocked());
     }
 
-    for (const SystemLock* lock : locks) {
+    for (const RangeLock* lock : locks) {
         int measureCount = 0;
         for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->next()) {
             ++measureCount;
@@ -69,17 +70,17 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    const SystemLocks* systemLocks = score->systemLocks();
-    std::vector<const SystemLock*> allLocks = systemLocks->allLocks();
+    const RangeLocks* systemLocks = score->systemLocks();
+    std::vector<const RangeLock*> allLocks = systemLocks->allLocks();
     EXPECT_FALSE(allLocks.empty());
 
     score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
     score->cmdSelectAll();
     score->endCmd();
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::addRemoveSystemLocks(score, 0, false); // Remove all locks
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::addRemoveSystemLocks(tx, score, 0, false); // Remove all locks
+    });
 
     allLocks = systemLocks->allLocks();
     EXPECT_TRUE(allLocks.empty());
@@ -91,9 +92,9 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
         measuresAtSystemEnd.push_back(sys->last());
     }
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::addRemoveSystemLocks(score, 0, true); // Lock current layout
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::addRemoveSystemLocks(tx, score, 0, true); // Lock current layout
+    });
 
     for (MeasureBase* mb : measuresAtSystemStart) {
         EXPECT_TRUE(mb->isStartOfSystemLock());
@@ -102,12 +103,12 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
         EXPECT_TRUE(mb->isEndOfSystemLock());
     }
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::addRemoveSystemLocks(score, 4, false); // Add locks every 4 measures
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::addRemoveSystemLocks(tx, score, 4, false); // Add locks every 4 measures
+    });
 
     allLocks = systemLocks->allLocks();
-    for (const SystemLock* lock : allLocks) {
+    for (const RangeLock* lock : allLocks) {
         int measureCount = 0;
         for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->next()) {
             ++measureCount;
@@ -130,9 +131,9 @@ TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::makeIntoSystem(score, thirdMeasure, sixthMeasure);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::makeIntoSystem(tx, score, thirdMeasure, sixthMeasure);
+    });
 
     EXPECT_TRUE(thirdMeasure->prev()->isEndOfSystemLock());
 
@@ -156,16 +157,16 @@ TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
 
     EXPECT_NE(thirdMeasure->system(), sixthMeasure->system());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::moveMeasureToPrevSystem(score, sixthMeasure);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::moveMeasureToPrevSystem(tx, score, sixthMeasure);
+    });
 
     EXPECT_TRUE(sixthMeasure->isEndOfSystemLock());
     EXPECT_TRUE(sixthMeasure->next()->isStartOfSystemLock());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::moveMeasureToNextSystem(score, thirdMeasure);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::moveMeasureToNextSystem(tx, score, thirdMeasure);
+    });
 
     EXPECT_TRUE(thirdMeasure->prev()->isEndOfSystemLock());
     EXPECT_TRUE(thirdMeasure->isStartOfSystemLock());
@@ -182,29 +183,29 @@ TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
 
     score->select(score->first(), SelectType::RANGE);
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::toggleSystemLock(score, score->selection().selectedSystems());
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
+    });
 
     EXPECT_FALSE(score->systems().front()->isLocked());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::toggleSystemLock(score, score->selection().selectedSystems());
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
+    });
 
     EXPECT_TRUE(score->systems().front()->isLocked());
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::toggleScoreLock(score);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::toggleScoreLock(tx, score);
+    });
 
     for (System* sys : score->systems()) {
         EXPECT_FALSE(sys->isLocked());
     }
 
-    score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
-    EditSystemLocks::toggleScoreLock(score);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving system locks tests"), [&](auto& tx) {
+        EditSystemLocks::toggleScoreLock(tx, score);
+    });
 
     for (System* sys : score->systems()) {
         EXPECT_TRUE(sys->isLocked());

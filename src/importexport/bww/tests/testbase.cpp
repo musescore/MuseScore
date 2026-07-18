@@ -22,9 +22,6 @@
 
 #include "testbase.h"
 
-#include <QProcess>
-#include <QTextStream>
-
 #include "io/file.h"
 
 #include "engraving/dom/masterscore.h"
@@ -34,6 +31,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
 #include "engraving/rw/rwregister.h"
+#include "engraving/tests/utils/scorecomp.h"
 
 #include "log.h"
 
@@ -86,26 +84,7 @@ bool MTest::saveScore(Score* score, const QString& name) const
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
 {
-    QString cmd = "diff";
-    QStringList args;
-    args.append("-u");
-    args.append("--strip-trailing-cr");
-    args.append(f2);
-    args.append(f1);
-    QProcess p;
-    LOGD() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
-    p.start(cmd, args);
-    if (!p.waitForFinished() || p.exitCode()) {
-        QByteArray ba = p.readAll();
-        //LOGD("%s", qPrintable(ba));
-        //LOGD("   <diff -u %s %s failed", qPrintable(compareWith),
-        //   qPrintable(QString(root + "/" + saveName)));
-        QTextStream outputText(stdout);
-        outputText << QString(ba);
-        outputText << QString("   <diff -u %1 %2 failed").arg(f2).arg(f1);
-        return false;
-    }
-    return true;
+    return ScoreComp::compareFiles(String::fromQString(f1), String::fromQString(f2));
 }
 
 bool MTest::compareFiles(const QString& saveName, const QString& compareWith) const

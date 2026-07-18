@@ -23,7 +23,7 @@
 #pragma once
 
 #include "elementeditdata.h"
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/textbase.h"
 
@@ -38,8 +38,6 @@ public:
 
     String oldXmlText;
     size_t startUndoIdx = 0;
-
-    TextCursor* cursor() const;
 
     bool deleteText = false;
 
@@ -62,24 +60,24 @@ private:
 };
 
 //---------------------------------------------------------
-//   TextEditUndoCommand
+//   TextEditUndoableCommand
 //---------------------------------------------------------
 
-class TextEditUndoCommand : public UndoCommand
+class TextEditUndoableCommand : public UndoableCommand
 {
-    OBJECT_ALLOCATOR(engraving, TextEditUndoCommand)
+    OBJECT_ALLOCATOR(engraving, TextEditUndoableCommand)
 
 public:
     UNDO_TYPE(CommandType::TextEdit)
     UNDO_NAME("TextEdit")
     UNDO_CHANGED_OBJECTS({ m_cursor.text() })
 
-    TextEditUndoCommand(const TextCursor& tc)
+    TextEditUndoableCommand(const TextCursor& tc)
         : m_cursor(tc) {}
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::TextEdit && m_cursor.text() == target;
+        return f == UndoableCommandFilter::TextEdit && m_cursor.text() == target;
     }
 
     TextCursor& cursor() { return m_cursor; }
@@ -93,14 +91,14 @@ protected:
 //   ChangeText
 //---------------------------------------------------------
 
-class ChangeTextProperties : public TextEditUndoCommand
+class ChangeTextProperties : public TextEditUndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeTextProperties)
 
 public:
     ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 private:
 
@@ -117,20 +115,20 @@ private:
 //   ChangeText
 //---------------------------------------------------------
 
-class ChangeText : public TextEditUndoCommand
+class ChangeText : public TextEditUndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeText)
 
 public:
     ChangeText(const TextCursor* tc, const String& t)
-        : TextEditUndoCommand(*tc), m_s(t), m_format(*tc->format()) {}
-    virtual void undo(EditData*) override = 0;
-    virtual void redo(EditData*) override = 0;
+        : TextEditUndoableCommand(*tc), m_s(t), m_format(*tc->format()) {}
+    virtual void undo() override = 0;
+    virtual void redo() override = 0;
     const String& string() const { return m_s; }
 
 protected:
-    void insertText(EditData*);
-    void removeText(EditData*);
+    void insertText();
+    void removeText();
 
 private:
 
@@ -148,8 +146,8 @@ class InsertText : public ChangeText
 public:
     InsertText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
-    virtual void redo(EditData* ed) override { insertText(ed); }
-    virtual void undo(EditData* ed) override { removeText(ed); }
+    virtual void redo() override { insertText(); }
+    virtual void undo() override { removeText(); }
     UNDO_NAME("InsertText")
 };
 
@@ -163,8 +161,8 @@ class RemoveText : public ChangeText
 public:
     RemoveText(const TextCursor* tc, const String& t)
         : ChangeText(tc, t) {}
-    virtual void redo(EditData* ed) override { removeText(ed); }
-    virtual void undo(EditData* ed) override { insertText(ed); }
+    virtual void redo() override { removeText(); }
+    virtual void undo() override { insertText(); }
     UNDO_NAME("RemoveText")
 };
 
@@ -172,16 +170,16 @@ public:
 //   SplitJoinText
 //---------------------------------------------------------
 
-class SplitJoinText : public TextEditUndoCommand
+class SplitJoinText : public TextEditUndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SplitJoinText)
 protected:
-    virtual void split(EditData*);
-    virtual void join(EditData*);
+    virtual void split();
+    virtual void join();
 
 public:
     SplitJoinText(const TextCursor* tc)
-        : TextEditUndoCommand(*tc) {}
+        : TextEditUndoableCommand(*tc) {}
 };
 
 //---------------------------------------------------------
@@ -192,8 +190,8 @@ class SplitText : public SplitJoinText
 {
     OBJECT_ALLOCATOR(engraving, SplitText)
 
-    virtual void undo(EditData* data) override { join(data); }
-    virtual void redo(EditData* data) override { split(data); }
+    virtual void undo() override { join(); }
+    virtual void redo() override { split(); }
 
 public:
     SplitText(const TextCursor* tc)
@@ -209,8 +207,8 @@ class JoinText : public SplitJoinText
 {
     OBJECT_ALLOCATOR(engraving, JoinText)
 
-    virtual void undo(EditData* data) override { split(data); }
-    virtual void redo(EditData* data) override { join(data); }
+    virtual void undo() override { split(); }
+    virtual void redo() override { join(); }
 
 public:
     JoinText(const TextCursor* tc)

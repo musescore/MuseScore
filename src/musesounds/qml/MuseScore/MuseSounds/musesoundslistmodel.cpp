@@ -22,6 +22,8 @@
 
 #include "musesoundslistmodel.h"
 
+#include <unordered_set>
+
 using namespace mu::musesounds;
 
 static const QVariantMap soundLibraryInfoToMap(const SoundLibraryInfo& soundLibraryInfo)
@@ -39,12 +41,32 @@ static const QVariantMap soundLibraryInfoToMap(const SoundLibraryInfo& soundLibr
 static const QVariantList soundInfoListToVariantList(const SoundLibraryInfoList& soundLibraryInfoList)
 {
     QVariantList list;
+    list.reserve(soundLibraryInfoList.size());
 
     for (const SoundLibraryInfo& soundLibraryInfo : soundLibraryInfoList) {
         list << soundLibraryInfoToMap(soundLibraryInfo);
     }
 
     return list;
+}
+
+static SoundLibraryInfoList filteredLibraries(const SoundLibraryInfoList& libs, const QString& search,
+                                              std::unordered_set<QString>& matchedCodes)
+{
+    SoundLibraryInfoList result;
+
+    for (const SoundLibraryInfo& lib : libs) {
+        if (lib.title.toQString().contains(search, Qt::CaseInsensitive)
+            || lib.subtitle.toQString().contains(search, Qt::CaseInsensitive)) {
+            // The same lib can be listed under several catalogs
+            // Only show its first match
+            if (matchedCodes.insert(lib.code.toQString()).second) {
+                result.push_back(lib);
+            }
+        }
+    }
+
+    return result;
 }
 
 MuseSoundsListModel::MuseSoundsListModel(QObject* parent)
@@ -54,10 +76,35 @@ MuseSoundsListModel::MuseSoundsListModel(QObject* parent)
 
 void MuseSoundsListModel::load()
 {
+    if (!m_searchText.isEmpty()) {
+        m_searchText.clear();
+        emit searchTextChanged();
+    }
+
+    m_filteredCatalogs.clear();
+
     setSoundsCatalogs(repository()->soundsCatalogs());
     repository()->soundsCatalogsChanged().onNotify(this, [this](){
         setSoundsCatalogs(repository()->soundsCatalogs());
     });
+}
+
+QString MuseSoundsListModel::searchText() const
+{
+    return m_searchText;
+}
+
+void MuseSoundsListModel::setSearchText(const QString& text)
+{
+    if (m_searchText == text) {
+        return;
+    }
+
+    bool narrowing = !m_searchText.isEmpty() && !text.isEmpty()
+                     && text.startsWith(m_searchText, Qt::CaseInsensitive);
+    m_searchText = text;
+    emit searchTextChanged();
+    applyFilter(narrowing);
 }
 
 QVariant MuseSoundsListModel::data(const QModelIndex& index, int role) const
@@ -66,7 +113,7 @@ QVariant MuseSoundsListModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const SoundCatalogInfo& soundCategoryInfo = m_soundsCatalogs.at(index.row());
+    const SoundCatalogInfo& soundCategoryInfo = m_filteredCatalogs.at(index.row());
 
     switch (role) {
     case rCatalogTitle:
@@ -80,7 +127,7 @@ QVariant MuseSoundsListModel::data(const QModelIndex& index, int role) const
 
 int MuseSoundsListModel::rowCount(const QModelIndex&) const
 {
-    return static_cast<int>(m_soundsCatalogs.size());
+    return static_cast<int>(m_filteredCatalogs.size());
 }
 
 QHash<int, QByteArray> MuseSoundsListModel::roleNames() const
@@ -96,13 +143,42 @@ bool MuseSoundsListModel::isEmpty() const
     return m_soundsCatalogs.empty();
 }
 
+bool MuseSoundsListModel::noResultsFound() const
+{
+    return !m_searchText.isEmpty() && m_filteredCatalogs.empty();
+}
+
 void MuseSoundsListModel::setSoundsCatalogs(const SoundCatalogInfoList& soundsCatalogs)
 {
-    beginResetModel();
-
     m_soundsCatalogs = soundsCatalogs;
+    applyFilter();
+}
 
-    endResetModel();
+void MuseSoundsListModel::applyFilter(bool narrowing)
+{
+    TRACEFUNC;
+
+    SoundCatalogInfoList newFiltered;
+    if (m_searchText.isEmpty()) {
+        newFiltered = m_soundsCatalogs;
+    } else {
+        // Narrowing: scan only the already-filtered (smaller) set
+        const SoundCatalogInfoList& source = narrowing ? m_filteredCatalogs : m_soundsCatalogs;
+        std::unordered_set<QString> matchedCodes;
+        for (const SoundCatalogInfo& catalogue : source) {
+            SoundLibraryInfoList libs = filteredLibraries(catalogue.soundLibraries, m_searchText, matchedCodes);
+            if (!libs.empty()) {
+                newFiltered.push_back({ catalogue.title, std::move(libs) });
+            }
+        }
+    }
+
+    if (newFiltered != m_filteredCatalogs) {
+        beginResetModel();
+        m_filteredCatalogs = std::move(newFiltered);
+        endResetModel();
+    }
 
     emit isEmptyChanged();
+    emit noResultsFoundChanged();
 }

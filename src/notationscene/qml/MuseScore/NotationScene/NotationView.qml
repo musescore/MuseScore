@@ -28,7 +28,6 @@ import QtQuick.Controls
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.Automation
 import MuseScore.NotationScene
 import MuseScore.Braille
 import MuseScore.Playback
@@ -220,18 +219,6 @@ FocusScope {
                             notationView.onElementPopupIsOpenChanged(AbstractElementPopupModel.TYPE_UNDEFINED)
                         }
                     }
-
-                    AutomationOverlayLoader {
-                        active: notationView.automationMode
-                        anchors.fill: notationView
-
-                        viewMatrix: notationView.matrix
-                        linesData: notationView.automationLinesData
-
-                        onPointChangeRequested: function(lineIdx, pointIdx, x, y) {
-                            notationView.requestChangeAutomationPoint(lineIdx, pointIdx, x, y)
-                        }
-                     }
 
                     NotationRegionsBeingProcessedView {
                         notationViewRect: Qt.rect(notationView.x, notationView.y, notationView.width, notationView.height)

@@ -80,6 +80,7 @@
 #include "dom/slur.h"
 #include "dom/soundflag.h"
 #include "dom/spacer.h"
+#include "dom/staff.h"
 #include "dom/stafftext.h"
 #include "dom/stafftypechange.h"
 #include "dom/sticking.h"
@@ -216,6 +217,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::SPACER:       layout(toSpacer(item), ctx);
         break;
     case ElementType::STAFF_TEXT:   layout(toStaffText(item), ctx);
+        break;
+    case ElementType::STAVE_SHARING_LABEL: layout(toStaveSharingLabel(item), ctx);
         break;
     case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
         break;
@@ -1618,6 +1621,11 @@ void SingleLayout::layout(StaffText* item, const Context& ctx)
             }
         }
     }
+}
+
+void SingleLayout::layout(StaveSharingLabel* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx, item->mutldata());
 }
 
 void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)

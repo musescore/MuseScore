@@ -28,6 +28,7 @@
 #include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 #include "dom/system.h"
 
 using namespace mu::engraving;

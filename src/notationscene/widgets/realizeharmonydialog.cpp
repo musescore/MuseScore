@@ -23,11 +23,15 @@
 #include "realizeharmonydialog.h"
 
 #include "engraving/dom/harmony.h"
-#include "engraving/dom/staff.h"
+#include "engraving/dom/realizedharmony.h"
+
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "translation.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
     : muse::ui::WidgetDialog(parent)
@@ -51,12 +55,12 @@ void RealizeHarmonyDialog::componentComplete()
         return;
     }
 
-    const std::vector<mu::engraving::EngravingItem*>& selectedElements = interaction->selection()->elements();
-    QList<mu::engraving::Harmony*> selectedHarmonyList;
+    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
+    QList<Harmony*> selectedHarmonyList;
 
-    for (mu::engraving::EngravingItem* element : selectedElements) {
+    for (EngravingItem* element : selectedElements) {
         if (element->isHarmony()) {
-            selectedHarmonyList << mu::engraving::toHarmony(element);
+            selectedHarmonyList << toHarmony(element);
         }
     }
 
@@ -77,10 +81,8 @@ void RealizeHarmonyDialog::accept()
     }
 
     bool optionsOverride = optionsBox->isChecked();
-    Voicing voicing = optionsOverride ? Voicing(voicingSelect->getVoicing())
-                      : Voicing::INVALID;
-    HarmonyDurationType durationType = optionsOverride ? HarmonyDurationType(voicingSelect->getDuration())
-                                       : HarmonyDurationType::INVALID;
+    Voicing voicing = optionsOverride ? Voicing(voicingSelect->getVoicing()) : Voicing::INVALID;
+    HDuration durationType = optionsOverride ? HDuration(voicingSelect->getDuration()) : HDuration::INVALID;
 
     interaction->realizeSelectedChordSymbols(voicingSelect->getLiteral(), voicing, durationType);
 

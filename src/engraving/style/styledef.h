@@ -1406,6 +1406,26 @@ enum class Sid : short {
     staffTextFrameBgColor,
     staffTextPosition,
 
+    staveSharingLabelFontFace,
+    staveSharingLabelFontSize,
+    staveSharingLabelLineSpacing,
+    staveSharingLabelFontSpatiumDependent,
+    staveSharingLabelFontStyle,
+    staveSharingLabelColor,
+    staveSharingLabelAlign,
+    staveSharingLabelOffsetType,
+    staveSharingLabelPlacement,
+    staveSharingLabelPosAbove,
+    staveSharingLabelPosBelow,
+    staveSharingLabelMinDistance,
+    staveSharingLabelFrameType,
+    staveSharingLabelFramePadding,
+    staveSharingLabelFrameWidth,
+    staveSharingLabelFrameRound,
+    staveSharingLabelFrameFgColor,
+    staveSharingLabelFrameBgColor,
+    staveSharingLabelPosition,
+
     fretDiagramFingeringFontFace,
     fretDiagramFingeringFontSize,
     fretDiagramFingeringLineSpacing,
@@ -2273,6 +2293,7 @@ Q_ENUM_NS(Sid)
 using _Sid::Sid;
 #endif
 
+using StyleId = Sid;
 using StyleIdSet = std::unordered_set<Sid>;
 
 //---------------------------------------------------------

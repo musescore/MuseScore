@@ -26,11 +26,13 @@ SKIP_ERR=true
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
 BUILD_CRASHPAD_CLIENT="OFF"
+DOCKWIDGETS_V2=OFF
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; BUILD_CRASHPAD_CLIENT=ON; shift ;;
+        --dockwidgets_v2) DOCKWIDGETS_V2="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -53,7 +55,6 @@ echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
-MUSESCORE_MACOS_DEPS_PATH="$HOME/musescore_deps_macos" \
 CMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
 MUSESCORE_INSTALL_DIR="../applebuild" \
 MUSE_APP_BUILD_MODE=$MUSE_APP_BUILD_MODE \
@@ -63,6 +64,7 @@ MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_CRASHPAD_CLIENT=$BUILD_CRASHPAD_CLIENT \
 MUSESCORE_BUILD_VST_MODULE="ON" \
 MUSESCORE_BUILD_WEBSOCKET="ON" \
+MUSESCORE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2=$DOCKWIDGETS_V2 \
 bash ./ninja_build.sh -t install
 
 bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSE_APP_BUILD_MODE

@@ -24,7 +24,11 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editrehearsalmark.h"
+#include "engraving/editing/editslashnotation.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -55,7 +59,7 @@ TEST_F(Engraving_ToolsTests, undoSlashFill)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdSlashFill();
+    EditSlashNotation::slashFill(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -85,7 +89,7 @@ TEST_F(Engraving_ToolsTests, undoSlashRhythm)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdSlashRhythm();
+    EditSlashNotation::slashRhythm(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -110,7 +114,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -135,7 +139,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -160,7 +164,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -185,7 +189,7 @@ TEST_F(Engraving_ToolsTests, undoResequencePart)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -206,7 +210,7 @@ void Engraving_ToolsTests::changeEnharmonic(bool both)
     score->cmdSelectAll();
     for (int i = 1; i < 6; ++i) {
         score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-        score->changeEnharmonicSpelling(both);
+        EditEnharmonicSpelling::changeEnharmonicSpelling(score, both);
         score->endCmd();
         String prefix = u"change-enharmonic-" + mode + u"-0" + (u'0' + i);
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, prefix + u"-test.mscx", TOOLS_DATA_DIR + prefix + u"-ref.mscx"));

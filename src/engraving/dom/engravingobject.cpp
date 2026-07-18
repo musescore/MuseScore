@@ -24,9 +24,10 @@
 
 #include "global/containers.h"
 
-#include "../editing/undo.h"
 #include "../editing/addremoveelement.h"
 #include "../editing/editproperty.h"
+#include "../editing/transaction/transaction.h"
+#include "../editing/transaction/undostack.h"
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 
@@ -487,7 +488,9 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
 void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
-    score()->undoStack()->pushWithoutPerforming(new ChangeProperty(this, id, val));
+
+    Transaction& tx = masterScore()->transactionManager()->currentOrDummyTransaction();
+    tx.pushWithoutPerforming(new ChangeProperty(this, id, val));
 }
 
 //---------------------------------------------------------
@@ -724,32 +727,7 @@ bool EngravingObject::isSLineSegment() const
 
 bool EngravingObject::isTextBase() const
 {
-    return type() == ElementType::TEXT
-           || type() == ElementType::LYRICS
-           || type() == ElementType::DYNAMIC
-           || type() == ElementType::EXPRESSION
-           || type() == ElementType::FINGERING
-           || type() == ElementType::HARMONY
-           || type() == ElementType::MARKER
-           || type() == ElementType::JUMP
-           || type() == ElementType::STAFF_TEXT
-           || type() == ElementType::SYSTEM_TEXT
-           || type() == ElementType::TRIPLET_FEEL
-           || type() == ElementType::PLAY_COUNT_TEXT
-           || type() == ElementType::PLAYTECH_ANNOTATION
-           || type() == ElementType::CAPO
-           || type() == ElementType::STRING_TUNINGS
-           || type() == ElementType::REHEARSAL_MARK
-           || type() == ElementType::INSTRUMENT_CHANGE
-           || type() == ElementType::FIGURED_BASS
-           || type() == ElementType::TEMPO_TEXT
-           || type() == ElementType::INSTRUMENT_NAME
-           || type() == ElementType::MEASURE_NUMBER
-           || type() == ElementType::MMREST_RANGE
-           || type() == ElementType::STICKING
-           || type() == ElementType::HARP_DIAGRAM
-           || type() == ElementType::GUITAR_BEND_TEXT
-           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT;
+    return muse::contains(TEXTBASE_TYPES, type());
 }
 
 //---------------------------------------------------------

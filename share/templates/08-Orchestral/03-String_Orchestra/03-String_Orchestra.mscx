@@ -93,6 +93,7 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.group</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -170,6 +171,7 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.group</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -249,6 +251,7 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.group</instrumentId>
         <clef>C3</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -328,6 +331,7 @@
         <maxPitchA>67</maxPitchA>
         <instrumentId>strings.group</instrumentId>
         <clef>F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -410,6 +414,7 @@
         <instrumentId>strings.group</instrumentId>
         <concertClef>F8vb</concertClef>
         <transposingClef>F</transposingClef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

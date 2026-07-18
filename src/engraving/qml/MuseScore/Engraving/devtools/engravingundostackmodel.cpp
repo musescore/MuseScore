@@ -19,11 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "engravingundostackmodel.h"
 
 #include "notation/inotation.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/dom/score.h"
+#include "engraving/editing/transaction/undoablecommand.h"
+#include "engraving/editing/transaction/undostack.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "log.h"
 
@@ -59,28 +65,28 @@ void EngravingUndoStackModel::reload()
 
     m_allItems.clear();
     delete m_rootItem;
-    m_rootItem = createItem(nullptr, nullptr);
+    m_rootItem = new Item(nullptr);
+    m_allItems.insert(m_rootItem->key(), m_rootItem);
 
     if (INotationPtr notation = context()->currentNotation()) {
         const UndoStack* undoStack = notation->elements()->msScore()->undoStack();
 
         for (size_t i = 1; i <= undoStack->size(); ++i) {
-            const UndoCommand* cmd = undoStack->lastAtIndex(i);
-            Item* item = createItem(m_rootItem, cmd, cmd == undoStack->last());
-            load(cmd, item);
+            const UndoableTransaction* transaction = undoStack->lastAtIndex(i);
+            Item* item = createItem(m_rootItem, transaction, transaction == undoStack->last());
+            load(transaction, item);
         }
     }
 
     endResetModel();
 }
 
-void EngravingUndoStackModel::load(const UndoCommand* undoCommand, Item* parent)
+void EngravingUndoStackModel::load(const UndoableTransaction* transaction, Item* parent)
 {
     TRACEFUNC;
 
-    for (const UndoCommand* childCommand : undoCommand->commands()) {
-        Item* item = createItem(parent, childCommand);
-        load(childCommand, item);
+    for (const UndoableCommand* childCommand : transaction->commands()) {
+        createItem(parent, childCommand);
     }
 }
 
@@ -202,19 +208,33 @@ static QColor colorForPointer(const void* ptr)
 }
 
 EngravingUndoStackModel::Item* EngravingUndoStackModel::createItem(
-    Item* parent, const UndoCommand* undoCommand, bool isCurrent)
+    Item* parent, const UndoableTransaction* transaction, bool isCurrent)
 {
     Item* item = new Item(parent);
     m_allItems.insert(item->key(), item);
 
-    if (undoCommand) {
+    if (transaction) {
         QVariantMap data;
-        if (const UndoMacro* macro = dynamic_cast<const UndoMacro*>(undoCommand)) {
-            data["text"] = macro->actionName().qTranslated();
-        } else {
-            data["text"] = QString(undoCommand->name());
-        }
-        data["color"] = colorForPointer(undoCommand);
+        data["text"] = transaction->actionName().qTranslated();
+        data["color"] = colorForPointer(transaction);
+        data["isCurrent"] = isCurrent;
+
+        item->setData(data);
+    }
+
+    return item;
+}
+
+EngravingUndoStackModel::Item* EngravingUndoStackModel::createItem(
+    Item* parent, const UndoableCommand* command, bool isCurrent)
+{
+    Item* item = new Item(parent);
+    m_allItems.insert(item->key(), item);
+
+    if (command) {
+        QVariantMap data;
+        data["text"] = QString(command->name());
+        data["color"] = colorForPointer(command);
         data["isCurrent"] = isCurrent;
 
         item->setData(data);

@@ -23,7 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"
@@ -50,15 +50,15 @@ public:
         score->cmdSelectAll();
 
         // transpose major second up
-        score->startCmd(TranslatableString::untranslatable("Engraving transpose tests"));
-        Transpose::transpose(score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4,
-                             true, true, true);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
+            Transpose::transpose(tx, score, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4,
+                                 true, true, true);
+        });
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
         // undo
         EditData ed;
-        score->undoStack()->undo(&ed);
+        score->transactionManager()->undoRedo(true, &ed);
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
         delete score;
@@ -79,15 +79,15 @@ public:
         score->cmdSelectAll();
 
         // transpose diatonic fourth down
-        score->startCmd(TranslatableString::untranslatable("Engraving transpose tests"));
-        Transpose::transpose(score, TransposeMode::DIATONICALLY, TransposeDirection::DOWN, Key::C, 3,
-                             true, false, false);
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving transpose tests"), [&](auto& tx) {
+            Transpose::transpose(tx, score, TransposeMode::DIATONICALLY, TransposeDirection::DOWN, Key::C, 3,
+                                 true, false, false);
+        });
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
         // undo
         EditData ed;
-        score->undoStack()->undo(&ed);
+        score->transactionManager()->undoRedo(true, &ed);
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
         delete score;

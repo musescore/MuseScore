@@ -69,7 +69,6 @@ public:
     std::vector<muse::String> imageFileNames() const;
     muse::ByteArray readImageFile(const muse::String& fileName) const;
 
-    muse::ByteArray readAudioFile() const;
     muse::ByteArray readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
     muse::ByteArray readVideoSettingsJsonFile() const;
     muse::ByteArray readViewSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;

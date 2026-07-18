@@ -24,6 +24,10 @@ import QtQuick
 import Muse.UiComponents
 
 StyledTabButton {
-    fillWidth: true
+    required property real maxWidth
+
     font: ui.theme.bodyBoldFont
+    width: Math.min(implicitWidth, maxWidth)
+    leftPadding: 4
+    rightPadding: 4
 }

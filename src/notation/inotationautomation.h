@@ -33,11 +33,6 @@ public:
     virtual bool isAutomationModeEnabled() const = 0;
     virtual void setAutomationModeEnabled(bool enabled) = 0;
     virtual muse::async::Notification automationModeEnabledChanged() const = 0;
-
-    virtual QVariant automationLinesData() const = 0;
-    virtual muse::async::Notification automationLinesDataChanged() const = 0;
-
-    virtual void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y) = 0;
 };
 
 using INotationAutomationPtr = std::shared_ptr<INotationAutomation>;

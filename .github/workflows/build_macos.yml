@@ -16,6 +16,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
+        required: false
   workflow_call:
     inputs:
       build_mode:
@@ -36,6 +40,11 @@ on:
       build_number:
         description: "Build number (if not provided, will be generated)"
         default: ""
+        type: string
+        required: false
+      dockwidgets_v2:
+        description: 'Use KDDockWidgets v2: ON/OFF'
+        default: 'OFF'
         type: string
         required: false
       app_repo:
@@ -73,7 +82,7 @@ jobs:
     runs-on: macos-26
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.app_repo || github.repository }}
         ref: ${{ inputs.app_ref || github.ref }}
@@ -81,7 +90,7 @@ jobs:
 
     - name: Override muse_framework
       if: inputs.framework_ref != '' && inputs.framework_repo != ''
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.framework_repo }}
         ref: ${{ inputs.framework_ref }}
@@ -182,17 +191,18 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v5
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-ccache-
-        restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    - name: Setup ccache
-      run: |
-        brew install ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-ccache-
+          restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+      - name: Setup ccache
+        run: |
+          brew install ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       # uses: jurplel/install-qt-action@v4
@@ -206,26 +216,24 @@ jobs:
       run: |
         bash ./buildscripts/ci/macos/install_qt.sh
 
-    - name: Download dependencies
-      run: |
-        bash ./buildscripts/ci/macos/download_dependencies.sh
+    - parallel:
+      - name: Generate _en.ts files
+        env:
+          LUPDATE_ARGS: ""
+          POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
+        run: |
+          bash ./tools/translations/run_lupdate.sh
+      - name: Update .ts files (tx pull)
+        if: env.DO_UPDATE_TS == 'true'
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
 
-    - name: Generate _en.ts files
-      env:
-        LUPDATE_ARGS: ""
-        POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
-      run: |
-        bash ./tools/translations/run_lupdate.sh
-    - name: Update .ts files (tx pull)
-      if: env.DO_UPDATE_TS == 'true'
-      uses: transifex/cli-action@v2
-      with:
-        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
-        args: "pull -f"
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
+        bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --dockwidgets_v2 ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
     - name: Show ccache stats
       run: |
         ccache -sv
@@ -276,7 +284,7 @@ jobs:
         echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_OUTPUT
     - name: Save ccache files
       if: always()
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         key: ${{ steps.restore-ccache.outputs.cache-primary-key }}${{ steps.prepare-save-ccache.outputs.CCACHE_TIMESTAMP }}
         path: ${{ github.workspace }}/.ccache

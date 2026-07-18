@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 #include "defer.h"
 #include "translation.h"
 #include "log.h"
+
+#include "notation/inotationplayback.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -181,7 +183,7 @@ void MixerChannelItem::addBlankSlots(size_t count)
     for (size_t i = 0; i < count; ++i) {
         AudioFxParams params;
         params.chainOrder = resolveNewBlankOutputResourceItemOrder();
-        m_outputResourceItems.insert(params.chainOrder, buildOutputResourceItem(std::move(params)));
+        m_outputResourceItems.insert(params.chainOrder, buildOutputResourceItem(params));
     }
 
     emit outputResourceItemListChanged();
@@ -365,7 +367,7 @@ void MixerChannelItem::loadSoloMuteState(const notation::INotationSoloMuteState:
     }
 }
 
-void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioSignalChanges)
+void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges& audioSignalChanges)
 {
     m_audioSignalChanges = audioSignalChanges;
 

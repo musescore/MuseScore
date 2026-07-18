@@ -25,6 +25,8 @@
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
 #include "types/translatablestring.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 using namespace mu::playback;
 using namespace mu::notation;
@@ -220,7 +222,7 @@ void PlaybackUiActions::init()
         m_actionCheckedChanged.send({ code });
     });
 
-    m_controller->isPlayAllowedChanged().onNotify(this, [this]() {
+    m_controller->isPlayAllowedChanged().onReceive(this, [this](bool) {
         const UiActionList& actions = actionsList();
 
         ActionCodeList codes;

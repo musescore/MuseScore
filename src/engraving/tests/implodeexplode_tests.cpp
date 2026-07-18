@@ -24,7 +24,7 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/editing/implodeexplode.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -130,4 +130,9 @@ TEST_F(Engraving_ImplodeExplodeTests, explodeDynamics)
 TEST_F(Engraving_ImplodeExplodeTests, implodeDynamics)
 {
     testUndoImplode(u"implodeDynamics");
+}
+
+TEST_F(Engraving_ImplodeExplodeTests, implodeArticulations)
+{
+    testUndoImplode(u"implodeArticulations");
 }

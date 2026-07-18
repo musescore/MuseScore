@@ -24,6 +24,8 @@
 
 #include "engraving/dom/instrumentname.h"
 
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
 using namespace mu::propertiespanel;
 using namespace muse::actions;
 

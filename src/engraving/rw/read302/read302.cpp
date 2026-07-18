@@ -28,7 +28,6 @@
 #include "rw/compat/compatutils.h"
 #include "style/style.h"
 
-#include "dom/audio.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/masterscore.h"
@@ -62,12 +61,11 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->m_audio = new Audio;
-            read400::TRead::read(score->m_audio, e, ctx);
+            e.skipCurrentElement();
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->m_playMode = PlayMode(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {
@@ -161,7 +159,7 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
             ctx.setScore(curScore);
 
-            s->linkMeasures(m);
+            Excerpt::linkMeasures(s, m);
             ex->setTracksMapping(ctx.tracks());
             m->addExcerpt(ex);
         } else if (tag == "name") {
@@ -197,8 +195,6 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         return false;
     }
 
-    score->connectTies();
-
     score->m_fileDivision = Constants::DIVISION;
 
     if (score->mscVersion() == 302) {
@@ -218,8 +214,20 @@ bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
     }
 
     score->setUpTempoMap();
+    if (score->isMaster()) {
+        // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+        // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+        // elements still do it).
+        // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+        // up-to-date from that point. But we weren't finished reading the score, so the score will still
+        // change. We need to tell the repeat list about that, so that it will be updated next time
+        // someone uses it.
+        static_cast<MasterScore*>(score)->invalidateRepeatList();
+    }
+    score->connectTies();
+    score->undoRemoveStaleTieJumpPoints(false);
 
-    for (Part* p : score->m_parts) {
+    for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
 

@@ -35,8 +35,12 @@
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
+#include "engraving/dom/system.h"
 #include "engraving/editing/editscoreproperties.h"
+#include "engraving/editing/editstyle.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/engravingproject.h"
 #include "engraving/infrastructure/mscio.h"
@@ -44,12 +48,16 @@
 #include "engraving/rw/write/writecontext.h"
 
 #include "iprojectautosaver.h"
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationviewstate.h"
 #include "notation/internal/masternotation.h"
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 #include "projectvideosettings.h"
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
+#include "types/projectcreateoptions.h"
 
 #include "global/concurrency/concurrent.h"
 
@@ -202,7 +210,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     // Load style if present
     if (!openParams.stylePath.empty()) {
         muse::io::File styleFile(openParams.stylePath);
-        m_engravingProject->masterScore()->loadStyle(styleFile);
+        mu::engraving::MasterScore* ms = m_engravingProject->masterScore();
+        mu::engraving::EditStyle::loadStyle(ms->transactionManager()->currentOrDummyTransaction(), ms, styleFile);
     }
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
@@ -310,7 +319,7 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const OpenParams& op
     // Load style if present
     if (!stylePath.empty()) {
         muse::io::File styleFile(stylePath);
-        score->loadStyle(styleFile);
+        mu::engraving::EditStyle::loadStyle(score->transactionManager()->currentOrDummyTransaction(), score, styleFile);
     }
 
     // Init ChordList

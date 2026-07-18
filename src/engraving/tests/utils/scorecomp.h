@@ -20,20 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SCORECOMP_H
-#define MU_ENGRAVING_SCORECOMP_H
+#pragma once
+
+#include "global/modularity/ioc.h"
+#include "global/io/ifilesystem.h"
 
 #include "engraving/dom/score.h"
 
 namespace mu::engraving {
 class ScoreComp
 {
-public:
+    static inline muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
+public:
     static bool saveCompareScore(Score*, const String& saveName, const String& compareWithLocalPath);
     static bool saveCompareMimeData(muse::ByteArray mimeData, const String& saveName, const String& compareWithLocalPath);
     static bool compareFiles(const String& fullPath1, const String& fullPath2);
 };
 }
-
-#endif // MU_ENGRAVING_SCORECOMP_H

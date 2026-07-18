@@ -24,10 +24,12 @@
 
 #include "async/channel.h"
 
-#include "notationtypes.h"
-
 namespace muse::midi {
 struct Event;
+}
+
+namespace mu::engraving {
+class Note;
 }
 
 namespace mu::notation {
@@ -37,7 +39,7 @@ public:
     virtual ~INotationMidiInput() = default;
 
     virtual void onMidiEventReceived(const muse::midi::Event& event) = 0;
-    virtual muse::async::Channel<std::vector<const Note*> > notesReceived() const = 0;
+    virtual muse::async::Channel<std::vector<const engraving::Note*> > notesReceived() const = 0;
 
     virtual void onRealtimeAdvance() = 0;
 };

@@ -32,7 +32,7 @@
 namespace mu::engraving::write {
 class Writer : public rw::IWriter
 {
-    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalThreadSafeInject<muse::IApplication> application;
 
 public:
 

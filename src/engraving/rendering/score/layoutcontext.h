@@ -63,14 +63,14 @@ class Score;
 class Spanner;
 class SpannerMap;
 class System;
-class SystemLocks;
+class RangeLocks;
 class Staff;
 class Measure;
 class ChordRest;
 class Segment;
 struct PaddingTable;
 
-class UndoCommand;
+class UndoableCommand;
 class EditData;
 
 class Selection;
@@ -178,7 +178,8 @@ public:
 
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
-    const SystemLocks* systemLocks() const;
+    const RangeLocks* systemLocks() const;
+    const RangeLocks* pageLocks() const;
 
     const PaddingTable& paddingTable() const;
 
@@ -202,10 +203,10 @@ public:
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);
-    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void undo(UndoableCommand* cmd) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
-    void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);
+    void updateLocksOnCreateMMRest(Measure* first, Measure* last);
     void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents = true);
 
     void addUnmanagedSpanner(Spanner* s);

@@ -71,9 +71,6 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited and others. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${QT_INSTALL_LIBS};@loader_path/../Frameworks")
-    if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
-        list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
-    endif()
 
     message("MACOSX_BUNDLE_VERSION: ${MACOSX_BUNDLE_LONG_VERSION_STRING}.${MACOSX_BUNDLE_BUNDLE_VERSION}")
 
@@ -120,6 +117,8 @@ endmacro()
 # This function also adds qml parts to the link
 add_to_link_if_exists(muse::accessibility)
 add_to_link_if_exists(muse::actions)
+add_to_link_if_exists(muse::rcommand)
+add_to_link_if_exists(muse::rcontrol)
 add_to_link_if_exists(muse::audio)
 add_to_link_if_exists(muse::audioplugins)
 add_to_link_if_exists(muse::testflow)
@@ -179,7 +178,7 @@ add_to_link_if_exists(palette)
 add_to_link_if_exists(playback)
 add_to_link_if_exists(preferences)
 add_to_link_if_exists(print)
-add_to_link_if_exists(project)     
+add_to_link_if_exists(project)
 
 
 set(MSCORE_APPEND_SRC)
@@ -247,7 +246,7 @@ set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
     set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
-    set(COVERAGE_LINK_FLAGS -lgcov --coverage)
+    set(COVERAGE_LINK_FLAGS --coverage)
     target_compile_options(MuseScoreStudio PRIVATE ${COVERAGE_FLAGS})
     target_link_options(MuseScoreStudio PRIVATE ${COVERAGE_LINK_FLAGS})
 endif()
@@ -364,15 +363,15 @@ if (OS_IS_WIN)
 ###########################################
 elseif(OS_IS_LIN)
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
-                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
+    install(CODE "message(STATUS \"Creating symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+                  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
 ###########################################
 # FreeBSD
 ###########################################
 elseif(OS_IS_FBSD)
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-    install(CODE "message(STATUS \"Creating symlink ${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
+    install(CODE "message(STATUS \"Creating symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX} -> ${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\")
                   execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/bin/mscore${MUSE_APP_INSTALL_SUFFIX}\" \"${CMAKE_INSTALL_PREFIX}/bin/musescore${MUSE_APP_INSTALL_SUFFIX}\")")
 
 ###########################################

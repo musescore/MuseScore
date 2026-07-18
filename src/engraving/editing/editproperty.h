@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/staff.h"
 
 namespace mu::engraving {
-class ChangeProperty : public UndoCommand
+class ChangeProperty : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeProperty)
 protected:
@@ -36,7 +36,7 @@ protected:
     PropertyValue property;
     PropertyFlags flags;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeProperty(EngravingObject* e, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
@@ -51,9 +51,9 @@ public:
 
     std::vector<EngravingObject*> objectItems() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::ChangePropertyLinked && muse::contains(target->linkList(), element);
+        return f == UndoableCommandFilter::ChangePropertyLinked && muse::contains(target->linkList(), element);
     }
 };
 
@@ -64,7 +64,7 @@ class ChangeBracketProperty : public ChangeProperty
     Staff* staff = nullptr;
     size_t level = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeBracketProperty(Staff* s, size_t l, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
@@ -77,7 +77,7 @@ class ChangeTextLineProperty : public ChangeProperty
 {
     OBJECT_ALLOCATOR(engraving, ChangeTextLineProperty)
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeTextLineProperty(EngravingObject* e, PropertyValue v)

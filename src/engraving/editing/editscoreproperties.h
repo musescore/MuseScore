@@ -22,19 +22,19 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class ChangeMetaTags : public UndoCommand
+class ChangeMetaTags : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMetaTags)
 
     Score* score = nullptr;
     std::map<String, String> metaTags;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMetaTags(Score* s, const std::map<String, String>& m)
@@ -45,7 +45,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeMetaText : public UndoCommand
+class ChangeMetaText : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMetaText)
 
@@ -53,7 +53,7 @@ class ChangeMetaText : public UndoCommand
     String id;
     String text;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeMetaText(Score* s, const String& i, const String& t)
@@ -64,13 +64,13 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeScoreOrder : public UndoCommand
+class ChangeScoreOrder : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeScoreOrder)
 
     Score* score = nullptr;
     ScoreOrder order;
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeScoreOrder(Score* sc, ScoreOrder so)
@@ -81,14 +81,14 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangePageNumberOffset : public UndoCommand
+class ChangePageNumberOffset : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePageNumberOffset)
 
     Score* score = nullptr;
     int pageOffset = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePageNumberOffset(Score* s, int po)

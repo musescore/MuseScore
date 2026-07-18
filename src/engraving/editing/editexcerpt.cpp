@@ -40,13 +40,13 @@ AddExcerpt::~AddExcerpt()
     }
 }
 
-void AddExcerpt::undo(EditData*)
+void AddExcerpt::undo()
 {
     deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
-void AddExcerpt::redo(EditData*)
+void AddExcerpt::redo()
 {
     deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt);
@@ -81,13 +81,13 @@ RemoveExcerpt::~RemoveExcerpt()
     }
 }
 
-void RemoveExcerpt::undo(EditData*)
+void RemoveExcerpt::undo()
 {
     deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt, index);
 }
 
-void RemoveExcerpt::redo(EditData*)
+void RemoveExcerpt::redo()
 {
     deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
@@ -108,7 +108,7 @@ std::vector<EngravingObject*> RemoveExcerpt::objectItems() const
 //   SwapExcerpt
 //---------------------------------------------------------
 
-void SwapExcerpt::flip(EditData*)
+void SwapExcerpt::flip()
 {
     Excerpt* tmp = score->excerpts().at(pos1);
     score->excerpts()[pos1] = score->excerpts().at(pos2);
@@ -120,7 +120,7 @@ void SwapExcerpt::flip(EditData*)
 //   ChangeExcerptTitle
 //---------------------------------------------------------
 
-void ChangeExcerptTitle::flip(EditData*)
+void ChangeExcerptTitle::flip()
 {
     String s = title;
     title = excerpt->name();
@@ -139,7 +139,7 @@ AddPartToExcerpt::AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx)
     assert(m_part);
 }
 
-void AddPartToExcerpt::undo(EditData*)
+void AddPartToExcerpt::undo()
 {
     muse::remove(m_excerpt->parts(), m_part);
 
@@ -148,7 +148,7 @@ void AddPartToExcerpt::undo(EditData*)
     }
 }
 
-void AddPartToExcerpt::redo(EditData*)
+void AddPartToExcerpt::redo()
 {
     std::vector<Part*>& excerptParts = m_excerpt->parts();
     if (m_targetPartIdx < excerptParts.size()) {
@@ -162,9 +162,9 @@ void AddPartToExcerpt::redo(EditData*)
     }
 }
 
-void AddPartToExcerpt::cleanup(bool undo)
+void AddPartToExcerpt::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_part;
         m_part = nullptr;
     }

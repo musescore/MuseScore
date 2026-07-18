@@ -54,6 +54,8 @@ class Painter;
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
+class Transaction;
+
 template<typename T>
 inline void dump(const ld_field<T>& f, std::stringstream& ss)
 {
@@ -387,7 +389,7 @@ public:
 
  Reimplemented by elements that accept drops.
 */
-    virtual EngravingItem* drop(EditData&) { return 0; }
+    virtual EngravingItem* drop(Transaction&, EditData&) { return 0; }
 
     mutable bool itemDiscovered = false;       // helper flag for bsp
 
@@ -676,8 +678,8 @@ public:
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 
-    EngravingItem* sharedItem() const { return m_layoutData->m_sharedItem; }
-    const std::vector<EngravingItem*>& originItems() const { return m_layoutData->m_originItems; }
+    EngravingItem* sharedItem() const;
+    const std::vector<EngravingItem*>& originItems() const;
     static void connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
     static void disconnectAllOriginItems(EngravingItem* sharedItem);

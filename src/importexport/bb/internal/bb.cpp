@@ -47,6 +47,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
 
@@ -476,7 +477,7 @@ Err importBB(MasterScore* score, const QString& name)
         }
     }
 
-    score->spell();
+    EditEnharmonicSpelling::spell(score);
 
     //---------------------------------------------------
     //    create title
@@ -797,6 +798,18 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             }
         }
     }
+}
+
+//---------------------------------------------------------
+//   quantizeLen
+//---------------------------------------------------------
+
+int quantizeLen(int len, int raster)
+{
+    if (raster == 0) {
+        return len;
+    }
+    return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
 //---------------------------------------------------------

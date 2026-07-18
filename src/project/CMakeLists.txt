@@ -42,6 +42,7 @@ target_sources(project PRIVATE
     imscmetareader.h
     iprojectautosaver.h
 
+    types/projectcreateoptions.h
     types/projecttypes.h
     types/projectmeta.h
 

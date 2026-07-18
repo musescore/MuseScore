@@ -133,6 +133,7 @@ class Staff;
 class StaffLabel;
 class StaffState;
 class StaffText;
+class StaveSharingLabel;
 class StaffTextBase;
 class StaffType;
 class StaffTypeChange;
@@ -279,6 +280,7 @@ public:
     static void write(const Staff* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const StaveSharingLabel* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffType* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Stem* item, XmlWriter& xml, WriteContext& ctx);
@@ -315,6 +317,7 @@ public:
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
+    static void writePageLocks(const Score* score, XmlWriter& xml);
     static void writeSystemLocks(const Score* score, XmlWriter& xml);
     static void writeSystemDividers(const Score* score, XmlWriter& xml, WriteContext& ctx);
 
@@ -366,7 +369,8 @@ private:
     static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeSystemLock(const SystemLock* systemLock, XmlWriter& xml);
+    static void writePageLock(const RangeLock* pageLock, XmlWriter& xml);
+    static void writeSystemLock(const RangeLock* systemLock, XmlWriter& xml);
 
     static muse::String lineBreakToTag(const String& str);
     static void writeProperties(const StaffLabel& item, XmlWriter& xml);

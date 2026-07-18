@@ -1,0 +1,11 @@
+,example #h4#e
+,,caveat3 ,currently ,muse,score doesn’t double the braille tuplet sign for a run
+of four or more tuplets of equal duration4 ,instead1 each tuplet gets its own sign4
+,,bana ,music ,braille ,code #bjae
+,muse,score ,studio ,braille ,test
+
+#a ,piano
+
+a 
+a #d4 _7'^&()YZY)_7'!Y&=(=&_7'Z=!)Y)!_7'()%Z&=&Z 
+b "p'v<K 

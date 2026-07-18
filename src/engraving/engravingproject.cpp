@@ -113,23 +113,13 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
     TRACEFUNC;
 
     m_masterScore->createPaddingTable();
-    m_masterScore->connectTies();
-    m_masterScore->undoRemoveStaleTieJumpPoints(false);
-
-    for (Part* p : m_masterScore->parts()) {
-        p->updateHarmonyChannels(false);
-    }
-
-    m_masterScore->rebuildMidiMapping();
-
     for (Score* s : m_masterScore->scoreList()) {
-        s->setPlaylistDirty();
-        s->setLayoutAll();
         s->createPaddingTable();
     }
 
-    m_masterScore->updateChannel();
+    m_masterScore->setLayoutAll();
     m_masterScore->update();
+    m_masterScore->initAutomation();
 
     Ret ret = checkCorrupted();
     m_isCorruptedUponLoading = !ret;

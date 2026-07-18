@@ -28,6 +28,7 @@
 
 namespace mu::engraving {
 class Hairpin;
+class Transaction;
 
 enum class HairpinType : signed char {
     INVALID = -1,
@@ -84,7 +85,7 @@ private:
     Sid getPropertyStyle(Pid) const override;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void setPropertyFlags(Pid id, PropertyFlags f) override;
 

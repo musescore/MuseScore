@@ -1421,7 +1421,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     // score->connectSlurs();
     score->connectTies();
     score->setUpTempoMap();
-    score->setPlaylistDirty();
+    score->invalidateRepeatList();
     score->setLayoutAll();
 }
 

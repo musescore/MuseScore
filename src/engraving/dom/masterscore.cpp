@@ -24,7 +24,10 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/transaction.h"
+#include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -33,7 +36,7 @@
 
 #include "engravingproject.h"
 
-#include "automation/internal/automationcontroller.h"
+#include "automation/internal/scoreautomationcontroller.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -65,10 +68,11 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     : Score(iocCtx)
 {
     m_project = project;
+    m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
-    m_automationController = new AutomationController();
+    m_automationController = new ScoreAutomationController();
     m_expandedRepeatList  = new RepeatList(this);
     m_nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
@@ -150,13 +154,17 @@ IAutomation* MasterScore::automation() const
     return m_automationController->automation();
 }
 
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+{
+    m_automationController->insertTime(this, tick, len);
+}
+
 //---------------------------------------------------------
-//   setPlaylistDirty
+//   invalidateRepeatLists
 //---------------------------------------------------------
 
-void MasterScore::setPlaylistDirty()
+void MasterScore::invalidateRepeatList()
 {
-    m_playlistDirty = true;
     m_expandedRepeatList->setScoreChanged();
     m_nonExpandedRepeatList->setScoreChanged();
 }
@@ -171,7 +179,7 @@ void MasterScore::setExpandRepeats(bool expand)
         return;
     }
     m_expandRepeats = expand;
-    setPlaylistDirty();
+    invalidateRepeatList();
 }
 
 //---------------------------------------------------------
@@ -381,6 +389,11 @@ void MasterScore::initAutomation()
         return;
     }
     m_automationController->init(this);
+}
+
+void MasterScore::updateAutomation(const ScoreChanges& changes)
+{
+    m_automationController->update(this, changes);
 }
 
 //---------------------------------------------------------
@@ -663,13 +676,15 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             }
                             keySigList.push_back(ks);
                             // if instrument change on that place, set correct key signature for instrument change
+                            const TrackRange trackRange = e->part()->trackRange();
                             bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                                      e->part()->startTrack(),
-                                                                                      e->part()->endTrack() - 1);
+                                                                                      trackRange.startTrack,
+                                                                                      trackRange.endTrack - 1);
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                EditKeySig::undoChangeKeySig(transactionManager()->currentOrDummyTransaction(), this, ks->staff(),
+                                                             e->tick(), ke);
                             } else {
                                 ee = e;
                             }

@@ -22,10 +22,12 @@
 
 #include "onlinesoundsstatusmodel.h"
 
-#include "audio/common/audioerrors.h"
+#include "global/async/async.h"
+#include "global/translation.h"
 
-#include "async/async.h"
-#include "translation.h"
+#include "audio/common/audioerrors.h"
+#include "notation/inotationplayback.h" // IWYU pragma: keep
+#include "playback/playbackcommands.h"
 
 using namespace mu::notation;
 using namespace mu::playback;
@@ -91,7 +93,7 @@ void OnlineSoundsStatusModel::load()
 void OnlineSoundsStatusModel::processOnlineSounds()
 {
     if (m_manualProcessingAllowed) {
-        dispatcher()->dispatch("process-online-sounds");
+        commandsDispatcher()->dispatch(PROCESS_ONLINESOUNDS_COMMAND);
     }
 }
 
@@ -176,8 +178,8 @@ void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault
     setManualProcessingAllowed(enableByDefault);
 
     m_tracksDataChanged = master->playback()->tracksDataChanged();
-    m_tracksDataChanged.onReceive(this, [this](const InstrumentTrackIdSet& changedTrackIdSet) {
-        for (const InstrumentTrackId& trackId : changedTrackIdSet) {
+    m_tracksDataChanged.onReceive(this, [this](const engraving::InstrumentTrackIdSet& changedTrackIdSet) {
+        for (const engraving::InstrumentTrackId& trackId : changedTrackIdSet) {
             if (muse::contains(m_onlineTrackIdSet, trackId)) {
                 setManualProcessingAllowed(true);
                 return;

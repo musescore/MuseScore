@@ -20,10 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_TIMELINE_H
-#define MU_NOTATION_TIMELINE_H
+#pragma once
 
-#include "engraving/dom/select.h"
+#include <vector>
+
+#include <QGraphicsView>
+#include <QSplitter>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
@@ -33,13 +35,13 @@
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
 
-#include <vector>
-#include <QGraphicsView>
-#include <QSplitter>
-
 namespace mu::engraving {
-class Score;
+class Measure;
 class Page;
+class Part;
+class Score;
+class Staff;
+enum class SelState : char;
 }
 
 namespace mu::notation {
@@ -155,7 +157,7 @@ private:
 
     TimelineTheme _lightTheme, _darkTheme;
 
-    std::tuple<int, qreal, EngravingItem*, EngravingItem*, bool> _repeatInfo;
+    std::tuple<int, qreal, engraving::EngravingItem*, engraving::EngravingItem*, bool> _repeatInfo;
     std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
     std::map<engraving::BarLineType, QPixmap*> _barlines;
@@ -196,8 +198,8 @@ private:
 
     bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType, engraving::EngravingItem* element,
                       engraving::Segment* seg, engraving::Measure* measure, QString tooltip = "");
-    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, Measure* m, bool full_measure, engraving::EngravingItem* e,
-                     QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
+    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, engraving::Measure* m, bool full_measure,
+                     engraving::EngravingItem* e, QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);
 
     int _globalMeasureNumber { 0 };
@@ -279,5 +281,3 @@ private:
     void seekSelection();
 };
 }
-
-#endif // MU_NOTATION_TIMELINE_H

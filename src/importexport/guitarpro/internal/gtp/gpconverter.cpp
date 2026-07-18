@@ -1,5 +1,6 @@
 #include "gpconverter.h"
 
+#include "engraving/dom/pitchspelling.h"
 #include "translation.h"
 
 #include "gpdommodel.h"
@@ -199,7 +200,7 @@ static ContiniousElementsBuilder::ImportType hairpinToImportType(GPBeat::Hairpin
 
 static void setPitchByOttavaType(mu::engraving::Note* note, mu::engraving::OttavaType type)
 {
-    note->setPitch(clampPitch(note->pitch() - ottavaDefault[int(type)].shift, true));
+    note->setPitch(clampPitchOctaved(note->pitch() - ottavaDefault[int(type)].shift));
 }
 
 static std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
@@ -268,6 +269,7 @@ void GPConverter::convertGP()
     clearDefectedSpanner();
     fixPercussion();
     addCapos();
+    utils::addPlayCountTexts(_score);
 }
 
 void GPConverter::fixPercussion()

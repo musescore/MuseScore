@@ -27,7 +27,6 @@
 #include "dom/text.h"
 #include "draw/fontmetrics.h"
 
-#include "editing/editfretboarddiagram.h"
 #include "tlayout.h"
 
 using namespace mu::engraving;

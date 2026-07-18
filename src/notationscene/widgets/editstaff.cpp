@@ -43,7 +43,11 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
+
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h"
+#include "notation/inotationselection.h"
 
 #include "log.h"
 
@@ -364,7 +368,7 @@ void EditStaff::apply()
     size_t index = m_staff->score()->undoStack()->currentIndex();
     applyStaffProperties();
     applyPartProperties();
-    m_staff->score()->undoStack()->mergeCommands(index);
+    m_staff->score()->undoStack()->mergeTransactions(index);
 }
 
 void EditStaff::minPitchAClicked()

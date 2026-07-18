@@ -129,6 +129,7 @@ class Spacer;
 class StaffLines;
 class StaffState;
 class StaffText;
+class StaveSharingLabel;
 class StaffTypeChange;
 class Stem;
 class StemSlash;
@@ -255,6 +256,7 @@ private:
     static void draw(const StaffLines* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffState* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffText* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const StaveSharingLabel* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StaffTypeChange* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Stem* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const StemSlash* item, muse::draw::Painter* painter, const PaintOptions& opt);

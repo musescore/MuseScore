@@ -255,6 +255,7 @@ MuseScore {
                 for (var j in chord.notes) {
                     var note = chord.notes[j]
                     var text = newElement(Element.TEXT) // This adds the text to the note: Better for grace notes and easier to remove
+                    text.subStyle = Tid.STAFF
                     text.text = note.tuning.toString()
                     text.fontSize *= curScore.style.value("smallNoteMag")
                                      // * (chord.noteType != NoteType.NORMAL ? curScore.style.value("graceNoteMag") : 1)

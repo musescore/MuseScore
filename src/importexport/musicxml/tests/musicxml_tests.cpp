@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 
 #include "engraving/engravingerrors.h"
+#include "engraving/dom/jump.h"
+#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 
 #include "settings.h"
@@ -220,7 +222,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRef(const char* file, bool exportLayo
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_ref.xml"));
@@ -245,7 +246,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRefBreaks(const char* file)
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
@@ -273,7 +273,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRefInvisibleElements(const char* file
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
@@ -396,14 +395,20 @@ TEST_F(MusicXml_Tests, articulationCombination) {
 TEST_F(MusicXml_Tests, backupRoundingError) {
     musicXmlImportTestRef("testBackupRoundingError");
 }
+TEST_F(MusicXml_Tests, barlineFermatas) {
+    musicXmlIoTest("testBarlineFermatas");
+}
 TEST_F(MusicXml_Tests, barlineLoc) {
     musicXmlImportTestRef("testBarlineLoc");
+}
+TEST_F(MusicXml_Tests, noteflightStartRepeatBarline) {
+    musicXmlImportTestRef("testNoteflightStartRepeatBarline");
 }
 TEST_F(MusicXml_Tests, barlineSpan) {
     musicXmlIoTest("testBarlineSpan");
 }
-TEST_F(MusicXml_Tests, barlineFermatas) {
-    musicXmlIoTest("testBarlineFermatas");
+TEST_F(MusicXml_Tests, barlineTips) {
+    musicXmlIoTest("testBarlineTips");
 }
 TEST_F(MusicXml_Tests, barStyles) {
     musicXmlIoTest("testBarStyles");
@@ -520,10 +525,41 @@ TEST_F(MusicXml_Tests, dalSegno) {
     musicXmlIoTest("testDalSegno");
 }
 TEST_F(MusicXml_Tests, dcalCoda) {
-    musicXmlIoTest("testDCalCoda");
+    // "D.C. al Coda" with <sound dacapo="yes"/> imports as a D.C. al Coda jump,
+    // so the exported <sound tocoda> attribute becomes linked to the coda marker
+    musicXmlIoTestRef("testDCalCoda");
 }
 TEST_F(MusicXml_Tests, dcalFine) {
     musicXmlIoTest("testDCalFine");
+}
+TEST_F(MusicXml_Tests, dcalFineNoInferTextType) {
+    // Explicit <sound dacapo="yes"/> and <sound fine="yes"/> attributes must be
+    // imported as Jump/Marker elements even when text type inference is disabled
+    MScore::debugMode = true;
+
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(false));
+
+    MasterScore* score = readScore(XML_IO_DATA_DIR + u"testDCalFine.xml");
+    ASSERT_TRUE(score);
+
+    const Jump* jump = nullptr;
+    const Marker* marker = nullptr;
+    for (const MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        for (const EngravingItem* el : mb->el()) {
+            if (el->isJump()) {
+                jump = toJump(el);
+            } else if (el->isMarker()) {
+                marker = toMarker(el);
+            }
+        }
+    }
+
+    ASSERT_TRUE(jump);
+    EXPECT_EQ(jump->jumpType(), JumpType::DC_AL_FINE);
+    ASSERT_TRUE(marker);
+    EXPECT_EQ(marker->markerType(), MarkerType::FINE);
+
+    delete score;
 }
 TEST_F(MusicXml_Tests, directions1) {
     musicXmlIoTestRef("testDirections1");
@@ -928,6 +964,9 @@ TEST_F(MusicXml_Tests, lyricExtension3) {
 TEST_F(MusicXml_Tests, lyricExtension4) {
     musicXmlImportTestRef("testLyricExtension2");
 }
+TEST_F(MusicXml_Tests, lyricsNorwegianOSlash) {
+    musicXmlImportTestRef("testLyricsNorwegianOSlash");
+}
 TEST_F(MusicXml_Tests, lyricsVoice2a) {
     musicXmlIoTest("testLyricsVoice2a");
 }
@@ -1222,6 +1261,9 @@ TEST_F(MusicXml_Tests, tablature4) {
 TEST_F(MusicXml_Tests, tablature5) {
     musicXmlIoTestRef("testTablature5");
 }
+TEST_F(MusicXml_Tests, tablature6) {
+    musicXmlMscxExportTestRef("testTabs");
+}
 TEST_F(MusicXml_Tests, tapping) {
     musicXmlIoTest("testTapping");
 }
@@ -1254,6 +1296,9 @@ TEST_F(MusicXml_Tests, tempo3) {
 }
 TEST_F(MusicXml_Tests, tempo4) {
     musicXmlIoTestRef("testTempo4");
+}
+TEST_F(MusicXml_Tests, metronome) {
+    musicXmlIoTest("testMetronome");
 }
 TEST_F(MusicXml_Tests, tempo5) {
     musicXmlIoTest("testTempo5");

@@ -31,7 +31,8 @@
 #include "modularity/ioc.h"
 
 namespace mu::engraving {
-class UndoCommand;
+class UndoableCommand;
+class UndoableTransaction;
 
 class EngravingUndoStackModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::Contextable
 {
@@ -81,11 +82,11 @@ private:
 
     void onNotationChanged();
 
-    Item* createItem(Item* parent, const engraving::UndoCommand* undoCommand, bool isCurrent = false);
+    Item* createItem(Item* parent, const engraving::UndoableTransaction* transaction, bool isCurrent = false);
+    Item* createItem(Item* parent, const engraving::UndoableCommand* command, bool isCurrent = false);
     Item* itemByModelIndex(const QModelIndex& index) const;
-    QVariantMap makeData(const mu::engraving::EngravingObject* el) const;
 
-    void load(const engraving::UndoCommand* undoCommand, Item* parent);
+    void load(const engraving::UndoableTransaction* transaction, Item* parent);
 
     Item* m_rootItem = nullptr;
     QHash<quintptr, Item*> m_allItems;

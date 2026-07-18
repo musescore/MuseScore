@@ -4,10 +4,13 @@
     <Dynamic>
       <subtype>f</subtype>
       <velocity>96</velocity>
+      <eid>B_B</eid>
       </Dynamic>
     <Chord>
+      <eid>C_C</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>D_D</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
@@ -19,6 +22,7 @@
         <beginHookHeight>-1.9</beginHookHeight>
         <endHookHeight>-1.9</endHookHeight>
         <ticks_f>2/4</ticks_f>
+        <eid>E_E</eid>
         </HairPin>
       <next>
         <location>
@@ -27,15 +31,19 @@
         </next>
       </Spanner>
     <Chord>
+      <eid>F_F</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>G_G</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>H_H</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>I_I</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
@@ -48,8 +56,10 @@
         </prev>
       </Spanner>
     <Chord>
+      <eid>J_J</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>K_K</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

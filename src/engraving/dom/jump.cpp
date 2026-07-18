@@ -157,7 +157,7 @@ bool Jump::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     }
     triggerLayout();
-    score()->setPlaylistDirty();
+    score()->invalidateRepeatList();
     return true;
 }
 

@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONNOTEINPUT_H
-#define MU_NOTATION_INOTATIONNOTEINPUT_H
+
+#pragma once
 
 #include "async/notification.h"
 #include "types/ret.h"
 
-#include "notationtypes.h"
+#include "types/noteinputtypes.h"
 
 namespace mu::notation {
 class INotationNoteInput
@@ -65,15 +65,15 @@ public:
 
     // Used in the input-by-duration mode
     virtual void setInputNote(const NoteInputParams& params) = 0;
-    virtual void setInputNotes(const NoteValList& notes) = 0;
-    virtual void moveInputNotes(bool up, PitchMode mode) = 0;
+    virtual void setInputNotes(const engraving::NoteValList& notes) = 0;
+    virtual void moveInputNotes(bool up, engraving::UpDownMode mode) = 0;
 
     virtual void setRestMode(bool rest) = 0;
-    virtual void setAccidental(AccidentalType accidentalType) = 0;
-    virtual void setArticulation(SymbolId articulationSymbolId) = 0;
+    virtual void setAccidental(engraving::AccidentalType accidentalType) = 0;
+    virtual void setArticulation(engraving::SymId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;
-    virtual void setCurrentVoice(voice_idx_t voiceIndex) = 0;
-    virtual void setCurrentTrack(track_idx_t trackIndex) = 0;
+    virtual void setCurrentVoice(engraving::voice_idx_t voiceIndex) = 0;
+    virtual void setCurrentTrack(engraving::track_idx_t trackIndex) = 0;
 
     virtual muse::RectF cursorRect() const = 0;
 
@@ -83,5 +83,3 @@ public:
 
 using INotationNoteInputPtr = std::shared_ptr<INotationNoteInput>;
 }
-
-#endif // MU_NOTATION_INOTATIONNOTEINPUT_H

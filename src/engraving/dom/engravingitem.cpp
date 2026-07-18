@@ -52,6 +52,7 @@
 #include "../editing/editdata.h"
 #include "../editing/editproperty.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/navigation.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -362,7 +363,7 @@ void EngravingItem::deleteLater()
     if (selected()) {
         score()->deselect(this);
     }
-    masterScore()->deleteLater(this);
+    masterScore()->cmdState().deleteLater(this);
 }
 
 //---------------------------------------------------------
@@ -390,12 +391,6 @@ bool EngravingItem::collectForDrawing() const
 {
     if (!visible() && !score()->isShowInvisible()) {
         return false;
-    }
-
-    bool isAnnotation = parent() && parent()->isSegment() && toSegment(parent())->element(track()) != this;
-    if (isAnnotation) {
-        Segment* segment = toSegment(parent());
-        return systemFlag() || (segment->measure() && segment->measure()->visible(staffIdx()));
     }
 
     return true;
@@ -1325,6 +1320,16 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+EngravingItem* EngravingItem::sharedItem() const
+{
+    return ldata()->m_sharedItem;
+}
+
+const std::vector<EngravingItem*>& EngravingItem::originItems() const
+{
+    return ldata()->m_originItems;
+}
+
 void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
 {
     if (originItem->ldata()->m_sharedItem == sharedItem) {
@@ -1337,10 +1342,6 @@ void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* 
 
     IF_ASSERT_FAILED(sharedItem->ldata()->m_sharedItem == nullptr && originItem->ldata()->m_originItems.empty()) {
         return;
-    }
-
-    if ((originItem->ldata()->m_sharedItem && originItem->ldata()->m_sharedItem != sharedItem)) {
-        disconnectSharedItem(originItem->ldata()->m_sharedItem, originItem);
     }
 
     originItem->mutldata()->m_sharedItem = sharedItem;
@@ -2043,7 +2044,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //------------------------------------------------------------------------------------------
@@ -2091,7 +2092,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -2790,9 +2791,11 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t elementTrack, const 
         return false;
     }
 
-    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (part->startTrack() <= refTrack
-                                                                        && part->endTrack() - 1 >= refTrack)) {
-        return true;
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT) {
+        const TrackRange range = part->trackRange();
+        if (range.startTrack <= refTrack && range.endTrack - 1 >= refTrack) {
+            return true;
+        }
     }
     return false;
 }

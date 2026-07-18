@@ -56,6 +56,11 @@
 #include "engraving/types/types.h"
 #include "engraving/types/typesconv.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationviewstate.h" // IWYU pragma: keep
+
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
 
@@ -142,6 +147,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "system",
     "video-hit-point",
     "staff",
+    "staveSharing",
     "expression",
     "hairpin",
     "lyrics-odd-lines",
@@ -1209,7 +1215,7 @@ void EditStyle::classBegin()
 
     textStyleFrameType->clear();
     textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
-    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
+    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::RECTANGLE));
     textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
 
     connect(dynamicsAndHairpinPos, &QComboBox::currentIndexChanged, dynamicsAndHairpinPosDescription, [this]() {

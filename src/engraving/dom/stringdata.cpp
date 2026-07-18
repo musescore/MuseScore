@@ -97,7 +97,7 @@ void StringData::set(const StringData& src)
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, const Staff* staff, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
@@ -115,7 +115,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) c
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, const Staff* staff, const Fraction& tick, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
 }
@@ -627,6 +627,21 @@ void StringData::updateFretsOnSameStrings(const Chord* chord) const
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             continue;
+        }
+        if (newFret < 0) {
+            // Don't create a negative fret on a string that already holds another note — this would cause a false conflict
+            bool sameStringConflict = false;
+            for (Note* other : chord->notes()) {
+                if (other != note && !skipTabNote(other, skipDead) && other->string() == note->string()) {
+                    sameStringConflict = true;
+                    break;
+                }
+            }
+            if (sameStringConflict) {
+                note->setString(INVALID_STRING_INDEX);
+                note->setFret(INVALID_FRET_INDEX);
+                continue;
+            }
         }
         note->setFret(newFret);
     }

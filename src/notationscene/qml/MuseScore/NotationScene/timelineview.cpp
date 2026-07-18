@@ -22,8 +22,6 @@
 
 #include "timelineview.h"
 
-#include "widgets/timeline.h"
-
 #include <QApplication>
 #include <QQuickWindow>
 #include <QSplitter>

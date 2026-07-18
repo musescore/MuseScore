@@ -19,9 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "propertiespanellistmodel.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
+#include "engraving/dom/score.h"
+
 #include "general/generalsettingsmodel.h"
+#include "systemlayout/systemlayoutsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
 #include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
@@ -108,7 +117,7 @@ bool PropertiesPanelListModel::alwaysUpdateModelList(const QList<engraving::Engr
 }
 
 void PropertiesPanelListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                                              SelectionState selectionState)
+                                              engraving::SelState selectionState)
 {
     TRACEFUNC;
 
@@ -224,6 +233,9 @@ void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSe
             break;
         case PropertiesPanelSectionType::SECTION_MEASURES:
             newModel = new MeasuresSettingsModel(this, iocContext(), m_repository.get());
+            break;
+        case PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT:
+            newModel = new SystemLayoutSettingsModel(this, iocContext(), m_repository.get());
             break;
         case PropertiesPanelSectionType::SECTION_EMPTY_STAVES:
             newModel = new EmptyStavesVisibilitySettingsModel(this, iocContext(), m_repository.get());
@@ -385,7 +397,7 @@ void PropertiesPanelListModel::listenScoreChanges()
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const engraving::ScoreChanges& changes) {
         if (changes.isTextEditing) {
             return;
         }

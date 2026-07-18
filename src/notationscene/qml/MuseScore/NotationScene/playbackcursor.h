@@ -23,16 +23,18 @@
 #pragma once
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
+
 #include "notation/inotationconfiguration.h"
 #include "draw/types/geometry.h"
 #include "midi/miditypes.h"
 
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 
 class QColor;
 
 namespace mu::notation {
-class PlaybackCursor : public muse::Contextable
+class PlaybackCursor : public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
 
@@ -52,11 +54,30 @@ public:
 
 private:
     QColor color() const;
-    muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
+
+    muse::RectF resolveCursorRectByTick(int tick) const;
+
+    struct PlaybackCursorCache {
+        const engraving::System* system = nullptr;
+        const engraving::Measure* measure = nullptr;
+        const engraving::Segment* segment = nullptr;
+
+        engraving::Fraction segmentStartTick;
+        engraving::Fraction segmentEndTick;
+
+        double segmentStartX = 0.0;
+        double segmentEndX = 0.0;
+        double systemBottomY = 0.0;
+
+        void clear()
+        {
+            *this = PlaybackCursorCache();
+        }
+    } mutable m_cache;
 
     bool m_visible = false;
     muse::RectF m_rect;
 
-    INotationPtr m_notation;
+    mu::notation::INotationPtr m_notation;
 };
 }

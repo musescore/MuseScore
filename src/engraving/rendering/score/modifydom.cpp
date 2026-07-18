@@ -109,9 +109,8 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
             }
         }
 
-        track_idx_t startTrack = staff->part()->startTrack();
+        const TrackRange trackRange = staff->part()->trackRange();
         track_idx_t mainTrack = staffIdx * VOICES;
-        track_idx_t endTrack = staff->part()->endTrack();
 
         for (const Segment& segment : measure->segments()) {
             if (segment.isJustType(SegmentType::KeySig)) {
@@ -121,7 +120,7 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
                     as.init(staff->keySigEvent(tick));
                 }
             } else if (segment.isJustType(SegmentType::ChordRest)) {
-                for (track_idx_t t = startTrack; t < endTrack; ++t) {
+                for (track_idx_t t = trackRange.startTrack; t < trackRange.endTrack; ++t) {
                     Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
                     if (chord) {
                         chord->cmdUpdateNotes(&as, staffIdx);

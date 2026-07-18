@@ -29,6 +29,7 @@ class Painter;
 }
 
 namespace mu::engraving {
+class Transaction;
 class Measure;
 class Segment;
 
@@ -104,7 +105,7 @@ public:
     void setPlayDynamic(bool v) { m_playDynamic = v; }
 
     bool acceptDrop(EditData& ed) const override;
-    EngravingItem* drop(EditData& ed) override;
+    EngravingItem* drop(Transaction& tx, EditData& ed) override;
 
     static int dynamicVelocity(DynamicType t);
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }

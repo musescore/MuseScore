@@ -85,7 +85,7 @@ void InsertRemoveMeasures::insertMeasures()
     Segment* fs = nullptr;
     Segment* ls = nullptr;
     if (fm->isMeasure()) {
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
         fs = toMeasure(fm)->first();
         ls = toMeasure(lm)->last();
         for (Segment* s = fs; s && s != ls; s = s->next1()) {
@@ -294,7 +294,7 @@ void InsertRemoveMeasures::removeMeasures()
 
     if (fm->isMeasure()) {
         score->setUpTempoMap();
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
 
         // check if there is a clef at the end of last measure
         // remove clef from staff cleflist
@@ -343,12 +343,12 @@ void InsertRemoveMeasures::removeMeasures()
             // erase system from score
             muse::remove(score->systems(), s);
             // finally delete system
-            score->deleteLater(s);
+            s->deleteLater();
 
             if (page && page->systems().empty()) {
                 // if page is empty, delete it as well
                 muse::remove(score->pages(), page);
-                score->deleteLater(page);
+                page->deleteLater();
             }
         }
     }
@@ -366,7 +366,7 @@ ChangeMeasureLen::ChangeMeasureLen(Measure* m, Fraction l)
     len         = l;
 }
 
-void ChangeMeasureLen::flip(EditData*)
+void ChangeMeasureLen::flip()
 {
     Fraction oLen = measure->ticks();
 
@@ -391,7 +391,7 @@ void ChangeMeasureLen::flip(EditData*)
 //   ChangeMMRest
 //---------------------------------------------------------
 
-void ChangeMMRest::flip(EditData*)
+void ChangeMMRest::flip()
 {
     Measure* mmr = m->mmRest();
     m->setMMRest(mmrest);
@@ -402,9 +402,27 @@ void ChangeMMRest::flip(EditData*)
 //   ChangeMeasureRepeatCount
 //---------------------------------------------------------
 
-void ChangeMeasureRepeatCount::flip(EditData*)
+void ChangeMeasureRepeatCount::flip()
 {
     int oldCount = m->measureRepeatCount(staffIdx);
     m->setMeasureRepeatCount(count, staffIdx);
     count = oldCount;
+}
+
+void ChangeMMRestNext::flip()
+{
+    assert(m_mmrest->isMMRest());
+    MeasureBase* oldNext = m_mmrest->next();
+
+    m_mmrest->setNext(m_next);
+    m_next = oldNext;
+}
+
+void ChangeMMRestPrev::flip()
+{
+    assert(m_mmrest->isMMRest());
+    MeasureBase* oldPrev = m_mmrest->prev();
+
+    m_mmrest->setPrev(m_prev);
+    m_prev = oldPrev;
 }

@@ -102,8 +102,8 @@ enum class TablatureSymbolRepeat : char {
 struct TablatureDurationFont {
     String family;                   // the family of the physical font to use
     String displayName;              // the name to display to the user
-    double defSize;                  // the default size of the font
-    double defYOffset;               // the default Y displacement
+    double defSize = 0.0;            // the default size of the font
+    double defYOffset = 0.0;         // the default Y displacement
     Spatium gridBeamWidth  = GRID_BEAM_DEF_WIDTH;       // the width of the 'grid'-style beam (in sp)
     Spatium gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     Spatium gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)

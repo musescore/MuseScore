@@ -19,8 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "noteheadsettingsmodel.h"
 
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/editing/editparentheses.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/types.h"
 
 #include "translation.h"
@@ -52,10 +57,10 @@ void NoteheadSettingsModel::createProperties()
         Score* score = m_elementList.front()->score();
         if (hasParens.toBool()) {
             beginCommand(TranslatableString("undoableAction", "Add notehead parentheses"));
-            score->cmdAddParenthesesToNotes();
+            EditParentheses::addParenthesesToNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         } else {
             beginCommand(TranslatableString("undoableAction", "Remove notehead parentheses"));
-            score->cmdRemoveParenthesesFromNotes();
+            EditParentheses::removeParenthesesFromNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         }
         updateNotation();
         endCommand();
@@ -81,9 +86,9 @@ void NoteheadSettingsModel::createProperties()
         Score* score = m_elementList.front()->score();
         bool addParens = m_elementList.front()->parenthesesMode() == ParenthesesMode::BOTH;
         if (addParens) {
-            score->cmdAddParenthesesToNotes();
+            EditParentheses::addParenthesesToNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         } else {
-            score->cmdRemoveParenthesesFromNotes();
+            EditParentheses::removeParenthesesFromNotes(score->transactionManager()->currentOrDummyTransaction(), score);
         }
         updateNotation();
         endCommand();
@@ -223,8 +228,12 @@ QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
         { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    muse::qtrc("propertiespanel", "Auto", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("propertiespanel", "Normal", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("propertiespanel", "Pitch names", "notehead scheme") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS,
+          muse::qtrc("propertiespanel", "Pitch names, no accidentals", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
           muse::qtrc("propertiespanel", "German pitch names", "notehead scheme") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
+          muse::qtrc("propertiespanel", "German pitch names, no accidentals", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
           muse::qtrc("propertiespanel", "Solfège movable do", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,

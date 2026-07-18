@@ -105,6 +105,7 @@ class Slur;
 class SoundFlag;
 class Spacer;
 class StaffText;
+class StaveSharingLabel;
 class StaffTypeChange;
 class Sticking;
 class StringTunings;
@@ -224,6 +225,7 @@ public:
     static void layout(SoundFlag* item, const Context& ctx);
     static void layout(Spacer* item, const Context&);
     static void layout(StaffText* item, const Context& ctx);
+    static void layout(StaveSharingLabel* item, const Context& ctx);
     static void layout(StaffTypeChange* item, const Context& ctx);
     static void layout(Stem* item, const Context& ctx);
     static void layout(Sticking* item, const Context& ctx);

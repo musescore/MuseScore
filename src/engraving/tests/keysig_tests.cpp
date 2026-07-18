@@ -26,7 +26,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editkeysig.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"
@@ -65,7 +66,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     KeySigEvent ke2;
     ke2.setConcertKey(Key::D);
     score->startCmd(TranslatableString::untranslatable("Key signature tests"));
-    score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), m2->tick(), ke2);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -73,7 +74,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     KeySigEvent ke_3;
     ke_3.setConcertKey(Key(-3));
     score->startCmd(TranslatableString::untranslatable("Key signature tests"));
-    score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), m2->tick(), ke_3);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
@@ -87,15 +88,15 @@ TEST_F(Engraving_KeySigTests, keysig)
 
     // undo remove
     EditData ed;
-    score->undoStack()->undo(&ed);
+    score->transactionManager()->undoRedo(true, &ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile4, reference4));
 
     // undo change
-    score->undoStack()->undo(&ed);
+    score->transactionManager()->undoRedo(true, &ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile5, reference5));
 
     // undo add
-    score->undoStack()->undo(&ed);
+    score->transactionManager()->undoRedo(true, &ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile6, reference6));
 
     delete score;
@@ -146,19 +147,19 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
-    Transpose::transpositionChanged(score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
-    score1->update();
-    score1->doLayout();
+    score1->transactionManager()->transaction(TranslatableString::untranslatable("Key signature tests"), [&](auto& tx) {
+        Transpose::transpositionChanged(tx, score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
+    });
     EXPECT_TRUE(ScoreComp::saveCompareScore(score1, u"preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-1-ref.mscx"));
     delete score1;
 
     MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-2.mscx");
     EXPECT_TRUE(score2);
     score2->cmdSelectAll();
-    score2->startCmd(TranslatableString::untranslatable("Key signature tests"));
-    // transpose augmented unison up
-    Transpose::transpose(score2, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
-    score2->endCmd();
+    score2->transactionManager()->transaction(TranslatableString::untranslatable("Key signature tests"), [&](auto& tx) {
+        // transpose augmented unison up
+        Transpose::transpose(tx, score2, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
+    });
     EXPECT_TRUE(ScoreComp::saveCompareScore(score2, u"preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-2-ref.mscx"));
     delete score2;
 }

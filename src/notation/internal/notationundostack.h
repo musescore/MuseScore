@@ -22,12 +22,15 @@
 
 #pragma once
 
+#include "draw/types/geometry.h"
+
 #include "inotationundostack.h"
 #include "igetscore.h"
 
 namespace mu::engraving {
 class Score;
 class MasterScore;
+class TransactionManager;
 class UndoStack;
 class EditData;
 }
@@ -46,13 +49,15 @@ public:
 
     void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) override;
+
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
     void commitChanges() override;
 
     bool isStackClean() const override;
 
-    void mergeCommands(size_t startIdx) override;
+    void mergeTransactions(size_t startIdx) override;
 
     void lock() override;
     void unlock() override;
@@ -65,7 +70,7 @@ public:
     const muse::TranslatableString lastActionNameAtIdx(size_t idx) const override;
 
     muse::async::Notification stackChanged() const override;
-    muse::async::Channel<ScoreChanges> changesChannel() const override;
+    muse::async::Channel<engraving::ScoreChanges> changesChannel() const override;
     muse::async::Notification undoRedoNotification() const override;
 
 private:
@@ -75,6 +80,7 @@ private:
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;
+    mu::engraving::TransactionManager* transactionManager() const;
     mu::engraving::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;

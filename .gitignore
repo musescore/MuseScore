@@ -79,6 +79,10 @@ __pycache__/
 # Stuff from 3.x builds
 /share/sound/MuseScore_General*
 
+# Stuff from 4.x builds
+src/braille/thirdparty/liblouis/liblouis/config.h
+src/braille/thirdparty/liblouis/liblouis/liblouis.h
+
 # User overrides of SetupBuildEnvironment
 /buildscripts/cmake/SetupBuildEnvironment.user.cmake
 

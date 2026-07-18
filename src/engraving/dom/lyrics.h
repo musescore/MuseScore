@@ -27,6 +27,8 @@
 #include "textbase.h"
 
 namespace mu::engraving {
+class Transaction;
+
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -52,7 +54,7 @@ public:
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
@@ -91,7 +93,7 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const String& txt) override;
+    void paste(const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -149,6 +151,8 @@ public:
 
 protected:
     LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+
+    bool isInSpannerMap() const override { return false; }
 
     Lyrics* m_nextLyrics = nullptr;
 
@@ -235,6 +239,7 @@ public:
 
 protected:
     void doComputeEndElement() override;
+    bool isInSpannerMap() const override { return true; }
 
 private:
     bool m_isEndMelisma = false;

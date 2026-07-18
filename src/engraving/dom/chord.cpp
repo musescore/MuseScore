@@ -30,6 +30,7 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
+#include "../editing/navigation.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -46,7 +47,6 @@
 #include "ledgerline.h"
 #include "measure.h"
 #include "mscore.h"
-#include "navigate.h"
 #include "note.h"
 #include "notedot.h"
 #include "noteevent.h"
@@ -658,8 +658,7 @@ void Chord::add(EngravingItem* e)
             measure()->setHasVoices(staffIdx(), true);
         }
     }
-        score()->setPlaylistDirty();
-        break;
+    break;
     case ElementType::ARPEGGIO:
         m_arpeggio = toArpeggio(e);
         break;
@@ -761,7 +760,6 @@ void Chord::remove(EngravingItem* e)
         if (voice() && measure() && note->visible()) {
             measure()->checkMultiVoices(staffIdx());
         }
-        score()->setPlaylistDirty();
     }
     break;
 
@@ -816,8 +814,18 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
-            LOGD("ChordRest::remove(): articulation not found");
+            LOGD("Chord::remove(): articulation not found");
         }
+    }
+    break;
+    case ElementType::PARENTHESIS: {
+        NoteParenthesisInfo* parenInfo = findNoteParenthesisInfo(toParenthesis(e));
+        IF_ASSERT_FAILED(parenInfo) {
+            LOGD() << "Chord::remove(): This parenthesis does not belong to this chord";
+            return;
+        }
+        EditChord::removeChordParentheses(this, parenInfo->notes());
+        break;
     }
     break;
     default:
@@ -1013,7 +1021,7 @@ Fraction Chord::endTickIncludingTied() const
 
 Chord* Chord::prev() const
 {
-    ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
+    ChordRest* prev = Navigation::prevChordRest(const_cast<Chord*>(this));
     if (prev && prev->isChord()) {
         return toChord(prev);
     }
@@ -1022,7 +1030,7 @@ Chord* Chord::prev() const
 
 Chord* Chord::next() const
 {
-    ChordRest* next = nextChordRest(const_cast<Chord*>(this));
+    ChordRest* next = Navigation::nextChordRest(const_cast<Chord*>(this));
     if (next && next->isChord()) {
         return toChord(next);
     }
@@ -1132,34 +1140,6 @@ bool Chord::underBeam() const
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   updatePercussionNotes
-//---------------------------------------------------------
-
-static void updatePercussionNotes(Chord* c, const Drumset* drumset)
-{
-    TRACEFUNC;
-    for (Chord* ch : c->graceNotes()) {
-        updatePercussionNotes(ch, drumset);
-    }
-    std::vector<Note*> lnotes(c->notes());    // we need a copy!
-    for (Note* note : lnotes) {
-        if (!drumset) {
-            note->setLine(0);
-        } else {
-            int pitch = note->pitch();
-            if (!drumset->isValid(pitch)) {
-                note->setLine(0);
-                //! NOTE May be called too often
-                //LOGW("unmapped drum note %d", pitch);
-            } else if (!note->fixed()) {
-                note->undoChangeProperty(Pid::HEAD_GROUP, drumset->noteHead(pitch));
-                note->setLine(drumset->line(pitch));
-            }
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -1496,7 +1476,7 @@ ChordLine* Chord::chordLine() const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Chord::drop(EditData& data)
+EngravingItem* Chord::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
@@ -1626,7 +1606,7 @@ EngravingItem* Chord::drop(EditData& data)
         return e;
 
     default:
-        return ChordRest::drop(data);
+        return ChordRest::drop(tx, data);
     }
     return 0;
 }
@@ -2500,7 +2480,7 @@ EngravingItem* Chord::prevElement()
     switch (e->type()) {
     case ElementType::NOTE: {
         if (isGrace()) {
-            ChordRest* prev = prevChordRest(this);
+            ChordRest* prev = Navigation::prevChordRest(this);
             if (prev) {
                 if (prev->isChord()) {
                     return toChord(prev)->notes().back();
@@ -2521,7 +2501,7 @@ EngravingItem* Chord::prevElement()
                     return prevNote->bendFor()->frontSegment();
                 }
 
-                ChordRest* prev = prevChordRest(this);
+                ChordRest* prev = Navigation::prevChordRest(this);
                 if (prev) {
                     if (prev->isChord()) {
                         return toChord(prev)->notes().back();

@@ -12,7 +12,7 @@ jobs:
       EXPECTED_BRANCH: main
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Verify muse_framework submodule URL
       run: |

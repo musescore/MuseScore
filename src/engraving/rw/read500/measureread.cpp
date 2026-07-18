@@ -176,6 +176,11 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             // set tick to previous measure
             measure->setTick(ctx.lastMeasure()->tick());
             ctx.setTick(ctx.lastMeasure()->tick());
+        } else if (tag == "mmRestLast") {
+            AsciiStringView s = e.readAsciiText();
+            EID eid = EID::fromStdString(s);
+            DO_ASSERT(eid.isValid());
+            ctx.addMMRestEndMeasureEID(measure, eid);
         } else if (tag == "MeasureNumber") {
             MeasureNumber* noText = new MeasureNumber(measure);
             TRead::read(noText, e, ctx);

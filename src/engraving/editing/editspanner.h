@@ -22,12 +22,24 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/spanner.h"
 
 namespace mu::engraving {
-class ChangeSpannerElements : public UndoCommand
+class Score;
+class Segment;
+class Transaction;
+
+class EditSpanner
+{
+public:
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, const PointF& pos, bool systemStavesOnly = false);
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
+                           Segment* endSegment, bool ctrlModifier = false);
+};
+
+class ChangeSpannerElements : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpannerElements)
 
@@ -35,7 +47,7 @@ class ChangeSpannerElements : public UndoCommand
     EngravingItem* startElement = nullptr;
     EngravingItem* endElement = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeSpannerElements(Spanner* s, EngravingItem* se, EngravingItem* ee)
@@ -46,7 +58,7 @@ public:
     UNDO_CHANGED_OBJECTS({ spanner })
 };
 
-class ChangeStartEndSpanner : public UndoCommand
+class ChangeStartEndSpanner : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStartEndSpanner)
 
@@ -54,7 +66,7 @@ class ChangeStartEndSpanner : public UndoCommand
     EngravingItem* start = nullptr;
     EngravingItem* end = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeStartEndSpanner(Spanner* sp, EngravingItem* s, EngravingItem* e)

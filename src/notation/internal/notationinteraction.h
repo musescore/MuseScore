@@ -42,16 +42,20 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
+#include "engraving/dom/score.h"
 #include "engraving/rendering/paintoptions.h"
 #include "engraving/types/symid.h"
 #include "previewmeasure.h"
 #include "scorecallbacks.h"
 
+class QDrag;
+
 namespace mu::engraving {
 class Lasso;
-}
+class Transaction;
 
-class QDrag;
+enum class HarmonyType : unsigned char;
+}
 
 namespace mu::notation {
 class Notation;
@@ -85,29 +89,48 @@ public:
 
     // Visibility
     void toggleVisible() override;
+    void setSelectionVisible(bool visible) override;
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
     std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const override;
-    Staff* hitStaff(const muse::PointF& pos) const override;
+    engraving::Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
 
     // Select
+    INotationSelectionPtr selection() const override;
+    muse::async::Notification selectionChanged() const override;
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
+    void select(SelectionTarget target) override;
+
     void moveChordNoteSelection(MoveDirection d) override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE,
-                engraving::staff_idx_t staffIndex = 0) override;
+
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
     void selectAll() override;
     void selectSection() override;
     void selectFirstElement(bool frame = false) override;
     void selectLastElement() override;
-    INotationSelectionPtr selection() const override;
+
     void clearSelection() override;
-    muse::async::Notification selectionChanged() const override;
+
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void findAndSelectChordRest(const Fraction& tick) override;
     void moveSegmentSelection(MoveDirection d) override;
+
+    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
+    void selectAllSimilarElements();
+    void selectAllSimilarElementsInStaff();
+    void selectAllSimilarElementsInRange();
+    void selectAllNotesInChord();
+
+    // Change selection
+    bool moveSelectionAvailable(MoveSelectionType type) const override;
+    void moveSelection(MoveDirection d, MoveSelectionType type) override;
+    void expandSelection(ExpandSelectionMode mode) override;
+    void addToSelection(MoveDirection d, MoveSelectionType type) override;
+    void selectTopStaff() override;
+    void selectEmptyTrailingMeasure() override;
 
     EngravingItem* contextItem() const override;
 
@@ -146,14 +169,6 @@ public:
     void undo() override;
     void redo() override;
     void undoRedoToIndex(size_t idx) override;
-
-    // Change selection
-    bool moveSelectionAvailable(MoveSelectionType type) const override;
-    void moveSelection(MoveDirection d, MoveSelectionType type) override;
-    void expandSelection(ExpandSelectionMode mode) override;
-    void addToSelection(MoveDirection d, MoveSelectionType type) override;
-    void selectTopStaff() override;
-    void selectEmptyTrailingMeasure() override;
 
     // Move
     void movePitch(MoveDirection d, PitchMode mode) override;
@@ -213,6 +228,7 @@ public:
     void deleteSelection() override;
     void flipSelection() override;
     void flipSelectionHorizontally() override;
+    void mirrorNotes() override;
     void addTieToSelection() override;
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
@@ -246,6 +262,11 @@ public:
     void toggleScoreLock() override;
     void makeIntoSystem() override;
     void applySystemLock() override;
+    void moveSystemToPrevPage() override;
+    void moveSystemToNextPage() override;
+    void togglePageLock() override;
+    void makeIntoPage() override;
+    void applyPageLock() override;
 
     void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
@@ -272,7 +293,7 @@ public:
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
 
-    void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) override;
+    void realizeSelectedChordSymbols(bool literal, engraving::Voicing voicing, engraving::HDuration durationType) override;
     void extendToNextNote() override;
     void removeSelectedMeasures() override;
     void removeSelectedRange() override;
@@ -354,6 +375,7 @@ private:
     void onScoreInited();
     void onViewModeChanged();
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func);
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();
@@ -380,8 +402,8 @@ private:
     void applyPaletteElementToRange(EngravingItem* element, mu::engraving::Score* score, const mu::engraving::Selection& sel,
                                     Qt::KeyboardModifiers modifiers = {});
 
-    bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
+    bool doDropStandard(mu::engraving::Transaction& tx);
+    bool doDropTextBaseAndSymbols(mu::engraving::Transaction& tx, const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 
@@ -402,8 +424,8 @@ private:
     void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
     void navigateToLyrics(bool, bool, bool);
 
-    Harmony* editedHarmony() const;
-    Segment* harmonySegment(const Harmony* harmony) const;
+    mu::engraving::Harmony* editedHarmony() const;
+    mu::engraving::Segment* harmonySegment(const mu::engraving::Harmony* harmony) const;
     mu::engraving::Harmony* findHarmonyInSegment(const mu::engraving::Segment* segment, engraving::track_idx_t track,
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
@@ -488,8 +510,8 @@ private:
 
     struct HitMeasureData
     {
-        Measure* measure = nullptr;
-        Staff* staff = nullptr;
+        engraving::Measure* measure = nullptr;
+        engraving::Staff* staff = nullptr;
     };
 
     HitMeasureData hitMeasure(const muse::PointF& pos) const;

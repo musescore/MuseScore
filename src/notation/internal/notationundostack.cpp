@@ -25,7 +25,8 @@
 #include "log.h"
 
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 using namespace mu::notation;
 using namespace muse::async;
@@ -50,7 +51,7 @@ void NotationUndoStack::undo(mu::engraving::EditData* editData)
         return;
     }
 
-    score()->undoRedo(true, editData);
+    transactionManager()->undoRedo(true, editData);
 
     notifyAboutNotationChanged();
     notifyAboutUndoRedo();
@@ -72,7 +73,7 @@ void NotationUndoStack::redo(mu::engraving::EditData* editData)
         return;
     }
 
-    score()->undoRedo(false, editData);
+    transactionManager()->undoRedo(false, editData);
 
     notifyAboutNotationChanged();
     notifyAboutUndoRedo();
@@ -92,14 +93,25 @@ void NotationUndoStack::undoRedoToIndex(size_t idx, mu::engraving::EditData* edi
     }
 
     while (stack->currentIndex() > idx && stack->canUndo()) {
-        score()->undoRedo(true, editData);
+        transactionManager()->undoRedo(true, editData);
     }
     while (stack->currentIndex() < idx && stack->canRedo()) {
-        score()->undoRedo(false, editData);
+        transactionManager()->undoRedo(false, editData);
     }
 
     notifyAboutNotationChanged();
     notifyAboutUndoRedo();
+    notifyAboutStateChanged();
+}
+
+void NotationUndoStack::transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    transactionManager()->transaction(actionName, func);
+
     notifyAboutStateChanged();
 }
 
@@ -113,7 +125,7 @@ void NotationUndoStack::prepareChanges(const muse::TranslatableString& actionNam
         return;
     }
 
-    score()->startCmd(actionName);
+    transactionManager()->beginTransaction(actionName);
 }
 
 void NotationUndoStack::rollbackChanges()
@@ -126,7 +138,7 @@ void NotationUndoStack::rollbackChanges()
         return;
     }
 
-    score()->endCmd(true);
+    transactionManager()->endTransaction(true);
 }
 
 void NotationUndoStack::commitChanges()
@@ -139,7 +151,7 @@ void NotationUndoStack::commitChanges()
         return;
     }
 
-    score()->endCmd();
+    transactionManager()->endTransaction(false);
 
     notifyAboutStateChanged();
 }
@@ -153,13 +165,13 @@ bool NotationUndoStack::isStackClean() const
     return undoStack()->isClean();
 }
 
-void NotationUndoStack::mergeCommands(size_t startIdx)
+void NotationUndoStack::mergeTransactions(size_t startIdx)
 {
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
 
-    undoStack()->mergeCommands(startIdx);
+    undoStack()->mergeTransactions(startIdx);
 }
 
 void NotationUndoStack::lock()
@@ -247,10 +259,10 @@ muse::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-muse::async::Channel<ScoreChanges> NotationUndoStack::changesChannel() const
+muse::async::Channel<mu::engraving::ScoreChanges> NotationUndoStack::changesChannel() const
 {
     IF_ASSERT_FAILED(score()) {
-        return muse::async::Channel<ScoreChanges>();
+        return muse::async::Channel<engraving::ScoreChanges>();
     }
 
     return score()->changesChannel();
@@ -271,9 +283,14 @@ mu::engraving::MasterScore* NotationUndoStack::masterScore() const
     return score() ? score()->masterScore() : nullptr;
 }
 
+mu::engraving::TransactionManager* NotationUndoStack::transactionManager() const
+{
+    return score() ? score()->masterScore()->transactionManager() : nullptr;
+}
+
 mu::engraving::UndoStack* NotationUndoStack::undoStack() const
 {
-    return score() ? score()->undoStack() : nullptr;
+    return score() ? score()->masterScore()->undoStack() : nullptr;
 }
 
 void NotationUndoStack::notifyAboutNotationChanged()

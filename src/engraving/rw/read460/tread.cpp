@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -92,7 +91,6 @@
 #include "../../dom/palmmute.h"
 #include "../../dom/parenthesis.h"
 #include "../../dom/part.h"
-#include "../../dom/part.h"
 #include "../../dom/partialtie.h"
 #include "../../dom/pedal.h"
 #include "../../dom/playcounttext.h"
@@ -107,6 +105,7 @@
 #include "../../dom/soundflag.h"
 #include "../../dom/spacer.h"
 #include "../../dom/spanner.h"
+#include "../../dom/staff.h"
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
@@ -2007,17 +2006,6 @@ void TRead::read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx)
     }
 }
 
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
-        }
-    }
-}
-
 void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)
 {
     while (e.readNextStartElement()) {
@@ -3830,6 +3818,19 @@ String TRead::lineBreakFromTag(const String& str)
 
 void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
 {
+    Staff* staff = ctx.staff(ch->staffIdx());
+    StaffGroup staffGroup = staff ? staff->staffTypeForElement(ch)->group() : StaffGroup::STANDARD;
+    if (staffGroup == StaffGroup::PERCUSSION) {
+        // We should have read all notes by now. They need to be sorted for percussion staves
+        const Instrument* instrument = ch->part()->instrument(ch->tick());
+        const Drumset* drumset = instrument->drumset();
+        if (!drumset) {
+            LOGW("no drumset");
+        }
+        updatePercussionNotes(ch, drumset);
+        ch->sortNotes();
+    }
+
     Parenthesis* leftParen = nullptr;
     Parenthesis* rightParen = nullptr;
     std::vector<Note*> notes;
@@ -3864,6 +3865,24 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
             }
         } else {
             e.unknown();
+        }
+    }
+
+    if (notes.empty()) {
+        LOGW() << "NoteParenGroup has no valid notes, skipping";
+        delete leftParen;
+        delete rightParen;
+        return;
+    }
+
+    for (const NoteParenthesisInfo* existing : ch->noteParentheses()) {
+        for (Note* note : notes) {
+            if (muse::contains(existing->notes(), note)) {
+                LOGW() << "Skipping duplicate NoteParenGroup: note already covered by existing group";
+                delete leftParen;
+                delete rightParen;
+                return;
+            }
         }
     }
 
@@ -4658,7 +4677,7 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         return;
     }
 
-    score->addSystemLock(new SystemLock(startMeas, endMeas));
+    score->addSystemLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)

@@ -2,14 +2,17 @@
 <StaffList version="2.00" tick="0/1" len="4/4" staff="0" staves="1">
   <Staff id="0">
     <Chord>
+      <eid>B_B</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>C_C</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         <Spanner type="Glissando">
           <Glissando>
             <isHarpGliss>0</isHarpGliss>
             <ticks_f>1/4</ticks_f>
+            <eid>D_D</eid>
             <diagonal>1</diagonal>
             </Glissando>
           <next>
@@ -21,8 +24,10 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>F_F</eid>
         <pitch>60</pitch>
         <tpc>14</tpc>
         <Spanner type="Glissando">
@@ -35,14 +40,17 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>G_G</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>H_H</eid>
         <pitch>67</pitch>
         <tpc>15</tpc>
         <Spanner type="Glissando">
           <Glissando>
             <isHarpGliss>0</isHarpGliss>
             <ticks_f>1/4</ticks_f>
+            <eid>I_I</eid>
             <diagonal>1</diagonal>
             </Glissando>
           <next>
@@ -54,8 +62,10 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>J_J</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>K_K</eid>
         <pitch>79</pitch>
         <tpc>15</tpc>
         <Spanner type="Glissando">

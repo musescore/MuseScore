@@ -27,6 +27,7 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editexcerpt.h"
 #include "../editing/transpose.h"
+#include "../editing/transaction/transaction.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -350,6 +351,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 {
     MasterScore* masterScore = excerpt->masterScore();
     Score* score = excerpt->excerptScore();
+    Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
 
     std::vector<Part*>& parts = excerpt->parts();
     std::vector<staff_idx_t> srcStaves;
@@ -441,7 +443,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            Transpose::transposeKeys(score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
+            Transpose::transposeKeys(tx, score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
@@ -467,7 +469,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        Transpose::undoTransposeHarmony(score, hh, interval);
+                        Transpose::undoTransposeHarmony(tx, hh, interval);
                     }
                 }
             }
@@ -481,7 +483,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // second layout of score
-    score->setPlaylistDirty();
+    score->invalidateRepeatList();
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
     score->remapBracketsAndBarlines();
@@ -549,7 +551,7 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 
     auto excerptCmd = new AddExcerpt(excerpt);
     if (fakeUndo) {
-        excerptCmd->redo(nullptr);
+        excerptCmd->redo();
     } else {
         excerpt->excerptScore()->undo(excerptCmd);
     }
@@ -1134,6 +1136,35 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     return nmb;
 }
 
+void Excerpt::cloneMMRests(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                           const TracksMap& trackList, TieMap& tieMap)
+{
+    // When MMRests are enabled in the main score and we are creating a new part or revealing a hidden stave within one, we must copy MMRests
+    // Elements are moved from underlying measures to MMRest measures. If we do not copy these MMRests, the elements attached to them will be lost
+    // It doesn't matter if the MMRest range is different in the part to the score. As long as the MMRest measure is present in the DOM, MMRestLayout will
+    // correct this, setting the appropriate length and moving the elements to the correct locations
+
+    for (Measure* srcM = sourceScore->firstMeasure(); srcM; srcM = srcM->nextMeasure()) {
+        if (!srcM->hasMMRest()) {
+            continue;
+        }
+
+        Measure* dstM = dstScore->tick2measure(srcM->tick());
+        if (!dstM) {
+            continue;
+        }
+
+        Measure* srcMMRest = srcM->mmRest();
+
+        Measure* dstMMRest = toMeasure(cloneMeasure(srcMMRest, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap));
+        dstMMRest->setMMRestCount(srcMMRest->mmRestCount());
+        dstMMRest->setPrev(dstM->prev());
+        dstMMRest->setNext(dstScore->tick2measure(srcMMRest->tick() + srcMMRest->ticks()));
+
+        dstM->setMMRest(dstMMRest);
+    }
+}
+
 void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
                           const TracksMap& trackList)
 {
@@ -1156,6 +1187,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->append(newMeasure);
     }
+
+    cloneMMRests(sourceScore, dstScore, sourceStavesIndexes, trackList, tieMap);
 
     size_t n = sourceStavesIndexes.size();
     for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
@@ -1222,7 +1255,28 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
         measures->append(newMeasure);
     }
 
+    cloneMMRests(oscore, score, {}, {}, tieMap);
+
     collectTieEndPoints(tieMap);
+}
+
+void Excerpt::linkMeasures(Score* excerptScore, Score* masterScore)
+{
+    MeasureBase* mbMaster = masterScore->first();
+    for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        while (mbMaster && !mbMaster->isMeasure()) {
+            mbMaster = mbMaster->next();
+        }
+        if (!mbMaster) {
+            LOGD("Measures in MasterScore and Score are not in sync.");
+            break;
+        }
+        mb->linkTo(mbMaster);
+        mbMaster = mbMaster->next();
+    }
 }
 
 //! NOTE For staves in the same score
@@ -1419,6 +1473,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 {
     Score* oscore = srcStaff->score();
     Score* score  = dstStaff->score();
+
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
     Excerpt* oex = oscore->excerpt();
     Excerpt* ex  = score->excerpt();
@@ -1694,7 +1750,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             interval.flip();
         }
 
-        Transpose::transposeKeys(score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+        Transpose::transposeKeys(tx, score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 
     collectTieEndPoints(tieMap);
@@ -1743,10 +1799,9 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         Excerpt* excerpt = new Excerpt(score);
         excerpt->parts().push_back(part);
 
-        track_idx_t startTrack = part->startTrack();
-        track_idx_t endTrack = part->endTrack();
+        const TrackRange range = part->trackRange();
 
-        for (track_idx_t i = startTrack, j = 0; i < endTrack; ++i, ++j) {
+        for (track_idx_t i = range.startTrack, j = 0; i < range.endTrack; ++i, ++j) {
             excerpt->m_tracksMapping.insert({ i, j });
         }
 

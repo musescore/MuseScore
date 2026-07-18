@@ -107,7 +107,6 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PLAY:
         setPlay(v.toBool());
-        score()->setPlaylistDirty();
         break;
     case Pid::TREMOLOBAR_TYPE:
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));

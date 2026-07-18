@@ -19,7 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationpaintview.h"
+
+#include "notation/inotationviewstate.h"
 
 using namespace mu;
 using namespace muse::draw;

@@ -5,15 +5,19 @@
       <voices>1</voices>
       </location>
     <Chord>
+      <eid>J_J</eid>
       <durationType>half</durationType>
       <Note>
+        <eid>K_K</eid>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>L_L</eid>
       <durationType>half</durationType>
       <Note>
+        <eid>M_M</eid>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>

@@ -100,14 +100,13 @@ MeasureBase::~MeasureBase()
 
 System* MeasureBase::prevNonVBoxSystem() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     System* curSystem = system();
     IF_ASSERT_FAILED(curSystem) {
         return nullptr;
     }
 
     System* prevSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && prevSystem == curSystem; mb = mmRests ? mb->prevMM() : mb->prev()) {
+    for (const MeasureBase* mb = this; mb && prevSystem == curSystem; mb = mb->prevMM()) {
         if (mb->isMeasure() || mb->isHBox()) {
             prevSystem = mb->system();
         } else {
@@ -120,14 +119,13 @@ System* MeasureBase::prevNonVBoxSystem() const
 
 System* MeasureBase::nextNonVBoxSystem() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     System* curSystem = system();
     IF_ASSERT_FAILED(curSystem) {
         return nullptr;
     }
 
     System* nextSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && nextSystem == curSystem; mb = mmRests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = this; mb && nextSystem == curSystem; mb = mb->nextMM()) {
         if (mb->isMeasure() || mb->isHBox()) {
             nextSystem = mb->system();
         } else {
@@ -136,6 +134,41 @@ System* MeasureBase::nextNonVBoxSystem() const
     }
 
     return nextSystem != curSystem ? nextSystem : nullptr;
+}
+
+Page* MeasureBase::page() const
+{
+    return system() ? system()->page() : nullptr;
+}
+
+Page* MeasureBase::prevPage() const
+{
+    Page* curPage = page();
+    IF_ASSERT_FAILED(curPage) {
+        return nullptr;
+    }
+
+    Page* prevPage = curPage;
+    for (const MeasureBase* mb = this; mb && prevPage == curPage; mb = mb->prevMM()) {
+        prevPage = mb->system()->page();
+    }
+
+    return prevPage != curPage ? prevPage : nullptr;
+}
+
+Page* MeasureBase::nextPage() const
+{
+    Page* curPage = page();
+    IF_ASSERT_FAILED(curPage) {
+        return nullptr;
+    }
+
+    Page* nextPage = curPage;
+    for (const MeasureBase* mb = this; mb && nextPage == curPage; mb = mb->nextMM()) {
+        nextPage = mb->system()->page();
+    }
+
+    return nextPage != curPage ? nextPage : nullptr;
 }
 
 //---------------------------------------------------------
@@ -638,20 +671,37 @@ bool MeasureBase::isBefore(const MeasureBase* other) const
     return false;
 }
 
-const SystemLock* MeasureBase::systemLock() const
+const RangeLock* MeasureBase::systemLock() const
 {
     return score()->systemLocks()->lockContaining(this);
 }
 
 bool MeasureBase::isStartOfSystemLock() const
 {
-    const SystemLock* lock = score()->systemLocks()->lockStartingAt(this);
+    const RangeLock* lock = score()->systemLocks()->lockStartingAt(this);
     return lock != nullptr;
 }
 
 bool MeasureBase::isEndOfSystemLock() const
 {
-    const SystemLock* lock = systemLock();
+    const RangeLock* lock = systemLock();
+    return lock && lock->endMB() == this;
+}
+
+const RangeLock* MeasureBase::pageLock() const
+{
+    return score()->pageLocks()->lockContaining(this);
+}
+
+bool MeasureBase::isStartOfPageLock() const
+{
+    const RangeLock* lock = score()->pageLocks()->lockStartingAt(this);
+    return lock != nullptr;
+}
+
+bool MeasureBase::isEndOfPageLock() const
+{
+    const RangeLock* lock = pageLock();
     return lock && lock->endMB() == this;
 }
 
@@ -897,6 +947,39 @@ Measure* MeasureBaseList::measureByTick(int tick) const
         if (mb->isMeasure()) {
             return toMeasure(mb);
         }
+    }
+
+    return nullptr;
+}
+
+MeasureBase* MeasureBaseList::firstMeasureBaseAtTick(int tick) const
+{
+    if (empty() || tick > m_last->endTick().ticks()) {
+        return nullptr;
+    }
+
+    auto it = m_tickIndex.upper_bound(tick);
+
+    if (it == m_tickIndex.begin()) {
+        MeasureBase* mb = it->second;
+
+        return mb;
+    }
+
+    --it;
+    for (;; --it) {
+        if (it == m_tickIndex.begin()) {
+            MeasureBase* mb = it->second;
+
+            return mb;
+        }
+
+        MeasureBase* mb = it->second;
+        if (!mb) {
+            break;
+        }
+
+        return mb;
     }
 
     return nullptr;

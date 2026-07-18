@@ -62,6 +62,7 @@
       <translatorFontFace>FreeSerif</translatorFontFace>
       <systemTextFontFace>FreeSerif</systemTextFontFace>
       <staffTextFontFace>FreeSerif</staffTextFontFace>
+      <staveSharingLabelFontFace>FreeSerif</staveSharingLabelFontFace>
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <repeatPlayCountFontFace>FreeSerif</repeatPlayCountFontFace>

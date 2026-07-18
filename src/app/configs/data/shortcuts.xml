@@ -555,6 +555,10 @@
     <seq>Shift+Down</seq>
     </SC>
   <SC>
+    <key>select-notes-in-chord</key>
+    <seq>Ctrl+Alt+A</seq>
+    </SC>
+  <SC>
     <key>scr-prev</key>
     <seq>PgUp</seq>
     </SC>
@@ -919,10 +923,12 @@
   <SC>
     <key>toggle-piano-keyboard</key>
     <seq>P</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-percussion-panel</key>
     <seq>O</seq>
+    <autorepeat>0</autorepeat>
     </SC>
   <SC>
     <key>toggle-properties-panel</key>

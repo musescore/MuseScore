@@ -44,7 +44,6 @@
 #include "dom/ambitus.h"
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
-#include "dom/audio.h"
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
@@ -101,7 +100,6 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
 #include "editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
@@ -271,13 +269,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         } else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent") {
             sizeIsSpatiumDependent = e.readInt();
         } else if (tag == "frameWidth") {   // obsolete
-            frameType = FrameType::SQUARE;
+            frameType = FrameType::RECTANGLE;
             /*frameWidthMM =*/ e.readDouble();
         } else if (tag == "frameWidthS") {
-            frameType = FrameType::SQUARE;
+            frameType = FrameType::RECTANGLE;
             frameWidth = Spatium(e.readDouble());
         } else if (tag == "frame") {
-            frameType = e.readInt() ? FrameType::SQUARE : FrameType::NO_FRAME;
+            frameType = e.readInt() ? FrameType::RECTANGLE : FrameType::NO_FRAME;
         } else if (tag == "paddingWidth") {          // obsolete
             /*paddingWidthMM =*/
             e.readDouble();
@@ -1178,10 +1176,10 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         read400::TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             note->setParenthesesMode(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             note->setParenthesesMode(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             note->add(s);
         }
@@ -1378,7 +1376,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+        t->setFrameType(e.readBool() ? FrameType::RECTANGLE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "frameRound") {
         read400::TRead::readProperty(t, e, ctx, Pid::FRAME_ROUND);
@@ -1387,7 +1385,7 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
             t->setFrameType(FrameType::CIRCLE);
         } else {
             if (t->circle()) {
-                t->setFrameType(FrameType::SQUARE);
+                t->setFrameType(FrameType::RECTANGLE);
             }
         }
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
@@ -3451,12 +3449,11 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
-            score->setAudio(new Audio);
-            read400::TRead::read(score->audio(), e, ctx);
+            e.skipCurrentElement();
         } else if (tag == "showOmr") {
             e.skipCurrentElement();
         } else if (tag == "playMode") {
-            score->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "LayerTag") {
             e.skipCurrentElement();
         } else if (tag == "Layer") {
@@ -3583,11 +3580,21 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         return false;
     }
 
-    score->connectTies();
-
     score->setFileDivision(Constants::DIVISION);
 
     score->setUpTempoMap();
+    if (score->isMaster()) {
+        // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+        // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+        // elements still do it).
+        // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+        // up-to-date from that point. But we weren't finished reading the score, so the score will still
+        // change. We need to tell the repeat list about that, so that it will be updated next time
+        // someone uses it.
+        static_cast<MasterScore*>(score)->invalidateRepeatList();
+    }
+    score->connectTies();
+    score->undoRemoveStaleTieJumpPoints(false);
 
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);

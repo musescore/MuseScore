@@ -444,7 +444,7 @@ bool Accidental::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Accidental::drop(EditData& data)
+EngravingItem* Accidental::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {

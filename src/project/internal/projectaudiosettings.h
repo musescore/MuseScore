@@ -101,7 +101,7 @@ private:
     QJsonObject attributesToJson(const muse::audio::AudioResourceAttributes& attributes) const;
 
     muse::audio::AudioSourceType sourceTypeFromString(const QString& string) const;
-    muse::audio::AudioResourceType resourceTypeFromString(const QString& string) const;
+    muse::audioplugins::PluginType resourceTypeFromString(const QString& string) const;
 
     QString sourceTypeToString(const muse::audio::AudioSourceType& type) const;
 

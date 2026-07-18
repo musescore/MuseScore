@@ -51,6 +51,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Position")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "PositionTab"
             navigation.panel: root.navigationPanel
@@ -59,6 +60,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Style")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "StyleTab"
             navigation.panel: root.navigationPanel
@@ -67,6 +69,7 @@ Column {
 
         PropertiesPanelTabButton {
             text: qsTrc("propertiespanel", "Text")
+            maxWidth: tabBar.truncatedItemWidth
 
             navigation.name: "TextTab"
             navigation.panel: root.navigationPanel

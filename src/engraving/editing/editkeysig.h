@@ -22,13 +22,17 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/key.h"
 #include "../dom/keysig.h"
 
 namespace mu::engraving {
-class ChangeKeySig : public UndoCommand
+class Score;
+class Staff;
+class Transaction;
+
+class ChangeKeySig : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeKeySig)
 
@@ -37,7 +41,7 @@ class ChangeKeySig : public UndoCommand
     bool showCourtesy = false;
     bool evtInStaff = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEvtToStaff = true);
@@ -45,5 +49,11 @@ public:
     UNDO_TYPE(CommandType::ChangeKeySig)
     UNDO_NAME("ChangeKeySig")
     UNDO_CHANGED_OBJECTS({ keysig })
+};
+
+class EditKeySig
+{
+public:
+    static void undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, const Fraction& tick, KeySigEvent key);
 };
 }

@@ -2,45 +2,58 @@
 <StaffList version="2.00" tick="0/1" len="4/4" staff="0" staves="1">
   <Staff id="0">
     <Chord>
+      <eid>B_B</eid>
       <durationType>quarter</durationType>
       <Lyrics>
+        <eid>C_C</eid>
         <text>a</text>
         </Lyrics>
       <Lyrics>
         <no>1</no>
+        <eid>D_D</eid>
         <text>asd</text>
         </Lyrics>
       <Note>
+        <eid>E_E</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>F_F</eid>
       <durationType>quarter</durationType>
       <Lyrics>
+        <eid>G_G</eid>
         <text>a</text>
         </Lyrics>
       <Note>
+        <eid>H_H</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Lyrics>
+        <eid>J_J</eid>
         <text>a</text>
         </Lyrics>
       <Note>
+        <eid>K_K</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>L_L</eid>
       <durationType>quarter</durationType>
       <Lyrics>
+        <eid>M_M</eid>
         <text>a</text>
         </Lyrics>
       <Note>
+        <eid>N_N</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

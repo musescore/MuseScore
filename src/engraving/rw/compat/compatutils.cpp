@@ -23,37 +23,42 @@
 #include "compatutils.h"
 
 #include "dom/articulation.h"
+#include "dom/capo.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
+#include "dom/excerpt.h"
 #include "dom/expression.h"
+#include "dom/factory.h"
 #include "dom/harmony.h"
 #include "dom/image.h"
+#include "dom/key.h"
+#include "dom/keylist.h"
 #include "dom/laissezvib.h"
-#include "dom/masterscore.h"
-#include "dom/note.h"
-#include "dom/score.h"
-#include "dom/excerpt.h"
-#include "dom/part.h"
-#include "dom/stem.h"
 #include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
 #include "dom/measure.h"
-#include "dom/factory.h"
+#include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
+#include "dom/part.h"
+#include "dom/playtechannotation.h"
 #include "dom/rest.h"
+#include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/stafftext.h"
 #include "dom/stafftextbase.h"
-#include "dom/playtechannotation.h"
-#include "dom/capo.h"
-#include "dom/noteline.h"
-#include "dom/textline.h"
-#include "style/styledef.h"
-#include "style/defaultstyle.h"
+#include "dom/stem.h"
 #include "dom/tempotext.h"
+#include "dom/textline.h"
 
 #include "editing/editchord.h"
+#include "editing/editkeysig.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
-#include "engraving/style/textstyle.h"
+#include "style/defaultstyle.h"
+#include "style/styledef.h"
+#include "style/textstyle.h"
 
 #include "types/string.h"
 
@@ -756,7 +761,8 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
                     }
                     kse.setConcertKey(cKey);
                     kse.setKey(key);
-                    score->undoChangeKeySig(staff, Fraction(0, 1), kse);
+                    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, staff,
+                                                 Fraction(0, 1), kse);
                 }
             }
         }

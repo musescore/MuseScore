@@ -34,6 +34,8 @@
 #include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
 
+#include "notation/inotationinteraction.h"
+
 #include "ui/view/widgetstatestore.h"
 
 static const QString SPECIAL_CHARACTERS_DIALOG_NAME("SpecialCharactersDialog");

@@ -2402,8 +2402,10 @@ QString Braille::brailleMeasure(Measure* measure, int staffCount)
             resetOctave(staffCount);
 
             // Undo filling the missing beats with rests, so we don't have an altered score.
+/* see FIXME above
             m_score->undoRedo(true, nullptr);
             m_score->undoRedo(true, nullptr);
+*/
             m_score->deselectAll();
         }
     }
@@ -2835,6 +2837,11 @@ QString Braille::brailleTuplet(Tuplet* tuplet, DurationElement* el)
 {
     if (tuplet == nullptr || *tuplet->elements().begin() != el) {
         return QString();
+    }
+
+    if (tuplet->ratio().numerator() == 3) {
+        // Special handling for triplets.
+        return QString("2"); // '⠆' (dots 2-3)
     }
 
     return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");

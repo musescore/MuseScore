@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/excerpt.h"
 #include "../dom/masterscore.h"
 #include "../dom/part.h"
 
 namespace mu::engraving {
-class AddExcerpt : public UndoCommand
+class AddExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddExcerpt)
 
@@ -40,8 +40,8 @@ public:
     AddExcerpt(Excerpt* ex);
     ~AddExcerpt() override;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -49,7 +49,7 @@ public:
     UNDO_NAME("AddExcerpt")
 };
 
-class RemoveExcerpt : public UndoCommand
+class RemoveExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveExcerpt)
 
@@ -61,8 +61,8 @@ public:
     RemoveExcerpt(Excerpt* ex);
     ~RemoveExcerpt() override;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -70,7 +70,7 @@ public:
     UNDO_NAME("RemoveExcerpt")
 };
 
-class SwapExcerpt : public UndoCommand
+class SwapExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SwapExcerpt)
 
@@ -78,7 +78,7 @@ class SwapExcerpt : public UndoCommand
     int pos1 = 0;
     int pos2 = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SwapExcerpt(MasterScore* s, int p1, int p2)
@@ -89,14 +89,14 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeExcerptTitle : public UndoCommand
+class ChangeExcerptTitle : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeExcerptTitle)
 
     Excerpt* excerpt = nullptr;
     String title;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeExcerptTitle(Excerpt* x, const String& t)
@@ -106,7 +106,7 @@ public:
     UNDO_NAME("ChangeExcerptTitle")
 };
 
-class AddPartToExcerpt : public UndoCommand
+class AddPartToExcerpt : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddPartToExcerpt)
 
@@ -116,9 +116,9 @@ class AddPartToExcerpt : public UndoCommand
 
 public:
     AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-    void cleanup(bool undo) override;
+    void undo() override;
+    void redo() override;
+    void cleanup(bool wasDone) override;
 
     UNDO_TYPE(CommandType::AddPartToExcerpt)
     UNDO_NAME("AddPartToExcerpt")

@@ -23,6 +23,7 @@
 #include "editpart.h"
 #include "editscoreproperties.h"
 #include "editstaff.h"
+#include "transaction/transaction.h"
 #include "transpose.h"
 
 #include "../dom/excerpt.h"
@@ -52,19 +53,19 @@ InsertPart::InsertPart(Part* p, size_t targetPartIdx)
     m_targetPartIdx = targetPartIdx;
 }
 
-void InsertPart::undo(EditData*)
+void InsertPart::undo()
 {
     m_part->score()->removePart(m_part);
 }
 
-void InsertPart::redo(EditData*)
+void InsertPart::redo()
 {
     m_part->score()->insertPart(m_part, m_targetPartIdx);
 }
 
-void InsertPart::cleanup(bool undo)
+void InsertPart::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_part;
         m_part = nullptr;
     }
@@ -84,19 +85,19 @@ RemovePart::RemovePart(Part* p, size_t partIdx)
     }
 }
 
-void RemovePart::undo(EditData*)
+void RemovePart::undo()
 {
     m_part->score()->insertPart(m_part, m_partIdx);
 }
 
-void RemovePart::redo(EditData*)
+void RemovePart::redo()
 {
     m_part->score()->removePart(m_part);
 }
 
-void RemovePart::cleanup(bool undo)
+void RemovePart::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete m_part;
         m_part = nullptr;
     }
@@ -112,12 +113,12 @@ SetSoloist::SetSoloist(Part* p, bool b)
     soloist  = b;
 }
 
-void SetSoloist::undo(EditData*)
+void SetSoloist::undo()
 {
     part->setSoloist(!soloist);
 }
 
-void SetSoloist::redo(EditData*)
+void SetSoloist::redo()
 {
     part->setSoloist(soloist);
 }
@@ -132,7 +133,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i)
     part       = _part;
 }
 
-void ChangePart::flip(EditData*)
+void ChangePart::flip()
 {
     Instrument* oi = part->instrument(); //tick?
     part->setInstrument(instrument);
@@ -142,7 +143,6 @@ void ChangePart::flip(EditData*)
     Score* score = part->score();
     score->masterScore()->rebuildMidiMapping();
     score->setInstrumentsChanged(true);
-    score->setPlaylistDirty();
 
     // check if notes need to be updated
     // true if changing into or away from TAB or from one TAB type to another
@@ -167,7 +167,7 @@ ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, const
 {
 }
 
-void ChangeInstrumentLong::flip(EditData*)
+void ChangeInstrumentLong::flip()
 {
     String s = part->longName(tick);
     part->setLongName(longName, tick);
@@ -184,7 +184,7 @@ ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, con
 {
 }
 
-void ChangeInstrumentShort::flip(EditData*)
+void ChangeInstrumentShort::flip()
 {
     String s = part->shortName(tick);
     part->setShortName(shortName, tick);
@@ -202,7 +202,7 @@ ChangeInstrumentGroupOptions::ChangeInstrumentGroupOptions(const Fraction& _tick
 {
 }
 
-void ChangeInstrumentGroupOptions::flip(EditData*)
+void ChangeInstrumentGroupOptions::flip()
 {
     InstrumentLabel& label = part->instrument(tick)->instrumentLabel();
 
@@ -226,7 +226,7 @@ ChangeInstrumentNumber::ChangeInstrumentNumber(const Fraction& _tick, Part* p, i
 {
 }
 
-void ChangeInstrumentNumber::flip(EditData*)
+void ChangeInstrumentNumber::flip()
 {
     int v = part->number(tick);
     part->setNumber(number, tick);
@@ -238,7 +238,7 @@ void ChangeInstrumentNumber::flip(EditData*)
 //   ChangeDrumset
 //---------------------------------------------------------
 
-void ChangeDrumset::flip(EditData*)
+void ChangeDrumset::flip()
 {
     Drumset d = instrument->drumset() ? *instrument->drumset() : Drumset();
     instrument->setDrumset(&drumset);
@@ -253,7 +253,7 @@ void ChangeDrumset::flip(EditData*)
 //   ChangeStringData
 //---------------------------------------------------------
 
-void ChangeStringData::flip(EditData*)
+void ChangeStringData::flip()
 {
     const StringData* stringData =  m_stringTunings ? m_stringTunings->stringData() : m_instrument->stringData();
     int frets = stringData->frets();
@@ -272,7 +272,7 @@ void ChangeStringData::flip(EditData*)
 //   ChangePatch
 //---------------------------------------------------------
 
-void ChangePatch::flip(EditData*)
+void ChangePatch::flip()
 {
     MidiPatch op;
     op.prog          = channel->program();
@@ -318,7 +318,7 @@ void ChangePatch::flip(EditData*)
 //   SetUserBankController
 //---------------------------------------------------------
 
-void SetUserBankController::flip(EditData*)
+void SetUserBankController::flip()
 {
     bool oldVal = channel->userBankController();
     channel->setUserBankController(val);
@@ -337,7 +337,8 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
         return nullptr;
     }
 
-    EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
+    const TrackRange trackRange = part->trackRange();
+    EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, trackRange.startTrack, trackRange.endTrack - 1);
     return item ? toInstrumentChange(item) : nullptr;
 }
 
@@ -426,7 +427,9 @@ void EditPart::setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpF
     Interval oldTransposition = part->staff(0)->transpose(Fraction(0, 1));
 
     part->undoChangeProperty(Pid::PREFER_SHARP_FLAT, int(sharpFlat));
-    Transpose::transpositionChanged(score, part, oldTransposition);
+
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+    Transpose::transpositionChanged(tx, score, part, oldTransposition);
 }
 
 void EditPart::setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name)

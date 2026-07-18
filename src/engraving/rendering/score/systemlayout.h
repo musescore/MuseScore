@@ -85,6 +85,7 @@ public:
     static void removeElementFromSkyline(EngravingItem* element, const System* system);
 
     static void layoutSystemLockIndicators(System* system, LayoutContext& ctx);
+    static void layoutPageLockIndicators(System* system);
 
 private:
     struct MeasureState
@@ -141,7 +142,7 @@ private:
         std::vector<Expression*> expressions;
         std::vector<HarpPedalDiagram*> harpDiagrams;
         std::vector<FretDiagram*> fretDiagrams;
-        std::vector<StaffText*> staffText;
+        std::vector<StaffTextBase*> staffText;
         std::vector<InstrumentChange*> instrChanges;
         std::vector<SystemText*> systemText;
         std::vector<EngravingItem*> playTechCapoStringTunTripletFeel;

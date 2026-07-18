@@ -22,18 +22,26 @@
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
-#include "async/notification.h"
-#include "async/channel.h"
-#include "async/promise.h"
-#include "global/progress.h"
-#include "notation/inotation.h"
-#include "notation/notationtypes.h"
-#include "audio/common/audiotypes.h"
 #include "actions/actiontypes.h"
-#include "midi/miditypes.h"
+#include "async/channel.h"
+#include "async/notification.h"
+#include "async/promise.h"
+#include "audio/common/audiotypes.h"
+#include "global/progress.h"
+#include "modularity/imoduleinterface.h"
+
+#include "engraving/dom/noteval.h"
+
+#include "notation/inotation_fwd.h"
+#include "notation/inotationsolomutestate.h"
+#include "notation/types/tempo.h"
 
 #include "playbacktypes.h"
+
+namespace mu::engraving {
+class EngravingItem;
+class Segment;
+}
 
 namespace mu::playback {
 class IPlaybackController : MODULE_CONTEXT_INTERFACE
@@ -43,18 +51,17 @@ class IPlaybackController : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IPlaybackController() = default;
 
-    virtual bool isPlayAllowed() const = 0;
-    virtual muse::async::Notification isPlayAllowedChanged() const = 0;
-
-    virtual bool isPlaying() const = 0;
-    virtual muse::async::Notification isPlayingChanged() const = 0;
-
-    virtual void reset() = 0;
-
-    virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
-
     virtual bool isPlaybackInited() const = 0;
     virtual muse::async::Channel<bool> playbackInitedChanged() const = 0;
+
+    virtual bool isPlayAllowed() const = 0;
+    virtual muse::async::Channel<bool> isPlayAllowedChanged() const = 0;
+
+    virtual bool isPlaying() const = 0;
+    virtual muse::async::Channel<bool> isPlayingChanged() const = 0;
+
+    virtual bool isLoopEnabled() const = 0;
+    virtual muse::async::Channel<bool> loopEnabledChanged() const = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
@@ -68,9 +75,8 @@ public:
     virtual std::string auxChannelName(muse::audio::aux_channel_idx_t index) const = 0;
     virtual muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
 
-    virtual muse::async::Promise<muse::audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId)
-    const
-        = 0;
+    virtual muse::async::Promise<muse::audio::SoundPresetList>
+    availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const = 0;
 
     using SoloMuteState = notation::INotationSoloMuteState::SoloMuteState;
 
@@ -84,15 +90,15 @@ public:
         bool flushSound = true;
     };
 
-    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements,
+    virtual void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                               const PlayParams& params = PlayParams(), bool isMidi = false) = 0;
-    virtual void playNotes(const notation::NoteValList& notes, notation::staff_idx_t staffIdx, const notation::Segment* segment,
+    virtual void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
                            const PlayParams& params = PlayParams()) = 0;
     virtual void playMetronome(int tick) = 0;
 
-    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick) = 0;
 
-    virtual void seekElement(const notation::EngravingItem* element, bool flushSound = true) = 0;
+    virtual void seekElement(const engraving::EngravingItem* element, bool flushSound = true) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) = 0;
 
     virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
@@ -104,7 +110,7 @@ public:
     virtual const notation::Tempo& currentTempo() const = 0;
     virtual muse::async::Notification currentTempoChanged() const = 0;
 
-    virtual notation::MeasureBeat currentBeat() const = 0;
+    virtual engraving::MeasureBeat currentBeat() const = 0;
     virtual muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;

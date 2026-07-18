@@ -22,15 +22,16 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/breath.h"
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
-#include "engraving/dom/measurenumber.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/editing/splitjoinmeasure.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -583,17 +584,16 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
     EXPECT_TRUE(score);
 
     TestUtils::createParts(score, 2);
-    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+        Measure* m = score->firstMeasure()->nextMeasure();
+        EXPECT_TRUE(m);
+        ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
+        EXPECT_TRUE(cr);
 
-    Measure* m = score->firstMeasure()->nextMeasure();
-    EXPECT_TRUE(m);
-    ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
-    EXPECT_TRUE(cr);
+        SplitJoinMeasure::splitMeasure(tx, score->masterScore(), cr->tick());
 
-    SplitJoinMeasure::splitMeasure(score->masterScore(), cr->tick());
-
-    score->setLayoutAll();
-    score->endCmd();
+        score->setLayoutAll();
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measureSplit.mscx", MEASURE_DATA_DIR + u"measureSplit-ref.mscx"));
 }
@@ -670,4 +670,171 @@ TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
     Measure* m3MMR = m3->mmRest();
     EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
     checkSegmentsAndItems(m3MMR, true);
+}
+
+TEST_F(Engraving_MeasureTests, deleteBreathInMMRest)
+{
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrest-breath.mscx");
+    EXPECT_TRUE(score);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    Measure* m2 = score->crMeasure(2);
+    EXPECT_TRUE(m2);
+    Measure* m2MM = m2->coveringMMRestOrThis();
+    Segment* breathSeg2 = m2MM->findSegmentR(SegmentType::Breath, m2MM->ticks());
+    EXPECT_TRUE(breathSeg2);
+    EngravingItem* breath2 = breathSeg2->element(0);
+    EXPECT_TRUE(breath2 && breath2->isBreath());
+
+    score->select(breath2);
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    Measure* m4 = score->crMeasure(4);
+    EXPECT_TRUE(m4);
+    Measure* m4MM = m4->coveringMMRestOrThis();
+    Segment* breathSeg4 = m4MM->findSegmentR(SegmentType::Breath, m4MM->ticks());
+    EXPECT_TRUE(breathSeg4);
+    EngravingItem* breath4 = breathSeg4->element(0);
+    EXPECT_TRUE(breath4 && breath4->isBreath());
+
+    score->undoRedo(true, 0);
+
+    Measure* m2After = score->crMeasure(2);
+    EXPECT_TRUE(m2After);
+    Measure* m2MMAfter = m2After->coveringMMRestOrThis();
+    Segment* breathSeg2After = m2MMAfter->findSegmentR(SegmentType::Breath, m2MMAfter->ticks());
+    EXPECT_TRUE(breathSeg2After);
+    EngravingItem* breath2After = breathSeg2After->element(0);
+    EXPECT_TRUE(breath2After && breath2After->isBreath());
+
+    Measure* m4After = score->crMeasure(4);
+    EXPECT_TRUE(m4After);
+    Measure* m4MMAfter = m4After->coveringMMRestOrThis();
+    Segment* breathSeg4After = m4MMAfter->findSegmentR(SegmentType::Breath, m4MMAfter->ticks());
+    EXPECT_TRUE(breathSeg4After);
+    EngravingItem* breath4After = breathSeg4After->element(0);
+    EXPECT_TRUE(breath4After && breath4After->isBreath());
+
+    delete score;
+}
+
+TEST_F(Engraving_MeasureTests, breathInPart)
+{
+    auto findBreath = [](Score* score, int measureIdx) -> Breath* {
+        Measure* m = score->crMeasure(measureIdx);
+        if (!m) {
+            return nullptr;
+        }
+        Segment* seg = m->findSegmentR(SegmentType::Breath, m->ticks());
+        return toBreath(seg ? seg->element(0) : nullptr);
+    };
+
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"breath-parts.mscx");
+    EXPECT_TRUE(score);
+
+    Score* partScore = TestUtils::createPart(score);
+    EXPECT_TRUE(partScore);
+
+    // Add a breath to measure 2
+    {
+        Measure* m = score->crMeasure(2);
+        EXPECT_TRUE(m);
+        ChordRest* cr = m->findChordRest(m->tick(), 0);
+        EXPECT_TRUE(cr);
+        Breath* b = Factory::createBreath(score->dummy()->segment());
+        b->setSymId(SymId::breathMarkComma);
+        EditData dd(nullptr);
+        dd.dropElement = b;
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+            cr->drop(tx, dd);
+        });
+    }
+
+    // Check breath at measure 2 in score and part
+    {
+        Breath* scoreBreath = findBreath(score, 2);
+        EXPECT_TRUE(scoreBreath);
+        EXPECT_EQ(scoreBreath->symId(), SymId::breathMarkComma);
+
+        Breath* partBreath = findBreath(partScore, 2);
+        EXPECT_TRUE(partBreath);
+        EXPECT_EQ(partBreath->symId(), SymId::breathMarkComma);
+    }
+
+    // Add breath with different symbol to measure 4
+    {
+        Measure* m = score->crMeasure(4);
+        EXPECT_TRUE(m);
+        ChordRest* cr = m->findChordRest(m->tick(), 0);
+        EXPECT_TRUE(cr);
+        Breath* b = Factory::createBreath(score->dummy()->segment());
+        b->setSymId(SymId::breathMarkTick);
+        EditData dd(nullptr);
+        dd.dropElement = b;
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+            cr->drop(tx, dd);
+        });
+    }
+
+    {
+        // Check breath at measure 4 in score and part
+        Breath* scoreBreath = findBreath(score, 4);
+        EXPECT_TRUE(scoreBreath);
+        EXPECT_EQ(scoreBreath->symId(), SymId::breathMarkTick);
+
+        Breath* partBreath = findBreath(partScore, 4);
+        EXPECT_TRUE(partBreath);
+        EXPECT_EQ(partBreath->symId(), SymId::breathMarkTick);
+    }
+
+    // Delete breath at measure 2
+    {
+        EngravingItem* b = findBreath(score, 2);
+        EXPECT_TRUE(b);
+        score->select(b);
+        score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+        score->cmdDeleteSelection();
+        score->endCmd();
+    }
+
+    {
+        // Check breath at measure 4 still present in both master score and part
+        Breath* scoreBreath1 = findBreath(score, 2);
+        Breath* scoreBreath2 = findBreath(score, 4);
+        EXPECT_FALSE(scoreBreath1);
+        EXPECT_TRUE(scoreBreath2);
+        EXPECT_EQ(scoreBreath2->symId(), SymId::breathMarkTick);
+        Breath* partBreath1 = findBreath(partScore, 2);
+        Breath* partBreath2 = findBreath(partScore, 4);
+        EXPECT_FALSE(partBreath1);
+        EXPECT_TRUE(partBreath2);
+        EXPECT_EQ(partBreath2->symId(), SymId::breathMarkTick);
+    }
+
+    // Undo deletion
+    score->undoRedo(true, 0);
+
+    {
+        // Check both breaths present in master score and part
+        Breath* scoreBreath1 = findBreath(score, 2);
+        Breath* scoreBreath2 = findBreath(score, 4);
+        EXPECT_TRUE(scoreBreath1);
+        EXPECT_EQ(scoreBreath1->symId(), SymId::breathMarkComma);
+        EXPECT_TRUE(scoreBreath2);
+        EXPECT_EQ(scoreBreath2->symId(), SymId::breathMarkTick);
+        Breath* partBreath1 = findBreath(partScore, 2);
+        Breath* partBreath2 = findBreath(partScore, 4);
+        EXPECT_TRUE(partBreath1);
+        EXPECT_EQ(partBreath1->symId(), SymId::breathMarkComma);
+        EXPECT_TRUE(partBreath2);
+        EXPECT_EQ(partBreath2->symId(), SymId::breathMarkTick);
+    }
+
+    delete score;
 }

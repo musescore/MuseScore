@@ -56,6 +56,7 @@ LEAD</longName>
         <maxPitchA>69</maxPitchA>
         <instrumentId>voice.tenor</instrumentId>
         <clef>G8vb</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -129,6 +130,7 @@ BASS</longName>
         <maxPitchA>64</maxPitchA>
         <instrumentId>voice.bass</instrumentId>
         <clef>F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

@@ -47,10 +47,6 @@ MMRest::MMRest(Segment* s)
 MMRest::MMRest(const MMRest& r, bool link)
     : Rest(r, link)
 {
-    if (link) {
-        score()->undo(new Link(this, const_cast<MMRest*>(&r)));
-        setAutoplace(true);
-    }
     m_numberVisible = r.m_numberVisible;
 }
 
