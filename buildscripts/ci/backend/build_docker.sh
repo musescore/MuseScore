@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 echo "Build Docker MuseScore"
+trap 'echo Build Docker failed; exit 1' ERR
 
 HERE="$(dirname ${BASH_SOURCE[0]})"
 ORIGIN_DIR=${PWD}
