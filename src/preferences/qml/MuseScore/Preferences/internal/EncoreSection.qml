@@ -45,6 +45,10 @@ BaseSection {
     property alias instrumentSearchModeModel: instrumentSearchModeBox.model
     property int currentInstrumentSearchMode: 0
 
+    // Tablature
+    property alias tablatureImportModeModel: tablatureImportModeBox.model
+    property int currentTablatureImportMode: 0
+
     // Measure correction group
     property alias underfillStrategyModel: underfillStrategyBox.model
     property int currentUnderfillStrategy: 0
@@ -68,6 +72,7 @@ BaseSection {
     signal importTempoTextSemanticChangeRequested(bool value)
     signal importUnsupportedArticulationsAsTextChangeRequested(bool value)
     signal instrumentSearchModeChangeRequested(int value)
+    signal tablatureImportModeChangeRequested(int value)
     signal underfillStrategyChangeRequested(int value)
     signal overfillStrategyChangeRequested(int value)
     signal firstMeasureIsPickupChangeRequested(bool value)
@@ -261,6 +266,29 @@ BaseSection {
 
             onValueEdited: function(newIndex, newValue) {
                 root.overfillStrategyChangeRequested(newValue)
+            }
+        }
+
+        // Tablature import mode: last, a rarely-used option.
+        ComboBoxWithTitle {
+            id: tablatureImportModeBox
+
+            title: qsTrc("preferences", "Tablature")
+            columnWidth: root.columnWidth
+
+            currentIndex: indexOfValue(root.currentTablatureImportMode)
+
+            textRole: "title"
+            valueRole: "value"
+
+            navigationName: "EncoreTablatureImportModeBox"
+            navigationPanel: root.navigation
+            navigationRow: 11
+
+            onIsOpenedChanged: if (isOpened) { root.suppressEnsureVisible = true }
+
+            onValueEdited: function(newIndex, newValue) {
+                root.tablatureImportModeChangeRequested(newValue)
             }
         }
     }

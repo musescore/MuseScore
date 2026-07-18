@@ -111,6 +111,9 @@ void ImportPreferencesModel::load()
     encoreConfiguration()->instrumentSearchModeChanged().onReceive(this, [this](iex::enc::InstrumentSearchMode val) {
         emit encoreInstrumentSearchModeChanged(static_cast<int>(val));
     });
+    encoreConfiguration()->tablatureImportModeChanged().onReceive(this, [this](iex::enc::TablatureImportMode val) {
+        emit encoreTablatureImportModeChanged(static_cast<int>(val));
+    });
 
     encoreConfiguration()->underfillMeasureStrategyChanged().onReceive(this, [this](iex::enc::UnderfillStrategy val) {
         emit encoreUnderfillStrategyChanged(static_cast<int>(val));
@@ -363,6 +366,18 @@ QVariantList ImportPreferencesModel::encoreOverfillStrategyModel() const
     return result;
 }
 
+QVariantList ImportPreferencesModel::encoreTablatureImportModeModel() const
+{
+    return {
+        QVariantMap { { "title", muse::qtrc("preferences", "Link tablature to its notation staff") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Linked) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Keep tablature as a separate staff") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Separate) } },
+        QVariantMap { { "title", muse::qtrc("preferences", "Ignore tablature staves") },
+            { "value", static_cast<int>(iex::enc::TablatureImportMode::Ignore) } },
+    };
+}
+
 bool ImportPreferencesModel::encoreImportPageLayout() const
 {
     return encoreConfiguration()->importPageLayout();
@@ -459,6 +474,20 @@ void ImportPreferencesModel::setEncoreInstrumentSearchMode(int value)
     }
 
     encoreConfiguration()->setInstrumentSearchMode(static_cast<iex::enc::InstrumentSearchMode>(value));
+}
+
+int ImportPreferencesModel::encoreTablatureImportMode() const
+{
+    return static_cast<int>(encoreConfiguration()->tablatureImportMode());
+}
+
+void ImportPreferencesModel::setEncoreTablatureImportMode(int value)
+{
+    if (value == encoreTablatureImportMode()) {
+        return;
+    }
+
+    encoreConfiguration()->setTablatureImportMode(static_cast<iex::enc::TablatureImportMode>(value));
 }
 
 int ImportPreferencesModel::encoreUnderfillStrategy() const

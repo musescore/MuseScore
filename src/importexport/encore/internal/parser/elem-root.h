@@ -42,6 +42,14 @@ struct EncFormatReader;   // defined in reader.h
 // Instrument / part
 // ---------------------------------------------------------------------------
 
+// Tablature tuning: open-string MIDI pitches (low -> high). See ENCORE_FORMAT.md §Tab tuning.
+struct EncTabTuning {
+    bool hasData { false };
+    std::vector<int> openStringPitches;   // low -> high, as stored by Encore
+
+    int strings() const { return static_cast<int>(openStringPitches.size()); }
+};
+
 struct EncInstrument {
     QString name;
     quint32 offset    { 0 };
@@ -55,6 +63,8 @@ struct EncInstrument {
     // Signed chromatic offset from Encore's Staff Sheet "Key" field.
     // 0=written, -12=octave lower, +12=octave higher.
     qint8 keyTransposeSemitones { 0 };
+    // Per-instrument tab tuning, from the last 8 bytes of this TK block (each track carries its own).
+    EncTabTuning tabTuning;
 
     EncCharSize charSize() const { return (offset > 250) ? EncCharSize::TWO_BYTES : EncCharSize::ONE_BYTE; }
 
@@ -87,10 +97,8 @@ struct EncLine {
     quint16 start        { 0 };
     quint8 measureCount { 0 };
     std::vector<EncLineStaffData> staffData;
-    // Per-staff written key index (Encore key index 0-14), clef and display size, filled only by
-    // the formats whose reader implements EncFormatReader::readLineStaffEntries, where the LINE
-    // block carries a staff entry this parse cannot read and staffData stays empty. One entry per
-    // staff of the system, in system order.
+    // Per-staff key, clef and size, filled only by the readers whose LINE block carries a staff entry
+    // this parse cannot walk. One entry per staff, in system order.
     std::vector<quint8> staffKeys;
     std::vector<EncClefType> staffClefs;
     std::vector<quint8> staffSizes;   // 0-indexed selector, as in EncLineStaffData::staffSizeHint
@@ -218,6 +226,7 @@ struct EncRoot {
     EncHeader header;
     std::vector<EncInstrument> instruments;
     std::vector<EncLine> lines;
+    EncTabTuning tabTuning;
     std::vector<EncMeasure> measures;
     EncTitle titleBlock;
     EncTextBlock textBlock;
