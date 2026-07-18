@@ -35,6 +35,7 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/dom/tuplet.h"
 
 #include "engraving/dom/instrtemplate.h"
@@ -114,6 +115,279 @@ TEST_F(Tst_Instruments, standard_template_swapped_to_tablature_when_clef_tab)
     ASSERT_NE(st, nullptr);
     EXPECT_EQ(st->group(), StaffGroup::TAB)
         << "EncClefType::TAB must select the tablature template variant";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: a TAB-clef staff whose instrument name matches no fretted template
+// (generic "Melody") must still become a real tablature staff. The importer
+// reads the per-staff tuning stored before the first PAGE block and sets up a
+// TAB StaffType plus StringData with the correct string count and tuning, so
+// the notes are fretted at layout. Before the feature the staff stayed a plain
+// 5-line STANDARD staff with empty StringData (no fret numbers).
+// ===========================================================================
+static Note* firstImportedNote(MasterScore* score, track_idx_t track)
+{
+    for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        EngravingItem* e = s->element(track);
+        if (e && e->isChord()) {
+            return toChord(e)->notes().front();
+        }
+    }
+    return nullptr;
+}
+
+TEST_F(Tst_Instruments, tab_generic_name_reads_mandolin_tuning)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_tuning_mandolin.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+
+    Staff* staff = score->staff(0);
+    const StaffType* st = staff->staffType(Fraction(0, 1));
+    ASSERT_NE(st, nullptr);
+    EXPECT_EQ(st->group(), StaffGroup::TAB)
+        << "a TAB clef must yield a tablature staff even when the instrument name matches no fretted template";
+    EXPECT_EQ(st->lines(), 4)
+        << "a 4-string mandolin tuning must produce a 4-line tab staff";
+
+    const Instrument* inst = staff->part()->instrument();
+    ASSERT_NE(inst, nullptr);
+    const StringData* sd = inst->stringData();
+    ASSERT_NE(sd, nullptr);
+    EXPECT_EQ(sd->strings(), 4)
+        << "StringData must be populated from the Encore tuning (was empty, so no frets were drawn)";
+
+    std::vector<int> pitches;
+    for (const instrString& is : sd->stringList()) {
+        pitches.push_back(is.pitch);
+    }
+    std::sort(pitches.begin(), pitches.end());
+    EXPECT_EQ(pitches, (std::vector<int> { 55, 62, 69, 76 }))
+        << "mandolin GDAE tuning (G3 D4 A4 E5) must be read verbatim from the file";
+
+    Note* n = firstImportedNote(score, 0);
+    ASSERT_NE(n, nullptr);
+    EXPECT_GE(n->fret(), 0) << "notes on the tab staff must be fretted at layout";
+    EXPECT_GE(n->string(), 0);
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_generic_name_reads_guitar_tuning)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_tuning_guitar.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+
+    Staff* staff = score->staff(0);
+    const StaffType* st = staff->staffType(Fraction(0, 1));
+    ASSERT_NE(st, nullptr);
+    EXPECT_EQ(st->group(), StaffGroup::TAB);
+    EXPECT_EQ(st->lines(), 6)
+        << "a 6-string guitar tuning must produce a 6-line tab staff";
+
+    const Instrument* inst = staff->part()->instrument();
+    ASSERT_NE(inst, nullptr);
+    const StringData* sd = inst->stringData();
+    ASSERT_NE(sd, nullptr);
+    EXPECT_EQ(sd->strings(), 6)
+        << "StringData must be populated with all six guitar strings";
+    delete score;
+}
+
+// The instrument's Key applies to the stored tuning as much as to the notes: both are written
+// pitches and MuseScore wants what sounds. A guitar states Key -12, so its tuning 52..76 has to
+// reach StringData as 40..64; left where the file writes it, no string can play the notes.
+TEST_F(Tst_Instruments, tab_tuning_moves_with_the_instrument_key)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_tuning_key_offset.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+    const StringData* sd = score->staff(0)->part()->instrument()->stringData();
+    ASSERT_NE(sd, nullptr);
+    ASSERT_EQ(sd->strings(), 6);
+    const std::vector<int> expected { 40, 45, 50, 55, 59, 64 };
+    for (size_t i = 0; i < expected.size(); ++i) {
+        EXPECT_EQ(sd->stringList()[i].pitch, expected[i]) << "string " << i << " must sound where the notes do";
+    }
+    Note* n = firstImportedNote(score, 0);
+    ASSERT_NE(n, nullptr);
+    EXPECT_EQ(n->pitch(), 40);
+    EXPECT_EQ(n->fret(), 0) << "the lowest note sits on the open lowest string";
+    delete score;
+}
+
+// Two TAB staves, each its own instrument with a DIFFERENT stored tuning, must each keep their own.
+// The bug applied one (last-block / global) tuning to every tab staff, so the first tab was wrong.
+TEST_F(Tst_Instruments, tab_two_staves_keep_own_tunings)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_two_tunings.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(score->nstaves(), size_t(2));
+
+    auto tuningOf = [](const Staff* staff) {
+        std::vector<int> t;
+        if (const StringData* sd = staff->part()->instrument()->stringData()) {
+            for (const instrString& is : sd->stringList()) {
+                t.push_back(is.pitch);
+            }
+        }
+        return t;
+    };
+    EXPECT_EQ(tuningOf(score->staff(0)), (std::vector<int> { 55, 62, 69, 76 }))
+        << "first tab staff must keep its own 4-string tuning";
+    EXPECT_EQ(tuningOf(score->staff(1)), (std::vector<int> { 52, 57, 62, 67, 71, 76 }))
+        << "second tab staff must keep its own 6-string tuning";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: tablature import mode. Encore stores a notation staff and its tab staff as separate
+// single-staff instruments, with the tab staff empty (a derived view). In Linked mode the pair
+// merges into one instrument with the tab linked to the notation; Separate keeps two parts; Ignore
+// drops the tab. instruments_tab_linked_pair.enc has instrument 0 = notation (with notes) and
+// instrument 1 = an empty tab staff immediately below it.
+// ===========================================================================
+TEST_F(Tst_Instruments, tab_linked_pair_merges_into_one_instrument)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Linked;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), size_t(1)) << "notation + tab must merge into one instrument";
+    Part* part = score->parts().front();
+    ASSERT_EQ(part->nstaves(), size_t(2));
+    EXPECT_NE(part->staff(0)->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+        << "staff 0 stays notation";
+    EXPECT_EQ(part->staff(1)->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+        << "staff 1 is the linked tab";
+    Note* n = firstImportedNote(score, part->staff(1)->idx() * VOICES);
+    ASSERT_NE(n, nullptr) << "the linked tab staff must share the notation's notes";
+    EXPECT_GE(n->fret(), 0) << "shared notes are fretted on the tab staff";
+    EXPECT_TRUE(score->sanityCheck());
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_separate_keeps_two_instruments)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Separate;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_EQ(score->parts().size(), size_t(2)) << "Separate mode leaves the staves unmerged";
+    delete score;
+}
+
+// ===========================================================================
+// A tab staff states the string and the fret it drew every note at, and linking hands its notes to
+// the notation staff, so those positions have to travel with them. instruments_tab_linked_frets.enc
+// puts E4 on the third string at fret 9 and B3 on the third string at fret 4; left to itself
+// MuseScore frets both on their open strings.
+// ===========================================================================
+TEST_F(Tst_Instruments, tab_linked_frets_come_from_the_file)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Linked;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_frets.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_EQ(score->parts().size(), size_t(1));
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    std::vector<Note*> notes;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        EngravingItem* el = seg->element(0);
+        if (el && el->isChord()) {
+            for (Note* n : toChord(el)->notes()) {
+                notes.push_back(n);
+            }
+        }
+    }
+    ASSERT_EQ(notes.size(), size_t(2));
+    EXPECT_EQ(notes[0]->pitch(), 64);
+    EXPECT_EQ(notes[0]->string(), 2) << "E4 sits on the third string, as the tab staff states";
+    EXPECT_EQ(notes[0]->fret(), 9);
+    EXPECT_EQ(notes[1]->pitch(), 59);
+    EXPECT_EQ(notes[1]->string(), 2) << "B3 sits on the third string, as the tab staff states";
+    EXPECT_EQ(notes[1]->fret(), 4);
+    EXPECT_TRUE(score->sanityCheck());
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_ignore_drops_tab_staff)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_pair.enc", opts);
+    ASSERT_NE(score, nullptr);
+    for (const Staff* st : score->staves()) {
+        EXPECT_NE(st->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+            << "Ignore mode drops every tablature staff";
+    }
+    delete score;
+}
+
+// Ignore mode on a tab-ONLY score (no notation to fall back to) converts the tab staff to standard
+// notation instead of dropping it (dropping would empty the score and crash playback), so "Ignore"
+// leaves no tablature staff anywhere.
+TEST_F(Tst_Instruments, tab_ignore_converts_tab_only_to_notation)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_standalone_frets.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_GT(score->nstaves(), size_t(0)) << "Ignore must not empty a tab-only score";
+    for (const Staff* st : score->staves()) {
+        EXPECT_NE(st->staffType(Fraction(0, 1))->group(), StaffGroup::TAB)
+            << "Ignore must leave no tablature staff; a standalone tab becomes standard notation";
+    }
+    delete score;
+}
+
+// Ignore on a tab shown over a HIDDEN notation staff must reveal the notation, not leave an
+// all-hidden score (which has no playable part and crashes playback).
+TEST_F(Tst_Instruments, tab_ignore_reveals_hidden_notation)
+{
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Ignore;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_hidden_notation.enc", opts);
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    const bool anyShown = std::any_of(score->parts().begin(), score->parts().end(),
+                                      [](const Part* p) { return p->show(); });
+    EXPECT_TRUE(anyShown) << "Ignore must leave at least one visible part";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, tab_linked_overfull_measure_stays_consistent)
+{
+    // An overfilled notation bar is widened by the IrregularMeasure strategy; the linked tab must be
+    // cloned into a cleared staff or the stale fill rests plus the clone overflow the irregular bar.
+    mu::iex::enc::EncImportOptions opts;
+    opts.tablatureImportMode = mu::iex::enc::TablatureImportMode::Linked;
+    opts.overfillMeasureStrategy = mu::iex::enc::OverfillStrategy::IrregularMeasure;
+    MasterScore* score = readEncoreScoreWithOpts("instruments_tab_linked_overfull.enc", opts);
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck())
+        << "the linked tab of an irregular measure must not overflow";
+    delete score;
+}
+
+// ===========================================================================
+// FEATURE: a tab-only score (no notation staff) stores the tab's notes as pitch-bearing REST
+// elements (voice bit 0x8, MIDI pitch at +15, no face value). They must be read as notes so the
+// standalone tab shows fret numbers.
+// ===========================================================================
+TEST_F(Tst_Instruments, tab_standalone_reads_own_notes)
+{
+    MasterScore* score = readEncoreScore("instruments_tab_standalone_frets.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+    Staff* staff = score->staff(0);
+    EXPECT_EQ(staff->staffType(Fraction(0, 1))->group(), StaffGroup::TAB);
+    Note* n = firstImportedNote(score, 0);
+    ASSERT_NE(n, nullptr) << "a tab-only staff must import its own notes";
+    EXPECT_GE(n->fret(), 0);
+    EXPECT_TRUE(score->sanityCheck());
     delete score;
 }
 
@@ -563,6 +837,193 @@ TEST_F(Tst_Instruments, total_size_tk_midi_read_from_content_offset)
         << "MIDI=49 must be read from total-size TK content[60]; must not fall back to Grand Piano";
     EXPECT_NE(inst1->id(), String(u"grand-piano"))
         << "MIDI=34 must be read from total-size TK content[60]; must not fall back to Grand Piano";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, total_size_tk_key_read_from_entry_end)
+{
+    // Encore 4.5.x TK varSize is the TOTAL block size, and its entries are long enough that the
+    // per-staff tables sit near the entry end: the program table 46 bytes before it and the key
+    // transposition 23 bytes before that. Reading the key from a fixed position inside the content
+    // lands in the name padding, so both parts came in at concert pitch (chromatic 0).
+    MasterScore* score = readEncoreScore("instruments_total_size_tk_key_from_entry_end.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2)
+        << "File declares 2 instruments; both must appear as parts";
+    const Instrument* inst0 = score->parts()[0]->instrument();
+    const Instrument* inst1 = score->parts()[1]->instrument();
+    ASSERT_NE(inst0, nullptr);
+    ASSERT_NE(inst1, nullptr);
+    EXPECT_EQ(inst0->transpose().chromatic, -9)
+        << "Key=-9 sits 69 bytes before the entry end in the total-size layout";
+    EXPECT_EQ(inst1->transpose().chromatic, -14)
+        << "Key=-14 sits 69 bytes before the entry end in the total-size layout";
+    delete score;
+}
+
+// The per-staff tables are runs of one byte per voice, and that shape is what proves one is there.
+// Demanding a program byte that differs from the channels throws out two real tables: a staff with
+// no instrument assigned, whose program is zero, and one whose channel number happens to equal its
+// program. Their keys went unread: in the corpus that cost a laud and a guitar their octave.
+TEST_F(Tst_Instruments, key_read_from_a_table_its_run_shape_proves)
+{
+    MasterScore* score = readEncoreScore("instruments_key_from_run_shaped_table.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2);
+    const Instrument* inst0 = score->parts()[0]->instrument();
+    const Instrument* inst1 = score->parts()[1]->instrument();
+    ASSERT_NE(inst0, nullptr);
+    ASSERT_NE(inst1, nullptr);
+    EXPECT_EQ(inst0->transpose().chromatic, -9) << "a channel run with no program still places the table";
+    EXPECT_EQ(inst1->transpose().chromatic, -14) << "channel and program being one number does not unplace it";
+    delete score;
+}
+
+// A staff with neither channel nor program leaves a stretch of zeros where its tables belong, and
+// zeros prove nothing. What places them is the distance measured on a sibling entry, since the
+// tables sit the same distance into every entry of a file.
+TEST_F(Tst_Instruments, key_placed_by_the_distance_a_sibling_entry_proves)
+{
+    MasterScore* score = readEncoreScore("instruments_key_from_a_sibling_measured_table.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2);
+    const Instrument* inst1 = score->parts()[1]->instrument();
+    ASSERT_NE(inst1, nullptr);
+    EXPECT_EQ(inst1->transpose().chromatic, -5)
+        << "the second entry proves nothing on its own; the first says where to look";
+    delete score;
+}
+
+// A score whose staves were never assigned an instrument holds no channel and no program anywhere,
+// so nothing proves where the tables sit and there is no sibling to measure either. The keys are
+// still 23 bytes ahead of where this layout keeps the tables, counted back from the entry end.
+TEST_F(Tst_Instruments, key_read_where_nothing_at_all_is_assigned)
+{
+    MasterScore* score = readEncoreScore("instruments_key_when_nothing_is_assigned.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2);
+    const Instrument* inst0 = score->parts()[0]->instrument();
+    const Instrument* inst1 = score->parts()[1]->instrument();
+    ASSERT_NE(inst0, nullptr);
+    ASSERT_NE(inst1, nullptr);
+    EXPECT_EQ(inst0->transpose().chromatic, -9);
+    EXPECT_EQ(inst1->transpose().chromatic, -14);
+    delete score;
+}
+
+// Encore 4 writes a fixed-stride entry table and marks only some entries with a TK magic. Where the
+// first is unmarked the file was taken for one with no blocks at all, and read at the absolute
+// positions of two other layouts: the name came back as whatever text the page blocks spell, and the
+// program and the key as nothing. Where the one magic sits proves the stride, and that places all
+// three fields of every entry.
+TEST_F(Tst_Instruments, entries_read_at_the_stride_the_file_proves)
+{
+    MasterScore* score = readEncoreScore("instruments_table_the_file_measures_itself.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 3);
+    EXPECT_EQ(score->parts()[1]->longName(), String(u"TenorSax"))
+        << "the unmarked entry names itself, rather than the word planted at the formula position";
+    const Instrument* inst1 = score->parts()[1]->instrument();
+    ASSERT_NE(inst1, nullptr);
+    EXPECT_EQ(inst1->transpose().chromatic, -14) << "and carries its key where its marked sibling does";
+    delete score;
+}
+
+// A band score of ten staves with no TK magic anywhere. Choosing between the two known layouts by
+// where the first block falls reads it as a table of entries of 2158 bytes: the first name is found
+// and every later probe walks into the music, while the programs and keys are looked for at absolute
+// positions holding other things. The span from the table base to the first block divides by the
+// instrument count and says what the entries measure.
+TEST_F(Tst_Instruments, unmarked_table_read_at_the_stride_its_span_gives)
+{
+    MasterScore* score = readEncoreScore("instruments_unmarked_table_of_ten.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 10);
+    EXPECT_EQ(score->parts()[1]->longName(), String(u"Trompeta 1"));
+    EXPECT_EQ(score->parts()[6]->longName(), String(u"Tuba"));
+    const Instrument* inst0 = score->parts()[0]->instrument();
+    const Instrument* inst9 = score->parts()[9]->instrument();
+    ASSERT_NE(inst0, nullptr);
+    ASSERT_NE(inst9, nullptr);
+    EXPECT_NE(inst0->id(), String(u"grand-piano")) << "the program of the first entry is read too";
+    EXPECT_EQ(inst9->transpose().chromatic, -3) << "and the key of the last one";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, total_size_tk_key_read_from_other_generation_distance)
+{
+    // These entries keep their per-staff tables at the other generation's distance from the entry
+    // end, 44 rather than 46, so the channel run covers position 46. The key must come from 23
+    // bytes ahead of the real table (-3), not from 23 ahead of the channel run, where the file
+    // holds an unrelated +1.
+    MasterScore* score = readEncoreScore("instruments_total_size_tk_key_not_from_channel_run.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2)
+        << "File declares 2 instruments; both must appear as parts";
+    EXPECT_EQ(score->parts()[0]->instrument()->transpose().chromatic, -3)
+        << "Key must follow the program table, wherever the entry keeps it";
+    EXPECT_EQ(score->parts()[1]->instrument()->transpose().chromatic, -3)
+        << "Key must follow the program table, wherever the entry keeps it";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, no_tk_compact_table_reads_key_for_every_instrument)
+{
+    // No TK blocks and the compact per-staff table: every instrument's key sits 23 bytes ahead of
+    // its own program table, not only the first one's.
+    MasterScore* score = readEncoreScore("instruments_no_tk_compact_table_two_instrs.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2)
+        << "File declares 2 instruments; both must appear as parts";
+    EXPECT_EQ(score->parts()[0]->instrument()->transpose().chromatic, -2);
+    EXPECT_EQ(score->parts()[1]->instrument()->transpose().chromatic, -9)
+        << "The second instrument's key must be read too, at 390 + 112 - 23";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, oversized_varsize_key_read_from_entry)
+{
+    // The declared block size is 0x70000000, as Encore 4 writes it: it masks to zero and exceeds
+    // the block, so it says nothing about the layout and the entry decides. Trusting it sends the
+    // read to the compact table of a file that has none.
+    MasterScore* score = readEncoreScore("instruments_oversized_varsize_key_from_entry_end.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    EXPECT_EQ(score->parts()[0]->instrument()->transpose().chromatic, -12)
+        << "Key must come from the entry, 23 bytes ahead of its program table";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, total_size_tk_midi_read_from_other_generation_distance)
+{
+    // Same file as the key test above: the tables sit 44 bytes before the entry end, so the usual
+    // position 46 falls inside the channel run. Reading the program there returns the channel
+    // number (1), which resolves to Grand Piano; the program at the confirmed table is 75.
+    MasterScore* score = readEncoreScore("instruments_total_size_tk_key_not_from_channel_run.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    const Instrument* inst = score->parts()[0]->instrument();
+    ASSERT_NE(inst, nullptr);
+    EXPECT_EQ(inst->id(), String(u"soprano-recorder"))
+        << "Program 75 sits at the confirmed table; reading the channel run instead gives 1, a piano";
+    delete score;
+}
+
+TEST_F(Tst_Instruments, small_tk_tables_are_not_borrowed_from_the_next_entry)
+{
+    // Instrument 0 keeps no per-staff table, and the position its declared size points at falls
+    // inside instrument 1, which does keep one. With the stride measured between the two blocks
+    // that position is known to be outside instrument 0, so it must not be read: instrument 0 has
+    // no program and lands on the Grand Piano fallback rather than on instrument 1's program 90.
+    MasterScore* score = readEncoreScore("instruments_small_tk_no_cross_entry_tables.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_GE(static_cast<int>(score->parts().size()), 2)
+        << "File declares 2 instruments; both must appear as parts";
+    const Instrument* inst0 = score->parts()[0]->instrument();
+    ASSERT_NE(inst0, nullptr);
+    EXPECT_EQ(inst0->id(), String(u"grand-piano"))
+        << "An instrument with no table of its own must not take the next instrument's program";
     delete score;
 }
 

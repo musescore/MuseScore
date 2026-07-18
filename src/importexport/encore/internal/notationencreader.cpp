@@ -45,6 +45,7 @@ muse::Ret NotationEncoreReader::read(MasterScore* score, const muse::io::path_t&
     opts.overfillMeasureStrategy              = encoreConfiguration()->overfillMeasureStrategy();
     opts.firstMeasureIsPickup                 = encoreConfiguration()->firstMeasureIsPickup();
     opts.mergeVoices                          = encoreConfiguration()->mergeVoices();
+    opts.tablatureImportMode                  = encoreConfiguration()->tablatureImportMode();
     Err err = importEncore(score, path.toQString(), opts);
     if (err == Err::FileBadFormat) {
         // Give a specific reason instead of the generic "Bad format" text.

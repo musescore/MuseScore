@@ -59,7 +59,9 @@ struct EncMeasure {
     EncBarlineType endBarline() const { return static_cast<EncBarlineType>(barTypeEnd); }
     EncRepeatType repeatMark() const { return static_cast<EncRepeatType>(coda & 0xFF); }
 
-    bool read(QDataStream& ds, const quint32 vs, const struct EncFormatReader& fmt);
+    // pureTabFile: the score has no notation staff, so tab staves carry their own notes as
+    // pitch-bearing REST elements (voice bit 0x8) that must be read as notes. See parsers-measure.cpp.
+    bool read(QDataStream& ds, const quint32 vs, const struct EncFormatReader& fmt, bool pureTabFile = false);
     void calculateRealDurations(bool hasGraceTimeBorrowing, const struct EncFormatReader& fmt);
     // Give back the dots the note-on positions do not carry, for one (staff, voice) group.
     void restoreHintedDots(std::vector<EncMeasureElem*>& elems, int staffIdx, int voice);

@@ -184,6 +184,9 @@ PreferencesPage {
             instrumentSearchModeModel: importPreferencesModel.encoreInstrumentSearchModeModel()
             currentInstrumentSearchMode: importPreferencesModel.encoreInstrumentSearchMode
 
+            tablatureImportModeModel: importPreferencesModel.encoreTablatureImportModeModel()
+            currentTablatureImportMode: importPreferencesModel.encoreTablatureImportMode
+
             underfillStrategyModel: importPreferencesModel.encoreUnderfillStrategyModel()
             currentUnderfillStrategy: importPreferencesModel.encoreUnderfillStrategy
             overfillStrategyModel: importPreferencesModel.encoreOverfillStrategyModel()
@@ -223,6 +226,10 @@ PreferencesPage {
                 importPreferencesModel.encoreInstrumentSearchMode = value
             }
 
+            onTablatureImportModeChangeRequested: function(value) {
+                importPreferencesModel.encoreTablatureImportMode = value
+            }
+
             onUnderfillStrategyChangeRequested: function(value) {
                 importPreferencesModel.encoreUnderfillStrategy = value
             }
@@ -251,6 +258,7 @@ PreferencesPage {
                 importPreferencesModel.encoreOverfillStrategy = 2       // IrregularMeasure
                 importPreferencesModel.encoreFirstMeasureIsPickup = true
                 importPreferencesModel.encoreMergeVoices = true
+                importPreferencesModel.encoreTablatureImportMode = 1   // Linked
             }
 
             onFocusChanged: {

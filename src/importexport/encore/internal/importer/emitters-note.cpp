@@ -784,6 +784,9 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     Note* note = Factory::createNote(chord);
     applyConcertPitch(note, concertPitch);
     chord->add(note);
+    if (ctx.trackNotesForTab) {
+        ctx.notesByMeasStaff[{ mc.measIdx, staffIdx }].push_back({ static_cast<int>(en->tick), note });
+    }
 
     // A small note on the normal path is a cue, not a grace. Mark the chord small rather than the note:
     // Note::mag multiplies the chord's, so a note-only flag leaves a full-size stem.

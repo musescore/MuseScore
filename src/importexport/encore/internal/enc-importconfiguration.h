@@ -77,6 +77,10 @@ public:
     void setMergeVoices(bool value) override;
     muse::async::Channel<bool> mergeVoicesChanged() const override;
 
+    TablatureImportMode tablatureImportMode() const override;
+    void setTablatureImportMode(TablatureImportMode value) override;
+    muse::async::Channel<TablatureImportMode> tablatureImportModeChanged() const override;
+
 private:
     muse::async::Channel<bool> m_importPageLayoutChanged;
     muse::async::Channel<bool> m_importPageBreaksChanged;
@@ -89,5 +93,6 @@ private:
     muse::async::Channel<OverfillStrategy> m_overfillMeasureStrategyChanged;
     muse::async::Channel<bool> m_firstMeasureIsPickupChanged;
     muse::async::Channel<bool> m_mergeVoicesChanged;
+    muse::async::Channel<TablatureImportMode> m_tablatureImportModeChanged;
 };
 } // namespace mu::iex::enc
