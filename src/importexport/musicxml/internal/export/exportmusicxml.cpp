@@ -4439,7 +4439,9 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             dotTag += elementPosition(this, dot);
             m_xml.tagRaw(dotTag);
         }
-        writeAccidental(m_xml, u"accidental", note->accidental());
+        if (note->staff() && !note->staff()->isTabStaff(Fraction(0, 1))) {
+            writeAccidental(m_xml, u"accidental", note->accidental());
+        }
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
         // no stem for whole notes and beyond
