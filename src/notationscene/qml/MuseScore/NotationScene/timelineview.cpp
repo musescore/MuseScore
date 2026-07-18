@@ -28,7 +28,10 @@
 #include <QTimer>
 
 #include "log.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationundostack.h"
 #include "project/inotationproject.h"
+#include "notationscene/widgets/timeline.h"
 
 namespace mu::notation {
 class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget
