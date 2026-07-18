@@ -331,7 +331,6 @@
         <duration>1</duration>
         <voice>5</voice>
         <type>eighth</type>
-        <accidental>sharp</accidental>
         <stem>none</stem>
         <staff>2</staff>
         <notations>
@@ -369,7 +368,6 @@
         <duration>1</duration>
         <voice>5</voice>
         <type>eighth</type>
-        <accidental>flat</accidental>
         <stem>none</stem>
         <staff>2</staff>
         <notations>
@@ -632,7 +630,6 @@
         <duration>1</duration>
         <voice>5</voice>
         <type>eighth</type>
-        <accidental>sharp</accidental>
         <stem>none</stem>
         <staff>2</staff>
         <notations>
@@ -670,7 +667,6 @@
         <duration>1</duration>
         <voice>5</voice>
         <type>eighth</type>
-        <accidental>flat</accidental>
         <stem>none</stem>
         <staff>2</staff>
         <notations>
