@@ -104,6 +104,8 @@ public:
         }
     } comparePitch;
 
+    using Whammy = GPNote::Bend;
+
     void addGPNote(const std::shared_ptr<GPNote>& n) { _notes.push_back(n); }
     void sortGPNotes();
     void addGPRhythm(const std::shared_ptr<GPRhythm>& n) { _rhythm = n; }
@@ -197,8 +199,9 @@ public:
     void setId(int id) { _id = id; }
     int id() const { return _id; }
 
-    void setDive(bool dive) { m_dive = dive; }
-    bool dive() const { return m_dive; }
+    void setWhammy(const Whammy& whammy) { m_whammy = whammy; }
+    const Whammy& whammy() const { return m_whammy; }
+    bool hasWhammy() const { return !m_whammy.isEmpty(); }
 
     void setPickScrape(bool pickScrape) { m_pickScrape = pickScrape; }
     bool pickScrape() const { return m_pickScrape; }
@@ -302,7 +305,7 @@ private:
     Golpe m_golpe = Golpe::None;
     Barre _barre;
     double _arpeggioStretch = 0.0;
-    bool m_dive = false; // TODO-gp: implement dives
+    Whammy m_whammy;
     bool m_pickScrape = false;
     bool m_deadSlapped = false;
     StemOrientation m_stemOrientation;
