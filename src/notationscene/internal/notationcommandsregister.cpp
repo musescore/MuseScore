@@ -251,126 +251,126 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME)
     },
     CommandInfo{
-        NOTE_LONGA_COMMAND,
+        SET_DURATION_LONGA_COMMAND,
         TranslatableString("action", "Longa"),
         TranslatableString("action", "Set duration: longa"),
         InputSchema(),
         Decoration(IconCode::Code::LONGO)
     },
     CommandInfo{
-        NOTE_BREVE_COMMAND,
+        SET_DURATION_BREVE_COMMAND,
         TranslatableString("action", "Breve"),
         TranslatableString("action", "Set duration: breve"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_WHOLE_DOUBLE)
     },
     CommandInfo{
-        PAD_NOTE_1_COMMAND,
+        SET_DURATION_WHOLE_COMMAND,
         TranslatableString("action", "Whole note"),
         TranslatableString("action", "Set duration: whole note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_WHOLE)
     },
     CommandInfo{
-        PAD_NOTE_2_COMMAND,
+        SET_DURATION_HALF_COMMAND,
         TranslatableString("action", "Half note"),
         TranslatableString("action", "Set duration: half note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_HALF)
     },
     CommandInfo{
-        PAD_NOTE_4_COMMAND,
+        SET_DURATION_QUARTER_COMMAND,
         TranslatableString("action", "Quarter note"),
         TranslatableString("action", "Set duration: quarter note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_QUARTER)
     },
     CommandInfo{
-        PAD_NOTE_8_COMMAND,
+        SET_DURATION_EIGHTH_COMMAND,
         TranslatableString("action", "Eighth note"),
         TranslatableString("action", "Set duration: eighth note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_8TH)
     },
     CommandInfo{
-        PAD_NOTE_16_COMMAND,
+        SET_DURATION_16TH_COMMAND,
         TranslatableString("action", "16th note"),
         TranslatableString("action", "Set duration: 16th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_16TH)
     },
     CommandInfo{
-        PAD_NOTE_32_COMMAND,
+        SET_DURATION_32ND_COMMAND,
         TranslatableString("action", "32nd note"),
         TranslatableString("action", "Set duration: 32nd note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_32ND)
     },
     CommandInfo{
-        PAD_NOTE_64_COMMAND,
+        SET_DURATION_64TH_COMMAND,
         TranslatableString("action", "64th note"),
         TranslatableString("action", "Set duration: 64th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_64TH)
     },
     CommandInfo{
-        PAD_NOTE_128_COMMAND,
+        SET_DURATION_128TH_COMMAND,
         TranslatableString("action", "128th note"),
         TranslatableString("action", "Set duration: 128th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_128TH)
     },
     CommandInfo{
-        PAD_NOTE_256_COMMAND,
+        SET_DURATION_256TH_COMMAND,
         TranslatableString("action", "256th note"),
         TranslatableString("action", "Set duration: 256th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_256TH)
     },
     CommandInfo{
-        PAD_NOTE_512_COMMAND,
+        SET_DURATION_512TH_COMMAND,
         TranslatableString("action", "512th note"),
         TranslatableString("action", "Set duration: 512th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_512TH)
     },
     CommandInfo{
-        PAD_NOTE_1024_COMMAND,
+        SET_DURATION_1024TH_COMMAND,
         TranslatableString("action", "1024th note"),
         TranslatableString("action", "Set duration: 1024th note"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_1024TH)
     },
     CommandInfo{
-        PAD_DOT_COMMAND,
+        TOGGLE_DOT_COMMAND,
         TranslatableString("action", "Augmentation dot"),
         TranslatableString("action", "Toggle duration dot"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_DOTTED)
     },
     CommandInfo{
-        PAD_DOT2_COMMAND,
+        TOGGLE_DOT2_COMMAND,
         TranslatableString("action", "Double augmentation dot"),
         TranslatableString("action", "Toggle duration dot: double"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_DOTTED_2)
     },
     CommandInfo{
-        PAD_DOT3_COMMAND,
+        TOGGLE_DOT3_COMMAND,
         TranslatableString("action", "Triple augmentation dot"),
         TranslatableString("action", "Toggle duration dot: triple"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_DOTTED_3)
     },
     CommandInfo{
-        PAD_DOT4_COMMAND,
+        TOGGLE_DOT4_COMMAND,
         TranslatableString("action", "Quadruple augmentation dot"),
         TranslatableString("action", "Toggle duration dot: quadruple"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_DOTTED_4)
     },
     CommandInfo{
-        PAD_REST_COMMAND,
+        TOGGLE_REST_COMMAND,
         TranslatableString("action", "Rest"),
         TranslatableString("action", "Toggle rest"),
         InputSchema(),

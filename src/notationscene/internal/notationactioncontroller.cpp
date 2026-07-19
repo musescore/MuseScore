@@ -179,24 +179,26 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
-    registerCommand(NOTE_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
-    registerCommand(NOTE_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
-    registerCommand(PAD_NOTE_1_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
-    registerCommand(PAD_NOTE_2_COMMAND, [this]() { setDuration(DurationType::V_HALF); });
-    registerCommand(PAD_NOTE_4_COMMAND, [this]() { setDuration(DurationType::V_QUARTER); });
-    registerCommand(PAD_NOTE_8_COMMAND, [this]() { setDuration(DurationType::V_EIGHTH); });
-    registerCommand(PAD_NOTE_16_COMMAND, [this]() { setDuration(DurationType::V_16TH); });
-    registerCommand(PAD_NOTE_32_COMMAND, [this]() { setDuration(DurationType::V_32ND); });
-    registerCommand(PAD_NOTE_64_COMMAND, [this]() { setDuration(DurationType::V_64TH); });
-    registerCommand(PAD_NOTE_128_COMMAND, [this]() { setDuration(DurationType::V_128TH); });
-    registerCommand(PAD_NOTE_256_COMMAND, [this]() { setDuration(DurationType::V_256TH); });
-    registerCommand(PAD_NOTE_512_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
-    registerCommand(PAD_NOTE_1024_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
-    registerCommand(PAD_DOT_COMMAND, [this]() { toggleDots(1); });
-    registerCommand(PAD_DOT2_COMMAND, [this]() { toggleDots(2); });
-    registerCommand(PAD_DOT3_COMMAND, [this]() { toggleDots(3); });
-    registerCommand(PAD_DOT4_COMMAND, [this]() { toggleDots(4); });
-    registerCommand(PAD_REST_COMMAND, [this]() { toggleRest(); });
+    registerCommand(SET_DURATION_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
+    registerCommand(SET_DURATION_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
+    registerCommand(SET_DURATION_WHOLE_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
+    registerCommand(SET_DURATION_HALF_COMMAND, [this]() { setDuration(DurationType::V_HALF); });
+    registerCommand(SET_DURATION_QUARTER_COMMAND, [this]() { setDuration(DurationType::V_QUARTER); });
+    registerCommand(SET_DURATION_EIGHTH_COMMAND, [this]() { setDuration(DurationType::V_EIGHTH); });
+    registerCommand(SET_DURATION_16TH_COMMAND, [this]() { setDuration(DurationType::V_16TH); });
+    registerCommand(SET_DURATION_32ND_COMMAND, [this]() { setDuration(DurationType::V_32ND); });
+    registerCommand(SET_DURATION_64TH_COMMAND, [this]() { setDuration(DurationType::V_64TH); });
+    registerCommand(SET_DURATION_128TH_COMMAND, [this]() { setDuration(DurationType::V_128TH); });
+    registerCommand(SET_DURATION_256TH_COMMAND, [this]() { setDuration(DurationType::V_256TH); });
+    registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
+    registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
+
+    registerCommand(TOGGLE_DOT_COMMAND, [this]() { toggleDots(1); });
+    registerCommand(TOGGLE_DOT2_COMMAND, [this]() { toggleDots(2); });
+    registerCommand(TOGGLE_DOT3_COMMAND, [this]() { toggleDots(3); });
+    registerCommand(TOGGLE_DOT4_COMMAND, [this]() { toggleDots(4); });
+
+    registerCommand(TOGGLE_REST_COMMAND, [this]() { toggleRest(); });
 
     registerCommand(TOGGLE_FLAT2_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT2); });
     registerCommand(TOGGLE_FLAT_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT); });
@@ -703,24 +705,24 @@ void NotationActionController::init()
             { "note-input-realtime-manual", TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND },
             { "note-input-timewise", TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND },
             { "realtime-advance", REALTIME_ADVANCE_COMMAND },
-            { "note-longa", NOTE_LONGA_COMMAND },
-            { "note-breve", NOTE_BREVE_COMMAND },
-            { "pad-note-1", PAD_NOTE_1_COMMAND },
-            { "pad-note-2", PAD_NOTE_2_COMMAND },
-            { "pad-note-4", PAD_NOTE_4_COMMAND },
-            { "pad-note-8", PAD_NOTE_8_COMMAND },
-            { "pad-note-16", PAD_NOTE_16_COMMAND },
-            { "pad-note-32", PAD_NOTE_32_COMMAND },
-            { "pad-note-64", PAD_NOTE_64_COMMAND },
-            { "pad-note-128", PAD_NOTE_128_COMMAND },
-            { "pad-note-256", PAD_NOTE_256_COMMAND },
-            { "pad-note-512", PAD_NOTE_512_COMMAND },
-            { "pad-note-1024", PAD_NOTE_1024_COMMAND },
-            { "pad-dot", PAD_DOT_COMMAND },
-            { "pad-dot2", PAD_DOT2_COMMAND },
-            { "pad-dot3", PAD_DOT3_COMMAND },
-            { "pad-dot4", PAD_DOT4_COMMAND },
-            { "pad-rest", PAD_REST_COMMAND },
+            { "note-longa", SET_DURATION_LONGA_COMMAND },
+            { "note-breve", SET_DURATION_BREVE_COMMAND },
+            { "pad-note-1", SET_DURATION_WHOLE_COMMAND },
+            { "pad-note-2", SET_DURATION_HALF_COMMAND },
+            { "pad-note-4", SET_DURATION_QUARTER_COMMAND },
+            { "pad-note-8", SET_DURATION_EIGHTH_COMMAND },
+            { "pad-note-16", SET_DURATION_16TH_COMMAND },
+            { "pad-note-32", SET_DURATION_32ND_COMMAND },
+            { "pad-note-64", SET_DURATION_64TH_COMMAND },
+            { "pad-note-128", SET_DURATION_128TH_COMMAND },
+            { "pad-note-256", SET_DURATION_256TH_COMMAND },
+            { "pad-note-512", SET_DURATION_512TH_COMMAND },
+            { "pad-note-1024", SET_DURATION_1024TH_COMMAND },
+            { "pad-dot", TOGGLE_DOT_COMMAND },
+            { "pad-dot2", TOGGLE_DOT2_COMMAND },
+            { "pad-dot3", TOGGLE_DOT3_COMMAND },
+            { "pad-dot4", TOGGLE_DOT4_COMMAND },
+            { "pad-rest", TOGGLE_REST_COMMAND },
             { "flat2", TOGGLE_FLAT2_COMMAND },
             { "flat", TOGGLE_FLAT_COMMAND },
             { "nat", TOGGLE_NAT_COMMAND },
