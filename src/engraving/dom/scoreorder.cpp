@@ -397,16 +397,22 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
     for (Part* part : score->parts()) {
         InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
-        if (!ii.instrTemplate) {
+        const InstrumentTemplate* instrTemplate = ii.instrTemplate;
+        if (!instrTemplate) {
             continue;
         }
 
-        String family { getFamilyName(ii.instrTemplate, part->soloist()) };
+        String family { getFamilyName(instrTemplate, part->soloist()) };
         const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
-        size_t staffIdx { 0 };
-        const bool isMultiStaffInstrument = ii.instrTemplate->staffCount > 1;
-        size_t braceSpan { 0 };
+        staff_idx_t staffIdx { 0 };
+        const bool isMultiStaffInstrument = instrTemplate->staffCount > 1;
+        const int partStaffCount = part->nstaves();
+
+        const int templateBracketSpan = std::accumulate(instrTemplate->bracketSpan, instrTemplate->bracketSpan + MAX_STAVES, 0);
+        const bool bracketSpansAllStaves = templateBracketSpan == (int)instrTemplate->staffCount;
+        const int templateBarlineSpan = std::count(instrTemplate->barlineSpan.begin(), instrTemplate->barlineSpan.end(), true);
+        const bool barlineSpansAllStaves = templateBarlineSpan == (int)instrTemplate->staffCount - 1;
         for (Staff* staff : part->staves()) {
             // Create copy, because the original is modified while we are iterating over it
             std::vector<BracketItem*> brackets = score->brackets(staff->idx());
@@ -415,17 +421,19 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 if (bi->bracketType() == BracketType::GROUP) {
                     continue;
                 }
-                if (bi->bracketType() == BracketType::BRACE) {
-                    braceSpan = std::max(braceSpan, bi->bracketSpan() - 1);
-                }
-                if (!braceSpan) {
-                    score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
-                }
+                score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
             }
-            if (!braceSpan) {
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
-            } else {
-                --braceSpan;
+            staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
+
+            // Reset template braces & barline spans
+            // The number of staves could differ from the template
+            // Use template spans if span doesn't cover whole set of staves (eg. organ), otherwise cover all staves
+            if (partStaffCount > 1) {
+                int bracketSpan = bracketSpansAllStaves ? partStaffCount : instrTemplate->bracketSpan[staffIdx];
+                score->undoAddBracket(staff, 0, instrTemplate->bracket[staffIdx], bracketSpan);
+
+                int barlineSpan = instrTemplate->barlineSpan[barlineSpansAllStaves - 1 ? 0 : staffIdx];
+                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, barlineSpan);
             }
 
             if ((prvSection.isEmpty() || (sg.section != prvSection)) && score->parts().size() > 1) {
@@ -456,7 +464,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
             }
 
             if (isMultiStaffInstrument) {
-                if (staffIdx < ii.instrTemplate->staffCount) {
+                if (staffIdx < instrTemplate->staffCount) {
                     ++staffIdx;
                 }
                 prvStaff = nullptr;
