@@ -18,7 +18,7 @@ on:
         required: false
       dockwidgets_v2:
         description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'OFF'
+        default: 'ON'
         required: false
   workflow_call:
     inputs:
@@ -44,7 +44,7 @@ on:
         required: false
       dockwidgets_v2:
         description: 'Use KDDockWidgets v2: ON/OFF'
-        default: 'OFF'
+        default: 'ON'
         type: string
         required: false
       app_repo:
