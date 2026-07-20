@@ -5974,7 +5974,7 @@ void NotationInteraction::putRestToSelection()
     }
 
     if (is.usingNoteEntryMethod(NoteEntryMethod::BY_DURATION) || is.usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
-        m_noteInput->padNote(Pad::REST);
+        m_noteInput->toggleRest();
     } else if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         ChordRest* cr = is.cr();
         if (cr) {
@@ -6097,9 +6097,9 @@ void NotationInteraction::toggleArticulationForSelection(SymbolId articulationSy
     apply();
 }
 
-void NotationInteraction::toggleDotsForSelection(Pad dots)
+void NotationInteraction::toggleDotsForSelection(int dots)
 {
-    IF_ASSERT_FAILED(dots >= Pad::DOT && dots <= Pad::DOT4) {
+    IF_ASSERT_FAILED(dots >= 1 && dots <= 4) {
         return;
     }
 
@@ -6108,7 +6108,7 @@ void NotationInteraction::toggleDotsForSelection(Pad dots)
     }
 
     transaction(TranslatableString("undoableAction", "Toggle augmentation dots"), [&](auto& tx) {
-        NoteInput::padToggle(tx, score(), dots, true /*toggleForSelectionOnly*/);
+        NoteInput::toggleDots(tx, score(), dots, true /*toggleForSelectionOnly*/);
     });
 
     notifyAboutNotationChanged();

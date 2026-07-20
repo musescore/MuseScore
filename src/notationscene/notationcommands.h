@@ -70,24 +70,26 @@ inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_MANUAL_CO
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND("command://notation/toggle-note-input-timewise");
 inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
 
-inline static const muse::rcommand::Command NOTE_LONGA_COMMAND("command://notation/note-longa");
-inline static const muse::rcommand::Command NOTE_BREVE_COMMAND("command://notation/note-breve");
-inline static const muse::rcommand::Command PAD_NOTE_1_COMMAND("command://notation/pad-note-1");
-inline static const muse::rcommand::Command PAD_NOTE_2_COMMAND("command://notation/pad-note-2");
-inline static const muse::rcommand::Command PAD_NOTE_4_COMMAND("command://notation/pad-note-4");
-inline static const muse::rcommand::Command PAD_NOTE_8_COMMAND("command://notation/pad-note-8");
-inline static const muse::rcommand::Command PAD_NOTE_16_COMMAND("command://notation/pad-note-16");
-inline static const muse::rcommand::Command PAD_NOTE_32_COMMAND("command://notation/pad-note-32");
-inline static const muse::rcommand::Command PAD_NOTE_64_COMMAND("command://notation/pad-note-64");
-inline static const muse::rcommand::Command PAD_NOTE_128_COMMAND("command://notation/pad-note-128");
-inline static const muse::rcommand::Command PAD_NOTE_256_COMMAND("command://notation/pad-note-256");
-inline static const muse::rcommand::Command PAD_NOTE_512_COMMAND("command://notation/pad-note-512");
-inline static const muse::rcommand::Command PAD_NOTE_1024_COMMAND("command://notation/pad-note-1024");
-inline static const muse::rcommand::Command PAD_DOT_COMMAND("command://notation/pad-dot");
-inline static const muse::rcommand::Command PAD_DOT2_COMMAND("command://notation/pad-dot2");
-inline static const muse::rcommand::Command PAD_DOT3_COMMAND("command://notation/pad-dot3");
-inline static const muse::rcommand::Command PAD_DOT4_COMMAND("command://notation/pad-dot4");
-inline static const muse::rcommand::Command PAD_REST_COMMAND("command://notation/pad-rest");
+inline static const muse::rcommand::Command SET_DURATION_LONGA_COMMAND("command://notation/set-duration-longa");
+inline static const muse::rcommand::Command SET_DURATION_BREVE_COMMAND("command://notation/set-duration-breve");
+inline static const muse::rcommand::Command SET_DURATION_WHOLE_COMMAND("command://notation/set-duration-whole");
+inline static const muse::rcommand::Command SET_DURATION_HALF_COMMAND("command://notation/set-duration-half");
+inline static const muse::rcommand::Command SET_DURATION_QUARTER_COMMAND("command://notation/set-duration-quarter");
+inline static const muse::rcommand::Command SET_DURATION_EIGHTH_COMMAND("command://notation/set-duration-eighth");
+inline static const muse::rcommand::Command SET_DURATION_16TH_COMMAND("command://notation/set-duration-16th");
+inline static const muse::rcommand::Command SET_DURATION_32ND_COMMAND("command://notation/set-duration-32nd");
+inline static const muse::rcommand::Command SET_DURATION_64TH_COMMAND("command://notation/set-duration-64th");
+inline static const muse::rcommand::Command SET_DURATION_128TH_COMMAND("command://notation/set-duration-128th");
+inline static const muse::rcommand::Command SET_DURATION_256TH_COMMAND("command://notation/set-duration-256th");
+inline static const muse::rcommand::Command SET_DURATION_512TH_COMMAND("command://notation/set-duration-512th");
+inline static const muse::rcommand::Command SET_DURATION_1024TH_COMMAND("command://notation/set-duration-1024th");
+
+inline static const muse::rcommand::Command TOGGLE_DOT_COMMAND("command://notation/toggle-dot");
+inline static const muse::rcommand::Command TOGGLE_DOT2_COMMAND("command://notation/toggle-dot2");
+inline static const muse::rcommand::Command TOGGLE_DOT3_COMMAND("command://notation/toggle-dot3");
+inline static const muse::rcommand::Command TOGGLE_DOT4_COMMAND("command://notation/toggle-dot4");
+
+inline static const muse::rcommand::Command TOGGLE_REST_COMMAND("command://notation/toggle-rest");
 
 inline static const muse::rcommand::Command TOGGLE_FLAT2_COMMAND("command://notation/toggle-flat2");
 inline static const muse::rcommand::Command TOGGLE_FLAT_COMMAND("command://notation/toggle-flat");

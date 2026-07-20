@@ -179,24 +179,26 @@ void NotationActionController::init()
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
-    registerPadNoteCommand(NOTE_LONGA_COMMAND, Pad::NOTE00);
-    registerPadNoteCommand(NOTE_BREVE_COMMAND, Pad::NOTE0);
-    registerPadNoteCommand(PAD_NOTE_1_COMMAND, Pad::NOTE1);
-    registerPadNoteCommand(PAD_NOTE_2_COMMAND, Pad::NOTE2);
-    registerPadNoteCommand(PAD_NOTE_4_COMMAND, Pad::NOTE4);
-    registerPadNoteCommand(PAD_NOTE_8_COMMAND, Pad::NOTE8);
-    registerPadNoteCommand(PAD_NOTE_16_COMMAND, Pad::NOTE16);
-    registerPadNoteCommand(PAD_NOTE_32_COMMAND, Pad::NOTE32);
-    registerPadNoteCommand(PAD_NOTE_64_COMMAND, Pad::NOTE64);
-    registerPadNoteCommand(PAD_NOTE_128_COMMAND, Pad::NOTE128);
-    registerPadNoteCommand(PAD_NOTE_256_COMMAND, Pad::NOTE256);
-    registerPadNoteCommand(PAD_NOTE_512_COMMAND, Pad::NOTE512);
-    registerPadNoteCommand(PAD_NOTE_1024_COMMAND, Pad::NOTE1024);
-    registerPadNoteCommand(PAD_DOT_COMMAND, Pad::DOT);
-    registerPadNoteCommand(PAD_DOT2_COMMAND, Pad::DOT2);
-    registerPadNoteCommand(PAD_DOT3_COMMAND, Pad::DOT3);
-    registerPadNoteCommand(PAD_DOT4_COMMAND, Pad::DOT4);
-    registerPadNoteCommand(PAD_REST_COMMAND, Pad::REST);
+    registerCommand(SET_DURATION_LONGA_COMMAND, [this]() { setDuration(DurationType::V_LONG); });
+    registerCommand(SET_DURATION_BREVE_COMMAND, [this]() { setDuration(DurationType::V_BREVE); });
+    registerCommand(SET_DURATION_WHOLE_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
+    registerCommand(SET_DURATION_HALF_COMMAND, [this]() { setDuration(DurationType::V_HALF); });
+    registerCommand(SET_DURATION_QUARTER_COMMAND, [this]() { setDuration(DurationType::V_QUARTER); });
+    registerCommand(SET_DURATION_EIGHTH_COMMAND, [this]() { setDuration(DurationType::V_EIGHTH); });
+    registerCommand(SET_DURATION_16TH_COMMAND, [this]() { setDuration(DurationType::V_16TH); });
+    registerCommand(SET_DURATION_32ND_COMMAND, [this]() { setDuration(DurationType::V_32ND); });
+    registerCommand(SET_DURATION_64TH_COMMAND, [this]() { setDuration(DurationType::V_64TH); });
+    registerCommand(SET_DURATION_128TH_COMMAND, [this]() { setDuration(DurationType::V_128TH); });
+    registerCommand(SET_DURATION_256TH_COMMAND, [this]() { setDuration(DurationType::V_256TH); });
+    registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
+    registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
+
+    registerCommand(TOGGLE_DOT_COMMAND, [this]() { toggleDots(1); });
+    registerCommand(TOGGLE_DOT2_COMMAND, [this]() { toggleDots(2); });
+    registerCommand(TOGGLE_DOT3_COMMAND, [this]() { toggleDots(3); });
+    registerCommand(TOGGLE_DOT4_COMMAND, [this]() { toggleDots(4); });
+
+    registerCommand(TOGGLE_REST_COMMAND, [this]() { toggleRest(); });
 
     registerCommand(TOGGLE_FLAT2_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT2); });
     registerCommand(TOGGLE_FLAT_COMMAND, [this]() { toggleAccidental(AccidentalType::FLAT); });
@@ -588,17 +590,17 @@ void NotationActionController::init()
     // TAB
     registerAction("string-above", &Controller::move, MoveDirection::Up, false, &Controller::isTablatureStaff);
     registerAction("string-below", &Controller::move, MoveDirection::Down, false, &Controller::isTablatureStaff);
-    registerTabPadNoteAction("pad-note-1-TAB", Pad::NOTE1);
-    registerTabPadNoteAction("pad-note-2-TAB", Pad::NOTE2);
-    registerTabPadNoteAction("pad-note-4-TAB", Pad::NOTE4);
-    registerTabPadNoteAction("pad-note-8-TAB", Pad::NOTE8);
-    registerTabPadNoteAction("pad-note-16-TAB", Pad::NOTE16);
-    registerTabPadNoteAction("pad-note-32-TAB", Pad::NOTE32);
-    registerTabPadNoteAction("pad-note-64-TAB", Pad::NOTE64);
-    registerTabPadNoteAction("pad-note-128-TAB", Pad::NOTE128);
-    registerTabPadNoteAction("pad-note-256-TAB", Pad::NOTE256);
-    registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
-    registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
+    registerAction("pad-note-1-TAB", [this]() { setDuration(DurationType::V_WHOLE); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-2-TAB", [this]() { setDuration(DurationType::V_HALF); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-4-TAB", [this]() { setDuration(DurationType::V_QUARTER); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-8-TAB", [this]() { setDuration(DurationType::V_EIGHTH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-16-TAB", [this]() { setDuration(DurationType::V_16TH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-32-TAB", [this]() { setDuration(DurationType::V_32ND); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-64-TAB", [this]() { setDuration(DurationType::V_64TH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-128-TAB", [this]() { setDuration(DurationType::V_128TH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-256-TAB", [this]() { setDuration(DurationType::V_256TH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-512-TAB", [this]() { setDuration(DurationType::V_512TH); }, &NotationActionController::isTablatureStaff);
+    registerAction("pad-note-1024-TAB", [this]() { setDuration(DurationType::V_1024TH); }, &NotationActionController::isTablatureStaff);
     registerAction("rest-TAB", &Interaction::putRestToSelection);
 
     registerAction("standard-bend", [this]() { addGuitarBend(GuitarBendType::BEND); });
@@ -703,24 +705,24 @@ void NotationActionController::init()
             { "note-input-realtime-manual", TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND },
             { "note-input-timewise", TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND },
             { "realtime-advance", REALTIME_ADVANCE_COMMAND },
-            { "note-longa", NOTE_LONGA_COMMAND },
-            { "note-breve", NOTE_BREVE_COMMAND },
-            { "pad-note-1", PAD_NOTE_1_COMMAND },
-            { "pad-note-2", PAD_NOTE_2_COMMAND },
-            { "pad-note-4", PAD_NOTE_4_COMMAND },
-            { "pad-note-8", PAD_NOTE_8_COMMAND },
-            { "pad-note-16", PAD_NOTE_16_COMMAND },
-            { "pad-note-32", PAD_NOTE_32_COMMAND },
-            { "pad-note-64", PAD_NOTE_64_COMMAND },
-            { "pad-note-128", PAD_NOTE_128_COMMAND },
-            { "pad-note-256", PAD_NOTE_256_COMMAND },
-            { "pad-note-512", PAD_NOTE_512_COMMAND },
-            { "pad-note-1024", PAD_NOTE_1024_COMMAND },
-            { "pad-dot", PAD_DOT_COMMAND },
-            { "pad-dot2", PAD_DOT2_COMMAND },
-            { "pad-dot3", PAD_DOT3_COMMAND },
-            { "pad-dot4", PAD_DOT4_COMMAND },
-            { "pad-rest", PAD_REST_COMMAND },
+            { "note-longa", SET_DURATION_LONGA_COMMAND },
+            { "note-breve", SET_DURATION_BREVE_COMMAND },
+            { "pad-note-1", SET_DURATION_WHOLE_COMMAND },
+            { "pad-note-2", SET_DURATION_HALF_COMMAND },
+            { "pad-note-4", SET_DURATION_QUARTER_COMMAND },
+            { "pad-note-8", SET_DURATION_EIGHTH_COMMAND },
+            { "pad-note-16", SET_DURATION_16TH_COMMAND },
+            { "pad-note-32", SET_DURATION_32ND_COMMAND },
+            { "pad-note-64", SET_DURATION_64TH_COMMAND },
+            { "pad-note-128", SET_DURATION_128TH_COMMAND },
+            { "pad-note-256", SET_DURATION_256TH_COMMAND },
+            { "pad-note-512", SET_DURATION_512TH_COMMAND },
+            { "pad-note-1024", SET_DURATION_1024TH_COMMAND },
+            { "pad-dot", TOGGLE_DOT_COMMAND },
+            { "pad-dot2", TOGGLE_DOT2_COMMAND },
+            { "pad-dot3", TOGGLE_DOT3_COMMAND },
+            { "pad-dot4", TOGGLE_DOT4_COMMAND },
+            { "pad-rest", TOGGLE_REST_COMMAND },
             { "flat2", TOGGLE_FLAT2_COMMAND },
             { "flat", TOGGLE_FLAT_COMMAND },
             { "nat", TOGGLE_NAT_COMMAND },
@@ -1092,7 +1094,7 @@ void NotationActionController::handleNoteAction(const NoteInputParams& params, c
     seekAndPlaySelectedElement();
 }
 
-void NotationActionController::padNote(const Pad& pad)
+void NotationActionController::setDuration(DurationType duration)
 {
     TRACEFUNC;
 
@@ -1102,10 +1104,6 @@ void NotationActionController::padNote(const Pad& pad)
     }
 
     INotationNoteInputPtr noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
-
     if (interaction->selection()->isNone()) {
         if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
             return;
@@ -1114,14 +1112,64 @@ void NotationActionController::padNote(const Pad& pad)
         startNoteInput();
     }
 
-    if (pad >= Pad::DOT && pad <= Pad::DOT4) {
-        if (!noteInput->isNoteInputMode() || !configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
-            interaction->toggleDotsForSelection(pad);
-            return;
-        }
+    noteInput->setDuration(duration);
+
+    if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+        || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
+        seekAndPlaySelectedElement();
+    }
+}
+
+void NotationActionController::toggleRest()
+{
+    TRACEFUNC;
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
     }
 
-    noteInput->padNote(pad);
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
+            return;
+        }
+
+        startNoteInput();
+    }
+
+    noteInput->toggleRest();
+
+    if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
+        || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
+        seekSelectedElement();
+    }
+}
+
+void NotationActionController::toggleDots(int dots)
+{
+    TRACEFUNC;
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+    if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !toggleNoteInputAllowed()) {
+            return;
+        }
+
+        startNoteInput();
+    }
+
+    if (!noteInput->isNoteInputMode() || !configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
+        interaction->toggleDotsForSelection(dots);
+        return;
+    }
+
+    noteInput->toggleDots(dots);
 
     if (noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)
         || noteInput->usingNoteInputMethod(NoteInputMethod::RHYTHM)) {
@@ -2921,22 +2969,6 @@ bool NotationActionController::isNoteInputActionAllowed() const
     return !isTablatureStaff();
 }
 
-void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)
-{
-    registerAction(code, [this, padding, code]()
-    {
-        padNote(padding);
-    });
-}
-
-void NotationActionController::registerTabPadNoteAction(const ActionCode& code, Pad padding)
-{
-    registerAction(code, [this, padding, code]()
-    {
-        padNote(padding);
-    }, &NotationActionController::isTablatureStaff);
-}
-
 void NotationActionController::select(const muse::rcommand::CommandQuery& query)
 {
     LOGDA() << query.toString();
@@ -3192,11 +3224,6 @@ void NotationActionController::registerAliases(const std::map<muse::rcommand::Co
 void NotationActionController::registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method)
 {
     registerCommand(command, [this, method]() { toggleNoteInput(method); }, &NotationActionController::toggleNoteInputAllowed);
-}
-
-void NotationActionController::registerPadNoteCommand(const muse::rcommand::Command& command, Pad padding)
-{
-    registerCommand(command, [this, padding]() { padNote(padding); });
 }
 
 void NotationActionController::registerNoteCommand(const muse::rcommand::Command& command,

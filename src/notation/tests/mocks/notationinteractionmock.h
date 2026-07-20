@@ -174,7 +174,7 @@ public:
     MOCK_METHOD(void, addBracketsToSelection, (BracketsType), (override));
     MOCK_METHOD(void, toggleAccidentalForSelection, (AccidentalType), (override));
     MOCK_METHOD(void, toggleArticulationForSelection, (SymbolId), (override));
-    MOCK_METHOD(void, toggleDotsForSelection, (Pad), (override));
+    MOCK_METHOD(void, toggleDotsForSelection, (int), (override));
     MOCK_METHOD(void, addGraceNotesToSelectedNotes, (GraceNoteType), (override));
     MOCK_METHOD(bool, canAddTupletToSelectedChordRests, (), (const, override));
     MOCK_METHOD(void, addTupletToSelectedChordRests, (const TupletOptions&), (override));
