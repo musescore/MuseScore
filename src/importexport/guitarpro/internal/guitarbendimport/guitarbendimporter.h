@@ -21,11 +21,9 @@
  */
 #pragma once
 
-#include <engraving/types/fraction.h>
-#include <engraving/types/pitchvalue.h>
-
 #include "benddatacollector.h"
-#include "benddataprocessor.h"
+#include "divedatacollector.h"
+#include "bendbuilder.h"
 
 namespace mu::engraving {
 class Note;
@@ -41,11 +39,14 @@ public:
     GuitarBendImporter(mu::engraving::Score* score);
 
     void collectBend(mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
-    void applyBendsToChords();
+    void collectDive(const mu::engraving::Chord* chord, const mu::engraving::PitchValues& pitchValues);
+    void addElementsToScore();
 
 private:
 
-    std::unique_ptr<BendDataCollector> m_dataCollector;
-    std::unique_ptr<BendDataProcessor> m_dataProcessor;
+    BendDataCollector m_bendCollector;
+    DiveDataCollector m_diveCollector;
+    BendBuilder m_bendBuilder;
+    mu::engraving::Score* m_score = nullptr;
 };
 } // mu::iex::guitarpro
