@@ -23,6 +23,7 @@
 
 #include <map>
 #include <set>
+#include <variant>
 #include <vector>
 
 #include "engraving/automation/automationdata.h"
@@ -82,6 +83,26 @@ private:
         MeasureRepeats measureRepeats;
     };
 
+    struct DynamicInfo {
+        struct Ordinary {
+            real_t value = 0;
+        };
+        struct SingleNote {
+            real_t value = 0;
+            std::optional<utick_t> nextTick; // tick of the next segment, if any (recovery point)
+        };
+        struct Compound {
+            real_t startValue = 0;
+            real_t endValue = 0;
+            utick_t endPointTick = 0; // tick + velocityChangeLength (arrival point)
+        };
+
+        utick_t tick = 0;
+        EID eid = EID::invalid();
+        int priority = 0;
+        std::variant<Ordinary, SingleNote, Compound> kind = Ordinary {};
+    };
+
     struct HairpinInfo {
         utick_t from = 0;
         utick_t to = 0;
@@ -102,7 +123,7 @@ private:
 
     static void addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx);
     static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx);
-    static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key, UpdateContext& ctx);
+    static void addDynamicPoints(const DynamicInfo& info, const AutomationCurveKey& key, UpdateContext& ctx);
 
     static void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, const StaffRange& range,
                                  UpdateContext& ctx);

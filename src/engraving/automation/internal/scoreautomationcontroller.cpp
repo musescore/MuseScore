@@ -482,79 +482,96 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         return;
     }
 
+    const DynamicType dynamicType = dynamic->dynamicType();
+    const utick_t tick = dynamic->tick().ticks() + tickOffset;
+
+    DynamicInfo info;
+    info.tick = tick;
+
+    if (auto ordinaryIt = ORDINARY_DYNAMIC_VALUES.find(dynamicType); ordinaryIt != ORDINARY_DYNAMIC_VALUES.end()) {
+        info.kind = DynamicInfo::Ordinary { ordinaryIt->second };
+    } else if (auto singleNoteIt = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); singleNoteIt != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
+        DynamicInfo::SingleNote singleNote { singleNoteIt->second };
+        if (const Segment* nextSeg = dynamic->segment()->next()) {
+            singleNote.nextTick = nextSeg->tick().ticks() + tickOffset;
+        }
+        info.kind = singleNote;
+    } else if (auto compoundIt = COMPOUND_DYNAMIC_VALUES.find(dynamicType); compoundIt != COMPOUND_DYNAMIC_VALUES.end()) {
+        info.kind = DynamicInfo::Compound { compoundIt->second.first, compoundIt->second.second,
+                                            tick + dynamic->velocityChangeLength().ticks() };
+    } else {
+        NOT_SUPPORTED;
+        return;
+    }
+
     const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, range);
+    if (keys.empty()) {
+        return;
+    }
+
+    info.priority = dynamicPriority(dynamic);
+
+    info.eid = dynamic->eid();
+    if (!info.eid.isValid()) {
+        info.eid = dynamic->assignNewEID();
+    }
+
     for (const AutomationCurveKey& key : keys) {
-        addDynamicPoints(dynamic, tickOffset, key, ctx);
+        addDynamicPoints(info, key, ctx);
     }
 }
 
-void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
-                                                 UpdateContext& ctx)
+void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const AutomationCurveKey& key, UpdateContext& ctx)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return;
     }
 
-    const int priority = dynamicPriority(dynamic);
-    const DynamicType dynamicType = dynamic->dynamicType();
-    const utick_t dynamicUTick = dynamic->tick().ticks() + tickOffset;
-
-    EID eid = dynamic->eid();
-    if (!eid.isValid()) {
-        eid = dynamic->assignNewEID();
-    }
-
-    if (auto it = ORDINARY_DYNAMIC_VALUES.find(dynamicType); it != ORDINARY_DYNAMIC_VALUES.end()) {
+    if (const auto* ordinary = std::get_if<DynamicInfo::Ordinary>(&info.kind)) {
         AutomationPoint point;
         point.inValue = AutomationPoint::FromPrevious {};
-        point.outValue = it->second;
-        point.itemId = eid;
+        point.outValue = ordinary->value;
+        point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, dynamicUTick, point, priority, ctx);
+        addDynamicPoint(key, info.tick, point, info.priority, ctx);
         return;
     }
 
-    if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        const Segment* nextSeg = dynamic->segment()->next();
-        const AutomationPoint* prevPoint = nextSeg ? activePoint(ctx.curves, key, dynamicUTick) : nullptr;
+    if (const auto* singleNote = std::get_if<DynamicInfo::SingleNote>(&info.kind)) {
+        const AutomationPoint* prevPoint = singleNote->nextTick ? activePoint(ctx.curves, key, info.tick) : nullptr;
 
         AutomationPoint point;
         point.inValue = AutomationPoint::FromPrevious {};
-        point.outValue = it->second;
-        point.itemId = eid;
+        point.outValue = singleNote->value;
+        point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, dynamicUTick, point, priority, ctx);
+        addDynamicPoint(key, info.tick, point, info.priority, ctx);
 
-        if (nextSeg) {
+        if (singleNote->nextTick) {
             // Recovers to whatever was active before this dynamic
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
             nextPoint.generated = true;
-            tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, ctx);
+            tryAddDynamicPoint(key, *singleNote->nextTick, nextPoint, info.priority, ctx);
         }
 
         return;
     }
 
-    if (auto it = COMPOUND_DYNAMIC_VALUES.find(dynamicType); it != COMPOUND_DYNAMIC_VALUES.end()) {
-        const std::pair<real_t, real_t>& values = it->second;
-        const utick_t endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
-
+    if (const auto* compound = std::get_if<DynamicInfo::Compound>(&info.kind)) {
         AutomationPoint startPoint;
         startPoint.inValue = AutomationPoint::FromPrevious {};
-        startPoint.outValue = values.first;
-        startPoint.itemId = eid;
+        startPoint.outValue = compound->startValue;
+        startPoint.itemId = info.eid;
         startPoint.generated = true;
-        addDynamicPoint(key, dynamicUTick, startPoint, priority, ctx);
+        addDynamicPoint(key, info.tick, startPoint, info.priority, ctx);
 
         AutomationPoint endPoint;
         endPoint.inValue = AutomationPoint::SameAsOut {};
-        endPoint.outValue = values.second;
-        endPoint.itemId = eid;
+        endPoint.outValue = compound->endValue;
+        endPoint.itemId = info.eid;
         endPoint.generated = true;
-        tryAddDynamicPoint(key, endPointTick, endPoint, priority, ctx);
-
-        return;
+        tryAddDynamicPoint(key, compound->endPointTick, endPoint, info.priority, ctx);
     }
 }
 
