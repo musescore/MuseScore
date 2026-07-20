@@ -47,6 +47,7 @@ public:
     virtual muse::async::Notification stackChanged() const = 0;
 
     virtual bool isTextEditing() const = 0;
+    virtual bool isLyricsEditing() const = 0;
     virtual muse::async::Channel<bool> textEditingChanged() const = 0;
 
     virtual bool isNoteInputAllowed() const = 0;

@@ -63,6 +63,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::COPY)
     },
     CommandInfo{
+        COPY_PASTE_SWAP_COMMAND,
+        TranslatableString("action", "&Swap with clipboard"),
+        TranslatableString("action", "Copy/paste: swap with clipboard"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         CUT_COMMAND,
         TranslatableString("action", "Cu&t"),
         TranslatableString("action", "Cut the current notation element"),
@@ -75,6 +82,27 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Paste the current notation element"),
         InputSchema(),
         Decoration(IconCode::Code::PASTE)
+    },
+    CommandInfo{
+        PASTE_HALF_COMMAND,
+        TranslatableString("action", "Paste &half duration"),
+        TranslatableString("action", "Paste half duration"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PASTE_DOUBLE_COMMAND,
+        TranslatableString("action", "Paste &double duration"),
+        TranslatableString("action", "Paste double duration"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PASTE_SPECIAL_COMMAND,
+        TranslatableString("action", "Paste special"),
+        TranslatableString("action", "Paste special"),
+        InputSchema(),
+        Decoration()
     },
     CommandInfo{
         DELETE_COMMAND,
@@ -159,29 +187,6 @@ static const std::vector<CommandInfo> s_commandInfos = {
         PITCH_DOWN_OCTAVE_COMMAND,
         TranslatableString("action", "Pitch down octave"),
         TranslatableString("action", "Pitch down the current note by an octave"),
-        InputSchema(),
-        Decoration()
-    },
-
-    // text editing
-    CommandInfo{
-        EDIT_NEXT_WORD_COMMAND,
-        TranslatableString("action", "Edit next word"),
-        TranslatableString("action", "Go to edit next notation word"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDIT_NEXT_TEXT_ELEMENT_COMMAND,
-        TranslatableString("action", "Edit next text element"),
-        TranslatableString("action", "Go to edit next notation text element"),
-        InputSchema(),
-        Decoration()
-    },
-    CommandInfo{
-        EDIT_PREV_TEXT_ELEMENT_COMMAND,
-        TranslatableString("action", "Edit previous text element"),
-        TranslatableString("action", "Go to edit previous notation text element"),
         InputSchema(),
         Decoration()
     },
@@ -342,6 +347,34 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::NOTE_1024TH)
     },
     CommandInfo{
+        SET_DOUBLE_DURATION_COMMAND,
+        TranslatableString("action", "Double duration"),
+        TranslatableString("action", "Double selected duration"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SET_HALVE_DURATION_COMMAND,
+        TranslatableString("action", "Halve duration"),
+        TranslatableString("action", "Halve selected duration"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SET_DOUBLE_DURATION_DOTTED_COMMAND,
+        TranslatableString("action", "Double selected duration (dotted)"),
+        TranslatableString("action", "Double selected duration (includes dotted values)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SET_HALVE_DURATION_DOTTED_COMMAND,
+        TranslatableString("action", "Halve selected duration (dotted)"),
+        TranslatableString("action", "Halve selected duration (includes dotted values)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         TOGGLE_DOT_COMMAND,
         TranslatableString("action", "Augmentation dot"),
         TranslatableString("action", "Toggle duration dot"),
@@ -412,7 +445,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::SHARP_DOUBLE)
     },
     CommandInfo{
-        ADD_TIE_COMMAND,
+        TOGGLE_TIE_COMMAND,
         TranslatableString("action", "Tie"),
         TranslatableString("action", "Add tied note"),
         InputSchema(),
@@ -426,35 +459,35 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::NOTE_SLUR)
     },
     CommandInfo{
-        ADD_LV_COMMAND,
+        TOGGLE_LV_COMMAND,
         TranslatableString("action", "Laissez vibrer"),
         TranslatableString("action", "Add laissez vibrer"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_LV)
     },
     CommandInfo{
-        ADD_MARCATO_COMMAND,
+        TOGGLE_MARCATO_COMMAND,
         TranslatableString("action", "Marcato"),
         TranslatableString("action", "Add articulation: marcato"),
         InputSchema(),
         Decoration(IconCode::Code::MARCATO)
     },
     CommandInfo{
-        ADD_SFORZATO_COMMAND,
+        TOGGLE_SFORZATO_COMMAND,
         TranslatableString("action", "Accent"),
         TranslatableString("action", "Add articulation: accent"),
         InputSchema(),
         Decoration(IconCode::Code::ACCENT)
     },
     CommandInfo{
-        ADD_TENUTO_COMMAND,
+        TOGGLE_TENUTO_COMMAND,
         TranslatableString("action", "Tenuto"),
         TranslatableString("action", "Add articulation: tenuto"),
         InputSchema(),
         Decoration(IconCode::Code::TENUTO)
     },
     CommandInfo{
-        ADD_STACCATO_COMMAND,
+        TOGGLE_STACCATO_COMMAND,
         TranslatableString("action", "Staccato"),
         TranslatableString("action", "Add articulation: staccato"),
         InputSchema(),
@@ -662,6 +695,14 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
+    CommandInfo{
+        ENTER_REST_COMMAND,
+        TranslatableString("action", "Rest"),
+        TranslatableString("action", "Enter rest"),
+        InputSchema(),
+        Decoration(IconCode::Code::REST)
+    },
+
     // tuplet
     CommandInfo{
         SHOW_TUPLET_CONFIGURE_COMMAND,
@@ -755,6 +796,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
                   u"similar, similar-in-staff, similar-in-range, all, section)") },
             { "play-mode", Arg(DataType::String, u"Play mode (none, note, chord)") },
         }),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_SELECTION_OPTIONS_COMMAND,
+        TranslatableString("action", "Selection options"),
+        TranslatableString("action", "Open selection options"),
+        InputSchema(),
         Decoration()
     },
     CommandInfo{
@@ -897,6 +945,151 @@ static const std::vector<CommandInfo> s_commandInfos = {
         SELECT_SECTION_COMMAND,
         TranslatableString("action", "Select sectio&n"),
         TranslatableString("action", "Select section"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // text navigation commands
+    CommandInfo{
+        EDITTEXT_NEXT_WORD_COMMAND,
+        TranslatableString("action", "Edit next word"),
+        TranslatableString("action", "Go to edit next notation word"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_NEXT_ELEMENT_COMMAND,
+        TranslatableString("action", "Edit next text element"),
+        TranslatableString("action", "Go to edit next notation text element"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_PREV_ELEMENT_COMMAND,
+        TranslatableString("action", "Edit previous text element"),
+        TranslatableString("action", "Go to edit previous notation text element"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_NEXT_BEAT_COMMAND,
+        TranslatableString("action", "Advance cursor: next beat (chord symbols)"),
+        TranslatableString("action", "Advance cursor: next beat (chord symbols)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_PREV_BEAT_COMMAND,
+        TranslatableString("action", "Advance cursor: previous beat (chord symbols)"),
+        TranslatableString("action", "Advance cursor: previous beat (chord symbols)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_LONGA_COMMAND,
+        TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: longa (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_BREVE_COMMAND,
+        TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: breve (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_1_COMMAND,
+        TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: whole note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_2_COMMAND,
+        TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: half note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_4_COMMAND,
+        TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: quarter note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_8_COMMAND,
+        TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: eighth note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_16_COMMAND,
+        TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: 16th note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_ADVANCE_32_COMMAND,
+        TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: 32nd note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        EDITTEXT_ADVANCE_64_COMMAND,
+        TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)"),
+        TranslatableString("action", "Advance cursor: 64th note (chord symbols/figured bass)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITLYRIC_NEXT_VERSE_COMMAND,
+        TranslatableString("action", "Next lyric verse"),
+        TranslatableString("action", "Move text/go to next lyric verse"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITLYRIC_PREV_VERSE_COMMAND,
+        TranslatableString("action", "Previous lyric verse"),
+        TranslatableString("action", "Move text/go to previous lyric verse"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITLYRIC_NEXT_SYLLABLE_COMMAND,
+        TranslatableString("action", "Next syllable"),
+        TranslatableString("action", "Lyrics: enter hyphen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITLYRIC_ADD_MELISMA_COMMAND,
+        TranslatableString("action", "Add extension line"),
+        TranslatableString("action", "Lyrics: enter extension line"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITLYRIC_ADD_VERSE_COMMAND,
+        TranslatableString("action", "Add lyrics verse"),
+        TranslatableString("action", "Add lyrics verse"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // properties commands
+    CommandInfo{
+        TOGGLE_VISIBLE_COMMAND,
+        TranslatableString("action", "Toggle visibility of elements"),
+        TranslatableString("action", "Toggle visibility of elements"),
         InputSchema(),
         Decoration()
     },

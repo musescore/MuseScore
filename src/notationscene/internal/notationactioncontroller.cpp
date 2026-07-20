@@ -71,18 +71,6 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
-static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
-    { "advance-longa", Fraction(4, 1) },
-    { "advance-breve", Fraction(2, 1) },
-    { "advance-1", Fraction(1, 1) },
-    { "advance-2", Fraction(1, 2) },
-    { "advance-4", Fraction(1, 4) },
-    { "advance-8", Fraction(1, 8) },
-    { "advance-16", Fraction(1, 16) },
-    { "advance-32", Fraction(1, 32) },
-    { "advance-64", Fraction(1, 64) },
-};
-
 using EngravingDebuggingOptions = NotationActionController::EngravingDebuggingOptions;
 const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> NotationActionController::engravingDebuggingActions {
     { "show-element-bounding-rects", &EngravingDebuggingOptions::showElementBoundingRects },
@@ -141,37 +129,41 @@ void NotationActionController::init()
     registerCommand(SELECT_COMMAND, &Controller::select);
     registerAliases(SELECTION_ALIASES, &Controller::select);
 
-    //! TODO remove, for example
-    // registerSelectionCommand(GOTO_FIRST_ELEMENT_COMMAND, SelectionTarget::FirstItem, PlayMode::PlayChord);
-    // registerSelectionCommand(GOTO_LAST_ELEMENT_COMMAND, SelectionTarget::LastItem, PlayMode::PlayChord);
-    // registerSelectionCommand(GOTO_NEXT_ELEMENT_COMMAND, SelectionTarget::NextItem, PlayMode::PlayNote);
-    // registerSelectionCommand(GOTO_PREV_ELEMENT_COMMAND, SelectionTarget::PrevItem, PlayMode::PlayNote);
-    // registerSelectionCommand(GOTO_NEXT_TRACK_COMMAND, SelectionTarget::NextTrack, PlayMode::PlayChord);
-    // registerSelectionCommand(GOTO_PREV_TRACK_COMMAND, SelectionTarget::PrevTrack, PlayMode::PlayChord);
-    // registerSelectionCommand(GOTO_NEXT_FRAME_COMMAND, SelectionTarget::NextFrame);
-    // registerSelectionCommand(GOTO_PREV_FRAME_COMMAND, SelectionTarget::PrevFrame);
-    // registerSelectionCommand(GOTO_NEXT_SYSTEM_COMMAND, SelectionTarget::NextSystem);
-    // registerSelectionCommand(GOTO_PREV_SYSTEM_COMMAND, SelectionTarget::PrevSystem);
-    // registerSelectionCommand(GOTO_UPNOTE_IN_CHORD_COMMAND, SelectionTarget::UpNoteInChord);
-    // registerSelectionCommand(GOTO_DOWNNOTE_IN_CHORD_COMMAND, SelectionTarget::DownNoteInChord);
-    // registerSelectionCommand(GOTO_TOPNOTE_IN_CHORD_COMMAND, SelectionTarget::TopNoteInChord);
-    // registerSelectionCommand(GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SelectionTarget::BottomNoteInChord);
+    registerCommand(OPEN_SELECTION_OPTIONS_COMMAND, &Controller::openSelectionMoreOptions);
 
-    // registerSelectionCommand(SELECT_SIMILAR_COMMAND, SelectionTarget::Similar);
-    // registerSelectionCommand(SELECT_SIMILAR_IN_STAFF_COMMAND, SelectionTarget::SimilarInStaff);
-    // registerSelectionCommand(SELECT_SIMILAR_IN_RANGE_COMMAND, SelectionTarget::SimilarInRange);
-    // registerSelectionCommand(SELECT_NOTES_IN_CHORD_COMMAND, SelectionTarget::NotesInChord);
-    // registerSelectionCommand(SELECT_ALL_COMMAND, SelectionTarget::All);
-    // registerSelectionCommand(SELECT_SECTION_COMMAND, SelectionTarget::Section);
+    // text navigation commands
+    registerCommand(EDITTEXT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
+    registerCommand(EDITTEXT_NEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
+    registerCommand(EDITTEXT_PREV_ELEMENT_COMMAND, [this]() { prevTextElement(); });
+    registerCommand(EDITTEXT_NEXT_BEAT_COMMAND, &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
+    registerCommand(EDITTEXT_PREV_BEAT_COMMAND, &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
-    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+    static const std::map<rcommand::Command, Fraction> ADVANCE_DURATIONS = {
+        { EDITTEXT_ADVANCE_LONGA_COMMAND, Fraction(4, 1) },
+        { EDITTEXT_ADVANCE_BREVE_COMMAND, Fraction(2, 1) },
+        { EDITTEXT_ADVANCE_1_COMMAND, Fraction(1, 1) },
+        { EDITTEXT_ADVANCE_2_COMMAND, Fraction(1, 2) },
+        { EDITTEXT_ADVANCE_4_COMMAND, Fraction(1, 4) },
+        { EDITTEXT_ADVANCE_8_COMMAND, Fraction(1, 8) },
+        { EDITTEXT_ADVANCE_16_COMMAND, Fraction(1, 16) },
+        { EDITTEXT_ADVANCE_32_COMMAND, Fraction(1, 32) },
+        { EDITTEXT_ADVANCE_64_COMMAND, Fraction(1, 64) },
+    };
 
-    registerCommand(EDIT_NEXT_WORD_COMMAND, [this]() { nextWord(); });
-    registerCommand(EDIT_NEXT_TEXT_ELEMENT_COMMAND, [this]() { nextTextElement(); });
-    registerCommand(EDIT_PREV_TEXT_ELEMENT_COMMAND, [this]() { prevTextElement(); });
+    for (auto it = ADVANCE_DURATIONS.cbegin(); it != ADVANCE_DURATIONS.cend(); ++it) {
+        registerCommand(it->first, [this, it]() {
+            navigateToTextElementByFraction(it->second);
+        }, &Controller::textNavigationByFractionAvailable);
+    }
+
+    // lyrics editing commands
+    registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
+    registerCommand(EDITLYRIC_PREV_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Up);
+    registerCommand(EDITLYRIC_NEXT_SYLLABLE_COMMAND, &Interaction::navigateToNextSyllable);
+    registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
+    registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
 
     // note input commands
-
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN /*default*/);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, NoteInputMethod::BY_DURATION);
@@ -197,6 +189,11 @@ void NotationActionController::init()
     registerCommand(SET_DURATION_512TH_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
     registerCommand(SET_DURATION_1024TH_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
+    registerCommand(SET_DOUBLE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(1, false); });
+    registerCommand(SET_HALVE_DURATION_COMMAND, [this]() { increaseDecreaseDuration(-1, false); });
+    registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
+    registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
+
     registerCommand(TOGGLE_DOT_COMMAND, [this]() { toggleDots(1); });
     registerCommand(TOGGLE_DOT2_COMMAND, [this]() { toggleDots(2); });
     registerCommand(TOGGLE_DOT3_COMMAND, [this]() { toggleDots(3); });
@@ -210,13 +207,13 @@ void NotationActionController::init()
     registerCommand(TOGGLE_SHARP_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP); });
     registerCommand(TOGGLE_SHARP2_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP2); });
 
-    registerCommand(ADD_TIE_COMMAND, &Controller::addTie);
+    registerCommand(TOGGLE_TIE_COMMAND, &Controller::addTie);
     registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
-    registerCommand(ADD_LV_COMMAND, &Controller::addLaissezVib);
-    registerCommand(ADD_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
-    registerCommand(ADD_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
-    registerCommand(ADD_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
-    registerCommand(ADD_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
+    registerCommand(TOGGLE_LV_COMMAND, &Controller::addLaissezVib);
+    registerCommand(TOGGLE_MARCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articMarcatoAbove); });
+    registerCommand(TOGGLE_SFORZATO_COMMAND, [this]() { toggleArticulation(SymbolId::articAccentAbove); });
+    registerCommand(TOGGLE_TENUTO_COMMAND, [this]() { toggleArticulation(SymbolId::articTenutoAbove); });
+    registerCommand(TOGGLE_STACCATO_COMMAND, [this]() { toggleArticulation(SymbolId::articStaccatoAbove); });
 
     registerCommand(USE_VOICE_1_COMMAND, [this]() { changeVoice(0); });
     registerCommand(USE_VOICE_2_COMMAND, [this]() { changeVoice(1); });
@@ -249,6 +246,8 @@ void NotationActionController::init()
     registerNoteCommand(INSERT_NOTE_A_COMMAND, NoteName::A, NoteAddingMode::InsertChord);
     registerNoteCommand(INSERT_NOTE_B_COMMAND, NoteName::B, NoteAddingMode::InsertChord);
 
+    registerCommand(ENTER_REST_COMMAND, &Interaction::putRestToSelection);
+
     registerCommand(SHOW_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
     registerCommand(ADD_TUPLET_COMMAND, &Controller::putTuplet);
     registerCommand(ADD_DUPLET_COMMAND, [this]() { putTuplet(2); });
@@ -262,8 +261,12 @@ void NotationActionController::init()
 
     // editing commands
     registerCommand(COPY_COMMAND, &Interaction::copySelection);
+    registerCommand(COPY_PASTE_SWAP_COMMAND, &Interaction::swapSelection);
     registerCommand(CUT_COMMAND, &Controller::cutSelection);
     registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
+    registerCommand(PASTE_HALF_COMMAND, [this]() { pasteSelection(PastingType::Half); });
+    registerCommand(PASTE_DOUBLE_COMMAND, [this]() { pasteSelection(PastingType::Double); });
+    registerCommand(PASTE_SPECIAL_COMMAND, [this]() { pasteSelection(PastingType::Special); });
     registerCommand(DELETE_COMMAND, &Interaction::deleteSelection);
 
     // move commands
@@ -277,54 +280,21 @@ void NotationActionController::init()
     registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
     registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
 
+    // properties commands
+    registerCommand(TOGGLE_VISIBLE_COMMAND, &Interaction::toggleVisible);
+
     // --------------------
 
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
 
     registerAction("note-action", &Controller::handleNoteAction); // used for drums
-
-    registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
-    registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
-
-    for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
-        registerAction(it.key(), [this, fraction = it.value()]() {
-            navigateToTextElementByFraction(
-                fraction);
-        }, &Controller::textNavigationByFractionAvailable);
-    }
-
-    registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay,
-                   &Controller::isEditingLyrics);
-    registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay,
-                   &Controller::isEditingLyrics);
-    registerAction("next-syllable", &Interaction::navigateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
-
-    registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
-
-    registerAction("rest", &Interaction::putRestToSelection);
-
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
-
-    registerAction("toggle-visible", &Interaction::toggleVisible, &Controller::isToggleVisibleAllowed);
 
     m_isAllowedDuringPlayback.insert({
         "notation-move-right", "notation-move-left",
         "notation-move-right-quickly", "notation-move-left-quickly",
     });
-
-    registerAction("double-duration", &Controller::doubleNoteInputDuration);
-    registerAction("half-duration", &Controller::halveNoteInputDuration);
-    registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
-    registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
-
-    registerAction("notation-paste-half", [this]() { pasteSelection(PastingType::Half); });
-    registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
-    registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
-    registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
-
-    registerAction("chord-tie", &Controller::chordTie);
 
     registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
 
@@ -678,6 +648,10 @@ void NotationActionController::init()
             { "action://notation/copy", COPY_COMMAND },
             { "action://notation/cut", CUT_COMMAND },
             { "action://notation/paste", PASTE_COMMAND },
+            { "notation-paste-half", PASTE_HALF_COMMAND },
+            { "notation-paste-double", PASTE_DOUBLE_COMMAND },
+            { "notation-paste-special", PASTE_SPECIAL_COMMAND },
+            { "notation-swap", COPY_PASTE_SWAP_COMMAND },
             { "action://notation/delete", DELETE_COMMAND },
             { "action://notation/cancel", CANCEL_COMMAND },
             { "action://notation/undo", UNDO_COMMAND },
@@ -697,9 +671,9 @@ void NotationActionController::init()
             { "pitch-down", PITCH_DOWN_COMMAND },
             { "pitch-up-octave", PITCH_UP_OCTAVE_COMMAND },
             { "pitch-down-octave", PITCH_DOWN_OCTAVE_COMMAND },
-            { "next-word", EDIT_NEXT_WORD_COMMAND },
-            { "next-text-element", EDIT_NEXT_TEXT_ELEMENT_COMMAND },
-            { "prev-text-element", EDIT_PREV_TEXT_ELEMENT_COMMAND },
+            { "next-word", EDITTEXT_NEXT_WORD_COMMAND },
+            { "next-text-element", EDITTEXT_NEXT_ELEMENT_COMMAND },
+            { "prev-text-element", EDITTEXT_PREV_ELEMENT_COMMAND },
             { "note-input", TOGGLE_NOTE_INPUT_COMMAND },
             { "note-input-by-note-name", TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND },
             { "note-input-by-duration", TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND },
@@ -722,6 +696,10 @@ void NotationActionController::init()
             { "pad-note-256", SET_DURATION_256TH_COMMAND },
             { "pad-note-512", SET_DURATION_512TH_COMMAND },
             { "pad-note-1024", SET_DURATION_1024TH_COMMAND },
+            { "double-duration", SET_DOUBLE_DURATION_COMMAND },
+            { "half-duration", SET_HALVE_DURATION_COMMAND },
+            { "inc-duration-dotted", SET_DOUBLE_DURATION_DOTTED_COMMAND },
+            { "dec-duration-dotted", SET_HALVE_DURATION_DOTTED_COMMAND },
             { "pad-dot", TOGGLE_DOT_COMMAND },
             { "pad-dot2", TOGGLE_DOT2_COMMAND },
             { "pad-dot3", TOGGLE_DOT3_COMMAND },
@@ -732,13 +710,14 @@ void NotationActionController::init()
             { "nat", TOGGLE_NAT_COMMAND },
             { "sharp", TOGGLE_SHARP_COMMAND },
             { "sharp2", TOGGLE_SHARP2_COMMAND },
-            { "tie", ADD_TIE_COMMAND },
-            { "lv", ADD_LV_COMMAND },
+            { "tie", TOGGLE_TIE_COMMAND },
+            { "chord-tie", TOGGLE_TIE_COMMAND }, // removed, now as 'tie'
+            { "lv", TOGGLE_LV_COMMAND },
             { "add-slur", ADD_SLUR_COMMAND },
-            { "add-marcato", ADD_MARCATO_COMMAND },
-            { "add-sforzato", ADD_SFORZATO_COMMAND },
-            { "add-tenuto", ADD_TENUTO_COMMAND },
-            { "add-staccato", ADD_STACCATO_COMMAND },
+            { "add-marcato", TOGGLE_MARCATO_COMMAND },
+            { "add-sforzato", TOGGLE_SFORZATO_COMMAND },
+            { "add-tenuto", TOGGLE_TENUTO_COMMAND },
+            { "add-staccato", TOGGLE_STACCATO_COMMAND },
             { "voice-1", USE_VOICE_1_COMMAND },
             { "voice-2", USE_VOICE_2_COMMAND },
             { "voice-3", USE_VOICE_3_COMMAND },
@@ -766,6 +745,7 @@ void NotationActionController::init()
             { "insert-g", INSERT_NOTE_G_COMMAND },
             { "insert-a", INSERT_NOTE_A_COMMAND },
             { "insert-b", INSERT_NOTE_B_COMMAND },
+            { "rest", ENTER_REST_COMMAND },
             { "duplet", ADD_DUPLET_COMMAND },
             { "triplet", ADD_TRIPLET_COMMAND },
             { "quadruplet", ADD_QUADRUPLET_COMMAND },
@@ -795,6 +775,23 @@ void NotationActionController::init()
             { "select-notes-in-chord", SELECT_NOTES_IN_CHORD_COMMAND },
             { "notation-select-all", SELECT_ALL_COMMAND },
             { "notation-select-section", SELECT_SECTION_COMMAND },
+            { "next-beat-TEXT", EDITTEXT_NEXT_BEAT_COMMAND },
+            { "prev-beat-TEXT", EDITTEXT_PREV_BEAT_COMMAND },
+            { "advance-longa", EDITTEXT_ADVANCE_LONGA_COMMAND },
+            { "advance-breve", EDITTEXT_ADVANCE_BREVE_COMMAND },
+            { "advance-1", EDITTEXT_ADVANCE_1_COMMAND },
+            { "advance-2", EDITTEXT_ADVANCE_2_COMMAND },
+            { "advance-4", EDITTEXT_ADVANCE_4_COMMAND },
+            { "advance-8", EDITTEXT_ADVANCE_8_COMMAND },
+            { "advance-16", EDITTEXT_ADVANCE_16_COMMAND },
+            { "advance-32", EDITTEXT_ADVANCE_32_COMMAND },
+            { "advance-64", EDITTEXT_ADVANCE_64_COMMAND },
+            { "next-lyric-verse", EDITLYRIC_NEXT_VERSE_COMMAND },
+            { "prev-lyric-verse", EDITLYRIC_PREV_VERSE_COMMAND },
+            { "next-syllable", EDITLYRIC_NEXT_SYLLABLE_COMMAND },
+            { "add-melisma", EDITLYRIC_ADD_MELISMA_COMMAND },
+            { "add-lyric-verse", EDITLYRIC_ADD_VERSE_COMMAND },
+            { "toggle-visible", TOGGLE_VISIBLE_COMMAND },
         };
 
         auto ad = dispatcher();
@@ -1638,7 +1635,7 @@ void NotationActionController::putTuplet(int tupletCount)
     putTuplet(options);
 }
 
-void NotationActionController::doubleNoteInputDuration()
+void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDots)
 {
     TRACEFUNC;
 
@@ -1650,27 +1647,13 @@ void NotationActionController::doubleNoteInputDuration()
     INotationNoteInputPtr noteInput = interaction->noteInput();
 
     if (noteInput->isNoteInputMode()) {
-        noteInput->doubleNoteInputDuration();
+        if (steps > 0) {
+            noteInput->doubleNoteInputDuration();
+        } else {
+            noteInput->halveNoteInputDuration();
+        }
     } else {
-        interaction->increaseDecreaseDuration(-1, false);
-    }
-}
-
-void NotationActionController::halveNoteInputDuration()
-{
-    TRACEFUNC;
-
-    INotationInteractionPtr interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    INotationNoteInputPtr noteInput = interaction->noteInput();
-
-    if (noteInput->isNoteInputMode()) {
-        noteInput->halveNoteInputDuration();
-    } else {
-        interaction->increaseDecreaseDuration(1, false);
+        interaction->increaseDecreaseDuration(steps, stepByDots);
     }
 }
 
@@ -1952,28 +1935,7 @@ void NotationActionController::addTie()
         noteInput->addTie();
         seekAndPlaySelectedElement(true);
     } else {
-        interaction->addTieToSelection();
-    }
-}
-
-void NotationActionController::chordTie()
-{
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    auto noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
-
-    if (noteInput->isNoteInputMode()) {
-        noteInput->addTie();
-        seekAndPlaySelectedElement(true);
-    } else {
-        interaction->addTiedNoteToChord();
+        interaction->toggleTieForSelection();
     }
 }
 
@@ -2432,6 +2394,18 @@ bool NotationActionController::isTextEditing() const
     }
 
     return interaction->isTextEditingStarted();
+}
+
+bool NotationActionController::isLyricsEditing() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->isTextEditingStarted()
+           && interaction->selection()->element()
+           && interaction->selection()->element()->isLyrics();
 }
 
 muse::async::Channel<bool> NotationActionController::textEditingChanged() const
@@ -3166,10 +3140,16 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
 }
 
 void NotationActionController::registerCommand(const muse::rcommand::Command& command,
-                                               void (INotationInteraction::* handler)(), PlayMode playMode)
+                                               void (INotationInteraction::* handler)(),
+                                               PlayMode playMode,
+                                               bool (NotationActionController::* enabler)() const)
 {
-    registerCommand(command, [this, handler, playMode]()
+    registerCommand(command, [this, handler, playMode, enabler]()
     {
+        if (enabler && !(this->*enabler)()) {
+            return muse::make_ret(Ret::Code::NotSupported);
+        }
+
         INotationPtr notation = currentNotation();
         if (notation) {
             (notation->interaction().get()->*handler)();
@@ -3180,7 +3160,30 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
                 playSelectedElement(playMode == PlayMode::PlayChord);
             }
         }
+
+        return muse::make_ok();
     });
+}
+
+template<class P1>
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               void (INotationInteraction::* handler)(P1), P1 param1,
+                                               PlayMode playMode,
+                                               bool (NotationActionController::* enabler)() const)
+{
+    registerCommand(command, [this, handler, param1, playMode]()
+    {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            (notation->interaction().get()->*handler)(param1);
+
+            seekSelectedElement();
+
+            if (playMode != PlayMode::NoPlay) {
+                playSelectedElement(playMode == PlayMode::PlayChord);
+            }
+        }
+    }, enabler);
 }
 
 void NotationActionController::registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
