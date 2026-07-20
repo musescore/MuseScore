@@ -345,7 +345,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
     addInstrumentChanges();
-    m_guitarBendImporter->applyBendsToChords();
+    m_guitarBendImporter->addElementsToScore();
 
     addFermatas();
     addContinuousSlideHammerOn();
@@ -1999,6 +1999,61 @@ void GPConverter::collectHammerOn(const GPNote* gpnote, Note* note)
     }
 }
 
+static mu::engraving::PitchValues gpBendCurveToPitchValues(const GPNote::Bend& b)
+{
+    using namespace mu::engraving;
+
+    auto gpTimeToMuTime = [] (float time) {
+        return time * PitchValue::MAX_TIME / 100;
+    };
+
+    bool bendHasMiddleValue = true;
+    if (b.middleOffset1 == 12 && b.middleOffset2 == 12) {
+        bendHasMiddleValue = false;
+    }
+
+    PitchValues pitchValues;
+
+    pitchValues.push_back(PitchValue(gpTimeToMuTime(b.originOffset), b.originValue));
+    PitchValue lastPoint = pitchValues.back();
+
+    if (bendHasMiddleValue) {
+        if (PitchValue value(gpTimeToMuTime(b.middleOffset1), b.middleValue);
+            b.middleOffset1 >= 0 && b.middleOffset1 < b.destinationOffset && value != lastPoint) {
+            pitchValues.push_back(std::move(value));
+        }
+
+        if (PitchValue value(gpTimeToMuTime(b.middleOffset2), b.middleValue);
+            b.middleOffset2 >= 0 && b.middleOffset2 != b.middleOffset1
+            && b.middleOffset2 < b.destinationOffset
+            && value != lastPoint) {
+            pitchValues.push_back(std::move(value));
+        }
+
+        if (b.middleOffset1 == -1 && b.middleOffset2 == -1 && b.middleValue != -1) {
+            //!@NOTE It seems when middle point is places exactly in the middle
+            //!of bend  GP6 stores this value equal -1
+            if (b.destinationOffset > 50) {
+                pitchValues.push_back(PitchValue(gpTimeToMuTime(50), b.middleValue));
+            }
+        }
+    }
+
+    if (b.destinationOffset <= 0) {
+        PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), b.middleValue);
+        if (b.middleValue > b.destinationValue && pitchValues.back() != fixGpxValue) {
+            pitchValues.push_back(fixGpxValue);
+        }
+        pitchValues.push_back(PitchValue(gpTimeToMuTime(100), b.destinationValue)); //! In .gpx this value might be exist
+    } else {
+        if (PitchValue value(gpTimeToMuTime(b.destinationOffset), b.destinationValue); value != lastPoint) {
+            pitchValues.push_back(std::move(value));
+        }
+    }
+
+    return pitchValues;
+}
+
 void GPConverter::addBend(const GPNote* gpnote, Note* note)
 {
     if (!gpnote->bend() || gpnote->bend()->isEmpty()) {
@@ -2007,55 +2062,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     using namespace mu::engraving;
 
-    auto gpTimeToMuTime = [] (float time) {
-        return time * PitchValue::MAX_TIME / 100;
-    };
-
-    const GPNote::Bend* gpBend = gpnote->bend();
-
-    bool bendHasMiddleValue = true;
-    if (gpBend->middleOffset1 == 12 && gpBend->middleOffset2 == 12) {
-        bendHasMiddleValue = false;
-    }
-
-    PitchValues pitchValues;
-
-    pitchValues.push_back(PitchValue(gpTimeToMuTime(gpBend->originOffset), gpBend->originValue));
-    PitchValue lastPoint = pitchValues.back();
-
-    if (bendHasMiddleValue) {
-        if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset1), gpBend->middleValue);
-            gpBend->middleOffset1 >= 0 && gpBend->middleOffset1 < gpBend->destinationOffset && value != lastPoint) {
-            pitchValues.push_back(std::move(value));
-        }
-
-        if (PitchValue value(gpTimeToMuTime(gpBend->middleOffset2), gpBend->middleValue);
-            gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
-            && gpBend->middleOffset2 < gpBend->destinationOffset
-            && value != lastPoint) {
-            pitchValues.push_back(std::move(value));
-        }
-
-        if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
-            //!@NOTE It seems when middle point is places exactly in the middle
-            //!of bend  GP6 stores this value equal -1
-            if (gpBend->destinationOffset > 50) {
-                pitchValues.push_back(PitchValue(gpTimeToMuTime(50), gpBend->middleValue));
-            }
-        }
-    }
-
-    if (gpBend->destinationOffset <= 0) {
-        PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), gpBend->middleValue);
-        if (gpBend->middleValue > gpBend->destinationValue && pitchValues.back() != fixGpxValue) {
-            pitchValues.push_back(fixGpxValue);
-        }
-        pitchValues.push_back(PitchValue(gpTimeToMuTime(100), gpBend->destinationValue)); //! In .gpx this value might be exist
-    } else {
-        if (PitchValue value(gpTimeToMuTime(gpBend->destinationOffset), gpBend->destinationValue); value != lastPoint) {
-            pitchValues.push_back(std::move(value));
-        }
-    }
+    PitchValues pitchValues = gpBendCurveToPitchValues(*gpnote->bend());
 
     if (pitchValues.size() < 2) {
         return;
@@ -2356,6 +2363,12 @@ void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
                                                         beat->hasWhammy());
+
+    if (!beat->hasWhammy() || !cr->isChord()) {
+        return;
+    }
+
+    m_guitarBendImporter->collectDive(toChord(cr), gpBendCurveToPitchValues(beat->whammy()));
 }
 
 void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)
