@@ -106,7 +106,7 @@ void BreaksDialog::showEvent(QShowEvent* ev)
     INotationSelectionPtr selection = interaction->selection();
 
     if (!selection->isRange()) {
-        interaction->selectAll();
+        interaction->select(SelectionTarget::All);
         _allSelected = true;
     } else {
         _allSelected = false;

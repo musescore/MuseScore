@@ -246,7 +246,7 @@ void AbstractNotationPaintView::selectOnNavigationActive()
         return;
     }
 
-    interaction->selectFirstElement(false);
+    interaction->select(SelectionTarget::FirstItem);
 }
 
 bool AbstractNotationPaintView::canReceiveAction(const ActionCode& actionCode) const

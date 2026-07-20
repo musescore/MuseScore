@@ -50,7 +50,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
 void TransposeDialog::componentComplete()
 {
     if (selection()->isNone()) {
-        interaction()->selectAll();
+        interaction()->select(SelectionTarget::All);
         m_allSelected = true;
     }
 

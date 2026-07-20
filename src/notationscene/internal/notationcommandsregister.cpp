@@ -749,6 +749,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
             { "target",
               Arg(DataType::String,
                   u"Selection target (first-item, last-item, next-item, prev-item, "
+                  u"next-chord, prev-chord, next-measure, prev-measure, "
                   u"next-track, prev-track, next-frame, prev-frame, next-system, prev-system, "
                   u"up-note-in-chord, down-note-in-chord, top-note-in-chord, bottom-note-in-chord, notes-in-chord, "
                   u"similar, similar-in-staff, similar-in-range, all, section)") },
