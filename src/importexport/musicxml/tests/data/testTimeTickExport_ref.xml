@@ -85,7 +85,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="down" size="8" number="1"/>
           </direction-type>
@@ -140,7 +140,7 @@
         <type>whole</type>
         <staff>1</staff>
         </note>
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="stop" size="8" number="1"/>
           </direction-type>

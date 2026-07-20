@@ -1675,6 +1675,8 @@ static void pitch2xml(const Note* note, String& s, int& alter, int& octave)
     // correct for ottava lines
     int ottava = 0;
     switch (note->ppitch() - note->pitch()) {
+    case  36: ottava =  3;
+        break;
     case  24: ottava =  2;
         break;
     case  12: ottava =  1;
@@ -1684,6 +1686,8 @@ static void pitch2xml(const Note* note, String& s, int& alter, int& octave)
     case -12: ottava = -1;
         break;
     case -24: ottava = -2;
+        break;
+    case -36: ottava = -3;
         break;
     default:  LOGD("pitch2xml() tick=%d pitch()=%d ppitch()=%d",
                    tick.ticks(), note->pitch(), note->ppitch());
@@ -5648,12 +5652,20 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
             sz = u"15";
             tp = u"down";
             break;
+        case OttavaType::OTTAVA_22MA:
+            sz = u"22";
+            tp = u"down";
+            break;
         case OttavaType::OTTAVA_8VB:
             sz = u"8";
             tp = u"up";
             break;
         case OttavaType::OTTAVA_15MB:
             sz = u"15";
+            tp = u"up";
+            break;
+        case OttavaType::OTTAVA_22MB:
+            sz = u"22";
             tp = u"up";
             break;
         default:
@@ -5667,6 +5679,8 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
             octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1);
         } else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB) {
             octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1);
+        } else if (st == OttavaType::OTTAVA_22MA || st == OttavaType::OTTAVA_22MB) {
+            octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"22\" number=\"%1\"").arg(n + 1);
         } else {
             LOGD("ottava subtype %d not understood", int(st));
         }
@@ -5677,7 +5691,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
         const Fraction tickToWrite = isStart ? ot->tick() : ot->tick2();
         moveToTickIfNeed(tickToWrite, ot->track(), measureStart);
 
-        directionTag(m_xml, m_attr, ot);
+        directionTag(m_xml, m_attr, nullptr);
         m_xml.startElement("direction-type");
         octaveShiftXml += color2xml(ot);
         octaveShiftXml += positioningAttributes(ot, ot->tick() == tick);
