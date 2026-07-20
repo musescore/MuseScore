@@ -53,7 +53,7 @@ echo "Login Docker"
 echo $ACCESS_TOKEN | docker login ghcr.io -u $ACCESS_USER --password-stdin
 
 echo "Push Docker"
-docker push ghcr.io/musescore/converter_4:${DOCKER_TAG}
+docker push ghcr.io/musescore/converter_5:${DOCKER_TAG}
 
 echo "Done!!"
 
