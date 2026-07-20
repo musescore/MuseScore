@@ -100,9 +100,9 @@ void fillSlightBendData(BendDataContext& bendDataCtx, const ImportedBendInfo& im
     const Chord* chord = note->chord();
     Fraction tick = chord->tick();
 
-    bend_data_map_t& slightBendChordData = bendDataCtx.slightBendData[note->track()][tick];
-    BendNoteData slightBendNoteData;
-    slightBendNoteData.quarterTones = 1;
+    segment_data_map_t& slightBendChordData = bendDataCtx.slightBendData[note->track()][tick];
+    SegmentData slightSegmentData;
+    slightSegmentData.quarterTones = 1;
 
     const auto& seg = importedInfo.segments.front();
 
@@ -110,20 +110,20 @@ void fillSlightBendData(BendDataContext& bendDataCtx, const ImportedBendInfo& im
     const int bendLength = seg.middleTime - seg.startTime;
     const int currentSegmentLength = seg.endTime - seg.startTime + distanceToBendStart;
 
-    slightBendNoteData.startFactor = (double)distanceToBendStart / currentSegmentLength;
-    slightBendNoteData.endFactor = (double)(distanceToBendStart + bendLength) / currentSegmentLength;
+    slightSegmentData.startFactor = (double)distanceToBendStart / currentSegmentLength;
+    slightSegmentData.endFactor = (double)(distanceToBendStart + bendLength) / currentSegmentLength;
 
-    slightBendChordData[noteIndexInChord] = std::move(slightBendNoteData);
+    slightBendChordData[noteIndexInChord] = std::move(slightSegmentData);
 }
 
 static void fillPrebendData(BendDataContext& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord)
 {
     const Note* note = importedInfo.note;
     Fraction tick = note->tick();
-    bend_data_map_t& prebendChordData = bendDataCtx.prebendData[note->track()][tick];
+    segment_data_map_t& prebendChordData = bendDataCtx.prebendData[note->track()][tick];
 
-    BendNoteData prebendNoteData;
-    prebendNoteData.quarterTones = importedInfo.pitchOffsetFromStart / 25;
+    SegmentData prebendNoteData;
+    prebendNoteData.quarterTones = importedInfo.pitchOffsetFromStart / GP_PITCH_PER_QUARTERTONE;
 
     prebendChordData[noteIndexInChord] = std::move(prebendNoteData);
 }
@@ -143,8 +143,8 @@ static void fillNormalBendData(BendDataContext& bendDataCtx, const ImportedBendI
         const auto& seg = importedInfo.segments[i];
         const int offsetFromStart = (i == 0) ? importedInfo.timeOffsetFromStart : 0;
 
-        BendNoteData data;
-        data.quarterTones = seg.endPitch / 25;
+        SegmentData data;
+        data.quarterTones = seg.endPitch / GP_PITCH_PER_QUARTERTONE;
 
         const int distanceToBendStart = offsetFromStart;
         const int bendLength = seg.middleTime - seg.startTime;

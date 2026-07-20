@@ -130,7 +130,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
     }
 
     if (importedInfo.segments.size() == 1 && importedInfo.type == BendType::NORMAL_BEND
-        && importedInfo.segments.front().pitchDiff() == 25) {
+        && importedInfo.segments.front().pitchDiff() == GP_PITCH_PER_QUARTERTONE) {
         importedInfo.type = BendType::SLIGHT_BEND;
     }
 
