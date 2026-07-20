@@ -220,9 +220,8 @@ public:
     void flipSelection() override;
     void flipSelectionHorizontally() override;
     void mirrorNotes() override;
-    void addTieToSelection() override;
+    void toggleTieForSelection() override;
     void addLaissezVibToSelection() override;
-    void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addHammerOnPullOffToSelection() override;
     void addOttavaToSelection(OttavaType type) override;

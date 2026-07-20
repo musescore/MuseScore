@@ -81,6 +81,7 @@ public:
     muse::async::Notification stackChanged() const override;
 
     bool isTextEditing() const override;
+    bool isLyricsEditing() const override;
     muse::async::Channel<bool> textEditingChanged() const override;
 
     bool isNoteInputAllowed() const override;
@@ -134,8 +135,7 @@ private:
     void toggleDots(int dots);
     void putNote(const muse::actions::ActionData& args);
     void removeNote(const muse::actions::ActionData& args);
-    void doubleNoteInputDuration();
-    void halveNoteInputDuration();
+    void increaseDecreaseDuration(int steps, bool stepByDots);
     void realtimeAdvance();
 
     void toggleAccidental(engraving::AccidentalType type);
@@ -157,7 +157,6 @@ private:
     void cutSelection();
     void repeatSelection();
     void addTie();
-    void chordTie();
     void addLaissezVib();
     void addSlur();
     void addHammerOnPullOff();
@@ -303,7 +302,11 @@ private:
     void registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
                          void (NotationActionController::*handler)(const muse::rcommand::CommandQuery&));
 
-    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay);
+    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
+                         bool (NotationActionController::*)() const = nullptr);
+    template<typename P1>
+    void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
+                         bool (NotationActionController::*)() const = nullptr);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
 

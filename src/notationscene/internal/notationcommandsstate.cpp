@@ -46,6 +46,7 @@ static inline auto commands(const Map& m) -> std::vector<typename Map::key_type>
 static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     CUT_COMMAND,
     COPY_COMMAND,
+    COPY_PASTE_SWAP_COMMAND,
     DELETE_COMMAND,
     FLIP_COMMAND,
     FLIP_HORIZONTALLY_COMMAND,
@@ -56,7 +57,12 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SELECT_SIMILAR_COMMAND,
     SELECT_SIMILAR_IN_STAFF_COMMAND,
     SELECT_SIMILAR_IN_RANGE_COMMAND,
-    SELECT_NOTES_IN_CHORD_COMMAND
+    SELECT_NOTES_IN_CHORD_COMMAND,
+    OPEN_SELECTION_OPTIONS_COMMAND,
+    SET_DOUBLE_DURATION_COMMAND,
+    SET_HALVE_DURATION_COMMAND,
+    SET_DOUBLE_DURATION_DOTTED_COMMAND,
+    SET_HALVE_DURATION_DOTTED_COMMAND
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -65,9 +71,28 @@ static const std::vector<Command> UNDO_REDO_COMMANDS = {
 };
 
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
-    EDIT_NEXT_TEXT_ELEMENT_COMMAND,
-    EDIT_PREV_TEXT_ELEMENT_COMMAND,
-    EDIT_NEXT_WORD_COMMAND
+    EDITTEXT_NEXT_ELEMENT_COMMAND,
+    EDITTEXT_PREV_ELEMENT_COMMAND,
+    EDITTEXT_NEXT_WORD_COMMAND,
+    EDITTEXT_NEXT_BEAT_COMMAND,
+    EDITTEXT_PREV_BEAT_COMMAND,
+    EDITTEXT_ADVANCE_LONGA_COMMAND,
+    EDITTEXT_ADVANCE_BREVE_COMMAND,
+    EDITTEXT_ADVANCE_1_COMMAND,
+    EDITTEXT_ADVANCE_2_COMMAND,
+    EDITTEXT_ADVANCE_4_COMMAND,
+    EDITTEXT_ADVANCE_8_COMMAND,
+    EDITTEXT_ADVANCE_16_COMMAND,
+    EDITTEXT_ADVANCE_32_COMMAND,
+    EDITTEXT_ADVANCE_64_COMMAND,
+};
+
+static const std::vector<Command> LYRICS_EDITING_COMMANDS = {
+    EDITLYRIC_NEXT_VERSE_COMMAND,
+    EDITLYRIC_PREV_VERSE_COMMAND,
+    EDITLYRIC_NEXT_SYLLABLE_COMMAND,
+    EDITLYRIC_ADD_MELISMA_COMMAND,
+    EDITLYRIC_ADD_VERSE_COMMAND
 };
 
 static const std::map<Command, NoteInputMethod> NOTE_INPUT_COMMANDS = {
@@ -113,16 +138,16 @@ static const std::map<Command, AccidentalType> ACCIDENTAL_COMMANDS = {
 };
 
 static const std::vector<Command> ADD_COMMANDS = {
-    ADD_TIE_COMMAND,
+    TOGGLE_TIE_COMMAND,
     ADD_SLUR_COMMAND,
-    ADD_LV_COMMAND
+    TOGGLE_LV_COMMAND
 };
 
 static const std::map<Command, SymId> ADD_ARTICULATION_COMMANDS = {
-    { ADD_MARCATO_COMMAND, SymId::articMarcatoAbove },
-    { ADD_SFORZATO_COMMAND, SymId::articAccentAbove },
-    { ADD_TENUTO_COMMAND, SymId::articTenutoAbove },
-    { ADD_STACCATO_COMMAND, SymId::articStaccatoAbove }
+    { TOGGLE_MARCATO_COMMAND, SymId::articMarcatoAbove },
+    { TOGGLE_SFORZATO_COMMAND, SymId::articAccentAbove },
+    { TOGGLE_TENUTO_COMMAND, SymId::articTenutoAbove },
+    { TOGGLE_STACCATO_COMMAND, SymId::articStaccatoAbove }
 };
 
 static const std::map<Command, voice_idx_t> VOICE_COMMANDS = {
@@ -141,6 +166,7 @@ static const std::vector<Command> NOTE_COMMANDS = {
     ENTER_NOTE_G_COMMAND,
     ENTER_NOTE_A_COMMAND,
     ENTER_NOTE_B_COMMAND,
+    ENTER_REST_COMMAND,
     ADD_NOTE_C_COMMAND,
     ADD_NOTE_D_COMMAND,
     ADD_NOTE_E_COMMAND,
@@ -218,6 +244,7 @@ void NotationCommandsState::init()
 
     controller()->textEditingChanged().onReceive(this, [this](bool) {
         updateCommandStates(TEXT_EDITING_COMMANDS);
+        updateCommandStates(LYRICS_EDITING_COMMANDS);
     });
 
     controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
@@ -298,6 +325,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(controller()->isTextEditing(), false);
     }
 
+    if (muse::contains(LYRICS_EDITING_COMMANDS, command)) {
+        return CommandState(controller()->isLyricsEditing(), false);
+    }
+
     if (muse::contains(NOTE_INPUT_COMMANDS, command)) {
         return CommandState(controller()->isNoteInputAllowed(),
                             controller()->isNoteInputMode() && controller()->noteInputMethod() == NOTE_INPUT_COMMANDS.at(command));
@@ -321,13 +352,13 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentAccidentalType() == ACCIDENTAL_COMMANDS.at(command));
     }
 
-    if (command == ADD_TIE_COMMAND) {
+    if (command == TOGGLE_TIE_COMMAND) {
         return CommandState(true, controller()->selectionHasTie());
     }
     if (command == ADD_SLUR_COMMAND) {
         return CommandState(true, controller()->selectionHasSlur());
     }
-    if (command == ADD_LV_COMMAND) {
+    if (command == TOGGLE_LV_COMMAND) {
         return CommandState(true, controller()->selectionHasLaissezVib());
     }
 

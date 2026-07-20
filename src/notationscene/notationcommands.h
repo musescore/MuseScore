@@ -32,6 +32,7 @@ inline static const muse::rcommand::Command REDO_COMMAND("command://notation/red
 
 // navigation and selection commands
 inline static const muse::rcommand::Command SELECT_COMMAND("command://notation/select"); // with params
+inline static const muse::rcommand::Command OPEN_SELECTION_OPTIONS_COMMAND("command://notation/open-selection-options");
 // aliases for select command
 inline static const muse::rcommand::Command GOTO_FIRST_ELEMENT_COMMAND("command://notation/goto-first-element");
 inline static const muse::rcommand::Command GOTO_LAST_ELEMENT_COMMAND("command://notation/goto-last-element");
@@ -55,9 +56,29 @@ inline static const muse::rcommand::Command SELECT_ALL_COMMAND("command://notati
 inline static const muse::rcommand::Command SELECT_SECTION_COMMAND("command://notation/select-section");
 // ------------------------------------------------------------
 
-inline static const muse::rcommand::Command EDIT_NEXT_WORD_COMMAND("command://notation/edit-next-word");
-inline static const muse::rcommand::Command EDIT_NEXT_TEXT_ELEMENT_COMMAND("command://notation/edit-next-text-element");
-inline static const muse::rcommand::Command EDIT_PREV_TEXT_ELEMENT_COMMAND("command://notation/edit-prev-text-element");
+// text navigation commands
+inline static const muse::rcommand::Command EDITTEXT_NEXT_WORD_COMMAND("command://notation/edittext-next-word");
+inline static const muse::rcommand::Command EDITTEXT_NEXT_ELEMENT_COMMAND("command://notation/edittext-next-element");
+inline static const muse::rcommand::Command EDITTEXT_PREV_ELEMENT_COMMAND("command://notation/edittext-prev-element");
+inline static const muse::rcommand::Command EDITTEXT_NEXT_BEAT_COMMAND("command://notation/edittext-next-beat");
+inline static const muse::rcommand::Command EDITTEXT_PREV_BEAT_COMMAND("command://notation/edittext-prev-beat");
+
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_LONGA_COMMAND("command://notation/edittext-advance-longa");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_BREVE_COMMAND("command://notation/edittext-advance-breve");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_1_COMMAND("command://notation/edittext-advance-1");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_2_COMMAND("command://notation/edittext-advance-2");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_4_COMMAND("command://notation/edittext-advance-4");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_8_COMMAND("command://notation/edittext-advance-8");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_16_COMMAND("command://notation/edittext-advance-16");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_32_COMMAND("command://notation/edittext-advance-32");
+inline static const muse::rcommand::Command EDITTEXT_ADVANCE_64_COMMAND("command://notation/edittext-advance-64");
+
+// lyrics editing commands
+inline static const muse::rcommand::Command EDITLYRIC_NEXT_VERSE_COMMAND("command://notation/editlyrics-next-verse");
+inline static const muse::rcommand::Command EDITLYRIC_PREV_VERSE_COMMAND("command://notation/editlyrics-prev-verse");
+inline static const muse::rcommand::Command EDITLYRIC_NEXT_SYLLABLE_COMMAND("command://notation/editlyrics-next-syllable");
+inline static const muse::rcommand::Command EDITLYRIC_ADD_MELISMA_COMMAND("command://notation/editlyrics-add-melisma");
+inline static const muse::rcommand::Command EDITLYRIC_ADD_VERSE_COMMAND("command://notation/editlyrics-add-verse");
 
 // note input commands
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_COMMAND("command://notation/toggle-note-input");
@@ -84,6 +105,11 @@ inline static const muse::rcommand::Command SET_DURATION_256TH_COMMAND("command:
 inline static const muse::rcommand::Command SET_DURATION_512TH_COMMAND("command://notation/set-duration-512th");
 inline static const muse::rcommand::Command SET_DURATION_1024TH_COMMAND("command://notation/set-duration-1024th");
 
+inline static const muse::rcommand::Command SET_DOUBLE_DURATION_COMMAND("command://notation/set-double-duration");
+inline static const muse::rcommand::Command SET_HALVE_DURATION_COMMAND("command://notation/set-halve-duration");
+inline static const muse::rcommand::Command SET_DOUBLE_DURATION_DOTTED_COMMAND("command://notation/set-double-duration-dotted");
+inline static const muse::rcommand::Command SET_HALVE_DURATION_DOTTED_COMMAND("command://notation/set-halve-duration-dotted");
+
 inline static const muse::rcommand::Command TOGGLE_DOT_COMMAND("command://notation/toggle-dot");
 inline static const muse::rcommand::Command TOGGLE_DOT2_COMMAND("command://notation/toggle-dot2");
 inline static const muse::rcommand::Command TOGGLE_DOT3_COMMAND("command://notation/toggle-dot3");
@@ -97,13 +123,13 @@ inline static const muse::rcommand::Command TOGGLE_NAT_COMMAND("command://notati
 inline static const muse::rcommand::Command TOGGLE_SHARP_COMMAND("command://notation/toggle-sharp");
 inline static const muse::rcommand::Command TOGGLE_SHARP2_COMMAND("command://notation/toggle-sharp2");
 
-inline static const muse::rcommand::Command ADD_TIE_COMMAND("command://notation/add-tie");
+inline static const muse::rcommand::Command TOGGLE_TIE_COMMAND("command://notation/toggle-tie");
 inline static const muse::rcommand::Command ADD_SLUR_COMMAND("command://notation/add-slur");
-inline static const muse::rcommand::Command ADD_LV_COMMAND("command://notation/add-laissez-vibrer");
-inline static const muse::rcommand::Command ADD_MARCATO_COMMAND("command://notation/add-marcato");
-inline static const muse::rcommand::Command ADD_SFORZATO_COMMAND("command://notation/add-sforzato");
-inline static const muse::rcommand::Command ADD_TENUTO_COMMAND("command://notation/add-tenuto");
-inline static const muse::rcommand::Command ADD_STACCATO_COMMAND("command://notation/add-staccato");
+inline static const muse::rcommand::Command TOGGLE_LV_COMMAND("command://notation/toggle-laissez-vibrer");
+inline static const muse::rcommand::Command TOGGLE_MARCATO_COMMAND("command://notation/toggle-marcato");
+inline static const muse::rcommand::Command TOGGLE_SFORZATO_COMMAND("command://notation/toggle-sforzato");
+inline static const muse::rcommand::Command TOGGLE_TENUTO_COMMAND("command://notation/toggle-tenuto");
+inline static const muse::rcommand::Command TOGGLE_STACCATO_COMMAND("command://notation/toggle-staccato");
 
 inline static const muse::rcommand::Command USE_VOICE_1_COMMAND("command://notation/use-voice-1");
 inline static const muse::rcommand::Command USE_VOICE_2_COMMAND("command://notation/use-voice-2");
@@ -136,6 +162,8 @@ inline static const muse::rcommand::Command INSERT_NOTE_G_COMMAND("command://not
 inline static const muse::rcommand::Command INSERT_NOTE_A_COMMAND("command://notation/insert-note-a");
 inline static const muse::rcommand::Command INSERT_NOTE_B_COMMAND("command://notation/insert-note-b");
 
+inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notation/enter-rest");
+
 inline static const muse::rcommand::Command SHOW_TUPLET_CONFIGURE_COMMAND("command://notation/show-tuplet-configure");
 inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
 inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
@@ -149,8 +177,12 @@ inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://nota
 
 // editing commands
 inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
+inline static const muse::rcommand::Command COPY_PASTE_SWAP_COMMAND("command://notation/copy-paste-swap");
 inline static const muse::rcommand::Command CUT_COMMAND("command://notation/cut");
 inline static const muse::rcommand::Command PASTE_COMMAND("command://notation/paste");
+inline static const muse::rcommand::Command PASTE_HALF_COMMAND("command://notation/paste-half");
+inline static const muse::rcommand::Command PASTE_DOUBLE_COMMAND("command://notation/paste-double");
+inline static const muse::rcommand::Command PASTE_SPECIAL_COMMAND("command://notation/paste-special");
 inline static const muse::rcommand::Command DELETE_COMMAND("command://notation/delete");
 
 // move commands
@@ -163,4 +195,7 @@ inline static const muse::rcommand::Command PITCH_UP_COMMAND("command://notation
 inline static const muse::rcommand::Command PITCH_DOWN_COMMAND("command://notation/pitch-down");
 inline static const muse::rcommand::Command PITCH_UP_OCTAVE_COMMAND("command://notation/pitch-up-octave");
 inline static const muse::rcommand::Command PITCH_DOWN_OCTAVE_COMMAND("command://notation/pitch-down-octave");
+
+// properties commands
+inline static const muse::rcommand::Command TOGGLE_VISIBLE_COMMAND("command://notation/toggle-visible");
 }
