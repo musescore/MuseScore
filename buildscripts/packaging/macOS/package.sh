@@ -68,6 +68,7 @@ fi
 macdeployqt ${APP_PATH} \
     -verbose=2 \
     -qmldir=. \
+    -executable="${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex/Contents/MacOS/MuseScoreQuickLookPreviewExtension" \
     $sign_args
 
 echo "otool -L post-macdeployqt"
