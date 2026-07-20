@@ -465,6 +465,9 @@ public:
         ld_field<bool> hasTabCircle = { "[Note] hasTabCircle", false };
         ld_field<RectF> tabCircleRect = { "[Note] tabCircleRect", RectF() };
         ld_field<double> tabCircleLineWidth = { "[Note] tabCircleLineWidth", 0.0 };
+        // Precomputed visible arc ranges of the circle (occlusion by adjacent notes' circles).
+        // Each pair is { startAngleRadians, endAngleRadians }; recomputed during chord layout.
+        ld_field<std::vector<PairF> > tabCircleArcs = { "[Note] tabCircleArcs", {} };
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
 

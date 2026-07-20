@@ -99,16 +99,17 @@ std::vector<ArcRange> computeVisibleArcRanges(
     }
 
     if (inArc) {
-        double arcEnd = 2.0 * M_PI;
-        if (isVisible(0.0)) {
-            for (int i = 0; i < N; ++i) {
-                if (!isVisible(dt * i)) {
-                    arcEnd = 2.0 * M_PI + dt * i;
-                    break;
-                }
-            }
+        // The final run reached angle 0 while still visible, so it wraps past the
+        // 3 o'clock origin. If the first recorded range also begins at angle 0 it is
+        // the continuation of this same run: merge them into one wrapped range
+        // instead of appending a second, overlapping arc. When no zero-angle run
+        // exists (result is empty, i.e. the whole ellipse is visible) keep the run
+        // as its own range.
+        if (!result.empty() && result.front().startAngleRadians == 0.0) {
+            result.front() = { arcStart, 2.0 * M_PI + result.front().endAngleRadians };
+        } else {
+            result.push_back({ arcStart, 2.0 * M_PI });
         }
-        result.push_back({ arcStart, arcEnd });
     }
 
     return result;
