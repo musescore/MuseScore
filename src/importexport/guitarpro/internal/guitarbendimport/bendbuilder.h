@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "benddatacontext.h"
+#include "guitarbendimporttypes.h"
 #include "splitchord/benddataprocessorsplitchord.h"
 
 namespace mu::engraving {
@@ -31,14 +31,12 @@ class Score;
 }
 
 namespace mu::iex::guitarpro {
-class BendDataProcessor
+class BendBuilder
 {
 public:
-    BendDataProcessor(mu::engraving::Score* score);
-    void processBends(const BendDataContext& bendDataCtx);
+    void addElementsToScore(mu::engraving::Score* score, const BendDataContext& bendCtx, const DiveDataContext& diveCtx);
 
 private:
-    mu::engraving::Score* m_score = nullptr;
     std::unique_ptr<BendDataProcessorSplitChord> m_bendDataProcessorSplitChord;
 };
 } // mu::iex::guitarpro
