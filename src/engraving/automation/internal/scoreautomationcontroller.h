@@ -124,11 +124,9 @@ private:
 
     void mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
-    static void mirrorPointIfInRange(int localTick, const std::optional<int>& localMoveFrom, const AutomationPoint& point,
-                                     const MirrorRange& range, AutomationPointEdits& allEdits);
+    static void mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range, AutomationPointEdits& allEdits);
 
-    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, int localTick,
-                                       const std::optional<int>& localMoveFrom, const AutomationPoint& point,
+    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, const AutomationPointEdit& localEdit,
                                        AutomationPointEdits& allEdits);
 
     Score* m_score = nullptr;

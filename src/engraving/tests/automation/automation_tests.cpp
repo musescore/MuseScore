@@ -34,7 +34,7 @@ class Automation_Tests : public ::testing::Test, public muse::async::Asyncable
 {
 };
 
-TEST_F(Automation_Tests, RemovePoints_RemovesGivenTicksPreservesOthers)
+TEST_F(Automation_Tests, EditPoints_EraseRemovesGivenTicksPreservesOthers)
 {
     // [GIVEN] Four points on a single curve
     AutomationData data;
@@ -53,8 +53,11 @@ TEST_F(Automation_Tests, RemovePoints_RemovesGivenTicksPreservesOthers)
     };
     data.setCurves(curves);
 
-    // [WHEN] Remove points at ticks 200 and 400
-    data.removePoints(key, { 200, 400 });
+    // [WHEN] Erase points at ticks 200 and 400
+    data.editPoints(key, {
+        { 200, AutomationPointEdit::ErasePoint {} },
+        { 400, AutomationPointEdit::ErasePoint {} }
+    });
 
     // [THEN] Only points at 100 and 300 remain
     AutomationCurve expected;
@@ -63,7 +66,7 @@ TEST_F(Automation_Tests, RemovePoints_RemovesGivenTicksPreservesOthers)
     checkCurvesMatch(data.curve(key), expected);
 }
 
-TEST_F(Automation_Tests, RemovePoints_ScopedToGivenKey)
+TEST_F(Automation_Tests, EditPoints_EraseScopedToGivenKey)
 {
     // [GIVEN] Two curves sharing the same tick
     AutomationData data;
@@ -82,8 +85,8 @@ TEST_F(Automation_Tests, RemovePoints_ScopedToGivenKey)
     curves[key2] = { { 300, p_key2_300 } };
     data.setCurves(curves);
 
-    // [WHEN] Remove tick 300 from key1 only
-    data.removePoints(key1, { 300 });
+    // [WHEN] Erase tick 300 from key1 only
+    data.editPoints(key1, { { 300, AutomationPointEdit::ErasePoint {} } });
 
     // [THEN] key1/300 removed, key1/100 and key2/300 untouched
     AutomationCurve expectedKey1;
@@ -94,9 +97,9 @@ TEST_F(Automation_Tests, RemovePoints_ScopedToGivenKey)
     checkCurvesMatch(data.curve(key2), expectedKey2);
 }
 
-TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
+TEST_F(Automation_Tests, EditPoints_EraseCleansUpEmptyCurves)
 {
-    // [GIVEN] A curve whose only points will all be removed
+    // [GIVEN] A curve whose only points will all be erased
     AutomationData data;
     AutomationCurveKey key;
     key.type = AutomationType::Dynamics;
@@ -106,8 +109,11 @@ TEST_F(Automation_Tests, RemovePoints_CleansUpEmptyCurves)
     curves[key] = { { 100, generatedPoint(0.4, 0.5) }, { 200, generatedPoint(0.5, 0.6) } };
     data.setCurves(curves);
 
-    // [WHEN] Remove both points
-    data.removePoints(key, { 100, 200 });
+    // [WHEN] Erase both points
+    data.editPoints(key, {
+        { 100, AutomationPointEdit::ErasePoint {} },
+        { 200, AutomationPointEdit::ErasePoint {} }
+    });
 
     // [THEN] Curve entry is removed from the map
     EXPECT_TRUE(data.isEmpty());
@@ -256,7 +262,7 @@ TEST_F(Automation_Tests, Notify_EditPoints_FiresWithCorrectRange)
     });
 
     // [WHEN] Add a point
-    data.editPoints(key, { { 200, generatedPoint(0.5, 0.5) } });
+    data.editPoints(key, { { 200, AutomationPointEdit::SetPoint { generatedPoint(0.5, 0.5) } } });
 
     // [THEN] Exactly one notification with the correct range
     EXPECT_EQ(notifyCount, 1);
@@ -285,7 +291,7 @@ TEST_F(Automation_Tests, Notify_EditPoints_SameValue_NotFired)
     });
 
     // [WHEN] Set an identical point
-    data.editPoints(key, { { 100, point } });
+    data.editPoints(key, { { 100, AutomationPointEdit::SetPoint { point } } });
 
     // [THEN] No notification fired
     EXPECT_EQ(notifyCount, 0);

@@ -375,7 +375,7 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     key.staffId = s_score->staff(0)->id();
 
     // [WHEN] The user inserts a custom automation point at the midpoint of the hairpin
-    AutomationPointEdits edits { { 5280, customPoint(0.0, MF_VALUE) } };
+    AutomationPointEdits edits { { 5280, AutomationPointEdit::SetPoint { customPoint(0.0, MF_VALUE) } } };
     controller.editPoints(key, edits);
 
     // [WHEN] The score is re-processed (simulates any subsequent score change)
@@ -414,7 +414,7 @@ TEST_F(ScoreAutomationController_Tests, EditPoints_UndoRedo_RestoresAndReapplies
 
     // [WHEN] The user edits a point (in an undoable command)
     const AutomationPoint edited = customPoint(0.2, 0.3);
-    AutomationPointEdits edits { { 2100, edited } };
+    AutomationPointEdits edits { { 2100, AutomationPointEdit::SetPoint { edited } } };
     s_score->startCmd(TranslatableString::untranslatable("ScoreAutomationController tests"));
     controller.editPoints(key, edits);
     s_score->endCmd();
@@ -458,7 +458,7 @@ TEST_F(ScoreAutomationController_Tests, MirrorEdit_OtherRepeatSegment_CopiesPoin
 
     // [WHEN] The user adds a custom point during the 1st pass through measure 5
     const AutomationPoint edited = customPoint(0.4, 0.4);
-    AutomationPointEdits edits { { 7700, edited } };
+    AutomationPointEdits edits { { 7700, AutomationPointEdit::SetPoint { edited } } };
     controller.editPoints(key, edits);
 
     // [THEN] The same point is mirrored into the 2nd pass through the same measure, marked generated
@@ -491,7 +491,7 @@ TEST_F(ScoreAutomationController_Tests, MirrorEdit_MeasureRepeat_CopiesPoint)
     // [WHEN] The user adds a custom point inside measure 6, the measure-repeat's source measure
     const AutomationPoint edited = customPoint(0.4, 0.4);
     const utick_t editUTick = 9700 + passOffset;
-    AutomationPointEdits edits { { editUTick, edited } };
+    AutomationPointEdits edits { { editUTick, AutomationPointEdit::SetPoint { edited } } };
     controller.editPoints(key, edits);
 
     // [THEN] The same point is mirrored into measure 7, the measure-repeat's occurrence

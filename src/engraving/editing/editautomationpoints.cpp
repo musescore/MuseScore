@@ -77,10 +77,16 @@ EditAutomationPoints::EditAutomationPoints(Score* score, AutomationDataPtr autom
     // Collapse the edit list into the final value to write at each touched tick,
     // replaying the same erase-then-write order AutomationData::editPoints itself would apply
     for (const AutomationPointEdit& edit : edits) {
-        if (edit.moveFrom && *edit.moveFrom != edit.tick) {
-            m_pointStates[*edit.moveFrom] = std::nullopt;
+        if (const auto* setPoint = std::get_if<AutomationPointEdit::SetPoint>(&edit.change)) {
+            m_pointStates[edit.tick] = setPoint->point;
+        } else if (const auto* movePoint = std::get_if<AutomationPointEdit::MovePoint>(&edit.change)) {
+            if (movePoint->from != edit.tick) {
+                m_pointStates[movePoint->from] = std::nullopt;
+            }
+            m_pointStates[edit.tick] = movePoint->point;
+        } else {
+            m_pointStates[edit.tick] = std::nullopt;
         }
-        m_pointStates[edit.tick] = edit.point;
     }
 }
 
@@ -97,10 +103,13 @@ void EditAutomationPoints::flip()
         return;
     }
 
-    AutomationCurve curve = m_automationData->curve(m_key);
+    const AutomationCurve& curve = m_automationData->curve(m_key);
     m_changedRange = computeChangedRange(m_score, m_key, m_pointStates);
 
     std::map<utick_t, std::optional<AutomationPoint> > previousStates;
+    AutomationPointEdits automationEdits;
+    automationEdits.reserve(m_pointStates.size());
+
     for (const auto& [tick, point] : m_pointStates) {
         const auto it = curve.find(tick);
         if (it != curve.cend()) {
@@ -110,14 +119,12 @@ void EditAutomationPoints::flip()
         }
 
         if (point) {
-            curve.insert_or_assign(tick, *point);
+            automationEdits.push_back({ tick, AutomationPointEdit::SetPoint { *point } });
         } else {
-            curve.erase(tick);
+            automationEdits.push_back({ tick, AutomationPointEdit::ErasePoint {} });
         }
     }
 
-    AutomationCurveMap curvesToReplace;
-    curvesToReplace.emplace(m_key, std::move(curve));
-    m_automationData->replaceCurves(curvesToReplace);
+    m_automationData->editPoints(m_key, automationEdits);
     m_pointStates = std::move(previousStates);
 }

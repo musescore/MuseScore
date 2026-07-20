@@ -42,11 +42,8 @@ public:
     //! NOTE: replaces only the given curves, keeping all others; keys absent from the argument are untouched
     void replaceCurves(const AutomationCurveMap& curves);
 
-    //! NOTE: creates, updates, and/or moves points in one batch
+    //! NOTE: writes, moves, or erases points in one batch, per each edit's SetPoint/MovePoint/ErasePoint
     void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits);
-
-    //! NOTE: removes the points at the given ticks from the given curve, if present
-    void removePoints(const AutomationCurveKey& key, const std::set<utick_t>& ticks);
 
     muse::async::Channel<AutomationChanges> changed() const;
 

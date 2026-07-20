@@ -912,52 +912,62 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
     const size_t originalEditCount = edits.size();
     for (size_t i = 0; i < originalEditCount; ++i) {
         // Copied by value: push_back below may reallocate edits
-        const AutomationPointEdit edit = edits[i];
-        const auto sourceIt = repeatList.findRepeatSegmentFromUTick(edit.tick);
+        AutomationPointEdit localEdit = edits[i];
+        const auto sourceIt = repeatList.findRepeatSegmentFromUTick(localEdit.tick);
         IF_ASSERT_FAILED(sourceIt != repeatList.cend()) {
             continue;
         }
 
         const RepeatSegment* sourceSeg = *sourceIt;
         const int sourceTickOffset = sourceSeg->utick - sourceSeg->tick;
-        const int localTick = static_cast<int>(edit.tick) - sourceTickOffset;
-        const std::optional<int> localMoveFrom = edit.moveFrom
-                                                  ? std::optional<int>(static_cast<int>(*edit.moveFrom) - sourceTickOffset)
-                                                  : std::nullopt;
+
+        // Re-express the edit in tick coordinates local to sourceSeg
+        localEdit.tick -= sourceTickOffset;
+        if (auto* movePoint = std::get_if<AutomationPointEdit::MovePoint>(&localEdit.change)) {
+            movePoint->from -= sourceTickOffset;
+        }
 
         for (const RepeatSegment* targetSeg : repeatList) {
             if (targetSeg != sourceSeg) {
                 const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
-                mirrorPointIfInRange(localTick, localMoveFrom, edit.point, targetRange, edits);
+                mirrorPointIfInRange(localEdit, targetRange, edits);
             }
-            mirrorToMeasureRepeats(targetSeg, range, localTick, localMoveFrom, edit.point, edits);
+            mirrorToMeasureRepeats(targetSeg, range, localEdit, edits);
         }
     }
 }
 
-void ScoreAutomationController::mirrorPointIfInRange(int localTick, const std::optional<int>& localMoveFrom,
-                                                     const AutomationPoint& point, const MirrorRange& range,
+void ScoreAutomationController::mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range,
                                                      AutomationPointEdits& allEdits)
 {
+    const int localTick = static_cast<int>(localEdit.tick);
     if (localTick < range.from || localTick >= range.toExclusive) {
         return;
     }
 
-    std::optional<utick_t> mirroredMoveFrom;
-    if (localMoveFrom && *localMoveFrom >= range.from && *localMoveFrom < range.toExclusive) {
-        mirroredMoveFrom = static_cast<utick_t>(*localMoveFrom + range.tickOffset);
+    const utick_t mirroredTick = static_cast<utick_t>(localTick + range.tickOffset);
+
+    if (std::holds_alternative<AutomationPointEdit::ErasePoint>(localEdit.change)) {
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::ErasePoint {} });
+        return;
     }
 
+    const auto* movePoint = std::get_if<AutomationPointEdit::MovePoint>(&localEdit.change);
+
     // Mirrored points are derived from the user's edit, not edited directly, so they are marked generated
-    AutomationPoint mirroredPoint = point;
+    AutomationPoint mirroredPoint = movePoint ? movePoint->point : std::get<AutomationPointEdit::SetPoint>(localEdit.change).point;
     mirroredPoint.generated = true;
 
-    allEdits.push_back({ static_cast<utick_t>(localTick + range.tickOffset), mirroredPoint, mirroredMoveFrom });
+    if (movePoint && movePoint->from >= range.from && movePoint->from < range.toExclusive) {
+        const utick_t mirroredMoveFrom = static_cast<utick_t>(movePoint->from + range.tickOffset);
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::MovePoint { mirroredPoint, mirroredMoveFrom } });
+    } else {
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::SetPoint { mirroredPoint } });
+    }
 }
 
-void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, int localTick,
-                                                       const std::optional<int>& localMoveFrom, const AutomationPoint& point,
-                                                       AutomationPointEdits& allEdits)
+void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range,
+                                                       const AutomationPointEdit& localEdit, AutomationPointEdits& allEdits)
 {
     const int tickOffset = targetSeg->utick - targetSeg->tick;
 
@@ -981,7 +991,7 @@ void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targ
             const int tickShift = currMeasure->tick().ticks() - measureFrom;
 
             const MirrorRange measureRange { measureFrom, measureToExclusive, tickShift + mrTickOffset };
-            mirrorPointIfInRange(localTick, localMoveFrom, point, measureRange, allEdits);
+            mirrorPointIfInRange(localEdit, measureRange, allEdits);
         }
     }
 }

@@ -40,6 +40,9 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::uicomponents;
 
+using SetPoint = mu::engraving::AutomationPointEdit::SetPoint;
+using MovePoint = mu::engraving::AutomationPointEdit::MovePoint;
+
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
 {
     IF_ASSERT_FAILED(polyline) {
@@ -608,7 +611,9 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         }
         editedPoint.generated = false;
 
-        mu::engraving::AutomationPointEdits edits { { newTick, editedPoint, oldPointData.tick } };
+        mu::engraving::AutomationPointEdits edits {
+            { newTick, MovePoint { editedPoint, oldPointData.tick } }
+        };
 
         m_isApplyingOwnEdit = true;
         editAutomationPoints(curveKey, edits);
@@ -632,7 +637,10 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     newPoint.interpolation = existingPoint.interpolation;
     newPoint.itemId = existingPoint.itemId;
 
-    mu::engraving::AutomationPointEdits edits { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } };
+    mu::engraving::AutomationPointEdits edits {
+        { oldPointData.tick, SetPoint { updatedOldPoint } },
+        { newTick, SetPoint { newPoint } }
+    };
 
     m_isApplyingOwnEdit = true;
     editAutomationPoints(curveKey, edits);
