@@ -1663,7 +1663,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
     const bool previousSelectionExists = currentNotationScore() && currentNotationScore()->selection().currentCR();
     if (interaction->selection()->isNone() && previousSelectionExists && !state.beyondScore()) {
         // Try to restore the previous selection...
-        interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
+        interaction->moveSelectionDeprecated(direction, MoveSelectionType::EngravingItem);
         seekAndPlaySelectedElement(true);
         return muse::make_ok();
     }
@@ -1688,10 +1688,10 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
             if (quickly) {
                 interaction->movePitch(direction, PitchMode::OCTAVE);
             }
-            interaction->moveSelection(direction, MoveSelectionType::String);
+            interaction->moveSelectionDeprecated(direction, MoveSelectionType::String);
             return muse::make_ok();
         } else if (interaction->selection()->isNone() && !state.beyondScore()) {
-            interaction->selectFirstElement(false);
+            interaction->select(SelectionTarget::FirstItem);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
@@ -1742,9 +1742,9 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
             interaction->nudgeAnchors(direction);
         } else {
             if (interaction->selection()->isNone() && !state.beyondScore()) {
-                interaction->selectFirstElement(false);
+                interaction->select(SelectionTarget::FirstItem);
             }
-            interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
+            interaction->moveSelectionDeprecated(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
             playChord = true;
         }
         break;
@@ -1793,30 +1793,6 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
 
     interaction->movePitch(direction, PitchMode::DIATONIC);
     seekAndPlaySelectedElement(true);
-}
-
-void NotationActionController::moveWithinChord(MoveDirection direction)
-{
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    interaction->moveChordNoteSelection(direction);
-    seekAndPlaySelectedElement(DONT_PLAY_CHORD);
-}
-
-void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
-{
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    interaction->selectTopOrBottomOfChord(direction);
-    seekAndPlaySelectedElement(DONT_PLAY_CHORD);
 }
 
 void NotationActionController::changeVoice(voice_idx_t voiceIndex)
