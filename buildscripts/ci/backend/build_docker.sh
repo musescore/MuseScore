@@ -57,7 +57,7 @@ docker buildx create --use >/dev/null 2>&1 || true
 
 docker buildx build \
     --platform linux/amd64\
-    -t ghcr.io/musescore/converter_4:${MU_VERSION} \
+    -t ghcr.io/musescore/converter_5:${MU_VERSION} \
     --load .
 
 cd $ORIGIN_DIR
