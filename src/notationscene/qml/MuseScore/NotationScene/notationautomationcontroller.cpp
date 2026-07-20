@@ -243,7 +243,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
 
         const Fraction frac = Fraction::fromTicks(tick);
         const Segment* seg = score()->tick2leftSegmentMM(frac);
-        IF_ASSERT_FAILED(seg) {
+        if (!seg) { //! FIXME: fix automation curve on measure repeats
             continue;
         }
 
