@@ -34,6 +34,7 @@
 #include "engraving/types/types.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
+#include "project/iprojectaudiosettings.h"
 #include "audio/main/iplayer.h"
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"

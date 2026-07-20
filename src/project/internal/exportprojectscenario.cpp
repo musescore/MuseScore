@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "exportprojectscenario.h"
 
 #include "global/io/fileinfo.h"
@@ -31,8 +32,12 @@
 #include "engraving/dom/score.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationpainting.h" // IWYU pragma: keep
+
+#include "inotationproject.h"
 
 using namespace muse;
 using namespace muse::io;

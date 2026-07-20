@@ -34,10 +34,14 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
+
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");

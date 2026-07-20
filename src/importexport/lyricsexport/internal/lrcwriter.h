@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+
 #include "engraving/types/types.h"
 
 #include "project/inotationwriter.h"

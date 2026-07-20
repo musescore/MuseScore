@@ -30,6 +30,7 @@
 #include "notation/inotation.h"
 
 namespace mu::engraving {
+class Fraction;
 class Measure;
 }
 

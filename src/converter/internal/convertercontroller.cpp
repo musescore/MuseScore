@@ -35,9 +35,13 @@
 #include "engraving/infrastructure/mscio.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselectionfilter.h" // IWYU pragma: keep
+
+#include "project/iprojectaudiosettings.h" // IWYU pragma: keep
 
 #include "convertercodes.h"
 #include "compat/backendapi.h"

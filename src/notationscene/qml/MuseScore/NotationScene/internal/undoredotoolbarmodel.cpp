@@ -22,6 +22,7 @@
 
 #include "undoredotoolbarmodel.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 
 #include "uicomponents/qml/Muse/UiComponents/toolbaritem.h"

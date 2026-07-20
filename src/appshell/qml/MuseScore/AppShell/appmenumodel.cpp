@@ -30,6 +30,7 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
+#include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
 

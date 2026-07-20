@@ -30,6 +30,7 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/symbol.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 
 #include "palettewidget.h"

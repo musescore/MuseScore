@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTCONFIGURATION_H
-#define MU_PROJECT_IPROJECTCONFIGURATION_H
 
-#include <QStringList>
+#pragma once
+
 #include <QColor>
+#include <QStringList>
+#include <QUrl>
 
 #include "modularity/imoduleinterface.h"
 #include "async/channel.h"
@@ -31,8 +32,10 @@
 #include "io/path.h"
 #include "types/bytearray.h"
 
-#include "inotationproject.h"
+#include "inotationproject_fwd.h"
+#include "types/migrationtypes.h"
 #include "types/projecttypes.h"
+#include "types/savelocation.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_GLOBAL_INTERFACE
@@ -167,5 +170,3 @@ public:
     virtual void setCreateBackupBeforeSaving(bool create) = 0;
 };
 }
-
-#endif // MU_PROJECT_IPROJECTCONFIGURATION_H

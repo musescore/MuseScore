@@ -34,6 +34,7 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/repeatlist.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 
 #include "svggenerator.h"

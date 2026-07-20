@@ -34,6 +34,7 @@
 #include "engraving/dom/stringtunings.h"
 #include "engraving/editing/editpart.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
@@ -122,9 +123,8 @@ QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) c
 
 INotationSelectionPtr EditStringData::currentNotationSelection() const
 {
-    auto currentNotation = globalContext()->currentNotation();
-    auto interaction = currentNotation ? currentNotation->interaction() : nullptr;
-    return interaction ? interaction->selection() : nullptr;
+    notation::INotationPtr currentNotation = globalContext()->currentNotation();
+    return currentNotation ? currentNotation->interaction()->selection() : nullptr;
 }
 
 //---------------------------------------------------------

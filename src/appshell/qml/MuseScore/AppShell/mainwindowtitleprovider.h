@@ -26,6 +26,7 @@
 
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "modularity/ioc.h"
 
 namespace mu::appshell {
 class MainWindowTitleProvider : public QObject, public muse::Contextable, public muse::async::Asyncable

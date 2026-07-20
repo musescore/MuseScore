@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_EXPORTTYPE_H
-#define MU_PROJECT_EXPORTTYPE_H
+
+#pragma once
 
 #include <unordered_set>
 #include <QList>
@@ -72,5 +72,3 @@ inline bool isAudioExport(const std::string& suffix)
     return muse::contains(audioSuffixes, suffix);
 }
 }
-
-#endif // MU_PROJECT_EXPORTTYPE_H

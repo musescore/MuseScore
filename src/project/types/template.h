@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -13,28 +13,27 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #pragma once
 
-#include "modularity/imoduleinterface.h"
-#include "project/types/template.h"
+#include <QList>
+#include <QString>
 
-#include "types/retval.h"
+#include "projectmeta.h"
 
 namespace mu::project {
-class ITemplatesRepository : MODULE_CONTEXT_INTERFACE
+struct Template
 {
-    INTERFACE_ID(ITemplatesRepository)
-
-public:
-    virtual ~ITemplatesRepository() = default;
-
-    virtual muse::RetVal<Templates> templates() const = 0;
+    QString categoryTitle;
+    ProjectMeta meta;
+    bool isCustom = false;
 };
+
+using Templates = QList<Template>;
 }

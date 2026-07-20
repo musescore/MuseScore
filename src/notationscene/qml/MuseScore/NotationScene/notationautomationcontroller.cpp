@@ -32,8 +32,10 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationautomation.h"
-#include "notation/inotationelements.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -654,6 +656,5 @@ mu::engraving::IAutomation* NotationAutomationController::engravingAutomation() 
 
 mu::engraving::Score* NotationAutomationController::score() const
 {
-    const INotationElementsPtr currElems = currentNotation() ? currentNotation()->elements() : nullptr;
-    return currElems ? currElems->msScore() : nullptr;
+    return currentNotation() ? currentNotation()->elements()->msScore() : nullptr;
 }

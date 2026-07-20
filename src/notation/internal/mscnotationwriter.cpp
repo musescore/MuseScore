@@ -24,6 +24,7 @@
 
 #include "io/file.h"
 
+#include "inotation.h"
 #include "inotationelements.h" // IWYU pragma: keep
 
 #include "engraving/engravingproject.h"
