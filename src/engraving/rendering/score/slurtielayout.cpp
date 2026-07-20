@@ -490,6 +490,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         pt = StemLayout::stemPos(sc) - sc->pagePos() + sc->stem()->ldata()->line.p2();
         if (useTablature) {                           // in tabs, stems are centred on note:
             pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);                      // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
+        } else {
+            // Use the same stem-x as the rest of layout, measured from chord origin.
+            // note1->x() was already added to sp->p1 above, so subtract it here
+            // to avoid double-counting when pt is added to sp->p1.
+            double stemX = StemLayout::stemPosX(sc);
+            pt.rx() = stemX - (note1 ? note1->x() : 0.0);
         }
         // clear the stem (x)
         // allow slight overlap (y)
@@ -538,6 +544,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         pt = StemLayout::stemPos(ec) - ec->pagePos() + ec->stem()->ldata()->line.p2();
         if (useTablature) {
             pt.rx() = hw2 * 0.5;
+        } else {
+            // Use the same stem-x as the rest of layout, measured from chord origin.
+            // note2->x() was already added to sp->p1 above, so subtract it here
+            // to avoid double-counting when pt is added to sp->p1.
+            double stemX = StemLayout::stemPosX(ec);
+            pt.rx() = stemX - (note2 ? note2->x() : 0.0);
         }
         // don't allow overlap with beam
         double yadj;
