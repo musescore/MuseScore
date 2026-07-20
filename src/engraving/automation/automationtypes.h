@@ -163,11 +163,16 @@ struct AutomationChanges {
         return !isFullReset && affectedKeys.empty();
     }
 
+    void extend(utick_t from, utick_t to)
+    {
+        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
+        tickTo = std::max(tickTo, to);
+    }
+
     void extend(const AutomationCurveKey& key, utick_t from, utick_t to)
     {
         affectedKeys.insert(key);
-        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
-        tickTo = std::max(tickTo, to);
+        extend(from, to);
     }
 
     void clear()
