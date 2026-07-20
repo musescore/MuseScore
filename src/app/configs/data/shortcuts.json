@@ -202,39 +202,39 @@
             "sequences": ["8", "Num+8"]
         },
         {
-            "command": "command://notation/pad-note-1",
+            "command": "command://notation/set-duration-whole",
             "sequences": ["7", "Num+7"]
         },
         {
-            "command": "command://notation/pad-note-2",
+            "command": "command://notation/set-duration-half",
             "sequences": ["6", "Num+6"]
         },
         {
-            "command": "command://notation/pad-note-4",
+            "command": "command://notation/set-duration-quarter",
             "sequences": ["5", "Num+5"]
         },
         {
-            "command": "command://notation/pad-note-8",
+            "command": "command://notation/set-duration-eighth",
             "sequences": ["4", "Num+4"]
         },
         {
-            "command": "command://notation/pad-note-16",
+            "command": "command://notation/set-duration-16th",
             "sequences": ["3", "Num+3"]
         },
         {
-            "command": "command://notation/pad-note-32",
+            "command": "command://notation/set-duration-32nd",
             "sequences": ["2", "Num+2"]
         },
         {
-            "command": "command://notation/pad-note-64",
+            "command": "command://notation/set-duration-64th",
             "sequences": ["1", "Num+1"]
         },
         {
-            "command": "command://notation/pad-dot",
+            "command": "command://notation/toggle-dot",
             "sequences": [".", "Num+."]
         },
         {
-            "command": "command://notation/pad-dot2",
+            "command": "command://notation/toggle-dot2",
             "sequences": [",", "Num+,"]
         },
         {
