@@ -1215,6 +1215,8 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
             beat->setBarreString(propertyNode.firstChild().toElement().text().toInt());
         } else if (propertyName == u"WhammyBar") {
             hasWhammyMarker = true;
+        } else if (propertyName == u"WhammyBarOriginOffset") {
+            whammyData.originOffset = propertyNode.firstChild().toElement().text().toFloat();
         } else if (propertyName == u"WhammyBarOriginValue") {
             whammyData.originValue = propertyNode.firstChild().toElement().text().toFloat();
         } else if (propertyName == u"WhammyBarDestinationValue") {
