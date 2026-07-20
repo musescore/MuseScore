@@ -118,8 +118,6 @@ export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland.so"
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
 export QML_SOURCES_PATHS=./
 
-export QML_IMPORT_PATH="${ORIGIN_DIR}/build.release"
-
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
@@ -128,7 +126,7 @@ for lib in libglib-2.0.so.0 libgio-2.0.so.0 libgmodule-2.0.so.0 libgobject-2.0.s
   rm -f "${appdir}/lib/${lib}"
 done
 
-unset QML_SOURCES_PATHS QML_IMPORT_PATH EXTRA_PLATFORM_PLUGINS
+unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
 # Return the moved libraries back
 [ -f "${qt_sql_drivers_tmp}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
