@@ -400,6 +400,46 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     checkCurvesMatch(controller.automationData()->curve(key), expectedCurve);
 }
 
+TEST_F(ScoreAutomationController_Tests, EditPoints_UndoRedo_RestoresAndReappliesEdit)
+{
+    // [GIVEN] A score initialised with dynamics
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = s_score->staff(0)->id();
+
+    const AutomationCurve curveBefore = controller.automationData()->curve(key);
+
+    // [WHEN] The user edits a point (in an undoable command)
+    const AutomationPoint edited = customPoint(0.2, 0.3);
+    AutomationPointEdits edits { { 2100, edited } };
+    s_score->startCmd(TranslatableString::untranslatable("ScoreAutomationController tests"));
+    controller.editPoints(key, edits);
+    s_score->endCmd();
+
+    const AutomationCurve curveAfterEdit = controller.automationData()->curve(key);
+    const auto editedIt = curveAfterEdit.find(2100);
+    ASSERT_TRUE(editedIt != curveAfterEdit.cend());
+    EXPECT_EQ(editedIt->second, edited);
+
+    // [WHEN] The edit is undone
+    s_score->undoRedo(true, nullptr);
+
+    // [THEN] The curve is exactly what it was before the edit
+    checkCurvesMatch(controller.automationData()->curve(key), curveBefore);
+
+    // [WHEN] The edit is redone
+    s_score->undoRedo(false, nullptr);
+
+    // [THEN] The curve exactly matches the post-edit state again
+    checkCurvesMatch(controller.automationData()->curve(key), curveAfterEdit);
+
+    // Restore s_score to its original state
+    s_score->undoRedo(true, nullptr);
+}
+
 TEST_F(ScoreAutomationController_Tests, MirrorEdit_OtherRepeatSegment_CopiesPoint)
 {
     // [GIVEN] Measure 5 (tick 7680-9600) is played twice via a real repeat barline: once as part

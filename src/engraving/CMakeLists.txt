@@ -108,6 +108,8 @@ target_sources(engraving PRIVATE
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
+    editing/editautomationpoints.cpp
+    editing/editautomationpoints.h
     editing/editbeam.cpp
     editing/editbeam.h
     editing/editbrackets.cpp

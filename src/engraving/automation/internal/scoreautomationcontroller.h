@@ -43,7 +43,7 @@ struct ScoreChanges;
 class ScoreAutomationController
 {
 public:
-    void init(const Score* score);
+    void init(Score* score);
 
     void insertTime(const Fraction& tick, const Fraction& len);
     void update(const ScoreChanges& changes);
@@ -131,7 +131,7 @@ private:
                                        const std::optional<int>& localMoveFrom, const AutomationPoint& point,
                                        AutomationPointEdits& allEdits);
 
-    const Score* m_score = nullptr;
+    Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
 };
 }

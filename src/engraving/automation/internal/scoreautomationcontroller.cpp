@@ -38,6 +38,7 @@
 #include "engraving/types/typesconv.h"
 
 #include "engraving/automation/automationdata.h"
+#include "engraving/editing/editautomationpoints.h"
 
 #include "log.h"
 
@@ -214,6 +215,8 @@ void ScoreAutomationController::setAutomationData(AutomationDataPtr data)
 
 void ScoreAutomationController::editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(m_score && m_automationData) {
         return;
     }
@@ -225,7 +228,7 @@ void ScoreAutomationController::editPoints(const AutomationCurveKey& key, Automa
     //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
     mirrorEditsToRepeats(key, edits);
 
-    m_automationData->editPoints(key, edits);
+    m_score->undo(new EditAutomationPoints(m_score, m_automationData, key, edits));
 }
 
 static bool isRelevantChange(const ScoreChanges& changes)
@@ -246,7 +249,7 @@ static bool isRelevantChange(const ScoreChanges& changes)
     return false;
 }
 
-void ScoreAutomationController::init(const Score* score)
+void ScoreAutomationController::init(Score* score)
 {
     m_score = score;
     update(0, muse::nidx, muse::nidx);

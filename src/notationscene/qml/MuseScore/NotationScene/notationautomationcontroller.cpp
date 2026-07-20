@@ -31,6 +31,7 @@
 #include "engraving/automation/automationdata.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h"
@@ -610,7 +611,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         mu::engraving::AutomationPointEdits edits { { newTick, editedPoint, oldPointData.tick } };
 
         m_isApplyingOwnEdit = true;
-        score()->editAutomationPoints(curveKey, edits);
+        editAutomationPoints(curveKey, edits);
         m_isApplyingOwnEdit = false;
 
         return true;
@@ -634,10 +635,24 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     mu::engraving::AutomationPointEdits edits { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } };
 
     m_isApplyingOwnEdit = true;
-    score()->editAutomationPoints(curveKey, edits);
+    editAutomationPoints(curveKey, edits);
     m_isApplyingOwnEdit = false;
 
     return true;
+}
+
+void NotationAutomationController::editAutomationPoints(const mu::engraving::AutomationCurveKey& key,
+                                                        mu::engraving::AutomationPointEdits& edits)
+{
+    mu::engraving::Score* sc = score();
+    IF_ASSERT_FAILED(sc) {
+        return;
+    }
+
+    sc->transactionManager()->transaction(muse::TranslatableString("undoableAction", "Edit automation points"),
+                                          [&](mu::engraving::Transaction&) {
+        sc->editAutomationPoints(key, edits);
+    });
 }
 
 INotationAutomationPtr NotationAutomationController::automation() const
