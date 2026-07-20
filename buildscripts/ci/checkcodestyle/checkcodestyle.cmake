@@ -4,8 +4,10 @@ endif()
 
 set(SCAN_DIR ${CMAKE_ARGV3})
 
-set(MF_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/../../..)
-set(DIR_FORMAT ${MF_ROOT_PATH}/tools/codestyle/format_dir.cmake)
+# Download the codestyle tooling (muse_framework tools + muse_deps)
+include(${CMAKE_CURRENT_LIST_DIR}/download_tools.cmake)
+
+set(DIR_FORMAT ${REPO_ROOT}/muse/tools/codestyle/format_dir.cmake)
 
 execute_process(
     COMMAND cmake -P ${DIR_FORMAT} ${SCAN_DIR}
