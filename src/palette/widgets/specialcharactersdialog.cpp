@@ -34,6 +34,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 
 #include "ui/view/widgetstatestore.h"

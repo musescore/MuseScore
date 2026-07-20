@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "abstractnotationpaintview.h"
 
 #include <QCursor>
@@ -31,6 +32,7 @@
 #include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h"
@@ -611,8 +613,7 @@ INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
 
 INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
 {
-    const IMasterNotationPtr masterNotation = m_notation ? m_notation->masterNotation() : nullptr;
-    return masterNotation ? masterNotation->automation() : nullptr;
+    return m_notation ? m_notation->masterNotation()->automation() : nullptr;
 }
 
 void AbstractNotationPaintView::onNoteInputStateChanged()

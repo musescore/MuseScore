@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationproject.h"
 
 #include <memory>
@@ -27,6 +28,7 @@
 #include <QDir>
 #include <QFile>
 
+#include "global/concurrency/concurrent.h"
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/ioretcodes.h"
@@ -57,8 +59,7 @@
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
 #include "types/projectcreateoptions.h"
-
-#include "global/concurrency/concurrent.h"
+#include "types/projectmeta.h"
 
 #include "defer.h"
 #include "log.h"

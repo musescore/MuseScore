@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "projectautosaver.h"
 
 #include "engraving/infrastructure/mscio.h"
+
+#include "project/inotationproject.h"
 
 #include "defer.h"
 #include "log.h"
@@ -58,7 +61,7 @@ void ProjectAutoSaver::init()
     update();
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
-        if (auto project = currentProject()) {
+        if (INotationProjectPtr project = currentProject()) {
             if (project->isNewlyCreated() && !project->isImported()) {
                 Ret ret = project->save(configuration()->newProjectTemporaryPath(), SaveMode::AutoSave);
                 if (!ret) {

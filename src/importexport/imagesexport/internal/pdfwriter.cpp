@@ -25,6 +25,7 @@
 #include <QBuffer>
 #include <QPdfWriter>
 
+#include "notation/inotation.h"
 #include "notation/inotationpainting.h"
 
 #include "log.h"

@@ -24,17 +24,19 @@
 #include <unordered_map>
 
 #include "types/translatablestring.h"
-#include "ui/view/iconcodes.h"
-#include "context/shortcutcontext.h"
-#include "notation/inotationinteraction.h"
-#include "notation/inotationselection.h"
-#include "notation/inotationautomation.h"
-#include "notation/inotationstyle.h"
-#include "notation/inotation.h"
-#include "notation/inotationnoteinput.h"
-#include "notation/inotationundostack.h"
 
-#include "engraving/style/styledef.h"
+#include "ui/view/iconcodes.h"
+
+#include "context/shortcutcontext.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu;
 using namespace mu::notation;

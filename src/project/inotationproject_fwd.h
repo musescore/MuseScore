@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,31 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mxlwriter.h"
+#pragma once
 
-#include "notation/inotation.h"
-#include "notation/inotationelements.h" // IWYU pragma: keep
+#include <memory>
 
-#include "export/exportmusicxml.h"
+namespace mu::project {
+class INotationProject;
+using INotationProjectPtr = std::shared_ptr<INotationProject>;
 
-#include "log.h"
-
-using namespace mu::iex::musicxml;
-using namespace muse;
-using namespace muse::io;
-
-Ret MxlWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    mu::engraving::Score* score = notation->elements()->msScore();
-
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    Ret ret = saveMxl(score, &destinationDevice);
-
-    return ret;
+class IProjectAudioSettings;
+using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
 }

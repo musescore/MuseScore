@@ -19,14 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "mscmetareader.h"
+
+#include <QPixmap>
 
 #include "global/io/buffer.h"
 #include "global/serialization/xmlstreamreader.h"
+#include "log.h"
 
 #include "engraving/infrastructure/mscreader.h"
 
-#include "log.h"
+#include "types/projectmeta.h"
+#include "types/projecttypes.h"
 
 using namespace muse;
 using namespace muse::io;

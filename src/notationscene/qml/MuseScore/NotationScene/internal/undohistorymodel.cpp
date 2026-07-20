@@ -22,6 +22,7 @@
 
 #include "undohistorymodel.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h"
 

@@ -28,6 +28,7 @@ target_sources(project PRIVATE
     projecterrors.h
     projectextensionpoints.h
     iexportprojectscenario.h
+    inotationproject_fwd.h
     inotationproject.h
     iprojectcreator.h
     inotationreader.h
@@ -41,9 +42,14 @@ target_sources(project PRIVATE
     imscmetareader.h
     iprojectautosaver.h
 
+    types/migrationtypes.h
     types/projectcreateoptions.h
-    types/projecttypes.h
+    types/projectfile.h
     types/projectmeta.h
+    types/projecttypes.h
+    types/recentfile.h
+    types/savelocation.h
+    types/template.h
 
     internal/iprojectmigrator.h
     internal/notationproject.cpp

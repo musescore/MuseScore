@@ -22,6 +22,7 @@
 
 #include "breaksdialog.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 

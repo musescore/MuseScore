@@ -22,6 +22,7 @@
 
 #include "playbackcommandsstate.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 
 #include "../playbackcommands.h"

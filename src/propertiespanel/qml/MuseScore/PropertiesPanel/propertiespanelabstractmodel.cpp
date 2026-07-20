@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "propertiespanelabstractmodel.h"
 
 #include "engraving/dom/barline.h"
@@ -896,7 +897,7 @@ bool PropertiesPanelAbstractModel::isMasterNotation() const
         return false;
     }
 
-    return notation == context()->currentMasterNotation()->notation();
+    return notation->isMaster();
 }
 
 INotationSelectionPtr PropertiesPanelAbstractModel::selection() const

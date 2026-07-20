@@ -24,7 +24,11 @@
 
 #include <gmock/gmock.h>
 
+#include <QPixmap>
+
 #include "project/imscmetareader.h"
+#include "project/types/projectmeta.h"
+#include "project/types/projecttypes.h"
 
 namespace mu::notation {
 class MscMetaReaderMock : public project::IMscMetaReader

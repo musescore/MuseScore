@@ -26,6 +26,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/shadownote.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 

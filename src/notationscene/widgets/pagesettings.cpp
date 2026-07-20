@@ -31,6 +31,7 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/style/pagestyle.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h" // IWYU pragma: keep

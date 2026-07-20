@@ -24,16 +24,19 @@
 
 #include <memory>
 
+#include "global/async/channel.h"
 #include "global/io/path.h"
 #include "global/types/ret.h"
-#include "global/async/channel.h"
+#include "global/types/retval.h"
 
-#include "iprojectaudiosettings.h"
-#include "notation/imasternotation.h"
+#include "notation/inotation_fwd.h"
+
+#include "inotationproject_fwd.h"
 #include "types/projecttypes.h"
 
 namespace mu::project {
 struct ProjectCreateOptions;
+struct ProjectMeta;
 
 class INotationProject
 {

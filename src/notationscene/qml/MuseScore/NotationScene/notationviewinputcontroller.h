@@ -35,6 +35,7 @@
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "notation/types/viewmode.h"
 
 #include "playback/iplaybackcontroller.h"
 
