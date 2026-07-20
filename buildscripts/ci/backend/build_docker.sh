@@ -69,7 +69,7 @@ docker buildx create --use >/dev/null 2>&1 || true
 
 docker buildx build \
     --platform ${DOCKER_PLATFORM} \
-    -t ghcr.io/musescore/converter_4:${DOCKER_TAG} \
+    -t ghcr.io/musescore/converter_5:${DOCKER_TAG} \
     --load .
 
 cd $ORIGIN_DIR
