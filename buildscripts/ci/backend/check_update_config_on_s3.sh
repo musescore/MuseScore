@@ -51,10 +51,10 @@ echo "Login Docker"
 echo $ACCESS_TOKEN | docker login ghcr.io -u $ACCESS_USER --password-stdin
 
 echo "Pull Docker"
-docker pull ghcr.io/musescore/converter_4:${MU_VERSION}
+docker pull ghcr.io/musescore/converter_5:${MU_VERSION}
 
 echo "Check version..."
-docker run ghcr.io/musescore/converter_4:${MU_VERSION} /musescore/convertor -v > $ARTIFACTS_DIR/conv_output.txt
+docker run ghcr.io/musescore/converter_5:${MU_VERSION} /musescore/convertor -v > $ARTIFACTS_DIR/conv_output.txt
 
 APP_VERSION=$(echo "$MU_VERSION" | cut -d '.' -f 1,2,3)
 CONV_OUT=$(cat $ARTIFACTS_DIR/conv_output.txt)
@@ -84,7 +84,7 @@ CONFIGURE_FILE_PATH="$ARTIFACTS_DIR/${CONFIGURE_FILE}"
 s3cmd get "$S3_URL/$CONFIGURE_FILE" "$CONFIGURE_FILE_PATH"
 
 NEW_DISTR=$ARTIFACT_NAME
-NEW_IMAGE_URL="ghcr.io/musescore/converter_4:${MU_VERSION}"
+NEW_IMAGE_URL="ghcr.io/musescore/converter_5:${MU_VERSION}"
 NEW_STAGE=$STAGE
 
 if jq -e "has(\"$MU_VERSION_MAJOR_MINOR\")" "$CONFIGURE_FILE_PATH" > /dev/null; then
