@@ -26,6 +26,7 @@
 
 #include "engraving/automation/internal/scoreautomationcontroller.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/repeatlist.h"
 #include "engraving/dom/staff.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
@@ -130,7 +131,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Positive_ShiftsAllPoints)
     ASSERT_FALSE(curvesBefore.empty());
 
     // [WHEN] Insert one full measure (1920 ticks) at tick 0
-    controller.insertTime(s_score, Fraction(0, 1), Fraction(4, 4));
+    controller.insertTime(Fraction(0, 1), Fraction(4, 4));
 
     // [THEN] Same number of curves, all points shifted forward by 1920 ticks
     const AutomationCurveMap& curvesAfter = controller.automationData()->curves();
@@ -158,7 +159,7 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     ASSERT_FALSE(curvesBefore.empty());
 
     // [WHEN] Remove the first measure: -1920 ticks starting at tick 1920 -> erases points in [0, 1920]
-    controller.insertTime(s_score, Fraction(4, 4), Fraction(-4, 4));
+    controller.insertTime(Fraction(4, 4), Fraction(-4, 4));
 
     // [THEN] Points in the removed range are gone; points beyond it shift back by 1920 ticks
     const AutomationCurveMap& curvesAfter = controller.automationData()->curves();
@@ -190,9 +191,13 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
     AutomationPoint p1 = generatedPoint(0.3, 0.4);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
+
     AutomationCurveMap curves;
     curves[key] = { { 100, p1 }, { 200, p2 }, { 300, p3 } };
-    s_score->automationData().setCurves(curves);
+
+    AutomationDataPtr data = std::make_shared<AutomationData>();
+    data->setCurves(curves);
+    controller.setAutomationData(data);
 
     // [WHEN] Move ticks starting at 200 by +100
     controller.insertTime(Fraction::fromTicks(200), Fraction::fromTicks(100));
@@ -202,7 +207,7 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
     expected[100] = p1;
     expected[300] = p2;
     expected[400] = p3;
-    checkCurvesMatch(s_score->automationData().curve(key), expected);
+    checkCurvesMatch(controller.automationData()->curve(key), expected);
 }
 
 TEST_F(ScoreAutomationController_Tests, MoveTicks_AcrossMultipleCurves)
@@ -221,10 +226,14 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_AcrossMultipleCurves)
 
     AutomationPoint p1 = generatedPoint(0.3, 0.5);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
+
     AutomationCurveMap curves;
     curves[key1] = { { 200, p1 } };
     curves[key2] = { { 200, p2 } };
-    s_score->automationData().setCurves(curves);
+
+    AutomationDataPtr data = std::make_shared<AutomationData>();
+    data->setCurves(curves);
+    controller.setAutomationData(data);
 
     // [WHEN] Ticks from 100 shifted by +500
     controller.insertTime(Fraction::fromTicks(100), Fraction::fromTicks(500));
@@ -234,8 +243,8 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_AcrossMultipleCurves)
     expected1[700] = p1;
     AutomationCurve expected2;
     expected2[700] = p2;
-    checkCurvesMatch(s_score->automationData().curve(key1), expected1);
-    checkCurvesMatch(s_score->automationData().curve(key2), expected2);
+    checkCurvesMatch(controller.automationData()->curve(key1), expected1);
+    checkCurvesMatch(controller.automationData()->curve(key2), expected2);
 }
 
 TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
@@ -252,9 +261,13 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     AutomationPoint p300 = generatedPoint(0.4, 0.5);
     AutomationPoint p500 = generatedPoint(0.5, 0.6);
     AutomationPoint p700 = generatedPoint(0.6, 0.7);
+
     AutomationCurveMap curves;
     curves[key] = { { 100, p100 }, { 300, p300 }, { 500, p500 }, { 700, p700 } };
-    s_score->automationData().setCurves(curves);
+
+    AutomationDataPtr data = std::make_shared<AutomationData>();
+    data->setCurves(curves);
+    controller.setAutomationData(data);
 
     // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
     controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-200));
@@ -263,7 +276,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     AutomationCurve expected;
     expected[100] = p100;
     expected[500] = p700;
-    checkCurvesMatch(s_score->automationData().curve(key), expected);
+    checkCurvesMatch(controller.automationData()->curve(key), expected);
 }
 
 TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
@@ -278,13 +291,16 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
 
     AutomationCurveMap curves;
     curves[key] = { { 200, generatedPoint(0.4, 0.5) }, { 400, generatedPoint(0.5, 0.6) } };
-    s_score->automationData().setCurves(curves);
+
+    AutomationDataPtr data = std::make_shared<AutomationData>();
+    data->setCurves(curves);
+    controller.setAutomationData(data);
 
     // [WHEN] Remove ticks in range [100, 500]
     controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-400));
 
     // [THEN] Curve entry is removed from the map
-    EXPECT_TRUE(s_score->automationData().isEmpty());
+    EXPECT_TRUE(controller.automationData()->isEmpty());
 }
 
 TEST_F(ScoreAutomationController_Tests, Update_IsTextEditing_DoesNothing)
@@ -304,7 +320,7 @@ TEST_F(ScoreAutomationController_Tests, Update_IsTextEditing_DoesNothing)
     ScoreChanges changes;
     changes.isTextEditing = true;
     changes.changedTypes = { ElementType::DYNAMIC };
-    controller.update(s_score, changes);
+    controller.update(changes);
 
     // [THEN] No change notification was sent, and automation is unchanged
     EXPECT_FALSE(notified);
@@ -334,7 +350,7 @@ TEST_F(ScoreAutomationController_Tests, Update_NoRelevantTypes_DoesNothing)
     // [WHEN] A change arrives with no automation-relevant element types
     ScoreChanges changes;
     changes.changedTypes = { ElementType::NOTE };
-    controller.update(s_score, changes);
+    controller.update(changes);
 
     // [THEN] No change notification was sent, and automation is unchanged
     EXPECT_FALSE(notified);
@@ -359,12 +375,13 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     key.staffId = s_score->staff(0)->id();
 
     // [WHEN] The user inserts a custom automation point at the midpoint of the hairpin
-    controller.automationData()->editPoints(key, { { 5280, customPoint(0.0, MF_VALUE) } });
+    AutomationPointEdits edits { { 5280, customPoint(0.0, MF_VALUE) } };
+    controller.editPoints(key, edits);
 
     // [WHEN] The score is re-processed (simulates any subsequent score change)
     ScoreChanges changes;
     changes.changedTypes = { ElementType::HAIRPIN };
-    controller.update(s_score, changes);
+    controller.update(changes);
 
     // [THEN] Measures 1-2 are unaffected by the hairpin-only update, the p dynamic at the hairpin
     //        start is unchanged, the user midpoint's own data is untouched by the rebuild, and the
@@ -381,4 +398,70 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     expectedCurve[5760] = generatedPoint(FF_VALUE, FF_VALUE);
 
     checkCurvesMatch(controller.automationData()->curve(key), expectedCurve);
+}
+
+TEST_F(ScoreAutomationController_Tests, MirrorEdit_OtherRepeatSegment_CopiesPoint)
+{
+    // [GIVEN] Measure 5 (tick 7680-9600) is played twice via a real repeat barline: once as part
+    //         of the 1st RepeatSegment (utick offset 0), once as part of the 2nd (utick offset 1920)
+    const RepeatList& repeatList = s_score->repeatList();
+    ASSERT_EQ(repeatList.size(), 2);
+    const int secondPassOffset = repeatList.at(1)->utick - repeatList.at(1)->tick;
+    ASSERT_EQ(secondPassOffset, 1920);
+
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = s_score->staff(0)->id();
+
+    // [WHEN] The user adds a custom point during the 1st pass through measure 5
+    const AutomationPoint edited = customPoint(0.4, 0.4);
+    AutomationPointEdits edits { { 7700, edited } };
+    controller.editPoints(key, edits);
+
+    // [THEN] The same point is mirrored into the 2nd pass through the same measure, marked generated
+    //        since it is a copy, not something the user edited directly at that tick
+    AutomationPoint expectedMirrored = edited;
+    expectedMirrored.generated = true;
+
+    const AutomationCurve& curve = controller.automationData()->curve(key);
+    const auto mirroredIt = curve.find(7700 + secondPassOffset);
+    ASSERT_TRUE(mirroredIt != curve.cend());
+    EXPECT_EQ(mirroredIt->second, expectedMirrored);
+}
+
+TEST_F(ScoreAutomationController_Tests, MirrorEdit_MeasureRepeat_CopiesPoint)
+{
+    // [GIVEN] Measure 7 is a 1-measure repeat of measure 6 (tick 9600-11520); both only ever play
+    //         once, during the 2nd RepeatSegment (utick offset 1920)
+    const RepeatList& repeatList = s_score->repeatList();
+    ASSERT_EQ(repeatList.size(), 2);
+    const int passOffset = repeatList.at(1)->utick - repeatList.at(1)->tick;
+    ASSERT_EQ(passOffset, 1920);
+
+    ScoreAutomationController controller;
+    controller.init(s_score);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Dynamics;
+    key.staffId = s_score->staff(0)->id();
+
+    // [WHEN] The user adds a custom point inside measure 6, the measure-repeat's source measure
+    const AutomationPoint edited = customPoint(0.4, 0.4);
+    const utick_t editUTick = 9700 + passOffset;
+    AutomationPointEdits edits { { editUTick, edited } };
+    controller.editPoints(key, edits);
+
+    // [THEN] The same point is mirrored into measure 7, the measure-repeat's occurrence
+    //        (measure 7 immediately follows measure 6, so tickShift is also 1 measure: 1920 ticks),
+    //        marked generated since it is a copy, not something the user edited directly at that tick
+    AutomationPoint expectedMirrored = edited;
+    expectedMirrored.generated = true;
+
+    const AutomationCurve& curve = controller.automationData()->curve(key);
+    const auto mirroredIt = curve.find(editUTick + 1920);
+    ASSERT_TRUE(mirroredIt != curve.cend());
+    EXPECT_EQ(mirroredIt->second, expectedMirrored);
 }

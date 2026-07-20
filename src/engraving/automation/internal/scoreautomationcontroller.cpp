@@ -212,11 +212,18 @@ void ScoreAutomationController::setAutomationData(AutomationDataPtr data)
     m_automationData = std::move(data);
 }
 
-void ScoreAutomationController::editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
+void ScoreAutomationController::editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
-    IF_ASSERT_FAILED(m_automationData) {
+    IF_ASSERT_FAILED(m_score && m_automationData) {
         return;
     }
+
+    if (edits.empty()) {
+        return;
+    }
+
+    //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
+    mirrorEditsToRepeats(key, edits);
 
     m_automationData->editPoints(key, edits);
 }
@@ -761,7 +768,13 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 
             for (AutomationCurve* curve : staffCurves) {
                 for (auto it = curve->lower_bound(srcFrom), end = curve->lower_bound(srcTo); it != end; ++it) {
-                    curve->insert({ it->first + tickShift, it->second });
+                    if (it->second.generated) {
+                        curve->insert({ it->first + tickShift, it->second });
+                    } else {
+                        AutomationPoint mirroredPoint = it->second;
+                        mirroredPoint.generated = true;
+                        curve->insert({ it->first + tickShift, mirroredPoint });
+                    }
                 }
             }
         }
@@ -874,4 +887,98 @@ std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const Eng
     }
 
     return result;
+}
+
+void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    TRACEFUNC;
+
+    const RepeatList& repeatList = m_score->repeatList();
+    if (repeatList.size() <= 1) {
+        return;
+    }
+
+    const Staff* staff = m_score->staffById(key.staffId);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    const StaffRange range(m_score, staff->idx(), staff->idx());
+
+    // Bounded by the original size, since mirrored edits are appended to the same vector below
+    const size_t originalEditCount = edits.size();
+    for (size_t i = 0; i < originalEditCount; ++i) {
+        // Copied by value: push_back below may reallocate edits
+        const AutomationPointEdit edit = edits[i];
+        const auto sourceIt = repeatList.findRepeatSegmentFromUTick(edit.tick);
+        IF_ASSERT_FAILED(sourceIt != repeatList.cend()) {
+            continue;
+        }
+
+        const RepeatSegment* sourceSeg = *sourceIt;
+        const int sourceTickOffset = sourceSeg->utick - sourceSeg->tick;
+        const int localTick = static_cast<int>(edit.tick) - sourceTickOffset;
+        const std::optional<int> localMoveFrom = edit.moveFrom
+                                                  ? std::optional<int>(static_cast<int>(*edit.moveFrom) - sourceTickOffset)
+                                                  : std::nullopt;
+
+        for (const RepeatSegment* targetSeg : repeatList) {
+            if (targetSeg != sourceSeg) {
+                const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
+                mirrorPointIfInRange(localTick, localMoveFrom, edit.point, targetRange, edits);
+            }
+            mirrorToMeasureRepeats(targetSeg, range, localTick, localMoveFrom, edit.point, edits);
+        }
+    }
+}
+
+void ScoreAutomationController::mirrorPointIfInRange(int localTick, const std::optional<int>& localMoveFrom,
+                                                     const AutomationPoint& point, const MirrorRange& range,
+                                                     AutomationPointEdits& allEdits)
+{
+    if (localTick < range.from || localTick >= range.toExclusive) {
+        return;
+    }
+
+    std::optional<utick_t> mirroredMoveFrom;
+    if (localMoveFrom && *localMoveFrom >= range.from && *localMoveFrom < range.toExclusive) {
+        mirroredMoveFrom = static_cast<utick_t>(*localMoveFrom + range.tickOffset);
+    }
+
+    // Mirrored points are derived from the user's edit, not edited directly, so they are marked generated
+    AutomationPoint mirroredPoint = point;
+    mirroredPoint.generated = true;
+
+    allEdits.push_back({ static_cast<utick_t>(localTick + range.tickOffset), mirroredPoint, mirroredMoveFrom });
+}
+
+void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, int localTick,
+                                                       const std::optional<int>& localMoveFrom, const AutomationPoint& point,
+                                                       AutomationPointEdits& allEdits)
+{
+    const int tickOffset = targetSeg->utick - targetSeg->tick;
+
+    MeasureRepeats measureRepeats;
+    for (const Measure* measure : targetSeg->measureList()) {
+        for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment; segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
+            collectMeasureRepeats(segment, tickOffset, range, measureRepeats);
+        }
+    }
+
+    for (const auto& [mr, mrTickOffset] : measureRepeats) {
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
+            const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+            IF_ASSERT_FAILED(referringMeasure && referringMeasure != currMeasure) {
+                continue;
+            }
+
+            const int measureFrom = referringMeasure->tick().ticks();
+            const int measureToExclusive = referringMeasure->endTick().ticks();
+            const int tickShift = currMeasure->tick().ticks() - measureFrom;
+
+            const MirrorRange measureRange { measureFrom, measureToExclusive, tickShift + mrTickOffset };
+            mirrorPointIfInRange(localTick, localMoveFrom, point, measureRange, allEdits);
+        }
+    }
 }

@@ -107,7 +107,7 @@ public:
 
     AutomationDataConstPtr automationData() const override;
     void setAutomationData(AutomationDataPtr data);
-    void editAutomationPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits) override;
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`

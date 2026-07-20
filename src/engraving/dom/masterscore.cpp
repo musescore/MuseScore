@@ -159,7 +159,7 @@ void MasterScore::setAutomationData(AutomationDataPtr data)
     m_automationController->setAutomationData(std::move(data));
 }
 
-void MasterScore::editAutomationPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
     m_automationController->editPoints(key, edits);
 }

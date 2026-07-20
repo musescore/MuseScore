@@ -5395,7 +5395,7 @@ void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
 
 AutomationDataConstPtr Score::automationData() const { return m_masterScore->automationData(); }
 
-void Score::editAutomationPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits)
+void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
     m_masterScore->editAutomationPoints(key, edits);
 }

@@ -877,7 +877,7 @@ public:
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
     virtual AutomationDataConstPtr automationData() const;
-    virtual void editAutomationPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits);
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
 protected:
     virtual void onTimeInserted(const Fraction& tick, const Fraction& len);

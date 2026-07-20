@@ -37,6 +37,7 @@ class Segment;
 class Dynamic;
 class Hairpin;
 class MeasureRepeat;
+class RepeatSegment;
 struct ScoreChanges;
 
 class ScoreAutomationController
@@ -49,7 +50,8 @@ public:
 
     AutomationDataConstPtr automationData() const { return m_automationData; }
     void setAutomationData(AutomationDataPtr data);
-    void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits);
+
+    void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
 private:
     struct StaffRange {
@@ -62,6 +64,12 @@ private:
 
         bool contains(staff_idx_t staffIdx) const;
         bool contains(const muse::ID& staffId) const;
+    };
+
+    struct MirrorRange {
+        int from = 0;
+        int toExclusive = 0;
+        int tickOffset = 0;
     };
 
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
@@ -113,6 +121,15 @@ private:
     static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range, AutomationCurveKey key,
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
+
+    void mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits);
+
+    static void mirrorPointIfInRange(int localTick, const std::optional<int>& localMoveFrom, const AutomationPoint& point,
+                                     const MirrorRange& range, AutomationPointEdits& allEdits);
+
+    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, int localTick,
+                                       const std::optional<int>& localMoveFrom, const AutomationPoint& point,
+                                       AutomationPointEdits& allEdits);
 
     const Score* m_score = nullptr;
     AutomationDataPtr m_automationData;

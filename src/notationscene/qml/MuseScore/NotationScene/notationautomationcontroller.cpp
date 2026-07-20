@@ -607,8 +607,10 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         }
         editedPoint.generated = false;
 
+        mu::engraving::AutomationPointEdits edits { { newTick, editedPoint, oldPointData.tick } };
+
         m_isApplyingOwnEdit = true;
-        score()->editAutomationPoints(curveKey, { { newTick, editedPoint, oldPointData.tick } });
+        score()->editAutomationPoints(curveKey, edits);
         m_isApplyingOwnEdit = false;
 
         return true;
@@ -629,8 +631,10 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     newPoint.interpolation = existingPoint.interpolation;
     newPoint.itemId = existingPoint.itemId;
 
+    mu::engraving::AutomationPointEdits edits { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } };
+
     m_isApplyingOwnEdit = true;
-    score()->editAutomationPoints(curveKey, { { oldPointData.tick, updatedOldPoint }, { newTick, newPoint } });
+    score()->editAutomationPoints(curveKey, edits);
     m_isApplyingOwnEdit = false;
 
     return true;
