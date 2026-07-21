@@ -1,86 +1,45 @@
+# Autosave files
 .*,
 *~
-*.swp
 *.autosave
-.qped
-.directory
+*.swp
+
+# IDEs
 .idea
+.qtcreator
+.vs
 .vscode/
-/builds
-build
+
+# build.cmake files
 /build_overrides.cmake
-build.release
+/builds
+
+# Build output
+build
+build-*
+build.artifacts
 build.debug
 build.install
-build.tooldata
 build.qtc
-build-*
-build
-muse
-muse_deps
+build.release
+build.symbols
+build.tooldata
+build.xcode
+
+applebuild
+MuseScorePortable
 win32build
 win32install
 win64build
 win64install
-build.xcode
-applebuild
-build.artifacts
-build.symbols
-vtest.artifacts
-MuseScorePortable
-/*.config
-/*.creator
-/*.files
-/*.includes
-*.user
-/share/locale/*placeholder.ts
-/share/locale/*.qm
-/share/instruments/tsv
-Doc
-DocLib
-*.sfd~
-/.project
-mscore/revision.h
-local_build_revision.env
-.DS_Store
-CMakeLists.txt.user.*
-*.qmlc
-*.jsc
-vtest/html
-vtest/compare
-thirdparty/mupdf-qt
-vtest/LOG
-vtest/META-INF
-vtest/Thumbnails
-vtest/Pictures
-.vs
-dependencies
 
-# Downloaded files during build process
-VERSION
-/mscore/data/mscore.aps
-/msvc.*
-
-# Backup Files created by Merging Softwares (Example: Meld)
-*.orig
-
-temp_*
-
+# Local files
 *.local.cmake
-
-# Python
-__pycache__/
-*.pyc
-.venv/
-.pdm-python
-
-**/_deps/*
-
-# Stuff from 3.x builds
-/share/sound/MuseScore_General*
-
-# User overrides of SetupBuildEnvironment
+*.user
+.DS_Store
 /buildscripts/cmake/SetupBuildEnvironment.user.cmake
+CMakeLists.txt.user.*
+local_build_revision.env
 
 # CMake User presets
 CMakeUserPresets.json
@@ -91,3 +50,34 @@ compile_commands.json
 
 # QML language server
 **/.qmlls.ini
+
+# Downloaded dependencies
+**/_deps/*
+
+# Translations
+/share/locale/*placeholder.ts
+/share/locale/*.qm
+
+# Instruments
+/share/instruments/tsv
+
+# Backup Files created by Merging Softwares (Example: Meld)
+*.orig
+
+# Temporary files (vtests)
+temp_*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pdm-python
+
+# Submodules from the main branch
+/muse
+/muse_deps
+
+# Stuff from 3.x builds
+/mscore/revision.h
+/share/sound/MuseScore_General*
+/VERSION
