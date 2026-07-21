@@ -193,7 +193,6 @@ EngravingObject* KeySig::propertyDelegate(Pid propertyId) const
     case Pid::KEY_CONCERT:
     case Pid::SHOW_COURTESY:
     case Pid::KEYSIG_MODE:
-    case Pid::IS_COURTESY:
     {
         Segment* thisSeg = segment();
         Segment* nextKSSeg = thisSeg ? thisSeg->next1(SegmentType::KeySig) : nullptr;
@@ -290,8 +289,11 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
 void KeySig::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (EngravingObject* e = propertyDelegate(id)) {
-        // If this is a courtesy, we must change the property of the _real_ key signature
+        /* If this is a courtesy, we must change the property of the _real_ key signature,
+         * and we want to avoid EngravingObject::undoChangeProperty unsetting GENERATED
+         * unless something really has changed about the courtesy itself: */
         e->undoChangeProperty(id, v, ps);
+        // If removing the courtesy, deselect it first:
         if (id == Pid::SHOW_COURTESY && _isCourtesy && !v.toBool() && selected() && e->isKeySig()) {
             score()->deselect(this);
             score()->select(toEngravingItem(e), SelectType::ADD, staffIdx());
