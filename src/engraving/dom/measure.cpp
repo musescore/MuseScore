@@ -1658,7 +1658,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             }
             break;
         case LayoutBreakType::NOBREAK:
-            if (measure->noBreak()) {
+            if (measure->noBreak() || measure->isEndOfSystemLock() || measure->isEndOfPageLock()) {
                 delete b;
                 b = 0;
             } else {
@@ -1668,6 +1668,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             break;
         }
         if (b) {
+            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
+            }
             b->setTrack(0);
             b->setParent(measure);
             score()->undoAddElement(b);

@@ -1557,7 +1557,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
         const RangeLock* systemLock = toSystemLockIndicator(el)->systemLock();
-        EditSystemLocks::undoRemoveSystemLock(tx, this, systemLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
     }
     break;
     case ElementType::PAGE_LOCK_INDICATOR:
