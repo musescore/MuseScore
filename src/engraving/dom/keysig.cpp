@@ -284,6 +284,24 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void KeySig::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (EngravingObject* e = propertyDelegate(id)) {
+        // If this is a courtesy, we must change the property of the _real_ key signature
+        e->undoChangeProperty(id, v, ps);
+        if (id == Pid::SHOW_COURTESY && _isCourtesy && !v.toBool() && selected() && e->isKeySig()) {
+            score()->deselect(this);
+            score()->select(toEngravingItem(e), SelectType::ADD, staffIdx());
+        }
+        return;
+    }
+    EngravingItem::undoChangeProperty(id, v, ps);
+}
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

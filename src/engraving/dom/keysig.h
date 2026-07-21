@@ -81,6 +81,8 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    void undoChangeProperty(Pid id, const PropertyValue& v) { EngravingObject::undoChangeProperty(id, v); }
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     PropertyValue propertyDefault(Pid id) const override;
     EngravingObject* propertyDelegate(Pid) const override;
 
