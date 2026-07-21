@@ -149,14 +149,24 @@ String MasterScore::name() const
     return fileInfo()->displayName();
 }
 
-IAutomation* MasterScore::automation() const
+AutomationDataConstPtr MasterScore::automationData() const
 {
-    return m_automationController->automation();
+    return m_automationController->automationData();
+}
+
+void MasterScore::setAutomationData(AutomationDataPtr data)
+{
+    m_automationController->setAutomationData(std::move(data));
+}
+
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    m_automationController->editPoints(key, edits);
 }
 
 void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
 {
-    m_automationController->insertTime(this, tick, len);
+    m_automationController->insertTime(tick, len);
 }
 
 //---------------------------------------------------------
@@ -393,7 +403,7 @@ void MasterScore::initAutomation()
 
 void MasterScore::updateAutomation(const ScoreChanges& changes)
 {
-    m_automationController->update(this, changes);
+    m_automationController->update(changes);
 }
 
 //---------------------------------------------------------

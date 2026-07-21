@@ -110,8 +110,6 @@
 #include "utils.h"
 #include "volta.h"
 
-#include "engraving/automation/iautomation.h"
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
@@ -5395,7 +5393,12 @@ void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
     m_systemDividers.at(systemIdx)[static_cast<size_t>(divider->dividerType())] = divider;
 }
 
-IAutomation* Score::automation() const { return m_masterScore->automation(); }
+AutomationDataConstPtr Score::automationData() const { return m_masterScore->automationData(); }
+
+void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    m_masterScore->editAutomationPoints(key, edits);
+}
 
 TransactionManager* Score::transactionManager() const { return m_masterScore->transactionManager(); }
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }

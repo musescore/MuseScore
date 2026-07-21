@@ -37,7 +37,8 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/types/typesconv.h"
 
-#include "engraving/automation/internal/automation.h"
+#include "engraving/automation/automationdata.h"
+#include "engraving/editing/editautomationpoints.h"
 
 #include "log.h"
 
@@ -184,17 +185,17 @@ static int dynamicPriority(const EngravingItem* item)
 
 static const AutomationPoint* activePoint(const AutomationCurveMap& curves, const AutomationCurveKey& key, utick_t tick)
 {
-    static const AutomationCurve EMPTY_CURVE;
+    static const AutomationCurve NO_CURVE;
 
     const auto keyCurveIt = curves.find(key);
-    const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : EMPTY_CURVE;
+    const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : NO_CURVE;
     const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
 
     if (key.voiceIdx.has_value()) {
         AutomationCurveKey sharedKey = key;
         sharedKey.voiceIdx = std::nullopt;
         const auto sharedCurveIt = curves.find(sharedKey);
-        const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : EMPTY_CURVE;
+        const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : NO_CURVE;
         const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
 
         if (sharedIt != sharedCurve.cend()) {
@@ -207,14 +208,27 @@ static const AutomationPoint* activePoint(const AutomationCurveMap& curves, cons
     return keyIt != keyCurve.cend() ? &keyIt->second : nullptr;
 }
 
-ScoreAutomationController::ScoreAutomationController()
+void ScoreAutomationController::setAutomationData(AutomationDataPtr data)
 {
-    m_automation = new Automation();
+    m_automationData = std::move(data);
 }
 
-ScoreAutomationController::~ScoreAutomationController()
+void ScoreAutomationController::editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
 {
-    delete m_automation;
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(m_score && m_automationData) {
+        return;
+    }
+
+    if (edits.empty()) {
+        return;
+    }
+
+    //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
+    mirrorEditsToRepeats(key, edits);
+
+    m_score->undo(new EditAutomationPoints(m_score, m_automationData, key, edits));
 }
 
 static bool isRelevantChange(const ScoreChanges& changes)
@@ -235,30 +249,34 @@ static bool isRelevantChange(const ScoreChanges& changes)
     return false;
 }
 
-void ScoreAutomationController::init(const Score* score)
+void ScoreAutomationController::init(Score* score)
 {
-    update(score, 0, muse::nidx, muse::nidx);
+    m_score = score;
+    update(0, muse::nidx, muse::nidx);
 }
 
-void ScoreAutomationController::insertTime(const Score* score, const Fraction& tick, const Fraction& len)
+void ScoreAutomationController::insertTime(const Fraction& tick, const Fraction& len)
 {
+    TRACEFUNC;
+
     const utick_t diff = len.ticks();
-    if (m_automation->isEmpty() || diff == 0) {
+    if (!m_score || !m_automationData || m_automationData->isEmpty() || diff == 0) {
         return;
     }
 
-    TRACEFUNC;
-
-    const utick_t utick = score->repeatList().tick2utick(tick.ticks());
+    const utick_t utick = m_score->repeatList().tick2utick(tick.ticks());
+    AutomationCurveMap curves = m_automationData->curves();
 
     if (diff < 0) {
-        m_automation->removeTicks(utick + diff, utick);
+        removeTicks(utick + diff, utick, curves);
     } else if (diff > 0) {
-        m_automation->moveTicks(utick, diff);
+        moveTicks(utick, diff, curves);
     }
+
+    m_automationData->setCurves(curves);
 }
 
-void ScoreAutomationController::update(const Score* score, const ScoreChanges& changes)
+void ScoreAutomationController::update(const ScoreChanges& changes)
 {
     if (changes.isTextEditing || !isRelevantChange(changes)) {
         return;
@@ -271,21 +289,21 @@ void ScoreAutomationController::update(const Score* score, const ScoreChanges& c
     const bool voiceAssignmentChanged = muse::contains(changes.changedPropertyIdSet, Pid::VOICE_ASSIGNMENT);
 
     if (voiceAssignmentChanged) {
-        update(score, tickFrom, muse::nidx, muse::nidx);
+        update(tickFrom, muse::nidx, muse::nidx);
     } else {
-        update(score, tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
+        update(tickFrom, changes.staffIdxFrom, changes.staffIdxTo);
     }
 }
 
-void ScoreAutomationController::update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
+void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(score) {
+    if (!m_score) {
         return;
     }
 
-    const RepeatList& repeatList = score->repeatList();
+    const RepeatList& repeatList = m_score->repeatList();
     if (repeatList.empty()) {
         return;
     }
@@ -299,7 +317,11 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
         return;
     }
 
-    const StaffRange range(score, staffIdxFrom, staffIdxTo);
+    if (!m_automationData) {
+        m_automationData = std::make_shared<AutomationData>();
+    }
+
+    const StaffRange range(m_score, staffIdxFrom, staffIdxTo);
     const RepeatSegment* firstSeg = *repeatFromIt;
 
     UpdateContext ctx;
@@ -308,8 +330,8 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     ctx.clearFromUTick = std::max(firstSeg->utick, tickFrom + (firstSeg->utick - firstSeg->tick));
 
     // Copy only the curves this update can affect, dropping the generated points that the rebuild
-    // below re-creates; all other curves stay untouched in m_automation
-    copyCurvesForRebuild(m_automation->curves(), range, ctx.clearFromUTick, ctx.curves);
+    // below re-creates; all other curves stay untouched in m_automationData
+    copyCurvesForRebuild(m_automationData->curves(), range, ctx.clearFromUTick, ctx.curves);
 
     // Step 1: segment dynamics: populates ctx.dynamicPriorities
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
@@ -345,7 +367,7 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     // Step 2: spanner points: ctx.dynamicPriorities fully populated; sets inValues on hairpin-end dynamics
     for (auto it = repeatFromIt; it != repeatList.cend(); ++it) {
         const RepeatSegment* seg = *it;
-        addSpannerPoints(score, seg->tick, seg->endTick(), seg->utick - seg->tick, range, ctx);
+        addSpannerPoints(m_score, seg->tick, seg->endTick(), seg->utick - seg->tick, range, ctx);
     }
 
     // Step 3: fill each voice curve with any points from the base (all-voice) curve it doesn't already have
@@ -355,7 +377,66 @@ void ScoreAutomationController::update(const Score* score, int tickFrom, staff_i
     addMeasureRepeatPoints(ctx);
 
     // Step 5: the new curves are fully built; merge them back, replacing only the affected ones
-    m_automation->replaceCurves(ctx.curves);
+    m_automationData->replaceCurves(ctx.curves);
+}
+
+//! NOTE: moves all points with tick >= tickFrom by diff ticks
+void ScoreAutomationController::moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves)
+{
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto startIt = curve.lower_bound(tickFrom);
+        if (startIt == curve.end()) {
+            continue;
+        }
+
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+}
+
+//! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
+void ScoreAutomationController::removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves)
+{
+    IF_ASSERT_FAILED(tickFrom <= tickTo) {
+        return;
+    }
+
+    const utick_t diff = tickFrom - tickTo;
+
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto eraseFromIt = curve.lower_bound(tickFrom);
+        if (eraseFromIt == curve.end()) {
+            continue;
+        }
+
+        curve.erase(eraseFromIt, curve.upper_bound(tickTo));
+
+        const auto startIt = curve.lower_bound(tickTo);
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+
+    for (auto it = curves.begin(); it != curves.end();) {
+        it = it->second.empty() ? curves.erase(it) : std::next(it);
+    }
 }
 
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
@@ -401,79 +482,96 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
         return;
     }
 
+    const DynamicType dynamicType = dynamic->dynamicType();
+    const utick_t tick = dynamic->tick().ticks() + tickOffset;
+
+    DynamicInfo info;
+    info.tick = tick;
+
+    if (auto ordinaryIt = ORDINARY_DYNAMIC_VALUES.find(dynamicType); ordinaryIt != ORDINARY_DYNAMIC_VALUES.end()) {
+        info.kind = DynamicInfo::Ordinary { ordinaryIt->second };
+    } else if (auto singleNoteIt = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); singleNoteIt != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
+        DynamicInfo::SingleNote singleNote { singleNoteIt->second };
+        if (const Segment* nextSeg = dynamic->segment()->next()) {
+            singleNote.nextTick = nextSeg->tick().ticks() + tickOffset;
+        }
+        info.kind = singleNote;
+    } else if (auto compoundIt = COMPOUND_DYNAMIC_VALUES.find(dynamicType); compoundIt != COMPOUND_DYNAMIC_VALUES.end()) {
+        info.kind = DynamicInfo::Compound { compoundIt->second.first, compoundIt->second.second,
+                                            tick + dynamic->velocityChangeLength().ticks() };
+    } else {
+        NOT_SUPPORTED;
+        return;
+    }
+
     const std::vector<AutomationCurveKey> keys = resolveKeys(dynamic, AutomationType::Dynamics, range);
+    if (keys.empty()) {
+        return;
+    }
+
+    info.priority = dynamicPriority(dynamic);
+
+    info.eid = dynamic->eid();
+    if (!info.eid.isValid()) {
+        info.eid = dynamic->assignNewEID();
+    }
+
     for (const AutomationCurveKey& key : keys) {
-        addDynamicPoints(dynamic, tickOffset, key, ctx);
+        addDynamicPoints(info, key, ctx);
     }
 }
 
-void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key,
-                                                 UpdateContext& ctx)
+void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const AutomationCurveKey& key, UpdateContext& ctx)
 {
     IF_ASSERT_FAILED(key.isValid()) {
         return;
     }
 
-    const int priority = dynamicPriority(dynamic);
-    const DynamicType dynamicType = dynamic->dynamicType();
-    const utick_t dynamicUTick = dynamic->tick().ticks() + tickOffset;
-
-    EID eid = dynamic->eid();
-    if (!eid.isValid()) {
-        eid = dynamic->assignNewEID();
-    }
-
-    if (auto it = ORDINARY_DYNAMIC_VALUES.find(dynamicType); it != ORDINARY_DYNAMIC_VALUES.end()) {
+    if (const auto* ordinary = std::get_if<DynamicInfo::Ordinary>(&info.kind)) {
         AutomationPoint point;
         point.inValue = AutomationPoint::FromPrevious {};
-        point.outValue = it->second;
-        point.itemId = eid;
+        point.outValue = ordinary->value;
+        point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, dynamicUTick, point, priority, ctx);
+        addDynamicPoint(key, info.tick, point, info.priority, ctx);
         return;
     }
 
-    if (auto it = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); it != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        const Segment* nextSeg = dynamic->segment()->next();
-        const AutomationPoint* prevPoint = nextSeg ? activePoint(ctx.curves, key, dynamicUTick) : nullptr;
+    if (const auto* singleNote = std::get_if<DynamicInfo::SingleNote>(&info.kind)) {
+        const AutomationPoint* prevPoint = singleNote->nextTick ? activePoint(ctx.curves, key, info.tick) : nullptr;
 
         AutomationPoint point;
         point.inValue = AutomationPoint::FromPrevious {};
-        point.outValue = it->second;
-        point.itemId = eid;
+        point.outValue = singleNote->value;
+        point.itemId = info.eid;
         point.generated = true;
-        addDynamicPoint(key, dynamicUTick, point, priority, ctx);
+        addDynamicPoint(key, info.tick, point, info.priority, ctx);
 
-        if (nextSeg) {
+        if (singleNote->nextTick) {
             // Recovers to whatever was active before this dynamic
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
             nextPoint.inValue = point.outValue;
             nextPoint.generated = true;
-            tryAddDynamicPoint(key, nextSeg->tick().ticks() + tickOffset, nextPoint, priority, ctx);
+            tryAddDynamicPoint(key, *singleNote->nextTick, nextPoint, info.priority, ctx);
         }
 
         return;
     }
 
-    if (auto it = COMPOUND_DYNAMIC_VALUES.find(dynamicType); it != COMPOUND_DYNAMIC_VALUES.end()) {
-        const std::pair<real_t, real_t>& values = it->second;
-        const utick_t endPointTick = dynamicUTick + dynamic->velocityChangeLength().ticks();
-
+    if (const auto* compound = std::get_if<DynamicInfo::Compound>(&info.kind)) {
         AutomationPoint startPoint;
         startPoint.inValue = AutomationPoint::FromPrevious {};
-        startPoint.outValue = values.first;
-        startPoint.itemId = eid;
+        startPoint.outValue = compound->startValue;
+        startPoint.itemId = info.eid;
         startPoint.generated = true;
-        addDynamicPoint(key, dynamicUTick, startPoint, priority, ctx);
+        addDynamicPoint(key, info.tick, startPoint, info.priority, ctx);
 
         AutomationPoint endPoint;
         endPoint.inValue = AutomationPoint::SameAsOut {};
-        endPoint.outValue = values.second;
-        endPoint.itemId = eid;
+        endPoint.outValue = compound->endValue;
+        endPoint.itemId = info.eid;
         endPoint.generated = true;
-        tryAddDynamicPoint(key, endPointTick, endPoint, priority, ctx);
-
-        return;
+        tryAddDynamicPoint(key, compound->endPointTick, endPoint, info.priority, ctx);
     }
 }
 
@@ -690,7 +788,13 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 
             for (AutomationCurve* curve : staffCurves) {
                 for (auto it = curve->lower_bound(srcFrom), end = curve->lower_bound(srcTo); it != end; ++it) {
-                    curve->insert({ it->first + tickShift, it->second });
+                    if (it->second.generated) {
+                        curve->insert({ it->first + tickShift, it->second });
+                    } else {
+                        AutomationPoint mirroredPoint = it->second;
+                        mirroredPoint.generated = true;
+                        curve->insert({ it->first + tickShift, mirroredPoint });
+                    }
                 }
             }
         }
@@ -803,4 +907,108 @@ std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const Eng
     }
 
     return result;
+}
+
+void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    TRACEFUNC;
+
+    const RepeatList& repeatList = m_score->repeatList();
+    if (repeatList.size() <= 1) {
+        return;
+    }
+
+    const Staff* staff = m_score->staffById(key.staffId);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    const StaffRange range(m_score, staff->idx(), staff->idx());
+
+    // Bounded by the original size, since mirrored edits are appended to the same vector below
+    const size_t originalEditCount = edits.size();
+    for (size_t i = 0; i < originalEditCount; ++i) {
+        // Copied by value: push_back below may reallocate edits
+        AutomationPointEdit localEdit = edits[i];
+        const auto sourceIt = repeatList.findRepeatSegmentFromUTick(localEdit.tick);
+        IF_ASSERT_FAILED(sourceIt != repeatList.cend()) {
+            continue;
+        }
+
+        const RepeatSegment* sourceSeg = *sourceIt;
+        const int sourceTickOffset = sourceSeg->utick - sourceSeg->tick;
+
+        // Re-express the edit in tick coordinates local to sourceSeg
+        localEdit.tick -= sourceTickOffset;
+        if (auto* movePoint = std::get_if<AutomationPointEdit::MovePoint>(&localEdit.change)) {
+            movePoint->from -= sourceTickOffset;
+        }
+
+        for (const RepeatSegment* targetSeg : repeatList) {
+            if (targetSeg != sourceSeg) {
+                const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
+                mirrorPointIfInRange(localEdit, targetRange, edits);
+            }
+            mirrorToMeasureRepeats(targetSeg, range, localEdit, edits);
+        }
+    }
+}
+
+void ScoreAutomationController::mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range,
+                                                     AutomationPointEdits& allEdits)
+{
+    const int localTick = static_cast<int>(localEdit.tick);
+    if (localTick < range.from || localTick >= range.toExclusive) {
+        return;
+    }
+
+    const utick_t mirroredTick = static_cast<utick_t>(localTick + range.tickOffset);
+
+    if (std::holds_alternative<AutomationPointEdit::ErasePoint>(localEdit.change)) {
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::ErasePoint {} });
+        return;
+    }
+
+    const auto* movePoint = std::get_if<AutomationPointEdit::MovePoint>(&localEdit.change);
+
+    // Mirrored points are derived from the user's edit, not edited directly, so they are marked generated
+    AutomationPoint mirroredPoint = movePoint ? movePoint->point : std::get<AutomationPointEdit::SetPoint>(localEdit.change).point;
+    mirroredPoint.generated = true;
+
+    if (movePoint && movePoint->from >= range.from && movePoint->from < range.toExclusive) {
+        const utick_t mirroredMoveFrom = static_cast<utick_t>(movePoint->from + range.tickOffset);
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::MovePoint { mirroredPoint, mirroredMoveFrom } });
+    } else {
+        allEdits.push_back({ mirroredTick, AutomationPointEdit::SetPoint { mirroredPoint } });
+    }
+}
+
+void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range,
+                                                       const AutomationPointEdit& localEdit, AutomationPointEdits& allEdits)
+{
+    const int tickOffset = targetSeg->utick - targetSeg->tick;
+
+    MeasureRepeats measureRepeats;
+    for (const Measure* measure : targetSeg->measureList()) {
+        for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment; segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
+            collectMeasureRepeats(segment, tickOffset, range, measureRepeats);
+        }
+    }
+
+    for (const auto& [mr, mrTickOffset] : measureRepeats) {
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
+            const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+            IF_ASSERT_FAILED(referringMeasure && referringMeasure != currMeasure) {
+                continue;
+            }
+
+            const int measureFrom = referringMeasure->tick().ticks();
+            const int measureToExclusive = referringMeasure->endTick().ticks();
+            const int tickShift = currMeasure->tick().ticks() - measureFrom;
+
+            const MirrorRange measureRange { measureFrom, measureToExclusive, tickShift + mrTickOffset };
+            mirrorPointIfInRange(localEdit, measureRange, allEdits);
+        }
+    }
 }

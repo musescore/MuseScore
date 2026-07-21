@@ -108,6 +108,8 @@ target_sources(engraving PRIVATE
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
+    editing/editautomationpoints.cpp
+    editing/editautomationpoints.h
     editing/editbeam.cpp
     editing/editbeam.h
     editing/editbrackets.cpp
@@ -368,9 +370,9 @@ target_sources(engraving PRIVATE
     rendering/paddingtable.h
 
     automation/automationtypes.h
-    automation/iautomation.h
-    automation/internal/automation.cpp
-    automation/internal/automation.h
+    automation/automationtypes_fwd.h
+    automation/automationdata.cpp
+    automation/automationdata.h
     automation/internal/automationrw.cpp
     automation/internal/automationrw.h
     automation/internal/scoreautomationcontroller.cpp

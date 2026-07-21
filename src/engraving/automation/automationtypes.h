@@ -134,9 +134,20 @@ inline muse::real_t resolvedInValue(const AutomationCurve& curve, AutomationCurv
 }
 
 struct AutomationPointEdit {
-    utick_t tick = 0; // tick to write the point at
-    AutomationPoint point; // the point's final value
-    std::optional<utick_t> moveFrom; // if set, the point currently at this tick is removed as part of this edit
+    //! NOTE: write point at tick
+    struct SetPoint {
+        AutomationPoint point;
+    };
+    //! NOTE: write point at tick, removing whatever point currently sits at from
+    struct MovePoint {
+        AutomationPoint point;
+        utick_t from = 0;
+    };
+    //! NOTE: erase whatever point currently sits at tick
+    struct ErasePoint {};
+
+    utick_t tick = 0; // destination tick for SetPoint/MovePoint, or the tick to erase for ErasePoint
+    std::variant<SetPoint, MovePoint, ErasePoint> change;
 };
 
 using AutomationPointEdits = std::vector<AutomationPointEdit>;
@@ -152,11 +163,16 @@ struct AutomationChanges {
         return !isFullReset && affectedKeys.empty();
     }
 
+    void extend(utick_t from, utick_t to)
+    {
+        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
+        tickTo = std::max(tickTo, to);
+    }
+
     void extend(const AutomationCurveKey& key, utick_t from, utick_t to)
     {
         affectedKeys.insert(key);
-        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
-        tickTo = std::max(tickTo, to);
+        extend(from, to);
     }
 
     void clear()

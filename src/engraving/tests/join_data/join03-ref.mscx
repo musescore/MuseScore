@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>C_C</eid>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
@@ -22,9 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
-      <eid>D_D</eid>
+      <eid>C_C</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -62,33 +62,33 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>F_F</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>G_G</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Join Measure+Hairpin</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             </Clef>
           <KeySig>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -98,7 +98,7 @@
               <veloChange>10</veloChange>
               <beginHookHeight>-1.9</beginHookHeight>
               <endHookHeight>-1.9</endHookHeight>
-              <eid>B_B</eid>
+              <eid>L_L</eid>
               </HairPin>
             <next>
               <location>

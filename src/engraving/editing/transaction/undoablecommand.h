@@ -22,7 +22,10 @@
 
 #pragma once
 
+#include <optional>
 #include <vector>
+
+#include "engraving/types/types.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -147,6 +150,9 @@ enum class CommandType : signed char {
     // Text
     TextEdit,
 
+    // Automation
+    EditAutomationPoints,
+
     // Other
     InsertTime,
     ChangeScoreOrder,
@@ -166,6 +172,13 @@ enum class UndoableCommandFilter : unsigned char {
 #define UNDO_NAME(a) const char* name() const override { return a; }
 #define UNDO_CHANGED_OBJECTS(...) std::vector<EngravingObject*> objectItems() const override { return __VA_ARGS__; }
 
+struct ChangedRange {
+    Fraction tickFrom;
+    Fraction tickTo;
+    staff_idx_t staffIdxFrom = muse::nidx;
+    staff_idx_t staffIdxTo = muse::nidx;
+};
+
 class UndoableCommand
 {
 public:
@@ -179,6 +192,8 @@ public:
     virtual std::vector<EngravingObject*> objectItems() const { return {}; }
     virtual const char* name() const { return "UndoableCommand"; }
     virtual CommandType type() const { return CommandType::Unknown; }
+
+    virtual std::optional<ChangedRange> changedRange() const { return std::nullopt; }
 
     virtual bool matchesFilter(UndoableCommandFilter, const EngravingItem* /* target */) const { return false; }
 

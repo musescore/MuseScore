@@ -31,10 +31,37 @@
 
 using namespace mu::engraving;
 
-static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes)
+static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes,
+                                      const std::vector<UndoableCommand*>& commands)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
+    staff_idx_t startStaff = cmdState.startStaff();
+    staff_idx_t endStaff = cmdState.endStaff();
+
+    for (const UndoableCommand* cmd : commands) {
+        std::optional<ChangedRange> range = cmd->changedRange();
+        if (!range) {
+            continue;
+        }
+
+        int tickFrom = range->tickFrom.ticks();
+        int tickTo = range->tickTo.ticks();
+
+        if (startTick == -1 || startTick > tickFrom) {
+            startTick = tickFrom;
+        }
+        if (endTick == -1 || endTick < tickTo) {
+            endTick = tickTo;
+        }
+
+        if (range->staffIdxFrom != muse::nidx && (startStaff == muse::nidx || startStaff > range->staffIdxFrom)) {
+            startStaff = range->staffIdxFrom;
+        }
+        if (range->staffIdxTo != muse::nidx && (endStaff == muse::nidx || endStaff < range->staffIdxTo)) {
+            endStaff = range->staffIdxTo;
+        }
+    }
 
     for (const auto& pair : changes.changedObjects) {
         if (!pair.first->isEngravingItem()) {
@@ -53,7 +80,7 @@ static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTr
     }
 
     return { startTick, endTick,
-             cmdState.startStaff(), cmdState.endStaff(),
+             startStaff, endStaff,
              changes.isTextEditing,
              std::move(changes.changedObjects),
              std::move(changes.changedObjectTypes),
@@ -179,7 +206,8 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts, bool
 
     ScoreChanges changes;
     if (!rollback) {
-        changes = buildScoreChanges(m_masterScore->cmdState(), stack->activeTransaction()->changesInfo());
+        changes = buildScoreChanges(m_masterScore->cmdState(), stack->activeTransaction()->changesInfo(),
+                                    stack->activeTransaction()->commands());
     }
 
     LOGD() << "Undo stack current transaction commands count: " << stack->activeTransaction()->commands().size();
@@ -245,20 +273,23 @@ void TransactionManager::undoRedo(bool undo, EditData* editData)
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
     UndoableTransaction::ChangesInfo changes;
+    UndoableTransaction* transaction = nullptr;
 
     if (undo) {
-        changes = stack->last()->changesInfo(true);
+        transaction = stack->last();
+        changes = transaction->changesInfo(true);
         stack->undo(editData);
     } else {
         stack->redo();
-        changes = stack->last()->changesInfo(false);
+        transaction = stack->last();
+        changes = transaction->changesInfo(false);
     }
 
     m_masterScore->update(false);
     m_masterScore->invalidateRepeatList(); // TODO: flag individual operations
     m_masterScore->updateSelection();
 
-    ScoreChanges result = buildScoreChanges(m_masterScore->cmdState(), changes);
+    ScoreChanges result = buildScoreChanges(m_masterScore->cmdState(), changes, transaction->commands());
     m_masterScore->updateAutomation(result);
     m_masterScore->changesChannel().send(result);
 }

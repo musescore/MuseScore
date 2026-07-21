@@ -33,14 +33,11 @@
 #include "notation/notationtypes.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
+#include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 
 namespace muse::uicomponents {
 class PolylinePlot;
-}
-
-namespace mu::engraving {
-class IAutomation;
 }
 
 namespace mu::notation {
@@ -124,9 +121,10 @@ private:
     void applyAutomationChanges(const mu::engraving::AutomationChanges& changes);
 
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
+    void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
 
     INotationAutomationPtr automation() const;
-    mu::engraving::IAutomation* engravingAutomation() const;
+    mu::engraving::AutomationDataConstPtr automationData() const;
     INotationPtr currentNotation() const;
     mu::engraving::Score* score() const;
 
