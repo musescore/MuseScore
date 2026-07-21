@@ -62,9 +62,13 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
     for (auto& track1: m_midiFile.tracks()) {
         Staff* staff  = m_score->staff(staffIdx);
 
-        muse::ByteArray partName = staff->partName().toUtf8();
-        size_t len = partName.size() + 1;
-        std::vector<unsigned char> data(partName.constData(), partName.constData() + len);
+        String partName = staff->part()->longName();
+        if (partName.empty()) {
+            partName = staff->partName();
+        }
+        muse::ByteArray partNameBytes = partName.toUtf8();
+        size_t len = partNameBytes.size() + 1;
+        std::vector<unsigned char> data(partNameBytes.constData(), partNameBytes.constData() + len);
 
         MidiEvent ev;
         ev.setType(ME_META);

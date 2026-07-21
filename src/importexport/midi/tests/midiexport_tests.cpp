@@ -36,6 +36,7 @@
 #include "engraving/compat/midi/compatmidirender.h"
 #include "engraving/compat/midi/compatmidirenderinternal.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
 #include "engraving/types/types.h"
 
 #include "engraving/tests/utils/scorecomp.h"
@@ -191,6 +192,18 @@ TEST_F(MidiExportTests, midi02) {
 /// write/read midi file with key sig
 TEST_F(MidiExportTests, midi03) {
     exportAndCompareWithRef("midi03");
+}
+
+TEST_F(MidiExportTests, renamedInstrumentIsUsedAsTrackName)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/midi01.mscx"));
+    ASSERT_TRUE(score);
+
+    score->parts().front()->setLongName(u"Custom part name");
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    testMidiExport(score.get(), u"renamedInstrument.mid", MIDI_EXPORT_DATA_DIR + u"/renamedInstrument-ref.mid");
 }
 
 //! FIXME: update ref
