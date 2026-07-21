@@ -6,15 +6,16 @@ on:
 
 jobs:
   codestyle:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
-    - name: Fetch Muse CI scripts
+    - name: Install CMake
       run: |
-        cmake -P ./buildscripts/ci/checkcodestyle/ci_fetch.cmake
+        sudo apt update
+        sudo apt install -y cmake
 
-    - name: Test coding style
+    - name: Test MSS coding style
       run: |
-        cmake -P ./buildscripts/ci/checkcodestyle/_deps/checkcodestyle.cmake ./src/
+        cmake -P ./buildscripts/ci/checkcodestyle/checkcodestyle.cmake ./src/
