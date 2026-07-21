@@ -24,6 +24,7 @@ set(PLAYBACK_QML_IMPORTS
     TARGET muse_ui_qml
     TARGET muse_uicomponents_qml
     TARGET notationscene_qml
+    QtMultimedia
 )
 
 qt_add_qml_module(playback_qml

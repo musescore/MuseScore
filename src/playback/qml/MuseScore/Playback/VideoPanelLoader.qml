@@ -21,8 +21,10 @@
  */
 
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
+import Muse.UiComponents
 
 Item {
     id: root
@@ -54,6 +56,34 @@ Item {
 
         onLoaded: {
             root.updateLoadedItem()
+        }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+
+        visible: root.shouldLoadPanel && videoPanelLoader.status === Loader.Error
+        color: ui.theme.backgroundPrimaryColor
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            width: Math.max(0, Math.min(parent.width - 48, 560))
+            spacing: 12
+
+            StyledTextLabel {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                font: ui.theme.headerBoldFont
+                text: qsTrc("playback", "Video playback is unavailable")
+            }
+
+            StyledTextLabel {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                opacity: 0.75
+                text: qsTrc("playback", "MuseScore could not load the Qt Multimedia module required by the Video panel. This build may be missing QtMultimedia in its package.")
+            }
         }
     }
 }
