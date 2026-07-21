@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <optional>
 #include <set>
 
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
@@ -44,6 +45,7 @@ using namespace muse::uicomponents;
 
 using SetPoint = mu::engraving::AutomationPointEdit::SetPoint;
 using MovePoint = mu::engraving::AutomationPointEdit::MovePoint;
+using ErasePoint = mu::engraving::AutomationPointEdit::ErasePoint;
 
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
 {
@@ -99,6 +101,32 @@ static const Segment* lastSegmentOfSystem(const System* system)
         seg = seg->next1(type);
     }
     return last;
+}
+
+// Maps an x position (normalized to the staff's canvas rect) to a tick, via whichever segment it
+// falls in; nullopt if it doesn't land in any segment
+static std::optional<int> tickFromCanvasX(const System* system, const muse::RectF& staffCanvasRect, qreal x)
+{
+    const double pointCanvasX = staffCanvasRect.x() + x * staffCanvasRect.width();
+    const Segment* seg = segmentForCanvasX(system, pointCanvasX);
+    if (!seg) {
+        return std::nullopt;
+    }
+
+    const double segStartCanvasX = seg->canvasX();
+    const double segEndCanvasX = segStartCanvasX + seg->width();
+    const double segCanvasWidth = segEndCanvasX - segStartCanvasX;
+    const double tickRatio = segCanvasWidth > 0.0 ? (pointCanvasX - segStartCanvasX) / segCanvasWidth : 0.0;
+
+    const int segStartTick = seg->tick().ticks();
+    const int segEndTick = segStartTick + seg->ticks().ticks();
+    return segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
+}
+
+static AutomationCurveKey dynamicsCurveKeyFor(const Staff* staff)
+{
+    // TODO: Not always dynamics...
+    return { AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
 }
 
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
@@ -200,24 +228,63 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         IF_ASSERT_FAILED(polylinePointIndexIsValid(polyline, pointIdx)) {
             return;
         }
-        const qreal clampedX = std::clamp(x, minX, maxX);
 
-        if (completed) {
-            // Only request to update the model when completed... If rejected, leave the point
-            // where the live drag preview last put it rather than moving it any further
-            const auto pointsDataIt = m_pointsDataByStaff.find(key);
-            IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end() && pointIdx < pointsDataIt->second.size()) {
-                return;
-            }
-            if (!requestEditPoint(pointsDataIt->second.at(pointIdx), key, clampedX, y)) {
-                return;
-            }
+        const auto pointsDataIt = m_pointsDataByStaff.find(key);
+        IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end() && pointIdx < pointsDataIt->second.size()) {
+            return;
         }
 
+        const PointData& oldPointData = pointsDataIt->second[pointIdx];
+        const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, oldPointData.tick);
+        const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
+        const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
+
+        if (completed) {
+            requestEditPoint(oldPointData, key, clampedX, y);
+            return;
+        }
+
+        // Live drag preview
         QVector<QPointF> points = polyline->points();
         points.replace(pointIdx, { clampedX, y });
         polyline->setPoints(points);
         polyline->update(); // TODO: pass update rect?
+    });
+
+    QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointAdded,
+                     [this, key, polyline, system, staffCanvasRect](qreal x, qreal y, bool completed) {
+        if (completed) {
+            requestAddPoint(key, x, y);
+            return;
+        }
+
+        const std::optional<int> tick = tickFromCanvasX(system, staffCanvasRect, x);
+        if (!tick) {
+            return;
+        }
+
+        QVector<PointData>& pointsData = m_pointsDataByStaff[key];
+        int insertIdx = 0;
+        while (insertIdx < pointsData.size() && pointsData.at(insertIdx).tick < *tick) {
+            ++insertIdx;
+        }
+        pointsData.insert(insertIdx, PointData(-1, *tick, { x, y }, PointData::PointType::BOTH));
+
+        QVector<QPointF> points = polyline->points();
+        points.insert(insertIdx, { x, y });
+        polyline->setPoints(points);
+    });
+
+    QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointRemoved,
+                     [this, key](int pointIdx, bool completed) {
+        if (!completed) {
+            return;
+        }
+        const auto pointsDataIt = m_pointsDataByStaff.find(key);
+        IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end() && pointIdx >= 0 && pointIdx < pointsDataIt->second.size()) {
+            return;
+        }
+        requestRemovePoint(pointsDataIt->second.at(pointIdx), key);
     });
 
     return polyline;
@@ -484,10 +551,6 @@ void NotationAutomationController::updateStaffPointsInRange(const SysStaffKey& k
 
 void NotationAutomationController::onAutomationChanged(const mu::engraving::AutomationChanges& changes)
 {
-    if (m_isApplyingOwnEdit) {
-        return;
-    }
-
     if (!automation() || !automation()->isAutomationModeEnabled()) {
         mergePendingChanges(changes);
         return;
@@ -556,31 +619,18 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     }
 
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-    const double staffStartCanvasX = staffCanvasRect.x();
-    const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
-    const double pointCanvasX = staffStartCanvasX + x * (staffEndCanvasX - staffStartCanvasX);
-
-    // No segment at this position - reject the move rather than guessing where it should go
-    const Segment* newSeg = segmentForCanvasX(system, pointCanvasX);
-    if (!newSeg) {
-        return false;
-    }
 
     // STEP 2 - Determine the new tick value based on the x parameter...
-    const double segStartCanvasX = newSeg->canvasX();
-    const double setEndCanvasX = segStartCanvasX + newSeg->width();
-
-    const int segStartTick = newSeg->tick().ticks();
-    const int segEndTick = segStartTick + newSeg->ticks().ticks();
-
-    const double segCanvasWidth = setEndCanvasX - segStartCanvasX;
-    const double tickRatio = segCanvasWidth > 0.0 ? (pointCanvasX - segStartCanvasX) / segCanvasWidth : 0.0;
-    const int newTick = segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
+    // No segment at this position - reject the move rather than guessing where it should go
+    const std::optional<int> newTickOpt = tickFromCanvasX(system, staffCanvasRect, x);
+    if (!newTickOpt) {
+        return false;
+    }
+    const int newTick = *newTickOpt;
     const bool tickChanged = newTick != oldPointData.tick;
 
     // STEP 3 - Fetch the point being edited...
-    // TODO: Not always dynamics...
-    const mu::engraving::AutomationCurveKey curveKey { mu::engraving::AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
+    const mu::engraving::AutomationCurveKey curveKey = dynamicsCurveKeyFor(staff);
 
     const mu::engraving::AutomationCurve& curve = automationData()->curve(curveKey);
     const auto existingIt = curve.find(oldPointData.tick);
@@ -617,9 +667,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
             { newTick, MovePoint { editedPoint, oldPointData.tick } }
         };
 
-        m_isApplyingOwnEdit = true;
         editAutomationPoints(curveKey, edits);
-        m_isApplyingOwnEdit = false;
 
         return true;
     }
@@ -644,9 +692,69 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         { newTick, SetPoint { newPoint } }
     };
 
-    m_isApplyingOwnEdit = true;
     editAutomationPoints(curveKey, edits);
-    m_isApplyingOwnEdit = false;
+
+    return true;
+}
+
+bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal x, qreal y)
+{
+    IF_ASSERT_FAILED(key.isValid()) {
+        return false;
+    }
+
+    const System* system = key.system;
+    const SysStaff* sysStaff = system ? system->staff(key.staffIdx) : nullptr;
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(sysStaff && staff) {
+        return false;
+    }
+
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+    const std::optional<int> newTick = tickFromCanvasX(system, staffCanvasRect, x);
+    if (!newTick) {
+        return false;
+    }
+
+    mu::engraving::AutomationPoint newPoint;
+    newPoint.outValue = automationValueFromDisplay(1.0 - y);
+    newPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+    newPoint.generated = false;
+
+    const mu::engraving::AutomationCurveKey curveKey = dynamicsCurveKeyFor(staff);
+
+    mu::engraving::AutomationPointEdits edits {
+        { *newTick, SetPoint { newPoint } }
+    };
+
+    editAutomationPoints(curveKey, edits);
+
+    return true;
+}
+
+bool NotationAutomationController::requestRemovePoint(const PointData& pointData, const SysStaffKey& key)
+{
+    IF_ASSERT_FAILED(key.isValid()) {
+        return false;
+    }
+
+    const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, pointData.tick);
+    if (!automationPoint || automationPoint->generated || automationPoint->itemId.has_value()) {
+        return false;
+    }
+
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(staff) {
+        return false;
+    }
+
+    const mu::engraving::AutomationCurveKey curveKey = dynamicsCurveKeyFor(staff);
+
+    mu::engraving::AutomationPointEdits edits {
+        { pointData.tick, ErasePoint {} }
+    };
+
+    editAutomationPoints(curveKey, edits);
 
     return true;
 }
@@ -663,6 +771,23 @@ void NotationAutomationController::editAutomationPoints(const mu::engraving::Aut
                                           [&](mu::engraving::Transaction&) {
         sc->editAutomationPoints(key, edits);
     });
+}
+
+const mu::engraving::AutomationPoint* NotationAutomationController::automationPointAt(const SysStaffKey& key, int tick) const
+{
+    const Staff* staff = score() ? score()->staff(key.staffIdx) : nullptr;
+    IF_ASSERT_FAILED(staff && automationData()) {
+        return nullptr;
+    }
+
+    const mu::engraving::AutomationCurveKey curveKey = dynamicsCurveKeyFor(staff);
+    const mu::engraving::AutomationCurve& curve = automationData()->curve(curveKey);
+    const auto it = curve.find(tick);
+    if (it == curve.end()) {
+        return nullptr;
+    }
+
+    return &it->second;
 }
 
 INotationAutomationPtr NotationAutomationController::automation() const

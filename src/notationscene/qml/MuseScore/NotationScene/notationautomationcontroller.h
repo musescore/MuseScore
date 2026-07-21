@@ -121,7 +121,11 @@ private:
     void applyAutomationChanges(const mu::engraving::AutomationChanges& changes);
 
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
+    bool requestAddPoint(const SysStaffKey& key, qreal x, qreal y);
+    bool requestRemovePoint(const PointData& pointData, const SysStaffKey& key);
     void editAutomationPoints(const mu::engraving::AutomationCurveKey& key, mu::engraving::AutomationPointEdits& edits);
+
+    const mu::engraving::AutomationPoint* automationPointAt(const SysStaffKey& key, int tick) const;
 
     INotationAutomationPtr automation() const;
     mu::engraving::AutomationDataConstPtr automationData() const;
@@ -132,7 +136,6 @@ private:
     SysStaffToPolylinesMap m_stavesToLinesMap;
     PointsDataMap m_pointsDataByStaff;
     muse::draw::Transform m_viewMatrix;
-    bool m_isApplyingOwnEdit = false;
     mu::engraving::AutomationChanges m_pendingChanges;
 };
 }
