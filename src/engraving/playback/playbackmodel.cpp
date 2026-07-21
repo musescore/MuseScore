@@ -85,7 +85,7 @@ void PlaybackModel::load(Score* score)
         ChangedTrackIdSet trackChanges;
 
         clearExpiredTracks();
-        m_playbackCtx->clear(trackRange.trackFrom, trackRange.trackTo);
+        m_playbackCtx->clear(trackRange.trackFrom, trackRange.trackTo, tickRange.tickFrom, tickRange.tickTo);
         clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
 
         const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
@@ -125,7 +125,7 @@ void PlaybackModel::reload()
     const int tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
 
     clearExpiredTracks();
-    m_playbackCtx->clear(trackFrom, trackTo);
+    m_playbackCtx->clear(trackFrom, trackTo, tickFrom, tickTo);
 
     for (auto& pair : m_playbackDataMap) {
         pair.second.originEvents.clear();
@@ -400,7 +400,7 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
                            ChangedTrackIdSet* trackChanges)
 {
     updateSetupData();
-    updateContext(trackFrom, trackTo);
+    updateContext(trackFrom, trackTo, tickFrom, tickTo);
     updateEvents(tickFrom, tickTo, trackFrom, trackTo, trackChanges);
 }
 
@@ -438,9 +438,9 @@ void PlaybackModel::updateSetupData()
     metronomeSetupData.scoreId = scoreId;
 }
 
-void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
+void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo)
 {
-    m_playbackCtx->update(trackFrom, trackTo, m_expandRepeats);
+    m_playbackCtx->update(trackFrom, trackTo, tickFrom, tickTo, m_expandRepeats);
 
     for (const Part* part : m_score->parts()) {
         const TrackRange trackRange = part->trackRange();

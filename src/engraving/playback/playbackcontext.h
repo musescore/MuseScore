@@ -68,8 +68,8 @@ public:
 
     bool hasSoundFlags(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
-    void update(const track_idx_t trackFrom, const track_idx_t trackTo, bool expandRepeats = true);
-    void clear(const track_idx_t trackFrom, const track_idx_t trackTo);
+    void update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo, bool expandRepeats = true);
+    void clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo);
 
 private:
     using SoundPresetsMap = std::map<int /*nominalPositionTick*/, muse::mpe::SoundPresetChangeEventList>;

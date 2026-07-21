@@ -326,7 +326,8 @@ void PlaybackContext::appendRampToLevelMap(const AutomationCurve& curve, Automat
     }
 }
 
-void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trackTo, bool expandRepeats)
+void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo,
+                             bool expandRepeats)
 {
     TRACEFUNC;
 
@@ -341,12 +342,35 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
     m_dynamicsCurveByTrack.clear();
 
     for (const RepeatSegment* repeatSegment : m_score->repeatList(expandRepeats)) {
+        const int repeatStartTick = repeatSegment->tick;
+        const int repeatEndTick = repeatSegment->endTick();
+
+        if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
+            continue;
+        }
+
         std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
+            const int measureStartTick = measure->tick().ticks();
+            const int measureEndTick = measure->endTick().ticks();
+
+            if (measureStartTick > tickTo || measureEndTick <= tickFrom) {
+                continue;
+            }
+
             for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
-                int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
+                const int segmentTick = segment->tick().ticks();
+                if (segmentTick > tickTo) {
+                    break;
+                }
+
+                if (segmentTick < tickFrom) {
+                    continue;
+                }
+
+                int segmentStartTick = segmentTick + tickPositionOffset;
 
                 handleSegmentElements(repeatSegment, segment, segmentStartTick, trackFrom, trackTo, measureRepeats);
                 handleSegmentAnnotations(segment, segmentStartTick, trackFrom, trackTo);
@@ -357,23 +381,31 @@ void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trac
     }
 }
 
-void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t trackTo)
+void PlaybackContext::clear(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo)
 {
-    const auto eraseTrackRange = [trackFrom, trackTo](auto& byTrackMap) {
-        byTrackMap.erase(byTrackMap.lower_bound(trackFrom), byTrackMap.lower_bound(trackTo));
+    const auto eraseTickRangeByTrack = [trackFrom, trackTo, tickFrom, tickTo](auto& byTrackMap) {
+        for (auto it = byTrackMap.lower_bound(trackFrom); it != byTrackMap.end() && it->first < trackTo;) {
+            auto& innerMap = it->second;
+            innerMap.erase(innerMap.lower_bound(tickFrom), innerMap.upper_bound(tickTo));
+
+            if (innerMap.empty()) {
+                it = byTrackMap.erase(it);
+            } else {
+                ++it;
+            }
+        }
     };
 
-    eraseTrackRange(m_soundPresetsByTrack);
-    eraseTrackRange(m_textArticulationsByTrack);
-    eraseTrackRange(m_syllablesByTrack);
-    eraseTrackRange(m_playTechniquesByTrack);
-    eraseTrackRange(m_multiVerseLyricsPositionMap);
+    eraseTickRangeByTrack(m_soundPresetsByTrack);
+    eraseTickRangeByTrack(m_textArticulationsByTrack);
+    eraseTickRangeByTrack(m_syllablesByTrack);
+    eraseTickRangeByTrack(m_playTechniquesByTrack);
+    eraseTickRangeByTrack(m_multiVerseLyricsPositionMap);
 
-    m_usedTracks.erase(m_usedTracks.lower_bound(trackFrom), m_usedTracks.lower_bound(trackTo));
-
-    muse::remove_if(m_currentVerseNumByChordRest, [trackFrom, trackTo](const auto& pair) {
+    muse::remove_if(m_currentVerseNumByChordRest, [trackFrom, trackTo, tickFrom, tickTo](const auto& pair) {
         const track_idx_t track = pair.first->track();
-        return track >= trackFrom && track < trackTo;
+        const int tick = pair.first->tick().ticks();
+        return track >= trackFrom && track < trackTo && tick >= tickFrom && tick <= tickTo;
     });
 }
 

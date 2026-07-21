@@ -126,7 +126,7 @@ private:
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                 ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
-    void updateContext(const track_idx_t trackFrom, const track_idx_t trackTo);
+    void updateContext(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo);
     void applyContextToTrackData(const InstrumentTrackId& trackId, const PartData& data);
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);

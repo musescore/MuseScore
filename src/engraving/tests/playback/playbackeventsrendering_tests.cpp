@@ -3563,7 +3563,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, HandbellsLetVibrate)
     // [WHEN] Parse the score
     const Part* part = score->parts().front();
     const TrackRange trackRange = part->trackRange();
-    ctx->update(trackRange.startTrack, trackRange.endTrack);
+    const int lastTick = score->endTick().ticks();
+    ctx->update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
