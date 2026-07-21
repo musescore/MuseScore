@@ -5743,17 +5743,20 @@ Regular barlines should not be added at the start or end of a measure, as that c
 
 void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const Fraction& tick)
 {
-    String loc = m_e.attribute("location");
+    AsciiStringView loc = m_e.asciiAttribute("location");
     if (loc.empty()) {
-        loc = u"right";
+        loc = "right";
     }
     // Place barline in correct place
     Fraction locTick = tick;
-    if (loc == u"left") {
+    if (loc == "left") {
         locTick = measure->tick();
-    } else if (loc == u"right") {
+    } else if (loc == "right") {
         locTick = measure->endTick();
     }
+
+    const String codaLabel = m_e.attribute("coda");
+    const String segnoLabel = m_e.attribute("segno");
 
     String barStyle;
     Color barlineColor;
@@ -5762,23 +5765,68 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
     Color endingColor;
     String endingText;
     String repeat;
-    String count;
     bool printEnding = true;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "bar-style") {
             barlineColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             barStyle = m_e.readText();
-        } else if (m_e.name() == "ending") {
-            endingNumber = m_e.attribute("number");
-            endingType   = m_e.attribute("type");
-            endingColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-            printEnding = m_e.asciiAttribute("print-object") != "no";
-            endingText = m_e.readText();
+        } else if (m_e.name() == "segno") {
+            const Color segnoColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            const AsciiStringView segnoSymbol = m_e.asciiAttribute("smufl");
+            Measure* markedMeasure = (loc == "right") ? measure->nextMeasure() : measure;
+            if (markedMeasure == nullptr) {
+                m_logger->logError(u"coda or segno marker cannot be placed at the end of the score", &m_e);
+                m_e.skipCurrentElement();
+                continue;
+            }
+            Marker* m = Factory::createMarker(markedMeasure);
+            m->setMarkerType(MarkerType::SEGNO);
+            if (!segnoSymbol.empty()) {
+                m->setXmlText(u"<sym>" + String::fromAscii(segnoSymbol.ascii()) + u"</sym>");
+            }
+            if (!segnoLabel.empty()) {
+                m->setLabel(segnoLabel);
+            }
+            if (segnoColor.isValid()) {
+                colorItem(m, segnoColor);
+            }
+            const track_idx_t track = m_pass1.trackForPart(partId);
+            addElemOffset(m, track, u"above", markedMeasure, markedMeasure->tick());
+            m_e.skipCurrentElement();
+        } else if (m_e.name() == "coda") {
+            const Color codaColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            const AsciiStringView codaSymbol = m_e.asciiAttribute("smufl");
+            Measure* markedMeasure = (loc == "right") ? measure->nextMeasure() : measure;
+            if (markedMeasure == nullptr) {
+                m_logger->logError(u"coda or segno marker cannot be placed at the end of the score", &m_e);
+                m_e.skipCurrentElement();
+                continue;
+            }
+            Marker* m = Factory::createMarker(markedMeasure);
+            m->setMarkerType(MarkerType::CODA);
+            if (!codaSymbol.empty()) {
+                m->setXmlText(u"<sym>" + String::fromAscii(codaSymbol.ascii()) + u"</sym>");
+            }
+            if (!codaLabel.empty()) {
+                m->setLabel(codaLabel);
+            }
+            if (codaColor.isValid()) {
+                colorItem(m, codaColor);
+            }
+            const track_idx_t track = m_pass1.trackForPart(partId);
+            addElemOffset(m, track, u"above", markedMeasure, markedMeasure->tick());
+            m_e.skipCurrentElement();
         } else if (m_e.name() == "fermata") {
             const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             const String fermataType = m_e.attribute("type");
-            Segment* const segment = measure->getSegment(SegmentType::EndBarLine, locTick);
+            SegmentType st = SegmentType::BarLine;
+            if (locTick == measure->endTick()) {
+                st = SegmentType::EndBarLine;
+            } else if (locTick == measure->tick()) {
+                st = SegmentType::BeginBarLine;
+            }
+            Segment* const segment = measure->getSegment(st, locTick);
             const track_idx_t track = m_pass1.trackForPart(partId);
             Fermata* fermata = Factory::createFermata(segment);
             fermata->setSymId(convertFermataToSymId(m_e.readText()));
@@ -5795,13 +5843,21 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             // Terminate tempo lines
             const InferredTempoLineStack& lines = getInferredTempoLine();
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), locTick, track);
+        } else if (m_e.name() == "ending") {
+            endingNumber = m_e.attribute("number");
+            endingType   = m_e.attribute("type");
+            endingColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            printEnding = m_e.asciiAttribute("print-object") != "no";
+            endingText = m_e.readText();
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attribute("direction");
-            count = m_e.attribute("times");
-            if (count.empty()) {
-                count = u"2";
+            int count = m_e.attribute("times").toInt();
+            if (!count) {
+                count = 2;
             }
-            measure->setRepeatCount(count.toInt());
+            measure->setRepeatCount(count);
+            bool repeatBarTips = !m_e.attribute("winged").empty() && m_e.attribute("winged") != "none";
+            m_score->undoChangeStyleVal(Sid::repeatBarTips, repeatBarTips);
             m_e.skipCurrentElement();
         } else {
             skipLogCurrElem();
