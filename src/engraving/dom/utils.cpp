@@ -1499,7 +1499,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const Measure* masterMeasure = master->tick2measure(measure->tick());
+    const Measure* masterMeasure = master->tick2measureMM(measure->tick());
 
     const RepeatList& repeatList = master->repeatList(true, false);
 
@@ -1519,7 +1519,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* prevSeg = *prevSegIt;
         const Measure* lastMasterMeasure = prevSeg->lastMeasure();
-        Measure* lastMeasure = lastMasterMeasure ? score->tick2measure(lastMasterMeasure->tick()) : nullptr;
+        Measure* lastMeasure = lastMasterMeasure ? score->tick2measureMM(lastMasterMeasure->tick()) : nullptr;
         if (!lastMeasure) {
             continue;
         }
@@ -1564,6 +1564,13 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
 
     const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
     const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
+
+    if (firstMasterMeasure) {
+        firstMasterMeasure = firstMasterMeasure->coveringMMRestOrThis();
+    }
+    if (secondMasterMeasure) {
+        secondMasterMeasure = secondMasterMeasure->coveringMMRestOrThis();
+    }
 
     Score* score = firstSeg->score();
 
