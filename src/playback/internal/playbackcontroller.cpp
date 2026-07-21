@@ -1595,7 +1595,6 @@ void PlaybackController::setupTracks()
         }, Asyncable::Mode::SetReplace);
     }
 
-    m_isPlayAllowedChanged.notify();
     m_isPlayAllowedChanged.send(isPlayAllowed());
 }
 
