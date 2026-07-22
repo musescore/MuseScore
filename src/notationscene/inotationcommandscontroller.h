@@ -66,5 +66,7 @@ public:
     virtual bool isNoteInputActionAllowed() const = 0;
     virtual bool isNoteOrRestSelected() const = 0;
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
+
+    virtual bool isToggleLayoutBreakAvailable() const = 0;
 };
 }

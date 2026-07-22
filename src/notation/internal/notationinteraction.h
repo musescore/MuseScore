@@ -110,7 +110,6 @@ public:
     void clearSelection() override;
 
     void findAndSelectChordRest(const Fraction& tick) override;
-    void moveSegmentSelection(MoveDirection d) override;
 
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;

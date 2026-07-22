@@ -102,6 +102,7 @@ private:
     void selectLastElement();
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
+    void moveSegmentSelection(MoveDirection d);
     void moveChordNoteSelection(MoveDirection d);
     void selectTopOrBottomOfChord(MoveDirection d);
     void selectAllSimilarElements();

@@ -833,7 +833,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
-
+    CommandInfo{
+        GOTO_NEXT_SEGMENT_ELEMENT_COMMAND,
+        TranslatableString("action", "Next segment element"),
+        TranslatableString("action", "Select next segment element"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_PREV_SEGMENT_ELEMENT_COMMAND,
+        TranslatableString("action", "Previous segment element"),
+        TranslatableString("action", "Select previous segment element"),
+        InputSchema(),
+        Decoration()
+    },
     CommandInfo{
         GOTO_NEXT_TRACK_COMMAND,
         TranslatableString("action", "Next staff or voice"),
@@ -1091,6 +1104,186 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Toggle visibility of elements"),
         TranslatableString("action", "Toggle visibility of elements"),
         InputSchema(),
+        Decoration()
+    },
+
+    // snap commands
+    CommandInfo{
+        TOGGLE_SNAP_TO_PREV_COMMAND,
+        TranslatableString("action", "Snap to &previous"),
+        TranslatableString("action", "Snap to previous"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        TOGGLE_SNAP_TO_NEXT_COMMAND,
+        TranslatableString("action", "Snap to &next"),
+        TranslatableString("action", "Snap to next"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+
+    // layout commands
+    CommandInfo{
+        TOGGLE_SYSTEM_BREAK_COMMAND,
+        TranslatableString("action", "Add/remove system break"),
+        TranslatableString("action", "Add/remove system break"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_PAGE_BREAK_COMMAND,
+        TranslatableString("action", "Add/remove page break"),
+        TranslatableString("action", "Add/remove page break"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_SECTION_BREAK_COMMAND,
+        TranslatableString("action", "Add/remove section break"),
+        TranslatableString("action", "Add/remove section break"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPLY_SYSTEM_LOCK_COMMAND,
+        TranslatableString("action", "Add/remove system lock"),
+        TranslatableString("action", "Add/remove system lock"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_SYSTEM_LOCK_COMMAND,
+        TranslatableString("action", "Lock/unlock selected system(s)"),
+        TranslatableString("action", "Lock/unlock selected system(s)"),
+        InputSchema(),
+        Decoration(IconCode::Code::SYSTEM_LOCK)
+    },
+    CommandInfo{
+        APPLY_PAGE_LOCK_COMMAND,
+        TranslatableString("action", "Add/remove page lock"),
+        TranslatableString("action", "Add/remove page lock"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_PAGE_LOCK_COMMAND,
+        TranslatableString("action", "Lock/unlock selected page(s)"),
+        TranslatableString("action", "Lock/unlock selected page(s)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_SCORE_LOCK_COMMAND,
+        TranslatableString("action", "Lock/unlock all systems"),
+        TranslatableString("action", "Lock/unlock all systems"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MAKE_INTO_SYSTEM_COMMAND,
+        TranslatableString("action", "Create system from selection"),
+        TranslatableString("action", "Create system from selection"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MAKE_INTO_PAGE_COMMAND,
+        TranslatableString("action", "Create page from selection"),
+        TranslatableString("action", "Create page from selection"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND,
+        TranslatableString("action", "Move measure to previous system"),
+        TranslatableString("action", "Move measure to previous system"),
+        InputSchema(),
+        Decoration(IconCode::Code::ARROW_UP)
+    },
+    CommandInfo{
+        MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND,
+        TranslatableString("action", "Move measure to next system"),
+        TranslatableString("action", "Move measure to next system"),
+        InputSchema(),
+        Decoration(IconCode::Code::ARROW_DOWN)
+    },
+    CommandInfo{
+        MOVE_SYSTEM_TO_PREV_PAGE_COMMAND,
+        TranslatableString("action", "Move system to previous page"),
+        TranslatableString("action", "Move system to previous page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND,
+        TranslatableString("action", "Move system to next page"),
+        TranslatableString("action", "Move system to next page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SPLIT_MEASURE_COMMAND,
+        TranslatableString("action", "&Split measure before selected note/rest"),
+        TranslatableString("action", "Split measure before selected note/rest"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        JOIN_MEASURES_COMMAND,
+        TranslatableString("action", "&Join selected measures"),
+        TranslatableString("action", "Join selected measures"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_MEASURE_COMMAND,
+        TranslatableString("action", "&Insert one measure before selection"),
+        TranslatableString("action", "Insert one measure before selection"),
+        InputSchema(),
+        Decoration(IconCode::Code::INSERT_ONE_MEASURE)
+    },
+    CommandInfo{
+        INSERT_MEASURES_COMMAND,
+        TranslatableString("action", "Insert &before selection…"),
+        TranslatableString("action", "Insert measures before selection"),
+        InputSchema({
+            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_MEASURES_AFTER_SELECTION_COMMAND,
+        TranslatableString("action", "Insert &after selection…"),
+        TranslatableString("action", "Insert measures after selection"),
+        InputSchema({
+            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_MEASURES_AT_START_OF_SCORE_COMMAND,
+        TranslatableString("action", "Insert at &start of score…"),
+        TranslatableString("action", "Insert measures at start of score"),
+        InputSchema({
+            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_MEASURE_COMMAND,
+        TranslatableString("action", "Insert &one measure at end of score"),
+        TranslatableString("action", "Insert one measure at end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_MEASURES_COMMAND,
+        TranslatableString("action", "Insert at &end of score…"),
+        TranslatableString("action", "Insert measures at end of score"),
+        InputSchema({
+            { "count", Arg(DataType::Integer, u"Number of measures to insert") },
+        }),
         Decoration()
     },
 };

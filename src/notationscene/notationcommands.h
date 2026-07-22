@@ -38,6 +38,8 @@ inline static const muse::rcommand::Command GOTO_FIRST_ELEMENT_COMMAND("command:
 inline static const muse::rcommand::Command GOTO_LAST_ELEMENT_COMMAND("command://notation/goto-last-element");
 inline static const muse::rcommand::Command GOTO_NEXT_ELEMENT_COMMAND("command://notation/goto-next-element");
 inline static const muse::rcommand::Command GOTO_PREV_ELEMENT_COMMAND("command://notation/goto-prev-element");
+inline static const muse::rcommand::Command GOTO_NEXT_SEGMENT_ELEMENT_COMMAND("command://notation/goto-next-segment-element");
+inline static const muse::rcommand::Command GOTO_PREV_SEGMENT_ELEMENT_COMMAND("command://notation/goto-prev-segment-element");
 inline static const muse::rcommand::Command GOTO_NEXT_TRACK_COMMAND("command://notation/goto-next-track");
 inline static const muse::rcommand::Command GOTO_PREV_TRACK_COMMAND("command://notation/goto-prev-track");
 inline static const muse::rcommand::Command GOTO_NEXT_FRAME_COMMAND("command://notation/goto-next-frame");
@@ -198,4 +200,42 @@ inline static const muse::rcommand::Command PITCH_DOWN_OCTAVE_COMMAND("command:/
 
 // properties commands
 inline static const muse::rcommand::Command TOGGLE_VISIBLE_COMMAND("command://notation/toggle-visible");
+
+// snap commands
+inline static const muse::rcommand::Command TOGGLE_SNAP_TO_PREV_COMMAND("command://notation/toggle-snap-to-prev");
+inline static const muse::rcommand::Command TOGGLE_SNAP_TO_NEXT_COMMAND("command://notation/toggle-snap-to-next");
+
+// layout commands
+
+// layout commands: measure
+inline static const muse::rcommand::Command MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND("command://notation/move-measure-to-prev-system");
+inline static const muse::rcommand::Command MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND("command://notation/move-measure-to-next-system");
+inline static const muse::rcommand::Command SPLIT_MEASURE_COMMAND("command://notation/split-measure");
+inline static const muse::rcommand::Command JOIN_MEASURES_COMMAND("command://notation/join-measures");
+inline static const muse::rcommand::Command INSERT_MEASURE_COMMAND("command://notation/insert-measure");
+inline static const muse::rcommand::Command INSERT_MEASURES_COMMAND("command://notation/insert-measures"); // with params
+inline static const muse::rcommand::Command INSERT_MEASURES_AFTER_SELECTION_COMMAND("command://notation/insert-measures-after-selection"); // with params
+inline static const muse::rcommand::Command INSERT_MEASURES_AT_START_OF_SCORE_COMMAND("command://notation/insert-measures-at-start-of-score"); // with params
+inline static const muse::rcommand::Command APPEND_MEASURE_COMMAND("command://notation/append-measure");
+inline static const muse::rcommand::Command APPEND_MEASURES_COMMAND("command://notation/append-measures"); // with params
+
+// layout commands: section
+inline static const muse::rcommand::Command TOGGLE_SECTION_BREAK_COMMAND("command://notation/toggle-section-break");
+
+// layout commands: system
+inline static const muse::rcommand::Command TOGGLE_SYSTEM_BREAK_COMMAND("command://notation/toggle-system-break");
+inline static const muse::rcommand::Command APPLY_SYSTEM_LOCK_COMMAND("command://notation/apply-system-lock");
+inline static const muse::rcommand::Command TOGGLE_SYSTEM_LOCK_COMMAND("command://notation/toggle-system-lock");
+inline static const muse::rcommand::Command MAKE_INTO_SYSTEM_COMMAND("command://notation/make-into-system");
+inline static const muse::rcommand::Command MOVE_SYSTEM_TO_PREV_PAGE_COMMAND("command://notation/move-system-to-prev-page");
+inline static const muse::rcommand::Command MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND("command://notation/move-system-to-next-page");
+
+// layout commands: page
+inline static const muse::rcommand::Command TOGGLE_PAGE_BREAK_COMMAND("command://notation/toggle-page-break");
+inline static const muse::rcommand::Command APPLY_PAGE_LOCK_COMMAND("command://notation/apply-page-lock");
+inline static const muse::rcommand::Command TOGGLE_PAGE_LOCK_COMMAND("command://notation/toggle-page-lock");
+inline static const muse::rcommand::Command MAKE_INTO_PAGE_COMMAND("command://notation/make-into-page");
+
+// layout commands: score
+inline static const muse::rcommand::Command TOGGLE_SCORE_LOCK_COMMAND("command://notation/toggle-score-lock");
 }

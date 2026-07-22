@@ -102,7 +102,6 @@ public:
     virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
     virtual void selectTopStaff() = 0;
     virtual void selectEmptyTrailingMeasure() = 0;
-    virtual void moveSegmentSelection(MoveDirection d) = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 
