@@ -23,31 +23,31 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/automationtypes.h"
+#include "engraving/automation/automationutils.h"
 
 namespace mu::engraving {
-using InterpolationType = AutomationPoint::InterpolationType;
+using AutomationBend = AutomationPoint::Bend;
 
-inline AutomationPoint generatedPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+inline AutomationPoint generatedPoint(double inVal, double outVal, AutomationBend bend = AutomationBend::none())
 {
     static uint64_t lastId = 0;
 
     AutomationPoint p;
     p.inValue = inVal;
     p.outValue = outVal;
-    p.interpolation = interp;
+    p.bend = bend;
     p.itemId = EID::newUniqueTestMode(lastId);
     p.generated = true;
 
     return p;
 }
 
-inline AutomationPoint customPoint(double inVal, double outVal, InterpolationType interp = InterpolationType::Linear)
+inline AutomationPoint customPoint(double inVal, double outVal, AutomationBend bend = AutomationBend::none())
 {
     AutomationPoint p;
     p.inValue = inVal;
     p.outValue = outVal;
-    p.interpolation = interp;
+    p.bend = bend;
     p.generated = false;
 
     return p;
@@ -67,7 +67,7 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
         EXPECT_NEAR(resolvedInValue(actualCurve, actualIt), resolvedInValue(expectedCurve, expectedIt), 0.0001)
             << "inValue mismatch at tick " << tick;
         EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at tick " << tick;
-        EXPECT_EQ(actualPoint.interpolation, expectedPoint.interpolation) << "interpolation mismatch at tick " << tick;
+        EXPECT_EQ(actualPoint.bend, expectedPoint.bend) << "bend mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;
     }
 }

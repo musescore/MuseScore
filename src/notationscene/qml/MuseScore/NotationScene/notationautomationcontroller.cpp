@@ -30,6 +30,8 @@
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/automation/automationdata.h"
+#include "engraving/automation/automationutils.h"
+#include "engraving/automation/dynamicvalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
 #include "engraving/editing/transaction/transaction.h"
@@ -684,7 +686,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
     mu::engraving::AutomationPoint newPoint;
     newPoint.outValue = newValue;
     newPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
-    newPoint.interpolation = existingPoint.interpolation;
+    newPoint.bend = existingPoint.bend;
     newPoint.itemId = existingPoint.itemId;
 
     mu::engraving::AutomationPointEdits edits {

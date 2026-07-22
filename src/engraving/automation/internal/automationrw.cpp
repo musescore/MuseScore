@@ -34,11 +34,6 @@ static const std::unordered_map<AutomationType, muse::String> AUTOMATION_TYPE_TO
     { AutomationType::Dynamics, u"Dynamics" },
 };
 
-static const std::unordered_map<AutomationPoint::InterpolationType, muse::String> INTERPOLATION_TYPE_TO_STRING {
-    { AutomationPoint::InterpolationType::Linear, u"Linear" },
-    { AutomationPoint::InterpolationType::Exponential, u"Exponential" },
-};
-
 void AutomationRW::read(AutomationData& data, const muse::ByteArray& json)
 {
     TRACEFUNC;
@@ -87,8 +82,13 @@ void AutomationRW::read(AutomationData& data, const muse::ByteArray& json)
                 point.inValue = pointObj.value("inValue").toDouble();
             }
             point.outValue = pointObj.value("outValue").toDouble();
-            point.interpolation = muse::key(INTERPOLATION_TYPE_TO_STRING, pointObj.value("interpolation").toString(),
-                                            AutomationPoint::InterpolationType::Linear);
+
+            if (pointObj.contains("bend")) {
+                const muse::JsonObject bendObj = pointObj.value("bend").toObject();
+                point.bend.t = bendObj.value("t").toDouble();
+                point.bend.value = bendObj.value("value").toDouble();
+            }
+
             if (pointObj.contains("itemId")) {
                 point.itemId = EID::fromStdString(pointObj.value("itemId").toString().toStdString());
             }
@@ -134,7 +134,12 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
                 pointObj["inValue"] = std::get<muse::real_t>(point.inValue);
             }
             pointObj["outValue"] = point.outValue;
-            pointObj["interpolation"] = muse::value(INTERPOLATION_TYPE_TO_STRING, point.interpolation);
+            if (!point.bend.isNone()) {
+                muse::JsonObject bendObj;
+                bendObj["t"] = point.bend.t.raw();
+                bendObj["value"] = point.bend.value.raw();
+                pointObj["bend"] = bendObj;
+            }
             if (point.itemId.has_value()) {
                 pointObj["itemId"] = point.itemId->toStdString();
             }
