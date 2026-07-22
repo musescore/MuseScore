@@ -38,6 +38,7 @@
 #include "engraving/types/typesconv.h"
 
 #include "engraving/automation/automationdata.h"
+#include "engraving/automation/dynamicvalues.h"
 #include "engraving/editing/editautomationpoints.h"
 
 #include "log.h"
@@ -48,24 +49,6 @@ static constexpr real_t DYNAMIC_STEP = real_t::make(0.05);
 
 // Dynamics and measure repeats can only appear on these segment types
 static constexpr SegmentType RELEVANT_SEGMENT_TYPES = SegmentType::ChordRest | SegmentType::TimeTick;
-
-static const std::unordered_map<DynamicType, real_t> SINGLE_NOTE_DYNAMIC_VALUES {
-    { DynamicType::SF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::SFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::SFF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FF) },
-    { DynamicType::SFFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FF) },
-    { DynamicType::SFFF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FFF) },
-    { DynamicType::SFFFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::FFF) },
-    { DynamicType::RFZ, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-    { DynamicType::RF, ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) },
-};
-
-static const std::unordered_map<DynamicType, std::pair<real_t, real_t> > COMPOUND_DYNAMIC_VALUES {
-    { DynamicType::FP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
-    { DynamicType::PF, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::P), ORDINARY_DYNAMIC_VALUES.at(DynamicType::F) } },
-    { DynamicType::SFP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::P) } },
-    { DynamicType::SFPP, { ORDINARY_DYNAMIC_VALUES.at(DynamicType::F), ORDINARY_DYNAMIC_VALUES.at(DynamicType::PP) } },
-};
 
 ScoreAutomationController::StaffRange::StaffRange(const Score* score, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
