@@ -2007,25 +2007,25 @@ static mu::engraving::PitchValues gpBendCurveToPitchValues(const GPNote::Bend& b
         return time * PitchValue::MAX_TIME / 100;
     };
 
-    bool bendHasMiddleValue = true;
-    if (b.middleOffset1 == 12 && b.middleOffset2 == 12) {
-        bendHasMiddleValue = false;
-    }
+    //! NOTE: In GPX format, -1 means "not set". Normalize to sensible defaults.
+    const float originOffset = std::max(0.f, b.originOffset);
+    const float destOffset = std::max(0.f, b.destinationOffset);
+    const bool hasMiddleValue = (b.middleValue != -1) && !(b.middleOffset1 == 12 && b.middleOffset2 == 12);
 
     PitchValues pitchValues;
 
-    pitchValues.push_back(PitchValue(gpTimeToMuTime(b.originOffset), b.originValue));
+    pitchValues.push_back(PitchValue(gpTimeToMuTime(originOffset), b.originValue));
     PitchValue lastPoint = pitchValues.back();
 
-    if (bendHasMiddleValue) {
+    if (hasMiddleValue) {
         if (PitchValue value(gpTimeToMuTime(b.middleOffset1), b.middleValue);
-            b.middleOffset1 >= 0 && b.middleOffset1 < b.destinationOffset && value != lastPoint) {
+            b.middleOffset1 >= 0 && b.middleOffset1 < destOffset && value != lastPoint) {
             pitchValues.push_back(std::move(value));
         }
 
         if (PitchValue value(gpTimeToMuTime(b.middleOffset2), b.middleValue);
             b.middleOffset2 >= 0 && b.middleOffset2 != b.middleOffset1
-            && b.middleOffset2 < b.destinationOffset
+            && b.middleOffset2 < destOffset
             && value != lastPoint) {
             pitchValues.push_back(std::move(value));
         }
@@ -2033,20 +2033,22 @@ static mu::engraving::PitchValues gpBendCurveToPitchValues(const GPNote::Bend& b
         if (b.middleOffset1 == -1 && b.middleOffset2 == -1 && b.middleValue != -1) {
             //!@NOTE It seems when middle point is places exactly in the middle
             //!of bend  GP6 stores this value equal -1
-            if (b.destinationOffset > 50) {
+            if (destOffset > 50) {
                 pitchValues.push_back(PitchValue(gpTimeToMuTime(50), b.middleValue));
             }
         }
     }
 
     if (b.destinationOffset <= 0) {
-        PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), b.middleValue);
-        if (b.middleValue > b.destinationValue && pitchValues.back() != fixGpxValue) {
-            pitchValues.push_back(fixGpxValue);
+        if (hasMiddleValue) {
+            PitchValue fixGpxValue = PitchValue(gpTimeToMuTime(50), b.middleValue);
+            if (b.middleValue > b.destinationValue && pitchValues.back() != fixGpxValue) {
+                pitchValues.push_back(fixGpxValue);
+            }
         }
         pitchValues.push_back(PitchValue(gpTimeToMuTime(100), b.destinationValue)); //! In .gpx this value might be exist
     } else {
-        if (PitchValue value(gpTimeToMuTime(b.destinationOffset), b.destinationValue); value != lastPoint) {
+        if (PitchValue value(gpTimeToMuTime(destOffset), b.destinationValue); value != pitchValues.back()) {
             pitchValues.push_back(std::move(value));
         }
     }
@@ -2364,11 +2366,29 @@ void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
                                                         beat->hasWhammy());
 
-    if (!beat->hasWhammy() || !cr->isChord()) {
+    if (!cr->isChord()) {
         return;
     }
 
-    m_guitarBendImporter->collectDive(toChord(cr), gpBendCurveToPitchValues(beat->whammy()));
+    const track_idx_t track = cr->track();
+
+    if (beat->hasWhammy()) {
+        auto it = m_lastWhammyState.find(track);
+        const auto& w = beat->whammy();
+
+        //! NOTE: GPX reuses the same GPBeat for multiple positions — treat repeated beat as hold.
+        if (it != m_lastWhammyState.end() && it->second.beat == beat && it->second.destValue != 0) {
+            const float holdValue = it->second.destValue;
+            PitchValues holdCurve;
+            holdCurve.push_back(PitchValue(0, holdValue));
+            holdCurve.push_back(PitchValue(PitchValue::MAX_TIME, holdValue));
+            m_guitarBendImporter->collectDive(toChord(cr), holdCurve);
+            return;
+        }
+
+        m_lastWhammyState[track] = { w.destinationValue, beat };
+        m_guitarBendImporter->collectDive(toChord(cr), gpBendCurveToPitchValues(w));
+    }
 }
 
 void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)

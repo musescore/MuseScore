@@ -44,6 +44,7 @@ static void reindexGraceNotes(Chord* chord);
 static void createSlightBends(const BendDataContext& bendDataCtx, Score* score);
 static void createPreBends(const BendDataContext& bendDataCtx, Score* score);
 static void createTiedNotesBends(const BendDataContext& bendDataCtx, Score* score);
+static void createPreDives(const DiveDataContext& diveDataCtx, Score* score);
 static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType type, Score* score);
 
 void BendBuilder::addElementsToScore(Score* score, const BendDataContext& bendCtx, const DiveDataContext& diveCtx)
@@ -51,6 +52,7 @@ void BendBuilder::addElementsToScore(Score* score, const BendDataContext& bendCt
     createPreBends(bendCtx, score);
     createSlightBends(bendCtx, score);
     createGraceAfterNotes(bendCtx.graceAfterBendData, GuitarBendType::BEND, score);
+    createPreDives(diveCtx, score);
     createGraceAfterNotes(diveCtx.graceAfterDiveData, GuitarBendType::DIVE, score);
     createTiedNotesBends(bendCtx, score);
 
@@ -158,6 +160,23 @@ static void reindexGraceNotes(Chord* chord)
     }
 }
 
+static Chord* createGraceAfterChord(Chord* parent)
+{
+    Chord* graceChord = Factory::createChord(parent->score()->dummy()->segment());
+    graceChord->setTrack(parent->track());
+    graceChord->setNoteType(NoteType::GRACE8_AFTER);
+    graceChord->setNoStem(true);
+    graceChord->setBeamMode(BeamMode::NONE);
+
+    TDuration dur;
+    dur.setVal(mu::engraving::Constants::DIVISION / 2);
+    graceChord->setDurationType(dur);
+    graceChord->setTicks(dur.fraction());
+    parent->add(graceChord);
+
+    return graceChord;
+}
+
 static std::vector<Chord*> createGraceChords(Chord* chord, const grace_segment_map_t& bendInfo)
 {
     std::vector<Chord*> graceChords;
@@ -170,21 +189,8 @@ static std::vector<Chord*> createGraceChords(Chord* chord, const grace_segment_m
         maxGraceAmount = std::max(maxGraceAmount, bendInfo.at(noteIndex).data.size());
     }
 
-    const Score* score = chord->score();
     for (size_t i = 0; i < maxGraceAmount; i++) {
-        Chord* graceChord = Factory::createChord(score->dummy()->segment());
-        graceChord->setTrack(chord->track());
-        graceChord->setNoteType(NoteType::GRACE8_AFTER);
-        graceChord->setNoStem(true);
-        graceChord->setBeamMode(BeamMode::NONE);
-
-        TDuration dur;
-        dur.setVal(mu::engraving::Constants::DIVISION / 2);
-        graceChord->setDurationType(dur);
-        graceChord->setTicks(dur.fraction());
-        chord->add(graceChord);
-
-        graceChords.push_back(graceChord);
+        graceChords.push_back(createGraceAfterChord(chord));
     }
 
     return graceChords;
@@ -248,6 +254,47 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+static void createPreDives(const DiveDataContext& diveDataCtx, Score* score)
+{
+    for (const auto& [track, trackInfo] : diveDataCtx.preDiveData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            Chord* chord = utils::getLocatedChord(score, tick, track);
+            if (!chord) {
+                continue;
+            }
+
+            for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+                if (!muse::contains(tickInfo, noteIndex)) {
+                    continue;
+                }
+
+                Note* note = chord->notes()[noteIndex];
+                const SegmentData& pd = tickInfo.at(noteIndex);
+
+                const int attackPitch = note->pitch() - pd.quarterTones / 2;
+
+                note->transposeDiatonic(-1, true, false);
+                GuitarBend* preDive = score->addGuitarBend(GuitarBendType::PRE_DIVE, note);
+                note->transposeDiatonic(1, true, false);
+
+                IF_ASSERT_FAILED(preDive) {
+                    LOGE() << "pre-dive not created for track " << track << ", tick " << tick.ticks();
+                    continue;
+                }
+
+                Note* ghostNote = preDive->startNote();
+                if (ghostNote) {
+                    ghostNote->setPitch(note->pitch());
+                    ghostNote->setTpcFromPitch();
+                }
+
+                note->setPitch(attackPitch);
+                note->setTpcFromPitch();
             }
         }
     }

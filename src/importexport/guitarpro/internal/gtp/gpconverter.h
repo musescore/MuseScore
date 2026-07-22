@@ -211,5 +211,11 @@ private:
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
+
+    struct WhammyState {
+        float destValue = 0;
+        const GPBeat* beat = nullptr;
+    };
+    std::unordered_map<mu::engraving::track_idx_t, WhammyState> m_lastWhammyState;
 };
 }

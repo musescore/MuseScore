@@ -40,11 +40,19 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
 
     for (const Note* note : chord->notes()) {
         ImportedDiveInfo info = DiveInfoConverter::fillDiveInfo(note, pitchValues);
-        if (info.type != DiveType::DIVE || !info.note) {
+        if (info.type == DiveType::NONE || !info.note) {
             continue;
         }
 
         const size_t noteIdx = muse::indexOf(chord->notes(), note);
+
+        if (info.type == DiveType::PRE_DIVE) {
+            m_ctx.preDiveData[track][tick][noteIdx].quarterTones = info.quarterTones;
+            if (!info.graceDiveSegments.empty()) {
+                m_ctx.graceAfterDiveData[track][tick][noteIdx].data = std::move(info.graceDiveSegments);
+            }
+            continue;
+        }
 
         m_ctx.graceAfterDiveData[track][tick][noteIdx].data = std::move(info.graceDiveSegments);
     }
