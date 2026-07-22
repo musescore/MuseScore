@@ -101,39 +101,28 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>1</staves>
-                  <fractions>1/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -145,56 +134,56 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             </Clef>
           <KeySig>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             </Rest>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>-1</staves>
-                  <fractions>-1/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>W_W</eid>
+              <eid>V_V</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>U_U</endElement>
+        <eid>Z_Z</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

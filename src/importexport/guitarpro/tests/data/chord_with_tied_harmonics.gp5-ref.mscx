@@ -72,98 +72,44 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>AH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>AH</continueText>
-              <eid>J_J</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>M_M</eid>
+                <eid>L_L</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>N_N</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <fret>6</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>O_O</eid>
+              <eid>M_M</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>P_P</eid>
+                <eid>N_N</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Q_Q</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>6</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>R_R</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>S_S</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>O_O</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>P_P</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>U_U</eid>
+                <eid>Q_Q</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>V_V</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <head>diamond</head>
@@ -172,40 +118,108 @@
               <string>3</string>
               </Note>
             <Note>
-              <eid>W_W</eid>
+              <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>X_X</eid>
+                <eid>S_S</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Y_Y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>73</pitch>
               <tpc>21</tpc>
               <head>diamond</head>
               <play>0</play>
+              <fret>6</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <eid>T_T</eid>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>V_V</eid>
+              <Tie>
+                <startElement>K_K</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <fret>6</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <eid>X_X</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>X_X</endElement>
+                <eid>Y_Y</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
               <fret>6</fret>
               <string>2</string>
               </Note>
             <Note>
               <eid>Z_Z</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>a_a</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>Z_Z</endElement>
+                <eid>a_a</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <eid>b_b</eid>
+              <Tie>
+                <startElement>P_P</startElement>
+                <endElement>b_b</endElement>
+                <eid>c_c</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>6</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <eid>d_d</eid>
+              <Tie>
+                <startElement>R_R</startElement>
+                <endElement>d_d</endElement>
+                <eid>e_e</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>6</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <eid>f_f</eid>
+              <Tie>
+                <startElement>T_T</startElement>
+                <endElement>f_f</endElement>
+                <eid>g_g</eid>
+                <track>0</track>
+                </Tie>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
@@ -215,151 +229,85 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>c_c</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>d_d</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>i_i</eid>
+              <Tie>
+                <startElement>V_V</startElement>
+                <endElement>i_i</endElement>
+                <eid>j_j</eid>
+                <track>0</track>
+                </Tie>
               <pitch>56</pitch>
               <tpc>22</tpc>
-              <fret>6</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <eid>e_e</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>f_f</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <eid>g_g</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>h_h</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <eid>i_i</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>j_j</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>68</pitch>
-              <tpc>22</tpc>
-              <head>diamond</head>
-              <play>0</play>
               <fret>6</fret>
               <string>3</string>
               </Note>
             <Note>
               <eid>k_k</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>l_l</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>73</pitch>
+              <Tie>
+                <startElement>X_X</startElement>
+                <endElement>k_k</endElement>
+                <eid>l_l</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>61</pitch>
               <tpc>21</tpc>
-              <head>diamond</head>
-              <play>0</play>
               <fret>6</fret>
               <string>2</string>
               </Note>
             <Note>
               <eid>m_m</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>n_n</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>Z_Z</startElement>
+                <endElement>m_m</endElement>
+                <eid>n_n</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>6</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <eid>o_o</eid>
+              <Tie>
+                <startElement>b_b</startElement>
+                <endElement>o_o</endElement>
+                <eid>p_p</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>6</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <eid>q_q</eid>
+              <Tie>
+                <startElement>d_d</startElement>
+                <endElement>q_q</endElement>
+                <eid>r_r</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>6</fret>
+              <string>2</string>
+              </Note>
+            <Note>
+              <eid>s_s</eid>
+              <Tie>
+                <startElement>f_f</startElement>
+                <endElement>s_s</endElement>
+                <eid>t_t</eid>
+                <track>0</track>
+                </Tie>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
@@ -369,257 +317,55 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>p_p</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>q_q</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>v_v</eid>
+              <Tie>
+                <startElement>i_i</startElement>
+                <endElement>v_v</endElement>
+                <eid>w_w</eid>
+                <track>0</track>
+                </Tie>
               <pitch>56</pitch>
               <tpc>22</tpc>
-              <fret>6</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <eid>r_r</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>s_s</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <eid>t_t</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>u_u</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
-              </Note>
-            <Note>
-              <eid>v_v</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>w_w</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>68</pitch>
-              <tpc>22</tpc>
-              <head>diamond</head>
-              <play>0</play>
               <fret>6</fret>
               <string>3</string>
               </Note>
             <Note>
               <eid>x_x</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>y_y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>73</pitch>
-              <tpc>21</tpc>
-              <head>diamond</head>
-              <play>0</play>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            <Note>
-              <eid>z_z</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>0_0</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              <head>diamond</head>
-              <play>0</play>
-              <fret>6</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>1_1</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>2_2</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>3_3</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>56</pitch>
-              <tpc>22</tpc>
-              <fret>6</fret>
-              <string>3</string>
-              </Note>
-            <Note>
-              <eid>4_4</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>5_5</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>k_k</startElement>
+                <endElement>x_x</endElement>
+                <eid>y_y</eid>
+                <track>0</track>
+                </Tie>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>6</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>6_6</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>7_7</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>z_z</eid>
+              <Tie>
+                <startElement>m_m</startElement>
+                <endElement>z_z</endElement>
+                <eid>0_0</eid>
+                <track>0</track>
+                </Tie>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>8_8</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>9_9</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>1_1</eid>
+              <Tie>
+                <startElement>o_o</startElement>
+                <endElement>1_1</endElement>
+                <eid>2_2</eid>
+                <track>0</track>
+                </Tie>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <head>diamond</head>
@@ -628,25 +374,13 @@
               <string>3</string>
               </Note>
             <Note>
-              <eid>+_+</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>/_/</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>3_3</eid>
+              <Tie>
+                <startElement>q_q</startElement>
+                <endElement>3_3</endElement>
+                <eid>4_4</eid>
+                <track>0</track>
+                </Tie>
               <pitch>73</pitch>
               <tpc>21</tpc>
               <head>diamond</head>
@@ -655,25 +389,13 @@
               <string>2</string>
               </Note>
             <Note>
-              <eid>AB_AB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>BB_BB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>5_5</eid>
+              <Tie>
+                <startElement>s_s</startElement>
+                <endElement>5_5</endElement>
+                <eid>6_6</eid>
+                <track>0</track>
+                </Tie>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
@@ -685,66 +407,58 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>CB_CB</eid>
+        <eid>7_7</eid>
         <voice>
           <Chord>
-            <eid>DB_DB</eid>
+            <eid>8_8</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>EB_EB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>9_9</eid>
+              <Tie>
+                <startElement>v_v</startElement>
+                <endElement>9_9</endElement>
+                <eid>+_+</eid>
+                <track>0</track>
+                </Tie>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <fret>6</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>FB_FB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>/_/</eid>
+              <Tie>
+                <startElement>x_x</startElement>
+                <endElement>/_/</endElement>
+                <eid>AB_AB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>6</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>GB_GB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>BB_BB</eid>
+              <Tie>
+                <startElement>z_z</startElement>
+                <endElement>BB_BB</endElement>
+                <eid>CB_CB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>HB_HB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>DB_DB</eid>
+              <Tie>
+                <startElement>1_1</startElement>
+                <endElement>DB_DB</endElement>
+                <eid>EB_EB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <head>diamond</head>
@@ -753,15 +467,13 @@
               <string>3</string>
               </Note>
             <Note>
-              <eid>IB_IB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>FB_FB</eid>
+              <Tie>
+                <startElement>3_3</startElement>
+                <endElement>FB_FB</endElement>
+                <eid>GB_GB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>73</pitch>
               <tpc>21</tpc>
               <head>diamond</head>
@@ -770,15 +482,13 @@
               <string>2</string>
               </Note>
             <Note>
-              <eid>JB_JB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>HB_HB</eid>
+              <Tie>
+                <startElement>5_5</startElement>
+                <endElement>HB_HB</endElement>
+                <eid>IB_IB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
@@ -787,24 +497,27 @@
               <string>1</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>KB_KB</eid>
+            <eid>JB_JB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>LB_LB</eid>
+            <eid>KB_KB</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HarmonicMark>
+        <beginText>AH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>AH</continueText>
+        <track2>0</track2>
+        <ticks>5/4</ticks>
+        <eid>LB_LB</eid>
+        <track>0</track>
+        </HarmonicMark>
+      </SpannerMap>
     </Score>
   </museScore>

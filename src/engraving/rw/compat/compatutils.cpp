@@ -827,7 +827,11 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
 
 NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
 {
-    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    IF_ASSERT_FAILED((textLine->startElement() && textLine->startElement()->isNote())
+                     && (textLine->endElement() && textLine->endElement()->isNote())) {
+        LOGW("Skipping textline with non note endpoints");
+        return nullptr;
+    }
     Note* startNote = toNote(textLine->startElement());
     Note* endNote = toNote(textLine->endElement());
 
@@ -881,7 +885,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                 Chord* chord = toChord(el);
                 for (Note* note : chord->notes()) {
                     for (Spanner* spanner : note->spannerFor()) {
-                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                        if (!spanner->isTextLine()) {
                             continue;
                         }
 
@@ -893,8 +897,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                         }
 
                         for (EngravingObject* linked : *links) {
-                            if (linked != spanner && linked && linked->isTextLine()
-                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                            if (linked != spanner && linked && linked->isTextLine()) {
                                 oldLines.insert(toTextLine(linked));
                             }
                         }
@@ -906,6 +909,11 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
 
     for (TextLine* oldLine : oldLines) {
         NoteLine* newLine = createNoteLineFromTextLine(oldLine);
+        if (!newLine) {
+            oldLine->parentItem()->remove(oldLine);
+            delete oldLine;
+            continue;
+        }
         EngravingItem* parent = newLine->parentItem();
 
         parent->remove(oldLine);

@@ -184,69 +184,43 @@
             <eid>d_d</eid>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>e_e</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <acciaccatura/>
             <Note>
-              <eid>f_f</eid>
+              <eid>e_e</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>g_g</eid>
+                <eid>f_f</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>2</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <text></text>
-                  <eid>h_h</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>j_j</eid>
+              <eid>h_h</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <text></text>
+                <startElement>e_e</startElement>
+                <endElement>h_h</endElement>
+                <eid>i_i</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>l_l</eid>
+              <eid>k_k</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>1</fret>
@@ -254,31 +228,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
+            <eid>l_l</eid>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
-            <Spanner type="HammerOnPullOff">
-              <HammerOnPullOff>
-                <eid>n_n</eid>
-                <HammerOnPullOffSegment no="0">
-                  <HammerOnPullOffText idx="0">
-                    <eid>o_o</eid>
-                    <style>hammer_on_pull_off</style>
-                    </HammerOnPullOffText>
-                  <eid>p_p</eid>
-                  </HammerOnPullOffSegment>
-                </HammerOnPullOff>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <appoggiatura/>
             <Note>
-              <eid>q_q</eid>
+              <eid>m_m</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>r_r</eid>
+                <eid>n_n</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -287,17 +245,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>s_s</eid>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
-            <Spanner type="HammerOnPullOff">
-              <prev>
-                <location>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>t_t</eid>
+              <eid>p_p</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -305,13 +256,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>u_u</eid>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>v_v</eid>
+              <eid>r_r</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>w_w</eid>
+                <eid>s_s</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>24</tpc>
@@ -320,45 +271,45 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>x_x</eid>
+            <eid>t_t</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
-            <eid>y_y</eid>
+            <eid>u_u</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>z_z</eid>
+            <eid>v_v</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>0_0</eid>
+            <eid>w_w</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>1_1</eid>
+            <eid>x_x</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>2_2</eid>
+        <eid>y_y</eid>
         <voice>
           <Chord>
-            <eid>3_3</eid>
+            <eid>z_z</eid>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
             <acciaccatura/>
             <Note>
-              <eid>4_4</eid>
+              <eid>0_0</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>5_5</eid>
+                <eid>1_1</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -367,10 +318,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>6_6</eid>
+            <eid>2_2</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>7_7</eid>
+              <eid>3_3</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -378,41 +329,64 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>8_8</eid>
+            <eid>4_4</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>9_9</eid>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>+_+</eid>
+            <eid>6_6</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>/_/</eid>
+            <eid>7_7</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>AB_AB</eid>
+            <eid>8_8</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>BB_BB</eid>
+            <eid>9_9</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>CB_CB</eid>
+            <eid>+_+</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>d_d</startElement>
+        <endElement>g_g</endElement>
+        <eid>/_/</eid>
+        <track>0</track>
+        </Slur>
+      <HammerOnPullOff>
+        <startElement>l_l</startElement>
+        <endElement>o_o</endElement>
+        <eid>AB_AB</eid>
+        <track>0</track>
+        <HammerOnPullOffSegment no="0">
+          <HammerOnPullOffText idx="0">
+            <eid>BB_BB</eid>
+            <track>0</track>
+            <style>hammer_on_pull_off</style>
+            </HammerOnPullOffText>
+          <eid>CB_CB</eid>
+          <track>0</track>
+          </HammerOnPullOffSegment>
+        </HammerOnPullOff>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -108,37 +108,25 @@
         <eid>O_O</eid>
         <endRepeat>3</endRepeat>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>1-2</beginText>
-              <eid>P_P</eid>
-              <endings>1,2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -147,53 +135,34 @@
             </Chord>
           <PlayCountText>
             <playCountCustomText></playCountCustomText>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <style>repeat_play_count</style>
             <text>3x</text>
             </PlayCountText>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>U_U</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>3</beginText>
-              <eid>W_W</eid>
-              <endings>3</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>X_X</eid>
+            <eid>V_V</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>W_W</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>X_X</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>a_a</eid>
+              <eid>Y_Y</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -201,25 +170,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>b_b</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>a_a</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>d_d</eid>
+            <eid>b_b</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>c_c</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -229,5 +191,23 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <beginText>1-2</beginText>
+        <startElement>O_O</startElement>
+        <endElement>O_O</endElement>
+        <eid>d_d</eid>
+        <track>0</track>
+        <endings>1,2</endings>
+        </Volta>
+      <Volta>
+        <beginText>3</beginText>
+        <startElement>U_U</startElement>
+        <endElement>U_U</endElement>
+        <eid>e_e</eid>
+        <track>0</track>
+        <endings>3</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

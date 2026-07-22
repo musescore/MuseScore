@@ -209,30 +209,15 @@
       <Measure>
         <eid>l_l</eid>
         <voice>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>m_m</eid>
-              <color r="4" g="51" b="255" a="255"/>
-              </Ottava>
-            <next>
-              <location>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
+          <Chord>
+            <eid>m_m</eid>
+            <durationType>quarter</durationType>
+            <Note>
               <eid>n_n</eid>
-              <color r="4" g="51" b="255" a="255"/>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>o_o</eid>
             <durationType>quarter</durationType>
@@ -251,13 +236,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>s_s</eid>
             <durationType>quarter</durationType>
@@ -267,52 +245,23 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Chord>
-            <eid>u_u</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>v_v</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>w_w</eid>
-                  <color r="4" g="51" b="255" a="255"/>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>x_x</eid>
+        <eid>u_u</eid>
         <voice>
           <Chord>
-            <eid>y_y</eid>
+            <eid>v_v</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>z_z</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>w_w</eid>
+              <Tie>
+                <startElement>t_t</startElement>
+                <endElement>w_w</endElement>
+                <eid>x_x</eid>
+                <track>0</track>
+                <color r="4" g="51" b="255" a="255"/>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -320,11 +269,11 @@
           <Clef>
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
-            <eid>0_0</eid>
+            <eid>y_y</eid>
             <color r="0" g="249" b="0" a="255"/>
             </Clef>
           <Tuplet>
-            <eid>1_1</eid>
+            <eid>z_z</eid>
             <color r="0" g="249" b="0" a="255"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -335,51 +284,40 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>2_2</eid>
+            <eid>0_0</eid>
             <l1>-6</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
-            <eid>3_3</eid>
+            <eid>1_1</eid>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>4_4</eid>
-                <color r="0" g="249" b="0" a="255"/>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>5_5</eid>
+              <eid>2_2</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>6_6</eid>
+            <eid>3_3</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>7_7</eid>
+              <eid>4_4</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>8_8</eid>
+            <eid>5_5</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>9_9</eid>
+              <eid>6_6</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>+_+</eid>
+            <eid>7_7</eid>
             <color r="0" g="249" b="0" a="255"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -390,40 +328,33 @@
               </Number>
             </Tuplet>
           <Rest>
-            <eid>/_/</eid>
+            <eid>8_8</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>AB_AB</eid>
+            <eid>9_9</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>BB_BB</eid>
+            <eid>+_+</eid>
             <durationType>eighth</durationType>
             </Rest>
           <endTuplet/>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <eid>CB_CB</eid>
+            <eid>/_/</eid>
             <color r="0" g="249" b="0" a="255"/>
             </Clef>
           <Chord>
-            <eid>DB_DB</eid>
+            <eid>AB_AB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>EB_EB</eid>
+              <eid>BB_BB</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalFlat</subtype>
-                <eid>FB_FB</eid>
+                <eid>CB_CB</eid>
                 <color r="215" g="131" b="255" a="255"/>
                 </Accidental>
               <pitch>63</pitch>
@@ -433,10 +364,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>GB_GB</eid>
+        <eid>DB_DB</eid>
         <voice>
           <Rest>
-            <eid>HB_HB</eid>
+            <eid>EB_EB</eid>
             <color r="255" g="64" b="255" a="255"/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -444,101 +375,118 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>IB_IB</eid>
+        <eid>FB_FB</eid>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>JB_JB</eid>
-              <color r="148" g="33" b="146" a="255"/>
-              </Pedal>
-            <next>
-              <location>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>KB_KB</eid>
+            <eid>GB_GB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>LB_LB</eid>
+              <eid>HB_HB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>MB_MB</eid>
+              <eid>IB_IB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
-              <eid>NB_NB</eid>
+              <eid>JB_JB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Arpeggio>
               <subtype>0</subtype>
-              <eid>OB_OB</eid>
+              <eid>KB_KB</eid>
               <color r="148" g="33" b="146" a="255"/>
               </Arpeggio>
             </Chord>
           <Beam>
-            <eid>PB_PB</eid>
+            <eid>LB_LB</eid>
             <l1>34</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
-            <eid>QB_QB</eid>
+            <eid>MB_MB</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>NB_NB</eid>
+              <color r="148" g="33" b="146" a="255"/>
+              </Articulation>
+            <Note>
+              <eid>OB_OB</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>PB_PB</eid>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
+              <eid>QB_QB</eid>
+              <color r="148" g="33" b="146" a="255"/>
+              </Articulation>
+            <Note>
               <eid>RB_RB</eid>
-              <color r="148" g="33" b="146" a="255"/>
-              </Articulation>
-            <Note>
-              <eid>SB_SB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>TB_TB</eid>
-            <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articAccentAbove</subtype>
-              <eid>UB_UB</eid>
-              <color r="148" g="33" b="146" a="255"/>
-              </Articulation>
-            <Note>
-              <eid>VB_VB</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Chord>
-            <eid>WB_WB</eid>
+            <eid>SB_SB</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>XB_XB</eid>
+              <eid>TB_TB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>YB_YB</eid>
+            <eid>UB_UB</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>2/4</ticks>
+        <eid>VB_VB</eid>
+        <track>0</track>
+        <color r="4" g="51" b="255" a="255"/>
+        </Ottava>
+      <HairPin>
+        <subtype>0</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>3/4</ticks>
+        <eid>WB_WB</eid>
+        <track>0</track>
+        <color r="4" g="51" b="255" a="255"/>
+        </HairPin>
+      <Slur>
+        <startElement>1_1</startElement>
+        <endElement>AB_AB</endElement>
+        <eid>XB_XB</eid>
+        <track>0</track>
+        <color r="0" g="249" b="0" a="255"/>
+        </Slur>
+      <Pedal>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>0</track2>
+        <startTick>60/12</startTick>
+        <ticks>12/24</ticks>
+        <eid>YB_YB</eid>
+        <track>0</track>
+        <color r="148" g="33" b="146" a="255"/>
+        </Pedal>
+      </SpannerMap>
     </Score>
   </museScore>

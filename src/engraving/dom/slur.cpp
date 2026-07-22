@@ -382,7 +382,6 @@ Slur::Slur(const Slur& s)
 Slur::Slur(EngravingItem* parent, ElementType type)
     : SlurTie(type, parent)
 {
-    setAnchor(Anchor::CHORD);
 }
 
 double Slur::scalingFactor() const

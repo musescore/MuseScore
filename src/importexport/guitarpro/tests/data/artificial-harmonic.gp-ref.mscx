@@ -74,31 +74,18 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>Fdbk</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>Fdbk</continueText>
-              <eid>J_J</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
@@ -107,38 +94,18 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>SH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>SH</continueText>
-              <eid>N_N</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>O_O</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>N_N</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>O_O</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <head>diamond</head>
@@ -147,38 +114,18 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>PH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>PH</continueText>
-              <eid>R_R</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>S_S</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>Q_Q</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>U_U</eid>
+              <eid>R_R</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
@@ -187,42 +134,21 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>TH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>TH</continueText>
-              <eid>V_V</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>-3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>W_W</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>T_T</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>1</string>
               </Note>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>U_U</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>Z_Z</eid>
+                <eid>V_V</eid>
                 </Accidental>
               <pitch>92</pitch>
               <tpc>22</tpc>
@@ -233,46 +159,25 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>a_a</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>X_X</eid>
         <voice>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>AH</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>AH</continueText>
-              <eid>c_c</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>d_d</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>Z_Z</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>f_f</eid>
+              <eid>a_a</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>diamond</head>
@@ -281,38 +186,18 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <HarmonicMark>
-              <beginText>Fdbk</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <continueText>Fdbk</continueText>
-              <eid>g_g</eid>
-              </HarmonicMark>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>h_h</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>c_c</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>j_j</eid>
+              <eid>d_d</eid>
               <pitch>89</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
@@ -322,17 +207,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>l_l</eid>
+              <eid>f_f</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>m_m</eid>
+              <eid>g_g</eid>
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
@@ -342,17 +227,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>n_n</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>o_o</eid>
+              <eid>i_i</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>p_p</eid>
+              <eid>j_j</eid>
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
@@ -361,22 +246,69 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="HarmonicMark">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HarmonicMark>
+        <beginText>Fdbk</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>Fdbk</continueText>
+        <track2>0</track2>
+        <ticks>1/4</ticks>
+        <eid>k_k</eid>
+        <track>0</track>
+        </HarmonicMark>
+      <HarmonicMark>
+        <beginText>SH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>SH</continueText>
+        <track2>0</track2>
+        <startTick>1/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>l_l</eid>
+        <track>0</track>
+        </HarmonicMark>
+      <HarmonicMark>
+        <beginText>PH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>PH</continueText>
+        <track2>0</track2>
+        <startTick>2/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>m_m</eid>
+        <track>0</track>
+        </HarmonicMark>
+      <HarmonicMark>
+        <beginText>TH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>TH</continueText>
+        <track2>0</track2>
+        <startTick>3/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>n_n</eid>
+        <track>0</track>
+        </HarmonicMark>
+      <HarmonicMark>
+        <beginText>AH</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>AH</continueText>
+        <track2>0</track2>
+        <startTick>4/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>o_o</eid>
+        <track>0</track>
+        </HarmonicMark>
+      <HarmonicMark>
+        <beginText>Fdbk</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <continueText>Fdbk</continueText>
+        <track2>0</track2>
+        <startTick>5/4</startTick>
+        <ticks>3/4</ticks>
+        <eid>p_p</eid>
+        <track>0</track>
+        </HarmonicMark>
+      </SpannerMap>
     </Score>
   </museScore>

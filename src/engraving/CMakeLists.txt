@@ -309,8 +309,6 @@ target_sources(engraving PRIVATE
     rw/read500/readcontext.h
     rw/read500/tread.cpp
     rw/read500/tread.h
-    rw/read500/connectorinforeader.cpp
-    rw/read500/connectorinforeader.h
 
     rw/compat/readstyle.cpp
     rw/compat/readstyle.h

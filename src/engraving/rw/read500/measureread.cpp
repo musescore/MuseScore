@@ -196,7 +196,6 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             e.unknown();
         }
     }
-    ctx.checkConnectors();
     if (measure->isMMRest()) {
         Measure* lm = ctx.lastMeasure();
         ctx.setTick(lm->endTick());
@@ -336,8 +335,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
             TRead::read(breath, e, ctx);
             segment->add(breath);
-        } else if (tag == "Spanner") {
-            TRead::readSpanner(e, ctx, measure, ctx.track());
         } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
             //             4.x                       3.x
             segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());

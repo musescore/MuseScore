@@ -84,7 +84,7 @@ EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
     std::shared_lock lock(m_mutex);
     auto iter = m_eidToItem.find(eid);
-    IF_ASSERT_FAILED(iter != m_eidToItem.end()) {
+    if (iter == m_eidToItem.end()) {
         return nullptr;
     }
     return iter->second;

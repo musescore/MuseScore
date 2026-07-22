@@ -72,22 +72,11 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>guitarVibrato</subtype>
-              <eid>J_J</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -97,13 +86,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>L_L</eid>
         <voice>
           <Chord>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>N_N</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -113,32 +102,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>O_O</eid>
         <voice>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>vibratoSawtooth</subtype>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>whole</durationType>
+            <Note>
               <eid>Q_Q</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <eid>R_R</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>S_S</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -148,37 +118,38 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>U_U</eid>
+            <eid>S_S</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Vibrato>
+        <subtype>guitarVibrato</subtype>
+        <track2>0</track2>
+        <ticks>8/4</ticks>
+        <eid>U_U</eid>
+        <track>0</track>
+        </Vibrato>
+      <Vibrato>
+        <subtype>vibratoSawtooth</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>8/4</ticks>
+        <eid>V_V</eid>
+        <track>0</track>
+        </Vibrato>
+      </SpannerMap>
     </Score>
   </museScore>

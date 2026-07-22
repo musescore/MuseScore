@@ -158,18 +158,6 @@
               </Note>
             <Note>
               <eid>R_R</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>S_S</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    <notes>1</notes>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -177,9 +165,9 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>S_S</eid>
         <Jump>
-          <eid>U_U</eid>
+          <eid>T_T</eid>
           <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
@@ -187,35 +175,32 @@
           <continueAt>codab</continueAt>
           </Jump>
         <LayoutBreak>
-          <eid>V_V</eid>
+          <eid>U_U</eid>
           <z>-10</z>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>W_W</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>X_X</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
-              <eid>Z_Z</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    <notes>-1</notes>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>Y_Y</eid>
+              <Tie>
+                <startElement>R_R</startElement>
+                <endElement>Y_Y</endElement>
+                <eid>Z_Z</eid>
+                <track>0</track>
+                </Tie>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -252,7 +237,9 @@
               <eid>g_g</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
+                <endElement>g_g</endElement>
                 <eid>h_h</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>69</pitch>
               <tpc>17</tpc>

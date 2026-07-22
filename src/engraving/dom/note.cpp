@@ -2079,7 +2079,6 @@ EngravingItem* Note::drop(Transaction& tx, EditData& data)
         Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : SLine::guessFinalNote(this);
         if (finalNote) {
             // init glissando data
-            gliss->setAnchor(Spanner::Anchor::NOTE);
             gliss->setStartElement(this);
             gliss->setEndElement(finalNote);
             gliss->setTick(ch->tick());

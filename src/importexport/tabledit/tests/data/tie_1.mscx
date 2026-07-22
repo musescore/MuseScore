@@ -112,16 +112,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>N_N</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>O_O</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -129,17 +119,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>P_P</eid>
+              <Tie>
+                <startElement>N_N</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -215,17 +204,6 @@
             <Note>
               <eid>c_c</eid>
               <linkedTo>N_N</linkedTo>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>d_d</eid>
-                  <linkedTo>O_O</linkedTo>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -233,19 +211,19 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>d_d</eid>
+            <linkedTo>O_O</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
-              <linkedTo>Q_Q</linkedTo>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>e_e</eid>
+              <linkedTo>P_P</linkedTo>
+              <Tie>
+                <startElement>c_c</startElement>
+                <endElement>e_e</endElement>
+                <eid>f_f</eid>
+                <linkedTo>Q_Q</linkedTo>
+                <track>4</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>

@@ -436,7 +436,6 @@ Spanner::Spanner(const Spanner& s)
     : EngravingItem(s)
 {
     m_playSpanner  = s.m_playSpanner;
-    m_anchor       = s.m_anchor;
     m_startElement = s.m_startElement;
     m_endElement   = s.m_endElement;
     m_tick         = s.m_tick;
@@ -625,8 +624,6 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
         return m_ticks;
     case Pid::SPANNER_TRACK2:
         return track2();
-    case Pid::ANCHOR:
-        return int(anchor());
     case Pid::LOCATION_STAVES:
         return (track2() / VOICES) - (track() / VOICES);
     case Pid::LOCATION_VOICES:
@@ -673,9 +670,6 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         setTrack2(v.value<track_idx_t>());
         setEndElement(0);                 // invalidate
         break;
-    case Pid::ANCHOR:
-        setAnchor(Anchor(v.toInt()));
-        break;
     case Pid::POSITION_LINKED_TO_MASTER:
         setPositionLinkedToMaster(v.toBool());
         if (isPositionLinkedToMaster()) {
@@ -710,8 +704,6 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::PLAY:
         return true;
-    case Pid::ANCHOR:
-        return int(Anchor::SEGMENT);
     default:
         break;
     }
@@ -740,7 +732,7 @@ void Spanner::computeStartElement()
 
 void Spanner::doComputeStartElement()
 {
-    switch (m_anchor) {
+    switch (anchor()) {
     case Anchor::SEGMENT: {
         Segment* startSeg = startSegment();
         if (!startSeg) {
@@ -763,7 +755,7 @@ void Spanner::doComputeStartElement()
         m_startElement = score()->tick2measure(tick());
         break;
 
-    case Anchor::CHORD:
+    case Anchor::CHORDREST:
         m_startElement = startCR();
         break;
     case Anchor::NOTE:
@@ -798,7 +790,7 @@ void Spanner::computeEndElement()
 
 void Spanner::doComputeEndElement()
 {
-    switch (m_anchor) {
+    switch (anchor()) {
     case Anchor::SEGMENT: {
         Segment* endSeg = endSegment();
         if (!endSeg) {
@@ -824,7 +816,7 @@ void Spanner::doComputeEndElement()
 
     case Anchor::NOTE:
         break;
-    case Anchor::CHORD:
+    case Anchor::CHORDREST:
         m_endElement = endCR();
         break;
     }
@@ -927,7 +919,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
 
 void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 {
-    if (m_anchor != Anchor::NOTE) {
+    if (anchor() != Anchor::NOTE) {
         return;
     }
 
@@ -954,7 +946,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    if (m_anchor != Anchor::CHORD) {
+    if (anchor() != Anchor::CHORDREST) {
         return nullptr;
     }
     if (!m_startElement) {
@@ -974,7 +966,7 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    if (m_anchor != Anchor::CHORD) {
+    if (anchor() != Anchor::CHORDREST) {
         return nullptr;
     }
     if (!m_endElement && type() == ElementType::SLUR) {
@@ -994,7 +986,7 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     if (!m_startElement || m_startElement->score() != score()) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_startElement = findStartCR();
@@ -1008,7 +1000,7 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     if ((!m_endElement || m_endElement->score() != score())) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_endElement = findEndCR();
@@ -1022,7 +1014,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::CHORDREST);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr && cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -1033,7 +1025,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::CHORDREST);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -1048,7 +1040,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     return score()->findCR(tick(), track());
 }
 
@@ -1058,7 +1050,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(anchor() == Anchor::SEGMENT || anchor() == Anchor::CHORDREST);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
@@ -1257,7 +1249,7 @@ void Spanner::setZ(int val)
 void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (m_anchor == Anchor::NOTE) {
+    if (anchor() == Anchor::NOTE) {
         assert(!e || e->isNote());
     }
 #endif
@@ -1271,7 +1263,7 @@ void Spanner::setStartElement(EngravingItem* e)
 void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (m_anchor == Anchor::NOTE) {
+    if (anchor() == Anchor::NOTE) {
         assert(!e || e->isNote());
     }
 #endif

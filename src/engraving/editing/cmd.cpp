@@ -768,7 +768,6 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     GuitarBend* bend = new GuitarBend(score()->dummy()->note());
-    bend->setAnchor(Spanner::Anchor::NOTE);
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 

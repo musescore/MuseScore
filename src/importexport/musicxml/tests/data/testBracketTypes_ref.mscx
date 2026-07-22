@@ -150,21 +150,11 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="TextLine">
-            <TextLine>
-              <eid>L_L</eid>
-              </TextLine>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -172,31 +162,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>N_N</eid>
         <voice>
-          <Spanner type="TextLine">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="TextLine">
-            <TextLine>
-              <eid>P_P</eid>
-              <lineStyle>dashed</lineStyle>
-              </TextLine>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>O_O</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>P_P</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -204,31 +176,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>Q_Q</eid>
         <voice>
-          <Spanner type="TextLine">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="TextLine">
-            <TextLine>
-              <eid>T_T</eid>
-              <lineStyle>dotted</lineStyle>
-              </TextLine>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>U_U</eid>
+            <eid>R_R</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>S_S</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -236,59 +190,60 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
+        <eid>T_T</eid>
         <voice>
-          <Spanner type="TextLine">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>prallprall</subtype>
-              <eid>X_X</eid>
-              <Ornament>
-                <subtype>ornamentTrill</subtype>
-                <eid>Y_Y</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>V_V</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <BarLine>
             <subtype>end</subtype>
-            <eid>b_b</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <TextLine>
+        <track2>0</track2>
+        <ticks>1/1</ticks>
+        <eid>X_X</eid>
+        <track>0</track>
+        </TextLine>
+      <TextLine>
+        <track2>0</track2>
+        <startTick>1/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>Y_Y</eid>
+        <track>0</track>
+        <lineStyle>dashed</lineStyle>
+        </TextLine>
+      <TextLine>
+        <track2>0</track2>
+        <startTick>2/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>Z_Z</eid>
+        <track>0</track>
+        <lineStyle>dotted</lineStyle>
+        </TextLine>
+      <Trill>
+        <subtype>prallprall</subtype>
+        <track2>0</track2>
+        <startTick>3/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>a_a</eid>
+        <track>0</track>
+        <Ornament>
+          <subtype>ornamentTrill</subtype>
+          <eid>b_b</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      </SpannerMap>
     </Score>
   </museScore>

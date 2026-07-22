@@ -116,6 +116,8 @@ public:
 
     Ottava* clone() const override { return new Ottava(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     void setOttavaType(OttavaType val);
     OttavaType ottavaType() const { return m_ottavaType; }
 

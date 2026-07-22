@@ -11,10 +11,10 @@
         </Note>
       </Chord>
     <Chord>
-      <eid>E_E</eid>
+      <eid>D_D</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>F_F</eid>
+        <eid>E_E</eid>
         <pitch>60</pitch>
         <tpc>14</tpc>
         </Note>
@@ -29,10 +29,10 @@
         </Note>
       </Chord>
     <Chord>
-      <eid>J_J</eid>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>K_K</eid>
+        <eid>J_J</eid>
         <pitch>79</pitch>
         <tpc>15</tpc>
         </Note>

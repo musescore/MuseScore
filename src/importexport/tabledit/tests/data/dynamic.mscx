@@ -180,16 +180,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>Z_Z</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>a_a</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -197,17 +187,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>a_a</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>c_c</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>b_b</eid>
+              <Tie>
+                <startElement>Z_Z</startElement>
+                <endElement>b_b</endElement>
+                <eid>c_c</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -313,17 +302,6 @@
             <Note>
               <eid>s_s</eid>
               <linkedTo>Z_Z</linkedTo>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>t_t</eid>
-                  <linkedTo>a_a</linkedTo>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -331,19 +309,19 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>u_u</eid>
-            <linkedTo>b_b</linkedTo>
+            <eid>t_t</eid>
+            <linkedTo>a_a</linkedTo>
             <durationType>eighth</durationType>
             <Note>
-              <eid>v_v</eid>
-              <linkedTo>c_c</linkedTo>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>u_u</eid>
+              <linkedTo>b_b</linkedTo>
+              <Tie>
+                <startElement>s_s</startElement>
+                <endElement>u_u</endElement>
+                <eid>v_v</eid>
+                <linkedTo>c_c</linkedTo>
+                <track>4</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>

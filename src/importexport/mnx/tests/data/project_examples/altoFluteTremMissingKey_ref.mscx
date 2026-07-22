@@ -118,55 +118,46 @@
             <dots>1</dots>
             <durationType>quarter</durationType>
             <duration>3/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <tpc2>17</tpc2>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <l1>52</l1>
               <l2>50</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <BeamMode>end</BeamMode>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <duration>3/16</duration>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>O_O</eid>
+              <eid>N_N</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>14</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>M_M</endElement>
+        <eid>P_P</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

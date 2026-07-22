@@ -266,17 +266,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>u_u</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>v_v</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -284,27 +273,25 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>BB_BB</eid>
+        <eid>+_+</eid>
         <voice>
           <Chord>
-            <eid>CB_CB</eid>
+            <eid>/_/</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>DB_DB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>AB_AB</eid>
+              <Tie>
+                <startElement>u_u</startElement>
+                <endElement>AB_AB</endElement>
+                <eid>BB_BB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>EB_EB</eid>
+            <eid>CB_CB</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -420,17 +407,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>mB_mB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>nB_nB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -440,18 +416,16 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>oB_oB</eid>
+            <eid>nB_nB</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>pB_pB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>oB_oB</eid>
+              <Tie>
+                <startElement>mB_mB</startElement>
+                <endElement>oB_oB</endElement>
+                <eid>pB_pB</eid>
+                <track>4</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -585,17 +559,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>CC_CC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>DC_DC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -605,18 +568,16 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>EC_EC</eid>
+            <eid>DC_DC</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>FC_FC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>EC_EC</eid>
+              <Tie>
+                <startElement>CC_CC</startElement>
+                <endElement>EC_EC</endElement>
+                <eid>FC_FC</eid>
+                <track>8</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

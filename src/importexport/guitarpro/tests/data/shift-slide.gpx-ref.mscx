@@ -87,42 +87,31 @@
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <text></text>
-                  <glissandoShift>1</glissandoShift>
-                  <eid>M_M</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             </Dynamic>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
               <string>3</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <text></text>
+                <glissandoShift>1</glissandoShift>
+                <startElement>L_L</startElement>
+                <endElement>O_O</endElement>
+                <eid>P_P</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Rest>

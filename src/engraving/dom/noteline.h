@@ -53,6 +53,8 @@ public:
 
     NoteLine* clone() const override { return new NoteLine(*this); }
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     LineSegment* createLineSegment(System* parent) override;
 
     PropertyValue propertyDefault(Pid) const override;

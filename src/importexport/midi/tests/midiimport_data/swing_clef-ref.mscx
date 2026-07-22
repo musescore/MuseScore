@@ -181,17 +181,6 @@
                 <subtype>accidentalFlat</subtype>
                 <eid>Y_Y</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Z_Z</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <velocity>80</velocity>
@@ -200,21 +189,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>Z_Z</eid>
         <voice>
           <Chord>
-            <eid>b_b</eid>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>c_c</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>b_b</eid>
+              <Tie>
+                <startElement>X_X</startElement>
+                <endElement>b_b</endElement>
+                <eid>c_c</eid>
+                <track>0</track>
+                </Tie>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <velocity>80</velocity>

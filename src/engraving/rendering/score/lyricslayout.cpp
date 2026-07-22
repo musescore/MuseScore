@@ -486,6 +486,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
     if (isEndMelisma() || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
         if (!item->separator()) {
             LyricsLine* separator = Factory::createLyricsLine(ctx.mutDom().dummyParent());
+            separator->setGenerated(true);
             separator->setTick(cr->tick());
             separator->setVisible(item->visible());
             item->setSeparator(separator);

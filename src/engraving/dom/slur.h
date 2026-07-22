@@ -79,6 +79,8 @@ public:
     Slur(EngravingItem* parent, ElementType type = ElementType::SLUR);
     Slur(const Slur&);
 
+    Anchor anchor() const override { return Anchor::CHORDREST; }
+
     struct StemFloated
     {
         bool left = false;

@@ -326,47 +326,22 @@
       <Measure>
         <eid>SE_SE</eid>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>X_X</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>b_b</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>d_d</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>k_k</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>l_l</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>g_g</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
@@ -378,33 +353,23 @@
         <eid>TE_TE</eid>
         <voice>
           <Chord>
-            <eid>m_m</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>q_q</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>o_o</eid>
+              <Tie>
+                <startElement>g_g</startElement>
+                <endElement>o_o</endElement>
+                <eid>p_p</eid>
+                <track>0</track>
+                </Tie>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Tuplet>
-            <eid>r_r</eid>
+            <eid>q_q</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -414,35 +379,35 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <l1>14</l1>
             <l2>18</l2>
             </Beam>
           <Chord>
-            <eid>t_t</eid>
+            <eid>s_s</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>x_x</eid>
+              <eid>w_w</eid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>y_y</eid>
+            <eid>x_x</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>1_1</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>3_3</eid>
+            <eid>2_2</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>7_7</eid>
+              <eid>6_6</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
@@ -452,13 +417,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>8_8</eid>
+            <eid>7_7</eid>
             </Dynamic>
           <Chord>
-            <eid>9_9</eid>
+            <eid>8_8</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>BB_BB</eid>
+              <eid>AB_AB</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
@@ -545,47 +510,22 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>YB_YB</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>ZB_ZB</eid>
+            <eid>YB_YB</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>cB_cB</eid>
+              <eid>bB_bB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>eB_eB</eid>
+            <eid>dB_dB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>jB_jB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>kB_kB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>gB_gB</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
@@ -596,33 +536,23 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>nB_nB</eid>
+            <eid>iB_iB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>qB_qB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>nB_nB</eid>
+              <Tie>
+                <startElement>gB_gB</startElement>
+                <endElement>nB_nB</endElement>
+                <eid>oB_oB</eid>
+                <track>4</track>
+                </Tie>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Tuplet>
-            <eid>sB_sB</eid>
+            <eid>rB_rB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -632,35 +562,35 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>tB_tB</eid>
+            <eid>sB_sB</eid>
             <l1>30</l1>
             <l2>32</l2>
             </Beam>
           <Chord>
-            <eid>uB_uB</eid>
+            <eid>tB_tB</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>xB_xB</eid>
+              <eid>wB_wB</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>zB_zB</eid>
+            <eid>yB_yB</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>2B_2B</eid>
+              <eid>1B_1B</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>4B_4B</eid>
+            <eid>3B_3B</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>7B_7B</eid>
+              <eid>6B_6B</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
@@ -670,13 +600,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>9B_9B</eid>
+            <eid>8B_8B</eid>
             </Dynamic>
           <Chord>
-            <eid>+B_+B</eid>
+            <eid>9B_9B</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>BC_BC</eid>
+              <eid>AC_AC</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
@@ -763,47 +693,22 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>ZC_ZC</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>aC_aC</eid>
+            <eid>ZC_ZC</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>cC_cC</eid>
+              <eid>bC_bC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>fC_fC</eid>
+            <eid>eC_eC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>iC_iC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>jC_jC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>gC_gC</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
@@ -814,33 +719,23 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>oC_oC</eid>
+            <eid>jC_jC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>qC_qC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>mC_mC</eid>
+              <Tie>
+                <startElement>gC_gC</startElement>
+                <endElement>mC_mC</endElement>
+                <eid>nC_nC</eid>
+                <track>8</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Tuplet>
-            <eid>tC_tC</eid>
+            <eid>sC_sC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -850,35 +745,35 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>uC_uC</eid>
+            <eid>tC_tC</eid>
             <l1>36</l1>
             <l2>38</l2>
             </Beam>
           <Chord>
-            <eid>vC_vC</eid>
+            <eid>uC_uC</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>xC_xC</eid>
+              <eid>wC_wC</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <tpc2>18</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>0C_0C</eid>
+            <eid>zC_zC</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>2C_2C</eid>
+              <eid>1C_1C</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>5C_5C</eid>
+            <eid>4C_4C</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>7C_7C</eid>
+              <eid>6C_6C</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -888,13 +783,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>+C_+C</eid>
+            <eid>9C_9C</eid>
             </Dynamic>
           <Chord>
-            <eid>/C_/C</eid>
+            <eid>+C_+C</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>BD_BD</eid>
+              <eid>AD_AD</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
@@ -981,47 +876,22 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>aD_aD</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>bD_bD</eid>
+            <eid>aD_aD</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>cD_cD</eid>
+              <eid>bD_bD</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>gD_gD</eid>
+            <eid>fD_fD</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>hD_hD</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>iD_iD</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>gD_gD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
@@ -1032,33 +902,23 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>pD_pD</eid>
+            <eid>kD_kD</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>qD_qD</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>lD_lD</eid>
+              <Tie>
+                <startElement>gD_gD</startElement>
+                <endElement>lD_lD</endElement>
+                <eid>mD_mD</eid>
+                <track>12</track>
+                </Tie>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Tuplet>
-            <eid>uD_uD</eid>
+            <eid>tD_tD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -1068,35 +928,35 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>vD_vD</eid>
+            <eid>uD_uD</eid>
             <l1>-6</l1>
             <l2>-4</l2>
             </Beam>
           <Chord>
-            <eid>wD_wD</eid>
+            <eid>vD_vD</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>xD_xD</eid>
+              <eid>wD_wD</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>1D_1D</eid>
+            <eid>0D_0D</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>2D_2D</eid>
+              <eid>1D_1D</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>6D_6D</eid>
+            <eid>5D_5D</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>7D_7D</eid>
+              <eid>6D_6D</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
@@ -1106,13 +966,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>/D_/D</eid>
+            <eid>+D_+D</eid>
             </Dynamic>
           <Chord>
-            <eid>AE_AE</eid>
+            <eid>/D_/D</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>BE_BE</eid>
+              <eid>AE_AE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
@@ -1126,5 +986,47 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>0</track2>
+        <startTick>2/1</startTick>
+        <ticks>5/4</ticks>
+        <eid>BB_BB</eid>
+        <track>0</track>
+        </HairPin>
+      <HairPin>
+        <subtype>0</subtype>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>4</track2>
+        <startTick>2/1</startTick>
+        <ticks>5/4</ticks>
+        <eid>CC_CC</eid>
+        <track>4</track>
+        </HairPin>
+      <HairPin>
+        <subtype>0</subtype>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>8</track2>
+        <startTick>2/1</startTick>
+        <ticks>5/4</ticks>
+        <eid>DD_DD</eid>
+        <track>8</track>
+        </HairPin>
+      <HairPin>
+        <subtype>0</subtype>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>12</track2>
+        <startTick>2/1</startTick>
+        <ticks>5/4</ticks>
+        <eid>EE_EE</eid>
+        <track>12</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>
