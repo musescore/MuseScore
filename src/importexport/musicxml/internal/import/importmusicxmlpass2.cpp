@@ -2837,7 +2837,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             Fraction missingCurr;
             int alt = -10;                          // any number outside range of xml-tag "alter"
             // note: chord and grace note handling done in note()
-            // dura > 0 iff valid rest or first note of chord found
+            // dura > 0 if valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
                            tupletStates, tuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
