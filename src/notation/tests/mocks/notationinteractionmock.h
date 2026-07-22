@@ -97,7 +97,6 @@ public:
     MOCK_METHOD(void, addToSelection, (MoveDirection, MoveSelectionType), (override));
     MOCK_METHOD(void, selectTopStaff, (), (override));
     MOCK_METHOD(void, selectEmptyTrailingMeasure, (), (override));
-    MOCK_METHOD(void, moveSegmentSelection, (MoveDirection), (override));
 
     MOCK_METHOD(EngravingItem*, contextItem, (), (const, override));
 

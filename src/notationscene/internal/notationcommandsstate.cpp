@@ -50,6 +50,8 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     DELETE_COMMAND,
     FLIP_COMMAND,
     FLIP_HORIZONTALLY_COMMAND,
+    GOTO_NEXT_SEGMENT_ELEMENT_COMMAND,
+    GOTO_PREV_SEGMENT_ELEMENT_COMMAND,
     GOTO_UPNOTE_IN_CHORD_COMMAND,
     GOTO_DOWNNOTE_IN_CHORD_COMMAND,
     GOTO_TOPNOTE_IN_CHORD_COMMAND,
@@ -62,7 +64,9 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SET_DOUBLE_DURATION_COMMAND,
     SET_HALVE_DURATION_COMMAND,
     SET_DOUBLE_DURATION_DOTTED_COMMAND,
-    SET_HALVE_DURATION_DOTTED_COMMAND
+    SET_HALVE_DURATION_DOTTED_COMMAND,
+    TOGGLE_SNAP_TO_PREV_COMMAND,
+    TOGGLE_SNAP_TO_NEXT_COMMAND
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -209,6 +213,12 @@ static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
     { GOTO_PREV_SYSTEM_COMMAND, MoveSelectionType::System }
 };
 
+static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
+    TOGGLE_SYSTEM_BREAK_COMMAND,
+    TOGGLE_PAGE_BREAK_COMMAND,
+    TOGGLE_SECTION_BREAK_COMMAND
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -236,6 +246,7 @@ void NotationCommandsState::init()
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(TUPLET_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
+        updateCommandStates(LAYOUT_BREAK_COMMANDS);
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -245,6 +256,7 @@ void NotationCommandsState::init()
     controller()->textEditingChanged().onReceive(this, [this](bool) {
         updateCommandStates(TEXT_EDITING_COMMANDS);
         updateCommandStates(LYRICS_EDITING_COMMANDS);
+        updateCommandStates(LAYOUT_BREAK_COMMANDS);
     });
 
     controller()->isNoteInputAllowedChanged().onReceive(this, [this](bool) {
@@ -372,6 +384,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(TUPLET_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
+    }
+
+    if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
+        return CommandState(controller()->isToggleLayoutBreakAvailable(), false);
     }
 
     return CommandState(true, false);

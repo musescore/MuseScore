@@ -897,25 +897,6 @@ void NotationInteraction::setHitElementContext(const HitElementContext& context)
     m_hitElementContext = context;
 }
 
-void NotationInteraction::moveSegmentSelection(MoveDirection d)
-{
-    IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
-        return;
-    }
-
-    EngravingItem* e = selection()->element();
-    if (!e && !selection()->elements().empty()) {
-        e = d == MoveDirection::Left ? selection()->elements().front() : selection()->elements().back();
-    }
-
-    if (!e || (e = d == MoveDirection::Left ? e->prevSegmentElement() : e->nextSegmentElement()) == nullptr) {
-        e = d == MoveDirection::Left ? Navigation::firstElement(score()) : Navigation::lastElement(score());
-    }
-
-    select({ e }, SelectType::SINGLE);
-    showItem(e);
-}
-
 EngravingItem* NotationInteraction::contextItem() const
 {
     EngravingItem* item = selection()->element();

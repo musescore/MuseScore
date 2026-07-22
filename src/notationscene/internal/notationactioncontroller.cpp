@@ -91,6 +91,11 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
 using Controller = NotationActionController;
 using Interaction = INotationInteraction;
 
+template<typename T>
+constexpr auto param = [](const ActionData& args, int index) -> Val {
+    return Val(args.arg<T>(index));
+};
+
 void NotationActionController::init()
 {
     TRACEFUNC;
@@ -108,6 +113,8 @@ void NotationActionController::init()
         { GOTO_LAST_ELEMENT_COMMAND, SELECT_QUERY.set("target", "last-item").set("play-mode", "chord") },
         { GOTO_NEXT_ELEMENT_COMMAND, SELECT_QUERY.set("target", "next-item").set("play-mode", "note") },
         { GOTO_PREV_ELEMENT_COMMAND, SELECT_QUERY.set("target", "prev-item").set("play-mode", "note") },
+        { GOTO_NEXT_SEGMENT_ELEMENT_COMMAND, SELECT_QUERY.set("target", "next-segment-item").set("play-mode", "note") },
+        { GOTO_PREV_SEGMENT_ELEMENT_COMMAND, SELECT_QUERY.set("target", "prev-segment-item").set("play-mode", "note") },
         { GOTO_NEXT_TRACK_COMMAND, SELECT_QUERY.set("target", "next-track").set("play-mode", "chord") },
         { GOTO_PREV_TRACK_COMMAND, SELECT_QUERY.set("target", "prev-track").set("play-mode", "chord") },
         { GOTO_NEXT_FRAME_COMMAND, SELECT_QUERY.set("target", "next-frame") },
@@ -283,70 +290,64 @@ void NotationActionController::init()
     // properties commands
     registerCommand(TOGGLE_VISIBLE_COMMAND, &Interaction::toggleVisible);
 
+    // snap commands
+    registerCommand(TOGGLE_SNAP_TO_PREV_COMMAND, &Interaction::toggleSnapToPrevious);
+    registerCommand(TOGGLE_SNAP_TO_NEXT_COMMAND, &Interaction::toggleSnapToNext);
+
+    // layout commands
+    registerCommand(TOGGLE_SYSTEM_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::LINE);
+    registerCommand(TOGGLE_PAGE_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::PAGE);
+    registerCommand(TOGGLE_SECTION_BREAK_COMMAND, &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION);
+
+    registerCommand(APPLY_SYSTEM_LOCK_COMMAND, &Interaction::applySystemLock);
+    registerCommand(TOGGLE_SYSTEM_LOCK_COMMAND, &Interaction::toggleSystemLock);
+    registerCommand(APPLY_PAGE_LOCK_COMMAND, &Interaction::applyPageLock);
+    registerCommand(TOGGLE_PAGE_LOCK_COMMAND, &Interaction::togglePageLock);
+    registerCommand(TOGGLE_SCORE_LOCK_COMMAND, &Interaction::toggleScoreLock);
+
+    registerCommand(MAKE_INTO_SYSTEM_COMMAND, &Interaction::makeIntoSystem);
+    registerCommand(MAKE_INTO_PAGE_COMMAND, &Interaction::makeIntoPage);
+
+    registerCommand(MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND, &Interaction::moveMeasureToPrevSystem);
+    registerCommand(MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND, &Interaction::moveMeasureToNextSystem);
+    registerCommand(MOVE_SYSTEM_TO_PREV_PAGE_COMMAND, &Interaction::moveSystemToPrevPage);
+    registerCommand(MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND, &Interaction::moveSystemToNextPage);
+
+    registerCommand(SPLIT_MEASURE_COMMAND, &Interaction::splitSelectedMeasure);
+    registerCommand(JOIN_MEASURES_COMMAND, &Interaction::joinSelectedMeasures);
+    registerCommand(INSERT_MEASURE_COMMAND, [this]() { addBoxes(BoxType::Measure, 1, AddBoxesTarget::BeforeSelection); });
+    registerCommand(INSERT_MEASURES_COMMAND, [this](const muse::rcommand::CommandQuery& query) {
+        addMeasures(query, AddBoxesTarget::BeforeSelection);
+    });
+    registerCommand(INSERT_MEASURES_AFTER_SELECTION_COMMAND, [this](const muse::rcommand::CommandQuery& query) {
+        addMeasures(query, AddBoxesTarget::AfterSelection);
+    });
+    registerCommand(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, [this](const muse::rcommand::CommandQuery& query) {
+        addMeasures(query, AddBoxesTarget::AtStartOfScore);
+    });
+    registerCommand(APPEND_MEASURE_COMMAND, [this]() {
+        addBoxes(BoxType::Measure, 1, AddBoxesTarget::AtEndOfScore);
+    });
+    registerCommand(APPEND_MEASURES_COMMAND, [this](const muse::rcommand::CommandQuery& query) {
+        addMeasures(query, AddBoxesTarget::AtEndOfScore);
+    });
+
     // --------------------
 
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
-
-    registerAction("note-action", &Controller::handleNoteAction); // used for drums
-    registerAction("put-note", &Controller::putNote);
-    registerAction("remove-note", &Controller::removeNote);
-
     m_isAllowedDuringPlayback.insert({
         "notation-move-right", "notation-move-left",
         "notation-move-right-quickly", "notation-move-left-quickly",
     });
 
-    registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
+    registerAction("note-action", &Controller::handleNoteAction); // used for drums
+    registerAction("put-note", &Controller::putNote);
+    registerAction("remove-note", &Controller::removeNote);
 
     registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
     registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
-    registerAction("toggle-snap-to-previous", &Interaction::toggleSnapToPrevious, &Controller::hasSelection);
-    registerAction("toggle-snap-to-next", &Interaction::toggleSnapToNext, &Controller::hasSelection);
-    registerAction("next-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Right, PlayMode::PlayNote);
-    registerAction("prev-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Left, PlayMode::PlayNote);
-
-    registerAction("system-break", &Interaction::toggleLayoutBreak, LayoutBreakType::LINE, PlayMode::NoPlay,
-                   &Controller::toggleLayoutBreakAvailable);
-    registerAction("page-break", &Interaction::toggleLayoutBreak, LayoutBreakType::PAGE, PlayMode::NoPlay,
-                   &Controller::toggleLayoutBreakAvailable);
-    registerAction("section-break", &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION, PlayMode::NoPlay,
-                   &Controller::toggleLayoutBreakAvailable);
-
-    registerAction("apply-system-lock", &Interaction::applySystemLock);
-    registerAction("move-measure-to-prev-system", &Interaction::moveMeasureToPrevSystem);
-    registerAction("move-measure-to-next-system", &Interaction::moveMeasureToNextSystem);
-    registerAction("toggle-system-lock", &Interaction::toggleSystemLock);
-    registerAction("toggle-score-lock", &Interaction::toggleScoreLock);
-    registerAction("make-into-system", &Interaction::makeIntoSystem);
-    registerAction("apply-page-lock", &Interaction::applyPageLock);
-    registerAction("move-system-to-prev-page", &Interaction::moveSystemToPrevPage);
-    registerAction("move-system-to-next-page", &Interaction::moveSystemToNextPage);
-    registerAction("toggle-page-lock", &Interaction::togglePageLock);
-    registerAction("make-into-page", &Interaction::makeIntoPage);
-
-    registerAction("split-measure", &Interaction::splitSelectedMeasure);
-    registerAction("join-measures", &Interaction::joinSelectedMeasures);
-
-    registerAction("insert-measure", [this]() {
-        addBoxes(BoxType::Measure, 1, AddBoxesTarget::BeforeSelection);
-    }, &Controller::hasSelection);
-    registerAction("insert-measures", [this](const ActionData& actionData) {
-        addMeasures(actionData, AddBoxesTarget::BeforeSelection);
-    }, &Controller::hasSelection);
-    registerAction("insert-measures-after-selection", [this](const ActionData& actionData) {
-        addMeasures(actionData, AddBoxesTarget::AfterSelection);
-    }, &Controller::hasSelection);
-    registerAction("insert-measures-at-start-of-score", [this](const ActionData& actionData) {
-        addMeasures(actionData, AddBoxesTarget::AtStartOfScore);
-    });
-    registerAction("append-measure", [this]() {
-        addBoxes(BoxType::Measure, 1, AddBoxesTarget::AtEndOfScore);
-    });
-    registerAction("append-measures", [this](const ActionData& actionData) {
-        addMeasures(actionData, AddBoxesTarget::AtEndOfScore);
-    });
 
     registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
     registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
@@ -562,6 +563,8 @@ void NotationActionController::init()
                    VoiceAssignment::ALL_VOICE_IN_STAFF);
 
     // TAB
+    registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
+
     registerAction("string-above", &Controller::move, MoveDirection::Up, false, &Controller::isTablatureStaff);
     registerAction("string-below", &Controller::move, MoveDirection::Down, false, &Controller::isTablatureStaff);
     registerAction("pad-note-1-TAB", [this]() { setDuration(DurationType::V_WHOLE); }, &NotationActionController::isTablatureStaff);
@@ -644,6 +647,54 @@ void NotationActionController::init()
 
     // compat
     {
+        // with params
+        using Convertor = std::function<muse::rcommand::CommandQuery (const rcommand::Command&, const ActionData&)>;
+        struct ActionToCommandWithParams {
+            ActionCode actionCode;
+            muse::rcommand::Command command;
+            Convertor convertor;
+        };
+
+        // convertors
+        // generic convertor
+        struct ParamSpec {
+            std::string name;
+            std::function<Val(const ActionData&, int)> param;
+        };
+
+        auto make_conv = [](const std::vector<ParamSpec>& specs) -> Convertor {
+            return [specs](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
+                muse::rcommand::CommandQuery query(command);
+                if (args.empty()) {
+                    return query;
+                }
+
+                IF_ASSERT_FAILED(args.count() <= static_cast<int>(specs.size())) {
+                    return query;
+                }
+
+                for (int i = 0; i < args.count(); ++i) {
+                    query.set(specs[i].name, specs[i].param(args, i));
+                }
+                return query;
+            };
+        };
+
+        // tuplet options convertor
+        auto tupletOptions = [](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
+            IF_ASSERT_FAILED(args.count() > 0) {
+                return muse::rcommand::CommandQuery();
+            }
+            TupletOptions options = args.arg<TupletOptions>(0);
+
+            rcommand::CommandQuery query(command);
+            query.addParam("ratio", Val(options.ratio.toString().toStdString()));
+            query.addParam("number-type", Val(engraving::str_conv(options.numberType)));
+            query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
+            query.addParam("auto-baselen", Val(options.autoBaseLen));
+            return query;
+        };
+
         static std::map<ActionCode, rcommand::Command> actionToCommand = {
             { "action://notation/copy", COPY_COMMAND },
             { "action://notation/cut", CUT_COMMAND },
@@ -759,6 +810,8 @@ void NotationActionController::init()
             { "last-element", GOTO_LAST_ELEMENT_COMMAND },
             { "next-element", GOTO_NEXT_ELEMENT_COMMAND },
             { "prev-element", GOTO_PREV_ELEMENT_COMMAND },
+            { "next-segment-element", GOTO_NEXT_SEGMENT_ELEMENT_COMMAND },
+            { "prev-segment-element", GOTO_PREV_SEGMENT_ELEMENT_COMMAND },
             { "next-track", GOTO_NEXT_TRACK_COMMAND },
             { "prev-track", GOTO_PREV_TRACK_COMMAND },
             { "next-frame", GOTO_NEXT_FRAME_COMMAND },
@@ -792,6 +845,34 @@ void NotationActionController::init()
             { "add-melisma", EDITLYRIC_ADD_MELISMA_COMMAND },
             { "add-lyric-verse", EDITLYRIC_ADD_VERSE_COMMAND },
             { "toggle-visible", TOGGLE_VISIBLE_COMMAND },
+            { "toggle-snap-to-previous", TOGGLE_SNAP_TO_PREV_COMMAND },
+            { "toggle-snap-to-next", TOGGLE_SNAP_TO_NEXT_COMMAND },
+            { "system-break", TOGGLE_SYSTEM_BREAK_COMMAND },
+            { "page-break", TOGGLE_PAGE_BREAK_COMMAND },
+            { "section-break", TOGGLE_SECTION_BREAK_COMMAND },
+            { "apply-system-lock", APPLY_SYSTEM_LOCK_COMMAND },
+            { "toggle-system-lock", TOGGLE_SYSTEM_LOCK_COMMAND },
+            { "apply-page-lock", APPLY_PAGE_LOCK_COMMAND },
+            { "toggle-page-lock", TOGGLE_PAGE_LOCK_COMMAND },
+            { "toggle-score-lock", TOGGLE_SCORE_LOCK_COMMAND },
+            { "make-into-system", MAKE_INTO_SYSTEM_COMMAND },
+            { "make-into-page", MAKE_INTO_PAGE_COMMAND },
+            { "move-measure-to-prev-system", MOVE_MEASURE_TO_PREV_SYSTEM_COMMAND },
+            { "move-measure-to-next-system", MOVE_MEASURE_TO_NEXT_SYSTEM_COMMAND },
+            { "move-system-to-prev-page", MOVE_SYSTEM_TO_PREV_PAGE_COMMAND },
+            { "move-system-to-next-page", MOVE_SYSTEM_TO_NEXT_PAGE_COMMAND },
+            { "split-measure", SPLIT_MEASURE_COMMAND },
+            { "join-measures", JOIN_MEASURES_COMMAND },
+            { "insert-measure", INSERT_MEASURE_COMMAND },
+            { "append-measure", APPEND_MEASURE_COMMAND },
+        };
+
+        static const std::vector<ActionToCommandWithParams> actionToCommandWithParams = {
+            { "custom-tuplet", ADD_TUPLET_COMMAND, tupletOptions },
+            { "insert-measures", INSERT_MEASURES_COMMAND, make_conv({ { "count", param<int> } }) },
+            { "insert-measures-after-selection", INSERT_MEASURES_AFTER_SELECTION_COMMAND, make_conv({ { "count", param<int> } }) },
+            { "insert-measures-at-start-of-score", INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, make_conv({ { "count", param<int> } }) },
+            { "append-measures", APPEND_MEASURES_COMMAND, make_conv({ { "count", param<int> } }) },
         };
 
         auto ad = dispatcher();
@@ -800,20 +881,9 @@ void NotationActionController::init()
             ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
         }
 
-        ad->reg(this, "custom-tuplet", [d](const ActionData& args) {
-            IF_ASSERT_FAILED(args.count() > 0) {
-                return;
-            }
-
-            TupletOptions options = args.arg<TupletOptions>(0);
-
-            rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
-            query.addParam("ratio", Val(options.ratio.toString().toStdString()));
-            query.addParam("number-type", Val(engraving::str_conv(options.numberType)));
-            query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
-            query.addParam("auto-baselen", Val(options.autoBaseLen));
-            d->dispatch(query);
-        });
+        for (const auto& atc: actionToCommandWithParams) {
+            ad->reg(this, atc.actionCode, [d, atc](const ActionData& args) { return d->dispatch(atc.convertor(atc.command, args)); });
+        }
     }
 }
 
@@ -1675,6 +1745,12 @@ bool NotationActionController::isMoveSelectionAvailable(MoveSelectionType type) 
     return interaction && interaction->moveSelectionAvailable(type);
 }
 
+bool NotationActionController::isToggleLayoutBreakAvailable() const
+{
+    auto interaction = currentNotationInteraction();
+    return interaction && interaction->toggleLayoutBreakAvailable();
+}
+
 void NotationActionController::select(SelectionTarget target)
 {
     auto interaction = currentNotationInteraction();
@@ -2202,6 +2278,20 @@ void NotationActionController::addMeasures(const ActionData& actionData, AddBoxe
     }
 }
 
+void NotationActionController::addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target)
+{
+    if (query.contains("count")) {
+        int count = query.param("count").toInt();
+        addBoxes(BoxType::Measure, count, target);
+    } else {
+        interactive()->open("musescore://notation/selectmeasurescount")
+        .onResolve(this, [this, target](const Val& v) {
+            int count = v.toInt();
+            addBoxes(BoxType::Measure, count, target);
+        });
+    }
+}
+
 void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
 {
     TRACEFUNC;
@@ -2378,12 +2468,6 @@ void NotationActionController::saveStyle()
 bool NotationActionController::measureNavigationAvailable() const
 {
     return isNotEditingOrHasPopup() || textNavigationAvailable();
-}
-
-bool NotationActionController::toggleLayoutBreakAvailable() const
-{
-    INotationInteractionPtr interaction = currentNotationInteraction();
-    return interaction && interaction->toggleLayoutBreakAvailable();
 }
 
 bool NotationActionController::isTextEditing() const
@@ -3099,6 +3183,19 @@ void NotationActionController::registerCommand(const muse::rcommand::Command& co
 
         handler();
         return muse::make_ok();
+    });
+}
+
+void NotationActionController::registerCommand(const muse::rcommand::Command& command,
+                                               std::function<void(const muse::rcommand::CommandQuery&)> handler)
+{
+    commandDispatcher()->onRequest(this, command, [this, command, handler](const rcommand::Request& request) {
+        if (!commandsState()->commandState(command).enabled) {
+            return rcommand::make_response(request, muse::make_ret(Ret::Code::NotSupported));
+        }
+
+        handler(request.query);
+        return rcommand::make_response(request, muse::make_ok());
     });
 }
 

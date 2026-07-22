@@ -101,6 +101,8 @@ public:
     bool isNoteOrRestSelected() const override;
     bool isMoveSelectionAvailable(MoveSelectionType type) const override;
 
+    bool isToggleLayoutBreakAvailable() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -176,6 +178,7 @@ private:
     void startEditSelectedText(const muse::actions::ActionData& args);
 
     void addMeasures(const muse::actions::ActionData& actionData, AddBoxesTarget target);
+    void addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
@@ -222,7 +225,6 @@ private:
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
     bool measureNavigationAvailable() const;
-    bool toggleLayoutBreakAvailable() const;
 
     enum class TextNavigationType {
         NearNoteOrRest,
@@ -296,6 +298,7 @@ private:
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
+    void registerCommand(const muse::rcommand::Command&, std::function<void(const muse::rcommand::CommandQuery&)>);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(const muse::rcommand::CommandQuery&));

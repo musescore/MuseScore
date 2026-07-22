@@ -207,6 +207,12 @@ void NotationSelection::select(SelectionTarget target)
     case SelectionTarget::PrevItem:
         moveSelection(MoveDirection::Left, MoveSelectionType::EngravingItem);
         break;
+    case SelectionTarget::NextSegmentItem:
+        moveSegmentSelection(MoveDirection::Right);
+        break;
+    case SelectionTarget::PrevSegmentItem:
+        moveSegmentSelection(MoveDirection::Left);
+        break;
     case SelectionTarget::NextChord:
         moveSelection(MoveDirection::Right, MoveSelectionType::Chord);
         break;
@@ -569,6 +575,25 @@ void NotationSelection::moveStringSelection(MoveDirection d)
             }
         }
     }
+}
+
+void NotationSelection::moveSegmentSelection(MoveDirection d)
+{
+    IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
+        return;
+    }
+
+    EngravingItem* e = this->element();
+    if (!e && !this->elements().empty()) {
+        e = d == MoveDirection::Left ? this->elements().front() : this->elements().back();
+    }
+
+    if (!e || (e = d == MoveDirection::Left ? e->prevSegmentElement() : e->nextSegmentElement()) == nullptr) {
+        e = d == MoveDirection::Left ? Navigation::firstElement(score()) : Navigation::lastElement(score());
+    }
+
+    select({ e }, SelectType::SINGLE);
+    m_interaction->showItem(e);
 }
 
 void NotationSelection::moveChordNoteSelection(MoveDirection d)
