@@ -5282,6 +5282,10 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
     struct MovedParenGroup {
         Chord* dstChord = nullptr;
         bool generated = false;
+        bool leftVisible = true;
+        bool rightVisible = true;
+        PointF leftOffset = PointF();
+        PointF rightOffset = PointF();
         std::vector<Note*> notes;
     };
     std::map<const NoteParenthesisInfo*, MovedParenGroup> movedParenGroups;
@@ -5453,13 +5457,21 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
             if (!chord->noteParentheses().empty()) {
                 const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenthesisInfo(note);
                 if (noteParenInfo) {
-                    bool generated = noteParenInfo->leftParen()->generated();
-                    EditChord::removeChordParentheses(chord, { note }, /*addToLinked*/ true, generated);
-
-                    MovedParenGroup& movedGroup = movedParenGroups[noteParenInfo];
-                    movedGroup.dstChord = dstChord;
-                    movedGroup.generated = generated;
-                    movedGroup.notes.push_back(newNote);
+                    Parenthesis* leftParen = noteParenInfo->leftParen();
+                    Parenthesis* rightParen = noteParenInfo->rightParen();
+                    DO_ASSERT(leftParen && rightParen);
+                    if (leftParen && rightParen) {
+                        bool generated = leftParen->generated();
+                        MovedParenGroup& movedGroup = movedParenGroups[noteParenInfo];
+                        movedGroup.dstChord = dstChord;
+                        movedGroup.generated = generated;
+                        movedGroup.notes.push_back(newNote);
+                        movedGroup.leftOffset = leftParen->offset();
+                        movedGroup.rightOffset = rightParen->offset();
+                        movedGroup.leftVisible = leftParen->visible();
+                        movedGroup.rightVisible = rightParen->visible();
+                        EditChord::removeChordParentheses(chord, { note }, /*addToLinked*/ true, generated);
+                    }
                 }
             }
 
@@ -5546,7 +5558,24 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
     // Recreate parenthesis groups
     for (auto& pair : movedParenGroups) {
         MovedParenGroup& movedGroup = pair.second;
+        IF_ASSERT_FAILED(!movedGroup.notes.empty()) {
+            continue;
+        }
+
         EditChord::addChordParentheses(movedGroup.dstChord, movedGroup.notes, /*addToLinked*/ true, movedGroup.generated);
+
+        const NoteParenthesisInfo* info = movedGroup.notes.front()->parenthesisInfo();
+        Parenthesis* leftParen = info ? info->leftParen() : nullptr;
+        Parenthesis* rightParen = info ? info->rightParen() : nullptr;
+
+        IF_ASSERT_FAILED(info && leftParen && rightParen) {
+            continue;
+        }
+
+        leftParen->undoSetVisible(movedGroup.leftVisible);
+        rightParen->undoSetVisible(movedGroup.rightVisible);
+        leftParen->undoChangeProperty(Pid::OFFSET, movedGroup.leftOffset);
+        rightParen->undoChangeProperty(Pid::OFFSET, movedGroup.rightOffset);
     }
 
     if (!newElements.empty()) {
