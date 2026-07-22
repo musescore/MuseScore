@@ -603,12 +603,10 @@ TEST_F(GuitarPro_Tests, gpVolumeSwell) {
 TEST_F(GuitarPro_Tests, gpxVolumeSwell) {
     gpReadTest("volume-swell", "gpx");
 }
-// TODO: fix
-TEST_F(GuitarPro_Tests, DISABLED_gpTremoloBar) {
+TEST_F(GuitarPro_Tests, gpTremoloBar) {
     gpReadTest("tremolo-bar", "gp");
 }
-// TODO: fix
-TEST_F(GuitarPro_Tests, DISABLED_gpxTremoloBar) {
+TEST_F(GuitarPro_Tests, gpxTremoloBar) {
     gpReadTest("tremolo-bar", "gpx");
 }
 TEST_F(GuitarPro_Tests, gpFreeTime) {
