@@ -140,6 +140,7 @@ private:
 
     bool hasToReloadTracks(const ScoreChanges& changes) const;
     bool hasToReloadScore(const ScoreChanges& changes) const;
+    bool hasAutomationChange(const ScoreChanges& changes) const;
 
     void clearExpiredTracks();
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,

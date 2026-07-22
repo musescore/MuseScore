@@ -800,6 +800,17 @@ bool PlaybackModel::hasToReloadScore(const ScoreChanges& changes) const
     return false;
 }
 
+bool PlaybackModel::hasAutomationChange(const ScoreChanges& changes) const
+{
+    for (const auto& pair : changes.changedObjects) {
+        if (muse::contains(pair.second, CommandType::EditAutomationPoints)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void PlaybackModel::clearExpiredTracks()
 {
     auto needRemoveTrack = [this](const InstrumentTrackId& trackId) {
@@ -1056,6 +1067,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChanges& 
 
     if (hasToReloadTracks(changes)
         || hasToReloadScore(changes)
+        || hasAutomationChange(changes)
         || !changes.isValidBoundary()) {
         const Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
