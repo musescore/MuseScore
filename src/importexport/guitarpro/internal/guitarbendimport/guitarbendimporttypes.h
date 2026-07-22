@@ -141,5 +141,6 @@ struct BendDataContext {
 
 struct DiveDataContext {
     GraceAfterTrackMap graceAfterDiveData;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t> > preDiveData;
 };
 } // mu::iex::guitarpro
