@@ -136,23 +136,25 @@ void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
 
     while (e.readNextStartElement()) {
         if (e.name() == "alter") {
-            const String alter = e.readText();
             bool ok;
-            m_alter = MusicXmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
-            if (!ok || m_alter < -2 || m_alter > 2) {
+            const double alter = e.readDouble(&ok);
+            m_alter = round(alter);
+            if (m_alter < -3 || m_alter > 3) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
-                const double altervalue = alter.toDouble(&ok2);
-                if (ok2 && (std::abs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
+                if (ok2 && (std::abs(alter) < 2.0) && (m_accType == AccidentalType::NONE)) {
                     // try to see if a microtonal accidental is needed
-                    m_accType = microtonalGuess(altervalue);
+                    m_accType = microtonalGuess(alter);
 
                     // If it's not a microtonal accidental we will use tuning
                     if (m_accType == AccidentalType::NONE) {
-                        m_tuning = 100 * altervalue;
+                        m_tuning = 100 * alter;
                     }
                 }
                 m_alter = 0;
+            }
+            if (m_alter != alter) {
+                m_tuning = 100 * (alter - m_alter);
             }
         } else if (e.name() == "octave") {
             const String oct = e.readText();
