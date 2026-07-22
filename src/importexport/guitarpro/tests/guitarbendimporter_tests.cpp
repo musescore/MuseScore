@@ -230,4 +230,20 @@ TEST_F(GuitarBendImporter_Tests, gpDiveHarmonic) {
 TEST_F(GuitarBendImporter_Tests, gpDiveWithPrebend) {
     gpReadTest(u"dive_with_prebend", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpDivesMulti) {
+    gpReadTest(u"dives_multi", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPredive) {
+    gpReadTest(u"predive", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPrediveDive) {
+    gpReadTest(u"predive_dive", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPrediveRelease) {
+    gpReadTest(u"predive_release", u"gp");
+}
 }
