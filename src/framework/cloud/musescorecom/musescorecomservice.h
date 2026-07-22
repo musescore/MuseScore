@@ -23,6 +23,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
@@ -34,7 +35,7 @@
 #include "musescorecom/imusescorecomservice.h"
 
 namespace muse::cloud {
-class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
+class MuseScoreComService : public IMuseScoreComService, public IMuseScoreComImportService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
     GlobalInject<ICloudConfiguration> configuration;
@@ -45,6 +46,8 @@ public:
     explicit MuseScoreComService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
 
     IAuthorizationServicePtr authorization() override;
+
+    IMuseScoreComImportServicePtr import() override;
 
     CloudInfo cloudInfo() const override;
 
@@ -62,6 +65,19 @@ public:
     ProgressPtr downloadScore(int scoreId, DevicePtr scoreData, const QString& hash = QString(),
                               const QString& secret = QString()) override;
 
+    // IMuseScoreComImportService
+    ProgressPtr uploadImport(ImportType type, const ImportFileList& files) override;
+    ProgressPtr downloadImportedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) override;
+
+    async::Promise<RetVal<ImportQueueList> > fetchImportQueue() override;
+    async::Promise<RetVal<SignedMsczUrl> > fetchMsczUrl(ImportType type, int id) override;
+
+    async::Promise<RetVal<SongAutocompleteList> > fetchSongAutocomplete(const QString& searchText) override;
+    async::Promise<RetVal<GenreList> > fetchGenres() override;
+
+    async::Promise<RetVal<ImportResult> > submitOmrMeta(const OmrMeta& meta) override;
+    async::Promise<RetVal<ImportResult> > submitOmrReview(int id, OmrReviewRating review, const QString& reason = QString()) override;
+
 private:
     ServerConfig serverConfig() const override;
 
@@ -69,6 +85,7 @@ private:
     async::Promise<Ret> updateTokens() override;
 
     network::RequestHeaders headers() const;
+    network::RequestHeaders importHeaders() const;
 
     void doDownloadScoreInfo(int scoreId, std::function<void(const RetVal<ScoreInfo>& res)> finished);
 
@@ -80,5 +97,9 @@ private:
                                       int revisionId, ProgressPtr progress);
 
     async::Promise<Ret> doUploadAudio(DevicePtr audioData, const QString& audioFormat, const QUrl& sourceUrl, ProgressPtr progress);
+
+    async::Promise<Ret> doUploadImport(ImportType type, const ImportFileList& files, ProgressPtr progress);
+
+    std::optional<GenreList> m_cachedGenres;
 };
 }

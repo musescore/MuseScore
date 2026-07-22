@@ -31,6 +31,8 @@
 #include "cloud/cloudtypes.h"
 #include "cloud/iauthorizationservice.h"
 
+#include "imusescorecomimportservice.h"
+
 class QIODevice;
 class QString;
 
@@ -45,6 +47,8 @@ public:
     virtual ~IMuseScoreComService() = default;
 
     virtual IAuthorizationServicePtr authorization() = 0;
+
+    virtual IMuseScoreComImportServicePtr import() = 0;
 
     virtual QUrl scoreManagerUrl() const = 0;
 
