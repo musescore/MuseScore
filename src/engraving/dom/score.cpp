@@ -5612,8 +5612,6 @@ void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointE
     m_masterScore->editAutomationPoints(key, edits);
 }
 
-IAutomation* Score::automation() const { return m_masterScore->automation(); }
-
 TransactionManager* Score::transactionManager() const { return m_masterScore->transactionManager(); }
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }
 const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(); }
