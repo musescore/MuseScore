@@ -41,6 +41,8 @@ on:
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+  # This information is public and can be extracted by anyone from the final .app file
+  APPLE_TEAM_ID: 6EPAF2X3PR
 
 jobs:
   macos_universal:
@@ -198,13 +200,15 @@ jobs:
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
-        bash ./buildscripts/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S"
+        USER=${{ env.DO_NOTARIZE == 'true' && secrets.APPLE_USERNAME || '' }}; if [ -z "$USER" ]; then USER=""; fi
+        PW=${{ env.DO_NOTARIZE == 'true' && secrets.APPLE_PASSWORD || '' }}; if [ -z "$PW" ]; then PW=""; fi
+        bash ./buildscripts/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" --user "$USER" --password "$PW" --team-id "$APPLE_TEAM_ID"
     - name: Notarize
       if: env.DO_NOTARIZE == 'true'
       run: |
         USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
-        bash ./buildscripts/ci/macos/notarize.sh -u $USER -p $PW
+        bash ./buildscripts/ci/macos/notarize.sh -u "$USER" -p "$PW" -t "$APPLE_TEAM_ID"
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
