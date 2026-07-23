@@ -107,6 +107,8 @@
               <eid>M_M</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
+              <fret>2</fret>
+              <string>4</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -118,6 +120,8 @@
               <eid>N_N</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
