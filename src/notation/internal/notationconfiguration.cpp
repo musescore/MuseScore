@@ -191,8 +191,10 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
     settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
         m_isOnlyInvertInDarkThemeChanged.notify();
-        m_foregroundChanged.notify();
-        m_notationColorChanged.notify();
+        if (scoreInversionEnabled()) {
+            m_foregroundChanged.notify();
+            m_notationColorChanged.notify();
+        }
     });
 
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
