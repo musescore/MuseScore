@@ -23,13 +23,22 @@
 #include "editstyle.h"
 
 #include <QAnyStringView>
+#include <QAbstractButton>
 #include <QButtonGroup>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickView>
 #include <QSignalMapper>
+#include <QSpinBox>
 #include <QStringBuilder>
 #include <QStringLiteral>
+#include <QToolButton>
 
 #include "translation.h"
 #include "types/translatablestring.h"
@@ -106,6 +115,7 @@ static const QStringList ALL_PAGE_CODES {
     "chord-symbols",
     "fretboard-diagrams",
     "tablature-styles",
+    "video-scoring",
     "text-styles"
 };
 
@@ -136,6 +146,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "repeat-text-right",
     "rehearsal-mark",
     "system",
+    "video-hit-point",
     "staff",
     "staveSharing",
     "expression",
@@ -256,6 +267,58 @@ void EditStyle::classBegin()
 
     buttonApplyToAllParts = buttonBox->addButton(muse::qtrc("notation/editstyle", "Apply to all parts"), QDialogButtonBox::ApplyRole);
     WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
+
+    const int videoScoringPageIndex = ALL_PAGE_CODES.indexOf(QStringLiteral("video-scoring"));
+    pageList->insertItem(videoScoringPageIndex, muse::qtrc("notation/editstyle", "Video Scoring"));
+    QWidget* pageVideoScoring = new QWidget(pageStack);
+    QVBoxLayout* videoScoringLayout = new QVBoxLayout(pageVideoScoring);
+    QGroupBox* videoHitPointGroup = new QGroupBox(muse::qtrc("notation/editstyle", "Video hit points"), pageVideoScoring);
+    QGridLayout* videoHitPointLayout = new QGridLayout(videoHitPointGroup);
+
+    videoHitPointLineStyle = new QButtonGroup(videoHitPointGroup);
+    QWidget* videoHitPointLineStyleButtons = new QWidget(videoHitPointGroup);
+    QHBoxLayout* videoHitPointLineStyleLayout = new QHBoxLayout(videoHitPointLineStyleButtons);
+    videoHitPointLineStyleLayout->setContentsMargins(0, 0, 0, 0);
+    videoHitPointLineStyleLayout->setSpacing(4);
+
+    auto addVideoHitPointLineStyleButton
+        = [this, videoHitPointLineStyleButtons, videoHitPointLineStyleLayout](const QString& text, LineType lineType) {
+        QToolButton* button = new QToolButton(videoHitPointLineStyleButtons);
+        button->setCheckable(true);
+        button->setText(text);
+        button->setMinimumWidth(78);
+        button->setAutoRaise(false);
+        videoHitPointLineStyle->addButton(button, int(lineType));
+        videoHitPointLineStyleLayout->addWidget(button);
+    };
+
+    addVideoHitPointLineStyleButton(QStringLiteral("_____"), LineType::SOLID);
+    addVideoHitPointLineStyleButton(QStringLiteral("- - -"), LineType::DASHED);
+    addVideoHitPointLineStyleButton(QStringLiteral(". . ."), LineType::DOTTED);
+    videoHitPointLineTransparency = new QSpinBox(videoHitPointGroup);
+    videoHitPointLineTransparency->setKeyboardTracking(false);
+    videoHitPointLineTransparency->setRange(0, 100);
+    videoHitPointLineTransparency->setSuffix(muse::qtrc("global", "%"));
+
+    videoHitPointLineColor = new Awl::ColorLabel(videoHitPointGroup);
+
+    resetVideoHitPointLineStyle = new QToolButton(videoHitPointGroup);
+    resetVideoHitPointLineTransparency = new QToolButton(videoHitPointGroup);
+    resetVideoHitPointLineColor = new QToolButton(videoHitPointGroup);
+
+    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Line style:"), videoHitPointGroup), 0, 0);
+    videoHitPointLayout->addWidget(videoHitPointLineStyleButtons, 0, 1);
+    videoHitPointLayout->addWidget(resetVideoHitPointLineStyle, 0, 2);
+    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Transparency:"), videoHitPointGroup), 1, 0);
+    videoHitPointLayout->addWidget(videoHitPointLineTransparency, 1, 1);
+    videoHitPointLayout->addWidget(resetVideoHitPointLineTransparency, 1, 2);
+    videoHitPointLayout->addWidget(new QLabel(muse::qtrc("notation/editstyle", "Color:"), videoHitPointGroup), 2, 0);
+    videoHitPointLayout->addWidget(videoHitPointLineColor, 2, 1);
+    videoHitPointLayout->addWidget(resetVideoHitPointLineColor, 2, 2);
+    videoHitPointLayout->setColumnStretch(1, 1);
+    videoScoringLayout->addWidget(videoHitPointGroup);
+    videoScoringLayout->addStretch(1);
+    pageStack->insertWidget(videoScoringPageIndex, pageVideoScoring);
 
     // ====================================================
     // Button Groups
@@ -631,6 +694,8 @@ void EditStyle::classBegin()
         { StyleId::musicalTextFont,          false, musicalTextFont,              0 },
         { StyleId::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance,
           resetAutoplaceHairpinDynamicsDistance },
+        { StyleId::videoHitPointLineStyle,        false, videoHitPointLineStyle,        resetVideoHitPointLineStyle },
+        { StyleId::videoHitPointLineTransparency, false, videoHitPointLineTransparency, resetVideoHitPointLineTransparency },
 
         { StyleId::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
         { StyleId::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
@@ -1119,6 +1184,16 @@ void EditStyle::classBegin()
 
         setSignalMapper->setMapping(sw.widget, static_cast<int>(sw.idx));
     }
+
+    WidgetUtils::setWidgetIcon(resetVideoHitPointLineColor, IconCode::Code::UNDO);
+    connect(videoHitPointLineColor, &Awl::ColorLabel::colorChanged, this, [this](const QColor& color) {
+        setStyleValue(StyleId::videoHitPointLineColor, PropertyValue::fromValue(Color(color)));
+        resetVideoHitPointLineColor->setEnabled(!hasDefaultStyleValue(StyleId::videoHitPointLineColor));
+    });
+    connect(resetVideoHitPointLineColor, &QToolButton::clicked, this, [this]() {
+        setStyleValue(StyleId::videoHitPointLineColor, defaultStyleValue(StyleId::videoHitPointLineColor));
+        setValues();
+    });
 
     connect(setSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::valueChanged);
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
@@ -1611,7 +1686,7 @@ void EditStyle::goToTextStylePage(const QString& code)
     int index = ALL_PAGE_CODES.indexOf("text-styles");
 
     int subIndex = ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf(code);
-    IF_ASSERT_FAILED(index >= 0) {
+    IF_ASSERT_FAILED(index >= 0 && subIndex >= 0 && subIndex < textStyles->count()) {
         return;
     }
 
@@ -1627,6 +1702,10 @@ void EditStyle::goToTextStylePage(const QString& code)
 
 void EditStyle::goToTextStylePage(int index)
 {
+    if (index < 0 || index >= textStyles->count() || index >= ALL_TEXT_STYLE_SUBPAGE_CODES.size()) {
+        return;
+    }
+
     pageList->setCurrentRow(ALL_PAGE_CODES.indexOf("text-styles"));
     m_currentPageCode = "text-styles";
 
@@ -2034,6 +2113,11 @@ void EditStyle::setValues()
         }
     }
 
+    videoHitPointLineColor->blockSignals(true);
+    videoHitPointLineColor->setColor(styleValue(StyleId::videoHitPointLineColor).value<Color>().toQColor());
+    videoHitPointLineColor->blockSignals(false);
+    resetVideoHitPointLineColor->setEnabled(!hasDefaultStyleValue(StyleId::videoHitPointLineColor));
+
     textStyleChanged(textStyles->currentRow());
 
     emit dynamicsAndHairpinPos->currentIndexChanged(dynamicsAndHairpinPos->currentIndex());
@@ -2419,6 +2503,10 @@ void EditStyle::resetStyleValue(int i)
 
 void EditStyle::textStyleChanged(int row)
 {
+    if (row < 0 || row >= textStyles->count()) {
+        return;
+    }
+
     TextStyleType tid = TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 

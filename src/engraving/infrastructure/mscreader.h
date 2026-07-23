@@ -70,6 +70,7 @@ public:
     muse::ByteArray readImageFile(const muse::String& fileName) const;
 
     muse::ByteArray readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
+    muse::ByteArray readVideoSettingsJsonFile() const;
     muse::ByteArray readViewSettingsJsonFile(const muse::io::path_t& pathPrefix = "") const;
     muse::ByteArray readAutomationJsonFile() const;
 

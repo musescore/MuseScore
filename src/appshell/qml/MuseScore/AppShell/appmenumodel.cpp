@@ -44,6 +44,9 @@ using namespace muse::actions;
 using namespace muse::extensions;
 
 static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
+static const ActionCode APP_MENU_VIDEO_TIMECODE_OFF_CODE = "video-timecode-off";
+static const ActionCode APP_MENU_VIDEO_TIMECODE_ABOVE_CODE = "video-timecode-above-bars";
+static const ActionCode APP_MENU_VIDEO_TIMECODE_BELOW_CODE = "video-timecode-below-bars";
 static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
@@ -146,6 +149,22 @@ void AppMenuModel::setupConnections()
 
         updateUndoRedoItems();
     });
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        updateTimecodeItems();
+
+        project::INotationProjectPtr project = globalContext()->currentProject();
+        project::IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+        if (!settings) {
+            return;
+        }
+
+        settings->settingsChanged().onNotify(this, [this]() {
+            updateTimecodeItems();
+        }, Asyncable::Mode::SetReplace);
+    });
+
+    updateTimecodeItems();
 }
 
 void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
@@ -312,11 +331,13 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
+        makeMenuItem("toggle-video-panel"),
         makeMenuItem("toggle-percussion-panel"),
         makeMenuItem("command://playback/show-playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
-        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
+        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
+        makeMenu(TranslatableString("appshell/menu/view", "Video &timecode"), makeTimecodeItems(), "menu-video-timecode")
     };
 
 #ifdef MUSE_MODULE_WORKSPACE
@@ -793,6 +814,36 @@ MenuItemList AppMenuModel::makeToolbarsItems()
     };
 
     return items;
+}
+
+MenuItemList AppMenuModel::makeTimecodeItems()
+{
+    project::INotationProjectPtr project = globalContext()->currentProject();
+    project::IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+    const VideoTimecodeDisplayMode mode = settings
+                                          ? settings->attachment().timecodeDisplayMode
+                                          : VideoTimecodeDisplayMode::Off;
+
+    auto makeTimecodeItem = [this, mode](const ActionCode& actionCode, VideoTimecodeDisplayMode itemMode) {
+        MenuItem* item = makeMenuItem(actionCode);
+        item->setSelectable(true);
+        item->setSelected(mode == itemMode);
+        return item;
+    };
+
+    return {
+        makeTimecodeItem(APP_MENU_VIDEO_TIMECODE_OFF_CODE, VideoTimecodeDisplayMode::Off),
+        makeTimecodeItem(APP_MENU_VIDEO_TIMECODE_ABOVE_CODE, VideoTimecodeDisplayMode::AboveBars),
+        makeTimecodeItem(APP_MENU_VIDEO_TIMECODE_BELOW_CODE, VideoTimecodeDisplayMode::BelowBars)
+    };
+}
+
+void AppMenuModel::updateTimecodeItems()
+{
+    MenuItem& timecodeMenu = findMenu("menu-video-timecode");
+    if (timecodeMenu.isValid()) {
+        timecodeMenu.setSubitems(makeTimecodeItems());
+    }
 }
 
 MenuItemList AppMenuModel::makeShowItems()

@@ -156,6 +156,12 @@ done
 # List them here using paths relative to the Qt root directory. Report new
 # additions at https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues
 additional_qt_components=(
+  # Video panel playback
+  lib/libQt6Multimedia.so.6
+  lib/libQt6MultimediaQuickPrivate.so.6
+  qml/QtMultimedia
+  plugins/multimedia
+
   plugins/printsupport/libcupsprintersupport.so
 
   # At an unknown point in time, the libqgtk3 plugin stopped being deployed

@@ -565,6 +565,37 @@ DockPage {
                     }
                 }
             }
+        },
+
+        DockPanel {
+            id: videoPanel
+
+            objectName: root.pageModel.videoPanelName()
+            title: qsTrc("appshell", "Video")
+
+            height: 360
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
+
+            minimumWidth: root.panelMinDimension
+            maximumWidth: root.panelMaxDimension
+
+            groupName: root.horizontalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            location: Location.Bottom
+
+            dropDestinations: root.horizontalPanelDropDestinations
+
+            navigationSection: root.navigationPanelSec(videoPanel.location)
+
+            VideoPanelLoader {
+                anchors.fill: parent
+                navigationSection: videoPanel.navigationSection
+                contentNavigationPanelOrderStart: videoPanel.contentNavigationPanelOrderStart
+            }
         }
     ]
 

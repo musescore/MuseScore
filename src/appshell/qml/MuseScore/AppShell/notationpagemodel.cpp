@@ -40,8 +40,13 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::project;
 using namespace mu::engraving;
 using namespace muse::actions;
+
+static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_OFF_CODE("video-timecode-off");
+static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_ABOVE_CODE("video-timecode-above-bars");
+static const ActionCode NOTATION_PAGE_VIDEO_TIMECODE_BELOW_CODE("video-timecode-below-bars");
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -70,6 +75,16 @@ void NotationPageModel::init()
         DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
         dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
     }
+
+    dispatcher()->reg(this, NOTATION_PAGE_VIDEO_TIMECODE_OFF_CODE, [this]() {
+        setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode::Off);
+    });
+    dispatcher()->reg(this, NOTATION_PAGE_VIDEO_TIMECODE_ABOVE_CODE, [this]() {
+        setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode::AboveBars);
+    });
+    dispatcher()->reg(this, NOTATION_PAGE_VIDEO_TIMECODE_BELOW_CODE, [this]() {
+        setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode::BelowBars);
+    });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -170,6 +185,11 @@ QString NotationPageModel::percussionPanelName() const
     return PERCUSSION_PANEL_NAME;
 }
 
+QString NotationPageModel::videoPanelName() const
+{
+    return VIDEO_PANEL_NAME;
+}
+
 QString NotationPageModel::statusBarName() const
 {
     return NOTATION_STATUSBAR_NAME;
@@ -208,6 +228,23 @@ void NotationPageModel::toggleDock(const QString& name)
     }
 
     dispatcher()->dispatch("dock-toggle", ActionData::make_arg1<QString>(name));
+}
+
+void NotationPageModel::setVideoTimecodeDisplayMode(VideoTimecodeDisplayMode mode)
+{
+    INotationProjectPtr project = globalContext()->currentProject();
+    IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+    if (!settings || !settings->attachment().isValid()) {
+        return;
+    }
+
+    VideoAttachmentSettings updated = settings->attachment();
+    if (updated.timecodeDisplayMode == mode) {
+        return;
+    }
+
+    updated.timecodeDisplayMode = mode;
+    settings->setAttachment(updated);
 }
 
 void NotationPageModel::scheduleUpdatePercussionPanelVisibility()

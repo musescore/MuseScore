@@ -1360,6 +1360,24 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(systemTextFrameBgColor,                     PropertyValue::fromValue(Color::transparent)),
     styleDef(systemTextPosition,                         AlignH::LEFT),
 
+    styleDef(videoHitPointFontFace,                      "Edwin"),
+    styleDef(videoHitPointFontSize,                      60.0),
+    styleDef(videoHitPointLineSpacing,                   1.0),
+    styleDef(videoHitPointFontSpatiumDependent,          false),
+    styleDef(videoHitPointFontStyle,                     int(FontStyle::Normal)),
+    styleDef(videoHitPointColor,                         PropertyValue::fromValue(Color::BLACK)),
+    styleDef(videoHitPointAlign,                         Align(AlignH::HCENTER, AlignV::BOTTOM)),
+    styleDef(videoHitPointOffsetType,                    int(OffsetType::SPATIUM)),
+    styleDef(videoHitPointPosAbove,                      PointF(.0, -0.35)),
+    styleDef(videoHitPointPosBelow,                      PointF(.0, 1.0)),
+    styleDef(videoHitPointFrameType,                     int(FrameType::NO_FRAME)),
+    styleDef(videoHitPointFramePadding,                  0.2_sp),
+    styleDef(videoHitPointFrameWidth,                    0.1_sp),
+    styleDef(videoHitPointFrameRound,                    0.0_sp),
+    styleDef(videoHitPointFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
+    styleDef(videoHitPointFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
+    styleDef(videoHitPointPosition,                      AlignH::HCENTER),
+
     styleDef(staffTextFontFace,                          "Edwin"),
     styleDef(staffTextFontSize,                          10.0),
     styleDef(staffTextLineSpacing,                       1.0),
@@ -2242,6 +2260,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
     styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
     styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
+
+    styleDef(videoHitPointLabelFontSize,                 5.0),
+    styleDef(videoHitPointLineStyle,                     PropertyValue(LineType::SOLID)),
+    styleDef(videoHitPointLineTransparency,              30),
+    styleDef(videoHitPointLineColor,                     PropertyValue::fromValue(Color(59, 148, 229))),
 } };
 
 #undef styleDef

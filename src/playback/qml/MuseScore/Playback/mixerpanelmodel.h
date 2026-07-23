@@ -33,6 +33,7 @@
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackconfiguration.h"
 #include "project/iprojectaudiosettings.h"
+#include "project/iprojectvideosettings.h"
 #include "ui/qml/Muse/Ui/navigationsection.h"
 
 #include "iplaybackcontroller.h"
@@ -100,6 +101,7 @@ private:
 
     MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                                  bool isPrimary = true);
+    MixerChannelItem* buildVideoChannelItem();
     MixerChannelItem* buildAuxChannelItem(muse::audio::aux_channel_idx_t index, const muse::audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 
@@ -112,6 +114,7 @@ private:
 
     project::INotationProjectPtr currentProject() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
+    project::IProjectVideoSettingsPtr videoSettings() const;
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
 

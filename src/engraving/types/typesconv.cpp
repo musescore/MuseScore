@@ -1760,6 +1760,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::REPEAT_RIGHT,      "repeat_right",         muse::TranslatableString("engraving", "Repeat text right") },
     { TextStyleType::REHEARSAL_MARK,    "rehearsal_mark",       muse::TranslatableString("engraving", "Rehearsal mark") },
     { TextStyleType::SYSTEM,            "system",               muse::TranslatableString("engraving", "System") },
+    { TextStyleType::VIDEO_HIT_POINT,   "video_hit_point",      muse::TranslatableString("engraving", "Video hit point") },
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
     { TextStyleType::STAVE_SHARING,     "staff",                muse::TranslatableString("engraving", "Stave sharing label") },
@@ -1870,6 +1871,7 @@ TextStyleType TConv::fromXml(const AsciiStringView& tag, TextStyleType def)
         { "Repeat Text Right", TextStyleType::REPEAT_RIGHT },
         { "Rehearsal Mark", TextStyleType::REHEARSAL_MARK },
         { "System", TextStyleType::SYSTEM },
+        { "Video Hit Point", TextStyleType::VIDEO_HIT_POINT },
 
         { "Staff", TextStyleType::STAFF },
         { "Expression", TextStyleType::EXPRESSION },

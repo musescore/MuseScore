@@ -32,6 +32,7 @@
 #include "context/iglobalcontext.h"
 #include "extensions/iextensionsprovider.h"
 #include "global/iglobalconfiguration.h"
+#include "project/iprojectvideosettings.h"
 #ifdef MUSE_MODULE_MUSESAMPLER
 #include "musesampler/imusesamplerinfo.h"
 #endif
@@ -87,6 +88,7 @@ private:
     void setupConnections();
 
     void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
+    void updateTimecodeItems();
 
     bool isMuseSamplerModuleAdded() const;
 
@@ -120,6 +122,7 @@ private:
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
     muse::uicomponents::MenuItemList makeToolbarsItems();
+    muse::uicomponents::MenuItemList makeTimecodeItems();
     muse::uicomponents::MenuItemList makeWorkspacesItems();
     muse::uicomponents::MenuItemList makeShowItems();
     muse::uicomponents::MenuItemList makePluginsItems();

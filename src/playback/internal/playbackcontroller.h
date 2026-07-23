@@ -46,6 +46,7 @@
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
 #include "../isoundprofilesrepository.h"
+#include "project/iprojectvideosettings.h"
 
 namespace mu::playback {
 class OnlineSoundsController;
@@ -213,6 +214,8 @@ private:
     void notifyActionCheckedChanged(const muse::actions::ActionCode& actionCode);
 
     project::IProjectAudioSettingsPtr audioSettings() const;
+    project::IProjectVideoSettingsPtr videoSettings() const;
+    void updateMasterControlParams();
 
     void resetPlayback();
     void setupPlayback();

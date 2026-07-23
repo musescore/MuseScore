@@ -24,6 +24,7 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
+#include "project/iprojectvideosettings.h"
 
 #include "dockwindow/idockwindow.h"
 #include "async/notification.h"
@@ -40,6 +41,18 @@ static const ActionCode FULL_SCREEN_CODE("fullscreen");
 static const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 static const ActionCode TOGGLE_BRAILLE_ACTION_CODE("toggle-braille-panel");
 static const ActionCode TOGGLE_PERCUSSION_PANEL_ACTION_CODE("toggle-percussion-panel");
+static const ActionCode VIDEO_TIMECODE_OFF_CODE("video-timecode-off");
+static const ActionCode VIDEO_TIMECODE_ABOVE_CODE("video-timecode-above-bars");
+static const ActionCode VIDEO_TIMECODE_BELOW_CODE("video-timecode-below-bars");
+
+static ActionCodeList videoTimecodeActionCodes()
+{
+    return {
+        VIDEO_TIMECODE_OFF_CODE,
+        VIDEO_TIMECODE_ABOVE_CODE,
+        VIDEO_TIMECODE_BELOW_CODE
+    };
+}
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -200,6 +213,34 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show/hide piano keyboard"),
              Checkable::Yes
              ),
+    UiAction("toggle-video-panel",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Video"),
+             TranslatableString("action", "Show/hide video panel"),
+             Checkable::Yes
+             ),
+    UiAction(VIDEO_TIMECODE_OFF_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Off"),
+             TranslatableString("action", "Hide video timecode"),
+             Checkable::Yes
+             ),
+    UiAction(VIDEO_TIMECODE_ABOVE_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Above bars"),
+             TranslatableString("action", "Show video timecode above bars"),
+             Checkable::Yes
+             ),
+    UiAction(VIDEO_TIMECODE_BELOW_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Below bars"),
+             TranslatableString("action", "Show video timecode below bars"),
+             Checkable::Yes
+             ),
     UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -253,6 +294,13 @@ void ApplicationUiActions::init()
     dockWindowProvider()->windowChanged().onNotify(this, [this]() {
         listenOpenedDocksChanged(dockWindowProvider()->window());
     });
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        listenCurrentProjectVideoSettings();
+        m_actionCheckedChanged.send(videoTimecodeActionCodes());
+    });
+
+    listenCurrentProjectVideoSettings();
 }
 
 void ApplicationUiActions::listenOpenedDocksChanged(IDockWindow* window)
@@ -294,6 +342,24 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
         return mainWindow()->isFullScreen();
     }
 
+    if (act.code == VIDEO_TIMECODE_OFF_CODE || act.code == VIDEO_TIMECODE_ABOVE_CODE || act.code == VIDEO_TIMECODE_BELOW_CODE) {
+        project::INotationProjectPtr project = globalContext()->currentProject();
+        project::IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+        const project::VideoTimecodeDisplayMode mode = settings
+                                                       ? settings->attachment().timecodeDisplayMode
+                                                       : project::VideoTimecodeDisplayMode::Off;
+
+        if (act.code == VIDEO_TIMECODE_OFF_CODE) {
+            return mode == project::VideoTimecodeDisplayMode::Off;
+        }
+
+        if (act.code == VIDEO_TIMECODE_ABOVE_CODE) {
+            return mode == project::VideoTimecodeDisplayMode::AboveBars;
+        }
+
+        return mode == project::VideoTimecodeDisplayMode::BelowBars;
+    }
+
     QMap<ActionCode, DockName> toggleDockActions = ApplicationUiActions::toggleDockActions();
     DockName dockName = toggleDockActions.value(act.code, DockName());
 
@@ -323,6 +389,19 @@ muse::async::Channel<ActionCodeList> ApplicationUiActions::actionCheckedChanged(
     return m_actionCheckedChanged;
 }
 
+void ApplicationUiActions::listenCurrentProjectVideoSettings()
+{
+    project::INotationProjectPtr project = globalContext()->currentProject();
+    project::IProjectVideoSettingsPtr settings = project ? project->videoSettings() : nullptr;
+    if (!settings) {
+        return;
+    }
+
+    settings->settingsChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send(videoTimecodeActionCodes());
+    }, Asyncable::Mode::SetReplace);
+}
+
 const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
 {
     static const QMap<ActionCode, DockName> actionsMap {
@@ -341,6 +420,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
+        { "toggle-video-panel", VIDEO_PANEL_NAME },
         { TOGGLE_PERCUSSION_PANEL_ACTION_CODE, PERCUSSION_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },

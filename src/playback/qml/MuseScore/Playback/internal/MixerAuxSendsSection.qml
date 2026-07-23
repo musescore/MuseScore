@@ -53,23 +53,28 @@ MixerPanelSection {
 
             model: content.channelItem.auxSendItemList
 
-            delegate: AuxSendControl {
-                id: auxSendControl
+            delegate: Item {
+                width: root.channelItemWidth
+                height: auxSendControl.height
 
                 required property AuxSendItem modelData
                 required property int index
 
-                anchors.horizontalCenter: parent.horizontalCenter
+                AuxSendControl {
+                    id: auxSendControl
 
-                auxSendItemModel: modelData
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                navigationPanel: content.channelItem.panel
-                navigationRowStart: root.navigationRowStart + index * 2 // NOTE: 2 - because AuxSendControl has 2 controls
-                navigationName: content.accessibleName
-                accessibleName: content.accessibleName
+                    auxSendItemModel: parent.modelData
 
-                onNavigateControlIndexChanged: function(index) {
-                    root.navigateControlIndexChanged(index)
+                    navigationPanel: content.channelItem.panel
+                    navigationRowStart: root.navigationRowStart + parent.index * 2 // NOTE: 2 - because AuxSendControl has 2 controls
+                    navigationName: content.accessibleName
+                    accessibleName: content.accessibleName
+
+                    onNavigateControlIndexChanged: function(index) {
+                        root.navigateControlIndexChanged(index)
+                    }
                 }
             }
         }

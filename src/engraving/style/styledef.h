@@ -1368,6 +1368,24 @@ enum class Sid : short {
     systemTextFrameBgColor,
     systemTextPosition,
 
+    videoHitPointFontFace,
+    videoHitPointFontSize,
+    videoHitPointLineSpacing,
+    videoHitPointFontSpatiumDependent,
+    videoHitPointFontStyle,
+    videoHitPointColor,
+    videoHitPointAlign,
+    videoHitPointOffsetType,
+    videoHitPointPosAbove,
+    videoHitPointPosBelow,
+    videoHitPointFrameType,
+    videoHitPointFramePadding,
+    videoHitPointFrameWidth,
+    videoHitPointFrameRound,
+    videoHitPointFrameFgColor,
+    videoHitPointFrameBgColor,
+    videoHitPointPosition,
+
     staffTextFontFace,
     staffTextFontSize,
     staffTextLineSpacing,
@@ -2260,6 +2278,11 @@ enum class Sid : short {
     palmMuteBeginFilledArrowWidth,
     palmMuteEndFilledArrowHeight,
     palmMuteEndFilledArrowWidth,
+
+    videoHitPointLabelFontSize,
+    videoHitPointLineStyle,
+    videoHitPointLineTransparency,
+    videoHitPointLineColor,
 
     STYLES
 };
