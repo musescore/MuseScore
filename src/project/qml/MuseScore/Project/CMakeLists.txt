@@ -30,6 +30,8 @@ qt_add_qml_module(project_qml
         enums.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
+        internal/importfiletoscoremodel.cpp
+        internal/importfiletoscoremodel.h
         internal/NewScore/additionalinfomodel.cpp
         internal/NewScore/additionalinfomodel.h
         internal/NewScore/newscoremodel.cpp
@@ -60,6 +62,7 @@ qt_add_qml_module(project_qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
         ExportDialog.qml
+        ImportFileToScoreDialog.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
         internal/Export/ExportOptionsView.qml
