@@ -205,23 +205,24 @@ void ScoreDisplaySettingsModel::updateShouldShowSoundFlags(bool isVisible)
 
 void ScoreDisplaySettingsModel::updateFromConfig(ScoreConfigType configType)
 {
+    const bool isShow = scoreConfig().isShown(configType);
     switch (configType) {
-    case notation::ScoreConfigType::ShowInvisibleElements:
-        updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
+    case ScoreConfigType::ShowInvisibleElements:
+        updateShouldShowInvisible(isShow);
         break;
-    case notation::ScoreConfigType::ShowUnprintableElements:
-        updateShouldShowFormatting(scoreConfig().isShowUnprintableElements);
+    case ScoreConfigType::ShowUnprintableElements:
+        updateShouldShowFormatting(isShow);
         break;
-    case notation::ScoreConfigType::ShowFrames:
-        updateShouldShowFrames(scoreConfig().isShowFrames);
+    case ScoreConfigType::ShowFrames:
+        updateShouldShowFrames(isShow);
         break;
-    case notation::ScoreConfigType::ShowPageMargins:
-        updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
+    case ScoreConfigType::ShowSoundFlags:
+        updateShouldShowSoundFlags(isShow);
         break;
-    case notation::ScoreConfigType::ShowSoundFlags:
-        updateShouldShowSoundFlags(scoreConfig().isShowSoundFlags);
+    case ScoreConfigType::MarkIrregularMeasures:
         break;
-    default:
+    case ScoreConfigType::ShowPageMargins:
+        updateShouldShowPageMargins(isShow);
         break;
     }
 }
@@ -230,9 +231,9 @@ void ScoreDisplaySettingsModel::updateAll()
 {
     auto config = scoreConfig();
 
-    updateShouldShowInvisible(config.isShowInvisibleElements);
-    updateShouldShowFormatting(config.isShowUnprintableElements);
-    updateShouldShowFrames(config.isShowFrames);
-    updateShouldShowSoundFlags(config.isShowSoundFlags);
-    updateShouldShowPageMargins(config.isShowPageMargins);
+    updateShouldShowInvisible(config.isShown(ScoreConfigType::ShowInvisibleElements));
+    updateShouldShowFormatting(config.isShown(ScoreConfigType::ShowUnprintableElements));
+    updateShouldShowFrames(config.isShown(ScoreConfigType::ShowFrames));
+    updateShouldShowSoundFlags(config.isShown(ScoreConfigType::ShowSoundFlags));
+    updateShouldShowPageMargins(config.isShown(ScoreConfigType::ShowPageMargins));
 }

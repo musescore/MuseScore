@@ -226,6 +226,12 @@ void NotationActionController::init()
     registerCommand(USE_VOICE_2_COMMAND, [this]() { changeVoice(1); });
     registerCommand(USE_VOICE_3_COMMAND, [this]() { changeVoice(2); });
     registerCommand(USE_VOICE_4_COMMAND, [this]() { changeVoice(3); });
+    registerCommand(SWAP_VOICE_X12_COMMAND, [this]() { swapVoices(0, 1); });
+    registerCommand(SWAP_VOICE_X13_COMMAND, [this]() { swapVoices(0, 2); });
+    registerCommand(SWAP_VOICE_X14_COMMAND, [this]() { swapVoices(0, 3); });
+    registerCommand(SWAP_VOICE_X23_COMMAND, [this]() { swapVoices(1, 2); });
+    registerCommand(SWAP_VOICE_X24_COMMAND, [this]() { swapVoices(1, 3); });
+    registerCommand(SWAP_VOICE_X34_COMMAND, [this]() { swapVoices(2, 3); });
 
     registerCommand(FLIP_COMMAND, &Interaction::flipSelection);
     registerCommand(FLIP_HORIZONTALLY_COMMAND, &Interaction::flipSelectionHorizontally);
@@ -255,7 +261,7 @@ void NotationActionController::init()
 
     registerCommand(ENTER_REST_COMMAND, &Interaction::putRestToSelection);
 
-    registerCommand(SHOW_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
+    registerCommand(OPEN_TUPLET_CONFIGURE_COMMAND, [this]() { openTupletOtherDialog(); });
     registerCommand(ADD_TUPLET_COMMAND, &Controller::putTuplet);
     registerCommand(ADD_DUPLET_COMMAND, [this]() { putTuplet(2); });
     registerCommand(ADD_TRIPLET_COMMAND, [this]() { putTuplet(3); });
@@ -265,6 +271,48 @@ void NotationActionController::init()
     registerCommand(ADD_SEPTUPLET_COMMAND, [this]() { putTuplet(7); });
     registerCommand(ADD_OCTUPLET_COMMAND, [this]() { putTuplet(8); });
     registerCommand(ADD_NONUPLET_COMMAND, [this]() { putTuplet(9); });
+
+    registerCommand(INSERT_HBOX_COMMAND, [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
+    registerCommand(INSERT_VBOX_COMMAND, [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
+    registerCommand(INSERT_TEXTFRAME_COMMAND, [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
+    registerCommand(INSERT_FRETFRAME_COMMAND, [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); });
+    registerCommand(APPEND_HBOX_COMMAND, [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
+    registerCommand(APPEND_VBOX_COMMAND, [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
+    registerCommand(APPEND_TEXTFRAME_COMMAND, [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
+    registerCommand(APPEND_FRETFRAME_COMMAND, [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::AtEndOfScore); });
+
+    registerCommand(ADD_FRETBOARD_DIAGRAM_COMMAND, &Controller::addFretboardDiagram);
+
+    registerCommand(ADD_OTTAVA_8VA_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
+    registerCommand(ADD_OTTAVA_8VB_COMMAND, &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
+
+    registerCommand(ADD_DYNAMIC_COMMAND, &Interaction::toggleDynamicPopup);
+    registerCommand(ADD_HAIRPIN_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
+    registerCommand(ADD_HAIRPIN_REVERSE_COMMAND, &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN);
+    registerCommand(ADD_NOTELINE_COMMAND, &Interaction::addAnchoredLineToSelectedNotes);
+
+    registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
+
+    // add text commands
+    registerCommand(ADD_TITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::TITLE); });
+    registerCommand(ADD_SUBTITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::SUBTITLE); });
+    registerCommand(ADD_COMPOSER_TEXT_COMMAND, [this]() { addText(TextStyleType::COMPOSER); });
+    registerCommand(ADD_LYRICIST_TEXT_COMMAND, [this]() { addText(TextStyleType::LYRICIST); });
+    registerCommand(ADD_PART_TEXT_COMMAND, [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
+    registerCommand(ADD_FRAME_TEXT_COMMAND, [this]() { addText(TextStyleType::FRAME); });
+    registerCommand(ADD_SYSTEM_TEXT_COMMAND, [this]() { addText(TextStyleType::SYSTEM); });
+    registerCommand(ADD_STAFF_TEXT_COMMAND, [this]() { addText(TextStyleType::STAFF); });
+    registerCommand(ADD_EXPRESSION_TEXT_COMMAND, [this]() { addText(TextStyleType::EXPRESSION); });
+    registerCommand(ADD_REHEARSALMARK_TEXT_COMMAND, [this]() { addText(TextStyleType::REHEARSAL_MARK); });
+    registerCommand(ADD_INSTRUMENT_CHANGE_TEXT_COMMAND, [this]() { addText(TextStyleType::INSTRUMENT_CHANGE); });
+    registerCommand(ADD_FINGERING_TEXT_COMMAND, [this]() { addText(TextStyleType::FINGERING); });
+    registerCommand(ADD_STICKING_TEXT_COMMAND, [this]() { addText(TextStyleType::STICKING); });
+    registerCommand(ADD_CHORD_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_A); });
+    registerCommand(ADD_ROMAN_NUMERAL_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_ROMAN); });
+    registerCommand(ADD_NASHVILLE_NUMBER_TEXT_COMMAND, [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
+    registerCommand(ADD_LYRICS_COMMAND, [this]() { addText(TextStyleType::LYRICS_ODD); });
+    registerCommand(ADD_TEMPO_COMMAND, [this]() { addText(TextStyleType::TEMPO); });
+    registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
 
     // editing commands
     registerCommand(COPY_COMMAND, &Interaction::copySelection);
@@ -332,6 +380,42 @@ void NotationActionController::init()
         addMeasures(query, AddBoxesTarget::AtEndOfScore);
     });
 
+    registerCommand(STRETCH_DECREASE_COMMAND, [this]() { addStretch(-STRETCH_STEP); });
+    registerCommand(STRETCH_INCREASE_COMMAND, [this]() { addStretch(STRETCH_STEP); });
+    registerCommand(STRETCH_RESET_COMMAND, &Controller::resetStretch);
+
+    // open properties
+    registerCommand(OPEN_PAGE_SETTINGS_COMMAND, &Controller::openPageSettingsDialog);
+    registerCommand(OPEN_STAFF_PROPERTIES_COMMAND, &Controller::openStaffProperties);
+    registerCommand(OPEN_EDIT_STRINGS_COMMAND, &Controller::openEditStringsDialog);
+    registerCommand(OPEN_BREAKS_COMMAND, &Controller::openBreaksDialog);
+    registerCommand(OPEN_STAFF_TEXT_PROPERTIES_COMMAND, &Controller::openStaffTextPropertiesDialog);
+    registerCommand(OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND, &Controller::openStaffTextPropertiesDialog);
+    registerCommand(OPEN_MEASURE_PROPERTIES_COMMAND, &Controller::openMeasurePropertiesDialog);
+    registerCommand(OPEN_TRANSPOSE_COMMAND, &Controller::openTransposeDialog);
+    registerCommand(OPEN_PARTS_COMMAND, &Controller::openPartsDialog);
+    registerCommand(OPEN_EDITGRIDSIZE_COMMAND, &Controller::openEditGridSizeDialog);
+    registerCommand(OPEN_REALIZECHORDSYMBOLS_COMMAND, &Controller::openRealizeChordSymbolsDialog);
+
+    // style commands
+    registerCommand(LOAD_STYLE_COMMAND, &Controller::loadStyle);
+    registerCommand(SAVE_STYLE_COMMAND, &Controller::saveStyle);
+    registerCommand(OPEN_EDIT_STYLE_COMMAND, &Controller::openEditStyleDialog);
+
+    // reset commands
+    registerCommand(RESET_TEXT_STYLE_OVERRIDES_COMMAND, &Interaction::resetTextStyleOverrides);
+    registerCommand(RESET_BEAMS_COMMAND, &Controller::resetBeamMode);
+    registerCommand(RESET_SHAPES_AND_POSITIONS_COMMAND, &Interaction::resetShapesAndPosition);
+    registerCommand(RESET_TO_DEFAULT_LAYOUT_COMMAND, &Interaction::resetToDefaultLayout);
+
+    // show commands
+    registerCommand(SHOW_INVISIBLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
+    registerCommand(SHOW_UNPRINTABLE_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
+    registerCommand(SHOW_FRAMES_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
+    registerCommand(SHOW_PAGEBORDERS_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
+    registerCommand(SHOW_SOUNDFLAGS_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
+    registerCommand(SHOW_IRREGULAR_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
+
     // --------------------
 
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
@@ -348,87 +432,6 @@ void NotationActionController::init()
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
     registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
-
-    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("append-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
-    registerAction("append-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
-    registerAction("append-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
-    registerAction("append-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::AtEndOfScore); });
-
-    registerAction("edit-style", &Controller::openEditStyleDialog);
-    registerAction("page-settings", &Controller::openPageSettingsDialog);
-    registerAction("staff-properties", &Controller::openStaffProperties);
-    registerAction("edit-strings", &Controller::openEditStringsDialog);
-    registerAction("measures-per-system", &Controller::openBreaksDialog);
-    registerAction("transpose", &Controller::openTransposeDialog);
-    registerAction("parts", &Controller::openPartsDialog);
-    registerAction("staff-text-properties", &Controller::openStaffTextPropertiesDialog);
-    registerAction("system-text-properties", &Controller::openStaffTextPropertiesDialog);
-    registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
-    registerAction("config-raster", &Controller::openEditGridSizeDialog);
-    registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
-    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram);
-
-    registerAction("load-style", &Controller::loadStyle);
-    registerAction("save-style", &Controller::saveStyle);
-
-    registerAction("voice-x12", &Interaction::swapVoices, 0, 1);
-    registerAction("voice-x13", &Interaction::swapVoices, 0, 2);
-    registerAction("voice-x14", &Interaction::swapVoices, 0, 3);
-    registerAction("voice-x23", &Interaction::swapVoices, 1, 2);
-    registerAction("voice-x24", &Interaction::swapVoices, 1, 3);
-    registerAction("voice-x34", &Interaction::swapVoices, 2, 3);
-
-    registerAction("add-8va", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
-    registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
-    registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::isNoteOrRestSelected);
-    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::isNoteOrRestSelected);
-    registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
-                   &Controller::isNoteOrRestSelected);
-    registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
-
-    registerAction("add-image", [this]() { addImage(); });
-
-    registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
-    registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
-    registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
-    registerAction("poet-text", [this]() { addText(TextStyleType::LYRICIST); });
-    registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
-    registerAction("frame-text", [this]() { addText(TextStyleType::FRAME); });
-
-    registerAction("system-text", [this]() { addText(TextStyleType::SYSTEM); });
-    registerAction("staff-text", [this]() { addText(TextStyleType::STAFF); });
-    registerAction("expression-text", [this]() { addText(TextStyleType::EXPRESSION); });
-    registerAction("rehearsalmark-text", [this]() { addText(TextStyleType::REHEARSAL_MARK); });
-    registerAction("instrument-change-text", [this]() { addText(TextStyleType::INSTRUMENT_CHANGE); });
-    registerAction("fingering-text", [this]() { addText(TextStyleType::FINGERING); });
-    registerAction("sticking-text", [this]() { addText(TextStyleType::STICKING); });
-    registerAction("chord-text", [this]() { addText(TextStyleType::HARMONY_A); });
-    registerAction("roman-numeral-text", [this]() { addText(TextStyleType::HARMONY_ROMAN); });
-    registerAction("nashville-number-text", [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
-    registerAction("lyrics", [this]() { addText(TextStyleType::LYRICS_ODD); });
-    registerAction("tempo", [this]() { addText(TextStyleType::TEMPO); });
-
-    registerAction("figured-bass", [this]() { addFiguredBass(); });
-
-    registerAction("stretch-", [this]() { addStretch(-STRETCH_STEP); });
-    registerAction("stretch+", [this]() { addStretch(STRETCH_STEP); });
-
-    registerAction("reset-stretch", &Controller::resetStretch);
-    registerAction("reset-text-style-overrides", &Interaction::resetTextStyleOverrides);
-    registerAction("reset-beammode", &Controller::resetBeamMode);
-    registerAction("reset", &Interaction::resetShapesAndPosition, &Controller::hasSelection);
-    registerAction("reset-to-default-layout", &Interaction::resetToDefaultLayout);
-
-    registerAction("show-invisible", [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
-    registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
-    registerAction("show-frames", [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
-    registerAction("show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
-    registerAction("show-soundflags", [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
-    registerAction("show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
     registerAction("concert-pitch", &Controller::toggleConcertPitch);
 
@@ -618,6 +621,10 @@ void NotationActionController::init()
                 m_textEditingChanged.send(false);
             }, Asyncable::Mode::SetReplace);
 
+            interaction->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+                m_scoreConfigChanged.send(configType);
+            }, Asyncable::Mode::SetReplace);
+
             auto undoStack = notation->undoStack();
             undoStack->stackChanged().onNotify(this, [this]() {
                 m_stackChanged.notify();
@@ -805,7 +812,7 @@ void NotationActionController::init()
             { "septuplet", ADD_SEPTUPLET_COMMAND },
             { "octuplet", ADD_OCTUPLET_COMMAND },
             { "nonuplet", ADD_NONUPLET_COMMAND },
-            { "tuplet-dialog", SHOW_TUPLET_CONFIGURE_COMMAND },
+            { "tuplet-dialog", OPEN_TUPLET_CONFIGURE_COMMAND },
             { "first-element", GOTO_FIRST_ELEMENT_COMMAND },
             { "last-element", GOTO_LAST_ELEMENT_COMMAND },
             { "next-element", GOTO_NEXT_ELEMENT_COMMAND },
@@ -865,6 +872,67 @@ void NotationActionController::init()
             { "join-measures", JOIN_MEASURES_COMMAND },
             { "insert-measure", INSERT_MEASURE_COMMAND },
             { "append-measure", APPEND_MEASURE_COMMAND },
+            { "insert-hbox", INSERT_HBOX_COMMAND },
+            { "insert-vbox", INSERT_VBOX_COMMAND },
+            { "insert-textframe", INSERT_TEXTFRAME_COMMAND },
+            { "insert-fretframe", INSERT_FRETFRAME_COMMAND },
+            { "append-hbox", APPEND_HBOX_COMMAND },
+            { "append-vbox", APPEND_VBOX_COMMAND },
+            { "append-textframe", APPEND_TEXTFRAME_COMMAND },
+            { "append-fretframe", APPEND_FRETFRAME_COMMAND },
+            { "page-settings", OPEN_PAGE_SETTINGS_COMMAND },
+            { "staff-properties", OPEN_STAFF_PROPERTIES_COMMAND },
+            { "edit-strings", OPEN_EDIT_STRINGS_COMMAND },
+            { "measures-per-system", OPEN_BREAKS_COMMAND },
+            { "staff-text-properties", OPEN_STAFF_TEXT_PROPERTIES_COMMAND },
+            { "system-text-properties", OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND },
+            { "measure-properties", OPEN_MEASURE_PROPERTIES_COMMAND },
+            { "transpose", OPEN_TRANSPOSE_COMMAND },
+            { "parts", OPEN_PARTS_COMMAND },
+            { "config-raster", OPEN_EDITGRIDSIZE_COMMAND },
+            { "realize-chord-symbols", OPEN_REALIZECHORDSYMBOLS_COMMAND },
+            { "load-style", LOAD_STYLE_COMMAND },
+            { "save-style", SAVE_STYLE_COMMAND },
+            { "add-fretboard-diagram", ADD_FRETBOARD_DIAGRAM_COMMAND },
+            { "add-ottava-8va", ADD_OTTAVA_8VA_COMMAND },
+            { "add-ottava-8vb", ADD_OTTAVA_8VB_COMMAND },
+            { "add-dynamic", ADD_DYNAMIC_COMMAND },
+            { "add-hairpin", ADD_HAIRPIN_COMMAND },
+            { "add-hairpin-reverse", ADD_HAIRPIN_REVERSE_COMMAND },
+            { "add-noteline", ADD_NOTELINE_COMMAND },
+            { "add-image", ADD_IMAGE_COMMAND },
+            { "stretch-decrease", STRETCH_DECREASE_COMMAND },
+            { "stretch-increase", STRETCH_INCREASE_COMMAND },
+            { "stretch-reset", STRETCH_RESET_COMMAND },
+            { "title-text", ADD_TITLE_TEXT_COMMAND },
+            { "subtitle-text", ADD_SUBTITLE_TEXT_COMMAND },
+            { "composer-text", ADD_COMPOSER_TEXT_COMMAND },
+            { "poet-text", ADD_LYRICIST_TEXT_COMMAND },
+            { "part-text", ADD_PART_TEXT_COMMAND },
+            { "frame-text", ADD_FRAME_TEXT_COMMAND },
+            { "system-text", ADD_SYSTEM_TEXT_COMMAND },
+            { "staff-text", ADD_STAFF_TEXT_COMMAND },
+            { "expression-text", ADD_EXPRESSION_TEXT_COMMAND },
+            { "rehearsalmark-text", ADD_REHEARSALMARK_TEXT_COMMAND },
+            { "instrument-change-text", ADD_INSTRUMENT_CHANGE_TEXT_COMMAND },
+            { "fingering-text", ADD_FINGERING_TEXT_COMMAND },
+            { "sticking-text", ADD_STICKING_TEXT_COMMAND },
+            { "chord-text", ADD_CHORD_TEXT_COMMAND },
+            { "roman-numeral-text", ADD_ROMAN_NUMERAL_TEXT_COMMAND },
+            { "nashville-number-text", ADD_NASHVILLE_NUMBER_TEXT_COMMAND },
+            { "lyrics", ADD_LYRICS_COMMAND },
+            { "tempo", ADD_TEMPO_COMMAND },
+            { "figured-bass", ADD_FIGURED_BASS_COMMAND },
+            { "reset-text-style-overrides", RESET_TEXT_STYLE_OVERRIDES_COMMAND },
+            { "reset-beammode", RESET_BEAMS_COMMAND },
+            { "reset", RESET_SHAPES_AND_POSITIONS_COMMAND },
+            { "reset-to-default-layout", RESET_TO_DEFAULT_LAYOUT_COMMAND },
+            { "show-invisible", SHOW_INVISIBLE_COMMAND },
+            { "show-unprintable", SHOW_UNPRINTABLE_COMMAND },
+            { "show-frames", SHOW_FRAMES_COMMAND },
+            { "show-pageborders", SHOW_PAGEBORDERS_COMMAND },
+            { "show-soundflags", SHOW_SOUNDFLAGS_COMMAND },
+            { "show-irregular", SHOW_IRREGULAR_COMMAND },
         };
 
         static const std::vector<ActionToCommandWithParams> actionToCommandWithParams = {
@@ -873,6 +941,8 @@ void NotationActionController::init()
             { "insert-measures-after-selection", INSERT_MEASURES_AFTER_SELECTION_COMMAND, make_conv({ { "count", param<int> } }) },
             { "insert-measures-at-start-of-score", INSERT_MEASURES_AT_START_OF_SCORE_COMMAND, make_conv({ { "count", param<int> } }) },
             { "append-measures", APPEND_MEASURES_COMMAND, make_conv({ { "count", param<int> } }) },
+            { "edit-style", OPEN_EDIT_STYLE_COMMAND, make_conv({ { "page_code", param<std::string> },
+                                                                   { "sub_page_code", param<std::string> } }) },
         };
 
         auto ad = dispatcher();
@@ -1751,6 +1821,20 @@ bool NotationActionController::isToggleLayoutBreakAvailable() const
     return interaction && interaction->toggleLayoutBreakAvailable();
 }
 
+ScoreConfig NotationActionController::scoreConfig() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return ScoreConfig();
+    }
+    return interaction->scoreConfig();
+}
+
+muse::async::Channel<ScoreConfigType> NotationActionController::scoreConfigChanged() const
+{
+    return m_scoreConfigChanged;
+}
+
 void NotationActionController::select(SelectionTarget target)
 {
     auto interaction = currentNotationInteraction();
@@ -1933,6 +2017,17 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     if (!noteInput->isNoteInputMode()) {
         interaction->changeSelectedElementsVoice(voiceIndex);
     }
+}
+
+void NotationActionController::swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2)
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->swapVoices(voiceIndex1, voiceIndex2);
 }
 
 void NotationActionController::cutSelection()
@@ -2229,7 +2324,9 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
         TextStyleType styleType = mu::engraving::toText(element)->textStyleType();
 
         if (styleType == mu::engraving::TextStyleType::HEADER || styleType == mu::engraving::TextStyleType::FOOTER) {
-            openEditStyleDialog(ActionData::make_arg1<QString>("header-and-footer"));
+            muse::rcommand::CommandQuery q(OPEN_EDIT_STYLE_COMMAND);
+            q.addParam("page_code", Val("header-and-footer"));
+            openEditStyleDialog(q);
             return;
         }
     }
@@ -2367,16 +2464,16 @@ void NotationActionController::resetBeamMode()
     }
 }
 
-void NotationActionController::openEditStyleDialog(const ActionData& args)
+void NotationActionController::openEditStyleDialog(const muse::rcommand::CommandQuery& query)
 {
     UriQuery uri("musescore://notation/style");
 
-    if (args.count() > 0) {
-        uri.addParam("currentPageCode", Val(args.arg<QString>(0)));
-    }
+    if (query.contains("page_code")) {
+        uri.addParam("currentPageCode", Val(query.param("page_code").toString()));
 
-    if (args.count() > 1) {
-        uri.addParam("currentSubPageCode", Val(args.arg<QString>(1)));
+        if (query.contains("sub_page_code")) {
+            uri.addParam("currentSubPageCode", Val(query.param("sub_page_code").toString()));
+        }
     }
 
     interactive()->open(uri);
@@ -2718,29 +2815,10 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 
     ScoreConfig config = interaction->scoreConfig();
 
-    switch (configType) {
-    case ScoreConfigType::ShowInvisibleElements:
-        config.isShowInvisibleElements = !config.isShowInvisibleElements;
-        break;
-    case ScoreConfigType::ShowUnprintableElements:
-        config.isShowUnprintableElements = !config.isShowUnprintableElements;
-        break;
-    case ScoreConfigType::ShowFrames:
-        config.isShowFrames = !config.isShowFrames;
-        break;
-    case ScoreConfigType::ShowPageMargins:
-        config.isShowPageMargins = !config.isShowPageMargins;
-        break;
-    case ScoreConfigType::ShowSoundFlags:
-        config.isShowSoundFlags = !config.isShowSoundFlags;
-        break;
-    case ScoreConfigType::MarkIrregularMeasures:
-        config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;
-        break;
-    }
+    bool isShow = config.isShown(configType);
+    config.setShown(configType, !isShow);
 
     interaction->setScoreConfig(config);
-    interaction->scoreConfigChanged().send(configType);
 }
 
 void NotationActionController::toggleConcertPitch()
