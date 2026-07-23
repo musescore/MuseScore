@@ -3784,7 +3784,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         }
     }
 
-    for (const SystemLockIndicator* sli : item->system()->lockIndicators()) {
+    for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
         if (sli != item) {
             // TODO: Rough spacing here
             xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;

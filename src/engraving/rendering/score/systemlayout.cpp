@@ -504,19 +504,20 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
 {
     UNUSED(ctx);
 
-    const std::vector<SystemLockIndicator*> lockIndicators = system->lockIndicators();
+    const std::vector<SystemLockIndicator*> lockIndicators = system->systemLockIndicators();
     // In PAGE view, at most ONE lock indicator can exist per system.
     assert(lockIndicators.size() <= 1);
-    system->deleteLockIndicators();
+    system->deleteSystemLockIndicators();
 
     const RangeLock* lock = system->systemLock();
     if (!lock) {
         return;
     }
 
-    SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+    SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
     lockIndicator->setParent(system);
-    system->addLockIndicator(lockIndicator);
+    system->addSystemLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
@@ -535,7 +536,8 @@ void SystemLayout::layoutPageLockIndicators(System* system)
         return;
     }
 
-    PageLockIndicator* lockIndicator = new PageLockIndicator(system, lock);
+    PageLockIndicator* lockIndicator = Factory::createPageLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
     lockIndicator->setParent(system);
     system->setPageLockIndicator(lockIndicator);
 

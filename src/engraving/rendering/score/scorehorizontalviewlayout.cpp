@@ -258,13 +258,14 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
 {
     // TODO: layout StaffVisibilityIndicator here
 
-    system->deleteLockIndicators();
+    system->deleteSystemLockIndicators();
 
     std::vector<const RangeLock*> systemLocks = system->score()->systemLocks()->allLocks();
     for (const RangeLock* lock : systemLocks) {
         SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+        lockIndicator->setTrack(0);
         lockIndicator->setParent(system);
-        system->addLockIndicator(lockIndicator);
+        system->addSystemLockIndicator(lockIndicator);
         TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
     }
 }
