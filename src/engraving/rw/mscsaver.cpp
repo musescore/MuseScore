@@ -21,6 +21,8 @@
  */
 #include "mscsaver.h"
 
+#include <cmath>
+
 #include "global/io/buffer.h"
 #include "muse_framework_config.h"
 
@@ -28,12 +30,15 @@
 #include <future>
 #endif
 
+#include "draw/painter.h"
+
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
 #include "dom/imageStore.h"
-#include "dom/audio.h"
+#include "dom/mscore.h"
+#include "dom/page.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"
@@ -170,7 +175,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write thumbnail
     {
         if (createThumbnail && !score->pages().empty()) {
-            auto pixmap = score->createThumbnail();
+            auto pixmap = this->createThumbnail(score);
 
             ByteArray ba;
             auto b = Buffer::opened(IODevice::WriteOnly, &ba);
@@ -179,17 +184,13 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         }
     }
 
-    // Write audio
-    {
-        if (score->audio()) {
-            mscWriter.writeAudioFile(score->audio()->data());
-        }
-    }
-
     // Write automation
     {
-        if (score->automation()) {
-            mscWriter.writeAutomationJsonFile(score->automation()->toJson());
+        if (score->automationData()) {
+            ByteArray data = AutomationRW::write(*score->automationData(), false /*writeGenerated*/);
+            if (!data.empty()) {
+                mscWriter.writeAutomationJsonFile(data);
+            }
         }
     }
 
@@ -220,7 +221,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     // Write thumbnail
     {
         if (!partScore->pages().empty()) {
-            auto pixmap = partScore->createThumbnail();
+            auto pixmap = createThumbnail(partScore);
 
             ByteArray ba;
             auto b = Buffer::opened(IODevice::WriteOnly, &ba);
@@ -230,4 +231,44 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     }
 
     return true;
+}
+
+std::shared_ptr<muse::draw::Pixmap> MscSaver::createThumbnail(Score* score)
+{
+    TRACEFUNC;
+
+    LayoutMode mode = score->layoutMode();
+    score->switchToPageMode();
+
+    Page* page = score->pages().at(0);
+    RectF fr = page->pageBoundingRect();
+    double mag = 512.0 / std::max(fr.width(), fr.height());
+    int w = int(fr.width() * mag);
+    int h = int(fr.height() * mag);
+
+    int dpm = lrint(DPMM * 1000.0);
+
+    auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
+
+    auto painterProvider = imageProvider()->painterForImage(pixmap);
+    muse::draw::Painter p(painterProvider, "thumbnail");
+
+    p.setAntialiasing(true);
+    p.scale(mag, mag);
+
+    rendering::IScoreRenderer::ScorePaintOptions opt;
+    opt.isPrinting = true;
+    opt.isSetViewport = false;
+    opt.printPageBackground = false;
+    opt.fromPage = 0;
+    opt.toPage = 0;
+    scoreRenderer()->paintScore(&p, score, opt);
+
+    p.endDraw();
+
+    if (score->layoutMode() != mode) {
+        score->setLayoutMode(mode);
+        score->doLayout();
+    }
+    return pixmap;
 }

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CHORDREST_H
-#define MU_ENGRAVING_CHORDREST_H
+#pragma once
 
 #include <functional>
 
@@ -40,14 +39,15 @@ enum class CrossMeasure : signed char {
 
 class Articulation;
 class BeamBase;
+class BeamSegment;
 class Lyrics;
 class Measure;
 class Score;
 class Segment;
 class Slur;
 class TabDurationSymbol;
+class Transaction;
 enum class SegmentType;
-class BeamSegment;
 
 //-------------------------------------------------------------------
 //   ChordRest
@@ -68,7 +68,7 @@ public:
     virtual void scanElements(std::function<void(EngravingItem*)> func) override;
 
     bool acceptDrop(EditData&) const override;
-    virtual EngravingItem* drop(EditData&) override;
+    virtual EngravingItem* drop(Transaction& tx, EditData&) override;
     virtual void undoUnlink() override;
 
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
@@ -231,5 +231,4 @@ private:
     int m_staffMove = 0; // -1, 0, +1, used for crossbeaming
     int m_storedStaffMove = 0; // used to remember and re-apply staff move if needed
 };
-} // namespace mu::engraving
-#endif
+}

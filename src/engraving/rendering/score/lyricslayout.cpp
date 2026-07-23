@@ -120,8 +120,14 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     ChordRest* cr = item->chordRest();
     double x = -cr->x();
 
+    /* Preserve the vertical position: a lyric's Y is set in computeVerticalPositions(). Necessary
+     * because layoutBaseTextBase1() ends with ldata->move(defaultPos), which accumulates a downward
+     * shift of the lyric if the current function is called in a partially-relaid system without a
+     * following computeVerticalPositions() call. */
+    const double posY = ldata->pos().y();
     TextLayout::layoutBaseTextBase1(item, ctx);
     TextLayout::computeTextHighResShape(item, ldata);
+    ldata->setPosY(posY);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
@@ -777,6 +783,9 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     const System* system = item->system();
     const LyricsLine* lyricsLine = item->lyricsLine();
     const ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    if (!endChordRest) {
+        return system->endingXForOpenEndedLines();
+    }
     const double systemPageX = system->pageX();
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();

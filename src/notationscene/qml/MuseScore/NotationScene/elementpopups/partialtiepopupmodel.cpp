@@ -23,7 +23,11 @@
 #include "partialtiepopupmodel.h"
 
 #include "engraving/dom/partialtie.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tie.h"
+
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 using namespace mu::engraving;

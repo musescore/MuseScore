@@ -24,6 +24,11 @@
 
 #include <QBuffer>
 
+#include "engraving/dom/score.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "midiexport/exportmidi.h"
 
 #include "log.h"

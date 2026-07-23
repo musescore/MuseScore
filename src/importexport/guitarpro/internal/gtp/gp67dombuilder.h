@@ -46,6 +46,7 @@ protected:
     void readNoteProperties(muse::XmlDomNode* propertiesNode, GPNote* n);
     void readBeatXProperties(const muse::XmlDomNode& propertiesNode, GPBeat* b);
     std::unique_ptr<GPNote::Bend> createBend(muse::XmlDomNode* propertyNode);
+    GPBeat::Whammy readWhammy(const muse::XmlDomElement& elem) const;
     void readHarmonic(muse::XmlDomNode* propertyNode, GPNote* note) const;
 
     std::vector<GPMasterTracks::Automation> readTempoMap(muse::XmlDomNode* currentNode);

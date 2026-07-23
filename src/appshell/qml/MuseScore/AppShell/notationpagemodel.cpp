@@ -19,17 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationpagemodel.h"
+
+#include "async/async.h"
+#include "log.h"
+
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationselection.h"
 
 #include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
-#include "async/async.h"
-
-#include "log.h"
-
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse::actions;
 
 NotationPageModel::NotationPageModel(QObject* parent)
@@ -248,10 +259,10 @@ void NotationPageModel::doUpdatePercussionPanelVisibility()
         return;
     }
 
-    const mu::engraving::Score* score = notation->elements()->msScore();
+    const Score* score = notation->elements()->msScore();
     if (score) {
-        const mu::engraving::InputState& inputState = score->inputState();
-        const mu::engraving::Staff* staff = inputState.staff();
+        const InputState& inputState = score->inputState();
+        const Staff* staff = inputState.staff();
         if (inputState.noteEntryMode() && staff && staff->isDrumStaff(inputState.tick())) {
             setPercussionPanelOpen(true);
             return;

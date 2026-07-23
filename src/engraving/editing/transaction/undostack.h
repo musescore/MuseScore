@@ -52,7 +52,7 @@ public:
     void appendCommand(UndoableCommand* cmd) { m_commands.push_back(cmd); }
     void append(UndoableTransaction&& other);
 
-    void unwind();
+    void unwind(bool cleanUp = true);
     void cleanup(bool wasDone);
 
     const std::vector<UndoableCommand*>& commands() const { return m_commands; }

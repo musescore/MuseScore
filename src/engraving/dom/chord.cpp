@@ -30,6 +30,7 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
+#include "../editing/navigation.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -46,7 +47,6 @@
 #include "ledgerline.h"
 #include "measure.h"
 #include "mscore.h"
-#include "navigate.h"
 #include "note.h"
 #include "notedot.h"
 #include "noteevent.h"
@@ -1021,7 +1021,7 @@ Fraction Chord::endTickIncludingTied() const
 
 Chord* Chord::prev() const
 {
-    ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
+    ChordRest* prev = Navigation::prevChordRest(const_cast<Chord*>(this));
     if (prev && prev->isChord()) {
         return toChord(prev);
     }
@@ -1030,7 +1030,7 @@ Chord* Chord::prev() const
 
 Chord* Chord::next() const
 {
-    ChordRest* next = nextChordRest(const_cast<Chord*>(this));
+    ChordRest* next = Navigation::nextChordRest(const_cast<Chord*>(this));
     if (next && next->isChord()) {
         return toChord(next);
     }
@@ -1476,7 +1476,7 @@ ChordLine* Chord::chordLine() const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Chord::drop(EditData& data)
+EngravingItem* Chord::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
@@ -1606,7 +1606,7 @@ EngravingItem* Chord::drop(EditData& data)
         return e;
 
     default:
-        return ChordRest::drop(data);
+        return ChordRest::drop(tx, data);
     }
     return 0;
 }
@@ -2480,7 +2480,7 @@ EngravingItem* Chord::prevElement()
     switch (e->type()) {
     case ElementType::NOTE: {
         if (isGrace()) {
-            ChordRest* prev = prevChordRest(this);
+            ChordRest* prev = Navigation::prevChordRest(this);
             if (prev) {
                 if (prev->isChord()) {
                     return toChord(prev)->notes().back();
@@ -2501,7 +2501,7 @@ EngravingItem* Chord::prevElement()
                     return prevNote->bendFor()->frontSegment();
                 }
 
-                ChordRest* prev = prevChordRest(this);
+                ChordRest* prev = Navigation::prevChordRest(this);
                 if (prev) {
                     if (prev->isChord()) {
                         return toChord(prev)->notes().back();

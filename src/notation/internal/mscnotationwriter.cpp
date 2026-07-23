@@ -22,8 +22,10 @@
 
 #include "mscnotationwriter.h"
 
-#include "io/buffer.h"
 #include "io/file.h"
+
+#include "inotation.h"
+#include "inotationelements.h" // IWYU pragma: keep
 
 #include "engraving/engravingproject.h"
 #include "engraving/dom/masterscore.h"

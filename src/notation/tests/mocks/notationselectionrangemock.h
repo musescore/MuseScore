@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONSELECTIONRANGEMOCK_H
-#define MU_NOTATION_NOTATIONSELECTIONRANGEMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
-#include "notation/internal/inotationselectionrange.h"
+#include "notation/inotationselectionrange.h"
 
 namespace mu::notation {
 class NotationSelectionRangeMock : public INotationSelectionRange
@@ -32,15 +32,15 @@ class NotationSelectionRangeMock : public INotationSelectionRange
 public:
     MOCK_METHOD(engraving::staff_idx_t, startStaffIndex, (), (const, override));
     MOCK_METHOD(engraving::Segment*, rangeStartSegment, (), (const, override));
-    MOCK_METHOD(Fraction, startTick, (), (const, override));
+    MOCK_METHOD(engraving::Fraction, startTick, (), (const, override));
 
     MOCK_METHOD(engraving::staff_idx_t, endStaffIndex, (), (const, override));
     MOCK_METHOD(engraving::Segment*, rangeEndSegment, (), (const, override));
-    MOCK_METHOD(Fraction, endTick, (), (const, override));
+    MOCK_METHOD(engraving::Fraction, endTick, (), (const, override));
 
     MOCK_METHOD(MeasureRange, measureRange, (), (const, override));
 
-    MOCK_METHOD(std::vector<const Part*>, selectedParts, (), (const, override));
+    MOCK_METHOD(std::vector<const engraving::Part*>, selectedParts, (), (const, override));
 
     MOCK_METHOD(std::vector<muse::RectF>, boundingArea, (), (const, override));
     MOCK_METHOD(bool, containsPoint, (const muse::PointF&), (const, override));
@@ -49,5 +49,3 @@ public:
     MOCK_METHOD(bool, containsMultiNoteChords, (), (const, override));
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSELECTIONRANGEMOCK_H

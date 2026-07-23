@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IRECENTFILESCONTROLLER_H
-#define MU_PROJECT_IRECENTFILESCONTROLLER_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
 #include "async/notification.h"
 #include "async/promise.h"
 
-#include "types/projecttypes.h"
+#include "types/recentfile.h"
 
 class QPixmap;
 
@@ -49,5 +49,3 @@ public:
     virtual muse::async::Promise<QPixmap> thumbnail(const muse::io::path_t& filePath) const = 0;
 };
 }
-
-#endif // MU_PROJECT_IRECENTFILESCONTROLLER_H

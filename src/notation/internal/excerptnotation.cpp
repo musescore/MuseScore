@@ -24,6 +24,9 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "inotationundostack.h"
 
 using namespace mu::notation;
 
@@ -107,11 +110,10 @@ void ExcerptNotation::undoSetName(const QString& name)
     }
 
     //: Means: "edit the name of a part score"
-    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
+    undoStack()->transaction(muse::TranslatableString("undoableAction", "Rename part"), [&](engraving::Transaction& tx) {
+        tx.push(new engraving::ChangeExcerptTitle(m_excerpt, name));
+    });
 
-    score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
-
-    undoStack()->commitChanges();
     notifyAboutNotationChanged();
 }
 

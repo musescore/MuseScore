@@ -24,15 +24,15 @@
 
 #include "global/modularity/imoduleinterface.h"
 
-#include <QPixmap>
-
 #include "global/io/path.h"
 #include "global/types/retval.h"
 
-#include "types/projectmeta.h"
-#include "types/projecttypes.h"
+class QPixmap;
 
 namespace mu::project {
+struct ProjectMeta;
+struct CloudProjectInfo;
+
 class IMscMetaReader : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMscMetaReader)

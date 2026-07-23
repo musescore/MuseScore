@@ -60,6 +60,9 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+
 #include "notationscene/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"
@@ -466,7 +469,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
         return;
     }
 
-    auto notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return;
     }

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "selectdialog.h"
 
 /**
@@ -26,8 +27,15 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/notationtypes.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;

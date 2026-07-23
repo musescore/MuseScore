@@ -32,11 +32,15 @@
 #include "context/iglobalcontext.h"
 #include "../iplaybackcontroller.h"
 #include "rcommand/icommandsregister.h"
+#include "notation/inotationconfiguration.h"
+#include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
 class PlaybackCommandsState : public muse::rcommand::IModuleCommandsState, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
+    muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<IPlaybackConfiguration> playbackConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
@@ -56,7 +60,7 @@ public:
 private:
 
     bool isProjectOpened() const;
-    void updateCommandStates();
+    void updateCommandStates(const std::vector<muse::rcommand::Command>& commands = {});
 
     muse::rcommand::IModuleCommandsRegisterPtr m_moduleRegister;
     std::map<muse::rcommand::Command, muse::rcommand::CommandState> m_commandStates;

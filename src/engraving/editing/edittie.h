@@ -22,13 +22,28 @@
 
 #pragma once
 
+#include <vector>
+
 #include "global/allocator.h"
 #include "global/types/string.h"
 
 #include "transaction/undoablecommand.h"
 
 namespace mu::engraving {
+class Note;
+class Score;
+class Selection;
+class Tie;
 class TieJumpPointList;
+
+class EditTie
+{
+public:
+    static void cmdAddTie(Score* score, bool addToChord = false);
+    static Tie* cmdToggleTie(Score* score);
+    static void cmdToggleLaissezVib(Score* score);
+    static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
+};
 
 class ChangeTieJumpPointActive : public UndoableCommand
 {

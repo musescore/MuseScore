@@ -22,7 +22,9 @@
 
 #include "editnote.h"
 #include "editchord.h"
+#include "noteinput.h"
 
+#include <algorithm>
 #include <set>
 
 #include "dom/accidental.h"
@@ -226,7 +228,7 @@ void EditNote::applyAccidentalToInputNotes(Score* score, AccidentalType accident
         pos.line = noteValToLine(oldVal, score->inputState().staff(), score->inputState().tick());
 
         bool error = false;
-        const NoteVal newVal = score->noteValForPosition(pos, accidentalType, error);
+        const NoteVal newVal = NoteInput::noteValForPosition(score, pos, accidentalType, error);
 
         if (error) {
             notes.push_back(oldVal);
@@ -477,9 +479,9 @@ void EditNote::upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, i
 
 void EditNote::upDown(Score* score, bool up, UpDownMode mode)
 {
-    std::list<Note*> el = score->selection().uniqueNotes();
+    std::vector<Note*> el = score->selection().uniqueNotes();
 
-    el.sort([up](Note* a, Note* b) {
+    std::sort(el.begin(), el.end(), [up](Note* a, Note* b) {
         if (up) {
             return a->string() < b->string();
         } else {

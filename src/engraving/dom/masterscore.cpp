@@ -24,6 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
@@ -35,7 +36,7 @@
 
 #include "engravingproject.h"
 
-#include "automation/internal/automationcontroller.h"
+#include "automation/internal/scoreautomationcontroller.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -71,7 +72,7 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
-    m_automationController = new AutomationController();
+    m_automationController = new ScoreAutomationController();
     m_expandedRepeatList  = new RepeatList(this);
     m_nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
@@ -148,9 +149,24 @@ String MasterScore::name() const
     return fileInfo()->displayName();
 }
 
-IAutomation* MasterScore::automation() const
+AutomationDataConstPtr MasterScore::automationData() const
 {
-    return m_automationController->automation();
+    return m_automationController->automationData();
+}
+
+void MasterScore::setAutomationData(AutomationDataPtr data)
+{
+    m_automationController->setAutomationData(std::move(data));
+}
+
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    m_automationController->editPoints(key, edits);
+}
+
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+{
+    m_automationController->insertTime(tick, len);
 }
 
 //---------------------------------------------------------
@@ -383,6 +399,11 @@ void MasterScore::initAutomation()
         return;
     }
     m_automationController->init(this);
+}
+
+void MasterScore::updateAutomation(const ScoreChanges& changes)
+{
+    m_automationController->update(changes);
 }
 
 //---------------------------------------------------------
@@ -665,13 +686,15 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             }
                             keySigList.push_back(ks);
                             // if instrument change on that place, set correct key signature for instrument change
+                            const TrackRange trackRange = e->part()->trackRange();
                             bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                                      e->part()->startTrack(),
-                                                                                      e->part()->endTrack() - 1);
+                                                                                      trackRange.startTrack,
+                                                                                      trackRange.endTrack - 1);
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                EditKeySig::undoChangeKeySig(transactionManager()->currentOrDummyTransaction(), this, ks->staff(),
+                                                             e->tick(), ke);
                             } else {
                                 ee = e;
                             }

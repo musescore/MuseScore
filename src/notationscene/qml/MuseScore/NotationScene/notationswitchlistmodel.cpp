@@ -23,6 +23,13 @@
 #include "notationswitchlistmodel.h"
 
 #include "log.h"
+#include "translation.h"
+
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+
+#include "project/inotationproject.h"
 
 using namespace mu::notation;
 using namespace mu::project;

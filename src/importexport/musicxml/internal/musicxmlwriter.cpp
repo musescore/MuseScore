@@ -25,6 +25,9 @@
 #include "engraving/dom/score.h"
 #include "export/exportmusicxml.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace mu::iex::musicxml;

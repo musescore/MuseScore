@@ -29,6 +29,7 @@
 
 namespace mu::engraving {
 class TDuration;
+class Transaction;
 
 struct RestVerticalClearance {
 public:
@@ -81,7 +82,7 @@ public:
     void setTrack(track_idx_t val) override;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool isGap() const { return m_gap; }
     virtual void setGap(bool v) { m_gap = v; }

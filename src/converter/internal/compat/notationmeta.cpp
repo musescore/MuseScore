@@ -27,13 +27,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "audio/common/audioutils.h"
+#include "audio/common/audiotypes.h"
+
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 
-#include "project/inotationproject.h"
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
-#include "audio/common/audioutils.h"
-#include "audio/common/audiotypes.h"
+#include "project/inotationproject.h"
+#include "project/iprojectaudiosettings.h"
 
 #include "log.h"
 
@@ -378,9 +384,9 @@ QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation)
         QJsonObject jsonTrack;
         jsonTrack.insert("instrumentId", trackId.instrumentId.toQString());
         jsonTrack.insert("partId", trackId.partId.toQString());
-        jsonTrack.insert("type", audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
+        jsonTrack.insert("type", audio::audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
 
-        audio::AudioSourceType sourceType = sourceTypeFromResourceType(inputParams.resourceMeta.type);
+        audio::AudioSourceType sourceType = audio::sourceTypeFromResourceType(inputParams.resourceMeta.type);
         if (sourceType != audio::AudioSourceType::Fluid) {
             if (sourceType == audio::AudioSourceType::MuseSampler) {
                 jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.attributeVal(

@@ -29,8 +29,10 @@
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"
-#include "notationtypes.h"
 #include "global/globaltypes.h"
+
+#include "types/noteinputtypes.h"
+#include "types/zoomtype.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
@@ -180,6 +182,7 @@ public:
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isCountInEnabledChanged() const = 0;
 
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;

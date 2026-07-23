@@ -24,8 +24,14 @@
 
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/score.h"
+#include "engraving/editing/edithairpin.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
 
 #include "log.h"
 
@@ -207,7 +213,8 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
     beginCommand(TranslatableString("undoableAction", "Add hairpin"));
     Hairpin* hairpin = Factory::createHairpin(m_item->score()->dummy()->segment());
     hairpin->setHairpinType(hairpinType);
-    m_item->score()->addHairpinToDynamic(hairpin, dynamic);
+    Transaction& tx = m_item->score()->transactionManager()->currentOrDummyTransaction();
+    EditHairpin::addHairpinToDynamic(tx, m_item->score(), hairpin, dynamic);
     endCommand();
     interaction->selectAndStartEditIfNeeded(hairpin);
     updateNotation();

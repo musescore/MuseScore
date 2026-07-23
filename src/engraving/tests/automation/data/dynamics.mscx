@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.60">
-  <programVersion>4.7.0</programVersion>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
   <programRevision></programRevision>
   <Score>
     <eid>IgMHKL4ZLqO_rbq68IziYTP</eid>
@@ -71,18 +71,24 @@
       <unsorted/>
       </Order>
     <Part id="1">
+      <eid>5xMB+ek5ncO_PbnxG93Xo6C</eid>
       <Staff>
         <eid>kFUYWio/LVF_yQHzJ61KE/F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="2" visible="1"/>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>2</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -280,9 +286,10 @@
               <eid>mKDXDkjfayH_mC2bfSNNLhN</eid>
               <Segment>
                 <subtype>0</subtype>
-                <offset x="0.5038" y="2.39101"/>
+                <offset x="0.5038" y="-1.10899"/>
                 <off2 x="-0.5038" y="0"/>
                 <eid>oLBdafea+MN_Q1dHAakpIeJ</eid>
+                <offset x="0.5038" y="-1.10899"/>
                 </Segment>
               </HairPin>
             <next>
@@ -389,6 +396,102 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>zy2H/cR2V8D_tc/4F2jlUhI</eid>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
+        <voice>
+          <Chord>
+            <eid>lXVe0b1nzuF_qY542NkKBJM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>aBFp5/cPZkE_6MXX5Uv6dYB</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>x3OSo7zCZsH_Baaf/b8pyPM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>cDdSopxINZE_sBzf3Q4ZT2C</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>nyCNpLDBI6_Fz9KB/dglqB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Vc+Nk2823EP_DpnuEOfe1aK</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>sLM3yYHnA5D_b7ZQQ4FuLjC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>sT+lNKK8FkB_YRc/gcGB6EJ</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>DNiiPUFNUNF_IyEjQhO0Vf</eid>
+        <voice>
+          <Chord>
+            <eid>3vru+nCzBgJ_kdeHMiJD/TL</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>p6HPc2vgA7F_z3/tKFelgaB</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>JGXphV+a0bG_dP1BPT5KKaH</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>2ILhJXlHrkO_aC3d8B4ZSq</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>qXvIXKma1IH_+4Ao8e4tZKI</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Q7vByWJ9kc_0AuqwQjysCO</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>hmTYeT0s4sN_bIN5xkYEV+</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>3i9SMplGd+N_tZigzOxZKxD</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>AO2bDJHJj1E_R6OfTXqqnRD</eid>
+        <measureRepeatCount>1</measureRepeatCount>
+        <voice>
+          <MeasureRepeat>
+            <subtype>1</subtype>
+            <eid>F2W00mEpi9N_lsp/bmugyoK</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </MeasureRepeat>
           </voice>
         </Measure>
       </Staff>

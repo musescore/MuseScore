@@ -29,6 +29,7 @@
 namespace mu::engraving {
 class Factory;
 class Segment;
+class Transaction;
 
 static constexpr int MIN_BARLINE_FROMTO_DIST        = 2;
 static constexpr int MIN_BARLINE_SPAN_FROMTO        = -2;
@@ -96,7 +97,7 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
     bool isEditable() const override { return true; }
 
     Segment* segment() const { return toSegment(explicitParent()); }

@@ -120,7 +120,7 @@ void MMRestLayout::reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, 
             nextMMRMeasure->setMMRestCount(numMeasuresInNewMMRest);
             nextMMRMeasure->setMeasureNumber(nextFirstMeasure->measureNumber());
 
-            ctx.mutDom().updateSystemLocksOnCreateMMRest(nextFirstMeasure, nextLastMeasure);
+            ctx.mutDom().updateLocksOnCreateMMRest(nextFirstMeasure, nextLastMeasure);
 
             nextMMRMeasure->setRepeatStart(nextFirstMeasure->repeatStart() || nextLastMeasure->repeatStart());
             nextMMRMeasure->setRepeatEnd(nextFirstMeasure->repeatEnd() || nextLastMeasure->repeatEnd());
@@ -193,7 +193,7 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
     mmrMeasure->setMMRestCount(numMeasuresInMMRest);
     mmrMeasure->setMeasureNumber(firstMeasure->measureNumber());
 
-    ctx.mutDom().updateSystemLocksOnCreateMMRest(firstMeasure, lastMeasure);
+    ctx.mutDom().updateLocksOnCreateMMRest(firstMeasure, lastMeasure);
 
     mmrMeasure->setRepeatStart(firstMeasure->repeatStart() || lastMeasure->repeatStart());
     mmrMeasure->setRepeatEnd(firstMeasure->repeatEnd() || lastMeasure->repeatEnd());

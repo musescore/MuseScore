@@ -3,6 +3,7 @@
 #include <QList>
 
 #include "audio/common/audioutils.h"
+#include "vst/vstpluginattrs.h"
 
 #include "log.h"
 #include "translation.h"
@@ -103,7 +104,7 @@ void OutputResourceItem::handleMenuItem(const QString& menuItemId)
         return;
     }
 
-    const AudioResourceId& newSelectedResourceId = menuItemId.toStdString();
+    const audioplugins::PluginResourceId& newSelectedResourceId = menuItemId.toStdString();
 
     for (const auto& pair : m_fxByVendorMap) {
         for (const AudioResourceMeta& fxResourceMeta : pair.second) {
@@ -183,7 +184,7 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
     requestToCloseNativeEditorView();
 
     audio::AudioFxParams newParams = m_currentFxParams;
-    newParams.categories = audio::audioFxCategoriesFromString(newMeta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
+    newParams.categories = audio::audioFxCategoriesFromString(newMeta.attributeVal(vst::CATEGORIES_ATTRIBUTE));
     newParams.resourceMeta = newMeta;
     newParams.configuration.clear();
     newParams.active = newMeta.isValid();
@@ -213,5 +214,5 @@ bool OutputResourceItem::isBlank() const
 
 bool OutputResourceItem::hasNativeEditorSupport() const
 {
-    return m_currentFxParams.resourceMeta.hasNativeEditorSupport;
+    return muse::audio::hasNativeEditorSupport(m_currentFxParams.resourceMeta);
 }

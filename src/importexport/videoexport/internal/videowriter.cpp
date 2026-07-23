@@ -30,12 +30,18 @@
 #include "global/io/filestream.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/painter.h"
 #include "draw/types/drawtypes.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationpainting.h"
+#include "notation/inotationplayback.h"
 #include "notation/notationtypes.h"
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"

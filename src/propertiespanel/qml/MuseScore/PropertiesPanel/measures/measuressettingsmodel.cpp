@@ -21,7 +21,8 @@
  */
 #include "measuressettingsmodel.h"
 
-#include "engraving/dom/score.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 #include "translation.h"
 
@@ -40,10 +41,6 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, const muse::modula
 
 void MeasuresSettingsModel::loadProperties()
 {
-    updateAllSystemsAreLocked();
-    updateScoreIsInPageView();
-    updateIsMakeIntoSystemAvailable();
-    updateSystemCount();
 }
 
 bool MeasuresSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
@@ -53,7 +50,6 @@ bool MeasuresSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
 
 void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
 {
-    loadProperties();
 }
 
 bool MeasuresSettingsModel::isEmpty() const
@@ -89,148 +85,4 @@ void MeasuresSettingsModel::deleteSelectedMeasures()
     }
 
     currentNotation()->interaction()->removeSelectedMeasures();
-}
-
-void MeasuresSettingsModel::moveMeasureUp()
-{
-    if (!currentNotation()) {
-        return;
-    }
-
-    currentNotation()->interaction()->moveMeasureToPrevSystem();
-}
-
-QString MeasuresSettingsModel::shortcutMoveMeasureUp() const
-{
-    return shortcutsForActionCode("move-measure-to-prev-system");
-}
-
-void MeasuresSettingsModel::moveMeasureDown()
-{
-    if (!currentNotation()) {
-        return;
-    }
-
-    currentNotation()->interaction()->moveMeasureToNextSystem();
-}
-
-QString MeasuresSettingsModel::shortcutMoveMeasureDown() const
-{
-    return shortcutsForActionCode("move-measure-to-next-system");
-}
-
-void MeasuresSettingsModel::toggleSystemLock()
-{
-    if (!currentNotation()) {
-        return;
-    }
-
-    currentNotation()->interaction()->toggleSystemLock();
-}
-
-QString MeasuresSettingsModel::shortcutToggleSystemLock() const
-{
-    return shortcutsForActionCode("toggle-system-lock");
-}
-
-bool MeasuresSettingsModel::allSystemsAreLocked() const
-{
-    return m_allSystemsAreLocked;
-}
-
-void MeasuresSettingsModel::updateAllSystemsAreLocked()
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    std::vector<System*> systems = selection()->selectedSystems();
-
-    bool allLocked = true;
-    for (System* system : systems) {
-        if (!system->isLocked()) {
-            allLocked = false;
-            break;
-        }
-    }
-
-    if (m_allSystemsAreLocked != allLocked) {
-        m_allSystemsAreLocked = allLocked;
-        emit allSystemsAreLockedChanged(m_allSystemsAreLocked);
-    }
-}
-
-bool MeasuresSettingsModel::scoreIsInPageView() const
-{
-    return m_scoreIsInPageView;
-}
-
-bool MeasuresSettingsModel::isMakeIntoSystemAvailable() const
-{
-    return m_isMakeIntoSystemAvailable;
-}
-
-int MeasuresSettingsModel::systemCount() const
-{
-    return static_cast<int>(m_systemCount);
-}
-
-void MeasuresSettingsModel::updateScoreIsInPageView()
-{
-    bool isInPageView = currentNotation()->viewMode() != LayoutMode::LINE;
-
-    if (m_scoreIsInPageView != isInPageView) {
-        m_scoreIsInPageView = isInPageView;
-        emit scoreIsInPageViewChanged(m_scoreIsInPageView);
-    }
-}
-
-void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    const MeasureBase* startMB = selection()->startMeasureBase();
-    const MeasureBase* endMB = selection()->endMeasureBase();
-    if (!startMB || !endMB) {
-        return;
-    }
-
-    bool available = true;
-    if (startMB->isStartOfSystemLock() && endMB->isEndOfSystemLock() && startMB->systemLock() == endMB->systemLock()) {
-        available = false;
-    }
-
-    if (m_isMakeIntoSystemAvailable != available) {
-        m_isMakeIntoSystemAvailable = available;
-        emit isMakeIntoSystemAvailableChanged(m_isMakeIntoSystemAvailable);
-    }
-}
-
-void MeasuresSettingsModel::updateSystemCount()
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    size_t count = selection()->selectedSystems().size();
-    if (count != m_systemCount) {
-        m_systemCount = count;
-        emit systemCountChanged(static_cast<int>(count));
-    }
-}
-
-void MeasuresSettingsModel::makeIntoSystem()
-{
-    if (!currentNotation()) {
-        return;
-    }
-
-    currentNotation()->interaction()->makeIntoSystem();
-}
-
-QString MeasuresSettingsModel::shortcutMakeIntoSystem() const
-{
-    return shortcutsForActionCode("make-into-system");
 }

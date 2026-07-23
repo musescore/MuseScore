@@ -29,6 +29,8 @@
 #include "global/io/path.h"
 
 #include "project/internal/mscmetareader.h"
+#include "project/types/projectmeta.h"
+#include "project/types/projecttypes.h"
 
 namespace stdfs = std::filesystem;
 using namespace Qt::StringLiterals;

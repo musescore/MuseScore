@@ -32,6 +32,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "audio/main/iaudioconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "tours/itoursservice.h"
 
@@ -53,6 +54,7 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
     muse::ContextInject<IPlaybackController> playbackController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
 
 public:
@@ -88,11 +90,11 @@ private:
     void setManualProcessingAllowed(bool allowed);
     void setStatus(Status status);
 
-    notation::InstrumentTrackIdSet m_onlineTrackIdSet;
+    engraving::InstrumentTrackIdSet m_onlineTrackIdSet;
     bool m_manualProcessingAllowed = false;
     bool m_shouldNotifyToursThatManualProcessingAllowed = true;
     Status m_status = Status::Success;
     muse::Ret m_ret;
-    muse::async::Channel<notation::InstrumentTrackIdSet> m_tracksDataChanged;
+    muse::async::Channel<engraving::InstrumentTrackIdSet> m_tracksDataChanged;
 };
 }

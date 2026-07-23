@@ -29,6 +29,10 @@
 
 #include "engraving/dom/utils.h"
 
+#include "notation/inotation.h"
+#include "notation/imasternotation.h"
+#include "notation/iexcerptnotation.h" // IWYU pragma: keep
+
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;

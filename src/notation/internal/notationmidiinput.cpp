@@ -19,23 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationmidiinput.h"
 
 #include <QGuiApplication>
 
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/tie.h"
-#include "engraving/dom/score.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/factory.h"
-
-#include "notationtypes.h"
-
+#include "containers.h"
 #include "defer.h"
 #include "log.h"
 
+#include "midi/miditypes.h"
+
+#include "engraving/dom/factory.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
+#include "playback/playbackcommands.h"
+
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static constexpr int PROCESS_INTERVAL = 20;
 
@@ -129,7 +137,7 @@ void NotationMidiInput::onRealtimeAdvance()
     }
 }
 
-mu::engraving::Score* NotationMidiInput::score() const
+Score* NotationMidiInput::score() const
 {
     IF_ASSERT_FAILED(m_getScore) {
         return nullptr;
@@ -149,7 +157,7 @@ void NotationMidiInput::doProcessEvents()
         return;
     }
 
-    const mu::engraving::Score* sc = score();
+    const Score* sc = score();
     if (!sc || sc->noStaves()) {
         return;
     }
@@ -234,7 +242,7 @@ void NotationMidiInput::startNoteInputIfNeed()
 
     if (configuration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
         if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES) && containsNoteOn()) {
-            dispatcher()->dispatch("note-input");
+            dispatcher()->dispatch("command://notation/toggle-note-input");
         }
     }
 }
@@ -261,13 +269,13 @@ void NotationMidiInput::addNoteEventsToInputState()
         const muse::midi::Event::Opcode opcode = event.opcode();
 
         if (opcode == muse::midi::Event::Opcode::NoteOn) {
-            NoteVal nval = score()->noteVal(event.note(), staffIdx, useWrittenPitch);
+            NoteVal nval = NoteInput::noteVal(score(), event.note(), staffIdx, useWrittenPitch);
             nval.velocityOverride = event.velocity7();
             notesOn.push_back(nval);
             m_holdingNotesInInputByDuration = true;
         } else if (opcode == muse::midi::Event::Opcode::NoteOff) {
             if (useVelocityAndDuration) {
-                notesOff.push_back(score()->noteVal(event.note(), staffIdx, useWrittenPitch));
+                notesOff.push_back(NoteInput::noteVal(score(), event.note(), staffIdx, useWrittenPitch));
             }
             m_holdingNotesInInputByDuration = false;
         } else if (opcode == muse::midi::Event::Opcode::ControlChange || opcode == muse::midi::Event::Opcode::PitchBend) {
@@ -297,17 +305,13 @@ void NotationMidiInput::addNoteEventsToInputState()
 
 Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 {
-    mu::engraving::Score* sc = score();
+    Score* sc = score();
 
-    mu::engraving::MidiInputEvent inputEv;
-    inputEv.pitch = e.note();
-    inputEv.velocity = e.velocity7();
+    const int pitch = e.note();
 
-    sc->activeMidiPitches().remove_if([&inputEv](const mu::engraving::MidiInputEvent& val) {
-        return inputEv.pitch == val.pitch;
-    });
+    muse::remove(m_activeMidiPitches, pitch);
 
-    const mu::engraving::InputState& is = sc->inputState();
+    const InputState& is = sc->inputState();
     if (!is.noteEntryMode()) {
         return nullptr;
     }
@@ -330,7 +334,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
             const Chord* chord = is.cr()->isChord() ? engraving::toChord(is.cr()) : nullptr;
             if (chord) {
-                Note* n = chord->findNote(inputEv.pitch);
+                Note* n = chord->findNote(pitch);
                 if (n) {
                     sc->deleteItem(n->tieBack());
                     sc->deleteItem(n);
@@ -341,23 +345,20 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         return nullptr;
     }
 
-    if (sc->activeMidiPitches().empty()) {
-        inputEv.chord = false;
-    } else {
-        inputEv.chord = true;
-    }
+    bool addToChord = !m_activeMidiPitches.empty();
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) {
-        mu::engraving::EngravingItem* cr = is.lastSegment()->element(is.track());
+        EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
-            inputEv.chord = true;
+            addToChord = true;
         }
     }
 
-    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord, configuration()->midiUseWrittenPitch().val);
+    Note* note = NoteInput::addMidiPitch(sc->transactionManager()->currentOrDummyTransaction(), sc, pitch,
+                                         addToChord, configuration()->midiUseWrittenPitch().val);
 
-    sc->activeMidiPitches().push_back(inputEv);
+    m_activeMidiPitches.push_back(pitch);
 
     if (is.cr()) {
         m_notationInteraction->showItem(is.cr());
@@ -372,21 +373,21 @@ Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
         return nullptr;
     }
 
-    mu::engraving::Score* score = this->score();
-    const mu::engraving::InputState& inputState = score->inputState();
+    Score* score = this->score();
+    const InputState& inputState = score->inputState();
     Segment* seg = inputState.lastSegment() ? inputState.lastSegment() : score->dummy()->segment();
 
     Chord* chord = engraving::Factory::createChord(seg);
     chord->setParent(seg);
 
     const ChordRest* cr = inputState.cr();
-    const mu::engraving::staff_idx_t staffIdx = cr ? engraving::track2staff(cr->track()) : 0;
+    const staff_idx_t staffIdx = cr ? engraving::track2staff(cr->track()) : 0;
 
     Note* note = engraving::Factory::createNote(chord);
     note->setParent(chord);
     note->setStaffIdx(staffIdx);
 
-    engraving::NoteVal nval = score->noteVal(e.note(), staffIdx, configuration()->midiUseWrittenPitch().val);
+    engraving::NoteVal nval = NoteInput::noteVal(score, e.note(), staffIdx, configuration()->midiUseWrittenPitch().val);
     note->setNval(nval);
 
     return note;
@@ -401,7 +402,7 @@ void NotationMidiInput::triggerControllers(const ControllerEventMap& events)
         { muse::midi::SUSTAIN_PEDAL_CONTROLLER, muse::mpe::ControllerChangeEvent::SustainPedalOnOff },
     };
 
-    const mu::engraving::InputState& is = score()->inputState();
+    const InputState& is = score()->inputState();
 
     for (const auto& pair : events) {
         const muse::midi::Event& e = pair.second;
@@ -433,7 +434,7 @@ void NotationMidiInput::releasePlayingNotes(const std::vector<int>& pitches)
     const bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
 
     for (int pitch : pitches) {
-        const NoteVal nval = score()->noteVal(pitch, staffIdx, useWrittenPitch);
+        const NoteVal nval = NoteInput::noteVal(score(), pitch, staffIdx, useWrittenPitch);
 
         auto it = m_playingNotes.find(nval.pitch);
         if (it == m_playingNotes.end()) {
@@ -463,7 +464,7 @@ void NotationMidiInput::enableMetronome()
         return;
     }
 
-    dispatcher()->dispatch("metronome");
+    commandsDispatcher()->dispatch(mu::playback::METRONOME_TOGGLE_COMMAND);
     m_shouldDisableMetronome = true;
 }
 
@@ -473,7 +474,7 @@ void NotationMidiInput::disableMetronome()
         return;
     }
 
-    dispatcher()->dispatch("metronome");
+    commandsDispatcher()->dispatch(mu::playback::METRONOME_TOGGLE_COMMAND);
 
     m_shouldDisableMetronome = false;
 }
@@ -490,7 +491,7 @@ void NotationMidiInput::stopRealtime()
 
 void NotationMidiInput::doRealtimeAdvance()
 {
-    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
+    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_activeMidiPitches.empty())) {
         if (m_realtimeTimer.isActive()) {
             stopRealtime();
         }
@@ -501,13 +502,13 @@ void NotationMidiInput::doRealtimeAdvance()
         return;
     }
 
-    const mu::engraving::InputState& is = m_getScore->score()->inputState();
+    const InputState& is = m_getScore->score()->inputState();
     playbackController()->playMetronome(is.tick().ticks());
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
-        m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Realtime advance"));
-        m_getScore->score()->realtimeAdvance(configuration()->midiUseWrittenPitch().val);
-        m_undoStack->commitChanges();
+        m_undoStack->transaction(muse::TranslatableString("undoableAction", "Realtime advance"), [this](Transaction& tx) {
+            NoteInput::realtimeAdvance(tx, score(), configuration()->midiUseWrittenPitch().val, m_activeMidiPitches);
+        });
     });
 
     if (isRealtimeManual()) {

@@ -139,11 +139,6 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
         xml.tag("layoutMode", "system");
     }
 
-    if (score->m_audio) {
-        xml.tag("playMode", int(score->m_playMode));
-        TWrite::write(score->m_audio, xml, ctx);
-    }
-
     if (score->isMaster() && !MScore::testMode) {
         score->m_synthesizerState.write(xml);
     }
@@ -266,6 +261,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
 
     hook.onWriteExcerpts302(score, xml, ctx);
 
+    TWrite::writePageLocks(score, xml);
     TWrite::writeSystemLocks(score, xml);
     TWrite::writeSystemDividers(score, xml, ctx);
 

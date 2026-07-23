@@ -27,7 +27,12 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
+
+namespace mu::engraving {
+enum class TupletNumberType : unsigned char;
+enum class TupletBracketType : unsigned char;
+}
 
 namespace mu::notation {
 class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
@@ -35,7 +40,7 @@ class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
     Q_OBJECT
 
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
 
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
@@ -47,8 +52,8 @@ public:
 
     void defaultToStyleSettings();
 
-    TupletNumberType numberType() const;
-    TupletBracketType bracketType() const;
+    engraving::TupletNumberType numberType() const;
+    engraving::TupletBracketType bracketType() const;
 
     INotationStylePtr style() const;
     INotationPtr notation() const;

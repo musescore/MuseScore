@@ -1895,19 +1895,8 @@ void SingleDraw::draw(const Image* item, Painter* painter, const PaintOptions&)
                 s = item->size() * DPMM;
             }
 
-            Transform t = painter->worldTransform();
-            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
-            t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-            painter->setWorldTransform(t);
-            if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
-                item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
-                item->setDirty(false);
-            }
-            if (item->buffer().isNull()) {
-                emptyImage = true;
-            } else {
-                painter->drawPixmap(PointF(0.0, 0.0), item->buffer());
-            }
+            painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
+            painter->drawPixmap(PointF(0, 0), *item->rasterImage());
 
             painter->restore();
         }

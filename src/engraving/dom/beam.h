@@ -32,7 +32,7 @@ class ChordRest;
 class Factory;
 class Skyline;
 class System;
-class Beam;
+class Transaction;
 enum class ActionIconType : signed char;
 enum class SpannerSegmentType : unsigned char;
 
@@ -91,7 +91,7 @@ public:
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     double growLeft() const { return m_growLeft; }
     double growRight() const { return m_growRight; }

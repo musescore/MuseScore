@@ -85,54 +85,43 @@ samples_t AudioExportConfiguration::exportBufferSize() const
     return 4096;
 }
 
-AudioSampleFormat AudioExportConfiguration::exportSampleFormat() const
+AudioSampleFormat AudioExportConfiguration::exportWavSampleFormat() const
 {
-    return m_exportSampleFormat;
+    return static_cast<AudioSampleFormat>(settings()->value(EXPORT_WAV_SAMPLE_FORMAT_KEY).toInt());
 }
 
-void AudioExportConfiguration::setExportSampleFormat(AudioSampleFormat format)
+void AudioExportConfiguration::setExportWavSampleFormat(AudioSampleFormat format)
 {
-    m_exportSampleFormat = format;
+    settings()->setSharedValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
 }
 
-void AudioExportConfiguration::setExportSampleFormat(const QString& extension, AudioSampleFormat format)
+AudioSampleFormat AudioExportConfiguration::exportFlacSampleFormat() const
 {
-    m_exportSampleFormat = format;
-    if (extension == QLatin1String("wav")) {
-        settings()->setSharedValue(EXPORT_WAV_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
-    } else if (extension == QLatin1String("flac")) {
-        settings()->setSharedValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
-    }
+    return static_cast<AudioSampleFormat>(settings()->value(EXPORT_FLAC_SAMPLE_FORMAT_KEY).toInt());
 }
 
-const std::vector<AudioSampleFormat>& AudioExportConfiguration::availableSampleFormats(const QString& extension) const
+void AudioExportConfiguration::setExportFlacSampleFormat(AudioSampleFormat format)
 {
-    if (extension == QLatin1String("wav")) {
-        static const std::vector<muse::audio::AudioSampleFormat> wavSampleFormats {
-            AudioSampleFormat::Int16,
-            AudioSampleFormat::Int24,
-            AudioSampleFormat::Float32,
-        };
-        return wavSampleFormats;
-    }
-    if (extension == QLatin1String("flac")) {
-        static const std::vector<muse::audio::AudioSampleFormat> flacSampleFormats {
-            AudioSampleFormat::Int16,
-            AudioSampleFormat::Int24,
-        };
-        return flacSampleFormats;
-    }
-    static const std::vector<muse::audio::AudioSampleFormat> emptySampleFormats {};
-    return emptySampleFormats;
+    settings()->setSharedValue(EXPORT_FLAC_SAMPLE_FORMAT_KEY, Val(static_cast<int>(format)));
 }
 
-void AudioExportConfiguration::loadSampleFormatSetting(const QString& extension)
+const std::vector<AudioSampleFormat>& AudioExportConfiguration::availableWavSampleFormats() const
 {
-    if (extension == QLatin1String("wav")) {
-        setExportSampleFormat(static_cast<AudioSampleFormat>(settings()->value(EXPORT_WAV_SAMPLE_FORMAT_KEY).toInt()));
-    } else if (extension == QLatin1String("flac")) {
-        setExportSampleFormat(static_cast<AudioSampleFormat>(settings()->value(EXPORT_FLAC_SAMPLE_FORMAT_KEY).toInt()));
-    }
+    static const std::vector<AudioSampleFormat> formats {
+        AudioSampleFormat::Int16,
+        AudioSampleFormat::Int24,
+        AudioSampleFormat::Float32,
+    };
+    return formats;
+}
+
+const std::vector<AudioSampleFormat>& AudioExportConfiguration::availableFlacSampleFormats() const
+{
+    static const std::vector<AudioSampleFormat> formats {
+        AudioSampleFormat::Int16,
+        AudioSampleFormat::Int24,
+    };
+    return formats;
 }
 
 QString AudioExportConfiguration::sampleFormatToString(AudioSampleFormat format) const

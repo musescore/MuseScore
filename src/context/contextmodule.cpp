@@ -26,6 +26,12 @@
 #include "internal/uicontextresolver.h"
 #include "shortcutcontext.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+#include "internal/shortcutresolver.h"
+#endif
+
 using namespace mu::context;
 using namespace muse::modularity;
 using namespace muse::shortcuts;
@@ -50,6 +56,10 @@ void ContextModuleContext::registerExports()
     ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
     ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
     ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
+
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+    ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext()));
+#endif
 }
 
 void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)

@@ -33,8 +33,10 @@
 #include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
 #include "../dom/fret.h"
-#include "editing/editfretboarddiagram.h"
-#include "editing/editkeysig.h"
+
+#include "editenharmonicspelling.h"
+#include "editfretboarddiagram.h"
+#include "editkeysig.h"
 #include "transaction/transaction.h"
 
 using namespace mu::engraving;
@@ -249,7 +251,7 @@ bool Transpose::transpose(Transaction& tx, Score* score, TransposeMode mode, Tra
                     // undoChangeKey handles linked staves/parts and generating new keysigs as needed
                     // it always sets the keysig non-generated
                     // so only call it when needed
-                    score->undoChangeKeySig(staff, tick, ke);
+                    EditKeySig::undoChangeKeySig(tx, score, staff, tick, ke);
                 }
             }
         }
@@ -420,7 +422,8 @@ void Transpose::transpositionChanged(Transaction& tx, Score* score, Part* part, 
         scores.insert(lsScore);
         Part* lp = ls->part();
         if (!lsScore->style().styleB(Sid::concertPitch)) {
-            transposeKeys(tx, lsScore, lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, true);
+            const TrackRange trackRange = lp->trackRange();
+            transposeKeys(tx, lsScore, track2staff(trackRange.startTrack), track2staff(trackRange.endTrack), tickStart, tickEnd, true);
         }
     }
 
@@ -657,7 +660,7 @@ String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key ke
         tpcs.push_back(tpc);
     }
 
-    int tpc = bestEnharmonicFit(tpcs, key);
+    int tpc = EditEnharmonicSpelling::bestEnharmonicFit(tpcs, key);
 
     if (tpc == Tpc::TPC_INVALID) {
         return notes.front();

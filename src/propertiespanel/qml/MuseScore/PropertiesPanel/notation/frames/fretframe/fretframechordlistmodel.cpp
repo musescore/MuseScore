@@ -24,9 +24,10 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/fret.h"
 
-#include "fretframechorditem.h"
+#include "notation/inotation.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
-#include "translation.h"
+#include "fretframechorditem.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;

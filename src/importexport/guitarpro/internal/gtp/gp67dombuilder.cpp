@@ -663,8 +663,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
         } else if (nodeName == u"Ottavia") {
             beat->setOttavaType(ottavaType(innerNode.toElement().text()));
         } else if (nodeName == u"Whammy" || nodeName == u"WhammyExtend") {
-            // TODO-gp: implement dives
-            beat->setDive(true);
+            beat->setWhammy(readWhammy(innerNode.toElement()));
         } else if (nodeName == u"DeadSlapped") {
             beat->setDeadSlapped(true);
         } else if (nodeName == u"TransposedPitchStemOrientation") {
@@ -1052,6 +1051,19 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
     }
 }
 
+GPBeat::Whammy GP67DomBuilder::readWhammy(const XmlDomElement& elem) const
+{
+    GPBeat::Whammy whammy;
+    whammy.originValue = elem.attribute("originValue").value().toFloat();
+    whammy.destinationValue = elem.attribute("destinationValue").value().toFloat();
+    whammy.middleValue = elem.attribute("middleValue").value().toFloat();
+    whammy.originOffset = elem.attribute("originOffset").value().toFloat();
+    whammy.middleOffset1 = elem.attribute("middleOffset1").value().toFloat();
+    whammy.middleOffset2 = elem.attribute("middleOffset2").value().toFloat();
+    whammy.destinationOffset = elem.attribute("destinationOffset").value().toFloat();
+    return whammy;
+}
+
 std::unique_ptr<GPNote::Bend> GP67DomBuilder::createBend(XmlDomNode* propertyNode)
 {
     std::unique_ptr<GPNote::Bend> bend = std::make_unique<GPNote::Bend>();
@@ -1174,6 +1186,8 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
         return GPBeat::PickStroke::None;
     };
 
+    GPBeat::Whammy whammyData;
+    bool hasWhammyMarker = false;
     auto propertyNode = propertiesNode.firstChild();
 
     while (!propertyNode.isNull()) {
@@ -1200,18 +1214,28 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
         } else if (propertyName == u"BarreString") {
             beat->setBarreString(propertyNode.firstChild().toElement().text().toInt());
         } else if (propertyName == u"WhammyBar") {
-            beat->setDive(true);
+            hasWhammyMarker = true;
+        } else if (propertyName == u"WhammyBarOriginOffset") {
+            whammyData.originOffset = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarOriginValue") {
+            whammyData.originValue = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarDestinationValue") {
+            whammyData.destinationValue = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarMiddleValue") {
+            whammyData.middleValue = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarDestinationOffset") {
+            whammyData.destinationOffset = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarMiddleOffset1") {
+            whammyData.middleOffset1 = propertyNode.firstChild().toElement().text().toFloat();
+        } else if (propertyName == u"WhammyBarMiddleOffset2") {
+            whammyData.middleOffset2 = propertyNode.firstChild().toElement().text().toFloat();
         }
-        /// TODO: implement dive
-//        else if (propertyName == u"WhammyBarDestinationOffset") {
-//        } else if (propertyName == u"WhammyBarDestinationValue") {
-//        } else if (propertyName == u"WhammyBarMiddleOffset1") {
-//        } else if (propertyName == u"WhammyBarMiddleOffset2") {
-//        } else if (propertyName == u"WhammyBarMiddleValue") {
-//        } else if (propertyName == u"WhammyBarOriginValue") {
-//        }
 
         propertyNode = propertyNode.nextSibling();
+    }
+
+    if (hasWhammyMarker && !whammyData.isEmpty() && !beat->hasWhammy()) {
+        beat->setWhammy(whammyData);
     }
 }
 

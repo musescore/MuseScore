@@ -23,6 +23,7 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
+#include "navigation.h"
 #include "transaction/undostack.h"
 
 #include "iengravingfont.h"
@@ -30,7 +31,6 @@
 
 #include "../dom/fret.h"
 #include "../dom/lyrics.h"
-#include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
@@ -160,14 +160,15 @@ void TextBase::endEdit(EditData& ed)
         }
     }
 
-    const bool newlyAdded = ted->oldXmlText.isEmpty();
+    const bool textStartedEmpty = ted->oldXmlText.isEmpty();
+    const UndoableTransaction* addTransaction = !textStartedEmpty ? nullptr
+                                                : (textWasEdited ? undo->prev() : undo->last());
+    const bool newlyAdded = addTransaction
+                            && addTransaction->hasCommandsMatchingFilter(UndoableCommandFilter::AddElement, this);
     if (newlyAdded) {
-        const UndoableTransaction* transaction = textWasEdited ? undo->prev() : undo->last();
-        if (transaction && transaction->hasCommandsMatchingFilter(UndoableCommandFilter::AddElement, this)) {
-            // We have just added this element to a score.
-            // Combine undo records of text creation with text editing.
-            undo->mergeTransactions(ted->startUndoIdx - 1);
-        }
+        // We have just added this element to a score.
+        // Combine undo records of text creation with text editing.
+        undo->mergeTransactions(ted->startUndoIdx - 1);
     }
 
     // TBox'es manage their Text themselves and are not removed if text is empty
@@ -176,16 +177,23 @@ void TextBase::endEdit(EditData& ed)
     if (actualPlainText.isEmpty() && removeTextIfEmpty) {
         LOGD("actual text is empty");
 
-        // If this assertion fails, no undo command relevant to this text
-        // resides on undo stack and reopen() would corrupt the previous
-        // command. Text shouldn't happen to be empty in other cases though.
-        assert(newlyAdded || textWasEdited);
-
-        undo->reopen();
         if (newlyAdded) {
-            score()->endCmd(true); // rollback the "add element" command
+            undo->reopen();
+            // Rollback the "AddElement" command, but don't delete the rolled-back element(s):
+            score()->endCmd(true, false, /*keepRolledBackElements*/ true);
+            // Defer deletion (to ~TextEditData):
             ted->deleteText = true;
         } else {
+            if (textWasEdited) {
+                // The text was just edited down to empty: the top transaction is this element's own edit:
+                undo->reopen();
+            } else {
+                /* The text was already empty before editing began (e.g. an empty text from a
+                 * legacy/corrupt file). No undo command relevant to this text resides on undo
+                 * stack and reopen() would corrupt the previous command: */
+                score()->startCmd(TranslatableString("undoableAction", "Remove empty text"));
+            }
+
             score()->undoRemoveElement(this);
 
             if (isLyrics()) {
@@ -202,7 +210,7 @@ void TextBase::endEdit(EditData& ed)
         ed.element = 0;
 
         if (isLyrics()) {
-            Lyrics* prev = prevLyrics(toLyrics(this));
+            Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setNeedRemoveInvalidSegments();
                 renderer()->layoutItem(prev);
@@ -838,7 +846,7 @@ void SplitJoinText::split()
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(Transaction&, EditData& ed)
 {
     TextCursor* cursor = this->cursor();
 

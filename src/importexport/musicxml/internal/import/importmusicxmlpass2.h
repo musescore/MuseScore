@@ -355,7 +355,7 @@ public:
     muse::String tremoloSmufl() const { return m_tremoloSmufl; }
     engraving::Color tremoloColor() const { return m_tremoloColor; }
     int tremoloNr() const { return m_tremoloNr; }
-    bool mustStopGraceAFter() const { return m_slurStop || m_wavyLineStop; }
+    bool mustStopGraceAfter() const { return (m_slurStop && !m_slurStart) || m_wavyLineStop; }
 private:
     void addError(const muse::String& error);      // Add an error to be shown in the GUI
     void addNotation(const Notation& notation, engraving::ChordRest* const cr, engraving::Note* const note);

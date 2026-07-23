@@ -39,9 +39,9 @@ public:
 private:
     void loadTypes() override;
 
-    SelectionFilterTypesVariant getAllMask() const override { return engraving::ElementsSelectionFilterTypes::ALL; }
-    SelectionFilterTypesVariant getNoneMask() const override { return engraving::ElementsSelectionFilterTypes::NONE; }
+    engraving::SelectionFilterTypesVariant getAllMask() const override { return engraving::ElementsSelectionFilterTypes::ALL; }
+    engraving::SelectionFilterTypesVariant getNoneMask() const override { return engraving::ElementsSelectionFilterTypes::NONE; }
 
-    QString titleForType(const SelectionFilterTypesVariant& variant) const override;
+    QString titleForType(const engraving::SelectionFilterTypesVariant& variant) const override;
 };
 }

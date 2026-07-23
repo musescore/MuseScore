@@ -19,7 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "noteinputcursor.h"
+
+#include "draw/painter.h"
+
+#include "engraving/dom/staff.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationnoteinput.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

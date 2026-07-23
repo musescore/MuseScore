@@ -23,6 +23,8 @@
 
 #include "engraving/dom/mmrest.h"
 
+#include "notation/inotationstyle.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;

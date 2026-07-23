@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "abstractstyledialogmodel.h"
 
 #include "engraving/style/style.h"
+
+#include "notation/inotation.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

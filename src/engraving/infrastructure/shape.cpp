@@ -332,7 +332,7 @@ double Shape::left() const
             dist = r.left();
         }
     }
-    return -dist;
+    return dist;
 }
 
 //---------------------------------------------------------

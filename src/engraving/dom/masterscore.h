@@ -53,7 +53,7 @@ class Revisions;
 class TempoMap;
 class TimeSigMap;
 class UndoStack;
-class AutomationController;
+class ScoreAutomationController;
 
 class MidiMapping
 {
@@ -104,7 +104,10 @@ public:
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
-    IAutomation* automation() const override;
+
+    AutomationDataConstPtr automationData() const override;
+    void setAutomationData(AutomationDataPtr data);
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -121,8 +124,6 @@ public:
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
-    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>& activeMidiPitches() override { return m_activeMidiPitches; }
 
     void setUpdateAll() override;
 
@@ -157,7 +158,6 @@ public:
     bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
     int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
-//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -193,11 +193,12 @@ public:
 
     muse::Ret sanityCheck();
 
-    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
-    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
-
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
+
+    void updateAutomation(const ScoreChanges& changes);
+
+    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -226,7 +227,7 @@ private:
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
-    AutomationController* m_automationController = nullptr;
+    ScoreAutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;
@@ -242,12 +243,9 @@ private:
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
     int m_midiPortCount = 0;                           // A count of ALSA midi out ports
-    //    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
-    std::list<MidiInputEvent> m_activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> m_midiMapping;
     bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
     // don't decrease and don't have gaps
-    double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
 

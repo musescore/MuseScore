@@ -29,7 +29,7 @@
 #include "draw/types/geometry.h"
 #include "midi/miditypes.h"
 
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 
 class QColor;
 
@@ -58,12 +58,12 @@ private:
     muse::RectF resolveCursorRectByTick(int tick) const;
 
     struct PlaybackCursorCache {
-        const System* system = nullptr;
-        const Measure* measure = nullptr;
-        const Segment* segment = nullptr;
+        const engraving::System* system = nullptr;
+        const engraving::Measure* measure = nullptr;
+        const engraving::Segment* segment = nullptr;
 
-        Fraction segmentStartTick;
-        Fraction segmentEndTick;
+        engraving::Fraction segmentStartTick;
+        engraving::Fraction segmentEndTick;
 
         double segmentStartX = 0.0;
         double segmentEndX = 0.0;

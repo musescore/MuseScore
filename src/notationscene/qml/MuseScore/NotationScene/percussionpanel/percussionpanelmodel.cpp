@@ -34,6 +34,15 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
+
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
 static const QString SET_COLUMNS_CODE("percussion-set-columns");
@@ -553,7 +562,8 @@ void PercussionPanelModel::resetLayout()
     }
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
-    const bool isMuseSamplerDrumset = resourceMeta.type == muse::audio::AudioResourceType::MuseSamplerSoundPack;
+    const bool isMuseSamplerDrumset = muse::audio::isResourceType(resourceMeta,
+                                                                  muse::audio::AudioResourceType::MuseSamplerSoundPack);
 
     Drumset defaultDrumset = isMuseSamplerDrumset ? museSamplerDefaultDrumset() : standardDefaultDrumset();
 
@@ -593,7 +603,7 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
 
-    const int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+    const int instrumentId = muse::audio::intAttribute(resourceMeta, u"museUID");
 
     const muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
     IF_ASSERT_FAILED(!drumMapping.empty()) {

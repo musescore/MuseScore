@@ -24,6 +24,8 @@
 
 #include "engraving/dom/instrumentname.h"
 
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
 using namespace mu::propertiespanel;
 using namespace muse::actions;
 
@@ -42,13 +44,13 @@ void InstrumentNameSettingsModel::openStyleSettings()
         return;
     }
 
-    QString subPageCode = "instrument-name-long";
+    std::string subPageCode = "instrument-name-long";
 
     if (instrumentName->instrumentNameType() == mu::engraving::InstrumentNameType::SHORT) {
         subPageCode = "instrument-name-short";
     }
 
-    ActionData args = ActionData::make_arg2<QString, QString>("text-styles", subPageCode);
+    ActionData args = ActionData::make_arg2<std::string, std::string>("text-styles", subPageCode);
     dispatcher()->dispatch("edit-style", args);
 }
 

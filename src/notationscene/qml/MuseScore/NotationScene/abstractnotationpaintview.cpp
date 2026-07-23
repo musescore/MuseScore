@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "abstractnotationpaintview.h"
 
 #include <QCursor>
@@ -26,10 +27,20 @@
 #include <QMimeData>
 
 #include "async/async.h"
+#include "log.h"
 
 #include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
-#include "log.h"
+
+#include "notation/imasternotation.h" // IWYU pragma: keep
+#include "notation/inotationaccessibility.h" // IWYU pragma: keep
+#include "notation/inotationautomation.h"
+#include "notation/inotationelements.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationpainting.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationviewstate.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -84,7 +95,20 @@ void AbstractNotationPaintView::load()
 
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
-    m_notationAutomationController = std::make_unique<NotationAutomationController>(this, iocContext());
+
+    // Clip automation lines to the view bounds
+    m_automationLinesContainer = new QQuickItem(this);
+    m_automationLinesContainer->setClip(true);
+    m_automationLinesContainer->setWidth(width());
+    m_automationLinesContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_automationLinesContainer, [this]() {
+        m_automationLinesContainer->setHeight(height());
+    });
+
+    m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -224,7 +248,7 @@ void AbstractNotationPaintView::selectOnNavigationActive()
         return;
     }
 
-    interaction->selectFirstElement(false);
+    interaction->select(SelectionTarget::FirstItem);
 }
 
 bool AbstractNotationPaintView::canReceiveAction(const ActionCode& actionCode) const
@@ -589,8 +613,7 @@ INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
 
 INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
 {
-    const IMasterNotationPtr masterNotation = m_notation ? m_notation->masterNotation() : nullptr;
-    return masterNotation ? masterNotation->automation() : nullptr;
+    return m_notation ? m_notation->masterNotation()->automation() : nullptr;
 }
 
 void AbstractNotationPaintView::onNoteInputStateChanged()
