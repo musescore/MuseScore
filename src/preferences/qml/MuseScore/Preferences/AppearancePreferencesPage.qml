@@ -118,7 +118,6 @@ PreferencesPage {
 
             scoreInversionEnabled: appearanceModel.scoreInversionEnabled
             isOnlyInvertInDarkTheme: appearanceModel.isOnlyInvertInDarkTheme
-            isCurrentThemeDark: appearanceModel.isCurrentThemeDark
             engravingColor: appearanceModel.engravingColor
 
             colorAndWallpaper.colorLabel: qsTrc("preferences", "Page color")

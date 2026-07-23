@@ -64,7 +64,6 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
     Q_PROPERTY(
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
-    Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
 
     Q_PROPERTY(QColor engravingColor READ engravingColor WRITE setEngravingColor NOTIFY engravingColorChanged)
 
@@ -109,7 +108,6 @@ public:
 
     bool scoreInversionEnabled() const;
     bool isOnlyInvertInDarkTheme() const;
-    bool isCurrentThemeDark() const;
 
     QColor engravingColor() const;
 

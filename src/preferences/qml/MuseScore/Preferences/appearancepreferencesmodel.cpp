@@ -49,6 +49,7 @@ void AppearancePreferencesModel::init()
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
         emit foregroundColorChanged();
+        emit engravingColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -271,11 +272,6 @@ bool AppearancePreferencesModel::scoreInversionEnabled() const
 bool AppearancePreferencesModel::isOnlyInvertInDarkTheme() const
 {
     return notationConfiguration()->isOnlyInvertInDarkTheme();
-}
-
-bool AppearancePreferencesModel::isCurrentThemeDark() const
-{
-    return uiConfiguration()->isDarkMode();
 }
 
 QColor AppearancePreferencesModel::engravingColor() const

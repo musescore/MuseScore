@@ -34,7 +34,6 @@ BaseSection {
 
     property alias scoreInversionEnabled: scoreInversionEnable.checked
     property alias isOnlyInvertInDarkTheme: isOnlyInvertInDarkTheme.checked
-    property bool isCurrentThemeDark
     property alias engravingColor: engravingColorPicker.color
     property alias colorAndWallpaper: colorAndWallpaper
 
@@ -109,12 +108,7 @@ BaseSection {
 
     ColorAndWallpaperSection {
         id: colorAndWallpaper
-
-        enabled: !root.scoreInversionEnabled || (root.isOnlyInvertInDarkTheme && !root.isCurrentThemeDark)
-        opacityOverride: enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
         wallpaperDialogTitle: qsTrc("preferences", "Choose notepaper")
-
         navigation: root.navigation
         navigationRowStart: 2
     }
