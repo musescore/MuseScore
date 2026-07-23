@@ -23,7 +23,12 @@
 
 #include <QIODevice>
 
+#include <map>
+
 #include "engraving/types/types.h"
+
+#include "modularity/ioc.h"
+#include "../ibrailleconfiguration.h"
 
 namespace mu::engraving {
 class Arpeggio;
@@ -148,10 +153,23 @@ private:
     QMap<QString, QString> textToBrailleASCII;
 };
 
+// Rendering decision for a sign under the Music Braille Code 2015 doubling rule.
+// Absence from the map means Single (render the sign once, the default behaviour).
+enum class SignDoubling {
+    Single = 0,        // default: write the sign once
+    Double = 1,        // first note of a group: write the sign twice
+    Omit = 2,          // middle notes of a group: do not write the sign
+    Terminate = 3,     // last note of a group: terminate doubling with one sign
+};
+
 struct BrailleContext {
     std::vector<Note*> previousNote;
     std::vector<ClefType> currentClefType;
     std::vector<Key> currentKey;
+
+    // Per-sign-instance and typed-sign decisions, computed once per Braille run.
+    std::map<const EngravingItem*, std::map<QString, SignDoubling> > signDoubling;
+    bool signDoublingComputed = false;
 };
 
 // Braille export is implemented according to Music Braille Code 2015
@@ -169,11 +187,19 @@ public:
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
 
+    // Music Braille Code 2015: the same sign on this many notes in a row is doubled.
+    static constexpr size_t SIGN_DOUBLING_MIN_GROUP = 4;
+
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
+
     Score* m_score = nullptr;
     BrailleContext m_context;
 
     void resetOctave(size_t stave);
     void resetOctaves();
+
+    void computeSignDoubling();
+    SignDoubling signDoublingState(const EngravingItem* item, const QString& signKey) const;
 
     void credits(QIODevice& device);
     void instruments(QIODevice& device);
@@ -188,6 +214,7 @@ private:
     bool isShortShortSlurConvergence(const std::vector<Slur*>& slurs);
     bool isLongLongSlurConvergence(const std::vector<Slur*>& slurs);
     bool hasTies(ChordRest* chordRest);
+    QString brailleIntervalSign(int interval);
     bool ascendingChords(ClefType clefType);
     BarLine* firstBarline(Measure* measure, track_idx_t track);
     BarLine* lastBarline(Measure* measure, track_idx_t track);
@@ -205,7 +232,8 @@ private:
     QString brailleBreath(Breath* breath);
     QString brailleChord(Chord* chord);
     QString brailleChordInterval(Note* rootNote, const std::vector<Note*>& notes, Note* note);
-    QString brailleChordRootNote(Chord* chord, Note* rootNote);
+    QString brailleChordRootNote(Chord* chord, Note* rootNote, bool includeSpecialNotehead = true);
+    QString brailleSpecialNoteheadSign(Note* note);
     QString brailleClef(Clef* clef);
     QString brailleDynamic(Dynamic* dynamic);
     QString brailleFermata(Fermata* fermata);
