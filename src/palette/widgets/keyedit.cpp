@@ -135,7 +135,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     rendering::PaintOptions opt;
     opt.invertColors = notationConfiguration()->shouldInvertScore();
 
-    muse::draw::Pen pen(opt.invertColors ? engravingConfiguration()->scoreInversionColor()
+    muse::draw::Pen pen(opt.invertColors ? engravingConfiguration()->defaultInvertedColor()
                         : engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(
                       Sid::staffLineWidth).val() * paletteScoreSpatium);

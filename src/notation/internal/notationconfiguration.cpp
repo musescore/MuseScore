@@ -125,6 +125,10 @@ void NotationConfiguration::init()
         m_notationColorChanged.notify();
     });
 
+    engravingConfiguration()->defaultInvertedColorChanged().onReceive(this, [this](const Color&) {
+        m_notationColorChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -353,7 +357,7 @@ void NotationConfiguration::init()
 QColor NotationConfiguration::notationColor() const
 {
     if (shouldInvertScore()) {
-        return engravingConfiguration()->scoreInversionColor().toQColor();
+        return engravingConfiguration()->defaultInvertedColor().toQColor();
     }
 
     return engravingConfiguration()->defaultColor().toQColor();
@@ -361,7 +365,11 @@ QColor NotationConfiguration::notationColor() const
 
 void NotationConfiguration::setNotationColor(const QColor& color)
 {
-    engravingConfiguration()->setDefaultColor(color);
+    if (shouldInvertScore()) {
+        engravingConfiguration()->setDefaultInvertedColor(color);
+    } else {
+        engravingConfiguration()->setDefaultColor(color);
+    }
 }
 
 muse::async::Notification NotationConfiguration::notationColorChanged() const

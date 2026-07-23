@@ -62,7 +62,10 @@ public:
     void setDefaultColor(Color color) override;
     muse::async::Channel<Color> defaultColorChanged() const override;
 
-    Color scoreInversionColor() const override;
+    Color defaultInvertedColor() const override;
+    void setDefaultInvertedColor(Color color) override;
+    muse::async::Channel<Color> defaultInvertedColorChanged() const override;
+
     Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
@@ -124,6 +127,7 @@ public:
 
 private:
     muse::async::Channel<Color> m_defaultColorChanged;
+    muse::async::Channel<Color> m_defaultInvertedColorChanged;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;

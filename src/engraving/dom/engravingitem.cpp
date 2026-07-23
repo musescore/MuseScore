@@ -730,7 +730,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
 
     if (opt.invertColors) {
         if (normalColor == configuration()->defaultColor()) {
-            return maybeOverrideColor(configuration()->scoreInversionColor());
+            return maybeOverrideColor(configuration()->defaultInvertedColor());
         }
         return maybeOverrideColor(normalColor.inverted());
     }
