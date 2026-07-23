@@ -32,6 +32,7 @@ class ProjectActionsController;
 class RecentFilesController;
 class ProjectAutoSaver;
 class EngravingPluginAPIHelper;
+class ImportFileToScoreScenario;
 class ProjectModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -47,5 +48,6 @@ private:
     std::shared_ptr<RecentFilesController> m_recentFilesController;
     std::shared_ptr<ProjectAutoSaver> m_projectAutoSaver;
     std::shared_ptr<EngravingPluginAPIHelper> m_engravingPluginAPIHelper;
+    std::shared_ptr<ImportFileToScoreScenario> m_importFileToScoreScenario;
 };
 }
