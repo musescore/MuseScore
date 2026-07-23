@@ -103,7 +103,6 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                  <guitarDiveTabPos>up</guitarDiveTabPos>
                   <eid>M_M</eid>
                   </GuitarBend>
                 <next>
