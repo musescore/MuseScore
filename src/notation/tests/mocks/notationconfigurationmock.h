@@ -195,6 +195,10 @@ public:
     MOCK_METHOD(void, setNotePlayDurationMilliseconds, (int), (override));
     MOCK_METHOD((muse::async::Channel<int>), notePlayDurationMillisecondsChanged, (), (const, override));
 
+    MOCK_METHOD(int, pedalReleaseGapMs, (), (const, override));
+    MOCK_METHOD(void, setPedalReleaseGapMs, (int), (override));
+    MOCK_METHOD((muse::async::Channel<int>), pedalReleaseGapMsChanged, (), (const, override));
+
     MOCK_METHOD(void, setTemplateModeEnabled, (std::optional<bool>), (override));
     MOCK_METHOD(void, setTestModeEnabled, (std::optional<bool>), (override));
 

@@ -209,6 +209,10 @@ public:
     void setNotePlayDurationMilliseconds(int durationMs)  override;
     muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
 
+    int pedalReleaseGapMs() const override;
+    void setPedalReleaseGapMs(int ms) override;
+    muse::async::Channel<int> pedalReleaseGapMsChanged() const override;
+
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
 

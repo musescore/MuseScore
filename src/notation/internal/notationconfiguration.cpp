@@ -92,6 +92,7 @@ static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/c
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
+static const Settings::Key PEDAL_RELEASE_GAP_MS(module_name, "application/playback/pedalReleaseGapMs");
 static const Settings::Key USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT(module_name,
                                                                             "io/midi/useMidiVelocityAndDurationDuringNoteInput");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
@@ -309,6 +310,14 @@ void NotationConfiguration::init()
         m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
     });
 
+    settings()->setDefaultValue(PEDAL_RELEASE_GAP_MS, Val(0));
+    settings()->setDescription(PEDAL_RELEASE_GAP_MS, muse::trc("notation", "Pedal release gap for playback (in milliseconds)"));
+    settings()->setCanBeManuallyEdited(PEDAL_RELEASE_GAP_MS, true, Val(0));
+    settings()->valueChanged(PEDAL_RELEASE_GAP_MS).onReceive(this, [this](const Val& val) {
+        mu::engraving::MScore::pedalReleaseGapMs = val.toInt();
+        m_pedalReleaseGapMsChanged.send(val.toInt());
+    });
+
     settings()->setDefaultValue(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(true));
     settings()->valueChanged(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).onReceive(this, [this](const Val& val) {
         m_useMidiVelocityAndDurationDuringNoteInputChanged.send(val.toBool());
@@ -340,6 +349,7 @@ void NotationConfiguration::init()
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
+    mu::engraving::MScore::pedalReleaseGapMs = settings()->value(PEDAL_RELEASE_GAP_MS).toInt();
 
     // Restore stored grid size values
     mu::engraving::MScore::setHRaster(settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt());
@@ -985,6 +995,21 @@ void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int d
 async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
 {
     return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+}
+
+int NotationConfiguration::pedalReleaseGapMs() const
+{
+    return settings()->value(PEDAL_RELEASE_GAP_MS).toInt();
+}
+
+void NotationConfiguration::setPedalReleaseGapMs(int ms)
+{
+    settings()->setSharedValue(PEDAL_RELEASE_GAP_MS, Val(ms));
+}
+
+async::Channel<int> NotationConfiguration::pedalReleaseGapMsChanged() const
+{
+    return m_pedalReleaseGapMsChanged;
 }
 
 bool NotationConfiguration::useMidiVelocityAndDurationDuringNoteInput() const
