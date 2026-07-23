@@ -53,6 +53,9 @@ public:
     virtual String iconsFontFamily() const = 0;
 
     virtual Color defaultColor() const = 0;
+    virtual void setDefaultColor(Color color) = 0;
+    virtual muse::async::Channel<Color> defaultColorChanged() const = 0;
+
     virtual Color scoreInversionColor() const = 0;
     virtual Color indicatorIconInvertedSelectionColor() const = 0;
     virtual Color lassoColor() const = 0;

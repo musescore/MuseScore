@@ -121,6 +121,10 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
 
 void NotationConfiguration::init()
 {
+    engravingConfiguration()->defaultColorChanged().onReceive(this, [this](const Color&) {
+        m_notationColorChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -353,6 +357,16 @@ QColor NotationConfiguration::notationColor() const
     }
 
     return engravingConfiguration()->defaultColor().toQColor();
+}
+
+void NotationConfiguration::setNotationColor(const QColor& color)
+{
+    engravingConfiguration()->setDefaultColor(color);
+}
+
+muse::async::Notification NotationConfiguration::notationColorChanged() const
+{
+    return m_notationColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const
