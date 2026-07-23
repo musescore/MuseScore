@@ -121,6 +121,7 @@ PreferencesPage {
             isCurrentThemeDark: appearanceModel.isCurrentThemeDark
             engravingColor: appearanceModel.engravingColor
 
+            colorAndWallpaper.colorLabel: qsTrc("preferences", "Page color")
             colorAndWallpaper.useColor: appearanceModel.foregroundUseColor
             colorAndWallpaper.color: appearanceModel.foregroundColor
             colorAndWallpaper.wallpaperPath: appearanceModel.foregroundWallpaperPath
