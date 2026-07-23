@@ -19,16 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationcontextmenumodel.h"
 
 #include "types/translatablestring.h"
 
 #include "ui/view/iconcodes.h"
 
-#include "widgets/editstyleutils.h"
-
-#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationselection.h"
+
+#include "widgets/editstyleutils.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -96,11 +103,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("action://notation/delete"),
+        makeMenuItem("command://notation/delete"),
     };
 
     return items;
@@ -109,15 +116,15 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem("action://notation/delete");
+    MenuItem* clearItem = makeMenuItem("command://notation/delete");
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
@@ -223,10 +230,10 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/copy")
+        makeMenuItem("command://notation/copy")
     };
 
-    MenuItem* hideItem = makeMenuItem("action://notation/delete");
+    MenuItem* hideItem = makeMenuItem("command://notation/delete");
 
     ui::UiAction action = hideItem->action();
     action.iconCode = ui::IconCode::Code::NONE;
@@ -430,14 +437,14 @@ MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
     item->setState(uiActionsRegister()->actionState(item->action().code));
 
     if (element) {
-        QString pageCode = EditStyleUtils::pageCodeForElement(element);
+        std::string pageCode = EditStyleUtils::pageCodeForElement(element).toStdString();
 
-        if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyleUtils::subPageCodeForElement(element);
-            if (!subPageCode.isEmpty()) {
-                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+        if (!pageCode.empty()) {
+            std::string subPageCode = EditStyleUtils::subPageCodeForElement(element).toStdString();
+            if (!subPageCode.empty()) {
+                item->setArgs(ActionData::make_arg2<std::string, std::string>(pageCode, subPageCode));
             } else {
-                item->setArgs(ActionData::make_arg1<QString>(pageCode));
+                item->setArgs(ActionData::make_arg1<std::string>(pageCode));
             }
         }
     }
@@ -480,8 +487,8 @@ INotationInteractionPtr NotationContextMenuModel::interaction() const
 
 INotationSelectionPtr NotationContextMenuModel::selection() const
 {
-    INotationInteractionPtr interaction = this->interaction();
-    return interaction ? interaction->selection() : nullptr;
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
 }
 
 const EngravingItem* NotationContextMenuModel::currentElement() const

@@ -23,12 +23,15 @@
 #include "mixerpanelmodel.h"
 
 #include "async/notifylist.h"
-
 #include "defer.h"
-
 #include "log.h"
-#include "modularity/ioc.h"
 #include "translation.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotationparts.h"
+#include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace muse;
 using namespace mu::playback;

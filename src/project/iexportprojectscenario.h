@@ -19,16 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IEXPORTPROJECTSCENARIO_H
-#define MU_PROJECT_IEXPORTPROJECTSCENARIO_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 #include "inotationwriter.h"
 #include "internal/exporttype.h"
-#include "types/projecttypes.h"
 
 namespace mu::project {
+struct ExportInfo {
+    QString id;
+    muse::io::path_t exportDirPath;
+    INotationWriter::UnitType unitType;
+    std::vector<notation::INotationWeakPtr> notations;
+};
+
 class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IExportProjectScenario)
@@ -48,5 +54,3 @@ public:
     virtual void setExportInfo(const ExportInfo& exportInfo) = 0;
 };
 }
-
-#endif // MU_PROJECT_IEXPORTPROJECTSCENARIO_H

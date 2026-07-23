@@ -28,6 +28,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
@@ -37,10 +38,14 @@
 #include "engraving/dom/utils.h"
 
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/edittie.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 using namespace muse::async;
 
@@ -80,7 +85,7 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
             updateInputState();
         } else if (shouldSetupInputNote()) {
             const NoteInputState& is = state();
-            const staff_idx_t prevStaffIdx = mu::engraving::track2staff(is.prevTrack());
+            const staff_idx_t prevStaffIdx = track2staff(is.prevTrack());
 
             if (prevStaffIdx != is.staffIdx()) {
                 setupInputNote();
@@ -119,18 +124,18 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
 
     m_interaction->select({ el }, SelectType::SINGLE, 0);
 
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
 
     Duration d(is.duration());
     if (!d.isValid() || d.isZero() || d.type() == DurationType::V_MEASURE) {
         is.setDuration(Duration(DurationType::V_QUARTER));
     }
-    is.setAccidentalType(mu::engraving::AccidentalType::NONE);
+    is.setAccidentalType(AccidentalType::NONE);
 
     is.setRest(false);
     is.setNoteEntryMode(true);
 
-    const Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
+    const Staff* staff = score()->staff(is.track() / VOICES);
 
     if (noteInputMethodAvailable(method, staff, is.tick())) {
         is.setNoteEntryMethod(method);
@@ -143,9 +148,9 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
     }
 
     switch (staff->staffType(is.tick())->group()) {
-    case mu::engraving::StaffGroup::STANDARD:
+    case StaffGroup::STANDARD:
         break;
-    case mu::engraving::StaffGroup::TAB: {
+    case StaffGroup::TAB: {
         int strg = 0;                           // assume topmost string as current string
         // if entering note entry with a note selected and the note has a string
         // set InputState::_string to note physical string
@@ -155,7 +160,7 @@ void NotationNoteInput::startNoteInput(NoteInputMethod method, bool focusNotatio
         is.setString(strg);
         break;
     }
-    case mu::engraving::StaffGroup::PERCUSSION:
+    case StaffGroup::PERCUSSION:
         break;
     }
 
@@ -206,8 +211,8 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
             if (lastSelected && lastSelected->voice()) {
                 // if last selected CR was not in voice 1,
                 // find CR in voice 1 instead
-                track_idx_t track = mu::engraving::trackZeroVoice(lastSelected->track());
-                const mu::engraving::Segment* s = lastSelected->segment();
+                track_idx_t track = trackZeroVoice(lastSelected->track());
+                const Segment* s = lastSelected->segment();
                 if (s) {
                     lastSelected = s->nextChordRest(track, true);
                 }
@@ -274,17 +279,17 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
         el = score()->selection().firstChordRest();
     }
 
-    const mu::engraving::InputState& is = score()->inputState();
+    const InputState& is = score()->inputState();
 
     if (!el) {
-        if (const mu::engraving::Segment* segment = is.lastSegment()) {
+        if (const Segment* segment = is.lastSegment()) {
             el = segment->element(is.track());
         }
     }
 
     if (!el || (!el->isChordRest() && !el->isNote())) {
         // if no note/rest is selected, start with voice 0
-        engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
+        engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / VOICES) * VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -298,8 +303,8 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     }
 
     if (el->isChord()) {
-        mu::engraving::Chord* c = toChord(el);
-        mu::engraving::Note* note = c->selectedNote();
+        Chord* c = toChord(el);
+        Note* note = c->selectedNote();
         if (note == 0) {
             note = c->upNote();
         }
@@ -317,7 +322,7 @@ bool NotationNoteInput::shouldSetupInputNote() const
 
 void NotationNoteInput::setupInputNote()
 {
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
     const EngravingItem* selectedItem = score()->selection().element();
 
     if (selectedItem && selectedItem->isNote()) {
@@ -358,15 +363,15 @@ void NotationNoteInput::setupInputNote()
 
 NoteVal NotationNoteInput::noteValForLine(int line) const
 {
-    const mu::engraving::InputState& is = score()->inputState();
+    const InputState& is = score()->inputState();
 
-    mu::engraving::Position pos;
+    Position pos;
     pos.segment = is.segment();
     pos.staffIdx = is.staffIdx();
     pos.line = line;
 
     bool error = false;
-    const NoteVal nval = score()->noteValForPosition(pos, is.accidentalType(), error);
+    const NoteVal nval = NoteInput::noteValForPosition(score(), pos, is.accidentalType(), error);
     if (error) {
         LOGE() << "Could not find note val for position, staffIdx: " << pos.staffIdx << ", line: " << pos.line;
     }
@@ -382,11 +387,11 @@ void NotationNoteInput::endNoteInput(bool resetState)
         return;
     }
 
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
 
     if (is.slur()) {
-        const std::vector<mu::engraving::SpannerSegment*>& el = is.slur()->spannerSegments();
+        const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
         if (!el.empty()) {
             el.front()->setSelected(false);
         }
@@ -457,7 +462,8 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
     } else {
         startEdit(TranslatableString("undoableAction", "Enter note"));
     }
-    score()->cmdAddPitch(params, addToUpOnCurrentChord, insertNewChord);
+    NoteInput::addPitch(score()->transactionManager()->currentOrDummyTransaction(), score(), params, addToUpOnCurrentChord,
+                        insertNewChord);
 
     apply();
 
@@ -472,14 +478,15 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
     m_interaction->showItem(state().cr());
 }
 
-void NotationNoteInput::padNote(const Pad& pad)
+void NotationNoteInput::applyNoteValueChange(const muse::TranslatableString& actionName,
+                                             const std::function<void(mu::engraving::Transaction&)>& change)
 {
     TRACEFUNC;
 
     m_interaction->hideShadowNote();
 
-    startEdit(TranslatableString("undoableAction", "Pad note"));
-    score()->padToggle(pad);
+    startEdit(actionName);
+    change(score()->transactionManager()->currentOrDummyTransaction());
     apply();
 
     notifyAboutStateChanged();
@@ -487,12 +494,33 @@ void NotationNoteInput::padNote(const Pad& pad)
     m_interaction->checkAndShowError();
 }
 
+void NotationNoteInput::setDuration(DurationType duration)
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Set duration"), [this, duration](mu::engraving::Transaction& tx) {
+        NoteInput::setDuration(tx, score(), duration);
+    });
+}
+
+void NotationNoteInput::toggleRest()
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Toggle rest"), [this](mu::engraving::Transaction& tx) {
+        NoteInput::toggleRest(tx, score());
+    });
+}
+
+void NotationNoteInput::toggleDots(int dots)
+{
+    applyNoteValueChange(muse::TranslatableString("undoableAction", "Toggle dots"), [this, dots](mu::engraving::Transaction& tx) {
+        NoteInput::toggleDots(tx, score(), dots);
+    });
+}
+
 Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Enter note"));
-    Ret ret = score()->putNote(pos, replace, insert);
+    Ret ret = NoteInput::putNote(score()->transactionManager()->currentOrDummyTransaction(), score(), pos, replace, insert);
     apply();
 
     if (ret) {
@@ -513,12 +541,12 @@ void NotationNoteInput::removeNote(const PointF& pos)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& inputState = score()->inputState();
+    InputState& inputState = score()->inputState();
     bool restMode = inputState.rest();
 
     startEdit(TranslatableString("undoableAction", "Delete note"));
     inputState.setRest(!restMode);
-    score()->putNote(pos, false, false);
+    NoteInput::putNote(score()->transactionManager()->currentOrDummyTransaction(), score(), pos, false, false);
     inputState.setRest(restMode);
     apply();
 
@@ -547,7 +575,7 @@ void NotationNoteInput::setInputNote(const NoteInputParams& params)
             nval.headGroup = drumset->noteHead(params.drumPitch);
         }
     } else {
-        nval = noteValForLine(mu::engraving::relStep(params.step, staff->clef(tick)));
+        nval = noteValForLine(relStep(params.step, staff->clef(tick)));
     }
 
     if (nval.pitch > 0) {
@@ -581,7 +609,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
     IF_ASSERT_FAILED(is.isValid()) {
         return;
     }
@@ -613,17 +641,17 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
             newVal.pitch = val.pitch + (up ? 1 : -1);
             break;
         case PitchMode::DIATONIC: {
-            const int oldLine = mu::engraving::noteValToLine(val, staff, tick);
+            const int oldLine = noteValToLine(val, staff, tick);
             const int newLine = oldLine + (up ? -1 : 1);
             newVal = noteValForLine(newLine);
         } break;
         case PitchMode::OCTAVE:
             newVal = val;
-            newVal.pitch += up ? mu::engraving::PITCH_DELTA_OCTAVE : -mu::engraving::PITCH_DELTA_OCTAVE;
+            newVal.pitch += up ? PITCH_DELTA_OCTAVE : -PITCH_DELTA_OCTAVE;
             break;
         }
 
-        newVal.pitch = mu::engraving::clampPitch(newVal.pitch);
+        newVal.pitch = clampPitch(newVal.pitch);
         notes.push_back(newVal);
     }
 
@@ -632,7 +660,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 
 void NotationNoteInput::setRestMode(bool rest)
 {
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
     if (is.rest() == rest) {
         return;
     }
@@ -645,7 +673,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;
 
-    mu::engraving::EditNote::toggleAccidental(score(), accidentalType);
+    EditNote::toggleAccidental(score(), accidentalType);
 
     notifyAboutStateChanged();
 
@@ -656,10 +684,10 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& inputState = score()->inputState();
+    InputState& inputState = score()->inputState();
 
-    std::set<SymbolId> articulations = mu::engraving::updateArticulations(
-        inputState.articulationIds(), articulationSymbolId, mu::engraving::ArticulationsUpdateMode::Remove);
+    std::set<SymbolId> articulations = updateArticulations(
+        inputState.articulationIds(), articulationSymbolId, ArticulationsUpdateMode::Remove);
     inputState.setArticulationIds(articulations);
 
     notifyAboutStateChanged();
@@ -671,7 +699,7 @@ void NotationNoteInput::setDrumNote(int note)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& is = score()->inputState();
+    InputState& is = score()->inputState();
     if (is.drumNote() == note) {
         return;
     }
@@ -688,7 +716,7 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& inputState = score()->inputState();
+    InputState& inputState = score()->inputState();
     if (!isVoiceIndexValid(voiceIndex) || voiceIndex == inputState.voice()) {
         return;
     }
@@ -709,15 +737,15 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 {
     TRACEFUNC;
 
-    const mu::engraving::InputState& inputState = score()->inputState();
+    const InputState& inputState = score()->inputState();
 
     startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
-    mu::engraving::ChordRest* chordRest = inputState.cr();
+    ChordRest* chordRest = inputState.cr();
     if (chordRest) {
         Fraction ratio = options.ratio;
         if (options.autoBaseLen) {
-            ratio.setDenominator(mu::engraving::Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+            ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
         }
         score()->changeCRlen(chordRest, inputState.duration());
         score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
@@ -760,19 +788,19 @@ muse::RectF NotationNoteInput::cursorRect() const
         return {};
     }
 
-    const mu::engraving::InputState& inputState = score()->inputState();
-    const mu::engraving::Segment* segment = inputState.segment();
+    const InputState& inputState = score()->inputState();
+    const Segment* segment = inputState.segment();
     if (!segment) {
         return {};
     }
 
-    const mu::engraving::System* system = segment->measure()->system();
+    const System* system = segment->measure()->system();
     if (!system) {
         return {};
     }
 
-    const mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
-    const mu::engraving::staff_idx_t staffIdx = mu::engraving::track2staff(track);
+    const track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
+    const staff_idx_t staffIdx = track2staff(track);
 
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
@@ -781,7 +809,7 @@ muse::RectF NotationNoteInput::cursorRect() const
 
     const double globalSpatium = score()->style().spatium();
 
-    const mu::engraving::StaffType* staffType = staff->staffType(inputState.tick());
+    const StaffType* staffType = staff->staffType(inputState.tick());
     const bool isTabStaff = staffType->isTabStaff();
     const double localSpatium = staffType->spatium();
 
@@ -790,7 +818,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     const RectF segmentContentRect = ::segmentContentRect(segment, track);
     double x = segmentContentRect.x() + segment->pagePos().x();
 
-    const double barNoteDist = score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance);
+    const double barNoteDist = score()->style().styleAbsolute(Sid::barNoteDistance);
     if (segment->x() < barNoteDist) {
         x += barNoteDist - segment->x();
     }
@@ -856,15 +884,15 @@ muse::RectF NotationNoteInput::cursorRect() const
     return result;
 }
 
-void NotationNoteInput::addSlur(mu::engraving::Slur* slur)
+void NotationNoteInput::addSlur(Slur* slur)
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& inputState = score()->inputState();
+    InputState& inputState = score()->inputState();
     inputState.setSlur(slur);
 
     if (slur) {
-        std::vector<mu::engraving::SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
+        std::vector<SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
         if (!slurSpannerSegments.empty()) {
             slurSpannerSegments.front()->setSelected(true);
         }
@@ -877,8 +905,8 @@ void NotationNoteInput::resetSlur()
 {
     TRACEFUNC;
 
-    mu::engraving::InputState& inputState = score()->inputState();
-    mu::engraving::Slur* slur = inputState.slur();
+    InputState& inputState = score()->inputState();
+    Slur* slur = inputState.slur();
     if (!slur) {
         return;
     }
@@ -893,7 +921,7 @@ void NotationNoteInput::addTie()
     TRACEFUNC;
 
     // Calls `startEdit` internally
-    score()->cmdAddTie();
+    EditTie::cmdAddTie(score());
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();
@@ -904,7 +932,7 @@ void NotationNoteInput::addLaissezVib()
     TRACEFUNC;
 
     // Calls `startEdit` internally
-    score()->cmdToggleLaissezVib();
+    EditTie::cmdToggleLaissezVib(score());
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();
@@ -925,7 +953,7 @@ void NotationNoteInput::setGetViewRectFunc(const std::function<RectF()>& func)
     m_getViewRectFunc = func;
 }
 
-mu::engraving::Score* NotationNoteInput::score() const
+Score* NotationNoteInput::score() const
 {
     return m_getScore->score();
 }
@@ -939,7 +967,7 @@ void NotationNoteInput::apply()
 {
     m_undoStack->commitChanges();
 
-    if (mu::engraving::ChordRest* chordRest = score()->inputState().cr()) {
+    if (ChordRest* chordRest = score()->inputState().cr()) {
         m_interaction->showItem(chordRest);
     }
 }
@@ -985,7 +1013,7 @@ void NotationNoteInput::doubleNoteInputDuration()
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Double note input duration"));
-    score()->cmdPadNoteIncreaseTAB();
+    NoteInput::increaseDuration(score()->transactionManager()->currentOrDummyTransaction(), score());
     apply();
 
     notifyAboutStateChanged();
@@ -997,7 +1025,7 @@ void NotationNoteInput::halveNoteInputDuration()
     TRACEFUNC;
 
     startEdit(TranslatableString("undoableAction", "Halve note input duration"));
-    score()->cmdPadNoteDecreaseTAB();
+    NoteInput::decreaseDuration(score()->transactionManager()->currentOrDummyTransaction(), score());
     apply();
 
     notifyAboutStateChanged();

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "abstractaudiowriter.h"
 
 #include <QCoreApplication>
@@ -27,8 +28,9 @@
 #include <QThread>
 
 #include "global/containers.h"
-
 #include "log.h"
+
+#include "notation/inotation.h"
 
 using namespace muse;
 using namespace muse::audio;

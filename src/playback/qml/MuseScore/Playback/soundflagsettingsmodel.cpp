@@ -22,13 +22,19 @@
 
 #include "soundflagsettingsmodel.h"
 
-#include "engraving/types/types.h"
+#include "actions/actiontypes.h"
+#include "audio/common/audioutils.h"
+
 #include "engraving/dom/utils.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
+#include "engraving/types/types.h"
 
-#include "audio/common/audioutils.h"
-#include "actions/actiontypes.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
 
 #include "translation.h"
 #include "log.h"

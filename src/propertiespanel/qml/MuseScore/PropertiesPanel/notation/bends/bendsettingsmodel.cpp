@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "bendsettingsmodel.h"
+
+#include "engraving/dom/guitarbend.h"
+#include "engraving/dom/stafftype.h"
 
 #include "translation.h"
 #include "types/bendtypes.h"
-
-#include "engraving/dom/bend.h"
-#include "engraving/dom/guitarbend.h"
 
 using namespace mu::engraving;
 using namespace mu::propertiespanel;

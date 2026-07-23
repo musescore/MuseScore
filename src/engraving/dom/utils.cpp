@@ -117,23 +117,16 @@ Measure* Score::tick2measureMM(const Fraction& t) const
     return measure->coveringMMRestOrThis();
 }
 
-//---------------------------------------------------------
-//   tick2measureBase
-//---------------------------------------------------------
-
 MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 {
-    std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
-    for (MeasureBase* mb : mbList) {
-        Fraction st = mb->tick();
-        Fraction l  = mb->ticks();
-        if (tick >= st && tick < (st + l)) {
-            return mb;
-        }
+    if (tick == Fraction(-1, 1)) {   // special number
+        return m_measures.last();
+    }
+    if (tick <= Fraction(0, 1)) {
+        return m_measures.first();
     }
 
-    LOGD("tick2measureBase %d not found", tick.ticks());
-    return nullptr;
+    return m_measures.firstMeasureBaseAtTick(tick.ticks());
 }
 
 //---------------------------------------------------------
@@ -274,51 +267,6 @@ void Score::checkChordList()
 }
 
 //---------------------------------------------------------
-//   nextSeg
-//---------------------------------------------------------
-
-Fraction Score::nextSeg(const Fraction& tick, int track)
-{
-    Segment* seg = tick2segment(tick);
-    while (seg) {
-        seg = seg->next1(SegmentType::ChordRest);
-        if (seg == 0) {
-            break;
-        }
-        if (seg->element(track)) {
-            break;
-        }
-    }
-    return seg ? seg->tick() : Fraction(-1, 1);
-}
-
-//---------------------------------------------------------
-//   nextSeg1
-//---------------------------------------------------------
-
-Segment* nextSeg1(Segment* seg)
-{
-    Segment* nextSeg = seg;
-    while (nextSeg && nextSeg->rtick() == seg->rtick()) {
-        nextSeg = nextSeg->next1(SegmentType::Duration);
-    }
-    return nextSeg;
-}
-
-//---------------------------------------------------------
-//   prevSeg1
-//---------------------------------------------------------
-
-Segment* prevSeg1(Segment* seg)
-{
-    Segment* prevSeg = seg;
-    while (prevSeg && prevSeg->rtick() == seg->rtick()) {
-        prevSeg = prevSeg->prev1(SegmentType::Duration);
-    }
-    return prevSeg;
-}
-
-//---------------------------------------------------------
 //    next/prevChordNote
 //
 //    returns the top note of the next/previous chord. If a
@@ -433,18 +381,6 @@ int line2pitch(int line, ClefType clef, Key key)
 
     int pitch = pitchKeyAdjust(l, key) + octave * PITCH_DELTA_OCTAVE;
     return clampPitch(pitch);
-}
-
-//---------------------------------------------------------
-//   quantizeLen
-//---------------------------------------------------------
-
-int quantizeLen(int len, int raster)
-{
-    if (raster == 0) {
-        return len;
-    }
-    return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
 static const char16_t* valSharp[] = {
@@ -640,7 +576,8 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 
     int idx1 = note->unisonIndex();
     Part* part = chord->part();
-    for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+    const TrackRange trackRange = part->trackRange();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
         EngravingItem* e = nextSegment->element(track);
         if (!e || !e->isChord()) {
             continue;
@@ -1562,7 +1499,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const Measure* masterMeasure = master->tick2measure(measure->tick());
+    const Measure* masterMeasure = master->tick2measureMM(measure->tick());
 
     const RepeatList& repeatList = master->repeatList(true, false);
 
@@ -1582,7 +1519,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* prevSeg = *prevSegIt;
         const Measure* lastMasterMeasure = prevSeg->lastMeasure();
-        Measure* lastMeasure = lastMasterMeasure ? score->tick2measure(lastMasterMeasure->tick()) : nullptr;
+        Measure* lastMeasure = lastMasterMeasure ? score->tick2measureMM(lastMasterMeasure->tick()) : nullptr;
         if (!lastMeasure) {
             continue;
         }
@@ -1627,6 +1564,13 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
 
     const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
     const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
+
+    if (firstMasterMeasure) {
+        firstMasterMeasure = firstMasterMeasure->coveringMMRestOrThis();
+    }
+    if (secondMasterMeasure) {
+        secondMasterMeasure = secondMasterMeasure->coveringMMRestOrThis();
+    }
 
     Score* score = firstSeg->score();
 

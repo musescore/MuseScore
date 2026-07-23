@@ -227,7 +227,8 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
     DynamicLevelLayers expectedLayers;
 
     auto addDynToAllStavesAndVoices = [score, part, &expectedLayers](mpe::DynamicType dyn, int tick) {
-        for (track_idx_t trackIdx = part->startTrack(); trackIdx < part->endTrack(); ++trackIdx) {
+        const TrackRange trackRange = part->trackRange();
+        for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
             expectedLayers[static_cast<layer_idx_t>(trackIdx)][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
         }
     };
@@ -654,7 +655,8 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_TextArticulations)
     EXPECT_EQ(actualArticulations, expectedArticulations);
 
     // [THEN] We can get articulations for a specific track & tick
-    for (track_idx_t trackIdx = part->startTrack(); trackIdx < part->endTrack(); ++trackIdx) {
+    const TrackRange trackRange = part->trackRange();
+    for (track_idx_t trackIdx = trackRange.startTrack; trackIdx < trackRange.endTrack; ++trackIdx) {
         TextArticulationEvent event = ctx.textArticulation(trackIdx, 0);
         EXPECT_TRUE(event.text.empty());
 

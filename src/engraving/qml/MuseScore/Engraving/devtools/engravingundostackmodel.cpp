@@ -19,12 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "engravingundostackmodel.h"
 
 #include "notation/inotation.h"
 
+#include "engraving/dom/score.h"
 #include "engraving/editing/transaction/undoablecommand.h"
 #include "engraving/editing/transaction/undostack.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "log.h"
 

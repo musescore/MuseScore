@@ -34,7 +34,6 @@
 #include "types/typesconv.h"
 
 #include "mscore.h"
-#include "navigate.h"
 #include "score.h"
 #include "staff.h"
 

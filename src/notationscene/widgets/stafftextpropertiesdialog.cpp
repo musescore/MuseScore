@@ -19,12 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "stafftextpropertiesdialog.h"
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftextbase.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationundostack.h"
 
 #include "ui/view/widgetstatestore.h"
 

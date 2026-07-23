@@ -69,19 +69,21 @@ jobs:
       uses: actions/checkout@v7
       with:
         submodules: recursive
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-        restore-keys: |
-          ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-          ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-    - name: Setup ccache
-      run: |
-        sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+          restore-keys: |
+            ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+            ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+      - name: Setup ccache
+        run: |
+          sudo apt-get install -y ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
@@ -134,19 +136,21 @@ jobs:
       with:
         ref: ${{ needs.setup.outputs.reference_ref }}
         submodules: recursive
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-        restore-keys: |
-          ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
-          ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
-    - name: Setup ccache
-      run: |
-        sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+          restore-keys: |
+            ${{runner.os}}-${{runner.arch}}-vtests-reference-ccache-
+            ${{runner.os}}-${{runner.arch}}-vtests-current-ccache-
+      - name: Setup ccache
+        run: |
+          sudo apt-get install -y ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
@@ -189,7 +193,7 @@ jobs:
 
   generate_and_compare:
     name: "Generate and Compare"
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-24.04
     needs: [setup, build_current, build_reference]
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -197,31 +201,40 @@ jobs:
       uses: actions/checkout@v7
       with:
         submodules: recursive
-    - name: Download current
-      uses: actions/download-artifact@v8
-      with:
-        name: current_build
-        path: ./musescore_current
-    - name: Download reference
-      uses: actions/download-artifact@v8
-      with:
-        name: reference_build
-        path: ./musescore_reference
-    - name: Generate PNGs
-      run: |
-        bash ./buildscripts/ci/vtests/generate_pngs.sh
-      env:
-        ASAN_OPTIONS: "detect_leaks=0"
+    - parallel:
+      - name: Setup environment
+        run: |
+          sudo apt-get install libegl1 imagemagick -y
+          echo "ASAN_OPTIONS=detect_leaks=0" >> $GITHUB_ENV
+          echo "QT_QPA_PLATFORM=offscreen" >> $GITHUB_ENV
+          echo "MU_QT_QPA_PLATFORM=offscreen" >> $GITHUB_ENV
+      - name: Download reference
+        uses: actions/download-artifact@v8
+        with:
+          name: reference_build
+          path: ./vtests_reference
+      - name: Download current
+        uses: actions/download-artifact@v8
+        with:
+          name: current_build
+          path: ./vtests_current
+    - parallel:
+      - name: Generate reference PNGs
+        run: |
+          ./buildscripts/ci/vtests/generate_pngs.sh ./vtests_reference
+      - name: Generate current PNGs
+        run: |
+          ./buildscripts/ci/vtests/generate_pngs.sh ./vtests_current
     - name: Compare PNGs
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
-        ./vtest/vtest-compare-pngs.sh --ci 1
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c vtests_current/pngs -r vtests_reference/pngs -o ./comparison
     - name: Compare PNGs small
       run: |
-        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_small -r ./reference_pngs_small -o ./comparison/small
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./vtests_current/pngs_small -r ./vtests_reference/pngs_small -o ./comparison/small
     - name: Compare PNGs gp
       run: |
-        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_gp_small -r ./reference_pngs_gp_small -o ./comparison/gp
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./vtests_current/pngs_gp_small -r ./vtests_reference/pngs_gp_small -o ./comparison/gp
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
       uses: actions/upload-artifact@v7

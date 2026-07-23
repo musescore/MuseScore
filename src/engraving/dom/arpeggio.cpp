@@ -81,7 +81,7 @@ void Arpeggio::findAndAttachToChords()
     const track_idx_t strack = track();
     const Chord* _chord = chord();
     const Part* part = _chord->part();
-    const track_idx_t btrack = part->endTrack();
+    const track_idx_t btrack = part->trackRange().endTrack;
 
     if (strack + m_span > btrack) {
         rebaseEndAnchor(AnchorRebaseDirection::UP);
@@ -123,7 +123,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
         // Move arpeggio to chord above
         Staff* s = staff();
         Part* part = s->part();
-        track_idx_t topTrack = part->startTrack();
+        track_idx_t topTrack = part->trackRange().startTrack;
         if (track() > topTrack) {
             // Loop through voices til we find a chord
             for (int curTrack = static_cast<int>(track()) - 1; curTrack >= static_cast<int>(topTrack); curTrack--) {
@@ -177,7 +177,7 @@ void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
         // Move end to chord below
         Staff* s = staff();
         Part* part = s->part();
-        track_idx_t btrack = part->endTrack();
+        track_idx_t btrack = part->trackRange().endTrack;
         if (track() + m_span < btrack) {
             // Loop through voices til we find a chord
             for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
@@ -403,7 +403,7 @@ bool Arpeggio::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Arpeggio::drop(EditData& data)
+EngravingItem* Arpeggio::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {

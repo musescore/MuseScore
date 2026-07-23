@@ -19,24 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONSELECTION_H
-#define MU_NOTATION_NOTATIONSELECTION_H
+
+#pragma once
 
 #include "../inotationselection.h"
 
 #include "igetscore.h"
-
-namespace mu::engraving {
-class MeasureBase;
-class Score;
-class System;
-}
+#include "../notationtypes.h"
+#include "../inotationelements.h"
 
 namespace mu::notation {
+//! NOTE Helper interface,
+// which contains interaction methods called in the selection.
+// This may not be necessary after refactoring,
+// or it could be implemented differently.
+class IInteractionForSelection
+{
+public:
+
+    virtual ~IInteractionForSelection() = default;
+
+    virtual void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) = 0;
+    virtual void resetHitElementContext() = 0;
+
+    virtual bool isTextEditingStarted() const = 0;
+    virtual void selectAllText() = 0;
+    virtual bool isEditingElement() const = 0;
+    virtual void navigateToNearText(MoveDirection direction) = 0;
+    virtual void endEditElement() = 0;
+    virtual void startEditElement(EngravingItem* element) = 0;
+
+    virtual INotationElementsPtr elements() const = 0;
+};
+
 class NotationSelection : public INotationSelection
 {
 public:
-    NotationSelection(IGetScore* getScore);
+    NotationSelection(IGetScore* getScore, IInteractionForSelection* interaction);
 
     bool isNone() const override;
     bool isRange() const override;
@@ -46,32 +65,58 @@ public:
     muse::ByteArray mimeData() const override;
     QMimeData* qMimeData() const override;
 
-    EngravingItem* element() const override;
-    const std::vector<EngravingItem*>& elements() const override;
+    engraving::EngravingItem* element() const override;
+    const std::vector<engraving::EngravingItem*>& elements() const override;
 
-    std::vector<Note*> notes(NoteFilter filter) const override;
+    std::vector<engraving::Note*> notes(NoteFilter filter) const override;
 
     muse::RectF canvasBoundingRect() const override;
 
     INotationSelectionRangePtr range() const override;
 
-    EngravingItem* lastElementHit() const override;
+    engraving::EngravingItem* lastElementHit() const override;
 
-    void onElementHit(EngravingItem*);
+    void onElementHit(engraving::EngravingItem*);
 
     mu::engraving::MeasureBase* startMeasureBase() const override;
     mu::engraving::MeasureBase* endMeasureBase() const override;
     std::vector<mu::engraving::System*> selectedSystems() const override;
+    std::vector<mu::engraving::Page*> pagesContainingSelection() const override;
 
     bool elementsSelected(const mu::engraving::ElementTypeSet& types) const override;
+
+    void select(SelectionTarget target);
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0);
+    void clearSelection();
+    muse::async::Notification selectionChanged() const;
+    void notifyAboutSelectionChangedIfNeed();
+    void moveSelection(MoveDirection d, MoveSelectionType type);
 
 private:
     mu::engraving::Score* score() const;
 
-    EngravingItem* m_lastElementHit = nullptr;
+    void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
+
+    void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
+    void selectFirstElement(bool frame = false);
+    void selectLastElement();
+    void moveElementSelection(MoveDirection d);
+    void moveStringSelection(MoveDirection d);
+    void moveSegmentSelection(MoveDirection d);
+    void moveChordNoteSelection(MoveDirection d);
+    void selectTopOrBottomOfChord(MoveDirection d);
+    void selectAllSimilarElements();
+    void selectAllSimilarElementsInStaff();
+    void selectAllSimilarElementsInRange();
+    void selectAllNotesInChord();
+    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
+    void selectAll();
+    void selectSection();
+
+    engraving::EngravingItem* m_lastElementHit = nullptr;
     IGetScore* m_getScore = nullptr;
+    IInteractionForSelection* m_interaction = nullptr;
     INotationSelectionRangePtr m_range;
+    muse::async::Notification m_selectionChanged;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSELECTION_H

@@ -21,7 +21,6 @@
  */
 
 #include "notationautomation.h"
-#include "engraving/automation/iautomation.h"
 #include "engraving/dom/masterscore.h"
 
 using namespace mu::notation;

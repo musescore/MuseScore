@@ -70,6 +70,7 @@ public:
 
 protected:
     Sid defaultPosSid() const override;
+    bool isInSpannerMap() const override { return false; }
 
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;

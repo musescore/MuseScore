@@ -133,7 +133,7 @@ public:
     void transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func);
 
     void beginTransaction(const muse::TranslatableString& description);
-    void endTransaction(bool rollback = false, bool layoutAllParts = false);
+    void endTransaction(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false);
 
     /// Returns the current transaction, if any is active.
     /// Where possible, prefer using `transaction()` instead of this method.

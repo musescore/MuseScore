@@ -211,5 +211,7 @@ private:
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
+
+    std::unordered_map<mu::engraving::track_idx_t, const GPBeat*> m_lastWhammyBeat;
 };
 }

@@ -505,11 +505,11 @@ void System::setIsLocked(bool locked)
         return;
     }
     Transaction& tx = system()->score()->transactionManager()->currentOrDummyTransaction();
-    const mu::engraving::SystemLock* currentLock = system()->systemLock();
+    const mu::engraving::RangeLock* currentLock = system()->systemLock();
     if (currentLock && !locked) {
-        EditSystemLocks::undoRemoveSystemLock(tx, currentLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, system()->score(), currentLock);
     } else if (!currentLock && locked) {
-        EditSystemLocks::undoAddSystemLock(tx, system()->score(), new mu::engraving::SystemLock(system()->first(), system()->last()));
+        EditSystemLocks::undoAddSystemLock(tx, system()->score(), new mu::engraving::RangeLock(system()->first(), system()->last()));
     }
 }
 

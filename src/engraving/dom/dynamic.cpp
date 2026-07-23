@@ -21,7 +21,9 @@
  */
 #include "dynamic.h"
 
+#include "../editing/edithairpin.h"
 #include "../editing/textedit.h"
+#include "../editing/transaction/transaction.h"
 #include "../types/typesconv.h"
 
 #include "dynamichairpingroup.h"
@@ -306,12 +308,12 @@ bool Dynamic::acceptDrop(EditData& ed) const
     return droppedType == ElementType::DYNAMIC || droppedType == ElementType::EXPRESSION || droppedType == ElementType::HAIRPIN;
 }
 
-EngravingItem* Dynamic::drop(EditData& ed)
+EngravingItem* Dynamic::drop(Transaction& tx, EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
 
     if (item->isHairpin()) {
-        score()->addHairpinToDynamic(toHairpin(item), this);
+        EditHairpin::addHairpinToDynamic(tx, score(), toHairpin(item), this);
         return item;
     }
 

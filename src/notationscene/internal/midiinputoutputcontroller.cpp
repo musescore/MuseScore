@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "midiinputoutputcontroller.h"
 
 #include "midi/miditypes.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationmidiinput.h"
 
 #include "log.h"
 
@@ -146,7 +150,7 @@ void MidiInputOutputController::onMidiEventReceived(const muse::midi::tick_t tic
         return;
     }
 
-    auto notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = globalContext()->currentNotation();
     if (notation) {
         notation->midiInput()->onMidiEventReceived(event);
     }

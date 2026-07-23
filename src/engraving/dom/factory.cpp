@@ -75,6 +75,7 @@
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
+#include "pagelockindicator.h"
 #include "palmmute.h"
 #include "parenthesis.h"
 #include "partialtie.h"
@@ -102,7 +103,7 @@
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "systemlock.h"
+#include "systemlockindicator.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tapping.h"
@@ -302,6 +303,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
     case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::PAGE_LOCK_INDICATOR:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
     case ElementType::HAMMER_ON_PULL_OFF_TEXT:
     case ElementType::TAPPING_HALF_SLUR:
@@ -476,6 +478,15 @@ CREATE_ITEM_IMPL(NoteLine, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(NoteLine, Note);
 
 CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
+
+PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
+{
+    PageLockIndicator* pli = new PageLockIndicator(parent, lock);
+    pli->setAccessibleEnabled(isAccessibleEnabled);
+    return pli;
+}
+
+COPY_ITEM_IMPL(PageLockIndicator)
 
 CREATE_ITEM_IMPL(PartialTie, Note, isAccessibleEnabled)
 COPY_ITEM_IMPL(PartialTie)
@@ -747,7 +758,7 @@ CREATE_ITEM_IMPL(TimeTickAnchor, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(StaffVisibilityIndicator, System, isAccessibleEnabled)
 
-SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
     SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
     sli->setAccessibleEnabled(isAccessibleEnabled);

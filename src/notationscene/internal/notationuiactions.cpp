@@ -24,8 +24,19 @@
 #include <unordered_map>
 
 #include "types/translatablestring.h"
+
 #include "ui/view/iconcodes.h"
+
 #include "context/shortcutcontext.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu;
 using namespace mu::notation;
@@ -82,6 +93,59 @@ static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)")
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
 const UiActionList NotationUiActions::s_actions = {
+    UiAction("action://copy",
+             { "action://notation/copy" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Copy"),
+             TranslatableString("action", "Copy"),
+             IconCode::Code::COPY
+             ),
+    UiAction("action://cut",
+             { "action://notation/cut" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Cu&t"),
+             TranslatableString("action", "Cut"),
+             IconCode::Code::CUT
+             ),
+    UiAction("action://paste",
+             { "action://notation/paste" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Past&e"),
+             TranslatableString("action", "Paste"),
+             IconCode::Code::PASTE
+             ),
+    UiAction("action://undo",
+             { "action://notation/undo" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Undo"),
+             TranslatableString("action", "Undo"),
+             IconCode::Code::UNDO
+             ),
+    UiAction("action://redo",
+             { "action://notation/redo" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Redo"),
+             TranslatableString("action", "Redo"),
+             IconCode::Code::REDO
+             ),
+    UiAction("action://delete",
+             { "action://notation/delete" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "De&lete"),
+             TranslatableString("action", "Delete"),
+             IconCode::Code::DELETE_TANK
+             ),
+    UiAction("action://cancel",
+             { "action://notation/cancel" },
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY
+             ),
     UiAction("action://notation/copy",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED,
@@ -372,12 +436,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Select sectio&n"),
              TranslatableString("action", "Select section")
-             ),
-    UiAction("select-notes-in-chord",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Select all &notes in chord"),
-             TranslatableString("action", "Select all notes in chord")
              ),
     UiAction("select-similar",
              mu::context::UiCtxProjectOpened,
@@ -675,6 +733,32 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Create system from selection"),
              TranslatableString("action", "Create system from selection")
+             ),
+    UiAction("apply-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Add/remove page lock"),
+             TranslatableString("action", "Add/remove page lock")
+             ),
+    UiAction("move-measure-to-prev-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to previous page"),
+             TranslatableString("action", "Move measure to previous page"),
+             IconCode::Code::ARROW_UP
+             ),
+    UiAction("move-measure-to-next-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to next page"),
+             TranslatableString("action", "Move measure to next page"),
+             IconCode::Code::ARROW_DOWN
+             ),
+    UiAction("make-into-page",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Create page from selection"),
+             TranslatableString("action", "Create page from selection")
              ),
     UiAction("section-break",
              mu::context::UiCtxProjectOpened,
@@ -2794,7 +2878,7 @@ NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> c
 
 void NotationUiActions::init()
 {
-    m_controller->currentNotationNoteInputChanged().onNotify(this, [this]() {
+    m_controller->noteInputStateChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ NOTE_INPUT_ACTION_CODE });
     });
 
@@ -2861,7 +2945,7 @@ void NotationUiActions::init()
         }
     });
 
-    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
+    playbackController()->isPlayingChanged().onReceive(this, [this](bool) {
         updateActionsEnabled(actionsList());
     });
 
@@ -2934,22 +3018,22 @@ bool NotationUiActions::isScoreConfigAction(const ActionCode& code) const
 bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const ScoreConfig& cfg) const
 {
     if (SHOW_INVISIBLE_CODE == code) {
-        return cfg.isShowInvisibleElements;
+        return cfg.isShown(ScoreConfigType::ShowInvisibleElements);
     }
     if (SHOW_UNPRINTABLE_CODE == code) {
-        return cfg.isShowUnprintableElements;
+        return cfg.isShown(ScoreConfigType::ShowUnprintableElements);
     }
     if (SHOW_FRAMES_CODE == code) {
-        return cfg.isShowFrames;
+        return cfg.isShown(ScoreConfigType::ShowFrames);
     }
     if (SHOW_PAGEBORDERS_CODE == code) {
-        return cfg.isShowPageMargins;
+        return cfg.isShown(ScoreConfigType::ShowPageMargins);
     }
     if (SHOW_SOUND_FLAGS == code) {
-        return cfg.isShowSoundFlags;
+        return cfg.isShown(ScoreConfigType::ShowSoundFlags);
     }
     if (SHOW_IRREGULAR_CODE == code) {
-        return cfg.isMarkIrregularMeasures;
+        return cfg.isShown(ScoreConfigType::MarkIrregularMeasures);
     }
 
     return false;

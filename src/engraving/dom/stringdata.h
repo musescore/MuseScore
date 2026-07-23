@@ -20,15 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TABLATURE_H
-#define MU_ENGRAVING_TABLATURE_H
+#pragma once
 
 #include <cstddef>
 #include <vector>
 #include <map>
 
-#include "engraving/types/fraction.h"
-#include "engraving/types/types.h"
+#include "../types/fraction.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Chord;
@@ -64,8 +63,8 @@ public:
 
     void        set(const StringData& src);
     bool        convertPitch(int pitch, int pitchOffset, int* string, int* fret, const CapoParams& capo = {}) const;
-    bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
-    bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
+    bool        convertPitch(int pitch, const Staff* staff, int* string, int* fret) const;
+    bool        convertPitch(int pitch, const Staff* staff, const Fraction& tick, int* string, int* fret) const;
     int         fret(int pitch, int string, const Staff* staff) const;
     int         fret(int pitch, int string, const Staff* staff, const Fraction& tick) const;
     void        fretChords(Chord* chord) const;
@@ -107,5 +106,4 @@ private:
     static bool bFretting;
     bool m_useFlats = false;
 };
-} // namespace mu::engraving
-#endif
+}

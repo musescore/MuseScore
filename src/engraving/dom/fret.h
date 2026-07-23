@@ -29,10 +29,11 @@
 #include "draw/types/font.h"
 
 namespace mu::engraving {
-class Factory;
-class StringData;
 class Chord;
+class Factory;
 class Harmony;
+class StringData;
+class Transaction;
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -206,7 +207,7 @@ public:
 
     RectF drag(EditData&) override;
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 

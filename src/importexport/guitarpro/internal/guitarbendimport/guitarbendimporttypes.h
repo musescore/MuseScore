@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,7 +21,12 @@
  */
 #pragma once
 
+#include <map>
+#include <unordered_map>
+#include <vector>
+
 #include <engraving/types/fraction.h>
+#include <engraving/types/types.h>
 
 namespace mu::engraving {
 class Note;
@@ -29,7 +34,11 @@ class Chord;
 }
 
 namespace mu::iex::guitarpro {
-struct BendNoteData {
+constexpr int GP_PITCH_PER_QUARTERTONE = 25;
+
+// ---- shared types ----
+
+struct SegmentData {
     double startFactor = 0.0;
     double endFactor = 1.0;
     int quarterTones = 0;
@@ -42,16 +51,24 @@ struct LastGraceNoteData {
 };
 
 struct GraceNotesImportInfo {
-    std::vector<BendNoteData> data;
+    std::vector<SegmentData> data;
     LastGraceNoteData lastNoteData;
 };
 
-using bend_data_map_t       = std::map<size_t /* idx in chord */, BendNoteData>;
-using grace_bend_data_map_t = std::map<size_t /* idx in chord */, GraceNotesImportInfo >; // each note can have multiple grace notes connected
+using segment_data_map_t = std::map<size_t, SegmentData>;
+using grace_segment_map_t = std::map<size_t /* idx in chord */, GraceNotesImportInfo>; // each note can have multiple grace notes connected
+
+using GraceAfterTrackMap = std::unordered_map<mu::engraving::track_idx_t,
+                                              std::map<mu::engraving::Fraction, grace_segment_map_t> >;
+
+using TiedNotesTrackMap = std::unordered_map<mu::engraving::track_idx_t,
+                                             std::map<mu::engraving::Fraction, segment_data_map_t> >;
+
+// ---- bend types ----
 
 struct BendChordData {
     mu::engraving::Fraction startTick;
-    bend_data_map_t noteDataByIdx;
+    segment_data_map_t noteDataByIdx;
 };
 
 struct BendSegment {
@@ -93,4 +110,41 @@ struct ChordImportedBendData {
 };
 
 using tied_chords_bend_data_chunk_t = std::map<mu::engraving::Fraction, ChordImportedBendData>;
+
+// ---- dive types ----
+
+enum class DiveType {
+    NONE,
+    DIVE,
+    PRE_DIVE,
+};
+
+struct ImportedDiveInfo {
+    const mu::engraving::Note* note = nullptr;
+    DiveType type = DiveType::NONE;
+    int quarterTones = 0;
+    double startFactor = 0.0;
+    double endFactor = 1.0;
+    int whammyOriginQt = 0;
+    int whammyDestQt = 0;
+    std::vector<SegmentData> graceDiveSegments;
+};
+
+// ---- data contexts ----
+
+struct BendDataContextSplitChord;
+
+struct BendDataContext {
+    GraceAfterTrackMap graceAfterBendData;
+    TiedNotesTrackMap tiedNotesBendsData;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t > > prebendData;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t > > slightBendData;
+    std::unique_ptr<BendDataContextSplitChord> splitChordCtx;
+};
+
+struct DiveDataContext {
+    GraceAfterTrackMap graceAfterDiveData;
+    TiedNotesTrackMap tiedNotesDivesData;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t> > preDiveData;
+};
 } // mu::iex::guitarpro

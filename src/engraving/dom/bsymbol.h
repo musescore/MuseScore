@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BSYMBOL_H
-#define MU_ENGRAVING_BSYMBOL_H
+#pragma once
 
 #include <vector>
 
 #include "engravingitem.h"
 
 namespace mu::engraving {
+class Transaction;
+
 //---------------------------------------------------------
 //   @@ BSymbol
 ///    base class for Symbol and Image
@@ -47,7 +48,7 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
     RectF drag(EditData&) override;
 
     Align align() const { return m_align; }
@@ -67,5 +68,4 @@ private:
     std::vector<EngravingItem*> m_leafs;
     Align m_align = { AlignH::LEFT, AlignV::BASELINE };
 };
-} // namespace mu::engraving
-#endif
+}

@@ -19,9 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "staffsettingsmodel.h"
 
 #include "engraving/types/types.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -129,7 +135,7 @@ QVariantList StaffSettingsModel::allStaffTypes() const
 
 bool StaffSettingsModel::isMainScore() const
 {
-    return currentNotation() == currentMasterNotation();
+    return currentNotation()->isMaster();
 }
 
 int StaffSettingsModel::staffType() const
@@ -356,8 +362,8 @@ void StaffSettingsModel::createLinkedStaff()
 
 INotationPartsPtr StaffSettingsModel::notationParts() const
 {
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->parts();
+    if (INotationPtr notation = context()->currentNotation()) {
+        return notation->parts();
     }
 
     return nullptr;
@@ -365,8 +371,8 @@ INotationPartsPtr StaffSettingsModel::notationParts() const
 
 INotationPartsPtr StaffSettingsModel::masterNotationParts() const
 {
-    if (context()->currentMasterNotation()) {
-        return context()->currentMasterNotation()->parts();
+    if (IMasterNotationPtr master = context()->currentMasterNotation()) {
+        return master->parts();
     }
 
     return nullptr;

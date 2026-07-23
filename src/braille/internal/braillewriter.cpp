@@ -24,6 +24,9 @@
 
 #include <QBuffer>
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "braille.h"
 
 using namespace mu::project;

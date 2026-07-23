@@ -31,6 +31,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/editing/textedit.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
@@ -54,7 +55,7 @@ Dynamic* Engraving_TextBaseTests::addDynamic(MasterScore* score)
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     EditData ed;
     ed.dropElement = dynamic;
-    chordRest->drop(ed);
+    chordRest->drop(score->transactionManager()->currentOrDummyTransaction(), ed);
     return dynamic;
 }
 
@@ -113,7 +114,7 @@ StaffText* Engraving_TextBaseTests::addStaffText(MasterScore* score)
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     EditData ed;
     ed.dropElement = staffText;
-    chordRest->drop(ed);
+    chordRest->drop(score->transactionManager()->currentOrDummyTransaction(), ed);
     return staffText;
 }
 

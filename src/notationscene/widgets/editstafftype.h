@@ -29,7 +29,9 @@
 
 #include "engraving/dom/stafftype.h"
 
-#include "notation/notationtypes.h"
+namespace mu::engraving {
+class Instrument;
+}
 
 namespace mu::notation {
 class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Contextable
@@ -74,7 +76,7 @@ public:
     void setStaffType(const mu::engraving::StaffType* staffType);
     mu::engraving::StaffType getStaffType() const { return staffType; }
 
-    void setInstrument(const Instrument& instrument);
+    void setInstrument(const engraving::Instrument& instrument);
 
 private:
     muse::Ret loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path);

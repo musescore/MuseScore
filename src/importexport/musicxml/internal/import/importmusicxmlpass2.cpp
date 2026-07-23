@@ -87,6 +87,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
 
@@ -1885,7 +1887,8 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
         const Segment* nextSeg = score->tick2leftSegment(unterminatedChord->tick() + unterminatedChord->ticks());
         if (nextSeg) {
             const Part* part = unterminatedTieNote->part();
-            for (track_idx_t track = part->startTrack(); track <= part->endTrack(); ++track) {
+            const TrackRange trackRange = part->trackRange();
+            for (track_idx_t track = trackRange.startTrack; track <= trackRange.endTrack; ++track) {
                 const EngravingItem* el = nextSeg->element(track);
                 if (el && el->isChord()) {
                     Note* matchingNote = toChord(el)->findNote(unterminatedTieNote->pitch());
@@ -2383,7 +2386,8 @@ void MusicXmlParserPass2::part()
             } else if (startChord) {
                 // try other voices in the stave
                 const Part* p = startChord->part();
-                for (track_idx_t track = p->startTrack(); track < p->endTrack() + VOICES; track++) {
+                const TrackRange trackRange = p->trackRange();
+                for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack + VOICES; track++) {
                     nextEl = nextSeg ? nextSeg->element(track) : nullptr;
                     nextChord = nextEl && nextEl->isChord() ? toChord(nextEl) : nullptr;
                     if (nextChord && nextChord->vStaffIdx() != startChord->vStaffIdx()) {
@@ -3034,7 +3038,8 @@ void MusicXmlParserPass2::setMeasureRepeats(const staff_idx_t scoreRelStaff, Mea
                 || (!(m_measureRepeatNumMeasures[i] % 2) && (m_measureRepeatCount[i] == m_measureRepeatNumMeasures[i] / 2))) {
                 // MeasureRepeat element goes in center measure of group if odd-numbered,
                 // or last measure of first half of group if even-numbered
-                m_score->addMeasureRepeat(measure->tick(), track, m_measureRepeatNumMeasures[i]);
+                Transaction& tx = m_score->transactionManager()->currentOrDummyTransaction();
+                EditMeasureRepeat::addMeasureRepeat(tx, m_score, measure->tick(), track, m_measureRepeatNumMeasures[i]);
             } else {
                 // measures that are part of group but do not contain the element have undisplayed whole rests
                 m_score->addRest(measure->tick(), track, TDuration(DurationType::V_MEASURE), 0);
@@ -5281,7 +5286,7 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
             return;
         }
         int ottavasize = m_e.intAttribute("size");
-        if (!(ottavasize == 8 || ottavasize == 15)) {
+        if (!(ottavasize == 8 || ottavasize == 15 || ottavasize == 22)) {
             m_logger->logError(String(u"unknown octave-shift size %1").arg(ottavasize), &m_e);
         } else {
             Ottava* o = spdesc.isStopped ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
@@ -5292,6 +5297,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VA);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MA);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MA);
                 }
             } else if (type == u"up") {
                 m_placement = m_placement.empty() ? u"below" : m_placement;
@@ -5299,6 +5306,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VB);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MB);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MB);
                 }
             }
 
@@ -5667,7 +5676,8 @@ String MusicXmlParserDirection::metronome(double& r)
 //---------------------------------------------------------
 
 static bool determineBarLineType(const String& barStyle, const String& repeat,
-                                 BarLineType& type, bool& visible)
+                                 BarLineType& type, bool& visible,
+                                 const MusicXmlExporterSoftware& exporter)
 {
     // set defaults
     type = BarLineType::NORMAL;
@@ -5676,6 +5686,8 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
     if (barStyle == u"light-heavy" && repeat == u"backward") {
         type = BarLineType::END_REPEAT;
     } else if (barStyle == u"heavy-light" && repeat == u"forward") {
+        type = BarLineType::START_REPEAT;
+    } else if (barStyle == u"light-heavy" && repeat == u"forward" && exporter == MusicXmlExporterSoftware::NOTEFLIGHT) {
         type = BarLineType::START_REPEAT;
     } else if (barStyle == u"light-heavy" && repeat.empty()) {
         type = BarLineType::END;
@@ -5867,7 +5879,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
 
     BarLineType type = BarLineType::NORMAL;
     bool visible = true;
-    if (determineBarLineType(barStyle, repeat, type, visible)) {
+    if (determineBarLineType(barStyle, repeat, type, visible, m_pass1.exporterSoftware())) {
         const track_idx_t track = m_pass1.trackForPart(partId);
         if (type & BarLineType::START_REPEAT) {
             // combine start_repeat flag with current state initialized during measure parsing
@@ -6997,6 +7009,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
     bool graceSlash = false;
+    double graceStealFollowing = -1.0;
+    double graceStealPrevious  = -1.0;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
     bool printLyric = (printObject && m_e.asciiAttribute("print-lyric") != "no") || m_e.asciiAttribute("print-lyric") == "yes";
     bool isSingleDrumset = false;
@@ -7032,6 +7046,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (m_e.name() == "grace") {
             grace = true;
             graceSlash = m_e.asciiAttribute("slash") == "yes";
+            graceStealFollowing = m_e.doubleAttribute("steal-time-following", -1.0);
+            graceStealPrevious  = m_e.doubleAttribute("steal-time-previous", -1.0);
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "instrument") {
             instrumentId = m_e.attribute("id");
@@ -7376,9 +7392,12 @@ Note* MusicXmlParserPass2::note(const String& partId,
         }
     }
 
-    // handle grace after state: remember current grace list size
-    if (grace && notations.mustStopGraceAFter()) {
-        gac = gcl.size();
+    if (grace) {
+        const bool afterByStealTime = graceStealPrevious >= 0.0 && c && c->noteType() != NoteType::ACCIACCATURA;
+        if (graceStealFollowing < 0.0 && (afterByStealTime || notations.mustStopGraceAfter())) {
+            // handle grace after state: remember current grace list size
+            gac = gcl.size();
+        }
     }
 
     // handle tremolo before handling tuplet (two note tremolos modify timeMod)

@@ -20,17 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_INOTATIONWRITER_H
-#define MU_PROJECT_INOTATIONWRITER_H
+#pragma once
 
 #include <map>
 
 #include "global/types/ret.h"
 #include "global/types/val.h"
 #include "global/io/iodevice.h"
-#include "global/async/channel.h"
 #include "global/progress.h"
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 
 namespace mu::project {
 class INotationWriter
@@ -73,5 +71,3 @@ public:
 
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;
 }
-
-#endif // MU_PROJECT_INOTATIONWRITER_H

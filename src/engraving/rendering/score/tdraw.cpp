@@ -92,7 +92,6 @@
 #include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
 
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/notedot.h"
 #include "dom/noteline.h"
@@ -101,6 +100,7 @@
 #include "dom/ottava.h"
 
 #include "dom/page.h"
+#include "dom/pagelockindicator.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
 #include "dom/palmmute.h"
@@ -132,8 +132,8 @@
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
+#include "dom/systemlockindicator.h"
 #include "dom/systemtext.h"
-#include "dom/systemlock.h"
 #include "dom/soundflag.h"
 
 #include "dom/tapping.h"
@@ -158,6 +158,7 @@
 #include "dom/whammybar.h"
 
 #include "editing/mscoreview.h"
+#include "editing/navigation.h"
 
 #include "infrastructure/rtti.h"
 
@@ -317,7 +318,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
         break;
-
+    case ElementType::PAGE_LOCK_INDICATOR: draw(item_cast<const PageLockIndicator*>(item), painter, opt);
+        break;
     case ElementType::PARENTHESIS:          draw(item_cast<const Parenthesis*>(item), painter, opt);
         break;
     case ElementType::PARTIAL_TIE_SEGMENT:  draw(item_cast<const PartialTieSegment*>(item), painter, opt);
@@ -2062,28 +2064,8 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
             } else {
                 s = item->size() * DPMM;
             }
-            Transform t = painter->worldTransform();
-            muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
-            int maxDim = item->configuration()->maxScaledImageDim();
-            bool useDirectDraw = (opt.isPrinting && !MScore::svgPrinting)
-                                 || (maxDim > 0 && std::max(ss.width(), ss.height()) > maxDim);
-
-            if (useDirectDraw) {
-                painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
-                painter->drawPixmap(PointF(0, 0), *item->rasterImage());
-            } else {
-                t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-                painter->setWorldTransform(t);
-                if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
-                    item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
-                    item->setDirty(false);
-                }
-                if (item->buffer().isNull()) {
-                    emptyImage = true;
-                } else {
-                    painter->drawPixmap(PointF(0.0, 0.0), item->buffer());
-                }
-            }
+            painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
+            painter->drawPixmap(PointF(0, 0), *item->rasterImage());
             painter->restore();
         }
     }
@@ -2181,7 +2163,10 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter, const PaintOptions& 
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
     painter->setPen(pen);
     painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
@@ -2454,6 +2439,38 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter, const PaintOptions
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
+}
+
+void TDraw::draw(const PageLockIndicator* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    if (opt.isPrinting || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
+    painter->setPen(pen);
+    painter->setFont(item->font());
+    painter->drawSymbol(PointF(), item->iconCode());
+
+    if (item->selected()) {
+        Color lockedAreaColor = selectionColor;
+        lockedAreaColor.setAlpha(opt.invertColors ? 90 : 38);
+        Brush brush(lockedAreaColor);
+        painter->setBrush(brush);
+        painter->setNoPen();
+        double radius = 0.5 * item->spatium();
+
+        PainterPath path;
+        path.setFillRule(PainterPath::FillRule::OddEvenFill);
+        path.addRoundedRect(item->ldata()->rangeRect, radius, radius);
+        path.addRect(item->ldata()->innerRangeRect);
+        painter->drawPath(path);
+    }
 }
 
 void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt)
@@ -2988,7 +3005,10 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
         return;
     }
 
-    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    Color selectionColor = opt.invertColors ? item->configuration()->indicatorIconInvertedSelectionColor()
+                           : item->configuration()->selectionColor();
+    Color color = item->selected() ? selectionColor : item->configuration()->formattingColor();
+    Pen pen(color);
     painter->setPen(pen);
     painter->setFont(item->font());
     painter->drawSymbol(PointF(), item->iconCode());
@@ -2996,8 +3016,8 @@ void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter, const 
     if (item->isSystemLockIndicator() && item->selected()) {
         const SystemLockIndicator* sli = toSystemLockIndicator(item);
 
-        Color lockedAreaColor = sli->configuration()->selectionColor();
-        lockedAreaColor.setAlpha(38);
+        Color lockedAreaColor = selectionColor;
+        lockedAreaColor.setAlpha(opt.invertColors ? 90 : 38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
@@ -3036,7 +3056,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOpt
 
     if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
         Chord* chord = toChord(item->explicitParent());
-        ChordRest* prevCR = prevChordRest(chord);
+        ChordRest* prevCR = Navigation::prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
             return;
         }

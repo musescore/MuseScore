@@ -24,11 +24,88 @@
 
 #include "../dom/chord.h"
 #include "../dom/engravingitem.h"
+#include "../dom/measure.h"
 #include "../dom/note.h"
+#include "../dom/score.h"
+#include "../dom/segment.h"
 #include "../dom/spanner.h"
+#include "../dom/textlinebase.h"
 #include "../dom/tie.h"
 
 using namespace mu::engraving;
+
+//---------------------------------------------------------
+//   EditSpanner
+//---------------------------------------------------------
+
+void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, const PointF& pos, bool systemStavesOnly)
+{
+    staff_idx_t staffIdx = spanner->staffIdx();
+    Segment* segment;
+    MeasureBase* mb = score->pos2measure(pos, &staffIdx, 0, &segment, 0);
+    if (systemStavesOnly) {
+        staffIdx = 0;
+    }
+    // ignore if we do not have a measure
+    if (mb == 0 || !mb->isMeasure()) {
+        LOGD("addSpanner: cannot put object here");
+        delete spanner;
+        return;
+    }
+
+    // all spanners live in voice 0 (except slurs/ties)
+    track_idx_t track = staffIdx == muse::nidx ? muse::nidx : staffIdx * VOICES;
+
+    spanner->setTrack(track);
+    spanner->setTrack2(track);
+
+    if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
+        spanner->setTick(segment->tick());
+        Fraction tick2 = std::min(segment->measure()->endTick(), score->lastMeasure()->endTick());
+        spanner->setTick2(tick2);
+    } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
+        Measure* m = toMeasure(mb);
+        spanner->setTick(m->tick());
+        spanner->setTick2(m->endTick());
+    }
+    spanner->eraseSpannerSegments();
+
+    bool ctrlModifier = isSystemTextLine(spanner) && !systemStavesOnly;
+    score->undoAddElement(spanner, true /*addToLinkedStaves*/, ctrlModifier);
+}
+
+void EditSpanner::addSpanner(Transaction&, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
+                             Segment* endSegment, bool ctrlModifier)
+{
+    track_idx_t track = staffIdx * VOICES;
+    spanner->setTrack(track);
+    spanner->setTrack2(track);
+    for (auto ss : spanner->spannerSegments()) {
+        ss->setTrack(track);
+    }
+
+    bool isMeasureAnchor = spanner->anchor() == Spanner::Anchor::MEASURE;
+    Fraction tick1 = isMeasureAnchor ? startSegment->measure()->tick() : startSegment->tick();
+    spanner->setTick(tick1);
+
+    Fraction tick2;
+    if (!endSegment) {
+        tick2 = score->lastSegment()->tick();
+    } else if (endSegment == startSegment) {
+        tick2 = startSegment->measure()->last()->tick();
+    } else {
+        tick2 = endSegment->tick();
+    }
+    if (isMeasureAnchor) {
+        Measure* endMeasure = score->tick2measureMM(tick2);
+        if (endMeasure->tick() != tick2) {
+            tick2 = endMeasure->endTick();
+        }
+    }
+
+    spanner->setTick2(tick2);
+    score->undoAddElement(spanner, true, ctrlModifier);
+}
 
 //---------------------------------------------------------
 //   ChangeSpannerElements

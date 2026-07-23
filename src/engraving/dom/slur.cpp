@@ -23,6 +23,7 @@
 
 #include "../editing/editspanner.h"
 #include "../editing/mscoreview.h"
+#include "../editing/navigation.h"
 #include "../editing/transaction/transaction.h"
 
 #include "arpeggio.h"
@@ -30,7 +31,6 @@
 #include "chord.h"
 #include "masterscore.h"
 #include "measure.h"
-#include "navigate.h"
 #include "note.h"
 #include "part.h"
 #include "score.h"
@@ -163,9 +163,9 @@ bool SlurSegment::edit(EditData& ed)
                     sl->undoSetIncoming(false);
                 }
                 if (ctrlMod) {
-                    cr = score()->prevMeasure(cr, true);
+                    cr = Navigation::prevMeasure(score(), cr, true);
                 } else {
-                    cr = prevChordRest(e, options);
+                    cr = Navigation::prevChordRest(e, options);
                 }
             }
         }
@@ -189,19 +189,19 @@ bool SlurSegment::edit(EditData& ed)
                     sl->undoSetOutgoing(false);
                 }
                 if (ctrlMod) {
-                    cr = score()->nextMeasure(cr, false, true);
+                    cr = Navigation::nextMeasure(score(), cr, false, true);
                 } else {
-                    cr = nextChordRest(e, options);
+                    cr = Navigation::nextChordRest(e, options);
                 }
             }
         }
     } else if (ed.key == Key_Up) {
-        track_idx_t startTrack = e->part()->startTrack();
+        track_idx_t startTrack = e->part()->trackRange().startTrack;
         track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
     } else if (ed.key == Key_Down) {
         track_idx_t startTrack = e->track() + 1;
-        track_idx_t endTrack   = e->part()->endTrack();
+        track_idx_t endTrack   = e->part()->trackRange().endTrack;
         cr = searchCR(e->segment(), startTrack, endTrack);
     } else {
         return false;

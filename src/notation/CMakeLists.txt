@@ -24,21 +24,23 @@ target_sources(notation PRIVATE
     notationmodule.cpp
     notationmodule.h
 
+    inotation_fwd.h
+    inotation.h
     imasternotation.h
     iexcerptnotation.h
-    inotation.h
     inotationpainting.h
     inotationviewstate.h
     inotationsolomutestate.h
     inotationnoteinput.h
     inotationselection.h
     inotationselectionfilter.h
+    inotationselectionrange.h
     inotationautomation.h
     inotationinteraction.h
     inotationstyle.h
+    inotationundostack.h
     inotationaccessibility.h
     inotationmidiinput.h
-    notationtypes.h
     inotationconfiguration.h
     inotationcontextconfiguration.h
     notationerrors.h
@@ -47,11 +49,21 @@ target_sources(notation PRIVATE
     inotationparts.h
     iinstrumentsrepository.h
 
-    internal/inotationundostack.h
+    notationtypes.h
+    types/instrumentstypes.h
+    types/loopboundaries.h
+    types/noteinputtypes.h
+    types/propertystyletypes.h
+    types/scorecreateoptions.h
+    types/staffparttypes.h
+    types/stringtunings.h
+    types/tempo.h
+    types/viewmode.h
+    types/zoomtype.h
+
     internal/excerptnotation.cpp
     internal/excerptnotation.h
     internal/igetscore.h
-    internal/inotationselectionrange.h
     internal/instrumentsrepository.cpp
     internal/instrumentsrepository.h
     internal/masternotation.cpp
@@ -132,6 +144,7 @@ if(NOT OS_IS_WASM)
 endif()
 
 target_link_libraries(notation PRIVATE
+    Qt::Widgets # for QApplication::cursorFlashTime() in notationinteraction.cpp
     muse::draw
     engraving
 )

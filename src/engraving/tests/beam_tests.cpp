@@ -30,6 +30,9 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/tremolotwochord.h"
 
+#include "engraving/editing/flip.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -220,7 +223,7 @@ TEST_F(Engraving_BeamTests, flipBeamStemDir)
 
     score->select(c2);
     score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
-    score->cmdFlip();
+    Flip::flip(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     cr->beam()->setDirection(DirectionV::DOWN);
 
@@ -253,7 +256,7 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 
     score->select(c1->upNote());
     score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
-    score->cmdFlip();
+    Flip::flip(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
 
     score->update();
@@ -324,7 +327,7 @@ TEST_F(Engraving_BeamTests, drumKitBeam)
 
     score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
     score->select({ cr1, cr2, cr3 }, SelectType::RANGE);
-    score->cmdFlip();
+    Flip::flip(score->transactionManager()->currentOrDummyTransaction(), score);
     score->setLayoutAll();
     score->doLayout();
     score->endCmd();

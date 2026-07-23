@@ -112,7 +112,7 @@ SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
     TrackGroup originTracks;
     originTracks.reserve(p->originParts().size());
     for (Part* op : p->originParts()) {
-        originTracks.push_back(op->startTrack());
+        originTracks.push_back(op->trackRange().startTrack);
     }
 
     std::unordered_set<track_idx_t> processedTracks;
@@ -175,7 +175,7 @@ SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
 
     std::unordered_set<track_idx_t> assignedTracks;
     track_idx_t lastAssignedTrack = muse::nidx;
-    track_idx_t curSharedTrack = p->startTrack();
+    track_idx_t curSharedTrack = p->trackRange().startTrack;
 
     for (track_idx_t track : originTracks) {
         if (muse::contains(assignedTracks, track)) {
@@ -603,15 +603,14 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
 {
     SharedPart* p = ctx.curSharedPart;
 
-    track_idx_t startTrack = p->startTrack();
-    track_idx_t endTrack = p->endTrack();
+    const TrackRange range = p->trackRange();
 
     ctx.oldStaveSharingLabels.clear();
     ctx.updatedStaveSharingLabels.clear();
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         for (EngravingItem* item : seg->annotations()) {
-            if (!item->systemFlag() && item->track() >= startTrack && item->track() < endTrack) {
+            if (!item->systemFlag() && item->track() >= range.startTrack && item->track() < range.endTrack) {
                 EngravingItem::disconnectAllOriginItems(item);
 
                 if (item->isStaveSharingLabel()) {
@@ -624,7 +623,7 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
             continue;
         }
 
-        for (track_idx_t track = p->startTrack(); track < p->endTrack(); ++track) {
+        for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
@@ -677,7 +676,7 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
     }
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
-        if (!spanner->systemFlag() && spanner->track() >= startTrack && spanner->track() < endTrack) {
+        if (!spanner->systemFlag() && spanner->track() >= range.startTrack && spanner->track() < range.endTrack) {
             EngravingItem::disconnectAllOriginItems(spanner);
         }
     }
@@ -1050,8 +1049,9 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
         updatedStaveSharingLabels.push_back(label);
     }
 
-    manageVoicePropertyAndTrackForSharedItems(updatedStaveSharingLabels, ctx.curSharedPart->startTrack(),
-                                              ctx.curSharedPart->endTrack(), trackMap);
+    const TrackRange curSharedPartTrackRange = ctx.curSharedPart->trackRange();
+    manageVoicePropertyAndTrackForSharedItems(updatedStaveSharingLabels, curSharedPartTrackRange.startTrack,
+                                              curSharedPartTrackRange.endTrack, trackMap);
 
     ctx.updatedStaveSharingLabels.reserve(updatedStaveSharingLabels.size());
     for (EngravingItem* el : updatedStaveSharingLabels) {
@@ -1187,13 +1187,12 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
 
     Score* score = ctx.score;
 
-    track_idx_t startTrack = p->startTrack();
-    track_idx_t endTrack = p->endTrack();
+    const TrackRange range = p->trackRange();
 
     for (Segment* seg : ctx.segmentsToUpdate) {
         std::vector<EngravingItem*> annotations = seg->annotations(); // Copy because we may remove elements
         for (EngravingItem* item : annotations) {
-            if (!item->systemFlag() && !item->isStaveSharingLabel() && item->track() >= startTrack && item->track() < endTrack
+            if (!item->systemFlag() && !item->isStaveSharingLabel() && item->track() >= range.startTrack && item->track() < range.endTrack
                 && item->originItems().empty()) {
                 score->undoRemoveElement(item);
             }
@@ -1203,7 +1202,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             continue;
         }
 
-        for (track_idx_t track = p->startTrack(); track < p->endTrack(); ++track) {
+        for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
@@ -1269,7 +1268,8 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
     }
 
     for (Spanner* spanner : ctx.overlappingSpanners) {
-        if (!spanner->systemFlag() && spanner->track() >= startTrack && spanner->track() < endTrack && spanner->originItems().empty()) {
+        if (!spanner->systemFlag() && spanner->track() >= range.startTrack && spanner->track() < range.endTrack
+            && spanner->originItems().empty()) {
             score->undoRemoveElement(spanner);
         }
     }

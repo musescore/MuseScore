@@ -38,6 +38,9 @@
 #include "engraving/dom/tremolosinglechord.h"
 
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/edittie.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -313,7 +316,7 @@ TEST_F(Engraving_NoteTests, grace)
 
     // tie
     score->select(gn);
-    score->cmdAddTie();
+    EditTie::cmdAddTie(score);
 //      n = toNote(ScoreRW::writeReadElement(gn));
 //      QVERIFY(n->tieFor() != 0);
 //      delete n;
@@ -381,14 +384,14 @@ TEST_F(Engraving_NoteTests, tpc)
     score->inputState().setDuration(DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
-    score->cmdAddPitch(octave + 1, false, false);
-    score->cmdAddPitch(octave + 2, false, false);
-    score->cmdAddPitch(octave + 3, false, false);
-    score->cmdAddPitch(octave + 4, false, false);
-    score->cmdAddPitch(octave + 5, false, false);
-    score->cmdAddPitch(octave + 6, false, false);
-    score->cmdAddPitch(octave + 7, false, false);
-    score->cmdAddPitch(octave + 8, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 1, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 2, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 3, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 4, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 5, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 6, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 7, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 8, false, false);
 
     score->cmdConcertPitchChanged(true);
 
@@ -437,7 +440,7 @@ TEST_F(Engraving_NoteTests, tpcTranspose2)
     score->inputState().setDuration(DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
-    score->cmdAddPitch(octave + 3, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, octave + 3, false, false);
 
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     score->cmdConcertPitchChanged(true);
@@ -462,18 +465,18 @@ TEST_F(Engraving_NoteTests, noteLimits)
     score->inputState().setNoteEntryMode(true);
 
     // over 127 shouldn't crash
-    score->cmdAddPitch(140, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 140, false, false);
     // below 0 shouldn't crash
-    score->cmdAddPitch(-40, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, -40, false, false);
 
     // stack chords
-    score->cmdAddPitch(42, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
     for (int i = 1; i < 20; i++) {
-        score->cmdAddPitch(42 + i * 7, true, false);
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42 + i * 7, true, false);
     }
 
     // interval below
-    score->cmdAddPitch(42, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
         score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
@@ -482,7 +485,7 @@ TEST_F(Engraving_NoteTests, noteLimits)
     }
 
     // interval above
-    score->cmdAddPitch(42, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
         score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
@@ -537,7 +540,7 @@ TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
     score->cmdEnterRest(DurationType::V_128TH);
 
     score->inputState().setDuration(DurationType::V_BREVE);
-    score->cmdAddPitch(47, 0, 0);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 47, 0, 0);
 
     Segment* s = score->tick2segment(TDuration(DurationType::V_128TH).ticks());
     EXPECT_TRUE(s && s->segmentType() == SegmentType::ChordRest);

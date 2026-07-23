@@ -45,6 +45,12 @@
 #include "engraving/dom/utils.h"
 #include "engraving/editing/transaction/undostack.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h"
+#include "notation/inotationselection.h"
+
 #include "log.h"
 
 using namespace mu::notation;

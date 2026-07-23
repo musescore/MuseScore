@@ -25,6 +25,8 @@
 
 #include "containers.h"
 
+#include "draw/painter.h"
+
 #include "engraving/dom/barline.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
@@ -41,7 +43,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/rendering/score/tlayout.h"
 
-#include "draw/painter.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 #include "log.h"
 

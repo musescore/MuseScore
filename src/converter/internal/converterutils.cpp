@@ -26,6 +26,9 @@
 
 #include "async/notifylist.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h"
+
 #include "convertercodes.h"
 
 using namespace muse;
@@ -178,7 +181,7 @@ Ret ConverterUtils::applyTranspose(const INotationPtr notation, const TransposeO
         return make_ret(Ret::Code::InternalError);
     }
 
-    interaction->selectAll();
+    interaction->select(SelectionTarget::All);
 
     bool ok = interaction->transpose(options);
 

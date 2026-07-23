@@ -22,12 +22,12 @@
 
 #include "slurandtiesettingsmodel.h"
 
-#include "types/linetypes.h"
-#include "types/commontypes.h"
-
+#include "engraving/style/style.h"
 #include "engraving/types/types.h"
 
 #include "translation.h"
+
+#include "types/commontypes.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::engraving;

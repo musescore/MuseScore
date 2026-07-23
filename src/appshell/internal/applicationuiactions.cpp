@@ -228,61 +228,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Preferences…"),
              TranslatableString("action", "Preferences")
-             ),
-
-    UiAction("action://copy",
-             { "action://notation/copy" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "&Copy"),
-             TranslatableString("action", "Copy"),
-             IconCode::Code::COPY
-             ),
-    UiAction("action://cut",
-             { "action://notation/cut" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Cu&t"),
-             TranslatableString("action", "Cut"),
-             IconCode::Code::CUT
-             ),
-    UiAction("action://paste",
-             { "action://notation/paste" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Past&e"),
-             TranslatableString("action", "Paste"),
-             IconCode::Code::PASTE
-             ),
-    UiAction("action://undo",
-             { "action://notation/undo" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Undo"),
-             TranslatableString("action", "Undo"),
-             IconCode::Code::UNDO
-             ),
-    UiAction("action://redo",
-             { "action://notation/redo" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Redo"),
-             TranslatableString("action", "Redo"),
-             IconCode::Code::REDO
-             ),
-    UiAction("action://delete",
-             { "action://notation/delete" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "De&lete"),
-             TranslatableString("action", "Delete"),
-             IconCode::Code::DELETE_TANK
-             ),
-    UiAction("action://cancel",
-             { "action://notation/cancel" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
-             ),
+             )
 };
 
 ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const modularity::ContextPtr& iocCtx)

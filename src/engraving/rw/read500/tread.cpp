@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -546,7 +545,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     const AsciiStringView tag(e.name());
 
     if (tag == "eid") {
-        readItemEID(item, e);
+        readItemEID(item, e, ctx);
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::OFFSET)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::MIN_DISTANCE)) {
@@ -582,11 +581,19 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     return true;
 }
 
-void TRead::readItemEID(EngravingObject* item, XmlReader& xml)
+void TRead::readItemEID(EngravingObject* item, XmlReader& xml, ReadContext& ctx)
 {
     AsciiStringView s = xml.readAsciiText();
     EID eid = EID::fromStdString(s);
     IF_ASSERT_FAILED(eid.isValid()) {
+        return;
+    }
+
+    if (ctx.pasteMode()) {
+        // On pasting we must create new EIDs for the elements, as the serialized EID is the EID of the item which was copied
+        // This could still be in use elsewhere in the score
+        EID realEid = item->assignNewEID();
+        ctx.registerPastedEID(eid, realEid);
         return;
     }
 
@@ -2013,17 +2020,6 @@ void TRead::read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx)
             t->setIsHalfSlurAbove(xml.readBool());
         } else if (!readProperties(toSlur(t), xml, ctx)) {
             xml.unknown();
-        }
-    }
-}
-
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
         }
     }
 }
@@ -3607,7 +3603,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     if (tag == "id") {
         p->setId(e.readInt());
     } else if (tag == "eid") {
-        readItemEID(p, e);
+        readItemEID(p, e, ctx);
     } else if (tag == "sharedPart") {
         AsciiStringView s = e.readAsciiText();
         EID eid = EID::fromStdString(s);
@@ -3884,14 +3880,21 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         } else if (t == "Notes") {
             while (e.readNextStartElement()) {
                 const AsciiStringView noteTag(e.name());
-                if (noteTag == "NoteIdx") {
-                    size_t idx = e.readInt();
-                    if (idx >= ch->notes().size()) {
-                        LOGE() << "Note index " << idx << " out of bounds " << ch->notes().size();
+                if (noteTag == "NoteEID") {
+                    AsciiStringView s = e.readAsciiText();
+                    EID eid = EID::fromStdString(s);
+                    IF_ASSERT_FAILED(eid.isValid()) {
                         continue;
                     }
-                    Note* note = ch->notes().at(idx);
-                    notes.push_back(note);
+                    if (ctx.pasteMode()) {
+                        eid = ctx.resolvePastedEID(eid);
+                    }
+                    EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+                    EngravingObject* obj = eidRegister->itemFromEID(eid);
+                    IF_ASSERT_FAILED(obj && obj->isNote()) {
+                        continue;
+                    }
+                    notes.push_back(toNote(obj));
                 } else {
                     e.unknown();
                 }
@@ -4150,7 +4153,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         /*_userMag =*/
         e.readDouble(0.1, 10.0);
     } else if (tag == "eid") {
-        readItemEID(s, e);
+        readItemEID(s, e, ctx);
     } else if (tag == "linkedTo") {
         readItemLink(s, e, ctx);
     } else if (tag == "color") {
@@ -4774,6 +4777,17 @@ void TRead::readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_id
     ConnectorInfoReader::readConnector(info, e, ctx);
 }
 
+void TRead::readPageLocks(Score* score, XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "pageLock") {
+            readPageLock(score, e);
+        } else {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::readSystemLocks(Score* score, XmlReader& e)
 {
     while (e.readNextStartElement()) {
@@ -4783,6 +4797,32 @@ void TRead::readSystemLocks(Score* score, XmlReader& e)
             e.unknown();
         }
     }
+}
+
+void TRead::readPageLock(Score* score, XmlReader& e)
+{
+    MeasureBase* startMeas = nullptr;
+    MeasureBase* endMeas = nullptr;
+    EIDRegister* eidRegister = score->masterScore()->eidRegister();
+
+    while (e.readNextStartElement()) {
+        AsciiStringView tag(e.name());
+        if (tag == "startMeasure") {
+            EID startMeasId = EID::fromStdString(e.readAsciiText());
+            startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
+        } else if (tag == "endMeasure") {
+            EID endMeasId = EID::fromStdString(e.readAsciiText());
+            endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
+        } else {
+            e.unknown();
+        }
+    }
+
+    IF_ASSERT_FAILED(startMeas && endMeas) {
+        return;
+    }
+
+    score->addPageLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemLock(Score* score, XmlReader& e)
@@ -4808,7 +4848,7 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         return;
     }
 
-    score->addSystemLock(new SystemLock(startMeas, endMeas));
+    score->addSystemLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)

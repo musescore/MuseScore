@@ -26,6 +26,10 @@
 
 #include "log.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+
 using namespace muse;
 using namespace muse::uicomponents;
 using namespace muse::async;

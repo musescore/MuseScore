@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>V_V</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
@@ -22,9 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <eid>C_C</eid>
+      <eid>W_W</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>X_X</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -90,34 +90,34 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>Y_Y</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>Z_Z</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>G_G</eid>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>H_H</eid>
+        <eid>b_b</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>13</root>
               </harmonyInfo>
-            <eid>I_I</eid>
+            <eid>B_B</eid>
             </Harmony>
           <Chord>
-            <eid>J_J</eid>
+            <eid>C_C</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>D_D</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -125,6 +125,54 @@
           <Harmony>
             <harmonyInfo>
               <root>15</root>
+              </harmonyInfo>
+            <eid>E_E</eid>
+            </Harmony>
+          <Chord>
+            <eid>F_F</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>G_G</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>H_H</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>I_I</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>J_J</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>K_K</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>c_c</eid>
+        <voice>
+          <Rest>
+            <eid>d_d</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>e_e</eid>
+        <voice>
+          <Harmony>
+            <harmonyInfo>
+              <root>13</root>
               </harmonyInfo>
             <eid>L_L</eid>
             </Harmony>
@@ -133,54 +181,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>N_N</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>O_O</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>P_P</eid>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>S_S</eid>
-        <voice>
-          <Rest>
-            <eid>T_T</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>U_U</eid>
-        <voice>
-          <Harmony>
-            <harmonyInfo>
-              <root>13</root>
-              </harmonyInfo>
-            <eid>V_V</eid>
-            </Harmony>
-          <Chord>
-            <eid>W_W</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>X_X</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -189,13 +189,13 @@
             <harmonyInfo>
               <root>15</root>
               </harmonyInfo>
-            <eid>Y_Y</eid>
+            <eid>O_O</eid>
             </Harmony>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>Q_Q</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -204,22 +204,22 @@
             <harmonyInfo>
               <root>14</root>
               </harmonyInfo>
-            <eid>b_b</eid>
+            <eid>f_f</eid>
             </Harmony>
           <Chord>
-            <eid>c_c</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>S_S</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>

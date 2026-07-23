@@ -41,6 +41,11 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/utils.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationparts.h" // IWYU pragma: keep
+
 #include "modularity/ioc.h"
 #include "notationscene/utilities/percussionutilities.h"
 

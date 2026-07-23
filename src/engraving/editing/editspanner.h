@@ -27,6 +27,18 @@
 #include "../dom/spanner.h"
 
 namespace mu::engraving {
+class Score;
+class Segment;
+class Transaction;
+
+class EditSpanner
+{
+public:
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, const PointF& pos, bool systemStavesOnly = false);
+    static void addSpanner(Transaction& tx, Score* score, Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment,
+                           Segment* endSegment, bool ctrlModifier = false);
+};
+
 class ChangeSpannerElements : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpannerElements)

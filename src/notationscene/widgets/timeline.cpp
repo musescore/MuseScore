@@ -49,6 +49,11 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/types/typesconv.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace mu::notation;

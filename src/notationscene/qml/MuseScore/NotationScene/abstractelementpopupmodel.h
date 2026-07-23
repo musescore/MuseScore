@@ -92,10 +92,10 @@ protected:
     notation::INotationPtr currentNotation() const;
     INotationInteractionPtr interaction() const;
 
-    void changeItemProperty(engraving::Pid id, const PropertyValue& value);
-    void changeItemProperty(engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+    void changeItemProperty(engraving::Pid id, const engraving::PropertyValue& value);
+    void changeItemProperty(engraving::Pid id, const engraving::PropertyValue& value, engraving::PropertyFlags flags);
 
-    EngravingItem* m_item = nullptr;
+    engraving::EngravingItem* m_item = nullptr;
     QRect m_itemRect;
 
 private:

@@ -5,10 +5,13 @@
       <harmonyInfo>
         <root>14</root>
         </harmonyInfo>
+      <eid>B_B</eid>
       </Harmony>
     <Chord>
+      <eid>C_C</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>D_D</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
@@ -17,10 +20,13 @@
       <harmonyInfo>
         <root>13</root>
         </harmonyInfo>
+      <eid>E_E</eid>
       </Harmony>
     <Chord>
+      <eid>F_F</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>G_G</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
@@ -29,10 +35,13 @@
       <harmonyInfo>
         <root>16</root>
         </harmonyInfo>
+      <eid>H_H</eid>
       </Harmony>
     <Chord>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>J_J</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
@@ -42,10 +51,13 @@
         <name>m</name>
         <root>17</root>
         </harmonyInfo>
+      <eid>K_K</eid>
       </Harmony>
     <Chord>
+      <eid>L_L</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>M_M</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

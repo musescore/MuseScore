@@ -23,6 +23,9 @@
 #include "caposettingsmodel.h"
 
 #include "engraving/dom/capo.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stringdata.h"
 
 using namespace mu::notation;
 

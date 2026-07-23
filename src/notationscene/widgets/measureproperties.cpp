@@ -33,7 +33,9 @@
 #include "engraving/dom/sig.h"
 #include "engraving/editing/editstaff.h"
 
-#include "notation/inotationelements.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationundostack.h"
 
 #include "ui/view/widgetnavigationfix.h"
 #include "ui/view/widgetstatestore.h"

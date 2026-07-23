@@ -30,6 +30,9 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 
+#include "engraving/editing/paste.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -74,7 +77,7 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     }
 
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
 

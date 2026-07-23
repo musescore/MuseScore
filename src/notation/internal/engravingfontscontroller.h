@@ -23,9 +23,11 @@
 #pragma once
 
 #include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "inotationconfiguration.h"
 #include "draw/internal/ifontsdatabase.h"
+#include "engraving/iengravingfontsprovider.h"
+#include "inotationconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {

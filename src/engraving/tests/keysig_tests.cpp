@@ -26,6 +26,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
+#include "engraving/editing/editkeysig.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
@@ -65,7 +66,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     KeySigEvent ke2;
     ke2.setConcertKey(Key::D);
     score->startCmd(TranslatableString::untranslatable("Key signature tests"));
-    score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), m2->tick(), ke2);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -73,7 +74,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     KeySigEvent ke_3;
     ke_3.setConcertKey(Key(-3));
     score->startCmd(TranslatableString::untranslatable("Key signature tests"));
-    score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
+    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, score->staff(0), m2->tick(), ke_3);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 

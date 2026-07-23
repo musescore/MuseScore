@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
@@ -38,6 +39,10 @@
 #include "cloud/qml/Muse/Cloud/enums.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 #include "projecterrors.h"
 #include "projectextensionpoints.h"
@@ -713,7 +718,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
     }
 
     if (globalContext()->playbackState()->isPlaying()) {
-        dispatcher()->dispatch("stop");
+        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
     }
 
     bool result = true;

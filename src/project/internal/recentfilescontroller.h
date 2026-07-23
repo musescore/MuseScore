@@ -26,6 +26,8 @@
 #include <mutex>
 #include <map>
 
+#include <QPixmap>
+
 #include "async/asyncable.h"
 #include "async/promise.h"
 

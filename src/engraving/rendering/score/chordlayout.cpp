@@ -38,7 +38,6 @@
 #include "dom/ledgerline.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
@@ -57,6 +56,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
 #include "editing/editchord.h"
+#include "editing/navigation.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -404,7 +404,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
             Chord* startChord = startNote ? startNote->chord() : nullptr;
-            if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
+            if (startChord && startChord->measure() == item->measure() && startChord == Navigation::prevChordRest(item)) {
                 double startNoteWidth = startNote->width();
                 // overlap into start chord?
                 // if in start chord, there are several notes or stem and tie in same direction
@@ -529,7 +529,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         bool repeat = false;
         if (!item->noStem()) {
             // check duration of prev. CR segm
-            ChordRest* prevCR = prevChordRest(item);
+            ChordRest* prevCR = Navigation::prevChordRest(item);
             if (prevCR == 0) {
                 needTabDur = true;
             } else if (item->beamMode() != BeamMode::AUTO
@@ -1656,6 +1656,26 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+static void relayoutChordBracketsAfterSegmentLayout(const std::vector<Chord*>& chords, LayoutContext& ctx)
+{
+    for (Chord* chord : chords) {
+        bool hasChordBracket = false;
+
+        for (EngravingItem* e : chord->el()) {
+            if (!e->isChordBracket()) {
+                continue;
+            }
+
+            hasChordBracket = true;
+            TLayout::layoutItem(e, ctx);
+        }
+
+        if (hasChordBracket) {
+            ChordLayout::fillShape(chord, chord->mutldata(), ctx.conf());
+        }
+    }
+}
+
 void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
@@ -2244,8 +2264,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     // we need to check all the notes in all the staves of the part so that we don't get weird collisions
     // between accidentals etc with moved notes
     const Part* part = staff->part();
-    const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
-    const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
+    const TrackRange partTrackRangeOrDefault = part ? part->trackRange() : TrackRange { startTrack, endTrack };
+    const track_idx_t partStartTrack = partTrackRangeOrDefault.startTrack;
+    const track_idx_t partEndTrack = partTrackRangeOrDefault.endTrack;
 
     if (isTab) {
         skipAccidentals(segment, startTrack, endTrack);
@@ -2301,6 +2322,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             TLayout::layoutOrnamentCueNote(ornament, ctx);
         }
     }
+
+    // Chord brackets depend on the final layouts of all voices in the same segment and visual staff.
+    // Re-layout them after the segment elements have been laid out.
+    relayoutChordBracketsAfterSegmentLayout(posInfo.chords, ctx);
 }
 
 //---------------------------------------------------------
@@ -2854,8 +2879,9 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
     bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks(), true);
     bool hasUpperCrossNotes = false;
     bool hasLowerCrossNotes = false;
-    staff_idx_t partTopStaff = c->part()->startTrack() / VOICES;
-    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
+    const TrackRange partTrackRange = c->part()->trackRange();
+    staff_idx_t partTopStaff = track2staff(partTrackRange.startTrack);
+    staff_idx_t partBottomStaff = track2staff(partTrackRange.endTrack);
     track_idx_t startVoice = c->track() - c->voice();
     // Get the last track we need to check for cross staff notes.
     // Either 1 stave away from the stave we are laying out or the bottom staff of the part

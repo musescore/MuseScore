@@ -22,7 +22,14 @@
 #include "pianokeyboardcontroller.h"
 
 #include "defer.h"
-#include "log.h"
+
+#include "midi/midievent.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationmidiinput.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 using namespace muse::midi;

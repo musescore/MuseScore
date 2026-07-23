@@ -29,6 +29,7 @@
 namespace mu::engraving {
 class Factory;
 class Note;
+class Transaction;
 enum class AccidentalVal : signed char;
 
 // NOTE: keep this in sync with accList array in accidentals.cpp
@@ -259,7 +260,7 @@ public:
     SymId symId() const;
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }

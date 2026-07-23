@@ -21,12 +21,21 @@
  */
 
 #include "loopmarker.h"
+
+#include "draw/painter.h"
 #include "draw/types/pen.h"
+
+#include "engraving/dom/staff.h"
 #include "engraving/iengravingfont.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
 
 using namespace muse;
 using namespace mu;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 LoopMarker::LoopMarker(LoopBoundaryType type, const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_type(type)

@@ -19,12 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationaccessibility.h"
 
 #include "translation.h"
-
-#include "igetscore.h"
-#include "notation.h"
 
 #include "engraving/accessibility/accessibleroot.h"
 #include "engraving/dom/masterscore.h"
@@ -32,6 +30,10 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
+
+#include "igetscore.h"
+#include "inotationinteraction.h" // IWYU pragma: keep
+#include "notation.h"
 
 using namespace mu::notation;
 using namespace muse::async;

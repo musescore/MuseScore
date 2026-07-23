@@ -22,10 +22,11 @@
 
 #include "pdfwriter.h"
 
-#include <QPdfWriter>
 #include <QBuffer>
+#include <QPdfWriter>
 
-#include "engraving/dom/masterscore.h"
+#include "notation/inotation.h"
+#include "notation/inotationpainting.h"
 
 #include "log.h"
 

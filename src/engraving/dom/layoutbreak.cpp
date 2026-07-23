@@ -119,7 +119,7 @@ bool LayoutBreak::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* LayoutBreak::drop(EditData& data)
+EngravingItem* LayoutBreak::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);

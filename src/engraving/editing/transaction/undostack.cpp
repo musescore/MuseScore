@@ -260,13 +260,15 @@ void UndoableTransaction::cleanup(bool wasDone)
     }
 }
 
-void UndoableTransaction::unwind()
+void UndoableTransaction::unwind(bool cleanUp)
 {
     while (!m_commands.empty()) {
         UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
         command->undo();
-        command->cleanup(false);
+        if (cleanUp) {
+            command->cleanup(false);
+        }
         delete command;
     }
 }
