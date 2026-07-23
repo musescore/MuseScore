@@ -220,6 +220,7 @@ public:
     void addSystemLockIndicator(SystemLockIndicator* sli);
     void deleteSystemLockIndicators();
 
+    PageLockIndicator* pageLockIndicator() const { return m_pageLockIndicator; }
     void setPageLockIndicator(PageLockIndicator* pli);
     void deletePageLockIndicator();
 
