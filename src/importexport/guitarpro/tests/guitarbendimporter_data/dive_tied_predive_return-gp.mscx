@@ -124,6 +124,8 @@
               <eid>P_P</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -185,6 +187,8 @@
               <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>12</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>

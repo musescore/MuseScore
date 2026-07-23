@@ -134,6 +134,8 @@
               <eid>N_N</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -180,6 +182,8 @@
               <eid>T_T</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -270,6 +274,8 @@
               <eid>d_d</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -343,6 +349,8 @@
               <eid>l_l</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -473,6 +481,8 @@
               <eid>x_x</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -515,6 +525,8 @@
               <eid>2_2</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>5</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -604,6 +616,8 @@
               <eid>/_/</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -646,6 +660,8 @@
               <eid>EB_EB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>5</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
