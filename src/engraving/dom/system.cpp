@@ -159,7 +159,7 @@ System::~System()
     }
     muse::DeleteAll(m_staves);
     muse::DeleteAll(m_brackets);
-    muse::DeleteAll(m_lockIndicators);
+    muse::DeleteAll(m_systemLockIndicators);
     if (m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
     }
@@ -326,16 +326,16 @@ const RangeLock* System::systemLock() const
     return m_ml.front()->systemLock();
 }
 
-void System::addLockIndicator(SystemLockIndicator* sli)
+void System::addSystemLockIndicator(SystemLockIndicator* sli)
 {
     assert(sli);
-    m_lockIndicators.push_back(sli);
+    m_systemLockIndicators.push_back(sli);
 }
 
-void System::deleteLockIndicators()
+void System::deleteSystemLockIndicators()
 {
-    muse::DeleteAll(m_lockIndicators);
-    m_lockIndicators.clear();
+    muse::DeleteAll(m_systemLockIndicators);
+    m_systemLockIndicators.clear();
 }
 
 void System::setPageLockIndicator(PageLockIndicator* pli)
@@ -746,7 +746,7 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
         func(m_pageLockIndicator);
     }
 
-    for (auto i : m_lockIndicators) {
+    for (auto i : m_systemLockIndicators) {
         func(i);
     }
 

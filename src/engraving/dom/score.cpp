@@ -1775,28 +1775,32 @@ int Score::utime2utick(double utime) const
 
 void Score::scanElementsInRange(std::function<void(EngravingItem*)> func)
 {
-    Segment* startSeg = m_selection.startSegment();
-    for (Segment* s = startSeg; s && s != m_selection.endSegment(); s = s->next1()) {
-        s->scanElements(func);
-        Measure* m = s->measure();
-        if (m && s == m->first()) {
-            Measure* mmr = m->mmRest();
-            if (mmr) {
-                mmr->scanElements(func);
-            }
+    const Fraction selectionStartTick = m_selection.startSegment() ? m_selection.startSegment()->tick() : Fraction(0, 1);
+    const Fraction selectionEndTick = m_selection.endSegment() ? m_selection.endSegment()->tick() : endTick();
+    auto doScanElement = [&](EngravingItem* e) {
+        if (e->tick() >= selectionStartTick && e->tick() < selectionEndTick) {
+            func(e);
         }
-    }
+    };
 
-    std::set<Spanner*> handledSpanners;
-    for (EngravingItem* e : m_selection.elements()) {
-        if (!e->isSpannerSegment()) {
-            continue;
+    System* lastSystem = nullptr;
+    // Inculde previous measure/system so we scan items at their end tick
+    // Filter anything else out in doScanElement
+    MeasureBase* startMb = m_selection.startMeasureBase();
+    if (startMb->prev()) {
+        startMb = startMb->prev();
+    }
+    for (MeasureBase* mb = startMb; mb && mb->tick() < selectionEndTick; mb = mb->next()) {
+        mb->scanElements(doScanElement);
+
+        if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
+            Measure* mmr = toMeasure(mb)->mmRest();
+            mmr->scanElements(doScanElement);
         }
-        Spanner* spanner = toSpannerSegment(e)->spanner();
-        if (handledSpanners.insert(spanner).second) {
-            for (SpannerSegment* ss : spanner->spannerSegments()) {
-                ss->scanElements(func);
-            }
+        System* system = mb ? mb->system() : nullptr;
+        if (system && system != lastSystem) {
+            system->scanElements(doScanElement);
+            lastSystem = system;
         }
     }
 }
