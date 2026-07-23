@@ -29,6 +29,9 @@
 #include <engraving/dom/measure.h>
 #include <engraving/dom/note.h>
 #include <engraving/dom/score.h>
+#include <engraving/dom/part.h>
+#include <engraving/dom/staff.h>
+#include <engraving/dom/stringdata.h>
 #include <engraving/dom/tie.h>
 #include <engraving/dom/tuplet.h>
 
@@ -53,8 +56,8 @@ void BendBuilder::addElementsToScore(Score* score, const BendDataContext& bendCt
     createSlightBends(bendCtx, score);
     createGraceAfterNotes(bendCtx.graceAfterBendData, GuitarBendType::BEND, score);
     createTiedSpans(bendCtx.tiedNotesBendsData, GuitarBendType::BEND, score);
-    createTiedSpans(diveCtx.tiedNotesDivesData, GuitarBendType::DIVE, score);
     createPreDives(diveCtx, score);
+    createTiedSpans(diveCtx.tiedNotesDivesData, GuitarBendType::DIVE, score);
     createGraceAfterNotes(diveCtx.graceAfterDiveData, GuitarBendType::DIVE, score);
 
     if (bendCtx.splitChordCtx) {
@@ -213,15 +216,29 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                 const auto& graceData = tickEntry.at(noteIndex);
                 const auto& lastGraceData = graceData.lastNoteData;
 
+                const bool isDive = (type == GuitarBendType::DIVE);
+
                 Note* currentNote = mainNote;
                 for (size_t graceIndex = 0; graceIndex < graceData.data.size(); graceIndex++) {
                     const auto& noteData = graceData.data[graceIndex];
                     Chord* graceChord = graceChords[graceIndex];
 
                     Note* graceNote = Factory::createNote(graceChord);
-                    graceNote->setPitch(currentNote->pitch() + noteData.quarterTones / 2);
+                    const int gracePitch = currentNote->pitch() + noteData.quarterTones / 2;
+                    graceNote->setPitch(gracePitch);
                     graceNote->setTpcFromPitch();
                     graceChord->add(graceNote);
+
+                    if (isDive) {
+                        const Staff* staff = mainNote->staff();
+                        const StringData* sd = mainNote->part()->stringData(mainNote->tick(), staff->idx());
+                        const int offset = staff->pitchOffset(mainNote->tick());
+                        const int gFret = sd->fret(gracePitch + offset, mainNote->string(), staff);
+                        if (gFret > 0) {
+                            graceNote->setString(mainNote->string());
+                            graceNote->setFret(gFret);
+                        }
+                    }
 
                     GuitarBend* bend = score->addGuitarBend(type, currentNote, graceNote);
                     IF_ASSERT_FAILED(bend) {
@@ -231,7 +248,7 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                     }
 
                     // Bend quarterTones are absolute from chain start, dive quarterTones are deltas
-                    const int endPitch = (type == GuitarBendType::DIVE)
+                    const int endPitch = isDive
                                          ? currentNote->pitch() + noteData.quarterTones / 2
                                          : bend->startNoteOfChain()->pitch() + noteData.quarterTones / 2;
 
@@ -310,6 +327,8 @@ static void createPreDives(const DiveDataContext& diveDataCtx, Score* score)
 
 static void createTiedSpans(const TiedNotesTrackMap& data, GuitarBendType type, Score* score)
 {
+    const bool isDive = (type == GuitarBendType::DIVE);
+
     for (const auto& [track, trackInfo] : data) {
         for (const auto& [tick, tickEntry] : trackInfo) {
             Chord* chord = utils::getLocatedChord(score, tick, track);
@@ -341,16 +360,18 @@ static void createTiedSpans(const TiedNotesTrackMap& data, GuitarBendType type, 
                     continue;
                 }
 
-                int rootPitch = (type == GuitarBendType::DIVE)
+                if (isDive && startNote->tieBack()) {
+                    startNote->setPitch(startNote->tieBack()->startNote()->pitch());
+                    startNote->setTpcFromPitch();
+                }
+
+                int rootPitch = isDive
                                 ? startNote->pitch()
                                 : bend->startNoteOfChain()->pitch();
 
                 bend->setEndNotePitch(rootPitch + noteInfo.quarterTones / 2, noteInfo.quarterTones % 2);
                 bend->setStartTimeFactor(noteInfo.startFactor);
                 bend->setEndTimeFactor(noteInfo.endFactor);
-                if (type == GuitarBendType::DIVE) {
-                    bend->setDiveTabPos(noteInfo.quarterTones > 0 ? DirectionV::UP : DirectionV::DOWN);
-                }
                 endNote->setParenthesesMode(ParenthesesMode::BOTH);
 
                 Tie* endTie = endNote->tieFor();
@@ -360,7 +381,6 @@ static void createTiedSpans(const TiedNotesTrackMap& data, GuitarBendType type, 
                         LOGE() << "bend/dive import error: not found tied note for track " << track << ", tick " << tick.ticks();
                         break;
                     }
-
                     nextNote->setPitch(endNote->pitch());
                     nextNote->setTpcFromPitch();
                     nextNote->setParenthesesMode(ParenthesesMode::BOTH);
