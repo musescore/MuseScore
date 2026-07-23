@@ -39,6 +39,12 @@ public:
     DiveDataContext& context() { return m_ctx; }
 
 private:
+    struct PrevWhammy {
+        int destPitch = 0;
+        mu::engraving::Fraction endTick;
+    };
+
     DiveDataContext m_ctx;
+    std::unordered_map<mu::engraving::track_idx_t, PrevWhammy> m_lastWhammyByTrack;
 };
 } // namespace mu::iex::guitarpro
