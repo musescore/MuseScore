@@ -179,6 +179,8 @@ public:
     MOCK_METHOD(void, autoFlipHairpinsType, (engraving::Dynamic * selDyn), (override));
 
     MOCK_METHOD(void, toggleDynamicPopup, (), (override));
+    MOCK_METHOD(void, increaseDecreaseDynamic, (engraving::Dynamic * dynamic, int delta), (override));
+    MOCK_METHOD(void, increaseDecreaseDynamicsForSelection, (int), (override));
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
     MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));

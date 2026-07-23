@@ -387,6 +387,16 @@ void NotationActionController::init()
     registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::isNoteOrRestSelected);
     registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
                    &Controller::isNoteOrRestSelected);
+
+    registerAction("increase-dynamic", [this]() {
+        currentNotationInteraction()->increaseDecreaseDynamicsForSelection(
+            1);
+    }, &Controller::hasSelection);
+    registerAction("decrease-dynamic", [this]() {
+        currentNotationInteraction()->increaseDecreaseDynamicsForSelection(
+            -1);
+    }, &Controller::hasSelection);
+
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
     registerAction("add-image", [this]() { addImage(); });
