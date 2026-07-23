@@ -48,8 +48,6 @@ void AppearancePreferencesModel::init()
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
-        emit foregroundColorChanged();
-        emit engravingColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -59,14 +57,10 @@ void AppearancePreferencesModel::init()
 
     notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
-        emit foregroundColorChanged();
-        emit engravingColorChanged();
     });
 
     notationConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
         emit isOnlyInvertInDarkThemeChanged();
-        emit foregroundColorChanged();
-        emit engravingColorChanged();
     });
 
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {

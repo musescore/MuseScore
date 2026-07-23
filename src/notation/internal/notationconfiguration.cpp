@@ -138,6 +138,10 @@ void NotationConfiguration::init()
     if (uiConfiguration()) {
         uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
             m_backgroundChanged.notify();
+            if (scoreInversionEnabled() && isOnlyInvertInDarkTheme()) {
+                m_foregroundChanged.notify();
+                m_notationColorChanged.notify();
+            }
         });
     }
 
@@ -185,12 +189,14 @@ void NotationConfiguration::init()
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
     settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
         m_isOnlyInvertInDarkThemeChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
