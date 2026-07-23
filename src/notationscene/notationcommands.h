@@ -133,10 +133,17 @@ inline static const muse::rcommand::Command TOGGLE_SFORZATO_COMMAND("command://n
 inline static const muse::rcommand::Command TOGGLE_TENUTO_COMMAND("command://notation/toggle-tenuto");
 inline static const muse::rcommand::Command TOGGLE_STACCATO_COMMAND("command://notation/toggle-staccato");
 
+// voice commands
 inline static const muse::rcommand::Command USE_VOICE_1_COMMAND("command://notation/use-voice-1");
 inline static const muse::rcommand::Command USE_VOICE_2_COMMAND("command://notation/use-voice-2");
 inline static const muse::rcommand::Command USE_VOICE_3_COMMAND("command://notation/use-voice-3");
 inline static const muse::rcommand::Command USE_VOICE_4_COMMAND("command://notation/use-voice-4");
+inline static const muse::rcommand::Command SWAP_VOICE_X12_COMMAND("command://notation/swap-voice-x12");
+inline static const muse::rcommand::Command SWAP_VOICE_X13_COMMAND("command://notation/swap-voice-x13");
+inline static const muse::rcommand::Command SWAP_VOICE_X14_COMMAND("command://notation/swap-voice-x14");
+inline static const muse::rcommand::Command SWAP_VOICE_X23_COMMAND("command://notation/swap-voice-x23");
+inline static const muse::rcommand::Command SWAP_VOICE_X24_COMMAND("command://notation/swap-voice-x24");
+inline static const muse::rcommand::Command SWAP_VOICE_X34_COMMAND("command://notation/swap-voice-x34");
 
 inline static const muse::rcommand::Command FLIP_COMMAND("command://notation/flip");
 inline static const muse::rcommand::Command FLIP_HORIZONTALLY_COMMAND("command://notation/flip-horizontally");
@@ -166,7 +173,8 @@ inline static const muse::rcommand::Command INSERT_NOTE_B_COMMAND("command://not
 
 inline static const muse::rcommand::Command ENTER_REST_COMMAND("command://notation/enter-rest");
 
-inline static const muse::rcommand::Command SHOW_TUPLET_CONFIGURE_COMMAND("command://notation/show-tuplet-configure");
+// add commands
+inline static const muse::rcommand::Command OPEN_TUPLET_CONFIGURE_COMMAND("command://notation/open-tuplet-configure");
 inline static const muse::rcommand::Command ADD_TUPLET_COMMAND("command://notation/add-tuplet"); // with params
 inline static const muse::rcommand::Command ADD_DUPLET_COMMAND("command://notation/add-duplet");
 inline static const muse::rcommand::Command ADD_TRIPLET_COMMAND("command://notation/add-triplet");
@@ -176,6 +184,48 @@ inline static const muse::rcommand::Command ADD_SEXTUPLET_COMMAND("command://not
 inline static const muse::rcommand::Command ADD_SEPTUPLET_COMMAND("command://notation/add-septuplet");
 inline static const muse::rcommand::Command ADD_OCTUPLET_COMMAND("command://notation/add-octuplet");
 inline static const muse::rcommand::Command ADD_NONUPLET_COMMAND("command://notation/add-nonuplet");
+
+inline static const muse::rcommand::Command INSERT_HBOX_COMMAND("command://notation/insert-hbox");
+inline static const muse::rcommand::Command INSERT_VBOX_COMMAND("command://notation/insert-vbox");
+inline static const muse::rcommand::Command INSERT_TEXTFRAME_COMMAND("command://notation/insert-textframe");
+inline static const muse::rcommand::Command INSERT_FRETFRAME_COMMAND("command://notation/insert-fretframe");
+inline static const muse::rcommand::Command APPEND_HBOX_COMMAND("command://notation/append-hbox");
+inline static const muse::rcommand::Command APPEND_VBOX_COMMAND("command://notation/append-vbox");
+inline static const muse::rcommand::Command APPEND_TEXTFRAME_COMMAND("command://notation/append-textframe");
+inline static const muse::rcommand::Command APPEND_FRETFRAME_COMMAND("command://notation/append-fretframe");
+
+inline static const muse::rcommand::Command ADD_FRETBOARD_DIAGRAM_COMMAND("command://notation/add-fretboard-diagram");
+
+inline static const muse::rcommand::Command ADD_OTTAVA_8VA_COMMAND("command://notation/add-ottava-8va");
+inline static const muse::rcommand::Command ADD_OTTAVA_8VB_COMMAND("command://notation/add-ottava-8vb");
+
+inline static const muse::rcommand::Command ADD_DYNAMIC_COMMAND("command://notation/add-dynamic");
+inline static const muse::rcommand::Command ADD_HAIRPIN_COMMAND("command://notation/add-hairpin");
+inline static const muse::rcommand::Command ADD_HAIRPIN_REVERSE_COMMAND("command://notation/add-hairpin-reverse");
+inline static const muse::rcommand::Command ADD_NOTELINE_COMMAND("command://notation/add-noteline");
+
+inline static const muse::rcommand::Command ADD_IMAGE_COMMAND("command://notation/add-image");
+
+// add text commands
+inline static const muse::rcommand::Command ADD_TITLE_TEXT_COMMAND("command://notation/add-title-text");
+inline static const muse::rcommand::Command ADD_SUBTITLE_TEXT_COMMAND("command://notation/add-subtitle-text");
+inline static const muse::rcommand::Command ADD_COMPOSER_TEXT_COMMAND("command://notation/add-composer-text");
+inline static const muse::rcommand::Command ADD_LYRICIST_TEXT_COMMAND("command://notation/add-lyricist-text");
+inline static const muse::rcommand::Command ADD_PART_TEXT_COMMAND("command://notation/add-part-text");
+inline static const muse::rcommand::Command ADD_FRAME_TEXT_COMMAND("command://notation/add-frame-text");
+inline static const muse::rcommand::Command ADD_SYSTEM_TEXT_COMMAND("command://notation/add-system-text");
+inline static const muse::rcommand::Command ADD_STAFF_TEXT_COMMAND("command://notation/add-staff-text");
+inline static const muse::rcommand::Command ADD_EXPRESSION_TEXT_COMMAND("command://notation/add-expression-text");
+inline static const muse::rcommand::Command ADD_REHEARSALMARK_TEXT_COMMAND("command://notation/add-rehearsalmark-text");
+inline static const muse::rcommand::Command ADD_INSTRUMENT_CHANGE_TEXT_COMMAND("command://notation/add-instrument-change-text");
+inline static const muse::rcommand::Command ADD_FINGERING_TEXT_COMMAND("command://notation/add-fingering-text");
+inline static const muse::rcommand::Command ADD_STICKING_TEXT_COMMAND("command://notation/add-sticking-text");
+inline static const muse::rcommand::Command ADD_CHORD_TEXT_COMMAND("command://notation/add-chord-text");
+inline static const muse::rcommand::Command ADD_ROMAN_NUMERAL_TEXT_COMMAND("command://notation/add-roman-numeral-text");
+inline static const muse::rcommand::Command ADD_NASHVILLE_NUMBER_TEXT_COMMAND("command://notation/add-nashville-number-text");
+inline static const muse::rcommand::Command ADD_LYRICS_COMMAND("command://notation/add-lyrics");
+inline static const muse::rcommand::Command ADD_TEMPO_COMMAND("command://notation/add-tempo");
+inline static const muse::rcommand::Command ADD_FIGURED_BASS_COMMAND("command://notation/add-figured-bass");
 
 // editing commands
 inline static const muse::rcommand::Command COPY_COMMAND("command://notation/copy");
@@ -238,4 +288,41 @@ inline static const muse::rcommand::Command MAKE_INTO_PAGE_COMMAND("command://no
 
 // layout commands: score
 inline static const muse::rcommand::Command TOGGLE_SCORE_LOCK_COMMAND("command://notation/toggle-score-lock");
+
+// layout commands: stretch
+inline static const muse::rcommand::Command STRETCH_DECREASE_COMMAND("command://notation/stretch-decrease");
+inline static const muse::rcommand::Command STRETCH_INCREASE_COMMAND("command://notation/stretch-increase");
+inline static const muse::rcommand::Command STRETCH_RESET_COMMAND("command://notation/stretch-reset");
+
+// open properties
+inline static const muse::rcommand::Command OPEN_PAGE_SETTINGS_COMMAND("command://notation/open-page-settings");
+inline static const muse::rcommand::Command OPEN_EDIT_STRINGS_COMMAND("command://notation/open-edit-strings");
+inline static const muse::rcommand::Command OPEN_BREAKS_COMMAND("command://notation/open-breaks");
+inline static const muse::rcommand::Command OPEN_STAFF_PROPERTIES_COMMAND("command://notation/open-staff-properties");
+inline static const muse::rcommand::Command OPEN_STAFF_TEXT_PROPERTIES_COMMAND("command://notation/open-staff-text-properties");
+inline static const muse::rcommand::Command OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND("command://notation/open-system-text-properties");
+inline static const muse::rcommand::Command OPEN_MEASURE_PROPERTIES_COMMAND("command://notation/open-measure-properties");
+inline static const muse::rcommand::Command OPEN_TRANSPOSE_COMMAND("command://notation/open-transpose");
+inline static const muse::rcommand::Command OPEN_PARTS_COMMAND("command://notation/open-parts");
+inline static const muse::rcommand::Command OPEN_EDITGRIDSIZE_COMMAND("command://notation/open-editgridsize");
+inline static const muse::rcommand::Command OPEN_REALIZECHORDSYMBOLS_COMMAND("command://notation/open-realizechordsymbols");
+
+// style commands
+inline static const muse::rcommand::Command LOAD_STYLE_COMMAND("command://notation/load-style");
+inline static const muse::rcommand::Command SAVE_STYLE_COMMAND("command://notation/save-style");
+inline static const muse::rcommand::Command OPEN_EDIT_STYLE_COMMAND("command://notation/open-edit-style");
+
+// reset commands
+inline static const muse::rcommand::Command RESET_TEXT_STYLE_OVERRIDES_COMMAND("command://notation/reset-text-style-overrides");
+inline static const muse::rcommand::Command RESET_BEAMS_COMMAND("command://notation/reset-beams");
+inline static const muse::rcommand::Command RESET_SHAPES_AND_POSITIONS_COMMAND("command://notation/reset-shapes-and-positions");
+inline static const muse::rcommand::Command RESET_TO_DEFAULT_LAYOUT_COMMAND("command://notation/reset-to-default-layout");
+
+// show commands
+inline static const muse::rcommand::Command SHOW_INVISIBLE_COMMAND("command://notation/show-invisible");
+inline static const muse::rcommand::Command SHOW_UNPRINTABLE_COMMAND("command://notation/show-unprintable");
+inline static const muse::rcommand::Command SHOW_FRAMES_COMMAND("command://notation/show-frames");
+inline static const muse::rcommand::Command SHOW_PAGEBORDERS_COMMAND("command://notation/show-pageborders");
+inline static const muse::rcommand::Command SHOW_SOUNDFLAGS_COMMAND("command://notation/show-soundflags");
+inline static const muse::rcommand::Command SHOW_IRREGULAR_COMMAND("command://notation/show-irregular");
 }

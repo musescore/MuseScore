@@ -23,6 +23,7 @@
 #include "notationcommandsregister.h"
 
 #include "../notationcommands.h"
+#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace muse::rcommand;
@@ -522,6 +523,49 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::VOICE_4)
     },
     CommandInfo{
+        SWAP_VOICE_X12_COMMAND,
+        TranslatableString("action", "Exchange voice &1-2"),
+        TranslatableString("action", "Exchange voice 1-2"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_VOICE_X13_COMMAND,
+        TranslatableString("action", "Exchange voice 1-3"),
+        TranslatableString("action", "Exchange voice 1-3"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_VOICE_X14_COMMAND,
+        TranslatableString("action", "Exchange voice 1-&4"),
+        TranslatableString("action", "Exchange voice 1-4"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_VOICE_X23_COMMAND,
+        TranslatableString("action", "Exchange voice &2-3"),
+        TranslatableString("action", "Exchange voice 2-3"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_VOICE_X24_COMMAND,
+        TranslatableString("action", "Exchange voice 2-4"),
+        TranslatableString("action", "Exchange voice 2-4"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_VOICE_X34_COMMAND,
+        TranslatableString("action", "Exchange voice &3-4"),
+        TranslatableString("action", "Exchange voice 3-4"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
         FLIP_COMMAND,
         TranslatableString("action", "Flip direction"),
         TranslatableString("action", "Flip direction"),
@@ -705,7 +749,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
 
     // tuplet
     CommandInfo{
-        SHOW_TUPLET_CONFIGURE_COMMAND,
+        OPEN_TUPLET_CONFIGURE_COMMAND,
         TranslatableString("action", "Othe&r…"),
         TranslatableString("action", "Show tuplet configure"),
         InputSchema(),
@@ -1286,6 +1330,454 @@ static const std::vector<CommandInfo> s_commandInfos = {
         }),
         Decoration()
     },
+    CommandInfo{
+        INSERT_HBOX_COMMAND,
+        TranslatableString("action", "Insert &horizontal frame"),
+        TranslatableString("action", "Insert horizontal frame"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_VBOX_COMMAND,
+        TranslatableString("action", "Insert &vertical frame"),
+        TranslatableString("action", "Insert vertical frame"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_TEXTFRAME_COMMAND,
+        TranslatableString("action", "Insert &text frame"),
+        TranslatableString("action", "Insert text frame"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        INSERT_FRETFRAME_COMMAND,
+        TranslatableString("action", "Insert &fretboard diagram legend"),
+        TranslatableString("action", "Insert fretboard diagram legend"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_HBOX_COMMAND,
+        TranslatableString("action", "&Horizontal frame"),
+        TranslatableString("action", "Insert horizontal frame at end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_VBOX_COMMAND,
+        TranslatableString("action", "&Vertical frame"),
+        TranslatableString("action", "Insert vertical frame at end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_TEXTFRAME_COMMAND,
+        TranslatableString("action", "&Text frame"),
+        TranslatableString("action", "Insert text frame at end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        APPEND_FRETFRAME_COMMAND,
+        TranslatableString("action", "&Fretboard diagram legend"),
+        TranslatableString("action", "Insert fretboard diagram legend at end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_EDIT_STYLE_COMMAND,
+        TranslatableString("action", "&Style…"),
+        TranslatableString("action", "Format style"),
+        InputSchema({
+            { "page_code", Arg(DataType::String, u"Page code") },
+            { "sub_page_code", Arg(DataType::String, u"Sub page code") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_PAGE_SETTINGS_COMMAND,
+        TranslatableString("action", "&Page settings…"),
+        TranslatableString("action", "Page settings"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_STAFF_PROPERTIES_COMMAND,
+        TranslatableString("action", "Instrument / Staff properties…"),
+        TranslatableString("action", "Instrument / Staff properties"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_EDIT_STRINGS_COMMAND,
+        TranslatableString("action", "Edit strings…"),
+        TranslatableString("action", "Edit strings"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_BREAKS_COMMAND,
+        TranslatableString("action", "Measures per s&ystem…"),
+        TranslatableString("action", "Measures per system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_STAFF_TEXT_PROPERTIES_COMMAND,
+        TranslatableString("action", "Staff text properties…"),
+        TranslatableString("action", "Staff text properties"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_SYSTEM_TEXT_PROPERTIES_COMMAND,
+        TranslatableString("action", "System text properties…"),
+        TranslatableString("action", "System text properties"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_MEASURE_PROPERTIES_COMMAND,
+        TranslatableString("action", "Measure properties…"),
+        TranslatableString("action", "Measure properties"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_TRANSPOSE_COMMAND,
+        TranslatableString("action", "&Transpose…"),
+        TranslatableString("action", "Transpose"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_PARTS_COMMAND,
+        TranslatableString("action", "&Parts…"),
+        TranslatableString("action", "Parts"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_EDITGRIDSIZE_COMMAND,
+        TranslatableString("action", "&Grid size…"),
+        TranslatableString("action", "Grid size"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        OPEN_REALIZECHORDSYMBOLS_COMMAND,
+        TranslatableString("action", "Realize &chord symbols"),
+        TranslatableString("action", "Realize chord symbols"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // style commands
+    CommandInfo{
+        LOAD_STYLE_COMMAND,
+        TranslatableString("action", "&Load style…"),
+        TranslatableString("action", "Load style"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SAVE_STYLE_COMMAND,
+        TranslatableString("action", "S&ave style…"),
+        TranslatableString("action", "Save style"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // fretboard diagram commands
+    CommandInfo{
+        ADD_FRETBOARD_DIAGRAM_COMMAND,
+        TranslatableString("action", "Add &fretboard diagram"),
+        TranslatableString("action", "Add fretboard diagram"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        ADD_OTTAVA_8VA_COMMAND,
+        TranslatableString("action", "Ottava 8va &alta"),
+        TranslatableString("action", "Add ottava 8va alta"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_OTTAVA_8VB_COMMAND,
+        TranslatableString("action", "Ottava 8va &bassa"),
+        TranslatableString("action", "Add ottava 8va bassa"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_DYNAMIC_COMMAND,
+        TranslatableString("action", "&Dynamic"),
+        TranslatableString("action", "Add dynamic"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_HAIRPIN_COMMAND,
+        TranslatableString("action", "&Crescendo"),
+        TranslatableString("action", "Add hairpin: crescendo"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_HAIRPIN_REVERSE_COMMAND,
+        TranslatableString("action", "&Diminuendo"),
+        TranslatableString("action", "Add hairpin: diminuendo"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_NOTELINE_COMMAND,
+        TranslatableString("action", "&Note-anchored line"),
+        TranslatableString("action", "Add note-anchored line"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_IMAGE_COMMAND,
+        TranslatableString("action", "Image"),
+        TranslatableString("action", "Add image"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add text commands
+    CommandInfo{
+        ADD_TITLE_TEXT_COMMAND,
+        TranslatableString("action", "&Title"),
+        TranslatableString("action", "Add text: title"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SUBTITLE_TEXT_COMMAND,
+        TranslatableString("action", "&Subtitle"),
+        TranslatableString("action", "Add text: subtitle"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_COMPOSER_TEXT_COMMAND,
+        TranslatableString("action", "&Composer"),
+        TranslatableString("action", "Add text: composer"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_LYRICIST_TEXT_COMMAND,
+        TranslatableString("action", "&Lyricist"),
+        TranslatableString("action", "Add text: lyricist"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_PART_TEXT_COMMAND,
+        TranslatableString("action", "&Part name"),
+        TranslatableString("action", "Add text: part name"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FRAME_TEXT_COMMAND,
+        TranslatableString("action", "Text"),
+        TranslatableString("action", "Add frame text"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SYSTEM_TEXT_COMMAND,
+        TranslatableString("action", "Syst&em text"),
+        TranslatableString("action", "Add text: system text"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_STAFF_TEXT_COMMAND,
+        TranslatableString("action", "St&aff text"),
+        TranslatableString("action", "Add text: staff text"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_EXPRESSION_TEXT_COMMAND,
+        TranslatableString("action", "E&xpression text"),
+        TranslatableString("action", "Add text: expression text"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_REHEARSALMARK_TEXT_COMMAND,
+        TranslatableString("action", "&Rehearsal mark"),
+        TranslatableString("action", "Add text: rehearsal mark"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INSTRUMENT_CHANGE_TEXT_COMMAND,
+        TranslatableString("action", "&Instrument change"),
+        TranslatableString("action", "Add text: instrument change"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FINGERING_TEXT_COMMAND,
+        TranslatableString("action", "&Fingering"),
+        TranslatableString("action", "Add text: fingering"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_STICKING_TEXT_COMMAND,
+        TranslatableString("action", "Stic&king"),
+        TranslatableString("action", "Add text: sticking"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_CHORD_TEXT_COMMAND,
+        TranslatableString("action", "C&hord symbol"),
+        TranslatableString("action", "Add text: chord symbol"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_ROMAN_NUMERAL_TEXT_COMMAND,
+        TranslatableString("action", "R&oman numeral analysis"),
+        TranslatableString("action", "Add text: Roman numeral analysis"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_NASHVILLE_NUMBER_TEXT_COMMAND,
+        TranslatableString("action", "&Nashville number"),
+        TranslatableString("action", "Add text: Nashville number"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_LYRICS_COMMAND,
+        TranslatableString("action", "L&yrics"),
+        TranslatableString("action", "Add text: lyrics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FIGURED_BASS_COMMAND,
+        TranslatableString("action", "Figured &bass"),
+        TranslatableString("action", "Add text: figured bass"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TEMPO_COMMAND,
+        TranslatableString("action", "Tempo &marking"),
+        TranslatableString("action", "Add text: tempo marking"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // layout commands: stretch
+    CommandInfo{
+        STRETCH_DECREASE_COMMAND,
+        TranslatableString("action", "&Decrease layout stretch"),
+        TranslatableString("action", "Decrease layout stretch"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        STRETCH_INCREASE_COMMAND,
+        TranslatableString("action", "&Increase layout stretch"),
+        TranslatableString("action", "Increase layout stretch"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        STRETCH_RESET_COMMAND,
+        TranslatableString("action", "&Reset layout stretch"),
+        TranslatableString("action", "Reset layout stretch"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        RESET_TEXT_STYLE_OVERRIDES_COMMAND,
+        TranslatableString("action", "Reset &text style overrides"),
+        TranslatableString("action", "Reset all text style overrides to default"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        RESET_BEAMS_COMMAND,
+        TranslatableString("action", "Reset &beams"),
+        TranslatableString("action", "Reset beams to default grouping"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        RESET_SHAPES_AND_POSITIONS_COMMAND,
+        TranslatableString("action", "Reset s&hapes and positions"),
+        TranslatableString("action", "Reset shapes and positions"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        RESET_TO_DEFAULT_LAYOUT_COMMAND,
+        TranslatableString("action", "Reset entire score to &default layout"),
+        TranslatableString("action", "Reset entire score to default layout"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // show commands
+    CommandInfo{
+        SHOW_INVISIBLE_COMMAND,
+        TranslatableString("action", "Show &invisible"),
+        TranslatableString("action", "Show/hide invisible elements"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        SHOW_UNPRINTABLE_COMMAND,
+        TranslatableString("action", "Show f&ormatting"),
+        TranslatableString("action", "Show/hide formatting"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        SHOW_FRAMES_COMMAND,
+        TranslatableString("action", "Show &frames"),
+        TranslatableString("action", "Show/hide frames"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        SHOW_PAGEBORDERS_COMMAND,
+        TranslatableString("action", "Show page &margins"),
+        TranslatableString("action", "Show/hide page margins"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        SHOW_SOUNDFLAGS_COMMAND,
+        TranslatableString("action", "Show sound flags"), // todo &
+        TranslatableString("action", "Show/hide sound flags"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        SHOW_IRREGULAR_COMMAND,
+        TranslatableString("action", "Mark i&rregular measures"),
+        TranslatableString("action", "Mark irregular measures"),
+        InputSchema(),
+        Decoration(rcommand::Checkable::Yes)
+    }
 };
 
 std::string NotationCommandsRegister::moduleName() const

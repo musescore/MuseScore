@@ -437,14 +437,14 @@ MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
     item->setState(uiActionsRegister()->actionState(item->action().code));
 
     if (element) {
-        QString pageCode = EditStyleUtils::pageCodeForElement(element);
+        std::string pageCode = EditStyleUtils::pageCodeForElement(element).toStdString();
 
-        if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyleUtils::subPageCodeForElement(element);
-            if (!subPageCode.isEmpty()) {
-                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+        if (!pageCode.empty()) {
+            std::string subPageCode = EditStyleUtils::subPageCodeForElement(element).toStdString();
+            if (!subPageCode.empty()) {
+                item->setArgs(ActionData::make_arg2<std::string, std::string>(pageCode, subPageCode));
             } else {
-                item->setArgs(ActionData::make_arg1<QString>(pageCode));
+                item->setArgs(ActionData::make_arg1<std::string>(pageCode));
             }
         }
     }

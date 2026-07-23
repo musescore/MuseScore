@@ -166,9 +166,6 @@ public:
     virtual muse::async::Notification textEditingChanged() const = 0;
     virtual muse::async::Channel<TextBase*> textEditingEnded() const = 0;
 
-    // Display
-    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
-
     // Grip edit
     virtual bool isGripEditStarted() const = 0;
     virtual bool isHitGrip(const muse::PointF& pos) const = 0;
@@ -291,6 +288,7 @@ public:
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(const ScoreConfig& config) = 0;
+    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
 
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;

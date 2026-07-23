@@ -187,8 +187,8 @@ static const std::vector<Command> NOTE_COMMANDS = {
     INSERT_NOTE_B_COMMAND
 };
 
-static const std::vector<Command> TUPLET_COMMANDS = {
-    SHOW_TUPLET_CONFIGURE_COMMAND,
+static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
+    OPEN_TUPLET_CONFIGURE_COMMAND,
     ADD_TUPLET_COMMAND,
     ADD_DUPLET_COMMAND,
     ADD_TRIPLET_COMMAND,
@@ -197,7 +197,10 @@ static const std::vector<Command> TUPLET_COMMANDS = {
     ADD_SEXTUPLET_COMMAND,
     ADD_SEPTUPLET_COMMAND,
     ADD_OCTUPLET_COMMAND,
-    ADD_NONUPLET_COMMAND
+    ADD_NONUPLET_COMMAND,
+    ADD_DYNAMIC_COMMAND,
+    ADD_HAIRPIN_COMMAND,
+    ADD_HAIRPIN_REVERSE_COMMAND
 };
 
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
@@ -217,6 +220,15 @@ static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
     TOGGLE_SYSTEM_BREAK_COMMAND,
     TOGGLE_PAGE_BREAK_COMMAND,
     TOGGLE_SECTION_BREAK_COMMAND
+};
+
+static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
+    { SHOW_INVISIBLE_COMMAND, ScoreConfigType::ShowInvisibleElements },
+    { SHOW_UNPRINTABLE_COMMAND, ScoreConfigType::ShowUnprintableElements },
+    { SHOW_FRAMES_COMMAND, ScoreConfigType::ShowFrames },
+    { SHOW_PAGEBORDERS_COMMAND, ScoreConfigType::ShowPageMargins },
+    { SHOW_SOUNDFLAGS_COMMAND, ScoreConfigType::ShowSoundFlags },
+    { SHOW_IRREGULAR_COMMAND, ScoreConfigType::MarkIrregularMeasures }
 };
 
 std::string NotationCommandsState::moduleName() const
@@ -244,7 +256,7 @@ void NotationCommandsState::init()
         updateCommandStates(ADD_COMMANDS);
         updateCommandStates({ TOGGLE_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
-        updateCommandStates(TUPLET_COMMANDS);
+        updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
     });
@@ -274,7 +286,11 @@ void NotationCommandsState::init()
         updateCommandStates(commands(ADD_ARTICULATION_COMMANDS));
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
-        updateCommandStates(TUPLET_COMMANDS);
+        updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+    });
+
+    controller()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+        updateCommandStates({ muse::key(SCORE_CONFIG_COMMANDS, configType) });
     });
 
     updateCommandStates();
@@ -289,6 +305,7 @@ void NotationCommandsState::deinit()
     controller()->textEditingChanged().disconnect(this);
     controller()->isNoteInputAllowedChanged().disconnect(this);
     controller()->noteInputStateChanged().disconnect(this);
+    controller()->scoreConfigChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -382,12 +399,16 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
     }
 
-    if (muse::contains(TUPLET_COMMANDS, command)) {
+    if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
         return CommandState(controller()->isToggleLayoutBreakAvailable(), false);
+    }
+
+    if (muse::contains(SCORE_CONFIG_COMMANDS, command)) {
+        return CommandState(true, controller()->scoreConfig().isShown(SCORE_CONFIG_COMMANDS.at(command)));
     }
 
     return CommandState(true, false);

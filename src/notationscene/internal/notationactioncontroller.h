@@ -103,6 +103,9 @@ public:
 
     bool isToggleLayoutBreakAvailable() const override;
 
+    ScoreConfig scoreConfig() const override;
+    muse::async::Channel<ScoreConfigType> scoreConfigChanged() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -155,6 +158,7 @@ private:
     void movePitchDiatonic(MoveDirection direction, bool);
 
     void changeVoice(voice_idx_t voiceIndex);
+    void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2);
 
     void cutSelection();
     void repeatSelection();
@@ -189,7 +193,7 @@ private:
     void resetStretch();
     void resetBeamMode();
 
-    void openEditStyleDialog(const muse::actions::ActionData& args);
+    void openEditStyleDialog(const muse::rcommand::CommandQuery& query);
     void openPageSettingsDialog();
     void openStaffProperties();
     void openEditStringsDialog();
@@ -323,6 +327,8 @@ private:
 
     muse::async::Channel<bool> m_isNoteInputAllowedChanged;
     muse::async::Notification m_noteInputStateChanged;
+
+    muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

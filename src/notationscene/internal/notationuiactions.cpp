@@ -3018,22 +3018,22 @@ bool NotationUiActions::isScoreConfigAction(const ActionCode& code) const
 bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const ScoreConfig& cfg) const
 {
     if (SHOW_INVISIBLE_CODE == code) {
-        return cfg.isShowInvisibleElements;
+        return cfg.isShown(ScoreConfigType::ShowInvisibleElements);
     }
     if (SHOW_UNPRINTABLE_CODE == code) {
-        return cfg.isShowUnprintableElements;
+        return cfg.isShown(ScoreConfigType::ShowUnprintableElements);
     }
     if (SHOW_FRAMES_CODE == code) {
-        return cfg.isShowFrames;
+        return cfg.isShown(ScoreConfigType::ShowFrames);
     }
     if (SHOW_PAGEBORDERS_CODE == code) {
-        return cfg.isShowPageMargins;
+        return cfg.isShown(ScoreConfigType::ShowPageMargins);
     }
     if (SHOW_SOUND_FLAGS == code) {
-        return cfg.isShowSoundFlags;
+        return cfg.isShown(ScoreConfigType::ShowSoundFlags);
     }
     if (SHOW_IRREGULAR_CODE == code) {
-        return cfg.isMarkIrregularMeasures;
+        return cfg.isShown(ScoreConfigType::MarkIrregularMeasures);
     }
 
     return false;
