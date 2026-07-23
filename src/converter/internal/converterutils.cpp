@@ -181,7 +181,7 @@ Ret ConverterUtils::applyTranspose(const INotationPtr notation, const TransposeO
         return make_ret(Ret::Code::InternalError);
     }
 
-    interaction->selectAll();
+    interaction->select(SelectionTarget::All);
 
     bool ok = interaction->transpose(options);
 

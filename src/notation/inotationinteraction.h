@@ -88,30 +88,20 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) = 0;
     virtual void select(SelectionTarget target) = 0;
-
-    virtual void moveChordNoteSelection(MoveDirection d) = 0;
-
-    virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
-    virtual void selectAll() = 0;
-    virtual void selectSection() = 0;
-    virtual void selectFirstElement(bool frame = true) = 0;
-    virtual void selectLastElement() = 0;
-
     virtual void clearSelection() = 0;
 
-    virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
+    virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
     virtual void findAndSelectChordRest(const Fraction& tick) = 0;
 
     // Change selection
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
-    virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
+    virtual void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) = 0;
 
     virtual void moveLyrics(MoveDirection d) = 0;
     virtual void expandSelection(ExpandSelectionMode mode) = 0;
     virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
     virtual void selectTopStaff() = 0;
     virtual void selectEmptyTrailingMeasure() = 0;
-    virtual void moveSegmentSelection(MoveDirection d) = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 
@@ -213,8 +203,7 @@ public:
     virtual void flipSelection() = 0;
     virtual void flipSelectionHorizontally() = 0;
     virtual void mirrorNotes() = 0;
-    virtual void addTieToSelection() = 0;
-    virtual void addTiedNoteToChord() = 0;
+    virtual void toggleTieForSelection() = 0;
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addHammerOnPullOffToSelection() = 0;
@@ -226,7 +215,7 @@ public:
     virtual void addBracketsToSelection(BracketsType type) = 0;
     virtual void toggleAccidentalForSelection(AccidentalType type) = 0;
     virtual void toggleArticulationForSelection(SymbolId articulationSymbolId) = 0;
-    virtual void toggleDotsForSelection(Pad dots) = 0;
+    virtual void toggleDotsForSelection(int dots) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
     virtual bool canAddTupletToSelectedChordRests() const = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;

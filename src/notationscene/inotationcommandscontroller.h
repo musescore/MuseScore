@@ -47,6 +47,7 @@ public:
     virtual muse::async::Notification stackChanged() const = 0;
 
     virtual bool isTextEditing() const = 0;
+    virtual bool isLyricsEditing() const = 0;
     virtual muse::async::Channel<bool> textEditingChanged() const = 0;
 
     virtual bool isNoteInputAllowed() const = 0;
@@ -65,5 +66,7 @@ public:
     virtual bool isNoteInputActionAllowed() const = 0;
     virtual bool isNoteOrRestSelected() const = 0;
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
+
+    virtual bool isToggleLayoutBreakAvailable() const = 0;
 };
 }

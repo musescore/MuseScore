@@ -22,6 +22,7 @@
 
 #include "breaksdialog.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
@@ -106,7 +107,7 @@ void BreaksDialog::showEvent(QShowEvent* ev)
     INotationSelectionPtr selection = interaction->selection();
 
     if (!selection->isRange()) {
-        interaction->selectAll();
+        interaction->select(SelectionTarget::All);
         _allSelected = true;
     } else {
         _allSelected = false;

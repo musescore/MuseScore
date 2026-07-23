@@ -1194,7 +1194,7 @@ bool GuitarPro4::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    m_guitarBendImporter->applyBendsToChords();
+    m_guitarBendImporter->addElementsToScore();
     addTunings();
     utils::addPlayCountTexts(score);
 

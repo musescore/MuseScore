@@ -23,13 +23,14 @@
 
 #include <map>
 #include <set>
+#include <variant>
 #include <vector>
 
+#include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
-class IAutomation;
 class Score;
 class Fraction;
 class EngravingItem;
@@ -37,20 +38,21 @@ class Segment;
 class Dynamic;
 class Hairpin;
 class MeasureRepeat;
+class RepeatSegment;
 struct ScoreChanges;
 
 class ScoreAutomationController
 {
 public:
-    ScoreAutomationController();
-    ~ScoreAutomationController();
+    void init(Score* score);
 
-    void init(const Score* score);
+    void insertTime(const Fraction& tick, const Fraction& len);
+    void update(const ScoreChanges& changes);
 
-    void insertTime(const Score* score, const Fraction& tick, const Fraction& len);
-    void update(const Score* score, const ScoreChanges& changes);
+    AutomationDataConstPtr automationData() const { return m_automationData; }
+    void setAutomationData(AutomationDataPtr data);
 
-    IAutomation* automation() const { return m_automation; }
+    void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
 private:
     struct StaffRange {
@@ -65,6 +67,12 @@ private:
         bool contains(const muse::ID& staffId) const;
     };
 
+    struct MirrorRange {
+        int from = 0;
+        int toExclusive = 0;
+        int tickOffset = 0;
+    };
+
     using DynamicPriorities = std::map<AutomationCurveKey, std::map<utick_t, int> >;
     using MeasureRepeats = std::vector<std::pair<const MeasureRepeat*, int> >;
 
@@ -73,6 +81,26 @@ private:
         utick_t clearFromUTick = 0;
         DynamicPriorities dynamicPriorities;
         MeasureRepeats measureRepeats;
+    };
+
+    struct DynamicInfo {
+        struct Ordinary {
+            real_t value = 0;
+        };
+        struct SingleNote {
+            real_t value = 0;
+            std::optional<utick_t> nextTick; // tick of the next segment, if any (recovery point)
+        };
+        struct Compound {
+            real_t startValue = 0;
+            real_t endValue = 0;
+            utick_t endPointTick = 0; // tick + velocityChangeLength (arrival point)
+        };
+
+        utick_t tick = 0;
+        EID eid = EID::invalid();
+        int priority = 0;
+        std::variant<Ordinary, SingleNote, Compound> kind = Ordinary {};
     };
 
     struct HairpinInfo {
@@ -85,14 +113,17 @@ private:
         std::optional<real_t> nominalValueTo;
     };
 
-    void update(const Score* score, int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
+    void update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
+
+    static void moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves);
+    static void removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves);
 
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
                                      AutomationCurveMap& destCurves);
 
     static void addSegmentPoints(const Segment* segment, int tickOffset, const StaffRange& range, UpdateContext& ctx);
     static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const StaffRange& range, UpdateContext& ctx);
-    static void addDynamicPoints(const Dynamic* dynamic, int tickOffset, const AutomationCurveKey& key, UpdateContext& ctx);
+    static void addDynamicPoints(const DynamicInfo& info, const AutomationCurveKey& key, UpdateContext& ctx);
 
     static void addSpannerPoints(const Score* score, int repeatStartTick, int repeatEndTick, int tickOffset, const StaffRange& range,
                                  UpdateContext& ctx);
@@ -112,6 +143,14 @@ private:
                                std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
-    IAutomation* m_automation = nullptr;
+    void mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits);
+
+    static void mirrorPointIfInRange(const AutomationPointEdit& localEdit, const MirrorRange& range, AutomationPointEdits& allEdits);
+
+    static void mirrorToMeasureRepeats(const RepeatSegment* targetSeg, const StaffRange& range, const AutomationPointEdit& localEdit,
+                                       AutomationPointEdits& allEdits);
+
+    Score* m_score = nullptr;
+    AutomationDataPtr m_automationData;
 };
 }

@@ -19,18 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
-#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "types/ret.h"
+#include "progress.h"
 #include "io/path.h"
+#include "types/ret.h"
 
+#include "types/projectfile.h"
 #include "types/projecttypes.h"
 
 class QUrl;
 
 namespace mu::project {
+struct ProjectBeingDownloaded {
+    int scoreId = 0;
+    muse::ProgressPtr progress;
+};
+
 class IProjectFilesController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IProjectFilesController)
@@ -50,5 +57,3 @@ public:
     virtual muse::async::Notification projectBeingDownloadedChanged() const = 0;
 };
 }
-
-#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H

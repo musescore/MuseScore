@@ -39,6 +39,7 @@ class InputState;
 class Note;
 class Score;
 class Segment;
+class TDuration;
 class Transaction;
 
 struct NoteVal;
@@ -50,28 +51,6 @@ enum class SymId;
 struct NoteInputParams {
     int step = 0;
     int drumPitch = -1;
-};
-
-enum class Pad : char {
-    NOTE00,
-    NOTE0,
-    NOTE1,
-    NOTE2,
-    NOTE4,
-    NOTE8,
-    NOTE16,
-    NOTE32,
-    NOTE64,
-    NOTE128,
-    NOTE256,
-    NOTE512,
-    NOTE1024,
-    //--------------------
-    REST,
-    DOT,
-    DOT2,
-    DOT3,
-    DOT4
 };
 
 class NoteInput
@@ -113,10 +92,18 @@ public:
     static void addPitch(Transaction& tx, Score* score, int step, bool addFlag, bool insert);
     static void addFret(Transaction& tx, Score* score, int fret);
 
-    static void padToggle(Transaction& tx, Score* score, Pad p, bool toggleForSelectionOnly = false);
-    static void padNoteIncreaseTAB(Transaction& tx, Score* score);
-    static void padNoteDecreaseTAB(Transaction& tx, Score* score);
+    static void setDuration(Transaction& tx, Score* score, DurationType duration);
+    static void toggleRest(Transaction& tx, Score* score);
+    static void toggleDots(Transaction& tx, Score* score, int dots, bool toggleForSelectionOnly = false);
+    static void increaseDuration(Transaction& tx, Score* score);
+    static void decreaseDuration(Transaction& tx, Score* score);
 
     static void realtimeAdvance(Transaction& tx, Score* score, bool allowTransposition, const std::vector<int>& activeMidiPitches);
+
+private:
+    //! NOTE: Shared prologue/epilogue for the setDuration/toggleRest/toggleDots commands above.
+    static bool noteValueChangeAllowed(const Score* score);
+    static void applyToSelection(Score* score, const TDuration& oldDuration, bool oldRest, AccidentalType oldAccidentalType,
+                                 bool toggleForSelectionOnly, bool restToggle);
 };
 }

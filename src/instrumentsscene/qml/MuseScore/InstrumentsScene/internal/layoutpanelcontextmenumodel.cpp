@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+#include "notation/imasternotation.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
 
 using namespace mu::context;

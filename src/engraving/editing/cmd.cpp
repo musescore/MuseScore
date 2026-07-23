@@ -317,9 +317,9 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(bool rollback, bool layoutAllParts)
+void Score::endCmd(bool rollback, bool layoutAllParts, bool keepRolledBackElements)
 {
-    masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts);
+    masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts, keepRolledBackElements);
 }
 
 //---------------------------------------------------------

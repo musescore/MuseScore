@@ -32,7 +32,6 @@ namespace mu::notation {
 using NoteInputState = mu::engraving::InputState;
 using NoteInputMethod = mu::engraving::NoteEntryMethod;
 using NoteInputParams = mu::engraving::NoteInputParams;
-using Pad = mu::engraving::Pad;
 using PitchMode = mu::engraving::UpDownMode;
 
 using NoteVal = mu::engraving::NoteVal;

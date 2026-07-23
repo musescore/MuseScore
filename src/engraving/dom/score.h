@@ -39,6 +39,7 @@
 #include "../ipalettescoreprovider.h"
 #include "../iengravingcontextconfiguration.h"
 
+#include "../automation/automationtypes_fwd.h"
 #include "../types/constants.h"
 
 #include "../rendering/iscorerenderer.h"
@@ -147,8 +148,6 @@ class UndoableCommand;
 class UndoStack;
 
 class ShadowNote;
-
-class IAutomation;
 
 struct Interval;
 struct NoteVal;
@@ -462,7 +461,7 @@ public:
     void cmdFullMeasureRest();
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
-    void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
+    void endCmd(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false); // end undoable command
     void update();
     void undoRedo(bool undo, EditData*);
 
@@ -877,7 +876,8 @@ public:
     SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
-    virtual IAutomation* automation() const;
+    virtual AutomationDataConstPtr automationData() const;
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
 protected:
     virtual void onTimeInserted(const Fraction& tick, const Fraction& len);

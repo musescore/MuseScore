@@ -42,6 +42,7 @@
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/staff.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep

@@ -137,8 +137,8 @@ MenuItem* AppMenuModel::makeEditMenu()
         makeMenuItem("notation-swap"),
         makeMenuItem("command://notation/delete"),
         makeSeparator(),
-        makeMenuItem("notation-select-all"),
-        makeMenuItem("notation-select-section"),
+        makeMenuItem("command://notation/select-all"),
+        makeMenuItem("command://notation/select-section"),
         makeMenuItem("find"),
     };
 

@@ -8,6 +8,7 @@
 
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
+#include "engraving/types/constants.h"
 #include "global/globalmodule.h"
 #include "global/iapplication.h"
 #include "global/io/buffer.h"
@@ -15,6 +16,7 @@
 #include "importexport/imagesexport/internal/pdfwriter.h"
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
+#include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/notationmodule.h"
 #include "project/inotationproject.h"
 #include "project/iprojectconfiguration.h"

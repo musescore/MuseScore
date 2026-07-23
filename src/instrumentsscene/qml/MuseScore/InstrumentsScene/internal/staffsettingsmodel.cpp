@@ -24,6 +24,8 @@
 
 #include "engraving/types/types.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationparts.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 
@@ -133,7 +135,7 @@ QVariantList StaffSettingsModel::allStaffTypes() const
 
 bool StaffSettingsModel::isMainScore() const
 {
-    return currentNotation() == currentMasterNotation();
+    return currentNotation()->isMaster();
 }
 
 int StaffSettingsModel::staffType() const
@@ -360,8 +362,8 @@ void StaffSettingsModel::createLinkedStaff()
 
 INotationPartsPtr StaffSettingsModel::notationParts() const
 {
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->parts();
+    if (INotationPtr notation = context()->currentNotation()) {
+        return notation->parts();
     }
 
     return nullptr;
@@ -369,8 +371,8 @@ INotationPartsPtr StaffSettingsModel::notationParts() const
 
 INotationPartsPtr StaffSettingsModel::masterNotationParts() const
 {
-    if (context()->currentMasterNotation()) {
-        return context()->currentMasterNotation()->parts();
+    if (IMasterNotationPtr master = context()->currentMasterNotation()) {
+        return master->parts();
     }
 
     return nullptr;

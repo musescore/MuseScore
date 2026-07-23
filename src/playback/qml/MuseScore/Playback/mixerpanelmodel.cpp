@@ -30,8 +30,11 @@
 #include "log.h"
 #include "translation.h"
 
+#include "notation/imasternotation.h"
 #include "notation/inotationparts.h"
 #include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace muse;
 using namespace mu::playback;

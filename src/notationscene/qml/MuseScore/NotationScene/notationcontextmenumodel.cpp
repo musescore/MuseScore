@@ -32,6 +32,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationselection.h"
 
 #include "widgets/editstyleutils.h"
@@ -486,8 +487,8 @@ INotationInteractionPtr NotationContextMenuModel::interaction() const
 
 INotationSelectionPtr NotationContextMenuModel::selection() const
 {
-    INotationInteractionPtr interaction = this->interaction();
-    return interaction ? interaction->selection() : nullptr;
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
 }
 
 const EngravingItem* NotationContextMenuModel::currentElement() const

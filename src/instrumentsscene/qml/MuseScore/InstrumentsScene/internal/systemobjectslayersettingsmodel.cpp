@@ -24,6 +24,7 @@
 
 #include "layoutpanelutils.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h"
 

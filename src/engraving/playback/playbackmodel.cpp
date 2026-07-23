@@ -764,6 +764,12 @@ bool PlaybackModel::hasToReloadScore(const ScoreChanges& changes) const
     };
 
     for (const ElementType type : changes.changedTypes) {
+        //! NOTE: a SCORE-level change with a valid tick/staff range means whoever made the
+        //! change already scoped it, so it doesn't need a full reload
+        if (type == ElementType::SCORE && changes.isValidBoundary()) {
+            continue;
+        }
+
         if (muse::contains(REQUIRED_TYPES, type)) {
             return true;
         }

@@ -22,6 +22,7 @@
 
 #include "paletteactionscontroller.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 
 using namespace mu::palette;

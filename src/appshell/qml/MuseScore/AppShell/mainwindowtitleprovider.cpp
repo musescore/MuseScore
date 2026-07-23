@@ -19,8 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "mainwindowtitleprovider.h"
+
 #include "translation.h"
+
+#include "notation/inotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::appshell;
 

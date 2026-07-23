@@ -24,6 +24,7 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/fret.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "fretframechorditem.h"

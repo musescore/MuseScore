@@ -25,6 +25,7 @@
 
 #include "midi/midievent.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationmidiinput.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep

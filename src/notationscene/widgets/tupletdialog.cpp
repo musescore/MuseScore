@@ -24,8 +24,8 @@
 
 #include "engraving/dom/tuplet.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationstyle.h"
-#include "notation/types/noteinputtypes.h"
 #include "notationcommands.h"
 
 #include "ui/view/widgetstatestore.h"

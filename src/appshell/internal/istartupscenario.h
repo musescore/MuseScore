@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "project/types/projecttypes.h"
+#include "project/types/projectfile.h"
 
 namespace mu::appshell {
 class IStartupScenario : MODULE_CONTEXT_INTERFACE

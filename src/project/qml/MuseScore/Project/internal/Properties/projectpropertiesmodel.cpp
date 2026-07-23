@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "projectpropertiesmodel.h"
 
-#include "translation.h"
 #include "log.h"
+#include "translation.h"
+
+#include "inotationproject.h"
 
 using namespace muse;
 using namespace muse::modularity;
