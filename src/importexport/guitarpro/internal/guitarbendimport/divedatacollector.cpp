@@ -38,8 +38,17 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
     const track_idx_t track = chord->track();
     const Fraction tick = chord->tick();
 
+    bool hasPrecedingWhammy = false;
+    if (auto it = m_lastWhammyByTrack.find(track); it != m_lastWhammyByTrack.end()) {
+        const auto& prev = it->second;
+        hasPrecedingWhammy = (prev.destPitch == pitchValues.front().pitch)
+                             && (prev.endTick == tick);
+    }
+    m_lastWhammyByTrack[track] = { pitchValues.back().pitch, tick + chord->actualTicks() };
+
     for (const Note* note : chord->notes()) {
-        ImportedDiveInfo info = DiveInfoConverter::fillDiveInfo(note, pitchValues);
+        const bool isContinuedWhammy = hasPrecedingWhammy && pitchValues.front().pitch != 0 && note->tieBack();
+        ImportedDiveInfo info = DiveInfoConverter::fillDiveInfo(note, pitchValues, isContinuedWhammy);
         if (info.type == DiveType::NONE || !info.note) {
             continue;
         }
@@ -51,6 +60,11 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
             if (!info.graceDiveSegments.empty()) {
                 m_ctx.graceAfterDiveData[track][tick][noteIdx].data = std::move(info.graceDiveSegments);
             }
+            continue;
+        }
+
+        if (info.graceDiveSegments.size() == 1 && note->tieFor()) {
+            m_ctx.tiedNotesDivesData[track][tick][noteIdx] = std::move(info.graceDiveSegments.front());
             continue;
         }
 
