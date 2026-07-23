@@ -116,7 +116,9 @@ StyledDialogView {
             for (var i in pages) {
                 var page = pages[i]
                 var obj = root.prv.pagesObjects[page.id]
-                obj.reset()
+                if (obj) {
+                    obj.reset()
+                }
             }
 
             Qt.callLater(preferencesModel.resetFactorySettings)
@@ -182,7 +184,9 @@ StyledDialogView {
                 for (var i in pages) {
                     var page = pages[i]
                     var obj = root.prv.pagesObjects[page.id]
-                    ok &= obj.apply()
+                    if (obj) {
+                        ok &= obj.apply()
+                    }
                 }
 
                 if (ok) {
