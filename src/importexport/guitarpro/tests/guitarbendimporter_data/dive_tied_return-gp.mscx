@@ -108,7 +108,6 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0.716667</bendStartTimeFactor>
                   <bendEndTimeFactor>0.9</bendEndTimeFactor>
-                  <guitarDiveTabPos>down</guitarDiveTabPos>
                   <eid>N_N</eid>
                   </GuitarBend>
                 <next>
@@ -129,6 +128,8 @@
               <eid>P_P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>14</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
