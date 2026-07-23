@@ -75,7 +75,6 @@ std::vector<TablatureDurationFont> StaffType::m_durationFonts = {};
 
 StaffType::StaffType()
 {
-    m_color = configuration()->defaultColor();
     // set reasonable defaults for type-specific members */
     m_symRepeat = TablatureSymbolRepeat::NEVER;
     setDurationFontName(m_durationFonts[0].displayName);
@@ -87,7 +86,6 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
                      const Color& color)
     : m_group(sg), m_xmlName(xml), m_staffTypeName(name),
     m_invisible(invisible),
-    m_color(color),
     m_lines(lines),
     m_stepOffset(stpOff),
     m_lineDistance(Spatium(lineDist)),
@@ -98,6 +96,7 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     m_genTimesig(genTimeSig),
     m_genKeysig(genKeySig)
 {
+    setColor(color);
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -109,7 +108,7 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
                      bool showBackTied)
 {
     UNUSED(invisible);
-    m_color = color;
+    setColor(color);
     m_group   = sg;
     m_xmlName = xml;
     m_staffTypeName    = name;
@@ -144,6 +143,20 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     setShowTabFingering(showTabFingering);
     setUseNumbers(useNumbers);
     setShowBackTied(showBackTied);
+}
+
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+Color StaffType::color() const
+{
+    return m_color.isValid() ? m_color : configuration()->defaultColor();
+}
+
+void StaffType::setColor(const Color& val)
+{
+    m_color = (val == configuration()->defaultColor()) ? Color() : val;
 }
 
 //---------------------------------------------------------

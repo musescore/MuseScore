@@ -87,7 +87,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, E
     : EngravingObject(type, parent)
 {
     m_flags         = f;
-    m_color         = configuration()->defaultColor();
+    // m_color is left invalid on purpose, meaning "use the current default engraving colour"
     m_z             = -1;
     m_minDistance   = 0.0_sp;
 }
@@ -663,12 +663,12 @@ Part* EngravingItem::part() const
 
 void EngravingItem::setColor(const Color& c)
 {
-    m_color = c;
+    m_color = (c == configuration()->defaultColor()) ? Color() : c;
 }
 
 Color EngravingItem::color() const
 {
-    return m_color;
+    return m_color.isValid() ? m_color : configuration()->defaultColor();
 }
 
 //---------------------------------------------------------

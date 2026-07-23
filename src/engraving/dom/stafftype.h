@@ -202,11 +202,11 @@ public:
     double userMag() const { return m_userMag; }
     bool isSmall() const { return m_small; }
     bool invisible() const { return m_invisible; }
-    const Color& color() const { return m_color; }
+    Color color() const;
     void setUserMag(double val) { m_userMag = val; }
     void setSmall(bool val) { m_small = val; }
     void setInvisible(bool val) { m_invisible = val; }
-    void setColor(const Color& val) { m_color = val; }
+    void setColor(const Color& val);
     Spatium yoffset() const { return m_yoffset; }
     void setYoffset(Spatium val) { m_yoffset = val; }
     double spatium() const;
@@ -342,6 +342,8 @@ private:
     Spatium m_yoffset;
     bool m_small = false;
     bool m_invisible = false;
+    /* An invalid default-constructed colour means that no custom colour has been set => use the
+     * engraving default colour (without hard-setting it, to allow immediate updates) */
     Color m_color;
 
     int m_lines = 5;

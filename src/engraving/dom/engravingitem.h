@@ -728,6 +728,8 @@ protected:
     virtual LayoutData* mutldataInternal();
 
     mutable int m_z = 0;
+    /* An invalid default-constructed colour means that no custom colour has been set => use the
+     * engraving default colour (without hard-setting it, to allow immediate updates) */
     Color m_color;                // element color attribute
 
     track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
