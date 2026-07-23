@@ -76,6 +76,8 @@ public:
                                                          const std::vector<std::string>& filter) override;
     io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                      const int options = 0) override;
+    io::paths_t selectOpeningFilesSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                       const int options = 0) override;
     io::path_t selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                     bool confirmOverwrite = true) override;
 

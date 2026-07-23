@@ -213,6 +213,21 @@ io::path_t WebInteractive::selectOpeningFileSync(const std::string& title, const
 #endif
 }
 
+io::paths_t WebInteractive::selectOpeningFilesSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                                   const int options)
+{
+#ifdef Q_OS_WASM
+    UNUSED(title);
+    UNUSED(dir);
+    UNUSED(filter);
+    UNUSED(options);
+    NOT_SUPPORTED;
+    return io::paths_t();
+#else
+    return m_origin->selectOpeningFilesSync(title, dir, filter, options);
+#endif
+}
+
 io::path_t WebInteractive::selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                                 bool confirmOverwrite)
 {
