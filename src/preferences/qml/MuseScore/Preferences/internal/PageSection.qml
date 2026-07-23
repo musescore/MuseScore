@@ -110,12 +110,7 @@ BaseSection {
 
     ColorAndWallpaperSection {
         id: colorAndWallpaper
-
-        enabled: !root.scoreInversionEnabled || (root.isOnlyInvertInDarkTheme && !root.isCurrentThemeDark)
-        opacityOverride: enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
         wallpaperDialogTitle: qsTrc("preferences", "Choose notepaper")
-
         navigation: root.navigation
         navigationRowStart: 2
     }

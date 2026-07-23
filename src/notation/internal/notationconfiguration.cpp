@@ -45,6 +45,7 @@ static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/bac
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
 static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
+static const Settings::Key INVERTED_FOREGROUND_COLOR(module_name, "ui/canvas/foreground/invertedColor");
 static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
@@ -172,6 +173,11 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(INVERTED_FOREGROUND_COLOR, Val(QColor("#141416")));
+    settings()->valueChanged(INVERTED_FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_foregroundChanged.notify();
     });
 
@@ -461,7 +467,7 @@ muse::async::Notification NotationConfiguration::backgroundChanged() const
 QColor NotationConfiguration::foregroundColor() const
 {
     if (shouldInvertScore()) {
-        return QColor("#141416");
+        return settings()->value(INVERTED_FOREGROUND_COLOR).toQColor();
     }
 
     return settings()->value(FOREGROUND_COLOR).toQColor();
@@ -469,7 +475,11 @@ QColor NotationConfiguration::foregroundColor() const
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
 {
-    settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    if (shouldInvertScore()) {
+        settings()->setSharedValue(INVERTED_FOREGROUND_COLOR, Val(color));
+    } else {
+        settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    }
 }
 
 muse::io::path_t NotationConfiguration::foregroundWallpaperPath() const
@@ -513,6 +523,7 @@ void NotationConfiguration::setForegroundUseColor(bool value)
 void NotationConfiguration::resetForeground()
 {
     settings()->setSharedValue(FOREGROUND_COLOR, settings()->defaultValue(FOREGROUND_COLOR));
+    settings()->setSharedValue(INVERTED_FOREGROUND_COLOR, settings()->defaultValue(INVERTED_FOREGROUND_COLOR));
     settings()->setSharedValue(FOREGROUND_USE_COLOR, settings()->defaultValue(FOREGROUND_USE_COLOR));
     settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, settings()->defaultValue(FOREGROUND_WALLPAPER_PATH));
     settings()->setSharedValue(INVERT_SCORE_COLOR, settings()->defaultValue(INVERT_SCORE_COLOR));

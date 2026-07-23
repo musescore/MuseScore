@@ -49,6 +49,7 @@ void AppearancePreferencesModel::init()
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
         emit foregroundColorChanged();
+        emit engravingColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
