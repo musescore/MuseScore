@@ -3013,9 +3013,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             bool courtesySig = (curTick == m->endTick());
             segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
             segment->add(ks);
-            if (!courtesySig) {
-                staff->setKey(curTick, ks->keySigEvent());
-            }
+            staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Text" || tag == "StaffText") {
             // MuseScore 3 has different types for system text and
             // staff text while MuseScore 2 didn't.
