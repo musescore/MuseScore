@@ -453,7 +453,7 @@ muse::async::Notification NotationConfiguration::backgroundChanged() const
 QColor NotationConfiguration::foregroundColor() const
 {
     if (shouldInvertScore()) {
-        return QColorConstants::Black;
+        return QColor("#141416");
     }
 
     return settings()->value(FOREGROUND_COLOR).toQColor();

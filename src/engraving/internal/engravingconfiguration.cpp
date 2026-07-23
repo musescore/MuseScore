@@ -268,7 +268,7 @@ muse::async::Channel<Color> EngravingConfiguration::defaultColorChanged() const
 Color EngravingConfiguration::scoreInversionColor() const
 {
     // slightly dulled white for less strain on the eyes
-    return Color(220, 220, 220);
+    return Color("#CBCBCD");
 }
 
 Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
