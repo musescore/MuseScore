@@ -88,7 +88,6 @@ ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValu
     const int originPitch = pitchValues.front().pitch;
     const int destPitch = pitchValues.back().pitch;
     const int originQuarterTones = gpPitchToQuarterTones(originPitch);
-    const int destQuarterTones = gpPitchToQuarterTones(destPitch);
 
     std::vector<SegmentData> chain = classifyDiveSegments(pitchValues);
 
@@ -110,8 +109,6 @@ ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValu
     }
 
     info.type = DiveType::DIVE;
-    info.whammyOriginQt = originQuarterTones;
-    info.whammyDestQt = destQuarterTones;
     info.graceDiveSegments = std::move(chain);
 
     if (info.graceDiveSegments.size() == 1) {
