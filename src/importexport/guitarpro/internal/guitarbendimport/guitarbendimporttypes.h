@@ -125,8 +125,6 @@ struct ImportedDiveInfo {
     int quarterTones = 0;
     double startFactor = 0.0;
     double endFactor = 1.0;
-    int whammyOriginQt = 0;
-    int whammyDestQt = 0;
     std::vector<SegmentData> graceDiveSegments;
 };
 

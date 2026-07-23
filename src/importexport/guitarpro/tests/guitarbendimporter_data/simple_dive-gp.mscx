@@ -101,6 +101,8 @@
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
+              <fret>7</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
