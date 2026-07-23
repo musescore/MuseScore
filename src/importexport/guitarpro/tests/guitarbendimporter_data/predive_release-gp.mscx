@@ -98,6 +98,8 @@
               <eid>L_L</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>12</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>

@@ -122,6 +122,8 @@
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
+              <fret>6</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
