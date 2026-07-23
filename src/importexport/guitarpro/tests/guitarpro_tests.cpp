@@ -723,8 +723,7 @@ TEST_F(GuitarPro_Tests, gpxInstrumentChange1beat) {
 TEST_F(GuitarPro_Tests, gpFixEmptyMeasures) {
     gpReadTest("mmrest", "gp");
 }
-// TODO: fix
-TEST_F(GuitarPro_Tests, DISABLED_gpLineElements) {
+TEST_F(GuitarPro_Tests, gpLineElements) {
     gpReadTest("line_elements", "gp");
 }
 TEST_F(GuitarPro_Tests, gp5LineElements) {
