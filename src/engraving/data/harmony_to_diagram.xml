@@ -78335,4 +78335,110 @@
             <name>n.c./c#</name>
         </Harmony>
     </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>5</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="1">
+                    <marker>cross</marker>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="2" end="-1">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>[8-O]X-[8-O]--;B6[2-5]</pattern>
+        <Harmony>
+            <name>fm11/c</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="0" end="-1">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>--[3-O][3-O]--;B1[0-5]</pattern>
+        <Harmony>
+            <name>bbm(add9)/f</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>8</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="5">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="3" end="4">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>XX[10-O]--[11-O];B9[3-4]</pattern>
+        <Harmony>
+            <name>dbm(maj9)</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>8</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="5">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="3" end="4">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>XX[10-O]--[11-O];B9[3-4]</pattern>
+        <Harmony>
+            <name>c#m(maj9)</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="1">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="0" end="5">2</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[4-O][4-O]-[3-O]-;B2[0-5]</pattern>
+        <Harmony>
+            <name>f#m(addb6)</name>
+        </Harmony>
+    </HarmonyToDiagram>
 </Data>
