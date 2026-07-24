@@ -116,7 +116,10 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    //! Default @c Pid::COLOR: sentinel (so resets keep inheritance) when beams inherit themed color.
     PropertyValue propertyDefault(Pid id) const override;
+    //! Draw color: top note of the first chord (skipping leading rests) when inheriting themed color.
+    Color color() const override;
 
     void setIsGrace(bool val) { m_isGrace = val; }
     bool isGrace() const { return m_isGrace; }
