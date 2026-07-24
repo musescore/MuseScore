@@ -47,6 +47,9 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
     m_lastWhammyByTrack[track] = { pitchValues.back().pitch, tick + chord->actualTicks() };
 
     for (const Note* note : chord->notes()) {
+        if (note->displayFret() == Note::DisplayFretOption::Hide) {
+            continue;
+        }
         const bool isContinuedWhammy = hasPrecedingWhammy && pitchValues.front().pitch != 0 && note->tieBack();
         ImportedDiveInfo info = DiveInfoConverter::fillDiveInfo(note, pitchValues, isContinuedWhammy);
         if (info.type == DiveType::NONE || !info.note) {
