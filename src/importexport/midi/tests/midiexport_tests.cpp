@@ -26,6 +26,7 @@
 
 #include <gtest/gtest.h>
 
+#include <QBuffer>
 #include <QString>
 
 #include "global/io/ifilesystem.h"
@@ -42,6 +43,7 @@
 #include "engraving/tests/utils/scorerw.h"
 
 #include "importexport/midi/internal/midiexport/exportmidi.h"
+#include "importexport/midi/internal/midishared/midifile.h"
 
 #include "utils/smfyamlserializer.h"
 
@@ -101,6 +103,24 @@ static void exportAndCompareWithRef(const std::string& name)
 class MidiExportTests : public ::testing::Test
 {
 protected:
+    /**
+     * Search \p track for a MIDI NoteOn event at exactly \p tick with the given \p pitch and
+     * \p velocity.  Returns a pointer to the matching event, or \c nullptr if none is found.
+     * Used by grace-note tests to assert that specific on/off events exist at expected positions.
+     */
+    static const MidiEvent* findNoteEvent(const MidiTrack& track, int tick, int pitch, int velocity)
+    {
+        auto [begin, end] = track.events().equal_range(tick);
+        for (auto it = begin; it != end; ++it) {
+            const MidiEvent& event = it->second;
+            if (event.type() == ME_NOTEON && event.pitch() == pitch && event.velo() == velocity) {
+                return &event;
+            }
+        }
+
+        return nullptr;
+    }
+
     static void testTimeStretchFermata(MasterScore* score, const String& file, const String& testName)
     {
         const String writeFile = String(u"%1-%2-test-%3.mid").arg(file).arg(testName);
@@ -212,6 +232,181 @@ TEST_F(MidiExportTests, midiArpeggio) {
 
 TEST_F(MidiExportTests, midiMutedUnison) {
     exportAndCompareWithRef("testMutedUnison");
+}
+
+/// Verifies acciaccatura (grace-before) MIDI timing: grace notes start before the beat,
+/// stealing time from the previous note.  Covers tick=0 edge case (no prior note to steal from),
+/// single and multiple grace notes, and both 60 bpm and 320 bpm tempos.
+TEST_F(MidiExportTests, midiGraceBefore)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/testGraceBefore.mscx"));
+    ASSERT_TRUE(score);
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    ExportMidi exporter(score.get());
+    QBuffer buffer;
+    ASSERT_TRUE(buffer.open(QIODevice::ReadWrite));
+    ASSERT_TRUE(exporter.write(&buffer, true, true));
+
+    buffer.seek(0);
+    MidiFile midiFile;
+    ASSERT_TRUE(midiFile.read(&buffer));
+    ASSERT_FALSE(midiFile.tracks().empty());
+
+    const MidiTrack& track = midiFile.tracks().front();
+
+    // Acciaccatura starts BEFORE the beat, stealing time from the previous note.
+    // graceTickSum = min(prevChord->ticks()/2, grace->notatedTicks()).
+    // At 60 bpm: quarter=480, eighth=240.
+
+    // Measure 1 beat 1 (tick 0): grace eighth (240 ticks), prevChord=null → graceTickSum=240.
+    // No previous note to steal from, so grace is clamped to tick 0 with duration preserved.
+    EXPECT_NE(findNoteEvent(track, 0, 71, 80), nullptr);    // grace on (clamped)
+    EXPECT_NE(findNoteEvent(track, 239, 71, 0), nullptr);   // grace off at 239 (duration preserved)
+    EXPECT_NE(findNoteEvent(track, 0, 72, 80), nullptr);    // principal on at beat
+
+    // Measure 1 beat 3 (tick 480): grace eighth, prevChord=eighth(240) → graceTickSum=min(120,240)=120.
+    EXPECT_NE(findNoteEvent(track, 360, 71, 80), nullptr);  // grace on 120 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 479, 71, 0), nullptr);   // grace off at beat-1 (off=on-1 for len=0)
+    EXPECT_NE(findNoteEvent(track, 480, 72, 80), nullptr);  // principal on at beat
+
+    // Measure 1 beat 4 (tick 960): grace eighth, prevChord=quarter(480) → graceTickSum=min(240,240)=240.
+    EXPECT_NE(findNoteEvent(track, 720, 71, 80), nullptr);  // grace on 240 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 960, 72, 80), nullptr);  // principal on at beat
+
+    // Measure 2 beat 1 (tick 1920): grace eighth, prevChord=half(960) → graceTickSum=min(480,240)=240.
+    EXPECT_NE(findNoteEvent(track, 1680, 71, 80), nullptr); // grace on 240 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 1920, 72, 80), nullptr); // principal on at beat
+
+    // Measure 3 beat 1 (tick 3840): 3 grace eighths, prevChord=whole(1920) → graceTickSum=min(960,240)=240, offset=80.
+    EXPECT_NE(findNoteEvent(track, 3600, 74, 80), nullptr); // grace 1 on at 3840-240
+    EXPECT_NE(findNoteEvent(track, 3680, 72, 80), nullptr); // grace 2 on at 3840-160
+    EXPECT_NE(findNoteEvent(track, 3760, 71, 80), nullptr); // grace 3 on at 3840-80
+    EXPECT_NE(findNoteEvent(track, 3840, 72, 80), nullptr); // principal on at beat
+
+    // Measures 4-6 at 320 bpm. Tick positions identical to 60 bpm (same score ticks, different wall-clock time).
+
+    // Measure 4 beat 1 (tick 5760): grace eighth, prevChord=measure-3 whole(1920) → graceTickSum=240.
+    EXPECT_NE(findNoteEvent(track, 5520, 71, 80), nullptr); // grace on 240 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 5760, 72, 80), nullptr); // principal on at beat
+
+    // Measure 4 beat 3 (tick 6240): grace eighth, prevChord=eighth(240) → graceTickSum=120.
+    EXPECT_NE(findNoteEvent(track, 6120, 71, 80), nullptr); // grace on 120 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 6240, 72, 80), nullptr); // principal on at beat
+
+    // Measure 4 beat 4 (tick 6720): grace eighth, prevChord=quarter(480) → graceTickSum=240.
+    EXPECT_NE(findNoteEvent(track, 6480, 71, 80), nullptr); // grace on 240 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 6720, 72, 80), nullptr); // principal on at beat
+
+    // Measure 5 beat 1 (tick 7680): grace eighth, prevChord=half(960) → graceTickSum=240.
+    EXPECT_NE(findNoteEvent(track, 7440, 71, 80), nullptr); // grace on 240 ticks before beat
+    EXPECT_NE(findNoteEvent(track, 7680, 72, 80), nullptr); // principal on at beat
+
+    // Measure 6 beat 1 (tick 9600): 3 grace eighths, prevChord=whole(1920) → graceTickSum=240, offset=80.
+    EXPECT_NE(findNoteEvent(track, 9360, 74, 80), nullptr); // grace 1 on at 9600-240
+    EXPECT_NE(findNoteEvent(track, 9440, 72, 80), nullptr); // grace 2 on at 9600-160
+    EXPECT_NE(findNoteEvent(track, 9520, 71, 80), nullptr); // grace 3 on at 9600-80
+    EXPECT_NE(findNoteEvent(track, 9600, 72, 80), nullptr); // principal on at beat
+}
+
+/// Verifies grace-after (trailtime) MIDI timing: the grace note starts at the midpoint
+/// of the principal note (trailtime=500 per-1000).
+TEST_F(MidiExportTests, midiGraceAfter)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/testGraceAfter.mscx"));
+    ASSERT_TRUE(score);
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    ExportMidi exporter(score.get());
+    QBuffer buffer;
+    ASSERT_TRUE(buffer.open(QIODevice::ReadWrite));
+    ASSERT_TRUE(exporter.write(&buffer, true, true));
+
+    buffer.seek(0);
+    MidiFile midiFile;
+    ASSERT_TRUE(midiFile.read(&buffer));
+    ASSERT_FALSE(midiFile.tracks().empty());
+
+    const MidiTrack& track = midiFile.tracks().front();
+
+    // At 60 bpm, quarter = 480 ticks. Grace-after (trailtime=500) starts at 480*500/1000 = 240.
+    EXPECT_NE(findNoteEvent(track, 0, 60, 80), nullptr);    // principal C4 on beat
+    EXPECT_NE(findNoteEvent(track, 240, 62, 80), nullptr);  // grace-after D4 at midpoint
+}
+
+/// Verifies appoggiatura MIDI timing: the grace note plays on the beat and takes a
+/// proportional slice of the principal note's duration — min(500, graceNotated/principal * 1000)
+/// per-1000.  Covers both quarter and half principal note durations.
+TEST_F(MidiExportTests, midiGraceAppoggiatura)
+{
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/testGraceAppoggiatura.mscx"));
+    ASSERT_TRUE(score);
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    ExportMidi exporter(score.get());
+    QBuffer buffer;
+    ASSERT_TRUE(buffer.open(QIODevice::ReadWrite));
+    ASSERT_TRUE(exporter.write(&buffer, true, true));
+
+    buffer.seek(0);
+    MidiFile midiFile;
+    ASSERT_TRUE(midiFile.read(&buffer));
+    ASSERT_FALSE(midiFile.tracks().empty());
+
+    const MidiTrack& track = midiFile.tracks().front();
+
+    // At 60 bpm, quarter = 480 ticks. Eighth appoggiatura takes 50% of quarter = 240 ticks.
+    EXPECT_NE(findNoteEvent(track, 0, 71, 80), nullptr);    // appoggiatura B4 on beat
+    EXPECT_NE(findNoteEvent(track, 240, 72, 80), nullptr);  // principal C5 at +240
+
+    // Eighth appoggiatura before half (960 ticks). Grace notated duration = eighth = 240 ticks,
+    // which is 240/960 = 25% of the principal → ontime = min(500, 250) = 250 per-1000
+    // → grace duration = 960 * 250/1000 = 240 ticks.
+    EXPECT_NE(findNoteEvent(track, 480, 71, 80), nullptr);  // appoggiatura B4 on beat
+    EXPECT_NE(findNoteEvent(track, 720, 72, 80), nullptr);  // principal C5 at +240
+}
+
+/// Regression test for the stale-events bug (issue #22669): grace notes whose NoteEvent
+/// was previously saved to the .mscx file with len=0 must still export with correct MIDI
+/// timing.  Loading such a file used to mark the chord PlayEventType::User, causing
+/// createGraceNotesPlayEvents() to skip recomputation and leave the silent len=0 in place.
+TEST_F(MidiExportTests, midiGraceStaleEvents)
+{
+    // Regression test: grace notes whose NoteEvent was saved to the score file with len=0
+    // (by an older MuseScore version) must still be exported with correct timing.
+    // When a note has stored <Events>, loading marks the chord PlayEventType::User, which
+    // previously caused createGraceNotesPlayEvents() to skip recomputing the grace events,
+    // leaving the stale len=0 in place and making the grace note silent in MIDI export.
+    std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u"/testGraceStaleEvents.mscx"));
+    ASSERT_TRUE(score);
+    score->doLayout();
+    score->rebuildMidiMapping();
+
+    ExportMidi exporter(score.get());
+    QBuffer buffer;
+    ASSERT_TRUE(buffer.open(QIODevice::ReadWrite));
+    ASSERT_TRUE(exporter.write(&buffer, true, true));
+
+    buffer.seek(0);
+    MidiFile midiFile;
+    ASSERT_TRUE(midiFile.read(&buffer));
+    ASSERT_FALSE(midiFile.tracks().empty());
+
+    const MidiTrack& track = midiFile.tracks().front();
+
+    // At 60 bpm: quarter=480, half=960 ticks.
+    // Appoggiatura (eighth) before half at beat 1 (tick 0):
+    //   ontime = min(500, 500ms/2000ms*1000) = 250 per-1000 → grace ends at tick 239, principal at tick 240.
+    EXPECT_NE(findNoteEvent(track, 0, 71, 80), nullptr);    // appoggiatura on at beat (stale len=0 overridden)
+    EXPECT_NE(findNoteEvent(track, 240, 72, 80), nullptr);  // principal on after grace
+
+    // Acciaccatura (eighth) before quarter at beat 3 (tick 960):
+    //   prevChord=half(960), graceTickSum=min(480,240)=240 → grace starts 240 ticks before beat.
+    EXPECT_NE(findNoteEvent(track, 720, 71, 80), nullptr);  // acciaccatura on before beat (stale len=0 overridden)
+    EXPECT_NE(findNoteEvent(track, 960, 72, 80), nullptr);  // principal on at beat
 }
 
 TEST_F(MidiExportTests, midiMeasureRepeats) {

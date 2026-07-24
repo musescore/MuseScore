@@ -3173,7 +3173,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
             }
         }
         n->setPlayEvents(playEvents);
-        if (n->chord()) {
+        // Don't mark grace chords as User: their stored events are always stale
+        // render artifacts (MuseScore 4 has no UI for editing grace note timing),
+        // and honouring the flag would suppress recomputation on the next render.
+        if (n->chord() && !n->chord()->isGrace()) {
             n->chord()->setPlayEventType(PlayEventType::User);
         }
     } else if (tag == "offset") {

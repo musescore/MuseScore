@@ -229,11 +229,6 @@
                 <eid>d_d</eid>
                 <text>2</text>
                 </Fingering>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>75</pitch>
               <tpc>11</tpc>
               </Note>
@@ -1041,11 +1036,6 @@
             <acciaccatura/>
             <Note>
               <eid>jC_jC</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>78</pitch>
               <tpc>20</tpc>
               </Note>

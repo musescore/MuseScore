@@ -2487,7 +2487,14 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
 
-    if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
+    // Never persist play events for grace note chords: MuseScore 4 exposes no UI
+    // for editing grace note MIDI timing, so stored events are always stale render
+    // artifacts. Skipping them here breaks the write→load→User→skip-recompute cycle
+    // that caused grace notes to be silent after a score was saved and reopened.
+    const bool isGraceNote = item->chord() && item->chord()->isGrace();
+    if (!isGraceNote
+        && (item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto)
+        && !item->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : item->playEvents()) {
             write(&e, xml, ctx);
