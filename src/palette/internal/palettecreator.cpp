@@ -529,6 +529,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
 PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
 {
+    UNUSED(defaultPalette);
     PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Layout);
     //: The name of a palette
     sp->setName(QT_TRANSLATE_NOOP("palette", "Layout"));
