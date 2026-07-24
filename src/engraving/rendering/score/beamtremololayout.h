@@ -24,8 +24,8 @@
 
 #include <vector>
 
-#include "dom/beambase.h"
-#include "types/types.h"
+#include "../../dom/beambase.h"
+#include "../../types/types.h"
 
 #include "layoutcontext.h"
 
