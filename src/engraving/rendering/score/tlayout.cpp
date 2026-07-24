@@ -4402,8 +4402,11 @@ void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockInd
     const RectF iconBox = metrics.boundingRect(item->iconCode());
     shape.add(iconBox, item);
 
-    // Inset 2.5sp from edge of page
-    PointF posOnPage = PointF(page->width() - iconBox.width() - iconBox.left() - 2.5 * spatium, page->height() - 2.5 * spatium);
+    const double borderWidth = iconBox.height() + spatium;
+    const double borderPadding = 2 * spatium;
+    const double iconInset = (borderWidth - iconBox.width()) / 2;
+    PointF posOnPage = PointF(page->width() - borderPadding - iconBox.width() - iconBox.left() - iconInset,
+                              page->height() - borderPadding - iconInset);
     PointF posOnSystem = posOnPage - sys->pos();
     ldata->setPos(posOnSystem);
 
@@ -4412,12 +4415,11 @@ void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockInd
         RectF rangeRect = page->shape().bbox();
         PointF rectPagePos = rangeRect.topLeft() - ldata->pos() - sys->pos();
         rangeRect.translate(rectPagePos);
-        rangeRect.adjust(spatium * 2, spatium * 2, -spatium * 2, -spatium * 2);
+        rangeRect.adjust(borderPadding, borderPadding, -borderPadding, -borderPadding);
         ldata->rangeRect = rangeRect;
 
         // Inner rectangle cutout
         // Leaves border with rounded corners when painted
-        double borderWidth = iconBox.height() + spatium;
         RectF innerRect = rangeRect.adjusted(borderWidth, borderWidth, -borderWidth, -borderWidth);
         ldata->innerRangeRect = innerRect;
         shape.add(RectF(PointF(rangeRect.left(),  rangeRect.top()),     PointF(rangeRect.right(),   innerRect.top())));       // top
