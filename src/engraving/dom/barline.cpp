@@ -248,7 +248,13 @@ void BarLine::calcY()
         return;
     }
 
-    Fraction tick = segment()->measure()->tick();
+    const Fraction measureTick = measure->tick();
+    Fraction tick = segment()->tick();
+    if (segment()->isEndBarLineType()) {
+        // End barline should reflect the staff type active at the end of this measure,
+        // not necessarily the one active at the measure start.
+        tick = measure->endTick() - Fraction::eps();
+    }
     const Staff* staff1 = score()->staff(staffIdx1);
     const StaffType* staffType1 = staff1->staffType(tick);
 
@@ -290,7 +296,7 @@ void BarLine::calcY()
     }
 
     // if stafftype change in next measure, check new staff positions
-    Fraction tickNext = tick + measure->ticks();
+    Fraction tickNext = measureTick + measure->ticks();
     if (staff1->isStaffTypeStartFrom(tickNext)) {
         Measure* measureNext = measure->nextMeasure();
         System* systemNext = measureNext ? measureNext->system() : nullptr;

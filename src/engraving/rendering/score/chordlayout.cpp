@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <cfloat>
+#include <utility>
 
 #include "chordlayout.h"
 
@@ -1292,6 +1293,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     double lineDistance = 1;
     bool staffVisible  = true;
     int stepOffset = 0;                         // for staff type changes with a step offset
+    double staffYOffset = 0.0;                  // transition-only y-offset delta
 
     Segment* segment = item->segment();
 
@@ -1300,10 +1302,15 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
         staff_idx_t idx = item->staffIdx() + item->staffMove();
         track         = staff2track(idx);
         const Staff* st     = ctx.dom().staff(idx);
+        const Measure* measure = segment->measure();
         lineBelow     = (st->lines(tick) - 1) * 2;
         lineDistance  = st->lineDistance(tick);
         staffVisible  = !st->isLinesInvisible(tick);
-        stepOffset = st->staffType(tick)->stepOffset();
+        const StaffType* currentType = st->staffType(tick);
+        stepOffset = currentType->stepOffset();
+        if (measure && measure->isPostStaffTypeTransitionTick(idx, tick)) {
+            staffYOffset = measure->computeStaffTypeTransitionOffset(idx, tick, item->spatium());
+        }
     }
 
     // need ledger lines?
@@ -1330,7 +1337,8 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     // NOTE: notes are sorted from bottom to top (line no. decreasing)
     // notes are scanned twice from outside (bottom or top) toward the staff
     // each pass stops at the first note without ledger lines
-    int n = static_cast<int>(item->notes().size());
+    const std::vector<Note*>& notes = item->notes();
+    int n = static_cast<int>(notes.size());
 
     for (const bool topToBottom : { false, true }) {
         const int from = topToBottom ? n - 1 : 0;
@@ -1343,7 +1351,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
         int maxLine = lineBelow;
 
         for (int i = from; i < n && i >= 0; i += delta) {
-            const Note* note = item->notes().at(i);
+            const Note* note = notes[i];
             int l = note->line() + stepOffset;
 
             // if 1st pass and note not below staff or 2nd pass and note not above staff
@@ -1371,8 +1379,10 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
 
             // ledger lines need the leftmost point of the notehead with a respect of bbox
             const double x = note->pos().x() + note->bboxXShift();
-            if (x - extraLen * note->mag() < minX) {
-                minX = x - extraLen * note->mag();
+            const double noteMag = note->mag();
+            const double noteExtent = extraLen * noteMag;
+            if (x - noteExtent < minX) {
+                minX = x - noteExtent;
                 // increase width of all lines between this one and the staff
                 for (auto& d : vecLines) {
                     if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l))) {
@@ -1381,8 +1391,8 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
                 }
             }
             // same for left side
-            if (x + hw + extraLen * note->mag() > maxX) {
-                maxX = x + hw + extraLen * note->mag();
+            if (x + hw + noteExtent > maxX) {
+                maxX = x + hw + noteExtent;
                 for (auto& d : vecLines) {
                     if ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) {
                         d.maxX = maxX;
@@ -1418,7 +1428,10 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
             }
         }
         if (minLine < 0 || maxLine > lineBelow) {
-            ledgerLineData.insert(ledgerLineData.end(), vecLines.begin(), vecLines.end());
+            ledgerLineData.reserve(ledgerLineData.size() + vecLines.size());
+            for (LedgerLineData& lineData : vecLines) {
+                ledgerLineData.push_back(std::move(lineData));
+            }
         }
     }
 
@@ -1426,13 +1439,13 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     double stepDistance = lineDistance * 0.5;
     item->resizeLedgerLinesTo(ledgerLineData.size());
     for (size_t i = 0; i < ledgerLineData.size(); ++i) {
-        LedgerLineData lld = ledgerLineData[i];
+        const LedgerLineData& lld = ledgerLineData[i];
         LedgerLine* h = item->ledgerLines()[i];
         h->setParent(item);
         h->setTrack(track);
         h->setVisible(lld.visible && staffVisible);
         h->setLen(lld.maxX - lld.minX);
-        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+        h->setPos(lld.minX, lld.line * _spatium * stepDistance + staffYOffset);
     }
 
     for (LedgerLine* ll : item->ledgerLines()) {
@@ -2715,6 +2728,11 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     double sp           = staff->spatium(tick);
     double stepDistance = sp * staff->lineDistance(tick) * .5;
     int stepOffset     = staff->staffType(tick)->stepOffset();
+    double staffYOffset = 0.0;
+    const Measure* measure = notes.front()->chord()->measure();
+    if (measure && measure->isPostStaffTypeTransitionTick(staff->idx(), tick)) {
+        staffYOffset = measure->computeStaffTypeTransitionOffset(staff->idx(), tick, sp);
+    }
 
     double upDotPosX    = 0.0;
     double downDotPosX  = 0.0;
@@ -2816,7 +2834,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
                 noteX = chord->noteHeadWidth() - note->headBodyWidth();
             }
 
-            double ny = (note->line() + stepOffset) * stepDistance;
+            double ny = (note->line() + stepOffset) * stepDistance + staffYOffset;
             if (note->ldata()->pos().y() != ny) {
                 note->mutldata()->setPosY(ny);
                 if (stem) {

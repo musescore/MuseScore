@@ -128,10 +128,16 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
     int voiceOffset = computeVoiceOffset(item, ldata); // Measured in 1sp steps
     int wholeRestOffset = computeWholeOrBreveRestOffset(item, voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
+    double transitionYOffset = 0.0;
+
+    const Measure* measure = item->measure();
+    if (measure && measure->isPostStaffTypeTransitionTick(item->staffIdx(), item->tick())) {
+        transitionYOffset = measure->computeStaffTypeTransitionOffset(item->staffIdx(), item->tick(), spatium);
+    }
 
     ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
 
-    ldata->setPosY(finalLine * lineDist * spatium);
+    ldata->setPosY(finalLine * lineDist * spatium + transitionYOffset);
     if (!item->shouldNotBeDrawn()) {
         fillShape(item, ldata, ctx.conf());
     }
@@ -500,6 +506,13 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
 
     track_idx_t sTrack = staffIdx * VOICES;
     track_idx_t eTrack = sTrack + VOICES;
+
+    for (const Fraction& transitionTick : measure->midMeasureStaffTypeChangeTicks(staffIdx)) {
+        const Fraction transitionRTick = transitionTick - measure->tick();
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            interruptionPointSets[voice].insert(transitionRTick);
+        }
+    }
 
     // Compute all-voices interruptions
     for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {

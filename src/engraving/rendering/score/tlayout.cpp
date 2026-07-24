@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <cfloat>
+#include <utility>
 
 #include "tlayout.h"
 
@@ -5180,41 +5181,174 @@ void TLayout::layoutStaffLines(StaffLines* item, LayoutContext& ctx)
     layoutForWidth(item, item->measure()->width(), ctx);
 }
 
+struct StaffLinesTransitionLayoutContext {
+    const Staff* staff = nullptr;
+    const Measure* measure = nullptr;
+    const std::vector<Fraction>* transitionTicks = nullptr;
+    StaffLines* item = nullptr;
+    StaffLines::LayoutData* ldata = nullptr;
+    double width = 0.0;
+    double staffLineWidthStyle = 0.0;
+    double spatium = 0.0;
+    std::vector<LineF>* lines = nullptr;
+    std::vector<StaffLines::ColoredLine>* coloredLines = nullptr;
+};
+
+static void layoutTransitionMeasureStaffLines(const StaffLinesTransitionLayoutContext& ctx)
+{
+    const Staff* staff = ctx.staff;
+    const Measure* measure = ctx.measure;
+    const std::vector<Fraction>& transitionTicks = *ctx.transitionTicks;
+    StaffLines* item = ctx.item;
+    StaffLines::LayoutData* ldata = ctx.ldata;
+    const double width = ctx.width;
+    const double staffLineWidthStyle = ctx.staffLineWidthStyle;
+    const double spatium = ctx.spatium;
+    std::vector<LineF>& lines = *ctx.lines;
+    std::vector<StaffLines::ColoredLine>& coloredLines = *ctx.coloredLines;
+
+    const Fraction measureStartTick = measure->tick();
+    const StaffType* preSt = staff->staffType(measureStartTick);
+    const double preSpatium = staff->spatium(measureStartTick);
+    const double preDist = preSpatium * preSt->lineDistance().val();
+    const int preLines = preSt->lines();
+    const double preYOffset = preSt->yoffset().val() * preSpatium;
+
+    const size_t estimatedSections = transitionTicks.size() + 1;
+    const size_t estimatedLineSegments = static_cast<size_t>(std::max(preLines, 0)) * estimatedSections;
+    lines.reserve(estimatedLineSegments);
+    coloredLines.reserve(estimatedLineSegments);
+
+    // Transition measures can mix invisible and visible sections.
+    // Keep the item visible and encode invisibility per section.
+    item->setVisible(true);
+    item->setLw(staffLineWidthStyle * spatium);
+    ldata->setPosY(preYOffset);
+    double minY = -item->lw() * 0.5;
+    double maxY = (preLines - 1) * preDist + item->lw() * 0.5;
+
+    auto appendSection = [&](const Fraction& sectionTick, double startX, double endX) {
+        if (endX <= startX) {
+            return;
+        }
+
+        const StaffType* st = staff->staffType(sectionTick);
+        const double sectionSpatium = staff->spatium(sectionTick);
+        const double sectionLw = staffLineWidthStyle * sectionSpatium;
+        const double yOffset = st->yoffset().val() * sectionSpatium;
+        const double lineDistance = sectionSpatium * st->lineDistance().val();
+        const double deltaYOffset = yOffset - preYOffset;
+        const int sectionLines = st->lines();
+        const bool sectionInvisible = staff->isLinesInvisible(sectionTick);
+        const Color sectionColor = sectionInvisible
+                                   ? item->configuration()->invisibleColor()
+                                   : staff->color(sectionTick);
+
+        for (int line = 0; line < sectionLines; ++line) {
+            const double y = deltaYOffset + line * lineDistance;
+            const LineF lineSegment(startX, y, endX, y);
+            lines.push_back(lineSegment);
+            coloredLines.push_back({ lineSegment, sectionColor, sectionLw });
+            minY = std::min(minY, y - sectionLw * 0.5);
+            maxY = std::max(maxY, y + sectionLw * 0.5);
+        }
+    };
+
+    double startX = 0.0;
+    Fraction sectionTick = measureStartTick;
+    for (const Fraction& transitionTick : transitionTicks) {
+        const double endX = std::clamp(measure->tick2pos(transitionTick), 0.0, width);
+        appendSection(sectionTick, startX, endX);
+        startX = endX;
+        sectionTick = transitionTick;
+    }
+    appendSection(sectionTick, startX, width);
+    ldata->setBbox(0.0, minY, width, maxY - minY);
+}
+
 void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     StaffLines::LayoutData* ldata = item->mutldata();
     const Staff* s = item->staff();
     double _spatium = item->spatium();
-    double dist     = _spatium;
     item->setPos(PointF(0.0, 0.0));
-    int _lines;
-    if (s) {
-        ldata->setMag(s->staffMag(item->measure()->tick()));
-        item->setVisible(!s->isLinesInvisible(item->measure()->tick()));
-        item->setColor(s->color(item->measure()->tick()));
-        const StaffType* st = s->staffType(item->measure()->tick());
-        dist *= st->lineDistance().val();
-        _lines = st->lines();
-        ldata->setPosY(st->yoffset().val() * _spatium);
-//            if (_lines == 1)
-//                  rypos() = 2 * _spatium;
-    } else {
-        _lines = 5;
-        item->setColor(item->configuration()->defaultColor());
-    }
-    item->setLw(ctx.conf().styleS(Sid::staffLineWidth).val() * _spatium);
-    double x1 = item->pos().x();
-    double x2 = x1 + w;
-    double y  = item->pos().y();
-    ldata->setBbox(x1, -item->lw() * .5 + y, w, (_lines - 1) * dist + item->lw());
 
     std::vector<LineF> ll;
-    for (int i = 0; i < _lines; ++i) {
-        ll.push_back(LineF(x1, y, x2, y));
-        y += dist;
+    std::vector<StaffLines::ColoredLine> coloredLines;
+    const double staffLineWidthStyle = ctx.conf().styleS(Sid::staffLineWidth).val();
+
+    if (s) {
+        const Measure* measure = item->measure();
+        const Fraction measureStartTick = measure->tick();
+        const std::vector<Fraction> transitionTicks = measure->midMeasureStaffTypeChangeTicks(item->staffIdx());
+
+        ldata->setMag(s->staffMag(measureStartTick));
+        item->setColor(s->color(measureStartTick));
+
+        const bool isTransitionMeasure = !transitionTicks.empty();
+
+        if (!isTransitionMeasure) {
+            // Original single-staff-type-per-measure path.
+            item->setVisible(!s->isLinesInvisible(measureStartTick));
+            const StaffType* st = s->staffType(measureStartTick);
+            const double dist = _spatium * st->lineDistance().val();
+            const int lines = st->lines();
+            ldata->setPosY(st->yoffset().val() * _spatium);
+
+            ll.reserve(static_cast<size_t>(std::max(lines, 0)));
+            coloredLines.reserve(static_cast<size_t>(std::max(lines, 0)));
+
+            item->setLw(staffLineWidthStyle * _spatium);
+            const PointF itemPos = item->pos();
+            const double startX = itemPos.x();
+            const double endX = startX + w;
+            double y = itemPos.y();
+            ldata->setBbox(startX, -item->lw() * .5 + y, w, (lines - 1) * dist + item->lw());
+
+            for (int i = 0; i < lines; ++i) {
+                const LineF lineSegment(startX, y, endX, y);
+                ll.push_back(lineSegment);
+                coloredLines.push_back({ lineSegment, item->color(), item->lw() });
+                y += dist;
+            }
+        } else {
+            // Transition measure path: split only at/after transition tick.
+            // Keep layout-space semantics consistent with the original path:
+            // yoffset lives in item posY, while bbox remains in local staff-line coordinates.
+            const StaffLinesTransitionLayoutContext transitionCtx {
+                s,
+                measure,
+                &transitionTicks,
+                item,
+                ldata,
+                w,
+                staffLineWidthStyle,
+                _spatium,
+                &ll,
+                &coloredLines,
+            };
+            layoutTransitionMeasureStaffLines(transitionCtx);
+        }
+    } else {
+        const int lines = 5;
+        item->setColor(item->configuration()->defaultColor());
+        item->setLw(staffLineWidthStyle * _spatium);
+        ldata->setBbox(0.0, -item->lw() * .5, w, (lines - 1) * _spatium + item->lw());
+
+        ll.reserve(static_cast<size_t>(lines));
+        coloredLines.reserve(static_cast<size_t>(lines));
+
+        for (int i = 0; i < lines; ++i) {
+            const double y = _spatium * i;
+            const LineF lineSegment(0.0, y, w, y);
+            ll.push_back(lineSegment);
+            coloredLines.push_back({ lineSegment, item->color(), item->lw() });
+        }
     }
-    item->setLines(ll);
+
+    item->setLines(std::move(ll));
+    item->setColoredLines(std::move(coloredLines));
 }
 
 void TLayout::layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata)
@@ -5314,8 +5448,12 @@ void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange
     double spatium = conf.spatium();
     ldata->setBbox(RectF(-item->lw() * .5, -item->lw() * .5, spatium * 2.5 + item->lw(), spatium * 2.5 + item->lw()));
     if (item->measure()) {
+        double x = spatium * .8;
+        if (!item->isAtMeasureStart()) {
+            x = item->measure()->tick2pos(item->tick());
+        }
         double y = -1.5 * spatium - ldata->bbox().height() + item->measure()->system()->staff(item->staffIdx())->y();
-        ldata->setPos(spatium * .8, y);
+        ldata->setPos(x, y);
     } else {
         ldata->setPos(0.0, 0.0);
     }

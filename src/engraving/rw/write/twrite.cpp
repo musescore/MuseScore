@@ -3149,6 +3149,9 @@ void TWrite::write(const StaffTypeChange* item, XmlWriter& xml, WriteContext& ct
     if (item->staffType()) {
         write(item->staffType(), xml, ctx);
     }
+    if (item->tick() != item->propertyDefault(Pid::TICK).value<Fraction>()) {
+        xml.tagFraction("tick", item->tick());
+    }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }

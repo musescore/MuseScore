@@ -4047,6 +4047,8 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
             TRead::read(st, e, ctx);
             // Measure::add() will replace this with a pointer to a copy in the staff
             c->setStaffType(st, true);
+        } else if (tag == "tick") {
+            c->setProperty(Pid::TICK, PropertyValue(e.readFraction()));
         } else if (!readItemProperties(c, e, ctx)) {
             e.unknown();
         }

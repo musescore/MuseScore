@@ -518,10 +518,33 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
         segment = shadowNoteActualSegment;
     }
 
-    Fraction tick = segment->tick();
-    qreal mag = staff->staffMag(tick);
+    const Fraction inputTick = segment->tick();
+    Fraction previewTick = inputTick;
 
-    const mu::engraving::Instrument* instr = staff->part()->instrument(tick);
+    // Keep original input-tick behavior, but choose preview style by hovered
+    // x-region inside a transition measure.
+    if (position.segment) {
+        const Measure* hoveredMeasure = position.segment->measure();
+        if (hoveredMeasure) {
+            const std::vector<Fraction> transitionTicks
+                =hoveredMeasure->midMeasureStaffTypeChangeTicks(position.staffIdx);
+            if (!transitionTicks.empty()) {
+                const Fraction hoverTick = StaffTypeChange::insertionTick(hoveredMeasure, position.pos);
+                previewTick = hoveredMeasure->tick();
+                for (const Fraction& transitionTick : transitionTicks) {
+                    if (transitionTick <= hoverTick) {
+                        previewTick = transitionTick;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    qreal mag = staff->staffMag(previewTick);
+
+    const mu::engraving::Instrument* instr = staff->part()->instrument(inputTick);
 
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = params.duration.headType();
@@ -557,7 +580,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     shadowNote.setVisible(true);
     shadowNote.mutldata()->setMag(mag);
-    shadowNote.setTick(tick);
+    shadowNote.setTick(previewTick);
     shadowNote.setStaffIdx(position.staffIdx);
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
@@ -575,7 +598,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
         Score* s = score()->paletteScore() ? score()->paletteScore() : score();
         mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy()->segment(), params.duration.type());
         rest->setTicks(params.duration.fraction());
-        symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
+        symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(previewTick));
         shadowNote.setState(symNotehead, params.duration, true, params.position.beyondScore);
         delete rest;
     } else {
@@ -591,7 +614,7 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     // if upscaled, note appears by default a distance away from the segment start,
     // as described in ChordLayout::centreChords
-    if (mag > 1.0) {
+    if (mag > 1.0 && previewTick == inputTick) {
         qreal xOffset = (mag - 1.0) * 0.5 * shadowNote.symWidth(symNotehead);
         if (shadowNote.computeUp()) {
             position.pos.rx() += xOffset;
@@ -634,7 +657,17 @@ RectF NotationInteraction::shadowNoteRect() const
     }
 
     penWidth *= note->mag();
-    rect.adjust(-penWidth, -penWidth, penWidth, penWidth);
+
+    // Add extra vertical repaint margin to avoid staff-line artifacts while
+    // dragging note preview in ledger-line zones.
+    double lineDistanceFactor = 1.0;
+    double lineCount = 5.0;
+    if (const StaffType* st = note->staffType()) {
+        lineDistanceFactor = std::max(1.0, st->lineDistance().val());
+        lineCount = std::max(4.0, static_cast<double>(st->lines()));
+    }
+    const double extraY = note->spatium() * note->mag() * lineDistanceFactor * (lineCount + 4.0);
+    rect.adjust(-penWidth, -penWidth - extraY, penWidth, penWidth + extraY);
 
     return rect;
 }
@@ -3104,8 +3137,11 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
         return false;
     }
 
-    mu::engraving::staff_idx_t staffIdx;
-    mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, nullptr, 0);
+    mu::engraving::staff_idx_t staffIdx = muse::nidx;
+    mu::engraving::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, nullptr, nullptr);
+    const bool isStaffTypeChange = dropElem->isStaffTypeChange()
+                                   || (dropElem->isActionIcon()
+                                       && toActionIcon(dropElem)->actionType() == ActionIconType::STAFF_TYPE_CHANGE);
 
     //! NOTE: Should match Measure::acceptDrop
     switch (dropElem->type()) {
@@ -3134,7 +3170,7 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
     }
 
     // Apart from STAFF_TYPE_CHANGE, measure anchored action icons are applied to all staves
-    if (dropElem->isActionIcon() && toActionIcon(dropElem)->actionType() != ActionIconType::STAFF_TYPE_CHANGE) {
+    if (dropElem->isActionIcon() && !isStaffTypeChange) {
         staffIdx = 0;
     }
 
@@ -3145,11 +3181,36 @@ bool NotationInteraction::prepareDropMeasureAnchorElement(const PointF& pos)
 
         RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
         measureRect.adjust(page->x(), page->y(), page->x(), page->y());
-        edd.ed.pos = measureRect.center();
+
+        PointF dropPoint = measureRect.center();
+        if (isStaffTypeChange) {
+            // Keep the exact drag position in canvas coordinates for tick mapping.
+            dropPoint = pos;
+        }
+
+        edd.ed.pos = dropPoint;
 
         const bool dropAccepted = targetMeasure->acceptDrop(edd.ed);
         if (dropAccepted) {
-            setAnchorLines({ LineF(pos, measureRect.topLeft()) });
+            LineF anchorLine;
+            if (isStaffTypeChange) {
+                const Fraction measureStartTick = targetMeasure->tick();
+                const Fraction tick = StaffTypeChange::insertionTick(targetMeasure, dropPoint);
+                if (tick == measureStartTick) {
+                    // Preserve legacy left-edge cue: STC at measure start anchors to top-left.
+                    anchorLine = LineF(pos, measureRect.topLeft());
+                } else {
+                    const double measureLeftX = targetMeasure->canvasPos().x();
+                    const double snappedX = measureLeftX + targetMeasure->tick2pos(tick);
+                    anchorLine = LineF(PointF(snappedX, measureRect.top()), PointF(snappedX, measureRect.bottom()));
+                }
+            } else {
+                anchorLine = LineF(pos, dropPoint);
+            }
+
+            setAnchorLines({ anchorLine });
+        } else {
+            setDropTarget(nullptr, true);
         }
 
         return dropAccepted;

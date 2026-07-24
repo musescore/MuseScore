@@ -40,6 +40,52 @@
 
 using namespace mu::engraving;
 
+namespace {
+std::vector<std::vector<Fraction> > collectStaffTypeChangeTicksInRange(const MasterScore* score,
+                                                                       const Fraction& rangeStart,
+                                                                       const Fraction& rangeEnd)
+{
+    std::vector<std::vector<Fraction> > result;
+    if (!score || rangeEnd <= rangeStart) {
+        return result;
+    }
+
+    result.resize(score->nstaves());
+
+    const int startTick = rangeStart.ticks();
+    const int endTick = rangeEnd.ticks();
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        const Staff* staff = score->staves().at(staffIdx);
+        std::vector<Fraction>& ticks = result[staffIdx];
+
+        if (staff->isStaffTypeStartFrom(rangeStart)) {
+            ticks.push_back(rangeStart);
+        }
+
+        for (int tick = staff->staffTypeRange(Fraction::fromTicks(startTick + 1)).second;
+             tick != -1 && tick < endTick;
+             tick = staff->staffTypeRange(Fraction::fromTicks(tick + 1)).second) {
+            ticks.push_back(Fraction::fromTicks(tick));
+        }
+    }
+
+    return result;
+}
+
+void reinsertStaffTypeChange(MasterScore* score, Measure* measure, size_t staffIdx, const Fraction& tick)
+{
+    if (!score || !measure || !measure->canAddStaffTypeChange(staffIdx, tick)) {
+        return;
+    }
+
+    StaffTypeChange* stc = Factory::createStaffTypeChange(measure);
+    stc->setParent(measure);
+    stc->setTrack(staffIdx * VOICES);
+    stc->setProperty(Pid::TICK, PropertyValue(tick));
+    score->addElement(stc);
+}
+}
+
 //---------------------------------------------------------
 //   splitMeasure
 //---------------------------------------------------------
@@ -71,6 +117,8 @@ void SplitJoinMeasure::splitMeasure(Transaction& tx, MasterScore* masterScore, c
 
     Fraction stick = measure->tick();
     Fraction etick = measure->endTick();
+    const std::vector<std::vector<Fraction> > staffTypeChangeTicks
+        = collectStaffTypeChangeTicksInRange(masterScore, stick, etick);
 
     std::vector<std::tuple<Spanner*, Fraction, Fraction> > spanners;
     for (auto i : masterScore->spanner()) {
@@ -173,12 +221,9 @@ void SplitJoinMeasure::splitMeasure(Transaction& tx, MasterScore* masterScore, c
     }
 
     for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
-        Staff* staff = masterScore->staves().at(staffIdx);
-        if (staff->isStaffTypeStartFrom(stick)) {
-            StaffTypeChange* stc = Factory::createStaffTypeChange(m1);
-            stc->setParent(m1);
-            stc->setTrack(staffIdx * VOICES);
-            masterScore->addElement(stc);
+        for (const Fraction& stcTick : staffTypeChangeTicks[staffIdx]) {
+            Measure* destination = (stcTick < m2->tick()) ? m1 : m2;
+            reinsertStaffTypeChange(masterScore, destination, staffIdx, stcTick);
         }
     }
 }
@@ -222,6 +267,8 @@ void SplitJoinMeasure::joinMeasures(Transaction& tx, MasterScore* masterScore, c
 
     Fraction startTick = m1->tick();
     Fraction endTick = m2->endTick();
+    const std::vector<std::vector<Fraction> > staffTypeChangeTicks
+        = collectStaffTypeChangeTicksInRange(masterScore, startTick, endTick);
 
     auto spanners = masterScore->spannerMap().findContained(startTick.ticks(), endTick.ticks());
     for (auto i : spanners) {
@@ -267,12 +314,8 @@ void SplitJoinMeasure::joinMeasures(Transaction& tx, MasterScore* masterScore, c
     }
 
     for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
-        Staff* staff = masterScore->staves().at(staffIdx);
-        if (staff->isStaffTypeStartFrom(tick1)) {
-            StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(joinedMeasure);
-            stc->setParent(joinedMeasure);
-            stc->setTrack(staffIdx * VOICES);
-            masterScore->addElement(stc);
+        for (const Fraction& stcTick : staffTypeChangeTicks[staffIdx]) {
+            reinsertStaffTypeChange(masterScore, joinedMeasure, staffIdx, stcTick);
         }
     }
 

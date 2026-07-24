@@ -1687,7 +1687,12 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
 
                         // add element to skyline
                         if (e->addToSkyline()) {
-                            const PointF offset = e->staffOffset();
+                            PointF offset = e->staffOffset();
+
+                            if (e->isChord() && m->isPostStaffTypeTransitionTick(staffIdx, e->tick())) {
+                                offset.ry() -= m->computeStaffTypeTransitionOffset(staffIdx, e->tick(), e->spatium());
+                            }
+
                             Shape shape = e->shape();
                             // add grace notes to skyline
                             if (e->isChord()) {
