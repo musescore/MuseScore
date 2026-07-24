@@ -232,7 +232,9 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
             if (mb->isVBoxBase()) {
                 VBox* vbox = static_cast<VBox*>(mb);
                 vbox->setProperty(Pid::PADDING_TO_NOTATION_ABOVE, Spatium()); // Because pre-4.6 these didn't exist
+                vbox->setPropertyFlags(Pid::PADDING_TO_NOTATION_ABOVE, PropertyFlags::UNSTYLED);
                 vbox->setProperty(Pid::PADDING_TO_NOTATION_BELOW, Spatium());
+                vbox->setPropertyFlags(Pid::PADDING_TO_NOTATION_BELOW, PropertyFlags::UNSTYLED);
                 if (nextmb && nextmb->isVBoxBase()) {
                     VBox* first = static_cast<VBox*>(mb);
                     VBox* second = static_cast<VBox*>(nextmb);
