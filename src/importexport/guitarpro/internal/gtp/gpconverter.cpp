@@ -1270,7 +1270,15 @@ void GPConverter::addContinuousSlideHammerOn()
             }
 
             if (nextCr->isChord() && !toChord(nextCr)->graceNotes().empty()) {
-                nextCr = toChord(nextCr)->graceNotes().front();
+                Chord* firstGrace = toChord(nextCr)->graceNotes().front();
+                bool isDiveGrace = false;
+                if (!firstGrace->notes().empty()) {
+                    Note* gn = firstGrace->notes().front();
+                    isDiveGrace = gn->ghost() || gn->diveFor() || gn->diveBack();
+                }
+                if (!isDiveGrace) {
+                    nextCr = firstGrace;
+                }
             }
         }
 
@@ -1308,6 +1316,10 @@ void GPConverter::addContinuousSlideHammerOn()
             GuitarBend* bend = bendNote->bendFor();
 
             while (bend) {
+                if (bend->isDive()) {
+                    break;
+                }
+
                 bendNote = bend->endNote();
                 IF_ASSERT_FAILED(bendNote) {
                     LOGE() << "glissando start note may be incorrect";
