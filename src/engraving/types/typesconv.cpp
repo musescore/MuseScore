@@ -2540,17 +2540,21 @@ BarLineType TConv::fromXml(const AsciiStringView& tag, BarLineType def)
     return def;
 }
 
-static const std::array<Item<TremoloType>, 10> TREMOLO_TYPES = { {
+static const std::array<Item<TremoloType>, 14> TREMOLO_TYPES = { {
     { TremoloType::INVALID_TREMOLO, "" },
     { TremoloType::R8,              "r8",       muse::TranslatableString("engraving/tremolotype", "Eighth through stem") },
     { TremoloType::R16,             "r16",      muse::TranslatableString("engraving/tremolotype", "16th through stem") },
     { TremoloType::R32,             "r32",      muse::TranslatableString("engraving/tremolotype", "32nd through stem") },
     { TremoloType::R64,             "r64",      muse::TranslatableString("engraving/tremolotype", "64th through stem") },
+    { TremoloType::R128,            "r128",     muse::TranslatableString("engraving/tremolotype", "128th through stem") },
+    { TremoloType::R256,            "r256",     muse::TranslatableString("engraving/tremolotype", "256th through stem") },
     { TremoloType::BUZZ_ROLL,       "buzzroll", muse::TranslatableString("engraving/tremolotype", "Buzz roll") },
     { TremoloType::C8,              "c8",       muse::TranslatableString("engraving/tremolotype", "Eighth between notes") },
     { TremoloType::C16,             "c16",      muse::TranslatableString("engraving/tremolotype", "16th between notes") },
     { TremoloType::C32,             "c32",      muse::TranslatableString("engraving/tremolotype", "32nd between notes") },
-    { TremoloType::C64,             "c64",      muse::TranslatableString("engraving/tremolotype", "64th between notes") }
+    { TremoloType::C64,             "c64",      muse::TranslatableString("engraving/tremolotype", "64th between notes") },
+    { TremoloType::C128,            "c128",     muse::TranslatableString("engraving/tremolotype", "128th between notes") },
+    { TremoloType::C256,            "c256",     muse::TranslatableString("engraving/tremolotype", "256th between notes") }
 } };
 
 const muse::TranslatableString& TConv::userName(TremoloType v)

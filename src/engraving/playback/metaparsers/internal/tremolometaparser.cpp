@@ -46,6 +46,12 @@ static mpe::ArticulationType toArticulationType(TremoloType type)
         return mpe::ArticulationType::Tremolo32nd;
     case TremoloType::R64:
     case TremoloType::C64:
+    // Playback currently caps tremolo subdivisions at 64th; 128th and 256th
+    // tremolos intentionally reuse the 64th articulation pattern.
+    case TremoloType::R128:
+    case TremoloType::C128:
+    case TremoloType::R256:
+    case TremoloType::C256:
         return mpe::ArticulationType::Tremolo64th;
     case TremoloType::BUZZ_ROLL:
         return mpe::ArticulationType::TremoloBuzz;
