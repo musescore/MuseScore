@@ -111,7 +111,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_TenutoAccent)
     m_defaultProfile->setPattern(ArticulationType::Tenuto, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -159,7 +159,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_NoArticulations)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -210,7 +210,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -270,7 +270,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -308,7 +308,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
     m_defaultProfile->setPattern(ArticulationType::TrillBaroque, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -397,7 +397,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     m_defaultProfile->setPattern(ArticulationType::Turn, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -471,7 +471,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     m_defaultProfile->setPattern(ArticulationType::InvertedTurn, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -546,7 +546,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
     m_defaultProfile->setPattern(ArticulationType::InvertedTurn, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -621,7 +621,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     m_defaultProfile->setPattern(ArticulationType::UpperMordent, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -696,7 +696,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
     m_defaultProfile->setPattern(ArticulationType::LowerMordent, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -759,7 +759,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -831,7 +831,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -915,7 +915,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -989,7 +989,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     PlaybackEventsMap result;
     m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
@@ -1070,7 +1070,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // ###################################################
     // 1st case: Discrete glissando on a tied note
@@ -1229,7 +1229,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -1315,7 +1315,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -1393,7 +1393,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1469,7 +1469,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
     m_defaultProfile->setPattern(ArticulationType::PreAppoggiatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
@@ -1546,7 +1546,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1632,7 +1632,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AppoggiaturaChord_Post)
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1710,7 +1710,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1782,7 +1782,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
     m_defaultProfile->setPattern(ArticulationType::Arpeggio, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1854,7 +1854,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1924,7 +1924,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -1997,7 +1997,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioDown, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2070,7 +2070,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioStraightDown, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2143,7 +2143,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioStraightUp, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2209,7 +2209,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2249,7 +2249,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedArpeggio)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -2354,7 +2354,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo8th, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2397,7 +2397,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
     m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [GIVEN] Chord of the 1st tied note (without tremolo)
     const Chord* chord = findChord(score, 1920);
@@ -2494,7 +2494,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote_Pla
     m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [GIVEN] First tied note (without tremolo) - should render normally
     const Chord* firstChord = findChord(score, 1920);
@@ -2568,7 +2568,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2614,7 +2614,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
     m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -2709,7 +2709,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -2848,7 +2848,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
@@ -2895,7 +2895,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -2982,7 +2982,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -3088,7 +3088,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartialTie)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -3201,7 +3201,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
@@ -3303,7 +3303,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
     // [GIVEN] The chord we want to render
     const Measure* firstMeasure = score->firstMeasure();
@@ -3558,10 +3558,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, HandbellsLetVibrate)
     m_defaultProfile->setPattern(ArticulationType::Pedal, m_dummyPattern);
 
     // [GIVEN] Playback context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>(score);
 
-    // [WHEN] Init the context
-    ctx->update(score->parts().front()->id(), score);
+    // [WHEN] Parse the score
+    const Part* part = score->parts().front();
+    const TrackRange trackRange = part->trackRange();
+    const int lastTick = score->endTick().ticks();
+    ctx->update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Render the score
     PlaybackEventsMap result;
