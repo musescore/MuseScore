@@ -286,20 +286,17 @@ void BendDataCollector::moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& d
         dataChunkIt = std::next(dataChunkIt);
         auto& nextChordData = dataChunkIt->second;
 
-        const bool noteExists = chordExists && noteIdx < nextChordData.chord->notes().size();
-        const Note* nextNote = noteExists ? nextChordData.chord->notes()[noteIdx] : nullptr;
-        const bool dataExists = noteExists && muse::contains(nextChordData.dataByNote, nextNote);
-
-        if (!dataExists) {
+        if (!chordExists || noteIdx >= nextChordData.chord->notes().size()) {
             LOGE() << "bend import error: bends data for tied notes is wrong for track " << note->track() << ", tick " <<
                 note->tick().ticks();
             return;
         }
 
-        auto& dataForNextNote = nextChordData.dataByNote.at(nextNote);
+        const Note* nextNote = nextChordData.chord->notes()[noteIdx];
+        auto& dataForNextNote = nextChordData.dataByNote[nextNote];
+        dataForNextNote.note = nextNote;
         dataForNextNote.segments.push_back(std::move(dataForFirstNote.segments[i]));
         dataForNextNote.connectionType = ConnectionToNextNoteType::MAIN_NOTE_CONNECTS;
-        dataForNextNote.note = nextNote;
     }
 
     if (newSegmentsSize < segmentsSize) {
