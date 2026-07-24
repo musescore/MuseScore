@@ -193,6 +193,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
 
     INotationWriter::Options options {
         { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
+        { INotationWriter::OptionKey::APPLY_WATERMARK, Val(imagesExportConfiguration()->exportApplyWatermark()) },
     };
 
     switch (unitType) {

@@ -982,6 +982,19 @@ void ExportDialogModel::setSelectedSampleFormat(int format)
     emit selectedSampleFormatChanged();
 }
 
+bool ExportDialogModel::applyWatermark() const
+{
+    return imageExportConfiguration()->exportApplyWatermark();
+}
+
+void ExportDialogModel::setApplyWatermark(bool apply)
+{
+    if (apply == imageExportConfiguration()->exportApplyWatermark()) {
+        return;
+    }
+    imageExportConfiguration()->setExportApplyWatermark(apply);
+    emit applyWatermarkChanged(apply);
+}
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 void ExportDialogModel::updateVideoExportSettingMode()
 {

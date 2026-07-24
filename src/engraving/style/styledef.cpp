@@ -2242,6 +2242,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
     styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
     styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
+
+    // --- Watermark ---
+    styleDef(watermarkEnabled,                           false),
+    styleDef(watermarkType,                              0),
+    styleDef(watermarkText,                              String(u"DRAFT")),
+    styleDef(watermarkOpacity,                           0.20),
+    styleDef(watermarkAngle,                             -45.0),
+    styleDef(watermarkImagePath,                         String(u"")),
+    styleDef(watermarkImageScale,                        1.0),
 } };
 
 #undef styleDef
