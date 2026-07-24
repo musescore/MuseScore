@@ -233,10 +233,10 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                         const Staff* staff = mainNote->staff();
                         const StringData* sd = mainNote->part()->stringData(mainNote->tick(), staff->idx());
                         const int offset = staff->pitchOffset(mainNote->tick());
-                        const int gFret = sd->fret(gracePitch + offset, mainNote->string(), staff);
-                        if (gFret > 0) {
+                        const int fret = sd->fret(gracePitch + offset, mainNote->string(), staff);
+                        if (fret >= 0) {
                             graceNote->setString(mainNote->string());
-                            graceNote->setFret(gFret);
+                            graceNote->setFret(fret);
                         }
                     }
 
