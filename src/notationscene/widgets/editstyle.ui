@@ -3844,6 +3844,24 @@
       <widget class="QWidget" name="PageSystem">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
+         <widget class="QScrollArea" name="scrollArea_system">
+          <property name="frameShape">
+           <enum>QFrame::Shape::NoFrame</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollArea_system_contents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>660</width>
+             <height>806</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_system">
+        <item>
          <widget class="QGroupBox" name="groupBox_systemBrackets">
           <property name="title">
            <string>System brackets</string>
@@ -4804,6 +4822,10 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
       <widget class="QWidget" name="PageInstrumentNames">
        <layout class="QVBoxLayout" name="verticalLayout_55">
         <property name="spacing">
@@ -13655,6 +13677,7 @@ followed by dashes</string>
   <tabstop>evenFooterL</tabstop>
   <tabstop>evenFooterC</tabstop>
   <tabstop>evenFooterR</tabstop>
+  <tabstop>scrollArea_system</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>resetBracketThickness</tabstop>
   <tabstop>akkoladeWidth</tabstop>
