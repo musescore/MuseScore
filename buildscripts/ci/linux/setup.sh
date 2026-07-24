@@ -29,7 +29,7 @@ BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 PACKARCH="x86_64" # x86_64, aarch64, wasm
 COMPILER="gcc" # gcc, clang
-EMSDK_VERSION="4.0.7" # for Qt 6.10
+EMSDK_VERSION="4.0.7" # for Qt 6.11.1
 BUILD_PIPEWIRE=
 
 while [[ "$#" -gt 0 ]]; do
