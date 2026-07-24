@@ -173,7 +173,7 @@ bool ImplodeExplode::explode(Score* score)
                     }
                 }
 
-                if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyRests(i) || !t) {
+                if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyDeletedRests(i) || !t) {
                     continue;
                 }
                 sTracks[full] = i;
