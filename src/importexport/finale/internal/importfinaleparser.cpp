@@ -215,6 +215,7 @@ Image* FinaleParser::getImageFromShape(const Cmper& shapeId)
     }
     IF_ASSERT_FAILED(registeredImage) {
         logger()->logWarning(String(u"Unable to create image from shape with cmper %1.").arg(String::fromStdString(std::to_string(shapeId))));
+        return nullptr;
     }
     return registeredImage->clone();
 }

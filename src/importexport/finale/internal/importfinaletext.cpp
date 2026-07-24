@@ -49,7 +49,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/pitchspelling.h"
@@ -64,6 +63,8 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/navigation.h"
 
 #include "engraving/rendering/score/headerfooterlayout.h"
 #include "engraving/rendering/score/layoutcontext.h"

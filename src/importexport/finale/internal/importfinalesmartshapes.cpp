@@ -43,7 +43,6 @@
 #include "engraving/dom/line.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteline.h"
 #include "engraving/dom/ottava.h"
@@ -58,6 +57,8 @@
 #include "engraving/dom/utils.h"
 #include "engraving/dom/vibrato.h"
 #include "engraving/dom/volta.h"
+
+#include "engraving/editing/navigation.h"
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/types.h"
@@ -211,7 +212,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
 
     if (elementType == ElementType::HAIRPIN) {
         if (beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)
-            || beginText.contains(u"decresc", CaseSensitivity::CaseInsensitive)) {
+            || continueText.contains(u"decresc", CaseSensitivity::CaseInsensitive)) {
             hairpinType = HairpinType::DIM_LINE;
         }
     } else if (elementType == ElementType::TEXTLINE) {
@@ -307,7 +308,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxIn
                 endHookType = HookType::HOOK_45;
                 endHookHeight = 0.5_sp;
                 // Pedals with text have already been detected - if element has no text but pedal hooks, is likely pedal
-                if (elementType == ElementType::TEXTLINE && endText.empty() && continueText.empty() && endText.empty()) {
+                if (elementType == ElementType::TEXTLINE && beginText.empty() && continueText.empty() && endText.empty()) {
                     elementType = ElementType::PEDAL;
                 }
                 break;
@@ -379,7 +380,7 @@ DirectionV FinaleParser::calculateSlurDirection(Slur* slur)
             || (!muse::contains(m_fixedChords, toChord(slur->endCR())) && toChord(slur->endCR())->notes().size() == 1))) {
         return DirectionV::DOWN;
     }
-    for (ChordRest* cr = slur->startCR(); cr; cr = nextChordRest(cr)) {
+    for (ChordRest* cr = slur->startCR(); cr; cr = Navigation::nextChordRest(cr)) {
         if (!cr->isChord()) {
             continue;
         }
@@ -700,7 +701,7 @@ void FinaleParser::importSmartShapes()
                 setAndStyleProperty(textLineBase, Pid::GAP_BETWEEN_TEXT_AND_LINE, customLine->gapBetweenTextAndLine);
                 setAndStyleProperty(textLineBase, Pid::TEXT_SIZE_SPATIUM_DEPENDENT, customLine->textSizeSpatiumDependent);
 
-                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_PLACE, customLine->continueTextPlace);
+                setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_PLACE, customLine->beginTextPlace);
                 setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT, customLine->beginText);
                 setAndStyleProperty(textLineBase, Pid::BEGIN_TEXT_ALIGN, customLine->beginTextAlign);
                 setAndStyleProperty(textLineBase, Pid::BEGIN_FONT_FACE, customLine->beginFontFamily);
@@ -749,7 +750,7 @@ void FinaleParser::importSmartShapes()
                     setAndStyleProperty(glissando, Pid::FONT_SIZE, customLine->centerShortFontSize);
                 } else if (!customLine->centerLongText.empty()) {
                     setAndStyleProperty(glissando, Pid::GLISS_SHOW_TEXT, true);
-                    setAndStyleProperty(glissando, Pid::GLISS_TEXT, customLine->centerShortText);
+                    setAndStyleProperty(glissando, Pid::GLISS_TEXT, customLine->centerLongText);
                     setAndStyleProperty(glissando, Pid::FONT_STYLE, int(customLine->centerLongFontStyle));
                     setAndStyleProperty(glissando, Pid::FONT_FACE, customLine->centerLongFontFamily);
                     setAndStyleProperty(glissando, Pid::FONT_SIZE, customLine->centerLongFontSize);
@@ -1179,7 +1180,7 @@ void FinaleParser::importVoltas()
 
             if (importCustomPositions()) {
                 copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
-                VoltaSegment* linkedVs = toVoltaSegment(volta->frontSegment());
+                VoltaSegment* linkedVs = toVoltaSegment(copy->frontSegment());
                 linkedVs->setSystem(measure->system());
 
                 const auto indiv = endingBegin->getIndividualPositioning(linkedMusxStaffId);
@@ -1348,7 +1349,7 @@ void FinaleParser::importVoltas()
             }
 
             copy->fixupSegments(1, [copy](System* parent) { return copy->createLineSegment(parent); });
-            VoltaSegment* linkedVs = toVoltaSegment(cur->frontSegment());
+            VoltaSegment* linkedVs = toVoltaSegment(copy->frontSegment());
             linkedVs->setSystem(measure->system());
 
             const MusxInstance<others::RepeatIndividualPositioning> indiv = endingEnd->getIndividualPositioning(linkedMusxStaffId);

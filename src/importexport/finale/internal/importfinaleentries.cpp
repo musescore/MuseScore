@@ -43,7 +43,6 @@
 #include "engraving/dom/laissezvib.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
@@ -62,6 +61,8 @@
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/navigation.h"
 
 #include "engraving/rendering/score/beamtremololayout.h"
 
@@ -476,7 +477,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
     Staff* baseStaff = m_score->staff(staffIdx);
     Staff* targetStaff = m_score->staff(idx);
     if (!(targetStaff && targetStaff->visible() && targetStaff->isLinked() == baseStaff->isLinked()
-          && staff2track(idx) >= baseStaff->part()->startTrack() && staff2track(idx) < baseStaff->part()->endTrack()
+          && staff2track(idx) >= baseStaff->part()->trackRange().startTrack && staff2track(idx) < baseStaff->part()->trackRange().endTrack
           && targetStaff->staffType(entryTick)->group() == baseStaff->staffType(entryTick)->group())) {
         crossStaffMove = 0;
         targetStaff = baseStaff;

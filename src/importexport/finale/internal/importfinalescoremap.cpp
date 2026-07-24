@@ -1249,7 +1249,7 @@ void FinaleParser::applyStaffStyles()
                     if (sp.value->isVolta()) {
                         sp.value->setVisible(!staffStyle->hideRepeats);
                     }
-                    if (sp.value->anchor() != Spanner::Anchor::CHORD || sp.value->anchor() == Spanner::Anchor::NOTE) {
+                    if (sp.value->anchor() != Spanner::Anchor::CHORD || sp.value->anchor() != Spanner::Anchor::NOTE) {
                         continue;
                     }
                     bool isAltLayer = layerFromTrack(sp.value->track(), sp.value->tick()) == staffStyle->altLayer;
@@ -1586,7 +1586,7 @@ void FinaleParser::importBarlines()
                 bl->setVisible(!mensurLast);
                 int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
                 bl->setSpanFrom(mensurStricheSpanFrom(lines));
-                bl->setSpanFrom(0);
+                bl->setSpanTo(0);
             } else {
                 bl->setSpanFrom(0);
                 bl->setSpanTo(0);
@@ -1722,8 +1722,8 @@ void FinaleParser::importPageLayout()
             logger()->logInfo(String(u"No need to add right margin for system %1").arg(i));
         }
 
-        // Lock measures in place, to guarantee we end up with the correct measure distribution
-        m_score->addSystemLock(new SystemLock(sysStart, sysEnd));
+        // Lock measures in system, to guarantee we end up with the correct measure distribution
+        m_score->addSystemLock(new RangeLock(sysStart, sysEnd));
 
         // Calculate if this is the last system on the page and add a page break if needed
         const bool isLastSystemInScore = i + 1 >= staffSystems.size();
@@ -1915,7 +1915,7 @@ void FinaleParser::rebaseSystemLeftMargins()
         }
         if (newStart && s->systemLock()) {
             m_score->removeSystemLock(s->systemLock());
-            m_score->addSystemLock(new SystemLock(newStart, s->last()));
+            m_score->addSystemLock(new RangeLock(newStart, s->last()));
         }
     }
 }

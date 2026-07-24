@@ -1663,7 +1663,7 @@ SymId acciSymbolFromAcciAmount(int acciAmount)
     /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
     /// This code assumes each chromatic halfstep is 1 EDO division, but we cannot make that assumption
     /// with microtonal symbols.
-    if (acciAmount == std::clamp(acciAmount, int(AccidentalVal::MIN), int(AccidentalVal::MIN))) {
+    if (acciAmount == std::clamp(acciAmount, int(AccidentalVal::MIN), int(AccidentalVal::MAX))) {
         return Accidental::subtype2symbol(Accidental::value2subtype(AccidentalVal(acciAmount)));
     }
     return SymId::noSym;
