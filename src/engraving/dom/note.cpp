@@ -40,6 +40,7 @@
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
+#include "types/symnames.h"
 
 #include "rendering/score/horizontalspacing.h"
 
@@ -2723,7 +2724,7 @@ int Note::playingOctave() const
 
 double Note::playingTuning() const
 {
-    return m_tuning + m_centOffset;
+    return m_tuning + effectiveCentOffset();
 }
 
 //---------------------------------------------------------
@@ -4256,5 +4257,28 @@ staff_idx_t Note::vStaffIdx() const
 {
     const Chord* c = chord();
     return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
+double Note::effectiveCentOffset() const
+{
+    if (m_accidental) { // explicit note-level accidental wins
+        double offset = Accidental::subtype2centOffset(m_accidental->accidentalType());
+        return offset;
+    }
+    if (!staff() || !chord()) {
+        return 0.0;
+    }
+    const KeySigEvent& kse = staff()->keySigEvent(chord()->tick());
+    if (!kse.custom()) {
+        return 0.0;
+    }
+    int deg = tpc2step(tpc());
+    for (const CustDef& cd : kse.customKeyDefs()) {
+        if (kse.degInKey(cd.degree) == deg) {
+            return Accidental::subtype2centOffset(
+                Accidental::name2subtype(SymNames::nameForSymId(cd.sym)));
+        }
+    }
+    return 0.0;
 }
 }
