@@ -286,8 +286,8 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
         }
     }
 
-    for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-        for (EngravingItem* item : segment->annotations()) {
+    for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+        for (const EngravingItem* item : segment->annotations()) {
             IF_ASSERT_FAILED(item) {
                 continue;
             }
@@ -299,6 +299,23 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
                 break;
             default:
                 break;
+            }
+        }
+    }
+
+    if (const BarLine* barLine = measure->endBarLine()) {
+        if (const Segment* seg = barLine->segment()) {
+            for (const EngravingItem* item : seg->annotations()) {
+                IF_ASSERT_FAILED(item) {
+                    continue;
+                }
+                if (item->isFermata()) {
+                    const Fermata* fermata = toFermata(item);
+                    DO_ASSERT(fermata);
+                    if (fermata) {
+                        mnxMeasure.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+                    }
+                }
             }
         }
     }

@@ -168,91 +168,113 @@ static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
 }
 
 //---------------------------------------------------------
+//   createMarking
+//   export a single marking from an Articulation instance
+//---------------------------------------------------------
+
+static std::optional<mnx::sequence::EventMarkingBase> createMarking(const Articulation* a,
+                                                                    mnx::sequence::EventMarkings mnxMarkings)
+{
+    const SymId sym = a->symId();
+
+    switch (sym) {
+    case SymId::articAccentAbove:
+    case SymId::articAccentBelow:
+        return mnxMarkings.ensure_accent();
+    case SymId::stringsDownBow:
+    case SymId::stringsDownBowTurned:
+        return mnxMarkings.ensure_bowDirection(mnx::MarkingUpDown::Down);
+    case SymId::stringsUpBow:
+    case SymId::stringsUpBowTurned:
+        return mnxMarkings.ensure_bowDirection(mnx::MarkingUpDown::Up);
+    case SymId::articSoftAccentAbove:
+    case SymId::articSoftAccentBelow:
+        return mnxMarkings.ensure_softAccent();
+    case SymId::articStaccatoAbove:
+    case SymId::articStaccatoBelow:
+        return mnxMarkings.ensure_staccato();
+    case SymId::articStaccatissimoAbove:
+    case SymId::articStaccatissimoBelow:
+        return mnxMarkings.ensure_staccatissimo();
+    case SymId::articStaccatissimoStrokeAbove:
+    case SymId::articStaccatissimoStrokeBelow:
+        return mnxMarkings.ensure_spiccato();
+    case SymId::articStressAbove:
+    case SymId::articStressBelow:
+        return mnxMarkings.ensure_stress();
+    case SymId::articUnstressAbove:
+    case SymId::articUnstressBelow:
+        return mnxMarkings.ensure_unstress();
+    case SymId::articMarcatoAbove:
+    case SymId::articMarcatoBelow:
+        return mnxMarkings.ensure_strongAccent();
+    case SymId::articTenutoAbove:
+    case SymId::articTenutoBelow:
+        return mnxMarkings.ensure_tenuto();
+    default:
+        break;
+    }
+
+    return std::nullopt;
+}
+
+//---------------------------------------------------------
+//   processAnnotations
+//   template function to process annotations for both
+//   events and full measure rests
+//---------------------------------------------------------
+
+template<typename EventType>
+void static processAnnotations(EventType& mnxEvent, ChordRest* cr)
+{
+    // Grace notes are parented to their main chord, not directly to a segment.
+    // Segment-anchored annotations such as fermatas belong to the main chord's
+    // segment and must not be re-exported from each grace note event.
+    if (cr->isGrace()) {
+        return;
+    }
+
+    if (Segment* seg = cr->segment()) {
+        for (EngravingItem* ann : seg->annotations()) {
+            if (!ann || ann->track() != cr->track()) {
+                continue;
+            }
+            if (ann->isFermata()) {
+                const Fermata* fermata = toFermata(ann);
+                IF_ASSERT_FAILED(fermata) {
+                    continue;
+                }
+                mnxEvent.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+                /// @note MNX currently can only store one barline fermata per measure stack.
+                /// To keep the loop clean for future expansion, this code deliberately
+                /// exports the last one found. We can revisit this if/when MNX provides
+                /// more clarity around barline fermatas.
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   createMarkings
 //   export articulations, breath marks, single-note
 //   tremolo
 //---------------------------------------------------------
 
-static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
+void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
 {
     IF_ASSERT_FAILED(cr) {
         return;
     }
 
-    auto pointingFromAnchor = [](ArticulationAnchor anchor) -> std::optional<mnx::MarkingUpDown> {
-        switch (anchor) {
-        case ArticulationAnchor::TOP: return mnx::MarkingUpDown::Up;
-        case ArticulationAnchor::BOTTOM: return mnx::MarkingUpDown::Down;
-        case ArticulationAnchor::AUTO:
-        default:
-            return std::nullopt;
-        }
-    };
-
     if (cr->isChord()) {
         const Chord* chord = toChord(cr);
         for (Articulation* a : chord->articulations()) {
-            auto mnxMarkings = mnxEvent.ensure_markings();
             IF_ASSERT_FAILED(a) {
                 continue;
             }
-            const SymId sym = a->symId();
-            const auto pointing = pointingFromAnchor(a->anchor());
-
-            switch (sym) {
-            case SymId::articAccentAbove:
-            case SymId::articAccentBelow: {
-                auto acc = mnxMarkings.ensure_accent();
-                if (pointing) {
-                    acc.set_pointing(*pointing);
-                }
-                break;
-            }
-            case SymId::articSoftAccentAbove:
-            case SymId::articSoftAccentBelow: {
-                auto sa = mnxMarkings.ensure_softAccent();
-                break;
-            }
-            case SymId::articStaccatoAbove:
-            case SymId::articStaccatoBelow: {
-                auto st = mnxMarkings.ensure_staccato();
-                break;
-            }
-            case SymId::articStaccatissimoAbove:
-            case SymId::articStaccatissimoBelow: {
-                auto st = mnxMarkings.ensure_staccatissimo();
-                break;
-            }
-            case SymId::articStaccatissimoStrokeAbove:
-            case SymId::articStaccatissimoStrokeBelow: {
-                auto sp = mnxMarkings.ensure_spiccato();
-                break;
-            }
-            case SymId::articStressAbove:
-            case SymId::articStressBelow: {
-                auto st = mnxMarkings.ensure_stress();
-                break;
-            }
-            case SymId::articUnstressAbove:
-            case SymId::articUnstressBelow: {
-                auto un = mnxMarkings.ensure_unstress();
-                break;
-            }
-            case SymId::articMarcatoAbove:
-            case SymId::articMarcatoBelow: {
-                auto sa = mnxMarkings.ensure_strongAccent();
-                if (pointing) {
-                    sa.set_pointing(*pointing);
-                }
-                break;
-            }
-            case SymId::articTenutoAbove:
-            case SymId::articTenutoBelow: {
-                auto tn = mnxMarkings.ensure_tenuto();
-                break;
-            }
-            default:
-                break;
+            auto mnxMarkings = mnxEvent.ensure_markings();
+            if (auto marking = createMarking(a, mnxMarkings)) {
+                marking->set_or_clear_orient(toMnxOrientation(a->anchor()));
             }
         }
 
@@ -266,22 +288,16 @@ static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         }
     }
 
-    if (Segment* seg = cr->segment()) {
-        for (EngravingItem* ann : seg->annotations()) {
-            if (!ann || ann->type() != ElementType::BREATH || ann->track() != cr->track()) {
-                continue;
-            }
-            const Breath* breath = toBreath(ann);
-            if (!breath) {
-                continue;
-            }
-            auto mnxMarkings = mnxEvent.ensure_markings();
-            auto mnxBreath = mnxMarkings.ensure_breath();
-            if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
-                mnxBreath.set_symbol(breathSym.value());
-            }
+    if (Breath* breath = cr->hasBreathMark()) {
+        auto mnxMarkings = mnxEvent.ensure_markings();
+        auto mnxBreath = mnxMarkings.ensure_breath();
+        mnxBreath.set_or_clear_orient(toMnxOrientation(breath->placement()));
+        if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
+            mnxBreath.set_symbol(breathSym.value());
         }
     }
+
+    processAnnotations(mnxEvent, cr);
 }
 
 //---------------------------------------------------------
@@ -1075,6 +1091,7 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
                                     LOGW() << "Skipping MNX fullMeasure staffPosition export; invalid staff step.";
                                 }
                             }
+                            processAnnotations(fullMeasure, rest);
                         } else {
                             /// @todo If MNX adds explicit rest visibility, export hidden (non-gap) full-measure rests; keep omitting gap rests.
                             // Hidden/gap measure rests should not generate a sequence.
@@ -1090,12 +1107,13 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
         }
     }
 
-    // Avoid cluttering output with unnecessary full-measure rests.
-    // Keep a solitary full-measure sequence only when it carries explicit placement data.
+    // Avoid cluttering the output with unnecessary full-measure rests.
+    // Keep a solitary full-measure sequence only when the full measure rest
+    // carries additional information, such as a staff position or fermata.
     if (mnxSequences.size() == 1) {
         auto onlySequence = mnxSequences.at(0);
         const auto fullMeasure = onlySequence.fullMeasure();
-        if (fullMeasure && onlySequence.content().empty() && !fullMeasure->staffPosition()) {
+        if (fullMeasure && onlySequence.content().empty() && fullMeasure->empty()) {
             mnxSequences.erase(0);
         }
     }

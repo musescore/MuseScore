@@ -1,0 +1,429 @@
+{
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+                "id": "m2"
+            }
+        ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "content": [
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 1
+                                }
+                            ],
+                            "type": "staff"
+                        },
+                        {
+                            "sources": [
+                                {
+                                    "part": "P1",
+                                    "staff": 2
+                                }
+                            ],
+                            "type": "staff"
+                        }
+                    ],
+                    "symbol": "brace",
+                    "type": "group"
+                }
+            ],
+            "id": "S0-Sys2"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/15"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 15
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            },
+                            "staff": 1
+                        },
+                        {
+                            "clef": {
+                                "glyph": "fClef",
+                                "sign": "F",
+                                "staffPosition": 2
+                            },
+                            "staff": 2
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev125",
+                                    "markings": {
+                                        "breath": {
+                                            "orient": "above",
+                                            "symbol": "comma"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev125n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half",
+                                        "dots": 1
+                                    },
+                                    "id": "ev126",
+                                    "notes": [
+                                        {
+                                            "id": "ev126n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev147",
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "comma"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev147n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half",
+                                        "dots": 1
+                                    },
+                                    "id": "ev148",
+                                    "notes": [
+                                        {
+                                            "id": "ev148n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "quarter"
+                                    },
+                                    "id": "ev149",
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "comma"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev149n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half",
+                                        "dots": 1
+                                    },
+                                    "id": "ev150",
+                                    "notes": [
+                                        {
+                                            "id": "ev150n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer2"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev151",
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "salzedo"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev151n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev152",
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "upbow"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev152n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev153",
+                                    "markings": {
+                                        "breath": {
+                                            "symbol": "tick"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev153n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev154",
+                                    "markings": {
+                                        "breath": {
+                                            "orient": "below",
+                                            "symbol": "comma"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev154n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev155",
+                                    "notes": [
+                                        {
+                                            "id": "ev155n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev156",
+                                    "notes": [
+                                        {
+                                            "id": "ev156n1",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "staff": 2,
+                            "voice": "s2layer2"
+                        }
+                    ]
+                }
+            ],
+            "staves": 2
+        }
+    ],
+    "scores": [
+        {
+            "layout": "S0-ScrVw",
+            "name": "SCORE",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
+                        },
+                        {
+                            "layout": "S0-Sys2",
+                            "measure": "m2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -35,16 +35,19 @@
 #endif
 
 namespace mu::engraving {
+class Articulation;
 class Chord;
 class ChordRest;
 class EngravingObject;
 class EngravingItem;
+class Fermata;
 class Instrument;
 class Measure;
 class Note;
 class Part;
 class Rest;
 class Score;
+class Segment;
 class Staff;
 class TremoloTwoChord;
 class Tuplet;
@@ -101,8 +104,8 @@ private:
     void importGraceEvents(const mnx::Sequence& sequence, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
                            const GraceNeighborsMap& graceNeighbors);
     engraving::ChordRest* importEvent(const mnx::sequence::Event& event, engraving::track_idx_t, engraving::Measure* measure,
-                                      const mnx::FractionValue& startTick, const std::stack<engraving::Tuplet*>& activeTuplets,
-                                      engraving::TremoloTwoChord* activeTremolo);
+                                      const mnx::FractionValue& startTick, const mnx::FractionValue& actualDuration,
+                                      const std::stack<engraving::Tuplet*>& activeTuplets, engraving::TremoloTwoChord* activeTremolo);
     engraving::Tuplet* createTuplet(const mnx::sequence::Tuplet& mnxTuplet, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
                                     const mnx::FractionValue& startTick);
     void createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremolo, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
@@ -123,9 +126,15 @@ private:
     void createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
 
     // markings
-    void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
+    engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,
+                                             engraving::SymId symId, const char* name);
+    void addFermata(engraving::Segment* seg, const mnx::Fermata& mnxFermata, engraving::track_idx_t track);
+    void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr, const engraving::Fraction& eventEndTick,
+                        engraving::Measure* measure = nullptr);
+    void importBowDirection(const mnx::sequence::BowDirection& bowDirection, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
-    void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr);
+    void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr, const engraving::Fraction& eventEndTick,
+                      engraving::Measure* measure = nullptr);
     void importSoftAccent(const mnx::sequence::SoftAccent& softAccent, engraving::ChordRest* cr);
     void importSpiccato(const mnx::sequence::Spiccato& spiccato, engraving::ChordRest* cr);
     void importStaccatissimo(const mnx::sequence::Staccatissimo& staccatissimo, engraving::ChordRest* cr);
@@ -135,6 +144,7 @@ private:
     void importTenuto(const mnx::sequence::Tenuto& tenuto, engraving::ChordRest* cr);
     void importTremolo(const mnx::sequence::SingleNoteTremolo& tremolo, engraving::ChordRest* cr);
     void importUnstress(const mnx::sequence::Unstress& unstress, engraving::ChordRest* cr);
+    void importFermata(const mnx::Fermata& mnxFermata, engraving::ChordRest* cr);
 
     // utility funcs
     engraving::staff_idx_t mnxPartStaffToStaffIdx(const mnx::Part& mnxPart, int staffNum);

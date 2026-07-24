@@ -31,6 +31,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/types/symid.h"
@@ -46,22 +47,11 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 //---------------------------------------------------------
-//   toArticulationAnchor
-//   Convert MNX pointing to MuseScore articulation anchor.
-//---------------------------------------------------------
-
-static ArticulationAnchor toArticulationAnchor(mnx::MarkingUpDown pointing)
-{
-    return pointing == mnx::MarkingUpDown::Up ? ArticulationAnchor::TOP : ArticulationAnchor::BOTTOM;
-}
-
-//---------------------------------------------------------
 //   addArticulation
 //   Helper to add a specific articulation to a chord.
 //---------------------------------------------------------
 
-template<typename Marking>
-static Articulation* addArticulation(ChordRest* cr, const Marking& marking, SymId symId, const char* name)
+Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::EventMarkingBase& marking, SymId symId, const char* name)
 {
     if (!cr->isChord()) {
         LOGW() << "Skipping MNX articulation \"" << name << "\" on rest at "
@@ -70,8 +60,31 @@ static Articulation* addArticulation(ChordRest* cr, const Marking& marking, SymI
     }
     Articulation* articulation = Factory::createArticulation(cr);
     articulation->setSymId(symId);
+    setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toMuseScoreArticulationAnchor(marking.orient())));
     cr->add(articulation);
     return articulation;
+}
+
+//---------------------------------------------------------
+//   addFermata
+//   Helper to create and add a fermata to a segment.
+//---------------------------------------------------------
+
+void MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata, track_idx_t track)
+{
+    IF_ASSERT_FAILED(seg) {
+        LOGE() << "Null segment passed to addFermata";
+        return;
+    }
+    Fermata* fermata = Factory::createFermata(seg);
+    fermata->setTrack(track);
+    /// @note MNX decouples fermata symbol from duration, but MuseScore does not currently model
+    /// an independently round-trippable fermata duration separate from the fermata subtype/symbol.
+    /// Therefore, we ignore the `duration` value in MNX in favor of the `symbol` to determine
+    /// the Fermata's symbol.
+    fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
+    setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.orient(), fermata));
+    seg->add(fermata);
 }
 
 //---------------------------------------------------------
@@ -79,7 +92,7 @@ static Articulation* addArticulation(ChordRest* cr, const Marking& marking, SymI
 //   Import all articulations/markings for an MNX event.
 //---------------------------------------------------------
 
-void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr)
+void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
 {
     if (!mnxEvent.markings()) {
         return;
@@ -88,8 +101,11 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
     if (const auto accent = markings.accent()) {
         importAccent(accent.value(), cr);
     }
+    if (const auto bowDirection = markings.bowDirection()) {
+        importBowDirection(bowDirection.value(), cr);
+    }
     if (const auto breath = markings.breath()) {
-        importBreath(breath.value(), cr);
+        importBreath(breath.value(), cr, eventEndTick, measure);
     }
     if (const auto softAccent = markings.softAccent()) {
         importSoftAccent(softAccent.value(), cr);
@@ -127,16 +143,23 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
 
 void MnxImporter::importAccent(const mnx::sequence::Accent& accent, ChordRest* cr)
 {
-    if (const auto pointing = accent.pointing()) {
-        Articulation* articulation = addArticulation(
-            cr, accent, pointing == mnx::MarkingUpDown::Up ? SymId::articAccentAbove : SymId::articAccentBelow,
-            "accent");
-        if (articulation) {
-            /// @todo MNX "pointing" may only describe glyph orientation; confirm whether anchor should be forced.
-            setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toArticulationAnchor(*pointing)));
-        }
-    } else {
-        addArticulation(cr, accent, SymId::articAccentAbove, "accent");
+    addArticulation(cr, accent, SymId::articAccentAbove, "accent");
+}
+
+//---------------------------------------------------------
+//   importBowDirection
+//   Import MNX bow direction marking.
+//---------------------------------------------------------
+
+void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirection, ChordRest* cr)
+{
+    switch (bowDirection.direction()) {
+    case mnx::MarkingUpDown::Down:
+        addArticulation(cr, bowDirection, SymId::stringsDownBow, "downBow");
+        break;
+    case mnx::MarkingUpDown::Up:
+        addArticulation(cr, bowDirection, SymId::stringsUpBow, "upBow");
+        break;
     }
 }
 
@@ -145,12 +168,23 @@ void MnxImporter::importAccent(const mnx::sequence::Accent& accent, ChordRest* c
 //   Import MNX breath mark.
 //---------------------------------------------------------
 
-void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr)
+void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
 {
-    Segment* segment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
+    Measure* targetMeasure = measure;
+    if (!targetMeasure) {
+        Segment* chordRestSegment = cr ? cr->segment() : nullptr;
+        targetMeasure = chordRestSegment ? chordRestSegment->measure() : nullptr;
+    }
+    IF_ASSERT_FAILED(targetMeasure) {
+        LOGE() << "cr has no measure when importing breath mark";
+        return;
+    }
+
+    Segment* segment = targetMeasure->getSegmentR(SegmentType::Breath, eventEndTick);
     Breath* breathMark = Factory::createBreath(segment);
     breathMark->setTrack(cr->track());
     breathMark->setSymId(toMuseScoreBreathMarkSym(breath.symbol()));
+    setAndStyleProperty(breathMark, Pid::PLACEMENT, toMuseScorePlacementV(breath.orient(), breathMark));
     segment->add(breathMark);
 }
 
@@ -211,17 +245,11 @@ void MnxImporter::importStress(const mnx::sequence::Stress& stress, ChordRest* c
 
 void MnxImporter::importStrongAccent(const mnx::sequence::StrongAccent& strongAccent, ChordRest* cr)
 {
-    if (const auto pointing = strongAccent.pointing()) {
-        Articulation* articulation = addArticulation(
-            cr, strongAccent, pointing == mnx::MarkingUpDown::Up ? SymId::articMarcatoAbove : SymId::articMarcatoBelow,
-            "strongAccent");
-        if (articulation) {
-            /// @todo MNX "pointing" may only describe glyph orientation; confirm whether anchor should be forced.
-            setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toArticulationAnchor(*pointing)));
-        }
-    } else {
-        addArticulation(cr, strongAccent, SymId::articMarcatoAbove, "strongAccent");
+    SymId symId = SymId::articMarcatoAbove;
+    if (strongAccent.pointing() == mnx::MarkingUpDownAuto::Down) {
+        symId = SymId::articMarcatoBelow;
     }
+    addArticulation(cr, strongAccent, symId, "strongAccent");
 }
 
 //---------------------------------------------------------
@@ -268,5 +296,20 @@ void MnxImporter::importTremolo(const mnx::sequence::SingleNoteTremolo& tremolo,
 void MnxImporter::importUnstress(const mnx::sequence::Unstress& unstress, ChordRest* cr)
 {
     addArticulation(cr, unstress, SymId::articUnstressAbove, "unstress");
+}
+
+//---------------------------------------------------------
+//   importFermata
+//   Import MNX fermata
+//---------------------------------------------------------
+
+void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::ChordRest* cr)
+{
+    Segment* seg = cr->segment();
+    IF_ASSERT_FAILED(seg) {
+        LOGE() << "cr has no segment when importing fermata";
+        return;
+    }
+    addFermata(seg, mnxFermata, cr->track());
 }
 } // namespace mu::iex::mnxio

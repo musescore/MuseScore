@@ -641,6 +641,7 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
 
 ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                     track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
+                                    const mnx::FractionValue& actualDuration,
                                     const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
 {
     const TDuration d = toMuseScoreDuration(event.duration());
@@ -747,7 +748,7 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     } else {
         cr->setTicks(cr->actualDurationType().fraction());
     }
-    importMarkings(event, cr);
+    importMarkings(event, cr, toMuseScoreFraction(startTick + actualDuration), measure);
     if (!event.isGrace()) {
         segment->add(cr);
         if (!activeTuplets.empty()) {
@@ -781,7 +782,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
 
     mnx::util::SequenceWalkHooks hooks;
     hooks.onFullMeasure = [&](const mnx::Sequence&,
-                              const mnx::sequence::FullMeasureRest&,
+                              const mnx::sequence::FullMeasureRest& mnxFullMeasureRest,
                               const mnx::FractionValue& startTick,
                               const mnx::FractionValue&,
                               mnx::util::SequenceWalkContext&) {
@@ -797,6 +798,9 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         rest->setTicks(measure->stretchedLen(staff));
         segment->add(rest);
+        if (mnxFullMeasureRest.fermata()) {
+            importFermata(mnxFullMeasureRest.fermata().value(), rest);
+        }
         lastCR = rest;
         insertedCR = true;
         return true;
@@ -856,13 +860,16 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onEvent = [&](const mnx::sequence::Event& event,
                         const mnx::FractionValue& startTick,
-                        const mnx::FractionValue&, [[maybe_unused]] mnx::util::SequenceWalkContext& ctx) {
+                        const mnx::FractionValue& actualDuration, [[maybe_unused]] mnx::util::SequenceWalkContext& ctx) {
         IF_ASSERT_FAILED(!ctx.inGrace) {
             LOGE() << "Encountered grace when processing non-grace.";
             return true;
         }
         updateLyricLineUsageForEvent(event, sequence, measure, curTrackIdx, startTick);
-        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, activeTuplets, activeTremolo)) {
+        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, activeTuplets, activeTremolo)) {
+            if (event.fermata()) {
+                importFermata(event.fermata().value(), cr);
+            }
             lastCR = cr;
             insertedCR = true;
             for (const auto& key : pendingNext) {
@@ -901,7 +908,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
     mnx::util::SequenceWalkHooks hooks;
     hooks.onEvent = [&](const mnx::sequence::Event& event,
                         const mnx::FractionValue& startTick,
-                        const mnx::FractionValue&, mnx::util::SequenceWalkContext& ctx) {
+                        const mnx::FractionValue& actualDuration, mnx::util::SequenceWalkContext& ctx) {
         if (ctx.inGrace) {
             if (event.rest()) {
                 LOGW() << "encountered unsupported grace note rest at " << event.pointer().to_string();
@@ -912,7 +919,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
             const bool useRight = rightNeighbor && rightNeighbor->isChord();
             const bool useLeft = !useRight && leftNeighbor && leftNeighbor->isChord();
             if (useRight || useLeft) {
-                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, {}, nullptr)) {
+                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, {}, nullptr)) {
                     engraving::Chord* gc = toChord(cr);
                     TDuration d = gc->durationType();
                     if (useRight && grace.slash() && grace.content().size() == 1) {
@@ -921,14 +928,21 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
                         gc->setNoteType(duraTypeToGraceNoteType(d.type(), useLeft));
                         gc->setShowStemSlash(grace.slash());
                     }
+                    Chord* graceParent = nullptr;
                     if (useRight) {
-                        Chord* graceParent = toChord(rightNeighbor);
+                        graceParent = toChord(rightNeighbor);
                         gc->setGraceIndex(graceParent->graceNotesBefore().size());
                         graceParent->add(gc);
                     } else if (useLeft) {
-                        Chord* graceParent = toChord(leftNeighbor);
+                        graceParent = toChord(leftNeighbor);
                         gc->setGraceIndex(0);
                         graceParent->add(gc);
+                    }
+                    if (event.fermata()) {
+                        DO_ASSERT_X(graceParent, "no parent found for grace note");
+                        if (graceParent) {
+                            importFermata(event.fermata().value(), graceParent);
+                        }
                     }
                 }
             }
