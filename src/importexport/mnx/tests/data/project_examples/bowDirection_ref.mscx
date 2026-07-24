@@ -101,67 +101,143 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>ff</subtype>
-            <velocity>112</velocity>
-            <eid>I_I</eid>
-            </Dynamic>
           <Chord>
-            <eid>J_J</eid>
-            <durationType>quarter</durationType>
+            <eid>I_I</eid>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>stringsDownBow</subtype>
+              <anchor>2</anchor>
+              <eid>J_J</eid>
+              </Articulation>
             <Note>
               <eid>K_K</eid>
-              <pitch>60</pitch>
+              <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>L_L</eid>
-            <durationType>quarter</durationType>
-            <Note>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>stringsUpBow</subtype>
+              <anchor>2</anchor>
               <eid>M_M</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>N_N</eid>
-            <durationType>quarter</durationType>
+              </Articulation>
             <Note>
-              <eid>O_O</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>ppp</subtype>
-            <velocity>16</velocity>
-            <eid>P_P</eid>
-            </Dynamic>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            <Note>
-              <eid>S_S</eid>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            <Note>
-              <eid>T_T</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Note>
-              <eid>U_U</eid>
+              <eid>N_N</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>O_O</eid>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>stringsDownBowTurned</subtype>
+              <anchor>2</anchor>
+              <eid>P_P</eid>
+              </Articulation>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>half</durationType>
+            <Articulation>
+              <subtype>stringsUpBowTurned</subtype>
+              <anchor>2</anchor>
+              <eid>S_S</eid>
+              </Articulation>
+            <Note>
+              <eid>T_T</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>U_U</eid>
+        <voice>
+          <Chord>
+            <eid>V_V</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>stringsDownBow</subtype>
+              <eid>W_W</eid>
+              </Articulation>
+            <Note>
+              <eid>X_X</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>Y_Y</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <eid>Z_Z</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>stringsUpBow</subtype>
+              <eid>a_a</eid>
+              </Articulation>
+            <Note>
+              <eid>b_b</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>c_c</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <eid>d_d</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>stringsDownBowTurned</subtype>
+              <anchor>1</anchor>
+              <eid>e_e</eid>
+              </Articulation>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>g_g</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <eid>h_h</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>stringsUpBowTurned</subtype>
+              <anchor>1</anchor>
+              <eid>i_i</eid>
+              </Articulation>
+            <Note>
+              <eid>j_j</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>k_k</eid>
+            <durationType>eighth</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>

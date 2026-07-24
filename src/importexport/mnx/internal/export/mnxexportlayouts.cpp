@@ -203,7 +203,7 @@ static void buildGroupNodes(const std::vector<LayoutGroupSpan>& groups, std::vec
 //   appendLayoutStaff
 //---------------------------------------------------------
 
-static void appendLayoutStaff(LayoutBuildContext& ctx, mnx::ContentArray content, size_t staffIdx)
+static void appendLayoutStaff(LayoutBuildContext& ctx, mnx::layout::LayoutContent content, size_t staffIdx)
 {
     Staff* staff = ctx.staves->at(staffIdx);
     if (!staff) {
@@ -236,7 +236,7 @@ static void appendLayoutStaff(LayoutBuildContext& ctx, mnx::ContentArray content
         LOGW() << "Skipping layout staff " << staffIdx << " with no part id.";
         return;
     }
-    auto mnxStaff = content.append<mnx::layout::Staff>();
+    auto mnxStaff = content.appendStaff();
     auto source = mnxStaff.sources().append(partId);
     source.set_staff(staffNum);
 }
@@ -317,7 +317,7 @@ static mnx::StaffGroupBarlineOverride calcGroupBarlineOverride(const LayoutBuild
 //   buildContent
 //---------------------------------------------------------
 
-static void buildContent(LayoutBuildContext& ctx, mnx::ContentArray content,
+static void buildContent(LayoutBuildContext& ctx, mnx::layout::LayoutContent content,
                          size_t start, size_t end, const std::vector<size_t>& children)
 {
     size_t staffIdx = start;
@@ -331,7 +331,7 @@ static void buildContent(LayoutBuildContext& ctx, mnx::ContentArray content,
         if (childPos < children.size()
             && nodes[children[childPos]].span.start == staffIdx) {
             const LayoutGroupNode& node = nodes[children[childPos]];
-            auto mnxGroup = content.append<mnx::layout::Group>();
+            auto mnxGroup = content.appendGroup();
             switch (calcGroupBarlineOverride(ctx, node.span)) {
             case mnx::StaffGroupBarlineOverride::None:
                 mnxGroup.set_or_clear_barlineStyle(mnx::StaffGroupBarlineStyle::Individual);

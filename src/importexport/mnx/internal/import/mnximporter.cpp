@@ -43,6 +43,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "engraving/types/symnames.h"
 
@@ -813,6 +814,9 @@ void MnxImporter::importGlobalMeasures()
             }
             createTimeSig(measure, mnxTimeSig.value());
         }
+        measure->setTimesig(currTimeSig);
+        measure->setTicks(currTimeSig);
+
         if (const std::optional<mnx::KeySignature>& keySig = mnxMeasure.key(); keySig || isFirst) {
             const int keyFifths = keySig ? keySig->fifths() : 0;
             createKeySig(measure, keyFifths);
@@ -843,6 +847,10 @@ void MnxImporter::importGlobalMeasures()
                 createTempoMark(measure, tempo);
             }
         }
+        if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {
+            Segment* const segment = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+            addFermata(segment, mnxFermata.value(), 0);
+        }
 
         /// @todo MNX currently offers no way to exclude a measure from having
         /// a measure number.
@@ -852,8 +860,6 @@ void MnxImporter::importGlobalMeasures()
         }
         lastDisplayNum = currDisplayNum;
 
-        measure->setTimesig(currTimeSig);
-        measure->setTicks(currTimeSig);
         m_score->measures()->append(measure);
         m_mnxMeasToTick.emplace(mnxMeasure.calcArrayIndex(), tick);
     }
@@ -906,20 +912,22 @@ void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::pa
 
 void MnxImporter::importMnx()
 {
-    if (!m_mnxDocument.hasEntityMap()) {
-        auto policies = mnx::EntityMapPolicies();
-        policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
-        policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
-        m_mnxDocument.buildEntityMap(policies);
-    }
-    if (const auto& support = m_mnxDocument.mnx().support()) {
-        m_useBeams = support->useBeams();
-        m_useAccidentalDisplay = support->useAccidentalDisplay();
-    }
-    importSettings();
-    importParts();
-    importBrackets();
-    importGlobalMeasures();
-    importPartMeasures();
+    m_score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX import"), [&](Transaction&) {
+        if (!m_mnxDocument.hasEntityMap()) {
+            auto policies = mnx::EntityMapPolicies();
+            policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
+            policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
+            m_mnxDocument.buildEntityMap(policies);
+        }
+        if (const auto& support = m_mnxDocument.mnx().support()) {
+            m_useBeams = support->useBeams();
+            m_useAccidentalDisplay = support->useAccidentalDisplay();
+        }
+        importSettings();
+        importParts();
+        importBrackets();
+        importGlobalMeasures();
+        importPartMeasures();
+    });
 }
 } // namespace mu::iex::mnxio

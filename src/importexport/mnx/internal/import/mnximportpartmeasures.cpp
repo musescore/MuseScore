@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <algorithm>
+#include <optional>
 #include <stack>
 #include <vector>
 
@@ -27,12 +28,15 @@
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
+#include "engraving/dom/beam.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/hook.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/keysig.h"
@@ -53,6 +57,7 @@
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 
 #ifdef MNXDOM_SYSTEM
@@ -641,6 +646,7 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
 
 ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                     track_idx_t curTrackIdx, Measure* measure, const mnx::FractionValue& startTick,
+                                    const mnx::FractionValue& actualDuration,
                                     const std::stack<Tuplet*>& activeTuplets, TremoloTwoChord* activeTremolo)
 {
     const TDuration d = toMuseScoreDuration(event.duration());
@@ -747,7 +753,7 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     } else {
         cr->setTicks(cr->actualDurationType().fraction());
     }
-    importMarkings(event, cr);
+    importMarkings(event, cr, toMuseScoreFraction(startTick + actualDuration), measure);
     if (!event.isGrace()) {
         segment->add(cr);
         if (!activeTuplets.empty()) {
@@ -781,7 +787,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
 
     mnx::util::SequenceWalkHooks hooks;
     hooks.onFullMeasure = [&](const mnx::Sequence&,
-                              const mnx::sequence::FullMeasureRest&,
+                              const mnx::sequence::FullMeasureRest& mnxFullMeasureRest,
                               const mnx::FractionValue& startTick,
                               const mnx::FractionValue&,
                               mnx::util::SequenceWalkContext&) {
@@ -797,11 +803,14 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         rest->setTicks(measure->stretchedLen(staff));
         segment->add(rest);
+        if (mnxFullMeasureRest.fermata()) {
+            importFermata(mnxFullMeasureRest.fermata().value(), rest);
+        }
         lastCR = rest;
         insertedCR = true;
         return true;
     };
-    hooks.onItem = [&](const mnx::ContentObject& item, mnx::util::SequenceWalkContext& ctx) {
+    hooks.onItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Grace::ContentTypeValue) {
             /// @todo refactor this if MuseScore allows grace notes to be normal.
             const auto grace = item.get<mnx::sequence::Grace>();
@@ -856,13 +865,16 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
     };
     hooks.onEvent = [&](const mnx::sequence::Event& event,
                         const mnx::FractionValue& startTick,
-                        const mnx::FractionValue&, [[maybe_unused]] mnx::util::SequenceWalkContext& ctx) {
+                        const mnx::FractionValue& actualDuration, [[maybe_unused]] mnx::util::SequenceWalkContext& ctx) {
         IF_ASSERT_FAILED(!ctx.inGrace) {
             LOGE() << "Encountered grace when processing non-grace.";
             return true;
         }
         updateLyricLineUsageForEvent(event, sequence, measure, curTrackIdx, startTick);
-        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, activeTuplets, activeTremolo)) {
+        if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, activeTuplets, activeTremolo)) {
+            if (event.fermata()) {
+                importFermata(event.fermata().value(), cr);
+            }
             lastCR = cr;
             insertedCR = true;
             for (const auto& key : pendingNext) {
@@ -875,7 +887,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         return true;
     };
-    hooks.onAfterItem = [&](const mnx::ContentObject& item, mnx::util::SequenceWalkContext& ctx) {
+    hooks.onAfterItem = [&](const mnx::sequence::SequenceContentObject& item, mnx::util::SequenceWalkContext& ctx) {
         if (item.type() == mnx::sequence::Tuplet::ContentTypeValue) {
             activeTuplets.pop();
         } else if (item.type() == mnx::sequence::MultiNoteTremolo::ContentTypeValue) {
@@ -901,7 +913,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
     mnx::util::SequenceWalkHooks hooks;
     hooks.onEvent = [&](const mnx::sequence::Event& event,
                         const mnx::FractionValue& startTick,
-                        const mnx::FractionValue&, mnx::util::SequenceWalkContext& ctx) {
+                        const mnx::FractionValue& actualDuration, mnx::util::SequenceWalkContext& ctx) {
         if (ctx.inGrace) {
             if (event.rest()) {
                 LOGW() << "encountered unsupported grace note rest at " << event.pointer().to_string();
@@ -912,7 +924,7 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
             const bool useRight = rightNeighbor && rightNeighbor->isChord();
             const bool useLeft = !useRight && leftNeighbor && leftNeighbor->isChord();
             if (useRight || useLeft) {
-                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, {}, nullptr)) {
+                if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, actualDuration, {}, nullptr)) {
                     engraving::Chord* gc = toChord(cr);
                     TDuration d = gc->durationType();
                     if (useRight && grace.slash() && grace.content().size() == 1) {
@@ -921,14 +933,21 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
                         gc->setNoteType(duraTypeToGraceNoteType(d.type(), useLeft));
                         gc->setShowStemSlash(grace.slash());
                     }
+                    Chord* graceParent = nullptr;
                     if (useRight) {
-                        Chord* graceParent = toChord(rightNeighbor);
+                        graceParent = toChord(rightNeighbor);
                         gc->setGraceIndex(graceParent->graceNotesBefore().size());
                         graceParent->add(gc);
                     } else if (useLeft) {
-                        Chord* graceParent = toChord(leftNeighbor);
+                        graceParent = toChord(leftNeighbor);
                         gc->setGraceIndex(0);
                         graceParent->add(gc);
+                    }
+                    if (event.fermata()) {
+                        DO_ASSERT_X(graceParent, "no parent found for grace note");
+                        if (graceParent) {
+                            importFermata(event.fermata().value(), graceParent);
+                        }
                     }
                 }
             }
@@ -947,6 +966,8 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
 void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Measure& partMeasure,
                                   Measure* measure)
 {
+    auto& sequenceTracks = m_partMeasureSequenceTracks[partMeasure.pointer().to_string()];
+    sequenceTracks.clear();
     std::vector<std::vector<track_idx_t> > staffVoiceMaps(mnxPart.staves());
 
     // pass1: import non-grace-note events to ChordRest
@@ -971,11 +992,13 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
         if (voiceId >= VOICES) {
             LOGW() << "Part measure " << partMeasure.pointer().to_string()
                    << " contains too many voices for staff " << sequence.staff() << ". This sequence is skipped.";
+            continue;
         }
         const track_idx_t curTrackIdx = staff2track(curStaffIdx, voiceId);
         GraceNeighborsMap graceNeighbors;
         if (importNonGraceEvents(sequence, measure, curTrackIdx, graceNeighbors)) {
             importGraceEvents(sequence, measure, curTrackIdx, graceNeighbors); // if MuseScore refactors graces, maybe we don't need this.
+            sequenceTracks.emplace(sequence.pointer().to_string(), curTrackIdx);
             staffVoiceMap.push_back(voiceId);
         }
     }
@@ -987,47 +1010,280 @@ void MnxImporter::importSequences(const mnx::Part& mnxPart, const mnx::part::Mea
     }
 }
 
+static DynamicType dynamicTypeFromAttackValuePair(std::optional<mnx::DynamicValue> attackValue,
+                                                  std::optional<mnx::DynamicValue> value)
+{
+    if (!value) {
+        return DynamicType::OTHER;
+    }
+
+    if (attackValue) {
+        switch (attackValue.value()) {
+        case mnx::DynamicValue::p:
+            switch (value.value()) {
+            case mnx::DynamicValue::f: return DynamicType::PF;
+            default: break;
+            }
+            break;
+        case mnx::DynamicValue::f:
+            switch (value.value()) {
+            case mnx::DynamicValue::p: return DynamicType::FP;
+            default: break;
+            }
+            break;
+        default:
+            break;
+        }
+        return DynamicType::OTHER;
+    }
+
+    switch (value.value()) {
+    case mnx::DynamicValue::f: return DynamicType::F;
+    case mnx::DynamicValue::ff: return DynamicType::FF;
+    case mnx::DynamicValue::fff: return DynamicType::FFF;
+    case mnx::DynamicValue::mf: return DynamicType::MF;
+    case mnx::DynamicValue::mp: return DynamicType::MP;
+    case mnx::DynamicValue::n: return DynamicType::N;
+    case mnx::DynamicValue::p: return DynamicType::P;
+    case mnx::DynamicValue::pp: return DynamicType::PP;
+    case mnx::DynamicValue::ppp: return DynamicType::PPP;
+    default: break;
+    }
+
+    return DynamicType::OTHER;
+}
+
+staff_idx_t MnxImporter::resolveDynamicStaff(const mnx::Part& mnxPart, const mnx::part::DynamicGroupBase& mnxDynamic)
+{
+    const auto explicitStaff = mnxDynamic.staff();
+    if (explicitStaff) {
+        return muse::value(m_mnxPartStaffToStaff,
+                           std::make_pair(mnxPart.calcArrayIndex(), *explicitStaff),
+                           muse::nidx);
+    }
+
+    // Orient only decides which staff to anchor to when MNX does not provide an
+    // explicit staff number.
+    const int staffNum = [&]() {
+        switch (mnxDynamic.orient()) {
+        case mnx::MultiStaffOrientation::Above:
+            return 1;
+        case mnx::MultiStaffOrientation::Below:
+            return mnxPart.staves();
+        case mnx::MultiStaffOrientation::Between:
+            return 1;
+        case mnx::MultiStaffOrientation::Auto:
+            return 1;
+        }
+        return 1;
+    }();
+
+    return muse::value(m_mnxPartStaffToStaff,
+                       std::make_pair(mnxPart.calcArrayIndex(), staffNum),
+                       muse::nidx);
+}
+
+void MnxImporter::applyDynamicOrient(EngravingItem* item, const mnx::Part& mnxPart, mnx::MultiStaffOrientation orient)
+{
+    IF_ASSERT_FAILED(item) {
+        return;
+    }
+
+    switch (orient) {
+    case mnx::MultiStaffOrientation::Above:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::UP);
+        setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+        break;
+    case mnx::MultiStaffOrientation::Below:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::DOWN);
+        setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+        break;
+    case mnx::MultiStaffOrientation::Between:
+        setAndStyleProperty(item, Pid::DIRECTION, DirectionV::AUTO);
+        if (mnxPart.staves() > 1) {
+            setAndStyleProperty(item, Pid::CENTER_BETWEEN_STAVES, AutoOnOff::ON);
+        }
+        break;
+    case mnx::MultiStaffOrientation::Auto:
+        break;
+    }
+}
+
+static VoiceAssignment resolveDynamicVoiceAssignment(const mnx::part::DynamicGroupBase& mnxDynamic, bool useVoiceAssignment)
+{
+    if (mnxDynamic.voice() && useVoiceAssignment) {
+        return VoiceAssignment::CURRENT_VOICE_ONLY;
+    }
+    if (mnxDynamic.staff()) {
+        return VoiceAssignment::ALL_VOICE_IN_STAFF;
+    }
+    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
+}
+
+void MnxImporter::createDynamic(const mnx::part::DynamicGroupBase& mnxDynamic, Segment* segment, const mnx::Part& mnxPart,
+                                track_idx_t curTrackIdx, bool useVoiceAssignment)
+{
+    IF_ASSERT_FAILED(segment) {
+        return;
+    }
+
+    Dynamic* dyn = Factory::createDynamic(segment);
+    dyn->setParent(segment);
+    dyn->setTrack(curTrackIdx);
+
+    String dynamicText = String::fromStdString(mnxDynamic.prefix_or({}));
+    // As of now we prefer glyphs over value/attackValue because the current
+    // list of dynamics classifications is so limited in MNX.
+    if (const auto glyphs = mnxDynamic.glyphs(); glyphs&& !glyphs->empty()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        for (const auto& glyph : glyphs.value()) {
+            dynamicText += u"<sym>" + String::fromStdString(glyph) + u"</sym>";
+        }
+    } else if (mnxDynamic.attackValue() || mnxDynamic.value()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        auto applyEnumString = [&](std::optional<mnx::DynamicValue> val) {
+            if (val) {
+                const auto& map = mnx::EnumStringMapping<mnx::DynamicValue>::enumToString();
+                dynamicText += String::fromStdString(map.at(*val));
+            }
+        };
+        applyEnumString(mnxDynamic.attackValue());
+        applyEnumString(mnxDynamic.value());
+    }
+
+    if (mnxDynamic.suffix()) {
+        if (!dynamicText.empty()) {
+            dynamicText += u" ";
+        }
+        dynamicText += String::fromStdString(mnxDynamic.suffix().value());
+    }
+
+    dyn->setDynamicType(dynamicText);
+    /// @todo If mnx adds an "other" type, we should leave our type as other and remove
+    /// this if statement.
+    if (dyn->dynamicType() == DynamicType::OTHER) {
+        dyn->setDynamicType(dynamicTypeFromAttackValuePair(mnxDynamic.attackValue(), mnxDynamic.value()));
+    }
+    applyDynamicOrient(dyn, mnxPart, mnxDynamic.orient());
+    dyn->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxDynamic, useVoiceAssignment));
+    segment->add(dyn);
+}
+
+void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Segment* segment, const mnx::Part& mnxPart,
+                                track_idx_t curTrackIdx, bool useVoiceAssignment)
+{
+    if (!segment) {
+        return;
+    }
+
+    const auto endMeasure = mnxDocument().getEntityMap().tryGet<mnx::global::Measure>(mnxHairpin.end().measure());
+    if (!endMeasure.has_value()) {
+        LOGW() << "hairpin end measure not found for " << mnxHairpin.pointer().to_string();
+        return;
+    }
+    Measure* targetMeasure = mnxMeasureToMeasure(endMeasure->calcArrayIndex());
+    if (!targetMeasure) {
+        LOGW() << "hairpin end measure could not be resolved to a MuseScore measure for "
+               << mnxHairpin.pointer().to_string();
+        return;
+    }
+
+    const Fraction endTick = targetMeasure->tick() + toMuseScoreFraction(mnxHairpin.end().position().fraction());
+    if (endTick <= segment->tick()) {
+        LOGW() << "hairpin end tick is not after start tick for " << mnxHairpin.pointer().to_string();
+        return;
+    }
+
+    Hairpin* hairpin = Factory::createHairpin(segment);
+    hairpin->setHairpinType(mnxHairpin.wedgeType() == mnx::DynamicWedgeType::Increasing
+                            ? HairpinType::CRESC_HAIRPIN
+                            : HairpinType::DIM_HAIRPIN);
+    hairpin->setTrack(curTrackIdx);
+    hairpin->setTrack2(curTrackIdx);
+    hairpin->setTick(segment->tick());
+    hairpin->setTick2(endTick);
+
+    applyDynamicOrient(hairpin, mnxPart, mnxHairpin.orient());
+    hairpin->setVoiceAssignment(resolveDynamicVoiceAssignment(mnxHairpin, useVoiceAssignment));
+
+    m_score->addElement(hairpin);
+}
+
+std::optional<track_idx_t> MnxImporter::resolveVoiceTrack(const mnx::part::Measure& mnxMeasure,
+                                                          staff_idx_t staffIdx,
+                                                          const std::string& mnxVoiceId)
+{
+    const auto measureIt = m_partMeasureSequenceTracks.find(mnxMeasure.pointer().to_string());
+    if (measureIt == m_partMeasureSequenceTracks.end()) {
+        return std::nullopt;
+    }
+
+    const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
+    IF_ASSERT_FAILED(part) {
+        LOGE() << "part not found for measure " << mnxMeasure.pointer().to_string();
+        return std::nullopt;
+    }
+
+    for (const auto& sequence : mnxMeasure.sequences()) {
+        if (mnxPartStaffToStaffIdx(part.value(), sequence.staff()) != staffIdx) {
+            continue;
+        }
+
+        const auto sequenceVoice = sequence.voice();
+        if (!sequenceVoice || sequenceVoice.value() != mnxVoiceId) {
+            continue;
+        }
+
+        const auto sequenceIt = measureIt->second.find(sequence.pointer().to_string());
+        if (sequenceIt != measureIt->second.end()) {
+            return sequenceIt->second;
+        }
+        break;
+    }
+
+    return std::nullopt;
+}
+
 //---------------------------------------------------------
 //   createDynamics
 //   Create MuseScore dynamics from MNX part-measure dynamics.
 //---------------------------------------------------------
 
-void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure)
+void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, Measure* measure)
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxDynamics = mnxMeasure.dynamics()) {
         for (const auto& mnxDynamic : mnxDynamics.value()) {
-            /// @todo Process all dynamics, including those without glyphs, once the meaning of value()
-            /// has been clarified and once mnx has text formatting, which seems to be imminent.
-            if (!mnxDynamic.glyph()) {
-                continue;
-            }
-            /// @todo Honor mnx requirement that dynamics apply to all staves when staff() member
-            /// is missing (after clarification).
-            staff_idx_t staffIdx = muse::value(m_mnxPartStaffToStaff,
-                                               std::make_pair(part->calcArrayIndex(), mnxDynamic.staff_or(1)),
-                                               muse::nidx);
+            staff_idx_t staffIdx = resolveDynamicStaff(part.value(), mnxDynamic);
             IF_ASSERT_FAILED(staffIdx != muse::nidx) {
                 LOGE() << "staff idx not found for part " << part->pointer().to_string();
                 continue;
             }
-            track_idx_t curTrackIdx = staff2track(staffIdx);
+            const track_idx_t staffTrackIdx = staff2track(staffIdx);
+            bool useVoiceAssignment = false;
+            track_idx_t curTrackIdx = staffTrackIdx;
+            if (const auto mnxVoiceId = mnxDynamic.voice()) {
+                if (const auto resolvedTrack = resolveVoiceTrack(mnxMeasure, staffIdx, mnxVoiceId.value())) {
+                    curTrackIdx = resolvedTrack.value();
+                    useVoiceAssignment = true;
+                }
+            }
 
             Fraction rTick = toMuseScoreFraction(mnxDynamic.position().fraction());
             Segment* s = measure->getChordRestOrTimeTickSegment(measure->tick() + rTick);
-            Dynamic* dyn = Factory::createDynamic(s);
-            dyn->setParent(s);
-            dyn->setTrack(curTrackIdx);
-            /// @todo: smarter approach to creating xmlText.
-            String xmlText = u"<sym>" + String::fromStdString(mnxDynamic.glyph().value()) + u"</sym>";
-            dyn->setXmlText(xmlText);
-            dyn->setDynamicType(toMuseScoreDynamicType(xmlText));
-            /// @todo: voice assignment based on voice()
-            dyn->setVoiceAssignment(mnxDynamic.staff()
-                                    ? VoiceAssignment::ALL_VOICE_IN_STAFF
-                                    : VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
 
-            s->add(dyn);
+            if (mnxDynamic.calcHasImmediateText()) {
+                createDynamic(mnxDynamic, s, part.value(), curTrackIdx, useVoiceAssignment);
+            }
+
+            if (mnxDynamic.type() == mnx::part::DynamicGradual::ContentTypeValue) {
+                const auto mnxHairpin = mnxDynamic.get<mnx::part::DynamicGradual>();
+                createHairpin(mnxHairpin, s, part.value(), curTrackIdx, useVoiceAssignment);
+            }
         }
     }
 }
@@ -1037,7 +1293,7 @@ void MnxImporter::createDynamics(const mnx::part::Measure& mnxMeasure, engraving
 //   Create MuseScore ottava spanners from MNX ottavas.
 //---------------------------------------------------------
 
-void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure)
+void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, Measure* measure)
 {
     const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
     if (const auto mnxOttavas = mnxMeasure.ottavas()) {
@@ -1102,13 +1358,25 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
     if (const auto beams = mnxMeasure.beams()) {
         for (const auto& beam : beams.value()) {
             const auto events = beam.events();
+            std::vector<ChordRest*> beamElements;
+            DirectionV beamDirection = DirectionV::AUTO;
             for (size_t x = 0; x < events.size(); x++) {
                 const auto& eventId = events[x];
+                const auto mnxEvent = mnxDocument().getEntityMap().tryGet<mnx::sequence::Event>(eventId);
+                if (beamDirection == DirectionV::AUTO && mnxEvent) {
+                    if (const auto stemDir = mnxEvent->stemDirection()) {
+                        beamDirection = stemDir.value() == mnx::StemDirection::Up ? DirectionV::UP : DirectionV::DOWN;
+                    }
+                }
                 ChordRest* cr = mnxEventIdToCR(eventId);
                 IF_ASSERT_FAILED(cr) {
                     LOGE() << "encountered unmapped event " << eventId << " in beam " << beam.pointer().to_string();
                     LOGE() << beam.dump(2);
                     continue;
+                }
+                beamElements.push_back(cr);
+                if (beamDirection == DirectionV::AUTO && cr->isChord()) {
+                    beamDirection = toChord(cr)->stemDirection();
                 }
                 if (events.size() == 1) {
                     cr->setBeamMode(BeamMode::NONE); // MuseScore does not have singleton beams
@@ -1121,6 +1389,149 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
                     cr->setBeamMode(mode);
                 }
             }
+            if (beamElements.size() > 1) {
+                Beam* msBeam = Factory::createBeam(m_score->dummy()->system());
+                msBeam->setTrack(beamElements.front()->track());
+                msBeam->setDirection(beamDirection);
+                for (ChordRest* cr : beamElements) {
+                    msBeam->add(cr);
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   createArpeggios
+//   Create MuseScore arepeggio markings from MNX arpeggios and nonArpeggios.
+//---------------------------------------------------------
+
+void MnxImporter::createArpeggios(const mnx::part::Measure& mnxMeasure)
+{
+    const auto part = mnxMeasure.getEnclosingElement<mnx::Part>();
+
+    auto processArpeggio = [&](const auto& mnxArpeggio) -> void {
+        using MnxArpeggioType = std::decay_t<decltype(mnxArpeggio)>;
+        static_assert(std::is_base_of_v<mnx::part::ArpeggioBase, MnxArpeggioType>,
+                      "arpeggio must derive from mnx::part::ArpeggioBase");
+
+        const mnx::part::ArpeggioBase& arpBase = mnxArpeggio;
+        Note* noteStart = mnxNoteIdToNote(arpBase.span().start());
+        Note* noteEnd =  mnxNoteIdToNote(arpBase.span().end());
+        IF_ASSERT_FAILED(noteStart && noteEnd) {
+            LOGE() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " not mapped.";
+            return;
+        }
+        const auto mnxPartIndexForNote = [this](const Note* note) -> std::optional<size_t> {
+            const auto partIt = m_StaffToMnxPart.find(track2staff(note->track()));
+            if (partIt == m_StaffToMnxPart.end()) {
+                return std::nullopt;
+            }
+            return partIt->second;
+        };
+        const std::optional<size_t> startPartIndex = mnxPartIndexForNote(noteStart);
+        const std::optional<size_t> endPartIndex = mnxPartIndexForNote(noteEnd);
+        IF_ASSERT_FAILED(startPartIndex && endPartIndex) {
+            LOGE() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " belongs to an unmapped staff.";
+            return;
+        }
+        if (*startPartIndex != part->calcArrayIndex() || *endPartIndex != part->calcArrayIndex()) {
+            LOGW() << "skipping arpeggio span " << arpBase.span().start() << " to " << arpBase.span().end()
+                   << " because MNX arpeggios cannot cross part boundaries.";
+            return;
+        }
+        if (noteStart->tick() != noteEnd->tick()) {
+            LOGW() << "Start note " << arpBase.span().start()
+                   << " or end note " << arpBase.span().end() << " are not vertically aligned.";
+            return;
+        }
+
+        Chord* chordTop{};
+        Chord* chordBot{};
+        if (noteEnd->track() <= noteStart->track()) {
+            chordTop = noteEnd->chord();
+            chordBot = noteStart->chord();
+        } else {
+            chordTop = noteStart->chord();
+            chordBot = noteEnd->chord();
+        }
+        IF_ASSERT_FAILED(chordTop && chordBot) {
+            LOGE() << "failed to determining top/bottom notes for arpeggio";
+            return;
+        }
+
+        const bool graceArpeggio = chordTop->isGrace() || chordBot->isGrace();
+        if (graceArpeggio) {
+            /// @note hopefully we can lift this requirement someday
+            LOGW() << "skipping arpeggio on grace note (not supported by MuseScore)";
+            return;
+        }
+        // leave the graceArpeggio check here in case we support grace arpeggios in the future
+        if (graceArpeggio && chordTop != chordBot) {
+            LOGW() << "skipping arpeggio spanning multiple grace chords at " << chordTop->tick().toString();
+            return;
+        }
+
+        // MNX targets individual notes, but MuseScore must target entire chords
+
+        const Note* chordTopNote = chordTop->upNote();
+        const Note* chordBotNote = chordBot->downNote();
+        const bool targetsChordExtremes = (noteStart == chordTopNote && noteEnd == chordBotNote)
+                                          || (noteEnd == chordTopNote && noteStart == chordBotNote);
+        if (!targetsChordExtremes) {
+            LOGW() << "arpeggio span " << arpBase.span().start() << " to " << arpBase.span().end()
+                   << " does not target the top and bottom notes of its chord span at " << chordTop->tick().toString();
+        }
+        if (chordTop->arpeggio()) {
+            LOGW() << "arpeggio already exists on top chord";
+            return;
+        }
+
+        Arpeggio* arpeggio = Factory::createArpeggio(chordTop);
+        arpeggio->setTrack(chordTop->track());
+        if constexpr (std::is_same_v<MnxArpeggioType, mnx::part::NonArpeggio>) {
+            arpeggio->setArpeggioType(ArpeggioType::BRACKET);
+        } else {
+            arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+            if (mnxArpeggio.arrow()) {
+                switch (mnxArpeggio.direction()) {
+                case mnx::MarkingUpDownAuto::Down:
+                    arpeggio->setArpeggioType(ArpeggioType::DOWN);
+                    break;
+                case mnx::MarkingUpDownAuto::Up:
+                    arpeggio->setArpeggioType(ArpeggioType::UP);
+                    break;
+                case mnx::MarkingUpDownAuto::Auto:
+                    break;
+                }
+            }
+        }
+        if (graceArpeggio) {
+            arpeggio->setSpan(1);
+        } else {
+            arpeggio->setSpan(int(chordBot->track() + 1 - chordTop->track()));
+            Segment* s = chordTop->segment();
+            for (track_idx_t track = chordTop->track(); track <= chordBot->track(); ++track) {
+                EngravingItem* item = s->element(track);
+                if (item && item->isChord()) {
+                    toChord(item)->setSpanArpeggio(arpeggio);
+                }
+            }
+        }
+        arpeggio->setParent(chordTop);
+        chordTop->setArpeggio(arpeggio);
+    };
+
+    if (const auto mnxArpeggios = mnxMeasure.arpeggios()) {
+        for (const auto& arpeggio : mnxArpeggios.value()) {
+            processArpeggio(arpeggio);
+        }
+    }
+    if (const auto mnxNonArpeggios = mnxMeasure.nonArpeggios()) {
+        for (const auto& nonArpeggio : mnxNonArpeggios.value()) {
+            processArpeggio(nonArpeggio);
         }
     }
 }
@@ -1137,9 +1548,9 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
                         const mnx::FractionValue&,
                         const mnx::FractionValue&, mnx::util::SequenceWalkContext& ctx) {
         ChordRest* cr = muse::value(m_mnxEventToCR, event.pointer().to_string());
-        IF_ASSERT_FAILED(cr) {
-            LOGE() << "event is not mapped.";
-            LOGE() << event.dump(2);
+        if (!cr) {
+            LOGW() << "event " << event.pointer().to_string()
+                   << " is not mapped, possibly due to too many sequences in measure.";
             return true;
         }
         if (!ctx.inGrace) {
@@ -1194,7 +1605,8 @@ void MnxImporter::processSequencePass2(const mnx::Sequence& sequence, Measure* m
 void MnxImporter::importPartMeasures()
 {
     m_lyricLineUsage.clear();
-    /// pass1: create ChordRests and clefs
+    m_partMeasureSequenceTracks.clear();
+    // pass1: create ChordRests and clefs
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {
             Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex());
@@ -1205,10 +1617,11 @@ void MnxImporter::importPartMeasures()
         }
     }
     buildLyricLineVerseMap();
-    /// pass2: add accidentals, beams, dynamics, ottavas, slurs, and ties
+    // pass2: add accidentals, beams, dynamics, ottavas, slurs, and ties
     for (const auto& mnxPart : mnxDocument().parts()) {
         for (const auto& partMeasure : mnxPart.measures()) {
             Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex());
+            createArpeggios(partMeasure);
             createDynamics(partMeasure, measure);
             createOttavas(partMeasure, measure);
             createBeams(partMeasure);

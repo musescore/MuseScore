@@ -29,11 +29,14 @@
 #include <string>
 #include <string_view>
 #include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/engravingerrors.h"
 #include "framework/global/modularity/ioc.h"
+#include "logger.h"
 #include "importexport/mnx/imnxconfiguration.h"
 #include "log.h"
 
@@ -50,6 +53,7 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "types/bytearray.h"
 #include "types/ret.h"
 #include "engraving/rw/rwregister.h"
@@ -110,7 +114,130 @@ private:
     Setter m_setter = nullptr;
     bool m_previous = true;
 };
+
+class ScopedLogCapture
+{
+public:
+    ScopedLogCapture()
+        : m_dest(std::make_unique<kors::logger::MemLogDest>(kors::logger::LogLayout("${type} | ${tag} | ${message}")))
+    {
+        // Additive capture: keep the console destination active and mirror logs into memory.
+        muse::logger::Logger::instance()->addDest(m_dest.get());
+    }
+
+    ~ScopedLogCapture()
+    {
+        if (m_dest) {
+            muse::logger::Logger::instance()->removeDest(m_dest.get());
+        }
+    }
+
+    std::string content() const
+    {
+        return m_dest ? m_dest->content() : std::string();
+    }
+
+    bool contains(const std::string& needle) const
+    {
+        return content().find(needle) != std::string::npos;
+    }
+
+    bool hasWarnings() const
+    {
+        return !warnings().empty();
+    }
+
+    std::vector<std::string> warnings() const
+    {
+        std::vector<std::string> result;
+        const std::string text = content();
+        size_t start = 0;
+        while (start <= text.size()) {
+            const size_t end = text.find('\n', start);
+            const size_t length = end == std::string::npos ? text.size() - start : end - start;
+            std::string_view line(text.data() + start, length);
+            if (line.rfind("WARN |", 0) == 0) {
+                result.emplace_back(line);
+            }
+            if (end == std::string::npos) {
+                break;
+            }
+            start = end + 1;
+        }
+        return result;
+    }
+
+private:
+    std::unique_ptr<kors::logger::MemLogDest> m_dest;
+};
+
+static const std::unordered_map<std::string_view, std::vector<std::string_view> > MNX_ALLOWED_WARNINGS {
+    { "project_enharmonics", { "mnxio::toMuseScoreNoteVal | Enharmonically transposing pitch with alteration value out of range" } },
+    { "project_dynamicsKbdVoices", { "MnxImporter::importSequences | Part measure",  "MnxImporter::processSequencePass2 | event" } },
+    { "project_key56Wrapped56Edited", { "mnxio::loadInstrument | MNX keyFifthsFlipAt value" } },
+    { "project_graceArps", { "MnxImporter::createArpeggios | skipping arpeggio on grace note" } },
+    { "w3c_organ_layout", { "MnxImporter::createTies" } }
+};
+
+static const std::vector<std::string_view>& allowedWarningsForTest(std::string_view testName)
+{
+    static const std::vector<std::string_view> noWarnings;
+    const auto it = MNX_ALLOWED_WARNINGS.find(testName);
+    if (it == MNX_ALLOWED_WARNINGS.end()) {
+        return noWarnings;
+    }
+    return it->second;
 }
+
+static std::vector<std::string> unexpectedWarningsForTest(const ScopedLogCapture& capture, std::string_view testName)
+{
+    const std::vector<std::string_view>& allowedWarnings = allowedWarningsForTest(testName);
+    std::vector<std::string> unexpected;
+    for (const std::string& line : capture.warnings()) {
+        const bool allowed = std::any_of(allowedWarnings.begin(), allowedWarnings.end(), [&line](std::string_view allowedWarning) {
+            return line.find(allowedWarning) != std::string::npos;
+        });
+        if (!allowed) {
+            unexpected.push_back(line);
+        }
+    }
+    return unexpected;
+}
+
+static void expectNoWarnings(const ScopedLogCapture& capture, std::string_view testName)
+{
+    const std::vector<std::string> unexpectedWarnings = unexpectedWarningsForTest(capture, testName);
+    EXPECT_TRUE(unexpectedWarnings.empty()) << "Unexpected warnings for " << testName << ":\n"
+                                            << [&unexpectedWarnings]() {
+        std::string out;
+        for (const std::string& warning : unexpectedWarnings) {
+            out += warning;
+            out += '\n';
+        }
+        return out;
+        } ();
+}
+
+class ScopedWarningExpectation
+{
+public:
+    ScopedWarningExpectation(const ScopedLogCapture& capture, std::string testName)
+        : m_capture(capture), m_testName(std::move(testName))
+    {
+    }
+
+    ~ScopedWarningExpectation()
+    {
+        expectNoWarnings(m_capture, m_testName);
+    }
+
+private:
+    const ScopedLogCapture& m_capture;
+    std::string m_testName;
+};
+}
+
+#define EXPECT_NO_WARNINGS(capture, testName) expectNoWarnings((capture), (testName))
 
 static const String MNX_DATA_DIR(u"data/project_examples/");
 static const String MSCX_REFERENCE_DIR(u"data/mscx_reference_examples/");
@@ -120,18 +247,16 @@ static const String MSCX_PROJECT_REFERENCE_DIR(u"data/project_examples/");
 #error "MNX_W3C_EXAMPLES_PATH must be provided by mnxdom"
 #endif
 
-static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode);
+static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode, bool normalizeChordStemDirection);
 
 static const std::unordered_set<std::string> MNX_NO_ROUNDTRIP {
-    /// @note File contains dynamics, which are not currently exported to MNX.
-    "dynamics",
     /// @note clarinet38MissingTime omits a time signature in MNX, so roundtrip inserts one and mismatches.
     "clarinet38MissingTime",
     /// @note multimeasure-rests has an explicit regular barline that is dropped on export, shifting eids.
     "multimeasure-rests",
     /// @note organ-layout is a W3C example missing clefs; we don't change the example, so skip roundtrip.
     "organ-layout",
-    /// @note Files contains overlapping ottavas, which are not exported in the same octave due to MuseScore
+    /// @note ottavas has overlapping ottavas, which are not exported in the same octave due to MuseScore
     /// playback only playing one ottava at a time.
     "ottavas"
 };
@@ -142,10 +267,11 @@ public:
     MasterScore* readMnxScore(const String& fileName, bool isAbsolutePath = false);
     std::string exportMnxJson(Score* score);
     MasterScore* importMnxFromJson(const std::string& json, const String& virtualPath);
-    MasterScore* roundTripMnxScore(const String& sourceFile, const String& exportedFile, bool isAbsolutePath = false);
+    MasterScore* roundTripMnxScore(Score* sourceScore, const String& exportedFile);
 
-    bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr);
-    bool importReferenceExample(const String& baseName);
+    bool compareWithMscxReference(Score* score, const String& referencePath, const char* testName = nullptr,
+                                  bool normalizeChordStemDirection = false);
+    std::unique_ptr<MasterScore> importReferenceExample(const String& baseName);
     void runProjectFileTest(const char* name);
     void runW3cExampleTest(const char* name);
 };
@@ -162,28 +288,30 @@ static void fixupScore(MasterScore* score)
 
 MasterScore* Mnx_Tests::readMnxScore(const String& fileName, bool isAbsolutePath)
 {
-    auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
-        NotationMnxReader reader(muse::modularity::globalCtx());
-        Ret ret = reader.read(score, path);
-        if (ret.success()) {
-            return Err::NoError;
-        }
+    const muse::io::path_t path = isAbsolutePath ? fileName : (ScoreRW::rootPath() + u"/" + fileName);
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle(muse::modularity::globalCtx());
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
+    NotationMnxReader reader(muse::modularity::globalCtx());
+    Ret ret = reader.read(score, path);
+    if (!ret.success()) {
         const int code = ret.code();
         if (code >= static_cast<int>(Ret::Code::EngravingFirst)
             && code <= static_cast<int>(Ret::Code::EngravingLast)) {
-            return static_cast<Err>(code);
+            delete score;
+            return nullptr;
         }
 
         if (code == static_cast<int>(Ret::Code::NotSupported)
             || code == static_cast<int>(Ret::Code::BadData)) {
-            return Err::FileBadFormat;
+            delete score;
+            return nullptr;
         }
 
-        return Err::UnknownError;
-    };
+        delete score;
+        return nullptr;
+    }
 
-    MasterScore* score = ScoreRW::readScore(fileName, isAbsolutePath, importFunc);
     return score;
 }
 
@@ -229,31 +357,30 @@ MasterScore* Mnx_Tests::importMnxFromJson(const std::string& json, const String&
     return score.release();
 }
 
-MasterScore* Mnx_Tests::roundTripMnxScore(const String& sourceFile, const String& exportedFile, bool isAbsolutePath)
+MasterScore* Mnx_Tests::roundTripMnxScore(Score* sourceScore, const String& exportedFile)
 {
-    std::unique_ptr<MasterScore> score(readMnxScore(sourceFile, isAbsolutePath));
-    if (!score) {
+    if (!sourceScore) {
         return nullptr;
     }
 
-    fixupScore(score.get());
-    score->doLayout();
-
-    const std::string json = exportMnxJson(score.get());
+    const std::string json = exportMnxJson(sourceScore);
     if (json.empty()) {
         return nullptr;
     }
 
     MasterScore* roundTrip = importMnxFromJson(json, exportedFile);
     if (roundTrip) {
-        fixupScore(roundTrip);
-        roundTrip->doLayout();
+        roundTrip->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+            fixupScore(roundTrip);
+            roundTrip->doLayout();
+        });
     }
 
     return roundTrip;
 }
 
-bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePath, const char* testName)
+bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePath, const char* testName,
+                                         bool normalizeChordStemDirection)
 {
 #if MUE_MNX_WRITE_REFS
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
@@ -266,7 +393,11 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
 #else
     auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
 
-    if (!rw::RWRegister::writer()->writeScore(score, &buffer)) {
+    bool writeOk = false;
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test compare"), [&](Transaction&) {
+        writeOk = rw::RWRegister::writer()->writeScore(score, &buffer);
+    });
+    if (!writeOk) {
         ADD_FAILURE() << "Failed to serialize score to MSCX.";
         return false;
     }
@@ -276,8 +407,13 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
         /// @note The exporter exports layout beams, which omits one of the beams-over-barline in the input
         "project_beamsOverBarlines"
     };
+    constexpr std::array<std::string_view, 1> chordStemDirectionNormalizationTests{
+        /// @note Beamed stem direction may round-trip as either chord or beam overrides.
+        "project_beamsOverBarlines"
+    };
 
     bool normalizeBeamMode = false;
+    bool normalizeChordStemDirectionForTest = false;
     if (testName) {
         for (const std::string_view name : normalizationTests) {
             if (name == testName) {
@@ -285,13 +421,23 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
                 break;
             }
         }
+        for (const std::string_view name : chordStemDirectionNormalizationTests) {
+            if (name == testName) {
+                normalizeChordStemDirectionForTest = true;
+                break;
+            }
+        }
     }
+    normalizeChordStemDirection = normalizeChordStemDirection && normalizeChordStemDirectionForTest;
 
     LOGI() << "BeamMode normalization " << (normalizeBeamMode ? "enabled" : "disabled") << " for "
            << (testName ? testName : "unnamed test");
+    LOGI() << "Chord StemDirection normalization " << (normalizeChordStemDirection ? "enabled" : "disabled") << " for "
+           << (testName ? testName : "unnamed test");
 
     const std::string outputText = normalizeMscxText(
-        std::string(reinterpret_cast<const char*>(buffer.data().constData()), buffer.data().size()), normalizeBeamMode);
+        std::string(reinterpret_cast<const char*>(buffer.data().constData()), buffer.data().size()),
+        normalizeBeamMode, normalizeChordStemDirection);
 
     ByteArray referenceData;
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
@@ -303,7 +449,7 @@ bool Mnx_Tests::compareWithMscxReference(Score* score, const String& referencePa
     }
 
     const std::string referenceText = normalizeMscxText(
-        std::string(referenceData.constChar(), referenceData.size()), normalizeBeamMode);
+        std::string(referenceData.constChar(), referenceData.size()), normalizeBeamMode, normalizeChordStemDirection);
 
     if (referenceText == outputText) {
         return true;
@@ -370,7 +516,7 @@ static String tempRoundTripPath(const String& baseName)
     return u"<roundtrip>/" + baseName + u".mnx";
 }
 
-static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode)
+static std::string normalizeMscxText(const std::string& text, bool normalizeBeamMode, bool normalizeChordStemDirection)
 {
     static const std::regex crlfRe("\r\n");
     static const std::regex tagWhitespaceRe(">\\s+<");
@@ -378,6 +524,9 @@ static std::string normalizeMscxText(const std::string& text, bool normalizeBeam
     static const std::regex trackNameRe("<trackName>[\\s\\S]*?</trackName>");
     // Beam modes are different on round trip if inbound file doesn't set useBeams
     static const std::regex beamModeRe("<BeamMode>[\\s\\S]*?</BeamMode>");
+    // Beamed stem directions may round-trip as either chord or beam overrides.
+    static const std::regex chordStemDirectionRe(
+        "(<Chord\\b[^>]*>(?:(?!</Chord>)[\\s\\S])*?)<StemDirection>[\\s\\S]*?</StemDirection>");
     // Explicit normal barlines are redundant and not preserved on export
     static const std::regex normalBarlineRe("<BarLine>(?:(?!<subtype>)[\\s\\S])*?</BarLine>");
     std::string out = std::regex_replace(text, crlfRe, "\n");
@@ -385,18 +534,21 @@ static std::string normalizeMscxText(const std::string& text, bool normalizeBeam
     if (normalizeBeamMode) {
         out = std::regex_replace(out, beamModeRe, "");
     }
+    if (normalizeChordStemDirection) {
+        out = std::regex_replace(out, chordStemDirectionRe, "$1");
+    }
     out = std::regex_replace(out, normalBarlineRe, "");
     return std::regex_replace(out, tagWhitespaceRe, "><");
 }
 
-bool Mnx_Tests::importReferenceExample(const String& baseName)
+std::unique_ptr<MasterScore> Mnx_Tests::importReferenceExample(const String& baseName)
 {
     const String referencePath = w3cRefPath(baseName);
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
 #if !MUE_MNX_WRITE_REFS
     if (!io::FileInfo::exists(referenceAbsPath)) {
         ADD_FAILURE() << "Missing MSCX reference file: " << referencePath.toStdString();
-        return false;
+        return nullptr;
     }
 #endif
 
@@ -406,30 +558,36 @@ bool Mnx_Tests::importReferenceExample(const String& baseName)
     std::unique_ptr<MasterScore> score(readMnxScore(sourcePath, /*isAbsolutePath*/ true));
     if (!score) {
         ADD_FAILURE() << "Failed to import MNX reference file: " << sourcePath.toStdString();
-        return false;
+        return nullptr;
     }
 
-    fixupScore(score.get());
-    score->doLayout();
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+        fixupScore(score.get());
+        score->doLayout();
+    });
 
-    return compareWithMscxReference(score.get(), referencePath);
+    return score;
 }
 
 void Mnx_Tests::runProjectFileTest(const char* name)
 {
     ScopedMnxBoolSetting exactValidationGuard(true, &IMnxConfiguration::mnxRequireExactSchemaValidation,
                                               &IMnxConfiguration::setMnxRequireExactSchemaValidation);
+    ScopedLogCapture logCapture;
+    const std::string testName = std::string("project_") + name;
+    ScopedWarningExpectation warningExpectation(logCapture, testName);
     const String baseName = String::fromUtf8(name);
     const String sourcePath = MNX_DATA_DIR + baseName + u".mnx";
 
     std::unique_ptr<MasterScore> score(readMnxScore(sourcePath));
     ASSERT_TRUE(score);
 
-    fixupScore(score.get());
-    score->doLayout();
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX test fixup"), [&](Transaction&) {
+        fixupScore(score.get());
+        score->doLayout();
+    });
 
     const String referencePath = projectRefPath(baseName);
-    const std::string testName = std::string("project_") + name;
     EXPECT_TRUE(compareWithMscxReference(score.get(), referencePath, testName.c_str()));
 
     if (MUE_MNX_WRITE_REFS) {
@@ -440,16 +598,19 @@ void Mnx_Tests::runProjectFileTest(const char* name)
     }
 
     const String exportName = tempRoundTripPath(baseName);
-    std::unique_ptr<MasterScore> roundTrip(roundTripMnxScore(sourcePath, exportName));
+    std::unique_ptr<MasterScore> roundTrip(roundTripMnxScore(score.get(), exportName));
     ASSERT_TRUE(roundTrip);
 
-    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str()));
+    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str(),
+                                         /*normalizeChordStemDirection*/ true));
 }
 
 void Mnx_Tests::runW3cExampleTest(const char* name)
 {
     const String baseName = mnxBaseNameFromMacro(name);
     const std::string baseNameUtf8 = baseName.toStdString();
+    const std::string testName = std::string("w3c_") + name;
+    const String referencePath = w3cRefPath(baseName);
     ScopedMnxBoolSetting exactValidationGuard(true, &IMnxConfiguration::mnxRequireExactSchemaValidation,
                                               &IMnxConfiguration::setMnxRequireExactSchemaValidation);
     ScopedMnxBoolSetting exportBeamsGuard(exportBeamsEnabledForW3c(baseNameUtf8),
@@ -457,10 +618,15 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
     ScopedMnxBoolSetting exportRestPositionsGuard(exportRestPositionsEnabledForW3c(baseNameUtf8),
                                                   &IMnxConfiguration::mnxExportRestPositions,
                                                   &IMnxConfiguration::setMnxExportRestPositions);
+    ScopedLogCapture logCapture;
+    ScopedWarningExpectation warningExpectation(logCapture, testName);
 
-    if (!importReferenceExample(baseName)) {
+    std::unique_ptr<MasterScore> score(importReferenceExample(baseName));
+    if (!score) {
         return;
     }
+
+    EXPECT_TRUE(compareWithMscxReference(score.get(), referencePath, testName.c_str()));
 
     if (MUE_MNX_WRITE_REFS) {
         return;
@@ -469,8 +635,6 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
         return;
     }
 
-    const std::string testName = std::string("w3c_") + name;
-    const String referencePath = w3cRefPath(baseName);
     const String referenceAbsPath = ScoreRW::rootPath() + u"/" + referencePath;
     if (!io::FileInfo::exists(referenceAbsPath)) {
         return;
@@ -478,10 +642,11 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
 
     const String exportName = tempRoundTripPath(baseName);
     std::unique_ptr<MasterScore> roundTrip(
-        roundTripMnxScore(w3cSourcePath(baseName), exportName, /*isAbsolutePath*/ true));
+        roundTripMnxScore(score.get(), exportName));
     ASSERT_TRUE(roundTrip);
 
-    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str()));
+    EXPECT_TRUE(compareWithMscxReference(roundTrip.get(), referencePath, testName.c_str(),
+                                         /*normalizeChordStemDirection*/ true));
 }
 
 #define MNX_PROJECT_FILE_TEST(name) \
@@ -498,13 +663,23 @@ void Mnx_Tests::runW3cExampleTest(const char* name)
 
 MNX_PROJECT_FILE_TEST(altoFluteTrem)
 MNX_PROJECT_FILE_TEST(altoFluteTremMissingKey)
+MNX_PROJECT_FILE_TEST(arpeggios)
 MNX_PROJECT_FILE_TEST_DISABLED(barlineTypesOriginal) // the original file is just for creating the edited file.
 MNX_PROJECT_FILE_TEST(barlineTypesWithShort)
 MNX_PROJECT_FILE_TEST(bcl)
 MNX_PROJECT_FILE_TEST(beamsOverBarlines)
+MNX_PROJECT_FILE_TEST(breathMark)
+MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)
+MNX_PROJECT_FILE_TEST(dynamicsHairpins)
+MNX_PROJECT_FILE_TEST(dynamicsKbdVoices)
+MNX_PROJECT_FILE_TEST(dynamicV1V2)
+MNX_PROJECT_FILE_TEST(dynamicVoice)
 MNX_PROJECT_FILE_TEST(enharmonicPart)
+MNX_PROJECT_FILE_TEST(enharmonics)
+MNX_PROJECT_FILE_TEST(fermata)
+MNX_PROJECT_FILE_TEST(graceArps)
 MNX_PROJECT_FILE_TEST(graceBeamed)
 MNX_PROJECT_FILE_TEST(key56Wrapped56Edited)
 MNX_PROJECT_FILE_TEST_DISABLED(key56Wrapped56Unedited) // the unedited file is just for creating the edited file.
@@ -516,6 +691,7 @@ MNX_PROJECT_FILE_TEST(layoutBrackets)
 MNX_PROJECT_FILE_TEST(measnumSequences)
 MNX_PROJECT_FILE_TEST(multinoteTremolos)
 MNX_PROJECT_FILE_TEST(multinoteTremolosAdv)
+MNX_PROJECT_FILE_TEST(nonArpeggios)
 MNX_PROJECT_FILE_TEST(ottavas)
 MNX_PROJECT_FILE_TEST(percussionKit)
 MNX_PROJECT_FILE_TEST(restPosition)

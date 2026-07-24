@@ -22,6 +22,8 @@
 #pragma once
 
 #include <optional>
+#include <string>
+#include <utility>
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/ottava.h"
@@ -42,14 +44,15 @@ class TDuration;
 
 namespace mu::iex::mnxio {
 // MNX values -> MuseScore values
+extern engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient);
 extern engraving::BarLineType toMuseScoreBarLineType(mnx::BarlineType blt);
 extern engraving::BeamMode toMuseScoreBeamMode(int lowestBeamStart);
 extern engraving::BracketType toMuseScoreBracketType(mnx::LayoutSymbol lys);
 extern engraving::SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym);
 extern engraving::ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef);
-extern engraving::DynamicType toMuseScoreDynamicType(const engraving::String& glyph);
 extern engraving::DurationType toMuseScoreDurationType(mnx::NoteValueBase nvb);
 extern engraving::TDuration toMuseScoreDuration(mnx::NoteValue nv);
+extern engraving::SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol);
 extern engraving::Fraction toMuseScoreFraction(const mnx::FractionValue& fraction);
 extern engraving::JumpType toMuseScoreJumpType(mnx::JumpType jt);
 extern engraving::Key toMuseScoreKey(int fifths);
@@ -57,6 +60,7 @@ extern engraving::LyricsSyllabic toMuseScoreLyricsSyllabic(mnx::LyricLineType ll
 extern engraving::NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, engraving::Key key, int octaveShift);
 extern engraving::OttavaType toMuseScoreOttavaType(mnx::OttavaAmount ottavaAmount);
 extern engraving::PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt);
+extern engraving::PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const engraving::EngravingItem* item);
 extern engraving::Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position);
 extern engraving::SlurStyleType toMuseScoreSlurStyleType(mnx::LineType lineType);
 extern engraving::TremoloType toMuseScoreTremoloType(int numberOfBeams);
@@ -67,11 +71,17 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDispla
 extern mnx::BarlineType toMnxBarLineType(engraving::BarLineType blt);
 extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId sym);
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
+extern std::pair<std::optional<mnx::DynamicValue>, std::optional<mnx::DynamicValue> > toMnxDynamicType(
+    engraving::DynamicType type, bool& copyGlyphs, bool& isAccent);
+extern mnx::FermataDuration toMnxFermataDuration(engraving::FermataType fermataType);
+extern mnx::FermataSymbol toMnxFermataSymbol(engraving::SymId sym);
 extern mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction);
 extern std::optional<mnx::JumpType> toMnxJumpType(engraving::JumpType jt);
 extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engraving::Interval& keyTransposition);
 extern mnx::LayoutSymbol toMnxLayoutSymbol(engraving::BracketType bracketType);
 extern mnx::LyricLineType toMnxLyricLineType(engraving::LyricsSyllabic ls);
+extern mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor);
+extern mnx::Orientation toMnxOrientation(engraving::PlacementV placement);
 extern mnx::LineType toMnxSlurLineType(engraving::SlurStyleType sst);
 extern std::optional<mnx::NoteValue::Required> toMnxNoteValue(const engraving::TDuration& duration);
 extern std::optional<mnx::OttavaAmount> toMnxOttavaAmount(engraving::OttavaType ottavaType);
