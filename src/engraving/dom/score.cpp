@@ -3919,8 +3919,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     part->initFromInstrTemplate(t);
     for (staff_idx_t i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
-        StaffType* stt = staff->staffType(Fraction(0, 1));
-        staff->init(t, stt, int(i));
+        staff->init(t, nullptr, int(i));
         undoInsertStaff(staff, i);
     }
     undoInsertPart(part, m_parts.size());
