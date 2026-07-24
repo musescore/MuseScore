@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <limits>
+#include <unordered_set>
 
 #include <QApplication> // for QApplication::cursorFlashTime()
 #include <QClipboard>
@@ -5479,7 +5480,7 @@ std::vector<Dynamic*> findDynamicsForElement(const EngravingItem* element)
 
         Dynamic* dynamic = toDynamic(item);
         if (dynamic->elementAppliesToTrack(cr->track())
-            && (dynamic->staffIdx() == cr->staffIdx() || dynamic->appliesToAllVoicesInInstrument())) {
+            && (dynamic->staffIdx() == cr->staffIdx())) {
             dynamics.push_back(dynamic);
         }
     }
@@ -5489,23 +5490,23 @@ std::vector<Dynamic*> findDynamicsForElement(const EngravingItem* element)
 
 void NotationInteraction::increaseDecreaseDynamicsForSelection(int delta)
 {
-    if (selection()->isNone()) {
-        return;
-    }
     startEdit(TranslatableString("undoableAction", delta > 0 ? "Increase dynamics" : "Decrease dynamics"));
-    if (selection()->element() && !selection()->element()->isDynamic()) {
-        std::vector<Dynamic*> dynamics = findDynamicsForElement(selection()->element());
-        for (Dynamic* dynamic : dynamics) {
-            increaseDecreaseDynamic(dynamic, delta);
-        }
-    } else {
-        for (EngravingItem* item : selection()->elements()) {
-            if (!item->isDynamic()) {
-                continue;
+
+    std::unordered_set<Dynamic*> dynamics;
+    for (EngravingItem* item : selection()->elements()) {
+        if (item->isDynamic()) {
+            dynamics.insert(toDynamic(item));
+        } else {
+            for (Dynamic* dynamic : findDynamicsForElement(item)) {
+                dynamics.insert(dynamic);
             }
-            increaseDecreaseDynamic(toDynamic(item), delta);
         }
     }
+
+    for (Dynamic* dynamic : dynamics) {
+        increaseDecreaseDynamic(dynamic, delta);
+    }
+
     apply();
 }
 
