@@ -22,14 +22,30 @@
 
 #include "stringtuningssettingsmodel.h"
 
+#include "stringtuningsutils.h"
+
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/utils.h"
+#include "engraving/style/styledef.h"
 
 #include "translation.h"
 
 using namespace mu;
 using namespace muse;
 using namespace mu::notation;
+
+namespace {
+mu::engraving::NoteSpellingType currentNoteSpelling(const mu::engraving::EngravingItem* item)
+{
+    using namespace mu::engraving;
+
+    if (!item) {
+        return NoteSpellingType::STANDARD;
+    }
+
+    return item->style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+}
+}
 
 const QString customPreset()
 {
@@ -49,7 +65,7 @@ void StringTuningsSettingsModel::init()
 
     AbstractElementPopupModel::init();
 
-    IF_ASSERT_FAILED(m_item || m_item->isStringTunings()) {
+    IF_ASSERT_FAILED(m_item && m_item->isStringTunings()) {
         return;
     }
 
@@ -79,6 +95,7 @@ void StringTuningsSettingsModel::init()
 
     const std::vector<engraving::instrString>& stringList = stringData->stringList();
     const std::vector<engraving::string_idx_t>& visibleStrings = stringTunings->visibleStrings();
+    const engraving::NoteSpellingType spelling = currentNoteSpelling(m_item);
     int numOfStrings = static_cast<int>(stringList.size());
     for (int i = 0; i < numOfStrings; ++i) {
         engraving::string_idx_t instrStringIndex = numOfStrings - i - 1;
@@ -90,6 +107,7 @@ void StringTuningsSettingsModel::init()
         item->setNumber(QString::number(i + 1));
         item->setValue(string.pitch);
         item->setUseFlat(string.useFlat);
+        item->setSpelling(static_cast<int>(spelling));
         item->blockSignals(false);
 
         m_strings.push_back(item);
@@ -104,7 +122,7 @@ void StringTuningsSettingsModel::init()
 
 QString StringTuningsSettingsModel::pitchToString(int pitch)
 {
-    return engraving::pitch2string(pitch);
+    return stringTuningPitchToString(pitch, true, currentNoteSpelling(m_item));
 }
 
 void StringTuningsSettingsModel::toggleString(int stringIndex)
@@ -119,24 +137,15 @@ void StringTuningsSettingsModel::toggleString(int stringIndex)
     saveStringsVisibleState();
 }
 
-bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& stringValue)
+bool StringTuningsSettingsModel::setStringPitchValue(int stringIndex, int value, bool useFlat)
 {
-    if (stringIndex >= m_strings.size()) {
+    if (stringIndex >= m_strings.size() || !engraving::pitchIsValid(value)) {
         return false;
     }
 
     StringTuningsItem* item = m_strings.at(stringIndex);
 
-    String _stringValue = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
-    int value = engraving::string2pitch(_stringValue);
-    if (value == -1) {
-        item->valueChanged();
-        return false;
-    }
-
     item->setValue(value);
-
-    bool useFlat = _stringValue.contains(u'♭');
     item->setUseFlat(useFlat);
 
     beginMultiCommands(TranslatableString("undoableAction", "Set string tuning"));
@@ -149,14 +158,35 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
     return true;
 }
 
-QString StringTuningsSettingsModel::increaseStringValue(int currentPitch)
+bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& stringValue)
 {
-    return engraving::pitch2string(currentPitch + 1, false /* useFlats */);
-}
+    if (stringIndex >= m_strings.size()) {
+        return false;
+    }
 
-QString StringTuningsSettingsModel::decreaseStringValue(int currentPitch)
-{
-    return engraving::pitch2string(currentPitch - 1, true /* useFlats */);
+    StringTuningsItem* item = m_strings.at(stringIndex);
+
+    const engraving::NoteSpellingType spelling = currentNoteSpelling(m_item);
+
+    const String normalizedValue = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
+
+    //! NOTE: Parse localized spellings first so popup-only spellings such as
+    //! GERMAN_PURE "B" map to the intended pitch class. If that fails, fall
+    //! back to the generic parser so standard ASCII spellings accepted
+    //! elsewhere in the engraving layer keep working here as well.
+    bool useFlat = false;
+    int value = stringTuningInputToPitch(normalizedValue, spelling, &useFlat);
+    if (value == engraving::INVALID_PITCH) {
+        value = engraving::string2pitch(normalizedValue);
+        useFlat = normalizedValue.contains(u'♭');
+    }
+
+    if (value == engraving::INVALID_PITCH) {
+        item->valueChanged();
+        return false;
+    }
+
+    return setStringPitchValue(stringIndex, value, useFlat);
 }
 
 QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
@@ -305,6 +335,7 @@ void StringTuningsSettingsModel::updateStrings()
     QString currentPreset = this->currentPreset();
     const auto& tick = m_item->tick();
     const auto transpose  = m_item->part()->instrument(tick)->transpose().chromatic;
+    const engraving::NoteSpellingType spelling = currentNoteSpelling(m_item);
 
     m_strings.clear();
 
@@ -322,6 +353,7 @@ void StringTuningsSettingsModel::updateStrings()
                 item->setNumber(QString::number(i + 1));
                 item->setValue(valueList[valueIndex].toInt() - transpose);
                 item->setUseFlat(useFlats);
+                item->setSpelling(static_cast<int>(spelling));
                 item->blockSignals(false);
 
                 m_strings.push_back(item);
@@ -453,7 +485,7 @@ int StringTuningsItem::value() const
 
 QString StringTuningsItem::valueStr() const
 {
-    return engraving::pitch2string(m_value, m_useFlat).toUpper();
+    return stringTuningPitchToString(m_value, m_useFlat, static_cast<engraving::NoteSpellingType>(m_spelling));
 }
 
 void StringTuningsItem::setValue(int value)
@@ -478,5 +510,15 @@ void StringTuningsItem::setUseFlat(bool use)
     }
 
     m_useFlat = use;
+    emit valueChanged();
+}
+
+void StringTuningsItem::setSpelling(int spelling)
+{
+    if (m_spelling == spelling) {
+        return;
+    }
+
+    m_spelling = spelling;
     emit valueChanged();
 }
