@@ -31,7 +31,8 @@ class StaveSharingLayout
 {
 public:
     static void updateStaveSharingForFullSystem(MeasureBase* firstMB, MeasureBase* lastMB, LayoutContext& ctx);
-    static void updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
+    static bool updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx);
+    static void updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx);
 
 private:
     using TrackGroup = std::vector<track_idx_t>;
@@ -54,6 +55,7 @@ private:
 
         Score* score = nullptr;
         LayoutContext& layoutCtx;
+        const MStyle& style;
 
         StaveSharingContext(MeasureBase* first, MeasureBase* last, LayoutContext& ctx);
     };
@@ -88,8 +90,8 @@ private:
     static void makeSharedSpanners(StaveSharingContext& ctx);
 
     static void makeStaveSharingLabels(StaveSharingContext& ctx);
-    static bool unisonNoteNeedsLabel(Note* unisonNote);
-    static String formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, const StaveSharingContext& ctx);
+    static bool unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSystem, StaveSharingContext& ctx);
+    static String formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool isForNewSystem, const StaveSharingContext& ctx);
 
     static void manageVoicePropertyAndTrackForSharedItems(const std::vector<EngravingItem*>& sharedItems, track_idx_t startOriginTrack,
                                                           track_idx_t endOriginTrack, const SharedTrackMap& trackMap);

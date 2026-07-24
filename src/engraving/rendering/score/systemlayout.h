@@ -27,6 +27,7 @@
 
 #include "../../dom/measure.h"
 #include "../../dom/segment.h"
+#include "../../dom/sharedpart.h"
 #include "../../types/types.h"
 
 namespace mu::engraving {
@@ -95,29 +96,13 @@ private:
         double measurePos = 0.0;
         std::map<EngravingItem*, PointF> elementPositions;
         std::map<EngravingItem*, double> elementWidths;
+        std::map<SharedPart*, SharedTrackMap> sharedTrackMaps;
         bool curHeader = false;
         bool curTrailer = false;
 
-        void clear()
-        {
-            measure = nullptr;
-            measureWidth = 0.0;
-            measurePos = 0.0;
-            elementPositions.clear();
-            elementWidths.clear();
-        }
+        void clear();
 
-        void restoreMeasure()
-        {
-            measure->mutldata()->setPosX(measurePos);
-            measure->setWidth(measureWidth);
-            for (auto pair : elementPositions) {
-                pair.first->setPos(pair.second);
-            }
-            for (auto pair : elementWidths) {
-                pair.first->setWidth(pair.second);
-            }
-        }
+        void restoreMeasure(LayoutContext& ctx);
     };
 
     struct ElementsToLayout

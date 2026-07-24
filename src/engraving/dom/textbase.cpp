@@ -3387,6 +3387,15 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
             break;
         }
     }
+
+    for (EngravingItem* originItem : originItems()) {
+        // This is a shared item: propagate to all origin items
+        score()->undo(new ChangeTextProperties(toTextBase(originItem)->cursor(), id, v, ps));
+    }
+    if (EngravingItem* sharedEl = sharedItem(); sharedEl && sharedEl->originItems().front() == this) {
+        // This is the first origin item of the shared item: propagate to shared item
+        score()->undo(new ChangeTextProperties(toTextBase(sharedEl)->cursor(), id, v, ps));
+    }
 }
 
 bool mu::engraving::TextBase::hasSymbolScale() const

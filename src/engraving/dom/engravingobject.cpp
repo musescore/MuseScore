@@ -425,6 +425,20 @@ static void changeProperties(EngravingObject* object, Pid propertyId, const Prop
             break;
         }
     }
+
+    if (!object->isEngravingItem() || propertyGroup(propertyId) == PropertyGroup::POSITION) {
+        return;
+    }
+
+    EngravingItem* item = toEngravingItem(object);
+    for (EngravingItem* originItem : item->originItems()) {
+        // This is a shared item: propagate to all origin items
+        changeProperty(originItem, propertyId, propertyValue, propertyFlag);
+    }
+    if (EngravingItem* sharedItem = item->sharedItem(); sharedItem && sharedItem->originItems().front() == item) {
+        // This is the first origin item of the shared item: propagate to shared item
+        changeProperty(sharedItem, propertyId, propertyValue, propertyFlag);
+    }
 }
 
 //---------------------------------------------------------

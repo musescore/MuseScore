@@ -157,9 +157,19 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
+
+        bool sharedTrackMapChanged = false;
         if (!systemLock) {
-            StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
+            for (Part* p : ctx.dom().parts()) {
+                if (p->isSharedPart()) {
+                    SharedPart* sp = toSharedPart(p);
+                    prevMeasureState.sharedTrackMaps[sp] = sp->trackMapAtTick(ctx.mutState().curMeasure()->tick());
+                }
+            }
+
+            sharedTrackMapChanged = StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
         }
+
         MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
 
         if (ctx.state().curMeasure()->isMeasure()) {
@@ -229,6 +239,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                 system->removeLastMeasure();
                 ctx.mutState().curMeasure()->setParent(oldSystem);
+            }
+
+            if (sharedTrackMapChanged) {
+                // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
+                StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx);
             }
 
             break;
@@ -362,7 +377,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                     MeasureLayout::updateGraceNotes(m, ctx);
 
-                    prevMeasureState.restoreMeasure();
+                    prevMeasureState.restoreMeasure(ctx);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
                     SystemLayout::restoreOldSystemLayout(m->system(), ctx);
@@ -2100,14 +2115,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
 {
-    ElementsToLayout elements(system);
-    for (MeasureBase* mb : system->measures()) {
-        if (mb->isMeasure()) {
-            collectElementsToLayout(toMeasure(mb), elements, ctx);
-        }
-    }
-
-    layoutTiesAndBends(elements, ctx);
+    layoutSystemElements(system, ctx);
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth)
@@ -2822,4 +2830,38 @@ void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* syste
     double yDiff = yBaseLine - numberBbox.top();
 
     mmRest->mutldata()->yNumberPos += yDiff;
+}
+
+void SystemLayout::MeasureState::clear()
+{
+    measure = nullptr;
+    measureWidth = 0.0;
+    measurePos = 0.0;
+    elementPositions.clear();
+    elementWidths.clear();
+    sharedTrackMaps.clear();
+}
+
+void SystemLayout::MeasureState::restoreMeasure(LayoutContext& ctx)
+{
+    bool mapChanged = false;
+    Fraction tick = measure->tick();
+    for (auto& [sharedPart, sharedTrackMap] : sharedTrackMaps) {
+        if (sharedPart->trackMapAtTick(tick) != sharedTrackMap) {
+            sharedPart->setTrackMapAtTick(sharedTrackMap, tick);
+            mapChanged = true;
+        }
+    }
+    if (mapChanged) {
+        StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(measure, ctx);
+    }
+
+    measure->mutldata()->setPosX(measurePos);
+    measure->setWidth(measureWidth);
+    for (auto pair : elementPositions) {
+        pair.first->setPos(pair.second);
+    }
+    for (auto pair : elementWidths) {
+        pair.first->setWidth(pair.second);
+    }
 }

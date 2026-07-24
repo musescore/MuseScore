@@ -1189,7 +1189,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         String result;
 
         if (actualOrientation == SharedLabelOrientation::HORIZONTAL) {
-            result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+            result = formatSharedVoiceLabel(instrumentsMappedToFirstVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
         } else {
             result = formatVerticalSharedLabel(instrumentsMappedToFirstVoice, trailingDotSingle);
         }
@@ -1197,13 +1197,13 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         return result;
     }
 
-    String result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+    String result = formatSharedVoiceLabel(instrumentsMappedToFirstVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     if (instrumentsMappedToSecondVoice.empty()) {
         return result;
     }
 
-    result += formatVoice(instrumentsMappedToSecondVoice, /*isFirstVoice*/ false, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+    result += '\n' + formatSharedVoiceLabel(instrumentsMappedToSecondVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     return result;
 }
@@ -1227,22 +1227,16 @@ String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrumen
     return result;
 }
 
-String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
-                                       bool trailingDotMultiple, int hyphenLimit)
+String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle,
+                                                  bool trailingDotMultiple, int hyphenLimit)
 {
     String result;
-
-    if (!isFirstVoice) {
-        result += '\n';
-    }
 
     size_t voiceCount = instruments.size();
     bool putTrailingDot = (voiceCount <= 1 && trailingDotSingle) || (voiceCount > 1 && trailingDotMultiple);
 
     for (size_t i = 0; i < instruments.size(); ++i) {
-        if (isFirstVoice && !result.empty()) {
-            result += '.';
-        } else if (!isFirstVoice && result.back() != '\n') {
+        if (!result.empty() && result.back() != '\n') {
             result += '.';
         }
 
