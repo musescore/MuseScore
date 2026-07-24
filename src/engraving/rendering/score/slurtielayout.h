@@ -95,6 +95,8 @@ private:
     static bool isOverBeams(Slur* slur);
     static double computeShoulderHeight(SlurSegment* slurSeg, double slurLengthInSp, PointF shoulderOffset);
 
+    static double endingXForOpenEndedSlurTie(const Measure* measure, staff_idx_t staffIdx);
+
     static bool tieSegmentShouldBeSkipped(const Tie* item);
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
