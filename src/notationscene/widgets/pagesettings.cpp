@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "pagesettings.h"
 
 #include <QKeyEvent>
@@ -29,6 +30,10 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/style/pagestyle.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 #include "ui/view/widgetstatestore.h"
 

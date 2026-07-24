@@ -29,14 +29,19 @@ bool PlaybackControllerStub::isPlayAllowed() const
     return false;
 }
 
-muse::async::Notification PlaybackControllerStub::isPlayAllowedChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::isPlayAllowedChanged() const
 {
-    return muse::async::Notification();
+    return {};
 }
 
 bool PlaybackControllerStub::isPlaying() const
 {
     return false;
+}
+
+muse::async::Channel<bool> PlaybackControllerStub::isPlayingChanged() const
+{
+    return {};
 }
 
 bool PlaybackControllerStub::isPlaybackInited() const
@@ -45,6 +50,16 @@ bool PlaybackControllerStub::isPlaybackInited() const
 }
 
 muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
+{
+    return {};
+}
+
+bool PlaybackControllerStub::isLoopEnabled() const
+{
+    return false;
+}
+
+muse::async::Channel<bool> PlaybackControllerStub::loopEnabledChanged() const
 {
     return {};
 }
@@ -98,11 +113,11 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
-void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&, const PlayParams&, bool)
+void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)
 {
 }
 
-void PlaybackControllerStub::playNotes(const notation::NoteValList&, notation::staff_idx_t, const notation::Segment*,
+void PlaybackControllerStub::playNotes(const engraving::NoteValList&, engraving::staff_idx_t, const engraving::Segment*,
                                        const PlayParams&)
 {
 }
@@ -111,11 +126,11 @@ void PlaybackControllerStub::playMetronome(int)
 {
 }
 
-void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int)
+void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, engraving::staff_idx_t, int)
 {
 }
 
-void PlaybackControllerStub::seekElement(const notation::EngravingItem*, bool)
+void PlaybackControllerStub::seekElement(const engraving::EngravingItem*, bool)
 {
 }
 
@@ -154,7 +169,7 @@ muse::async::Notification PlaybackControllerStub::currentTempoChanged() const
     return {};
 }
 
-mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
+mu::engraving::MeasureBeat PlaybackControllerStub::currentBeat() const
 {
     return {};
 }

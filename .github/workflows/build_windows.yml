@@ -186,30 +186,32 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - name: Restore ccache files
-    #   id: restore-ccache
-    #   uses: actions/cache/restore@v5
-    #   with:
-    #     path: ${{ github.workspace }}/.ccache
-    #     key: ${{runner.os}}-${{runner.arch}}-ccache-
-    #     restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    # - name: Setup ccache
-    #   run: |
-    #     choco install -y ccache
-    #     bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    # - parallel:
+    #   - name: Restore ccache files
+    #     id: restore-ccache
+    #     uses: actions/cache/restore@v6
+    #     with:
+    #       path: ${{ github.workspace }}/.ccache
+    #       key: ${{runner.os}}-${{runner.arch}}-ccache-
+    #       restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+    #   - name: Setup ccache
+    #     run: |
+    #       choco install -y ccache
+    #       bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: 6.10.2
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2022_64'
-        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
-        cache: true
-    - name: Setup environment
-      run: |
-        buildscripts\ci\windows\setup.bat
+    - parallel:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.2
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+          cache: true
+      - name: Setup environment
+        run: |
+          buildscripts\ci\windows\setup.bat
 
     - name: Generate _en.ts files
       shell: bash
@@ -349,45 +351,49 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - name: Restore ccache files
-    #   id: restore-ccache
-    #   uses: actions/cache/restore@v5
-    #   with:
-    #     path: ${{ github.workspace }}/.ccache
-    #     key: ${{runner.os}}-${{runner.arch}}-ccache-
-    #     restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    # - name: Setup ccache
-    #   run: |
-    #     choco install -y ccache
-    #     bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-ccache-
+          restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+      - name: Setup ccache
+        run: |
+          choco install -y ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: 6.10.2
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2022_64'
-        modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
-        cache: true
-    - name: Setup environment
-      run: |
-        buildscripts\ci\windows\setup.bat --portable ON
+    - parallel:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.2
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          modules: 'qt5compat qtnetworkauth qtshadertools qtwebsockets'
+          cache: true
+      - name: Setup environment
+        run: |
+          buildscripts\ci\windows\setup.bat --portable ON
 
-    - name: Generate _en.ts files
-      shell: bash
-      env:
-        LUPDATE_ARGS: ""
-        POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
-        POSTPROCESS_LAUNCHER: "python3 -X utf8"
-      run: |
-        bash ./tools/translations/run_lupdate.sh
-    - name: Update .ts files (tx pull)
-      if: env.DO_UPDATE_TS == 'true'
-      uses: cbjeukendrup/cli-action@windows
-      with:
-        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
-        args: "pull -f"
+    - parallel:
+      - name: Generate _en.ts files
+        shell: bash
+        env:
+          LUPDATE_ARGS: ""
+          POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
+          POSTPROCESS_LAUNCHER: "python3 -X utf8"
+        run: |
+          bash ./tools/translations/run_lupdate.sh
+      - name: Update .ts files (tx pull)
+        if: env.DO_UPDATE_TS == 'true'
+        uses: cbjeukendrup/cli-action@windows
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
+
     - name: Build
       shell: cmd
       run: |

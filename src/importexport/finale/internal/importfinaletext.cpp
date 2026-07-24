@@ -49,7 +49,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurenumber.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/pitchspelling.h"
@@ -64,6 +63,8 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/navigation.h"
 
 #include "engraving/rendering/score/headerfooterlayout.h"
 #include "engraving/rendering/score/layoutcontext.h"
@@ -1089,21 +1090,21 @@ void FinaleParser::importTextExpressions()
             collectElementStyle(item);
 
             auto resizeExpressionIfNeeded = [&](TextBase* expr, const MusxInstance<others::MeasureExprAssign> exprAssign) {
-                if (!exprAssign->dontScaleWithEntry) {
-                    Segment* crSeg = measure->findSegmentR(SegmentType::ChordRest, s->rtick());
-                    if (crSeg && crSeg->element(expr->track())) {
-                        ChordRest* scaleCR = toChordRest(crSeg->element(expr->track()));
-                        if (exprAssign->graceNoteIndex && scaleCR->isChord()) {
-                            if (Chord* gc = toChord(scaleCR)->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
-                                scaleCR = gc;
-                            }
+                if (exprAssign->dontScaleWithEntry) {
+                    return;
+                }
+                Segment* crSeg = measure->findSegmentR(SegmentType::ChordRest, s->rtick());
+                if (crSeg && crSeg->element(expr->track())) {
+                    ChordRest* scaleCR = toChordRest(crSeg->element(expr->track()));
+                    if (exprAssign->graceNoteIndex && scaleCR->isChord()) {
+                        if (Chord* gc = toChord(scaleCR)->graceNoteAt(static_cast<size_t>(exprAssign->graceNoteIndex - 1))) {
+                            scaleCR = gc;
                         }
-                        if (scaleCR->isSmall()) {
-                            const double fontSize = expr->getProperty(Pid::FONT_SIZE).toDouble()
-                                                    * m_score->style().styleD(Sid::smallNoteMag);
-                            if (fontSize > 0.0) {
-                                setAndStyleProperty(expr, Pid::FONT_SIZE, fontSize);
-                            }
+                    }
+                    if (scaleCR->isSmall()) {
+                        const double fontSize = expr->getProperty(Pid::FONT_SIZE).toDouble() * score()->style().styleD(Sid::smallNoteMag);
+                        if (fontSize > 0.0) {
+                            setAndStyleProperty(expr, Pid::FONT_SIZE, fontSize);
                         }
                     }
                 }

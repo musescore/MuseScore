@@ -21,39 +21,19 @@
 
 trap 'echo Generate PNGs failed; exit 1' ERR
 
-sudo apt update
-sudo apt install libegl1 imagemagick -y
-export QT_QPA_PLATFORM=offscreen
-export MU_QT_QPA_PLATFORM=offscreen
+vtest_dir=$1
 
-cd ./musescore_reference
+pushd $vtest_dir
 chmod +x ./MuseScore-Studio-vtest.AppImage
 ./MuseScore-Studio-vtest.AppImage --appimage-extract
-cd ..
-REF_BIN=./musescore_reference/squashfs-root/AppRun
+popd
 
-echo reference version:
-$REF_BIN --long-version
+MSCORE=$vtest_dir/squashfs-root/AppRun
 
-cd ./musescore_current
-chmod +x ./MuseScore-Studio-vtest.AppImage
-./MuseScore-Studio-vtest.AppImage --appimage-extract
-cd ..
-CUR_BIN=./musescore_current/squashfs-root/AppRun
+echo Version:
+$MSCORE --long-version
 
-echo current version:
-$CUR_BIN --long-version
-
-echo =======================
-echo ==== Generate PNGs ====
-echo =======================
-
-echo Generate reference pngs: 
-./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $REF_BIN
-./vtest/vtest-generate-pngs.sh -o ./reference_pngs_small -m $REF_BIN -s ./vtest/scores_small -d 460 -S ./vtest/small.mss
-./vtest/vtest-generate-pngs.sh -o ./reference_pngs_gp_small -m $REF_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
-
-echo Generate current pngs: 
-./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $CUR_BIN
-./vtest/vtest-generate-pngs.sh -o ./current_pngs_small -m $CUR_BIN -s ./vtest/scores_small -d 460 -S ./vtest/small.mss
-./vtest/vtest-generate-pngs.sh -o ./current_pngs_gp_small -m $CUR_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
+echo Generating PNGs:
+./vtest/vtest-generate-pngs.sh -o $vtest_dir/pngs -m $MSCORE
+./vtest/vtest-generate-pngs.sh -o $vtest_dir/pngs_small -m $MSCORE -s ./vtest/scores_small -d 460 -S ./vtest/small.mss
+./vtest/vtest-generate-pngs.sh -o $vtest_dir/pngs_gp_small -m $MSCORE -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked

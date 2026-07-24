@@ -440,7 +440,7 @@ private:
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
-    PlayingTechniqueType m_currPlayTechnique;
+    PlayingTechniqueType m_currPlayTechnique = PlayingTechniqueType::Undefined;
     bool m_isMxl = false;
 };
 
@@ -7067,9 +7067,7 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
 
 void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 {
-    track_idx_t strack = p->startTrack();
-    track_idx_t etrack = p->endTrack();
-    //LOGD("keysigTimesig m %p strack %zu etrack %zu", m, strack, etrack);
+    const TrackRange trackRange = p->trackRange();
 
     // search all staves for non-generated time and key signatures
     std::map<staff_idx_t, KeySig*> keysigs;     // map staff to key signature
@@ -7078,14 +7076,14 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (seg->tick() > m->tick()) {
             break;
         }
-        for (track_idx_t t = strack; t < etrack; t += VOICES) {
+        for (track_idx_t t = trackRange.startTrack; t < trackRange.endTrack; t += VOICES) {
             EngravingItem* el = seg->element(t);
             if (!el) {
                 continue;
             }
             if (el->isKeySig()) {
                 //LOGD(" found keysig %p track %d", el, el->track());
-                staff_idx_t st = (t - strack) / VOICES;
+                staff_idx_t st = (t - trackRange.startTrack) / VOICES;
                 if (!el->generated()) {
                     keysigs[st] = toKeySig(el);
                 }
@@ -7093,7 +7091,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 
             if (el->isTimeSig()) {
                 LOGN(" found timesig %p tick %d track %zu", el, el->tick().ticks(), el->track());
-                staff_idx_t st = (t - strack) / VOICES;
+                staff_idx_t st = (t - trackRange.startTrack) / VOICES;
                 if (!el->generated()) {
                     timesigs[st] = toTimeSig(el);
                 }
@@ -7599,6 +7597,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
         const Segment* clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0, 1));
 
         if (clefSeg) {
+            const track_idx_t partStartTrack = part->trackRange().startTrack;
             for (size_t i = 0; i < staves; ++i) {
                 // sstaff - xml staff number, counting from 1 for this
                 // instrument
@@ -7606,7 +7605,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
                 // xml output (because there is only one staff)
 
                 size_t sstaff = (staves > 1) ? i + 1 : 0;
-                track_idx_t track = part->startTrack() + VOICES * i;
+                track_idx_t track = partStartTrack + VOICES * i;
 
                 if (clefSeg->element(track) == nullptr) {
                     ClefType ct { ClefType::G };
@@ -7734,8 +7733,7 @@ static void addChordPitchesToSet(const Chord* c, pitchSet& set)
 
 static void findPitchesUsed(const Part* part, pitchSet& set)
 {
-    track_idx_t strack = part->startTrack();
-    track_idx_t etrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
 
     // loop over all chords in the part
     for (const MeasureBase* mb = part->score()->measures()->first(); mb; mb = mb->next()) {
@@ -7743,7 +7741,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
             continue;
         }
         const Measure* m = toMeasure(mb);
-        for (track_idx_t st = strack; st < etrack; ++st) {
+        for (track_idx_t st = trackRange.startTrack; st < trackRange.endTrack; ++st) {
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 const EngravingItem* el = seg->element(st);
                 if (!el) {
@@ -8602,8 +8600,9 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 {
     const Part* part = m_score->parts().at(partIndex);
     const size_t staves = part->nstaves();
-    const track_idx_t strack = part->startTrack();
-    const track_idx_t etrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
+    const track_idx_t strack = trackRange.startTrack;
+    const track_idx_t etrack = trackRange.endTrack;
 
     // If MMRests are enabled, elements are moved from the underlying measure to the convering MMRest measure
     // Make sure we find these elements in the correct measure

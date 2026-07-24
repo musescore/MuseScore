@@ -31,6 +31,10 @@ namespace muse {
 class XmlStreamReader;
 }
 
+namespace mu::engraving {
+class MscReader;
+}
+
 namespace mu::project {
 class MscMetaReader : public IMscMetaReader
 {

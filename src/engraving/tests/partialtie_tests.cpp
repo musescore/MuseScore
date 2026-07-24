@@ -22,11 +22,17 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
 #include <QMimeData>
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/note.h"
 #include "engraving/internal/qmimedataadapter.h"
+
+#include "engraving/editing/edittie.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/paste.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -93,7 +99,7 @@ protected:
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
         m_masterScore->select(m_startNote);
-        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* t = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
 
         for (const Note* note : m_jumpPoints) {
@@ -256,7 +262,7 @@ protected:
 
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
 
         bool newTieFound = false;
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
@@ -290,7 +296,7 @@ protected:
         // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(tieBeforeSegno);
 
         Tie* startTie = addTie();
@@ -350,7 +356,7 @@ protected:
         // Expect tie to be added successfully and all jump points to have an incoming tie
         m_masterScore->select(m_startNote);
         m_masterScore->select(secondTieNote, SelectType::ADD);
-        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* t = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
 
         for (const Note* note : m_jumpPoints) {
@@ -458,7 +464,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     score->select(m1->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials01.mscx"),
@@ -468,7 +474,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m3->first(SegmentType::ChordRest)->element(0));
     score->select(m3->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials02.mscx"),
@@ -478,7 +484,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials03.mscx"),
@@ -488,7 +494,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(4));
     score->select(m4->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
@@ -534,7 +540,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->cmdAddPitch(pitchC, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, pitchC, false, false);
     score->endCmd();
 
     Chord* tieToChord = m2->findChord(Fraction(4, 4), 0);
@@ -548,7 +554,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie at 4/4
     score->select(tieFromNote);
-    score->cmdToggleTie(); // calls startCmd/endCmd internally
+    EditTie::cmdToggleTie(score); // calls startCmd/endCmd internally
 
     // Clear the second measure
 
@@ -576,7 +582,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->cmdAddPitch(pitchC, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, pitchC, false, false);
     score->endCmd();
 
     Chord* newTieToChord = m2->findChord(Fraction(4, 4), 0);
@@ -586,7 +592,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie again at 4/4
     score->select(tieFromNote);
-    score->cmdToggleTie(); // calls startCmd/endCmd internally
+    EditTie::cmdToggleTie(score); // calls startCmd/endCmd internally
 
     // Verify the tie is now full
     Tie* newTie = tieFromNote->tieFor();
@@ -655,10 +661,10 @@ TEST_F(Engraving_PartialTieTests, copyPasteRemoveInvalidPartialTies)
     // Paste at measure 4
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Partial tie tests"), [&](Transaction& tx) {
+        QMimeDataAdapter ma(mimeData);
+        Paste::paste(tx, score, &ma, 0);
+    });
     score->doLayout();
 
     // Measure 4 beat 1 — no ties expected

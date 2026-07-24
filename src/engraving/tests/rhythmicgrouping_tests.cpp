@@ -25,6 +25,9 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/segment.h"
 
+#include "engraving/editing/regroup.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -43,20 +46,19 @@ void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size
     MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
-    score->startCmd(TranslatableString::untranslatable("Regroup notes and rests"));
-    if (!staves) {
-        score->cmdSelectAll();
-        score->cmdResetNoteAndRestGroupings();
-    } else {
-        assert(staves < score->nstaves());
-        for (size_t track = 0; track < staves * VOICES; track++) {
-            score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
-                                        score->lastSegment()->tick(), static_cast<int>(track));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Regroup notes and rests"), [&](Transaction& tx) {
+        if (!staves) {
+            score->cmdSelectAll();
+            Regroup::regroupNotesAndRestsInSelection(tx, score);
+        } else {
+            assert(staves < score->nstaves());
+            for (size_t track = 0; track < staves * VOICES; track++) {
+                Regroup::regroupNotesAndRests(tx, score,
+                                              score->firstSegment(SegmentType::All)->tick(),
+                                              score->lastSegment()->tick(), static_cast<int>(track));
+            }
         }
-    }
-
-    score->endCmd();
-    score->doLayout();
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), RHYTHMICGRP_DATA_DIR + String::fromUtf8(p2)));
 
@@ -118,7 +120,7 @@ TEST_F(Engraving_RhythmicGroupingTests, groupMaintainSelection)
     staff_idx_t eStaff = selection.staffEnd();
 
     // [WHEN] Regrouping rhythms
-    score->cmdResetNoteAndRestGroupings();
+    Regroup::regroupNotesAndRestsInSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     // [EXPECT] Selection is maintained
     EXPECT_EQ(sTick, score->selection().tickStart());
@@ -144,7 +146,7 @@ TEST_F(Engraving_RhythmicGroupingTests, groupMaintainSelectionMultipleStaves)
     staff_idx_t eStaff = selection.staffEnd();
 
     // [WHEN] Regrouping rhythms
-    score->cmdResetNoteAndRestGroupings();
+    Regroup::regroupNotesAndRestsInSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     // [EXPECT] Selection is maintained
     EXPECT_EQ(sTick, score->selection().tickStart());

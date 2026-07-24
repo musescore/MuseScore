@@ -54,6 +54,7 @@ public:
 
     virtual Color defaultColor() const = 0;
     virtual Color scoreInversionColor() const = 0;
+    virtual Color indicatorIconInvertedSelectionColor() const = 0;
     virtual Color lassoColor() const = 0;
     virtual Color warningColor() const = 0;
     virtual Color warningSelectedColor() const = 0;
@@ -144,8 +145,5 @@ public:
     virtual bool preferSameStringForTranspose() const = 0;
     virtual void setPreferSameStringForTranspose(bool preferSameString) = 0;
     virtual bool keepDeadNotesUnchangedOnTranspose() const = 0;
-
-    virtual int maxScaledImageDim() const = 0;
-    virtual void setMaxScaledImageDim(int maxDim) = 0;
 };
 }

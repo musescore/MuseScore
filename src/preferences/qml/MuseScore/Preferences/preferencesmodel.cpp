@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <QApplication>
+
+#include <QGuiApplication>
 
 #include "preferencesmodel.h"
 
@@ -233,15 +234,15 @@ void PreferencesModel::askForConfirmationOfPreferencesReset()
 void PreferencesModel::resetFactorySettings()
 {
     static constexpr bool KEEP_DEFAULT_SETTINGS = true;
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QApplication::processEvents();
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    QGuiApplication::processEvents();
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
 
     // Unreset the "First Launch Completed" setting so the first-time launch wizard does not appear.
     configuration()->setHasCompletedFirstLaunchSetup(true);
 
     configuration()->startEditSettings();
-    QApplication::restoreOverrideCursor();
+    QGuiApplication::restoreOverrideCursor();
 }
 
 void PreferencesModel::apply()

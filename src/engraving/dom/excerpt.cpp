@@ -1260,6 +1260,25 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
     collectTieEndPoints(tieMap);
 }
 
+void Excerpt::linkMeasures(Score* excerptScore, Score* masterScore)
+{
+    MeasureBase* mbMaster = masterScore->first();
+    for (MeasureBase* mb = excerptScore->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        while (mbMaster && !mbMaster->isMeasure()) {
+            mbMaster = mbMaster->next();
+        }
+        if (!mbMaster) {
+            LOGD("Measures in MasterScore and Score are not in sync.");
+            break;
+        }
+        mb->linkTo(mbMaster);
+        mbMaster = mbMaster->next();
+    }
+}
+
 //! NOTE For staves in the same score
 void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
 {
@@ -1780,10 +1799,9 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         Excerpt* excerpt = new Excerpt(score);
         excerpt->parts().push_back(part);
 
-        track_idx_t startTrack = part->startTrack();
-        track_idx_t endTrack = part->endTrack();
+        const TrackRange range = part->trackRange();
 
-        for (track_idx_t i = startTrack, j = 0; i < endTrack; ++i, ++j) {
+        for (track_idx_t i = range.startTrack, j = 0; i < range.endTrack; ++i, ++j) {
             excerpt->m_tracksMapping.insert({ i, j });
         }
 

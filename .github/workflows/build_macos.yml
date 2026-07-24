@@ -191,17 +191,18 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    - name: Restore ccache files
-      id: restore-ccache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{runner.os}}-${{runner.arch}}-ccache-
-        restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
-    - name: Setup ccache
-      run: |
-        brew install ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+    - parallel:
+      - name: Restore ccache files
+        id: restore-ccache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{runner.os}}-${{runner.arch}}-ccache-
+          restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
+      - name: Setup ccache
+        run: |
+          brew install ccache
+          bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Install Qt
       # uses: jurplel/install-qt-action@v4
@@ -215,22 +216,20 @@ jobs:
       run: |
         bash ./buildscripts/ci/macos/install_qt.sh
 
-    - name: Download dependencies
-      run: |
-        bash ./buildscripts/ci/macos/download_dependencies.sh
+    - parallel:
+      - name: Generate _en.ts files
+        env:
+          LUPDATE_ARGS: ""
+          POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
+        run: |
+          bash ./tools/translations/run_lupdate.sh
+      - name: Update .ts files (tx pull)
+        if: env.DO_UPDATE_TS == 'true'
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
 
-    - name: Generate _en.ts files
-      env:
-        LUPDATE_ARGS: ""
-        POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
-      run: |
-        bash ./tools/translations/run_lupdate.sh
-    - name: Update .ts files (tx pull)
-      if: env.DO_UPDATE_TS == 'true'
-      uses: transifex/cli-action@v2
-      with:
-        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
-        args: "pull -f"
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi

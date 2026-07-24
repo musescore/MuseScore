@@ -22,6 +22,8 @@
 
 #include "notationstatusbarmodel.h"
 
+#include "defer.h"
+#include "log.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -30,8 +32,12 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
-#include "defer.h"
-#include "log.h"
+#include "engraving/dom/score.h"
+
+#include "notation/inotationaccessibility.h"
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationviewstate.h" // IWYU pragma: keep
 
 using namespace mu::appshell;
 using namespace mu::notation;

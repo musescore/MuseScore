@@ -253,6 +253,11 @@ Color EngravingConfiguration::scoreInversionColor() const
     return Color(220, 220, 220);
 }
 
+Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
+{
+    return Color::fromQColor(voiceColor(0).toQColor().lighter(135));
+}
+
 Color EngravingConfiguration::lassoColor() const
 {
     return "#00323200";
@@ -482,14 +487,4 @@ void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameSt
 bool EngravingConfiguration::keepDeadNotesUnchangedOnTranspose() const
 {
     return false;
-}
-
-int EngravingConfiguration::maxScaledImageDim() const
-{
-    return m_maxScaledImageDim;
-}
-
-void EngravingConfiguration::setMaxScaledImageDim(int maxDim)
-{
-    m_maxScaledImageDim = maxDim;
 }

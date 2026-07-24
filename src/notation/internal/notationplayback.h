@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPLAYBACK_H
-#define MU_NOTATION_NOTATIONPLAYBACK_H
+
+#pragma once
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -45,10 +45,10 @@ public:
     void init() override;
     void reload() override;
 
-    void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) override;
+    void setSendEventsOnScoreChange(const engraving::InstrumentTrackId& trackId, bool send) override;
     void sendEventsForChangedTracks() override;
 
-    muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const override;
+    muse::async::Channel<engraving::InstrumentTrackIdSet> tracksDataChanged() const override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
@@ -56,10 +56,11 @@ public:
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
 
-    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) override;
+    void triggerEventsForItems(const std::vector<const engraving::EngravingItem*>& items, muse::mpe::duration_t duration,
+                               bool flushSound) override;
     void triggerMetronome(muse::midi::tick_t tick) override;
     void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration) override;
-    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick) override;
 
     engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
@@ -73,16 +74,17 @@ public:
     muse::midi::tick_t secToTick(muse::audio::secs_t sec) const override;
 
     muse::RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const override;
-    muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
+    muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const engraving::EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) override;
     void setLoopBoundariesEnabled(bool enabled) override;
     bool isLoopEnabled() const override;
+    muse::async::Channel<bool> loopEnabledChanged() const override;
     const LoopBoundaries& loopBoundaries() const override;
     muse::async::Notification loopBoundariesChanged() const override;
 
     const Tempo& multipliedTempo(muse::midi::tick_t tick) const override;
-    MeasureBeat beat(muse::midi::tick_t tick) const override;
+    engraving::MeasureBeat beat(muse::midi::tick_t tick) const override;
     muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
@@ -111,6 +113,7 @@ private:
 
     LoopBoundaries m_loopBoundaries;
     muse::async::Notification m_loopBoundariesChanged;
+    muse::async::Channel<bool> m_loopEnabledChanged;
 
     muse::audio::secs_t m_totalPlayTime = 0;
     muse::async::Channel<muse::audio::secs_t> m_totalPlayTimeChanged;
@@ -120,5 +123,3 @@ private:
     mutable engraving::PlaybackModel m_playbackModel;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONPLAYBACK_H

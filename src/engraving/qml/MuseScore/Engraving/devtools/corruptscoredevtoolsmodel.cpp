@@ -25,6 +25,9 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/score.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 using namespace mu::engraving;
 
 CorruptScoreDevToolsModel::CorruptScoreDevToolsModel(QObject* parent)
@@ -60,6 +63,4 @@ void CorruptScoreDevToolsModel::corruptOpenScore()
             }
         }
     });
-
-    notation->undoStack()->commitChanges();
 }

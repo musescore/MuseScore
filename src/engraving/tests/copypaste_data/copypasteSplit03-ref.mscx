@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>D_D</eid>
     <Division>480</Division>
     <Style>
       <pageNumberFontSize>9</pageNumberFontSize>
@@ -71,9 +71,9 @@
       <unsorted/>
       </Order>
     <Part id="1">
-      <eid>C_C</eid>
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -96,22 +96,22 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>8</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             <durationType>breve</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>B_B</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -119,29 +119,29 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <voice>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>P_P</eid>
+                  <eid>Q_Q</eid>
                   </Tie>
                 <next>
                   <location>
@@ -157,16 +157,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>T_T</eid>
+                  <eid>U_U</eid>
                   </Tie>
                 <next>
                   <location>
@@ -189,16 +189,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>X_X</eid>
+                  <eid>Y_Y</eid>
                   </Tie>
                 <next>
                   <location>
@@ -220,16 +220,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>Z_Z</eid>
         <voice>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>b_b</eid>
+                  <eid>c_c</eid>
                   </Tie>
                 <next>
                   <location>
@@ -251,14 +251,14 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>d_d</eid>
         <voice>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -271,7 +271,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>eighth</durationType>
             </Rest>
           </voice>

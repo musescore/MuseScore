@@ -39,6 +39,9 @@
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
+
 #include "projecterrors.h"
 #include "projectextensionpoints.h"
 
@@ -713,7 +716,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
     }
 
     if (globalContext()->playbackState()->isPlaying()) {
-        dispatcher()->dispatch("stop");
+        commandDispatcher()->dispatch(rcommand::Command("command://playback/stop"));
     }
 
     bool result = true;

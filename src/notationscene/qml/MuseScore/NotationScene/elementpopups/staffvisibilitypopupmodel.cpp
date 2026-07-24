@@ -30,6 +30,8 @@
 #include "containers.h"
 
 #include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/staffvisibilityindicator.h"
 #include "engraving/dom/system.h"
@@ -37,9 +39,13 @@
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using mu::engraving::rendering::score::SystemLayout;
 
 StaffVisibilityPopupModel::StaffVisibilityPopupModel(QObject* parent)
@@ -100,7 +106,7 @@ EmptyStavesVisibilityModel::EmptyStavesVisibilityModel(QObject* parent)
 
 EmptyStavesVisibilityModel::~EmptyStavesVisibilityModel() = default;
 
-void EmptyStavesVisibilityModel::load(INotationPtr notation, engraving::System* system)
+void EmptyStavesVisibilityModel::load(INotationPtr notation, System* system)
 {
     m_notation = notation;
     m_system = system;
@@ -110,7 +116,7 @@ void EmptyStavesVisibilityModel::load(INotationPtr notation, engraving::System* 
 
 void EmptyStavesVisibilityModel::reload()
 {
-    engraving::Fraction tick = m_system->tick();
+    Fraction tick = m_system->tick();
 
     assert(m_system && m_system->staves().size() == m_system->score()->nstaves());
 

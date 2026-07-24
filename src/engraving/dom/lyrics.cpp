@@ -24,10 +24,10 @@
 
 #include "types/translatablestring.h"
 
+#include "../editing/navigation.h"
 #include "../editing/textedit.h"
 
 #include "measure.h"
-#include "navigate.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -239,11 +239,11 @@ bool Lyrics::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Lyrics::drop(EditData& data)
+EngravingItem* Lyrics::drop(Transaction& tx, EditData& data)
 {
     ElementType type = data.dropElement->type();
     if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
-        TextBase::drop(data);
+        TextBase::drop(tx, data);
         return 0;
     }
     if (!data.dropElement->isText()) {
@@ -298,7 +298,7 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 
 void Lyrics::adjustPrevious()
 {
-    Lyrics* prev = prevLyrics(toLyrics(this));
+    Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
     if (prev) {
         // search for lyric spanners to split at this point if necessary
         if (prev->tick() + prev->ticks() >= tick()) {
@@ -375,7 +375,7 @@ void Lyrics::removeFromScore()
         delete m_separator;
         m_separator = 0;
     }
-    Lyrics* prev = prevLyrics(this);
+    Lyrics* prev = Navigation::prevLyrics(this);
     if (prev) {
         // check to make sure we haven't created an invalid segment by deleting this lyric
         prev->setNeedRemoveInvalidSegments();
@@ -416,10 +416,10 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
     {
         PlacementV newVal = v.value<PlacementV>();
         if (newVal != placement()) {
-            if (Lyrics* l = prevLyrics(this)) {
+            if (Lyrics* l = Navigation::prevLyrics(this)) {
                 l->setNeedRemoveInvalidSegments();
             }
-            if (nextLyrics(this)) {
+            if (Navigation::nextLyrics(this)) {
                 setNeedRemoveInvalidSegments();
             }
             setPlacement(newVal);
@@ -451,7 +451,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     case Pid::VERSE: {
-        if (Lyrics* l = prevLyrics(this)) {
+        if (Lyrics* l = Navigation::prevLyrics(this)) {
             l->setNeedRemoveInvalidSegments();
         }
         bool followTextStyle = getProperty(Pid::TEXT_STYLE) == propertyDefault(Pid::TEXT_STYLE);

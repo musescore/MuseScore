@@ -22,12 +22,13 @@
 #include "read500.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/noteinput.h"
+#include "../editing/paste.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "../types/types.h"
 
 #include "dom/anchors.h"
-#include "dom/audio.h"
 #include "dom/beam.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
@@ -123,14 +124,9 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "eid") {
-            TRead::readItemEID(score, e);
+            TRead::readItemEID(score, e, ctx);
         } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
-        } else if (tag == "Audio") {
-            score->m_audio = new Audio;
-            TRead::read(score->m_audio, e, ctx);
-        } else if (tag == "playMode") {
-            score->m_playMode = PlayMode(e.readInt());
         } else if (tag == "Synthesizer") {
             score->m_synthesizerState.read(e);
         } else if (tag == "page-offset") {
@@ -190,6 +186,8 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                     e.skipCurrentElement();
                 }
             }
+        } else if (tag == "PageLocks") {
+            TRead::readPageLocks(score, e);
         } else if (tag == "SystemLocks") {
             TRead::readSystemLocks(score, e);
         } else if (tag == "SystemDividers") {
@@ -246,7 +244,7 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
             ctx.setScore(curScore);
 
-            s->linkMeasures(m);
+            Excerpt::linkMeasures(s, m);
             ex->setTracksMapping(ctx.tracks());
             m->addExcerpt(ex);
         } else if (tag == "name") {
@@ -356,7 +354,8 @@ bool Read500::preparePasteDurationElement(Score* score, const Fraction& tick, co
     if (Segment* leftSeg = score->tick2leftSegment(tick)) {
         ChordRest* prevCr = leftSeg->nextChordRest(track, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
         if (prevCr && prevCr->endTick() > tick) {
-            score->truncateChordRest(prevCr, tick, /*fillWithRest*/ false);
+            NoteInput::truncateChordRest(
+                score->transactionManager()->currentOrDummyTransaction(), score, prevCr, tick, /*fillWithRest*/ false);
         }
     }
 
@@ -660,7 +659,7 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 continue;
                             }
                         }
-                        score->pasteChordRest(cr, tick);
+                        Paste::pasteChordRest(tx, score, cr, tick);
                     }
                 } else if (tag == "Spanner") {
                     TRead::readSpanner(e, ctx, score, ctx.track());

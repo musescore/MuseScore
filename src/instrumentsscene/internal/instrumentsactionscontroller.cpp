@@ -24,6 +24,10 @@
 
 #include "engraving/dom/instrchange.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;

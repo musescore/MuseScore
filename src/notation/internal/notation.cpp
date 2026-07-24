@@ -27,6 +27,7 @@
 #include "engraving/dom/masterscore.h"
 
 #include "imasternotation.h"
+#include "inotationnoteinput.h" // IWYU pragma: keep
 
 #include "masternotation.h"
 #include "notationpainting.h"

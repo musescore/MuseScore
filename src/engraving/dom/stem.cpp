@@ -126,7 +126,7 @@ bool Stem::acceptDrop(EditData& data) const
     return false;
 }
 
-EngravingItem* Stem::drop(EditData& data)
+EngravingItem* Stem::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     Chord* ch  = chord();

@@ -22,9 +22,32 @@
 
 #include "editbrackets.h"
 
+#include "../dom/accidental.h"
+#include "../dom/score.h"
+#include "../dom/select.h"
 #include "../dom/staff.h"
 
 using namespace mu::engraving;
+
+void EditBrackets::addBracket(Transaction&, Score* score)
+{
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isAccidental()) {
+            Accidental* acc = toAccidental(el);
+            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
+        }
+    }
+}
+
+void EditBrackets::addBraces(Transaction&, Score* score)
+{
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isAccidental()) {
+            Accidental* acc = toAccidental(el);
+            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   AddBracket

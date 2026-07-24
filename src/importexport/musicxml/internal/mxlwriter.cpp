@@ -22,6 +22,8 @@
 
 #include "mxlwriter.h"
 
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "export/exportmusicxml.h"
 
 #include "log.h"

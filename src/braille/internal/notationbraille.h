@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_BRAILLE_NOTATIONBRAILLE_H
-#define MU_BRAILLE_NOTATIONBRAILLE_H
+#pragma once
 
 #include "accessibility/iaccessibilitycontroller.h"
 #include "async/asyncable.h"
@@ -31,7 +30,7 @@
 #include "ibrailleconfiguration.h"
 #include "inotationbraille.h"
 #include "modularity/ioc.h"
-#include "notation/notationtypes.h"
+#include "notation/types/noteinputtypes.h"
 #include "playback/iplaybackcontroller.h"
 #include "actions/iactionsdispatcher.h"
 
@@ -41,6 +40,7 @@
 namespace mu::engraving {
 class Score;
 class Selection;
+class TDuration;
 
 class NotationBraille : public mu::braille::INotationBraille, public muse::Contextable, public muse::async::Asyncable
 {
@@ -69,8 +69,8 @@ public:
     bool incDuration();
     bool decDuration();
     bool setArticulation();
-    void setInputNoteDuration(notation::Duration d);
-    void setTupletDuration(int tuplet, notation::Duration d);
+    void setInputNoteDuration(engraving::TDuration d);
+    void setTupletDuration(int tuplet, engraving::TDuration d);
 
     muse::ValCh<std::string> brailleInfo() const override;
     muse::ValCh<int> cursorPosition() const override;
@@ -138,5 +138,3 @@ private:
     muse::async::Notification m_selectionChanged;
 };
 }
-
-#endif // MU_BRAILLE_NOTATIONBRAILLE_H

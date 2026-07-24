@@ -24,7 +24,11 @@
 
 #include "log.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselectionfilter.h"
+
 using namespace mu::notation;
+using namespace mu::engraving;
 
 AbstractSelectionFilterModel::AbstractSelectionFilterModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))

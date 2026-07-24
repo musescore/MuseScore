@@ -43,7 +43,6 @@
 #include "engraving/dom/laissezvib.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
 #include "engraving/dom/part.h"
@@ -62,6 +61,8 @@
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/navigation.h"
 
 #include "engraving/rendering/score/beamtremololayout.h"
 
@@ -476,7 +477,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
     Staff* baseStaff = m_score->staff(staffIdx);
     Staff* targetStaff = m_score->staff(idx);
     if (!(targetStaff && targetStaff->visible() && targetStaff->isLinked() == baseStaff->isLinked()
-          && staff2track(idx) >= baseStaff->part()->startTrack() && staff2track(idx) < baseStaff->part()->endTrack()
+          && staff2track(idx) >= baseStaff->part()->trackRange().startTrack && staff2track(idx) < baseStaff->part()->trackRange().endTrack
           && targetStaff->staffType(entryTick)->group() == baseStaff->staffType(entryTick)->group())) {
         crossStaffMove = 0;
         targetStaff = baseStaff;
@@ -487,6 +488,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
     const bool neverPlayback = layerInfo && !layerInfo->playback;
 
     if (!entryInfo.calcDisplaysAsRest()) {
+        const bool up = entryInfo.calcUpStem();
+
         engraving::Chord* chord = Factory::createChord(segment);
 
         for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
@@ -610,14 +613,11 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
             }
             if (currentEntry->noteDetail) {
                 if (const auto noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
-                    if (noteInfo->percent
-                        && muse::RealIsEqualOrLess(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
-                        note->setSmall(true);
-                    }
                     if (importCustomPositions()) {
                         PointF noteOffset = evpuToPointF(noteInfo->nxdisp, noteInfo->allowVertPos ? -noteInfo->nydisp : 0);
                         note->setOffset(noteOffset * note->spatium());
                     }
+                    Symbol* noteheadSymbol = nullptr;
                     if (targetStaff->isTabStaff(entryTick) && (noteInfo->altNhead == U'X' || noteInfo->altNhead == U'x')) {
                         // Shortcut for dead notes
                         note->setProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_CROSS);
@@ -634,9 +634,47 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
                                     p->setDirection(j == 0 ? DirectionH::LEFT : DirectionH::RIGHT);
                                     note->add(p);
                                 }
+                            } else {
+                                noteheadSymbol = new Symbol(note);
+                                noteheadSymbol->setTrack(ctx->track);
+                                noteheadSymbol->setVisible(entryIsVisible);
+
+                                if (fontIsEngravingFont(noteInfo->customFont)) {
+                                    noteheadSymbol->setSym(customSym,
+                                                           score()->engravingFonts()->fontByName(noteInfo->customFont->getName()));
+                                } else {
+                                    noteheadSymbol->setSym(customSym);
+                                }
+                                // noteheadSymbol->setOffset(); /// @todo exact positioning
+                                note->add(noteheadSymbol);
                             }
                         }
                         setNoteHeadSymbol(note, customSym);
+                    }
+                    if (noteInfo->percent) {
+                        if (muse::RealIsEqual(doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
+                            note->setSmall(true);
+                        } else {
+                            if (!noteheadSymbol) {
+                                noteheadSymbol = new Symbol(note);
+                                noteheadSymbol->setTrack(ctx->track);
+                                noteheadSymbol->setVisible(entryIsVisible);
+
+                                const auto noteheadFont = options::FontOptions::getFontInfo(musxDocument(),
+                                                                                            options::FontOptions::FontType::Noteheads);
+                                if (fontIsEngravingFont(noteheadFont)) {
+                                    noteheadSymbol->setSym(engraving::Note::noteHead(up ? 1 : 0, note->headGroup(), note->headType()),
+                                                           score()->engravingFonts()->fontByName(noteheadFont->getName()));
+                                } else {
+                                    noteheadSymbol->setSym(engraving::Note::noteHead(up ? 1 : 0, note->headGroup(), note->headType()));
+                                }
+                                // noteheadSymbol->setOffset(); /// @todo exact positioning
+                                note->add(noteheadSymbol);
+                            }
+
+                            note->setVisible(false);
+                            noteheadSymbol->setProperty(Pid::SYMBOLS_SIZE, doubleFromPercent(noteInfo->percent));
+                        }
                     }
                 }
             }
@@ -668,7 +706,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr::InterpretedIterator result, En
 
             if (importCustomPositions()) {
                 // Stem direction
-                const bool up = entryInfo.calcUpStem();
                 chord->setStemDirection(up ? DirectionV::UP : DirectionV::DOWN);
                 /// @note chord with a fixed stem position have a different effect on placement of other elements.
                 if (isFixedChord(entryInfo)) {

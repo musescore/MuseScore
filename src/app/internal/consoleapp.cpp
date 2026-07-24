@@ -323,8 +323,8 @@ int MuseScoreConsoleApp::processAudioPluginRegistration(const MuseScoreCmdOption
 
     muse::ContextInject<audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { ctx };
 
-    if (task.failedPlugin) {
-        ret = registerAudioPluginsScenario()->registerFailedPlugin(task.pluginPath, task.failCode);
+    if (!task.outputFile.empty()) {
+        ret = registerAudioPluginsScenario()->validatePlugin(task.pluginPath, task.outputFile);
     } else {
         ret = registerAudioPluginsScenario()->registerPlugin(task.pluginPath);
     }

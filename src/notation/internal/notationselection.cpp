@@ -23,9 +23,11 @@
 
 #include <QMimeData>
 
-#include "engraving/dom/masterscore.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
+
+#include "engraving/editing/edittie.h"
 
 #include "notationselectionrange.h"
 #include "notationerrors.h"
@@ -34,6 +36,7 @@
 
 using namespace muse;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 NotationSelection::NotationSelection(IGetScore* getScore)
     : m_getScore(getScore)
@@ -101,7 +104,7 @@ std::vector<Note*> NotationSelection::notes(NoteFilter filter) const
 {
     switch (filter) {
     case NoteFilter::All: return score()->selection().noteList();
-    case NoteFilter::WithTie: return score()->cmdTieNoteList(score()->selection(), false);
+    case NoteFilter::WithTie: return mu::engraving::EditTie::cmdTieNoteList(score()->selection(), false);
     case NoteFilter::WithSlur: {
         NOT_IMPLEMENTED;
         return {};
@@ -135,7 +138,7 @@ INotationSelectionRangePtr NotationSelection::range() const
     return m_range;
 }
 
-mu::engraving::Score* NotationSelection::score() const
+Score* NotationSelection::score() const
 {
     return m_getScore->score();
 }
@@ -145,19 +148,24 @@ void NotationSelection::onElementHit(EngravingItem* el)
     m_lastElementHit = el;
 }
 
-mu::engraving::MeasureBase* NotationSelection::startMeasureBase() const
+MeasureBase* NotationSelection::startMeasureBase() const
 {
     return score()->selection().startMeasureBase();
 }
 
-mu::engraving::MeasureBase* NotationSelection::endMeasureBase() const
+MeasureBase* NotationSelection::endMeasureBase() const
 {
     return score()->selection().endMeasureBase();
 }
 
-std::vector<mu::engraving::System*> NotationSelection::selectedSystems() const
+std::vector<System*> NotationSelection::selectedSystems() const
 {
     return score()->selection().selectedSystems();
+}
+
+std::vector<mu::engraving::Page*> NotationSelection::pagesContainingSelection() const
+{
+    return score()->selection().pagesContainingSelection();
 }
 
 EngravingItem* NotationSelection::lastElementHit() const

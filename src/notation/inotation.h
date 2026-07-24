@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
+#include "async/channel.h"
 #include "async/notification.h"
+#include "draw/types/geometry.h"
+#include "modularity/ioc.h"
 
-#include "inotationaccessibility.h"
-#include "inotationelements.h"
-#include "inotationinteraction.h"
-#include "inotationmidiinput.h"
-#include "inotationpainting.h"
-#include "inotationparts.h"
-#include "inotationsolomutestate.h"
-#include "inotationstyle.h"
-#include "inotationviewstate.h"
-#include "internal/inotationundostack.h"
-#include "notationtypes.h"
+#include "inotation_fwd.h" // IWYU pragma: export
+#include "types/viewmode.h"
 
 class QString;
 
@@ -42,14 +37,6 @@ class INotationProject;
 }
 
 namespace mu::notation {
-class INotation;
-using INotationPtr = std::shared_ptr<INotation>;
-using INotationWeakPtr = std::weak_ptr<INotation>;
-using INotationPtrList = std::vector<INotationPtr>;
-
-class IMasterNotation;
-using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
-
 class INotation
 {
 public:
@@ -116,4 +103,6 @@ public:
     // notify
     virtual muse::async::Channel<muse::RectF> notationChanged() const = 0;
 };
+
+using INotationPtr = std::shared_ptr<INotation>;
 }

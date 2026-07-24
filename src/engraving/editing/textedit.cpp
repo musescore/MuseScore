@@ -23,6 +23,7 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
+#include "navigation.h"
 #include "transaction/undostack.h"
 
 #include "iengravingfont.h"
@@ -30,7 +31,6 @@
 
 #include "../dom/fret.h"
 #include "../dom/lyrics.h"
-#include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
@@ -202,7 +202,7 @@ void TextBase::endEdit(EditData& ed)
         ed.element = 0;
 
         if (isLyrics()) {
-            Lyrics* prev = prevLyrics(toLyrics(this));
+            Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setNeedRemoveInvalidSegments();
                 renderer()->layoutItem(prev);
@@ -838,7 +838,7 @@ void SplitJoinText::split()
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(Transaction&, EditData& ed)
 {
     TextCursor* cursor = this->cursor();
 

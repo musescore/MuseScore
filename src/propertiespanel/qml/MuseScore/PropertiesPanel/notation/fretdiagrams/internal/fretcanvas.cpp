@@ -24,7 +24,12 @@
 
 #include <cmath>
 
+#include "draw/fontmetrics.h"
+
 #include "engraving/dom/fret.h"
+#include "engraving/dom/score.h"
+
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::propertiespanel;
 

@@ -23,10 +23,16 @@
 
 #include "async/notifylist.h"
 
+#include "engraving/dom/sharedpart.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)

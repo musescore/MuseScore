@@ -24,10 +24,12 @@
 
 #include <memory>
 
-#include "notationtypes.h"
+#include "async/notification.h"
 
 #include "draw/painter.h"
 #include "engraving/rendering/iscorerenderer.h"
+
+#include "types/viewmode.h"
 
 namespace mu::notation {
 class INotationPainting

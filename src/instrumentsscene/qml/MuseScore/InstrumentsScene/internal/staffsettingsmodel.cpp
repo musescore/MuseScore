@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "staffsettingsmodel.h"
 
 #include "engraving/types/types.h"
+
+#include "notation/inotationparts.h"
+#include "notation/inotationundostack.h" // IWYU pragma: keep
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

@@ -26,6 +26,9 @@
 
 #include "async/notifylist.h"
 
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h"
+
 #include "convertercodes.h"
 
 using namespace muse;

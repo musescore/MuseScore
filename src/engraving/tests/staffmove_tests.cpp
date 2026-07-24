@@ -31,7 +31,9 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/editcrossstaff.h"
 #include "engraving/editing/editstaff.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -59,7 +61,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 
     // Move chord
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->moveUp(c1);
+    EditCrossStaff::moveUp(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
 
     // Hide staff
@@ -81,7 +83,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 
     // Move chord back
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->moveDown(c1);
+    EditCrossStaff::moveDown(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
 
     // Compare
@@ -102,19 +104,19 @@ TEST_F(Engraving_StaffMoveTests, linkedStaff)
     EXPECT_TRUE(c2);
 
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->moveDown(c1);
+    EditCrossStaff::moveDown(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff1.mscx", STAFF_MOVE_DIR + u"linkedStaff-ref.mscx"));
 
     // Try to move linked chord - should be no change
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->moveUp(c2);
+    EditCrossStaff::moveUp(score->transactionManager()->currentOrDummyTransaction(), score, c2);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff2.mscx", STAFF_MOVE_DIR + u"linkedStaff-ref.mscx"));
 
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->moveUp(c1);
+    EditCrossStaff::moveUp(score->transactionManager()->currentOrDummyTransaction(), score, c1);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff3.mscx", STAFF_MOVE_DIR + u"linkedStaff.mscx"));
     delete score;

@@ -1,9 +1,265 @@
 {
-    "PROJECT_PAGE": [
+    "NAVIGATION": [
         {
-            "command": "command://playback/play",
+            "command": "command://navigation/escape",
+            "sequences": ["Escape"]
+        },
+        {
+            "command": "command://navigation/next-section",
+            "sequences": ["F6", "`"]
+        },
+        {
+            "command": "command://navigation/prev-section",
+            "sequences": ["Shift+F6", "Shift+`"]
+        },
+        {
+            "command": "command://navigation/next-panel",
+            "sequences": ["Tab"]
+        },
+        {
+            "command": "command://navigation/prev-panel",
+            "sequences": ["Shift+Tab"]
+        },
+
+        {
+            "command": "command://navigation/next-tab",
+            "sequences": ["Ctrl+Tab"]
+        },
+        {
+            "command": "command://navigation/prev-tab",
+            "sequences": ["Ctrl+Shift+Tab"]
+        },
+        {
+            "command": "command://navigation/right",
+            "sequences": ["Right"]
+        },
+        {
+            "command": "command://navigation/left",
+            "sequences": ["Left"]
+        },
+        {
+            "command": "command://navigation/up",
+            "sequences": ["Up"]
+        },
+        {
+            "command": "command://navigation/down",
+            "sequences": ["Down"]
+        },
+        {
+            "command": "command://navigation/first-control",
+            "sequences": ["Home"]
+        },
+        {
+            "command": "command://navigation/last-control",
+            "sequences": ["End"]
+        },
+        {
+            "command": "command://navigation/next-row-control",
+            "sequences": ["PgDown"]
+        },
+        {
+            "command": "command://navigation/prev-row-control",
+            "sequences": ["PgUp"]
+        },
+        {
+            "command": "command://navigation/trigger-control",
+            "sequences": ["Return", "Enter", "Space"],
+            "autorepeat": 0
+        }
+    ],
+    "PLAYBACK": [
+        {
+            "command": "command://playback/play-toggle",
             "sequences": ["Space"],
             "autorepeat": 0
+        },
+        {
+            "command": "command://playback/play-selection",
+            "sequences": ["Shift+Space"],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/pause-and-select",
+            "sequences": ["Ctrl+Space"],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/loop-toggle",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+
+            "command": "command://playback/metronome-toggle",
+            "sequences": [],
+            "autorepeat": 0
+        }
+    ],
+    "NOTATION": [
+        {
+            "command": "command://notation/copy",
+            "sequences": ["Ctrl+C"]
+        },
+        {
+            "command": "command://notation/cut",
+            "sequences": ["Ctrl+X"]
+        },
+        {
+            "command": "command://notation/paste",
+            "sequences": ["Ctrl+V"]
+        },
+        {
+            "command": "command://notation/delete",
+            "sequences": ["Delete"]
+        },
+        {
+            "command": "command://notation/cancel",
+            "sequences": ["Escape"]
+        },
+        {
+            "command": "command://notation/undo",
+            "sequences": ["Ctrl+Z"]
+        },
+        {
+            "command": "command://notation/redo",
+            "sequences": ["Ctrl+Shift+Z"]
+        },
+        {
+            "command": "command://notation/move-right",
+            "sequences": ["Right"]
+        },
+        {
+            "command": "command://notation/move-right-quickly",
+            "sequences": ["Ctrl+Right"]
+        },
+        {
+            "command": "command://notation/move-left",
+            "sequences": ["Left"]
+        },
+        {
+            "command": "command://notation/move-left-quickly",
+            "sequences": ["Ctrl+Left"]
+        },
+        {
+            "command": "command://notation/pitch-up",
+            "sequences": ["Up"]
+        },
+        {
+            "command": "command://notation/pitch-down",
+            "sequences": ["Down"]
+        },
+        {
+            "command": "command://notation/pitch-up-octave",
+            "sequences": ["Ctrl+Up"]
+        },
+        {
+            "command": "command://notation/pitch-down-octave",
+            "sequences": ["Ctrl+Down"]
+        },
+        {
+            "command": "command://notation/toggle-note-input-by-note-name",
+            "sequences": ["N"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-by-duration",
+            "sequences": ["M"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-rhythm",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-repitch",
+            "sequences": ["Ctrl+Shift+I"],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-realtime-auto",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-realtime-manual",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/toggle-note-input-timewise",
+            "sequences": [],
+            "autorepeat": 0
+        },
+        {
+            "command": "command://notation/note-longa",
+            "sequences": ["9", "Num+9"]
+        },
+        {
+            "command": "command://notation/note-breve",
+            "sequences": ["8", "Num+8"]
+        },
+        {
+            "command": "command://notation/pad-note-1",
+            "sequences": ["7", "Num+7"]
+        },
+        {
+            "command": "command://notation/pad-note-2",
+            "sequences": ["6", "Num+6"]
+        },
+        {
+            "command": "command://notation/pad-note-4",
+            "sequences": ["5", "Num+5"]
+        },
+        {
+            "command": "command://notation/pad-note-8",
+            "sequences": ["4", "Num+4"]
+        },
+        {
+            "command": "command://notation/pad-note-16",
+            "sequences": ["3", "Num+3"]
+        },
+        {
+            "command": "command://notation/pad-note-32",
+            "sequences": ["2", "Num+2"]
+        },
+        {
+            "command": "command://notation/pad-note-64",
+            "sequences": ["1", "Num+1"]
+        },
+        {
+            "command": "command://notation/pad-dot",
+            "sequences": [".", "Num+."]
+        },
+        {
+            "command": "command://notation/pad-dot2",
+            "sequences": [",", "Num+,"]
+        },
+        {
+            "command": "command://notation/add-slur",
+            "sequences": ["S"]
+        }
+    ],
+    "NOTATION_NOTE_INPUT": [
+        {
+            "command": "command://notation/realtime-advance",
+            "sequences": ["Enter"]
+        }
+    ],
+    "NOTATION_TEXT_EDITING": [
+        {
+            "command": "command://notation/edit-next-word",
+            "sequences": ["Space"]
+        },
+        {
+            "command": "command://notation/edit-next-text-element",
+            "sequences": ["Right"]
+        },
+        {
+            "command": "command://notation/edit-prev-text-element",
+            "sequences": ["Left", "Shift+Space", "Backspace"]
         }
     ]
 }

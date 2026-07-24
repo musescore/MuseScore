@@ -21,25 +21,25 @@
  */
 #include "notationparts.h"
 
-#include "engraving/editing/transaction/transaction.h"
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
-#include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/page.h"
 #include "engraving/editing/addremoveelement.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editpart.h"
-#include "engraving/editing/editscoreproperties.h"
 #include "engraving/editing/editstaff.h"
 #include "engraving/editing/editstavesharing.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
 #include "igetscore.h"
+#include "inotationnoteinput.h" // IWYU pragma: keep
 
 #include "log.h"
 
@@ -248,6 +248,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     if (visible) {
         engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditPageLocks::removePageLocksContainingMMRests(tx, score());
         EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
@@ -573,6 +574,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     if (visible) {
         engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditPageLocks::removePageLocksContainingMMRests(tx, score());
         EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
@@ -734,6 +736,7 @@ void NotationParts::insertPart(Part* part, size_t index)
     startEdit(TranslatableString("undoableAction", "Add instrument"));
 
     engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditPageLocks::removePageLocksContainingMMRests(tx, score());
     EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
 
     doInsertPart(part, index);

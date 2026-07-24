@@ -22,14 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/compat/scoreaccess.h"
-
 #include "engraving/dom/chord.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
 
+#include "engraving/editing/editparentheses.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 using namespace mu::engraving;
 
@@ -42,9 +42,9 @@ protected:
     {
         score->select(note);
 
-        score->startCmd(TranslatableString::untranslatable("Parentheses tests"));
-        score->cmdToggleParentheses();
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Parentheses tests"), [&](Transaction& tx) {
+            EditParentheses::toggleParentheses(tx, score);
+        });
     }
 
     static void toggleMultipleNoteParen(MasterScore* score, std::vector<Note*>& notes)
@@ -52,9 +52,9 @@ protected:
         std::vector<EngravingItem*> items(notes.begin(), notes.end());
         score->select(items, SelectType::ADD);
 
-        score->startCmd(TranslatableString::untranslatable("Parentheses tests"));
-        score->cmdToggleParentheses();
-        score->endCmd();
+        score->transactionManager()->transaction(TranslatableString::untranslatable("Parentheses tests"), [&](Transaction& tx) {
+            EditParentheses::toggleParentheses(tx, score);
+        });
     }
 
     static MasterScore* loadScore(const String& filename)
@@ -221,9 +221,10 @@ TEST_F(Engraving_ParenthesesTests, removeParensBottomNotes)
     std::vector<Note*> notes = chord->notes();
     std::vector<EngravingItem*> bottomNotes{ notes.at(notes.size() - 2), notes.at(notes.size() - 1) };
     score->select(bottomNotes, SelectType::ADD);
-    score->startCmd(TranslatableString::untranslatable("Parentheses tests remove bottom notes"));
-    score->cmdRemoveParenthesesFromNotes();
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Parentheses tests remove bottom notes"),
+                                             [&](Transaction& tx) {
+        EditParentheses::removeParenthesesFromNotes(tx, score);
+    });
 
     // Assert that these 2 notes have no paren info
     EXPECT_FALSE(notes.at(notes.size() - 2)->parenthesisInfo());

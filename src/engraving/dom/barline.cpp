@@ -393,7 +393,7 @@ bool BarLine::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* BarLine::drop(EditData& data)
+EngravingItem* BarLine::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
 
@@ -480,7 +480,7 @@ EngravingItem* BarLine::drop(EditData& data)
             if (left && segment()->isEndBarLineType() && m->nextMeasureMM()) {
                 m = m->nextMeasureMM();
             }
-            return m->drop(data);
+            return m->drop(tx, data);
         }
     }
     return nullptr;

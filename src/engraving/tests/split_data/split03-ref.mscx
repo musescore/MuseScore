@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>C_C</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
@@ -22,9 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
-      <eid>C_C</eid>
+      <eid>D_D</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -62,35 +62,35 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>subtitle</style>
           <text>Split Measure</text>
           </Text>
         </VBox>
       <Measure len="2/4">
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Spanner type="HairPin">
@@ -99,7 +99,7 @@
               <veloChange>10</veloChange>
               <beginHookHeight>-1.9</beginHookHeight>
               <endHookHeight>-1.9</endHookHeight>
-              <eid>L_L</eid>
+              <eid>B_B</eid>
               </HairPin>
             <next>
               <location>

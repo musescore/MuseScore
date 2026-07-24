@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -2003,17 +2002,6 @@ void TRead::read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx)
             t->setIsHalfSlurAbove(xml.readBool());
         } else if (!readProperties(toSlur(t), xml, ctx)) {
             xml.unknown();
-        }
-    }
-}
-
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
         }
     }
 }
@@ -4689,7 +4677,7 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         return;
     }
 
-    score->addSystemLock(new SystemLock(startMeas, endMeas));
+    score->addSystemLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)

@@ -108,6 +108,8 @@ target_sources(engraving PRIVATE
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
+    editing/editbeam.cpp
+    editing/editbeam.h
     editing/editbrackets.cpp
     editing/editbrackets.h
     editing/editcapo.cpp
@@ -116,28 +118,46 @@ target_sources(engraving PRIVATE
     editing/editchord.h
     editing/editclef.cpp
     editing/editclef.h
-    editing/editharppedaldiagram.cpp
-    editing/editharppedaldiagram.h
-    editing/editinstrumentchange.cpp
-    editing/editinstrumentchange.h
+    editing/editcrossstaff.cpp
+    editing/editcrossstaff.h
     editing/editdata.cpp
     editing/editdata.h
+    editing/editduration.cpp
+    editing/editduration.h
+    editing/editenharmonicspelling.cpp
+    editing/editenharmonicspelling.h
     editing/editexcerpt.cpp
     editing/editexcerpt.h
     editing/editfretboarddiagram.cpp
     editing/editfretboarddiagram.h
+    editing/edithairpin.cpp
+    editing/edithairpin.h
+    editing/editharppedaldiagram.cpp
+    editing/editharppedaldiagram.h
+    editing/editinstrumentchange.cpp
+    editing/editinstrumentchange.h
     editing/editkeysig.cpp
     editing/editkeysig.h
+    editing/editmeasurerepeat.cpp
+    editing/editmeasurerepeat.h
     editing/editmeasures.cpp
     editing/editmeasures.h
     editing/editnote.cpp
     editing/editnote.h
+    editing/editpagelocks.cpp
+    editing/editpagelocks.h
+    editing/editparentheses.cpp
+    editing/editparentheses.h
     editing/editpart.cpp
     editing/editpart.h
     editing/editproperty.cpp
     editing/editproperty.h
+    editing/editrehearsalmark.cpp
+    editing/editrehearsalmark.h
     editing/editscoreproperties.cpp
     editing/editscoreproperties.h
+    editing/editslashnotation.cpp
+    editing/editslashnotation.h
     editing/editsoundflag.cpp
     editing/editsoundflag.h
     editing/editspanner.cpp
@@ -146,23 +166,45 @@ target_sources(engraving PRIVATE
     editing/editstaff.h
     editing/editstavesharing.cpp
     editing/editstavesharing.h
+    editing/editstretch.cpp
+    editing/editstretch.h
     editing/editstyle.cpp
     editing/editstyle.h
     editing/editsystemlocks.cpp
     editing/editsystemlocks.h
     editing/edittie.cpp
     editing/edittie.h
+    editing/edittimesig.cpp
+    editing/edittimesig.h
     editing/edittremolo.cpp
     editing/edittremolo.h
+    editing/editvisibility.cpp
+    editing/editvisibility.h
+    editing/editvoice.cpp
+    editing/editvoice.h
+    editing/elementeditdata.h
     editing/exchangevoices.cpp
     editing/exchangevoices.h
+    editing/flip.cpp
+    editing/flip.h
     editing/implodeexplode.cpp
     editing/implodeexplode.h
     editing/inserttime.cpp
     editing/inserttime.h
-    editing/elementeditdata.h
     editing/mscoreview.cpp
     editing/mscoreview.h
+    editing/navigation.cpp
+    editing/navigation.h
+    editing/noteinput.cpp
+    editing/noteinput.h
+    editing/paste.cpp
+    editing/paste.h
+    editing/realizechordsymbols.cpp
+    editing/realizechordsymbols.h
+    editing/regroup.cpp
+    editing/regroup.h
+    editing/reset.cpp
+    editing/reset.h
     editing/splitjoinmeasure.cpp
     editing/splitjoinmeasure.h
     editing/textedit.cpp
@@ -329,8 +371,10 @@ target_sources(engraving PRIVATE
     automation/iautomation.h
     automation/internal/automation.cpp
     automation/internal/automation.h
-    automation/internal/automationcontroller.cpp
-    automation/internal/automationcontroller.h
+    automation/internal/automationrw.cpp
+    automation/internal/automationrw.h
+    automation/internal/scoreautomationcontroller.cpp
+    automation/internal/scoreautomationcontroller.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}

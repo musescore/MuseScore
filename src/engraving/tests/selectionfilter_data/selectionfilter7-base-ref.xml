@@ -7,10 +7,13 @@
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <prefix>2</prefix>
         </FiguredBassItem>
+      <eid>B_B</eid>
       </FiguredBass>
     <Chord>
+      <eid>C_C</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>D_D</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
@@ -25,10 +28,13 @@
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <digit>4</digit>
         </FiguredBassItem>
+      <eid>E_E</eid>
       </FiguredBass>
     <Chord>
+      <eid>F_F</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>G_G</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
@@ -40,10 +46,13 @@
         <digit>5</digit>
         <suffix>8</suffix>
         </FiguredBassItem>
+      <eid>H_H</eid>
       </FiguredBass>
     <Chord>
+      <eid>I_I</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>J_J</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
@@ -54,10 +63,13 @@
         <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
         <digit>7</digit>
         </FiguredBassItem>
+      <eid>K_K</eid>
       </FiguredBass>
     <Chord>
+      <eid>L_L</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>M_M</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

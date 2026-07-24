@@ -27,6 +27,10 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/timesig.h"
 
+#include "engraving/editing/editclef.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -56,16 +60,17 @@ TEST_F(Engraving_ClefTests, clef1)
 TEST_F(Engraving_ClefTests, clef2)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-2.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
-    Measure* m = score->firstMeasure();
-    m = m->nextMeasure();
-    m = m->nextMeasure();
-    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
-    ts->setSig(Fraction(2, 4));
-    score->cmdAddTimeSig(m, 0, ts, false);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Clef tests"), [&](Transaction& tx) {
+        Measure* m = score->firstMeasure();
+        m = m->nextMeasure();
+        m = m->nextMeasure();
+        TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+        ts->setSig(Fraction(2, 4));
+        EditTimeSig::addTimeSig(tx, score, m, 0, ts, false);
+    });
 
-    score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-2.mscx", CLEF_DATA_DIR + u"clef-2-ref.mscx"));
     delete score;
 }
@@ -76,12 +81,13 @@ TEST_F(Engraving_ClefTests, clef2)
 TEST_F(Engraving_ClefTests, clef3)
 {
     MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + u"clef-3.mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
-    Measure* m = score->firstMeasure();
-    score->undoChangeClef(score->staff(0), m, ClefType::F);
+    score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Clef tests"), [&](Transaction& tx) {
+        Measure* m = score->firstMeasure();
+        EditClef::undoChangeClef(tx, score, score->staff(0), m, ClefType::F);
+    });
 
-    score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef-3.mscx", CLEF_DATA_DIR + u"clef-3-ref.mscx"));
     delete score;
 }

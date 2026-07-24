@@ -21,8 +21,6 @@
  */
 #include "twrite.h"
 
-#include "global/io/fileinfo.h"
-
 #include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
@@ -43,7 +41,6 @@
 #include "dom/ambitus.h"
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
-#include "dom/audio.h"
 
 #include "dom/bagpembell.h"
 #include "dom/barline.h"
@@ -451,15 +448,29 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     xml.tagProperty(pid, p, d);
 }
 
+void TWrite::writePageLocks(const Score* score, XmlWriter& xml)
+{
+    std::vector<const RangeLock*> locks = score->pageLocks()->allLocks();
+    if (locks.empty()) {
+        return;
+    }
+
+    xml.startElement("PageLocks");
+    for (const RangeLock* sl : locks) {
+        writePageLock(sl, xml);
+    }
+    xml.endElement();
+}
+
 void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 {
-    std::vector<const SystemLock*> locks = score->systemLocks()->allLocks();
+    std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
     if (locks.empty()) {
         return;
     }
 
     xml.startElement("SystemLocks");
-    for (const SystemLock* sl : locks) {
+    for (const RangeLock* sl : locks) {
         writeSystemLock(sl, xml);
     }
     xml.endElement();
@@ -498,7 +509,7 @@ void TWrite::writeSystemDividers(const Score* score, XmlWriter& xml, WriteContex
 
 void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore()) {
         return;
     }
 
@@ -528,7 +539,17 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
     }
 }
 
-void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
+void TWrite::writePageLock(const RangeLock* pageLock, XmlWriter& xml)
+{
+    xml.startElement("pageLock");
+
+    xml.tag("startMeasure", pageLock->startMB()->eid().toStdString());
+    xml.tag("endMeasure", pageLock->endMB()->eid().toStdString());
+
+    xml.endElement();
+}
+
+void TWrite::writeSystemLock(const RangeLock* systemLock, XmlWriter& xml)
 {
     xml.startElement("systemLock");
 
@@ -754,13 +775,6 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
-    xml.endElement();
-}
-
-void TWrite::write(const Audio* item, XmlWriter& xml, WriteContext&)
-{
-    xml.startElement("Audio");
-    xml.tag("path", item->path());
     xml.endElement();
 }
 
@@ -1081,9 +1095,11 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
         xml.startElement("Notes");
         for (const Note* note : parenPair->notes()) {
-            auto it = std::find(item->notes().begin(), item->notes().end(), note);
-            size_t idx = it - item->notes().begin();
-            xml.tag("NoteIdx", idx);
+            EID noteEID = note->eid();
+            if (!noteEID.isValid()) {
+                noteEID = note->assignNewEID();
+            }
+            xml.tag("NoteEID", noteEID.toStdString());
         }
         xml.endElement();
         xml.endElement();

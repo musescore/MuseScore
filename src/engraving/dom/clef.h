@@ -31,6 +31,7 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
+class Transaction;
 class Factory;
 class Segment;
 
@@ -98,7 +99,7 @@ public:
     Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool isEditable() const override { return false; }
 

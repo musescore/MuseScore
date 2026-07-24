@@ -24,7 +24,9 @@
 
 #include "translation.h"
 
+#include "../editing/editclef.h"
 #include "../editing/editinstrumentchange.h"
+#include "../editing/editkeysig.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
@@ -112,7 +114,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
             // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
             EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-            score()->undoChangeClef(part->staff(i), element, newClefType, true);
+            EditClef::undoChangeClef(tx, score(), part->staff(i), element, newClefType, true);
         }
     }
 
@@ -129,7 +131,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                 ks.setForInstrumentChange(forInstChange);
                 Key cKey = part->staff(i)->concertKey(tickStart);
                 ks.setConcertKey(cKey);
-                score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+                EditKeySig::undoChangeKeySig(tx, score(), part->staff(i), tickStart, ks);
             }
         }
     }

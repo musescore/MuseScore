@@ -27,6 +27,7 @@
 
 namespace mu::engraving {
 class Factory;
+class Transaction;
 
 //---------------------------------------------------------
 //   @@ LayoutBreak
@@ -49,7 +50,7 @@ public:
     LayoutBreakType layoutBreakType() const { return m_layoutBreakType; }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     double pause() const { return m_pause; }

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationviewinputcontroller.h"
 
 #include <set>
@@ -35,9 +36,18 @@
 #include "abstractelementpopupmodel.h"
 
 #include "engraving/dom/drumset.h"
-#include "engraving/dom/mscore.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/mscore.h"
 #include "engraving/dom/shadownote.h"
+#include "engraving/dom/staff.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationpainting.h" // IWYU pragma: keep
+#include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
+#include "notation/inotationviewstate.h" // IWYU pragma: keep
 
 using namespace mu;
 using namespace mu::notation;
@@ -1367,7 +1377,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         if (modifiers != Qt::NoModifier) {
             break; // Doesn't support modifiers...
         }
-        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+        dispatcher()->dispatch("command://notation/toggle-note-input");
         break;
     }
     case ElementType::NOTE: {

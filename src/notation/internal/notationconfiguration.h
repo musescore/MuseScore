@@ -184,6 +184,7 @@ public:
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
+    muse::async::Notification isCountInEnabledChanged() const override;
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;
@@ -271,5 +272,6 @@ private:
     muse::async::Channel<QColor> m_anchorColorChanged;
 
     muse::async::Notification m_isAutomaticallyPanEnabledChanged;
+    muse::async::Notification m_isCountInEnabledChanged;
 };
 }

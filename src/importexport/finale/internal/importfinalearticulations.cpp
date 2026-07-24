@@ -44,7 +44,6 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/measure.h"
-#include "engraving/dom/navigate.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/parenthesis.h"
@@ -61,6 +60,7 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/utils.h"
 
+#include "engraving/editing/navigation.h"
 #include "engraving/editing/transpose.h"
 
 #include "engraving/types/symnames.h"
@@ -283,7 +283,7 @@ bool FinaleParser::createArpeggioForChordRange(const musx::util::ArpeggioSpanCan
     }
 
     track_idx_t topChordTrack = topChord->track();
-    track_idx_t bottomChordTrack = std::min(bottomChord->track(), topChord->part()->endTrack() - 1);
+    track_idx_t bottomChordTrack = std::min(bottomChord->track(), topChord->part()->trackRange().endTrack - 1);
     Segment* segment = topChord->segment();
     if (!segment || bottomChord->segment() != segment || bottomChordTrack < topChordTrack) {
         return false;
@@ -342,8 +342,8 @@ bool FinaleParser::createPartSplitArpeggios(const musx::util::ArpeggioSpanCandid
     Segment* segment = topChord->segment();
     bool created = false;
     for (Part* part : m_score->parts()) {
-        const track_idx_t partStartTrack = part->startTrack();
-        const track_idx_t partEndTrack = part->endTrack() - 1;
+        const track_idx_t partStartTrack = part->trackRange().endTrack;
+        const track_idx_t partEndTrack = part->trackRange().endTrack - 1;
         const track_idx_t rangeStartTrack = std::max(topChord->track(), partStartTrack);
         const track_idx_t rangeEndTrack = std::min(bottomChord->track(), partEndTrack);
         if (rangeEndTrack < rangeStartTrack) {
@@ -863,7 +863,7 @@ void FinaleParser::importArticulations()
                     ChordRestNavigateOptions options;
                     options.skipGrace = true;
                     options.skipMeasureRepeatRests = false;
-                    ChordRest* nextCR = after ? nextChordRest(cr, options) : prevChordRest(cr, options);
+                    ChordRest* nextCR = after ? Navigation::nextChordRest(cr, options) : Navigation::prevChordRest(cr, options);
                     parentChord = nextCR->isChord() ? toChord(nextCR) : nullptr;
                     after = !after;
                 }

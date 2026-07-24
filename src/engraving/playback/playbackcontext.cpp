@@ -314,8 +314,9 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
     }
 
     // cache them for optimization
-    m_partStartTrack = part->startTrack();
-    m_partEndTrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
+    m_partStartTrack = trackRange.startTrack;
+    m_partEndTrack = trackRange.endTrack;
 
     IF_ASSERT_FAILED(m_partStartTrack <= m_partEndTrack) {
         return;

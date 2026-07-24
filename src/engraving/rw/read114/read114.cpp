@@ -2818,7 +2818,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 }
             }
         } else if (tag == "playMode") {
-            masterScore->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "SyntiSettings") {
             masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {

@@ -35,3 +35,10 @@ target_sources(context PRIVATE
     internal/uicontextresolver.cpp
     internal/uicontextresolver.h
 )
+
+if (MUSE_MODULE_SHORTCUTS_V2)
+    target_sources(context PRIVATE
+        internal/shortcutresolver.cpp
+        internal/shortcutresolver.h
+    )
+endif()

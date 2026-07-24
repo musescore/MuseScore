@@ -114,8 +114,8 @@ static String logString(FinaleLogger::Level level, const String& text, const Doc
  Log debug (function) trace.
  */
 
-void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, MeasCmper currMusxStaff,
-                                 StaffCmper currMusxMeas) const
+void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, StaffCmper currMusxMeas,
+                                 MeasCmper currMusxStaff) const
 {
     if (m_level <= Level::MUSX_TRACE) {
         LOGD() << logString(Level::MUSX_TRACE, trace, musxDocument, currMusxStaff, currMusxMeas);
