@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "bracketItem.h"
+#include "bracketitem.h"
 
 #include "property.h"
 #include "score.h"
@@ -34,14 +34,19 @@ BracketItem::BracketItem(EngravingItem* parent)
 {
 }
 
-BracketItem::BracketItem(EngravingItem* parent, BracketType a, int b)
-    : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(a), m_bracketSpan(b)
+BracketItem::BracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
+    : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(bracketType), m_bracketSpan(span)
 {
 }
 
 EngravingItem* BracketItem::clone() const
 {
     return new BracketItem(*this);
+}
+
+Staff* BracketItem::startStaff() const
+{
+    return score() ? score()->staff(m_startStaffIdx) : nullptr;
 }
 
 PropertyValue BracketItem::getProperty(Pid id) const
@@ -70,10 +75,10 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        staff()->setBracketType(column(), BracketType(v.toInt())); // change bracket type global
+        score()->setBracketType(startStaffIdx(), column(), BracketType(v.toInt())); // change bracket type global
         break;
     case Pid::BRACKET_COLUMN:
-        staff()->changeBracketColumn(column(), static_cast<size_t>(v.toInt()));
+        score()->changeBracketColumn(startStaffIdx(), column(), static_cast<size_t>(v.toInt()));
         break;
     case Pid::BRACKET_SPAN:
         m_bracketSpan = static_cast<size_t>(v.toInt());
@@ -121,14 +126,14 @@ PropertyValue BracketItem::propertyDefault(Pid id) const
 
 bool BracketItem::intersects(const BracketItem* other) const
 {
-    staff_idx_t firstOfOther = other->staff()->idx();
+    staff_idx_t firstOfOther = other->startStaffIdx();
     staff_idx_t lastOfOther = firstOfOther + other->bracketSpan() - 1;
     return intersects(firstOfOther, lastOfOther);
 }
 
 bool BracketItem::intersects(staff_idx_t first, staff_idx_t last) const
 {
-    staff_idx_t firstOfThis = staff()->idx();
+    staff_idx_t firstOfThis = m_startStaffIdx;
     staff_idx_t lastOfThis = firstOfThis + bracketSpan() - 1;
     return firstOfThis <= last && lastOfThis >= first;
 }

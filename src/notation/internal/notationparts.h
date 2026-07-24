@@ -133,7 +133,6 @@ private:
 
     void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
     void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex, bool createRests=true);
-    void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
     void insertNewParts(const PartInstrumentList& parts, const mu::engraving::KeyList& keyList);

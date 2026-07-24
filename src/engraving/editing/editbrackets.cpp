@@ -55,14 +55,14 @@ void EditBrackets::addBraces(Transaction&, Score* score)
 
 void AddBracket::redo()
 {
-    staff->setBracketType(level, bracketType);
-    staff->setBracketSpan(level, span);
+    staff->score()->setBracketType(staff->idx(), level, bracketType);
+    staff->score()->setBracketSpan(staff->idx(), level, span);
     staff->triggerLayout();
 }
 
 void AddBracket::undo()
 {
-    staff->setBracketType(level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
@@ -72,13 +72,13 @@ void AddBracket::undo()
 
 void RemoveBracket::redo()
 {
-    staff->setBracketType(level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
 void RemoveBracket::undo()
 {
-    staff->setBracketType(level, bracketType);
-    staff->setBracketSpan(level, span);
+    staff->score()->setBracketType(staff->idx(), level, bracketType);
+    staff->score()->setBracketSpan(staff->idx(), level, span);
     staff->triggerLayout();
 }

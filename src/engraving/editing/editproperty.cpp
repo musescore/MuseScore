@@ -22,7 +22,7 @@
 
 #include "editproperty.h"
 
-#include "../dom/bracketItem.h"
+#include "../dom/bracketitem.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
 #include "../dom/textline.h"
@@ -65,7 +65,7 @@ void ChangeBracketProperty::flip()
         return;
     }
 
-    element = staff->brackets()[level];
+    element = staff->score()->brackets(staff->idx())[level];
     ChangeProperty::flip();
     level = toBracketItem(element)->column();
 }

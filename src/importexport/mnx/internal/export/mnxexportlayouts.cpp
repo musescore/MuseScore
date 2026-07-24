@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
@@ -99,7 +99,7 @@ static std::vector<LayoutGroupSpan> buildGroupSpans(const std::vector<Staff*>& s
         if (!staff) {
             continue;
         }
-        for (const BracketItem* bracket : staff->brackets()) {
+        for (const BracketItem* bracket : staff->score()->brackets(staff->idx())) {
             if (!bracket) {
                 continue;
             }

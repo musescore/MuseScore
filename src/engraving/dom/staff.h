@@ -63,14 +63,12 @@ class Staff final : public EngravingItem
 public:
     Staff* clone() const override;
 
-    void init(const InstrumentTemplate*, const StaffType* staffType, int);
+    void init(const InstrumentTemplate*, const StaffType* staffType, staff_idx_t templateStaffIdx);
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
 
     const ID& id() const;
     void setId(const ID& id);
-
-    void setScore(Score* score) override;
 
     bool isTop() const;
     String partName() const;
@@ -79,20 +77,6 @@ public:
 
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
-
-    BracketType bracketType(size_t idx) const;
-    size_t bracketSpan(size_t idx) const;
-    void setBracketType(size_t idx, BracketType val);
-    void setBracketSpan(size_t idx, size_t val);
-    void setBracketVisible(size_t idx, bool v);
-    void swapBracket(size_t oldIdx, size_t newIdx);
-    void changeBracketColumn(size_t oldColumn, size_t newColumn);
-    void addBracket(BracketItem*);
-    void insertBracket(BracketItem* b);
-    const std::vector<BracketItem*>& brackets() const { return m_brackets; }
-    std::vector<BracketItem*>& brackets() { return m_brackets; }
-    void cleanupBrackets();
-    size_t bracketLevels() const;
 
     ClefList& clefList() { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
@@ -227,8 +211,6 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    BracketType innerBracket() const;
-
     bool playbackVoice(int voice) const;
     void setPlaybackVoice(int voice, bool val);
 
@@ -273,9 +255,6 @@ private:
     Staff(Part* parent);
     Staff(const Staff& staff);
 
-    void fillBrackets(size_t idx);
-    void cleanBrackets();
-
     double staffMag(const StaffType*) const;
 
     friend class Excerpt;
@@ -291,7 +270,6 @@ private:
     KeyList m_keys;
     std::map<int, TimeSig*> m_timesigs;
 
-    std::vector<BracketItem*> m_brackets;
     bool m_barLineSpan = false;          // true - span barline to next staff
     int m_barLineFrom = 0;              // line of start staff to draw the barline from (0 = staff top line, ...)
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)

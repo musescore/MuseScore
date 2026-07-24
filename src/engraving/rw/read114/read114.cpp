@@ -44,7 +44,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/clef.h"
@@ -2409,9 +2409,9 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "keylist") {
             read400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
-            size_t col = staff->brackets().size();
-            staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-            staff->setBracketSpan(col, e.intAttribute("span", 0));
+            size_t col = ctx.score()->brackets(staff->idx()).size();
+            ctx.score()->setBracketType(staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            ctx.score()->setBracketSpan(staff->idx(), col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
             const int barLineSpan = e.readInt();

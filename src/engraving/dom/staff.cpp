@@ -26,7 +26,7 @@
 
 #include "barline.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "chord.h"
 #include "clef.h"
 #include "cleflist.h"
@@ -285,192 +285,6 @@ String Staff::individualStaffNameShort(const Fraction& tick) const
     return staffType(tick)->shortName();
 }
 
-//---------------------------------------------------------
-//   fillBrackets
-//    make sure index idx is valid
-//---------------------------------------------------------
-
-void Staff::fillBrackets(size_t idx)
-{
-    for (size_t i = m_brackets.size(); i <= idx; ++i) {
-        BracketItem* bi = Factory::createBracketItem(score()->dummy());
-        bi->setStaff(this);
-        bi->setColumn(i);
-        m_brackets.push_back(bi);
-    }
-}
-
-//---------------------------------------------------------
-//   cleanBrackets
-//    remove NO_BRACKET entries from the end of list
-//---------------------------------------------------------
-
-void Staff::cleanBrackets()
-{
-    while (!m_brackets.empty() && (m_brackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = muse::takeLast(m_brackets);
-        delete bi;
-    }
-}
-
-//---------------------------------------------------------
-//   bracket
-//---------------------------------------------------------
-
-BracketType Staff::bracketType(size_t idx) const
-{
-    if (idx < m_brackets.size()) {
-        return m_brackets[idx]->bracketType();
-    }
-    return BracketType::NO_BRACKET;
-}
-
-//---------------------------------------------------------
-//   bracketSpan
-//---------------------------------------------------------
-
-size_t Staff::bracketSpan(size_t idx) const
-{
-    if (idx < m_brackets.size()) {
-        return m_brackets[idx]->bracketSpan();
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   setBracket
-//---------------------------------------------------------
-
-void Staff::setBracketType(size_t idx, BracketType val)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setBracketType(val);
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
-//   swapBracket
-//---------------------------------------------------------
-
-void Staff::swapBracket(size_t oldIdx, size_t newIdx)
-{
-    size_t idx = std::max(oldIdx, newIdx);
-    fillBrackets(idx);
-    m_brackets[oldIdx]->setColumn(newIdx);
-    m_brackets[newIdx]->setColumn(oldIdx);
-    muse::swapItemsAt(m_brackets, oldIdx, newIdx);
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
-//   changeBracketColumn
-//---------------------------------------------------------
-
-void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
-{
-    if (oldColumn == newColumn) {
-        return;
-    }
-
-    size_t idx = std::max(oldColumn, newColumn);
-    fillBrackets(idx);
-    int step = newColumn > oldColumn ? 1 : -1;
-    for (size_t i = oldColumn; i != newColumn; i += step) {
-        size_t oldIdx = i;
-        size_t newIdx = i + step;
-        m_brackets[oldIdx]->setColumn(newIdx);
-        m_brackets[newIdx]->setColumn(oldIdx);
-        muse::swapItemsAt(m_brackets, oldIdx, newIdx);
-    }
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
-//   setBracketSpan
-//---------------------------------------------------------
-
-void Staff::setBracketSpan(size_t idx, size_t val)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setBracketSpan(val);
-}
-
-void Staff::setBracketVisible(size_t idx, bool v)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setVisible(v);
-}
-
-//---------------------------------------------------------
-//   addBracket
-//---------------------------------------------------------
-
-void Staff::addBracket(BracketItem* b)
-{
-    b->setStaff(this);
-    if (!m_brackets.empty() && m_brackets[0]->bracketType() == BracketType::NO_BRACKET) {
-        m_brackets[0] = b;
-    } else {
-        //
-        // create new bracket level
-        //
-        for (Staff* s : score()->staves()) {
-            if (s == this) {
-                s->m_brackets.push_back(b);
-            } else {
-                BracketItem* bi = Factory::createBracketItem(score()->dummy());
-                bi->setStaff(this);
-                s->m_brackets.push_back(bi);
-            }
-        }
-    }
-}
-
-void Staff::insertBracket(BracketItem* b)
-{
-    b->setStaff(this);
-    size_t column = b->column();
-    if (column < m_brackets.size()) {
-        if (m_brackets[column]) {
-            delete m_brackets[column];
-        }
-        m_brackets[column] = b;
-    } else if (column == m_brackets.size()) {
-        m_brackets.push_back(b);
-    } else {
-        fillBrackets(column - 1);
-        m_brackets.push_back(b);
-    }
-}
-
-//---------------------------------------------------------
-//   innerBracket
-//    Return type inner bracket.
-//    The bracket type determines the staff distance.
-//---------------------------------------------------------
-
-BracketType Staff::innerBracket() const
-{
-    staff_idx_t staffIdx = idx();
-
-    BracketType t = BracketType::NO_BRACKET;
-    size_t level = 1000;
-    for (size_t i = 0; i < score()->nstaves(); ++i) {
-        Staff* staff = score()->staff(i);
-        for (size_t k = 0; k < staff->brackets().size(); ++k) {
-            const BracketItem* bi = staff->brackets().at(k);
-            if (bi->bracketType() != BracketType::NO_BRACKET) {
-                if (i < staffIdx && ((i + bi->bracketSpan()) > staffIdx) && k < level) {
-                    t = bi->bracketType();
-                    level = k;
-                    break;
-                }
-            }
-        }
-    }
-    return t;
-}
-
 bool Staff::playbackVoice(int voice) const
 {
     return m_playbackVoice[voice];
@@ -550,57 +364,6 @@ bool Staff::reflectTranspositionInLinkedTab() const
 void Staff::setReflectTranspositionInLinkedTab(bool reflect)
 {
     m_reflectTranspositionInLinkedTab = reflect;
-}
-
-//---------------------------------------------------------
-//   cleanupBrackets
-//---------------------------------------------------------
-
-void Staff::cleanupBrackets()
-{
-    staff_idx_t index = idx();
-    size_t n = score()->nstaves();
-    for (size_t i = 0; i < m_brackets.size(); ++i) {
-        if (m_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
-            continue;
-        }
-        size_t span = m_brackets[i]->bracketSpan();
-        if (span > (n - index)) {
-            span = n - index;
-            m_brackets[i]->setBracketSpan(span);
-        }
-    }
-    for (size_t i = 0; i < m_brackets.size(); ++i) {
-        if (m_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
-            continue;
-        }
-        size_t span = m_brackets[i]->bracketSpan();
-        if (span <= 1) {
-            m_brackets[i] = Factory::createBracketItem(score()->dummy());
-            m_brackets[i]->setStaff(this);
-        } else {
-            // delete all other brackets with same span
-            for (size_t k = i + 1; k < m_brackets.size(); ++k) {
-                if (span == m_brackets[k]->bracketSpan()) {
-                    m_brackets[k] = Factory::createBracketItem(score()->dummy());
-                    m_brackets[k]->setStaff(this);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   bracketLevels
-//---------------------------------------------------------
-
-size_t Staff::bracketLevels() const
-{
-    size_t columns = 0;
-    for (auto bi : m_brackets) {
-        columns = std::max(columns, bi->column());
-    }
-    return columns;
 }
 
 //---------------------------------------------------------
@@ -1369,24 +1132,28 @@ void Staff::removeStaffType(const Fraction& tick)
 //   init
 //---------------------------------------------------------
 
-void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
+void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, staff_idx_t templateStaffIdx)
 {
+    // Initialises a staff from an InstrumentTemplate and StaffType. The staff MUST be added to the score already.
+    assert(idx() != muse::nidx);
     // set staff-type-independent parameters
     const StaffType* pst = staffType ? staffType : t->staffTypePreset;
     if (!pst) {
         pst = StaffType::getDefaultPreset(t->staffGroup);
     }
 
+    const staff_idx_t staffIdx = idx() != muse::nidx ? idx() : score()->nstaves();
+
     StaffType* stt = setStaffType(Fraction(0, 1), *pst);
-    if (cidx >= MAX_STAVES) {
+    if (templateStaffIdx >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
-        stt->setSmall(t->smallStaff[cidx]);
-        setBracketType(0, t->bracket[cidx]);
-        setBracketSpan(0, t->bracketSpan[cidx]);
-        setBarLineSpan(t->barlineSpan[cidx]);
+        stt->setSmall(t->smallStaff[templateStaffIdx]);
+        score()->setBracketType(staffIdx, 0, t->bracket[templateStaffIdx]);
+        score()->setBracketSpan(staffIdx, 0, t->bracketSpan[templateStaffIdx]);
+        setBarLineSpan(t->barlineSpan[templateStaffIdx]);
     }
-    setDefaultClefType(t->clefType(cidx));
+    setDefaultClefType(t->clefType(templateStaffIdx));
 }
 
 //---------------------------------------------------------
@@ -1426,15 +1193,6 @@ const ID& Staff::id() const
 void Staff::setId(const ID& id)
 {
     m_id = id;
-}
-
-void Staff::setScore(Score* score)
-{
-    EngravingItem::setScore(score);
-
-    for (BracketItem* bracket: m_brackets) {
-        bracket->setScore(score);
-    }
 }
 
 //---------------------------------------------------------

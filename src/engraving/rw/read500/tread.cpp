@@ -4117,21 +4117,21 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         Color color = Color::fromString(e.attribute("color"));
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(s->brackets().size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        s->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        s->setBracketSpan(col, e.intAttribute("span", 0));
-        s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
-        BracketItem* bi = s->brackets().at(col);
+        ctx.score()->setBracketType(s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        ctx.score()->setBracketSpan(s->idx(), col, e.intAttribute("span", 0));
+        ctx.score()->setBracketVisible(s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
+        BracketItem* bi = ctx.score()->brackets(s->idx()).at(col);
         if (color.isValid()) {
             bi->setColor(color);
         }
         e.readNext();
     } else if (tag == "BracketItem") {
         BracketItem* b = Factory::createBracketItem(s);
-        b->setStaff(s);
+        b->setStartStaffIdx(s->idx());
         read(b, e, ctx);
-        s->insertBracket(b);
+        ctx.score()->insertBracket(s->idx(), b);
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
         if (barLineSpan < 0) {
