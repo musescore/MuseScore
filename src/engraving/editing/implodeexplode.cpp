@@ -161,48 +161,51 @@ bool ImplodeExplode::explode(Score* score)
             sTracks[i] = muse::nidx;
             dTracks[i] = muse::nidx;
         }
-        int full = 0;
+        size_t matchedTrackCount = 0;
 
         for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
-            for (track_idx_t i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
-                bool t = true;
-                for (voice_idx_t j = 0; j < VOICES; j++) {
-                    if (i == sTracks[j]) {
-                        t = false;
+            for (track_idx_t candidateSrcTrack = srcTrack; candidateSrcTrack < srcTrack + VOICES && matchedTrackCount != VOICES;
+                 candidateSrcTrack++) {
+                bool isUnclaimedSrcTrack = true;
+                for (voice_idx_t claimedIdx = 0; claimedIdx < VOICES; claimedIdx++) {
+                    if (candidateSrcTrack == sTracks[claimedIdx]) {
+                        isUnclaimedSrcTrack = false;
                         break;
                     }
                 }
 
-                if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyGapRests(i) || !t) {
+                if (!seg->measure()->hasVoice(candidateSrcTrack) || seg->measure()->isOnlyGapRests(candidateSrcTrack)
+                    || !isUnclaimedSrcTrack) {
                     continue;
                 }
-                sTracks[full] = i;
+                sTracks[matchedTrackCount] = candidateSrcTrack;
 
-                for (size_t j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
-                    if (i == j) {
-                        dTracks[full] = j;
+                for (size_t candidateDstTrack = srcTrack + matchedTrackCount * VOICES; candidateDstTrack < lastStaff * VOICES;
+                     candidateDstTrack++) {
+                    if (candidateSrcTrack == candidateDstTrack) {
+                        dTracks[matchedTrackCount] = candidateDstTrack;
                         break;
                     }
                     for (Measure* m = seg->measure(); m && m->tick() < lTick; m = m->nextMeasure()) {
-                        if (!m->hasVoice(j) || (m->hasVoice(j) && m->isOnlyRests(j))) {
-                            dTracks[full] = j;
+                        if (!m->hasVoice(candidateDstTrack) || (m->hasVoice(candidateDstTrack) && m->isOnlyRests(candidateDstTrack))) {
+                            dTracks[matchedTrackCount] = candidateDstTrack;
                         } else {
-                            dTracks[full] = muse::nidx;
+                            dTracks[matchedTrackCount] = muse::nidx;
                             break;
                         }
                     }
-                    if (dTracks[full] != muse::nidx) {
+                    if (dTracks[matchedTrackCount] != muse::nidx) {
                         break;
                     }
                 }
-                full++;
+                matchedTrackCount++;
             }
         }
 
-        IF_ASSERT_FAILED(full > 0) {
+        IF_ASSERT_FAILED(matchedTrackCount > 0) {
             return false;
         }
-        lastStaff = track2staff(dTracks[full - 1]) + 1;
+        lastStaff = track2staff(dTracks[matchedTrackCount - 1]) + 1;
 
         // Check that all source and dest measures have the same time stretch - allows explode within a local time signature,
         // but don't yet support it between differing local time signatures.
