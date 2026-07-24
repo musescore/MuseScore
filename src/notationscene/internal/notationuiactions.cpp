@@ -1761,6 +1761,13 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Lock/unlock selected system(s)"),
              IconCode::Code::SYSTEM_LOCK
              ),
+    UiAction("toggle-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             IconCode::Code::PAGE_LOCK
+             ),
     UiAction("enh-both",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

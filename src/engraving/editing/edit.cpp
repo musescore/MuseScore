@@ -1557,12 +1557,18 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
         const RangeLock* systemLock = toSystemLockIndicator(el)->systemLock();
-        EditSystemLocks::undoRemoveSystemLock(tx, this, systemLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
+    }
+    break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+    {
+        const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
+        EditPageLocks::undoRemovePageLock(tx, pageLock);
     }
     break;
     case ElementType::PARENTHESIS: {
         Parenthesis* paren = toParenthesis(el);
-        // Use EditChord::removeChordParentheses when parent is a chord, fall through for all others
+        // Use EditChord::removeChordParentheses when parent is a chord
         if (el->parent() && el->parent()->isChord()) {
             Chord* chord = toChord(el->parent());
             NoteParenthesisInfo* parenInfo = chord->findNoteParenthesisInfo(paren);
@@ -1575,17 +1581,11 @@ void Score::deleteItem(EngravingItem* el)
                 note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
             }
             EditChord::removeChordParentheses(chord, parenInfo->notes());
-            break;
+        } else {
+            undoRemoveElement(el);
         }
     }
     break;
-    case ElementType::PAGE_LOCK_INDICATOR:
-    {
-        const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
-        EditPageLocks::undoRemovePageLock(tx, this, pageLock);
-    }
-    break;
-
     default:
         undoRemoveElement(el);
         break;

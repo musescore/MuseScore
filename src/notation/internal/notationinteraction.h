@@ -150,7 +150,7 @@ public:
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
-    void setDropRect(const muse::RectF& rect) override;
+    void setDropRects(const std::vector<muse::RectF>& rects) override;
     void endDrop() override;
     muse::async::Notification dropChanged() const override;
 
@@ -513,7 +513,7 @@ private:
     {
         mu::engraving::EditData ed;
         EngravingItem* dropTarget = nullptr;
-        muse::RectF dropRect;
+        std::vector<muse::RectF> dropRects;
     };
 
     struct RangeDropData

@@ -507,9 +507,9 @@ void System::setIsLocked(bool locked)
     Transaction& tx = system()->score()->transactionManager()->currentOrDummyTransaction();
     const mu::engraving::RangeLock* currentLock = system()->systemLock();
     if (currentLock && !locked) {
-        EditSystemLocks::undoRemoveSystemLock(tx, system()->score(), currentLock);
+        EditSystemLocks::undoRemoveSystemLock(tx, currentLock);
     } else if (!currentLock && locked) {
-        EditSystemLocks::undoAddSystemLock(tx, system()->score(), new mu::engraving::RangeLock(system()->first(), system()->last()));
+        EditSystemLocks::undoAddSystemLock(tx, new mu::engraving::RangeLock(system()->first(), system()->last()));
     }
 }
 

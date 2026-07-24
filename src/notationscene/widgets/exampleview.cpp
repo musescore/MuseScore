@@ -119,7 +119,7 @@ void ExampleView::changeEditElement(EngravingItem*)
 {
 }
 
-void ExampleView::setDropRectangle(const RectF&)
+void ExampleView::setDropRectangles(const std::vector<RectF>&)
 {
 }
 
