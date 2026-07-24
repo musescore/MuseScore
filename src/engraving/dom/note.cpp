@@ -61,6 +61,7 @@
 #include "measure.h"
 #include "notedot.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "parenthesis.h"
 #include "part.h"
 #include "partialtie.h"
@@ -668,6 +669,7 @@ Note::~Note()
     }
 
     muse::DeleteAll(m_dots);
+    muse::DeleteAll(m_octaveDots);
 }
 
 std::vector<Note*> Note::compoundNotes() const
@@ -793,7 +795,8 @@ Note::Note(const Note& n, bool link)
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
-    m_mark      = n.m_mark;
+    m_mark = n.m_mark;
+    m_jianpuDigit = n.m_jianpuDigit;
 
     setDropTarget(false);
 }
@@ -2351,6 +2354,9 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     for (NoteDot* dot : m_dots) {
         func(dot);
     }
+    for (OctaveDot* od : m_octaveDots) {
+        func(od);
+    }
 }
 
 //---------------------------------------------------------
@@ -2399,6 +2405,9 @@ void Note::setTrack(track_idx_t val)
         return;
     }
     for (NoteDot* dot : m_dots) {
+        dot->setTrack(val);
+    }
+    for (OctaveDot* dot : m_octaveDots) {
         dot->setTrack(val);
     }
 }
@@ -3387,6 +3396,9 @@ void Note::setScore(Score* s)
     for (NoteDot* dot : m_dots) {
         dot->setScore(s);
     }
+    for (OctaveDot* dot : m_octaveDots) {
+        dot->setScore(s);
+    }
     for (EngravingItem* el : m_el) {
         el->setScore(s);
     }
@@ -4256,5 +4268,18 @@ staff_idx_t Note::vStaffIdx() const
 {
     const Chord* c = chord();
     return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
+void Note::resizeOctaveDotsTo(size_t newSize)
+{
+    while (m_octaveDots.size() < newSize) {
+        OctaveDot* dot = new OctaveDot(this);
+        dot->setTrack(track());
+        m_octaveDots.push_back(dot);
+    }
+    while (m_octaveDots.size() > newSize) {
+        delete m_octaveDots.back();
+        m_octaveDots.pop_back();
+    }
 }
 }
