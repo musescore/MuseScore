@@ -520,8 +520,8 @@ void NotationBraille::setKeys(const QString& sequence)
                 String pitchName;
                 String accidental; // needed for tpc2name
                 tpc2name(rootNote->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, pitchName, accidental);
-                size_t inote = String("CDEFGAB").indexOf(pitchName.at(0));
-                IF_ASSERT_FAILED(inote <= 6) {
+                int inote = String("CDEFGAB").indexOf(pitchName.at(0));
+                IF_ASSERT_FAILED(inote >= 0 && inote <= 6) {
                 } else {
                     prevNoteName = static_cast<NoteName>(inote);
                     prevNoteOctave = rootNote->octave();
