@@ -981,6 +981,11 @@ void NotationInteraction::select(SelectionTarget target)
     m_selection->select(target);
 }
 
+void NotationInteraction::addToSelection(SelectionTarget target)
+{
+    m_selection->addToSelection(target);
+}
+
 void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 {
     if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
@@ -3679,52 +3684,6 @@ void NotationInteraction::expandSelection(ExpandSelectionMode mode)
 
     if (el) {
         select({ el }, SelectType::RANGE, el->staffIdx());
-    }
-}
-
-void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type)
-{
-    ChordRest* cr = activeCr(score());
-    if (!cr) {
-        return;
-    }
-    ChordRest* el = 0;
-    switch (type) {
-    case MoveSelectionType::Chord: {
-        ChordRestNavigateOptions options;
-        options.skipGrace = true;
-        if (d == MoveDirection::Right) {
-            el = mu::engraving::Navigation::nextChordRest(cr, options);
-        } else {
-            el = mu::engraving::Navigation::prevChordRest(cr, options);
-        }
-        break;
-    }
-    case MoveSelectionType::Measure:
-        if (d == MoveDirection::Right) {
-            el = mu::engraving::Navigation::nextMeasure(score(), cr, true, true);
-        } else {
-            el = mu::engraving::Navigation::prevMeasure(score(), cr, true);
-        }
-        break;
-    case MoveSelectionType::Track:
-        if (d == MoveDirection::Up) {
-            el = mu::engraving::Navigation::upStaff(cr);
-        } else {
-            el = mu::engraving::Navigation::downStaff(score(), cr);
-        }
-    case MoveSelectionType::EngravingItem:
-    case MoveSelectionType::Frame:
-    case MoveSelectionType::System:
-    case MoveSelectionType::String:
-    case MoveSelectionType::Undefined:
-        break;
-    }
-
-    if (el) {
-        select({ el }, SelectType::RANGE, el->staffIdx());
-        showItem(el);
-        resetHitElementContext();
     }
 }
 

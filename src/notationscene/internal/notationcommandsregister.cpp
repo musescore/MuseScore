@@ -1777,7 +1777,377 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Mark irregular measures"),
         InputSchema(),
         Decoration(rcommand::Checkable::Yes)
-    }
+    },
+    CommandInfo{
+        TOGGLE_CONCERT_PITCH_COMMAND,
+        TranslatableString("action", "Concert pitch"),
+        TranslatableString("action", "Toggle concert pitch"),
+        InputSchema(),
+        Decoration(IconCode::Code::TUNING_FORK, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        STAFF_EXPLODE_COMMAND,
+        TranslatableString("action", "&Explode"),
+        TranslatableString("action", "Explode"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        STAFF_IMPLODE_COMMAND,
+        TranslatableString("action", "&Implode"),
+        TranslatableString("action", "Implode"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add grace notes commands
+    CommandInfo{
+        ADD_ACCIACCATURA_COMMAND,
+        TranslatableString("action", "Acciaccatura"),
+        TranslatableString("action", "Add grace note: acciaccatura"),
+        InputSchema(),
+        Decoration(IconCode::Code::ACCIACCATURA)
+    },
+    CommandInfo{
+        ADD_APPOGGIATURA_COMMAND,
+        TranslatableString("action", "Appoggiatura"),
+        TranslatableString("action", "Add grace note: appoggiatura"),
+        InputSchema(),
+        Decoration(IconCode::Code::APPOGGIATURA)
+    },
+    CommandInfo{
+        ADD_GRACE4_COMMAND,
+        TranslatableString("action", "Grace: quarter"),
+        TranslatableString("action", "Add grace note: quarter"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE4)
+    },
+    CommandInfo{
+        ADD_GRACE16_COMMAND,
+        TranslatableString("action", "Grace: 16th"),
+        TranslatableString("action", "Add grace note: 16th"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE16)
+    },
+    CommandInfo{
+        ADD_GRACE32_COMMAND,
+        TranslatableString("action", "Grace: 32nd"),
+        TranslatableString("action", "Add grace note: 32nd"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE32)
+    },
+    CommandInfo{
+        ADD_GRACE8_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 8th after"),
+        TranslatableString("action", "Add grace note: eighth after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE8_AFTER)
+    },
+    CommandInfo{
+        ADD_GRACE16_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 16th after"),
+        TranslatableString("action", "Add grace note: 16th after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE16_AFTER)
+    },
+    CommandInfo{
+        ADD_GRACE32_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 32nd after"),
+        TranslatableString("action", "Add grace note: 32nd after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE32_AFTER)
+    },
+
+    // add beam commands
+    CommandInfo{
+        ADD_BEAM_AUTO_COMMAND,
+        TranslatableString("action", "Auto beam"),
+        TranslatableString("action", "Add beam: auto"),
+        InputSchema(),
+        Decoration(IconCode::Code::AUTO_TEXT)
+    },
+    CommandInfo{
+        ADD_BEAM_NONE_COMMAND,
+        TranslatableString("action", "No beam"),
+        TranslatableString("action", "Add beam: none"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_NONE)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN_COMMAND,
+        TranslatableString("action", "Break beam left"),
+        TranslatableString("action", "Break beam left"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_LEFT)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN16_COMMAND,
+        TranslatableString("action", "Break inner beams (8th)"),
+        TranslatableString("action", "Break inner beams (eighth)"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_INNER_8TH)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN32_COMMAND,
+        TranslatableString("action", "Break inner beams (16th)"),
+        TranslatableString("action", "Break inner beams (16th)"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_INNER_16TH)
+    },
+    CommandInfo{
+        ADD_BEAM_MID_COMMAND,
+        TranslatableString("action", "Join beams"),
+        TranslatableString("action", "Join beams"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_JOIN)
+    },
+    CommandInfo{
+        ADD_BEAM_SELECTED_RANGE_COMMAND,
+        TranslatableString("action", "Beam selected range"),
+        TranslatableString("action", "Beam selected range"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add brackets commands
+    CommandInfo{
+        ADD_BRACKETS_COMMAND,
+        TranslatableString("action", "Add brackets to accidental"),
+        TranslatableString("action", "Add brackets to accidental"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACKET_PARENTHESES_SQUARE)
+    },
+    CommandInfo{
+        ADD_BRACES_COMMAND,
+        TranslatableString("action", "Add braces to element"),
+        TranslatableString("action", "Add braces to element"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACE)
+    },
+    CommandInfo{
+        ADD_PARENTHESES_COMMAND,
+        TranslatableString("action", "Add parentheses to element"),
+        TranslatableString("action", "Add parentheses to element"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACKET_PARENTHESES)
+    },
+
+    // add ornament commands
+    CommandInfo{
+        ADD_TURN_COMMAND,
+        TranslatableString("action", "Toggle turn"),
+        TranslatableString("action", "Add ornament: turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_INVERTED_COMMAND,
+        TranslatableString("action", "Toggle inverted turn"),
+        TranslatableString("action", "Add ornament: inverted turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_SLASH_COMMAND,
+        TranslatableString("action", "Toggle turn with slash"),
+        TranslatableString("action", "Add ornament: turn with slash"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        ADD_TURN_UP_COMMAND,
+        TranslatableString("action", "Toggle turn up"),
+        TranslatableString("action", "Add ornament: turn up"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_INVERTED_UP_COMMAND,
+        TranslatableString("action", "Toggle vertical inverted turn"),
+        TranslatableString("action", "Add ornament: vertical inverted turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TRILL_COMMAND,
+        TranslatableString("action", "Toggle trill"),
+        TranslatableString("action", "Add ornament: trill"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHORT_TRILL_COMMAND,
+        TranslatableString("action", "Toggle short trill"),
+        TranslatableString("action", "Add ornament: short trill"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_MORDENT_COMMAND,
+        TranslatableString("action", "Toggle mordent"),
+        TranslatableString("action", "Add ornament: mordent"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_HAYDN_COMMAND,
+        TranslatableString("action", "Toggle Haydn ornament"),
+        TranslatableString("action", "Add ornament: Haydn ornament"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TREMBLEMENT_COMMAND,
+        TranslatableString("action", "Toggle tremblement"),
+        TranslatableString("action", "Add ornament: tremblement"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_PRALL_MORDENT_COMMAND,
+        TranslatableString("action", "Toggle prall mordent"),
+        TranslatableString("action", "Add ornament: prall mordent"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHAKE_COMMAND,
+        TranslatableString("action", "Toggle shake"),
+        TranslatableString("action", "Add ornament: shake"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHAKE_MUFFAT_COMMAND,
+        TranslatableString("action", "Toggle shake (Muffat)"),
+        TranslatableString("action", "Add ornament: shake (Muffat)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TREMBLEMENT_COUPERIN_COMMAND,
+        TranslatableString("action", "Toggle tremblement appuyé (Couperin)"),
+        TranslatableString("action", "Add ornament: tremblement appuyé (Couperin)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // text editing commands
+    CommandInfo{
+        EDITTEXT_TOGGLE_BOLD_COMMAND,
+        TranslatableString("action", "Toggle bold"),
+        TranslatableString("action", "Toggle bold"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_ITALIC_COMMAND,
+        TranslatableString("action", "Toggle italic"),
+        TranslatableString("action", "Toggle italic"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_UNDERLINE_COMMAND,
+        TranslatableString("action", "Toggle underline"),
+        TranslatableString("action", "Toggle underline"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_STRIKE_COMMAND,
+        TranslatableString("action", "Toggle strike"),
+        TranslatableString("action", "Toggle strike"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND,
+        TranslatableString("action", "Toggle subscript"),
+        TranslatableString("action", "Toggle subscript"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND,
+        TranslatableString("action", "Toggle superscript"),
+        TranslatableString("action", "Toggle superscript"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add to selection commands
+    CommandInfo{
+        ADD_TO_SELECTION_NEXT_CHORD_COMMAND,
+        TranslatableString("action", "Add next chord to selection"),
+        TranslatableString("action", "Add to selection: next note/rest"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_PREV_CHORD_COMMAND,
+        TranslatableString("action", "Add previous chord to selection"),
+        TranslatableString("action", "Add to selection: previous note/rest"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_NEXT_MEASURE_COMMAND,
+        TranslatableString("action", "Add next measure to selection"),
+        TranslatableString("action", "Add to selection: next measure"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_PREV_MEASURE_COMMAND,
+        TranslatableString("action", "Add previous measure to selection"),
+        TranslatableString("action", "Add to selection: previous measure"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_ABOVE_STAFF_COMMAND,
+        TranslatableString("action", "Add staff above to selection"),
+        TranslatableString("action", "Add to selection: staff above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BELOW_STAFF_COMMAND,
+        TranslatableString("action", "Add staff below to selection"),
+        TranslatableString("action", "Add to selection: staff below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND,
+        TranslatableString("action", "Select to beginning of system"),
+        TranslatableString("action", "Add to selection: beginning of system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_END_SYSTEM_COMMAND,
+        TranslatableString("action", "Select to end of system"),
+        TranslatableString("action", "Add to selection: end of system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BEGIN_SCORE_COMMAND,
+        TranslatableString("action", "Select to beginning of score"),
+        TranslatableString("action", "Add to selection: beginning of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_END_SCORE_COMMAND,
+        TranslatableString("action", "Select to end of score"),
+        TranslatableString("action", "Add to selection: end of score"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const

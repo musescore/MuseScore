@@ -106,14 +106,14 @@ public:
     ScoreConfig scoreConfig() const override;
     muse::async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
+    INotationStylePtr notationStyle() const override;
+    muse::async::Notification notationStyleChanged() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
     INotationInteractionPtr currentNotationInteraction() const;
     INotationUndoStackPtr currentNotationUndoStack() const;
-
-    INotationStylePtr currentNotationStyle() const;
-    muse::async::Notification currentNotationStyleChanged() const;
 
     IMasterNotationPtr currentMasterNotation() const;
     muse::async::Notification currentMasterNotationChanged() const;
@@ -283,7 +283,6 @@ private:
 
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
 
-    void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
     void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
@@ -329,6 +328,7 @@ private:
     muse::async::Notification m_noteInputStateChanged;
 
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
+    muse::async::Notification m_currentNotationStyleChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
