@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "systemlayoutsettingsmodel.h"
+#include "systempagelayoutsettingsmodel.h"
 
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
@@ -34,15 +34,15 @@ using namespace mu::propertiespanel;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-SystemLayoutSettingsModel::SystemLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
-                                                     IElementRepositoryService* repository)
+SystemPageLayoutSettingsModel::SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                                             IElementRepositoryService* repository)
     : PropertiesPanelAbstractModel(parent, iocCtx, repository)
 {
-    setSectionType(PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT);
-    setTitle(muse::qtrc("propertiespanel", "System layout"));
+    setSectionType(PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT);
+    setTitle(muse::qtrc("propertiespanel", "System & page layout"));
 }
 
-void SystemLayoutSettingsModel::loadProperties()
+void SystemPageLayoutSettingsModel::loadProperties()
 {
     updateAllSystemsAreLocked();
     updateAllPagesAreLocked();
@@ -53,17 +53,17 @@ void SystemLayoutSettingsModel::loadProperties()
     updatePageCount();
 }
 
-bool SystemLayoutSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
+bool SystemPageLayoutSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
 {
     return true;
 }
 
-void SystemLayoutSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
+void SystemPageLayoutSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
 {
     loadProperties();
 }
 
-void SystemLayoutSettingsModel::moveSystemDownPage()
+void SystemPageLayoutSettingsModel::moveSystemDownPage()
 {
     if (!currentNotation()) {
         return;
@@ -72,7 +72,7 @@ void SystemLayoutSettingsModel::moveSystemDownPage()
     currentNotation()->interaction()->moveSystemToNextPage();
 }
 
-void SystemLayoutSettingsModel::moveSystemUpPage()
+void SystemPageLayoutSettingsModel::moveSystemUpPage()
 {
     if (!currentNotation()) {
         return;
@@ -81,22 +81,22 @@ void SystemLayoutSettingsModel::moveSystemUpPage()
     currentNotation()->interaction()->moveSystemToPrevPage();
 }
 
-QString SystemLayoutSettingsModel::shortcutMoveSystemUpPage() const
+QString SystemPageLayoutSettingsModel::shortcutMoveSystemUpPage() const
 {
     return shortcutsForActionCode("move-system-to-prev-page");
 }
 
-QString SystemLayoutSettingsModel::shortcutMoveSystemDownPage() const
+QString SystemPageLayoutSettingsModel::shortcutMoveSystemDownPage() const
 {
     return shortcutsForActionCode("move-system-to-next-page");
 }
 
-QString SystemLayoutSettingsModel::shortcutMakeIntoPage() const
+QString SystemPageLayoutSettingsModel::shortcutMakeIntoPage() const
 {
     return shortcutsForActionCode("make-into-page");
 }
 
-void SystemLayoutSettingsModel::makeIntoPage()
+void SystemPageLayoutSettingsModel::makeIntoPage()
 {
     if (!currentNotation()) {
         return;
@@ -105,13 +105,13 @@ void SystemLayoutSettingsModel::makeIntoPage()
     currentNotation()->interaction()->makeIntoPage();
 }
 
-bool SystemLayoutSettingsModel::isEmpty() const
+bool SystemPageLayoutSettingsModel::isEmpty() const
 {
     INotationSelectionPtr selection = this->selection();
     return !selection || !selection->isRange();
 }
 
-void SystemLayoutSettingsModel::moveMeasureUpSystem()
+void SystemPageLayoutSettingsModel::moveMeasureUpSystem()
 {
     if (!currentNotation()) {
         return;
@@ -120,12 +120,12 @@ void SystemLayoutSettingsModel::moveMeasureUpSystem()
     currentNotation()->interaction()->moveMeasureToPrevSystem();
 }
 
-QString SystemLayoutSettingsModel::shortcutMoveMeasureUpSystem() const
+QString SystemPageLayoutSettingsModel::shortcutMoveMeasureUpSystem() const
 {
     return shortcutsForActionCode("move-measure-to-prev-system");
 }
 
-void SystemLayoutSettingsModel::moveMeasureDownSystem()
+void SystemPageLayoutSettingsModel::moveMeasureDownSystem()
 {
     if (!currentNotation()) {
         return;
@@ -134,12 +134,12 @@ void SystemLayoutSettingsModel::moveMeasureDownSystem()
     currentNotation()->interaction()->moveMeasureToNextSystem();
 }
 
-QString SystemLayoutSettingsModel::shortcutMoveMeasureDownSystem() const
+QString SystemPageLayoutSettingsModel::shortcutMoveMeasureDownSystem() const
 {
     return shortcutsForActionCode("move-measure-to-next-system");
 }
 
-void SystemLayoutSettingsModel::toggleSystemLock()
+void SystemPageLayoutSettingsModel::toggleSystemLock()
 {
     if (!currentNotation()) {
         return;
@@ -148,12 +148,12 @@ void SystemLayoutSettingsModel::toggleSystemLock()
     currentNotation()->interaction()->toggleSystemLock();
 }
 
-QString SystemLayoutSettingsModel::shortcutToggleSystemLock() const
+QString SystemPageLayoutSettingsModel::shortcutToggleSystemLock() const
 {
     return shortcutsForActionCode("toggle-system-lock");
 }
 
-void SystemLayoutSettingsModel::togglePageLock()
+void SystemPageLayoutSettingsModel::togglePageLock()
 {
     if (!currentNotation()) {
         return;
@@ -162,22 +162,22 @@ void SystemLayoutSettingsModel::togglePageLock()
     currentNotation()->interaction()->togglePageLock();
 }
 
-QString SystemLayoutSettingsModel::shortcutTogglePageLock() const
+QString SystemPageLayoutSettingsModel::shortcutTogglePageLock() const
 {
     return shortcutsForActionCode("toggle-page-lock");
 }
 
-bool SystemLayoutSettingsModel::allSystemsAreLocked() const
+bool SystemPageLayoutSettingsModel::allSystemsAreLocked() const
 {
     return m_allSystemsAreLocked;
 }
 
-bool SystemLayoutSettingsModel::allPagesAreLocked() const
+bool SystemPageLayoutSettingsModel::allPagesAreLocked() const
 {
     return m_allPagesAreLocked;
 }
 
-void SystemLayoutSettingsModel::updateAllSystemsAreLocked()
+void SystemPageLayoutSettingsModel::updateAllSystemsAreLocked()
 {
     if (isEmpty()) {
         return;
@@ -199,7 +199,7 @@ void SystemLayoutSettingsModel::updateAllSystemsAreLocked()
     }
 }
 
-void SystemLayoutSettingsModel::updateAllPagesAreLocked()
+void SystemPageLayoutSettingsModel::updateAllPagesAreLocked()
 {
     if (isEmpty()) {
         return;
@@ -221,32 +221,32 @@ void SystemLayoutSettingsModel::updateAllPagesAreLocked()
     }
 }
 
-bool SystemLayoutSettingsModel::scoreIsInPageView() const
+bool SystemPageLayoutSettingsModel::scoreIsInPageView() const
 {
     return m_scoreIsInPageView;
 }
 
-bool SystemLayoutSettingsModel::isMakeIntoSystemAvailable() const
+bool SystemPageLayoutSettingsModel::isMakeIntoSystemAvailable() const
 {
     return m_isMakeIntoSystemAvailable;
 }
 
-bool SystemLayoutSettingsModel::isMakeIntoPageAvailable() const
+bool SystemPageLayoutSettingsModel::isMakeIntoPageAvailable() const
 {
     return m_isMakeIntoPageAvailable;
 }
 
-int SystemLayoutSettingsModel::systemCount() const
+int SystemPageLayoutSettingsModel::systemCount() const
 {
     return static_cast<int>(m_systemCount);
 }
 
-int SystemLayoutSettingsModel::pageCount() const
+int SystemPageLayoutSettingsModel::pageCount() const
 {
     return static_cast<int>(m_pageCount);
 }
 
-void SystemLayoutSettingsModel::updateScoreIsInPageView()
+void SystemPageLayoutSettingsModel::updateScoreIsInPageView()
 {
     if (!currentNotation()) {
         return;
@@ -260,7 +260,7 @@ void SystemLayoutSettingsModel::updateScoreIsInPageView()
     }
 }
 
-void SystemLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
+void SystemPageLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
 {
     if (isEmpty()) {
         return;
@@ -283,7 +283,7 @@ void SystemLayoutSettingsModel::updateIsMakeIntoSystemAvailable()
     }
 }
 
-void SystemLayoutSettingsModel::updateIsMakeIntoPageAvailable()
+void SystemPageLayoutSettingsModel::updateIsMakeIntoPageAvailable()
 {
     bool available = !isEmpty();
 
@@ -293,7 +293,7 @@ void SystemLayoutSettingsModel::updateIsMakeIntoPageAvailable()
     }
 }
 
-void SystemLayoutSettingsModel::updateSystemCount()
+void SystemPageLayoutSettingsModel::updateSystemCount()
 {
     if (isEmpty()) {
         return;
@@ -306,7 +306,7 @@ void SystemLayoutSettingsModel::updateSystemCount()
     }
 }
 
-void SystemLayoutSettingsModel::updatePageCount()
+void SystemPageLayoutSettingsModel::updatePageCount()
 {
     if (isEmpty()) {
         return;
@@ -319,7 +319,7 @@ void SystemLayoutSettingsModel::updatePageCount()
     }
 }
 
-void SystemLayoutSettingsModel::makeIntoSystem()
+void SystemPageLayoutSettingsModel::makeIntoSystem()
 {
     if (!currentNotation()) {
         return;
@@ -328,7 +328,7 @@ void SystemLayoutSettingsModel::makeIntoSystem()
     currentNotation()->interaction()->makeIntoSystem();
 }
 
-QString SystemLayoutSettingsModel::shortcutMakeIntoSystem() const
+QString SystemPageLayoutSettingsModel::shortcutMakeIntoSystem() const
 {
     return shortcutsForActionCode("make-into-system");
 }

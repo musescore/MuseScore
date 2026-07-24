@@ -27,7 +27,7 @@
 #include "propertiespanelabstractmodel.h"
 
 namespace mu::propertiespanel {
-class SystemLayoutSettingsModel : public PropertiesPanelAbstractModel
+class SystemPageLayoutSettingsModel : public PropertiesPanelAbstractModel
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -50,7 +50,8 @@ class SystemLayoutSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(int pageCount READ pageCount NOTIFY pageCountChanged)
 
 public:
-    explicit SystemLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit SystemPageLayoutSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                           IElementRepositoryService* repository);
 
     void createProperties() override { }
     void loadProperties() override;
