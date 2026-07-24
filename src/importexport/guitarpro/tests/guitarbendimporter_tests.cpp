@@ -217,6 +217,10 @@ TEST_F(GuitarBendImporter_Tests, gpTiedBendTieBack) {
 TEST_F(GuitarBendImporter_Tests, gpTiedChordSlightBend) {
     gpReadTest(u"tied_chord_slight_bend", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpBendChordTied) {
+    gpReadTest(u"bend_chord_tied", u"gp");
+}
 #endif
 
 TEST_F(GuitarBendImporter_Tests, gpSimpleDive) {
@@ -366,5 +370,4 @@ TEST_F(GuitarBendImporter_Tests, gpDiveCrossZeroUp) {
 TEST_F(GuitarBendImporter_Tests, gpDiveArtificialHarmonic) {
     gpReadTest(u"dive_artificial_harmonic", u"gp");
 }
-
 }
