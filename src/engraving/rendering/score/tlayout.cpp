@@ -4183,7 +4183,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
 
-        SymId nh = item->noteHead();
+        SymId nh = item->hideNotehead() ? SymId::noSym : item->noteHead();
         ldata->cachedNoteheadSym.set_value(nh);
 
         if (item->isNoteName()) {
