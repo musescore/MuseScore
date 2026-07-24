@@ -34,6 +34,7 @@ enum class Err {
     UnknownError    = int(Ret::Code::CloudFirst),
 
     AccessTokenIsEmpty,
+    InvalidData,
     Status400_InvalidRequest,
     Status401_AuthorizationRequired,
     Status403_AccountNotActivated,
@@ -57,6 +58,7 @@ inline Ret make_ret(Err e)
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
     case Err::AccessTokenIsEmpty: return Ret(retCode, "Access token is empty");
+    case Err::InvalidData: return Ret(retCode, "Invalid data");
     case Err::Status400_InvalidRequest: return Ret(retCode, "Status 400: invalid request");
     case Err::Status401_AuthorizationRequired: return Ret(retCode, "Status 401: authorization required");
     case Err::Status403_AccountNotActivated: return Ret(retCode, "Status 403: account not activated");

@@ -42,6 +42,7 @@ target_sources(project PRIVATE
     iprojectautosaver.h
     iprojectrwregister.h
     iprojectwriter.h
+    iimportfiletoscorescenario.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -59,6 +60,8 @@ target_sources(project PRIVATE
     internal/notationwritersregister.h
     internal/projectautosaver.cpp
     internal/projectautosaver.h
+    internal/importfiletoscorescenario.cpp
+    internal/importfiletoscorescenario.h
     internal/projectactionscontroller.cpp
     internal/projectactionscontroller.h
     internal/engravingpluginapihelper.cpp

@@ -28,8 +28,12 @@ qt_add_qml_module(project_qml
         audiogenerationsettingsmodel.h
         enums.cpp
         enums.h
+        internal/devtools/importfiletoscoredevtoolsmodel.cpp
+        internal/devtools/importfiletoscoredevtoolsmodel.h
         internal/Export/exportdialogmodel.cpp
         internal/Export/exportdialogmodel.h
+        internal/importfiletoscoremodel.cpp
+        internal/importfiletoscoremodel.h
         internal/NewScore/additionalinfomodel.cpp
         internal/NewScore/additionalinfomodel.h
         internal/NewScore/newscoremodel.cpp
@@ -60,6 +64,8 @@ qt_add_qml_module(project_qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
         ExportDialog.qml
+        ImportFileToScoreDialog.qml
+        internal/devtools/ImportFileToScoreDevTools.qml
         internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
         internal/Export/ExportOptionsView.qml
@@ -139,6 +145,7 @@ fixup_qml_module_dependencies(project_qml)
 # Necessary for the auto-generated sources
 target_include_directories(project_qml PRIVATE
     internal
+    internal/devtools
     internal/Export
     internal/NewScore
     internal/Properties

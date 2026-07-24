@@ -353,6 +353,28 @@ io::path_t Interactive::selectOpeningFileSync(const std::string& title, const io
 #endif
 }
 
+io::paths_t Interactive::selectOpeningFilesSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                                const int options)
+{
+#ifndef Q_OS_LINUX
+    const QFileDialog::Options qoptions = QFileDialog::Options::fromInt(options);
+    const QStringList result = QFileDialog::getOpenFileNames(nullptr, QString::fromStdString(title), dir.toQString(),
+                                                             filterToString(filter), nullptr, qoptions);
+
+    io::paths_t paths;
+    paths.reserve(result.size());
+    for (const QString& path : result) {
+        paths.emplace_back(path);
+    }
+
+    return paths;
+#else
+    NOT_IMPLEMENTED;
+    const io::path_t path = selectOpeningFileSync(title, dir, filter, options);
+    return path.empty() ? io::paths_t {} : io::paths_t { path };
+#endif
+}
+
 io::path_t Interactive::selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                              bool confirmOverwrite)
 {
