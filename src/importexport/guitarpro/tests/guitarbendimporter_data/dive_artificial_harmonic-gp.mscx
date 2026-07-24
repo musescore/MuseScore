@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <eid>C_C</eid>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Instrument id="electric-guitar">
+        <InstrumentLabel>
+          <longName>Lead Guitar</longName>
+          <shortName>E-Gt</shortName>
+          </InstrumentLabel>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Channel>
+          <program value="30"/>
+          <controller ctrl="7" value="109"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>E_E</eid>
+        <voice>
+          <KeySig>
+            <eid>F_F</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>G_G</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <eid>H_H</eid>
+            </Dynamic>
+          <Tempo>
+            <tempo>3.516667</tempo>
+            <eid>I_I</eid>
+            <text><sym>metNoteQuarterUp</sym> = 211</text>
+            </Tempo>
+          <Spanner type="WhammyBar">
+            <WhammyBar>
+              <beginTextOffset x="0" y="0"/>
+              <eid>J_J</eid>
+              <placement>below</placement>
+              </WhammyBar>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>3/4</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Spanner type="HarmonicMark">
+            <HarmonicMark>
+              <beginText>AH</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <continueText>AH</continueText>
+              <eid>K_K</eid>
+              </HarmonicMark>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>7/8</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>10</fret>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>dive</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.983333</bendEndTimeFactor>
+                  <eid>N_N</eid>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>O_O</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>P_P</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>10</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <eid>Q_Q</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>R_R</eid>
+        <voice>
+          <Chord>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>T_T</eid>
+              <parentheses>both</parentheses>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>10</fret>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>dive</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>U_U</eid>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>V_V</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>W_W</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>10</fret>
+              <string>3</string>
+              </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteEID>T_T</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Chord>
+            <eid>X_X</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Y_Y</eid>
+              <parentheses>both</parentheses>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>10</fret>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>dive</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>Z_Z</eid>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>a_a</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>b_b</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>10</fret>
+              <string>3</string>
+              </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteEID>Y_Y</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Chord>
+            <eid>c_c</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>d_d</eid>
+              <parentheses>both</parentheses>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>e_e</eid>
+                </Accidental>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <fret>10</fret>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>dive</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.983333</bendEndTimeFactor>
+                  <eid>f_f</eid>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>g_g</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>h_h</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>10</fret>
+              <string>3</string>
+              </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteEID>d_d</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Spanner type="WhammyBar">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-3/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <eid>i_i</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>j_j</eid>
+              <parentheses>both</parentheses>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>10</fret>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>k_k</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>10</fret>
+              <string>3</string>
+              </Note>
+            <NoteParenGroup>
+              <Notes>
+                <NoteEID>j_j</NoteEID>
+                </Notes>
+              </NoteParenGroup>
+            </Chord>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-7/8</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <eid>l_l</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
