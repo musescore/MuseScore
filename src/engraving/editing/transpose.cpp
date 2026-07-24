@@ -606,13 +606,18 @@ void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Scor
     if (seg) {
         tick = seg->tick();
     }
-    Key key = !diagram->staff() ? Key::C : diagram->staff()->key(tick);
+    Staff* staff = diagram->staff();
+    Key key = staff ? staff->key(tick) : Key::C;
 
     String name = findBestEnharmonicFit(names, key, score->style());
 
     // Transpose harmony without undo
-    Interval kv = diagram->staff()->transpose(tick);
-    Interval iv = diagram->part()->instrument(tick)->transpose();
+    Interval kv = staff ? staff->transpose(tick) : Interval(0, 0);
+
+    Part* part = diagram->part();
+    Instrument* instrument = part ? part->instrument(tick) : nullptr;
+    Interval iv = instrument ? instrument->transpose() : Interval(0, 0);
+
     Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
 
     String transposed = transposedChordName(score, name, [&](int tpc) {
