@@ -27,6 +27,7 @@ import QtQuick
 import Muse.Ui
 import Muse.UiComponents
 import Muse.Dock
+import MuseScore.Project
 
 DockPage {
     id: root
@@ -41,6 +42,7 @@ DockPage {
         case "interactive": root.central = interactiveComp; break
         case "crashhandler": root.central = crashhandlerComp; break
         case "corruptscore": root.central = corruptScoreComp; break
+        case "importfiletoscore": root.central = importFileToScoreComp; break
         case "mpe": root.central = mpeComponent; break
         case "extensions": root.central = extensionsComp; break
         case "navigation": root.central = keynavComp; break
@@ -73,6 +75,7 @@ DockPage {
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "corruptscore", "title": "Corrupt score" },
+                        { "name": "importfiletoscore", "title": "Import file to score" },
                         { "name": "mpe", "title": "MPE" },
                         { "name": "extensions", "title": "Extensions" },
                         { "name": "navigation", "title": "KeyNav" }
@@ -116,6 +119,12 @@ DockPage {
         id: corruptScoreComp
 
         CorruptScoreDevTools {}
+    }
+
+    Component {
+        id: importFileToScoreComp
+
+        ImportFileToScoreDevTools {}
     }
 
     Component {
