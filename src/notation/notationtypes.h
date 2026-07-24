@@ -127,6 +127,8 @@ enum class SelectionTarget : unsigned char
     PrevFrame,
     NextSystem,
     PrevSystem,
+    AboveStaff,
+    BelowStaff,
     UpNoteInChord,
     DownNoteInChord,
     TopNoteInChord,
@@ -156,6 +158,8 @@ static const std::map<std::string, SelectionTarget> STR_SELECTION_TARGET = {
     { "prev-frame", SelectionTarget::PrevFrame },
     { "next-system", SelectionTarget::NextSystem },
     { "prev-system", SelectionTarget::PrevSystem },
+    { "above-staff", SelectionTarget::AboveStaff },
+    { "below-staff", SelectionTarget::BelowStaff },
     { "up-note-in-chord", SelectionTarget::UpNoteInChord },
     { "down-note-in-chord", SelectionTarget::DownNoteInChord },
     { "top-note-in-chord", SelectionTarget::TopNoteInChord },
@@ -175,6 +179,16 @@ inline SelectionTarget str_conv(const std::string& str, SelectionTarget def)
         return it->second;
     }
     return def;
+}
+
+inline std::string str_conv(SelectionTarget target)
+{
+    for (const auto& [key, value] : STR_SELECTION_TARGET) {
+        if (value == target) {
+            return key;
+        }
+    }
+    return "";
 }
 
 enum PlayMode {

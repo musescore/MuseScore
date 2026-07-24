@@ -75,6 +75,12 @@ static const std::vector<Command> UNDO_REDO_COMMANDS = {
 };
 
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
+    EDITTEXT_TOGGLE_BOLD_COMMAND,
+    EDITTEXT_TOGGLE_ITALIC_COMMAND,
+    EDITTEXT_TOGGLE_UNDERLINE_COMMAND,
+    EDITTEXT_TOGGLE_STRIKE_COMMAND,
+    EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND,
+    EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND,
     EDITTEXT_NEXT_ELEMENT_COMMAND,
     EDITTEXT_PREV_ELEMENT_COMMAND,
     EDITTEXT_NEXT_WORD_COMMAND,
@@ -231,6 +237,10 @@ static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
     { SHOW_IRREGULAR_COMMAND, ScoreConfigType::MarkIrregularMeasures }
 };
 
+static const std::vector<Command> STYLE_COMMANDS = {
+    TOGGLE_CONCERT_PITCH_COMMAND
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -293,6 +303,10 @@ void NotationCommandsState::init()
         updateCommandStates({ muse::key(SCORE_CONFIG_COMMANDS, configType) });
     });
 
+    controller()->notationStyleChanged().onNotify(this, [this]() {
+        updateCommandStates(STYLE_COMMANDS);
+    });
+
     updateCommandStates();
 }
 
@@ -306,6 +320,7 @@ void NotationCommandsState::deinit()
     controller()->isNoteInputAllowedChanged().disconnect(this);
     controller()->noteInputStateChanged().disconnect(this);
     controller()->scoreConfigChanged().disconnect(this);
+    controller()->notationStyleChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -409,6 +424,11 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (muse::contains(SCORE_CONFIG_COMMANDS, command)) {
         return CommandState(true, controller()->scoreConfig().isShown(SCORE_CONFIG_COMMANDS.at(command)));
+    }
+
+    if (muse::contains(STYLE_COMMANDS, command)) {
+        auto style = controller()->notationStyle();
+        return CommandState(true, style ? style->styleValue(StyleId::concertPitch).toBool() : false);
     }
 
     return CommandState(true, false);

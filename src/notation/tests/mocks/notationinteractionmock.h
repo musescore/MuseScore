@@ -51,6 +51,7 @@ public:
 
     MOCK_METHOD(void, select, (const std::vector<EngravingItem*>&, SelectType, engraving::staff_idx_t), (override));
     MOCK_METHOD(void, select, (SelectionTarget), (override));
+    MOCK_METHOD(void, addToSelection, (SelectionTarget), (override));
     MOCK_METHOD(void, selectAndStartEditIfNeeded, (EngravingItem*), (override));
     MOCK_METHOD(INotationSelectionPtr, selection, (), (const, override));
     MOCK_METHOD(void, clearSelection, (), (override));
@@ -94,7 +95,6 @@ public:
 
     MOCK_METHOD(void, moveLyrics, (MoveDirection), (override));
     MOCK_METHOD(void, expandSelection, (ExpandSelectionMode), (override));
-    MOCK_METHOD(void, addToSelection, (MoveDirection, MoveSelectionType), (override));
     MOCK_METHOD(void, selectTopStaff, (), (override));
     MOCK_METHOD(void, selectEmptyTrailingMeasure, (), (override));
 

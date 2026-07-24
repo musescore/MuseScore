@@ -136,6 +136,17 @@ void NotationActionController::init()
     registerCommand(SELECT_COMMAND, &Controller::select);
     registerAliases(SELECTION_ALIASES, &Controller::select);
 
+    registerCommand(ADD_TO_SELECTION_NEXT_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::NextChord);
+    registerCommand(ADD_TO_SELECTION_PREV_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::PrevChord);
+    registerCommand(ADD_TO_SELECTION_NEXT_MEASURE_COMMAND, &Interaction::addToSelection, SelectionTarget::NextMeasure);
+    registerCommand(ADD_TO_SELECTION_PREV_MEASURE_COMMAND, &Interaction::addToSelection, SelectionTarget::PrevMeasure);
+    registerCommand(ADD_TO_SELECTION_ABOVE_STAFF_COMMAND, &Interaction::addToSelection, SelectionTarget::AboveStaff);
+    registerCommand(ADD_TO_SELECTION_BELOW_STAFF_COMMAND, &Interaction::addToSelection, SelectionTarget::BelowStaff);
+    registerCommand(ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::BeginSystem);
+    registerCommand(ADD_TO_SELECTION_END_SYSTEM_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::EndSystem);
+    registerCommand(ADD_TO_SELECTION_BEGIN_SCORE_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::BeginScore);
+    registerCommand(ADD_TO_SELECTION_END_SCORE_COMMAND, &Interaction::expandSelection, ExpandSelectionMode::EndScore);
+
     registerCommand(OPEN_SELECTION_OPTIONS_COMMAND, &Controller::openSelectionMoreOptions);
 
     // text navigation commands
@@ -169,6 +180,14 @@ void NotationActionController::init()
     registerCommand(EDITLYRIC_NEXT_SYLLABLE_COMMAND, &Interaction::navigateToNextSyllable);
     registerCommand(EDITLYRIC_ADD_MELISMA_COMMAND, &Interaction::addMelisma);
     registerCommand(EDITLYRIC_ADD_VERSE_COMMAND, &Interaction::addLyricsVerse);
+
+    // text editing commands
+    registerCommand(EDITTEXT_TOGGLE_BOLD_COMMAND, &Interaction::toggleBold);
+    registerCommand(EDITTEXT_TOGGLE_ITALIC_COMMAND, &Interaction::toggleItalic);
+    registerCommand(EDITTEXT_TOGGLE_UNDERLINE_COMMAND, &Interaction::toggleUnderline);
+    registerCommand(EDITTEXT_TOGGLE_STRIKE_COMMAND, &Interaction::toggleStrike);
+    registerCommand(EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND, &Interaction::toggleSubScript);
+    registerCommand(EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND, &Interaction::toggleSuperScript);
 
     // note input commands
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_COMMAND, NoteInputMethod::UNKNOWN /*default*/);
@@ -314,6 +333,46 @@ void NotationActionController::init()
     registerCommand(ADD_TEMPO_COMMAND, [this]() { addText(TextStyleType::TEMPO); });
     registerCommand(ADD_FIGURED_BASS_COMMAND, [this]() { addFiguredBass(); });
 
+    // add grace notes commands
+    registerCommand(ADD_ACCIACCATURA_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::ACCIACCATURA);
+    registerCommand(ADD_APPOGGIATURA_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::APPOGGIATURA);
+    registerCommand(ADD_GRACE4_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE4);
+    registerCommand(ADD_GRACE16_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE16);
+    registerCommand(ADD_GRACE32_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE32);
+    registerCommand(ADD_GRACE8_AFTER_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE8_AFTER);
+    registerCommand(ADD_GRACE16_AFTER_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE16_AFTER);
+    registerCommand(ADD_GRACE32_AFTER_COMMAND, &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE32_AFTER);
+
+    // add beam commands
+    registerCommand(ADD_BEAM_AUTO_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
+    registerCommand(ADD_BEAM_NONE_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
+    registerCommand(ADD_BEAM_BEGIN_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
+    registerCommand(ADD_BEAM_BEGIN16_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN16);
+    registerCommand(ADD_BEAM_BEGIN32_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
+    registerCommand(ADD_BEAM_MID_COMMAND, &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
+    registerCommand(ADD_BEAM_SELECTED_RANGE_COMMAND, &Interaction::beamSelectedRange);
+
+    // add brackets commands
+    registerCommand(ADD_BRACKETS_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Brackets);
+    registerCommand(ADD_BRACES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Braces);
+    registerCommand(ADD_PARENTHESES_COMMAND, &Interaction::addBracketsToSelection, BracketsType::Parentheses);
+
+    // add ornament commands
+    registerCommand(ADD_TURN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurn);
+    registerCommand(ADD_TURN_INVERTED_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnInverted);
+    registerCommand(ADD_TURN_SLASH_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnSlash);
+    registerCommand(ADD_TURN_UP_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUp);
+    registerCommand(ADD_TURN_INVERTED_UP_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUpS);
+    registerCommand(ADD_TRILL_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
+    registerCommand(ADD_SHORT_TRILL_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
+    registerCommand(ADD_MORDENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
+    registerCommand(ADD_HAYDN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentHaydn);
+    registerCommand(ADD_TREMBLEMENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
+    registerCommand(ADD_PRALL_MORDENT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
+    registerCommand(ADD_SHAKE_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);
+    registerCommand(ADD_SHAKE_MUFFAT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShakeMuffat1);
+    registerCommand(ADD_TREMBLEMENT_COUPERIN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblementCouperin);
+
     // editing commands
     registerCommand(COPY_COMMAND, &Interaction::copySelection);
     registerCommand(COPY_PASTE_SWAP_COMMAND, &Interaction::swapSelection);
@@ -401,6 +460,7 @@ void NotationActionController::init()
     registerCommand(LOAD_STYLE_COMMAND, &Controller::loadStyle);
     registerCommand(SAVE_STYLE_COMMAND, &Controller::saveStyle);
     registerCommand(OPEN_EDIT_STYLE_COMMAND, &Controller::openEditStyleDialog);
+    registerCommand(TOGGLE_CONCERT_PITCH_COMMAND, &Controller::toggleConcertPitch);
 
     // reset commands
     registerCommand(RESET_TEXT_STYLE_OVERRIDES_COMMAND, &Interaction::resetTextStyleOverrides);
@@ -416,6 +476,10 @@ void NotationActionController::init()
     registerCommand(SHOW_SOUNDFLAGS_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
     registerCommand(SHOW_IRREGULAR_COMMAND, [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
+    // staff commands
+    registerCommand(STAFF_EXPLODE_COMMAND, &Interaction::explodeSelectedStaff);
+    registerCommand(STAFF_IMPLODE_COMMAND, &Interaction::implodeSelectedStaff);
+
     // --------------------
 
     m_isAllowedDuringPlayback.insert("action://notation/cancel");
@@ -427,16 +491,14 @@ void NotationActionController::init()
     registerAction("note-action", &Controller::handleNoteAction); // used for drums
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
+    registerAction("edit-text", &Controller::startEditSelectedText);
+    registerAction("edit-element", &Controller::startEditSelectedElement);
 
     registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
     registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
 
-    registerAction("concert-pitch", &Controller::toggleConcertPitch);
-
-    registerAction("explode", &Interaction::explodeSelectedStaff);
-    registerAction("implode", &Interaction::implodeSelectedStaff);
     registerAction("extend-to-next-note", &Interaction::extendToNextNote);
     registerAction("time-delete", &Interaction::removeSelectedRange);
     registerAction("del-empty-measures", &Interaction::removeEmptyTrailingMeasures);
@@ -451,51 +513,9 @@ void NotationActionController::init()
     registerAction("unroll-repeats", &Controller::unrollRepeats);
 
     registerAction("copy-lyrics-to-clipboard", &Interaction::copyLyrics);
-    registerAction("acciaccatura", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::ACCIACCATURA);
-    registerAction("appoggiatura", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::APPOGGIATURA);
-    registerAction("grace4", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE4);
-    registerAction("grace16", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE16);
-    registerAction("grace32", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE32);
-    registerAction("grace8after", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE8_AFTER);
-    registerAction("grace16after", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE16_AFTER);
-    registerAction("grace32after", &Interaction::addGraceNotesToSelectedNotes, GraceNoteType::GRACE32_AFTER);
-
-    registerAction("beam-auto", &Interaction::addBeamToSelectedChordRests, BeamMode::AUTO);
-    registerAction("beam-none", &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
-    registerAction("beam-break-left", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
-    registerAction("beam-break-inner-8th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN16);
-    registerAction("beam-break-inner-16th", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
-    registerAction("beam-join", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
-    registerAction("beam-selected-range", &Interaction::beamSelectedRange);
-
-    registerAction("add-brackets", &Interaction::addBracketsToSelection, BracketsType::Brackets);
-    registerAction("add-parentheses", &Interaction::addBracketsToSelection, BracketsType::Parentheses);
-    registerAction("add-braces", &Interaction::addBracketsToSelection, BracketsType::Braces);
 
     registerAction("enh-both", &Interaction::changeEnharmonicSpelling, true);
     registerAction("enh-current", &Interaction::changeEnharmonicSpelling, false);
-
-    registerAction("edit-element", &Controller::startEditSelectedElement);
-    registerAction("edit-text", &Controller::startEditSelectedText);
-
-    registerAction("text-b", &Interaction::toggleBold, &Controller::isEditingText);
-    registerAction("text-i", &Interaction::toggleItalic, &Controller::isEditingText);
-    registerAction("text-u", &Interaction::toggleUnderline, &Controller::isEditingText);
-    registerAction("text-s", &Interaction::toggleStrike, &Controller::isEditingText);
-    registerAction("text-sub", &Interaction::toggleSubScript, &Controller::isEditingText);
-    registerAction("text-sup", &Interaction::toggleSuperScript, &Controller::isEditingText);
-
-    registerAddToSelectionAction("select-next-chord", MoveSelectionType::Chord, MoveDirection::Right);
-    registerAddToSelectionAction("select-prev-chord", MoveSelectionType::Chord, MoveDirection::Left);
-    registerAddToSelectionAction("select-next-measure", MoveSelectionType::Measure, MoveDirection::Right);
-    registerAddToSelectionAction("select-prev-measure", MoveSelectionType::Measure, MoveDirection::Left);
-    registerAddToSelectionAction("select-staff-above", MoveSelectionType::Track, MoveDirection::Up);
-    registerAddToSelectionAction("select-staff-below", MoveSelectionType::Track, MoveDirection::Down);
-
-    registerExpandSelectionAction("select-begin-line", ExpandSelectionMode::BeginSystem);
-    registerExpandSelectionAction("select-end-line", ExpandSelectionMode::EndSystem);
-    registerExpandSelectionAction("select-begin-score", ExpandSelectionMode::BeginScore);
-    registerExpandSelectionAction("select-end-score", ExpandSelectionMode::EndScore);
 
     registerAction("top-staff", &Interaction::selectTopStaff, PlayMode::PlayChord);
     registerAction("empty-trailing-measure", &Interaction::selectEmptyTrailingMeasure);
@@ -505,21 +525,6 @@ void NotationActionController::init()
     registerAction("pitch-down-diatonic", &Controller::movePitchDiatonic, MoveDirection::Down, false);
 
     registerAction("repeat-sel", &Controller::repeatSelection);
-
-    registerAction("add-turn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurn);
-    registerAction("add-turn-inverted", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnInverted);
-    registerAction("add-turn-slash", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnSlash);
-    registerAction("add-turn-up", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUp);
-    registerAction("add-turn-inverted-up", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUpS);
-    registerAction("add-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
-    registerAction("add-short-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
-    registerAction("add-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
-    registerAction("add-haydn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentHaydn);
-    registerAction("add-tremblement", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
-    registerAction("add-prall-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
-    registerAction("add-shake", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);
-    registerAction("add-shake-muffat", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShakeMuffat1);
-    registerAction("add-tremblement-couperin", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblementCouperin);
 
     registerAction("add-up-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
     registerAction("add-down-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
@@ -629,9 +634,15 @@ void NotationActionController::init()
             undoStack->stackChanged().onNotify(this, [this]() {
                 m_stackChanged.notify();
             }, Asyncable::Mode::SetReplace);
+
+            notation->style()->styleChanged().onNotify(this, [this]() {
+                m_currentNotationStyleChanged.notify();
+            }, Asyncable::Mode::SetReplace);
         }
+
         m_textEditingChanged.send(isTextEditing());
         m_noteInputStateChanged.notify();
+        m_currentNotationStyleChanged.notify();
     });
 
     globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
@@ -835,6 +846,7 @@ void NotationActionController::init()
             { "select-notes-in-chord", SELECT_NOTES_IN_CHORD_COMMAND },
             { "notation-select-all", SELECT_ALL_COMMAND },
             { "notation-select-section", SELECT_SECTION_COMMAND },
+            { "select-dialog", OPEN_SELECTION_OPTIONS_COMMAND },
             { "next-beat-TEXT", EDITTEXT_NEXT_BEAT_COMMAND },
             { "prev-beat-TEXT", EDITTEXT_PREV_BEAT_COMMAND },
             { "advance-longa", EDITTEXT_ADVANCE_LONGA_COMMAND },
@@ -933,6 +945,49 @@ void NotationActionController::init()
             { "show-pageborders", SHOW_PAGEBORDERS_COMMAND },
             { "show-soundflags", SHOW_SOUNDFLAGS_COMMAND },
             { "show-irregular", SHOW_IRREGULAR_COMMAND },
+            { "concert-pitch", TOGGLE_CONCERT_PITCH_COMMAND },
+            { "acciaccatura", ADD_ACCIACCATURA_COMMAND },
+            { "appoggiatura", ADD_APPOGGIATURA_COMMAND },
+            { "grace4", ADD_GRACE4_COMMAND },
+            { "grace16", ADD_GRACE16_COMMAND },
+            { "grace32", ADD_GRACE32_COMMAND },
+            { "grace8after", ADD_GRACE8_AFTER_COMMAND },
+            { "grace16after", ADD_GRACE16_AFTER_COMMAND },
+            { "grace32after", ADD_GRACE32_AFTER_COMMAND },
+            { "beam-auto", ADD_BEAM_AUTO_COMMAND },
+            { "beam-none", ADD_BEAM_NONE_COMMAND },
+            { "beam-break-left", ADD_BEAM_BEGIN_COMMAND },
+            { "beam-break-inner-8th", ADD_BEAM_BEGIN16_COMMAND },
+            { "beam-break-inner-16th", ADD_BEAM_BEGIN32_COMMAND },
+            { "beam-join", ADD_BEAM_MID_COMMAND },
+            { "beam-selected-range", ADD_BEAM_SELECTED_RANGE_COMMAND },
+            { "add-brackets", ADD_BRACKETS_COMMAND },
+            { "add-parentheses", ADD_PARENTHESES_COMMAND },
+            { "add-braces", ADD_BRACES_COMMAND },
+            { "add-turn", ADD_TURN_COMMAND },
+            { "add-turn-inverted", ADD_TURN_INVERTED_COMMAND },
+            { "add-turn-slash", ADD_TURN_SLASH_COMMAND },
+            { "add-turn-up", ADD_TURN_UP_COMMAND },
+            { "add-turn-inverted-up", ADD_TURN_INVERTED_UP_COMMAND },
+            { "add-trill", ADD_TRILL_COMMAND },
+            { "add-short-trill", ADD_SHORT_TRILL_COMMAND },
+            { "add-mordent", ADD_MORDENT_COMMAND },
+            { "add-haydn", ADD_HAYDN_COMMAND },
+            { "add-tremblement", ADD_TREMBLEMENT_COMMAND },
+            { "add-prall-mordent", ADD_PRALL_MORDENT_COMMAND },
+            { "add-shake", ADD_SHAKE_COMMAND },
+            { "add-shake-muffat", ADD_SHAKE_MUFFAT_COMMAND },
+            { "add-tremblement-couperin", ADD_TREMBLEMENT_COUPERIN_COMMAND },
+            { "select-next-chord", ADD_TO_SELECTION_NEXT_CHORD_COMMAND },
+            { "select-prev-chord", ADD_TO_SELECTION_PREV_CHORD_COMMAND },
+            { "select-next-measure", ADD_TO_SELECTION_NEXT_MEASURE_COMMAND },
+            { "select-prev-measure", ADD_TO_SELECTION_PREV_MEASURE_COMMAND },
+            { "select-above-staff", ADD_TO_SELECTION_ABOVE_STAFF_COMMAND },
+            { "select-below-staff", ADD_TO_SELECTION_BELOW_STAFF_COMMAND },
+            { "select-begin-line", ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND },
+            { "select-end-line", ADD_TO_SELECTION_END_SYSTEM_COMMAND },
+            { "select-begin-score", ADD_TO_SELECTION_BEGIN_SCORE_COMMAND },
+            { "select-end-score", ADD_TO_SELECTION_END_SCORE_COMMAND },
         };
 
         static const std::vector<ActionToCommandWithParams> actionToCommandWithParams = {
@@ -1056,7 +1111,7 @@ mu::engraving::Score* NotationActionController::currentNotationScore() const
     return currentNotationElements() ? currentNotationElements()->msScore() : nullptr;
 }
 
-INotationStylePtr NotationActionController::currentNotationStyle() const
+INotationStylePtr NotationActionController::notationStyle() const
 {
     auto notation = currentNotation();
     if (!notation) {
@@ -1066,9 +1121,9 @@ INotationStylePtr NotationActionController::currentNotationStyle() const
     return notation->style();
 }
 
-muse::async::Notification NotationActionController::currentNotationStyleChanged() const
+muse::async::Notification NotationActionController::notationStyleChanged() const
 {
-    return currentNotationStyle() ? currentNotationStyle()->styleChanged() : muse::async::Notification();
+    return m_currentNotationStyleChanged;
 }
 
 void NotationActionController::resetState()
@@ -1765,7 +1820,7 @@ void NotationActionController::putTuplet(int tupletCount)
     options.ratio.setDenominator(2);
     options.autoBaseLen = true;
     // get the bracket type from score style settings
-    if (INotationStylePtr style = currentNotationStyle()) {
+    if (INotationStylePtr style = notationStyle()) {
         int bracketType = style->styleValue(StyleId::tupletBracketType).toInt();
         options.bracketType = static_cast<engraving::TupletBracketType>(bracketType);
         int numberType = style->styleValue(StyleId::tupletNumberType).toInt();
@@ -2534,7 +2589,7 @@ void NotationActionController::loadStyle()
                                  f.errorString());
             return;
         }
-        if (!currentNotationStyle()->loadStyle(path.toQString(), false)) {
+        if (!notationStyle()->loadStyle(path.toQString(), false)) {
             auto promise = interactive()->warning(
                 muse::trc("notation",
                           "Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly."),
@@ -2543,7 +2598,7 @@ void NotationActionController::loadStyle()
 
             promise.onResolve(this, [this, path](const IInteractive::Result& res) {
                 if (res.isButton(IInteractive::Button::Ok)) {
-                    currentNotationStyle()->loadStyle(path.toQString(), true);
+                    notationStyle()->loadStyle(path.toQString(), true);
                 }
             });
         }
@@ -2555,7 +2610,7 @@ void NotationActionController::saveStyle()
     TRACEFUNC;
     auto path = selectStyleFile(false);
     if (!path.empty()) {
-        if (!currentNotationStyle()->saveStyle(path)) {
+        if (!notationStyle()->saveStyle(path)) {
             interactive()->error(muse::trc("notation", "The style file could not be saved."),
                                  muse::trc("notation", "An error occurred."));
         }
@@ -2824,7 +2879,7 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 void NotationActionController::toggleConcertPitch()
 {
     TRACEFUNC;
-    INotationStylePtr style = currentNotationStyle();
+    INotationStylePtr style = notationStyle();
     if (!style) {
         return;
     }
@@ -3114,12 +3169,6 @@ void NotationActionController::registerSelectionCommand(const muse::rcommand::Co
             playSelectedElement(playMode == PlayMode::PlayChord);
         }
     });
-}
-
-void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type, MoveDirection direction)
-{
-    registerAction(code, &Interaction::addToSelection, direction, type, PlayMode::NoPlay, &Controller::isNotNoteInputMode);
-    m_isAllowedDuringPlayback.insert(code);
 }
 
 void NotationActionController::registerExpandSelectionAction(const ActionCode& code, ExpandSelectionMode mode)

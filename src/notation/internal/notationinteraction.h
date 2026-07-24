@@ -104,6 +104,7 @@ public:
     muse::async::Notification selectionChanged() const override;
     void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
     void select(SelectionTarget target) override;
+    void addToSelection(SelectionTarget target) override;
 
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
 
@@ -115,7 +116,6 @@ public:
     bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) override;
     void expandSelection(ExpandSelectionMode mode) override;
-    void addToSelection(MoveDirection d, MoveSelectionType type) override;
     void selectTopStaff() override;
     void selectEmptyTrailingMeasure() override;
 
