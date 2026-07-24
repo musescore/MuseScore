@@ -140,7 +140,7 @@ void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::
     UNUSED(currentViewScaling);
 
     Pen pen(opt.invertColors
-            ? item->configuration()->scoreInversionColor()
+            ? item->configuration()->defaultInvertedColor()
             : item->configuration()->defaultColor(), 0.0);
     painter->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {

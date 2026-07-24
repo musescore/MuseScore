@@ -43,6 +43,8 @@ using namespace mu::engraving;
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
 
+static const Settings::Key DEFAULT_COLOR("engraving", "engraving/colors/defaultColor");
+static const Settings::Key DEFAULT_INVERTED_COLOR("engraving", "engraving/colors/defaultInvertedColor");
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
 static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
@@ -83,6 +85,26 @@ void EngravingConfiguration::init()
     settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
     });
+
+    settings()->setDefaultValue(DEFAULT_COLOR, Val(Color::BLACK.toQColor()));
+    settings()->setDescription(DEFAULT_COLOR, muse::trc("engraving", "Default engraving color"));
+    settings()->setCanBeManuallyEdited(DEFAULT_COLOR, true);
+    settings()->valueChanged(DEFAULT_COLOR).onReceive(this, [this](const Val& val) {
+        const Color color = Color::fromQColor(val.toQColor());
+        m_cachedDefaultColor = color;
+        m_defaultColorChanged.send(color);
+    });
+    m_cachedDefaultColor = settings()->value(DEFAULT_COLOR).toQColor();
+
+    settings()->setDefaultValue(DEFAULT_INVERTED_COLOR, Val(Color("#CBCBCD").toQColor()));
+    settings()->setDescription(DEFAULT_INVERTED_COLOR, muse::trc("engraving", "Default inverted engraving color"));
+    settings()->setCanBeManuallyEdited(DEFAULT_INVERTED_COLOR, true);
+    settings()->valueChanged(DEFAULT_INVERTED_COLOR).onReceive(this, [this](const Val& val) {
+        const Color color = Color::fromQColor(val.toQColor());
+        m_cachedDefaultInvertedColor = color;
+        m_defaultInvertedColorChanged.send(color);
+    });
+    m_cachedDefaultInvertedColor = settings()->value(DEFAULT_INVERTED_COLOR).toQColor();
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
@@ -244,13 +266,32 @@ muse::String EngravingConfiguration::iconsFontFamily() const
 
 Color EngravingConfiguration::defaultColor() const
 {
-    return Color::BLACK;
+    return m_cachedDefaultColor;
 }
 
-Color EngravingConfiguration::scoreInversionColor() const
+void EngravingConfiguration::setDefaultColor(Color color)
 {
-    // slightly dulled white for less strain on the eyes
-    return Color(220, 220, 220);
+    settings()->setSharedValue(DEFAULT_COLOR, Val(color.toQColor()));
+}
+
+muse::async::Channel<Color> EngravingConfiguration::defaultColorChanged() const
+{
+    return m_defaultColorChanged;
+}
+
+Color EngravingConfiguration::defaultInvertedColor() const
+{
+    return m_cachedDefaultInvertedColor;
+}
+
+void EngravingConfiguration::setDefaultInvertedColor(Color color)
+{
+    settings()->setSharedValue(DEFAULT_INVERTED_COLOR, Val(color.toQColor()));
+}
+
+muse::async::Channel<Color> EngravingConfiguration::defaultInvertedColorChanged() const
+{
+    return m_defaultInvertedColorChanged;
 }
 
 Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const

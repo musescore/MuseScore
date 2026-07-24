@@ -45,6 +45,7 @@ static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/bac
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
 static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
+static const Settings::Key INVERTED_FOREGROUND_COLOR(module_name, "ui/canvas/foreground/invertedColor");
 static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
@@ -121,6 +122,14 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
 
 void NotationConfiguration::init()
 {
+    engravingConfiguration()->defaultColorChanged().onReceive(this, [this](const Color&) {
+        m_notationColorChanged.notify();
+    });
+
+    engravingConfiguration()->defaultInvertedColorChanged().onReceive(this, [this](const Color&) {
+        m_notationColorChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -129,6 +138,10 @@ void NotationConfiguration::init()
     if (uiConfiguration()) {
         uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
             m_backgroundChanged.notify();
+            if (scoreInversionEnabled() && isOnlyInvertInDarkTheme()) {
+                m_foregroundChanged.notify();
+                m_notationColorChanged.notify();
+            }
         });
     }
 
@@ -167,16 +180,23 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
+    settings()->setDefaultValue(INVERTED_FOREGROUND_COLOR, Val(QColor("#141416")));
+    settings()->valueChanged(INVERTED_FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
+    });
+
     settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
     settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
         m_isOnlyInvertInDarkThemeChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
@@ -349,10 +369,24 @@ void NotationConfiguration::init()
 QColor NotationConfiguration::notationColor() const
 {
     if (shouldInvertScore()) {
-        return engravingConfiguration()->scoreInversionColor().toQColor();
+        return engravingConfiguration()->defaultInvertedColor().toQColor();
     }
 
     return engravingConfiguration()->defaultColor().toQColor();
+}
+
+void NotationConfiguration::setNotationColor(const QColor& color)
+{
+    if (shouldInvertScore()) {
+        engravingConfiguration()->setDefaultInvertedColor(color);
+    } else {
+        engravingConfiguration()->setDefaultColor(color);
+    }
+}
+
+muse::async::Notification NotationConfiguration::notationColorChanged() const
+{
+    return m_notationColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const
@@ -439,7 +473,7 @@ muse::async::Notification NotationConfiguration::backgroundChanged() const
 QColor NotationConfiguration::foregroundColor() const
 {
     if (shouldInvertScore()) {
-        return QColorConstants::Black;
+        return settings()->value(INVERTED_FOREGROUND_COLOR).toQColor();
     }
 
     return settings()->value(FOREGROUND_COLOR).toQColor();
@@ -447,7 +481,11 @@ QColor NotationConfiguration::foregroundColor() const
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
 {
-    settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    if (shouldInvertScore()) {
+        settings()->setSharedValue(INVERTED_FOREGROUND_COLOR, Val(color));
+    } else {
+        settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    }
 }
 
 muse::io::path_t NotationConfiguration::foregroundWallpaperPath() const
@@ -491,6 +529,7 @@ void NotationConfiguration::setForegroundUseColor(bool value)
 void NotationConfiguration::resetForeground()
 {
     settings()->setSharedValue(FOREGROUND_COLOR, settings()->defaultValue(FOREGROUND_COLOR));
+    settings()->setSharedValue(INVERTED_FOREGROUND_COLOR, settings()->defaultValue(INVERTED_FOREGROUND_COLOR));
     settings()->setSharedValue(FOREGROUND_USE_COLOR, settings()->defaultValue(FOREGROUND_USE_COLOR));
     settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, settings()->defaultValue(FOREGROUND_WALLPAPER_PATH));
     settings()->setSharedValue(INVERT_SCORE_COLOR, settings()->defaultValue(INVERT_SCORE_COLOR));

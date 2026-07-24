@@ -59,7 +59,13 @@ public:
     String iconsFontFamily() const override;
 
     Color defaultColor() const override;
-    Color scoreInversionColor() const override;
+    void setDefaultColor(Color color) override;
+    muse::async::Channel<Color> defaultColorChanged() const override;
+
+    Color defaultInvertedColor() const override;
+    void setDefaultInvertedColor(Color color) override;
+    muse::async::Channel<Color> defaultInvertedColorChanged() const override;
+
     Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
@@ -120,6 +126,8 @@ public:
     bool keepDeadNotesUnchangedOnTranspose() const override;
 
 private:
+    muse::async::Channel<Color> m_defaultColorChanged;
+    muse::async::Channel<Color> m_defaultInvertedColorChanged;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
@@ -133,5 +141,7 @@ private:
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
     bool m_multiVoice = false;
+    Color m_cachedDefaultColor;
+    Color m_cachedDefaultInvertedColor;
 };
 }

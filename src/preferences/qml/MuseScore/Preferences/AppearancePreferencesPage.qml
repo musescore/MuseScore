@@ -119,7 +119,9 @@ PreferencesPage {
             scoreInversionEnabled: appearanceModel.scoreInversionEnabled
             isOnlyInvertInDarkTheme: appearanceModel.isOnlyInvertInDarkTheme
             isCurrentThemeDark: appearanceModel.isCurrentThemeDark
+            engravingColor: appearanceModel.engravingColor
 
+            colorAndWallpaper.colorLabel: qsTrc("preferences", "Page color")
             colorAndWallpaper.useColor: appearanceModel.foregroundUseColor
             colorAndWallpaper.color: appearanceModel.foregroundColor
             colorAndWallpaper.wallpaperPath: appearanceModel.foregroundWallpaperPath
@@ -135,6 +137,10 @@ PreferencesPage {
 
             onIsOnlyInvertInDarkThemeChangeRequested: function(enable) {
                 appearanceModel.isOnlyInvertInDarkTheme = enable
+            }
+
+            onEngravingColorChangeRequested: function(newColor) {
+                appearanceModel.engravingColor = newColor
             }
 
             colorAndWallpaper.onUseColorChangeRequested: function(newValue) {
