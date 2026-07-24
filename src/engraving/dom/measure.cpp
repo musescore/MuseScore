@@ -2583,17 +2583,17 @@ bool Measure::isOnlyRests(track_idx_t track) const
 }
 
 //---------------------------------------------------------
-//   isOnlyDeletedRests
+//   isOnlyGapRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyDeletedRests(track_idx_t track) const
+bool Measure::isOnlyGapRests(track_idx_t track) const
 {
     static const SegmentType st { SegmentType::ChordRest };
     for (const Segment* s = first(st); s; s = s->next(st)) {
         if (s->segmentType() != st || !s->element(track)) {
             continue;
         }
-        if (s->element(track)->isRest() ? !toRest(s->element(track))->isGap() : !s->element(track)->isRest()) {
+        if (!s->element(track)->isRest() || !toRest(s->element(track))->isGap()) {
             return false;
         }
     }
