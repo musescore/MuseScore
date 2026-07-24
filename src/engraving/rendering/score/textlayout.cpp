@@ -53,6 +53,8 @@ void TextLayout::layoutBaseTextBase(TextBase* item, LayoutContext&)
 
 void TextLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ldata)
 {
+    TRACEFUNC;
+
     if (item->explicitParent() && item->layoutToParentWidth()) {
         LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
     }

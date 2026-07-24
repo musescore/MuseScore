@@ -361,7 +361,9 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
         }
     }
 
-    m_text->renderer()->layoutText1(m_text);
+    if (editing()) {
+        m_text->renderer()->layoutText1(m_text);
+    }
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
