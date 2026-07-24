@@ -1880,9 +1880,6 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::v
             }
         }
         for (SpannerSegment* ss : segments) {
-            if (!ss->offset().isNull()) {
-                continue;
-            }
             const double& staffY = ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
             if (staffY > -DBL_MAX) {
                 ss->mutldata()->setPosY(staffY);
@@ -2631,11 +2628,6 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
 
 bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system)
 {
-    if (item->offset().y() != item->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
-        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
-        return false;
-    }
-
     const Part* itemPart = item->part();
     IF_ASSERT_FAILED(itemPart) {
         return false;
@@ -2695,11 +2687,6 @@ bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, con
 
 bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system)
 {
-    if (wbar->offset().y() != wbar->propertyDefault(Pid::OFFSET).value<PointF>().y()) {
-        // NOTE: because of current limitations of the offset system, we can't center an element that's been manually moved.
-        return false;
-    }
-
     staff_idx_t staffIdx = wbar->staffIdx();
     Staff* thisStaff = wbar->staff();
     Staff* nextStaff = wbar->score()->staff(staffIdx + 1);
@@ -2760,7 +2747,7 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     const double minHorizontalClearance = system->style().styleAbsolute(Sid::skylineMinHorizontalClearance);
 
     Shape elementShape = element->ldata()->shape()
-                         .translated(PointF(elementXinSystemCoord, element->y()))
+                         .translated(PointF(elementXinSystemCoord, element->ldata()->pos().y()))
                          .adjust(-minHorizontalClearance, 0.0, minHorizontalClearance, 0.0);
     elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
