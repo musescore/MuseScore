@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "actions/actiontypes.h"
+#include "log.h"
 
 using namespace mu::project;
 using namespace muse::actions;
@@ -47,6 +48,35 @@ void ScoresPageModel::openOther()
 void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(QUrl::fromLocalFile(scorePath), displayNameOverride));
+}
+
+void ScoresPageModel::revealInFileBrowser(const QString& scorePath)
+{
+    muse::Ret ret = platformInteractive()->revealInFileBrowser(scorePath);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+}
+
+void ScoresPageModel::viewOnline(int scoreId)
+{
+    if (scoreId <= 0) {
+        return;
+    }
+
+    muse::RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    if (!scoreInfo.ret) {
+        LOGE() << scoreInfo.ret.toString();
+        return;
+    }
+
+    QUrl scoreUrl = QUrl::fromUserInput(scoreInfo.val.url);
+    if (!scoreUrl.isValid() || scoreUrl.isEmpty()) {
+        LOGE() << "Invalid score URL for cloud score" << scoreId << ":" << scoreInfo.val.url;
+        return;
+    }
+
+    platformInteractive()->openUrl(scoreUrl);
 }
 
 void ScoresPageModel::openScoreManager()
