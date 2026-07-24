@@ -713,7 +713,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     if (ctx.dom().nstaves() == 1) {
-        // One staff, show iff not manually hidden score-wide
+        // One staff, show if not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
         system->setHasStaffVisibilityIndicator(false);
