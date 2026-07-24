@@ -141,5 +141,7 @@ private:
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
     bool m_multiVoice = false;
+    Color m_cachedDefaultColor;
+    Color m_cachedDefaultInvertedColor;
 };
 }
