@@ -52,6 +52,20 @@ void BrailleConfigurationStub::setIntervalDirection(const BrailleIntervalDirecti
 {
 }
 
+muse::async::Notification BrailleConfigurationStub::voiceOrderChanged() const
+{
+    return {};
+}
+
+BrailleVoiceOrder BrailleConfigurationStub::voiceOrder() const
+{
+    return {};
+}
+
+void BrailleConfigurationStub::setVoiceOrder(const BrailleVoiceOrder)
+{
+}
+
 muse::async::Notification BrailleConfigurationStub::brailleTableChanged() const
 {
     return {};

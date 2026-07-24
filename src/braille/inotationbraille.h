@@ -43,11 +43,13 @@ public:
     virtual muse::ValCh<std::string> keys() const = 0;
     virtual muse::ValCh<bool> enabled() const = 0;
     virtual muse::ValCh<BrailleIntervalDirection> intervalDirection() const = 0;
+    virtual muse::ValCh<BrailleVoiceOrder> voiceOrder() const = 0;
     virtual muse::ValCh<int> mode() const = 0;
     virtual muse::ValCh<std::string> cursorColor() const = 0;
 
     virtual void setEnabled(const bool enabled) = 0;
     virtual void setIntervalDirection(const BrailleIntervalDirection direction) = 0;
+    virtual void setVoiceOrder(const BrailleVoiceOrder order) = 0;
 
     virtual void setCursorPosition(const int pos) = 0;
     virtual void setCurrentItemPosition(const int, const int) = 0;
