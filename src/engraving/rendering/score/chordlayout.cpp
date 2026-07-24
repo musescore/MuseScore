@@ -69,6 +69,7 @@
 #include "slurtielayout.h"
 #include "stemlayout.h"
 #include "systemlayout.h"
+#include "tablaturegeometry.h"
 #include "tlayout.h"
 #include "tremololayout.h"
 
@@ -375,8 +376,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         note->updateFrettingForTiesAndBends();
         ChordLayout::setDotRelativeLine(note, 0, ctx);
         TLayout::layoutNote(note, note->mutldata());
-        // set headWidth to max fret text width
-        double fretWidth = note->ldata()->bbox().width();
+        // set headWidth to max fret text width (not bbox which may include circle)
+        double fretWidth = note->tabHeadWidth(tab);
         if (headWidth < fretWidth) {
             headWidth = fretWidth;
         }
@@ -458,16 +459,52 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         headWidth += extraLen;            // include ledger lines extra width in chord width
     }
 
-    // horiz. spacing: leave half width at each side of the (potential) stem
+    // horiz. spacing: use actual note bbox extent (includes circles if present)
     double halfHeadWidth = headWidth * 0.5;
-    if (lll < stemX - halfHeadWidth) {
-        lll = stemX - halfHeadWidth;
+    double chordLeftExtent = stemX - halfHeadWidth;
+    for (Note* note : item->notes()) {
+        double noteLeft = note->pos().x() + note->ldata()->bbox().left();
+        chordLeftExtent = std::min(chordLeftExtent, noteLeft);
     }
-    if (rrr < stemX + halfHeadWidth) {
-        rrr = stemX + halfHeadWidth;
+    if (lll < -chordLeftExtent) {
+        lll = -chordLeftExtent;
     }
-    // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
-    item->setDotPosX(headWidth);
+    double chordRightExtent = stemX + halfHeadWidth;
+    for (Note* note : item->notes()) {
+        double noteRight = note->pos().x() + note->ldata()->bbox().right();
+        chordRightExtent = std::max(chordRightExtent, noteRight);
+    }
+    if (rrr < chordRightExtent) {
+        rrr = chordRightExtent;
+    }
+    // align dots to the widest note extent (not needed in all TAB styles, but harmless anyway)
+    item->setDotPosX(chordRightExtent);
+
+    // Precompute visible circle arc ranges now that every note has its final
+    // position and circle geometry, so drawing does not re-sample the ellipse on
+    // each repaint. Depends on circle geometry, adjacent-note positions and line
+    // width, all settled at this point.
+    for (Note* note : item->notes()) {
+        Note::LayoutData* nld = note->mutldata();
+        if (!nld->hasTabCircle.value()) {
+            nld->tabCircleArcs.set_value({});
+            continue;
+        }
+        std::vector<RectF> adjacentRects;
+        for (const Note* other : item->notes()) {
+            if (other != note && other->ldata()->hasTabCircle.value()) {
+                RectF rect = other->ldata()->tabCircleRect.value();
+                rect.translate(other->pos() - note->pos());
+                adjacentRects.push_back(rect);
+            }
+        }
+        std::vector<PairF> arcs;
+        for (const ArcRange& arc : computeVisibleArcRanges(nld->tabCircleRect.value(), adjacentRects,
+                                                           nld->tabCircleLineWidth.value())) {
+            arcs.push_back({ arc.startAngleRadians, arc.endAngleRadians });
+        }
+        nld->tabCircleArcs.set_value(std::move(arcs));
+    }
 
     if (item->shouldHaveStem()) {
         // if stem is required but missing, add it;

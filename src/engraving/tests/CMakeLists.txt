@@ -84,6 +84,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stavesharing_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system_locks_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system_dividers_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tablature_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization

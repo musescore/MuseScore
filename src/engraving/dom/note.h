@@ -460,6 +460,14 @@ public:
         ld_field<SymId> cachedSymNull = { "[Note] cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
         ld_field<bool> mirror = { "[Note] mirror", false };                                  // True if note is mirrored at stem.
         ld_field<bool> hasGeneratedParens = { "[Note] hasGeneratedParens", false };          // Should generated parens be created
+
+        // Tablature circle for CIRCLED minim style
+        ld_field<bool> hasTabCircle = { "[Note] hasTabCircle", false };
+        ld_field<RectF> tabCircleRect = { "[Note] tabCircleRect", RectF() };
+        ld_field<double> tabCircleLineWidth = { "[Note] tabCircleLineWidth", 0.0 };
+        // Precomputed visible arc ranges of the circle (occlusion by adjacent notes' circles).
+        // Each pair is { startAngleRadians, endAngleRadians }; recomputed during chord layout.
+        ld_field<std::vector<PairF> > tabCircleArcs = { "[Note] tabCircleArcs", {} };
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
 
