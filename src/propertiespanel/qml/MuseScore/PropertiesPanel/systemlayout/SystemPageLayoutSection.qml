@@ -35,7 +35,7 @@ import "."
 PropertiesPanelSection {
     id: root
 
-    required property SystemLayoutSettingsModel model
+    required property SystemPageLayoutSettingsModel model
 
     implicitHeight: contentColumn.implicitHeight
 
