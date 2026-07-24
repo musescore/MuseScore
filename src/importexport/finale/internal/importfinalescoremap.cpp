@@ -1630,10 +1630,13 @@ void FinaleParser::importPageLayout()
                 pageFrame->setNext(afterBlank);
                 pageFrame->setPrev(prev);
                 m_score->measures()->insert(pageFrame, pageFrame);
-                LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
-                lb->setLayoutBreakType(LayoutBreakType::PAGE);
-                pageFrame->add(lb);
-                prev = pageFrame;
+                if (importCustomPositions()) {
+                    m_score->addPageLock(new RangeLock(pageFrame, pageFrame));
+                } else {
+                    LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
+                    lb->setLayoutBreakType(LayoutBreakType::PAGE);
+                    pageFrame->add(lb);
+                }
             }
         }
     }
@@ -1641,21 +1644,29 @@ void FinaleParser::importPageLayout()
         VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         m_score->measures()->append(pageFrame);
-        LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
-        lb->setLayoutBreakType(LayoutBreakType::PAGE);
-        pageFrame->add(lb);
+        if (importCustomPositions()) {
+            m_score->addPageLock(new RangeLock(pageFrame, pageFrame));
+        } else {
+            LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
+            lb->setLayoutBreakType(LayoutBreakType::PAGE);
+            pageFrame->add(lb);
+        }
     }
 
     // No measures or staves means no valid staff systems
     if (!m_score->firstMeasure() || m_score->noStaves()) {
         return;
     }
+
     const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
     std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
     const double scoreSpatium = m_score->style().spatium();
     const double defaultSpatium = m_score->style().defaultSpatium();
+
+    MeasureBase* firstOnPage = nullptr;
+
     for (size_t i = 0; i < staffSystems.size(); ++i) {
         const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
         MusxInstance<others::StaffSystem> rightStaffSystem = staffSystems[i];
@@ -1667,7 +1678,8 @@ void FinaleParser::importPageLayout()
         // Determine if system is first on the page
         // Determine the current page the staffsystem is on
         const MusxInstance<others::Page> page = leftStaffSystem->getPage();
-        const bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
+        const bool isFirstSystemOnPage = page->firstSystemId == leftStaffSystem->getCmper();
+        const bool isLastSystemOnPage = page->lastSystemId.has_value() && page->lastSystemId.value() == leftStaffSystem->getCmper();
 
         // Compute system scaling factors
         /// @note Distances between staves and the bottom system margin use system scaling, everything else uses page scaling.
@@ -1727,13 +1739,19 @@ void FinaleParser::importPageLayout()
         // Lock measures in system, to guarantee we end up with the correct measure distribution
         m_score->addSystemLock(new RangeLock(sysStart, sysEnd));
 
-        // Calculate if this is the last system on the page and add a page break if needed
-        const bool isLastSystemInScore = i + 1 >= staffSystems.size();
-        const bool isLastSystemOnPage = isLastSystemInScore || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
-        if (isLastSystemOnPage && (!isLastSystemInScore || m_score->last()->isVBox())) {
-            LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
-            lb->setLayoutBreakType(LayoutBreakType::PAGE);
-            sysEnd->add(lb);
+        // Lock systems on page
+        if (isFirstSystemOnPage) {
+            firstOnPage = sysStart;
+        }
+        if (isLastSystemOnPage) {
+            if (importCustomPositions() && firstOnPage) {
+                m_score->addPageLock(new RangeLock(firstOnPage, sysEnd));
+            } else if (i + 1 < staffSystems.size() || m_score->last()->isVBox()) {
+                LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
+                lb->setLayoutBreakType(LayoutBreakType::PAGE);
+                sysEnd->add(lb);
+            }
+            firstOnPage = nullptr;
         }
 
         // If following measure should show full instrument names, add section break to sysEnd

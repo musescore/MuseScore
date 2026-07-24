@@ -1838,12 +1838,14 @@ void FinaleParser::importPageTexts()
                     if (MeasureBase* presentBase = muse::value(topBoxes, page->pageNumber(), nullptr)) {
                         return presentBase;
                     }
-                    System* system = page->systems().front();
-                    if (system && system->vbox()) {
-                        topBoxes.emplace(page->pageNumber(), system->first());
-                        return system->first();
+
+                    if (page->firstMeasureBase() && page->firstMeasureBase()->isVBox()) {
+                        topBoxes.emplace(page->pageNumber(), page->firstMeasureBase());
+                        return page->firstMeasureBase();
                     }
+
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    System* system = page->systems().front();
                     double distToTopStaff = 0.0;
                     if (system) {
                         pageFrame->setTick(system->first()->tick());
@@ -1857,6 +1859,10 @@ void FinaleParser::importPageTexts()
                     } else {
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
+                    }
+                    if (page->pageLock()) {
+                        m_score->removePageLock(page->pageLock());
+                        m_score->addPageLock(new RangeLock(pageFrame, page->lastMeasureBase() ? page->lastMeasureBase() : pageFrame));
                     }
                     if (importCustomPositions()) {
                         rendering::score::LayoutContext pgctx(score());
@@ -1888,12 +1894,12 @@ void FinaleParser::importPageTexts()
                     if (MeasureBase* presentBase = muse::value(bottomBoxes, page->pageNumber(), nullptr)) {
                         return presentBase;
                     }
-                    System* system = page->systems().back();
-                    if (system && system->vbox()) {
-                        bottomBoxes.emplace(page->pageNumber(), system->first());
-                        return system->last();
+                    if (page->lastMeasureBase() && page->lastMeasureBase()->isVBox()) {
+                        bottomBoxes.emplace(page->pageNumber(), page->lastMeasureBase());
+                        return page->lastMeasureBase();
                     }
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                    System* system = page->systems().back();
                     double distToBottomStaff = 0.0;
                     if (system) {
                         pageFrame->setTick(system->last()->endTick());
@@ -1915,6 +1921,10 @@ void FinaleParser::importPageTexts()
                     } else {
                         pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
                         m_score->measures()->append(pageFrame);
+                    }
+                    if (page->pageLock()) {
+                        m_score->removePageLock(page->pageLock());
+                        m_score->addPageLock(new RangeLock(page->firstMeasureBase() ? page->firstMeasureBase() : pageFrame, pageFrame));
                     }
                     if (importCustomPositions()) {
                         /// @todo check scaling on this
