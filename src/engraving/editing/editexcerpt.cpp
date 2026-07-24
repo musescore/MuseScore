@@ -28,8 +28,8 @@ using namespace mu::engraving;
 //   AddExcerpt
 //---------------------------------------------------------
 
-AddExcerpt::AddExcerpt(Excerpt* ex)
-    : excerpt(ex)
+AddExcerpt::AddExcerpt(Excerpt* ex, bool initIfNeeded)
+    : excerpt(ex), m_initIfNeeded(initIfNeeded)
 {}
 
 AddExcerpt::~AddExcerpt()
@@ -49,7 +49,7 @@ void AddExcerpt::undo()
 void AddExcerpt::redo()
 {
     deleteExcerpt = false;
-    excerpt->masterScore()->addExcerpt(excerpt);
+    excerpt->masterScore()->addExcerpt(excerpt, muse::nidx, m_initIfNeeded);
 }
 
 std::vector<EngravingObject*> AddExcerpt::objectItems() const
@@ -68,7 +68,7 @@ std::vector<EngravingObject*> AddExcerpt::objectItems() const
 //---------------------------------------------------------
 
 RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
-    : excerpt(ex)
+    : excerpt(ex), m_initIfNeeded(ex->inited())
 {
     index = muse::indexOf(excerpt->masterScore()->excerpts(), excerpt);
 }
@@ -84,7 +84,7 @@ RemoveExcerpt::~RemoveExcerpt()
 void RemoveExcerpt::undo()
 {
     deleteExcerpt = false;
-    excerpt->masterScore()->addExcerpt(excerpt, index);
+    excerpt->masterScore()->addExcerpt(excerpt, index, m_initIfNeeded);
 }
 
 void RemoveExcerpt::redo()

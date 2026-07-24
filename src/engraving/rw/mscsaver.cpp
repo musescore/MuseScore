@@ -97,13 +97,11 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 ByteArray scoreData;
             };
 
-            auto serializeExcerpt = [masterWriteOutData, score](Excerpt* excerpt, size_t excerptIndex) -> ExcerptData {
+            auto serializeExcerpt = [masterWriteOutData, score](Excerpt* excerpt) -> ExcerptData {
                 Score* partScore = excerpt->excerptScore();
                 IF_ASSERT_FAILED(partScore && partScore != score) {
                     return ExcerptData();
                 }
-
-                excerpt->updateFileName(excerptIndex);
 
                 ExcerptData data;
                 data.fileName = excerpt->fileName();
@@ -125,9 +123,19 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
 
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
                 Excerpt* excerpt = excerpts.at(excerptIndex);
+                excerpt->updateFileName(excerptIndex);
 
-                futures.push_back(std::async(std::launch::async, [serializeExcerpt, excerpt, excerptIndex]() {
-                    return serializeExcerpt(excerpt, excerptIndex);
+                // Uninitialised excerpts have no excerptScore - write minimal XML
+                if (!excerpt->excerptScore()) {
+                    ByteArray excerptData;
+                    auto excerptBuf = Buffer::opened(IODevice::WriteOnly, &excerptData);
+                    RWRegister::writer()->writeUninitExcerpt(excerpt, &excerptBuf);
+                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
+                    continue;
+                }
+
+                futures.push_back(std::async(std::launch::async, [serializeExcerpt, excerpt]() {
+                    return serializeExcerpt(excerpt);
                 }));
             }
 
@@ -141,8 +149,18 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
 #else
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
                 Excerpt* excerpt = excerpts.at(excerptIndex);
+                excerpt->updateFileName(excerptIndex);
 
-                ExcerptData data = serializeExcerpt(excerpt, excerptIndex);
+                // Uninitialised excerpts have no excerptScore - write minimal XML
+                if (!excerpt->excerptScore()) {
+                    ByteArray excerptData;
+                    auto excerptBuf = Buffer::opened(IODevice::WriteOnly, &excerptData);
+                    RWRegister::writer()->writeUninitExcerpt(excerpt, &excerptBuf);
+                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
+                    continue;
+                }
+
+                ExcerptData data = serializeExcerpt(excerpt);
                 mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
                 mscWriter.addExcerptFile(data.fileName, data.scoreData);
             }

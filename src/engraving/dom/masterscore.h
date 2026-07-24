@@ -166,7 +166,7 @@ public:
     Fraction loopBoundaryTick(LoopBoundaryType type) const;
     void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
-    void addExcerpt(Excerpt*, size_t index = muse::nidx);
+    void addExcerpt(Excerpt*, size_t index = muse::nidx, bool initIfNeeded = true);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
 

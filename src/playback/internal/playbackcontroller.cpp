@@ -1417,6 +1417,9 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)
 {
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         if (const INotationPtr& notation = excerpt->notation()) {
             if (notation == m_notation || notation->soloMuteState()->trackSoloMuteStateExists(instrumentTrackId)) {
                 continue;

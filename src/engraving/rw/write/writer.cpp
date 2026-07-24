@@ -23,6 +23,8 @@
 
 #include "../types/types.h"
 
+#include "global/serialization/xmlstreamwriter.h"
+
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/part.h"
@@ -282,6 +284,48 @@ void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t 
     ctx.setCurTick(curTick);
     TWrite::writeSegments(xml, ctx, strack, etrack, sseg, eseg, writeSystemElements, forceTimeSig);
     curTick = ctx.curTick();
+}
+
+bool Writer::writeUninitExcerpt(Excerpt* excerpt, io::IODevice* device)
+{
+    XmlStreamWriter xml(device);
+    xml.startDocument();
+
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
+    xml.startElement("Score");
+
+    // Mark as uninitialised excerpt
+    xml.element("initialised", 0);
+
+    // Write name if not empty
+    if (!excerpt->name().empty()) {
+        xml.element("name", excerpt->name());
+    }
+
+    // Write tracks mapping
+    const TracksMap& tracks = excerpt->tracksMapping();
+    if (!tracks.empty()) {
+        for (auto it = tracks.cbegin(); it != tracks.cend(); ++it) {
+            xml.element("Tracklist", { { "sTrack", String::number(it->first) },
+                            { "dstTrack", String::number(it->second) } });
+        }
+    }
+
+    // Write initialPartId if set
+    if (excerpt->initialPartId().isValid()) {
+        xml.element("initialPartId", excerpt->initialPartId().toUint64());
+    }
+
+    // Write parts (as Part element with id attribute)
+    for (const Part* part : excerpt->parts()) {
+        xml.element("Part", { { "id", part->id().toUint64() } });
+    }
+
+    xml.endElement();  // Score
+    xml.endElement();  // museScore
+    xml.flush();
+
+    return true;
 }
 
 void Writer::doWriteItem(const EngravingItem* item, XmlWriter& xml)

@@ -211,14 +211,22 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     engraving::Transpose::transpositionChanged(tx, score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
 
     if (isMainInstrument) {
-        if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
+        mu::engraving::Excerpt* excerpt = findExcerpt(part->id());
+        if (excerpt) {
             StringList allExcerptLowerNames;
-            for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
-                allExcerptLowerNames.push_back(excerpt2->name().toLower());
+            for (const mu::engraving::Excerpt* ex : score()->masterScore()->excerpts()) {
+                if (ex == excerpt) {
+                    continue;
+                }
+                allExcerptLowerNames.push_back(ex->name().toLower());
             }
-
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
-            excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
+
+            // Use masterScore undo stack for uninitialised excerpts, excerptScore for initialised
+            mu::engraving::Score* undoScore = excerpt->excerptScore()
+                                              ? excerpt->excerptScore()
+                                              : static_cast<mu::engraving::Score*>(score()->masterScore());
+            undoScore->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
         }
     }
 
@@ -240,6 +248,24 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
     endGlobalEdit();
 }
 
+void MasterNotationParts::onPartsAdded(const std::vector<Part*>& parts)
+{
+    // During initial score setup, addExcerptsToMasterScore handles excerpt creation
+    if (m_skipExcerptCreation) {
+        return;
+    }
+
+    mu::engraving::MasterScore* master = score()->masterScore();
+
+    // Create uninitialised excerpts for newly added parts
+    std::vector<mu::engraving::Excerpt*> newExcerpts
+        = mu::engraving::Excerpt::createExcerptsFromParts(parts, master);
+
+    for (mu::engraving::Excerpt* excerpt : newExcerpts) {
+        master->undo(new mu::engraving::AddExcerpt(excerpt, false));
+    }
+}
+
 void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
 {
     mu::engraving::MasterScore* master = score()->masterScore();
@@ -251,12 +277,17 @@ void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
             continue;
         }
 
-        bool deleteExcerpt = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
+        bool shouldRemove = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
             return part->id() == initialPartId;
         }) != parts.cend();
 
-        if (deleteExcerpt) {
-            master->deleteExcerpt(excerpt);
+        if (shouldRemove) {
+            if (excerpt->inited()) {
+                // deleteExcerpt unlinks staves before pushing RemoveExcerpt onto the undo stack
+                master->deleteExcerpt(excerpt);
+            } else {
+                master->undo(new mu::engraving::RemoveExcerpt(excerpt));
+            }
         }
     }
 }
@@ -331,6 +362,10 @@ std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
     std::vector<INotationPartsPtr> result;
 
     for (const IExcerptNotationPtr& excerpt : m_excerpts) {
+        // Skip uninitialised excerpts (no score)
+        if (!excerpt->isInited()) {
+            continue;
+        }
         result.push_back(excerpt->notation()->parts());
     }
 

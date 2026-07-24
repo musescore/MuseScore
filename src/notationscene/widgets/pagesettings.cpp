@@ -345,6 +345,9 @@ void PageSettings::applyToAllParts()
         return;
     }
     for (Excerpt* e : score()->masterScore()->excerpts()) {
+        if (!e->excerptScore()) {
+            continue;
+        }
         applyToScore(e->excerptScore());
     }
     _changeFlag = false;
