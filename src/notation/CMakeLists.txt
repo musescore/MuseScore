@@ -50,6 +50,14 @@ target_sources(notation PRIVATE
     iinstrumentsrepository.h
 
     notationtypes.h
+    types/instrumentstypes.h
+    types/loopboundaries.h
+    types/noteinputtypes.h
+    types/propertystyletypes.h
+    types/scorecreateoptions.h
+    types/staffparttypes.h
+    types/stringtunings.h
+    types/tempo.h
     types/viewmode.h
     types/zoomtype.h
 
@@ -136,6 +144,7 @@ if(NOT OS_IS_WASM)
 endif()
 
 target_link_libraries(notation PRIVATE
+    Qt::Widgets # for QApplication::cursorFlashTime() in notationinteraction.cpp
     muse::draw
     engraving
 )

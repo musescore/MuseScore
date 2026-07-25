@@ -1447,8 +1447,10 @@
         <voice>
           <Spanner type="Pedal">
             <Pedal>
-              <endHookType>1</endHookType>
               <beginHookType>1</beginHookType>
+              <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>BE_BE</eid>
               </Pedal>
             <next>

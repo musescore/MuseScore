@@ -39,6 +39,7 @@
 #include "../ipalettescoreprovider.h"
 #include "../iengravingcontextconfiguration.h"
 
+#include "../automation/automationtypes_fwd.h"
 #include "../types/constants.h"
 
 #include "../rendering/iscorerenderer.h"
@@ -62,7 +63,7 @@
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"
-#include "systemlock.h"
+#include "rangelock.h"
 #include "tuplet.h"
 
 namespace mu::engraving {
@@ -148,8 +149,6 @@ class UndoStack;
 
 class ShadowNote;
 
-class IAutomation;
-
 struct Interval;
 struct NoteVal;
 struct ShowAnchors;
@@ -170,28 +169,6 @@ enum class LoopBoundaryType : signed char {
     LoopOut = 1
 };
 
-enum class Pad : char {
-    NOTE00,
-    NOTE0,
-    NOTE1,
-    NOTE2,
-    NOTE4,
-    NOTE8,
-    NOTE16,
-    NOTE32,
-    NOTE64,
-    NOTE128,
-    NOTE256,
-    NOTE512,
-    NOTE1024,
-    //--------------------
-    REST,
-    DOT,
-    DOT2,
-    DOT3,
-    DOT4
-};
-
 struct Position {
     Segment* segment = nullptr;
     staff_idx_t staffIdx = muse::nidx;
@@ -199,11 +176,6 @@ struct Position {
     int fret = INVALID_FRET_INDEX;
     PointF pos;
     bool beyondScore = false;
-};
-
-struct NoteInputParams {
-    int step = 0;
-    int drumPitch = -1;
 };
 
 struct ShowAnchors {
@@ -489,7 +461,7 @@ public:
     void cmdFullMeasureRest();
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
-    void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
+    void endCmd(bool rollback = false, bool layoutAllParts = false, bool keepRolledBackElements = false); // end undoable command
     void update();
     void undoRedo(bool undo, EditData*);
 
@@ -889,10 +861,14 @@ public:
 
     void autoUpdateSpatium();
 
-    const SystemLocks* systemLocks() const { return &m_systemLocks; }
-    void addSystemLock(const SystemLock* lock);
-    void removeSystemLock(const SystemLock* lock);
+    const RangeLocks* systemLocks() const { return &m_systemLocks; }
+    void addSystemLock(const RangeLock* lock);
+    void removeSystemLock(const RangeLock* lock);
     void clearSystemLocks() { m_systemLocks.clear(); }
+
+    const RangeLocks* pageLocks() const { return &m_pageLocks; }
+    void addPageLock(const RangeLock* lock);
+    void removePageLock(const RangeLock* lock);
 
     void rebuildFretBox();
 
@@ -900,9 +876,11 @@ public:
     SystemDivider* systemDivider(size_t systemIdx, SystemDividerType type) const;
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
-    virtual IAutomation* automation() const;
+    virtual AutomationDataConstPtr automationData() const;
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
 
 protected:
+    virtual void onTimeInserted(const Fraction& tick, const Fraction& len);
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);
@@ -984,7 +962,9 @@ private:
     std::vector<Part*> m_parts;
     std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
-    SystemLocks m_systemLocks;
+    RangeLocks m_systemLocks;
+
+    RangeLocks m_pageLocks;
 
     SpannerMap m_spanner;
     std::set<Spanner*> m_unmanagedSpanner;

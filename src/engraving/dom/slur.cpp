@@ -196,12 +196,12 @@ bool SlurSegment::edit(EditData& ed)
             }
         }
     } else if (ed.key == Key_Up) {
-        track_idx_t startTrack = e->part()->startTrack();
+        track_idx_t startTrack = e->part()->trackRange().startTrack;
         track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
     } else if (ed.key == Key_Down) {
         track_idx_t startTrack = e->track() + 1;
-        track_idx_t endTrack   = e->part()->endTrack();
+        track_idx_t endTrack   = e->part()->trackRange().endTrack;
         cr = searchCR(e->segment(), startTrack, endTrack);
     } else {
         return false;

@@ -33,6 +33,7 @@ using namespace mu::context;
 static const std::string NAVIGATION_SCOPE = "NAVIGATION";
 static const std::string PLAYBACK_SCOPE = "PLAYBACK";
 static const std::string NOTATION_SCOPE = "NOTATION";
+static const std::string NOTATION_NOTE_INPUT_SCOPE = "NOTATION_NOTE_INPUT";
 static const std::string NOTATION_TEXT_EDITING_SCOPE = "NOTATION_TEXT_EDITING";
 
 static const QString NOTATION_PANEL_NAME("ScoreView");
@@ -44,7 +45,8 @@ int ShortcutResolver::scopePriority(const std::string& scope) const
             { NAVIGATION_SCOPE, []() { return 1; } },
             { PLAYBACK_SCOPE, []() { return 2; } },
             { NOTATION_SCOPE, [this]() { return isNotationFocused() ? 3 : -1; } },
-            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocused() ? 4 : -1; } },
+            { NOTATION_NOTE_INPUT_SCOPE, [this]() { return isNotationFocusedAndNoteInputMode() ? 4 : -1; } },
+            { NOTATION_TEXT_EDITING_SCOPE, [this]() { return isNotationFocused() ? 5 : -1; } },
         };
     }
 
@@ -59,6 +61,11 @@ bool ShortcutResolver::isNotationFocused() const
 {
     auto activePanel = navigationController()->activePanel();
     return activePanel && activePanel->name() == NOTATION_PANEL_NAME;
+}
+
+bool ShortcutResolver::isNotationFocusedAndNoteInputMode() const
+{
+    return isNotationFocused() && notationCommandsController()->isNoteInputMode();
 }
 
 Shortcut ShortcutResolver::selectOne(const ShortcutList& list) const

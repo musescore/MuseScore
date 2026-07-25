@@ -51,6 +51,7 @@
 #include "engraving/dom/whammybar.h"
 #include "engraving/types/symid.h"
 #include "engraving/types/typesconv.h"
+#include "engraving/dom/layoutbreak.h"
 
 #include "palette.h"
 #include "palettecell.h"
@@ -234,7 +235,7 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
     }
 
     if (palette.type() == Palette::Type::Layout) {
-        addNewLayoutItems(palette);
+        addNewLayoutItems(palette, paletteScore);
         return;
     }
 
@@ -457,9 +458,11 @@ void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* 
     }
 }
 
-void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
+void PaletteCompat::addNewLayoutItems(Palette& layoutPalette, engraving::Score* paletteScore)
 {
     bool containsFFrame = false;
+    bool containsLock = false;
+    bool containsNoBreak = false;
     for (const PaletteCellPtr& cell : layoutPalette.cells()) {
         const ElementPtr element = cell->element;
         if (!element) {
@@ -469,11 +472,29 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
         if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::FFRAME) {
             containsFFrame = true;
         }
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::PAGE_LOCK) {
+            containsLock = true;
+        }
+        if (element->isLayoutBreak() && toLayoutBreak(element.get())->layoutBreakType() == LayoutBreakType::NOBREAK) {
+            containsNoBreak = true;
+        }
     }
 
     if (!containsFFrame) {
         int defaultPosition = std::min(10, layoutPalette.cellsCount());
         layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+    }
+
+    if (!containsNoBreak) {
+        int defaultPosition = std::min(3, layoutPalette.cellsCount());
+        auto lb = Factory::makeLayoutBreak(paletteScore->dummy()->measure());
+        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
+        layoutPalette.insertElement(defaultPosition, lb, TConv::userName(LayoutBreakType::NOBREAK));
+    }
+
+    if (!containsLock) {
+        int defaultPosition = std::min(5, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::PAGE_LOCK, "toggle-page-lock");
     }
 }
 

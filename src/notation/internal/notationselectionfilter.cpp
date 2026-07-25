@@ -22,10 +22,11 @@
 
 #include "notationselectionfilter.h"
 
-#include "log.h"
+#include "engraving/dom/score.h"
 
 using namespace muse;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 NotationSelectionFilter::NotationSelectionFilter(const IGetScore* getScore, const std::function<void()>& selectionChangedCallback)
     : m_getScore(getScore), m_selectionChangedCallback(selectionChangedCallback)

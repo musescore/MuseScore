@@ -24,6 +24,7 @@
 
 #include "notation/inotation.h"
 
+#include "engraving/dom/score.h"
 #include "engraving/editing/transaction/undoablecommand.h"
 #include "engraving/editing/transaction/undostack.h"
 

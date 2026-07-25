@@ -43,7 +43,7 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    std::vector<const SystemLock*> locks = score->systemLocks()->allLocks();
+    std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
     EXPECT_FALSE(locks.empty());
 
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
@@ -54,7 +54,7 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
         EXPECT_TRUE(sys->isLocked());
     }
 
-    for (const SystemLock* lock : locks) {
+    for (const RangeLock* lock : locks) {
         int measureCount = 0;
         for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->next()) {
             ++measureCount;
@@ -70,8 +70,8 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
-    const SystemLocks* systemLocks = score->systemLocks();
-    std::vector<const SystemLock*> allLocks = systemLocks->allLocks();
+    const RangeLocks* systemLocks = score->systemLocks();
+    std::vector<const RangeLock*> allLocks = systemLocks->allLocks();
     EXPECT_FALSE(allLocks.empty());
 
     score->startCmd(TranslatableString::untranslatable("Engraving system locks tests"));
@@ -108,7 +108,7 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
     });
 
     allLocks = systemLocks->allLocks();
-    for (const SystemLock* lock : allLocks) {
+    for (const RangeLock* lock : allLocks) {
         int measureCount = 0;
         for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->next()) {
             ++measureCount;

@@ -259,10 +259,10 @@ muse::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-muse::async::Channel<ScoreChanges> NotationUndoStack::changesChannel() const
+muse::async::Channel<mu::engraving::ScoreChanges> NotationUndoStack::changesChannel() const
 {
     IF_ASSERT_FAILED(score()) {
-        return muse::async::Channel<ScoreChanges>();
+        return muse::async::Channel<engraving::ScoreChanges>();
     }
 
     return score()->changesChannel();

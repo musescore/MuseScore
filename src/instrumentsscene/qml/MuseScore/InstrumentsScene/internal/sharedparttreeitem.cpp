@@ -21,6 +21,8 @@
  */
 #include "sharedparttreeitem.h"
 
+#include "engraving/dom/sharedpart.h"
+
 #include "notation/inotation.h"
 
 using namespace mu::instrumentsscene;

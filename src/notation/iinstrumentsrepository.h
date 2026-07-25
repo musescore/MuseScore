@@ -24,7 +24,8 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "notationtypes.h"
+#include "types/instrumentstypes.h"
+#include "types/stringtunings.h"
 
 namespace mu::notation {
 class IInstrumentsRepository : MODULE_GLOBAL_INTERFACE

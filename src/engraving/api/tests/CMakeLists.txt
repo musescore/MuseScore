@@ -21,13 +21,20 @@
 set(MODULE_TEST engraving_api_tests)
 
 set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/util_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/score_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/spanner_tests.cpp
 )
 
 set(MODULE_TEST_LINK
+    Qt::Qml
     engraving
 )
+
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(SetupGTest)

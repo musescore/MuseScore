@@ -110,8 +110,6 @@
 #include "utils.h"
 #include "volta.h"
 
-#include "engraving/automation/iautomation.h"
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
@@ -271,6 +269,9 @@ Score::~Score()
     muse::DeleteAll(m_systemLocks.allLocks());
     m_systemLocks.clear();
 
+    muse::DeleteAll(m_pageLocks.allLocks());
+    m_pageLocks.clear();
+
     muse::DeleteAll(m_parts);
     m_parts.clear();
 
@@ -329,7 +330,8 @@ Score* Score::clone()
     for (Part* part : m_parts) {
         excerpt->parts().push_back(part);
 
-        for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+        const TrackRange range = part->trackRange();
+        for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
             tracks.insert({ track, track });
         }
     }
@@ -1917,8 +1919,8 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     Fraction tickOfAppend = last()->endTick();
     TieMap tieMap;
 
-    MeasureBase* fmb = score->tick2measureBase(startTick);
-    MeasureBase* emb = score->tick2measureBase(endTick);
+    MeasureBase* fmb = score->tick2measure(startTick);
+    MeasureBase* emb = score->tick2measure(endTick);
     Fraction curTick = tickOfAppend;
     for (MeasureBase* cmb = fmb; cmb != emb; cmb = cmb->next()) {
         MeasureBase* nmb;
@@ -4019,15 +4021,11 @@ void Score::insertTime(const Fraction& tick, const Fraction& len)
         part->insertTime(tick, len);
     }
 
-    if (isMaster() && automation() && !automation()->isEmpty()) {
-        const int utick = repeatList().tick2utick(tick.ticks());
+    onTimeInserted(tick, len);
+}
 
-        if (len.negative()) {
-            automation()->removeTicks(utick + len.ticks(), utick);
-        } else if (len.isNotZero()) {
-            automation()->moveTicks(utick, utick + len.ticks());
-        }
-    }
+void Score::onTimeInserted(const Fraction&, const Fraction&)
+{
 }
 
 //---------------------------------------------------------
@@ -4668,7 +4666,8 @@ std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, c
     std::set<staff_idx_t> result;
 
     for (const Part* part : m_score->parts()) {
-        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+        const TrackRange range = part->trackRange();
+        if (trackTo < range.startTrack || trackFrom >= range.endTrack) {
             continue;
         }
 
@@ -5186,7 +5185,7 @@ void Score::autoUpdateSpatium()
     createPaddingTable();
 }
 
-void Score::addSystemLock(const SystemLock* lock)
+void Score::addSystemLock(const RangeLock* lock)
 {
     m_systemLocks.add(lock);
 
@@ -5194,9 +5193,25 @@ void Score::addSystemLock(const SystemLock* lock)
     lock->endMB()->triggerLayout();
 }
 
-void Score::removeSystemLock(const SystemLock* lock)
+void Score::removeSystemLock(const RangeLock* lock)
 {
     m_systemLocks.remove(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::addPageLock(const RangeLock* lock)
+{
+    m_pageLocks.add(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::removePageLock(const RangeLock* lock)
+{
+    m_pageLocks.remove(lock);
 
     lock->startMB()->triggerLayout();
     lock->endMB()->triggerLayout();
@@ -5378,7 +5393,12 @@ void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
     m_systemDividers.at(systemIdx)[static_cast<size_t>(divider->dividerType())] = divider;
 }
 
-IAutomation* Score::automation() const { return m_masterScore->automation(); }
+AutomationDataConstPtr Score::automationData() const { return m_masterScore->automationData(); }
+
+void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    m_masterScore->editAutomationPoints(key, edits);
+}
 
 TransactionManager* Score::transactionManager() const { return m_masterScore->transactionManager(); }
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }

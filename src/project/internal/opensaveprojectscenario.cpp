@@ -25,6 +25,9 @@
 #include "cloud/clouderrors.h"
 #include "cloud/qml/Muse/Cloud/enums.h"
 #include "engraving/infrastructure/mscio.h"
+#include "translation.h"
+
+#include "inotationproject.h"
 #include "projecterrors.h"
 
 using namespace muse;

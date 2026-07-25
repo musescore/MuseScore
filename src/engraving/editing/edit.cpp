@@ -64,6 +64,7 @@
 #include "../dom/note.h"
 #include "../dom/noteline.h"
 #include "../dom/ottava.h"
+#include "../dom/pagelockindicator.h"
 #include "../dom/part.h"
 #include "../dom/partialtie.h"
 #include "../dom/playcounttext.h"
@@ -80,6 +81,7 @@
 #include "../dom/sticking.h"
 #include "../dom/stringtunings.h"
 #include "../dom/system.h"
+#include "../dom/systemlockindicator.h"
 #include "../dom/systemtext.h"
 #include "../dom/tapping.h"
 #include "../dom/tempotext.h"
@@ -103,6 +105,7 @@
 #include "editkeysig.h"
 #include "editmeasures.h"
 #include "editnote.h"
+#include "editpagelocks.h"
 #include "editpart.h"
 #include "editproperty.h"
 #include "editrehearsalmark.h"
@@ -1068,6 +1071,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::KEYSIG:
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
+        case ElementType::PAGE_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
         case ElementType::LYRICSLINE_SEGMENT:
@@ -1111,8 +1115,9 @@ void Score::deleteItem(EngravingItem* el)
     {
         KeySig* k = toKeySig(el);
         Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
+        const TrackRange trackRange = el->part()->trackRange();
         bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                         el->part()->startTrack(), el->part()->endTrack() - 1);
+                                                         trackRange.startTrack, trackRange.endTrack - 1);
         undoRemoveElement(k);
         if (ic) {
             KeySigEvent ke = k->keySigEvent();
@@ -1551,13 +1556,19 @@ void Score::deleteItem(EngravingItem* el)
     break;
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
-        const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
+        const RangeLock* systemLock = toSystemLockIndicator(el)->systemLock();
         EditSystemLocks::undoRemoveSystemLock(tx, systemLock);
+    }
+    break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+    {
+        const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
+        EditPageLocks::undoRemovePageLock(tx, pageLock);
     }
     break;
     case ElementType::PARENTHESIS: {
         Parenthesis* paren = toParenthesis(el);
-        // Use EditChord::removeChordParentheses when parent is a chord, fall through for all others
+        // Use EditChord::removeChordParentheses when parent is a chord
         if (el->parent() && el->parent()->isChord()) {
             Chord* chord = toChord(el->parent());
             NoteParenthesisInfo* parenInfo = chord->findNoteParenthesisInfo(paren);
@@ -1570,10 +1581,11 @@ void Score::deleteItem(EngravingItem* el)
                 note->undoChangeProperty(Pid::HAS_PARENTHESES, ParenthesesMode::NONE);
             }
             EditChord::removeChordParentheses(chord, parenInfo->notes());
-            break;
+        } else {
+            undoRemoveElement(el);
         }
     }
-
+    break;
     default:
         undoRemoveElement(el);
         break;
@@ -2696,7 +2708,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     MeasureBase* localInsertMeasureBase = nullptr;
     if (type == ElementType::MEASURE) {
         if (MeasureBase* masterInsertMeasure = masterScore()->insertMeasure(beforeMeasure, options)) {
-            localInsertMeasureBase = tick2measureBase(masterInsertMeasure->tick());
+            localInsertMeasureBase = tick2measure(masterInsertMeasure->tick());
         }
     } else {
         localInsertMeasureBase = insertBox(type, beforeMeasure, options);
@@ -4643,7 +4655,12 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     for (const Staff* staff : ostaff->staffList()) {
         track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
 
-        if (linkedTrack == muse::nidx || linkedTrack < staff->part()->startTrack() || linkedTrack >= staff->part()->endTrack()) {
+        if (linkedTrack == muse::nidx) {
+            continue;
+        }
+
+        const TrackRange trackRange = staff->part()->trackRange();
+        if (linkedTrack < trackRange.startTrack || linkedTrack >= trackRange.endTrack) {
             continue;
         }
 
@@ -5171,6 +5188,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     }
 
     EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
+    EditPageLocks::removePageLocksOnRemoveMeasures(tx, this, m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }

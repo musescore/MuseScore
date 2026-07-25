@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ISELECTINSTRUMENTSSCENARIO_H
-#define MU_NOTATION_ISELECTINSTRUMENTSSCENARIO_H
 
+#pragma once
+
+#include "async/promise.h"
 #include "modularity/imoduleinterface.h"
-#include "notation/notationtypes.h"
-#include "global/async/promise.h"
+
+#include "notation/types/instrumentstypes.h"
 
 namespace mu::notation {
 class ISelectInstrumentsScenario : MODULE_CONTEXT_INTERFACE
@@ -39,5 +40,3 @@ public:
         const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };
 }
-
-#endif // MU_NOTATION_ISELECTINSTRUMENTSSCENARIO_H

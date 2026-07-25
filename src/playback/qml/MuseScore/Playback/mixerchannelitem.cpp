@@ -26,7 +26,10 @@
 #include "translation.h"
 #include "log.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace mu::playback;
 using namespace muse;

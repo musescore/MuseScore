@@ -21,7 +21,7 @@
  */
 #include "navigableappmenumodel.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QWindow>
 #include <QKeyEvent>
 
@@ -74,7 +74,7 @@ void NavigableAppMenuModel::load()
 {
     AppMenuModel::load();
 
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
+    connect(qApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
         if (state != Qt::ApplicationActive) {
             resetNavigation();
         }
@@ -182,7 +182,7 @@ void NavigableAppMenuModel::setOpenedMenuId(QString openedMenuId)
 
     //! NOTE: after opening the menu, position on the first control
     if (navigationStarted && menuOpened) {
-        actionsDispatcher()->dispatch("nav-first-control");
+        actionsDispatcher()->dispatch("command://navigation/first-control");
     }
 
     emit openedMenuIdChanged(m_openedMenuId);

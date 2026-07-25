@@ -24,6 +24,7 @@
 
 #include "layoutpanelutils.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h"
 
@@ -108,7 +109,7 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
         DO_ASSERT(group.staff);
         group.staff->undoSetShowMeasureNumbers(visible);
     } else {
-        for (EngravingItem* item : group.items) {
+        for (engraving::EngravingItem* item : group.items) {
             item->undoSetVisible(visible);
         }
     }

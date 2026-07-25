@@ -34,6 +34,10 @@
 
 #include "layoutpanelitemtype.h"
 
+namespace mu::engraving {
+struct ScoreChanges;
+}
+
 namespace mu::instrumentsscene {
 struct MoveParams {
     muse::IDList objectIdListToMove;

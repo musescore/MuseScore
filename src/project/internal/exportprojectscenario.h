@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_EXPORTPROJECTSCENARIO_H
-#define MU_PROJECT_EXPORTPROJECTSCENARIO_H
+
+#pragma once
 
 #include "modularity/ioc.h"
 
@@ -33,6 +33,7 @@
 #include "context/iglobalcontext.h"
 #include "io/ifilesystem.h"
 #include "async/asyncable.h"
+#include "notation/types/viewmode.h"
 
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public muse::async::Asyncable, public muse::Contextable
@@ -103,5 +104,3 @@ private:
     ExportInfo m_exportInfo;
 };
 }
-
-#endif // MU_PROJECT_EXPORTPROJECTSCENARIO_H

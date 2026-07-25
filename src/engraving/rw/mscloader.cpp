@@ -34,7 +34,8 @@
 #include "../dom/excerpt.h"
 #include "../dom/imageStore.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/automationdata.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"
@@ -211,10 +212,10 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
 
     // Read automation
     {
-        if (masterScore->automation()) {
-            ByteArray ba = mscReader.readAutomationJsonFile();
-            masterScore->automation()->read(ba);
-        }
+        ByteArray ba = mscReader.readAutomationJsonFile();
+        AutomationDataPtr automationData = std::make_shared<AutomationData>();
+        AutomationRW::read(*automationData, ba);
+        masterScore->setAutomationData(automationData);
     }
 
     return ret;

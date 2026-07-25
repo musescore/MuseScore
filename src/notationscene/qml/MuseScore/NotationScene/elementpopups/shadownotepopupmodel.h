@@ -27,6 +27,10 @@
 
 #include "../abstractelementpopupmodel.h"
 
+namespace mu::engraving {
+class EngravingItem;
+}
+
 namespace mu::notation {
 namespace ShadowNotePopupContent {
 Q_NAMESPACE;
@@ -52,7 +56,7 @@ class ShadowNotePopupModel : public AbstractElementPopupModel
 public:
     explicit ShadowNotePopupModel(QObject* parent = nullptr);
 
-    static bool canOpen(const EngravingItem* shadowNote);
+    static bool canOpen(const engraving::EngravingItem* shadowNote);
 
     Q_INVOKABLE void init() override;
 

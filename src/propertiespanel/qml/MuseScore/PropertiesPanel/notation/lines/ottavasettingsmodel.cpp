@@ -22,6 +22,8 @@
 
 #include "ottavasettingsmodel.h"
 
+#include "engraving/dom/ottava.h"
+
 #include "translation.h"
 
 #include "ui/view/iconcodes.h"

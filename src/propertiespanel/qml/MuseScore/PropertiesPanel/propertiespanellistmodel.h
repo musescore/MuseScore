@@ -29,6 +29,7 @@
 #include <qqmlintegration.h>
 
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/select.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -74,7 +75,7 @@ private:
 
     bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
     void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
-                        notation::SelectionState selectionState = notation::SelectionState::NONE);
+                        engraving::SelState selectionState = engraving::SelState::NONE);
 
     void buildModelsForEmptySelection();
     void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,

@@ -21,6 +21,8 @@
  */
 #include "roottreeitem.h"
 
+#include "engraving/dom/score.h"
+
 #include "parttreeitem.h"
 #include "systemobjectslayertreeitem.h"
 

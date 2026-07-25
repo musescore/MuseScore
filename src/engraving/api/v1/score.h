@@ -27,6 +27,9 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+
 // api
 #include "excerpt.h"
 #include "apistructs.h"

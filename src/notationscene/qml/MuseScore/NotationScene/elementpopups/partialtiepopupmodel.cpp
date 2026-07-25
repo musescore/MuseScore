@@ -23,6 +23,7 @@
 #include "partialtiepopupmodel.h"
 
 #include "engraving/dom/partialtie.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tie.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep

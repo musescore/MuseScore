@@ -580,6 +580,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <continueTextPlace>auto</continueTextPlace>
+              <endTextPlace>auto</endTextPlace>
               <eid>BB_BB</eid>
               </Pedal>
             <next>

@@ -286,7 +286,7 @@
         <stem>up</stem>
         <staff>1</staff>
         </note>
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="down" size="8" number="1"/>
           </direction-type>
@@ -328,7 +328,7 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <direction placement="below">
+      <direction>
         <direction-type>
           <octave-shift type="up" size="8" number="2"/>
           </direction-type>
@@ -391,7 +391,7 @@
         <stem>up</stem>
         <staff>1</staff>
         </note>
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="stop" size="8" number="1"/>
           </direction-type>
@@ -433,7 +433,7 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <direction placement="below">
+      <direction>
         <direction-type>
           <octave-shift type="stop" size="8" number="2"/>
           </direction-type>

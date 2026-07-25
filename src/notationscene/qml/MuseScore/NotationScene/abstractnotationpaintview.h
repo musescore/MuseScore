@@ -285,6 +285,7 @@ private:
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
+    QQuickItem* m_automationLinesContainer = nullptr;
     std::unique_ptr<NotationAutomationController> m_notationAutomationController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;

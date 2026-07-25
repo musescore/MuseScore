@@ -38,7 +38,7 @@ class MeasureBase;
 class Page;
 class SpannerSegment;
 class StaffVisibilityIndicator;
-class SystemLock;
+class RangeLock;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -214,11 +214,14 @@ public:
     void setHasStaffVisibilityIndicator(bool has);
 
     bool isLocked() const;
-    const SystemLock* systemLock() const;
+    const RangeLock* systemLock() const;
 
     const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
     void addLockIndicator(SystemLockIndicator* sli);
     void deleteLockIndicators();
+
+    void setPageLockIndicator(PageLockIndicator* pli);
+    void deletePageLockIndicator();
 
     struct LayoutData : public EngravingItem::LayoutData {
     public:
@@ -279,6 +282,7 @@ private:
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
     std::vector<SystemLockIndicator*> m_lockIndicators;
+    PageLockIndicator* m_pageLockIndicator = nullptr;
 
     StaffVisibilityIndicator* m_staffVisibilityIndicator = nullptr;
 

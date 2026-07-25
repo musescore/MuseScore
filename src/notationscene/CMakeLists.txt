@@ -51,6 +51,12 @@ target_sources(notationscene PRIVATE
     utilities/percussionutilities.h
 )
 
+set_source_files_properties(
+    internal/notationuiactions.cpp
+    PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+)
+
 add_subdirectory(widgets)
 
 target_link_libraries(notationscene PRIVATE

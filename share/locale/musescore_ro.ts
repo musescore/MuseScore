@@ -9704,12 +9704,12 @@ urmate de cratime</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>Importă a&amp;udio în partitură…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>Importă audio în partitură</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -11439,7 +11439,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8041"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Elimină legato parțial invalid de intrare</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8049"/>
@@ -11449,7 +11449,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Elimină legato parțial invalid de ieșire</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8072"/>
@@ -26798,7 +26798,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="109"/>
         <source>Search sounds</source>
-        <translation type="unfinished"/>
+        <translation>Caută sunete</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="197"/>
@@ -35331,7 +35331,7 @@ a eșuat: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Încearcă mai târziu sau obține ajutor pentru această problemă pe MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>

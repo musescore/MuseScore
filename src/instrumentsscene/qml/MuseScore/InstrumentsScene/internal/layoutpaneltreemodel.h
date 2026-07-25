@@ -25,7 +25,6 @@
 #include <QAbstractItemModel>
 #include <QQmlParserStatus>
 #include <QVariant>
-#include <QtQml/qqmlparserstatus.h>
 #include <qqmlintegration.h>
 
 #include "abstractlayoutpaneltreeitem.h"
@@ -161,14 +160,15 @@ private:
     void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
-    static void sortParts(notation::PartList& parts, notation::PartList& referenceParts);
+    using PartList = std::vector<const engraving::Part*>;
+    static void sortParts(PartList& parts, const PartList& referenceParts);
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& partId);
     void setupNotationConnections();
 
     void updateSelectedRows();
-    void onScoreChanged(const mu::engraving::ScoreChanges& changes = {});
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes);
 
     void clear();
     void deleteItems();

@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "notation/notationtypes.h"
+#include "notation/types/staffparttypes.h"
 
 namespace mu::instrumentsscene {
 class StaffSettingsModel : public QObject, public muse::Contextable

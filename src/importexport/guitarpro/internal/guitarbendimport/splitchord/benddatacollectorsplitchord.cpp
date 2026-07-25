@@ -111,8 +111,8 @@ static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const Im
         BendChordData& bendChordData
             = bendDataCtx.bendDataByEndTick[note->track()][(currentTick + tickDuration).ticks()];
         bendChordData.startTick = currentTick;
-        BendNoteData bendNoteData;
-        bendNoteData.quarterTones = seg.endPitch / 25;
+        SegmentData bendNoteData;
+        bendNoteData.quarterTones = seg.endPitch / GP_PITCH_PER_QUARTERTONE;
         bendChordData.noteDataByIdx[noteIndexInChord] = std::move(bendNoteData);
 
         currentTick += tickDuration;

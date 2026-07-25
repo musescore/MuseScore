@@ -47,8 +47,6 @@ void EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool
 //---------------------------------------------------------
 //   toggleArticulation
 ///   Toggle attribute \a attr for all selected notes/rests.
-///
-///   Called from padToggle() to add note prefix/accent.
 //---------------------------------------------------------
 
 void EditChord::toggleArticulation(Score* score, SymId attr)

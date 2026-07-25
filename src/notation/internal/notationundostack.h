@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "draw/types/geometry.h"
+
 #include "inotationundostack.h"
 #include "igetscore.h"
 
@@ -68,7 +70,7 @@ public:
     const muse::TranslatableString lastActionNameAtIdx(size_t idx) const override;
 
     muse::async::Notification stackChanged() const override;
-    muse::async::Channel<ScoreChanges> changesChannel() const override;
+    muse::async::Channel<engraving::ScoreChanges> changesChannel() const override;
     muse::async::Notification undoRedoNotification() const override;
 
 private:

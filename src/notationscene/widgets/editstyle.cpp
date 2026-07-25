@@ -47,6 +47,7 @@
 #include "engraving/types/types.h"
 #include "engraving/types/typesconv.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationstyle.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h" // IWYU pragma: keep

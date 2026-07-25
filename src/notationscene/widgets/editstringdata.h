@@ -29,6 +29,10 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
+namespace mu::engraving {
+class Instrument;
+}
+
 namespace mu::notation {
 //---------------------------------------------------------
 //   EditStringData
@@ -76,6 +80,6 @@ private:
     std::vector<mu::engraving::instrString> _stringsLoc;         // local working copy of string list
 
     bool m_updateOnExit = false;
-    Instrument* m_instrument = nullptr;
+    engraving::Instrument* m_instrument = nullptr;
 };
 }

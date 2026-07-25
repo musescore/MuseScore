@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "instrumentsettingsmodel.h"
 
 #include "engraving/types/types.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationparts.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 

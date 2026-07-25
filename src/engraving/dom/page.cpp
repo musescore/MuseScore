@@ -44,6 +44,24 @@ Page::Page(RootItem* parent)
     m_bspTreeValid = false;
 }
 
+MeasureBase* Page::firstMeasureBase() const
+{
+    if (m_systems.empty()) {
+        return nullptr;
+    }
+    System* firstSys = m_systems.front();
+    return firstSys ? firstSys->first() : nullptr;
+}
+
+MeasureBase* Page::lastMeasureBase() const
+{
+    if (m_systems.empty()) {
+        return nullptr;
+    }
+    System* lastSys = m_systems.back();
+    return lastSys ? lastSys->last() : nullptr;
+}
+
 //---------------------------------------------------------
 //   items
 //---------------------------------------------------------
@@ -273,4 +291,16 @@ Measure* Page::firstMeasure() const
     }
 
     return nullptr;
+}
+
+bool Page::isLocked() const
+{
+    MeasureBase* firstMeasure = firstMeasureBase();
+    return firstMeasure ? firstMeasure->isStartOfPageLock() : false;
+}
+
+const RangeLock* Page::pageLock() const
+{
+    MeasureBase* firstMeasure = firstMeasureBase();
+    return firstMeasure ? firstMeasure->pageLock() : nullptr;
 }

@@ -25,11 +25,12 @@
 #include "async/notification.h"
 #include "async/channel.h"
 
-#include "notationtypes.h"
+#include "types/translatablestring.h"
 
 namespace mu::engraving {
 class EditData;
 class Transaction;
+struct ScoreChanges;
 enum class ElementType : unsigned char;
 }
 
@@ -68,7 +69,7 @@ public:
     virtual const muse::TranslatableString lastActionNameAtIdx(size_t) const = 0;
 
     virtual muse::async::Notification stackChanged() const = 0;
-    virtual muse::async::Channel<ScoreChanges> changesChannel() const = 0;
+    virtual muse::async::Channel<engraving::ScoreChanges> changesChannel() const = 0;
     virtual muse::async::Notification undoRedoNotification() const = 0;
 };
 

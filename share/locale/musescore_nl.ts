@@ -9704,12 +9704,12 @@ wanneer articulatiemarkeringen aanwezig zijn</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation>A&amp;udio importeren in de partituur…</translation>
+        <translation>Importeer aud&amp;io naar partituur…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation>Audio importeren in de partituur</translation>
+        <translation>Importeer audio naar partituur</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>

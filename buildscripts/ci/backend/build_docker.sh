@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 echo "Build Docker MuseScore"
+trap 'echo Build Docker failed; exit 1' ERR
 
 HERE="$(dirname ${BASH_SOURCE[0]})"
 ORIGIN_DIR=${PWD}
@@ -56,7 +57,7 @@ docker buildx create --use >/dev/null 2>&1 || true
 
 docker buildx build \
     --platform linux/amd64\
-    -t ghcr.io/musescore/converter_4:${MU_VERSION} \
+    -t ghcr.io/musescore/converter_5:${MU_VERSION} \
     --load .
 
 cd $ORIGIN_DIR

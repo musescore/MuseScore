@@ -33,13 +33,15 @@
 #include "extensions/iextensionsconfiguration.h"
 #include "audio/main/iaudioconfiguration.h"
 #include "vst/ivstconfiguration.h"
-#include "appshell/iappshellconfiguration.h"
+#include "audioplugins/iregisteraudiopluginsscenario.h"
 
 namespace mu::preferences {
 class FoldersPreferencesModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
-    QML_ELEMENT;
+    QML_ELEMENT
+
+    Q_PROPERTY(bool vstEnabled READ vstEnabled CONSTANT)
 
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
@@ -47,9 +49,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Contexta
     muse::GlobalInject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
+    muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
+
+    bool vstEnabled() const;
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
@@ -57,6 +62,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void rescanVstPlugins();
 
 private:
     void setupConnections();

@@ -34,6 +34,7 @@
 
 #include "engraving/types/types.h"
 
+#include "inotation.h"
 #include "inotationelements.h" // IWYU pragma: keep
 
 #include "log.h"

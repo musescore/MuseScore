@@ -29,7 +29,13 @@
 #include "mpe/events.h"
 #include "engraving/types/types.h"
 
-#include "notationtypes.h"
+#include "types/loopboundaries.h"
+#include "types/tempo.h"
+
+namespace mu::engraving {
+class EngravingItem;
+class StaffText;
+}
 
 namespace mu::notation {
 class INotationPlayback
@@ -40,10 +46,10 @@ public:
     virtual void init() = 0;
     virtual void reload() = 0;
 
-    virtual void setSendEventsOnScoreChange(const InstrumentTrackId& trackId, bool send) = 0;
+    virtual void setSendEventsOnScoreChange(const engraving::InstrumentTrackId& trackId, bool send) = 0;
     virtual void sendEventsForChangedTracks() = 0;
 
-    virtual muse::async::Channel<InstrumentTrackIdSet> tracksDataChanged() const = 0;
+    virtual muse::async::Channel<engraving::InstrumentTrackIdSet> tracksDataChanged() const = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
     virtual engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const = 0;
@@ -51,10 +57,11 @@ public:
 
     virtual const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
 
-    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) = 0;
+    virtual void triggerEventsForItems(const std::vector<const engraving::EngravingItem*>& items, muse::mpe::duration_t duration,
+                                       bool flushSound) = 0;
     virtual void triggerMetronome(muse::midi::tick_t tick) = 0;
     virtual void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration) = 0;
-    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick) = 0;
 
     virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
@@ -68,7 +75,7 @@ public:
     virtual muse::midi::tick_t secToTick(muse::audio::secs_t sec) const = 0;
 
     virtual muse::RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const = 0;
-    virtual muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
+    virtual muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const engraving::EngravingItem* element) const = 0;
 
     enum BoundaryTick {
         FirstScoreTick = 0,
@@ -84,7 +91,7 @@ public:
     virtual muse::async::Notification loopBoundariesChanged() const = 0;
 
     virtual const Tempo& multipliedTempo(muse::midi::tick_t tick) const = 0;
-    virtual MeasureBeat beat(muse::midi::tick_t tick) const = 0;
+    virtual engraving::MeasureBeat beat(muse::midi::tick_t tick) const = 0;
     virtual muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;

@@ -30,8 +30,8 @@
 
 #include "async/asyncable.h"
 
-#include "notation/notationtypes.h"
 #include "notation/inotationstyle.h"
+#include "notation/types/propertystyletypes.h"
 
 #include "styleitem.h"
 

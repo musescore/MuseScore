@@ -56,6 +56,7 @@ private:
 
     bool isProjectOpened() const;
     void updateCommandStates(const std::vector<muse::rcommand::Command>& commands = {});
+    muse::rcommand::CommandState doCommandState(const muse::rcommand::Command& command) const;
 
     muse::rcommand::IModuleCommandsRegisterPtr m_moduleRegister;
     std::map<muse::rcommand::Command, muse::rcommand::CommandState> m_commandStates;

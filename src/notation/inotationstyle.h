@@ -22,8 +22,10 @@
 
 #pragma once
 
-#include "notationtypes.h"
 #include "async/notification.h"
+#include "io/path.h"
+
+#include "types/propertystyletypes.h"
 
 namespace mu::notation {
 class INotationStyle

@@ -47,7 +47,7 @@ void TextStylePopupModel::doInit()
     m_textSettingsModel = new TextSettingsModel(this, iocContext(), m_elementRepositoryService.get());
     m_textSettingsModel->init();
 
-    m_elementRepositoryService->updateElementList({ m_item }, notation::SelectionState::LIST);
+    m_elementRepositoryService->updateElementList({ m_item }, engraving::SelState::LIST);
 }
 
 void TextStylePopupModel::init()

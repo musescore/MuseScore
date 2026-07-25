@@ -60,7 +60,7 @@ void EditVisibility::toggleVisible(Transaction& tx, Score* score)
     bool allVisible = true;
 
     for (EngravingItem* item : score->selection().elements()) {
-        if (!item->visible()) {
+        if (!item->getProperty(Pid::VISIBLE).toBool()) {
             allVisible = false;
             break;
         }

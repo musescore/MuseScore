@@ -360,6 +360,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
         }
 
         // Export lyrics and RehearsalMarks as Meta events
+        const TrackRange trackRange = part->trackRange();
         for (const RepeatSegment* rs : m_score->repeatList()) {
             int endTick    = rs->endTick();
             int tickOffset = rs->utick - rs->tick;
@@ -367,7 +368,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             // export Lyrics
             SegmentType st = SegmentType::ChordRest;
             for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
-                for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
+                for (track_idx_t i = trackRange.startTrack; i < trackRange.endTrack; ++i) {
                     ChordRest* cr = toChordRest(seg->element(i));
                     if (cr) {
                         for (const auto& lyric : cr->lyrics()) {

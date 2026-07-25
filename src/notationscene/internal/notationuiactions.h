@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "notation/notationtypes.h"
 #include "ui/iuiactionsmodule.h"
-#include "context/iglobalcontext.h"
 
 #include "notationactioncontroller.h"
 
@@ -36,7 +35,7 @@ class NotationUiActions : public muse::ui::IUiActionsModule, public muse::async:
 {
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<context::IUiContextResolver> uicontextResolver = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
 
@@ -62,6 +61,7 @@ public:
 
 private:
     static const muse::ui::UiActionList s_actions;
+    static const muse::ui::UiActionList s_undoRedoActions;
     static const muse::ui::UiActionList s_scoreConfigActions;
     static const muse::ui::UiActionList s_engravingDebuggingActions;
 

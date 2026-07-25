@@ -119,6 +119,7 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
 
     m_masterScore->setLayoutAll();
     m_masterScore->update();
+    m_masterScore->initAutomation();
 
     Ret ret = checkCorrupted();
     m_isCorruptedUponLoading = !ret;

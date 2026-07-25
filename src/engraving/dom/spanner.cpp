@@ -474,6 +474,7 @@ void Spanner::add(EngravingItem* e)
     ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
     ls->EngravingItem::setZ(z());
+    ls->EngravingItem::setVisible(visible());
     m_segments.push_back(ls);
     e->added();
 }

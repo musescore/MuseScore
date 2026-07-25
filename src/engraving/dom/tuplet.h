@@ -34,9 +34,54 @@ class Spanner;
 enum class TupletNumberType : unsigned char {
     SHOW_NUMBER, SHOW_RELATION, NO_TEXT
 };
+
+inline std::string str_conv(TupletNumberType type)
+{
+    switch (type) {
+    case TupletNumberType::SHOW_NUMBER: return "number";
+    case TupletNumberType::SHOW_RELATION: return "relation";
+    case TupletNumberType::NO_TEXT: return "none";
+    }
+    return "";
+}
+
+inline TupletNumberType str_conv(const std::string& type, TupletNumberType def)
+{
+    if (type == "number") {
+        return TupletNumberType::SHOW_NUMBER;
+    } else if (type == "relation") {
+        return TupletNumberType::SHOW_RELATION;
+    } else if (type == "none") {
+        return TupletNumberType::NO_TEXT;
+    }
+    return def;
+}
+
 enum class TupletBracketType : unsigned char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
 };
+
+inline std::string str_conv(TupletBracketType type)
+{
+    switch (type) {
+    case TupletBracketType::AUTO_BRACKET: return "auto";
+    case TupletBracketType::SHOW_BRACKET: return "show";
+    case TupletBracketType::SHOW_NO_BRACKET: return "none";
+    }
+    return "";
+}
+
+inline TupletBracketType str_conv(const std::string& type, TupletBracketType def)
+{
+    if (type == "auto") {
+        return TupletBracketType::AUTO_BRACKET;
+    } else if (type == "show") {
+        return TupletBracketType::SHOW_BRACKET;
+    } else if (type == "none") {
+        return TupletBracketType::SHOW_NO_BRACKET;
+    }
+    return def;
+}
 
 //------------------------------------------------------------------------
 //   @@ Tuplet

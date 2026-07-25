@@ -341,11 +341,18 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
         return noteHeads[direction][int(group)][int(t)];
     }
     // other schemes
-    if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
+    if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
+        || scheme == NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS
+        || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS) {
+        const bool no_accidentals = scheme == NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS
+                                    || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS;
+        const bool german = scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
+                            || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS;
+
         if (tpc == Tpc::TPC_A) {
             group = NoteHeadGroup::HEAD_A;
         } else if (tpc == Tpc::TPC_B) {
-            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
+            if (german) {
                 group = NoteHeadGroup::HEAD_H;
             } else {
                 group = NoteHeadGroup::HEAD_B;
@@ -361,41 +368,142 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
         } else if (tpc == Tpc::TPC_G) {
             group = NoteHeadGroup::HEAD_G;
         } else if (tpc == Tpc::TPC_A_S) {
-            group = NoteHeadGroup::HEAD_A_SHARP;
-        } else if (tpc == Tpc::TPC_B_S) {
-            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
-                group = NoteHeadGroup::HEAD_H_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_A;
             } else {
-                group = NoteHeadGroup::HEAD_B_SHARP;
+                group = NoteHeadGroup::HEAD_A_SHARP;
+            }
+        } else if (tpc == Tpc::TPC_B_S) {
+            if (no_accidentals) {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H;
+                } else {
+                    group = NoteHeadGroup::HEAD_B;
+                }
+            } else {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H_SHARP;
+                } else {
+                    group = NoteHeadGroup::HEAD_B_SHARP;
+                }
             }
         } else if (tpc == Tpc::TPC_C_S) {
-            group = NoteHeadGroup::HEAD_C_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_C;
+            } else {
+                group = NoteHeadGroup::HEAD_C_SHARP;
+            }
         } else if (tpc == Tpc::TPC_D_S) {
-            group = NoteHeadGroup::HEAD_D_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_D;
+            } else {
+                group = NoteHeadGroup::HEAD_D_SHARP;
+            }
         } else if (tpc == Tpc::TPC_E_S) {
-            group = NoteHeadGroup::HEAD_E_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_E;
+            } else {
+                group = NoteHeadGroup::HEAD_E_SHARP;
+            }
         } else if (tpc == Tpc::TPC_F_S) {
-            group = NoteHeadGroup::HEAD_F_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_F;
+            } else {
+                group = NoteHeadGroup::HEAD_F_SHARP;
+            }
         } else if (tpc == Tpc::TPC_G_S) {
-            group = NoteHeadGroup::HEAD_G_SHARP;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_G;
+            } else {
+                group = NoteHeadGroup::HEAD_G_SHARP;
+            }
         } else if (tpc == Tpc::TPC_A_B) {
-            group = NoteHeadGroup::HEAD_A_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_A;
+            } else {
+                group = NoteHeadGroup::HEAD_A_FLAT;
+            }
         } else if (tpc == Tpc::TPC_B_B) {
-            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
+            if (no_accidentals) {
                 group = NoteHeadGroup::HEAD_B;
             } else {
-                group = NoteHeadGroup::HEAD_B_FLAT;
+                if (german) {
+                    group = NoteHeadGroup::HEAD_B;
+                } else {
+                    group = NoteHeadGroup::HEAD_B_FLAT;
+                }
             }
         } else if (tpc == Tpc::TPC_C_B) {
-            group = NoteHeadGroup::HEAD_C_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_C;
+            } else {
+                group = NoteHeadGroup::HEAD_C_FLAT;
+            }
         } else if (tpc == Tpc::TPC_D_B) {
-            group = NoteHeadGroup::HEAD_D_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_D;
+            } else {
+                group = NoteHeadGroup::HEAD_D_FLAT;
+            }
         } else if (tpc == Tpc::TPC_E_B) {
-            group = NoteHeadGroup::HEAD_E_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_E;
+            } else {
+                group = NoteHeadGroup::HEAD_E_FLAT;
+            }
         } else if (tpc == Tpc::TPC_F_B) {
-            group = NoteHeadGroup::HEAD_F_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_F;
+            } else {
+                group = NoteHeadGroup::HEAD_F_FLAT;
+            }
         } else if (tpc == Tpc::TPC_G_B) {
-            group = NoteHeadGroup::HEAD_G_FLAT;
+            if (no_accidentals) {
+                group = NoteHeadGroup::HEAD_G;
+            } else {
+                group = NoteHeadGroup::HEAD_G_FLAT;
+            }
+        } else if (no_accidentals) {
+            // for TPCs that don't have their own heads (i.e. with 2 or 3 accidentals),
+            // fall back to using the corresponding ones without accidentals
+            // rather than using the (smaller!) normal noteheads
+            if (tpc == Tpc::TPC_A_SS || tpc == Tpc::TPC_A_SSS) {
+                group = NoteHeadGroup::HEAD_A;
+            } else if (tpc == Tpc::TPC_B_SS || tpc == Tpc::TPC_B_SSS) {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H;
+                } else {
+                    group = NoteHeadGroup::HEAD_B;
+                }
+            } else if (tpc == Tpc::TPC_C_SS || tpc == Tpc::TPC_C_SSS) {
+                group = NoteHeadGroup::HEAD_C;
+            } else if (tpc == Tpc::TPC_D_SS || tpc == Tpc::TPC_D_SSS) {
+                group = NoteHeadGroup::HEAD_D;
+            } else if (tpc == Tpc::TPC_E_SS || tpc == Tpc::TPC_E_SSS) {
+                group = NoteHeadGroup::HEAD_E;
+            } else if (tpc == Tpc::TPC_F_SS || tpc == Tpc::TPC_F_SSS) {
+                group = NoteHeadGroup::HEAD_F;
+            } else if (tpc == Tpc::TPC_G_SS || tpc == Tpc::TPC_G_SSS) {
+                group = NoteHeadGroup::HEAD_G;
+            } else if (tpc == Tpc::TPC_A_BB || tpc == Tpc::TPC_A_BBB) {
+                group = NoteHeadGroup::HEAD_A;
+            } else if (tpc == Tpc::TPC_B_BB || tpc == Tpc::TPC_B_BBB) {
+                if (german) {
+                    group = NoteHeadGroup::HEAD_H;
+                } else {
+                    group = NoteHeadGroup::HEAD_B;
+                }
+            } else if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_BBB) {
+                group = NoteHeadGroup::HEAD_C;
+            } else if (tpc == Tpc::TPC_D_BB || tpc == Tpc::TPC_D_BBB) {
+                group = NoteHeadGroup::HEAD_D;
+            } else if (tpc == Tpc::TPC_E_BB || tpc == Tpc::TPC_E_BBB) {
+                group = NoteHeadGroup::HEAD_E;
+            } else if (tpc == Tpc::TPC_F_BB || tpc == Tpc::TPC_F_BBB) {
+                group = NoteHeadGroup::HEAD_F;
+            } else if (tpc == Tpc::TPC_G_BB || tpc == Tpc::TPC_G_BBB) {
+                group = NoteHeadGroup::HEAD_G;
+            }
         }
     } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
         int degree = tpc2degree(tpc, key);
@@ -1393,6 +1501,7 @@ bool Note::isNoteName() const
             s = st->staffTypeForElement(this)->noteHeadScheme();
         }
         return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
+               || s == NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS
                || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
     }
     return false;

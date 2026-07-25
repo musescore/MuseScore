@@ -53,7 +53,7 @@ class Revisions;
 class TempoMap;
 class TimeSigMap;
 class UndoStack;
-class AutomationController;
+class ScoreAutomationController;
 
 class MidiMapping
 {
@@ -104,7 +104,10 @@ public:
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
-    IAutomation* automation() const override;
+
+    AutomationDataConstPtr automationData() const override;
+    void setAutomationData(AutomationDataPtr data);
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -193,6 +196,10 @@ public:
 private:
     void update(bool resetCmdState, bool layoutAllParts = false);
 
+    void updateAutomation(const ScoreChanges& changes);
+
+    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
+
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
@@ -220,7 +227,7 @@ private:
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
-    AutomationController* m_automationController = nullptr;
+    ScoreAutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
 
     std::vector<Excerpt*> m_excerpts;

@@ -24,7 +24,7 @@
 
 #include "../dom/chordlist.h"
 #include "../dom/score.h"
-
+#include "editing/editpagelocks.h"
 #include "editing/editsystemlocks.h"
 #include "editing/transaction/transaction.h"
 
@@ -130,6 +130,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
         if (oldValue.toBool() == true && newValue.toBool() == false) {
             Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditSystemLocks::removeSystemLocksContainingMMRests(tx, score);
+            EditPageLocks::removePageLocksContainingMMRests(tx, score);
         }
         break;
     default:

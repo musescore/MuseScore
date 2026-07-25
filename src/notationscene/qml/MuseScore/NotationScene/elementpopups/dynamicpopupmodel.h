@@ -27,6 +27,8 @@
 #include <QVariantList>
 #include <qqmlintegration.h>
 
+#include "engraving/iengravingfont.h"
+
 #include "../abstractelementpopupmodel.h"
 
 namespace mu::notation {

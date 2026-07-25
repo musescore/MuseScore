@@ -117,23 +117,16 @@ Measure* Score::tick2measureMM(const Fraction& t) const
     return measure->coveringMMRestOrThis();
 }
 
-//---------------------------------------------------------
-//   tick2measureBase
-//---------------------------------------------------------
-
 MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 {
-    std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
-    for (MeasureBase* mb : mbList) {
-        Fraction st = mb->tick();
-        Fraction l  = mb->ticks();
-        if (tick >= st && tick < (st + l)) {
-            return mb;
-        }
+    if (tick == Fraction(-1, 1)) {   // special number
+        return m_measures.last();
+    }
+    if (tick <= Fraction(0, 1)) {
+        return m_measures.first();
     }
 
-    LOGD("tick2measureBase %d not found", tick.ticks());
-    return nullptr;
+    return m_measures.firstMeasureBaseAtTick(tick.ticks());
 }
 
 //---------------------------------------------------------
@@ -583,7 +576,8 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 
     int idx1 = note->unisonIndex();
     Part* part = chord->part();
-    for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+    const TrackRange trackRange = part->trackRange();
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
         EngravingItem* e = nextSegment->element(track);
         if (!e || !e->isChord()) {
             continue;
@@ -1505,7 +1499,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const Measure* masterMeasure = master->tick2measure(measure->tick());
+    const Measure* masterMeasure = master->tick2measureMM(measure->tick());
 
     const RepeatList& repeatList = master->repeatList(true, false);
 
@@ -1525,7 +1519,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* prevSeg = *prevSegIt;
         const Measure* lastMasterMeasure = prevSeg->lastMeasure();
-        Measure* lastMeasure = lastMasterMeasure ? score->tick2measure(lastMasterMeasure->tick()) : nullptr;
+        Measure* lastMeasure = lastMasterMeasure ? score->tick2measureMM(lastMasterMeasure->tick()) : nullptr;
         if (!lastMeasure) {
             continue;
         }
@@ -1570,6 +1564,13 @@ bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg)
 
     const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
     const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
+
+    if (firstMasterMeasure) {
+        firstMasterMeasure = firstMasterMeasure->coveringMMRestOrThis();
+    }
+    if (secondMasterMeasure) {
+        secondMasterMeasure = secondMasterMeasure->coveringMMRestOrThis();
+    }
 
     Score* score = firstSeg->score();
 

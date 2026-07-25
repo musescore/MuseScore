@@ -27,6 +27,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftextbase.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationundostack.h"
 

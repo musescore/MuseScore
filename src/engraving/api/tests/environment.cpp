@@ -28,6 +28,8 @@
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/mscore.h"
 
+#include "engraving/tests/utils/scorerw.h"
+
 #include "log.h"
 
 static muse::testing::SuiteEnvironment engraving_api_se(
@@ -38,6 +40,8 @@ static muse::testing::SuiteEnvironment engraving_api_se(
     nullptr,
     []() {
     LOGI() << "engraving API tests suite post init";
+
+    mu::engraving::ScoreRW::setRootPath(muse::String::fromUtf8(engraving_api_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;

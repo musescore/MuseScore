@@ -29,6 +29,7 @@
 #include "../imasternotation.h"
 
 namespace mu::engraving {
+class Excerpt;
 class MasterScore;
 }
 

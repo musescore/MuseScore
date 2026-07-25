@@ -26,6 +26,7 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
+#include "notation/notationtypes.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
 #include "context/iglobalcontext.h"

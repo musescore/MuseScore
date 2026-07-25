@@ -25,6 +25,10 @@
 #include "iexcerptnotation.h"
 #include "notation.h"
 
+namespace mu::engraving {
+class Excerpt;
+}
+
 namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation, public std::enable_shared_from_this<ExcerptNotation>
 {

@@ -24,6 +24,9 @@
 
 #include "draw/painter.h"
 
+#include "engraving/dom/staff.h"
+
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationnoteinput.h"
 

@@ -39,8 +39,8 @@ public:
     static void collectPage(LayoutContext& ctx);
 
 private:
-    static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
-    static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding);
+    static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding, bool squeezeToFit);
+    static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding, bool squeezeToFit);
 
     static void layoutCrossStaffElements(LayoutContext& ctx, Page* page);
     static void layoutCrossStaffSlurs(LayoutContext& ctx, System* system);

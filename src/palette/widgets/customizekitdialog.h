@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_CUSTOMIZEKITDIALOG_H
-#define MU_PALETTE_CUSTOMIZEKITDIALOG_H
+
+#pragma once
 
 #include "ui/view/widgetdialog.h"
 
@@ -36,6 +36,7 @@
 #include "ui/iuiconfiguration.h"
 
 #include "engraving/dom/drumset.h"
+#include "notation/types/instrumentstypes.h"
 
 namespace mu::palette {
 //---------------------------------------------------------
@@ -96,5 +97,3 @@ private:
     engraving::Drumset m_editedDrumset;
 };
 }
-
-#endif // MU_PALETTE_CUSTOMIZEKITDIALOG_H

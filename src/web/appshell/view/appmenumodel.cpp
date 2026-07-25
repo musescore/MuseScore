@@ -29,6 +29,8 @@
 #include "workspace/view/workspacesmenumodel.h"
 #endif
 
+#include "notationscene/notationcommands.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -135,8 +137,8 @@ MenuItem* AppMenuModel::makeEditMenu()
         makeMenuItem("notation-swap"),
         makeMenuItem("command://notation/delete"),
         makeSeparator(),
-        makeMenuItem("notation-select-all"),
-        makeMenuItem("notation-select-section"),
+        makeMenuItem("command://notation/select-all"),
+        makeMenuItem("command://notation/select-section"),
         makeMenuItem("find"),
     };
 
@@ -294,23 +296,23 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("note-input"),
+        makeMenuItem("command://notation/toggle-note-input"),
         makeSeparator(),
-        makeMenuItem("note-c"),
-        makeMenuItem("note-d"),
-        makeMenuItem("note-e"),
-        makeMenuItem("note-f"),
-        makeMenuItem("note-g"),
-        makeMenuItem("note-a"),
-        makeMenuItem("note-b"),
+        makeMenuItem("command://notation/enter-note-c"),
+        makeMenuItem("command://notation/enter-note-d"),
+        makeMenuItem("command://notation/enter-note-e"),
+        makeMenuItem("command://notation/enter-note-f"),
+        makeMenuItem("command://notation/enter-note-g"),
+        makeMenuItem("command://notation/enter-note-a"),
+        makeMenuItem("command://notation/enter-note-b"),
         makeSeparator(),
-        makeMenuItem("chord-c"),
-        makeMenuItem("chord-d"),
-        makeMenuItem("chord-e"),
-        makeMenuItem("chord-f"),
-        makeMenuItem("chord-g"),
-        makeMenuItem("chord-a"),
-        makeMenuItem("chord-b")
+        makeMenuItem("command://notation/add-note-c"),
+        makeMenuItem("command://notation/add-note-d"),
+        makeMenuItem("command://notation/add-note-e"),
+        makeMenuItem("command://notation/add-note-f"),
+        makeMenuItem("command://notation/add-note-g"),
+        makeMenuItem("command://notation/add-note-a"),
+        makeMenuItem("command://notation/add-note-b")
     };
 
     return items;
@@ -347,15 +349,15 @@ MenuItemList AppMenuModel::makeIntervalsItems()
 MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
-        makeMenuItem("duplet"),
-        makeMenuItem("triplet"),
-        makeMenuItem("quadruplet"),
-        makeMenuItem("quintuplet"),
-        makeMenuItem("sextuplet"),
-        makeMenuItem("septuplet"),
-        makeMenuItem("octuplet"),
-        makeMenuItem("nonuplet"),
-        makeMenuItem("tuplet-dialog")
+        makeMenuItem(notation::ADD_DUPLET_COMMAND),
+        makeMenuItem(notation::ADD_TRIPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUADRUPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUINTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEXTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_NONUPLET_COMMAND),
+        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;
@@ -421,7 +423,7 @@ MenuItemList AppMenuModel::makeTextItems()
 MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem("add-slur"),
+        makeMenuItem("command://notation/add-slur"),
         makeMenuItem("add-hairpin"),
         makeMenuItem("add-hairpin-reverse"),
         makeMenuItem("add-8va"),

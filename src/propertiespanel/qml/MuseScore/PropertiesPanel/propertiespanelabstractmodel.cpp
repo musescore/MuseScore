@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "propertiespanelabstractmodel.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/tempotext.h"
 
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
@@ -404,6 +406,7 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
 
     if (isRange) {
         types << PropertiesPanelSectionType::SECTION_MEASURES;
+        types << PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT;
         types << PropertiesPanelSectionType::SECTION_EMPTY_STAVES;
     }
 
@@ -894,7 +897,7 @@ bool PropertiesPanelAbstractModel::isMasterNotation() const
         return false;
     }
 
-    return notation == context()->currentMasterNotation()->notation();
+    return notation->isMaster();
 }
 
 INotationSelectionPtr PropertiesPanelAbstractModel::selection() const

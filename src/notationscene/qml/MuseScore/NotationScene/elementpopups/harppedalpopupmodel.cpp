@@ -21,10 +21,12 @@
  */
 
 #include "harppedalpopupmodel.h"
+
+#include "engraving/dom/measure.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/stafflines.h"
 
-#include "log.h"
-
+using namespace mu::engraving;
 using namespace mu::notation;
 
 HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)

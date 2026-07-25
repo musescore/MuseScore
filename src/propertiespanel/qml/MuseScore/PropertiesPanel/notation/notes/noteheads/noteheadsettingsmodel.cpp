@@ -19,8 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "noteheadsettingsmodel.h"
 
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/types/types.h"
@@ -225,8 +228,12 @@ QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
         { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    muse::qtrc("propertiespanel", "Auto", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("propertiespanel", "Normal", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("propertiespanel", "Pitch names", "notehead scheme") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS,
+          muse::qtrc("propertiespanel", "Pitch names, no accidentals", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
           muse::qtrc("propertiespanel", "German pitch names", "notehead scheme") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
+          muse::qtrc("propertiespanel", "German pitch names, no accidentals", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
           muse::qtrc("propertiespanel", "Solfège movable do", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,

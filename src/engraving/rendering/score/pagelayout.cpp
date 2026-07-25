@@ -143,12 +143,22 @@ void PageLayout::collectPage(LayoutContext& ctx)
     System* nextSystem = nullptr;
     int systemIdx = -1;
 
+    auto getPageLock = [&ctx](MeasureBase* mb) -> const RangeLock* {
+        return mb && ctx.conf().viewMode() == LayoutMode::PAGE
+               ? ctx.dom().pageLocks()->lockStartingAt(mb) : nullptr;
+    };
+
+    const RangeLock* pageLock = nullptr;
+
     // re-calculate positions for systems before current
     // (they may have been filled on previous layout)
     size_t pSystems = page->systems().size();
     if (pSystems > 0) {
         SystemLayout::restoreLayout2(page->system(0), ctx);
         y = page->system(0)->y() + page->system(0)->height();
+
+        // Get existing page lock
+        pageLock = getPageLock(page->system(0)->first());
     } else {
         y = page->tm();
     }
@@ -172,6 +182,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
             distance = SystemLayout::minDistance(ctx.state().prevSystem(), ctx.state().curSystem(), ctx);
         } else {
             // this is the first system on page
+            // get page lock here
+            pageLock = getPageLock(ctx.state().curSystem()->first());
             if (ctx.state().curSystem()->vbox()) {
                 // if the header exists and there is a frame, move the frame downwards
                 // to avoid collisions
@@ -244,9 +256,15 @@ void PageLayout::collectPage(LayoutContext& ctx)
         assert(ctx.state().curSystem() != nextSystem);
         ctx.mutState().setCurSystem(nextSystem);
 
-        bool isPageBreak = !ctx.state().curSystem() || (breakPages && ctx.state().prevSystem()->pageBreak());
+        MeasureBase* endMB = ctx.state().prevSystem()->lastMeasure();
+        bool endOfPageLock = endMB && endMB->isEndOfPageLock();
+        const MeasureBase* nextMB = endMB ? endMB->nextMM() : nullptr;
+        bool pageLockStart = nextMB && nextMB->isStartOfPageLock();
 
-        if (!isPageBreak) {
+        bool isPageBreak = !ctx.state().curSystem()
+                           || (breakPages && (ctx.state().prevSystem()->pageBreak() || endOfPageLock || pageLockStart));
+
+        if (!isPageBreak && !pageLock) {
             double dist = SystemLayout::minDistance(ctx.state().prevSystem(), ctx.state().curSystem(), ctx)
                           + ctx.state().curSystem()->height();
             Box* vbox = ctx.state().curSystem()->vbox();
@@ -278,7 +296,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 dist += footerPadding;
             }
             dist = std::max(dist, slb);
-            layoutPage(ctx, page, endY - (y + dist), footerPadding);
+            layoutPage(ctx, page, endY - (y + dist), footerPadding, pageLock);
             // if we collected a system we cannot fit onto this page,
             // we need to collect next page in order to correctly set system positions
             if (collected) {
@@ -372,6 +390,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
             MeasureLayout::layout2(m, ctx);
         }
         SystemLayout::layoutSystemLockIndicators(s, ctx);
+        if (ctx.conf().isMode(LayoutMode::PAGE)) {
+            SystemLayout::layoutPageLockIndicators(s);
+        }
 
         if (StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator()) {
             TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
@@ -527,10 +548,10 @@ void PageLayout::layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, Sy
 //    systems.
 //---------------------------------------------------------
 
-void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
+void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding, bool squeezeToFit)
 {
     TRACEFUNC;
-    if (restHeight < 0.0) {
+    if (restHeight < 0.0 && !squeezeToFit) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;
     }
@@ -558,11 +579,16 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
                 system->move(PointF(0.0, 0.0));
             }
         } else if ((ctx.conf().viewMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
-            distributeStaves(ctx, page, footerPadding);
+            distributeStaves(ctx, page, footerPadding, squeezeToFit);
         }
 
         return;
     }
+
+    const bool compactStaves = restHeight <= 0.0;
+    auto pageFilled = [compactStaves](double space) -> bool {
+        return compactStaves ? (space >= 0.0) : (space <= 0.0);
+    };
 
     double maxDist = ctx.conf().maxSystemDistance();
 
@@ -589,7 +615,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
                 s->setDistance(d);
             }
             restHeight -= totalFill;                        // reduce available space for next iteration
-            if (restHeight <= 0) {
+            if (pageFilled(restHeight)) {
                 break;                                      // no space left
             }
         }
@@ -617,7 +643,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     page->systems().back()->mutldata()->setPosY(y);
 }
 
-void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerPadding)
+void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerPadding, bool squeezeToFit)
 {
     VerticalGapDataList vgdl;
 
@@ -712,12 +738,17 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     if (nextSpacer) {
         spaceRemaining -= std::max(0.0, nextSpacer->absoluteGap() - spacerOffset - staffLowerBorder);
     }
-    if (spaceRemaining <= 0.0) {
+    if (spaceRemaining <= 0.0 && !squeezeToFit) {
         return;
     }
 
+    const bool compactStaves = spaceRemaining <= 0.0;
+    auto breakLoop = [compactStaves](double space) -> bool {
+        return compactStaves ? (space >= 0.0) : (space <= 0.0);
+    };
+
     // Try to make the gaps equal, taking the spread factors and maximum spacing into account.
-    static const int maxPasses { 20 };     // Saveguard to prevent endless loops.
+    static const int maxPasses { 20 };                  // Saveguard to prevent endless loops.
     int pass { 0 };
     while (!muse::RealIsNull(spaceRemaining) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
@@ -747,11 +778,11 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                 modified.push_back(vgd);
                 ++ngaps;
             }
-            if ((spaceRemaining - addedSpace) <= 0.0) {
+            if (breakLoop(spaceRemaining - addedSpace)) {
                 break;
             }
         }
-        if ((spaceRemaining - addedSpace) <= 0.0) {
+        if (breakLoop(spaceRemaining - addedSpace)) {
             for (VerticalGapData* vgd : modified) {
                 vgd->undoLastAddSpacing();
             }

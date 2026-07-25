@@ -19,11 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "barlinesettingsmodel.h"
 
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 
 #include "notation/inotationundostack.h"
 

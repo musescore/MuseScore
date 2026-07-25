@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "scoreappearancesettingsmodel.h"
 
 #include "translation.h"
 
 using namespace mu::propertiespanel;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
                                                            IElementRepositoryService* repository)

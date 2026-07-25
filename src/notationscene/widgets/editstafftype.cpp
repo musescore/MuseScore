@@ -47,7 +47,9 @@ using namespace muse::ui;
 mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
     mu::engraving::NoteHeadScheme::HEAD_NORMAL,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,

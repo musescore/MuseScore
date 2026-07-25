@@ -440,7 +440,7 @@ private:
     TrillHash m_trillStart;
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
-    PlayingTechniqueType m_currPlayTechnique;
+    PlayingTechniqueType m_currPlayTechnique = PlayingTechniqueType::Undefined;
     bool m_isMxl = false;
 };
 
@@ -1675,6 +1675,8 @@ static void pitch2xml(const Note* note, String& s, int& alter, int& octave)
     // correct for ottava lines
     int ottava = 0;
     switch (note->ppitch() - note->pitch()) {
+    case  36: ottava =  3;
+        break;
     case  24: ottava =  2;
         break;
     case  12: ottava =  1;
@@ -1684,6 +1686,8 @@ static void pitch2xml(const Note* note, String& s, int& alter, int& octave)
     case -12: ottava = -1;
         break;
     case -24: ottava = -2;
+        break;
+    case -36: ottava = -3;
         break;
     default:  LOGD("pitch2xml() tick=%d pitch()=%d ppitch()=%d",
                    tick.ticks(), note->pitch(), note->ppitch());
@@ -5648,12 +5652,20 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
             sz = u"15";
             tp = u"down";
             break;
+        case OttavaType::OTTAVA_22MA:
+            sz = u"22";
+            tp = u"down";
+            break;
         case OttavaType::OTTAVA_8VB:
             sz = u"8";
             tp = u"up";
             break;
         case OttavaType::OTTAVA_15MB:
             sz = u"15";
+            tp = u"up";
+            break;
+        case OttavaType::OTTAVA_22MB:
+            sz = u"22";
             tp = u"up";
             break;
         default:
@@ -5667,6 +5679,8 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
             octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1);
         } else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB) {
             octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1);
+        } else if (st == OttavaType::OTTAVA_22MA || st == OttavaType::OTTAVA_22MB) {
+            octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"22\" number=\"%1\"").arg(n + 1);
         } else {
             LOGD("ottava subtype %d not understood", int(st));
         }
@@ -5677,7 +5691,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
         const Fraction tickToWrite = isStart ? ot->tick() : ot->tick2();
         moveToTickIfNeed(tickToWrite, ot->track(), measureStart);
 
-        directionTag(m_xml, m_attr, ot);
+        directionTag(m_xml, m_attr, nullptr);
         m_xml.startElement("direction-type");
         octaveShiftXml += color2xml(ot);
         octaveShiftXml += positioningAttributes(ot, ot->tick() == tick);
@@ -7067,9 +7081,7 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
 
 void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 {
-    track_idx_t strack = p->startTrack();
-    track_idx_t etrack = p->endTrack();
-    //LOGD("keysigTimesig m %p strack %zu etrack %zu", m, strack, etrack);
+    const TrackRange trackRange = p->trackRange();
 
     // search all staves for non-generated time and key signatures
     std::map<staff_idx_t, KeySig*> keysigs;     // map staff to key signature
@@ -7078,14 +7090,14 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (seg->tick() > m->tick()) {
             break;
         }
-        for (track_idx_t t = strack; t < etrack; t += VOICES) {
+        for (track_idx_t t = trackRange.startTrack; t < trackRange.endTrack; t += VOICES) {
             EngravingItem* el = seg->element(t);
             if (!el) {
                 continue;
             }
             if (el->isKeySig()) {
                 //LOGD(" found keysig %p track %d", el, el->track());
-                staff_idx_t st = (t - strack) / VOICES;
+                staff_idx_t st = (t - trackRange.startTrack) / VOICES;
                 if (!el->generated()) {
                     keysigs[st] = toKeySig(el);
                 }
@@ -7093,7 +7105,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 
             if (el->isTimeSig()) {
                 LOGN(" found timesig %p tick %d track %zu", el, el->tick().ticks(), el->track());
-                staff_idx_t st = (t - strack) / VOICES;
+                staff_idx_t st = (t - trackRange.startTrack) / VOICES;
                 if (!el->generated()) {
                     timesigs[st] = toTimeSig(el);
                 }
@@ -7599,6 +7611,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
         const Segment* clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0, 1));
 
         if (clefSeg) {
+            const track_idx_t partStartTrack = part->trackRange().startTrack;
             for (size_t i = 0; i < staves; ++i) {
                 // sstaff - xml staff number, counting from 1 for this
                 // instrument
@@ -7606,7 +7619,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
                 // xml output (because there is only one staff)
 
                 size_t sstaff = (staves > 1) ? i + 1 : 0;
-                track_idx_t track = part->startTrack() + VOICES * i;
+                track_idx_t track = partStartTrack + VOICES * i;
 
                 if (clefSeg->element(track) == nullptr) {
                     ClefType ct { ClefType::G };
@@ -7734,8 +7747,7 @@ static void addChordPitchesToSet(const Chord* c, pitchSet& set)
 
 static void findPitchesUsed(const Part* part, pitchSet& set)
 {
-    track_idx_t strack = part->startTrack();
-    track_idx_t etrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
 
     // loop over all chords in the part
     for (const MeasureBase* mb = part->score()->measures()->first(); mb; mb = mb->next()) {
@@ -7743,7 +7755,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
             continue;
         }
         const Measure* m = toMeasure(mb);
-        for (track_idx_t st = strack; st < etrack; ++st) {
+        for (track_idx_t st = trackRange.startTrack; st < trackRange.endTrack; ++st) {
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 const EngravingItem* el = seg->element(st);
                 if (!el) {
@@ -8602,8 +8614,9 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 {
     const Part* part = m_score->parts().at(partIndex);
     const size_t staves = part->nstaves();
-    const track_idx_t strack = part->startTrack();
-    const track_idx_t etrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
+    const track_idx_t strack = trackRange.startTrack;
+    const track_idx_t etrack = trackRange.endTrack;
 
     // If MMRests are enabled, elements are moved from the underlying measure to the convering MMRest measure
     // Make sure we find these elements in the correct measure
@@ -9109,7 +9122,7 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
         for (int j : bStarts) {
             xml.startElement("frame-note");
             xml.tag("string", mxmlString);
-            xml.tag("fret", j);
+            xml.tag("fret", j + item->fretOffset());
             xml.tag("barre", { { "type", "start" } });
             xml.endElement();
         }
@@ -9117,7 +9130,7 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
         for (int j : bEnds) {
             xml.startElement("frame-note");
             xml.tag("string", mxmlString);
-            xml.tag("fret", j);
+            xml.tag("fret", j + item->fretOffset());
             xml.tag("barre", { { "type", "stop" } });
             xml.endElement();
         }

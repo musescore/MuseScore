@@ -662,10 +662,11 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     if (crossStaffMove != 0) {
         const staff_idx_t targetStaffIdxCandidate = static_cast<staff_idx_t>(int(staffIdx) + crossStaffMove);
         Staff* candidateStaff = m_score->staff(targetStaffIdxCandidate);
+        const TrackRange basePartTrackRange = baseStaff->part()->trackRange();
         const bool canUseCandidate = candidateStaff && candidateStaff->visible()
                                      && candidateStaff->isLinked() == baseStaff->isLinked()
-                                     && staff2track(staffIdx) >= baseStaff->part()->startTrack()
-                                     && staff2track(targetStaffIdxCandidate) < baseStaff->part()->endTrack()
+                                     && staff2track(staffIdx) >= basePartTrackRange.startTrack
+                                     && staff2track(targetStaffIdxCandidate) < basePartTrackRange.endTrack
                                      && candidateStaff->staffType(eventTick)->group() == baseStaff->staffType(eventTick)->group();
         if (canUseCandidate) {
             targetStaff = candidateStaff;

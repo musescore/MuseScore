@@ -87,6 +87,7 @@
 #include "editchord.h"
 #include "editnote.h"
 #include "noteinput.h"
+#include "editpagelocks.h"
 #include "editproperty.h"
 #include "editspanner.h"
 #include "editstaff.h"
@@ -316,9 +317,9 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(bool rollback, bool layoutAllParts)
+void Score::endCmd(bool rollback, bool layoutAllParts, bool keepRolledBackElements)
 {
-    masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts);
+    masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts, keepRolledBackElements);
 }
 
 //---------------------------------------------------------
@@ -1818,6 +1819,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->lineBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove page break if appropriate
@@ -1829,6 +1831,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->pageBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove line break if appropriate
@@ -1840,6 +1843,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->sectionBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             break;

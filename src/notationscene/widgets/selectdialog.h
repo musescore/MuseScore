@@ -28,7 +28,10 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::engraving {
+class EngravingItem;
 class System;
 }
 
@@ -68,8 +71,8 @@ private:
     void apply() const;
     FilterElementsOptions elementOptions() const;
 
-    mu::engraving::System* elementSystem(const EngravingItem* element) const;
+    engraving::System* elementSystem(const engraving::EngravingItem* element) const;
 
-    const EngravingItem* m_element = nullptr;
+    const engraving::EngravingItem* m_element = nullptr;
 };
 }

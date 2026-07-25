@@ -34,6 +34,7 @@
 #include "../dom/measurerepeat.h"
 #include "../dom/mscore.h"
 #include "../dom/note.h"
+#include "../dom/pagelockindicator.h"
 #include "../dom/rest.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
@@ -41,6 +42,7 @@
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
+#include "../dom/systemlockindicator.h"
 #include "../dom/tapping.h"
 #include "../style/style.h"
 
@@ -925,6 +927,12 @@ EngravingItem* Score::nextElement()
             e = toSystemLockIndicator(e)->systemLock()->endMB();
             continue;
         }
+        case ElementType::PAGE_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toPageLockIndicator(e)->pageLock()->endMB();
+            continue;
+        }
         case ElementType::SOUND_FLAG:
             if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
                 return parent;
@@ -1172,6 +1180,12 @@ EngravingItem* Score::prevElement()
         {
             staffId = 0;
             e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
+        }
+        case ElementType::PAGE_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toPageLockIndicator(e)->pageLock()->endMB();
             continue;
         }
         case ElementType::HARMONY: {

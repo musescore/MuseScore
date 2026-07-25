@@ -22,6 +22,8 @@
 
 #include "chordsymbolsettingsmodel.h"
 
+#include "engraving/dom/harmony.h"
+
 #include "notation/inotationstyle.h" // IWYU pragma: keep
 
 #include "translation.h"

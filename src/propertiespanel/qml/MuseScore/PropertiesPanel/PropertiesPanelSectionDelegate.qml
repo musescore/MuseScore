@@ -30,6 +30,7 @@ import MuseScore.PropertiesPanel
 import "common"
 import "general"
 import "measures"
+import "systemlayout"
 import "emptystaves"
 import "notation"
 import "text"
@@ -66,6 +67,7 @@ ExpandableBlank {
         switch (root.sectionModel.sectionType) {
         case PropertiesPanelAbstractModel.SECTION_GENERAL: return generalSection
         case PropertiesPanelAbstractModel.SECTION_MEASURES: return measuresSection
+        case PropertiesPanelAbstractModel.SECTION_SYSTEM_LAYOUT: return systemLayoutSection
         case PropertiesPanelAbstractModel.SECTION_EMPTY_STAVES: return emptyStavesSection
         case PropertiesPanelAbstractModel.SECTION_TEXT: return textSection
         case PropertiesPanelAbstractModel.SECTION_NOTATION:
@@ -102,6 +104,21 @@ ExpandableBlank {
 
         MeasuresSection {
             model: root.sectionModel as MeasuresSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigation.row + 1
+            anchorItem: root.anchorItem
+
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(-invisibleContentHeight)
+            }
+        }
+    }
+
+    Component {
+        id: systemLayoutSection
+
+        SystemLayoutSection {
+            model: root.sectionModel as SystemLayoutSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem

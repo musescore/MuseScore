@@ -85,7 +85,6 @@ private:
     Item* createItem(Item* parent, const engraving::UndoableTransaction* transaction, bool isCurrent = false);
     Item* createItem(Item* parent, const engraving::UndoableCommand* command, bool isCurrent = false);
     Item* itemByModelIndex(const QModelIndex& index) const;
-    QVariantMap makeData(const mu::engraving::EngravingObject* el) const;
 
     void load(const engraving::UndoableTransaction* transaction, Item* parent);
 

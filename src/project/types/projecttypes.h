@@ -22,36 +22,14 @@
 
 #pragma once
 
-#include <variant>
-
 #include <QString>
 #include <QUrl>
 
 #include "io/path.h"
-#include "progress.h"
-#include "log.h"
-
-#include "projectmeta.h"
 
 #include "cloud/cloudtypes.h"
-#include "notation/inotation.h"
-#include "notation/notationtypes.h"
-#include "../inotationwriter.h"
 
 namespace mu::project {
-struct ProjectCreateOptions
-{
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-
-    muse::io::path_t templatePath;
-
-    notation::ScoreCreateOptions scoreOptions;
-};
-
 struct OpenParams {
     OpenParams() {}
 
@@ -60,20 +38,6 @@ struct OpenParams {
     bool forceMode = false;
     bool forcePageMode = false;
     bool unrollRepeats = false;
-};
-
-struct MigrationOptions
-{
-    // common
-    int appVersion = 0;
-    bool isApplyMigration = false;
-    bool isAskAgain = true;
-
-    bool isApplyLeland = true;
-    bool isApplyEdwin = true;
-    bool isRemapPercussion = true;
-
-    bool isValid() const { return appVersion != 0; }
 };
 
 enum class SaveMode
@@ -85,19 +49,6 @@ enum class SaveMode
     AutoSave,
     SavePage,
 };
-
-namespace _SaveLocationType {
-Q_NAMESPACE;
-enum class Type
-{
-    Undefined,
-    Local,
-    Cloud
-};
-Q_ENUM_NS(Type)
-}
-
-using SaveLocationType = _SaveLocationType::Type;
 
 struct CloudProjectInfo {
     QUrl sourceUrl;
@@ -124,224 +75,9 @@ struct CloudAudioInfo {
     }
 };
 
-struct ExportInfo {
-    QString id;
-    muse::io::path_t exportDirPath;
-    INotationWriter::UnitType unitType;
-    std::vector<notation::INotationWeakPtr> notations;
-};
-
-struct SaveLocation
-{
-    SaveLocationType type = SaveLocationType::Undefined;
-
-    std::variant<muse::io::path_t, CloudProjectInfo> data;
-
-    bool isLocal() const
-    {
-        return type == SaveLocationType::Local
-               && std::holds_alternative<muse::io::path_t>(data);
-    }
-
-    bool isCloud() const
-    {
-        return type == SaveLocationType::Cloud
-               && std::holds_alternative<CloudProjectInfo>(data);
-    }
-
-    bool isValid() const
-    {
-        return isLocal() || isCloud();
-    }
-
-    const muse::io::path_t& localPath() const
-    {
-        IF_ASSERT_FAILED(isLocal()) {
-            static muse::io::path_t null;
-            return null;
-        }
-
-        return std::get<muse::io::path_t>(data);
-    }
-
-    const CloudProjectInfo& cloudInfo() const
-    {
-        IF_ASSERT_FAILED(isCloud()) {
-            static CloudProjectInfo null;
-            return null;
-        }
-
-        return std::get<CloudProjectInfo>(data);
-    }
-
-    SaveLocation() = default;
-
-    SaveLocation(SaveLocationType type, const std::variant<muse::io::path_t, CloudProjectInfo>& data = {})
-        : type(type), data(data) {}
-
-    SaveLocation(const muse::io::path_t& localPath)
-        : type(SaveLocationType::Local), data(localPath) {}
-
-    SaveLocation(const CloudProjectInfo& cloudInfo)
-        : type(SaveLocationType::Cloud), data(cloudInfo) {}
-};
-
-struct ProjectFile {
-    QUrl url;
-    QString displayNameOverride = {};
-
-    ProjectFile() = default;
-
-    ProjectFile(const QUrl& url, const QString& displayNameOverride = {})
-        : url(url), displayNameOverride(displayNameOverride) {}
-
-    ProjectFile(const muse::io::path_t& path, const QString& displayNameOverride = {})
-        : url(path.toQUrl()), displayNameOverride(displayNameOverride) {}
-
-    bool isNull() const
-    {
-        return url.isEmpty();
-    }
-
-    bool isValid() const
-    {
-        return url.isValid();
-    }
-
-    bool hasDisplayName() const
-    {
-        if (!displayNameOverride.isEmpty()) {
-            return true;
-        }
-
-        return url.isLocalFile();
-    }
-
-    QString displayName(bool includingExtension) const
-    {
-        if (!displayNameOverride.isEmpty()) {
-            return displayNameOverride;
-        }
-
-        return muse::io::filename(path(), includingExtension).toQString();
-    }
-
-    muse::io::path_t path() const
-    {
-        assert(url.isEmpty() || url.isLocalFile());
-
-        return muse::io::path_t(url);
-    }
-
-    bool operator ==(const ProjectFile& other) const
-    {
-        return url == other.url
-               && displayNameOverride == other.displayNameOverride;
-    }
-
-    bool operator !=(const ProjectFile& other) const
-    {
-        return !(*this == other);
-    }
-};
-
-using ProjectFilesList = std::vector<ProjectFile>;
-
-struct RecentFile {
-    muse::io::path_t path;
-    QString displayNameOverride = {};
-
-    RecentFile() = default;
-
-    RecentFile(const muse::io::path_t& path, const QString& displayNameOverride = {})
-        : path(path), displayNameOverride(displayNameOverride) {}
-
-    static RecentFile fromProjectFile(const ProjectFile& projectFile)
-    {
-        return RecentFile(projectFile.path(), projectFile.displayNameOverride);
-    }
-
-    ProjectFile toProjectFile() const
-    {
-        return ProjectFile(path, displayNameOverride);
-    }
-
-    bool isValid() const
-    {
-        return !path.empty();
-    }
-
-    QString displayName(bool includingExtension) const
-    {
-        if (!displayNameOverride.isEmpty()) {
-            return displayNameOverride;
-        }
-
-        return muse::io::filename(path, includingExtension).toQString();
-    }
-
-    bool operator ==(const RecentFile& other) const
-    {
-        return path == other.path
-               && displayNameOverride == other.displayNameOverride;
-    }
-
-    bool operator !=(const RecentFile& other) const
-    {
-        return !(*this == other);
-    }
-};
-
-using RecentFilesList = std::vector<RecentFile>;
-
-struct Template
-{
-    QString categoryTitle;
-    ProjectMeta meta;
-    bool isCustom = false;
-};
-
-using Templates = QList<Template>;
-
-struct ProjectBeingDownloaded {
-    int scoreId = 0;
-    muse::ProgressPtr progress;
-};
-
-namespace _GenerateAudioTimePeriodType {
-Q_NAMESPACE;
-
-enum class Type {
+enum class GenerateAudioTimePeriodType {
     Never = 0,
     Always,
     AfterCertainNumberOfSaves
 };
-Q_ENUM_NS(Type)
-}
-
-using GenerateAudioTimePeriodType = _GenerateAudioTimePeriodType::Type;
-
-namespace _MigrationType {
-Q_NAMESPACE;
-
-enum class Type
-{
-    Unknown,
-    Pre_3_6,
-    Ver_3_6
-};
-Q_ENUM_NS(Type)
-}
-
-using MigrationType = _MigrationType::Type;
-
-inline std::vector<MigrationType> allMigrationTypes()
-{
-    static const std::vector<MigrationType> types {
-        MigrationType::Pre_3_6,
-        MigrationType::Ver_3_6
-    };
-
-    return types;
-}
 }

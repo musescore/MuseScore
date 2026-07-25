@@ -21,6 +21,8 @@
  */
 
 #include "chordsymbolspagemodel.h"
+
+#include "engraving/dom/realizedharmony.h"
 #include "engraving/types/types.h"
 
 using namespace mu::notation;
@@ -199,25 +201,25 @@ QVariantList ChordSymbolsPageModel::possibleHarmonyVoicingOptions() const
     QVariantList options {
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Automatic") },
-            { "value", static_cast<int>(Voicing::AUTO) } },
+            { "value", static_cast<int>(engraving::Voicing::AUTO) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Root only") },
-            { "value", static_cast<int>(Voicing::ROOT_ONLY) } },
+            { "value", static_cast<int>(engraving::Voicing::ROOT_ONLY) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Close") },
-            { "value", static_cast<int>(Voicing::CLOSE) } },
+            { "value", static_cast<int>(engraving::Voicing::CLOSE) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Drop two") },
-            { "value", static_cast<int>(Voicing::DROP_2) } },
+            { "value", static_cast<int>(engraving::Voicing::DROP_2) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Six note") },
-            { "value", static_cast<int>(Voicing::SIX_NOTE) } },
+            { "value", static_cast<int>(engraving::Voicing::SIX_NOTE) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Four note") },
-            { "value", static_cast<int>(Voicing::FOUR_NOTE) } },
+            { "value", static_cast<int>(engraving::Voicing::FOUR_NOTE) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Three note") },
-            { "value", static_cast<int>(Voicing::THREE_NOTE) } },
+            { "value", static_cast<int>(engraving::Voicing::THREE_NOTE) } },
     };
 
     return options;
@@ -228,13 +230,13 @@ QVariantList ChordSymbolsPageModel::possibleHarmonyDurationOptions() const
     QVariantList options {
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Until next chord symbol") },
-            { "value", static_cast<int>(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL) } },
+            { "value", static_cast<int>(engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Until end of measure") },
-            { "value", static_cast<int>(mu::engraving::HDuration::STOP_AT_MEASURE_END) } },
+            { "value", static_cast<int>(engraving::HDuration::STOP_AT_MEASURE_END) } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Chord/rest duration") },
-            { "value", static_cast<int>(mu::engraving::HDuration::SEGMENT_DURATION) } },
+            { "value", static_cast<int>(engraving::HDuration::SEGMENT_DURATION) } },
     };
 
     return options;

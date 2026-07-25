@@ -20,12 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_REALIZEDHARMONY_H
-#define MU_ENGRAVING_REALIZEDHARMONY_H
+#pragma once
 
 #include <map>
 
-#include "containers.h"
 #include "../types/fraction.h"
 
 namespace mu::engraving {
@@ -105,5 +103,3 @@ private:
     bool m_literal = false;   //use all notes when possible and do not add any notes
 };
 }
-
-#endif // __REALIZEDHARMONY_H__

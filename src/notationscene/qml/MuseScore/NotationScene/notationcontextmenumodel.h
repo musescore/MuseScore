@@ -28,7 +28,6 @@
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "notation/inotationinteraction.h"
-#include "notation/notationtypes.h"
 
 namespace mu::notation {
 class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
@@ -42,7 +41,7 @@ public:
     Q_INVOKABLE void loadItems(int elementType);
 
 private:
-    muse::uicomponents::MenuItemList makeItemsByElementType(ElementType type);
+    muse::uicomponents::MenuItemList makeItemsByElementType(engraving::ElementType type);
 
     muse::uicomponents::MenuItemList makePageItems();
     muse::uicomponents::MenuItemList makeDefaultCopyPasteItems();
@@ -65,7 +64,7 @@ private:
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
     muse::uicomponents::MenuItemList makeTextItems();
 
-    muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* element);
+    muse::uicomponents::MenuItem* makeEditStyle(const engraving::EngravingItem* element);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
@@ -75,7 +74,7 @@ private:
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
 
-    const EngravingItem* currentElement() const;
+    const engraving::EngravingItem* currentElement() const;
 
     const INotationInteraction::HitElementContext& hitElementContext() const;
 };

@@ -33,6 +33,7 @@
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
+#include "../editing/editpagelocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/mscoreview.h"
@@ -389,9 +390,8 @@ AccidentalVal Measure::findAccidental(const Note* note) const
     AccidentalState tversatz;    // state of already set accidentals for this measure
     tversatz.init(vStaff->keySigEvent(tick()));
 
-    track_idx_t startTrack = vStaff->part()->startTrack();
+    const TrackRange trackRange = vStaff->part()->trackRange();
     track_idx_t mainTrack = chord->vStaffIdx() * VOICES;
-    track_idx_t endTrack = vStaff->part()->endTrack();
 
     for (const Segment* segment = first(); segment; segment = segment->next()) {
         if (segment->isKeySigType()) {
@@ -401,7 +401,7 @@ AccidentalVal Measure::findAccidental(const Note* note) const
             }
             tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
                 const EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
@@ -465,15 +465,14 @@ AccidentalVal Measure::findAccidental(const Segment* s, staff_idx_t staffIdx, in
     tversatz.init(staff->keySigEvent(tick()));
 
     SegmentType st = SegmentType::ChordRest;
-    track_idx_t startTrack = staff->part()->startTrack();
-    track_idx_t endTrack = staff->part()->endTrack();
+    const TrackRange trackRange = staff->part()->trackRange();
     for (const Segment* segment = first(st); segment; segment = segment->next(st)) {
         if (segment == s && staff->isPitchedStaff(tick())) {
             ClefType clef = staff->clef(s->tick());
             int l = relStep(line, clef);
             return tversatz.accidentalVal(l, error);
         }
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
             const EngravingItem* e = segment->element(track);
             if (!e || !e->isChord()) {
                 continue;
@@ -1409,7 +1408,7 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::LAYOUT_BREAK:
         // Always drop to all staves
         if (viewer) {
-            viewer->setDropRectangle(canvasBoundingRect());
+            viewer->setDropRectangles({ canvasBoundingRect() });
         }
         return true;
 
@@ -1420,9 +1419,9 @@ bool Measure::acceptDrop(EditData& data) const
         // Drop to all staves or single staff depending on modifier
         if (viewer) {
             if (data.modifiers & ControlModifier) {
-                viewer->setDropRectangle(staffRect);
+                viewer->setDropRectangles({ staffRect });
             } else {
-                viewer->setDropRectangle(canvasBoundingRect());
+                viewer->setDropRectangles({ canvasBoundingRect() });
             }
         }
         return true;
@@ -1438,14 +1437,14 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
         if (viewer) {
-            viewer->setDropRectangle(staffRect);
+            viewer->setDropRectangles({ staffRect });
         }
         return true;
 
     case ElementType::STRING_TUNINGS: {
         const bool canAdd = canAddStringTunings(staffIdx);
         if (viewer && canAdd) {
-            viewer->setDropRectangle(staffRect);
+            viewer->setDropRectangles({ staffRect });
         }
         return canAdd;
     }
@@ -1464,7 +1463,7 @@ bool Measure::acceptDrop(EditData& data) const
                 }
             }
             if (viewer) {
-                viewer->setDropRectangle(canvasBoundingRect());
+                viewer->setDropRectangles({ canvasBoundingRect() });
             }
             return true;
         }
@@ -1473,7 +1472,7 @@ bool Measure::acceptDrop(EditData& data) const
                 return false;
             }
             if (viewer) {
-                viewer->setDropRectangle(staffRect);
+                viewer->setDropRectangles({ staffRect });
             }
             return true;
         case ActionIconType::SYSTEM_LOCK:
@@ -1481,7 +1480,38 @@ bool Measure::acceptDrop(EditData& data) const
             LayoutMode layoutMode = score()->layoutMode();
             if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
                 if (viewer) {
-                    viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                    const MeasureBase* first = system() ? system()->first() : nullptr;
+                    const PointF topLeft = first ? first->canvasBoundingRect().topLeft() : PointF(0.0, 0.0);
+                    viewer->setDropRectangles({ RectF(topLeft, canvasBoundingRect().bottomRight()) });
+                }
+                return true;
+            }
+            return false;
+        }
+        case ActionIconType::PAGE_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            if (layoutMode == LayoutMode::PAGE) {
+                if (viewer) {
+                    std::vector<RectF> dropRects;
+                    for (System* sys : page()->systems()) {
+                        const bool lastSelectedSys = sys == system();
+                        const MeasureBase* first = sys ? sys->first() : nullptr;
+                        const MeasureBase* last = sys ? sys->last() : nullptr;
+                        if (lastSelectedSys) {
+                            last = this;
+                        }
+                        if (!first || !last) {
+                            continue;
+                        }
+                        dropRects.push_back(RectF(first->canvasBoundingRect().topLeft(),
+                                                  last->canvasBoundingRect().bottomRight()));
+
+                        if (lastSelectedSys) {
+                            break;
+                        }
+                    }
+                    viewer->setDropRectangles(dropRects);
                 }
                 return true;
             }
@@ -1514,7 +1544,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         return nullptr;
     }
     Staff* staff = score()->staff(staffIdx);
-    //bool fromPalette = (e->track() == -1);
 
     switch (e->type()) {
     case ElementType::MARKER:
@@ -1629,7 +1658,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             }
             break;
         case LayoutBreakType::NOBREAK:
-            if (measure->noBreak()) {
+            if (measure->noBreak() || measure->isEndOfSystemLock() || measure->isEndOfPageLock()) {
                 delete b;
                 b = 0;
             } else {
@@ -1639,6 +1668,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             break;
         }
         if (b) {
+            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
+            }
             b->setTrack(0);
             b->setParent(measure);
             score()->undoAddElement(b);
@@ -1807,6 +1839,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         }
         case ActionIconType::SYSTEM_LOCK:
             EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
+            break;
+        case ActionIconType::PAGE_LOCK:
+            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
             break;
         default:
             break;

@@ -40,6 +40,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "page.h"
+#include "pagelockindicator.h"
 #include "part.h"
 #include "score.h"
 #include "segment.h"
@@ -49,6 +50,7 @@
 #include "staffvisibilityindicator.h"
 #include "system.h"
 #include "systemdivider.h"
+#include "systemlockindicator.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -160,6 +162,9 @@ System::~System()
     muse::DeleteAll(m_lockIndicators);
     if (m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
+    }
+    if (m_pageLockIndicator) {
+        delete m_pageLockIndicator;
     }
 }
 
@@ -316,7 +321,7 @@ bool System::isLocked() const
     return m_ml.front()->isStartOfSystemLock();
 }
 
-const SystemLock* System::systemLock() const
+const RangeLock* System::systemLock() const
 {
     return m_ml.front()->systemLock();
 }
@@ -331,6 +336,17 @@ void System::deleteLockIndicators()
 {
     muse::DeleteAll(m_lockIndicators);
     m_lockIndicators.clear();
+}
+
+void System::setPageLockIndicator(PageLockIndicator* pli)
+{
+    m_pageLockIndicator = pli;
+}
+
+void System::deletePageLockIndicator()
+{
+    delete m_pageLockIndicator;
+    m_pageLockIndicator = nullptr;
 }
 
 //---------------------------------------------------------
@@ -724,6 +740,10 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     if (m_staffVisibilityIndicator) {
         func(m_staffVisibilityIndicator);
+    }
+
+    if (m_pageLockIndicator) {
+        func(m_pageLockIndicator);
     }
 
     for (auto i : m_lockIndicators) {

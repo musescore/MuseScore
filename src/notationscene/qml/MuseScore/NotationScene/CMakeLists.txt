@@ -321,6 +321,7 @@ target_include_directories(notationscene_qml PRIVATE
 )
 
 target_link_libraries(notationscene_qml PRIVATE
+    Qt::Widgets # for QApplication
     muse::uicomponents_qml
 )
 

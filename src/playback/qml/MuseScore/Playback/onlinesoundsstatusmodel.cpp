@@ -26,6 +26,7 @@
 #include "global/translation.h"
 
 #include "audio/common/audioerrors.h"
+#include "notation/imasternotation.h"
 #include "notation/inotationplayback.h" // IWYU pragma: keep
 #include "playback/playbackcommands.h"
 
@@ -178,8 +179,8 @@ void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault
     setManualProcessingAllowed(enableByDefault);
 
     m_tracksDataChanged = master->playback()->tracksDataChanged();
-    m_tracksDataChanged.onReceive(this, [this](const InstrumentTrackIdSet& changedTrackIdSet) {
-        for (const InstrumentTrackId& trackId : changedTrackIdSet) {
+    m_tracksDataChanged.onReceive(this, [this](const engraving::InstrumentTrackIdSet& changedTrackIdSet) {
+        for (const engraving::InstrumentTrackId& trackId : changedTrackIdSet) {
             if (muse::contains(m_onlineTrackIdSet, trackId)) {
                 setManualProcessingAllowed(true);
                 return;

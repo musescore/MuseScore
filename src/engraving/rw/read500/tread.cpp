@@ -1843,7 +1843,8 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
 
         { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
 
-        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
+        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK },
+        { "toggle-page-lock", ActionIconType::PAGE_LOCK }
     };
 
     auto it = map.find(actionCode);
@@ -4777,6 +4778,17 @@ void TRead::readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_id
     ConnectorInfoReader::readConnector(info, e, ctx);
 }
 
+void TRead::readPageLocks(Score* score, XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "pageLock") {
+            readPageLock(score, e);
+        } else {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::readSystemLocks(Score* score, XmlReader& e)
 {
     while (e.readNextStartElement()) {
@@ -4786,6 +4798,32 @@ void TRead::readSystemLocks(Score* score, XmlReader& e)
             e.unknown();
         }
     }
+}
+
+void TRead::readPageLock(Score* score, XmlReader& e)
+{
+    MeasureBase* startMeas = nullptr;
+    MeasureBase* endMeas = nullptr;
+    EIDRegister* eidRegister = score->masterScore()->eidRegister();
+
+    while (e.readNextStartElement()) {
+        AsciiStringView tag(e.name());
+        if (tag == "startMeasure") {
+            EID startMeasId = EID::fromStdString(e.readAsciiText());
+            startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
+        } else if (tag == "endMeasure") {
+            EID endMeasId = EID::fromStdString(e.readAsciiText());
+            endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
+        } else {
+            e.unknown();
+        }
+    }
+
+    IF_ASSERT_FAILED(startMeas && endMeas) {
+        return;
+    }
+
+    score->addPageLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemLock(Score* score, XmlReader& e)
@@ -4811,7 +4849,7 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         return;
     }
 
-    score->addSystemLock(new SystemLock(startMeas, endMeas));
+    score->addSystemLock(new RangeLock(startMeas, endMeas));
 }
 
 void TRead::readSystemDividers(Score* score, XmlReader& e, ReadContext& ctx)
