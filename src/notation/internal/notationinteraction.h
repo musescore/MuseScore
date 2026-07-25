@@ -241,7 +241,7 @@ public:
 
     void autoFlipHairpinsType(engraving::Dynamic* dynamic) override;
 
-    void toggleDynamicPopup() override;
+    void toggleDynamicPopup(bool allowAnyGrip=false) override;
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void moveMeasureToPrevSystem() override;
