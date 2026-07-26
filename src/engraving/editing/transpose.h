@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include "../dom/harmony.h"
 #include "../dom/interval.h"
 
@@ -47,6 +49,8 @@ public:
     static int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
     static void undoTransposeHarmony(Transaction& tx, Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+
+    static String transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc);
 
 private:
     static void undoTransposeHarmonyDiatonic(Transaction& tx, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);
