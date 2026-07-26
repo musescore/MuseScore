@@ -206,6 +206,7 @@ TEST_F(Engraving_PlaybackModelTests, ActivePlaybackPitchesFiltersTracksAndSurviv
     const Part* part = score->parts().front();
     ASSERT_TRUE(part);
 
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     PlaybackModel model(modularity::globalCtx());
@@ -228,6 +229,7 @@ TEST_F(Engraving_PlaybackModelTests, ScoreChangeInvalidatesActivePlaybackPitches
     Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     PlaybackModel model(modularity::globalCtx());

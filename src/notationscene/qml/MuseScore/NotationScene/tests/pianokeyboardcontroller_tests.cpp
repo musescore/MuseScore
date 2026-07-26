@@ -546,6 +546,10 @@ TEST_F(PianoKeyboardControllerTests, PauseStopAndResumePreservePressedKey)
 
 TEST_F(PianoKeyboardControllerTests, PlaybackPreservesSelectionAndMidiStates)
 {
+    muse::ValCh<bool> useWrittenPitch;
+    useWrittenPitch.val = true;
+    ON_CALL(*m_configuration, midiUseWrittenPitch()).WillByDefault(Return(useWrittenPitch));
+
     std::unique_ptr<engraving::MasterScore> score(engraving::compat::ScoreAccess::createMasterScore(nullptr));
     auto chord = engraving::Factory::makeChord(score->dummy()->segment());
     engraving::Note* note60 = engraving::Factory::createNote(chord.get());
