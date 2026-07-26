@@ -24,6 +24,8 @@ set(PLAYBACK_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playbackcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/playbacknoteindex.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playbacknoteindex.h
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playbacksetupdataresolver.cpp

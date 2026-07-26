@@ -36,6 +36,7 @@
 
 #include "../types/types.h"
 #include "playbackeventsrenderer.h"
+#include "playbacknoteindex.h"
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
 
@@ -82,8 +83,13 @@ public:
 
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
-    muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
-    muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
+    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
+    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
+    void sendOffStreamEvents(const InstrumentTrackId& trackId, const muse::mpe::PlaybackEventsMap& events,
+                             const muse::mpe::DynamicLevelLayers& dynamics, bool flushSound);
+
+    std::vector<muse::midi::note_idx_t> activePlaybackPitches(muse::mpe::timestamp_t timestamp,
+                                                              const InstrumentTrackIdSet& includedTracks) const;
 
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound);
     void triggerMetronome(int tick);
@@ -122,6 +128,7 @@ private:
     InstrumentTrackId idKey(const EngravingItem* item) const;
     InstrumentTrackId idKey(const std::vector<const EngravingItem*>& items) const;
     InstrumentTrackId idKey(const ID& partId, const String& instrumentId) const;
+    muse::mpe::PlaybackData& resolveTrackPlaybackDataMutable(const InstrumentTrackId& trackId);
 
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                 ChangedTrackIdSet* trackChanges = nullptr);
@@ -163,6 +170,7 @@ private:
     const RepeatList& repeatList() const;
 
     muse::mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
+    void invalidateActivePlaybackPitches();
 
     static void applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries);
     static void applyTieTickBoundaries(const Tie* tie, TickBoundaries& tickBoundaries);
@@ -179,6 +187,10 @@ private:
     PlaybackContextPtr m_playbackCtx;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
     std::unordered_map<InstrumentTrackId, bool> m_sendEventsOnScoreChangeMap;
+
+    mutable PlaybackNoteIndex m_activePlaybackNoteIndex;
+    mutable InstrumentTrackIdSet m_indexedPlaybackTracks;
+    mutable bool m_activePlaybackNoteIndexDirty = true;
 
     InstrumentTrackIdSet m_changedTrackIdSet;
 

@@ -64,6 +64,9 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
 void PlaybackModel::load(Score* score)
 {
     TRACEFUNC;
+    //! NOTE: PlaybackModel is initialized once per notation. Score changes after initialization
+    //! are handled incrementally below, or wholesale by reload().
+    invalidateActivePlaybackPitches();
 
     if (!score || score->measures()->empty() || !score->lastMeasure()) {
         return;
@@ -110,6 +113,8 @@ void PlaybackModel::load(Score* score)
 
 void PlaybackModel::reload()
 {
+    invalidateActivePlaybackPitches();
+
     if (!m_score) {
         return;
     }
@@ -249,7 +254,12 @@ bool PlaybackModel::hasSoundFlags(const InstrumentTrackId& trackId) const
     return m_playbackCtx->hasSoundFlags(trackRange.startTrack, trackRange.endTrack);
 }
 
-PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
+const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
+{
+    return resolveTrackPlaybackDataMutable(trackId);
+}
+
+PlaybackData& PlaybackModel::resolveTrackPlaybackDataMutable(const InstrumentTrackId& trackId)
 {
     auto search = m_playbackDataMap.find(trackId);
 
@@ -270,9 +280,41 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& t
     return m_playbackDataMap[trackId];
 }
 
-PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
+const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
 {
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
+}
+
+void PlaybackModel::sendOffStreamEvents(const InstrumentTrackId& trackId, const PlaybackEventsMap& events,
+                                        const DynamicLevelLayers& dynamics, bool flushSound)
+{
+    PlaybackData& data = resolveTrackPlaybackDataMutable(trackId);
+    data.offStream.send(events, dynamics, flushSound);
+}
+
+std::vector<muse::midi::note_idx_t> PlaybackModel::activePlaybackPitches(timestamp_t timestamp,
+                                                                         const InstrumentTrackIdSet& includedTracks) const
+{
+    if (m_activePlaybackNoteIndexDirty || m_indexedPlaybackTracks != includedTracks) {
+        m_activePlaybackNoteIndex.clear();
+
+        for (const InstrumentTrackId& trackId : includedTracks) {
+            if (trackId == METRONOME_TRACK_ID) {
+                continue;
+            }
+
+            const auto playbackData = m_playbackDataMap.find(trackId);
+            if (playbackData != m_playbackDataMap.cend()) {
+                m_activePlaybackNoteIndex.add(playbackData->second.originEvents);
+            }
+        }
+
+        m_activePlaybackNoteIndex.finalize();
+        m_indexedPlaybackTracks = includedTracks;
+        m_activePlaybackNoteIndexDirty = false;
+    }
+
+    return m_activePlaybackNoteIndex.activePitches(timestamp);
 }
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
@@ -399,6 +441,7 @@ muse::async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
 void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                            ChangedTrackIdSet* trackChanges)
 {
+    invalidateActivePlaybackPitches();
     updateSetupData();
     updateContext(trackFrom, trackTo, tickFrom, tickTo);
     updateEvents(tickFrom, tickTo, trackFrom, trackTo, trackChanges);
@@ -683,6 +726,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
 void PlaybackModel::reloadMetronomeEvents()
 {
     TRACEFUNC;
+    invalidateActivePlaybackPitches();
 
     PlaybackData& metronomeData = m_playbackDataMap[METRONOME_TRACK_ID];
     metronomeData.originEvents.clear();
@@ -813,6 +857,8 @@ bool PlaybackModel::hasAutomationChange(const ScoreChanges& changes) const
 
 void PlaybackModel::clearExpiredTracks()
 {
+    invalidateActivePlaybackPitches();
+
     auto needRemoveTrack = [this](const InstrumentTrackId& trackId) {
         const Part* part = m_score->partById(trackId.partId.toUint64());
 
@@ -974,6 +1020,8 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
     if (search == m_playbackDataMap.cend()) {
         return;
     }
+
+    invalidateActivePlaybackPitches();
 
     PlaybackData& trackPlaybackData = search->second;
     const size_t oldSize = trackPlaybackData.originEvents.size();
@@ -1180,6 +1228,11 @@ muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(con
     }
 
     return profilesRepository()->defaultProfile(it->second.setupData.category);
+}
+
+void PlaybackModel::invalidateActivePlaybackPitches()
+{
+    m_activePlaybackNoteIndexDirty = true;
 }
 
 void PlaybackModel::applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries)

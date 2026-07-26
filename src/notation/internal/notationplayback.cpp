@@ -160,6 +160,12 @@ const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engravi
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
+std::vector<muse::midi::note_idx_t> NotationPlayback::activePlaybackPitches(
+    muse::audio::secs_t position, const engraving::InstrumentTrackIdSet& includedTracks) const
+{
+    return m_playbackModel.activePlaybackPitches(muse::secs_to_usecs(position).raw(), includedTracks);
+}
+
 void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration,
                                              bool flushSound)
 {
@@ -199,8 +205,7 @@ void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEvent
         { 0, mpe::PlaybackEventList(list.begin(), list.end()) }
     };
 
-    mpe::PlaybackData& data = m_playbackModel.resolveTrackPlaybackData(trackId);
-    data.offStream.send(events, {}, false /*flushOffstream*/);
+    m_playbackModel.sendOffStreamEvents(trackId, events, {}, false /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const

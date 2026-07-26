@@ -75,6 +75,12 @@ const muse::mpe::PlaybackData& NotationPlaybackStub::trackPlaybackData(const eng
     return dummy;
 }
 
+std::vector<muse::midi::note_idx_t> NotationPlaybackStub::activePlaybackPitches(
+    muse::audio::secs_t, const engraving::InstrumentTrackIdSet&) const
+{
+    return {};
+}
+
 void NotationPlaybackStub::triggerEventsForItems(const std::vector<const EngravingItem*>&, muse::mpe::duration_t, bool)
 {
 }
