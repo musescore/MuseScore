@@ -70,7 +70,7 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrum
     return m;
 }
 
-engraving::InstrumentTrackIdSet PlaybackControllerStub::audibleInstrumentTrackIds() const
+mu::engraving::InstrumentTrackIdSet PlaybackControllerStub::audibleInstrumentTrackIds() const
 {
     return {};
 }
