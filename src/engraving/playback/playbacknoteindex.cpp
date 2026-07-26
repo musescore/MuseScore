@@ -46,7 +46,7 @@ void PlaybackNoteIndex::add(const PlaybackEventsMap& events)
         (void)eventTimestamp;
 
         for (const PlaybackEvent& event : eventList) {
-            const NoteEvent* noteEvent = std::get_if<NoteEvent>(&event);
+            const muse::mpe::NoteEvent* noteEvent = std::get_if<muse::mpe::NoteEvent>(&event);
             if (!noteEvent) {
                 continue;
             }
