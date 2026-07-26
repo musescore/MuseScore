@@ -41,6 +41,14 @@ inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t time
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
+// Returns the section-break pause at `tick` in microseconds, or 0.
+//
+// Section-break pauses should fire once — after the final repeat iteration —
+// but tick2time() includes the pause at every segment boundary.  To avoid
+// double-counting, we only return the pause for notes whose segment is the
+// one that carries it (i.e. the last segment in the repeat).
+//
+// Non-section-break pauses (caesuras, Fermata, etc.) are returned unconditionally.
 inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int noteStartTick,
                                      const int tickPositionOffset)
 {
@@ -49,6 +57,7 @@ inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const i
         return 0;
     }
 
+    // Determine whether `tick` is a section-break boundary.
     bool isSectionBreak = false;
     for (const RepeatSegment* s : score->repeatList()) {
         if (s->pause > 0.0 && s->tick + s->len() == tick) {
@@ -61,6 +70,9 @@ inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const i
         return secs * 1000000;
     }
 
+    // Section break: only subtract the pause if the note lives in the segment
+    // that carries it.  Other segments had the pause already removed from their
+    // time delta in updateTempo(), so subtracting again would double-count.
     int utick = noteStartTick + tickPositionOffset;
     for (const RepeatSegment* s : score->repeatList()) {
         if (utick >= s->utick && utick < s->utick + s->len()) {
