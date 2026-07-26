@@ -62,10 +62,15 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
 PianoKeyboardView::~PianoKeyboardView()
 {
     delete m_controller;
+    m_controller = nullptr;
 }
 
 void PianoKeyboardView::init()
 {
+    if (m_isInitialized) {
+        return;
+    }
+
     m_isInitialized = true;
 
     calculateKeyRects();
@@ -74,6 +79,14 @@ void PianoKeyboardView::init()
     connect(this, &QQuickItem::heightChanged, this, &PianoKeyboardView::calculateKeyRects);
 
     m_controller = new PianoKeyboardController(iocContext());
+    m_controller->init();
+
+    connect(this, &QQuickItem::visibleChanged, this, [this]() {
+        if (m_controller) {
+            m_controller->setPlaybackTrackingEnabled(isVisible());
+        }
+    });
+    m_controller->setPlaybackTrackingEnabled(isVisible());
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
         determineOctaveLabelsFont();
