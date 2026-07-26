@@ -53,7 +53,7 @@ static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in micro
 static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
 static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
 
-static NoteEvent makeNoteEventWithPitchLevel(timestamp_t actualTimestamp, duration_t actualDuration, pitch_level_t pitchLevel)
+static mpe::NoteEvent makeNoteEventWithPitchLevel(timestamp_t actualTimestamp, duration_t actualDuration, pitch_level_t pitchLevel)
 {
     ArrangementContext arrangement;
     arrangement.actualTimestamp = actualTimestamp;
@@ -62,10 +62,10 @@ static NoteEvent makeNoteEventWithPitchLevel(timestamp_t actualTimestamp, durati
     PitchContext pitch;
     pitch.nominalPitchLevel = pitchLevel;
 
-    return NoteEvent(std::move(arrangement), std::move(pitch), ExpressionContext {});
+    return mpe::NoteEvent(std::move(arrangement), std::move(pitch), ExpressionContext {});
 }
 
-static NoteEvent makeNoteEvent(timestamp_t actualTimestamp, duration_t actualDuration, int midiPitch)
+static mpe::NoteEvent makeNoteEvent(timestamp_t actualTimestamp, duration_t actualDuration, int midiPitch)
 {
     return makeNoteEventWithPitchLevel(actualTimestamp, actualDuration,
                                        (midiPitch - ZERO_PITCH_LEVEL_MIDI_EQUIVALENT) * PITCH_LEVEL_STEP);
@@ -447,7 +447,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
 
     // [THEN] The duration of the tied note matches expectations
     size_t noteEventCount = 0;
-    const NoteEvent* tiedNoteEvent = nullptr;
+    const mpe::NoteEvent* tiedNoteEvent = nullptr;
     for (const auto& pair : result) {
         for (const PlaybackEvent& event : pair.second) {
             if (std::holds_alternative<mpe::NoteEvent>(event)) {
