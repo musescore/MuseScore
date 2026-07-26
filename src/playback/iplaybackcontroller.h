@@ -65,6 +65,7 @@ public:
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
+    virtual engraving::InstrumentTrackIdSet audibleInstrumentTrackIds() const = 0;
 
     using AuxTrackIdMap = std::map<muse::audio::aux_channel_idx_t, muse::audio::TrackId>;
     virtual const AuxTrackIdMap& auxTrackIdMap() const = 0;
@@ -90,8 +91,8 @@ public:
         bool flushSound = true;
     };
 
-    virtual void playElements(const std::vector<const engraving::EngravingItem*>& elements,
-                              const PlayParams& params = PlayParams(), bool isMidi = false) = 0;
+    virtual void playElements(const std::vector<const engraving::EngravingItem*>& elements, const PlayParams& params = PlayParams(),
+                              bool isMidi = false) = 0;
     virtual void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
                            const PlayParams& params = PlayParams()) = 0;
     virtual void playMetronome(int tick) = 0;
