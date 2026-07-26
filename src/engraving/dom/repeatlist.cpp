@@ -236,6 +236,11 @@ void RepeatList::updateTempo()
         return;
     }
 
+    // Collect the end-ticks of all segments that carry a section-break pause.
+    // tick2time() always includes the pause at the queried tick, so for repeated
+    // sections every segment ending at a section break would accumulate the pause
+    // once per iteration.  We subtract it from non-final segments so that it is
+    // counted only once (in the last segment, where s->pause > 0.0).
     std::set<int> sectionBreakEndTicks;
     for (RepeatSegment* s : *this) {
         if (s->pause > 0.0) {
@@ -254,6 +259,8 @@ void RepeatList::updateTempo()
         int len       = s->len();
         utick        += len;
         double delta  = tl->tick2time(s->tick + len) - ct;
+        // For a non-final segment that ends at a section break, remove the
+        // section-break pause from the delta so the pause is not double-counted.
         if (s->pause == 0.0 && sectionBreakEndTicks.count(s->tick + len)) {
             delta -= tl->pauseSecs(s->tick + len);
         }
