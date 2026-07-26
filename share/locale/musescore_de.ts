@@ -36605,7 +36605,7 @@ musikalische Symbole</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="570"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation>Sie können entweder die &lt;a href=&quot;%1&quot;&gt;Online-Partitur&lt;/a&gt;ersetzen, oder die Partitur neu hochladen, um Änderungen der aktuellen Version beizubehalten.</translation>
+        <translation>Sie können entweder die &lt;a href=&quot;%1&quot;&gt;Online-Partitur&lt;/a&gt; ersetzen, oder die Partitur neu hochladen, um Änderungen der aktuellen Version beizubehalten.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="576"/>
@@ -36621,7 +36621,7 @@ musikalische Symbole</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="581"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>Sie können entweder die &lt;a href=&quot;%1&quot;&gt;Online-Partitur&lt;/a&gt;ersetzen, oder die Partiur als eine neue Datei speichern, um Änderungen der aktuellen Version beizubehalten.</translation>
+        <translation>Sie können entweder die &lt;a href=&quot;%1&quot;&gt;Online-Partitur&lt;/a&gt; ersetzen, oder die Partitur als eine neue Datei speichern, um Änderungen der aktuellen Version beizubehalten.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="587"/>
