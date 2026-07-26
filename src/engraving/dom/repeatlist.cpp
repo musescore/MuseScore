@@ -23,6 +23,7 @@
 #include "repeatlist.h"
 
 #include <list>
+#include <set>
 #include <utility> // std::pair
 
 #include "jump.h"
@@ -234,6 +235,13 @@ void RepeatList::updateTempo()
         return;
     }
 
+    std::set<int> sectionBreakEndTicks;
+    for (RepeatSegment* s : *this) {
+        if (s->pause > 0.0) {
+            sectionBreakEndTicks.insert(s->tick + s->len());
+        }
+    }
+
     int utick = 0;
     double t  = 0;
 
@@ -244,7 +252,11 @@ void RepeatList::updateTempo()
         s->timeOffset = t - ct;
         int len       = s->len();
         utick        += len;
-        t            += tl->tick2time(s->tick + len) - ct;
+        double delta  = tl->tick2time(s->tick + len) - ct;
+        if (s->pause == 0.0 && sectionBreakEndTicks.count(s->tick + len)) {
+            delta -= tl->pauseSecs(s->tick + len);
+        }
+        t            += delta;
     }
 }
 
