@@ -41,10 +41,34 @@ inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t time
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline muse::mpe::duration_t pauseUs(const Score* score, const int tick)
+inline muse::mpe::duration_t pauseUs(const Score* score, const int tick, const int noteStartTick,
+                                     const int tickPositionOffset)
 {
     double secs = score->tempomap()->pauseSecs(tick);
-    return muse::RealIsNull(secs) ? 0 : secs* 1000000;
+    if (muse::RealIsNull(secs)) {
+        return 0;
+    }
+
+    bool isSectionBreak = false;
+    for (const RepeatSegment* s : score->repeatList()) {
+        if (s->pause > 0.0 && s->tick + s->len() == tick) {
+            isSectionBreak = true;
+            break;
+        }
+    }
+
+    if (!isSectionBreak) {
+        return secs * 1000000;
+    }
+
+    int utick = noteStartTick + tickPositionOffset;
+    for (const RepeatSegment* s : score->repeatList()) {
+        if (utick >= s->utick && utick < s->utick + s->len()) {
+            return s->pause > 0.0 ? secs * 1000000 : 0;
+        }
+    }
+
+    return 0;
 }
 
 inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick,
@@ -52,7 +76,7 @@ inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, con
 {
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick + tickPositionOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, endTick + tickPositionOffset);
-    muse::mpe::duration_t pause = pauseUs(score, endTick);
+    muse::mpe::duration_t pause = pauseUs(score, endTick, startTick, tickPositionOffset);
 
     return endTimestamp - startTimestamp - pause;
 }
@@ -70,7 +94,7 @@ inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationT
     int startTickWithOffset = startTick + tickPositionOffset;
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
     muse::mpe::timestamp_t endTimestamp = timestampFromTicks(score, startTickWithOffset + durationTicks);
-    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks);
+    muse::mpe::duration_t pause = pauseUs(score, startTick + durationTicks, startTick, tickPositionOffset);
     muse::mpe::duration_t duration = endTimestamp - startTimestamp - pause;
 
     return { startTimestamp, duration };
