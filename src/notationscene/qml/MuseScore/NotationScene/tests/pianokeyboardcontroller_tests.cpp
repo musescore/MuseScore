@@ -398,7 +398,9 @@ public:
 
     void TearDown() override
     {
-        m_controller->keyStatesChanged().disconnect(this);
+        if (m_controller) {
+            m_controller->keyStatesChanged().disconnect(this);
+        }
         m_controller.reset();
         modularity::removeIoC(m_iocContext);
     }
