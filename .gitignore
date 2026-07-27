@@ -25,6 +25,7 @@ build.release
 build.symbols
 build.tooldata
 build.xcode
+/msvc.*
 
 applebuild
 MuseScorePortable
@@ -78,6 +79,7 @@ __pycache__/
 /muse_deps
 
 # Stuff from 3.x builds
+/dependencies
 /mscore/revision.h
 /share/sound/MuseScore_General*
 /VERSION
