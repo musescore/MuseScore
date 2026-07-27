@@ -100,8 +100,6 @@ public:
     virtual void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) = 0;
 
     virtual void moveLyrics(MoveDirection d) = 0;
-    virtual void selectTopStaff() = 0;
-    virtual void selectEmptyTrailingMeasure() = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 

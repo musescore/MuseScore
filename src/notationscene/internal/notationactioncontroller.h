@@ -189,6 +189,10 @@ private:
 
     void unrollRepeats();
 
+    void toggleMmrest();
+    void toggleHideEmpty();
+    void addFullMeasureRest();
+
     void resetState();
     void resetStretch();
     void resetBeamMode();
