@@ -101,6 +101,11 @@ muse::io::path_t ProjectConfigurationStub::defaultUserProjectsPath() const
     return muse::io::path_t();
 }
 
+muse::io::path_t ProjectConfigurationStub::defaultOpenProjectsPath() const
+{
+    return muse::io::path_t();
+}
+
 bool ProjectConfigurationStub::shouldAskSaveLocationType() const
 {
     return false;
@@ -302,6 +307,11 @@ QUrl ProjectConfigurationStub::supportForumUrl() const
 }
 
 QUrl ProjectConfigurationStub::dotComBugReportUrl() const
+{
+    return QUrl();
+}
+
+QUrl ProjectConfigurationStub::scoreUploadingGuidelinesUrl() const
 {
     return QUrl();
 }

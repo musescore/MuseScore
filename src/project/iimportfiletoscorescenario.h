@@ -26,9 +26,16 @@
 #include "async/promise.h"
 #include "async/channel.h"
 #include "io/path.h"
-#include "types/ret.h"
+#include "types/retval.h"
+
+#include "cloud/musescorecom/importtypes.h"
 
 namespace mu::project {
+struct ImportSelection {
+    muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+    muse::io::paths_t paths;
+};
+
 class IImportFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IImportFileToScoreScenario)
@@ -36,11 +43,11 @@ class IImportFileToScoreScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IImportFileToScoreScenario() = default;
 
-    virtual muse::async::Promise<muse::io::paths_t> selectFilesToImport() = 0;
+    virtual muse::async::Promise<ImportSelection> selectFilesToImport() = 0;
+    virtual muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) = 0;
+    virtual bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) = 0;
 
     virtual bool isImportInProgress() const = 0;
-    virtual bool importFiles(const muse::io::paths_t& files) = 0;
-
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const = 0;
 };
 

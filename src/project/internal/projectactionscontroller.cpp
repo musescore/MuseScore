@@ -1920,17 +1920,7 @@ async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() co
                                       muse::trc("project", "MuseScore developer files") + " (*.mscs)",
                                       muse::trc("project", "MuseScore backup files") + " (*.mscz~)" };
 
-    muse::io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
-
-    if (defaultDir.empty()) {
-        defaultDir = configuration()->userProjectsPath();
-    }
-
-    if (defaultDir.empty()) {
-        defaultDir = configuration()->defaultUserProjectsPath();
-    }
-
-    return interactive()->selectOpeningFile(muse::trc("project", "Open"), defaultDir, filter);
+    return interactive()->selectOpeningFile(muse::trc("project", "Open"), configuration()->defaultOpenProjectsPath(), filter);
 }
 
 bool ProjectActionsController::hasSelection() const

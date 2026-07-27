@@ -55,15 +55,15 @@ void ImportFileToScoreDevToolsModel::selectAndImportFiles()
     appendLog("selectFilesToImport() called");
 
     importFileToScoreScenario()->selectFilesToImport()
-    .onResolve(this, [this](const io::paths_t& paths) {
+    .onResolve(this, [this](const ImportSelection& selection) {
         QStringList pathStrings;
-        for (const io::path_t& path : paths) {
+        for (const io::path_t& path : selection.paths) {
             pathStrings << path.toQString();
         }
 
         appendLog("selectFilesToImport() resolved: " + pathStrings.join(", "));
 
-        bool started = importFileToScoreScenario()->importFiles(paths);
+        bool started = importFileToScoreScenario()->importFiles(selection.type, selection.paths);
         appendLog(QString("importFiles() returned %1").arg(started ? "true" : "false"));
     })
     .onReject(this, [this](int code, const std::string& msg) {

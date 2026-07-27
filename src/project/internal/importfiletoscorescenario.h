@@ -33,6 +33,7 @@
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
+#include "project/iprojectconfiguration.h"
 #include "project/iimportfiletoscorescenario.h"
 
 namespace mu::project {
@@ -41,6 +42,7 @@ class ImportFileToScoreScenario : public IImportFileToScoreScenario, public muse
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
@@ -49,11 +51,11 @@ public:
 
     void init();
 
-    muse::async::Promise<muse::io::paths_t> selectFilesToImport() override;
+    muse::async::Promise<ImportSelection> selectFilesToImport() override;
+    muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) override;
+    bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) override;
 
     bool isImportInProgress() const override;
-    bool importFiles(const muse::io::paths_t& files) override;
-
     muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const override;
 
 private:
@@ -69,6 +71,14 @@ private:
         muse::cloud::ImportStatus lastHandledStatus = muse::cloud::ImportStatus::Unknown;
     };
 
+    muse::Ret ensureAuthorization();
+
+    bool validateAgainstConfig(muse::cloud::ImportType type, const muse::io::paths_t& paths, const muse::cloud::ImportConfig& config);
+    void showFileTooLargeError(qint64 maxFileSizeBytes);
+    void showUnsupportedFormatError(const QStringList& allowedExtensions);
+    void showFileValidationError(const std::string& title, const std::string& text);
+
+    void openFilesAndUpload(muse::cloud::ImportType type, const muse::io::paths_t& paths);
     void upload(muse::cloud::ImportType type, const muse::cloud::ImportFileList& files);
 
     void watch(int queueId, muse::cloud::ImportType type);

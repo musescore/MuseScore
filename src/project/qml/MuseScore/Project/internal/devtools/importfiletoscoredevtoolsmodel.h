@@ -48,7 +48,7 @@ public:
 
     Q_INVOKABLE void init();
 
-    //! NOTE: calls selectFilesToImport(), then importFiles() with the result
+    //! NOTE: calls selectFilesToImport(), then importFiles() with the resolved selection
     Q_INVOKABLE void selectAndImportFiles();
 
     Q_INVOKABLE void checkImportInProgress();
