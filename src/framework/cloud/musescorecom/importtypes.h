@@ -29,6 +29,7 @@
 
 #include <QDateTime>
 #include <QString>
+#include <QStringList>
 #include <QUrl>
 
 class QIODevice;
@@ -73,6 +74,24 @@ enum class ImportErrorCode {
 static const std::string IMPORT_ERROR_CODE_KEY("errorCode");
 
 static const qint64 MAX_IMPORT_FILE_SIZE_BYTES = 1024LL * 1024 * 1024; // 1 GB
+
+struct OmrImportConfig {
+    qint64 maxFileSizeBytes = 0;
+    int maxPages = 0;
+    int maxImages = 0;
+    QStringList allowedExtensions;
+};
+
+struct Audio2ScoreImportConfig {
+    qint64 maxFileSizeBytes = 0;
+    int maxFiles = 0;
+    QStringList allowedExtensions;
+};
+
+struct ImportConfig {
+    OmrImportConfig omr;
+    Audio2ScoreImportConfig audio2score;
+};
 
 struct ImportFile {
     std::shared_ptr<QIODevice> data;

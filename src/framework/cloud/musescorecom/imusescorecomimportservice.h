@@ -33,6 +33,10 @@ class QIODevice;
 using DevicePtr = std::shared_ptr<QIODevice>;
 
 namespace muse::cloud {
+/// fetchImportConfig() can be called at any time (no authenticated user required) to get the
+/// upload limits (max file size, page/image counts, allowed types) for client-side validation
+/// before uploadImport() is called.
+///
 /// Expected call order for an OMR import:
 /// 1. uploadImport() to submit the file(s) and start processing
 /// 2. Poll fetchImportQueue() and watch the item's status
@@ -54,6 +58,8 @@ class IMuseScoreComImportService : MODULE_CONTEXT_INTERFACE
 
 public:
     virtual ~IMuseScoreComImportService() = default;
+
+    virtual async::Promise<RetVal<ImportConfig> > fetchImportConfig() = 0;
 
     virtual ProgressPtr uploadImport(ImportType type, const ImportFileList& files) = 0;
     virtual ProgressPtr downloadImportedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) = 0;
