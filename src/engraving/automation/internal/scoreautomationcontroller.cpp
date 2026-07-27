@@ -331,15 +331,15 @@ void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, s
                 continue;
             }
 
+            // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
+            const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest);
+            if (firstChordRestSegment && firstChordRestSegment->tick().ticks() >= measureFrom) {
+                collectMeasureRepeats(firstChordRestSegment, tickOffset, range, ctx.measureRepeats);
+            }
+
             for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment;
                  segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
-                if (segment->tick().ticks() < measureFrom) {
-                    continue;
-                }
-
-                collectMeasureRepeats(segment, tickOffset, range, ctx.measureRepeats);
-
-                if (segment->annotations().empty()) {
+                if (segment->annotations().empty() || segment->tick().ticks() < measureFrom) {
                     continue;
                 }
 
@@ -1003,10 +1003,11 @@ void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targ
 {
     const int tickOffset = targetSeg->utick - targetSeg->tick;
 
+    // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
     MeasureRepeats measureRepeats;
     for (const Measure* measure : targetSeg->measureList()) {
-        for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment; segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
-            collectMeasureRepeats(segment, tickOffset, range, measureRepeats);
+        if (const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest)) {
+            collectMeasureRepeats(firstChordRestSegment, tickOffset, range, measureRepeats);
         }
     }
 
