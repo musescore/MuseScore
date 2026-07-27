@@ -125,6 +125,8 @@ void NotationActionController::init()
         { GOTO_DOWNNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "down-note-in-chord") },
         { GOTO_TOPNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "top-note-in-chord") },
         { GOTO_BOTTOMNOTE_IN_CHORD_COMMAND, SELECT_QUERY.set("target", "bottom-note-in-chord") },
+        { GOTO_TOP_STAFF_COMMAND, SELECT_QUERY.set("target", "top-staff").set("play-mode", "chord") },
+        { GOTO_EMPTY_TRAILING_MEASURE_COMMAND, SELECT_QUERY.set("target", "empty-trailing-measure") },
         { SELECT_SIMILAR_COMMAND, SELECT_QUERY.set("target", "similar") },
         { SELECT_SIMILAR_IN_STAFF_COMMAND, SELECT_QUERY.set("target", "similar-in-staff") },
         { SELECT_SIMILAR_IN_RANGE_COMMAND, SELECT_QUERY.set("target", "similar-in-range") },
@@ -135,6 +137,8 @@ void NotationActionController::init()
 
     registerCommand(SELECT_COMMAND, &Controller::select);
     registerAliases(SELECTION_ALIASES, &Controller::select);
+
+    registerCommand(GET_LOCATION_COMMAND, &Interaction::getLocation);
 
     registerCommand(ADD_TO_SELECTION_NEXT_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::NextChord);
     registerCommand(ADD_TO_SELECTION_PREV_CHORD_COMMAND, &Interaction::addToSelection, SelectionTarget::PrevChord);
@@ -198,6 +202,7 @@ void NotationActionController::init()
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, NoteInputMethod::REALTIME_AUTO);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, NoteInputMethod::REALTIME_MANUAL);
     registerNoteInputCommand(TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, NoteInputMethod::TIMEWISE);
+    registerCommand(TOGGLE_INSERT_MODE_COMMAND, [this]() { toggleNoteInputInsert(); }, &NotationActionController::isNotEditingElement);
 
     registerCommand(REALTIME_ADVANCE_COMMAND, &Controller::realtimeAdvance);
 
@@ -220,6 +225,8 @@ void NotationActionController::init()
     registerCommand(SET_DOUBLE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(1, true); });
     registerCommand(SET_HALVE_DURATION_DOTTED_COMMAND, [this]() { increaseDecreaseDuration(-1, true); });
 
+    registerCommand(EXTEND_TO_NEXT_NOTE_COMMAND, &Interaction::extendToNextNote);
+
     registerCommand(TOGGLE_DOT_COMMAND, [this]() { toggleDots(1); });
     registerCommand(TOGGLE_DOT2_COMMAND, [this]() { toggleDots(2); });
     registerCommand(TOGGLE_DOT3_COMMAND, [this]() { toggleDots(3); });
@@ -232,6 +239,12 @@ void NotationActionController::init()
     registerCommand(TOGGLE_NAT_COMMAND, [this]() { toggleAccidental(AccidentalType::NATURAL); });
     registerCommand(TOGGLE_SHARP_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP); });
     registerCommand(TOGGLE_SHARP2_COMMAND, [this]() { toggleAccidental(AccidentalType::SHARP2); });
+
+    registerCommand(ADD_SHARP2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
+    registerCommand(ADD_SHARP_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
+    registerCommand(ADD_NAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
+    registerCommand(ADD_FLAT_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT, PlayMode::PlayNote);
+    registerCommand(ADD_FLAT2_COMMAND, &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT2, PlayMode::PlayNote);
 
     registerCommand(TOGGLE_TIE_COMMAND, &Controller::addTie);
     registerCommand(ADD_SLUR_COMMAND, &Controller::addSlur);
@@ -312,6 +325,9 @@ void NotationActionController::init()
 
     registerCommand(ADD_IMAGE_COMMAND, [this]() { addImage(); });
 
+    registerCommand(ADD_UP_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
+    registerCommand(ADD_DOWN_BOW_COMMAND, &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
+
     // add text commands
     registerCommand(ADD_TITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::TITLE); });
     registerCommand(ADD_SUBTITLE_TEXT_COMMAND, [this]() { addText(TextStyleType::SUBTITLE); });
@@ -373,9 +389,37 @@ void NotationActionController::init()
     registerCommand(ADD_SHAKE_MUFFAT_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShakeMuffat1);
     registerCommand(ADD_TREMBLEMENT_COUPERIN_COMMAND, &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblementCouperin);
 
+    // clef commands
+    registerCommand(ADD_CLEF_VIOLIN_COMMAND, [this]() { insertClef(mu::engraving::ClefType::G); });
+    registerCommand(ADD_CLEF_BASS_COMMAND, [this]() { insertClef(mu::engraving::ClefType::F); });
+
+    registerCommand(ADD_FULL_MEASURE_REST_COMMAND, &Controller::addFullMeasureRest);
+
+    // interval commands
+    registerCommand(ADD_INTERVAL_PLUS_1_COMMAND, &Interaction::addIntervalToSelectedNotes, 1);
+    registerCommand(ADD_INTERVAL_PLUS_2_COMMAND, &Interaction::addIntervalToSelectedNotes, 2);
+    registerCommand(ADD_INTERVAL_PLUS_3_COMMAND, &Interaction::addIntervalToSelectedNotes, 3);
+    registerCommand(ADD_INTERVAL_PLUS_4_COMMAND, &Interaction::addIntervalToSelectedNotes, 4);
+    registerCommand(ADD_INTERVAL_PLUS_5_COMMAND, &Interaction::addIntervalToSelectedNotes, 5);
+    registerCommand(ADD_INTERVAL_PLUS_6_COMMAND, &Interaction::addIntervalToSelectedNotes, 6);
+    registerCommand(ADD_INTERVAL_PLUS_7_COMMAND, &Interaction::addIntervalToSelectedNotes, 7);
+    registerCommand(ADD_INTERVAL_PLUS_8_COMMAND, &Interaction::addIntervalToSelectedNotes, 8);
+    registerCommand(ADD_INTERVAL_PLUS_9_COMMAND, &Interaction::addIntervalToSelectedNotes, 9);
+    registerCommand(ADD_INTERVAL_PLUS_10_COMMAND, &Interaction::addIntervalToSelectedNotes, 10);
+    registerCommand(ADD_INTERVAL_MINUS_2_COMMAND, &Interaction::addIntervalToSelectedNotes, -2);
+    registerCommand(ADD_INTERVAL_MINUS_3_COMMAND, &Interaction::addIntervalToSelectedNotes, -3);
+    registerCommand(ADD_INTERVAL_MINUS_4_COMMAND, &Interaction::addIntervalToSelectedNotes, -4);
+    registerCommand(ADD_INTERVAL_MINUS_5_COMMAND, &Interaction::addIntervalToSelectedNotes, -5);
+    registerCommand(ADD_INTERVAL_MINUS_6_COMMAND, &Interaction::addIntervalToSelectedNotes, -6);
+    registerCommand(ADD_INTERVAL_MINUS_7_COMMAND, &Interaction::addIntervalToSelectedNotes, -7);
+    registerCommand(ADD_INTERVAL_MINUS_8_COMMAND, &Interaction::addIntervalToSelectedNotes, -8);
+    registerCommand(ADD_INTERVAL_MINUS_9_COMMAND, &Interaction::addIntervalToSelectedNotes, -9);
+    registerCommand(ADD_INTERVAL_MINUS_10_COMMAND, &Interaction::addIntervalToSelectedNotes, -10);
+
     // editing commands
     registerCommand(COPY_COMMAND, &Interaction::copySelection);
     registerCommand(COPY_PASTE_SWAP_COMMAND, &Interaction::swapSelection);
+    registerCommand(COPY_LYRICS_COMMAND, &Interaction::copyLyrics);
     registerCommand(CUT_COMMAND, &Controller::cutSelection);
     registerCommand(PASTE_COMMAND, [this]() { pasteSelection(PastingType::Default); });
     registerCommand(PASTE_HALF_COMMAND, [this]() { pasteSelection(PastingType::Half); });
@@ -393,6 +437,15 @@ void NotationActionController::init()
     registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
     registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
     registerCommand(PITCH_DOWN_OCTAVE_COMMAND, [this]() { move(MoveDirection::Down, true); });
+    registerCommand(PITCH_UP_DIATONIC_COMMAND, [this]() { movePitchDiatonic(MoveDirection::Up, false); });
+    registerCommand(PITCH_DOWN_DIATONIC_COMMAND, [this]() { movePitchDiatonic(MoveDirection::Down, false); });
+
+    registerCommand(PITCH_UP_DIATONIC_ALTERATIONS_COMMAND, &Interaction::transposeDiatonicAlterations,
+                    mu::engraving::TransposeDirection::UP,
+                    PlayMode::PlayNote);
+    registerCommand(PITCH_DOWN_DIATONIC_ALTERATIONS_COMMAND, &Interaction::transposeDiatonicAlterations,
+                    mu::engraving::TransposeDirection::DOWN,
+                    PlayMode::PlayNote);
 
     // properties commands
     registerCommand(TOGGLE_VISIBLE_COMMAND, &Interaction::toggleVisible);
@@ -480,14 +533,42 @@ void NotationActionController::init()
     registerCommand(STAFF_EXPLODE_COMMAND, &Interaction::explodeSelectedStaff);
     registerCommand(STAFF_IMPLODE_COMMAND, &Interaction::implodeSelectedStaff);
 
+    // remove commands
+    registerCommand(REMOVE_SELECTED_RANGE_COMMAND, &Interaction::removeSelectedRange);
+    registerCommand(REMOVE_EMPTY_TRAILING_MEASURES_COMMAND, &Interaction::removeEmptyTrailingMeasures);
+
+    // slash commands
+    registerCommand(SLASH_FILL_COMMAND, &Interaction::fillSelectionWithSlashes);
+    registerCommand(SLASH_RHYTHM_COMMAND, &Interaction::replaceSelectedNotesWithSlashes);
+
+    // spelling commands
+    registerCommand(PITCH_SPELL_COMMAND, &Interaction::spellPitches);
+    registerCommand(PITCH_SPELL_SHARPS_COMMAND, &Interaction::spellPitchesWithSharps);
+    registerCommand(PITCH_SPELL_FLATS_COMMAND, &Interaction::spellPitchesWithFlats);
+    registerCommand(ENHARMONIC_SPELL_BOTH_COMMAND, &Interaction::changeEnharmonicSpelling, true);
+    registerCommand(ENHARMONIC_SPELL_CURRENT_COMMAND, &Interaction::changeEnharmonicSpelling, false);
+
+    // others commands
+    registerCommand(REGROUP_RHYTHMS_COMMAND, &Interaction::regroupNotesAndRests);
+    registerCommand(RESEQUENCE_REHEARSAL_MARKS_COMMAND, &Interaction::resequenceRehearsalMarks);
+    registerCommand(UNROLL_REPEATS_COMMAND, &Controller::unrollRepeats);
+    registerCommand(REPEAT_SELECTION_COMMAND, &Controller::repeatSelection);
+    registerCommand(TRANSPOSE_UP_COMMAND, &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
+    registerCommand(TRANSPOSE_DOWN_COMMAND, &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
+    registerCommand(TOGGLE_MMREST_COMMAND, &Controller::toggleMmrest);
+    registerCommand(TOGGLE_HIDE_EMPTY_COMMAND, &Controller::toggleHideEmpty);
+    registerCommand(MIRROR_NOTEHEAD_COMMAND, &Interaction::mirrorNotes);
+    registerCommand(SET_VISIBLE_COMMAND, &Interaction::setSelectionVisible, true);
+    registerCommand(UNSET_VISIBLE_COMMAND, &Interaction::setSelectionVisible, false);
+    registerCommand(TOGGLE_AUTOPLACE_COMMAND, &Interaction::toggleAutoplace, false);
+    registerCommand(AUTOPLACE_ENABLED_COMMAND, &Interaction::toggleAutoplace, true);
+
+    registerCommand(VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND, &Interaction::changeSelectedElementsVoiceAssignment,
+                    VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
+    registerCommand(VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND, &Interaction::changeSelectedElementsVoiceAssignment,
+                    VoiceAssignment::ALL_VOICE_IN_STAFF);
+
     // --------------------
-
-    m_isAllowedDuringPlayback.insert("action://notation/cancel");
-    m_isAllowedDuringPlayback.insert({
-        "notation-move-right", "notation-move-left",
-        "notation-move-right-quickly", "notation-move-left-quickly",
-    });
-
     registerAction("note-action", &Controller::handleNoteAction); // used for drums
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
@@ -498,77 +579,6 @@ void NotationActionController::init()
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
     registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
-
-    registerAction("extend-to-next-note", &Interaction::extendToNextNote);
-    registerAction("time-delete", &Interaction::removeSelectedRange);
-    registerAction("del-empty-measures", &Interaction::removeEmptyTrailingMeasures);
-    registerAction("slash-fill", &Interaction::fillSelectionWithSlashes);
-    registerAction("slash-rhythm", &Interaction::replaceSelectedNotesWithSlashes);
-    registerAction("pitch-spell", &Interaction::spellPitches);
-    registerAction("pitch-spell-sharps", &Interaction::spellPitchesWithSharps);
-    registerAction("pitch-spell-flats", &Interaction::spellPitchesWithFlats);
-    registerAction("reset-groupings", &Interaction::regroupNotesAndRests);
-    registerAction("resequence-rehearsal-marks", &Interaction::resequenceRehearsalMarks);
-
-    registerAction("unroll-repeats", &Controller::unrollRepeats);
-
-    registerAction("copy-lyrics-to-clipboard", &Interaction::copyLyrics);
-
-    registerAction("enh-both", &Interaction::changeEnharmonicSpelling, true);
-    registerAction("enh-current", &Interaction::changeEnharmonicSpelling, false);
-
-    registerAction("top-staff", &Interaction::selectTopStaff, PlayMode::PlayChord);
-    registerAction("empty-trailing-measure", &Interaction::selectEmptyTrailingMeasure);
-    m_isAllowedDuringPlayback.insert({ "top-staff", "empty-trailing-measure" });
-
-    registerAction("pitch-up-diatonic", &Controller::movePitchDiatonic, MoveDirection::Up, false);
-    registerAction("pitch-down-diatonic", &Controller::movePitchDiatonic, MoveDirection::Down, false);
-
-    registerAction("repeat-sel", &Controller::repeatSelection);
-
-    registerAction("add-up-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsUpBow);
-    registerAction("add-down-bow", &Interaction::toggleArticulation, mu::engraving::SymId::stringsDownBow);
-    registerAction("transpose-up", &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
-    registerAction("transpose-down", &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
-    registerAction("toggle-insert-mode", [this]() { toggleNoteInputInsert(); }, &NotationActionController::isNotEditingElement);
-
-    registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
-    registerAction("toggle-mmrest", &Interaction::execute, &mu::engraving::Score::cmdToggleMmrest,
-                   TranslatableString("undoableAction", "Toggle multimeasure rests"));
-    registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty,
-                   TranslatableString("undoableAction", "Toggle empty staves"));
-
-    registerAction("mirror-note", &Interaction::mirrorNotes, &Controller::hasSelection);
-
-    registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
-    registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
-
-    registerAction("sharp2-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP2, PlayMode::PlayNote);
-    registerAction("sharp-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::SHARP, PlayMode::PlayNote);
-    registerAction("nat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
-    registerAction("flat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT, PlayMode::PlayNote);
-    registerAction("flat2-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT2, PlayMode::PlayNote);
-    registerAction("pitch-up-diatonic-alterations", &Interaction::transposeDiatonicAlterations, mu::engraving::TransposeDirection::UP,
-                   PlayMode::PlayNote);
-    registerAction("pitch-down-diatonic-alterations", &Interaction::transposeDiatonicAlterations, mu::engraving::TransposeDirection::DOWN,
-                   PlayMode::PlayNote);
-    registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
-                   TranslatableString("undoableAction", "Enter full-measure rest"));
-    registerAction("set-visible", &Interaction::setSelectionVisible, true);
-    registerAction("unset-visible", &Interaction::setSelectionVisible, false);
-    registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
-    registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
-
-    for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
-        if (isNotesIntervalValid(i)) {
-            registerAction("interval" + std::to_string(i), &Interaction::addIntervalToSelectedNotes, i, PlayMode::PlayChord);
-        }
-    }
-
-    registerAction("voice-assignment-all-in-instrument", &Interaction::changeSelectedElementsVoiceAssignment,
-                   VoiceAssignment::ALL_VOICE_IN_INSTRUMENT);
-    registerAction("voice-assignment-all-in-staff", &Interaction::changeSelectedElementsVoiceAssignment,
-                   VoiceAssignment::ALL_VOICE_IN_STAFF);
 
     // TAB
     registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
@@ -740,6 +750,10 @@ void NotationActionController::init()
             { "pitch-down", PITCH_DOWN_COMMAND },
             { "pitch-up-octave", PITCH_UP_OCTAVE_COMMAND },
             { "pitch-down-octave", PITCH_DOWN_OCTAVE_COMMAND },
+            { "pitch-up-diatonic", PITCH_UP_DIATONIC_COMMAND },
+            { "pitch-down-diatonic", PITCH_DOWN_DIATONIC_COMMAND },
+            { "pitch-up-diatonic-alterations", PITCH_UP_DIATONIC_ALTERATIONS_COMMAND },
+            { "pitch-down-diatonic-alterations", PITCH_DOWN_DIATONIC_ALTERATIONS_COMMAND },
             { "next-word", EDITTEXT_NEXT_WORD_COMMAND },
             { "next-text-element", EDITTEXT_NEXT_ELEMENT_COMMAND },
             { "prev-text-element", EDITTEXT_PREV_ELEMENT_COMMAND },
@@ -779,6 +793,11 @@ void NotationActionController::init()
             { "nat", TOGGLE_NAT_COMMAND },
             { "sharp", TOGGLE_SHARP_COMMAND },
             { "sharp2", TOGGLE_SHARP2_COMMAND },
+            { "sharp2-post", ADD_SHARP2_COMMAND },
+            { "sharp-post", ADD_SHARP_COMMAND },
+            { "nat-post", ADD_NAT_COMMAND },
+            { "flat-post", ADD_FLAT_COMMAND },
+            { "flat2-post", ADD_FLAT2_COMMAND },
             { "tie", TOGGLE_TIE_COMMAND },
             { "chord-tie", TOGGLE_TIE_COMMAND }, // removed, now as 'tie'
             { "lv", TOGGLE_LV_COMMAND },
@@ -840,6 +859,8 @@ void NotationActionController::init()
             { "down-chord", GOTO_DOWNNOTE_IN_CHORD_COMMAND },
             { "top-chord", GOTO_TOPNOTE_IN_CHORD_COMMAND },
             { "bottom-chord", GOTO_BOTTOMNOTE_IN_CHORD_COMMAND },
+            { "top-staff", GOTO_TOP_STAFF_COMMAND },
+            { "empty-trailing-measure", GOTO_EMPTY_TRAILING_MEASURE_COMMAND },
             { "select-similar", SELECT_SIMILAR_COMMAND },
             { "select-similar-staff", SELECT_SIMILAR_IN_STAFF_COMMAND },
             { "select-similar-range", SELECT_SIMILAR_IN_RANGE_COMMAND },
@@ -988,6 +1009,56 @@ void NotationActionController::init()
             { "select-end-line", ADD_TO_SELECTION_END_SYSTEM_COMMAND },
             { "select-begin-score", ADD_TO_SELECTION_BEGIN_SCORE_COMMAND },
             { "select-end-score", ADD_TO_SELECTION_END_SCORE_COMMAND },
+            { "extend-to-next-note", EXTEND_TO_NEXT_NOTE_COMMAND },
+            { "time-delete", REMOVE_SELECTED_RANGE_COMMAND },
+            { "del-empty-measures", REMOVE_EMPTY_TRAILING_MEASURES_COMMAND },
+            { "slash-fill", SLASH_FILL_COMMAND },
+            { "slash-rhythm", SLASH_RHYTHM_COMMAND },
+            { "pitch-spell", PITCH_SPELL_COMMAND },
+            { "pitch-spell-sharps", PITCH_SPELL_SHARPS_COMMAND },
+            { "pitch-spell-flats", PITCH_SPELL_FLATS_COMMAND },
+            { "enh-both", ENHARMONIC_SPELL_BOTH_COMMAND },
+            { "enh-current", ENHARMONIC_SPELL_CURRENT_COMMAND },
+            { "reset-groupings", REGROUP_RHYTHMS_COMMAND },
+            { "resequence-rehearsal-marks", RESEQUENCE_REHEARSAL_MARKS_COMMAND },
+            { "unroll-repeats", UNROLL_REPEATS_COMMAND },
+            { "copy-lyrics-to-clipboard", COPY_LYRICS_COMMAND },
+            { "repeat-selection", REPEAT_SELECTION_COMMAND },
+            { "add-up-bow", ADD_UP_BOW_COMMAND },
+            { "add-down-bow", ADD_DOWN_BOW_COMMAND },
+            { "transpose-up", TRANSPOSE_UP_COMMAND },
+            { "transpose-down", TRANSPOSE_DOWN_COMMAND },
+            { "toggle-insert-mode", TOGGLE_INSERT_MODE_COMMAND },
+            { "get-location", GET_LOCATION_COMMAND },
+            { "toggle-mmrest", TOGGLE_MMREST_COMMAND },
+            { "toggle-hide-empty", TOGGLE_HIDE_EMPTY_COMMAND },
+            { "mirror-note", MIRROR_NOTEHEAD_COMMAND },
+            { "set-visible", SET_VISIBLE_COMMAND },
+            { "unset-visible", UNSET_VISIBLE_COMMAND },
+            { "toggle-autoplace", TOGGLE_AUTOPLACE_COMMAND },
+            { "autoplace-enabled", AUTOPLACE_ENABLED_COMMAND },
+            { "full-measure-rest", ADD_FULL_MEASURE_REST_COMMAND },
+            { "interval1", ADD_INTERVAL_PLUS_1_COMMAND },
+            { "interval2", ADD_INTERVAL_PLUS_2_COMMAND },
+            { "interval3", ADD_INTERVAL_PLUS_3_COMMAND },
+            { "interval4", ADD_INTERVAL_PLUS_4_COMMAND },
+            { "interval5", ADD_INTERVAL_PLUS_5_COMMAND },
+            { "interval6", ADD_INTERVAL_PLUS_6_COMMAND },
+            { "interval7", ADD_INTERVAL_PLUS_7_COMMAND },
+            { "interval8", ADD_INTERVAL_PLUS_8_COMMAND },
+            { "interval9", ADD_INTERVAL_PLUS_9_COMMAND },
+            { "interval10", ADD_INTERVAL_PLUS_10_COMMAND },
+            { "interval-2", ADD_INTERVAL_MINUS_2_COMMAND },
+            { "interval-3", ADD_INTERVAL_MINUS_3_COMMAND },
+            { "interval-4", ADD_INTERVAL_MINUS_4_COMMAND },
+            { "interval-5", ADD_INTERVAL_MINUS_5_COMMAND },
+            { "interval-6", ADD_INTERVAL_MINUS_6_COMMAND },
+            { "interval-7", ADD_INTERVAL_MINUS_7_COMMAND },
+            { "interval-8", ADD_INTERVAL_MINUS_8_COMMAND },
+            { "interval-9", ADD_INTERVAL_MINUS_9_COMMAND },
+            { "interval-10", ADD_INTERVAL_MINUS_10_COMMAND },
+            { "voice-assignment-all-in-instrument", VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND },
+            { "voice-assignment-all-in-staff", VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND },
         };
 
         static const std::vector<ActionToCommandWithParams> actionToCommandWithParams = {
@@ -2459,6 +2530,36 @@ void NotationActionController::unrollRepeats()
 {
     NOT_IMPLEMENTED;
     // TODO: https://github.com/musescore/MuseScore/issues/9670
+}
+
+void NotationActionController::toggleMmrest()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->execute(&mu::engraving::Score::cmdToggleMmrest, TranslatableString("undoableAction", "Toggle multimeasure rests"));
+}
+
+void NotationActionController::toggleHideEmpty()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->execute(&mu::engraving::Score::cmdToggleHideEmpty, TranslatableString("undoableAction", "Toggle empty staves"));
+}
+
+void NotationActionController::addFullMeasureRest()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->execute(&mu::engraving::Score::cmdFullMeasureRest, TranslatableString("undoableAction", "Enter full measure rest"));
 }
 
 void NotationActionController::addStretch(qreal value)

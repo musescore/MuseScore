@@ -107,6 +107,8 @@ private:
     void moveSegmentSelection(MoveDirection d);
     void moveChordNoteSelection(MoveDirection d);
     void selectTopOrBottomOfChord(MoveDirection d);
+    void selectTopStaff();
+    void selectEmptyTrailingMeasure();
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
@@ -114,6 +116,8 @@ private:
     FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
     void selectAll();
     void selectSection();
+
+    ChordRest* activeCr(const mu::engraving::Score* score) const;
 
     engraving::EngravingItem* m_lastElementHit = nullptr;
     IGetScore* m_getScore = nullptr;
