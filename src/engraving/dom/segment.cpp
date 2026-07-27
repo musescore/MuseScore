@@ -785,13 +785,13 @@ void Segment::add(EngravingItem* el)
         assert(m_segmentType & SegmentType::KeySigTypes);
         checkElement(el, track);
         m_elist[track] = el;
-        if (!el->generated()) {
+        if (m_segmentType & SegmentType::CourtesyKeySigTypes) {
+            toKeySig(el)->setIsCourtesy(true);
+        }
+        if (!el->generated() && !toKeySig(el)->isCourtesy()) {
             el->staff()->setKey(tick(), toKeySig(el)->keySigEvent());
         }
         setEmpty(false);
-        if (m_segmentType == SegmentType::CourtesyKeySigTypes) {
-            toKeySig(el)->setIsCourtesy(true);
-        }
         break;
 
     case ElementType::CHORD:
@@ -963,7 +963,7 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::KEYSIG:
         m_elist[track] = 0;
-        if (!el->generated()) {
+        if (!el->generated() && !toKeySig(el)->isCourtesy()) {
             el->staff()->removeKey(tick());
         }
         break;
