@@ -380,6 +380,9 @@ public:
         m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_audibleTracks = { makeTrackId(1, u"piano") };
         ON_CALL(*m_playbackController, audibleInstrumentTrackIds()).WillByDefault(Return(m_audibleTracks));
+        ON_CALL(*m_playbackController, playbackInitedChanged()).WillByDefault(Return(m_playbackInitedChanged));
+        ON_CALL(*m_playbackController, trackAdded()).WillByDefault(Return(m_trackAdded));
+        ON_CALL(*m_playbackController, trackRemoved()).WillByDefault(Return(m_trackRemoved));
 
         modularity::ioc(m_iocContext)->registerExport<context::IGlobalContext>("piano_keyboard_tests", m_globalContext);
         modularity::ioc(m_iocContext)->registerExport<playback::IPlaybackController>("piano_keyboard_tests", m_playbackController);
@@ -425,6 +428,9 @@ protected:
     std::shared_ptr<NiceMock<NotationConfigurationMock> > m_configuration;
     async::Notification m_selectionChanged;
     async::Notification m_playChordSymbolsChanged;
+    async::Channel<bool> m_playbackInitedChanged;
+    async::Channel<audio::TrackId> m_trackAdded;
+    async::Channel<audio::TrackId> m_trackRemoved;
     engraving::InstrumentTrackIdSet m_audibleTracks;
     int m_keyStatesChangedCount = 0;
 };
@@ -520,6 +526,65 @@ TEST_F(PianoKeyboardControllerTests, PositionChangesAreIgnoredUnlessRunningAndSa
 
     EXPECT_EQ(m_controller->keyState(60), KeyState::Played);
     EXPECT_EQ(m_keyStatesChangedCount, 1);
+}
+
+TEST_F(PianoKeyboardControllerTests, PositionChangesReuseCachedAudibleTracks)
+{
+    enableTracking();
+    m_playbackState->setPosition(1.0);
+
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .Times(1)
+    .WillOnce(Return(m_audibleTracks));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(_, m_audibleTracks))
+    .Times(3)
+    .WillRepeatedly(Return(std::vector<midi::note_idx_t> { 60 }));
+
+    m_playbackState->setStatus(audio::PlaybackStatus::Running);
+    m_playbackState->setPosition(2.0);
+    m_playbackState->setPosition(3.0);
+}
+
+TEST_F(PianoKeyboardControllerTests, PlaybackTrackChangesInvalidateAudibleTracksCache)
+{
+    enableTracking();
+    m_playbackState->setPosition(1.0);
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), m_audibleTracks))
+    .WillOnce(Return(std::vector<midi::note_idx_t> { 60 }));
+    m_playbackState->setStatus(audio::PlaybackStatus::Running);
+
+    const engraving::InstrumentTrackIdSet replacementTracks = { makeTrackId(2, u"violin") };
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .WillOnce(Return(replacementTracks));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), replacementTracks))
+    .WillOnce(Return(std::vector<midi::note_idx_t> { 67 }));
+
+    m_trackAdded.send(42);
+
+    EXPECT_EQ(m_controller->keyState(60), KeyState::None);
+    EXPECT_EQ(m_controller->keyState(67), KeyState::Played);
+
+    const engraving::InstrumentTrackIdSet removedTrackResult = { makeTrackId(3, u"flute") };
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .WillOnce(Return(removedTrackResult));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), removedTrackResult))
+    .WillOnce(Return(std::vector<midi::note_idx_t> { 69 }));
+
+    m_trackRemoved.send(42);
+
+    EXPECT_EQ(m_controller->keyState(67), KeyState::None);
+    EXPECT_EQ(m_controller->keyState(69), KeyState::Played);
+
+    const engraving::InstrumentTrackIdSet initializedTrackResult = { makeTrackId(4, u"trumpet") };
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .WillOnce(Return(initializedTrackResult));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), initializedTrackResult))
+    .WillOnce(Return(std::vector<midi::note_idx_t> { 72 }));
+
+    m_playbackInitedChanged.send(true);
+
+    EXPECT_EQ(m_controller->keyState(69), KeyState::None);
+    EXPECT_EQ(m_controller->keyState(72), KeyState::Played);
 }
 
 TEST_F(PianoKeyboardControllerTests, PauseStopAndResumePreservePressedKey)
@@ -640,7 +705,10 @@ TEST_F(PianoKeyboardControllerTests, ChordSymbolsConfigurationChangeRefreshesAtS
     .WillOnce(Return(std::vector<midi::note_idx_t> { 60 }));
     m_playbackState->setStatus(audio::PlaybackStatus::Running);
 
-    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), _))
+    const engraving::InstrumentTrackIdSet replacementTracks = { makeTrackId(2, u"chord-symbols") };
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .WillOnce(Return(replacementTracks));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), replacementTracks))
     .WillOnce(Return(std::vector<midi::note_idx_t> { 64 }));
 
     m_playChordSymbolsChanged.notify();
@@ -658,7 +726,10 @@ TEST_F(PianoKeyboardControllerTests, SelectionChangeRefreshesRangePlaybackAtSame
     .WillOnce(Return(std::vector<midi::note_idx_t> { 60 }));
     m_playbackState->setStatus(audio::PlaybackStatus::Running);
 
-    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), _))
+    const engraving::InstrumentTrackIdSet replacementTracks = { makeTrackId(2, u"violin") };
+    EXPECT_CALL(*m_playbackController, audibleInstrumentTrackIds())
+    .WillOnce(Return(replacementTracks));
+    EXPECT_CALL(*m_notationPlayback, activePlaybackPitches(audio::secs_t(1.0), replacementTracks))
     .WillOnce(Return(std::vector<midi::note_idx_t> { 72 }));
 
     m_selectionChanged.notify();

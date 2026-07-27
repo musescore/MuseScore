@@ -161,3 +161,17 @@ TEST(PlaybackControllerTests, TrackWithoutPlaybackChannelIsInaudible)
     EXPECT_TRUE(result.contains(loadedTrackId));
     EXPECT_FALSE(result.contains(unloadedTrackId));
 }
+
+TEST(PlaybackControllerTests, SoloTrackWithoutPlaybackChannelDoesNotMuteLoadedTracks)
+{
+    const InstrumentTrackId loadedTrackId = makeTrackId(1);
+    const InstrumentTrackId unloadedSoloTrackId = makeTrackId(2);
+
+    const InstrumentTrackIdSet result = audibleTrackIds({
+        makeTrackState(loadedTrackId),
+        makeTrackState(unloadedSoloTrackId, false, true, false)
+    });
+
+    EXPECT_TRUE(result.contains(loadedTrackId));
+    EXPECT_FALSE(result.contains(unloadedSoloTrackId));
+}
