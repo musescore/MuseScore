@@ -52,7 +52,7 @@ struct AutomationPoint {
         muse::real_t value = 0.5; // [0; 1]
 
         static Bend none() { return {}; }
-        bool isNone() const { return *this == none(); }
+        bool isNone() const { return t == 0.5 && value == 0.5; }
         bool operator==(const Bend& b) const { return t == b.t && value == b.value; }
     };
 

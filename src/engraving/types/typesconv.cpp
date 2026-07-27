@@ -1936,7 +1936,7 @@ static const std::vector<Item<ChangeMethod> > CHANGE_METHODS = {
     { ChangeMethod::EXPONENTIAL,      "exponential" },
 };
 
-static float easingFactor(const float x, const ChangeMethod method)
+static double easingFactor(const double x, const ChangeMethod method)
 {
     switch (method) {
     case ChangeMethod::NORMAL:
@@ -1947,19 +1947,19 @@ static float easingFactor(const float x, const ChangeMethod method)
         return std::sqrt(1 - std::pow(x - 1, 2));
     case ChangeMethod::EASE_IN_OUT:
         if (x < 0.5) {
-            return (1.f - std::sqrt(1 - std::pow(2 * x, 2))) / 2;
+            return (1.0 - std::sqrt(1 - std::pow(2 * x, 2))) / 2;
         } else {
-            return (std::sqrt(1.f - std::pow(-2 * x + 2, 2)) + 1) / 2;
+            return (std::sqrt(1.0 - std::pow(-2 * x + 2, 2)) + 1) / 2;
         }
     case ChangeMethod::EXPONENTIAL:
-        if (muse::RealIsEqual(x, 1.f)) {
+        if (muse::RealIsEqual(x, 1.0)) {
             return x;
         } else {
-            return 1.f - std::pow(2, -10 * x);
+            return 1.0 - std::pow(2, -10 * x);
         }
     }
 
-    return 1.f;
+    return 1.0;
 }
 
 template<typename T>
@@ -1972,10 +1972,10 @@ static std::map<int /*tickPosition*/, T> buildEasedValueCurve(const int ticksDur
 
     std::map<int, T> result;
 
-    float durationStep = static_cast<float>(ticksDuration) / static_cast<float>(stepsCount);
+    double durationStep = static_cast<double>(ticksDuration) / static_cast<double>(stepsCount);
 
     for (int i = 0; i <= stepsCount; ++i) {
-        result.emplace(i * durationStep, easingFactor(i / static_cast<float>(stepsCount), method) * amplitude);
+        result.emplace(i * durationStep, easingFactor(static_cast<double>(i) / static_cast<double>(stepsCount), method) * amplitude);
     }
 
     return result;
