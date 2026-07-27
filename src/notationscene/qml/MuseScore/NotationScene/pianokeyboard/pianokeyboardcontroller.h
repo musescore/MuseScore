@@ -93,6 +93,7 @@ private:
     muse::audio::PlaybackStatus m_playbackStatus = muse::audio::PlaybackStatus::Stopped;
     std::optional<muse::audio::secs_t> m_lastPlaybackPosition;
     std::optional<muse::audio::secs_t> m_countInStartPosition;
+    std::optional<engraving::InstrumentTrackIdSet> m_audibleInstrumentTrackIds;
 
     muse::async::Notification m_keyStatesChanged;
 };

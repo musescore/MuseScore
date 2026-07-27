@@ -74,6 +74,21 @@ void PianoKeyboardController::init()
         onPlaybackPositionChanged(position);
     });
 
+    auto controller = playbackController();
+    if (controller) {
+        controller->playbackInitedChanged().onReceive(this, [this](bool) {
+            refreshPlaybackKeys();
+        });
+
+        controller->trackAdded().onReceive(this, [this](muse::audio::TrackId) {
+            refreshPlaybackKeys();
+        });
+
+        controller->trackRemoved().onReceive(this, [this](muse::audio::TrackId) {
+            refreshPlaybackKeys();
+        });
+    }
+
     auto configuration = notationConfiguration();
     if (configuration) {
         configuration->isPlayChordSymbolsChanged().onNotify(this, [this]() {
@@ -209,6 +224,7 @@ void PianoKeyboardController::onNotationChanged()
 
     const bool playbackStateChanged = replacePlaybackKeys({});
     m_lastPlaybackPosition.reset();
+    m_audibleInstrumentTrackIds.reset();
     m_notation = notation;
 
     if (notation) {
@@ -267,6 +283,7 @@ void PianoKeyboardController::onNotationChanged()
 void PianoKeyboardController::onMasterNotationChanged()
 {
     m_lastPlaybackPosition.reset();
+    m_audibleInstrumentTrackIds.reset();
 
     if (m_isPlaybackTrackingEnabled && m_playbackStatus == muse::audio::PlaybackStatus::Running
         && !m_isWaitingForCountIn) {
@@ -314,6 +331,7 @@ void PianoKeyboardController::onPlaybackStatusChanged(muse::audio::PlaybackStatu
 
     m_playbackStatus = status;
     m_lastPlaybackPosition.reset();
+    m_audibleInstrumentTrackIds.reset();
 
     if (status != muse::audio::PlaybackStatus::Running) {
         m_isWaitingForCountIn = false;
@@ -368,6 +386,8 @@ void PianoKeyboardController::onPlaybackPositionChanged(muse::audio::secs_t posi
 
 void PianoKeyboardController::refreshPlaybackKeys()
 {
+    m_audibleInstrumentTrackIds.reset();
+
     if (!m_isPlaybackTrackingEnabled || m_playbackStatus != muse::audio::PlaybackStatus::Running
         || m_isWaitingForCountIn) {
         return;
@@ -396,8 +416,12 @@ void PianoKeyboardController::updatePlaybackKeys(muse::audio::secs_t position, b
 
     std::unordered_set<piano_key_t> playbackKeys;
     if (notationPlayback && controller) {
+        if (!m_audibleInstrumentTrackIds.has_value()) {
+            m_audibleInstrumentTrackIds = controller->audibleInstrumentTrackIds();
+        }
+
         const std::vector<muse::midi::note_idx_t> pitches = notationPlayback->activePlaybackPitches(
-            position, controller->audibleInstrumentTrackIds());
+            position, *m_audibleInstrumentTrackIds);
         playbackKeys.insert(pitches.cbegin(), pitches.cend());
     }
 

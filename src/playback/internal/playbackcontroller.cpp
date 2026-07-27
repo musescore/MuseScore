@@ -95,7 +95,7 @@ std::vector<mu::playback::detail::EffectiveTrackSoloMuteState> mu::playback::det
     bool hasSolo = false;
 
     for (const InstrumentTrackSoloMuteState& state : trackStates) {
-        if (!state.isMetronome && state.soloMuteState.solo) {
+        if (!state.isMetronome && state.hasPlaybackTrack && state.soloMuteState.solo) {
             hasSolo = true;
             break;
         }
