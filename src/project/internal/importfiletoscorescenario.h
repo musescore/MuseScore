@@ -21,8 +21,7 @@
  */
 #pragma once
 
-#include <map>
-#include <vector>
+#include <unordered_map>
 
 #include <QTimer>
 
@@ -58,9 +57,16 @@ public:
     muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const override;
 
 private:
+    enum class DownloadStatus {
+        NotStarted,
+        Downloading,
+        Downloaded
+    };
+
     struct WatchedItem {
-        int queueId = 0;
         muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+        DownloadStatus downloadStatus = DownloadStatus::NotStarted;
+        muse::cloud::ImportStatus lastHandledStatus = muse::cloud::ImportStatus::Unknown;
     };
 
     void upload(muse::cloud::ImportType type, const muse::cloud::ImportFileList& files);
@@ -74,13 +80,15 @@ private:
     void submitMeta(int queueId);
     void askReviewRating(int queueId);
     void submitReview(int queueId, muse::cloud::OmrReviewRating rating);
+    void downloadIfNotAlready(muse::cloud::ImportType type, int queueId);
     void fetchScoreUrlAndDownload(muse::cloud::ImportType type, int queueId);
     void downloadScoreAndFinish(const muse::cloud::SignedMsczUrl& urlInfo);
+    void markDownloaded(int queueId);
+    void clearDownloading(int queueId);
     void finishImport(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
 
     QTimer m_timer;
-    std::vector<WatchedItem> m_watchedItems;
-    std::map<int, muse::cloud::ImportStatus> m_lastHandledStatus;
+    std::unordered_map<int /*queueId*/, WatchedItem> m_watchedItems;
     bool m_importInProgress = false;
     int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_importFinished;

@@ -40,13 +40,14 @@ namespace muse::cloud {
 /// Expected call order for an OMR import:
 /// 1. uploadImport() to submit the file(s) and start processing
 /// 2. Poll fetchImportQueue() and watch the item's status
-/// 3. If the status is AwaitingMeta, get options via fetchSongAutocomplete()/fetchGenres()
-///    and submit the choice with submitOmrMeta()
-/// 4. Keep polling fetchImportQueue(). If the status is AwaitingReview, use fetchMsczUrl()
-///    to let the user review the result, then submit their verdict with submitOmrReview()
-/// 5. Keep polling fetchImportQueue() until the status is Done or Failed (an item may also
-///    disappear from the queue instead of reporting Done, which should be treated the same way)
-/// 6. Once Done, call fetchMsczUrl() to get the final score, then downloadImportedScore()
+/// 3. As soon as the status is AwaitingMeta, AwaitingReview, or Done, the MSCZ is already
+///    available: call fetchMsczUrl() then downloadImportedScore() to get the score
+/// 4. Submitting meta (submitOmrMeta(), once AwaitingMeta, options via
+///    fetchSongAutocomplete()/fetchGenres()) and rating the recognition quality
+///    (submitOmrReview(), once AwaitingReview) are both optional and do not gate the
+///    download above — they only affect the score's state on musescore.com
+/// 5. Keep polling fetchImportQueue() until the status is Failed, or the item disappears
+///    from the queue (which should be treated the same as Done)
 ///
 /// Expected call order for an Audio2Score import (no meta/review steps):
 /// 1. uploadImport() to submit the file and start processing
