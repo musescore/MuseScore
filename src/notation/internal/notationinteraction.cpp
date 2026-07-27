@@ -5274,7 +5274,7 @@ void NotationInteraction::repeatSelection()
 
     //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
     //! fully compatible with list selections right now...
-    if (selection.isList()) {
+    if (selection.isList() && !selection.noteList().empty()) {
         const Fraction& firstTick = selection.tickStart();
         const Fraction& lastTick = selection.tickEnd();
         // Only "single-tick" list selections are currently supported...
@@ -5291,6 +5291,17 @@ void NotationInteraction::repeatSelection()
         }
         apply();
         return;
+    }
+
+    // If a list selection with no notes is a rest, convert to a range selection
+    if (selection.isList()) {
+        ChordRest* cr = score()->getSelectedChordRest();
+        if (!cr) {
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            checkAndShowError();
+            return;
+        }
+        score()->select(cr, SelectType::RANGE);
     }
 
     // Use copy-paste logic for range selections...
