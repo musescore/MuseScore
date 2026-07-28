@@ -179,16 +179,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_DISABLED
              ),
 
-    UiAction("put-note", // args: PointF pos, bool replace, bool insert
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Put note")
-             ),
-    UiAction("remove-note", // args: PointF pos
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Remove note")
-             ),
     UiAction("next-element",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -1646,12 +1636,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Accessibility: Get location"),
              TranslatableString("action", "Accessibility: get location")
-             ),
-    UiAction("edit-element",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Edit element"),
-             TranslatableString("action", "Edit element")
              ),
     UiAction("select-prev-measure",
              mu::context::UiCtxProjectOpened,

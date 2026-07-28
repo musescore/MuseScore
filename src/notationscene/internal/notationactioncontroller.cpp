@@ -56,6 +56,7 @@
 
 #include "log.h"
 #include "rcommand/commandtypes.h"
+#include "thirdparty/kors_logger/src/log_base.h"
 #include "types/ret.h"
 
 using namespace mu;
@@ -433,6 +434,11 @@ void NotationActionController::init()
     registerCommand(MOVE_RIGHT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Right, true); });
     registerCommand(MOVE_LEFT_QUICKLY_COMMAND, [this]() { move(MoveDirection::Left, true); });
 
+    registerCommand(MOVE_UP_COMMAND, &Interaction::moveChordRestToStaff, MoveDirection::Up);
+    registerCommand(MOVE_DOWN_COMMAND, &Interaction::moveChordRestToStaff, MoveDirection::Down);
+    registerCommand(SWAP_LEFT_COMMAND, &Interaction::swapChordRest, MoveDirection::Left);
+    registerCommand(SWAP_RIGHT_COMMAND, &Interaction::swapChordRest, MoveDirection::Right);
+
     registerCommand(PITCH_UP_COMMAND, [this]() { move(MoveDirection::Up, false); });
     registerCommand(PITCH_DOWN_COMMAND, [this]() { move(MoveDirection::Down, false); });
     registerCommand(PITCH_UP_OCTAVE_COMMAND, [this]() { move(MoveDirection::Up, true); });
@@ -548,6 +554,12 @@ void NotationActionController::init()
     registerCommand(ENHARMONIC_SPELL_BOTH_COMMAND, &Interaction::changeEnharmonicSpelling, true);
     registerCommand(ENHARMONIC_SPELL_CURRENT_COMMAND, &Interaction::changeEnharmonicSpelling, false);
 
+    // screen commands
+    registerCommand(SCREEN_PUT_NOTE_COMMAND, &Controller::putNote);
+    registerCommand(SCREEN_REMOVE_NOTE_COMMAND, &Controller::removeNote);
+    registerCommand(SCREEN_EDIT_TEXT_COMMAND, &Controller::startEditSelectedText);
+    registerCommand(SCREEN_EDIT_ELEMENT_COMMAND, &Controller::startEditSelectedElement);
+
     // others commands
     registerCommand(REGROUP_RHYTHMS_COMMAND, &Interaction::regroupNotesAndRests);
     registerCommand(RESEQUENCE_REHEARSAL_MARKS_COMMAND, &Interaction::resequenceRehearsalMarks);
@@ -568,52 +580,57 @@ void NotationActionController::init()
     registerCommand(VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND, &Interaction::changeSelectedElementsVoiceAssignment,
                     VoiceAssignment::ALL_VOICE_IN_STAFF);
 
-    // --------------------
-    registerAction("note-action", &Controller::handleNoteAction); // used for drums
-    registerAction("put-note", &Controller::putNote);
-    registerAction("remove-note", &Controller::removeNote);
-    registerAction("edit-text", &Controller::startEditSelectedText);
-    registerAction("edit-element", &Controller::startEditSelectedElement);
-
-    registerAction("move-up", &Interaction::moveChordRestToStaff, MoveDirection::Up, &Controller::hasSelection);
-    registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
-    registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
-    registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
+    registerCommand(TOGGLE_AUTOMATION_COMMAND, &Controller::toggleAutomation);
 
     // TAB
-    registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
+    registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
+    registerCommand(SET_DURATION_HALF_TAB_COMMAND, [this]() { setDuration(DurationType::V_HALF); });
+    registerCommand(SET_DURATION_QUARTER_TAB_COMMAND, [this]() { setDuration(DurationType::V_QUARTER); });
+    registerCommand(SET_DURATION_EIGHTH_TAB_COMMAND, [this]() { setDuration(DurationType::V_EIGHTH); });
+    registerCommand(SET_DURATION_16TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_16TH); });
+    registerCommand(SET_DURATION_32ND_TAB_COMMAND, [this]() { setDuration(DurationType::V_32ND); });
+    registerCommand(SET_DURATION_64TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_64TH); });
+    registerCommand(SET_DURATION_128TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_128TH); });
+    registerCommand(SET_DURATION_256TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_256TH); });
+    registerCommand(SET_DURATION_512TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_512TH); });
+    registerCommand(SET_DURATION_1024TH_TAB_COMMAND, [this]() { setDuration(DurationType::V_1024TH); });
 
-    registerAction("string-above", &Controller::move, MoveDirection::Up, false, &Controller::isTablatureStaff);
-    registerAction("string-below", &Controller::move, MoveDirection::Down, false, &Controller::isTablatureStaff);
-    registerAction("pad-note-1-TAB", [this]() { setDuration(DurationType::V_WHOLE); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-2-TAB", [this]() { setDuration(DurationType::V_HALF); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-4-TAB", [this]() { setDuration(DurationType::V_QUARTER); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-8-TAB", [this]() { setDuration(DurationType::V_EIGHTH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-16-TAB", [this]() { setDuration(DurationType::V_16TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-32-TAB", [this]() { setDuration(DurationType::V_32ND); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-64-TAB", [this]() { setDuration(DurationType::V_64TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-128-TAB", [this]() { setDuration(DurationType::V_128TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-256-TAB", [this]() { setDuration(DurationType::V_256TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-512-TAB", [this]() { setDuration(DurationType::V_512TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("pad-note-1024-TAB", [this]() { setDuration(DurationType::V_1024TH); }, &NotationActionController::isTablatureStaff);
-    registerAction("rest-TAB", &Interaction::putRestToSelection);
+    registerCommand(ENTER_FRET_0_COMMAND, [this]() { addFret(0); });
+    registerCommand(ENTER_FRET_1_COMMAND, [this]() { addFret(1); });
+    registerCommand(ENTER_FRET_2_COMMAND, [this]() { addFret(2); });
+    registerCommand(ENTER_FRET_3_COMMAND, [this]() { addFret(3); });
+    registerCommand(ENTER_FRET_4_COMMAND, [this]() { addFret(4); });
+    registerCommand(ENTER_FRET_5_COMMAND, [this]() { addFret(5); });
+    registerCommand(ENTER_FRET_6_COMMAND, [this]() { addFret(6); });
+    registerCommand(ENTER_FRET_7_COMMAND, [this]() { addFret(7); });
+    registerCommand(ENTER_FRET_8_COMMAND, [this]() { addFret(8); });
+    registerCommand(ENTER_FRET_9_COMMAND, [this]() { addFret(9); });
+    registerCommand(ENTER_FRET_10_COMMAND, [this]() { addFret(10); });
+    registerCommand(ENTER_FRET_11_COMMAND, [this]() { addFret(11); });
+    registerCommand(ENTER_FRET_12_COMMAND, [this]() { addFret(12); });
+    registerCommand(ENTER_FRET_13_COMMAND, [this]() { addFret(13); });
+    registerCommand(ENTER_FRET_14_COMMAND, [this]() { addFret(14); });
 
-    registerAction("standard-bend", [this]() { addGuitarBend(GuitarBendType::BEND); });
-    registerAction("pre-bend",  [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
-    registerAction("grace-note-bend",  [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
-    registerAction("slight-bend",  [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
+    registerCommand(ENTER_REST_TAB_COMMAND, &Interaction::putRestToSelection);
 
-    registerAction("dive", [this]() { addGuitarBend(GuitarBendType::DIVE); });
-    registerAction("pre-dive",  [this]() { addGuitarBend(GuitarBendType::PRE_DIVE); });
-    registerAction("dip",  [this]() { addGuitarBend(GuitarBendType::DIP); });
-    registerAction("scoop",  [this]() { addGuitarBend(GuitarBendType::SCOOP); });
+    registerCommand(ADD_STANDARD_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::BEND); });
+    registerCommand(ADD_PRE_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
+    registerCommand(ADD_GRACE_NOTE_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
+    registerCommand(ADD_SLIGHT_BEND_COMMAND, [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
+    registerCommand(ADD_DIVE_COMMAND, [this]() { addGuitarBend(GuitarBendType::DIVE); });
+    registerCommand(ADD_PRE_DIVE_COMMAND, [this]() { addGuitarBend(GuitarBendType::PRE_DIVE); });
+    registerCommand(ADD_DIP_COMMAND, [this]() { addGuitarBend(GuitarBendType::DIP); });
+    registerCommand(ADD_SCOOP_COMMAND, [this]() { addGuitarBend(GuitarBendType::SCOOP); });
 
-    for (int i = 0; i < MAX_FRET; ++i) {
-        registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
-    }
+    registerCommand(ADD_HAMMER_ON_PULL_OFF_COMMAND, [this]() { addHammerOnPullOff(); });
 
-    registerAction("toggle-automation", &Controller::toggleAutomation);
-    m_isAllowedDuringPlayback.insert("toggle-automation");
+    registerCommand(GOTO_STRING_ABOVE_COMMAND, [this]() { move(MoveDirection::Up, false); });
+    registerCommand(GOTO_STRING_BELOW_COMMAND, [this]() { move(MoveDirection::Down, false); });
+
+    // --------------------
+    registerAction("note-action", &Controller::handleNoteAction); // used for drums
+
+    // TAB
 
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -648,6 +665,12 @@ void NotationActionController::init()
             notation->style()->styleChanged().onNotify(this, [this]() {
                 m_currentNotationStyleChanged.notify();
             }, Asyncable::Mode::SetReplace);
+
+            if (const IMasterNotationPtr masterNotation = notation->masterNotation()) {
+                masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+                    m_automationModeEnabledChanged.notify();
+                }, Asyncable::Mode::SetReplace);
+            }
         }
 
         m_textEditingChanged.send(isTextEditing());
@@ -1059,6 +1082,49 @@ void NotationActionController::init()
             { "interval-10", ADD_INTERVAL_MINUS_10_COMMAND },
             { "voice-assignment-all-in-instrument", VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND },
             { "voice-assignment-all-in-staff", VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND },
+            { "pad-note-1-TAB", SET_DURATION_WHOLE_TAB_COMMAND },
+            { "pad-note-2-TAB", SET_DURATION_HALF_TAB_COMMAND },
+            { "pad-note-4-TAB", SET_DURATION_QUARTER_TAB_COMMAND },
+            { "pad-note-8-TAB", SET_DURATION_EIGHTH_TAB_COMMAND },
+            { "pad-note-16-TAB", SET_DURATION_16TH_TAB_COMMAND },
+            { "pad-note-32-TAB", SET_DURATION_32ND_TAB_COMMAND },
+            { "pad-note-64-TAB", SET_DURATION_64TH_TAB_COMMAND },
+            { "pad-note-128-TAB", SET_DURATION_128TH_TAB_COMMAND },
+            { "pad-note-256-TAB", SET_DURATION_256TH_TAB_COMMAND },
+            { "pad-note-512-TAB", SET_DURATION_512TH_TAB_COMMAND },
+            { "pad-note-1024-TAB", SET_DURATION_1024TH_TAB_COMMAND },
+            { "rest-TAB", ENTER_REST_TAB_COMMAND },
+            { "fret-0", ENTER_FRET_0_COMMAND },
+            { "fret-1", ENTER_FRET_1_COMMAND },
+            { "fret-2", ENTER_FRET_2_COMMAND },
+            { "fret-3", ENTER_FRET_3_COMMAND },
+            { "fret-4", ENTER_FRET_4_COMMAND },
+            { "fret-5", ENTER_FRET_5_COMMAND },
+            { "fret-6", ENTER_FRET_6_COMMAND },
+            { "fret-7", ENTER_FRET_7_COMMAND },
+            { "fret-8", ENTER_FRET_8_COMMAND },
+            { "fret-9", ENTER_FRET_9_COMMAND },
+            { "fret-10", ENTER_FRET_10_COMMAND },
+            { "fret-11", ENTER_FRET_11_COMMAND },
+            { "fret-12", ENTER_FRET_12_COMMAND },
+            { "fret-13", ENTER_FRET_13_COMMAND },
+            { "fret-14", ENTER_FRET_14_COMMAND },
+            { "standard-bend", ADD_STANDARD_BEND_COMMAND },
+            { "pre-bend", ADD_PRE_BEND_COMMAND },
+            { "grace-note-bend", ADD_GRACE_NOTE_BEND_COMMAND },
+            { "slight-bend", ADD_SLIGHT_BEND_COMMAND },
+            { "dive", ADD_DIVE_COMMAND },
+            { "pre-dive", ADD_PRE_DIVE_COMMAND },
+            { "dip", ADD_DIP_COMMAND },
+            { "scoop", ADD_SCOOP_COMMAND },
+            { "hammer-on-pull-off", ADD_HAMMER_ON_PULL_OFF_COMMAND },
+            { "toggle-automation", TOGGLE_AUTOMATION_COMMAND },
+            { "string-up", GOTO_STRING_ABOVE_COMMAND },
+            { "string-down", GOTO_STRING_BELOW_COMMAND },
+            { "move-up", MOVE_UP_COMMAND },
+            { "move-down", MOVE_DOWN_COMMAND },
+            { "move-left", SWAP_LEFT_COMMAND },
+            { "move-right", SWAP_RIGHT_COMMAND },
         };
 
         static const std::vector<ActionToCommandWithParams> actionToCommandWithParams = {
@@ -1746,7 +1812,7 @@ bool NotationActionController::selectionHasSlur() const
     return hasSlur;
 }
 
-void NotationActionController::putNote(const ActionData& args)
+void NotationActionController::putNote(const muse::rcommand::CommandQuery& query)
 {
     TRACEFUNC;
 
@@ -1755,13 +1821,16 @@ void NotationActionController::putNote(const ActionData& args)
         return;
     }
 
-    IF_ASSERT_FAILED(args.count() > 2) {
+    IF_ASSERT_FAILED(query.contains("pos_x") && query.contains("pos_y")) {
         return;
     }
 
-    PointF pos = args.arg<PointF>(0);
-    bool replace = args.arg<bool>(1);
-    bool insert = args.arg<bool>(2);
+    float posX = query.param("pos_x").toFloat();
+    float posY = query.param("pos_y").toFloat();
+    bool replace = query.param("replace", Val(false)).toBool();
+    bool insert = query.param("insert", Val(false)).toBool();
+
+    PointF pos = PointF(posX, posY);
 
     Ret ret = noteInput->putNote(pos, replace, insert);
     if (ret) {
@@ -1769,7 +1838,7 @@ void NotationActionController::putNote(const ActionData& args)
     }
 }
 
-void NotationActionController::removeNote(const ActionData& args)
+void NotationActionController::removeNote(const muse::rcommand::CommandQuery& query)
 {
     TRACEFUNC;
 
@@ -1778,11 +1847,14 @@ void NotationActionController::removeNote(const ActionData& args)
         return;
     }
 
-    IF_ASSERT_FAILED(args.count() == 1) {
+    IF_ASSERT_FAILED(query.contains("pos_x") && query.contains("pos_y")) {
         return;
     }
 
-    PointF pos = args.arg<PointF>(0);
+    float posX = query.param("pos_x").toFloat();
+    float posY = query.param("pos_y").toFloat();
+
+    PointF pos = PointF(posX, posY);
     noteInput->removeNote(pos);
     seekSelectedElement();
 }
@@ -2419,7 +2491,7 @@ void NotationActionController::openSelectionMoreOptions()
     }
 }
 
-void NotationActionController::startEditSelectedElement(const ActionData& args)
+void NotationActionController::startEditSelectedElement(const muse::rcommand::CommandQuery& query)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -2458,14 +2530,16 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
     }
 
     if (interaction->textEditingAllowed(element)) {
-        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        float posX = query.param("pos_x").toFloat();
+        float posY = query.param("pos_y").toFloat();
+        PointF cursorPos = PointF(posX, posY);
         interaction->startEditText(element, cursorPos);
     } else {
         interaction->startEditElement(element);
     }
 }
 
-void NotationActionController::startEditSelectedText(const ActionData& args)
+void NotationActionController::startEditSelectedText(const muse::rcommand::CommandQuery& query)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -2480,7 +2554,9 @@ void NotationActionController::startEditSelectedText(const ActionData& args)
     mu::engraving::EngravingItem* element = selection->element();
 
     if (interaction->textEditingAllowed(element)) {
-        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        float posX = query.param("pos_x").toFloat();
+        float posY = query.param("pos_y").toFloat();
+        PointF cursorPos = PointF(posX, posY);
         interaction->startEditText(element, cursorPos);
     }
 }
@@ -3122,6 +3198,16 @@ bool NotationActionController::isNotationPage() const
 bool NotationActionController::isTablatureStaff() const
 {
     return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
+}
+
+bool NotationActionController::isAutomationModeEnabled() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->automation()->isAutomationModeEnabled() : false;
+}
+
+muse::async::Notification NotationActionController::automationModeEnabledChanged() const
+{
+    return m_automationModeEnabledChanged;
 }
 
 bool NotationActionController::isEditingElement() const
