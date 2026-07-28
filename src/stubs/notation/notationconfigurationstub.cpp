@@ -28,6 +28,20 @@ QColor NotationConfigurationStub::notationColor() const
     return QColor();
 }
 
+void NotationConfigurationStub::setNotationColor(const QColor&)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::notationColorChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+void NotationConfigurationStub::resetNotationColor()
+{
+}
+
 QColor NotationConfigurationStub::backgroundColor() const
 {
     return QColor();
