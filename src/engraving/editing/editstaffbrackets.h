@@ -30,14 +30,9 @@ namespace mu::engraving {
 class Score;
 class Transaction;
 
-class EditBrackets
+class EditStaffBrackets
 {
 public:
-    // -- TODO MOVE - this file is for stave brackets, not accidental brackets
-    static void addBracket(Transaction& tx, Score* score);
-    static void addBraces(Transaction& tx, Score* score);
-    // --
-
     static void undoAddBracket(Score* score, Staff* staff, size_t level, BracketType type, size_t span);
     static void undoRemoveBracket(Score* score, Bracket* bracket);
 

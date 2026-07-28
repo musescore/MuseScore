@@ -74,7 +74,7 @@
 #include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
 
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/editing/transpose.h"
 
 #include "thirdparty/libmei/cmn.h"
@@ -1314,14 +1314,14 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
             }
 
             staff_idx_t startIdx = idx;
-            EditBrackets::setBracketType(m_score, startIdx, column, bracketSt.bracketType);
+            EditStaffBrackets::setBracketType(m_score, startIdx, column, bracketSt.bracketType);
 
             int childStaffSpan = 0;
             // Recursive call
             success = success && this->readStaffGrps(child.node(), childStaffSpan, column + 1, idx);
 
             // Now we know the spanning of the group
-            EditBrackets::setBracketSpan(m_score, startIdx, column, childStaffSpan);
+            EditStaffBrackets::setBracketSpan(m_score, startIdx, column, childStaffSpan);
             // We can also set the barline spanning - staff by staff since this is what MuseScore seems to do by default
             if (bracketSt.barLineSpan > 0) {
                 size_t staffIdxStart = idx - static_cast<size_t>(childStaffSpan);

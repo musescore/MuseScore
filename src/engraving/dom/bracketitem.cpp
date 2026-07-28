@@ -26,7 +26,7 @@
 #include "score.h"
 #include "staff.h"
 
-#include "../editing/editbrackets.h"
+#include "../editing/editstaffbrackets.h"
 
 using namespace mu;
 
@@ -77,10 +77,10 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        EditBrackets::setBracketType(score(), startStaffIdx(), column(), BracketType(v.toInt())); // change bracket type global
+        EditStaffBrackets::setBracketType(score(), startStaffIdx(), column(), BracketType(v.toInt())); // change bracket type global
         break;
     case Pid::BRACKET_COLUMN:
-        EditBrackets::changeBracketColumn(score(), startStaffIdx(), column(), static_cast<size_t>(v.toInt()));
+        EditStaffBrackets::changeBracketColumn(score(), startStaffIdx(), column(), static_cast<size_t>(v.toInt()));
         break;
     case Pid::BRACKET_SPAN:
         m_bracketSpan = static_cast<size_t>(v.toInt());

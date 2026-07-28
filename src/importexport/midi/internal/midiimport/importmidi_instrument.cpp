@@ -42,7 +42,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 
 using namespace std::literals;
 using namespace mu::engraving;
@@ -658,12 +658,12 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
         } else {
             if (!instr) {
                 staff->setBarLineSpan(true);
-                EditBrackets::setBracketType(score, staff->idx(), 0, BracketType::BRACE);
+                EditStaffBrackets::setBracketType(score, staff->idx(), 0, BracketType::BRACE);
             } else {
                 staff->setBarLineSpan(instr->barlineSpan[0]);
-                EditBrackets::setBracketType(score, staff->idx(), 0, instr->bracket[0]);
+                EditStaffBrackets::setBracketType(score, staff->idx(), 0, instr->bracket[0]);
             }
-            EditBrackets::setBracketSpan(score, staff->idx(), 0, 2);
+            EditStaffBrackets::setBracketSpan(score, staff->idx(), 0, 2);
         }
 
         if (instr) {

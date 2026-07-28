@@ -101,7 +101,7 @@
 #include "dom/utils.h"
 #include "dom/volta.h"
 
-#include "../../editing/editbrackets.h"
+#include "../../editing/editstaffbrackets.h"
 #include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
@@ -842,9 +842,9 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
             if (col == -1) {
                 col = static_cast<int>(ctx.score()->brackets(staff->idx()).size());
             }
-            EditBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
-            EditBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
-            EditBrackets::setBracketVisible(ctx.score(), staff->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
+            EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditStaffBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
+            EditStaffBrackets::setBracketVisible(ctx.score(), staff->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
             e.readNext();
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));

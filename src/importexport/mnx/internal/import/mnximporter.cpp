@@ -30,7 +30,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
@@ -462,7 +462,7 @@ void MnxImporter::importBrackets()
         const int groupSpan = static_cast<int>(span.endIndex - span.startIndex + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(span.depth));
-        EditBrackets::addBracket(m_score, staffIdx, bi);
+        EditStaffBrackets::addBracket(m_score, staffIdx, bi);
         if (groupSpan <= 1 || span.kind != mnx::util::LayoutSpan::Kind::Group) {
             continue;
         }

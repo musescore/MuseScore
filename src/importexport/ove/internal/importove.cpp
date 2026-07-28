@@ -34,7 +34,7 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
@@ -432,8 +432,8 @@ void OveToMScore::convertGroups()
 
             // brace
             if (j == 0 && partStaffCount == 2) {
-                EditBrackets::setBracketType(m_score, staffIndex, 0, BracketType::BRACE);
-                EditBrackets::setBracketSpan(m_score, staffIndex, 0, 2);
+                EditStaffBrackets::setBracketType(m_score, staffIndex, 0, BracketType::BRACE);
+                EditStaffBrackets::setBracketSpan(m_score, staffIndex, 0, 2);
                 staff->setBarLineSpan(true);
             }
 
@@ -443,7 +443,8 @@ void OveToMScore::convertGroups()
                 int span = staffPtr->getGroupStaffCount() + 1;
                 int endStaff = staffIndex + span;
                 if (span > 0 && endStaff >= staffIndex && endStaff <= m_ove->getTrackCount()) {
-                    EditBrackets::addBracket(m_score, staffIndex, Factory::createBracketItem(m_score->dummy(), BracketType::NORMAL, span));
+                    EditStaffBrackets::addBracket(m_score, staffIndex,
+                                                  Factory::createBracketItem(m_score->dummy(), BracketType::NORMAL, span));
                     staff->setBarLineSpan(static_cast<bool>(span));
                 }
             }

@@ -48,7 +48,7 @@
 #include "utils.h"
 #include "capo.h"
 
-#include "../editing/editbrackets.h"
+#include "../editing/editstaffbrackets.h"
 #include "../editing/editcapo.h"
 #include "../editing/transpose.h"
 
@@ -1151,8 +1151,8 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, staff_
         stt->setSmall(false);
     } else {
         stt->setSmall(t->smallStaff[templateStaffIdx]);
-        EditBrackets::setBracketType(score(), staffIdx, 0, t->bracket[templateStaffIdx]);
-        EditBrackets::setBracketSpan(score(), staffIdx, 0, t->bracketSpan[templateStaffIdx]);
+        EditStaffBrackets::setBracketType(score(), staffIdx, 0, t->bracket[templateStaffIdx]);
+        EditStaffBrackets::setBracketSpan(score(), staffIdx, 0, t->bracketSpan[templateStaffIdx]);
         setBarLineSpan(t->barlineSpan[templateStaffIdx]);
     }
     setDefaultClefType(t->clefType(templateStaffIdx));

@@ -136,7 +136,7 @@
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
 
-#include "../../editing/editbrackets.h"
+#include "../../editing/editstaffbrackets.h"
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
@@ -4122,9 +4122,9 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         if (col == -1) {
             col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        EditBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
-        EditBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
-        EditBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
+        EditStaffBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        EditStaffBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
+        EditStaffBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
         BracketItem* bi = ctx.score()->brackets(s->idx()).at(col);
         if (color.isValid()) {
             bi->setColor(color);
@@ -4134,7 +4134,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         BracketItem* b = Factory::createBracketItem(s);
         b->setStartStaffIdx(s->idx());
         read(b, e, ctx);
-        EditBrackets::insertBracket(ctx.score(), s->idx(), b);
+        EditStaffBrackets::insertBracket(ctx.score(), s->idx(), b);
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
         if (barLineSpan < 0) {

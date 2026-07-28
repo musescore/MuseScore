@@ -31,7 +31,7 @@
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/score.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 
 namespace mu::iex::midi {
 namespace MidiDrum {
@@ -190,8 +190,8 @@ void setBracket(engraving::Staff*& staff, int& counter)
 {
     if (staff && counter > 1) {
         engraving::Score* score = staff->score();
-        engraving::EditBrackets::setBracketType(score, staff->idx(), 0, engraving::BracketType::NORMAL);
-        engraving::EditBrackets::setBracketSpan(score, staff->idx(), 0, counter);
+        engraving::EditStaffBrackets::setBracketType(score, staff->idx(), 0, engraving::BracketType::NORMAL);
+        engraving::EditStaffBrackets::setBracketSpan(score, staff->idx(), 0, counter);
     }
     if (counter) {
         counter = 0;

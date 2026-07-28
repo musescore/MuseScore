@@ -33,7 +33,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/rendering/score/tlayout.h"
 
@@ -1462,8 +1462,8 @@ void MusicXmlParserPass1::scorePartwise()
         // TODO: use group-symbol default-x to determine horizontal order of brackets
         Staff* staff = il.at(pg->start)->staff(0);
         if (pg->type != BracketType::NO_BRACKET && !isRedundantBracket(staff, pg->type, stavesSpan)) {
-            EditBrackets::setBracketType(m_score, staff->idx(), pg->column, pg->type);
-            EditBrackets::setBracketSpan(m_score, staff->idx(), pg->column, stavesSpan);
+            EditStaffBrackets::setBracketType(m_score, staff->idx(), pg->column, pg->type);
+            EditStaffBrackets::setBracketSpan(m_score, staff->idx(), pg->column, stavesSpan);
             if ((m_score->brackets(staff->idx()).size() > pg->column) && pg->color.isValid()) {
                 BracketItem* bracketItem = m_score->brackets(staff->idx()).at(pg->column);
                 bracketItem->setColor(pg->color);
@@ -1486,8 +1486,8 @@ void MusicXmlParserPass1::scorePartwise()
         if (p->nstaves() > 1 && !muse::contains(partSet, p)) {
             Staff* staff = p->staff(0);
             const size_t column = m_score->bracketLevels(staff->idx()) + 1;
-            EditBrackets::setBracketType(m_score, staff->idx(), column, BracketType::BRACE);
-            EditBrackets::setBracketSpan(m_score, staff->idx(), column, p->nstaves());
+            EditStaffBrackets::setBracketType(m_score, staff->idx(), column, BracketType::BRACE);
+            EditStaffBrackets::setBracketSpan(m_score, staff->idx(), column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
                 for (Staff* spannedStaff : p->staves()) {

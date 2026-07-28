@@ -20,39 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "editbrackets.h"
+#include "editstaffbrackets.h"
 
-#include "../dom/accidental.h"
 #include "../dom/bracket.h"
 #include "../dom/bracketitem.h"
 #include "../dom/factory.h"
 #include "../dom/score.h"
-#include "../dom/select.h"
 #include "../dom/staff.h"
 
 using namespace mu::engraving;
 
-void EditBrackets::addBracket(Transaction&, Score* score)
-{
-    for (EngravingItem* el : score->selection().elements()) {
-        if (el->isAccidental()) {
-            Accidental* acc = toAccidental(el);
-            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
-        }
-    }
-}
-
-void EditBrackets::addBraces(Transaction&, Score* score)
-{
-    for (EngravingItem* el : score->selection().elements()) {
-        if (el->isAccidental()) {
-            Accidental* acc = toAccidental(el);
-            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
-        }
-    }
-}
-
-void EditBrackets::undoAddBracket(Score* score, Staff* staff, size_t level, BracketType type, size_t span)
+void EditStaffBrackets::undoAddBracket(Score* score, Staff* staff, size_t level, BracketType type, size_t span)
 {
     staff_idx_t startStaffIdx = staff->idx();
     staff_idx_t totStaves = score->nstaves();
@@ -98,12 +76,12 @@ void EditBrackets::undoAddBracket(Score* score, Staff* staff, size_t level, Brac
     score->undo(new AddBracket(staff, level, type, span));
 }
 
-void EditBrackets::undoRemoveBracket(Score* score, Bracket* b)
+void EditStaffBrackets::undoRemoveBracket(Score* score, Bracket* b)
 {
     score->undo(new RemoveBracket(b->staff(), b->column(), b->bracketType(), b->span()));
 }
 
-void EditBrackets::fillBrackets(Score* score, staff_idx_t staffIdx, size_t idx)
+void EditStaffBrackets::fillBrackets(Score* score, staff_idx_t staffIdx, size_t idx)
 {
     // make sure index idx is valid
     std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
@@ -116,7 +94,7 @@ void EditBrackets::fillBrackets(Score* score, staff_idx_t staffIdx, size_t idx)
     }
 }
 
-void EditBrackets::cleanBrackets(Score* score, staff_idx_t staffIdx)
+void EditStaffBrackets::cleanBrackets(Score* score, staff_idx_t staffIdx)
 {
     // remove NO_BRACKET entries from the end of list
     std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
@@ -126,7 +104,7 @@ void EditBrackets::cleanBrackets(Score* score, staff_idx_t staffIdx)
     }
 }
 
-void EditBrackets::adjustBracketsDel(Score* score, size_t sidx, size_t eidx)
+void EditStaffBrackets::adjustBracketsDel(Score* score, size_t sidx, size_t eidx)
 {
     IF_ASSERT_FAILED(sidx < eidx && eidx <= score->staves().size()) {
         return;
@@ -156,14 +134,14 @@ void EditBrackets::adjustBracketsDel(Score* score, size_t sidx, size_t eidx)
                     // Move the bracket past the end of the deleted range,
                     // and shorten it by the number of staves deleted that were spanned by it.
 
-                    EditBrackets::undoAddBracket(score, score->staves().at(eidx), column, bracketType, newSpan);
+                    EditStaffBrackets::undoAddBracket(score, score->staves().at(eidx), column, bracketType, newSpan);
                 }
             }
         }
     }
 }
 
-void EditBrackets::adjustBracketsIns(Score* score, size_t sidx, size_t eidx)
+void EditStaffBrackets::adjustBracketsIns(Score* score, size_t sidx, size_t eidx)
 {
     for (size_t staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
         const std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
@@ -179,7 +157,7 @@ void EditBrackets::adjustBracketsIns(Score* score, size_t sidx, size_t eidx)
     }
 }
 
-void EditBrackets::setBracketType(Score* score, staff_idx_t staffIdx, size_t idx, BracketType val)
+void EditStaffBrackets::setBracketType(Score* score, staff_idx_t staffIdx, size_t idx, BracketType val)
 {
     std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
 
@@ -188,7 +166,7 @@ void EditBrackets::setBracketType(Score* score, staff_idx_t staffIdx, size_t idx
     cleanBrackets(score, staffIdx);
 }
 
-void EditBrackets::changeBracketColumn(Score* score, staff_idx_t staffIdx, size_t oldColumn, size_t newColumn)
+void EditStaffBrackets::changeBracketColumn(Score* score, staff_idx_t staffIdx, size_t oldColumn, size_t newColumn)
 {
     if (oldColumn == newColumn) {
         return;
@@ -208,21 +186,21 @@ void EditBrackets::changeBracketColumn(Score* score, staff_idx_t staffIdx, size_
     cleanBrackets(score, staffIdx);
 }
 
-void EditBrackets::setBracketSpan(Score* score, staff_idx_t staffIdx, size_t idx, size_t val)
+void EditStaffBrackets::setBracketSpan(Score* score, staff_idx_t staffIdx, size_t idx, size_t val)
 {
     const std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
     fillBrackets(score, staffIdx, idx);
     staffBrackets[idx]->setBracketSpan(val);
 }
 
-void EditBrackets::setBracketVisible(Score* score, staff_idx_t staffIdx, size_t idx, bool v)
+void EditStaffBrackets::setBracketVisible(Score* score, staff_idx_t staffIdx, size_t idx, bool v)
 {
     const std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
     fillBrackets(score, staffIdx, idx);
     staffBrackets[idx]->setVisible(v);
 }
 
-void EditBrackets::addBracket(Score* score, staff_idx_t staffIdx, BracketItem* b)
+void EditStaffBrackets::addBracket(Score* score, staff_idx_t staffIdx, BracketItem* b)
 {
     std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
     b->setStartStaffIdx(staffIdx);
@@ -247,7 +225,7 @@ void EditBrackets::addBracket(Score* score, staff_idx_t staffIdx, BracketItem* b
     }
 }
 
-void EditBrackets::insertBracket(Score* score, staff_idx_t staffIdx, BracketItem* b)
+void EditStaffBrackets::insertBracket(Score* score, staff_idx_t staffIdx, BracketItem* b)
 {
     std::vector<BracketItem*>& staffBrackets = score->brackets(staffIdx);
     b->setStartStaffIdx(staffIdx);
@@ -271,14 +249,14 @@ void EditBrackets::insertBracket(Score* score, staff_idx_t staffIdx, BracketItem
 
 void AddBracket::redo()
 {
-    EditBrackets::setBracketType(staff->score(), staff->idx(), level, bracketType);
-    EditBrackets::setBracketSpan(staff->score(), staff->idx(), level, span);
+    EditStaffBrackets::setBracketType(staff->score(), staff->idx(), level, bracketType);
+    EditStaffBrackets::setBracketSpan(staff->score(), staff->idx(), level, span);
     staff->triggerLayout();
 }
 
 void AddBracket::undo()
 {
-    EditBrackets::setBracketType(staff->score(), staff->idx(), level, BracketType::NO_BRACKET);
+    EditStaffBrackets::setBracketType(staff->score(), staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
@@ -288,13 +266,13 @@ void AddBracket::undo()
 
 void RemoveBracket::redo()
 {
-    EditBrackets::setBracketType(staff->score(), staff->idx(), level, BracketType::NO_BRACKET);
+    EditStaffBrackets::setBracketType(staff->score(), staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
 void RemoveBracket::undo()
 {
-    EditBrackets::setBracketType(staff->score(), staff->idx(), level, bracketType);
-    EditBrackets::setBracketSpan(staff->score(), staff->idx(), level, span);
+    EditStaffBrackets::setBracketType(staff->score(), staff->idx(), level, bracketType);
+    EditStaffBrackets::setBracketSpan(staff->score(), staff->idx(), level, span);
     staff->triggerLayout();
 }

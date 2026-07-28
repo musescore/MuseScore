@@ -42,7 +42,7 @@
 #include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
 #include "editing/transpose.h"
-#include "editing/editbrackets.h"
+#include "editing/editstaffbrackets.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -2592,7 +2592,7 @@ KeyList Score::keyList() const
 void Score::cmdRemoveStaff(staff_idx_t staffIdx)
 {
     Staff* s = staff(staffIdx);
-    EditBrackets::adjustBracketsDel(this, staffIdx, staffIdx + 1);
+    EditStaffBrackets::adjustBracketsDel(this, staffIdx, staffIdx + 1);
 
     undoRemoveStaff(s);
 }
@@ -3484,7 +3484,7 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
                 staff(part->staff(0)->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, firstStaffBarLineSpan);
             }
             if (noBracesFound && (tp->bracket[0] != BracketType::NO_BRACKET)) {
-                EditBrackets::undoAddBracket(this, part->staves()[0], 0, tp->bracket[0], part->nstaves());
+                EditStaffBrackets::undoAddBracket(this, part->staves()[0], 0, tp->bracket[0], part->nstaves());
             }
         }
     } else {
@@ -3556,8 +3556,8 @@ void Score::remapBracketsAndBarlines()
             }
 
             if (firstBracketed && span > 1) {
-                EditBrackets::setBracketType(this, firstBracketed->idx(), bracketIdx, bracket->bracketType());
-                EditBrackets::setBracketSpan(this, firstBracketed->idx(), bracketIdx, span);
+                EditStaffBrackets::setBracketType(this, firstBracketed->idx(), bracketIdx, bracket->bracketType());
+                EditStaffBrackets::setBracketSpan(this, firstBracketed->idx(), bracketIdx, span);
             }
         }
     }

@@ -99,7 +99,7 @@
 #include "../infrastructure/messagebox.h"
 
 #include "addremoveelement.h"
-#include "editbrackets.h"
+#include "editstaffbrackets.h"
 #include "editchord.h"
 #include "editclef.h"
 #include "editkeysig.h"
@@ -1396,7 +1396,7 @@ void Score::deleteItem(EngravingItem* el)
     break;
 
     case ElementType::BRACKET:
-        EditBrackets::undoRemoveBracket(this, toBracket(el));
+        EditStaffBrackets::undoRemoveBracket(this, toBracket(el));
         break;
     case ElementType::CLEF:
     {

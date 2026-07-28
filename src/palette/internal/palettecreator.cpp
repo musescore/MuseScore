@@ -91,7 +91,7 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
 
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editstaffbrackets.h"
 
 using namespace mu;
 using namespace mu::palette;
@@ -945,7 +945,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
         paletteScore()->appendStaff(bracketItemOwner);
     }
 
-    EditBrackets::setBracketType(paletteScore(), bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
+    EditStaffBrackets::setBracketType(paletteScore(), bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(paletteScore()->dummy());
