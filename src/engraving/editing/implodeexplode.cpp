@@ -69,13 +69,13 @@ bool ImplodeExplode::explode(Score* score)
             break;
         }
     }
+    // force complete measures
+    score->deselectAll();
+    score->select(startMeasure, SelectType::RANGE, srcStaff);
+    score->select(endMeasure, SelectType::RANGE, srcStaff);
+    startSegment = score->selection().startSegment();
+    endSegment = score->selection().endSegment();
     if (!voice) {
-        // force complete measures
-        score->deselectAll();
-        score->select(startMeasure, SelectType::RANGE, srcStaff);
-        score->select(endMeasure, SelectType::RANGE, srcStaff);
-        startSegment = score->selection().startSegment();
-        endSegment = score->selection().endSegment();
         if (srcStaff == lastStaff - 1) {
             // only one staff was selected up front - determine number of staves
             // loop through all chords looking for maximum number of notes
