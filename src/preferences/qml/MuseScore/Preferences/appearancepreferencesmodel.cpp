@@ -59,11 +59,13 @@ void AppearancePreferencesModel::init()
     notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
         emit foregroundColorChanged();
+        emit engravingColorChanged();
     });
 
     notationConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
         emit isOnlyInvertInDarkThemeChanged();
         emit foregroundColorChanged();
+        emit engravingColorChanged();
     });
 
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {
@@ -76,6 +78,10 @@ void AppearancePreferencesModel::init()
         emit foregroundColorChanged();
         emit foregroundUseColorChanged();
         emit foregroundWallpaperPathChanged();
+    });
+
+    notationConfiguration()->notationColorChanged().onNotify(this, [this]() {
+        emit engravingColorChanged();
     });
 }
 
@@ -272,6 +278,11 @@ bool AppearancePreferencesModel::isCurrentThemeDark() const
     return uiConfiguration()->isDarkMode();
 }
 
+QColor AppearancePreferencesModel::engravingColor() const
+{
+    return notationConfiguration()->notationColor();
+}
+
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
     if (themeCode == currentThemeCode() && !isFollowSystemTheme()) {
@@ -387,4 +398,13 @@ void AppearancePreferencesModel::setOnlyInvertInDarkTheme(bool value)
     }
 
     notationConfiguration()->setOnlyInvertInDarkTheme(value);
+}
+
+void AppearancePreferencesModel::setEngravingColor(const QColor& color)
+{
+    if (color == engravingColor()) {
+        return;
+    }
+
+    notationConfiguration()->setNotationColor(color);
 }

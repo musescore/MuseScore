@@ -59,7 +59,11 @@ public:
     String iconsFontFamily() const override;
 
     Color defaultColor() const override;
-    Color scoreInversionColor() const override;
+
+    Color displayedDefaultColor(bool inverted) const override;
+    void setDisplayedDefaultColor(Color color, bool inverted) override;
+    muse::async::Channel<Color> displayedDefaultColorChanged() const override;
+
     Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
@@ -120,6 +124,7 @@ public:
     bool keepDeadNotesUnchangedOnTranspose() const override;
 
 private:
+    muse::async::Channel<Color> m_displayedDefaultColorChanged;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;

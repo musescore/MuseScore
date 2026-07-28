@@ -35,15 +35,16 @@ BaseSection {
     property alias scoreInversionEnabled: scoreInversionEnable.checked
     property alias isOnlyInvertInDarkTheme: isOnlyInvertInDarkTheme.checked
     property bool isCurrentThemeDark
+    property alias engravingColor: engravingColorPicker.color
     property alias colorAndWallpaper: colorAndWallpaper
 
     signal scoreInversionEnableChangeRequested(bool enable)
     signal isOnlyInvertInDarkThemeChangeRequested(bool enable)
+    signal engravingColorChangeRequested(var newColor)
 
     GridLayout {
         id: gridSection
 
-        rows: 2
         columns: 2
 
         rowSpacing: root.rowSpacing
@@ -82,6 +83,28 @@ BaseSection {
                 root.isOnlyInvertInDarkThemeChangeRequested(!checked)
             }
         }
+
+        StyledTextLabel {
+            id: engravingColorLabel
+            text: qsTrc("preferences", "Engraving color")
+            width: root.columnWidth
+            horizontalAlignment: Qt.AlignLeft
+        }
+
+        ColorPicker {
+            id: engravingColorPicker
+
+            width: 112
+
+            navigation.name: "EngravingColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 1
+
+            onNewColorSelected: function(newColor) {
+                root.engravingColorChangeRequested(newColor)
+            }
+        }
     }
 
     ColorAndWallpaperSection {
@@ -93,6 +116,6 @@ BaseSection {
         wallpaperDialogTitle: qsTrc("preferences", "Choose notepaper")
 
         navigation: root.navigation
-        navigationRowStart: 1
+        navigationRowStart: 2
     }
 }

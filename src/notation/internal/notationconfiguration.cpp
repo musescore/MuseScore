@@ -121,6 +121,10 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
 
 void NotationConfiguration::init()
 {
+    engravingConfiguration()->displayedDefaultColorChanged().onReceive(this, [this](const Color&) {
+        m_notationColorChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -129,6 +133,10 @@ void NotationConfiguration::init()
     if (uiConfiguration()) {
         uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
             m_backgroundChanged.notify();
+            if (scoreInversionEnabled() && isOnlyInvertInDarkTheme()) {
+                m_foregroundChanged.notify();
+                m_notationColorChanged.notify();
+            }
         });
     }
 
@@ -171,12 +179,14 @@ void NotationConfiguration::init()
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(ONLY_INVERT_IN_DARK_THEME, Val(false));
     settings()->valueChanged(ONLY_INVERT_IN_DARK_THEME).onReceive(nullptr, [this](const Val&) {
         m_isOnlyInvertInDarkThemeChanged.notify();
         m_foregroundChanged.notify();
+        m_notationColorChanged.notify();
     });
 
     settings()->setDefaultValue(NOTE_INPUT_PREVIEW_COLOR, Val(selectionColor()));
@@ -348,11 +358,17 @@ void NotationConfiguration::init()
 
 QColor NotationConfiguration::notationColor() const
 {
-    if (shouldInvertScore()) {
-        return engravingConfiguration()->scoreInversionColor().toQColor();
-    }
+    return engravingConfiguration()->displayedDefaultColor(shouldInvertScore()).toQColor();
+}
 
-    return engravingConfiguration()->defaultColor().toQColor();
+void NotationConfiguration::setNotationColor(const QColor& color)
+{
+    engravingConfiguration()->setDisplayedDefaultColor(color, shouldInvertScore());
+}
+
+muse::async::Notification NotationConfiguration::notationColorChanged() const
+{
+    return m_notationColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const

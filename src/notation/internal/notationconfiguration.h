@@ -45,6 +45,8 @@ public:
     void init();
 
     QColor notationColor() const override;
+    void setNotationColor(const QColor& color) override;
+    muse::async::Notification notationColorChanged() const override;
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
@@ -239,6 +241,7 @@ public:
     muse::async::Channel<std::string> styleFileImportPathChanged() const override;
 
 private:
+    muse::async::Notification m_notationColorChanged;
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
     muse::async::Notification m_scoreInversionChanged;
