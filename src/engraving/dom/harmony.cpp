@@ -28,6 +28,8 @@
 #include "draw/fontmetrics.h"
 
 #include "../editing/transpose.h"
+#include "../editing/transaction/transaction.h"
+#include "../editing/transaction/undostack.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -854,14 +856,14 @@ void Harmony::endEdit(EditData& ed)
         UndoStack* undoStack = linkedScore->undoStack();
         const size_t undoIdx = undoStack->currentIndex();
 
-        linkedScore->startCmd(TranslatableString("undoableAction", "Transpose harmony"));
-        Transpose::undoTransposeHarmony(h->score(), h, transposeDiff);
-        linkedScore->endCmd();
+        score()->transactionManager()->transaction(TranslatableString("undoableAction", "Transpose harmony"), [&](auto& tx) {
+            Transpose::undoTransposeHarmony(tx, h, transposeDiff);
+        });
 
         // Merge with end of text editing
         if (undoIdx != undoStack->currentIndex() && undoStack->currentIndex() >= 2) {
             const size_t penultimateCmdIdx = undoStack->currentIndex() - 2;
-            undoStack->mergeCommands(penultimateCmdIdx);
+            undoStack->mergeTransactions(penultimateCmdIdx);
         }
     }
 }

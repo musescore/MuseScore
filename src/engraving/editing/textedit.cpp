@@ -262,7 +262,7 @@ bool TextBase::textWasEdited(EditData& ed) const
 {
     // Only for use in overriden endEdit functions BEFORE TextBase::endEdit is called
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    IF_ASSERT_FAILED(ted && ted->cursor()) {
+    IF_ASSERT_FAILED(ted) {
         return false;
     }
 
