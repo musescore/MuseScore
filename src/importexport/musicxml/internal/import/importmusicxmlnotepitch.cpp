@@ -152,7 +152,7 @@ void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
                 }
                 m_alter = 0;
             }
-            if (m_alter != alter) {
+            if (m_alter && m_alter != alter) {
                 m_tuning = 100 * (alter - m_alter);
             }
         } else if (e.name() == "octave") {
