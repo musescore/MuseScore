@@ -209,7 +209,7 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     mu::engraving::Interval newTranspose = newInstrument.transpose();
     // this also transposes all linked parts
     engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
-    if (oldTranspose != newTranspose) {
+    if (newTranspose.reduced() != oldTranspose.reduced()) {
         engraving::Transpose::transpositionChanged(tx, score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
     }
 
