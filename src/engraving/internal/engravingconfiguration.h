@@ -39,7 +39,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public muse::asyn
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
-    EngravingConfiguration() {}
+    EngravingConfiguration();
 
     void init();
 
@@ -136,6 +136,9 @@ private:
     muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
+
+    Color m_cachedDisplayedDefaultColor;
+    Color m_cachedInvertedDisplayedDefaultColor;
 
     bool m_multiVoice = false;
 };

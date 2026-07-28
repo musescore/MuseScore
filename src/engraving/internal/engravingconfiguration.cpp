@@ -65,6 +65,12 @@ struct VoiceColor {
 static VoiceColor VOICE_COLORS[VOICES + 1];
 
 static const Color UNLINKED_ITEM_COLOR = "#FF9300";
+static const Color DEFAULT_DISPLAYED_INVERTED_COLOR = "#CBCBCD";
+
+EngravingConfiguration::EngravingConfiguration()
+    : m_cachedDisplayedDefaultColor(Color::BLACK),
+    m_cachedInvertedDisplayedDefaultColor(DEFAULT_DISPLAYED_INVERTED_COLOR)
+{}
 
 void EngravingConfiguration::init()
 {
@@ -90,16 +96,22 @@ void EngravingConfiguration::init()
     settings()->setDescription(DISPLAYED_DEFAULT_COLOR, muse::trc("engraving", "Displayed default color"));
     settings()->setCanBeManuallyEdited(DISPLAYED_DEFAULT_COLOR, true);
     settings()->valueChanged(DISPLAYED_DEFAULT_COLOR).onReceive(nullptr, [this](const Val& val) {
-        m_displayedDefaultColorChanged.send(val.toQColor());
+        const Color color = val.toQColor();
+        m_cachedDisplayedDefaultColor = color;
+        m_displayedDefaultColorChanged.send(color);
     });
+    m_cachedDisplayedDefaultColor = settings()->value(DISPLAYED_DEFAULT_COLOR).toQColor();
 
-    settings()->setDefaultValue(INVERTED_DISPLAYED_DEFAULT_COLOR, Val(Color("#CBCBCD").toQColor()));
+    settings()->setDefaultValue(INVERTED_DISPLAYED_DEFAULT_COLOR, Val(Color(DEFAULT_DISPLAYED_INVERTED_COLOR).toQColor()));
     settings()->setDescription(INVERTED_DISPLAYED_DEFAULT_COLOR,
                                muse::trc("engraving", "Displayed default color when score colors are inverted"));
     settings()->setCanBeManuallyEdited(INVERTED_DISPLAYED_DEFAULT_COLOR, true);
     settings()->valueChanged(INVERTED_DISPLAYED_DEFAULT_COLOR).onReceive(nullptr, [this](const Val& val) {
-        m_displayedDefaultColorChanged.send(val.toQColor());
+        const Color color = val.toQColor();
+        m_cachedInvertedDisplayedDefaultColor = color;
+        m_displayedDefaultColorChanged.send(color);
     });
+    m_cachedInvertedDisplayedDefaultColor = settings()->value(INVERTED_DISPLAYED_DEFAULT_COLOR).toQColor();
 
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
@@ -267,9 +279,9 @@ Color EngravingConfiguration::defaultColor() const
 Color EngravingConfiguration::displayedDefaultColor(bool inverted) const
 {
     if (inverted) {
-        return Color::fromQColor(settings()->value(INVERTED_DISPLAYED_DEFAULT_COLOR).toQColor());
+        return m_cachedInvertedDisplayedDefaultColor;
     }
-    return Color::fromQColor(settings()->value(DISPLAYED_DEFAULT_COLOR).toQColor());
+    return m_cachedDisplayedDefaultColor;
 }
 
 void EngravingConfiguration::setDisplayedDefaultColor(Color color, bool inverted)
