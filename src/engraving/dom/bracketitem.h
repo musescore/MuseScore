@@ -50,8 +50,9 @@ public:
     BracketType bracketType() const { return m_bracketType; }
     void setBracketSpan(size_t v) { m_bracketSpan = v; }
     void setBracketType(BracketType v) { m_bracketType = v; }
-    Staff* staff() const { return m_staff; }
-    void setStaff(Staff* s) { m_staff = s; }
+    staff_idx_t startStaffIdx() const { return m_startStaffIdx; }
+    void setStartStaffIdx(staff_idx_t staffIdx) { m_startStaffIdx = staffIdx; }
+    Staff* startStaff() const;
     size_t column() const { return m_column; }
     void setColumn(size_t v) { m_column = v; }
 
@@ -71,12 +72,12 @@ private:
     friend class Factory;
 
     BracketItem(EngravingItem* parent);
-    BracketItem(EngravingItem* parent, BracketType a, int b);
+    BracketItem(EngravingItem* parent, BracketType bracketType, size_t span);
 
     BracketType m_bracketType = BracketType::NO_BRACKET;
     size_t m_column = 0;
     size_t m_bracketSpan = 0;
-    Staff* m_staff = nullptr;
+    staff_idx_t m_startStaffIdx = muse::nidx;
 
     StaffLabel m_name = StaffLabel(muse::mtrc("systemBrackets", "GROUP"), muse::mtrc("systemBrackets", "GR.", "Short for GROUP"));
     bool m_showText = true;

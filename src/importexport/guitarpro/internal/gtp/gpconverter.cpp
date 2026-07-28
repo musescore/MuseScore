@@ -8,7 +8,8 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/bend.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
@@ -1092,7 +1093,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     if (tR->staffCount() > 1) {
-        part->staff(0)->addBracket(mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
+        EditStaffBrackets::addBracket(_score, part->staff(0)->idx(),
+                                      mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
         part->staff(0)->setBarLineSpan(true);
     }
 

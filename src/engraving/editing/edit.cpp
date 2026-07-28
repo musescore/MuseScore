@@ -99,7 +99,7 @@
 #include "../infrastructure/messagebox.h"
 
 #include "addremoveelement.h"
-#include "editbrackets.h"
+#include "editstaffbrackets.h"
 #include "editchord.h"
 #include "editclef.h"
 #include "editkeysig.h"
@@ -1396,7 +1396,7 @@ void Score::deleteItem(EngravingItem* el)
     break;
 
     case ElementType::BRACKET:
-        undoRemoveBracket(toBracket(el));
+        EditStaffBrackets::undoRemoveBracket(this, toBracket(el));
         break;
     case ElementType::CLEF:
     {
@@ -4889,65 +4889,6 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
             toTie(sp)->updatePossibleJumpPoints();
         }
     }
-}
-
-//---------------------------------------------------------
-//   undoAddBracket
-//---------------------------------------------------------
-
-void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span)
-{
-    staff_idx_t startStaffIdx = staff->idx();
-    staff_idx_t totStaves = nstaves();
-
-    // Make sure this brackets won't overlap with others sharing same column.
-    // If overlaps are found, move the other brackets outwards (i.e. increase column).
-    for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
-        const std::vector<BracketItem*>& brackets = m_staves.at(staffIdx)->brackets();
-
-        bool collision = false;
-        for (BracketItem* b : brackets) {
-            if (b->bracketType() != BracketType::NO_BRACKET && b->bracketType() != BracketType::GROUP
-                && b->column() == level) {
-                collision = true;
-                break;
-            }
-        }
-
-        if (!collision) {
-            continue;
-        }
-
-        for (int i = static_cast<int>(brackets.size()) - 1; i >= static_cast<int>(level); --i) {
-            if (i >= static_cast<int>(brackets.size())) {
-                // This might theoretically happen when a lot of brackets get cleaned up
-                // after changing the column of the first bracket we see
-                continue;
-            }
-
-            BracketItem* bi = brackets[i];
-            if (bi->column() > level) {
-                continue;
-            }
-
-            if (bi->bracketType() == BracketType::NO_BRACKET || bi->bracketType() == BracketType::GROUP) {
-                continue;
-            }
-
-            bi->undoChangeProperty(Pid::BRACKET_COLUMN, bi->column() + 1);
-        }
-    }
-
-    undo(new AddBracket(staff, level, type, span));
-}
-
-//---------------------------------------------------------
-//   undoRemoveBracket
-//---------------------------------------------------------
-
-void Score::undoRemoveBracket(Bracket* b)
-{
-    undo(new RemoveBracket(b->staff(), b->column(), b->bracketType(), b->span()));
 }
 
 //---------------------------------------------------------

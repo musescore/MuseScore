@@ -91,6 +91,8 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
 
+#include "engraving/editing/editstaffbrackets.h"
+
 using namespace mu;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -201,7 +203,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
-    defaultPalette->append(newLayoutPalette(true));
+    defaultPalette->append(newLayoutPalette());
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -527,7 +529,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
+PalettePtr PaletteCreator::newLayoutPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Layout);
     //: The name of a palette
@@ -935,13 +937,19 @@ PalettePtr PaletteCreator::newBracketsPalette()
         { BracketType::GROUP,  QT_TRANSLATE_NOOP("palette", "Group bracket") }
     } };
 
-    static Part* bracketItemOwnerPart = new Part(paletteScore());
-    static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
-    bracketItemOwner->setBracketType(types.size() - 1, BracketType::NORMAL);
+    static Part* bracketItemOwnerPart = nullptr;
+    static Staff* bracketItemOwner = nullptr;
+    if (!bracketItemOwner) {
+        bracketItemOwnerPart = new Part(paletteScore());
+        bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
+        paletteScore()->appendStaff(bracketItemOwner);
+    }
+
+    EditStaffBrackets::setBracketType(paletteScore(), bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(paletteScore()->dummy());
-        auto bi1 = bracketItemOwner->brackets()[i];
+        auto bi1 = paletteScore()->brackets(bracketItemOwner->idx())[i];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);

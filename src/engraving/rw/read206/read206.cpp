@@ -100,7 +100,9 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/transpose.h"
+
+#include "../../editing/editstaffbrackets.h"
+#include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
@@ -838,11 +840,11 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "bracket") {
             int col = e.intAttribute("col", -1);
             if (col == -1) {
-                col = static_cast<int>(staff->brackets().size());
+                col = static_cast<int>(ctx.score()->brackets(staff->idx()).size());
             }
-            staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-            staff->setBracketSpan(col, e.intAttribute("span", 0));
-            staff->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
+            EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditStaffBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
+            EditStaffBrackets::setBracketVisible(ctx.score(), staff->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
             e.readNext();
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));

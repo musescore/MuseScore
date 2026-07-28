@@ -27,6 +27,7 @@
 
 #include "measure.h"
 
+#include "../editing/editstaffbrackets.h"
 #include "../editing/editclef.h"
 #include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
@@ -46,7 +47,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "chord.h"
 #include "clef.h"
 #include "durationelement.h"
@@ -1584,7 +1585,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
         for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
-            for (const BracketItem* bi : score()->staff(idx)->brackets()) {
+            for (const BracketItem* bi : score()->brackets(idx)) {
                 if (bi->intersects(firstStaff, lastStaff)) {
                     level = std::max(level, bi->column() + 1);
                 }
@@ -1593,9 +1594,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 
         Bracket* b = toBracket(e);
         if (sel.isRange()) {
-            score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+            EditStaffBrackets::undoAddBracket(score(), staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {
-            score()->undoAddBracket(staff, level, b->bracketType(), 1);
+            EditStaffBrackets::undoAddBracket(score(), staff, level, b->bracketType(), 1);
         }
         delete b;
     }

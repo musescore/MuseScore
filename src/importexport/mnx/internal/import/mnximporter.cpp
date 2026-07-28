@@ -26,10 +26,11 @@
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
@@ -461,7 +462,7 @@ void MnxImporter::importBrackets()
         const int groupSpan = static_cast<int>(span.endIndex - span.startIndex + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(span.depth));
-        m_score->staff(staffIdx)->addBracket(bi);
+        EditStaffBrackets::addBracket(m_score, staffIdx, bi);
         if (groupSpan <= 1 || span.kind != mnx::util::LayoutSpan::Kind::Group) {
             continue;
         }
