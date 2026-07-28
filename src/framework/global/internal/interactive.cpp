@@ -241,9 +241,10 @@ void Interactive::showProgress(const std::string& title, Progress progress)
 }
 
 #ifdef Q_OS_LINUX
-// see QQuickPlatformFileDialog::FileMode
+// see QQuickLabsPlatformFileDialog::FileMode
 enum class FileDialogMode {
     OpenFile = 0,
+    OpenFiles = 1,
     SaveFile = 2
 };
 
@@ -261,7 +262,7 @@ static UriQuery makeSelectFileQuery(FileDialogMode mode, const std::string& titl
     q.set("nameFilters", filterList);
     q.set("fileMode", static_cast<int>(mode));
     q.set("options", options);
-    if (mode == FileDialogMode::OpenFile) {
+    if (mode == FileDialogMode::OpenFile || mode == FileDialogMode::OpenFiles) {
         q.set("selectExisting", true);
         q.set("folder", QUrl::fromLocalFile(current.toQString()).toString().toStdString());
     } else if (mode == FileDialogMode::SaveFile) {
@@ -369,9 +370,22 @@ io::paths_t Interactive::selectOpeningFilesSync(const std::string& title, const 
 
     return paths;
 #else
-    NOT_IMPLEMENTED;
-    const io::path_t path = selectOpeningFileSync(title, dir, filter, options);
-    return path.empty() ? io::paths_t {} : io::paths_t { path };
+    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFiles, title, dir, filter, options);
+
+    RetVal<Val> rv = provider()->openSync(q);
+    if (!rv.ret) {
+        return io::paths_t();
+    }
+
+    ValList urls = rv.val.toList();
+
+    io::paths_t paths;
+    paths.reserve(urls.size());
+    for (const Val& url : urls) {
+        paths.emplace_back(QUrl::fromUserInput(url.toQString()).toLocalFile());
+    }
+
+    return paths;
 #endif
 }
 
