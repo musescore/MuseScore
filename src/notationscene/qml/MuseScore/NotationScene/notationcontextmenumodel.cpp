@@ -287,7 +287,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
     if (element && element->isEditable()) {
         items << makeSeparator();
-        items << makeMenuItem("edit-element");
+        items << makeMenuItem("command://notation/screen-edit-element");
     }
 
     items << makeSeparator()

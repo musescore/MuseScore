@@ -344,6 +344,10 @@ inline static const muse::rcommand::Command MOVE_RIGHT_COMMAND("command://notati
 inline static const muse::rcommand::Command MOVE_LEFT_COMMAND("command://notation/move-left");
 inline static const muse::rcommand::Command MOVE_RIGHT_QUICKLY_COMMAND("command://notation/move-right-quickly");
 inline static const muse::rcommand::Command MOVE_LEFT_QUICKLY_COMMAND("command://notation/move-left-quickly");
+inline static const muse::rcommand::Command MOVE_UP_COMMAND("command://notation/move-up");
+inline static const muse::rcommand::Command MOVE_DOWN_COMMAND("command://notation/move-down");
+inline static const muse::rcommand::Command SWAP_LEFT_COMMAND("command://notation/swap-left");
+inline static const muse::rcommand::Command SWAP_RIGHT_COMMAND("command://notation/swap-right");
 
 inline static const muse::rcommand::Command PITCH_UP_COMMAND("command://notation/pitch-up");
 inline static const muse::rcommand::Command PITCH_DOWN_COMMAND("command://notation/pitch-down");
@@ -452,6 +456,12 @@ inline static const muse::rcommand::Command PITCH_SPELL_FLATS_COMMAND("command:/
 inline static const muse::rcommand::Command ENHARMONIC_SPELL_BOTH_COMMAND("command://notation/enharmonic-spell-both");
 inline static const muse::rcommand::Command ENHARMONIC_SPELL_CURRENT_COMMAND("command://notation/enharmonic-spell-current");
 
+// screen commands
+inline static const muse::rcommand::Command SCREEN_PUT_NOTE_COMMAND("command://notation/screen-put-note"); // with params
+inline static const muse::rcommand::Command SCREEN_REMOVE_NOTE_COMMAND("command://notation/screen-remove-note"); // with params
+inline static const muse::rcommand::Command SCREEN_EDIT_TEXT_COMMAND("command://notation/screen-edit-text"); // with params
+inline static const muse::rcommand::Command SCREEN_EDIT_ELEMENT_COMMAND("command://notation/screen-edit-element"); // with params
+
 // others commands
 inline static const muse::rcommand::Command REGROUP_RHYTHMS_COMMAND("command://notation/regroup-rhythms");
 inline static const muse::rcommand::Command RESEQUENCE_REHEARSAL_MARKS_COMMAND("command://notation/resequence-rehearsal-marks");
@@ -468,4 +478,50 @@ inline static const muse::rcommand::Command TOGGLE_AUTOPLACE_COMMAND("command://
 inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command://notation/autoplace-enabled");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
+inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
+
+// TAB commands
+inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");
+inline static const muse::rcommand::Command SET_DURATION_HALF_TAB_COMMAND("command://notation/set-duration-half-tab");
+inline static const muse::rcommand::Command SET_DURATION_QUARTER_TAB_COMMAND("command://notation/set-duration-quarter-tab");
+inline static const muse::rcommand::Command SET_DURATION_EIGHTH_TAB_COMMAND("command://notation/set-duration-eighth-tab");
+inline static const muse::rcommand::Command SET_DURATION_16TH_TAB_COMMAND("command://notation/set-duration-16th-tab");
+inline static const muse::rcommand::Command SET_DURATION_32ND_TAB_COMMAND("command://notation/set-duration-32nd-tab");
+inline static const muse::rcommand::Command SET_DURATION_64TH_TAB_COMMAND("command://notation/set-duration-64th-tab");
+inline static const muse::rcommand::Command SET_DURATION_128TH_TAB_COMMAND("command://notation/set-duration-128th-tab");
+inline static const muse::rcommand::Command SET_DURATION_256TH_TAB_COMMAND("command://notation/set-duration-256th-tab");
+inline static const muse::rcommand::Command SET_DURATION_512TH_TAB_COMMAND("command://notation/set-duration-512th-tab");
+inline static const muse::rcommand::Command SET_DURATION_1024TH_TAB_COMMAND("command://notation/set-duration-1024th-tab");
+
+inline static const muse::rcommand::Command ENTER_FRET_0_COMMAND("command://notation/enter-fret-0");
+inline static const muse::rcommand::Command ENTER_FRET_1_COMMAND("command://notation/enter-fret-1");
+inline static const muse::rcommand::Command ENTER_FRET_2_COMMAND("command://notation/enter-fret-2");
+inline static const muse::rcommand::Command ENTER_FRET_3_COMMAND("command://notation/enter-fret-3");
+inline static const muse::rcommand::Command ENTER_FRET_4_COMMAND("command://notation/enter-fret-4");
+inline static const muse::rcommand::Command ENTER_FRET_5_COMMAND("command://notation/enter-fret-5");
+inline static const muse::rcommand::Command ENTER_FRET_6_COMMAND("command://notation/enter-fret-6");
+inline static const muse::rcommand::Command ENTER_FRET_7_COMMAND("command://notation/enter-fret-7");
+inline static const muse::rcommand::Command ENTER_FRET_8_COMMAND("command://notation/enter-fret-8");
+inline static const muse::rcommand::Command ENTER_FRET_9_COMMAND("command://notation/enter-fret-9");
+inline static const muse::rcommand::Command ENTER_FRET_10_COMMAND("command://notation/enter-fret-10");
+inline static const muse::rcommand::Command ENTER_FRET_11_COMMAND("command://notation/enter-fret-11");
+inline static const muse::rcommand::Command ENTER_FRET_12_COMMAND("command://notation/enter-fret-12");
+inline static const muse::rcommand::Command ENTER_FRET_13_COMMAND("command://notation/enter-fret-13");
+inline static const muse::rcommand::Command ENTER_FRET_14_COMMAND("command://notation/enter-fret-14");
+
+inline static const muse::rcommand::Command ENTER_REST_TAB_COMMAND("command://notation/enter-rest-tab");
+
+inline static const muse::rcommand::Command ADD_STANDARD_BEND_COMMAND("command://notation/add-standard-bend");
+inline static const muse::rcommand::Command ADD_PRE_BEND_COMMAND("command://notation/add-pre-bend");
+inline static const muse::rcommand::Command ADD_GRACE_NOTE_BEND_COMMAND("command://notation/add-grace-note-bend");
+inline static const muse::rcommand::Command ADD_SLIGHT_BEND_COMMAND("command://notation/add-slight-bend");
+inline static const muse::rcommand::Command ADD_DIVE_COMMAND("command://notation/add-dive");
+inline static const muse::rcommand::Command ADD_PRE_DIVE_COMMAND("command://notation/add-pre-dive");
+inline static const muse::rcommand::Command ADD_DIP_COMMAND("command://notation/add-dip");
+inline static const muse::rcommand::Command ADD_SCOOP_COMMAND("command://notation/add-scoop");
+
+inline static const muse::rcommand::Command ADD_HAMMER_ON_PULL_OFF_COMMAND("command://notation/add-hammer-on-pull-off");
+
+inline static const muse::rcommand::Command GOTO_STRING_ABOVE_COMMAND("command://notation/goto-string-above");
+inline static const muse::rcommand::Command GOTO_STRING_BELOW_COMMAND("command://notation/goto-string-below");
 }

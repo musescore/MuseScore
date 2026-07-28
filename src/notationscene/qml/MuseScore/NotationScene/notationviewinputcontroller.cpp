@@ -50,6 +50,8 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
+#include "notationscene/notationcommands.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -768,12 +770,21 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
 
     if (event->button() == Qt::RightButton) {
         m_ignoreNextMouseContextMenuEvent = true;
-        dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
+        muse::rcommand::CommandQuery query(SCREEN_REMOVE_NOTE_COMMAND);
+        query.set("pos_x", muse::Val(logicPos.x()));
+        query.set("pos_y", muse::Val(logicPos.y()));
+        commandDispatcher()->dispatch(query);
     } else {
         const Qt::KeyboardModifiers keyState = event->modifiers();
         const bool replace = keyState & Qt::ShiftModifier;
         const bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
+
+        muse::rcommand::CommandQuery query(SCREEN_PUT_NOTE_COMMAND);
+        query.set("pos_x", muse::Val(logicPos.x()));
+        query.set("pos_y", muse::Val(logicPos.y()));
+        query.set("replace", replace);
+        query.set("insert", insert);
+        commandDispatcher()->dispatch(query);
     }
 }
 
@@ -1277,7 +1288,10 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 
     if (m_shouldStartEditOnLeftClickRelease) {
-        dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+        muse::rcommand::CommandQuery query(SCREEN_EDIT_ELEMENT_COMMAND);
+        query.set("pos_x", muse::Val(m_mouseDownInfo.logicalBeginPoint.x()));
+        query.set("pos_y", muse::Val(m_mouseDownInfo.logicalBeginPoint.y()));
+        commandDispatcher()->dispatch(query);
         m_shouldStartEditOnLeftClickRelease = false;
         return;
     }
@@ -1479,7 +1493,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     auto key = event->key();
 
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
-        dispatcher()->dispatch("edit-text");
+        commandDispatcher()->dispatch(SCREEN_EDIT_TEXT_COMMAND);
         event->accept();
     } else if (event->key() == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
         // Cancel "Alt+click to paste range"

@@ -109,6 +109,11 @@ public:
     INotationStylePtr notationStyle() const override;
     muse::async::Notification notationStyleChanged() const override;
 
+    bool isTablatureStaff() const override;
+
+    bool isAutomationModeEnabled() const override;
+    muse::async::Notification automationModeEnabledChanged() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -138,8 +143,8 @@ private:
     void setDuration(engraving::DurationType duration);
     void toggleRest();
     void toggleDots(int dots);
-    void putNote(const muse::actions::ActionData& args);
-    void removeNote(const muse::actions::ActionData& args);
+    void putNote(const muse::rcommand::CommandQuery& query);
+    void removeNote(const muse::rcommand::CommandQuery& query);
     void increaseDecreaseDuration(int steps, bool stepByDots);
     void realtimeAdvance();
 
@@ -178,8 +183,8 @@ private:
 
     void openSelectionMoreOptions();
 
-    void startEditSelectedElement(const muse::actions::ActionData& args);
-    void startEditSelectedText(const muse::actions::ActionData& args);
+    void startEditSelectedElement(const muse::rcommand::CommandQuery& query);
+    void startEditSelectedText(const muse::rcommand::CommandQuery& query);
 
     void addMeasures(const muse::actions::ActionData& actionData, AddBoxesTarget target);
     void addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
@@ -264,7 +269,6 @@ private:
     bool elementHasPopup(const EngravingItem* e) const;
 
     bool isNotationPage() const;
-    bool isTablatureStaff() const;
 
     void checkForScoreCorruptions();
 
@@ -333,6 +337,7 @@ private:
 
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
     muse::async::Notification m_currentNotationStyleChanged;
+    muse::async::Notification m_automationModeEnabledChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

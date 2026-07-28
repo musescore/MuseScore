@@ -54,6 +54,13 @@ static const TranslatableString Add_X_to_chord = TranslatableString("action", "A
 static const TranslatableString Add_note_X_to_chord = TranslatableString("action", "Add note %1 to chord");
 static const TranslatableString Insert_X = TranslatableString("action", "Insert %1");
 
+//: Addition to the name of an action to indicate that this action only applies to tablature notation.
+//: '%1' is the name of the action.
+static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)");
+
+static const TranslatableString fret_X_TAB = TranslatableString("action", "Fret %1 (TAB)");
+static const TranslatableString enter_TAB_fret_X = TranslatableString("action", "Enter TAB: fret %1");
+
 static const std::vector<CommandInfo> s_commandInfos = {
     // copy, cut, paste, delete, cancel
     CommandInfo{
@@ -163,6 +170,35 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+    CommandInfo{
+        MOVE_UP_COMMAND,
+        TranslatableString("action", "Move to staff above"),
+        TranslatableString("action", "Move selected note/rest to staff above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MOVE_DOWN_COMMAND,
+        TranslatableString("action", "Move to staff below"),
+        TranslatableString("action", "Move selected note/rest to staff below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_LEFT_COMMAND,
+        TranslatableString("action", "Move chord/rest left"),
+        TranslatableString("action", "Move chord/rest left"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_RIGHT_COMMAND,
+        TranslatableString("action", "Move chord/rest right"),
+        TranslatableString("action", "Move chord/rest right"),
+        InputSchema(),
+        Decoration()
+    },
+
     CommandInfo{
         PITCH_UP_COMMAND,
         TranslatableString("action", "Pitch up"),
@@ -382,6 +418,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::NOTE_1024TH)
     },
+
     CommandInfo{
         SET_DOUBLE_DURATION_COMMAND,
         TranslatableString("action", "Double duration"),
@@ -2582,6 +2619,334 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Tenth below"),
         TranslatableString("action", "Enter interval: tenth below"),
         InputSchema(),
+        Decoration()
+    },
+
+    // TAB commands
+    CommandInfo {
+        SET_DURATION_WHOLE_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Whole note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: whole note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_WHOLE)
+    },
+    CommandInfo {
+        SET_DURATION_HALF_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Half note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: half note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_HALF)
+    },
+    CommandInfo {
+        SET_DURATION_QUARTER_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Quarter note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: quarter note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_QUARTER)
+    },
+    CommandInfo {
+        SET_DURATION_EIGHTH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Eighth note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: eighth note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_8TH)
+    },
+    CommandInfo {
+        SET_DURATION_16TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "16th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 16th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_16TH)
+    },
+    CommandInfo {
+        SET_DURATION_32ND_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "32nd note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 32nd note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_32ND)
+    },
+    CommandInfo {
+        SET_DURATION_64TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "64th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 64th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_64TH)
+    },
+    CommandInfo {
+        SET_DURATION_128TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "128th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 128th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_128TH)
+    },
+    CommandInfo {
+        SET_DURATION_256TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "256th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 256th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_256TH)
+    },
+    CommandInfo {
+        SET_DURATION_512TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "512th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 512th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_512TH)
+    },
+    CommandInfo {
+        SET_DURATION_1024TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "1024th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 1024th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_1024TH)
+    },
+    CommandInfo {
+        ENTER_REST_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Rest")),
+        X_TAB.arg(TranslatableString("action", "Enter rest")),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        ENTER_FRET_0_COMMAND,
+        fret_X_TAB.arg(0),
+        enter_TAB_fret_X.arg(0),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_1_COMMAND,
+        fret_X_TAB.arg(1),
+        enter_TAB_fret_X.arg(1),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_2_COMMAND,
+        fret_X_TAB.arg(2),
+        enter_TAB_fret_X.arg(2),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_3_COMMAND,
+        fret_X_TAB.arg(3),
+        enter_TAB_fret_X.arg(3),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_4_COMMAND,
+        fret_X_TAB.arg(4),
+        enter_TAB_fret_X.arg(4),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_5_COMMAND,
+        fret_X_TAB.arg(5),
+        enter_TAB_fret_X.arg(5),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_6_COMMAND,
+        fret_X_TAB.arg(6),
+        enter_TAB_fret_X.arg(6),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_7_COMMAND,
+        fret_X_TAB.arg(7),
+        enter_TAB_fret_X.arg(7),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_8_COMMAND,
+        fret_X_TAB.arg(8),
+        enter_TAB_fret_X.arg(8),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_9_COMMAND,
+        fret_X_TAB.arg(9),
+        enter_TAB_fret_X.arg(9),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_10_COMMAND,
+        fret_X_TAB.arg(10),
+        enter_TAB_fret_X.arg(10),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_11_COMMAND,
+        fret_X_TAB.arg(11),
+        enter_TAB_fret_X.arg(11),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_12_COMMAND,
+        fret_X_TAB.arg(12),
+        enter_TAB_fret_X.arg(12),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_13_COMMAND,
+        fret_X_TAB.arg(13),
+        enter_TAB_fret_X.arg(13),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_14_COMMAND,
+        fret_X_TAB.arg(14),
+        enter_TAB_fret_X.arg(14),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        ADD_STANDARD_BEND_COMMAND,
+        TranslatableString("action", "Standard bend"),
+        TranslatableString("action", "Add standard bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_BEND_REGULAR)
+    },
+    CommandInfo {
+        ADD_PRE_BEND_COMMAND,
+        TranslatableString("action", "Pre-bend"),
+        TranslatableString("action", "Add pre-bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_PRE_BEND)
+    },
+    CommandInfo {
+        ADD_GRACE_NOTE_BEND_COMMAND,
+        TranslatableString("action", "Grace note bend"),
+        TranslatableString("action", "Add grace note bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_GRACE_NOTE_BEND)
+    },
+    CommandInfo {
+        ADD_SLIGHT_BEND_COMMAND,
+        TranslatableString("action", "Slight bend"),
+        TranslatableString("action", "Add slight bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_SLIGHT_BEND)
+    },
+    CommandInfo {
+        ADD_DIVE_COMMAND,
+        //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
+        TranslatableString("action", "Dive"),
+        TranslatableString("action", "Add dive"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_DIVE_REGULAR)
+    },
+    CommandInfo {
+        ADD_PRE_DIVE_COMMAND,
+        //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
+        TranslatableString("action", "Pre-dive"),
+        TranslatableString("action", "Add pre-dive"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_PRE_DIVE)
+    },
+    CommandInfo {
+        ADD_DIP_COMMAND,
+        //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
+        TranslatableString("action", "Dip"),
+        TranslatableString("action", "Add dip"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_DIP_DOWN)
+    },
+    CommandInfo {
+        ADD_SCOOP_COMMAND,
+        //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
+        TranslatableString("action", "Scoop"),
+        TranslatableString("action", "Add scoop"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_SCOOP)
+    },
+    CommandInfo {
+        ADD_HAMMER_ON_PULL_OFF_COMMAND,
+        TranslatableString("action", "Hammer-on/pull-off"),
+        TranslatableString("action", "Add hammer-on/pull-off"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        GOTO_STRING_ABOVE_COMMAND,
+        TranslatableString("action", "String above (TAB)"),
+        TranslatableString("action", "Go to string above (TAB)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        GOTO_STRING_BELOW_COMMAND,
+        TranslatableString("action", "String below (TAB)"),
+        TranslatableString("action", "Go to string below (TAB)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        TOGGLE_AUTOMATION_COMMAND,
+        TranslatableString("action", "Automation"),
+        TranslatableString("action", "Toggle automation"),
+        InputSchema(),
+        Decoration(IconCode::Code::AUTOMATION, rcommand::Checkable::Yes)
+    },
+
+    // screen commands
+
+    CommandInfo{
+        SCREEN_PUT_NOTE_COMMAND,
+        TranslatableString("action", "Put note"),
+        TranslatableString("action", "Put note"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X position") },
+            { "pos_y", Arg(DataType::Float, u"Y position") },
+            { "replace", Arg(DataType::Boolean, u"Replace") },
+            { "insert", Arg(DataType::Boolean, u"Insert") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_REMOVE_NOTE_COMMAND,
+        TranslatableString("action", "Remove note"),
+        TranslatableString("action", "Remove note"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X position") },
+            { "pos_y", Arg(DataType::Float, u"Y position") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_EDIT_TEXT_COMMAND,
+        TranslatableString("action", "Edit text"),
+        TranslatableString("action", "Edit text"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X cursor position") },
+            { "pos_y", Arg(DataType::Float, u"Y cursor position") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_EDIT_ELEMENT_COMMAND,
+        TranslatableString("action", "Edit element"),
+        TranslatableString("action", "Edit element"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X cursor position") },
+            { "pos_y", Arg(DataType::Float, u"Y cursor position") },
+        }),
         Decoration()
     },
 };

@@ -67,7 +67,9 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SET_HALVE_DURATION_DOTTED_COMMAND,
     TOGGLE_SNAP_TO_PREV_COMMAND,
     TOGGLE_SNAP_TO_NEXT_COMMAND,
-    MIRROR_NOTEHEAD_COMMAND
+    MIRROR_NOTEHEAD_COMMAND,
+    MOVE_UP_COMMAND,
+    MOVE_DOWN_COMMAND,
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -242,6 +244,23 @@ static const std::vector<Command> STYLE_COMMANDS = {
     TOGGLE_CONCERT_PITCH_COMMAND
 };
 
+static const std::vector<Command> TAB_COMMANDS = {
+    SET_DURATION_WHOLE_TAB_COMMAND,
+    SET_DURATION_HALF_TAB_COMMAND,
+    SET_DURATION_QUARTER_TAB_COMMAND,
+    SET_DURATION_EIGHTH_TAB_COMMAND,
+    SET_DURATION_16TH_TAB_COMMAND,
+    SET_DURATION_32ND_TAB_COMMAND,
+    SET_DURATION_64TH_TAB_COMMAND,
+    SET_DURATION_128TH_TAB_COMMAND,
+    SET_DURATION_256TH_TAB_COMMAND,
+    SET_DURATION_512TH_TAB_COMMAND,
+    SET_DURATION_1024TH_TAB_COMMAND,
+    ENTER_REST_TAB_COMMAND,
+    GOTO_STRING_ABOVE_COMMAND,
+    GOTO_STRING_BELOW_COMMAND
+};
+
 std::string NotationCommandsState::moduleName() const
 {
     return "notation";
@@ -270,6 +289,7 @@ void NotationCommandsState::init()
         updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(TAB_COMMANDS);
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -308,6 +328,10 @@ void NotationCommandsState::init()
         updateCommandStates(STYLE_COMMANDS);
     });
 
+    controller()->automationModeEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ TOGGLE_AUTOMATION_COMMAND });
+    });
+
     updateCommandStates();
 }
 
@@ -322,6 +346,7 @@ void NotationCommandsState::deinit()
     controller()->noteInputStateChanged().disconnect(this);
     controller()->scoreConfigChanged().disconnect(this);
     controller()->notationStyleChanged().disconnect(this);
+    controller()->automationModeEnabledChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -430,6 +455,14 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
     if (muse::contains(STYLE_COMMANDS, command)) {
         auto style = controller()->notationStyle();
         return CommandState(true, style ? style->styleValue(StyleId::concertPitch).toBool() : false);
+    }
+
+    if (muse::contains(TAB_COMMANDS, command)) {
+        return CommandState(controller()->isTablatureStaff(), false);
+    }
+
+    if (command == TOGGLE_AUTOMATION_COMMAND) {
+        return CommandState(true, controller()->isAutomationModeEnabled());
     }
 
     return CommandState(true, false);
