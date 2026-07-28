@@ -377,8 +377,20 @@ void Score::onElementDestruction(EngravingItem* e)
 {
     Score* score = e->EngravingObject::score();
 
-    if (!score || Score::validScores.find(score) == Score::validScores.end()) {
-        // No score or the score is already deleted
+    if (!score) {
+        return;
+    }
+
+    // The EID register lives on the master score, so unregister the item even when
+    // its own score is being deleted (e.g. when an excerpt is removed), as long as
+    // the master score, and with it the register, is still alive
+    MasterScore* masterScore = score->masterScore();
+    if (masterScore && Score::validScores.find(masterScore) != Score::validScores.end()) {
+        masterScore->eidRegister()->onItemDestroyed(e);
+    }
+
+    if (Score::validScores.find(score) == Score::validScores.end()) {
+        // The score is already deleted
         return;
     }
 
