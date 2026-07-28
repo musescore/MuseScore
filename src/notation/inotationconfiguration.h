@@ -45,6 +45,7 @@ public:
     virtual QColor notationColor() const = 0;
     virtual void setNotationColor(const QColor& color) = 0;
     virtual muse::async::Notification notationColorChanged() const = 0;
+    virtual void resetNotationColor() = 0;
 
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;

@@ -141,6 +141,7 @@ void AppearancePreferencesModel::resetAppearancePreferencesToDefault()
     uiConfiguration()->resetFonts();
     notationConfiguration()->resetBackground();
     notationConfiguration()->resetForeground();
+    notationConfiguration()->resetNotationColor();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)

@@ -298,6 +298,12 @@ muse::async::Channel<Color> EngravingConfiguration::displayedDefaultColorChanged
     return m_displayedDefaultColorChanged;
 }
 
+void EngravingConfiguration::resetDisplayedDefaultColors()
+{
+    settings()->setSharedValue(DISPLAYED_DEFAULT_COLOR, settings()->defaultValue(DISPLAYED_DEFAULT_COLOR));
+    settings()->setSharedValue(INVERTED_DISPLAYED_DEFAULT_COLOR, settings()->defaultValue(INVERTED_DISPLAYED_DEFAULT_COLOR));
+}
+
 Color EngravingConfiguration::indicatorIconInvertedSelectionColor() const
 {
     return Color::fromQColor(voiceColor(0).toQColor().lighter(135));

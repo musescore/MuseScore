@@ -63,6 +63,7 @@ public:
     Color displayedDefaultColor(bool inverted) const override;
     void setDisplayedDefaultColor(Color color, bool inverted) override;
     muse::async::Channel<Color> displayedDefaultColorChanged() const override;
+    void resetDisplayedDefaultColors() override;
 
     Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;

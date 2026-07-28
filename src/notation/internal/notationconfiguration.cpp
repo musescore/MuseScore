@@ -379,6 +379,11 @@ muse::async::Notification NotationConfiguration::notationColorChanged() const
     return m_notationColorChanged;
 }
 
+void NotationConfiguration::resetNotationColor()
+{
+    engravingConfiguration()->resetDisplayedDefaultColors();
+}
+
 QColor NotationConfiguration::backgroundColor() const
 {
     if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {

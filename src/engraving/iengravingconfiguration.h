@@ -62,6 +62,7 @@ public:
     virtual Color displayedDefaultColor(bool inverted) const = 0;
     virtual void setDisplayedDefaultColor(Color color, bool inverted) = 0;
     virtual muse::async::Channel<Color> displayedDefaultColorChanged() const = 0;
+    virtual void resetDisplayedDefaultColors() = 0;
 
     virtual Color indicatorIconInvertedSelectionColor() const = 0;
     virtual Color lassoColor() const = 0;
