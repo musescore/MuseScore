@@ -62,7 +62,7 @@ public:
 
     Color displayedDefaultColor(bool inverted) const override;
     void setDisplayedDefaultColor(Color color, bool inverted) override;
-    muse::async::Channel<Color> displayedDefaultColorChanged() const override;
+    muse::async::Channel<bool, Color> displayedDefaultColorChanged() const override;
     void resetDisplayedDefaultColors() override;
 
     Color indicatorIconInvertedSelectionColor() const override;
@@ -125,7 +125,7 @@ public:
     bool keepDeadNotesUnchangedOnTranspose() const override;
 
 private:
-    muse::async::Channel<Color> m_displayedDefaultColorChanged;
+    muse::async::Channel<bool, Color> m_displayedDefaultColorChanged;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;

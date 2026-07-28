@@ -795,13 +795,13 @@ void AbstractNotationPaintView::onNotationSetup()
         scheduleRedraw();
     });
 
+    notationConfiguration()->notationColorChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         scheduleRedraw();
     }, async::Asyncable::Mode::SetReplace);
-
-    engravingConfiguration()->displayedDefaultColorChanged().onReceive(this, [this](const Color&) {
-        scheduleRedraw();
-    });
 
     engravingConfiguration()->selectionColorChanged().onReceive(this, [this](voice_idx_t, const muse::draw::Color&) {
         scheduleRedraw();

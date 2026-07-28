@@ -122,8 +122,10 @@ static const std::map<NoteInputMethod, std::string> NOTE_INPUT_METHOD_TO_STR {
 
 void NotationConfiguration::init()
 {
-    engravingConfiguration()->displayedDefaultColorChanged().onReceive(this, [this](const Color&) {
-        m_notationColorChanged.notify();
+    engravingConfiguration()->displayedDefaultColorChanged().onReceive(this, [this](bool inverted, const Color&) {
+        if (inverted == shouldInvertScore()) {
+            m_notationColorChanged.notify();
+        }
     });
 
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));

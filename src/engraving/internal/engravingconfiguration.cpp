@@ -95,10 +95,10 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DISPLAYED_DEFAULT_COLOR, Val(defaultColor().toQColor()));
     settings()->setDescription(DISPLAYED_DEFAULT_COLOR, muse::trc("engraving", "Displayed default color"));
     settings()->setCanBeManuallyEdited(DISPLAYED_DEFAULT_COLOR, true);
-    settings()->valueChanged(DISPLAYED_DEFAULT_COLOR).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(DISPLAYED_DEFAULT_COLOR).onReceive(this, [this](const Val& val) {
         const Color color = val.toQColor();
         m_cachedDisplayedDefaultColor = color;
-        m_displayedDefaultColorChanged.send(color);
+        m_displayedDefaultColorChanged.send(false, color);
     });
     m_cachedDisplayedDefaultColor = settings()->value(DISPLAYED_DEFAULT_COLOR).toQColor();
 
@@ -106,10 +106,10 @@ void EngravingConfiguration::init()
     settings()->setDescription(INVERTED_DISPLAYED_DEFAULT_COLOR,
                                muse::trc("engraving", "Displayed default color when score colors are inverted"));
     settings()->setCanBeManuallyEdited(INVERTED_DISPLAYED_DEFAULT_COLOR, true);
-    settings()->valueChanged(INVERTED_DISPLAYED_DEFAULT_COLOR).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(INVERTED_DISPLAYED_DEFAULT_COLOR).onReceive(this, [this](const Val& val) {
         const Color color = val.toQColor();
         m_cachedInvertedDisplayedDefaultColor = color;
-        m_displayedDefaultColorChanged.send(color);
+        m_displayedDefaultColorChanged.send(true, color);
     });
     m_cachedInvertedDisplayedDefaultColor = settings()->value(INVERTED_DISPLAYED_DEFAULT_COLOR).toQColor();
 
@@ -293,7 +293,7 @@ void EngravingConfiguration::setDisplayedDefaultColor(Color color, bool inverted
     }
 }
 
-muse::async::Channel<Color> EngravingConfiguration::displayedDefaultColorChanged() const
+muse::async::Channel<bool, Color> EngravingConfiguration::displayedDefaultColorChanged() const
 {
     return m_displayedDefaultColorChanged;
 }

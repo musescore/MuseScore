@@ -48,7 +48,7 @@ public:
     MOCK_METHOD(Color, defaultColor, (), (const, override));
     MOCK_METHOD(Color, displayedDefaultColor, (bool), (const, override));
     MOCK_METHOD(void, setDisplayedDefaultColor, (Color, bool), (override));
-    MOCK_METHOD((muse::async::Channel<Color>), displayedDefaultColorChanged, (), (const, override));
+    MOCK_METHOD((muse::async::Channel<bool, Color>), displayedDefaultColorChanged, (), (const, override));
     MOCK_METHOD(void, resetDisplayedDefaultColors, (), (override));
 
     MOCK_METHOD(Color, indicatorIconInvertedSelectionColor, (), (const, override));
