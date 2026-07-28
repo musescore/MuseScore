@@ -50,15 +50,15 @@ void StaveSharingLayout::updateStaveSharingForFullSystem(MeasureBase* firstMB, M
     updateStaveSharing(ssctx);
 }
 
-void StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
+bool StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, LayoutContext& ctx)
 {
     if (!system->last()->isMeasure()) {
-        return;
+        return false;
     }
 
     StaveSharingContext ssctx(system->first(), system->last(), ctx);
     if (ssctx.crSegments.empty()) {
-        return;
+        return false;
     }
 
     ssctx.updateForLastAdded = true;
@@ -68,26 +68,48 @@ void StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, L
     if (ssctx.trackMapChanged) {
         SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
 
-        for (MeasureBase* mb = system->first(); mb && mb != system->last(); mb = mb->next()) {
+        for (MeasureBase* mb = system->first(); mb; mb = mb->next()) {
             if (mb->isMeasure()) {
-                // TODO: only relayout shared staves
                 toMeasure(mb)->mutldata()->setNeedLayout(true);
+                // TODO: only relayout shared staves
                 MeasureLayout::layoutMeasure(mb, ctx);
+            }
+            if (mb == system->last()) {
+                break;
             }
         }
     }
+
+    return ssctx.trackMapChanged;
+}
+
+void StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(Measure* measure, LayoutContext& ctx)
+{
+    StaveSharingContext ssctx(measure, measure, ctx);
+    if (ssctx.crSegments.empty()) {
+        return;
+    }
+
+    for (Part* p : ssctx.layoutCtx.dom().parts()) {
+        if (p->isSharedPart() && toSharedPart(p)->show()) {
+            SharedPart* sharedPart = toSharedPart(p);
+            ssctx.curSharedPart = sharedPart;
+            updateNotation(ssctx);
+        }
+    }
+
+    measure->mutldata()->setNeedLayout(true);
+    MeasureLayout::layoutMeasure(measure, ctx);
 }
 
 void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
 {
     for (Part* p : ctx.layoutCtx.dom().parts()) {
-        if (p->isSharedPart() && p->show() && toSharedPart(p)->enabled()) {
+        if (p->isSharedPart() && toSharedPart(p)->show()) {
             SharedPart* sharedPart = toSharedPart(p);
-            if (sharedPart->show() && sharedPart->enabled()) {
-                ctx.curSharedPart = sharedPart;
-                updateTrackMaps(ctx);
-                updateNotation(ctx);
-            }
+            ctx.curSharedPart = sharedPart;
+            updateTrackMaps(ctx);
+            updateNotation(ctx);
         }
     }
 }
@@ -548,7 +570,7 @@ bool StaveSharingLayout::checkArticulationsForSameVoice(Chord* chord1, Chord* ch
 bool StaveSharingLayout::canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack,
                                           StaveSharingContext& ctx)
 {
-    if (ctx.layoutCtx.conf().styleB(Sid::allowVoiceCrossing)) {
+    if (ctx.style.styleB(Sid::allowVoiceCrossing)) {
         return true;
     }
 
@@ -743,8 +765,6 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                         sharedTuplet->setTrack(sharedTrack);
                         sharedTuplet->setParent(originTuplet->measure());
                         score->undoAddElement(sharedTuplet);
-
-                        EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
                     }
                 } else {
                     sharedTuplet = toTuplet(originTuplet->sharedItem());
@@ -753,6 +773,8 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                 IF_ASSERT_FAILED(sharedTuplet) {
                     break;
                 }
+
+                EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
 
                 sharedTuplet->add(sharedDE);
 
@@ -1022,11 +1044,12 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     std::vector<EngravingItem*> updatedStaveSharingLabels;
 
     for (Note* unisonNote : ctx.sharedUnisonNotes) {
-        if (!unisonNoteNeedsLabel(unisonNote)) {
+        bool isForNewSystem = false;
+        if (!unisonNoteNeedsLabel(unisonNote, isForNewSystem, ctx)) {
             continue;
         }
 
-        String text = formatUnisonLabel(unisonNote, trackMap, ctx);
+        String text = formatUnisonLabel(unisonNote, trackMap, isForNewSystem, ctx);
         Segment* segment = unisonNote->chord()->segment();
 
         StaveSharingLabel* label = nullptr;
@@ -1059,8 +1082,9 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     }
 }
 
-bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
+bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSystem, StaveSharingContext& ctx)
 {
+    bool restateOnNewSystem = ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() != AutoOnOff::OFF;
     std::vector<track_idx_t> originTracksOfThisNote;
     for (EngravingItem* originNote : unisonNote->originItems()) {
         originTracksOfThisNote.push_back(originNote->track());
@@ -1070,6 +1094,10 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
     track_idx_t curTrack = unisonNote->track();
     Segment* curSegment = unisonNote->chord()->segment();
     for (Segment* seg = curSegment->prev1(SegmentType::ChordRest); seg; seg = seg->prev1(SegmentType::ChordRest)) {
+        if (seg->system() != curSegment->system() && restateOnNewSystem) {
+            isForNewSystem = true;
+            return true;
+        }
         if (EngravingItem* el = seg->element(curTrack); el && el->isChord()) {
             for (Note* note : toChord(el)->notes()) {
                 if (!note->originItems().empty()) {
@@ -1095,12 +1123,15 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote)
     return originTracksOfPrevNote != originTracksOfThisNote;
 }
 
-String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, const StaveSharingContext& ctx)
+String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool isForNewSystem,
+                                             const StaveSharingContext& ctx)
 {
+    const MStyle& style = ctx.style;
+
     String result;
 
     size_t originUnisonsCount = unisonNote->originItems().size();
-    result += u"a " + String::number(originUnisonsCount);
+    result += style.styleSt(Sid::textForUnisonLabel) + String::number(originUnisonsCount);
     bool trailingDot = false; // TODO: style
     if (trailingDot) {
         result += '.';
@@ -1111,6 +1142,8 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
 
     std::vector<track_idx_t> originTracks;
     originTracks.reserve(originUnisonsCount);
+    std::vector<Instrument*> originInstruments;
+    originInstruments.reserve(originUnisonsCount);
     std::vector<track_idx_t> tracksMappedToThisStave;
     tracksMappedToThisStave.reserve(originUnisonsCount);
 
@@ -1120,24 +1153,42 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         }
         if (sharedTrack == curTrack) {
             originTracks.push_back(originTrack);
+            originInstruments.push_back(ctx.score->staff(track2staff(originTrack))->part()->instrument());
         }
     }
 
+    bool addParenthesis = isForNewSystem && ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() == AutoOnOff::AUTO;
+
     if (tracksMappedToThisStave.size() <= originUnisonsCount) {
+        if (addParenthesis) {
+            result.prepend('(');
+            result.append(')');
+        }
         return result;
     }
 
-    String prefix;
-    for (track_idx_t originTrack : originTracks) {
-        if (!prefix.empty()) {
-            prefix += '.';
-        }
-        Instrument* originInstrument = ctx.score->staff(track2staff(originTrack))->part()->instrument();
-        prefix += String::number(originInstrument->number());
+    bool trailingDotSingle;
+    bool trailingDotMultiple;
+    int hyphenLimit;
+    if (style.styleB(Sid::sharedOnStaffNumeralsFollowInstrumentNumerals)) {
+        trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
+    } else {
+        trailingDotSingle = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotSingle);
+        trailingDotMultiple = style.styleB(Sid::sharedOnStaffNumeralsTrailingDotMultiple);
+        hyphenLimit = style.styleB(Sid::sharedOnStaffNumeralsHyphenEnable)
+                      ? style.styleI(Sid::sharedOnStaffNumeralsHyphenThreshold) : INT_MAX;
     }
-    prefix += ' ';
 
-    result.prepend(prefix);
+    String prefix = SystemHeaderLayout::formatSharedVoiceLabel(originInstruments, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+
+    result.prepend(prefix + ' ');
+
+    if (addParenthesis) {
+        result.prepend('(');
+        result.append(')');
+    }
 
     return result;
 }
@@ -1282,7 +1333,7 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
 }
 
 StaveSharingLayout::StaveSharingContext::StaveSharingContext(MeasureBase* first, MeasureBase* last, LayoutContext& ctx)
-    : layoutCtx(ctx)
+    : layoutCtx(ctx), style(ctx.conf().style())
 {
     for (MeasureBase* mb = first; mb; mb = mb->next()) {
         if (!mb->isMeasure()) {
