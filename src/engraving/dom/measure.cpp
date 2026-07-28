@@ -27,6 +27,7 @@
 
 #include "measure.h"
 
+#include "../editing/editbrackets.h"
 #include "../editing/editclef.h"
 #include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
@@ -1593,9 +1594,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 
         Bracket* b = toBracket(e);
         if (sel.isRange()) {
-            score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+            EditBrackets::undoAddBracket(score(), staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {
-            score()->undoAddBracket(staff, level, b->bracketType(), 1);
+            EditBrackets::undoAddBracket(score(), staff, level, b->bracketType(), 1);
         }
         delete b;
     }

@@ -60,6 +60,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
+
+#include "engraving/editing/editbrackets.h"
 #include "engraving/editing/transpose.h"
 
 #include "engraving/engravingerrors.h"
@@ -1285,8 +1287,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             LOGD("bad bracket 'from' value");
             continue;
         }
-        score->setBracketType(staff->idx(), 0, cb.curly ? BracketType::BRACE : BracketType::NORMAL);
-        score->setBracketSpan(staff->idx(), 0, cb.to - cb.from + 1);
+        EditBrackets::setBracketType(score, staff->idx(), 0, cb.curly ? BracketType::BRACE : BracketType::NORMAL);
+        EditBrackets::setBracketSpan(score, staff->idx(), 0, cb.to - cb.from + 1);
     }
     MeasureBase* measure = nullptr;
     for (BasicDrawObj* o : cap->backgroundChord->objects) {

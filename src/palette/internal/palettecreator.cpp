@@ -91,6 +91,8 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
 
+#include "engraving/editing/editbrackets.h"
+
 using namespace mu;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -201,7 +203,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
-    defaultPalette->append(newLayoutPalette(true));
+    defaultPalette->append(newLayoutPalette());
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -527,7 +529,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
+PalettePtr PaletteCreator::newLayoutPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Layout);
     //: The name of a palette
@@ -943,7 +945,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
         paletteScore()->appendStaff(bracketItemOwner);
     }
 
-    paletteScore()->setBracketType(bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
+    EditBrackets::setBracketType(paletteScore(), bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(paletteScore()->dummy());

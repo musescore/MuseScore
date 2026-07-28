@@ -29,7 +29,8 @@
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/staff.h"
-#include "editing/editbrackets.h"
+
+#include "../editing/editbrackets.h"
 
 #include "log.h"
 
@@ -430,7 +431,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
             // Use template spans if span doesn't cover whole set of staves (eg. organ), otherwise cover all staves
             if (partStaffCount > 1) {
                 int bracketSpan = bracketSpansAllStaves ? partStaffCount : instrTemplate->bracketSpan[staffIdx];
-                score->undoAddBracket(staff, 0, instrTemplate->bracket[staffIdx], bracketSpan);
+                EditBrackets::undoAddBracket(score, staff, 0, instrTemplate->bracket[staffIdx], bracketSpan);
 
                 int barlineSpan = instrTemplate->barlineSpan[barlineSpansAllStaves - 1 ? 0 : staffIdx];
                 staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, barlineSpan);
@@ -438,7 +439,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
             if ((prvSection.isEmpty() || (sg.section != prvSection)) && score->parts().size() > 1) {
                 if (thkBracketStaff && (thkBracketSpan > 1)) {
-                    score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
+                    EditBrackets::undoAddBracket(score, thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
                 }
                 if (!staffIdx) {
                     thkBracketStaff = sg.bracket ? staff : nullptr;
@@ -451,7 +452,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
             if (prvInstrument == -1 || (ii.instrIndex != prvInstrument) || isMultiStaffInstrument) {
                 if (thnBracketStaff && (thnBracketSpan > 1)) {
-                    score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
+                    EditBrackets::undoAddBracket(score, thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
                 }
                 if (ii.instrIndex != prvInstrument || isMultiStaffInstrument) {
                     thnBracketStaff = nullptr;
@@ -488,10 +489,10 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     }
 
     if (thkBracketStaff && (thkBracketSpan > 1)) {
-        score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
+        EditBrackets::undoAddBracket(score, thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
     }
     if (thnBracketStaff && (thnBracketSpan > 1) && prvThnBracket) {
-        score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
+        EditBrackets::undoAddBracket(score, thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
     }
 }
 

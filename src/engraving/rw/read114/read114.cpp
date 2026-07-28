@@ -89,7 +89,8 @@
 #include "dom/utils.h"
 #include "dom/volta.h"
 
-#include "editing/transpose.h"
+#include "../../editing/editbrackets.h"
+#include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
@@ -2408,8 +2409,8 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
             read400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
             size_t col = ctx.score()->brackets(staff->idx()).size();
-            ctx.score()->setBracketType(staff->idx(), col, BracketType(e.intAttribute("type", -1)));
-            ctx.score()->setBracketSpan(staff->idx(), col, e.intAttribute("span", 0));
+            EditBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
             const int barLineSpan = e.readInt();

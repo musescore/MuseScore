@@ -2473,67 +2473,6 @@ void Score::removeStaff(Staff* staff)
 }
 
 //---------------------------------------------------------
-//   adjustBracketsDel
-//---------------------------------------------------------
-
-void Score::adjustBracketsDel(size_t sidx, size_t eidx)
-{
-    IF_ASSERT_FAILED(sidx < eidx && eidx <= m_staves.size()) {
-        return;
-    }
-
-    for (size_t staffIdx = 0; staffIdx < eidx; ++staffIdx) {
-        const std::vector<BracketItem*> staffBrackets = brackets(staffIdx);
-        for (BracketItem* bi : staffBrackets) {
-            size_t span = bi->bracketSpan();
-            if ((span == 0) || ((staffIdx + span) <= sidx)) {
-                continue;
-            }
-            const bool startsOutsideDeletedRange = (staffIdx < sidx);
-            const bool endsOutsideDeletedRange = ((staffIdx + span) >= eidx);
-            if (startsOutsideDeletedRange && endsOutsideDeletedRange) {
-                // Shorten the bracket by the number of staves deleted
-                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(span - (eidx - sidx)));
-            } else if (startsOutsideDeletedRange) {
-                // Shorten the bracket by the number of staves deleted that were spanned by it
-                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(sidx - staffIdx));
-            } else if (endsOutsideDeletedRange) {
-                const size_t column = bi->column();
-                const BracketType bracketType = bi->bracketType();
-                undo(new RemoveBracket(m_staves.at(staffIdx), bi->column(), bi->bracketType(), span));
-                int newSpan = int(span - (eidx - staffIdx));
-                if (eidx < m_staves.size() && newSpan > 0) {
-                    // Move the bracket past the end of the deleted range,
-                    // and shorten it by the number of staves deleted that were spanned by it.
-
-                    undoAddBracket(m_staves.at(eidx), column, bracketType, newSpan);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   adjustBracketsIns
-//---------------------------------------------------------
-
-void Score::adjustBracketsIns(size_t sidx, size_t eidx)
-{
-    for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
-        const std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-        for (BracketItem* bi : staffBrackets) {
-            size_t span = bi->bracketSpan();
-            if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
-                continue;
-            }
-            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(span + (eidx - sidx)));
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   adjustKeySigs
 //---------------------------------------------------------
 
@@ -2653,7 +2592,7 @@ KeyList Score::keyList() const
 void Score::cmdRemoveStaff(staff_idx_t staffIdx)
 {
     Staff* s = staff(staffIdx);
-    adjustBracketsDel(staffIdx, staffIdx + 1);
+    EditBrackets::adjustBracketsDel(this, staffIdx, staffIdx + 1);
 
     undoRemoveStaff(s);
 }
@@ -3545,7 +3484,7 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
                 staff(part->staff(0)->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, firstStaffBarLineSpan);
             }
             if (noBracesFound && (tp->bracket[0] != BracketType::NO_BRACKET)) {
-                undoAddBracket(part->staves()[0], 0, tp->bracket[0], part->nstaves());
+                EditBrackets::undoAddBracket(this, part->staves()[0], 0, tp->bracket[0], part->nstaves());
             }
         }
     } else {
@@ -3617,8 +3556,8 @@ void Score::remapBracketsAndBarlines()
             }
 
             if (firstBracketed && span > 1) {
-                setBracketType(firstBracketed->idx(), bracketIdx, bracket->bracketType());
-                setBracketSpan(firstBracketed->idx(), bracketIdx, span);
+                EditBrackets::setBracketType(this, firstBracketed->idx(), bracketIdx, bracket->bracketType());
+                EditBrackets::setBracketSpan(this, firstBracketed->idx(), bracketIdx, span);
             }
         }
     }
@@ -5418,41 +5357,6 @@ void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
     m_systemDividers.at(systemIdx)[static_cast<size_t>(divider->dividerType())] = divider;
 }
 
-//---------------------------------------------------------
-//   fillBrackets
-//    make sure index idx is valid
-//---------------------------------------------------------
-
-void Score::fillBrackets(staff_idx_t staffIdx, size_t idx)
-{
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    for (size_t i = staffBrackets.size(); i <= idx; ++i) {
-        BracketItem* bi = Factory::createBracketItem(dummy());
-        bi->setStartStaffIdx(staffIdx);
-        bi->setColumn(i);
-        bi->setScore(this);
-        staffBrackets.push_back(bi);
-    }
-}
-
-//---------------------------------------------------------
-//   cleanBrackets
-//    remove NO_BRACKET entries from the end of list
-//---------------------------------------------------------
-
-void Score::cleanBrackets(staff_idx_t staffIdx)
-{
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    while (!staffBrackets.empty() && (staffBrackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = muse::takeLast(staffBrackets);
-        delete bi;
-    }
-}
-
-//---------------------------------------------------------
-//   bracket
-//---------------------------------------------------------
-
 BracketType Score::bracketType(staff_idx_t staffIdx, size_t idx) const
 {
     const std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
@@ -5462,10 +5366,6 @@ BracketType Score::bracketType(staff_idx_t staffIdx, size_t idx) const
     return BracketType::NO_BRACKET;
 }
 
-//---------------------------------------------------------
-//   bracketSpan
-//---------------------------------------------------------
-
 size_t Score::bracketSpan(staff_idx_t staffIdx, size_t idx) const
 {
     const std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
@@ -5473,108 +5373,6 @@ size_t Score::bracketSpan(staff_idx_t staffIdx, size_t idx) const
         return staffBrackets[idx]->bracketSpan();
     }
     return 0;
-}
-
-//---------------------------------------------------------
-//   setBracket
-//---------------------------------------------------------
-
-void Score::setBracketType(staff_idx_t staffIdx, size_t idx, BracketType val)
-{
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-
-    fillBrackets(staffIdx, idx);
-    staffBrackets[idx]->setBracketType(val);
-    cleanBrackets(staffIdx);
-}
-
-//---------------------------------------------------------
-//   changeBracketColumn
-//---------------------------------------------------------
-
-void Score::changeBracketColumn(staff_idx_t staffIdx, size_t oldColumn, size_t newColumn)
-{
-    if (oldColumn == newColumn) {
-        return;
-    }
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-
-    size_t idx = std::max(oldColumn, newColumn);
-    fillBrackets(staffIdx, idx);
-    int step = newColumn > oldColumn ? 1 : -1;
-    for (size_t i = oldColumn; i != newColumn; i += step) {
-        size_t oldIdx = i;
-        size_t newIdx = i + step;
-        staffBrackets[oldIdx]->setColumn(newIdx);
-        staffBrackets[newIdx]->setColumn(oldIdx);
-        muse::swapItemsAt(staffBrackets, oldIdx, newIdx);
-    }
-    cleanBrackets(staffIdx);
-}
-
-//---------------------------------------------------------
-//   setBracketSpan
-//---------------------------------------------------------
-
-void Score::setBracketSpan(staff_idx_t staffIdx, size_t idx, size_t val)
-{
-    const std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    fillBrackets(staffIdx, idx);
-    staffBrackets[idx]->setBracketSpan(val);
-}
-
-void Score::setBracketVisible(staff_idx_t staffIdx, size_t idx, bool v)
-{
-    const std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    fillBrackets(staffIdx, idx);
-    staffBrackets[idx]->setVisible(v);
-}
-
-//---------------------------------------------------------
-//   addBracket
-//---------------------------------------------------------
-
-void Score::addBracket(staff_idx_t staffIdx, BracketItem* b)
-{
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    b->setStartStaffIdx(staffIdx);
-    if (!staffBrackets.empty() && staffBrackets[0]->bracketType() == BracketType::NO_BRACKET) {
-        delete staffBrackets[0];
-        staffBrackets[0] = b;
-    } else {
-        //
-        // create new bracket level
-        //
-        for (staff_idx_t sidx = 0; sidx < nstaves(); ++sidx) {
-            if (sidx == staffIdx) {
-                staffBrackets.push_back(b);
-                b->setScore(this);
-            } else {
-                BracketItem* bi = Factory::createBracketItem(score()->dummy());
-                bi->setStartStaffIdx(sidx);
-                bi->setScore(this);
-                m_brackets[sidx].push_back(bi);
-            }
-        }
-    }
-}
-
-void Score::insertBracket(staff_idx_t staffIdx, BracketItem* b)
-{
-    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
-    b->setStartStaffIdx(staffIdx);
-    size_t column = b->column();
-    if (column < staffBrackets.size()) {
-        if (staffBrackets[column]) {
-            delete staffBrackets[column];
-        }
-        staffBrackets[column] = b;
-    } else if (column == staffBrackets.size()) {
-        staffBrackets.push_back(b);
-    } else {
-        fillBrackets(staffIdx, column - 1);
-        staffBrackets.push_back(b);
-    }
 }
 
 const std::vector<BracketItem*>& Score::brackets(staff_idx_t staffIdx) const

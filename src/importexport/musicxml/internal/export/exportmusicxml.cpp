@@ -7823,7 +7823,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 }
                 // OK, found bracket in first staff of part
                 // filter out implicit brackets
-                if (score->bracketSpan(staffIdx, j) == part->nstaves() && score->bracketType(staffIdx, j) == BracketType::BRACE) {
+                if (score->bracketSpan(staffIdx, j) == part->nstaves()
+                    && score->bracketType(staffIdx, j) == BracketType::BRACE) {
                     continue;
                 }
                 // filter out brackets starting in the last part

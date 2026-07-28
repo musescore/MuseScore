@@ -33,8 +33,26 @@ class Transaction;
 class EditBrackets
 {
 public:
+    // -- TODO MOVE - this file is for stave brackets, not accidental brackets
     static void addBracket(Transaction& tx, Score* score);
     static void addBraces(Transaction& tx, Score* score);
+    // --
+
+    static void undoAddBracket(Score* score, Staff* staff, size_t level, BracketType type, size_t span);
+    static void undoRemoveBracket(Score* score, Bracket* bracket);
+
+    static void fillBrackets(Score* score, staff_idx_t staffIdx, size_t idx);
+    static void cleanBrackets(Score* score, staff_idx_t staffIdx);
+
+    static void adjustBracketsDel(Score* score, size_t sidx, size_t eidx);
+    static void adjustBracketsIns(Score* score, size_t sidx, size_t eidx);
+
+    static void setBracketType(Score* score, staff_idx_t staffIdx, size_t idx, BracketType val);
+    static void setBracketSpan(Score* score, staff_idx_t staffIdx, size_t idx, size_t val);
+    static void setBracketVisible(Score* score, staff_idx_t staffIdx, size_t idx, bool v);
+    static void changeBracketColumn(Score* score, staff_idx_t staffIdx, size_t oldColumn, size_t newColumn);
+    static void addBracket(Score* score, staff_idx_t staffIdx, BracketItem*);
+    static void insertBracket(Score* score, staff_idx_t staffIdx, BracketItem* b);
 };
 
 class RemoveBracket : public UndoableCommand

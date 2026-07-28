@@ -400,8 +400,6 @@ public:
     void undo(UndoableCommand*) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false, bool moveStaffTypeChanges = true);
     void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
-    void undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span);
-    void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values);
@@ -666,8 +664,6 @@ public:
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
 
-    void adjustBracketsDel(size_t sidx, size_t eidx);
-    void adjustBracketsIns(size_t sidx, size_t eidx);
     void adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km);
     KeyList keyList() const;
 
@@ -883,12 +879,6 @@ public:
 
     BracketType bracketType(staff_idx_t staffIdx, size_t idx) const;
     size_t bracketSpan(staff_idx_t staffIdx, size_t idx) const;
-    void setBracketType(staff_idx_t staffIdx, size_t idx, BracketType val);
-    void setBracketSpan(staff_idx_t staffIdx, size_t idx, size_t val);
-    void setBracketVisible(staff_idx_t staffIdx, size_t idx, bool v);
-    void changeBracketColumn(staff_idx_t staffIdx, size_t oldColumn, size_t newColumn);
-    void addBracket(staff_idx_t staffIdx, BracketItem*);
-    void insertBracket(staff_idx_t staffIdx, BracketItem* b);
     const std::vector<BracketItem*>& brackets(staff_idx_t staffIdx) const;
     std::vector<BracketItem*>& brackets(staff_idx_t staffIdx);
     size_t bracketLevels(staff_idx_t staffIdx) const;
@@ -948,9 +938,6 @@ private:
 
     void deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
                             Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
-
-    void fillBrackets(staff_idx_t staffIdx, size_t idx);
-    void cleanBrackets(staff_idx_t staffIdx);
 
     muse::ID newStaffId() const;
     muse::ID newPartId() const;
