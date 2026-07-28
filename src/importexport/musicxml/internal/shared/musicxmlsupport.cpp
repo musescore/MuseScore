@@ -28,6 +28,7 @@
 #include "global/serialization/xmlstreamreader.h"
 
 #include "translation.h"
+#include "engraving/dom/accidental.h"
 #include "engraving/dom/chordlist.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/score.h"
@@ -646,9 +647,17 @@ AccidentalType microtonalGuess(double val)
         return AccidentalType::SHARP_SLASH4;
     } else if (isAppr(val, 2, eps)) {
         return AccidentalType::SHARP2;
-    } else {
-        LOGD("Guess for microtonal accidental corresponding to value %f failed.", val);
     }
+
+    for (int i = 1; i < static_cast<int>(AccidentalType::END); ++i) {
+        AccidentalType type = static_cast<AccidentalType>(i);
+        double altVal = static_cast<int>(Accidental::subtype2value(type)) + Accidental::subtype2centOffset(type) / 100.0;
+        if (isAppr(val, altVal, eps)) {
+            return type;
+        }
+    }
+
+    LOGD("Guess for microtonal accidental corresponding to value %f failed.", val);
     // default
     return AccidentalType::NONE;
 }
