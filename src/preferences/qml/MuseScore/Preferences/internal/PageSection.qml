@@ -85,6 +85,7 @@ BaseSection {
 
         StyledTextLabel {
             id: engravingColorLabel
+
             text: qsTrc("preferences", "Engraving color")
             width: root.columnWidth
             horizontalAlignment: Qt.AlignLeft
@@ -99,6 +100,7 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.row: 1
             navigation.column: 1
+            navigation.accessible.name: engravingColorLabel.text + " " + Utils.accessibleColorDescription(engravingColorPicker.color)
 
             onNewColorSelected: function(newColor) {
                 root.engravingColorChangeRequested(newColor)
@@ -108,7 +110,9 @@ BaseSection {
 
     ColorAndWallpaperSection {
         id: colorAndWallpaper
+
         wallpaperDialogTitle: qsTrc("preferences", "Choose notepaper")
+
         navigation: root.navigation
         navigationRowStart: 2
     }
