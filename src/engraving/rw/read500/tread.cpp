@@ -590,14 +590,18 @@ static Spanner* tryCreateSpanner(const AsciiStringView& tag, ReadContext& ctx, b
     }
 
     EngravingItem* item = Factory::createItem(type, ctx.dummy());
-    if (item && item->isSpanner()) {
-        Spanner* spanner = toSpanner(item);
-        if ((spanner->anchor() == Spanner::Anchor::NOTE) == requireNoteAnchor) {
-            return spanner;
-        }
+    if (!item || !item->isSpanner()) {
+        delete item;
+        return nullptr;
     }
-    delete item;
-    return nullptr;
+
+    Spanner* spanner = toSpanner(item);
+    if ((spanner->anchor() == Spanner::Anchor::NOTE) != requireNoteAnchor) {
+        delete item;
+        return nullptr;
+    }
+
+    return spanner;
 }
 
 void TRead::readScoreSpanners(Score* score, XmlReader& e, ReadContext& ctx)

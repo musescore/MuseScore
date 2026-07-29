@@ -1670,21 +1670,23 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
         xml.tagFraction("startTick", item->tick());
         xml.tagFraction("ticks", item->ticks());
     } else {
-        IF_ASSERT_FAILED(item->score()->isPaletteScore() || item->isPartialTie() || item->isLaissezVib()
-                         || (item->startElement() && item->endElement())) {
+        const bool isPartialTieOrLV = item->isPartialTie() || item->isLaissezVib();
+        const bool hasStartEndElements = item->startElement() && item->endElement();
+        IF_ASSERT_FAILED(item->score()->isPaletteScore() || isPartialTieOrLV || hasStartEndElements) {
             writeItemProperties(item, xml, ctx);
             return;
         }
         if (EngravingItem* startEl = item->startElement()) {
             EID startElEID = startEl->eid();
             if (!startElEID.isValid()) {
+                assert(item->anchor() == Spanner::Anchor::NOTE);
                 startElEID = startEl->assignNewEID();
             }
             xml.tag("startElement", startElEID.toStdString());
         }
         if (EngravingItem* endEl = item->endElement()) {
             EID endElEID = endEl->eid();
-            if (!endElEID.isValid()) {
+            IF_ASSERT_FAILED(endElEID.isValid()) {
                 endElEID = endEl->assignNewEID();
             }
             xml.tag("endElement", endElEID.toStdString());
