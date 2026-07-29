@@ -613,24 +613,14 @@ String musicXmlAccidentalTextToChar(const String mxmlName)
 
 AccidentalType microtonalGuess(double val)
 {
-    if (muse::RealIsEqual(val, -2)) {
-        return AccidentalType::FLAT2;
-    } else if (muse::RealIsEqual(val, -1.5)) {
+    if (muse::RealIsEqual(val, -1.5)) {
         return AccidentalType::MIRRORED_FLAT2;
-    } else if (muse::RealIsEqual(val, -1)) {
-        return AccidentalType::FLAT;
     } else if (muse::RealIsEqual(val, -0.5)) {
         return AccidentalType::MIRRORED_FLAT;
-    } else if (muse::RealIsEqual(val, 0)) {
-        return AccidentalType::NATURAL;
     } else if (muse::RealIsEqual(val, 0.5)) {
         return AccidentalType::SHARP_SLASH;
-    } else if (muse::RealIsEqual(val, 1)) {
-        return AccidentalType::SHARP;
     } else if (muse::RealIsEqual(val, 1.5)) {
         return AccidentalType::SHARP_SLASH4;
-    } else if (muse::RealIsEqual(val, 2)) {
-        return AccidentalType::SHARP2;
     }
 
     for (int i = 1; i < static_cast<int>(AccidentalType::END); ++i) {
