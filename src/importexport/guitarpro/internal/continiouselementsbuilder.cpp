@@ -47,8 +47,6 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
         return ElementType::LET_RING;
     case import_t::PALM_MUTE:
         return ElementType::PALM_MUTE;
-    case import_t::WHAMMY_BAR:
-        return ElementType::WHAMMY_BAR;
     case import_t::RASGUEADO:
         return ElementType::RASGUEADO;
     case import_t::PICK_SCRAPE:
