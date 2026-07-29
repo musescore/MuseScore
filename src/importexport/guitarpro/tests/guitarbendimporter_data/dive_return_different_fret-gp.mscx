@@ -89,6 +89,7 @@
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>

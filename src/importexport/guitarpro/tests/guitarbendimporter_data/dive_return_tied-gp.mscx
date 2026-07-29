@@ -148,6 +148,7 @@
               <eid>P_P</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
