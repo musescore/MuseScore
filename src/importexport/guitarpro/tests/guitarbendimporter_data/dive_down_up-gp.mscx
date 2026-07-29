@@ -105,6 +105,7 @@
               <eid>M_M</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
