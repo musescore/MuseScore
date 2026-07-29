@@ -22,7 +22,6 @@
 
 #include "importfiletoscoremodel.h"
 
-#include <QFileInfo>
 #include <QUrl>
 
 #include "io/path.h"
@@ -45,31 +44,21 @@ ImportFileToScoreModel::ImportFileToScoreModel(QObject* parent)
 {
 }
 
-QString ImportFileToScoreModel::errorMessage() const
+QString ImportFileToScoreModel::guidelinesLinkText() const
 {
-    return m_errorMessage;
-}
-
-void ImportFileToScoreModel::setErrorMessage(const QString& message)
-{
-    if (m_errorMessage == message) {
-        return;
-    }
-
-    m_errorMessage = message;
-    emit errorMessageChanged();
+    return "<a href=\"" + configuration()->scoreUploadingGuidelinesUrl().toString() + "\">"
+           + "Uploading guidelines" + "</a>";
 }
 
 QStringList ImportFileToScoreModel::selectFiles()
 {
-    const std::vector<std::string> filter {
-        qtrc("project", "Importable files").toStdString() + " (*.pdf *.mp3 *.jpg *.jpeg *.png)"
+    const std::vector<std::string> filters {
+        "Importable files (*.pdf *.jpg *.jpeg *.png *.mp3)",
+        "All files (*)"
     };
 
-    io::paths_t files = interactive()->selectOpeningFilesSync(qtrc("project", "Choose file").toStdString(), io::path_t(), filter);
-    if (files.empty()) {
-        return QStringList();
-    }
+    io::paths_t files = interactive()->selectOpeningFilesSync("Choose file",
+                                                              configuration()->defaultOpenProjectsPath(), filters);
 
     QStringList paths;
     paths.reserve(files.size());
@@ -77,56 +66,21 @@ QStringList ImportFileToScoreModel::selectFiles()
         paths << file.toQString();
     }
 
-    return checkFiles(paths) ? paths : QStringList();
-}
-
-bool ImportFileToScoreModel::checkFiles(const QStringList& pathsOrUrls)
-{
-    if (pathsOrUrls.isEmpty()) {
-        return false;
-    }
-
-    bool hasMp3 = false;
-    bool hasPdf = false;
-    bool hasImage = false;
-    bool hasUnsupported = false;
-
-    for (const QString& pathOrUrl : pathsOrUrls) {
-        const QString ext = QFileInfo(localPath(pathOrUrl)).suffix().toLower();
-        if (!hasMp3 && ext == "mp3") {
-            hasMp3 = true;
-        } else if (!hasPdf && ext == "pdf") {
-            hasPdf = true;
-        } else if (!hasImage && (ext == "jpg" || ext == "jpeg" || ext == "png")) {
-            hasImage = true;
-        } else if (ext != "mp3" && ext != "pdf" && ext != "jpg" && ext != "jpeg" && ext != "png") {
-            hasUnsupported = true;
-            break;
-        }
-    }
-
-    const int typeGroupCount = int(hasMp3) + int(hasPdf) + int(hasImage);
-    if (hasUnsupported || typeGroupCount != 1) {
-        setErrorMessage(qtrc("project", "Unsupported file selection. Please choose one PDF, one or more JPG/PNG images, or one MP3 file."));
-        return false;
-    }
-
-    if ((hasMp3 || hasPdf) && pathsOrUrls.size() > 1) {
-        setErrorMessage(qtrc("project", "Only one file can be imported at a time for this file type."));
-        return false;
-    }
-
-    setErrorMessage(QString());
-    return true;
-}
-
-QStringList ImportFileToScoreModel::localPaths(const QStringList& pathsOrUrls) const
-{
-    QStringList paths;
-    paths.reserve(pathsOrUrls.size());
-    for (const QString& pathOrUrl : pathsOrUrls) {
-        paths << localPath(pathOrUrl);
-    }
-
     return paths;
+}
+
+void ImportFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
+{
+    io::paths_t ioPaths;
+    ioPaths.reserve(pathsOrUrls.size());
+
+    for (const QString& pathOrUrl : pathsOrUrls) {
+        ioPaths.push_back(io::path_t(localPath(pathOrUrl)));
+    }
+
+    importFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, ioPaths](const RetVal<cloud::ImportType>& result) {
+        if (result.ret) {
+            emit validationFinished(int(result.val), QString::fromStdString(io::pathsToString(ioPaths)));
+        }
+    });
 }

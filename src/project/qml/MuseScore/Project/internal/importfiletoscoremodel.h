@@ -30,32 +30,31 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
+#include "project/iprojectconfiguration.h"
+#include "project/iimportfiletoscorescenario.h"
+
 namespace mu::project {
 class ImportFileToScoreModel : public QObject, public muse::async::Asyncable, public muse::Contextable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
+    Q_PROPERTY(QString guidelinesLinkText READ guidelinesLinkText CONSTANT)
 
     QML_ELEMENT
 
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<IImportFileToScoreScenario> importFileToScoreScenario = { this };
+    muse::GlobalInject<IProjectConfiguration> configuration;
 
 public:
     explicit ImportFileToScoreModel(QObject* parent = nullptr);
 
-    QString errorMessage() const;
+    QString guidelinesLinkText() const;
 
     Q_INVOKABLE QStringList selectFiles();
-    Q_INVOKABLE bool checkFiles(const QStringList& pathsOrUrls);
-    Q_INVOKABLE QStringList localPaths(const QStringList& pathsOrUrls) const;
+    Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
 
 signals:
-    void errorMessageChanged();
-
-private:
-    void setErrorMessage(const QString& message);
-
-    QString m_errorMessage;
+    void validationFinished(int type, QString paths);
 };
 }

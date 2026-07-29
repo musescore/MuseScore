@@ -244,6 +244,20 @@ muse::io::path_t ProjectConfiguration::defaultUserProjectsPath() const
     return settings()->defaultValue(USER_PROJECTS_PATH).toPath();
 }
 
+muse::io::path_t ProjectConfiguration::defaultOpenProjectsPath() const
+{
+    muse::io::path_t dir = lastOpenedProjectsPath();
+    if (dir.empty()) {
+        dir = userProjectsPath();
+    }
+
+    if (dir.empty()) {
+        dir = defaultUserProjectsPath();
+    }
+
+    return dir;
+}
+
 bool ProjectConfiguration::shouldAskSaveLocationType() const
 {
     return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
@@ -652,6 +666,11 @@ QUrl ProjectConfiguration::dotComBugReportUrl() const
 {
     // The general .com bug report page
     return QUrl("https://musescore.com/groups/bug-reports");
+}
+
+QUrl ProjectConfiguration::scoreUploadingGuidelinesUrl() const
+{
+    return QUrl("https://musescore.com/score-uploading-guidelines");
 }
 
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const

@@ -71,6 +71,7 @@ public:
     void setUserProjectsPath(const muse::io::path_t& path) override;
     muse::async::Channel<muse::io::path_t> userProjectsPathChanged() const override;
     muse::io::path_t defaultUserProjectsPath() const override;
+    muse::io::path_t defaultOpenProjectsPath() const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
@@ -137,6 +138,8 @@ public:
     QUrl supportForumUrl() const override;
 
     QUrl dotComBugReportUrl() const override;
+
+    QUrl scoreUploadingGuidelinesUrl() const override;
 
     bool openDetailedProjectUploadedDialog() const override;
     void setOpenDetailedProjectUploadedDialog(bool show) override;

@@ -146,7 +146,7 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     size_t currentFileNum = 0;
 
     if (writerProgress) {
-        showExportProgress(isAudioExport(suffix));
+        showExportProgress(isAudioFileSuffix(suffix));
         m_exportProgress.start();
 
         writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,

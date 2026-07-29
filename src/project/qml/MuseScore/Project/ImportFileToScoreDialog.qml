@@ -29,7 +29,7 @@ import MuseScore.Project
 StyledDialogView {
     id: root
 
-    title: qsTrc("project", "Import file to Score")
+    title: "Import file to Score"
 
     contentWidth: 520
     contentHeight: 362
@@ -39,10 +39,14 @@ StyledDialogView {
 
     ImportFileToScoreModel {
         id: importModel
+
+        onValidationFinished: function(type, paths) {
+            root.finish(type, paths)
+        }
     }
 
-    function finish(files) {
-        root.ret = { errcode: 0, value: files }
+    function finish(type, paths) {
+        root.ret = { errcode: 0, value: { type: type, paths: paths } }
         root.hide()
     }
 
@@ -58,7 +62,7 @@ StyledDialogView {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
-            text: qsTrc("project", "Convert from a file to MSCZ")
+            text: "Convert from a file to MSCZ"
             font: ui.theme.largeBodyBoldFont
         }
 
@@ -113,14 +117,14 @@ StyledDialogView {
                 StyledTextLabel {
                     Layout.alignment: Qt.AlignHCenter
 
-                    text: qsTrc("project", "Drag and drop your file here")
+                    text: "Drag and drop your file here"
                     font: ui.theme.tabBoldFont
                 }
 
                 StyledTextLabel {
                     Layout.alignment: Qt.AlignHCenter
 
-                    text: qsTrc("project", "Acceptable files - .pdf .mp3 (beta) .jpg .png")
+                    text: "Acceptable files - .pdf .mp3 (beta) .jpg .png"
                     font: ui.theme.bodyFont
                     opacity: 0.7
                 }
@@ -131,7 +135,7 @@ StyledDialogView {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 8
 
-                    text: qsTrc("project", "Choose file")
+                    text: "Choose file"
                     accentButton: true
 
                     navigation.panel: cancelButtonBox.navigationPanel
@@ -140,28 +144,16 @@ StyledDialogView {
                     onClicked: {
                         var files = importModel.selectFiles()
                         if (files.length > 0) {
-                            root.finish(files)
+                            importModel.validateFiles(files)
                         }
                     }
                 }
 
                 StyledTextLabel {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 8
-
-                    visible: importModel.errorMessage.length > 0
-
-                    text: importModel.errorMessage
-                    font: ui.theme.bodyFont
-                    wrapMode: Text.WordWrap
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                StyledTextLabel {
-                    Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 16
 
-                    text: "<a href=\"https://musescore.com/score-uploading-guidelines\">" + qsTrc("project", "Uploading guidelines") + "</a>"
+                    text: importModel.guidelinesLinkText
                     font: ui.theme.bodyFont
                 }
             }
@@ -172,10 +164,7 @@ StyledDialogView {
                 onDropped: function(drop) {
                     if (drop.hasUrls) {
                         var urls = drop.urls.map(function(url) { return url.toString() })
-                        var files = importModel.localPaths(urls)
-                        if (importModel.checkFiles(files)) {
-                            root.finish(files)
-                        }
+                        importModel.validateFiles(urls)
                     }
                 }
             }

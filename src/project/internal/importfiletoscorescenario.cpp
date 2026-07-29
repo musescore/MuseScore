@@ -28,11 +28,17 @@
 #include <QFileInfo>
 #include <QTemporaryFile>
 
+#include "dataformatter.h"
 #include "log.h"
+
+#include "projecterrors.h"
+#include "types/projecttypes.h"
 
 using namespace mu::project;
 using namespace muse;
 using namespace muse::cloud;
+
+static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 5;
 
 static std::string errorCodeToString(ImportErrorCode code)
 {
@@ -58,34 +64,116 @@ static std::string errorCodeToString(ImportErrorCode code)
     return std::string();
 }
 
-static ImportType importTypeFromPath(const io::path_t& path)
+static const char* importStatusToString(ImportStatus status)
 {
-    QString ext = QFileInfo(path.toQString()).suffix().toLower();
-    return ext == "mp3" ? ImportType::Audio2Score : ImportType::Omr;
+    switch (status) {
+    case ImportStatus::Processing: return "processing";
+    case ImportStatus::AwaitingMeta: return "awaiting meta";
+    case ImportStatus::AwaitingReview: return "awaiting review";
+    case ImportStatus::Done: return "done";
+    case ImportStatus::Failed: return "failed";
+    case ImportStatus::Unknown: return "unknown";
+    }
+    return "";
 }
 
-static constexpr int MAX_CONSECUTIVE_POLL_FAILURES = 5;
+static ImportType importTypeFromPath(const io::path_t& path, const ImportConfig& config)
+{
+    const QString ext = QFileInfo(path.toQString()).suffix();
+
+    if (!config.audio2score.allowedExtensions.isEmpty()) {
+        return config.audio2score.allowedExtensions.contains(ext, Qt::CaseInsensitive)
+               ? ImportType::Audio2Score : ImportType::Omr;
+    }
+
+    //! NOTE: config unavailable, fall back to a best-effort guess
+    return isAudioFileSuffix(ext.toLower().toStdString()) ? ImportType::Audio2Score : ImportType::Omr;
+}
 
 void ImportFileToScoreScenario::init()
 {
     m_timer.setInterval(1 * 60000); // poll once a minute
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
+
+    //! NOTE: prefetch and cache import config
+    museScoreComService()->import()->fetchImportConfig().onResolve(this, [](const RetVal<ImportConfig>& config) {
+        if (!config.ret) {
+            LOGW() << "Could not prefetch import config: " << config.ret.toString();
+        }
+    });
 }
 
-async::Promise<io::paths_t> ImportFileToScoreScenario::selectFilesToImport()
+async::Promise<ImportSelection> ImportFileToScoreScenario::selectFilesToImport()
 {
-    return interactive()->open("musescore://project/import/selectfiles").then<io::paths_t>(this, [](const Val& val, auto resolve) {
-        QStringList paths = val.toQVariant().toStringList();
-
-        io::paths_t result;
-        result.reserve(paths.size());
-        for (const QString& path : paths) {
-            result.push_back(io::path_t(path));
+    return async::Promise<ImportSelection>([this](auto resolve, auto reject) {
+        Ret authRet = ensureAuthorization();
+        if (!authRet) {
+            return reject(authRet.code(), authRet.text());
         }
 
-        return resolve(result);
+        interactive()->open("musescore://project/import/selectfiles")
+        .then<ImportSelection>(this, [](const Val& val, auto innerResolve) {
+            QVariantMap map = val.toQVariant().toMap();
+
+            ImportSelection selection;
+            selection.type = static_cast<ImportType>(map.value("type").toInt());
+            selection.paths = io::pathsFromString(map.value("paths").toString().toStdString());
+
+            return innerResolve(selection);
+        })
+        .onResolve(this, [resolve](const ImportSelection& selection) {
+            (void)resolve(selection);
+        })
+        .onReject(this, [reject](int code, const std::string& msg) {
+            (void)reject(code, msg);
+        });
+
+        return async::Promise<ImportSelection>::dummy_result();
     });
+}
+
+async::Promise<RetVal<ImportType> > ImportFileToScoreScenario::validateFiles(const io::paths_t& paths)
+{
+    return async::Promise<RetVal<ImportType> >([this, paths](auto resolve, auto) {
+        if (paths.empty()) {
+            return resolve(RetVal<ImportType>::make_ret(make_ret(Err::ImportValidationFailed)));
+        }
+
+        museScoreComService()->import()->fetchImportConfig().onResolve(this, [this, paths, resolve](const RetVal<ImportConfig>& config) {
+            if (!config.ret) {
+                LOGW() << "Could not fetch import config: " << config.ret.toString();
+            }
+
+            const ImportType type = importTypeFromPath(paths.front(), config.val);
+
+            //! NOTE: config is a client-side sanity check only; if it can't be fetched, fall back
+            //! to letting the server enforce its own limits rather than blocking the import
+            if (config.ret && !validateAgainstConfig(type, paths, config.val)) {
+                (void)resolve(RetVal<ImportType>::make_ret(make_ret(Err::ImportValidationFailed)));
+                return;
+            }
+
+            (void)resolve(RetVal<ImportType>::make_ok(type));
+        });
+
+        return async::Promise<RetVal<ImportType> >::dummy_result();
+    });
+}
+
+bool ImportFileToScoreScenario::importFiles(ImportType type, const io::paths_t& paths)
+{
+    if (m_importInProgress || paths.empty()) {
+        return false;
+    }
+
+    if (!ensureAuthorization()) {
+        return false;
+    }
+
+    openFilesAndUpload(type, paths);
+
+    return true;
 }
 
 bool ImportFileToScoreScenario::isImportInProgress() const
@@ -98,25 +186,107 @@ async::Channel<Ret, io::path_t> ImportFileToScoreScenario::importFinished() cons
     return m_importFinished;
 }
 
-bool ImportFileToScoreScenario::importFiles(const io::paths_t& paths)
+Ret ImportFileToScoreScenario::ensureAuthorization()
 {
-    if (m_importInProgress) {
-        return false;
-    }
+    std::string dialogText = "Log in or create a free account on MuseScore.com to convert a file.";
+    return museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
+}
 
-    if (paths.empty()) {
-        return false;
-    }
-
-    ImportType type = importTypeFromPath(paths.front());
-
+bool ImportFileToScoreScenario::validateAgainstConfig(ImportType type, const io::paths_t& paths, const ImportConfig& config)
+{
     for (const io::path_t& path : paths) {
-        if (importTypeFromPath(path) != type) {
-            interactive()->error("Import failed", "All files must be of the same type");
+        if (importTypeFromPath(path, config) != type) {
+            showFileValidationError("Import failed", "All files must be of the same type");
             return false;
         }
     }
 
+    if (type == ImportType::Audio2Score) {
+        if (config.audio2score.maxFiles > 0 && int(paths.size()) > config.audio2score.maxFiles) {
+            std::string text = "Only up to " + std::to_string(config.audio2score.maxFiles)
+                               + " audio file(s) can be imported at a time";
+            showFileValidationError("Import failed", text);
+            return false;
+        }
+
+        for (const io::path_t& path : paths) {
+            QFileInfo info(path.toQString());
+
+            if (!config.audio2score.allowedExtensions.isEmpty()
+                && !config.audio2score.allowedExtensions.contains(info.suffix(), Qt::CaseInsensitive)) {
+                showUnsupportedFormatError(config.audio2score.allowedExtensions);
+                return false;
+            }
+
+            if (config.audio2score.maxFileSizeBytes > 0 && info.size() > config.audio2score.maxFileSizeBytes) {
+                showFileTooLargeError(config.audio2score.maxFileSizeBytes);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    if (config.omr.maxImages > 0 && paths.size() > 1 && int(paths.size()) > config.omr.maxImages) {
+        std::string text = "Only up to " + std::to_string(config.omr.maxImages)
+                           + " image(s) can be imported at a time";
+        showFileValidationError("Import failed", text);
+        return false;
+    }
+
+    for (const io::path_t& path : paths) {
+        QFileInfo info(path.toQString());
+
+        if (!config.omr.allowedExtensions.isEmpty()
+            && !config.omr.allowedExtensions.contains(info.suffix(), Qt::CaseInsensitive)) {
+            showUnsupportedFormatError(config.omr.allowedExtensions);
+            return false;
+        }
+
+        if (config.omr.maxFileSizeBytes > 0 && info.size() > config.omr.maxFileSizeBytes) {
+            showFileTooLargeError(config.omr.maxFileSizeBytes);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void ImportFileToScoreScenario::showFileTooLargeError(qint64 maxFileSizeBytes)
+{
+    std::string size = DataFormatter::formatFileSize(size_t(maxFileSizeBytes)).toStdString();
+    std::string text = "The maximum file size is " + size
+                       + ". Reduce the size of your file and try again.";
+    showFileValidationError("This file is too large", text);
+}
+
+void ImportFileToScoreScenario::showUnsupportedFormatError(const QStringList& allowedExtensions)
+{
+    QStringList upperExtensions;
+    upperExtensions.reserve(allowedExtensions.size());
+    for (const QString& ext : allowedExtensions) {
+        upperExtensions << ext.toUpper();
+    }
+
+    std::string text = "Make sure the file you're uploading is a " + upperExtensions.join(", ").toStdString() + ".";
+    showFileValidationError("This file type is not compatible", text);
+}
+
+void ImportFileToScoreScenario::showFileValidationError(const std::string& title, const std::string& text)
+{
+    IInteractive::ButtonData guidelinesBtn(IInteractive::Button::CustomButton, "Uploading guidelines");
+    IInteractive::ButtonData closeBtn(IInteractive::Button::Close, "Close", true /*accent*/);
+
+    interactive()->error(title, text, { guidelinesBtn, closeBtn }, closeBtn.btn)
+    .onResolve(this, [this, guidelinesBtn](const IInteractive::Result& res) {
+        if (res.isButton(guidelinesBtn.btn)) {
+            interactive()->openUrl(configuration()->scoreUploadingGuidelinesUrl());
+        }
+    });
+}
+
+void ImportFileToScoreScenario::openFilesAndUpload(ImportType type, const io::paths_t& paths)
+{
     ImportFileList files;
     files.reserve(paths.size());
 
@@ -140,17 +310,19 @@ bool ImportFileToScoreScenario::importFiles(const io::paths_t& paths)
         text.text = "Could not open the following files";
         text.detailedText = failedFiles.join(", ").toStdString();
         interactive()->error("Import failed", text);
-        return false;
+        finishImport(make_ret(Err::FileOpenError));
+        return;
     }
 
-    m_importInProgress = true;
     upload(type, files);
-    return true;
 }
 
 void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& files)
 {
+    m_importInProgress = true;
+
     ProgressPtr progress = museScoreComService()->import()->uploadImport(type, files);
+    interactive()->showProgress("Uploading…", *progress);
 
     progress->finished().onReceive(this, [this, type, files](const ProgressResult& res) {
         if (!res.ret) {
@@ -170,7 +342,7 @@ void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& fi
 
         int queueId = res.val.toMap()["id"].toInt();
         if (queueId <= 0) {
-            Ret ret = make_ret(Ret::Code::UnknownError, std::string("The server did not return a valid import id"));
+            Ret ret = make_ret(Err::MalformedImportResponse, std::string("The server did not return a valid import id"));
             interactive()->error("Upload failed", ret.text());
             finishImport(ret);
             return;
@@ -182,7 +354,7 @@ void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& fi
 
 void ImportFileToScoreScenario::watch(int queueId, ImportType type)
 {
-    m_watchedItems.push_back({ queueId, type });
+    m_watchedItems.insert_or_assign(queueId, WatchedItem { type, DownloadStatus::NotStarted });
     m_pollFailureCount = 0;
 
     if (!m_timer.isActive()) {
@@ -221,10 +393,11 @@ void ImportFileToScoreScenario::poll()
         m_pollFailureCount = 0;
 
         for (auto it = m_watchedItems.begin(); it != m_watchedItems.end();) {
-            const WatchedItem& watched = *it;
+            int queueId = it->first;
+            ImportType type = it->second.type;
 
-            auto found = std::find_if(result.val.begin(), result.val.end(), [&watched](const ImportQueueItem& item) {
-                return item.id == watched.queueId;
+            auto found = std::find_if(result.val.begin(), result.val.end(), [queueId](const ImportQueueItem& item) {
+                return item.id == queueId;
             });
 
             if (found != result.val.end()) {
@@ -241,8 +414,8 @@ void ImportFileToScoreScenario::poll()
             //! NOTE: a finished entity drops out of the queue entirely rather than
             //! reporting a final "done" status, per the OMR/A2S API contract
             ImportQueueItem doneItem;
-            doneItem.id = watched.queueId;
-            doneItem.type = watched.type;
+            doneItem.id = queueId;
+            doneItem.type = type;
             doneItem.status = ImportStatus::Done;
             onStatusChanged(doneItem);
 
@@ -257,19 +430,29 @@ void ImportFileToScoreScenario::onStatusChanged(const ImportQueueItem& item)
         return;
     }
 
+    const char* typeStr = item.type == ImportType::Omr ? "Omr" : "Audio2Score";
+    LOGI() << "Import " << item.id << " (\"" << item.filename << "\", type = " << typeStr
+           << ", scoreId = " << item.scoreId << ", createdAt = " << item.createdAt.toString(Qt::ISODate)
+           << ", updatedAt = " << item.updatedAt.toString(Qt::ISODate)
+           << ") is " << importStatusToString(item.status);
+
     switch (item.status) {
     case ImportStatus::Processing:
-        LOGI() << "Import " << item.id << " (\"" << item.filename << "\", type = "
-               << (item.type == ImportType::Omr ? "Omr" : "Audio2Score") << ") is processing";
+    case ImportStatus::Unknown:
         break;
     case ImportStatus::AwaitingMeta:
+        //! NOTE: the MSCZ is already available at this point; submitting meta is optional,
+        //! so it doesn't gate the download
         submitMeta(item.id);
+        downloadIfNotAlready(item.type, item.id);
         break;
     case ImportStatus::AwaitingReview:
+        //! NOTE: same as AwaitingMeta above - the review rating doesn't gate the download
         askReviewRating(item.id);
+        downloadIfNotAlready(item.type, item.id);
         break;
     case ImportStatus::Done:
-        fetchScoreUrlAndDownload(item.type, item.id);
+        downloadIfNotAlready(item.type, item.id);
         break;
     case ImportStatus::Failed: {
         IInteractive::Text text;
@@ -279,23 +462,21 @@ void ImportFileToScoreScenario::onStatusChanged(const ImportQueueItem& item)
         finishImport(make_ret(Ret::Code::UnknownError, errorCodeToString(item.errorCode)));
         break;
     }
-    case ImportStatus::Unknown:
-        break;
     }
 }
 
 bool ImportFileToScoreScenario::shouldHandle(int queueId, ImportStatus status)
 {
-    auto it = m_lastHandledStatus.find(queueId);
-    if (it != m_lastHandledStatus.end()) {
-        if (it->second == status) {
-            return false;
-        }
-        it->second = status;
+    auto it = m_watchedItems.find(queueId);
+    if (it == m_watchedItems.end()) {
         return true;
     }
 
-    m_lastHandledStatus.emplace(queueId, status);
+    if (it->second.lastHandledStatus == status) {
+        return false;
+    }
+
+    it->second.lastHandledStatus = status;
     return true;
 }
 
@@ -316,7 +497,6 @@ void ImportFileToScoreScenario::submitMeta(int queueId)
         text.text = "Could not submit the score information";
         text.detailedText = res.ret.toString();
         interactive()->error("Import failed", text);
-        finishImport(res.ret);
     });
 }
 
@@ -344,15 +524,28 @@ void ImportFileToScoreScenario::submitReview(int queueId, OmrReviewRating rating
         text.text = "Could not submit the review";
         text.detailedText = res.ret.toString();
         interactive()->error("Review failed", text);
-        finishImport(res.ret);
     });
+}
+
+void ImportFileToScoreScenario::downloadIfNotAlready(ImportType type, int queueId)
+{
+    auto it = m_watchedItems.find(queueId);
+    if (it != m_watchedItems.end()) {
+        if (it->second.downloadStatus != DownloadStatus::NotStarted) {
+            return;
+        }
+        it->second.downloadStatus = DownloadStatus::Downloading;
+    }
+
+    fetchScoreUrlAndDownload(type, queueId);
 }
 
 void ImportFileToScoreScenario::fetchScoreUrlAndDownload(ImportType type, int queueId)
 {
-    museScoreComService()->import()->fetchMsczUrl(type, queueId).onResolve(this, [this](const RetVal<SignedMsczUrl>& urlInfo) {
+    museScoreComService()->import()->fetchMsczUrl(type, queueId).onResolve(this, [this, queueId](const RetVal<SignedMsczUrl>& urlInfo) {
         if (!urlInfo.ret) {
             interactive()->error("Import failed", "Could not fetch the imported score: " + urlInfo.ret.toString());
+            clearDownloading(queueId);
             finishImport(urlInfo.ret);
             return;
         }
@@ -370,24 +563,44 @@ void ImportFileToScoreScenario::downloadScoreAndFinish(const SignedMsczUrl& urlI
     scoreFile->setAutoRemove(false);
 
     if (!scoreFile->open()) {
-        Ret ret = make_ret(Ret::Code::UnknownError, std::string("Could not create a file for the imported score"));
+        Ret ret = make_ret(Err::FileCreateError, std::string("Could not create a file for the imported score"));
         interactive()->error("Import failed", ret.text());
+        clearDownloading(urlInfo.id);
         finishImport(ret);
         return;
     }
 
     const muse::io::path_t path = QFileInfo(*scoreFile).absoluteFilePath();
     ProgressPtr progress = museScoreComService()->import()->downloadImportedScore(urlInfo, scoreFile);
+    interactive()->showProgress("Downloading…", *progress);
 
-    progress->finished().onReceive(this, [this, path](const ProgressResult& res) {
+    progress->finished().onReceive(this, [this, path, queueId = urlInfo.id](const ProgressResult& res) {
         if (!res.ret) {
             interactive()->error("Import failed", "Could not download the imported score: " + res.ret.toString());
+            clearDownloading(queueId);
             finishImport(res.ret);
             return;
         }
 
+        markDownloaded(queueId);
         finishImport(make_ok(), path);
     });
+}
+
+void ImportFileToScoreScenario::markDownloaded(int queueId)
+{
+    auto it = m_watchedItems.find(queueId);
+    if (it != m_watchedItems.end()) {
+        it->second.downloadStatus = DownloadStatus::Downloaded;
+    }
+}
+
+void ImportFileToScoreScenario::clearDownloading(int queueId)
+{
+    auto it = m_watchedItems.find(queueId);
+    if (it != m_watchedItems.end() && it->second.downloadStatus == DownloadStatus::Downloading) {
+        it->second.downloadStatus = DownloadStatus::NotStarted;
+    }
 }
 
 void ImportFileToScoreScenario::finishImport(const Ret& ret, const io::path_t& path)

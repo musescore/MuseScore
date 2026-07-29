@@ -52,6 +52,7 @@ public:
     MOCK_METHOD(void, setUserProjectsPath, (const muse::io::path_t&), (override));
     MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userProjectsPathChanged, (), (const, override));
     MOCK_METHOD(muse::io::path_t, defaultUserProjectsPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, defaultOpenProjectsPath, (), (const, override));
 
     MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
@@ -117,6 +118,8 @@ public:
     MOCK_METHOD(QUrl, supportForumUrl, (), (const, override));
 
     MOCK_METHOD(QUrl, dotComBugReportUrl, (), (const, override));
+
+    MOCK_METHOD(QUrl, scoreUploadingGuidelinesUrl, (), (const, override));
 
     MOCK_METHOD(bool, openDetailedProjectUploadedDialog, (), (const, override));
     MOCK_METHOD(void, setOpenDetailedProjectUploadedDialog, (bool), (override));

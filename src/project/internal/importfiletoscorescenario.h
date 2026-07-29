@@ -21,8 +21,7 @@
  */
 #pragma once
 
-#include <map>
-#include <vector>
+#include <unordered_map>
 
 #include <QTimer>
 
@@ -34,6 +33,7 @@
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
+#include "project/iprojectconfiguration.h"
 #include "project/iimportfiletoscorescenario.h"
 
 namespace mu::project {
@@ -42,6 +42,7 @@ class ImportFileToScoreScenario : public IImportFileToScoreScenario, public muse
     muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
@@ -50,19 +51,34 @@ public:
 
     void init();
 
-    muse::async::Promise<muse::io::paths_t> selectFilesToImport() override;
+    muse::async::Promise<ImportSelection> selectFilesToImport() override;
+    muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) override;
+    bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) override;
 
     bool isImportInProgress() const override;
-    bool importFiles(const muse::io::paths_t& files) override;
-
     muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const override;
 
 private:
-    struct WatchedItem {
-        int queueId = 0;
-        muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+    enum class DownloadStatus {
+        NotStarted,
+        Downloading,
+        Downloaded
     };
 
+    struct WatchedItem {
+        muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+        DownloadStatus downloadStatus = DownloadStatus::NotStarted;
+        muse::cloud::ImportStatus lastHandledStatus = muse::cloud::ImportStatus::Unknown;
+    };
+
+    muse::Ret ensureAuthorization();
+
+    bool validateAgainstConfig(muse::cloud::ImportType type, const muse::io::paths_t& paths, const muse::cloud::ImportConfig& config);
+    void showFileTooLargeError(qint64 maxFileSizeBytes);
+    void showUnsupportedFormatError(const QStringList& allowedExtensions);
+    void showFileValidationError(const std::string& title, const std::string& text);
+
+    void openFilesAndUpload(muse::cloud::ImportType type, const muse::io::paths_t& paths);
     void upload(muse::cloud::ImportType type, const muse::cloud::ImportFileList& files);
 
     void watch(int queueId, muse::cloud::ImportType type);
@@ -74,13 +90,15 @@ private:
     void submitMeta(int queueId);
     void askReviewRating(int queueId);
     void submitReview(int queueId, muse::cloud::OmrReviewRating rating);
+    void downloadIfNotAlready(muse::cloud::ImportType type, int queueId);
     void fetchScoreUrlAndDownload(muse::cloud::ImportType type, int queueId);
     void downloadScoreAndFinish(const muse::cloud::SignedMsczUrl& urlInfo);
+    void markDownloaded(int queueId);
+    void clearDownloading(int queueId);
     void finishImport(const muse::Ret& ret, const muse::io::path_t& path = muse::io::path_t());
 
     QTimer m_timer;
-    std::vector<WatchedItem> m_watchedItems;
-    std::map<int, muse::cloud::ImportStatus> m_lastHandledStatus;
+    std::unordered_map<int /*queueId*/, WatchedItem> m_watchedItems;
     bool m_importInProgress = false;
     int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_importFinished;

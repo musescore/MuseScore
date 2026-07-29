@@ -66,6 +66,8 @@ public:
                               const QString& secret = QString()) override;
 
     // IMuseScoreComImportService
+    async::Promise<RetVal<ImportConfig> > fetchImportConfig() override;
+
     ProgressPtr uploadImport(ImportType type, const ImportFileList& files) override;
     ProgressPtr downloadImportedScore(const SignedMsczUrl& urlInfo, DevicePtr scoreData) override;
 
@@ -100,6 +102,7 @@ private:
 
     async::Promise<Ret> doUploadImport(ImportType type, const ImportFileList& files, ProgressPtr progress);
 
+    std::optional<ImportConfig> m_cachedImportConfig;
     std::optional<GenreList> m_cachedGenres;
 };
 }

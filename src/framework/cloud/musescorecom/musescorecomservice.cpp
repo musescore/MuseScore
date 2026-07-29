@@ -27,6 +27,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include <QRandomGenerator>
 #include <QRegularExpression>
 
@@ -52,6 +54,7 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_RO
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
+static const QUrl MUSESCORECOM_IMPORT_CONFIG_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/import/config");
 static const QUrl MUSESCORECOM_IMPORT_UPLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/import");
 static const QUrl MUSESCORECOM_IMPORT_QUEUE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/import/queue");
 static const QUrl MUSESCORECOM_IMPORT_MSCZ_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/mscz");
@@ -414,6 +417,46 @@ static RetVal<SignedMsczUrl> parseSignedMsczUrl(const QByteArray& data)
     result.expiresInSeconds = obj.value("expires_in").toInt();
 
     return RetVal<SignedMsczUrl>::make_ok(result);
+}
+
+static RetVal<ImportConfig> parseImportConfig(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return RetVal<ImportConfig>::make_ret((int)Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject omrObj = doc.object().value("omr").toObject();
+    QJsonObject audio2scoreObj = doc.object().value("audio2score").toObject();
+
+    ImportConfig result;
+
+    result.omr.maxFileSizeBytes = omrObj.value("max_file_size_bytes").toInteger();
+    result.omr.maxPages = omrObj.value("max_pages").toInt();
+    result.omr.maxImages = omrObj.value("max_images").toInt();
+
+    //! NOTE: server sends MIME types (e.g. "image/jpeg"), client only checks extensions;
+    //! resolve to the real extensions they cover
+    QMimeDatabase mimeDb;
+    for (const QJsonValue& mimeType : omrObj.value("allowed_mime_types").toArray()) {
+        QString mimeTypeStr = mimeType.toString();
+        QStringList suffixes = mimeDb.mimeTypeForName(mimeTypeStr).suffixes();
+        if (suffixes.isEmpty()) {
+            result.omr.allowedExtensions.push_back(mimeTypeStr.section('/', -1));
+            continue;
+        }
+
+        result.omr.allowedExtensions.append(suffixes);
+    }
+
+    result.audio2score.maxFileSizeBytes = audio2scoreObj.value("max_file_size_bytes").toInteger();
+    result.audio2score.maxFiles = audio2scoreObj.value("max_files").toInt();
+    for (const QJsonValue& extension : audio2scoreObj.value("allowed_extensions").toArray()) {
+        result.audio2score.allowedExtensions.push_back(extension.toString());
+    }
+
+    return RetVal<ImportConfig>::make_ok(result);
 }
 
 static QString sanitizeContentDispositionFilename(const QString& fileName)
@@ -990,6 +1033,40 @@ RequestHeaders MuseScoreComService::importHeaders() const
     headers.rawHeaders["Accept"] = "application/json";
 
     return headers;
+}
+
+Promise<RetVal<ImportConfig> > MuseScoreComService::fetchImportConfig()
+{
+    return Promise<RetVal<ImportConfig> >([this](auto resolve, auto) {
+        if (m_cachedImportConfig.has_value()) {
+            (void)resolve(RetVal<ImportConfig>::make_ok(m_cachedImportConfig.value()));
+            return Promise<RetVal<ImportConfig> >::dummy_result();
+        }
+
+        auto receivedData = std::make_shared<QBuffer>();
+        RetVal<Progress> progress = m_networkManager->get(MUSESCORECOM_IMPORT_CONFIG_API_URL, receivedData, importHeaders());
+        if (!progress.ret) {
+            return resolve(RetVal<ImportConfig>::make_ret(progress.ret));
+        }
+
+        progress.val.finished().onReceive(this, [this, receivedData, resolve](const ProgressResult& res) {
+            if (!res.ret) {
+                printServerReply(*receivedData);
+                Ret ret = uploadingDownloadingRetFromRawRet(res.ret);
+                appendServerErrorCode(ret, receivedData->data());
+                (void)resolve(RetVal<ImportConfig>::make_ret(ret));
+                return;
+            }
+
+            RetVal<ImportConfig> config = parseImportConfig(receivedData->data());
+            if (config.ret) {
+                m_cachedImportConfig = config.val;
+            }
+            (void)resolve(config);
+        });
+
+        return Promise<RetVal<ImportConfig> >::dummy_result();
+    });
 }
 
 ProgressPtr MuseScoreComService::uploadImport(ImportType type, const ImportFileList& files)
