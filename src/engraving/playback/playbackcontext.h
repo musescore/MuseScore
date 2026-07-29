@@ -99,7 +99,6 @@ private:
 
     const AutomationCurve* dynamicsCurve(const track_idx_t trackIdx) const;
     muse::mpe::DynamicLevelMap buildDynamicLevelMap(const AutomationCurve& curve) const;
-    void appendRampToLevelMap(const AutomationCurve& curve, AutomationCurve::const_iterator it, muse::mpe::DynamicLevelMap& levelMap) const;
 
     bool hasOnlyOneLyricsVerse(const RepeatSegment* repeat, const track_idx_t track) const;
 

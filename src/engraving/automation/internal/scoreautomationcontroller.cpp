@@ -23,6 +23,7 @@
 #include "scoreautomationcontroller.h"
 
 #include <set>
+#include <unordered_map>
 #include <unordered_set>
 
 #include "global/containers.h"
@@ -330,15 +331,15 @@ void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, s
                 continue;
             }
 
+            // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
+            const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest);
+            if (firstChordRestSegment && firstChordRestSegment->tick().ticks() >= measureFrom) {
+                collectMeasureRepeats(firstChordRestSegment, tickOffset, range, ctx.measureRepeats);
+            }
+
             for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment;
                  segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
-                if (segment->tick().ticks() < measureFrom) {
-                    continue;
-                }
-
-                collectMeasureRepeats(segment, tickOffset, range, ctx.measureRepeats);
-
-                if (segment->annotations().empty()) {
+                if (segment->annotations().empty() || segment->tick().ticks() < measureFrom) {
                     continue;
                 }
 
@@ -425,6 +426,8 @@ void ScoreAutomationController::removeTicks(utick_t tickFrom, utick_t tickTo, Au
 void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
                                                      AutomationCurveMap& destCurves)
 {
+    TRACEFUNC;
+
     for (const auto& [key, curve] : curves) {
         if (key.type != AutomationType::Dynamics || !range.contains(key.staffId)) {
             continue;
@@ -716,11 +719,11 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
 void ScoreAutomationController::collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range,
                                                       MeasureRepeats& result)
 {
-    TRACEFUNC;
-
     if (!segment->isChordRestType()) {
         return;
     }
+
+    TRACEFUNC;
 
     for (staff_idx_t staffIdx = range.from; staffIdx <= range.to; ++staffIdx) {
         const EngravingItem* item = segment->element(staff2track(staffIdx));
@@ -740,10 +743,16 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
         return;
     }
 
-    std::map<muse::ID, std::vector<AutomationCurve*> > curvesByStaff;
+    std::unordered_map<uint64_t, std::vector<AutomationCurve*> > curvesByStaff;
     for (auto& [key, curve] : ctx.curves) {
-        curvesByStaff[key.staffId].push_back(&curve);
+        curvesByStaff[key.staffId.toUint64()].push_back(&curve);
     }
+
+    struct MeasureRange {
+        int tickShift = 0;
+        utick_t srcFrom = 0;
+        utick_t srcTo = 0;
+    };
 
     for (const auto& [mr, tickOffset] : ctx.measureRepeats) {
         const Staff* staff = mr->staff();
@@ -751,32 +760,55 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
             continue;
         }
 
-        const auto staffCurvesIt = curvesByStaff.find(staff->id());
+        const auto staffCurvesIt = curvesByStaff.find(staff->id().toUint64());
         if (staffCurvesIt == curvesByStaff.end()) {
             continue;
         }
 
-        const auto& staffCurves = staffCurvesIt->second;
-        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        std::vector<MeasureRange> ranges;
+        ranges.reserve(mr->numMeasures());
 
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
         for (int num = 0; currMeasure && num < mr->numMeasures(); ++num, currMeasure = currMeasure->nextMeasure()) {
             const Measure* referringMeasure = mr->referringMeasure(currMeasure);
             IF_ASSERT_FAILED(referringMeasure && referringMeasure != currMeasure) {
                 continue;
             }
 
-            const int tickShift = currMeasure->tick().ticks() - referringMeasure->tick().ticks();
-            const utick_t srcFrom = referringMeasure->tick().ticks() + tickOffset;
-            const utick_t srcTo = referringMeasure->endTick().ticks() + tickOffset;
+            const int referringMeasureTick = referringMeasure->tick().ticks();
+            ranges.push_back({ currMeasure->tick().ticks() - referringMeasureTick,
+                               referringMeasureTick + tickOffset,
+                               referringMeasure->endTick().ticks() + tickOffset });
+        }
 
-            for (AutomationCurve* curve : staffCurves) {
-                for (auto it = curve->lower_bound(srcFrom), end = curve->lower_bound(srcTo); it != end; ++it) {
-                    if (it->second.generated) {
-                        curve->insert({ it->first + tickShift, it->second });
+        if (ranges.empty()) {
+            continue;
+        }
+
+        for (AutomationCurve* curve : staffCurvesIt->second) {
+            const MeasureRange& firstRange = ranges.front();
+            auto srcIt = curve->lower_bound(firstRange.srcFrom);
+            const auto curveEnd = curve->end();
+            if (srcIt == curveEnd) {
+                continue;
+            }
+
+            const auto destHint = curve->lower_bound(firstRange.srcFrom + firstRange.tickShift);
+
+            for (const MeasureRange& range : ranges) {
+                // Ranges are contiguous for consecutive measures, but a skipped measure (assert
+                // failure above) can leave a gap; catch up if srcIt fell behind this range's start
+                if (srcIt != curveEnd && srcIt->first < range.srcFrom) {
+                    srcIt = curve->lower_bound(range.srcFrom);
+                }
+
+                for (; srcIt != curveEnd && srcIt->first < range.srcTo; ++srcIt) {
+                    if (srcIt->second.generated) {
+                        curve->insert(destHint, { srcIt->first + range.tickShift, srcIt->second });
                     } else {
-                        AutomationPoint mirroredPoint = it->second;
+                        AutomationPoint mirroredPoint = srcIt->second;
                         mirroredPoint.generated = true;
-                        curve->insert({ it->first + tickShift, mirroredPoint });
+                        curve->insert(destHint, { srcIt->first + range.tickShift, mirroredPoint });
                     }
                 }
             }
@@ -971,10 +1003,11 @@ void ScoreAutomationController::mirrorToMeasureRepeats(const RepeatSegment* targ
 {
     const int tickOffset = targetSeg->utick - targetSeg->tick;
 
+    // A MeasureRepeat can only ever sit on the measure's first ChordRest segment
     MeasureRepeats measureRepeats;
     for (const Measure* measure : targetSeg->measureList()) {
-        for (const Segment* segment = measure->first(RELEVANT_SEGMENT_TYPES); segment; segment = segment->next(RELEVANT_SEGMENT_TYPES)) {
-            collectMeasureRepeats(segment, tickOffset, range, measureRepeats);
+        if (const Segment* firstChordRestSegment = measure->first(SegmentType::ChordRest)) {
+            collectMeasureRepeats(firstChordRestSegment, tickOffset, range, measureRepeats);
         }
     }
 

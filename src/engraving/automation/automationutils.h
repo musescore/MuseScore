@@ -50,11 +50,9 @@ inline muse::real_t evaluateCurveAt(const AutomationCurve& curve, AutomationCurv
 {
     const muse::real_t prevOut = it == curve.begin() ? muse::real_t(0.0) : std::prev(it)->second.outValue;
     const muse::real_t thisIn = resolvedInValue(curve, it);
-
     const AutomationPoint::Bend& bend = it->second.bend;
-    const muse::real_t bendT = bend.t;
 
-    if (bendT <= 0.0 || bendT >= 1.0) {
+    if (bend.isNone() || bend.t <= 0.0 || bend.t >= 1.0) {
         return prevOut + (thisIn - prevOut) * t;
     }
 
@@ -66,16 +64,16 @@ inline muse::real_t evaluateCurveAt(const AutomationCurve& curve, AutomationCurv
     const muse::real_t halfSlope = 0.5 * (thisIn - prevOut);
 
     // Clamped control points for each arc
-    const muse::real_t q1 = std::clamp(bendValue - bendT * halfSlope, lo, hi);
-    const muse::real_t q2 = std::clamp(bendValue + (1.0 - bendT) * halfSlope, lo, hi);
+    const muse::real_t q1 = std::clamp(bendValue - bend.t * halfSlope, lo, hi);
+    const muse::real_t q2 = std::clamp(bendValue + (1.0 - bend.t) * halfSlope, lo, hi);
 
-    if (t <= bendT) {
-        const muse::real_t s = t / bendT;
+    if (t <= bend.t) {
+        const muse::real_t s = t / bend.t;
         const muse::real_t u = 1.0 - s;
         return u * u * prevOut + 2.0 * u * s * q1 + s * s * bendValue;
     }
 
-    const muse::real_t s = (t - bendT) / (1.0 - bendT);
+    const muse::real_t s = (t - bend.t) / (1.0 - bend.t);
     const muse::real_t u = 1.0 - s;
     return u * u * bendValue + 2.0 * u * s * q2 + s * s * thisIn;
 }

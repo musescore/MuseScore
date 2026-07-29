@@ -270,60 +270,78 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const track_idx_t trackFr
 
 DynamicLevelMap PlaybackContext::buildDynamicLevelMap(const AutomationCurve& curve) const
 {
-    DynamicLevelMap levelMap;
+    TRACEFUNC;
+
+    std::vector<std::pair<timestamp_t, dynamic_level_t> > levels;
+
+    // Ramp ticks are generated in ascending order, but truncation in the tick calculation below
+    // can repeat a timestamp; overwrite the last entry in that case instead of duplicating it
+    auto appendLevel = [&levels](timestamp_t timestamp, dynamic_level_t level) {
+        if (!levels.empty() && levels.back().first == timestamp) {
+            levels.back().second = level;
+        } else {
+            levels.emplace_back(timestamp, level);
+        }
+    };
 
     if (curve.cbegin()->first > 0) {
-        levelMap[timestampFromTicks(m_score, 0)] = NATURAL_DYNAMIC_LEVEL;
+        appendLevel(timestampFromTicks(m_score, 0), NATURAL_DYNAMIC_LEVEL);
     }
 
     for (auto it = curve.cbegin(); it != curve.cend(); ++it) {
-        levelMap[timestampFromTicks(m_score, it->first)] = toDynamicLevel(it->second.outValue);
-        appendRampToLevelMap(curve, it, levelMap);
+        appendLevel(timestampFromTicks(m_score, it->first), toDynamicLevel(it->second.outValue));
+
+        const auto nextIt = std::next(it);
+        if (nextIt == curve.cend()) {
+            continue;
+        }
+
+        const dynamic_level_t baseLvl = toDynamicLevel(it->second.outValue);
+        const dynamic_level_t nextLvl = toDynamicLevel(resolvedInValue(curve, nextIt));
+        const int range = nextLvl - baseLvl;
+        const bool isLinear = nextIt->second.bend.isNone();
+        if (range == 0 && isLinear) {
+            continue;
+        }
+
+        // nextIt's own curve entry stores outValue, not inValue - if it's a discontinuity, end the ramp
+        // one tick early so it still approaches the true target (inValue)
+        const bool nextIsDiscontinuity = !muse::RealIsEqual(resolvedInValue(curve, nextIt), nextIt->second.outValue);
+        const utick_t targetTick = nextIsDiscontinuity ? nextIt->first - 1 : nextIt->first;
+        const int intervalDuration = targetTick - it->first;
+        const int steps = std::max(intervalDuration / (Constants::DIVISION / 4), 24);
+
+        for (int j = 1; j < steps; ++j) {
+            const utick_t tick = it->first + static_cast<utick_t>(static_cast<double>(j) * intervalDuration / steps);
+            if (tick == it->first) {
+                // Truncation on very short ramps (intervalDuration < steps) can land back on the
+                // segment's own start tick; skip rather than overwrite its exact baseLvl with an approximation
+                continue;
+            }
+
+            const double t = static_cast<double>(j) / static_cast<double>(steps);
+
+            dynamic_level_t level = 0;
+            if (isLinear) {
+                level = static_cast<dynamic_level_t>(std::lround(baseLvl + t * range));
+            } else {
+                level = toDynamicLevel(evaluateCurveAt(curve, nextIt, t));
+            }
+            appendLevel(timestampFromTicks(m_score, tick), level);
+        }
+
+        if (nextIsDiscontinuity && targetTick != it->first) {
+            appendLevel(timestampFromTicks(m_score, targetTick), nextLvl);
+        }
+    }
+
+    DynamicLevelMap levelMap;
+    auto hint = levelMap.end();
+    for (const auto& [timestamp, level] : levels) {
+        hint = levelMap.insert(hint, { timestamp, level });
     }
 
     return levelMap;
-}
-
-void PlaybackContext::appendRampToLevelMap(const AutomationCurve& curve, AutomationCurve::const_iterator it,
-                                           DynamicLevelMap& levelMap) const
-{
-    const auto nextIt = std::next(it);
-    if (nextIt == curve.cend()) {
-        return;
-    }
-
-    const dynamic_level_t baseLvl = toDynamicLevel(it->second.outValue);
-    const dynamic_level_t nextLvl = toDynamicLevel(resolvedInValue(curve, nextIt));
-    const int range = nextLvl - baseLvl;
-    const bool isLinear = nextIt->second.bend.isNone();
-    if (range == 0 && isLinear) {
-        return;
-    }
-
-    // nextIt's own curve entry stores outValue, not inValue - if it's a discontinuity, end the ramp
-    // one tick early so it still approaches the true target (inValue)
-    const bool nextIsDiscontinuity = !muse::RealIsEqual(resolvedInValue(curve, nextIt), nextIt->second.outValue);
-    const utick_t targetTick = nextIsDiscontinuity ? nextIt->first - 1 : nextIt->first;
-    const int intervalDuration = targetTick - it->first;
-    const int steps = std::max(intervalDuration / (Constants::DIVISION / 4), 24);
-
-    for (int j = 1; j < steps; ++j) {
-        const utick_t tick = it->first + static_cast<utick_t>(static_cast<float>(j) * intervalDuration / steps);
-
-        dynamic_level_t level;
-        if (isLinear) {
-            const float factor = static_cast<float>(j) / static_cast<float>(steps);
-            level = static_cast<dynamic_level_t>(std::lround(baseLvl + static_cast<double>(factor) * static_cast<double>(range)));
-        } else {
-            const double t = static_cast<double>(j) / static_cast<double>(steps);
-            level = toDynamicLevel(evaluateCurveAt(curve, nextIt, t));
-        }
-        levelMap[timestampFromTicks(m_score, tick)] = level;
-    }
-
-    if (nextIsDiscontinuity) {
-        levelMap[timestampFromTicks(m_score, targetTick)] = nextLvl;
-    }
 }
 
 void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo,

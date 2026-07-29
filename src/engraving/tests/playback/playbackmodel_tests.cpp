@@ -561,12 +561,12 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24), 4375);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24),
               static_cast<dynamic_level_t>(std::lround(piano + (forte - piano) * 3.0 / 24)));
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 4687);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 4688);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 8 / 24), piano + (forte - piano) * 8 / 24);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24), 5188);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24), 5563);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), piano + (forte - piano) * 22 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 5687);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 5688);
 
     // Reach forte
     EXPECT_EQ(dynamicLevelMap.at(8 * QUARTER_NOTE_DURATION), forte);
