@@ -82,6 +82,10 @@ target_link_libraries(palette PRIVATE
     Qt::Widgets
 )
 
+if (MUE_BUILD_PALETTE_TESTS)
+    add_subdirectory(tests)
+endif()
+
 if (MUE_BUILD_PALETTE_QML)
     add_subdirectory(qml/MuseScore/Palette)
 endif()
