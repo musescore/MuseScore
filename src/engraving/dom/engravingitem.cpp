@@ -728,7 +728,7 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
         return configuration()->invisibleColor();
     }
 
-    if (normalColor == configuration()->defaultColor()) {
+    if (!opt.ignoreDisplayedDefaultColor && normalColor == configuration()->defaultColor()) {
         return maybeOverrideColor(configuration()->displayedDefaultColor(opt.invertColors));
     }
 
