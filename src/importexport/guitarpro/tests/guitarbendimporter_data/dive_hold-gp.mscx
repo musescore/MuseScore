@@ -74,30 +74,18 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>J_J</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalFlat</subtype>
-                <eid>M_M</eid>
+                <eid>L_L</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -112,10 +100,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>N_N</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -125,7 +113,7 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.766667</bendEndTimeFactor>
-                  <eid>P_P</eid>
+                  <eid>O_O</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -136,13 +124,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <parentheses>both</parentheses>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -154,7 +142,7 @@
                   <guitarBendType>pre-dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>S_S</eid>
+                  <eid>R_R</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -164,15 +152,15 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>R_R</NoteEID>
+                <NoteEID>Q_Q</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>T_T</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <fret>3</fret>
@@ -186,15 +174,8 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

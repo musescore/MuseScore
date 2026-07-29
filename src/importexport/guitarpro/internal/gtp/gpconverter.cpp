@@ -2377,9 +2377,6 @@ void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
-                                                        beat->hasWhammy());
-
     if (!beat->hasWhammy() || !cr->isChord()) {
         return;
     }

@@ -83,26 +83,14 @@
             <velocity>96</velocity>
             <eid>K_K</eid>
             </Dynamic>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>L_L</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <fractions>1/8</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>10</fret>
@@ -116,13 +104,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
             <Spanner type="Slur">
               <Slur>
-                <eid>P_P</eid>
+                <eid>O_O</eid>
                 </Slur>
               <next>
                 <location>
@@ -132,7 +120,7 @@
             <acciaccatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>P_P</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -140,7 +128,7 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <text></text>
-                  <eid>R_R</eid>
+                  <eid>Q_Q</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -150,7 +138,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <parentheses>both</parentheses>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -162,7 +150,7 @@
                   <guitarBendType>pre-dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>T_T</eid>
+                  <eid>S_S</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -173,12 +161,12 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>S_S</NoteEID>
+                <NoteEID>R_R</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -188,10 +176,10 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>W_W</eid>
+                <eid>V_V</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -202,7 +190,7 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                  <eid>X_X</eid>
+                  <eid>W_W</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -227,20 +215,6 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-1/8</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-1/8</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
