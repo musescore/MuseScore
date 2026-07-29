@@ -74,26 +74,14 @@
             <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 162</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>I_I</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <fractions>3/16</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>K_K</eid>
+              <eid>J_J</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>14</fret>
@@ -107,13 +95,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <parentheses>both</parentheses>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -125,7 +113,7 @@
                   <guitarBendType>5</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>N_N</eid>
+                  <eid>M_M</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -141,17 +129,17 @@
               </NoteParenGroup>
             </Chord>
           <Beam>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <l1>24</l1>
             <l2>22</l2>
             </Beam>
           <Chord>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
-                <eid>Q_Q</eid>
+                <eid>P_P</eid>
                 </Slur>
               <next>
                 <location>
@@ -160,7 +148,7 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>14</fret>
@@ -170,7 +158,7 @@
                   <guitarBendType>4</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.0666667</bendEndTimeFactor>
-                  <eid>S_S</eid>
+                  <eid>R_R</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -182,7 +170,7 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <text></text>
-                  <eid>T_T</eid>
+                  <eid>S_S</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -200,15 +188,8 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-3/16</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -218,7 +199,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <fret>15</fret>
@@ -233,12 +214,12 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
