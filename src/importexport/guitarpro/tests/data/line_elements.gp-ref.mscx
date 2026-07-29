@@ -487,6 +487,7 @@
               <eid>2_2</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -550,6 +551,7 @@
                 </Accidental>
               <pitch>51</pitch>
               <tpc>11</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -636,6 +638,7 @@
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -660,6 +663,7 @@
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>

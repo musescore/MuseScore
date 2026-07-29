@@ -86,6 +86,7 @@
               <eid>K_K</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>

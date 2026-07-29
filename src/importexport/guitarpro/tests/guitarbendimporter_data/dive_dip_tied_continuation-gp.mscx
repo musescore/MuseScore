@@ -104,6 +104,7 @@
               <eid>P_P</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
