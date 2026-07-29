@@ -2151,9 +2151,18 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                 return nme;
             } else if (nmb->isEndOfSystemLock()) {
                 System* system = nmb->system();
-                SystemLockIndicator* lockInd = system ? system->lockIndicators().front() : nullptr;
-                if (lockInd) {
-                    return lockInd;
+                if (system) {
+                    for (SystemLockIndicator* lockInd : system->systemLockIndicators()) {
+                        if (nmb->systemLock() == lockInd->systemLock()) {
+                            return lockInd;
+                        }
+                    }
+                }
+            } else if (nmb->isEndOfPageLock()) {
+                System* system = nmb->system();
+                PageLockIndicator* pli = system ? system->pageLockIndicator() : nullptr;
+                if (pli) {
+                    return pli;
                 }
             } //TODO: StaffVisibilityIndicator handling
         }
@@ -2361,11 +2370,20 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 return me;
             } else if (me && me->isLayoutBreak() && e->staffIdx() == 0) {
                 return me;
+            } else if (measure()->isEndOfPageLock()) {
+                System* system = measure()->system();
+                PageLockIndicator* pli = system ? system->pageLockIndicator() : nullptr;
+                if (pli) {
+                    return pli;
+                }
             } else if (measure()->isEndOfSystemLock()) {
                 System* system = measure()->system();
-                SystemLockIndicator* lockInd = system ? system->lockIndicators().front() : nullptr;
-                if (lockInd) {
-                    return lockInd;
+                if (system) {
+                    for (SystemLockIndicator* lockInd : system->systemLockIndicators()) {
+                        if (measure()->systemLock() == lockInd->systemLock()) {
+                            return lockInd;
+                        }
+                    }
                 }
             } else if (psm != pmb) {
                 return pmb;

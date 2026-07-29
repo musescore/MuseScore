@@ -44,6 +44,8 @@ public:
 
     muse::draw::Font font() const;
 
+    Fraction tick() const override;
+
     virtual char16_t iconCode() const { return 0x000; }
 
     void undoChangeProperty(Pid, const PropertyValue&, PropertyFlags) override { return; } // not editable

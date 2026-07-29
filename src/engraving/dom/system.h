@@ -216,10 +216,11 @@ public:
     bool isLocked() const;
     const RangeLock* systemLock() const;
 
-    const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
-    void addLockIndicator(SystemLockIndicator* sli);
-    void deleteLockIndicators();
+    const std::vector<SystemLockIndicator*> systemLockIndicators() const { return m_systemLockIndicators; }
+    void addSystemLockIndicator(SystemLockIndicator* sli);
+    void deleteSystemLockIndicators();
 
+    PageLockIndicator* pageLockIndicator() const { return m_pageLockIndicator; }
     void setPageLockIndicator(PageLockIndicator* pli);
     void deletePageLockIndicator();
 
@@ -281,7 +282,7 @@ private:
     std::vector<SysStaff*> m_staves;
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
-    std::vector<SystemLockIndicator*> m_lockIndicators;
+    std::vector<SystemLockIndicator*> m_systemLockIndicators;
     PageLockIndicator* m_pageLockIndicator = nullptr;
 
     StaffVisibilityIndicator* m_staffVisibilityIndicator = nullptr;
