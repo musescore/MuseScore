@@ -33,7 +33,6 @@ public:
         NONE,
         LET_RING,
         PALM_MUTE,
-        WHAMMY_BAR,
         RASGUEADO,
         PICK_SCRAPE,
 
