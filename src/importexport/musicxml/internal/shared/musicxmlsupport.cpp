@@ -604,20 +604,6 @@ String musicXmlAccidentalTextToChar(const String mxmlName)
 }
 
 //---------------------------------------------------------
-//   isAppr
-//---------------------------------------------------------
-
-/**
- Check if v approximately equals ref.
- Used to prevent floating point comparison for equality from failing
- */
-
-static bool isAppr(const double v, const double ref, const double epsilon)
-{
-    return v > ref - epsilon && v < ref + epsilon;
-}
-
-//---------------------------------------------------------
 //   microtonalGuess
 //---------------------------------------------------------
 
@@ -628,31 +614,30 @@ static bool isAppr(const double v, const double ref, const double epsilon)
 
 AccidentalType microtonalGuess(double val)
 {
-    const double eps = 0.001;
-    if (isAppr(val, -2, eps)) {
+    if (muse::RealIsEqual(val, -2)) {
         return AccidentalType::FLAT2;
-    } else if (isAppr(val, -1.5, eps)) {
+    } else if (muse::RealIsEqual(val, -1.5)) {
         return AccidentalType::MIRRORED_FLAT2;
-    } else if (isAppr(val, -1, eps)) {
+    } else if (muse::RealIsEqual(val, -1)) {
         return AccidentalType::FLAT;
-    } else if (isAppr(val, -0.5, eps)) {
+    } else if (muse::RealIsEqual(val, -0.5)) {
         return AccidentalType::MIRRORED_FLAT;
-    } else if (isAppr(val, 0, eps)) {
+    } else if (muse::RealIsEqual(val, 0)) {
         return AccidentalType::NATURAL;
-    } else if (isAppr(val, 0.5, eps)) {
+    } else if (muse::RealIsEqual(val, 0.5)) {
         return AccidentalType::SHARP_SLASH;
-    } else if (isAppr(val, 1, eps)) {
+    } else if (muse::RealIsEqual(val, 1)) {
         return AccidentalType::SHARP;
-    } else if (isAppr(val, 1.5, eps)) {
+    } else if (muse::RealIsEqual(val, 1.5)) {
         return AccidentalType::SHARP_SLASH4;
-    } else if (isAppr(val, 2, eps)) {
+    } else if (muse::RealIsEqual(val, 2)) {
         return AccidentalType::SHARP2;
     }
 
     for (int i = 1; i < static_cast<int>(AccidentalType::END); ++i) {
         AccidentalType type = static_cast<AccidentalType>(i);
         double altVal = static_cast<int>(Accidental::subtype2value(type)) + Accidental::subtype2centOffset(type) / 100.0;
-        if (isAppr(val, altVal, eps)) {
+        if (muse::RealIsEqual(val, altVal)) {
             return type;
         }
     }
