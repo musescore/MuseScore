@@ -609,7 +609,6 @@ String musicXmlAccidentalTextToChar(const String mxmlName)
 
 /**
  Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum AccidentalType.
- Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
  */
 
 AccidentalType microtonalGuess(double val)
