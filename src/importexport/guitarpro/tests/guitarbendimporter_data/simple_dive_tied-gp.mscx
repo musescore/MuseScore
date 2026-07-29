@@ -72,23 +72,11 @@
             <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>I_I</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -98,7 +86,7 @@
                   <guitarBendType>4</guitarBendType>
                   <bendStartTimeFactor>0.116667</bendStartTimeFactor>
                   <bendEndTimeFactor>0.583333</bendEndTimeFactor>
-                  <eid>L_L</eid>
+                  <eid>K_K</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -109,22 +97,15 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <parentheses>both</parentheses>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>O_O</eid>
+                <eid>N_N</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -145,7 +126,7 @@
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
