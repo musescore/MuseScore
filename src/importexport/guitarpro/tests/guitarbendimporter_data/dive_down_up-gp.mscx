@@ -103,6 +103,7 @@
               <eid>L_L</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>4</guitarBendType>

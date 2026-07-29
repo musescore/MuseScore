@@ -102,6 +102,7 @@
               <eid>O_O</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>4</guitarBendType>
