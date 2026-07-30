@@ -97,5 +97,6 @@ private:
                                                           track_idx_t endOriginTrack, const SharedTrackMap& trackMap);
 
     static void cleanup(StaveSharingContext& ctx);
+    static void addMeasureRestsIfNeed(StaveSharingContext& ctx);
 };
 }

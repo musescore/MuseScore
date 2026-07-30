@@ -1318,6 +1318,8 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
         }
     }
 
+    addMeasureRestsIfNeed(ctx);
+
     for (Spanner* spanner : ctx.overlappingSpanners) {
         if (!spanner->systemFlag() && spanner->track() >= range.startTrack && spanner->track() < range.endTrack
             && spanner->originItems().empty()) {
@@ -1328,6 +1330,29 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
     for (StaveSharingLabel* oldLabel : ctx.oldStaveSharingLabels) {
         if (!muse::contains(ctx.updatedStaveSharingLabels, oldLabel)) {
             ctx.score->undoRemoveElement(oldLabel);
+        }
+    }
+}
+
+void StaveSharingLayout::addMeasureRestsIfNeed(StaveSharingContext& ctx)
+{
+    Measure* startMeas = ctx.segmentsToUpdate.front()->measure();
+    Measure* endMeas = ctx.segmentsToUpdate.back()->measure();
+
+    TrackRange trackRange = ctx.curSharedPart->trackRange();
+    staff_idx_t startStaff = track2staff(trackRange.startTrack);
+    staff_idx_t endStaff = track2staff(trackRange.endTrack);
+
+    for (Measure* measure = startMeas; measure && measure->isBeforeOrEqual(endMeas); measure = measure->nextMeasure()) {
+        for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
+            if (!measure->isEmpty(staffIdx)) {
+                continue;
+            }
+            if (ChordRest* firstCR = measure->firstChordRest(staffIdx * VOICES); firstCR && firstCR->isFullMeasureRest()) {
+                continue;
+            }
+
+            ctx.score->setRest(measure->tick(), staffIdx * VOICES, measure->ticks(), false, nullptr);
         }
     }
 }
