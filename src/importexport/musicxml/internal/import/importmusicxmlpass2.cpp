@@ -3968,6 +3968,7 @@ Text* MusicXmlParserDirection::addTextToHeader(const TextStyleType textStyleType
 {
     Text* t = Factory::createText(m_score->dummy(), textStyleType);
     t->setXmlText(m_wordsText.trimmed());
+    t->renderer()->layoutText1(t);
     MeasureBase* const firstMeasure = m_score->measures()->first();
     VBox* vbox
         = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score, Fraction(0, 1));

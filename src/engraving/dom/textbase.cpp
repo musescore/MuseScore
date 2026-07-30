@@ -468,8 +468,8 @@ void TextCursor::setFormat(FormatId id, FormatValue val)
         }
     }
     format()->setFormatValue(id, val);
-    changeSelectionFormat(id, val);
     if (hasSelection()) {
+        changeSelectionFormat(id, val);
         text()->setTextInvalid();
     }
     if (!editing()) {
