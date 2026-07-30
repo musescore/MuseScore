@@ -51,7 +51,6 @@ public:
     //! NOTE: calls selectFilesToImport(), then importFiles() with the resolved selection
     Q_INVOKABLE void selectAndImportFiles();
 
-    Q_INVOKABLE void checkImportInProgress();
     Q_INVOKABLE void clearLog();
 
 signals:

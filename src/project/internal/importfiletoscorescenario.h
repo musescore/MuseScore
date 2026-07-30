@@ -55,7 +55,6 @@ public:
     muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) override;
     bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) override;
 
-    bool isImportInProgress() const override;
     muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const override;
 
 private:
@@ -99,7 +98,7 @@ private:
 
     QTimer m_timer;
     std::unordered_map<int /*queueId*/, WatchedItem> m_watchedItems;
-    bool m_importInProgress = false;
+    bool m_pollInProgress = false;
     int m_pollFailureCount = 0;
     muse::async::Channel<muse::Ret, muse::io::path_t> m_importFinished;
 };

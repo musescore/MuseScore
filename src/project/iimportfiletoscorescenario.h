@@ -47,7 +47,6 @@ public:
     virtual muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) = 0;
     virtual bool importFiles(muse::cloud::ImportType type, const muse::io::paths_t& files) = 0;
 
-    virtual bool isImportInProgress() const = 0;
     virtual muse::async::Channel<muse::Ret, muse::io::path_t> importFinished() const = 0;
 };
 

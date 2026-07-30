@@ -163,7 +163,7 @@ async::Promise<RetVal<ImportType> > ImportFileToScoreScenario::validateFiles(con
 
 bool ImportFileToScoreScenario::importFiles(ImportType type, const io::paths_t& paths)
 {
-    if (m_importInProgress || paths.empty()) {
+    if (paths.empty()) {
         return false;
     }
 
@@ -174,11 +174,6 @@ bool ImportFileToScoreScenario::importFiles(ImportType type, const io::paths_t& 
     openFilesAndUpload(type, paths);
 
     return true;
-}
-
-bool ImportFileToScoreScenario::isImportInProgress() const
-{
-    return m_importInProgress;
 }
 
 async::Channel<Ret, io::path_t> ImportFileToScoreScenario::importFinished() const
@@ -290,25 +285,25 @@ void ImportFileToScoreScenario::openFilesAndUpload(ImportType type, const io::pa
     ImportFileList files;
     files.reserve(paths.size());
 
-    QStringList failedFiles;
+    io::paths_t failedFiles;
 
     for (const io::path_t& path : paths) {
         auto file = std::make_shared<QFile>(path.toQString());
         if (!file->open(QIODevice::ReadOnly)) {
-            failedFiles << QFileInfo(path.toQString()).fileName();
+            failedFiles.push_back(io::filename(path));
             continue;
         }
 
         ImportFile importFile;
         importFile.data = file;
-        importFile.fileName = QFileInfo(path.toQString()).fileName();
+        importFile.fileName = io::filename(path).toQString();
         files.push_back(importFile);
     }
 
-    if (!failedFiles.isEmpty()) {
+    if (!failedFiles.empty()) {
         IInteractive::Text text;
         text.text = "Could not open the following files";
-        text.detailedText = failedFiles.join(", ").toStdString();
+        text.detailedText = io::pathsToString(failedFiles, "\n");
         interactive()->error("Import failed", text);
         finishImport(make_ret(Err::FileOpenError));
         return;
@@ -319,8 +314,6 @@ void ImportFileToScoreScenario::openFilesAndUpload(ImportType type, const io::pa
 
 void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& files)
 {
-    m_importInProgress = true;
-
     ProgressPtr progress = museScoreComService()->import()->uploadImport(type, files);
     interactive()->showProgress("Uploading…", *progress);
 
@@ -355,7 +348,6 @@ void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& fi
 void ImportFileToScoreScenario::watch(int queueId, ImportType type)
 {
     m_watchedItems.insert_or_assign(queueId, WatchedItem { type, DownloadStatus::NotStarted });
-    m_pollFailureCount = 0;
 
     if (!m_timer.isActive()) {
         m_timer.start();
@@ -371,7 +363,15 @@ void ImportFileToScoreScenario::poll()
         return;
     }
 
+    if (m_pollInProgress) {
+        return;
+    }
+
+    m_pollInProgress = true;
+
     museScoreComService()->import()->fetchImportQueue().onResolve(this, [this](const RetVal<ImportQueueList>& result) {
+        m_pollInProgress = false;
+
         if (!result.ret) {
             ++m_pollFailureCount;
 
@@ -384,8 +384,9 @@ void ImportFileToScoreScenario::poll()
             text.detailedText = result.ret.toString();
             interactive()->error("Import failed", text);
 
-            m_watchedItems.clear();
             m_timer.stop();
+            m_watchedItems.clear();
+            m_pollFailureCount = 0;
             finishImport(result.ret);
             return;
         }
@@ -605,6 +606,5 @@ void ImportFileToScoreScenario::clearDownloading(int queueId)
 
 void ImportFileToScoreScenario::finishImport(const Ret& ret, const io::path_t& path)
 {
-    m_importInProgress = false;
     m_importFinished.send(ret, path);
 }

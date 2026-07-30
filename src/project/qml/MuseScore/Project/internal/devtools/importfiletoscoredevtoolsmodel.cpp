@@ -73,11 +73,6 @@ void ImportFileToScoreDevToolsModel::selectAndImportFiles()
     });
 }
 
-void ImportFileToScoreDevToolsModel::checkImportInProgress()
-{
-    appendLog(QString("isImportInProgress() returned %1").arg(importFileToScoreScenario()->isImportInProgress() ? "true" : "false"));
-}
-
 void ImportFileToScoreDevToolsModel::clearLog()
 {
     m_log.clear();

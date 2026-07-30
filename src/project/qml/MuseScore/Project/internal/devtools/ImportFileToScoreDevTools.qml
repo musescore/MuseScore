@@ -47,13 +47,8 @@ Rectangle {
             spacing: 8
 
             FlatButton {
-                text: "Select && import files"
+                text: "Import files"
                 onClicked: model.selectAndImportFiles()
-            }
-
-            FlatButton {
-                text: "Check import in progress"
-                onClicked: model.checkImportInProgress()
             }
 
             FlatButton {
