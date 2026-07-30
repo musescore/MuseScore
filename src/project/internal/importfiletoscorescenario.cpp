@@ -28,11 +28,12 @@
 #include <QFileInfo>
 #include <QTemporaryFile>
 
-#include "dataformatter.h"
-#include "log.h"
+#include "project/projecterrors.h"
+#include "project/types/projecttypes.h"
 
-#include "projecterrors.h"
-#include "types/projecttypes.h"
+#include "global/dataformatter.h"
+#include "global/serialization/json.h"
+#include "global/log.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -92,6 +93,8 @@ static ImportType importTypeFromPath(const io::path_t& path, const ImportConfig&
 
 void ImportFileToScoreScenario::init()
 {
+    TRACEFUNC;
+
     m_timer.setInterval(1 * 60000); // poll once a minute
 
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { poll(); });
@@ -102,6 +105,13 @@ void ImportFileToScoreScenario::init()
             LOGW() << "Could not prefetch import config: " << config.ret.toString();
         }
     });
+}
+
+void ImportFileToScoreScenario::resumeImport()
+{
+    //! NOTE: resuming polling can show dialogs (errors, review prompts), so it must wait
+    //! until the main window is up rather than running during onInit()
+    loadWatchedItems();
 }
 
 async::Promise<ImportSelection> ImportFileToScoreScenario::selectFilesToImport()
@@ -353,6 +363,7 @@ void ImportFileToScoreScenario::upload(ImportType type, const ImportFileList& fi
 void ImportFileToScoreScenario::watch(int queueId, ImportType type)
 {
     m_watchedItems.insert_or_assign(queueId, WatchedItem { type, DownloadStatus::NotStarted });
+    saveWatchedItems();
 
     if (!m_timer.isActive()) {
         m_timer.start();
@@ -392,6 +403,7 @@ void ImportFileToScoreScenario::poll()
             m_timer.stop();
             m_watchedItems.clear();
             m_pollFailureCount = 0;
+            saveWatchedItems();
             finishImport(result.ret);
             return;
         }
@@ -409,7 +421,9 @@ void ImportFileToScoreScenario::poll()
             if (found != result.val.end()) {
                 onStatusChanged(*found);
 
-                if (found->status == ImportStatus::Done || found->status == ImportStatus::Failed) {
+                //! NOTE: Done doesn't erase the item yet - it stays watched (and persisted)
+                //! until its download actually resolves, so a crash mid-download can be resumed
+                if (found->status == ImportStatus::Failed) {
                     it = m_watchedItems.erase(it);
                 } else {
                     ++it;
@@ -425,9 +439,70 @@ void ImportFileToScoreScenario::poll()
             doneItem.status = ImportStatus::Done;
             onStatusChanged(doneItem);
 
-            it = m_watchedItems.erase(it);
+            ++it;
         }
+
+        saveWatchedItems();
     });
+}
+
+io::path_t ImportFileToScoreScenario::pendingImportsJsonPath() const
+{
+    return globalConfiguration()->userAppDataPath().appendingComponent("pending_imports.json");
+}
+
+void ImportFileToScoreScenario::loadWatchedItems()
+{
+    TRACEFUNC;
+
+    RetVal<ByteArray> data = fileSystem()->readFile(pendingImportsJsonPath());
+    if (!data.ret || data.val.empty()) {
+        if (!data.ret) {
+            LOGE() << "Could not read the pending imports file: " << data.ret;
+        }
+        return;
+    }
+
+    std::string err;
+    const JsonDocument json = JsonDocument::fromJson(data.val, &err);
+    if (!err.empty() || !json.isArray()) {
+        if (!err.empty()){
+            LOGE() << "Could not parse the pending imports file: " << err;
+        }
+        return;
+    }
+
+    const JsonArray array = json.rootArray();
+    for (size_t i = 0; i < array.size(); ++i) {
+        const JsonObject obj = array.at(i).toObject();
+        const int queueId = obj.value("id").toInt();
+        const ImportType type = static_cast<ImportType>(obj.value("type").toInt());
+        m_watchedItems.insert_or_assign(queueId, WatchedItem { type, DownloadStatus::NotStarted });
+    }
+
+    if (!m_watchedItems.empty()) {
+        m_timer.start();
+        poll();
+    }
+}
+
+void ImportFileToScoreScenario::saveWatchedItems()
+{
+    TRACEFUNC;
+
+    JsonArray array;
+    for (const auto& pair : m_watchedItems) {
+        JsonObject obj;
+        obj["id"] = pair.first;
+        obj["type"] = static_cast<int>(pair.second.type);
+        array << obj;
+    }
+
+    JsonDocument json(array);
+    Ret ret = fileSystem()->writeFile(pendingImportsJsonPath(), json.toJson());
+    if (!ret) {
+        LOGE() << "Could not save the pending imports list: " << ret.toString();
+    }
 }
 
 void ImportFileToScoreScenario::onStatusChanged(const ImportQueueItem& item)
@@ -595,10 +670,9 @@ void ImportFileToScoreScenario::downloadScoreAndFinish(const SignedMsczUrl& urlI
 
 void ImportFileToScoreScenario::markDownloaded(int queueId)
 {
-    auto it = m_watchedItems.find(queueId);
-    if (it != m_watchedItems.end()) {
-        it->second.downloadStatus = DownloadStatus::Downloaded;
-    }
+    //! NOTE: the download is done, stop watching
+    m_watchedItems.erase(queueId);
+    saveWatchedItems();
 }
 
 void ImportFileToScoreScenario::clearDownloading(int queueId)

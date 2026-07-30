@@ -145,3 +145,8 @@ void ProjectModule::onInit(const IApplication::RunMode& mode)
     m_projectAutoSaver->init();
     m_importFileToScoreScenario->init();
 }
+
+void ProjectModule::onDelayedInit()
+{
+    m_importFileToScoreScenario->resumeImport();
+}

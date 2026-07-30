@@ -50,6 +50,7 @@ public:
         : muse::Contextable(iocCtx) {}
 
     void init();
+    void resumeImport();
 
     muse::async::Promise<ImportSelection> selectFilesToImport() override;
     muse::async::Promise<muse::RetVal<muse::cloud::ImportType> > validateFiles(const muse::io::paths_t& paths) override;
@@ -60,8 +61,7 @@ public:
 private:
     enum class DownloadStatus {
         NotStarted,
-        Downloading,
-        Downloaded
+        Downloading
     };
 
     struct WatchedItem {
@@ -82,6 +82,11 @@ private:
 
     void watch(int queueId, muse::cloud::ImportType type);
     void poll();
+
+    muse::io::path_t pendingImportsJsonPath() const;
+
+    void loadWatchedItems();
+    void saveWatchedItems();
 
     void onStatusChanged(const muse::cloud::ImportQueueItem& item);
     bool shouldHandle(int queueId, muse::cloud::ImportStatus status);
