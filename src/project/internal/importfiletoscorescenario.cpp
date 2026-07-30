@@ -118,7 +118,12 @@ async::Promise<ImportSelection> ImportFileToScoreScenario::selectFilesToImport()
 
             ImportSelection selection;
             selection.type = static_cast<ImportType>(map.value("type").toInt());
-            selection.paths = io::pathsFromString(map.value("paths").toString().toStdString());
+
+            const QStringList paths = map.value("paths").toStringList();
+            selection.paths.reserve(paths.size());
+            for (const QString& path : paths) {
+                selection.paths.push_back(io::path_t(path));
+            }
 
             return innerResolve(selection);
         })

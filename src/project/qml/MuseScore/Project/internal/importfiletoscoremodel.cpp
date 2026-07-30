@@ -74,13 +74,18 @@ void ImportFileToScoreModel::validateFiles(const QStringList& pathsOrUrls)
     io::paths_t ioPaths;
     ioPaths.reserve(pathsOrUrls.size());
 
+    QVariantList normalizedPaths;
+    normalizedPaths.reserve(pathsOrUrls.size());
+
     for (const QString& pathOrUrl : pathsOrUrls) {
-        ioPaths.push_back(io::path_t(localPath(pathOrUrl)));
+        QString path = localPath(pathOrUrl);
+        ioPaths.push_back(io::path_t(path));
+        normalizedPaths << path;
     }
 
-    importFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, ioPaths](const RetVal<cloud::ImportType>& result) {
+    importFileToScoreScenario()->validateFiles(ioPaths).onResolve(this, [this, normalizedPaths](const RetVal<cloud::ImportType>& result) {
         if (result.ret) {
-            emit validationFinished(int(result.val), QString::fromStdString(io::pathsToString(ioPaths)));
+            emit validationFinished(int(result.val), normalizedPaths);
         }
     });
 }

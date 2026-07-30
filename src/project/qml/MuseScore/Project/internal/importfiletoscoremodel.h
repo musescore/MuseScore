@@ -55,6 +55,6 @@ public:
     Q_INVOKABLE void validateFiles(const QStringList& pathsOrUrls);
 
 signals:
-    void validationFinished(int type, QString paths);
+    void validationFinished(int type, QVariantList paths);
 };
 }
