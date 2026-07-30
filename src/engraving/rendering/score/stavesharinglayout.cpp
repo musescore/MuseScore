@@ -1044,12 +1044,12 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     std::vector<EngravingItem*> updatedStaveSharingLabels;
 
     for (Note* unisonNote : ctx.sharedUnisonNotes) {
-        bool isForNewSystem = false;
-        if (!unisonNoteNeedsLabel(unisonNote, isForNewSystem, ctx)) {
+        bool needsRestateOnNewSystem = false;
+        if (!unisonNoteNeedsLabel(unisonNote, needsRestateOnNewSystem, ctx)) {
             continue;
         }
 
-        String text = formatUnisonLabel(unisonNote, trackMap, isForNewSystem, ctx);
+        String text = formatUnisonLabel(unisonNote, trackMap, needsRestateOnNewSystem, ctx);
         Segment* segment = unisonNote->chord()->segment();
 
         StaveSharingLabel* label = nullptr;
@@ -1082,9 +1082,8 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
     }
 }
 
-bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSystem, StaveSharingContext& ctx)
+bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& needsRestateOnNewSystem, StaveSharingContext& ctx)
 {
-    bool restateOnNewSystem = ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() != AutoOnOff::OFF;
     std::vector<track_idx_t> originTracksOfThisNote;
     for (EngravingItem* originNote : unisonNote->originItems()) {
         originTracksOfThisNote.push_back(originNote->track());
@@ -1094,10 +1093,6 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSy
     track_idx_t curTrack = unisonNote->track();
     Segment* curSegment = unisonNote->chord()->segment();
     for (Segment* seg = curSegment->prev1(SegmentType::ChordRest); seg; seg = seg->prev1(SegmentType::ChordRest)) {
-        if (seg->system() != curSegment->system() && restateOnNewSystem) {
-            isForNewSystem = true;
-            return true;
-        }
         if (EngravingItem* el = seg->element(curTrack); el && el->isChord()) {
             for (Note* note : toChord(el)->notes()) {
                 if (!note->originItems().empty()) {
@@ -1120,10 +1115,15 @@ bool StaveSharingLayout::unisonNoteNeedsLabel(Note* unisonNote, bool& isForNewSy
         originTracksOfPrevNote.push_back(originNote->track());
     }
 
-    return originTracksOfPrevNote != originTracksOfThisNote;
+    bool restateOnNewSystem = ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() != AutoOnOff::OFF;
+    needsRestateOnNewSystem = restateOnNewSystem
+                              && unisonNote->chord()->segment()->system() != prevNote->chord()->segment()->system()
+                              && originTracksOfPrevNote == originTracksOfThisNote;
+
+    return originTracksOfPrevNote != originTracksOfThisNote || needsRestateOnNewSystem;
 }
 
-String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool isForNewSystem,
+String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrackMap& trackMap, bool needsRestateOnNewSystem,
                                              const StaveSharingContext& ctx)
 {
     const MStyle& style = ctx.style;
@@ -1157,7 +1157,8 @@ String StaveSharingLayout::formatUnisonLabel(Note* unisonNote, const SharedTrack
         }
     }
 
-    bool addParenthesis = isForNewSystem && ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() == AutoOnOff::AUTO;
+    bool addParenthesis = needsRestateOnNewSystem
+                          && ctx.style.styleV(Sid::unisonLabelRestateOnNewSystem).value<AutoOnOff>() == AutoOnOff::AUTO;
 
     if (tracksMappedToThisStave.size() <= originUnisonsCount) {
         if (addParenthesis) {
