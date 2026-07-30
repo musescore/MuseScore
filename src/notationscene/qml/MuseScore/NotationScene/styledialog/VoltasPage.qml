@@ -62,8 +62,8 @@ StyledFlickable {
                         Layout.preferredWidth: 100
                         currentValue: voltasPage.voltaPosAbove.value.y
                         measureUnitsSymbol: qsTrc("global", "sp")
-                        maxValue: 0
-                        minValue: -100
+                        minValue: 0
+                        maxValue: 100
                         decimals: 2
                         step: 0.25
 
