@@ -66,6 +66,7 @@ private:
 
     struct WatchedItem {
         muse::cloud::ImportType type = muse::cloud::ImportType::Omr;
+        muse::io::paths_t filePaths;
         DownloadStatus downloadStatus = DownloadStatus::NotStarted;
         muse::cloud::ImportStatus lastHandledStatus = muse::cloud::ImportStatus::Unknown;
     };
@@ -78,9 +79,9 @@ private:
     void showFileValidationError(const std::string& title, const std::string& text);
 
     void openFilesAndUpload(muse::cloud::ImportType type, const muse::io::paths_t& paths);
-    void upload(muse::cloud::ImportType type, const muse::cloud::ImportFileList& files);
+    void upload(muse::cloud::ImportType type, const muse::cloud::ImportFileList& files, const muse::io::paths_t& filePaths);
 
-    void watch(int queueId, muse::cloud::ImportType type);
+    void watch(int queueId, muse::cloud::ImportType type, const muse::io::paths_t& filePaths);
     void poll();
 
     muse::io::path_t pendingImportsJsonPath() const;
@@ -88,12 +89,13 @@ private:
     void loadWatchedItems();
     void saveWatchedItems();
 
+    muse::Ret attachFailedFiles(muse::Ret ret, int queueId) const;
+
     void onStatusChanged(const muse::cloud::ImportQueueItem& item);
     bool shouldHandle(int queueId, muse::cloud::ImportStatus status);
 
-    void submitMeta(int queueId);
-    void askReviewRating(int queueId);
-    void submitReview(int queueId, muse::cloud::OmrReviewRating rating);
+    void submitMeta(muse::cloud::ImportType type, int queueId);
+    void askReviewRating(muse::cloud::ImportType type, int queueId);
     void downloadIfNotAlready(muse::cloud::ImportType type, int queueId);
     void fetchScoreUrlAndDownload(muse::cloud::ImportType type, int queueId);
     void downloadScoreAndFinish(const muse::cloud::SignedMsczUrl& urlInfo);

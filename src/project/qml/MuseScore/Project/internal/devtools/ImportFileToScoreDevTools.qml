@@ -37,47 +37,12 @@ Rectangle {
         model.init()
     }
 
-    ColumnLayout {
-        anchors.fill: parent
+    FlatButton {
+        anchors.top: parent.top
+        anchors.left: parent.left
         anchors.margins: 12
 
-        spacing: 12
-
-        RowLayout {
-            spacing: 8
-
-            FlatButton {
-                text: "Import files"
-                onClicked: model.selectAndImportFiles()
-            }
-
-            FlatButton {
-                text: "Clear log"
-                onClicked: model.clearLog()
-            }
-        }
-
-        StyledTextLabel {
-            text: "Log:"
-        }
-
-        Flickable {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            contentWidth: width
-            contentHeight: logLabel.implicitHeight
-            clip: true
-
-            StyledTextLabel {
-                id: logLabel
-
-                width: parent.width
-
-                text: model.log
-                horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
-            }
-        }
+        text: "Import files"
+        onClicked: model.selectAndImportFiles()
     }
 }

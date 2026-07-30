@@ -22,8 +22,12 @@
 
 #include "importfiletoscoredevtoolsmodel.h"
 
+#include "actions/actiontypes.h"
+#include "project/projecterrors.h"
+
 using namespace mu::project;
 using namespace muse;
+using namespace muse::actions;
 
 ImportFileToScoreDevToolsModel::ImportFileToScoreDevToolsModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -33,48 +37,30 @@ ImportFileToScoreDevToolsModel::ImportFileToScoreDevToolsModel(QObject* parent)
 void ImportFileToScoreDevToolsModel::init()
 {
     importFileToScoreScenario()->importFinished().onReceive(this, [this](const Ret& ret, const io::path_t& path) {
-        appendLog(QString("importFinished: ret = \"%1\", path = \"%2\"")
-                  .arg(QString::fromStdString(ret.toString()))
-                  .arg(path.toQString()));
+        if (!ret) {
+            IInteractive::Text text;
+            text.text = ret.toString();
+            text.detailedText = io::pathsToString(ret.data<io::paths_t>(IMPORT_FAILED_FILES_KEY, {}), "\n");
+            interactive()->error("Import failed", text);
+            return;
+        }
+
+        const IInteractive::ButtonData openScoreBtn(IInteractive::Button::CustomButton, "Open score", true /*accent*/);
+        const IInteractive::ButtonData closeBtn(IInteractive::Button::Close, "Close");
+
+        interactive()->info("Your score is ready!", "", { openScoreBtn, closeBtn }, closeBtn.btn)
+        .onResolve(this, [this, path, openScoreBtn](const IInteractive::Result& res) {
+            if (res.isButton(openScoreBtn.btn)) {
+                dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(path.toQUrl()));
+            }
+        });
     });
-}
-
-QString ImportFileToScoreDevToolsModel::log() const
-{
-    return m_log;
-}
-
-void ImportFileToScoreDevToolsModel::appendLog(const QString& line)
-{
-    m_log += line + "\n";
-    emit logChanged();
 }
 
 void ImportFileToScoreDevToolsModel::selectAndImportFiles()
 {
-    appendLog("selectFilesToImport() called");
-
     importFileToScoreScenario()->selectFilesToImport()
     .onResolve(this, [this](const ImportSelection& selection) {
-        QStringList pathStrings;
-        for (const io::path_t& path : selection.paths) {
-            pathStrings << path.toQString();
-        }
-
-        appendLog("selectFilesToImport() resolved: " + pathStrings.join(", "));
-
-        bool started = importFileToScoreScenario()->importFiles(selection.type, selection.paths);
-        appendLog(QString("importFiles() returned %1").arg(started ? "true" : "false"));
-    })
-    .onReject(this, [this](int code, const std::string& msg) {
-        appendLog(QString("selectFilesToImport() rejected: code = %1, msg = \"%2\"")
-                  .arg(code)
-                  .arg(QString::fromStdString(msg)));
+        importFileToScoreScenario()->importFiles(selection.type, selection.paths);
     });
-}
-
-void ImportFileToScoreDevToolsModel::clearLog()
-{
-    m_log.clear();
-    emit logChanged();
 }

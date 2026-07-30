@@ -32,6 +32,8 @@
 #include <QStringList>
 #include <QUrl>
 
+#include "global/logstream.h"
+
 class QIODevice;
 
 namespace muse::cloud {
@@ -48,6 +50,28 @@ enum class ImportStatus {
     Failed,
     Unknown
 };
+
+inline const char* importTypeToString(ImportType type)
+{
+    switch (type) {
+    case ImportType::Omr: return "Omr";
+    case ImportType::Audio2Score: return "Audio2Score";
+    }
+    return "Unknown";
+}
+
+inline const char* importStatusToString(ImportStatus status)
+{
+    switch (status) {
+    case ImportStatus::Processing: return "Processing";
+    case ImportStatus::AwaitingMeta: return "AwaitingMeta";
+    case ImportStatus::AwaitingReview: return "AwaitingReview";
+    case ImportStatus::Done: return "Done";
+    case ImportStatus::Failed: return "Failed";
+    case ImportStatus::Unknown: break;
+    }
+    return "Unknown";
+}
 
 //! NOTE: must be in sync with the musescore.com API's error_code values
 enum class ImportErrorCode {
@@ -177,4 +201,16 @@ enum class OmrReviewRating {
     Bad = 0,
     Good = 1,
 };
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::cloud::ImportQueueItem& item)
+{
+    s << "id: " << item.id
+      << ", filename: \"" << item.filename << "\""
+      << ", type: " << muse::cloud::importTypeToString(item.type)
+      << ", status: " << muse::cloud::importStatusToString(item.status)
+      << ", scoreId: " << item.scoreId
+      << ", createdAt: " << item.createdAt.toString(Qt::ISODate)
+      << ", updatedAt: " << item.updatedAt.toString(Qt::ISODate);
+    return s;
 }

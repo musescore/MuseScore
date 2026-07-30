@@ -44,8 +44,12 @@ enum class Err {
     MalformedOpenScoreUrl,
 
     ImportValidationFailed,
-    MalformedImportResponse,
+    ImportProcessingFailed,
+    DownloadLinkExpired,
 };
+
+//! NOTE: key for the list of files stored in Ret::data
+static const std::string IMPORT_FAILED_FILES_KEY("failedFiles");
 
 inline muse::Ret make_ret(Err e)
 {
