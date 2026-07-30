@@ -98,6 +98,7 @@ qt_add_qml_module(appshell_qml
         TARGET muse_learn_qml
         TARGET muse_mpe_qml
         TARGET muse_shortcuts_qml
+        TARGET muse_toast_qml
         TARGET muse_tours_qml
         TARGET engraving_qml
         TARGET propertiespanel_qml
