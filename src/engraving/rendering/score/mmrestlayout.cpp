@@ -423,6 +423,10 @@ bool MMRestLayout::validMMRestMeasure(const LayoutContext& ctx, const Measure* m
 
     size_t nstaves = ctx.dom().nstaves();
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (!ctx.dom().staff(staffIdx)->show()) {
+            continue;
+        }
+
         if (m->isMeasureRepeatGroup(staffIdx)) {
             return false;
         }
