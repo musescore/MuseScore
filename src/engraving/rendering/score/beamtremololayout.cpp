@@ -88,8 +88,8 @@ void BeamTremoloLayout::setupLData(const BeamBase* item, BeamBase::LayoutData* l
 int BeamTremoloLayout::minStemLength(const ChordRest* cr, const BeamBase::LayoutData* ldata)
 {
     // min stem lengths in quarter spaces according to how many beams there are (starting with 1)
-    static constexpr int BEAMS_COUNT = 8;
-    static constexpr int minStemLengths[BEAMS_COUNT] = { 11, 13, 15, 18, 21, 24, 27, 30 };
+    static constexpr int BEAMS_COUNT = 9;
+    static constexpr int minStemLengths[BEAMS_COUNT] = { 11, 13, 15, 18, 21, 24, 27, 30, 33 };
     int beams = strokeCount(ldata, cr);
     if (beams > BEAMS_COUNT) {
         LOGE() << "Beam count " << beams << " out of range (" << BEAMS_COUNT - 1 << ")";
@@ -229,9 +229,19 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
         return;
     }
     // min stem lengths according to how many beams there are (starting with 1)
-    static const int minStemLengths[] = { 11, 13, 15, 18, 21, 24, 27, 30 };
+    static constexpr int BEAMS_COUNT = 9;
+    static constexpr int minStemLengths[BEAMS_COUNT] = { 11, 13, 15, 18, 21, 24, 27, 30, 33 };
     int dictatorBeams = strokeCount(ldata, isStartDictator ? startChord : endChord);
     int pointerBeams = strokeCount(ldata, isStartDictator ? endChord : startChord);
+    if (dictatorBeams > BEAMS_COUNT) {
+        LOGE() << "Beam count " << dictatorBeams << " out of range (" << BEAMS_COUNT - 1 << ")";
+        dictatorBeams =  BEAMS_COUNT - 1;
+    }
+    if (pointerBeams > BEAMS_COUNT) {
+        LOGE() << "Beam count " << pointerBeams << " out of range (" << BEAMS_COUNT - 1 << ")";
+        pointerBeams =  BEAMS_COUNT - 1;
+    }
+
     int maxDictatorReduce = stemLengthDictator - minStemLengths[std::max(dictatorBeams - 1, 0)];
     maxDictatorReduce = std::min(std::abs(dictator - targetLine), maxDictatorReduce);
 

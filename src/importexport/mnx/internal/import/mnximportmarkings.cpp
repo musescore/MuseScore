@@ -250,7 +250,7 @@ void MnxImporter::importTremolo(const mnx::sequence::SingleNoteTremolo& tremolo,
         return;
     }
     int tremoloTypeValue = int(TremoloType::R8) - 1 + marks;
-    tremoloTypeValue = std::clamp(tremoloTypeValue, int(TremoloType::R8), int(TremoloType::R64));
+    tremoloTypeValue = std::clamp(tremoloTypeValue, int(TremoloType::R8), int(TremoloType::R256));
     TremoloType type = TremoloType(tremoloTypeValue);
     if (type == TremoloType::INVALID_TREMOLO) {
         return;
