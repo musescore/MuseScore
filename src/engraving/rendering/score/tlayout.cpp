@@ -2436,8 +2436,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
@@ -2472,8 +2471,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
