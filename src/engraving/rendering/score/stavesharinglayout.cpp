@@ -116,15 +116,15 @@ void StaveSharingLayout::updateStaveSharing(StaveSharingContext& ctx)
 
 void StaveSharingLayout::updateTrackMaps(StaveSharingContext& ctx)
 {
-    const SharedTrackMap& curTrackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
+    const SharedTrackMap& oldTrackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
 
-    SharedTrackMap trackMap = computeTrackMap(ctx);
-    if (trackMap != curTrackMap) {
+    ctx.curTrackMap = computeTrackMap(ctx);
+    if (ctx.curTrackMap != oldTrackMap) {
         ctx.trackMapChanged = true;
     }
 
     ctx.curSharedPart->removeMapsBetweenTicks(ctx.sTick, ctx.eTick);
-    ctx.curSharedPart->setTrackMapAtTick(trackMap, ctx.sTick);
+    ctx.curSharedPart->setTrackMapAtTick(ctx.curTrackMap, ctx.sTick);
 }
 
 SharedTrackMap StaveSharingLayout::computeTrackMap(StaveSharingContext& ctx)
@@ -772,12 +772,10 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
 {
     Score* score = ctx.score;
 
-    const SharedTrackMap& trackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
-
     ctx.sharedUnisonNotes.clear();
 
     for (Segment* seg : ctx.crSegmentsToUpdate) {
-        for (const auto& [originTrack, sharedTrack] : trackMap) {
+        for (const auto& [originTrack, sharedTrack] : ctx.curTrackMap) {
             ChordRest* originCR = toChordRest(seg->element(originTrack));
             if (!originCR) {
                 continue;
@@ -1005,7 +1003,7 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
 {
     Score* score = ctx.score;
 
-    const SharedTrackMap& trackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
+    const SharedTrackMap& trackMap = ctx.curTrackMap;
     track_idx_t startOriginTrack = trackMap.begin()->first;
     track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
@@ -1063,7 +1061,7 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
 
 void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
 {
-    const SharedTrackMap& trackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
+    const SharedTrackMap& trackMap = ctx.curTrackMap;
     track_idx_t startOriginTrack = trackMap.begin()->first;
     track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
@@ -1115,7 +1113,7 @@ void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
 
 void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
 {
-    const SharedTrackMap& trackMap = ctx.curSharedPart->trackMapAtTick(ctx.sTick);
+    const SharedTrackMap& trackMap = ctx.curTrackMap;
 
     std::vector<EngravingItem*> updatedStaveSharingLabels;
 

@@ -49,6 +49,7 @@ private:
         std::vector<Spanner*> overlappingSpanners;
 
         SharedPart* curSharedPart = nullptr;
+        SharedTrackMap curTrackMap;
         std::unordered_set<Note*> sharedUnisonNotes;
         std::vector<StaveSharingLabel*> oldStaveSharingLabels;
         std::vector<StaveSharingLabel*> updatedStaveSharingLabels;
