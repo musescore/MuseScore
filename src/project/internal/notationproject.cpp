@@ -1137,21 +1137,22 @@ void NotationProject::setNeedSave(bool needSave)
         m_hasNonUndoStackChanges = false;
     }
 
-    if (m_needSave == needSave) {
+    if (m_isNeedSave == needSave) {
         return;
     }
 
-    m_needSave = needSave;
-    m_needSaveNotification.notify();
+    m_isNeedSave = needSave;
+    m_needSaveChanged.notify();
 }
 
-ValNt<bool> NotationProject::needSave() const
+bool NotationProject::isNeedSave() const
 {
-    ValNt<bool> needSave;
-    needSave.val = m_needSave;
-    needSave.notification = m_needSaveNotification;
+    return m_isNeedSave;
+}
 
-    return needSave;
+muse::async::Notification NotationProject::needSaveChanged() const
+{
+    return m_needSaveChanged;
 }
 
 Ret NotationProject::canSave() const
