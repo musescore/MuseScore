@@ -78,16 +78,6 @@ enum class Pid : short;
 class StaffType;
 
 //---------------------------------------------------------
-//   OffsetChange
-//---------------------------------------------------------
-
-enum class OffsetChange : signed char {
-    RELATIVE_OFFSET   = -1,
-    NONE              =  0,
-    ABSOLUTE_OFFSET   =  1
-};
-
-//---------------------------------------------------------
 //   ElementFlag
 //---------------------------------------------------------
 
@@ -440,7 +430,6 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
-    void undoResetProperty(Pid id) override;
     PropertyValue propertyDefault(Pid) const override;
 
     bool custom(Pid) const;
@@ -508,15 +497,8 @@ public:
     virtual EngravingItem* findLinkedInScore(const Score* score) const;
     EngravingItem* findLinkedInStaff(const Staff* staff) const;
 
-    struct Autoplace {
-        OffsetChange offsetChanged = OffsetChange::NONE;     // set by user actions that change offset, used by autoplace
-        PointF changedPos;                                   // position set when changing offset
-    };
-
     struct LayoutData {
         virtual ~LayoutData() = default;
-
-        Autoplace autoplace;
 
         virtual void reset()
         {
@@ -593,8 +575,6 @@ public:
 
         void setMask(const Shape& m) { m_mask.set_value(m); }
         const Shape& mask() const { return m_mask.value(); }
-
-        OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
         void connectItemSnappedBefore(EngravingItem* itemBefore);
         void disconnectItemSnappedBefore();
@@ -711,8 +691,6 @@ public:
     void checkVoiceAssignmentCompatibleWithTrack();
     virtual bool elementAppliesToTrack(const track_idx_t refTrack) const;
     void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
-
-    void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
 
 protected:

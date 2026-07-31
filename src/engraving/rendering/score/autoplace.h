@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_AUTOPLACE_DEV_H
-#define MU_ENGRAVING_AUTOPLACE_DEV_H
+#pragma once
 
 #include "dom/articulation.h"
 #include "dom/engravingitem.h"
@@ -45,15 +44,6 @@ public:
 
     static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata, double spatium);
 
-    static double rebaseOffset(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool nox = true);
-    static bool rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
-                                  double rebase, bool above);
-
-    static void setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute = true,
-                                 const PointF& diff = PointF());
-
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 };
 }
-
-#endif // MU_ENGRAVING_AUTOPLACE_DEV_H
