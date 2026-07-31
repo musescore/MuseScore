@@ -307,7 +307,6 @@ void Image::dragGrip(EditData& ed)
 {
     if (ed.curGrip == Grip::MIDDLE) {
         setOffset(offset() + ed.evtDelta);
-        setOffsetChanged(true);
         triggerLayout();
         return;
     }
