@@ -358,20 +358,29 @@ double SlurTieLayout::endingXForOpenEndedSlurTie(const Measure* measure, staff_i
 {
     double endingX = measure->endingXForOpenEndedLines();
 
-    const Segment* clefSeg = measure->findSegmentR(SegmentType::ClefTypes, measure->ticks());
-    if (!clefSeg || !clefSeg->enabled()) {
+    const SegmentType segmentTypesToAvoid = SegmentType::TimeSigTypes | SegmentType::KeySigTypes | SegmentType::ClefTypes;
+
+    // Find the first segment at the end of the measure which meets the criteria for the SlurTie to stop before it:
+    const Segment* endSegment = measure->findSegmentR(segmentTypesToAvoid, measure->ticks());
+    const EngravingItem* endItem = nullptr;
+    while (endSegment) {
+        if (endSegment->isType(segmentTypesToAvoid) && endSegment->enabled()) {
+            endItem = endSegment->element(staff2track(staffIdx));
+            if (endItem && endItem->visible() && endItem->addToSkyline()) {
+                break;
+            }
+        }
+        endSegment = endSegment->next();
+    }
+
+    if (!endSegment || !endItem) {
         return endingX;
     }
 
-    const Clef* clef = toClef(clefSeg->element(staff2track(staffIdx)));
-    if (!clef || !clef->addToSkyline()) {
-        return endingX;
-    }
+    const double margin = endItem->style().styleAbsolute(Sid::lineEndToBarlineDistance);
+    const double itemLeftX = measure->x() + endSegment->x() + endItem->ldata()->shape().translated(endItem->pos()).left();
 
-    const double margin = clef->style().styleAbsolute(Sid::lineEndToBarlineDistance);
-    const double clefLeftX = measure->x() + clefSeg->x() + clef->ldata()->shape().translated(clef->pos()).left();
-
-    return std::min(endingX, clefLeftX - margin);
+    return std::min(endingX, itemLeftX - margin);
 }
 
 //---------------------------------------------------------
