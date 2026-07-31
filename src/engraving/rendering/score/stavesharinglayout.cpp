@@ -25,6 +25,7 @@
 #include "measurelayout.h"
 #include "systemheaderlayout.h"
 
+#include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
 #include "dom/measure.h"
@@ -319,6 +320,10 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
     }
 
     for (Segment* segment : ctx.allSegments) {
+        if (segment->isBreathType() && !checkBreathsForSameVoice(segment, prevTrack, nextTrack)) {
+            return false;
+        }
+
         if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
@@ -433,6 +438,10 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
     }
 
     for (Segment* segment : ctx.allSegments) {
+        if (segment->isBreathType() && !checkBreathsForSameVoice(segment, prevTrack, nextTrack)) {
+            return false;
+        }
+
         if (!checkAnnotationsForSameVoice(segment, prevTrack, nextTrack)) {
             return false;
         }
@@ -489,6 +498,22 @@ bool StaveSharingLayout::checkAnnotationsForSameVoice(Segment* segment, track_id
         }
 
         // TODO: other types will probably need other checks
+    }
+
+    return true;
+}
+
+bool StaveSharingLayout::checkBreathsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack)
+{
+    Breath* breath1 = toBreath(segment->element(prevTrack));
+    Breath* breath2 = toBreath(segment->element(nextTrack));
+
+    if (bool(breath1) != bool(breath2)) {
+        return false;
+    }
+
+    if (breath1 && breath1->symId() != breath2->symId()) {
+        return false;
     }
 
     return true;
@@ -688,6 +713,14 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
             }
         }
 
+        if (seg->isBreathType()) {
+            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
+                if (EngravingItem* breath = seg->element(track)) {
+                    EngravingItem::disconnectAllOriginItems(breath);
+                }
+            }
+        }
+
         if (!seg->isChordRestType()) {
             continue;
         }
@@ -763,6 +796,7 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
 void StaveSharingLayout::makeSharedNotation(StaveSharingContext& ctx)
 {
     makeSharedChordRests(ctx);
+    makeSharedBreaths(ctx);
     makeSharedAnnotations(ctx);
     makeSharedSpanners(ctx);
     makeStaveSharingLabels(ctx);
@@ -893,6 +927,50 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
             }
         }
     }
+}
+
+void StaveSharingLayout::makeSharedBreaths(StaveSharingContext& ctx)
+{
+    std::vector<EngravingItem*> sharedBreaths;
+
+    const SharedTrackMap& trackMap = ctx.curTrackMap;
+    track_idx_t startOriginTrack = trackMap.begin()->first;
+    track_idx_t endOriginTrack = trackMap.rbegin()->first;
+
+    for (Segment* seg : ctx.segmentsToUpdate) {
+        if (!seg->isBreathType()) {
+            continue;
+        }
+
+        for (const auto& [originTrack, sharedTrack] : trackMap) {
+            Breath* originBreath = toBreath(seg->element(originTrack));
+            if (!originBreath) {
+                continue;
+            }
+
+            Breath* sharedBreath = nullptr;
+            Breath* possibleSharedBreath = toBreath(seg->element(sharedTrack));
+            if (possibleSharedBreath) {
+                if (possibleSharedBreath->symId() == originBreath->symId()) {
+                    sharedBreath = possibleSharedBreath;
+                } else {
+                    ctx.score->undoRemoveElement(possibleSharedBreath);
+                }
+            }
+
+            if (!sharedBreath) {
+                sharedBreath = toBreath(originBreath->clone());
+                sharedBreath->setTrack(sharedTrack);
+                sharedBreath->setParent(seg);
+                ctx.score->undoAddElement(sharedBreath);
+            }
+
+            EngravingItem::connectSharedItem(sharedBreath, originBreath);
+            sharedBreaths.push_back(sharedBreath);
+        }
+    }
+
+    manageVoicePropertyAndTrackForSharedItems(sharedBreaths, startOriginTrack, endOriginTrack, trackMap);
 }
 
 void StaveSharingLayout::makeSharedArticulations(Chord* originChord, Chord* sharedChord)
@@ -1321,6 +1399,14 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             if (!item->systemFlag() && !item->isStaveSharingLabel() && item->track() >= range.startTrack && item->track() < range.endTrack
                 && item->originItems().empty()) {
                 score->undoRemoveElement(item);
+            }
+        }
+
+        if (seg->isBreathType()) {
+            for (track_idx_t track = range.startTrack; track < range.endTrack; ++track) {
+                if (EngravingItem* breath = seg->element(track); breath && breath->originItems().empty()) {
+                    ctx.score->undoRemoveElement(breath);
+                }
             }
         }
 
