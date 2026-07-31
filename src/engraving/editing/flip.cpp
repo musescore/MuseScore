@@ -272,7 +272,6 @@ void Flip::flip(Transaction&, Score* score)
                             double oldY = off.y() - oldDefaultY;
                             off.ry() = newDefaultY - oldY;
                             ss->undoChangeProperty(Pid::OFFSET, off);
-                            ss->setOffsetChanged(false);
                         }
                     }
                 } else if (!ee->offset().isNull()) {
@@ -280,7 +279,6 @@ void Flip::flip(Transaction&, Score* score)
                     double oldY = off.y() - oldDefaultY;
                     off.ry() = newDefaultY - oldY;
                     ee->undoChangeProperty(Pid::OFFSET, off);
-                    ee->setOffsetChanged(false);
                 }
             });
         }
