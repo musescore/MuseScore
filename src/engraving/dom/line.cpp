@@ -579,7 +579,6 @@ void LineSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, 
     if (grip == Grip::START) {
         setOffset(offset() + delta);
         m_offset2 -= delta;
-        setOffsetChanged(true);
     } else {
         m_offset2 += delta;
     }
@@ -722,7 +721,6 @@ void LineSegment::dragGrip(EditData& ed)
         // Only for moving, no y limitation
         const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
-        setOffsetChanged(true);
         rebaseAnchors(ed, ed.curGrip);
     }
     break;
@@ -809,7 +807,6 @@ std::vector<LineF> LineSegment::dragAnchorLines() const
 RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
-    setOffsetChanged(true);
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();

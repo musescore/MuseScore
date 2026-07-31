@@ -1660,14 +1660,6 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
     EngravingObject::undoChangeProperty(pid, val, ps);
 }
 
-void EngravingItem::undoResetProperty(Pid id)
-{
-    EngravingObject::undoResetProperty(id);
-    if (id == Pid::OFFSET) {
-        setOffsetChanged(false);
-    }
-}
-
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -2299,7 +2291,6 @@ RectF EngravingItem::drag(EditData& ed)
     }
 
     setOffset(PointF(x, y));
-    setOffsetChanged(true);
 //      setGenerated(false);
 
     if (isTextBase()) {           // TODO: check for other types
@@ -2475,7 +2466,6 @@ void EngravingItem::dragGrip(EditData& ed)
 
     score()->addRefresh(canvasBoundingRect());
     setOffset(offset() + ed.delta);
-    setOffsetChanged(true);
     score()->addRefresh(canvasBoundingRect());
 }
 
@@ -3044,10 +3034,5 @@ PointF EngravingItem::staffOffset() const
     const StaffType* st = staffType();
     const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
     return PointF(0.0, yOffset);
-}
-
-void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)
-{
-    rendering::score::Autoplace::setOffsetChanged(this, mutldata(), val, absolute, diff);
 }
 }
