@@ -551,6 +551,7 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
         return;
     }
 
+    const TrackRange trackRange = part->trackRange();
     std::unordered_set<const Arpeggio*> exportedArpeggios;
 
     auto isExportedChord = [this](const Chord* chord) {
@@ -678,7 +679,7 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
     for (Segment* segment = measure->first(SegmentType::ChordRest);
          segment;
          segment = segment->next(SegmentType::ChordRest)) {
-        for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
+        for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
             EngravingItem* item = segment->element(track);
             if (!item || !item->isChord()) {
                 continue;
@@ -837,11 +838,12 @@ static void createDynamic(const Dynamic* dynamic, const Fraction& rTick, int mnx
 static void exportTextAnnotations(const Part* part, const Measure* measure, mnx::part::Measure& mnxMeasure)
 {
     const size_t staves = part->nstaves();
+    const track_idx_t partStartTrack = part->trackRange().startTrack;
     constexpr SegmentType timeSegments = SegmentType::Duration;
     for (Segment* segment = measure->first(timeSegments); segment; segment = segment->next(timeSegments)) {
         const Fraction rTick = segment->rtick();
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
-            const track_idx_t track = part->startTrack() + VOICES * staffIdx;
+            const track_idx_t track = partStartTrack + VOICES * staffIdx;
             for (EngravingItem* annotation : segment->annotations()) {
                 if (annotation->track() < track || annotation->track() >= track + VOICES || !annotation->isTextBase()) {
                     continue;
