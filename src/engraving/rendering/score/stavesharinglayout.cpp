@@ -270,27 +270,51 @@ bool StaveSharingLayout::isUnison(track_idx_t prevTrack, track_idx_t nextTrack, 
 
         Chord* c1 = toChord(cr1);
         Chord* c2 = toChord(cr2);
-        const std::vector<Note*> notes1 = c1->notes();
-        const std::vector<Note*> notes2 = c2->notes();
-        if (notes1.size() != notes2.size()) {
-            return false;
-        }
 
-        for (size_t i = 0; i < notes1.size(); ++i) {
-            Note* n1 = notes1[i];
-            Note* n2 = notes2[i];
-
-            if (!n1->isExactUnison(n2)) {
+        auto checkChordsForUnison = [&](Chord* c1, Chord* c2) {
+            if (c1->durationType() != c2->durationType() || c1->noteType() != c2->noteType()) {
                 return false;
             }
 
-            if (!checkNoteSpannersForUnison(n1, n2)) {
+            const std::vector<Note*>& notes1 = c1->notes();
+            const std::vector<Note*>& notes2 = c2->notes();
+            if (notes1.size() != notes2.size()) {
                 return false;
             }
+
+            for (size_t i = 0; i < notes1.size(); ++i) {
+                Note* n1 = notes1[i];
+                Note* n2 = notes2[i];
+
+                if (!n1->isExactUnison(n2)) {
+                    return false;
+                }
+
+                if (!checkNoteSpannersForUnison(n1, n2)) {
+                    return false;
+                }
+            }
+
+            if (!checkArticulationsForSameVoice(c1, c2)) {
+                return false;
+            }
+
+            return true;
+        };
+
+        if (!checkChordsForUnison(c1, c2)) {
+            return false;
         }
 
-        if (!checkArticulationsForSameVoice(c1, c2)) {
+        const std::vector<Chord*>& grace1 = c1->graceNotes();
+        const std::vector<Chord*>& grace2 = c2->graceNotes();
+        if (grace1.size() != grace2.size()) {
             return false;
+        }
+        for (size_t i = 0; i < grace1.size(); ++i) {
+            if (!checkChordsForUnison(grace1[i], grace2[i])) {
+                return false;
+            }
         }
     }
 
@@ -338,46 +362,69 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
         Chord* c1 = toChord(cr1);
         Chord* c2 = toChord(cr2);
 
-        const std::vector<Note*>& notes1 = c1->notes();
-        const std::vector<Note*>& notes2 = c2->notes();
-        if (notes1.size() != notes2.size()) {
-            return false;
-        }
-
-        for (size_t i = 0; i < notes1.size(); ++i) {
-            Note* n1 = notes1[i];
-            Note* n2 = notes2[i];
-
-            if (n2->pitch() > n1->pitch()) {
+        auto checkChordsForSameVoice = [&](Chord* c1, Chord* c2) {
+            if (c1->durationType() != c2->durationType() || c1->noteType() != c2->noteType()) {
                 return false;
             }
 
-            if (!n2->isExactUnison(n1)) {
-                if (n2->pitch() == n1->pitch() || muse::contains(localUnisonNotes, n1)) {
+            const std::vector<Note*>& notes1 = c1->notes();
+            const std::vector<Note*>& notes2 = c2->notes();
+            if (notes1.size() != notes2.size()) {
+                return false;
+            }
+
+            for (size_t i = 0; i < notes1.size(); ++i) {
+                Note* n1 = notes1[i];
+                Note* n2 = notes2[i];
+
+                if (n2->pitch() > n1->pitch()) {
                     return false;
                 }
 
-                continue;
-            }
+                if (!n2->isExactUnison(n1)) {
+                    if (n2->pitch() == n1->pitch() || muse::contains(localUnisonNotes, n1)) {
+                        return false;
+                    }
 
-            if (!checkNoteSpannersForUnison(n1, n2)) {
-                return false;
-            }
-
-            for (track_idx_t track : curTrackGroup) {
-                if (track == prevTrack) {
                     continue;
                 }
-                if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
-                    for (Note* n : toChord(cr)->notes()) {
-                        if (!n2->isExactUnison(n)) {
-                            return false;
+
+                if (!checkNoteSpannersForUnison(n1, n2)) {
+                    return false;
+                }
+
+                for (track_idx_t track : curTrackGroup) {
+                    if (track == prevTrack) {
+                        continue;
+                    }
+                    if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
+                        for (Note* n : toChord(cr)->notes()) {
+                            if (!n2->isExactUnison(n)) {
+                                return false;
+                            }
                         }
                     }
                 }
+
+                potentialUnisonNotes.push_back(n2);
             }
 
-            potentialUnisonNotes.push_back(n2);
+            return true;
+        };
+
+        if (!checkChordsForSameVoice(c1, c2)) {
+            return false;
+        }
+
+        const std::vector<Chord*>& grace1 = c1->graceNotes();
+        const std::vector<Chord*>& grace2 = c2->graceNotes();
+        if (grace1.size() != grace2.size()) {
+            return false;
+        }
+        for (size_t i = 0; i < grace1.size(); ++i) {
+            if (!checkChordsForSameVoice(grace1[i], grace2[i])) {
+                return false;
+            }
         }
 
         if (!checkArticulationsForSameVoice(c1, c2)) {
@@ -668,30 +715,39 @@ void StaveSharingLayout::disconnectAll(StaveSharingContext& ctx)
             }
 
             if (cr->isChord()) {
-                for (Note* note : toChord(cr)->notes()) {
-                    EngravingItem::disconnectAllOriginItems(note);
+                auto disconnectChord = [&](Chord* c) {
+                    for (Note* note : c->notes()) {
+                        EngravingItem::disconnectAllOriginItems(note);
 
-                    if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endNote()) { // if it does have endNote it will be disconnected when we process that note
-                        EngravingItem::disconnectAllOriginItems(tieFor);
-                    }
+                        if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endNote()) { // if it does have endNote it will be disconnected when we process that note
+                            EngravingItem::disconnectAllOriginItems(tieFor);
+                        }
 
-                    for (Spanner* spannerFor : note->spannerFor()) {
-                        if (!spannerFor->endElement()) {
-                            EngravingItem::disconnectAllOriginItems(spannerFor); // if it does have endElement it will be disconnected when we process that note
+                        for (Spanner* spannerFor : note->spannerFor()) {
+                            if (!spannerFor->endElement()) {
+                                EngravingItem::disconnectAllOriginItems(spannerFor); // if it does have endElement it will be disconnected when we process that note
+                            }
+                        }
+
+                        if (Tie* tieBack = note->tieBack()) {
+                            EngravingItem::disconnectAllOriginItems(tieBack);
+                        }
+
+                        for (Spanner* spannerBack : note->spannerBack()) {
+                            EngravingItem::disconnectAllOriginItems(spannerBack);
                         }
                     }
 
-                    if (Tie* tieBack = note->tieBack()) {
-                        EngravingItem::disconnectAllOriginItems(tieBack);
+                    for (Articulation* art : c->articulations()) {
+                        EngravingItem::disconnectAllOriginItems(art);
                     }
+                };
 
-                    for (Spanner* spannerBack : note->spannerBack()) {
-                        EngravingItem::disconnectAllOriginItems(spannerBack);
-                    }
-                }
+                Chord* c = toChord(cr);
+                disconnectChord(c);
 
-                for (Articulation* art : toChord(cr)->articulations()) {
-                    EngravingItem::disconnectAllOriginItems(art);
+                for (Chord* grace : c->graceNotes()) {
+                    disconnectChord(grace);
                 }
             }
         }
@@ -790,33 +846,53 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                 continue;
             }
 
-            Chord* originChord = toChord(originCR);
-            Note* originNote = originChord->upNote();
-            Chord* sharedChord = toChord(sharedCR);
-            Note* sharedNote = nullptr;
-            for (Note* n : sharedChord->notes()) {
-                if (n->isExactUnison(originNote)) {
-                    sharedNote = n;
-                    break;
+            auto makeSharedNotes = [&](Chord* originChord, Chord* sharedChord) {
+                Note* originNote = originChord->upNote();
+                Note* sharedNote = nullptr;
+                for (Note* n : sharedChord->notes()) {
+                    if (n->isExactUnison(originNote)) {
+                        sharedNote = n;
+                        break;
+                    }
                 }
+
+                if (!sharedNote) {
+                    sharedNote = originNote->clone();
+                    sharedNote->setTrack(sharedTrack);
+                    sharedNote->setParent(sharedChord);
+                    score->undoAddElement(sharedNote);
+                }
+
+                EngravingItem::connectSharedItem(sharedNote, originNote);
+
+                if (sharedNote->originItems().size() > 1) {
+                    ctx.sharedUnisonNotes.insert(sharedNote);
+                }
+
+                makeSharedTiesAndNoteSpanners(originNote, sharedNote);
+
+                makeSharedArticulations(originChord, sharedChord);
+            };
+
+            Chord* originChord = toChord(originCR);
+            Chord* sharedChord = toChord(sharedCR);
+
+            makeSharedNotes(originChord, sharedChord);
+
+            const std::vector<Chord*>& originGraces = originChord->graceNotes();
+            const std::vector<Chord*>& sharedGraces = sharedChord->graceNotes();
+            for (size_t i = 0; i < originGraces.size(); ++i) {
+                Chord* originGrace = originGraces[i];
+                Chord* sharedGrace = i < sharedGraces.size() ? sharedGraces[i] : nullptr;
+                if (!sharedGrace) {
+                    sharedGrace = toChord(originGrace->clone());
+                    sharedGrace->setTrack(sharedTrack);
+                    sharedGrace->setParent(sharedChord);
+                    score->undoAddElement(sharedGrace);
+                }
+
+                makeSharedNotes(originGrace, sharedGrace);
             }
-
-            if (!sharedNote) {
-                sharedNote = originNote->clone();
-                sharedNote->setTrack(sharedTrack);
-                sharedNote->setParent(sharedChord);
-                score->undoAddElement(sharedNote);
-            }
-
-            EngravingItem::connectSharedItem(sharedNote, originNote);
-
-            if (sharedNote->originItems().size() > 1) {
-                ctx.sharedUnisonNotes.insert(sharedNote);
-            }
-
-            makeSharedTiesAndNoteSpanners(originNote, sharedNote);
-
-            makeSharedArticulations(originChord, sharedChord);
         }
     }
 }
@@ -1277,43 +1353,51 @@ void StaveSharingLayout::cleanup(StaveSharingContext& ctx)
             }
 
             if (cr->isChord()) {
+                auto cleanupChord = [&](Chord* c) {
+                    std::vector<Articulation*> articulations = c->articulations(); // copy because may be removed
+                    for (Articulation* art : articulations) {
+                        if (art->originItems().empty()) {
+                            score->undoRemoveElement(art);
+                        }
+                    }
+
+                    std::vector<Note*> notes = c->notes();     // copy because may be removed
+                    for (Note* note : notes) {
+                        if (Tie* tieBack = note->tieBack(); tieBack && tieBack->originItems().empty()) {
+                            score->undoRemoveElement(tieBack);
+                        }
+
+                        for (Spanner* sp : note->spannerBack()) {
+                            if (sp->originItems().empty()) {
+                                score->undoRemoveElement(sp);
+                            }
+                        }
+
+                        if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endElement() && tieFor->originItems().empty()) {
+                            score->undoRemoveElement(tieFor);
+                        }
+
+                        for (Spanner* sp : note->spannerFor()) {
+                            if (!sp->endElement() && sp->originItems().empty()) {
+                                score->undoRemoveElement(sp);
+                            }
+                        }
+
+                        if (note->originItems().empty()) {
+                            score->undoRemoveElement(note);
+                        }
+                    }
+                    if (c->notes().empty()) {
+                        score->undoRemoveElement(c);
+                    }
+                };
+
                 Chord* c = toChord(cr);
+                cleanupChord(c);
 
-                std::vector<Articulation*> articulations = c->articulations(); // copy because may be removed
-                for (Articulation* art : articulations) {
-                    if (art->originItems().empty()) {
-                        score->undoRemoveElement(art);
-                    }
-                }
-
-                std::vector<Note*> notes = c->notes();     // copy because may be removed
-                for (Note* note : notes) {
-                    if (Tie* tieBack = note->tieBack(); tieBack && tieBack->originItems().empty()) {
-                        score->undoRemoveElement(tieBack);
-                    }
-
-                    for (Spanner* sp : note->spannerBack()) {
-                        if (sp->originItems().empty()) {
-                            score->undoRemoveElement(sp);
-                        }
-                    }
-
-                    if (Tie* tieFor = note->tieFor(); tieFor && !tieFor->endElement() && tieFor->originItems().empty()) {
-                        score->undoRemoveElement(tieFor);
-                    }
-
-                    for (Spanner* sp : note->spannerFor()) {
-                        if (!sp->endElement() && sp->originItems().empty()) {
-                            score->undoRemoveElement(sp);
-                        }
-                    }
-
-                    if (note->originItems().empty()) {
-                        score->undoRemoveElement(note);
-                    }
-                }
-                if (c->notes().empty()) {
-                    score->undoRemoveElement(c);
+                std::vector<Chord*> graceNotes = c->graceNotes(); // copy because we may remove elements
+                for (Chord* grace : graceNotes) {
+                    cleanupChord(grace);
                 }
             }
         }
