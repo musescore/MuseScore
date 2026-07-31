@@ -92,6 +92,9 @@ TEST_F(Braille_Tests, notes) {
 TEST_F(Braille_Tests, specialNoteheads) {
     brailleSaveTest("testSpecialNoteheads_Table2_MBC2015");
 }
+TEST_F(Braille_Tests, cueNotes) {
+    brailleSaveTest("testCueNotes_Table21_MBC2015");
+}
 TEST_F(Braille_Tests, octavesNoChords) {
     // TODO a,b,c section names not exported
     brailleSaveTest("testOctavesNoChords_Example_3.2.2.1_MBC2015");

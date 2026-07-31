@@ -285,6 +285,11 @@ namespace mu::engraving {
 
 // Table 21. Page 16. Music Braille Code 2015
 #define BRAILLE_MUSIC_PARENTHESES       QString(",'")
+// 21.6. Page 156. Music Braille Code 2015: notes or rests printed smaller than normal (cue notes).
+#define BRAILLE_NOTE_SMALL_TYPE         QString(",5")
+// The Table 21 counterpart ";5" ("notes printed in large type") is intentionally not defined:
+// MuseScore's engraving model has no "note printed larger than normal" flag to key off of
+// (only Note::isSmall()/ChordRest::isSmall() exist).
 
 // Table 22. Page 17. Music Braille Code 2015.
 #define BRAILLE_ARPEGGIO_UPWARD         QString(">k")
@@ -957,6 +962,7 @@ void Braille::resetOctaves()
 }
 
 static QString brailleSpecialNoteheadPrefix(Note* note);
+static QString brailleNoteSizePrefix(Note* note);
 
 // 22. Doubling of Signs. Music Braille Code 2015.
 // When the same sign appears on more than three consecutive notes
@@ -1045,6 +1051,14 @@ void Braille::computeSignDoubling()
                 presentSigns.insert(QStringLiteral("notehead:") + key);
             }
 
+            for (Note* note : notes) {
+                const QString key = brailleNoteSizePrefix(note);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                presentSigns.insert(QStringLiteral("notesize:") + key);
+            }
+
             if (notes.size() > 1) {
                 for (auto it = notes.begin() + 1; it != notes.end(); ++it) {
                     const QString key = brailleIntervalSign(computeInterval(rootNote, *it, true));
@@ -1084,6 +1098,14 @@ void Braille::computeSignDoubling()
                     continue;
                 }
                 openSignRuns[QStringLiteral("notehead:") + key].push_back(note);
+            }
+
+            for (Note* note : notes) {
+                const QString key = brailleNoteSizePrefix(note);
+                if (key.isEmpty()) {
+                    continue;
+                }
+                openSignRuns[QStringLiteral("notesize:") + key].push_back(note);
             }
 
             if (notes.size() > 1) {
@@ -1984,6 +2006,20 @@ static QString brailleSpecialNoteheadPrefix(Note* note)
     return QString();
 }
 
+static QString brailleNoteSizePrefix(Note* note)
+{
+    if (!note) {
+        return QString();
+    }
+
+    Chord* chord = note->chord();
+    if (note->isSmall() || (chord && chord->isSmall())) {
+        return BRAILLE_NOTE_SMALL_TYPE;
+    }
+
+    return QString();
+}
+
 QString Braille::brailleSpecialNoteheadSign(Note* note)
 {
     const QString code = brailleSpecialNoteheadPrefix(note);
@@ -1999,6 +2035,32 @@ QString Braille::brailleSpecialNoteheadSign(Note* note)
     switch (signDoublingState(note, signKey)) {
     case SignDoubling::Double:
         // MBC 2015, 2.5.1: only the second half of a special-note-shape sign is repeated.
+        return code + code.right(1);
+    case SignDoubling::Omit:
+        return QString();
+    case SignDoubling::Terminate:
+    case SignDoubling::Single:
+    default:
+        // The terminating sign retains its normal position before the last note.
+        return code;
+    }
+}
+
+QString Braille::brailleNoteSizeSign(Note* note)
+{
+    const QString code = brailleNoteSizePrefix(note);
+    if (code.isEmpty()) {
+        return QString();
+    }
+
+    if (!m_context.signDoublingComputed) {
+        computeSignDoubling();
+    }
+
+    const QString signKey = QStringLiteral("notesize:") + code;
+    switch (signDoublingState(note, signKey)) {
+    case SignDoubling::Double:
+        // MBC 2015, 21.6: "either sign may be doubled by writing its second cell twice."
         return code + code.right(1);
     case SignDoubling::Omit:
         return QString();
@@ -2045,6 +2107,7 @@ QString Braille::brailleChord(Chord* chord)
     }
 
     Note* rootNote = notes.front();
+    QString noteSizeBraille = brailleNoteSizeSign(rootNote);
     QString specialNoteheadBraille = brailleSpecialNoteheadSign(rootNote);
     QString rootNoteBraille = brailleChordRootNote(chord, rootNote, false);
 
@@ -2132,6 +2195,9 @@ QString Braille::brailleChord(Chord* chord)
     QString result = QString();
     result += graceNotesBefore;
     result += graceNoteMarking;
+    // MBC 2015, 21.6: the cue/small-print sign precedes bowing signs, ornaments,
+    // signs of expression, accidentals, and octave marks belonging to the affected note.
+    result += noteSizeBraille;
     // MBC 2015, 2.5: a special-note-shape prefix precedes nuances, ornaments,
     // accidentals, and octave marks belonging to the affected note.
     result += specialNoteheadBraille;
@@ -2215,6 +2281,7 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     }
 
     QString noteTieBraille = brailleTie(note);
+    QString noteSizeBraille = brailleNoteSizeSign(note);
     QString specialNoteheadBraille = brailleSpecialNoteheadSign(note);
 
     QString fingeringAfterBraille = QString();
@@ -2243,7 +2310,8 @@ QString Braille::brailleChordInterval(Note* rootNote, const std::vector<Note*>& 
     }
 
     return
-        specialNoteheadBraille
+        noteSizeBraille
+        + specialNoteheadBraille
         + noteAccidentalBraille
         + noteOctaveBraille
         + intervalBraille
@@ -2282,6 +2350,9 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote, bool include
         accidentalBraille = brailleAccidentalType(rootNote->accidental()->accidentalType());
     }
 
+    // includeSpecialNotehead also gates the note-size sign: both are already handled by the
+    // caller when false (see brailleChord, which computes them separately before calling here).
+    QString noteSizeBraille = includeSpecialNotehead ? brailleNoteSizeSign(rootNote) : QString();
     QString specialNoteheadBraille = includeSpecialNotehead ? brailleSpecialNoteheadSign(rootNote) : QString();
     QString noteTieBraille = brailleTie(rootNote);
 
@@ -2293,7 +2364,8 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote, bool include
     }
 
     return
-        specialNoteheadBraille
+        noteSizeBraille
+        + specialNoteheadBraille
         + accidentalBraille
         + octaveBraille
         + noteBraille

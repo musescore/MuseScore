@@ -234,6 +234,7 @@ private:
     QString brailleChordInterval(Note* rootNote, const std::vector<Note*>& notes, Note* note);
     QString brailleChordRootNote(Chord* chord, Note* rootNote, bool includeSpecialNotehead = true);
     QString brailleSpecialNoteheadSign(Note* note);
+    QString brailleNoteSizeSign(Note* note);
     QString brailleClef(Clef* clef);
     QString brailleDynamic(Dynamic* dynamic);
     QString brailleFermata(Fermata* fermata);
