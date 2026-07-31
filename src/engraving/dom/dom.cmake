@@ -88,8 +88,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/expression.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.h
-    ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
