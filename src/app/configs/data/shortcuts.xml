@@ -757,6 +757,11 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
+    <key>preference-dialog</key>
+    <seq>Ctrl+,</seq>
+    <autorepeat>0</autorepeat>
+  </SC>
+  <SC>
     <key>toggle-mixer</key>
     <seq>F10</seq>
     <autorepeat>0</autorepeat>
