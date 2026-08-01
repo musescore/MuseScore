@@ -102,7 +102,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
-            <subtype>ff</subtype>
+            <subtype>sfz</subtype>
             <velocity>112</velocity>
             <eid>I_I</eid>
             </Dynamic>
@@ -115,51 +115,79 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Chord>
+          <Dynamic>
+            <subtype>rfz</subtype>
+            <velocity>112</velocity>
             <eid>L_L</eid>
+            </Dynamic>
+          <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>fz</subtype>
+            <velocity>112</velocity>
+            <eid>O_O</eid>
+            </Dynamic>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Q_Q</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <Dynamic>
+            <subtype>sf</subtype>
+            <velocity>112</velocity>
+            <eid>R_R</eid>
+            </Dynamic>
           <Chord>
-            <eid>N_N</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>T_T</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>U_U</eid>
+        <voice>
+          <Dynamic>
+            <subtype>fp</subtype>
+            <velocity>96</velocity>
+            <eid>V_V</eid>
+            </Dynamic>
+          <Chord>
+            <eid>W_W</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Dynamic>
-            <subtype>ppp</subtype>
-            <velocity>16</velocity>
-            <eid>P_P</eid>
+            <subtype>other-dynamics</subtype>
+            <eid>Y_Y</eid>
+            <text><sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym><sym>dynamicPiano</sym></text>
             </Dynamic>
           <Chord>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
+            <eid>Z_Z</eid>
+            <durationType>half</durationType>
             <Note>
-              <eid>R_R</eid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            <Note>
-              <eid>S_S</eid>
+              <eid>a_a</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              </Note>
-            <Note>
-              <eid>T_T</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            <Note>
-              <eid>U_U</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
