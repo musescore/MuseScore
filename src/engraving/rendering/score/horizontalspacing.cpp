@@ -293,8 +293,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
         placedSegments.back().xPosInSystemCoords += leadingSpace;
         Page* page = toPage(ctx.system->parent());
         if (page) {
-            double pageLeftEdge = -page->lm();
-            placedSegments.back().xPosInSystemCoords = std::max(placedSegments.back().xPosInSystemCoords, pageLeftEdge);
+            placedSegments.back().xPosInSystemCoords = std::max(placedSegments.back().xPosInSystemCoords, -page->lm());
         }
 
         if (curSeg->isChordRestType()) {
