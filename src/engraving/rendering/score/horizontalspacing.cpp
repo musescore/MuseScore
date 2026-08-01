@@ -1615,8 +1615,9 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 void HorizontalSpacing::computeChordBracketPadding(const EngravingItem* item1, const ChordBracket* chordBracket, double& padding)
 {
     const Chord* chord = chordBracket->chord();
-    if (chord && chord == item1->findAncestor(ElementType::CHORD)) {
-        // Padding a right-handed chord bracket to its own chord: use the same padding values as the left-handed case
+    const Chord* itemChord = static_cast<const Chord*>(item1->findAncestor(ElementType::CHORD));
+    if (chord && itemChord && chord->segment() == itemChord->segment() && chord->part() == itemChord->part()) {
+        // Padding a right-handed chord bracket to chords in the same Segment and part: use the same padding values as the left-handed case
         padding = item1->score()->paddingTable().at(ElementType::CHORD_BRACKET).at(item1->type());
     }
 }
