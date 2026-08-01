@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "chordbracketlayout.h"
 #include "parenthesislayout.h"
 
 #include "dom/barline.h"
@@ -1336,6 +1337,11 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             // so make sure segment is as wide as it needs to be
             d = std::max(d, f->staffShape(staffIdx).right());
         }
+
+        // Multi-staff ChordBrackets are stored on their owner chords
+        // and are therefore not fully represented in every visually spanned staff Shape.
+        // Add the missing bracket collisions before combining the per-staff minimum distances.
+        ChordBracketLayout::updateHorizontalSpacing(f, ns, staffIdx, squeezeFactor, d);
 
         if (f->isChordRestType() && ns->isChordRestType()) {
             checkCollisionsWithCrossStaffStems(f, ns, staffIdx, d);
