@@ -51,6 +51,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "chordbracketlayout.h"
 #include "headerfooterlayout.h"
 #include "masklayout.h"
 #include "measurelayout.h"
@@ -366,7 +367,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             for (EngravingItem* e : c->el()) {
                                 if (e->isChordBracket()) {
-                                    ArpeggioLayout::layoutArpeggio2(toChordBracket(e), ctx);
+                                    ChordBracket* bracket = toChordBracket(e);
+                                    if (c->onTabStaff()) {
+                                        ArpeggioLayout::layoutArpeggio2(bracket, ctx);
+                                    } else {
+                                        ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
+                                    }
                                 }
                             }
                             ChordLayout::layoutSpanners(c, ctx);
