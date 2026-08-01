@@ -170,9 +170,13 @@ void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirec
 
 void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
 {
+    // cr->track() is read unconditionally below, so a null cr is not survivable here.
+    IF_ASSERT_FAILED(cr) {
+        return;
+    }
     Measure* targetMeasure = measure;
     if (!targetMeasure) {
-        Segment* chordRestSegment = cr ? cr->segment() : nullptr;
+        Segment* chordRestSegment = cr->segment();
         targetMeasure = chordRestSegment ? chordRestSegment->measure() : nullptr;
     }
     IF_ASSERT_FAILED(targetMeasure) {

@@ -1206,7 +1206,7 @@ void MnxImporter::createHairpin(const mnx::part::DynamicGradual& mnxHairpin, Seg
         LOGW() << "hairpin end measure not found for " << mnxHairpin.pointer().to_string();
         return;
     }
-    Measure* targetMeasure = mnxMeasureToMeasure(endMeasure->calcArrayIndex());
+    Measure* targetMeasure = tryMnxMeasureToMeasure(endMeasure->calcArrayIndex());
     if (!targetMeasure) {
         LOGW() << "hairpin end measure could not be resolved to a MuseScore measure for "
                << mnxHairpin.pointer().to_string();
@@ -1661,7 +1661,7 @@ void MnxImporter::createMeasureRepeats(const mnx::Part& mnxPart)
         const int anchorOffset = (numMeasures % 2) ? numMeasures / 2 : numMeasures / 2 - 1;
 
         for (int offset = 0; offset < numMeasures; offset++) {
-            Measure* measure = mnxMeasureToMeasure(partMeasure.calcArrayIndex() + offset);
+            Measure* measure = tryMnxMeasureToMeasure(partMeasure.calcArrayIndex() + offset);
             if (!measure) {
                 LOGW() << "Measure repeat at " << mnxMeasureRepeat->pointer().to_string()
                        << " extends past the end of the score.";

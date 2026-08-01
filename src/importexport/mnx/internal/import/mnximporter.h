@@ -156,6 +156,10 @@ private:
     engraving::staff_idx_t mnxPartStaffToStaffIdx(const mnx::Part& mnxPart, int staffNum);
     engraving::staff_idx_t mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxStaff); // returns the first corresponding part staff found, or muse::nidx
     engraving::Measure* mnxMeasureToMeasure(const size_t mnxMeasIdx);
+    /// #mnxMeasureToMeasure for indices that may legitimately not resolve, such as one past
+    /// the end of the score. Returns nullptr instead of throwing, so the caller can warn and
+    /// carry on rather than aborting the import.
+    engraving::Measure* tryMnxMeasureToMeasure(const size_t mnxMeasIdx);
     engraving::ChordRest* mnxEventIdToCR(const std::string& eventId);
     engraving::Note* mnxNoteIdToNote(const std::string& noteId);
     static void setAndStyleProperty(engraving::EngravingObject* e, engraving::Pid id, engraving::PropertyValue v);

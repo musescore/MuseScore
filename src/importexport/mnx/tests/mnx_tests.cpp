@@ -804,6 +804,23 @@ void expectDynamicLetters(const char* letters, const MnxDynamicMapping& expected
 }
 } // namespace
 
+TEST_F(Mnx_Tests, dynamicValueSpellingsCarryNoAffixLetters)
+{
+    // toMnxDynamicFromLetters reads the accent affixes one character at a time, which is only
+    // unambiguous because no DynamicValue spells itself with s, r, or z. That is a property of
+    // mnxdom, not of this code, so assert it here rather than let a schema change silently
+    // turn "sf" into a value lookup that swallows the prefix.
+    for (const auto& [value, spelling] : mnx::EnumStringMapping<mnx::DynamicValue>::enumToString()) {
+        SCOPED_TRACE(spelling);
+        EXPECT_FALSE(spelling.empty());
+        for (const char ch : spelling) {
+            EXPECT_TRUE(ch == 'p' || ch == 'm' || ch == 'f' || ch == 'n')
+                << "DynamicValue \"" << spelling << "\" contains '" << ch
+                << "', which the letters grammar treats as an accent affix.";
+        }
+    }
+}
+
 TEST_F(Mnx_Tests, dynamicLettersAccepted)
 {
     expectDynamicLetters("p", plainDynamic(DynValue::p));

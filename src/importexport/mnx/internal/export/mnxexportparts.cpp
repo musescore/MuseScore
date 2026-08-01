@@ -504,9 +504,14 @@ void MnxExporter::createOttava(const Ottava* ottava)
                                                             endMeasureId,
                                                             toMnxFractionValue(endOffset).reduced()));
 
-    if (const Chord* endC = toChord(ottava->endElement()); endC && !endC->graceNotesBefore().empty()) {
-        // Ensure grace notes before the end of the ottava are included.
-        mnxOttava.end().position().set_graceIndex(0);
+    // toChord only asserts in debug builds, so the type has to be checked first: an ottava
+    // ending on a rest would otherwise yield a bogus Chord* and read past it here.
+    if (ottava->endElement()->isChord()) {
+        const Chord* endC = toChord(ottava->endElement());
+        if (!endC->graceNotesBefore().empty()) {
+            // Ensure grace notes before the end of the ottava are included.
+            mnxOttava.end().position().set_graceIndex(0);
+        }
     }
 
     if (part && part->nstaves() > 1) {
@@ -702,7 +707,10 @@ void MnxExporter::createArpeggios(const Part* part, const Measure* measure, mnx:
     }
 }
 
-static void splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector<SymId>& symIds, String& suffix)
+/// Splits a dynamic's text into leading text, SMuFL glyphs, and trailing text. Returns false,
+/// leaving all three empty, when the text interleaves glyphs and words in a way MNX cannot
+/// describe -- the caller must not export a partial reading of it.
+static bool splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector<SymId>& symIds, String& suffix)
 {
     const auto engravingFonts = [&]() -> std::shared_ptr<mu::engraving::IEngravingFontsProvider> {
         return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("engraving");
@@ -714,7 +722,12 @@ static void splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector
         const CharFormat& format = fragment.format;
         if (format.fontFamily() == u"ScoreText") {
             if (gotSuffix) {
-                return; // can't encode a dynamic with multiple glyph sequences separated by text.
+                // Can't encode a dynamic with multiple glyph sequences separated by text.
+                // Clear everything so a partial reading cannot be mistaken for a whole one.
+                prefix.clear();
+                suffix.clear();
+                symIds.clear();
+                return false;
             }
             for (size_t i = 0; i < fragment.text.size(); ++i) {
                 const Char ch = fragment.text.at(i);
@@ -735,6 +748,7 @@ static void splitDynamicText(const Dynamic* dynamic, String& prefix, std::vector
     }
     prefix = prefix.trimmed();
     suffix = suffix.trimmed();
+    return true;
 }
 
 //---------------------------------------------------------
@@ -752,7 +766,10 @@ static void createDynamic(const Dynamic* dynamic, const Fraction& rTick, int mnx
     String prefix{};
     String suffix{};
     std::vector<SymId> symIds{};
-    splitDynamicText(dynamic, prefix, symIds, suffix);
+    if (!splitDynamicText(dynamic, prefix, symIds, suffix)) {
+        LOGI() << "Dynamic \"" << dynamic->plainText() << "\" mixes glyphs and text in a way MNX cannot describe; not exported.";
+        return;
+    }
 
     bool sawIncrease{};
     bool sawDecrease{};

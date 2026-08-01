@@ -27,7 +27,7 @@ This directory contains source files used to regenerate MNX project test cases w
     which is most of a Finale document's style and font tables rather than notation, and they
     compress roughly 35x. Zipping them keeps the repository small and keeps diffs of this
     directory from swamping unrelated review.
-  - Denigma does not yet read a zipped source, so regenerating requires unzipping first. See below.
+  - Denigma reads `.enigmaxml.zip` directly, so no unzipping step is needed.
 - Conversion:
   - Denigma may be downloaded or built from its [GitHub repository](https://github.com/rpatters1/denigma).
   - Maintaining source material from multiple platforms remains valuable for cross-tool validation.
@@ -43,15 +43,11 @@ schema rejects, the fix belongs in denigma rather than in these files.
 From this directory:
 
 ```sh
-src=$(mktemp -d)                       # a dedicated directory, so --recursive sees only these
-
 # one file
-unzip -o -d "$src" project_sources/arpeggios.enigmaxml.zip
-denigma export "$src/arpeggios.enigmaxml" --mnx project_examples/
+denigma export project_sources/arpeggios.enigmaxml.zip --mnx project_examples/
 
 # all of them
-for z in project_sources/*.enigmaxml.zip; do unzip -o -d "$src" "$z"; done
-denigma export "$src" --mnx project_examples/ --recursive
+denigma export project_sources --mnx project_examples/ --recursive
 ```
 
 Then regenerate the affected `*_ref.mscx` with `MUE_MNX_WRITE_REFS` set and read the diffs
