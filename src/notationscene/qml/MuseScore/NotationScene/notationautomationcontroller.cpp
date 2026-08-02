@@ -30,7 +30,6 @@
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/automation/automationdata.h"
-#include "engraving/automation/automationutils.h"
 #include "engraving/automation/dynamicvalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
@@ -333,15 +332,15 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
 
         // Point in/out values are rescaled to the display range - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = it->second;
-        const mu::engraving::real_t resolvedIn = mu::engraving::resolvedInValue(curve, it);
-        if (resolvedIn == autoPoint.outValue) {
+        const mu::engraving::real_t resolvedIn = mu::engraving::resolveInValue(curve, it);
+        if (resolvedIn == autoPoint.value.outValue) {
             const QPointF qpf(pointXInStaff, 1.0 - automationValueToDisplay(resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpf, PointData::PointType::BOTH));
         } else {
             const QPointF qpfIn(pointXInStaff, 1.0 - automationValueToDisplay(resolvedIn));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfIn, PointData::PointType::IN));
 
-            const QPointF qpfOut(pointXInStaff, 1.0 - automationValueToDisplay(autoPoint.outValue));
+            const QPointF qpfOut(pointXInStaff, 1.0 - automationValueToDisplay(autoPoint.value.outValue));
             points.emplace_back(PointData(currentPointIndex++, tick, qpfOut, PointData::PointType::OUT));
         }
 
@@ -370,10 +369,8 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
     PolylinePointStyle* standard = polyline->standardPointStyle();
     standard->setCenterColor(pointFillColor);
     standard->setOutlineColor(lineColor);
-
-    PolylinePointStyle* hovered = polyline->hoveredPointStyle();
-    hovered->setCenterColor(pointFillColor);
-    hovered->setOutlineColor(lineColor);
+    standard->setCenterColorHovered(pointFillColor);
+    standard->setOutlineColorHovered(lineColor);
 
     PolylinePointStyle* ghost = polyline->ghostPointStyle();
     QColor ghostColor = lineColor;
@@ -406,10 +403,8 @@ void NotationAutomationController::applyPolylineSizes(PolylinePlot* polyline) co
     PolylinePointStyle* standard = polyline->standardPointStyle();
     standard->setCenterRadius(baseStandardRadius * zoomScale);
     standard->setOutlineWidth(lineWidth);
-
-    PolylinePointStyle* hovered = polyline->hoveredPointStyle();
-    hovered->setCenterRadius(baseHoveredRadius * zoomScale);
-    hovered->setOutlineWidth(lineWidth);
+    standard->setCenterRadiusHovered(baseHoveredRadius * zoomScale);
+    standard->setOutlineWidthHovered(lineWidth);
 
     PolylinePointStyle* ghost = polyline->ghostPointStyle();
     ghost->setCenterRadius(baseStandardRadius * zoomScale);
@@ -638,7 +633,7 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return false;
     }
     const mu::engraving::AutomationPoint& existingPoint = existingIt->second;
-    const mu::engraving::real_t existingInValue = mu::engraving::resolvedInValue(curve, existingIt);
+    const mu::engraving::real_t existingInValue = mu::engraving::resolveInValue(curve, existingIt);
 
     //! NOTE: Point in/out values are rescaled to the display range - higher value == lower Y...
     const mu::engraving::real_t newValue = automationValueFromDisplay(1.0 - y);
@@ -652,14 +647,16 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     if (!tickChanged || pointType == PointData::PointType::BOTH) {
         mu::engraving::AutomationPoint editedPoint = existingPoint;
+        const mu::engraving::AutomationPoint::Bend preservedBend
+            = mu::engraving::bend(editedPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
         if (pointType == PointData::PointType::IN) {
             // The user explicitly chose this arrival value; it no longer follows whatever precedes it
-            editedPoint.inValue = newValue;
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newValue, preservedBend };
         } else if (pointType == PointData::PointType::BOTH) {
-            editedPoint.outValue = newValue;
-            editedPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+            editedPoint.value.outValue = newValue;
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { editedPoint.value.outValue, preservedBend };
         } else {
-            editedPoint.outValue = newValue;
+            editedPoint.value.outValue = newValue;
         }
         editedPoint.generated = false;
 
@@ -672,19 +669,21 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return true;
     }
 
-    // oldTick becomes a flat BOTH point via SameAsOut, so its inValue keeps following outValue
-    // even if outValue changes again later
+    // oldTick becomes a flat BOTH point, so its inValue is frozen to outValue at edit time (it no
+    // longer live-tracks outValue if it's edited again later)
+    const mu::engraving::AutomationPoint::Bend originalBend
+        = mu::engraving::bend(existingPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
+
     mu::engraving::AutomationPoint updatedOldPoint = existingPoint;
-    updatedOldPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
     if (pointType == PointData::PointType::OUT) {
-        updatedOldPoint.outValue = existingInValue;
+        updatedOldPoint.value.outValue = existingInValue;
     }
+    updatedOldPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { updatedOldPoint.value.outValue, originalBend };
     updatedOldPoint.generated = false;
 
     mu::engraving::AutomationPoint newPoint;
-    newPoint.outValue = newValue;
-    newPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
-    newPoint.bend = existingPoint.bend;
+    newPoint.value.outValue = newValue;
+    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue, originalBend };
     newPoint.itemId = existingPoint.itemId;
 
     mu::engraving::AutomationPointEdits edits {
@@ -717,8 +716,9 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     }
 
     mu::engraving::AutomationPoint newPoint;
-    newPoint.outValue = automationValueFromDisplay(1.0 - y);
-    newPoint.inValue = mu::engraving::AutomationPoint::SameAsOut {};
+    newPoint.value.outValue = automationValueFromDisplay(1.0 - y);
+    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue,
+                                                                               mu::engraving::AutomationPoint::Bend::none() };
     newPoint.generated = false;
 
     const mu::engraving::AutomationCurveKey curveKey = dynamicsCurveKeyFor(staff);

@@ -37,7 +37,6 @@
 #include "dom/stafftext.h"
 
 #include "engraving/automation/automationdata.h"
-#include "engraving/automation/automationutils.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
@@ -99,13 +98,13 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
         return NATURAL_DYNAMIC_LEVEL;
     }
 
-    const auto nextIt = std::next(it);
-    if (nextIt == curve->cend()) {
-        return toDynamicLevel(it->second.outValue);
+    const auto next = std::next(it);
+    if (next == curve->cend()) {
+        return toDynamicLevel(it->second.value.outValue);
     }
 
-    const double factor = static_cast<double>(nominalPositionTick - it->first) / (nextIt->first - it->first);
-    return toDynamicLevel(evaluateCurveAt(*curve, nextIt, factor));
+    const real_t t = static_cast<real_t>(nominalPositionTick - it->first) / static_cast<real_t>(next->first - it->first);
+    return toDynamicLevel(muse::mpe::evaluateAt(next->second.value, it->second.value.outValue, t));
 }
 
 std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const track_idx_t trackIdx,
@@ -289,24 +288,25 @@ DynamicLevelMap PlaybackContext::buildDynamicLevelMap(const AutomationCurve& cur
     }
 
     for (auto it = curve.cbegin(); it != curve.cend(); ++it) {
-        appendLevel(timestampFromTicks(m_score, it->first), toDynamicLevel(it->second.outValue));
+        appendLevel(timestampFromTicks(m_score, it->first), toDynamicLevel(it->second.value.outValue));
 
         const auto nextIt = std::next(it);
         if (nextIt == curve.cend()) {
             continue;
         }
 
-        const dynamic_level_t baseLvl = toDynamicLevel(it->second.outValue);
-        const dynamic_level_t nextLvl = toDynamicLevel(resolvedInValue(curve, nextIt));
+        const dynamic_level_t baseLvl = toDynamicLevel(it->second.value.outValue);
+        const dynamic_level_t nextLvl = toDynamicLevel(resolveInValue(curve, nextIt));
         const int range = nextLvl - baseLvl;
-        const bool isLinear = nextIt->second.bend.isNone();
+        const std::optional<AutomationPoint::Bend> nextBend = bend(nextIt->second);
+        const bool isLinear = !nextBend || nextBend->isNone();
         if (range == 0 && isLinear) {
             continue;
         }
 
         // nextIt's own curve entry stores outValue, not inValue - if it's a discontinuity, end the ramp
         // one tick early so it still approaches the true target (inValue)
-        const bool nextIsDiscontinuity = !muse::RealIsEqual(resolvedInValue(curve, nextIt), nextIt->second.outValue);
+        const bool nextIsDiscontinuity = !muse::RealIsEqual(resolveInValue(curve, nextIt), nextIt->second.value.outValue);
         const utick_t targetTick = nextIsDiscontinuity ? nextIt->first - 1 : nextIt->first;
         const int intervalDuration = targetTick - it->first;
         const int steps = std::max(intervalDuration / (Constants::DIVISION / 4), 24);
@@ -325,7 +325,7 @@ DynamicLevelMap PlaybackContext::buildDynamicLevelMap(const AutomationCurve& cur
             if (isLinear) {
                 level = static_cast<dynamic_level_t>(std::lround(baseLvl + t * range));
             } else {
-                level = toDynamicLevel(evaluateCurveAt(curve, nextIt, t));
+                level = toDynamicLevel(muse::mpe::evaluateAt(nextIt->second.value, it->second.value.outValue, t));
             }
             appendLevel(timestampFromTicks(m_score, tick), level);
         }
