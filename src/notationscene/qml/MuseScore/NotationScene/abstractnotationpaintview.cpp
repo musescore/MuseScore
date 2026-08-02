@@ -40,6 +40,7 @@
 #include "engraving/dom/system.h"
 #include "engraving/style/styledef.h"
 #include "engraving/types/types.h"
+#include "project/inotationproject.h"
 #include "project/iprojectvideosettings.h"
 #include "log.h"
 
