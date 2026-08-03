@@ -49,6 +49,7 @@
 #include "measure.h"
 #include "measurerepeat.h"
 #include "note.h"
+#include "parenthesis.h"
 #include "part.h"
 #include "rest.h"
 #include "score.h"
@@ -291,9 +292,16 @@ bool Score::cmdRepeatListSelection()
     std::unordered_set<const Chord*> foundChords;
 
     // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
-    // new notes have been created we can call cmdAddParentheses on each group...
+    // new notes have been created we can call cmdAddParentheses on each group then set their offset & visibility
     using NoteList = std::list<Note*>;
-    std::unordered_map</*leftParen*/ const Parenthesis*, NoteList> parenMap;
+    struct ParenGroup {
+        NoteList notes;
+        bool leftVisible = true;
+        bool rightVisible = true;
+        PointF leftOffset;
+        PointF rightOffset;
+    };
+    std::unordered_map</*leftParen*/ const Parenthesis*, ParenGroup> parenMap;
 
     for (Note* n : notes) {
         if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
@@ -331,6 +339,8 @@ bool Score::cmdRepeatListSelection()
             continue;
         }
 
+        newNote->undoChangeProperty(Pid::VISIBLE, n->visible());
+
         Chord* newChord = newNote->chord();
 
         newChord->updateArticulations(sourceChord->articulationSymbolIds());
@@ -345,8 +355,13 @@ bool Score::cmdRepeatListSelection()
 
         toSelect.push_back(newNote);
 
-        const Parenthesis* leftParen = n->parenthesisInfo() ? n->parenthesisInfo()->leftParen() : nullptr;
+        const NoteParenthesisInfo* parenInfo = n->parenthesisInfo();
+        const Parenthesis* leftParen = parenInfo ? parenInfo->leftParen() : nullptr;
         if (!leftParen) {
+            continue;
+        }
+        const Parenthesis* rightParen = parenInfo->rightParen();
+        IF_ASSERT_FAILED(rightParen) {
             continue;
         }
 
@@ -366,16 +381,45 @@ bool Score::cmdRepeatListSelection()
 
         auto search = parenMap.find(leftParen);
         if (search != parenMap.end()) {
-            NoteList& nl = search->second;
+            NoteList& nl = search->second.notes;
             nl.insert(nl.end(), notesForParen.begin(), notesForParen.end());
             continue;
         }
 
-        parenMap.emplace(leftParen, notesForParen);
+        ParenGroup group;
+        group.notes = std::move(notesForParen);
+        group.leftVisible = leftParen->visible();
+        group.rightVisible = rightParen->visible();
+        group.leftOffset = leftParen->offset();
+        group.rightOffset = rightParen->offset();
+        parenMap.emplace(leftParen, std::move(group));
     }
 
     for (auto& pair : parenMap) {
-        cmdAddParenthesesToNotes(pair.second);
+        ParenGroup& group = pair.second;
+        cmdAddParenthesesToNotes(group.notes);
+
+        // Restore the original parentheses' visibility and offset on each newly-created pair...
+        std::unordered_set<const Parenthesis*> processedParens;
+        for (Note* note : group.notes) {
+            const NoteParenthesisInfo* newParenInfo = note->parenthesisInfo();
+            Parenthesis* newLeftParen = newParenInfo ? newParenInfo->leftParen() : nullptr;
+            if (!newLeftParen || muse::contains(processedParens, static_cast<const Parenthesis*>(newLeftParen))) {
+                continue;
+            }
+            processedParens.insert(newLeftParen);
+
+            newLeftParen->undoSetVisible(group.leftVisible);
+            newLeftParen->undoChangeProperty(Pid::OFFSET, group.leftOffset);
+
+            Parenthesis* newRightParen = newParenInfo->rightParen();
+            IF_ASSERT_FAILED(newRightParen) {
+                continue;
+            }
+
+            newRightParen->undoSetVisible(group.rightVisible);
+            newRightParen->undoChangeProperty(Pid::OFFSET, group.rightOffset);
+        }
     }
 
     select(toSelect, SelectType::ADD);
