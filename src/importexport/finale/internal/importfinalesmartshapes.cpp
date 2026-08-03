@@ -1086,6 +1086,10 @@ void FinaleParser::importSmartShapes()
             setAndStyleProperty(newSpanner, Pid::DIRECTION, newSpanner->placeAbove() ? DirectionV::UP : DirectionV::DOWN);
         }
 
+        for (SpannerSegment* ss : newSpanner->spannerSegments()) {
+            ss->roffset() -= ss->defaultPos();
+        }
+
         /// @todo declare hairpin placement in hairpin elementStyle?
         if (type == ElementType::HAIRPIN && toHairpin(newSpanner)->isLineType() && newSpanner->isStyled(Pid::HAIRPIN_HEIGHT)) {
             // If not otherwise set, determine hairpin height by length

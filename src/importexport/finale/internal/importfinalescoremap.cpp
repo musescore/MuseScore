@@ -35,7 +35,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/chord.h"
@@ -68,6 +68,8 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/editstaffbrackets.h"
 
 #include "engraving/types/symnames.h"
 
@@ -524,7 +526,7 @@ void FinaleParser::importBrackets()
         int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
-        m_score->staff(startStaffIdx)->addBracket(bi);
+        EditStaffBrackets::addBracket(m_score, startStaffIdx, bi);
         if (bi->bracketType() == BracketType::BRACE) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 m_stavesWithPianoBraces.at(idx) = true;

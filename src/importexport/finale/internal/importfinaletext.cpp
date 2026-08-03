@@ -1084,7 +1084,7 @@ void FinaleParser::importTextExpressions()
                 if (expr->hasVoiceAssignmentProperties()) {
                     setAndStyleProperty(expr, Pid::DIRECTION, expr->placeAbove() ? DirectionV::UP : DirectionV::DOWN, true);
                 }
-                setAndStyleProperty(expr, Pid::OFFSET, p);
+                setAndStyleProperty(expr, Pid::OFFSET, p - expr->defaultPos());
             };
             positionExpression(item, expressionAssignment);
             collectElementStyle(item);
@@ -1181,7 +1181,7 @@ void FinaleParser::importTextExpressions()
                 text->setVisible(!measureTextAssign->hidden);
                 setAndStyleProperty(text, Pid::SIZE_SPATIUM_DEPENDENT, false);
                 text->setAutoplace(false);
-                PointF p = evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp);
+                PointF p = evpuToPointF(rTick.isZero() ? measureTextAssign->xDispEvpu : 0, -measureTextAssign->yDisp) - text->defaultPos();
                 setAndStyleProperty(text, Pid::OFFSET, p * text->defaultSpatium(), true);
                 /// @todo Account for Finale's weird handle placement. Anyhow, the following line gets us close. Measure Text is always aligned as follows.
                 /// It can have different justification (i.e., a multiline centered text) but the handle is always left aligned.
@@ -1308,7 +1308,8 @@ void FinaleParser::importTextExpressions()
                             }
                         }
                         setAndStyleProperty(lyric, Pid::OFFSET,
-                                            PointF(evpuToLocalDouble(musxLyric->horzOffset, lyric), yPos + crossStaffOffset));
+                                            PointF(evpuToLocalDouble(musxLyric->horzOffset, lyric), yPos + crossStaffOffset)
+                                            - lyric->defaultPos());
                     }
 
                     if (musxLyric->displayVerseNum) {
@@ -1426,7 +1427,7 @@ void FinaleParser::importJumps()
                     setAndStyleProperty(repeatMarking, Pid::PLACEMENT, PlacementV::BELOW, true);
                     point.ry() -= repeatMarking->staff()->staffHeight(measure->tick());
                 }
-                setAndStyleProperty(repeatMarking, Pid::OFFSET, point);
+                setAndStyleProperty(repeatMarking, Pid::OFFSET, point - repeatMarking->defaultPos());
             };
 
             if (importCustomPositions()) {
@@ -1790,7 +1791,7 @@ void FinaleParser::importPageTexts()
             setAndStyleProperty(text, Pid::POSITION, hAlignment, true);
             text->score()->renderer()->layoutItem(text);
             PointF p = pagePosOfPageTextAssign(page, pageTextAssign, text->ldata()->bbox());
-            setAndStyleProperty(text, Pid::OFFSET, mb->isBox() ? p : p - mb->pagePos());
+            setAndStyleProperty(text, Pid::OFFSET, (mb->isBox() ? p : p - mb->pagePos()) - text->defaultPos());
             FrameSettings frameSettings(pageTextAssign->getTextBlock().get());
             frameSettings.setFrameProperties(text);
             collectElementStyle(text);
@@ -2160,7 +2161,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                 PointF fbOffset = evpuToPointF(chordAssignment->fbHorzOff, -chordAssignment->fbVertOff) * m_score->style().spatium();
                 fbOffset.ry() -= (fbBaselinepos - staffReferenceOffset); /// @todo set this as style?
                 offset.ry() -= fbOffset.y(); /// @todo also diagram height?
-                setAndStyleProperty(fret, Pid::OFFSET, fbOffset, true);
+                setAndStyleProperty(fret, Pid::OFFSET, fbOffset - fret->defaultPos(), true);
             }
             if (!chordAssignment->useFretboardFont) {
                 if (const MusxInstance<others::FretboardStyle>& fretboardStyle = chordAssignment->getFretboardStyle()) {
@@ -2168,7 +2169,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
                     setAndStyleProperty(fret, Pid::FRET_NUT, fretboardStyle->nutWidth > 0);
                     if (importCustomPositions()) {
                         PointF fretOffset(efixToSp(fretboardStyle->horzHandleOff), efixToSp(fretboardStyle->vertHandleOff));
-                        setAndStyleProperty(fret, Pid::OFFSET, fretOffset * m_score->style().spatium()); // bind vertical to fretY
+                        setAndStyleProperty(fret, Pid::OFFSET, (fretOffset * m_score->style().spatium()) - fret->defaultPos()); // bind vertical to fretY
                     }
                     String suffix = String::fromStdString(fretboardStyle->fretNumText);
                     collectGlobalProperty(Sid::fretUseCustomSuffix, !suffix.empty());
@@ -2239,7 +2240,7 @@ void FinaleParser::importChordsFrets(const StaffCmper musxStaffId, const MeasCmp
         double harmonyFontSize = h->propertyDefault(Pid::FONT_SIZE).toDouble() * doubleFromPercent(chordAssignment->chPercent);
         setAndStyleProperty(h, Pid::FONT_SIZE, harmonyFontSize, true);
         if (importCustomPositions()) {
-            setAndStyleProperty(h, Pid::OFFSET, offset, true); /// @todo positioning relative to fretboard
+            setAndStyleProperty(h, Pid::OFFSET, offset - h->defaultPos(), true); /// @todo positioning relative to fretboard
         }
         if (fret) {
             s->add(fret);
