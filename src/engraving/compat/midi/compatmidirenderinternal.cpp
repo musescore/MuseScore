@@ -400,8 +400,17 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
         note = tieFor->endNote();
     }
 
-    while (note->bendFor()) {
+    while (note->bendFor() || note->tieForNonPartial()) {
         const GuitarBend* bendFor = note->bendFor();
+        if (!bendFor) {
+            const Tie* tieFor = note->tieForNonPartial();
+            if (tieFor && tieFor->endNote() && tieFor->endNote() != note) {
+                note = tieFor->endNote();
+                continue;
+            }
+            break;
+        }
+
         const Note* endNote = bendFor->endNote();
         if (!endNote || note == endNote) {
             LOGE() << "cannot find end bend note for note on track " << note->track() << ", tick " << note->tick().ticks();
@@ -502,6 +511,12 @@ static void collectGuitarBend(const Note* note,
                 }
 
                 double tickDelta = duration * (bendPlaybackInfo.endTimeFactor - bendPlaybackInfo.startTimeFactor);
+                if (muse::is_zero(tickDelta)) {
+                    quarterOffsetFromStartNote += currentQuarterTones;
+                    curPitchBendSegmentStart += duration;
+                    note = endNote;
+                    continue;
+                }
                 double a = currentQuarterTones / 2.0 / (tickDelta * tickDelta);
                 double b = initialPitchBendValue;
                 auto bendFunc = [startTick = bendPlaybackInfo.startTick, scale, a, b] (uint32_t tick) {
