@@ -777,7 +777,7 @@ public:
     QList<CapSystem*> systems;
     QList<CapBracket> brackets;
     ChordObj* backgroundChord;
-    CapStaffLayout* staffLayout(int idx) { return _staffLayouts[idx]; }
+    CapStaffLayout* staffLayout(int idx);
     const QList<CapStaffLayout*>& staffLayouts() const { return _staffLayouts; }
 
     double smallLineDist;              // spatium unit in metric mm
