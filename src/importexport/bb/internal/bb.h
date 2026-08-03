@@ -150,6 +150,11 @@ class BBFile
 
     int timesigZ() { return styles[_style].timesigZ; }
     int timesigN() { return styles[_style].timesigN; }
+    bool checkRange(int idx, int n) const
+    {
+        return idx >= 0 && n >= 0 && n <= size && idx <= size - n;
+    }
+
     engraving::Fraction processPendingNotes(engraving::Score*, QList<MNote*>* notes, const engraving::Fraction&, int);
 
 public:
