@@ -183,6 +183,14 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
         mscWriter.writeStyleFile(excerptStyleData);
     }
 
+    // Add the master score's metaTags to the part
+    const std::map<String, String> partTags = partScore->metaTags();
+    std::map<String, String> effectiveTags = partScore->masterScore()->metaTags();
+    for (const auto& [key, val] : partTags) {
+        effectiveTags.insert_or_assign(key, val);
+    }
+    partScore->setMetaTags(effectiveTags);
+
     // Write excerpt as main score
     {
         ByteArray excerptData;
@@ -193,6 +201,9 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
 
         mscWriter.writeScoreFile(excerptData);
     }
+
+    // restore in-memory part score's metaTags
+    partScore->setMetaTags(partTags);
 
     // Write thumbnail
     {
