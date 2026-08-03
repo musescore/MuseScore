@@ -37,6 +37,8 @@ struct Interval {
     Interval(int chromatic);
 
     void flip();
+    void reduce();
+    Interval reduced();
     bool isZero() const;
     bool operator!=(const Interval& a) const { return diatonic != a.diatonic || chromatic != a.chromatic; }
     bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
