@@ -1200,6 +1200,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         CAPELLA_TRACE("System:");
         for (CapStaff* cstaff : csys->staves) {
             CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
+            if (!cl) {
+                throw Capella::Error::BAD_FORMAT;
+            }
             CAPELLA_TRACE("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                           qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
                           qPrintable(cl->intermediateName), qPrintable(cl->intermediateAbbrev),
@@ -1237,6 +1240,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     Part* part = 0;
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         CapStaffLayout* cl = cap->staffLayout(staffIdx);
+        if (!cl) {
+            throw Capella::Error::BAD_FORMAT;
+        }
         // CAPELLA_TRACE("MIDI staff %d program %d", staffIdx, cl->sound);
 
         // create a new part if necessary
@@ -1371,6 +1377,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
             CAPELLA_TRACE("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
             int staffIdx = cstaff->iLayout;
+            if (!score->staff(staffIdx)) {
+                continue;
+            }
             for (CapVoice* cvoice : cstaff->voices) {
                 Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                 if (tick > mtick) {
@@ -2749,6 +2758,14 @@ QPointF Capella::readPoint()
     return QPointF(double(x), double(y));
 }
 
+CapStaffLayout* Capella::staffLayout(int idx)
+{
+    if (idx < 0 || idx >= _staffLayouts.size()) {
+        return nullptr;
+    }
+    return _staffLayouts[idx];
+}
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -2848,6 +2865,8 @@ Err importCapella(MasterScore* score, const QString& name)
     Capella cf;
     try {
         cf.read(&fp);
+        fp.close();
+        convertCapella(score, &cf, false);
     }
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
@@ -2859,8 +2878,6 @@ Err importCapella(MasterScore* score, const QString& name)
         // avoid another error message box
         return Err::NoError;
     }
-    fp.close();
-    convertCapella(score, &cf, false);
     return Err::NoError;
 }
 }

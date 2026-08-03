@@ -1435,7 +1435,13 @@ Err importCapXml(MasterScore* score, const QString& name)
         }
     }
 
-    convertCapella(score, &cf, true);
+    try {
+        convertCapella(score, &cf, true);
+    }
+    catch (Capella::Error) {
+        // avoid another error message box
+        return Err::NoError;
+    }
     return Err::NoError;
 }
 }
