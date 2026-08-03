@@ -1498,6 +1498,10 @@ bool GuitarPro2::read(IODevice* io)
         }
         /*int midiPort     =*/ readInt();     //  - 1;
         int midiChannel  = readInt() - 1;
+        if (midiChannel < 0 || midiChannel >= static_cast<int>(channelDefaults.size())) {
+            LOGE() << "midiChannel " << midiChannel << " out of range 0-" << channelDefaults.size();
+            return false;
+        }
         /*int midiChannel2 =*/ readInt();     // - 1;
         int frets        = readInt();
         int capo         = readInt();
@@ -2246,6 +2250,10 @@ bool GuitarPro3::read(IODevice* io)
         }
         int midiPort     = readInt() - 1;
         int midiChannel  = readInt() - 1;
+        if (midiChannel < 0 || midiChannel >= static_cast<int>(channelDefaults.size())) {
+            LOGE() << "midiChannel " << midiChannel << " out of range 0-" << channelDefaults.size();
+            return false;
+        }
         /*int midiChannel2 =*/ readInt();     // - 1;
         int frets        = readInt();
         int capo         = readInt();
