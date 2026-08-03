@@ -1187,3 +1187,70 @@ TEST_F(MidiRendererBend_Tests, preDiveMultiSegment)
     EXPECT_TRUE(events[0].empty());
 }
 
+TEST_F(MidiRendererBend_Tests, diveGraceAfterWithTie)
+{
+    constexpr int defVol = 96;
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"dive_grace_after_with_tie.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 66);
+
+    checkEventInterval(events, 1440, 2399, 57, defVol);
+
+    /// PRE_DIVE instant offset
+    checkPitchBend(events, 1440, 1366);
+
+    /// return parabola to neutral
+    checkPitchBend(events, 1680, 1366);
+    checkPitchBend(events, 1690, 1410);
+    checkPitchBend(events, 1700, 1543);
+    checkPitchBend(events, 1710, 1765);
+    checkPitchBend(events, 1720, 2076);
+    checkPitchBend(events, 1730, 2476);
+    checkPitchBend(events, 1740, 2964);
+    checkPitchBend(events, 1750, 3541);
+    checkPitchBend(events, 1760, 4207);
+    checkPitchBend(events, 1770, 4962);
+    checkPitchBend(events, 1780, 5806);
+    checkPitchBend(events, 1790, 6738);
+    checkPitchBend(events, 1800, 7759);
+    checkPitchBend(events, 1810, 8192);
+
+    /// dive parabola
+    checkPitchBend(events, 1920, 8192);
+    checkPitchBend(events, 1930, 8174);
+    checkPitchBend(events, 1940, 8118);
+    checkPitchBend(events, 1950, 8026);
+    checkPitchBend(events, 1960, 7896);
+    checkPitchBend(events, 1970, 7730);
+    checkPitchBend(events, 1980, 7526);
+    checkPitchBend(events, 1990, 7285);
+    checkPitchBend(events, 2000, 7007);
+    checkPitchBend(events, 2010, 6692);
+    checkPitchBend(events, 2020, 6341);
+    checkPitchBend(events, 2030, 5952);
+    checkPitchBend(events, 2040, 5526);
+    checkPitchBend(events, 2050, 5063);
+    checkPitchBend(events, 2060, 4563);
+    checkPitchBend(events, 2070, 4026);
+    checkPitchBend(events, 2080, 3452);
+    checkPitchBend(events, 2090, 2841);
+    checkPitchBend(events, 2100, 2192);
+    checkPitchBend(events, 2110, 1507);
+
+    /// plateau at bottom
+    checkPitchBendInterval(events, 2120, 2350, 10, 1366);
+
+    /// steep return at end
+    checkPitchBend(events, 2360, 1434);
+    checkPitchBend(events, 2370, 2202);
+    checkPitchBend(events, 2380, 3823);
+    checkPitchBend(events, 2390, 6298);
+
+    /// PB reset after NoteOff
+    checkPitchBend(events, 2400, pwReset);
+
+    EXPECT_TRUE(events[0].empty());
+}
