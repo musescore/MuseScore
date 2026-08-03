@@ -135,6 +135,10 @@ bool BBFile::read(const QString& name)
     //---------------------------------------------------
 
     int idx = 0;
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (version)";
+        return false;
+    }
     _version = a[idx++];
     switch (_version) {
     case 0x43:
@@ -156,7 +160,15 @@ bool BBFile::read(const QString& name)
     //    read title
     //---------------------------------------------------
 
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (title length)";
+        return false;
+    }
     int len = a[idx++];
+    if (!checkRange(idx, len)) {
+        LOGE() << "BB: truncated file (title)";
+        return false;
+    }
     _title  = new char[len + 1];
     for (int i = 0; i < len; ++i) {
         _title[i] = a[idx++];
@@ -167,11 +179,19 @@ bool BBFile::read(const QString& name)
     //    read style(timesig), key and bpm
     //---------------------------------------------------
 
+    if (!checkRange(idx, 3)) {
+        LOGE() << "BB: truncated file (style)";
+        return false;
+    }
     ++idx;
     ++idx;
     _style = a[idx++] - 1;
     if (_style < 0 || _style >= int(sizeof(styles) / sizeof(*styles))) {
         LOGD("Import bb: unknown style %d", _style + 1);
+        return false;
+    }
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (key)";
         return false;
     }
     _key = a[idx++];
@@ -189,6 +209,10 @@ bool BBFile::read(const QString& name)
     }
     _key = kt[_key];
 
+    if (!checkRange(idx, 2)) {
+        LOGE() << "BB: truncated file (bpm)";
+        return false;
+    }
     _bpm = a[idx] + (a[idx + 1] << 8);
     idx += 2;
 
@@ -202,10 +226,22 @@ bool BBFile::read(const QString& name)
     //    read bar types
     //---------------------------------------------------
 
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (bar start)";
+        return false;
+    }
     int bar = a[idx++];             // starting bar number
     while (bar < 255) {
+        if (!checkRange(idx, 1)) {
+            LOGE() << "BB: truncated file (bar type)";
+            return false;
+        }
         int val = a[idx++];
         if (val == 0) {
+            if (!checkRange(idx, 1)) {
+                LOGE() << "BB: truncated file (bar run-length)";
+                return false;
+            }
             bar += a[idx++];
         } else {
             LOGD("bar type: bar %d val %d", bar, val);
@@ -219,8 +255,16 @@ bool BBFile::read(const QString& name)
 
     int beat;
     for (beat = 0; beat < MAX_BARS * 4;) {
+        if (!checkRange(idx, 1)) {
+            LOGE() << "BB: truncated file (chord extension)";
+            return false;
+        }
         int val = a[idx++];
         if (val == 0) {
+            if (!checkRange(idx, 1)) {
+                LOGE() << "BB: truncated file (chord ext run-length)";
+                return false;
+            }
             beat += a[idx++];
         } else {
             BBChord c;
@@ -238,8 +282,16 @@ bool BBFile::read(const QString& name)
     int roots = 0;
     int maxbeat = 0;
     for (beat = 0; beat < MAX_BARS * 4;) {
+        if (!checkRange(idx, 1)) {
+            LOGE() << "BB: truncated file (chord root)";
+            return false;
+        }
         int val = a[idx++];
         if (val == 0) {
+            if (!checkRange(idx, 1)) {
+                LOGE() << "BB: truncated file (chord root run-length)";
+                return false;
+            }
             beat += a[idx++];
         } else {
             int root = val % 18;
@@ -248,6 +300,10 @@ bool BBFile::read(const QString& name)
                 bass = 0;
             }
             int ibeat = beat * (timesigZ() / timesigN());
+            if (roots >= _chords.size()) {
+                LOGE() << "BB: chord root/extension count mismatch";
+                return false;
+            }
             if (ibeat != _chords[roots].beat) {
                 LOGD("import bb: inconsistent chord type and root beat");
                 return false;
@@ -270,11 +326,19 @@ bool BBFile::read(const QString& name)
     }
     LOGD("Measures %d", _measures);
 
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (chorus marker)";
+        return false;
+    }
     if (a[idx] == 1) {              //??
         LOGD("Skip 0x%02x at 0x%04x", a[idx], idx);
         ++idx;
     }
 
+    if (!checkRange(idx, 3)) {
+        LOGE() << "BB: truncated file (chorus/repeats)";
+        return false;
+    }
     _startChorus = a[idx++];
     _endChorus   = a[idx++];
     _repeats     = a[idx++];
@@ -295,8 +359,11 @@ bool BBFile::read(const QString& name)
     bool found = false;
     for (int i = idx; i < size; ++i) {
         if (a[i] == 0x42) {
-            if (a[i + 1] < 16) {
+            if (checkRange(i, 2) && a[i + 1] < 16) {
                 for (int k = i + 2; k < (i + 18); ++k) {
+                    if (!checkRange(k, 4)) {
+                        break;
+                    }
                     if (a[k] == '.' && a[k + 1] == 'S' && a[k + 2] == 'T' && a[k + 3] == 'Y') {
                         found = true;
                         break;
@@ -315,7 +382,15 @@ bool BBFile::read(const QString& name)
     }
 
     LOGD("read styleName at 0x%x", idx);
+    if (!checkRange(idx, 1)) {
+        LOGE() << "BB: truncated file (style name length)";
+        return false;
+    }
     len = a[idx++];
+    if (!checkRange(idx, len)) {
+        LOGE() << "BB: truncated file (style name)";
+        return false;
+    }
     _styleName = new char[len + 1];
 
     for (int i = 0; i < len; ++i) {
@@ -326,6 +401,10 @@ bool BBFile::read(const QString& name)
     LOGD("style name <%s>", _styleName);
 
     // read midi events
+    if (!checkRange(size - 4, 4)) {
+        LOGE() << "BB: truncated file (event header)";
+        return false;
+    }
     int eventStart = a[size - 4] + a[size - 3] * 256;
     int eventCount = a[size - 2] + a[size - 1] * 256;
 
