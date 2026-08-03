@@ -28,6 +28,8 @@
 #include <QFile>
 #include <QtMath>
 
+#include <limits>
+
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/box.h"
@@ -1472,9 +1474,14 @@ void TextObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
+    if (size == std::numeric_limits<unsigned>::max()) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     std::vector<char> vtxt(size + 1);
     char* txt = vtxt.data();
-    cap->read(txt, size);
+    if (!cap->read(txt, size)) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     txt[size] = 0;
     text = QString(txt);
     // CAPELLA_TRACE("read textObj len %d <%s>", size, txt);
@@ -2142,8 +2149,14 @@ int Capella::readInt()
 char* Capella::readString()
 {
     unsigned len = readUnsigned();
+    if (len == std::numeric_limits<unsigned>::max()) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     char* buffer = new char[static_cast<size_t>(len) + 1];
-    read(buffer, len);
+    if (!read(buffer, len)) {
+        delete[] buffer;
+        throw Capella::Error::BAD_FORMAT;
+    }
     buffer[len] = 0;
     return buffer;
 }
