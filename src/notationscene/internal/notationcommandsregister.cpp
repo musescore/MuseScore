@@ -700,6 +700,16 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        ADD_DRUM_NOTE_COMMAND,
+        TranslatableString("action", "Add drum note"),
+        TranslatableString("action", "Add drum note"),
+        InputSchema({
+            { "pitch", Arg(DataType::Integer, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
+            { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
         ENTER_NOTE_C_COMMAND,
         noteC,
         Enter_note_X.arg(noteC),

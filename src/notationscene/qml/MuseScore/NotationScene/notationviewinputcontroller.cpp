@@ -1062,11 +1062,10 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
         return false;
     }
 
-    NoteInputParams params;
-    params.drumPitch = pitchToWrite;
-
-    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
-    dispatcher()->dispatch("note-action", args);
+    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
+    query.set("pitch", muse::Val(pitchToWrite));
+    query.set("mode", muse::Val(str_conv(addingMode)));
+    commandDispatcher()->dispatch(query);
 
     return true;
 }
