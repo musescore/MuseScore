@@ -575,7 +575,7 @@ Err importBB(MasterScore* score, const QString& name)
     if (!measureB->isVBox()) {
         measureB = Factory::createTitleVBox(score);
         measureB->setNext(score->first());
-        score->measures()->append(measureB);
+        score->measures()->add(measureB);
     }
     measureB->add(text);
 
@@ -583,7 +583,7 @@ Err importBB(MasterScore* score, const QString& name)
     //    create chord symbols
     //---------------------------------------------------
 
-    static const int table[] = {
+    static const std::array<int, 17> table = {
         //C  Db, D,  Eb,  E, F, Gb, G,  Ab, A,  Bb, B,  C#, D#, F#  G#  A#
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
     };
@@ -595,12 +595,16 @@ Err importBB(MasterScore* score, const QString& name)
             LOGD("import BB: measure for tick %d not found", tick.ticks());
             continue;
         }
+        if (c.root <= 0 || c.root > table.size()) {
+            LOGE() << "Chord root out of range";
+            continue;
+        }
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
         Harmony* h = Factory::createHarmony(s);
-        HarmonyInfo* info = new HarmonyInfo(score);
         h->setTrack(0);
+        HarmonyInfo* info = new HarmonyInfo(score);
         info->setRootTpc(table[c.root - 1]);
-        if (c.bass > 0) {
+        if (c.bass > 0 && c.bass <= table.size()) {
             info->setBassTpc(table[c.bass - 1]);
         } else {
             info->setBassTpc(Tpc::TPC_INVALID);
