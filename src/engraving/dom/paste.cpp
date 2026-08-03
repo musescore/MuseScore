@@ -339,6 +339,8 @@ bool Score::cmdRepeatListSelection()
             continue;
         }
 
+        newNote->undoChangeProperty(Pid::VISIBLE, n->visible());
+
         Chord* newChord = newNote->chord();
 
         newChord->updateArticulations(sourceChord->articulationSymbolIds());
