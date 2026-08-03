@@ -517,7 +517,9 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
 
 void GuitarPro::addDynamic(Note* note, int d)
 {
-    if (d < 0) {
+    // guitar pro only allows their users to go from ppp to fff
+    static const std::array<String, 9> map_dyn { u"f", u"ppp", u"pp", u"p", u"mp", u"mf", u"f", u"ff", u"fff" };
+    if (d < 0 || static_cast<size_t>(d) >= map_dyn.size()) {
         return;
     }
     if (!note->chord()) {
@@ -533,8 +535,6 @@ void GuitarPro::addDynamic(Note* note, int d)
     }
     if (!s->findAnnotation(ElementType::DYNAMIC, note->staffIdx() * VOICES, note->staffIdx() * VOICES + VOICES - 1)) {
         Dynamic* dyn = new Dynamic(s);
-        // guitar pro only allows their users to go from ppp to fff
-        const String map_dyn[] = { u"f", u"ppp", u"pp", u"p", u"mp", u"mf", u"f", u"ff", u"fff" };
         dyn->setDynamicType(map_dyn[d]);
         dyn->setTrack(note->track());
         s->add(dyn);
