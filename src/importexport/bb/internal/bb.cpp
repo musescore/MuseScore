@@ -328,6 +328,8 @@ bool BBFile::read(const QString& name)
     int eventStart = a[size - 4] + a[size - 3] * 256;
     int eventCount = a[size - 2] + a[size - 1] * 256;
 
+    const int EVENT_END_BOUNDARY = size - 4;
+
     Fraction endTick = Fraction::fromTicks(_measures * bbDivision * 4 * timesigZ() / timesigN());
 
     if (eventCount == 0) {
@@ -339,6 +341,10 @@ bool BBFile::read(const QString& name)
         int i = 0;
         int lastLen = 0;
         for (i = 0; i < eventCount; ++i, idx+=12) {
+            if (idx + 12 > EVENT_END_BOUNDARY) {
+                LOGE() << "Event out of range";
+                return false;
+            }
             int type = a[idx + 4] & 0xf0;
             if (type == 0x90) {
                 int channel = a[idx + 7];
