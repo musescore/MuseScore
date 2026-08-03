@@ -771,10 +771,13 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             }
             // LOGD("clef %hhd off %d", clef, off);
 
-            static int keyOffsets[15] = {
+            static std::array<int, 15> keyOffsets = {
                 /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
                 /* */ 7, 4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 0
             };
+            if (int(key) + 7 >= keyOffsets.size()) {
+                throw Capella::Error::BAD_FORMAT;
+            }
             off += keyOffsets[int(key) + 7];
 
             for (const CNote& n : o->notes) {
