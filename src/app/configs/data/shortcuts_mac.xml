@@ -857,6 +857,10 @@
     <seq>Ctrl+R</seq>
     </SC>
   <SC>
+    <key>freeze-current-placement</key>
+    <seq>Ctrl+Alt+Shift+F</seq>
+    </SC>
+  <SC>
     <key>show-keys</key>
     <seq>Shift+F2</seq>
     </SC>

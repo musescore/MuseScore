@@ -118,6 +118,7 @@
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
 #include "engraving/editing/editpagelocks.h"
+#include "engraving/editing/editposition.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
@@ -6433,6 +6434,20 @@ void NotationInteraction::resetShapesAndPosition()
     for (EngravingItem* item : selection()->elements()) {
         resetItem(item);
     }
+}
+
+void NotationInteraction::freezeSelectionPosition()
+{
+    std::vector<EngravingItem*> items = selection()->elements();
+    if (items.empty()) {
+        return;
+    }
+
+    transaction(TranslatableString("undoableAction", "Freeze current placement"), [&](mu::engraving::Transaction& tx) {
+        EditPosition::freezeItemsPositions(tx, items);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::resetToDefaultLayout()
