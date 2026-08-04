@@ -1025,7 +1025,7 @@ void FinaleParser::importSmartShapes()
                 } else if (isStandardOttava) {
                     /// @note ottavas need special handling because we shift endSeg forwards, to account for playback correctly.
                     /// Aside from that, they follow the x-positioning of all other lines.
-                    /// @todo ottavas not ending on CRs or barlines
+                    /// @todo ottavas not ending on CRs or barlines (create timeanchors and use their xpos)
                     if (ss->spanner()->endElement() && ss->spanner()->endElement()->isChordRest()) {
                         endSeg = toChordRest(ss->spanner()->endElement())->segment();
                     }
