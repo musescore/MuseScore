@@ -73,26 +73,6 @@ static muse::real_t automationValueFromDisplay(double displayValue)
     return DISPLAY_VALUE_RANGE_MIN + displayValue * (DISPLAY_VALUE_RANGE_MAX - DISPLAY_VALUE_RANGE_MIN);
 }
 
-// TODO: This will do for now, but it needs to be smarter because there will be gaps between ChordRest/TimeTick segment types (e.g.
-// barlines). This method effectively needs to return the closest segment of the desired type (and probably whether canvasX is before
-// or after the segment). If the canvasX is before the closest segment, then we'll go on to use the start tick of the segment. If it's
-// after, we'll use the end tick of the segment....
-static const Segment* segmentForCanvasX(const System* system, double canvasX)
-{
-    IF_ASSERT_FAILED(system) {
-        return nullptr;
-    }
-    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration;
-    const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
-    while (seg && seg->system() == system) {
-        if (canvasX >= seg->canvasX() && canvasX <= seg->canvasX() + seg->width()) {
-            return seg;
-        }
-        seg = seg->next1(type);
-    }
-    return nullptr;
-}
-
 static const Segment* lastSegmentOfSystem(const System* system)
 {
     const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration;
@@ -105,24 +85,39 @@ static const Segment* lastSegmentOfSystem(const System* system)
     return last;
 }
 
-// Maps an x position (normalized to the staff's canvas rect) to a tick, via whichever segment it
-// falls in; nullopt if it doesn't land in any segment
+// Maps an x position to a tick via linear interpolation between the nearest Duration/barline segments on either side of it
 static std::optional<int> tickFromCanvasX(const System* system, const muse::RectF& staffCanvasRect, qreal x)
 {
-    const double pointCanvasX = staffCanvasRect.x() + x * staffCanvasRect.width();
-    const Segment* seg = segmentForCanvasX(system, pointCanvasX);
-    if (!seg) {
+    IF_ASSERT_FAILED(system) {
         return std::nullopt;
     }
 
-    const double segStartCanvasX = seg->canvasX();
-    const double segEndCanvasX = segStartCanvasX + seg->width();
-    const double segCanvasWidth = segEndCanvasX - segStartCanvasX;
-    const double tickRatio = segCanvasWidth > 0.0 ? (pointCanvasX - segStartCanvasX) / segCanvasWidth : 0.0;
+    const double pointCanvasX = staffCanvasRect.x() + x * staffCanvasRect.width();
+    const mu::engraving::SegmentType type = mu::engraving::SegmentType::Duration | mu::engraving::SegmentType::BarLineTypes;
 
-    const int segStartTick = seg->tick().ticks();
-    const int segEndTick = segStartTick + seg->ticks().ticks();
-    return segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
+    const Segment* prevSeg = nullptr;
+    const Segment* nextSeg = nullptr;
+    for (const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
+         seg && seg->system() == system; seg = seg->next1(type)) {
+        if (seg->canvasX() <= pointCanvasX) {
+            prevSeg = seg;
+        } else {
+            nextSeg = seg;
+            break;
+        }
+    }
+
+    if (!prevSeg) {
+        return nextSeg ? std::make_optional(nextSeg->tick().ticks()) : std::nullopt;
+    }
+
+    // No next segment - use prevSeg's own end as a virtual next point
+    const double nextCanvasX = nextSeg ? nextSeg->canvasX() : prevSeg->canvasX() + prevSeg->width();
+    const int nextTick = nextSeg ? nextSeg->tick().ticks() : prevSeg->tick().ticks() + prevSeg->ticks().ticks();
+    const double canvasSpan = nextCanvasX - prevSeg->canvasX();
+    const double ratio = canvasSpan > 0.0 ? (pointCanvasX - prevSeg->canvasX()) / canvasSpan : 0.0;
+
+    return prevSeg->tick().ticks() + static_cast<int>(ratio * (nextTick - prevSeg->tick().ticks()));
 }
 
 static AutomationCurveKey dynamicsCurveKeyFor(const Staff* staff)
@@ -241,16 +236,24 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
 
+        const auto setPreviewPoint = [polyline, pointIdx](const QPointF& point) {
+            QVector<QPointF> points = polyline->points();
+            points.replace(pointIdx, point);
+            polyline->setPoints(points);
+            polyline->update(); // TODO: pass update rect?
+        };
+
         if (completed) {
-            requestEditPoint(oldPointData, key, clampedX, y);
+            if (!requestEditPoint(oldPointData, key, clampedX, y)) {
+                // Edit was rejected - snap the point back to where it actually is instead of
+                // leaving the live-drag preview stuck at the rejected position
+                setPreviewPoint(oldPointData.qPointF);
+            }
             return;
         }
 
         // Live drag preview
-        QVector<QPointF> points = polyline->points();
-        points.replace(pointIdx, { clampedX, y });
-        polyline->setPoints(points);
-        polyline->update(); // TODO: pass update rect?
+        setPreviewPoint({ clampedX, y });
     });
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointAdded,
@@ -620,15 +623,10 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
         return false;
     }
 
-    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-
     // STEP 2 - Determine the new tick value based on the x parameter...
-    // No segment at this position - reject the move rather than guessing where it should go
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
     const std::optional<int> newTickOpt = tickFromCanvasX(system, staffCanvasRect, x);
-    if (!newTickOpt) {
-        return false;
-    }
-    const int newTick = *newTickOpt;
+    const int newTick = newTickOpt.value_or(oldPointData.tick);
     const bool tickChanged = newTick != oldPointData.tick;
 
     // STEP 3 - Fetch the point being edited...
