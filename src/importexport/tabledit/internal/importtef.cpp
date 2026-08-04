@@ -332,6 +332,7 @@ static void addVolta(Score* score, Measure* measure, const Ending& ending)
         Measure* next = endMeasure->nextMeasure();
         if (!next) {
             LOGD() << "Ending at " << "TBD" << " specifies non-existent end measure.";
+            break;
         }
         endMeasure = next;
     }
