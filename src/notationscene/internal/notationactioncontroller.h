@@ -234,7 +234,7 @@ private:
 
     bool textNavigationAvailable() const;
     bool textNavigationByBeatsAvailable() const;
-    bool gotoByFracAvailable() const;
+    bool textNavigationByFractionAvailable() const;
     bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
 
     muse::Ret nextTextElement();
@@ -243,7 +243,7 @@ private:
     void nextBeatTextElement();
     void prevBeatTextElement();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
-    void gotoToTextItemByFrac(const Fraction& fraction);
+    void navigateToTextItemByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
     bool toggleNoteInputAllowed() const;
@@ -276,6 +276,7 @@ private:
                          bool (NotationActionController::*)() const = nullptr);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+    void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
     void select(const muse::rcommand::CommandQuery& query);
     void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
