@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
 import Muse.UiComponents
 
@@ -41,14 +41,14 @@ BaseSection {
         title: qsTrc("preferences", "When importing layout:")
         columnWidth: root.columnWidth
 
-        currentIndex: control.indexOfValue(root.importPositionsType)
+        currentIndex: indexOfValue(root.importPositionsType)
 
-        control.textRole: "title"
-        control.valueRole: "value"
+        textRole: "title"
+        valueRole: "value"
 
-        navigation.name: "importPositionsTypesBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+        navigationName: "importPositionsTypesBox"
+        navigationPanel: root.navigation
+        navigationRow: 0
 
         onValueEdited: function(newIndex, newValue) {
             root.importPositionsTypeChangeRequested(newValue)
