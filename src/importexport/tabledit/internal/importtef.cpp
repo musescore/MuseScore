@@ -85,6 +85,10 @@ std::string TablEdit::readUtf8Text()
 {
     std::string result;
     uint16_t size = readUInt16();
+    if (size < 1) {
+        LOGE() << "Invalid Utf8Text";
+        return result;
+    }
     for (uint16_t i = 0; i < size - 1; ++i) {
         result += readUInt8();
     }
