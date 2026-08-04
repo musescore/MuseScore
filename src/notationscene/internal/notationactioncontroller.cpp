@@ -171,6 +171,7 @@ void NotationActionController::init()
     registerNavigationByFractionCommand(EDITTEXT_ADVANCE_8_COMMAND, Fraction(1, 8));
     registerNavigationByFractionCommand(EDITTEXT_ADVANCE_16_COMMAND, Fraction(1, 16));
     registerNavigationByFractionCommand(EDITTEXT_ADVANCE_32_COMMAND, Fraction(1, 32));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_64_COMMAND, Fraction(1, 64));
 
     // lyrics editing commands
     registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
