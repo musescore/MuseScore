@@ -132,7 +132,7 @@ static std::optional<int> tickFromCanvasX(const System* system, const muse::Rect
 static AutomationCurveKey dynamicsCurveKeyFor(const Staff* staff)
 {
     // TODO: Not always dynamics...
-    return { AutomationType::Dynamics, staff->id(), /*voiceIdx*/ std::nullopt };
+    return AutomationCurveKey::staff(AutomationType::Dynamics, staff->id());
 }
 
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
@@ -332,7 +332,8 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     }
 
     int currentPointIndex = 0;
-    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staffId, std::nullopt };
+    const mu::engraving::AutomationCurveKey key = mu::engraving::AutomationCurveKey::staff(mu::engraving::AutomationType::Dynamics,
+                                                                                           staffId);
     const mu::engraving::AutomationCurve& curve = automationData()->curve(key);
 
     // Start at the first point >= startTick rather than curve.begin() - resolvedInValue() only ever
@@ -652,8 +653,13 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
     }
 
     std::set<muse::ID> affectedStaffIds;
+    std::set<mu::engraving::InstrumentTrackId> affectedTrackIds;
     for (const mu::engraving::AutomationCurveKey& key : changes.affectedKeys) {
-        affectedStaffIds.insert(key.staffId);
+        if (const std::optional<muse::ID> staffId = key.staffId()) {
+            affectedStaffIds.insert(*staffId);
+        } else if (const std::optional<mu::engraving::InstrumentTrackId> trackId = key.trackId()) {
+            affectedTrackIds.insert(*trackId);
+        }
     }
 
     // Only touch the staves that were actually affected and whose system overlaps the changed tick
@@ -664,7 +670,13 @@ void NotationAutomationController::applyAutomationChanges(const mu::engraving::A
             continue;
         }
         const Staff* staff = score()->staff(key.staffIdx);
-        if (!staff || affectedStaffIds.find(staff->id()) == affectedStaffIds.end()) {
+        if (!staff) {
+            continue;
+        }
+        const bool staffAffected = affectedStaffIds.find(staff->id()) != affectedStaffIds.end();
+        const mu::engraving::InstrumentTrackId staffTrackId { staff->part()->id(), staff->part()->instrumentId() };
+        const bool trackAffected = affectedTrackIds.find(staffTrackId) != affectedTrackIds.end();
+        if (!staffAffected && !trackAffected) {
             continue;
         }
         const System* system = key.system;

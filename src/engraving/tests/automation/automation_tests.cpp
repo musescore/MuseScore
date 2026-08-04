@@ -38,9 +38,7 @@ TEST_F(Automation_Tests, EditPoints_EraseRemovesGivenTicksPreservesOthers)
 {
     // [GIVEN] Four points on a single curve
     AutomationData data;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationPoint custom100 = customPoint(0.3, 0.4);
     AutomationPoint custom300 = customPoint(0.5, 0.6);
@@ -70,13 +68,8 @@ TEST_F(Automation_Tests, EditPoints_EraseScopedToGivenKey)
 {
     // [GIVEN] Two curves sharing the same tick
     AutomationData data;
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
+    AutomationCurveKey key1 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
+    AutomationCurveKey key2 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(2));
 
     AutomationPoint p_key1_100 = generatedPoint(0.3, 0.4);
     AutomationPoint p_key2_300 = generatedPoint(0.5, 0.6);
@@ -101,9 +94,7 @@ TEST_F(Automation_Tests, EditPoints_EraseCleansUpEmptyCurves)
 {
     // [GIVEN] A curve whose only points will all be erased
     AutomationData data;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationCurveMap curves;
     curves[key] = { { 100, generatedPoint(0.4, 0.5) }, { 200, generatedPoint(0.5, 0.6) } };
@@ -123,17 +114,9 @@ TEST_F(Automation_Tests, ReplaceCurves_MergesReplacesRemovesAndNotifies)
 {
     // [GIVEN] Three curves: key1 (to be replaced), key2 (to be emptied/removed), key3 (left untouched)
     AutomationData data;
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
-
-    AutomationCurveKey key3;
-    key3.type = AutomationType::Dynamics;
-    key3.staffId = muse::ID(3);
+    AutomationCurveKey key1 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
+    AutomationCurveKey key2 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(2));
+    AutomationCurveKey key3 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(3));
 
     AutomationPoint p3 = generatedPoint(0.6, 0.7);
     AutomationCurveMap curves;
@@ -183,13 +166,8 @@ TEST_F(Automation_Tests, SetCurves_FullyReplacesAndRemovesAbsentKeys)
 {
     // [GIVEN] Two curves: key1 (to be replaced), key2 (absent from the new set)
     AutomationData data;
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
+    AutomationCurveKey key1 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
+    AutomationCurveKey key2 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(2));
 
     AutomationCurveMap curves;
     curves[key1] = { { 100, generatedPoint(0.3, 0.4) } };
@@ -226,9 +204,7 @@ TEST_F(Automation_Tests, SetCurves_SameContent_NotFired)
 {
     // [GIVEN] A curve already matching what's about to be set
     AutomationData data;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationCurveMap curves;
     curves[key] = { { 100, generatedPoint(0.3, 0.4) } };
@@ -250,9 +226,7 @@ TEST_F(Automation_Tests, Notify_EditPoints_FiresWithCorrectRange)
 {
     // [GIVEN] A subscriber registered before the change
     AutomationData data;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     int notifyCount = 0;
     AutomationChanges lastChanges;
@@ -276,9 +250,7 @@ TEST_F(Automation_Tests, Notify_EditPoints_SameValue_NotFired)
 {
     // [GIVEN] A point already at 0.5
     AutomationData data;
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     const AutomationPoint point = generatedPoint(0.5, 0.5);
     AutomationCurveMap curves;

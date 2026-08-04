@@ -135,12 +135,12 @@ private:
     static void collectMeasureRepeats(const Segment* segment, int tickOffset, const StaffRange& range, MeasureRepeats& result);
     static void addMeasureRepeatPoints(UpdateContext& ctx);
 
+    void mirrorGlobalAndInstrumentPointsToRepeats(UpdateContext& ctx);
+
     static bool tryAddDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                                    UpdateContext& ctx);
     static void addDynamicPoint(const AutomationCurveKey& key, utick_t tick, const AutomationPoint& point, int priority,
                                 UpdateContext& ctx);
-    static void tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range, AutomationCurveKey key,
-                               std::vector<AutomationCurveKey>& result);
     static std::vector<AutomationCurveKey> resolveKeys(const EngravingItem* item, AutomationType type, const StaffRange& range);
 
     void mirrorEditsToRepeats(const AutomationCurveKey& key, AutomationPointEdits& edits);

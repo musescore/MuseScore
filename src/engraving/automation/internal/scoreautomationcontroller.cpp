@@ -175,9 +175,8 @@ static const AutomationPoint* activePoint(const AutomationCurveMap& curves, cons
     const AutomationCurve& keyCurve = keyCurveIt != curves.end() ? keyCurveIt->second : NO_CURVE;
     const auto keyIt = muse::findLessOrEqual(keyCurve, tick);
 
-    if (key.voiceIdx.has_value()) {
-        AutomationCurveKey sharedKey = key;
-        sharedKey.voiceIdx = std::nullopt;
+    if (key.voiceIdx().has_value()) {
+        const AutomationCurveKey sharedKey = key.withoutVoice();
         const auto sharedCurveIt = curves.find(sharedKey);
         const AutomationCurve& sharedCurve = sharedCurveIt != curves.end() ? sharedCurveIt->second : NO_CURVE;
         const auto sharedIt = muse::findLessOrEqual(sharedCurve, tick);
@@ -360,8 +359,40 @@ void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, s
     // Step 4: measure repeats
     addMeasureRepeatPoints(ctx);
 
-    // Step 5: the new curves are fully built; merge them back, replacing only the affected ones
+    // Step 5: Mirror global/instrument points to repeats (e.g. Tempo, Volume, Pan)
+    mirrorGlobalAndInstrumentPointsToRepeats(ctx);
+
+    // Step 6: the new curves are fully built; merge them back, replacing only the affected ones
     m_automationData->replaceCurves(ctx.curves);
+}
+
+void ScoreAutomationController::mirrorGlobalAndInstrumentPointsToRepeats(UpdateContext& ctx)
+{
+    TRACEFUNC;
+
+    for (auto& [key, curve] : ctx.curves) {
+        if (key.staffId() || curve.empty()) {
+            continue;
+        }
+
+        AutomationPointEdits edits;
+        edits.reserve(curve.size());
+        for (const auto& [tick, point] : curve) {
+            edits.push_back({ tick, AutomationPointEdit::SetPoint { point } });
+        }
+
+        //! NOTE: appends the corresponding mirrored edit(s) - one per other repeat pass - directly to edits
+        mirrorEditsToRepeats(key, edits);
+
+        for (const AutomationPointEdit& edit : edits) {
+            const auto* setPoint = std::get_if<AutomationPointEdit::SetPoint>(&edit.change);
+            IF_ASSERT_FAILED(setPoint) {
+                continue;
+            }
+
+            curve.insert_or_assign(edit.tick, setPoint->point);
+        }
+    }
 }
 
 //! NOTE: moves all points with tick >= tickFrom by diff ticks
@@ -429,14 +460,19 @@ void ScoreAutomationController::copyCurvesForRebuild(const AutomationCurveMap& c
     TRACEFUNC;
 
     for (const auto& [key, curve] : curves) {
-        if (key.type != AutomationType::Dynamics || !range.contains(key.staffId)) {
+        // Non-Dynamics curves (Tempo, Volume, Pan) aren't staff-scoped or score-derived, so only
+        // user points survive here - mirrorGlobalAndInstrumentPointsToRepeats() recomputes the rest
+        const std::optional<muse::ID> staffId = key.staffId();
+        const bool isDynamics = key.type == AutomationType::Dynamics;
+
+        if (isDynamics && (!staffId || !range.contains(*staffId))) {
             continue;
         }
 
         AutomationCurve& curveCopy = destCurves.emplace_hint(destCurves.end(), key, AutomationCurve())->second;
 
         for (const auto& [tick, point] : curve) {
-            if (tick < clearFromUTick || !point.generated) {
+            if (!point.generated || (isDynamics && tick < clearFromUTick)) {
                 curveCopy.emplace_hint(curveCopy.end(), tick, point);
             }
         }
@@ -702,13 +738,11 @@ void ScoreAutomationController::fillVoiceCurvesFromBase(UpdateContext& ctx)
     TRACEFUNC;
 
     for (auto& [key, curve] : ctx.curves) {
-        if (!key.voiceIdx.has_value()) {
+        if (!key.voiceIdx().has_value()) {
             continue;
         }
 
-        AutomationCurveKey baseKey = key;
-        baseKey.voiceIdx = std::nullopt;
-
+        const AutomationCurveKey baseKey = key.withoutVoice();
         const auto baseIt = ctx.curves.find(baseKey);
         if (baseIt == ctx.curves.end()) {
             continue;
@@ -747,7 +781,14 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
 
     std::unordered_map<uint64_t, std::vector<AutomationCurve*> > curvesByStaff;
     for (auto& [key, curve] : ctx.curves) {
-        curvesByStaff[key.staffId.toUint64()].push_back(&curve);
+        const std::optional<muse::ID> staffId = key.staffId();
+        if (staffId) {
+            curvesByStaff[staffId->toUint64()].push_back(&curve);
+        }
+    }
+
+    if (curvesByStaff.empty()) {
+        return;
     }
 
     struct MeasureRange {
@@ -869,36 +910,34 @@ void ScoreAutomationController::addDynamicPoint(const AutomationCurveKey& key, u
     tryAddDynamicPoint(key, tick, point, priority, ctx);
 }
 
-void ScoreAutomationController::tryAddStaffKey(const Score* score, staff_idx_t staffIdx, const StaffRange& range,
-                                               AutomationCurveKey key, std::vector<AutomationCurveKey>& result)
-{
-    if (!range.contains(staffIdx)) {
-        return;
-    }
-
-    const Staff* staff = score ? score->staff(staffIdx) : nullptr;
-    IF_ASSERT_FAILED(staff) {
-        return;
-    }
-
-    if (!staff->isPrimaryStaff()) {
-        return; // ignore linked staves
-    }
-
-    key.staffId = staff->id();
-    result.push_back(key);
-}
-
 std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const EngravingItem* item, AutomationType type,
                                                                        const StaffRange& range)
 {
-    const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
     const Score* score = item->score();
+    IF_ASSERT_FAILED(score) {
+        return {};
+    }
 
     std::vector<AutomationCurveKey> result;
-    AutomationCurveKey key;
-    key.type = type;
 
+    auto tryAddStaffKey = [type, score, &range, &result](staff_idx_t staffIdx, std::optional<size_t> voiceIdx = std::nullopt) {
+        if (!range.contains(staffIdx)) {
+            return;
+        }
+
+        const Staff* staff = score->staff(staffIdx);
+        IF_ASSERT_FAILED(staff) {
+            return;
+        }
+
+        if (!staff->isPrimaryStaff()) {
+            return; // ignore linked staves
+        }
+
+        result.push_back(AutomationCurveKey::staff(type, staff->id(), voiceIdx));
+    };
+
+    const VoiceAssignment voiceAssignment = item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
     switch (voiceAssignment) {
     case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
         const Part* part = item->part();
@@ -912,14 +951,14 @@ std::vector<AutomationCurveKey> ScoreAutomationController::resolveKeys(const Eng
         result.reserve(endStaffIdx - startStaffIdx);
 
         for (staff_idx_t staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
-            tryAddStaffKey(score, staffIdx, range, key, result);
+            tryAddStaffKey(staffIdx);
         }
     } break;
     case VoiceAssignment::CURRENT_VOICE_ONLY:
-        key.voiceIdx = item->voice();
-    // fallthrough
+        tryAddStaffKey(item->staffIdx(), item->voice());
+        break;
     case VoiceAssignment::ALL_VOICE_IN_STAFF:
-        tryAddStaffKey(score, item->staffIdx(), range, key, result);
+        tryAddStaffKey(item->staffIdx());
         break;
     }
 
@@ -935,12 +974,17 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
         return;
     }
 
-    const Staff* staff = m_score->staffById(key.staffId);
-    IF_ASSERT_FAILED(staff) {
-        return;
-    }
+    // Measure repeats are staff-specific; global/instrument-scoped points (e.g. Tempo, Volume, Pan)
+    // aren't tied to any staff, so they're mirrored to regular repeats only, not measure repeats
+    std::optional<StaffRange> staffRange;
+    if (const std::optional<muse::ID> staffId = key.staffId()) {
+        const Staff* staff = m_score->staffById(*staffId);
+        IF_ASSERT_FAILED(staff) {
+            return;
+        }
 
-    const StaffRange range(m_score, staff->idx(), staff->idx());
+        staffRange.emplace(m_score, staff->idx(), staff->idx());
+    }
 
     // Bounded by the original size, since mirrored edits are appended to the same vector below
     const size_t originalEditCount = edits.size();
@@ -966,7 +1010,9 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
                 const MirrorRange targetRange { targetSeg->tick, targetSeg->endTick(), targetSeg->utick - targetSeg->tick };
                 mirrorPointIfInRange(localEdit, targetRange, edits);
             }
-            mirrorToMeasureRepeats(targetSeg, range, localEdit, edits);
+            if (staffRange) {
+                mirrorToMeasureRepeats(targetSeg, *staffRange, localEdit, edits);
+            }
         }
     }
 }
