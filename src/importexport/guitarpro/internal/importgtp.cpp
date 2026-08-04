@@ -2852,6 +2852,7 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
             s = s.mid(21);
         } else {
             LOGD("unknown gtp format <%s>", ss);
+            delete gp;
             return Err::FileBadFormat;
         }
         int a = s.left(1).toInt();
@@ -2869,16 +2870,19 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
             gp = new GuitarPro5(score, version, iocCtx);
         } else {
             LOGD("unknown gtp format %d", version);
+            delete gp;
             return Err::FileBadFormat;
         }
         readResult = gp->read(io);
         gp->setTempo(0, 0);
     } else {
+        delete gp;
         return Err::FileBadFormat;
     }
     if (readResult == false) {
         LOGD("guitar pro import error====");
         // avoid another error message box
+        delete gp;
         return Err::NoError;
     }
 
