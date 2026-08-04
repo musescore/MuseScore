@@ -301,6 +301,7 @@ public:
     void resetBeamMode() override;
     void resetShapesAndPosition() override;
     void resetToDefaultLayout() override;
+    void freezeSelectionPosition() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(const ScoreConfig& config) override;
