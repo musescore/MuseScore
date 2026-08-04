@@ -38,6 +38,9 @@ inline void deleteVector(QList<T*>& vec) {
 }
 */
 
+static constexpr unsigned int OLD_HEADER_SIZE = 11;
+static constexpr unsigned int NEW_HEADER_SIZE = 7;
+
 TickElement::TickElement()
 {
     m_tick = 0;
@@ -5339,9 +5342,13 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
         if (!readBuffer(placeHolder, 2)) {
             return false;
         }
-        unsigned int twoByte = placeHolder.toUnsignedInt();
-        unsigned int oldBlockSize = twoByte - 11;
-        unsigned int newBlockSize = twoByte - 7;
+        const unsigned int twoByte = placeHolder.toUnsignedInt();
+
+        const bool invalidBlockOld = twoByte < OLD_HEADER_SIZE;
+        const bool invalidBlockNew = twoByte < NEW_HEADER_SIZE;
+
+        const unsigned int oldBlockSize = twoByte - OLD_HEADER_SIZE;
+        const unsigned int newBlockSize = twoByte - NEW_HEADER_SIZE;
 
         // type id
         if (!readBuffer(placeHolder, 1)) {
@@ -5356,61 +5363,71 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
 
         switch (type) {
         case CondType::Bar_Number: {
-            if (!parseBarNumber(measure, twoByte - 1)) {
+            if (twoByte < 1 || !parseBarNumber(measure, twoByte - 1)) {
+                LOGE() << "Error parsing bar number";
                 return false;
             }
             break;
         }
         case CondType::Repeat: {
-            if (!parseRepeatSymbol(measureData, oldBlockSize)) {
+            if (invalidBlockOld || !parseRepeatSymbol(measureData, oldBlockSize)) {
+                LOGE() << "Error parsing repeat symbol";
                 return false;
             }
             break;
         }
         case CondType::Numeric_Ending: {
-            if (!parseNumericEndings(measureData, oldBlockSize)) {
+            if (invalidBlockOld || !parseNumericEndings(measureData, oldBlockSize)) {
+                LOGE() << "Error parsing numeric ending";
                 return false;
             }
             break;
         }
         case CondType::Decorator: {
-            if (!parseDecorators(measureData, newBlockSize)) {
+            if (invalidBlockNew || !parseDecorators(measureData, newBlockSize)) {
+                LOGE() << "Error parsing decorator";
                 return false;
             }
             break;
         }
         case CondType::Tempo: {
-            if (!parseTempo(measureData, newBlockSize)) {
+            if (invalidBlockNew || !parseTempo(measureData, newBlockSize)) {
+                LOGE() << "Error parsing tempo";
                 return false;
             }
             break;
         }
         case CondType::Text: {
-            if (!parseText(measureData, newBlockSize)) {
+            if (invalidBlockNew || !parseText(measureData, newBlockSize)) {
+                LOGE() << "Error parsing text";
                 return false;
             }
             break;
         }
         case CondType::Expression: {
-            if (!parseExpressions(measureData, newBlockSize)) {
+            if (invalidBlockNew || !parseExpressions(measureData, newBlockSize)) {
+                LOGE() << "Error parsing expression";
                 return false;
             }
             break;
         }
         case CondType::Time_Parameters: {
-            if (!parseTimeSignatureParameters(measure, newBlockSize)) {
+            if (invalidBlockNew || !parseTimeSignatureParameters(measure, newBlockSize)) {
+                LOGE() << "Error parsing time signature parameters";
                 return false;
             }
             break;
         }
         case CondType::Barline_Parameters: {
-            if (!parseBarlineParameters(measure, newBlockSize)) {
+            if (invalidBlockNew || !parseBarlineParameters(measure, newBlockSize)) {
+                LOGE() << "Error parsing barline parameters";
                 return false;
             }
             break;
         }
         default: {
-            if (!jump(newBlockSize)) {
+            if (invalidBlockNew || !jump(newBlockSize)) {
+                LOGE() << "Block invalid, can't jump";
                 return false;
             }
             break;
@@ -6105,7 +6122,14 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
         if (!readBuffer(placeHolder, 2)) {
             return false;
         }
-        unsigned int count = placeHolder.toUnsignedInt() - 7;
+
+        const unsigned int size = placeHolder.toUnsignedInt();
+        if (size < NEW_HEADER_SIZE) {
+            LOGE() << "Error parsing BDAT";
+            return false;
+        }
+
+        const unsigned int count = size - NEW_HEADER_SIZE;
 
         // type id
         if (!readBuffer(placeHolder, 1)) {
