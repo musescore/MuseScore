@@ -3955,6 +3955,11 @@ QList<MidiData*> MeasureData::getMidiDatas(MidiType type)
     return datas;
 }
 
+static bool readLengthValid(const Block* dataBlock, unsigned int proposedReadLength)
+{
+    return dataBlock->size() > 0 && static_cast<unsigned int>(proposedReadLength) <= dataBlock->size();
+}
+
 StreamHandle::StreamHandle()
     : m_size(0), m_curPos(0), m_point(NULL)
 {
@@ -4393,6 +4398,10 @@ bool OvscParse::parse()
 {
     Block* dataBlock = m_chunk->getDataBlock();
     unsigned int blockSize = m_chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for OVSC";
+        return false;
+    }
     StreamHandle handle(dataBlock->data(), blockSize);
     Block placeHolder;
 
@@ -4485,6 +4494,10 @@ bool TrackParse::parse()
 {
     Block* dataBlock = m_chunk->getDataBlock();
     unsigned int blockSize = m_ove->getIsVersion4() ? m_chunk->getSizeBlock()->toSize() : SizeChunk::version3TrackSize;
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Track";
+        return false;
+    }
     StreamHandle handle(dataBlock->data(), blockSize);
     Block placeHolder;
 
@@ -4834,7 +4847,13 @@ bool PageGroupParse::parse()
 bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page)
 {
     Block placeHolder(2);
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Page";
+        return false;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
 
     m_handle = &handle;
 
@@ -4932,7 +4951,13 @@ StaffCountGetter::StaffCountGetter(OveSong* ove)
 
 unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk)
 {
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Line";
+        return 0;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
     Block placeHolder;
 
     m_handle = &handle;
@@ -5012,7 +5037,13 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line)
 {
     Block placeHolder;
 
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Line";
+        return false;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
 
     m_handle = &handle;
 
@@ -5067,7 +5098,13 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff)
 {
     Block placeHolder;
 
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Staff";
+        return false;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
 
     m_handle = &handle;
 
@@ -5244,7 +5281,13 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk)
 {
     Block placeHolder;
 
-    StreamHandle measureHandle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Measure";
+        return false;
+    }
+    StreamHandle measureHandle(dataBlock->data(), blockSize);
 
     m_handle = &measureHandle;
 
@@ -5324,7 +5367,13 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
 {
     Block placeHolder;
 
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Conduct";
+        return false;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
 
     m_handle = &handle;
 
@@ -6107,7 +6156,13 @@ bool BarsParse::parseRepeatSymbol(MeasureData* measureData, int /* length */)
 bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, SizeChunk* chunk)
 {
     Block placeHolder;
-    StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
+    Block* dataBlock = chunk->getDataBlock();
+    unsigned int blockSize = chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for BDAT";
+        return false;
+    }
+    StreamHandle handle(dataBlock->data(), blockSize);
 
     m_handle = &handle;
 
@@ -9313,6 +9368,10 @@ bool LyricChunkParse::parse()
     unsigned int i;
     Block* dataBlock = m_chunk->getDataBlock();
     unsigned int blockSize = m_chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlock, blockSize)) {
+        LOGE() << "Invalid read length for Lyric";
+        return false;
+    }
     StreamHandle handle(dataBlock->data(), blockSize);
     Block placeHolder;
 
@@ -9528,6 +9587,10 @@ bool TitleChunkParse::parse()
 {
     Block* dataBlockP = m_chunk->getDataBlock();
     unsigned int blockSize = m_chunk->getSizeBlock()->toSize();
+    if (!readLengthValid(dataBlockP, blockSize)) {
+        LOGE() << "Invalid read length for Title";
+        return false;
+    }
     StreamHandle handle(dataBlockP->data(), blockSize);
     Block typeBlock;
     unsigned int titleType;
