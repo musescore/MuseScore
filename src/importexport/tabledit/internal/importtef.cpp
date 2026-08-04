@@ -929,11 +929,16 @@ void TablEdit::readTefContents()
         LOGD("no instruments");
         return;
     }
+
     int totalNumberOfStrings { 0 };
     for (const auto& instrument : tefInstruments) {
         totalNumberOfStrings += instrument.stringNumber;
     }
     LOGN("totalNumberOfStrings %d", totalNumberOfStrings);
+    if (totalNumberOfStrings < 1) {
+        LOGE() << "totalNumberOfStrings invalid";
+        return;
+    }
 
     _file->seek(OFFSET_CONTENTS);
     uint32_t position = readUInt32();
@@ -1054,7 +1059,14 @@ void TablEdit::readTefMeasures()
         /* uint8_t uTmp = */ readUInt8();
         measure.key = readInt8();
         measure.size = readUInt8();
-        measure.denominator = readUInt8();
+        const int denom = readUInt8();
+        if (denom < 1) {
+            LOGE() << "Error reading measure - corrupt denominator";
+            readUInt8(); // numerator
+            readUInt16(); // margins
+            continue;
+        }
+        measure.denominator = denom;
         measure.numerator = readUInt8();
         /* uint16_t margins = */ readUInt16();
         tefMeasures.push_back(measure);
