@@ -944,6 +944,10 @@ void TablEdit::createTexts()
         }
 
         StaffText* staffText = Factory::createStaffText(segment);
+        if (textMarker.index < 0 || textMarker.index >= static_cast<int>(tefTexts.size())) {
+            LOGE() << "text marker index invalid";
+            continue;
+        }
         muse::String text { tefTexts.at(textMarker.index).c_str() };
         staffText->setPlainText(text);
         staffText->setTrack(track);
