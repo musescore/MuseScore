@@ -1538,12 +1538,8 @@ void FinaleParser::importEntryAdjustments()
         // Collect alterations
         /// @todo offsets and contour
         auto positionTie = [this](Tie* tie, const MusxInstance<details::TieAlterBase>& tieAlt) {
-            if (!tieAlt) {
-                logger()->logInfo(String("Unable to to find tie details for tie at tick %1").arg(tie->tick().toString()));
-                return;
-            }
             bool outside = musxOptions().tieOptions->useOuterPlacement;
-            if (tieAlt->outerOn) {
+            if (tieAlt && tieAlt->outerOn) {
                 logger()->logDebugTrace(String(u"Tie overrides default outer/inner placement"));
                 outside = tieAlt->outerLocal;
             }
