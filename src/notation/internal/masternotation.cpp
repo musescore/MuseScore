@@ -168,6 +168,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score, bool disa
     TRACEFUNC;
 
     setScore(score);
+    std::static_pointer_cast<NotationAutomation>(m_notationAutomation)->setMasterScore(score);
 
     score->updateSwing();
 

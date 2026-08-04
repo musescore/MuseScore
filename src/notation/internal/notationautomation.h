@@ -25,6 +25,10 @@
 
 #include "async/notification.h"
 
+namespace mu::engraving {
+class MasterScore;
+}
+
 namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {
@@ -35,8 +39,16 @@ public:
     void setAutomationModeEnabled(bool enabled) override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
+    AutomationDataConstPtr automationData() const override;
+    void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
+
+    //! NOTE: called by MasterNotation whenever the underlying score changes
+    void setMasterScore(engraving::MasterScore* masterScore);
+
 private:
     bool m_isAutomationModeEnabled = false;
     muse::async::Notification m_automationModeEnabledChanged;
+
+    engraving::MasterScore* m_masterScore = nullptr;
 };
 }

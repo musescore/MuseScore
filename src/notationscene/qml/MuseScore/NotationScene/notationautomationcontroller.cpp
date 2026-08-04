@@ -33,7 +33,6 @@
 #include "engraving/automation/dynamicvalues.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/staff.h"
-#include "engraving/editing/transaction/transaction.h"
 
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
@@ -848,15 +847,12 @@ bool NotationAutomationController::requestRemovePoint(const PointData& pointData
 void NotationAutomationController::editAutomationPoints(const mu::engraving::AutomationCurveKey& key,
                                                         mu::engraving::AutomationPointEdits& edits)
 {
-    mu::engraving::Score* sc = score();
-    IF_ASSERT_FAILED(sc) {
+    const INotationAutomationPtr notationAutomation = automation();
+    IF_ASSERT_FAILED(notationAutomation) {
         return;
     }
 
-    sc->transactionManager()->transaction(muse::TranslatableString("undoableAction", "Edit automation points"),
-                                          [&](mu::engraving::Transaction&) {
-        sc->editAutomationPoints(key, edits);
-    });
+    notationAutomation->editPoints(key, edits);
 }
 
 const mu::engraving::AutomationPoint* NotationAutomationController::automationPointAt(const SysStaffKey& key, int tick) const
@@ -889,7 +885,8 @@ INotationPtr NotationAutomationController::currentNotation() const
 
 mu::engraving::AutomationDataConstPtr NotationAutomationController::automationData() const
 {
-    return score() ? score()->automationData() : nullptr;
+    const INotationAutomationPtr notationAutomation = automation();
+    return notationAutomation ? notationAutomation->automationData() : nullptr;
 }
 
 mu::engraving::Score* NotationAutomationController::score() const
