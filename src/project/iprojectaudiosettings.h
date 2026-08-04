@@ -66,8 +66,12 @@ struct AudioOutputParams {
 
     void setControl(const muse::audio::ControlParams& control)
     {
-        volume = control.volume;
-        balance = control.balance;
+        if (!control.volume.hasAutomation()) {
+            volume = std::get<muse::audio::volume_db_t>(control.volume.value());
+        }
+        if (!control.balance.hasAutomation()) {
+            balance = std::get<muse::audio::balance_t>(control.balance.value());
+        }
         muted = control.muted;
     }
 };

@@ -25,52 +25,48 @@
 #include "global/types/number.h"
 #include "global/types/sharedmap.h"
 
+#include "mpe/automationpoint.h"
+
 #include "engraving/infrastructure/eid.h"
 
 #include <algorithm>
 #include <optional>
 #include <set>
-#include <unordered_map>
+#include <tuple>
 #include <variant>
 #include <vector>
 
 namespace mu::engraving {
 struct AutomationPoint {
-    //! NOTE: arrival value equals whatever precedes this point in the curve, resolved live
-    struct FromPrevious {
-        bool operator==(const FromPrevious&) const { return true; }
-    };
-    //! NOTE: arrival value equals this point's own outValue (a flat, held point)
-    struct SameAsOut {
-        bool operator==(const SameAsOut&) const { return true; }
-    };
-    using InValue = std::variant<FromPrevious, SameAsOut, muse::real_t>;
+    using Bend = muse::mpe::AutomationPoint::Bend;
+    using ArrivalFromPrevious = muse::mpe::AutomationPoint::ArrivalFromPrevious;
+    using ExplicitArrival = muse::mpe::AutomationPoint::ExplicitArrival;
+    using InValue = muse::mpe::AutomationPoint::InValue;
 
-    //! NOTE: bends the segment through point (t, value)
-    struct Bend {
-        muse::real_t t = 0.5; // [0; 1]
-        muse::real_t value = 0.5; // [0; 1]
-
-        static Bend none() { return {}; }
-        bool isNone() const { return t == 0.5 && value == 0.5; }
-        bool operator==(const Bend& b) const { return t == b.t && value == b.value; }
-    };
-
-    InValue inValue = FromPrevious {};
-    muse::real_t outValue = 0.; // [0; 1]
-    Bend bend;
+    muse::mpe::AutomationPoint value;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
     bool generated = false; // true if the point was generated automatically and hasn't been edited by the user
 
     bool operator==(const AutomationPoint& p) const
     {
-        return inValue == p.inValue
-               && outValue == p.outValue
-               && bend == p.bend
-               && itemId == p.itemId
-               && generated == p.generated;
+        return value == p.value && itemId == p.itemId && generated == p.generated;
     }
 };
+
+using utick_t = int;
+using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
+
+inline std::optional<AutomationPoint::Bend> bend(const AutomationPoint& point) noexcept
+{
+    return muse::mpe::bend(point.value);
+}
+
+inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve::const_iterator it)
+{
+    const std::optional<muse::real_t> prevOutValue = it == curve.begin()
+                                                     ? std::nullopt : std::optional(std::prev(it)->second.value.outValue);
+    return muse::mpe::resolveInValue(it->second.value, prevOutValue);
+}
 
 enum class AutomationType : unsigned char {
     Unknown = 0,
@@ -98,8 +94,6 @@ struct AutomationCurveKey {
     }
 };
 
-using utick_t = int;
-using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
 using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
 
 struct AutomationPointEdit {

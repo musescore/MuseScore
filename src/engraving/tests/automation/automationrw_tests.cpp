@@ -36,7 +36,7 @@ class AutomationRW_Tests : public ::testing::Test
 TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
 {
     // [GIVEN] Two curves on different staves: key1 holds a generated point (itemId set) plus
-    // a SameAsOut and a FromPrevious point; key2 holds a custom point (no itemId)
+    // an explicit-arrival and a FromPrevious point; key2 holds a custom point (no itemId)
     AutomationData data;
     AutomationCurveKey key1;
     key1.type = AutomationType::Dynamics;
@@ -50,18 +50,18 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     const AutomationPoint p1 = generatedPoint(0.3, 0.5);
     const AutomationPoint p2 = customPoint(0.6, 0.8);
 
-    AutomationPoint sameAsOut;
-    sameAsOut.inValue = AutomationPoint::SameAsOut {};
-    sameAsOut.outValue = 0.5;
-    sameAsOut.generated = true;
+    AutomationPoint explicitArrival;
+    explicitArrival.value.outValue = 0.5;
+    explicitArrival.value.inValue = AutomationPoint::ExplicitArrival { explicitArrival.value.outValue, AutomationPoint::Bend::none() };
+    explicitArrival.generated = true;
 
     AutomationPoint fromPrevious;
-    fromPrevious.inValue = AutomationPoint::FromPrevious {};
-    fromPrevious.outValue = 0.7;
+    fromPrevious.value.inValue = AutomationPoint::ArrivalFromPrevious {};
+    fromPrevious.value.outValue = 0.7;
     fromPrevious.generated = true;
 
     AutomationCurveMap curves;
-    curves[key1] = { { 100, p1 }, { 300, sameAsOut }, { 400, fromPrevious } };
+    curves[key1] = { { 100, p1 }, { 300, explicitArrival }, { 400, fromPrevious } };
     curves[key2] = { { 200, p2 } };
     data.setCurves(curves);
 
@@ -79,6 +79,6 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
 
     // [THEN] Each point's inValue type survives the round trip
     const AutomationCurve& loadedCurve1 = loaded.curve(key1);
-    EXPECT_TRUE(std::holds_alternative<AutomationPoint::SameAsOut>(loadedCurve1.at(300).inValue));
-    EXPECT_TRUE(std::holds_alternative<AutomationPoint::FromPrevious>(loadedCurve1.at(400).inValue));
+    EXPECT_TRUE(std::holds_alternative<AutomationPoint::ExplicitArrival>(loadedCurve1.at(300).value.inValue));
+    EXPECT_TRUE(std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(loadedCurve1.at(400).value.inValue));
 }

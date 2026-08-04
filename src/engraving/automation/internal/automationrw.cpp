@@ -73,20 +73,21 @@ void AutomationRW::read(AutomationData& data, const muse::ByteArray& json)
             const muse::JsonObject pointObj = pointArray.at(j).toObject();
 
             AutomationPoint point;
+            point.value.outValue = pointObj.value("outValue").toDouble();
+
             const muse::String inValueKind = pointObj.contains("inValueKind") ? pointObj.value("inValueKind").toString() : muse::String();
             if (inValueKind == u"FromPrevious") {
-                point.inValue = AutomationPoint::FromPrevious {};
-            } else if (inValueKind == u"SameAsOut") {
-                point.inValue = AutomationPoint::SameAsOut {};
+                point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
             } else {
-                point.inValue = pointObj.value("inValue").toDouble();
-            }
-            point.outValue = pointObj.value("outValue").toDouble();
+                AutomationPoint::Bend bend;
+                if (pointObj.contains("bend")) {
+                    const muse::JsonObject bendObj = pointObj.value("bend").toObject();
+                    bend.t = bendObj.value("t").toDouble();
+                    bend.value = bendObj.value("value").toDouble();
+                }
 
-            if (pointObj.contains("bend")) {
-                const muse::JsonObject bendObj = pointObj.value("bend").toObject();
-                point.bend.t = bendObj.value("t").toDouble();
-                point.bend.value = bendObj.value("value").toDouble();
+                const muse::real_t value = muse::real_t(pointObj.value("inValue").toDouble());
+                point.value.inValue = AutomationPoint::ExplicitArrival { value, bend };
             }
 
             if (pointObj.contains("itemId")) {
@@ -126,20 +127,19 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
 
             muse::JsonObject pointObj;
             pointObj["tick"] = tick;
-            if (std::holds_alternative<AutomationPoint::FromPrevious>(point.inValue)) {
+            if (std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(point.value.inValue)) {
                 pointObj["inValueKind"] = muse::String(u"FromPrevious");
-            } else if (std::holds_alternative<AutomationPoint::SameAsOut>(point.inValue)) {
-                pointObj["inValueKind"] = muse::String(u"SameAsOut");
             } else {
-                pointObj["inValue"] = std::get<muse::real_t>(point.inValue);
+                const AutomationPoint::ExplicitArrival& explicitArrival = std::get<AutomationPoint::ExplicitArrival>(point.value.inValue);
+                pointObj["inValue"] = explicitArrival.value;
+                if (!explicitArrival.bend.isNone()) {
+                    muse::JsonObject bendObj;
+                    bendObj["t"] = explicitArrival.bend.t.raw();
+                    bendObj["value"] = explicitArrival.bend.value.raw();
+                    pointObj["bend"] = bendObj;
+                }
             }
-            pointObj["outValue"] = point.outValue;
-            if (!point.bend.isNone()) {
-                muse::JsonObject bendObj;
-                bendObj["t"] = point.bend.t.raw();
-                bendObj["value"] = point.bend.value.raw();
-                pointObj["bend"] = bendObj;
-            }
+            pointObj["outValue"] = point.value.outValue;
             if (point.itemId.has_value()) {
                 pointObj["itemId"] = point.itemId->toStdString();
             }

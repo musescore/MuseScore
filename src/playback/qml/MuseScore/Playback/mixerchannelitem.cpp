@@ -440,7 +440,7 @@ void MixerChannelItem::setVolumeLevel(float volumeLevel)
 
 void MixerChannelItem::setBalance(int balance)
 {
-    if (m_outParams.balance * BALANCE_SCALING_FACTOR == balance) {
+    if (m_outParams.balance.raw() * BALANCE_SCALING_FACTOR == balance) {
         return;
     }
 
