@@ -516,7 +516,7 @@ bool MidiFile::readEvent(MidiEvent* event)
     if (me == 0xf0 || me == 0xf7) {
         status  = -1;                      // no running status
         int len = getvl();
-        if (len == -1) {
+        if (len < 1) {
             LOGD("readEvent: error 3");
             return false;
         }
