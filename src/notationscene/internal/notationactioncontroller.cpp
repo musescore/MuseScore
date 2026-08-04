@@ -88,9 +88,9 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
 using Controller = NotationActionController;
 using Interaction = INotationInteraction;
 
-namespace {
 // tuplet options convertor
-auto tupletOptions = [](const rcommand::Command& command, const ActionData& args) -> muse::rcommand::CommandQuery {
+static muse::rcommand::CommandQuery tupletOptions(const rcommand::Command& command, const ActionData& args)
+{
     IF_ASSERT_FAILED(args.count() > 0) {
         return muse::rcommand::CommandQuery();
     }
@@ -102,7 +102,6 @@ auto tupletOptions = [](const rcommand::Command& command, const ActionData& args
     query.addParam("bracket-type", Val(engraving::str_conv(options.bracketType)));
     query.addParam("auto-baselen", Val(options.autoBaseLen));
     return query;
-};
 }
 
 void NotationActionController::init()
@@ -164,15 +163,14 @@ void NotationActionController::init()
     registerCommand(EDITTEXT_NEXT_BEAT_COMMAND, &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
     registerCommand(EDITTEXT_PREV_BEAT_COMMAND, &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
-    registerCommand(EDITTEXT_ADVANCE_LONGA_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(4, 1)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_BREVE_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(2, 1)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_1_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 1)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_2_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 2)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_4_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 4)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_8_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 8)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_16_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 16)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_32_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 32)); }, &Controller::gotoByFracAvailable);
-    registerCommand(EDITTEXT_ADVANCE_64_COMMAND, [this]() { gotoToTextItemByFrac(Fraction(1, 64)); }, &Controller::gotoByFracAvailable);
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_LONGA_COMMAND, Fraction(4, 1));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_BREVE_COMMAND, Fraction(2, 1));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_1_COMMAND, Fraction(1, 1));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_2_COMMAND, Fraction(1, 2));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_4_COMMAND, Fraction(1, 4));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_8_COMMAND, Fraction(1, 8));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_16_COMMAND, Fraction(1, 16));
+    registerNavigationByFractionCommand(EDITTEXT_ADVANCE_32_COMMAND, Fraction(1, 32));
 
     // lyrics editing commands
     registerCommand(EDITLYRIC_NEXT_VERSE_COMMAND, &Interaction::navigateToLyricsVerse, MoveDirection::Down);
@@ -2754,7 +2752,7 @@ bool NotationActionController::textNavigationByBeatsAvailable() const
     return resolveTextNavigationAvailable(TextNavigationType::NearBeat);
 }
 
-bool NotationActionController::gotoByFracAvailable() const
+bool NotationActionController::textNavigationByFractionAvailable() const
 {
     return resolveTextNavigationAvailable(TextNavigationType::Fraction);
 }
@@ -2856,7 +2854,7 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     }
 }
 
-void NotationActionController::gotoToTextItemByFrac(const Fraction& fraction)
+void NotationActionController::navigateToTextItemByFraction(const Fraction& fraction)
 {
     const mu::engraving::EngravingItem* element = selectedElement();
     if (!element) {
@@ -3337,4 +3335,12 @@ void NotationActionController::registerNoteCommand(const muse::rcommand::Command
     {
         addNote(noteName, addingMode);
     });
+}
+
+void NotationActionController::registerNavigationByFractionCommand(const muse::rcommand::Command& command, const Fraction& fraction)
+{
+    registerCommand(command, [this, fraction]() {
+        navigateToTextItemByFraction(
+            fraction);
+    }, &NotationActionController::textNavigationByFractionAvailable);
 }
