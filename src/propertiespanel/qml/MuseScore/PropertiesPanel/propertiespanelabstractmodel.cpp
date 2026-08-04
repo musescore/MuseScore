@@ -622,10 +622,17 @@ PropertyValue PropertiesPanelAbstractModel::valueToElementUnits(const mu::engrav
     P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
+        PointF point = toPoint(value);
+        if (pid == Pid::OFFSET) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            point.setY(-point.y());
+        }
+
         if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
-            return toPoint(value) * element->spatium();
+            return point * element->spatium();
         } else {
-            return toPoint(value) * mu::engraving::DPMM;
+            return point * mu::engraving::DPMM;
         }
     }
 
@@ -668,11 +675,20 @@ QVariant PropertiesPanelAbstractModel::valueFromElementUnits(const mu::engraving
 
     switch (value.type()) {
     case P_TYPE::POINT: {
+        PointF point = value.value<PointF>();
         if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
-            return value.value<PointF>().toQPointF() / element->spatium();
+            point = point / element->spatium();
         } else {
-            return value.value<PointF>().toQPointF() / mu::engraving::DPMM;
+            point = point / mu::engraving::DPMM;
         }
+
+        if (pid == Pid::OFFSET) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            point.setY(-point.y());
+        }
+
+        return point.toQPointF();
     }
 
     case P_TYPE::ABSOLUTE:

@@ -440,6 +440,7 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
+    void undoResetProperty(Pid id) override;
     PropertyValue propertyDefault(Pid) const override;
 
     bool custom(Pid) const;

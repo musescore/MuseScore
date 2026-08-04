@@ -407,7 +407,6 @@ void EngravingItem::reset()
     undoResetProperty(Pid::MIN_DISTANCE);
     undoResetProperty(Pid::OFFSET);
     undoResetProperty(Pid::LEADING_SPACE);
-    setOffsetChanged(false);
     EngravingObject::reset();
 }
 
@@ -1627,6 +1626,14 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
         undoPushProperty(Pid::OFFSET);
     }
     EngravingObject::undoChangeProperty(pid, val, ps);
+}
+
+void EngravingItem::undoResetProperty(Pid id)
+{
+    EngravingObject::undoResetProperty(id);
+    if (id == Pid::OFFSET) {
+        setOffsetChanged(false);
+    }
 }
 
 //---------------------------------------------------------

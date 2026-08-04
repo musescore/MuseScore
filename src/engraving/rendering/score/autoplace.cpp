@@ -76,7 +76,6 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
 
         SysStaff* ss = m->system()->staff(si);
         Shape shape = item->ldata()->shape().translate(item->systemPos());
-        RectF r = shape.bbox();
 
         // Adjust bbox Y pos for staffType offset
         shape.translate(item->staffOffset());
@@ -109,8 +108,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
+                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above)) {
                     shape.translate(PointF(0.0, rebase));
                 }
             }
@@ -184,8 +182,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight(item->tick());
-                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
+                if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above)) {
                     sh.translateY(rebase);
                 }
             }
@@ -257,9 +254,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
             if (ldata->offsetChanged() != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight(item->tick());
-                rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
             }
             ldata->moveY(yd);
         }
@@ -335,7 +330,7 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
 //---------------------------------------------------------
 
 bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
-                                  double rebase, bool above, bool fix)
+                                  double rebase, bool above)
 {
     bool rc = false;
     PropertyFlags pf = item->propertyFlags(Pid::MIN_DISTANCE);
@@ -344,10 +339,7 @@ bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::Layo
     }
     double adjustedY = item->pos().y() + yd;
     double diff = ldata->autoplace.changedPos.y() - adjustedY;
-    if (fix) {
-        const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(-999.0), pf);
-        yd = 0.0;
-    } else if (!item->isStyled(Pid::MIN_DISTANCE)) {
+    if (!item->isStyled(Pid::MIN_DISTANCE)) {
         md = (above ? md + yd : md - yd) / sp;
         const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::MIN_DISTANCE, Spatium(md), pf);
         yd += diff;
