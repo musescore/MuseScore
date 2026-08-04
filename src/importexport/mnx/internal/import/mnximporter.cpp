@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <array>
+#include <exception>
 #include <vector>
 
 #include "mnximporter.h"
@@ -44,6 +45,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/volta.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "engraving/types/symnames.h"
 
@@ -273,6 +275,15 @@ staff_idx_t MnxImporter::mnxLayoutStaffToStaffIdx(const mnx::layout::Staff& mnxS
 //   mnxMeasureToMeasure
 //   Convert an MNX measure index to a MuseScore Measure pointer.
 //---------------------------------------------------------
+
+Measure* MnxImporter::tryMnxMeasureToMeasure(const size_t mnxMeasIdx)
+{
+    const Fraction measTick = muse::value(m_mnxMeasToTick, mnxMeasIdx, { -1, 1 });
+    if (measTick < Fraction(0, 1)) {
+        return nullptr; // not mapped, e.g. an index past the last measure of the score
+    }
+    return m_score->tick2measure(measTick);
+}
 
 Measure* MnxImporter::mnxMeasureToMeasure(const size_t mnxMeasIdx)
 {
@@ -588,12 +599,13 @@ void MnxImporter::createKeySig(engraving::Measure* measure, int keyFifths)
 
 void MnxImporter::createTimeSig(engraving::Measure* measure, const mnx::TimeSignature& timeSig)
 {
-    /// @todo Eventually, as mnx develops, we may get more sophisticated here than just a Fraction.
     const Fraction sigFraction = toMuseScoreFraction(timeSig);
+    // setSig is the only way in; TimeSig has no public setTimeSigType.
+    const TimeSigType sigType = toMuseScoreTimeSigType(timeSig.display());
     for (track_idx_t trackIdx = 0; trackIdx < m_score->ntracks(); trackIdx += VOICES) {
         Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         TimeSig* ts = Factory::createTimeSig(seg);
-        ts->setSig(sigFraction);
+        ts->setSig(sigFraction, sigType);
         ts->setTrack(trackIdx);
         seg->add(ts);
     }
@@ -814,6 +826,9 @@ void MnxImporter::importGlobalMeasures()
             }
             createTimeSig(measure, mnxTimeSig.value());
         }
+        measure->setTimesig(currTimeSig);
+        measure->setTicks(currTimeSig);
+
         if (const std::optional<mnx::KeySignature>& keySig = mnxMeasure.key(); keySig || isFirst) {
             const int keyFifths = keySig ? keySig->fifths() : 0;
             createKeySig(measure, keyFifths);
@@ -844,6 +859,10 @@ void MnxImporter::importGlobalMeasures()
                 createTempoMark(measure, tempo);
             }
         }
+        if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {
+            Segment* const segment = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+            addFermata(segment, mnxFermata.value(), 0);
+        }
 
         /// @todo MNX currently offers no way to exclude a measure from having
         /// a measure number.
@@ -853,8 +872,6 @@ void MnxImporter::importGlobalMeasures()
         }
         lastDisplayNum = currDisplayNum;
 
-        measure->setTimesig(currTimeSig);
-        measure->setTicks(currTimeSig);
         m_score->measures()->append(measure);
         m_mnxMeasToTick.emplace(mnxMeasure.calcArrayIndex(), tick);
     }
@@ -907,20 +924,36 @@ void MnxImporter::createClefs(const mnx::Part& mnxPart, const mnx::Array<mnx::pa
 
 void MnxImporter::importMnx()
 {
-    if (!m_mnxDocument.hasEntityMap()) {
-        auto policies = mnx::EntityMapPolicies();
-        policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
-        policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
-        m_mnxDocument.buildEntityMap(policies);
+    // Malformed input makes the lookup helpers throw, and NotationMnxReader catches that to
+    // report a failed import. TransactionManager::transaction() runs endTransaction() only on
+    // the normal path, and Transaction is a non-owning handle with no destructor, so an
+    // exception escaping this callback would leave the score holding an open transaction.
+    // Keep it inside, let the transaction close, then rethrow for the reader to handle.
+    std::exception_ptr failure;
+    m_score->transactionManager()->transaction(muse::TranslatableString::untranslatable("MNX import"), [&](Transaction&) {
+        try {
+            if (!m_mnxDocument.hasEntityMap()) {
+                auto policies = mnx::EntityMapPolicies();
+                policies.ottavasRespectGraceTargets = false;    // MuseScore can't target grace notes with ottavas
+                policies.ottavasRespectVoiceTargets = false;    // MuseScore can't target voices with ottavas
+                m_mnxDocument.buildEntityMap(policies);
+            }
+            if (const auto& support = m_mnxDocument.mnx().support()) {
+                m_useBeams = support->useBeams();
+                m_useAccidentalDisplay = support->useAccidentalDisplay();
+            }
+            importSettings();
+            importParts();
+            importBrackets();
+            importGlobalMeasures();
+            importPartMeasures();
+        } catch (...) {
+            failure = std::current_exception();
+        }
+    });
+
+    if (failure) {
+        std::rethrow_exception(failure);
     }
-    if (const auto& support = m_mnxDocument.mnx().support()) {
-        m_useBeams = support->useBeams();
-        m_useAccidentalDisplay = support->useAccidentalDisplay();
-    }
-    importSettings();
-    importParts();
-    importBrackets();
-    importGlobalMeasures();
-    importPartMeasures();
 }
 } // namespace mu::iex::mnxio

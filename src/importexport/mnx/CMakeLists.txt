@@ -14,13 +14,20 @@ if(MSS_USE_SYSTEM_MNXDOM)
     pkg_check_modules(mnxdom REQUIRED IMPORTED_TARGET mnxdom)
     set(MNXDOM_LIB PkgConfig::mnxdom)
     target_compile_definitions(iex_mnx PRIVATE MNXDOM_SYSTEM)
-    message(STATUS "Using system-installed mnxdom")
+    # The fetched path derives this from the pinned tag. Nothing sets it here, so record the
+    # package version instead of leaving provenance empty or carrying a stale cached value.
+    set(MNXDOM_GIT_COMMIT "system-${mnxdom_VERSION}" CACHE STRING
+        "mnxdom source control revision to embed in provenance" FORCE)
+    message(STATUS "Using system-installed mnxdom ${mnxdom_VERSION}")
 else()
+    set(MNXDOM_GIT_TAG 45bf46221c00411e968c851ff9a1be4e202af5c2)
+    string(SUBSTRING "${MNXDOM_GIT_TAG}" 0 7 MNXDOM_GIT_COMMIT)
     FetchContent_Declare(
         mnxdom
         GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
-        GIT_TAG        e7c947bf768caccf315426dcae0dfac02caf738b
+        GIT_TAG        ${MNXDOM_GIT_TAG}
     )
+    set(MNXDOM_GIT_COMMIT "${MNXDOM_GIT_COMMIT}" CACHE STRING "mnxdom source control revision to embed in provenance" FORCE)
     FetchContent_MakeAvailable(mnxdom)
     set(MNXDOM_LIB mnxdom)
     message(STATUS "Using fetched mnxdom")

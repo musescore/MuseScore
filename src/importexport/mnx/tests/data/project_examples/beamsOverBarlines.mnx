@@ -361,14 +361,29 @@
     ],
     "mnx": {
         "_x": {
-            "schemaVersion": {
-                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            "mnxdom": {
+                "client": {
+                    "commit": "cb7c616c47a7",
+                    "name": "denigma",
+                    "version": "4.0.0"
+                },
+                "createdAt": "2026-07-31T22:16:08Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/27",
+                "mnxdom": {
+                    "commit": "45bf462",
+                    "version": "3.1.0"
+                },
+                "provenanceSchemaVersion": 1,
+                "source": {
+                    "filename": "beamsOverBarlines.enigmaxml",
+                    "format": "enigmaxml"
+                }
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 4
+        "version": 27
     },
     "parts": [
         {
@@ -393,6 +408,7 @@
                             }
                         }
                     ],
+                    "id": "P1.m1",
                     "sequences": [
                         {
                             "content": [
@@ -450,6 +466,7 @@
                                     "type": "tuplet"
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
@@ -464,6 +481,7 @@
                             ]
                         }
                     ],
+                    "id": "P1.m2",
                     "sequences": [
                         {
                             "content": [
@@ -590,6 +608,7 @@
                                     "type": "tuplet"
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
@@ -627,6 +646,7 @@
                             ]
                         }
                     ],
+                    "id": "P1.m3",
                     "sequences": [
                         {
                             "content": [
@@ -756,6 +776,7 @@
                                     "stemDirection": "down"
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
@@ -803,6 +824,7 @@
                             ]
                         }
                     ],
+                    "id": "P1.m4",
                     "sequences": [
                         {
                             "content": [
@@ -933,6 +955,7 @@
                                     ]
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
@@ -970,6 +993,7 @@
                             ]
                         }
                     ],
+                    "id": "P1.m5",
                     "sequences": [
                         {
                             "content": [
@@ -1099,6 +1123,7 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
@@ -1178,6 +1203,7 @@
                             ]
                         }
                     ],
+                    "id": "P1.m6",
                     "sequences": [
                         {
                             "content": [
@@ -1307,11 +1333,13 @@
                                     ]
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P1.m7",
                     "sequences": [
                         {
                             "content": [
@@ -1450,80 +1478,105 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P1.m8",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m9",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m10",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m11",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m12",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m13",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m14",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m15",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m16",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m17",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m18",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m19",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m20",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m21",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m22",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m23",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m24",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m25",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m26",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m27",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m28",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m29",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m30",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m31",
                     "sequences": []
                 }
             ]
