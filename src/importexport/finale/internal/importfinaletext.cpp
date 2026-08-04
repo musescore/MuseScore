@@ -62,6 +62,7 @@
 #include "engraving/dom/stafftextbase.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempotext.h"
+#include "engraving/dom/textbase.h"
 #include "engraving/dom/utils.h"
 
 #include "engraving/editing/navigation.h"
@@ -945,6 +946,31 @@ void FinaleParser::importTextExpressions()
                     }
                 }
                 p.rx() += evpuToScoreDouble(expressionDef->measXAdjust, expr);
+
+                // MuseScore aligns text using the bounding box, Finale uses font values
+                if (!expr->ldata()->blocks.empty()) {
+                    if (expr->position() == AlignH::LEFT) {
+                        double leftEdge = -DBL_MAX;
+                        for (const engraving::TextBlock& block : expr->ldata()->blocks) {
+                            leftEdge = std::max(leftEdge, block.xpos(0, expr));
+                        }
+                        p.rx() -= leftEdge;
+                    } else if (expr->position() == AlignH::HCENTER) {
+                        double leftEdge = -DBL_MAX;
+                        double rightEdge = DBL_MAX;
+                        for (const engraving::TextBlock& block : expr->ldata()->blocks) {
+                            leftEdge = std::max(leftEdge, block.xpos(0, expr));
+                            rightEdge = std::min(rightEdge, expr->ldata()->bbox().width() - block.xpos(block.columns(), expr));
+                        }
+                        p.rx() -= (leftEdge - rightEdge) / 2;
+                    } else if (expr->position() == AlignH::RIGHT) {
+                        double rightEdge = DBL_MAX;
+                        for (const engraving::TextBlock& block : expr->ldata()->blocks) {
+                            rightEdge = std::min(rightEdge, expr->ldata()->bbox().width() - block.xpos(block.columns(), expr));
+                        }
+                        p.rx() += rightEdge;
+                    }
+                }
 
                 const MusxInstance<others::StaffComposite> musxStaff = exprAssign->createCurrentStaff();
                 const Staff* staff = m_score->staff(expr->staffIdx());
