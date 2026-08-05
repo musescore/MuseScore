@@ -26,7 +26,6 @@
 #include "containers.h"
 #include "modularity/ioc.h"
 #include "log.h"
-#include "rcommand/commandtypes.h"
 #include "types/ret.h"
 
 #include "audio/common/audioutils.h"
@@ -47,11 +46,9 @@
 #include "project/inotationproject.h"
 
 #include "../playbacktypes.h"
-#include "../playbackcommands.h"
 #include "onlinesoundscontroller.h"
 
 using namespace muse;
-using namespace muse::actions;
 using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::midi;
@@ -1055,11 +1052,6 @@ void PlaybackController::disableLoop()
     notationPlayback()->setLoopBoundariesEnabled(false);
 }
 
-void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode)
-{
-    m_actionCheckedChanged.send(actionCode);
-}
-
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 {
     INotationProjectPtr project = globalContext()->currentProject();
@@ -1604,16 +1596,6 @@ void PlaybackController::updateAuxMuteStates()
     }
 }
 
-bool PlaybackController::actionChecked(const ActionCode&) const
-{
-    return false;
-}
-
-Channel<ActionCode> PlaybackController::actionCheckedChanged() const
-{
-    return m_actionCheckedChanged;
-}
-
 secs_t PlaybackController::totalPlayTime() const
 {
     auto np = notationPlayback();
@@ -1821,7 +1803,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     }
 }
 
-bool PlaybackController::canReceiveAction(const ActionCode&) const
+bool PlaybackController::canReceiveAction(const muse::actions::ActionCode&) const
 {
     if (!m_masterNotation || !m_masterNotation->hasParts()) {
         return false;

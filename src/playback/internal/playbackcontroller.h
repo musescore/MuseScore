@@ -24,12 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
-#include "rcommand/commandtypes.h"
-#include "rcommand/icommanddispatcher.h"
-#include "rcommand/commandable.h"
-#include "actions/actionable.h"
+#include "actions/actiontypes.h"
 #include "context/iglobalcontext.h"
 #include "engraving/types/types.h"
 #include "notation/inotationconfiguration.h"
@@ -38,7 +33,6 @@
 #include "audio/main/iplayer.h"
 #include "audio/main/iplayback.h"
 #include "audio/common/audiotypes.h"
-#include "interactive/iinteractive.h"
 #include "tours/itoursservice.h"
 
 #include "drumsetloader.h"
@@ -49,17 +43,13 @@
 
 namespace mu::playback {
 class OnlineSoundsController;
-class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::rcommand::Commandable, public muse::Contextable
+class PlaybackController : public IPlaybackController, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };
 
 public:
@@ -128,9 +118,6 @@ public:
     void seekElement(const engraving::EngravingItem* element, bool flushSound = true) override;
     void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
 
-    bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
-    muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
-
     muse::secs_t totalPlayTime() const override;
     muse::async::Notification totalPlayTimeChanged() const override;
 
@@ -152,7 +139,7 @@ public:
 
     void setIsExportingAudio(bool exporting) override;
 
-    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+    bool canReceiveAction(const muse::actions::ActionCode& code) const;
 
     const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
@@ -210,8 +197,6 @@ private:
     void enableLoop();
     void disableLoop();
 
-    void notifyActionCheckedChanged(const muse::actions::ActionCode& actionCode);
-
     project::IProjectAudioSettingsPtr audioSettings() const;
 
     void resetPlayback();
@@ -248,7 +233,6 @@ private:
     muse::async::Channel<bool> m_loopEnabledChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
-    muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
