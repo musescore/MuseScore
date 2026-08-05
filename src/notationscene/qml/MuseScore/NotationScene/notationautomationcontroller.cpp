@@ -48,6 +48,16 @@ using SetPoint = mu::engraving::AutomationPointEdit::SetPoint;
 using MovePoint = mu::engraving::AutomationPointEdit::MovePoint;
 using ErasePoint = mu::engraving::AutomationPointEdit::ErasePoint;
 
+constexpr static qreal POLYLINE_LINE_WIDTH = 1.5;
+
+constexpr static qreal POLYLINE_STANDARD_CENTER_RADIUS = 3.0;
+constexpr static qreal POLYLINE_HOVERED_CENTER_RADIUS = 3.5;
+constexpr static qreal POLYLINE_SELECTED_CENTER_RADIUS = 3.5;
+
+constexpr static qreal POLYLINE_SELECTED_MIDDLE_RING_WIDTH = 1.5;
+
+constexpr static int POLYLINE_SELECTED_HOVERED_ALPHA = 127;
+
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
 {
     IF_ASSERT_FAILED(polyline) {
@@ -149,6 +159,24 @@ void NotationAutomationController::init()
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
+    notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        updatePolylinesColors();
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
+    notationConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
+        updatePolylinesColors();
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        updatePolylinesColors();
+    }, Asyncable::Mode::SetReplace /* FIXME */);
+
+    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](voice_idx_t idx, const muse::draw::Color&) {
+        if (idx == 0) {
+            updatePolylinesColors();
+        }
     }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
@@ -360,54 +388,87 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
         return;
     }
 
-    const QColor lineColor = notationConfiguration()->notationColor();
-    const QColor pointFillColor = Qt::white;
-
-    polyline->setLineColor(lineColor);
+    polyline->setLineWidth(POLYLINE_LINE_WIDTH);
     polyline->setDrawBackground(false);
 
+    polyline->setGhostPointsEnabled(false);
+    polyline->setSelectedPointsEnabled(true);
+
     PolylinePointStyle* standard = polyline->standardPointStyle();
-    standard->setCenterColor(pointFillColor);
-    standard->setOutlineColor(lineColor);
-    standard->setCenterColorHovered(pointFillColor);
-    standard->setOutlineColorHovered(lineColor);
+    standard->setCenterRadius(POLYLINE_STANDARD_CENTER_RADIUS);
+    standard->setOutlineWidth(POLYLINE_LINE_WIDTH);
 
-    PolylinePointStyle* ghost = polyline->ghostPointStyle();
-    QColor ghostColor = lineColor;
-    ghostColor.setAlphaF(0.4f);
-    ghost->setCenterColor(ghostColor);
+    standard->setCenterRadiusHovered(POLYLINE_HOVERED_CENTER_RADIUS);
+    standard->setOutlineWidthHovered(POLYLINE_LINE_WIDTH);
 
-    applyPolylineSizes(polyline);
+    PolylinePointStyle* selected = polyline->selectedPointStyle();
+    selected->setCenterRadius(POLYLINE_SELECTED_CENTER_RADIUS);
+    selected->setMiddleRingWidth(POLYLINE_SELECTED_MIDDLE_RING_WIDTH);
+    selected->setOutlineWidth(POLYLINE_LINE_WIDTH);
+
+    selected->setCenterRadiusHovered(POLYLINE_SELECTED_CENTER_RADIUS);
+    selected->setMiddleRingWidthHovered(POLYLINE_SELECTED_MIDDLE_RING_WIDTH);
+    selected->setOutlineWidthHovered(POLYLINE_LINE_WIDTH);
+
+    applyPolylineColors(polyline);
 }
 
-void NotationAutomationController::applyPolylineSizes(PolylinePlot* polyline) const
+void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline) const
 {
     IF_ASSERT_FAILED(polyline) {
         return;
     }
 
-    // Point/line sizes are raw pixels, so scale them with zoom manually
-    // and clamp so they don't get huge or vanish at extreme zoom
-    constexpr qreal baseLineWidth = 1.5;
-    constexpr qreal baseStandardRadius = 3.0;
-    constexpr qreal baseHoveredRadius = 4.0;
-    constexpr qreal minZoomScale = 0.5;
-    constexpr qreal maxZoomScale = 2.0;
-    const qreal hundredPercentScale = notationContextConfiguration()->scalingFromZoomPercentage(100);
-    const qreal zoomRatio = m_viewMatrix.m11() / hundredPercentScale;
-    const qreal zoomScale = std::clamp(std::sqrt(zoomRatio), minZoomScale, maxZoomScale);
-    const qreal lineWidth = baseLineWidth * zoomScale;
+    const QColor lineColor = inversionRelativeColor(muse::ui::FONT_PRIMARY_COLOR);
+    polyline->setLineColor(lineColor);
 
-    polyline->setLineWidth(lineWidth);
+    const QColor foregroundColor = notationConfiguration()->foregroundColor();
 
     PolylinePointStyle* standard = polyline->standardPointStyle();
-    standard->setCenterRadius(baseStandardRadius * zoomScale);
-    standard->setOutlineWidth(lineWidth);
-    standard->setCenterRadiusHovered(baseHoveredRadius * zoomScale);
-    standard->setOutlineWidthHovered(lineWidth);
+    standard->setCenterColor(foregroundColor);
+    standard->setOutlineColor(lineColor);
 
-    PolylinePointStyle* ghost = polyline->ghostPointStyle();
-    ghost->setCenterRadius(baseStandardRadius * zoomScale);
+    standard->setCenterColorHovered(inversionRelativeColor(muse::ui::BUTTON_COLOR));
+    standard->setOutlineColorHovered(lineColor);
+
+    QColor selectionColor = engravingConfiguration()->selectionColor().toQColor();
+
+    PolylinePointStyle* selected = polyline->selectedPointStyle();
+    selected->setCenterColor(selectionColor);
+    selected->setMiddleRingColor(foregroundColor);
+    selected->setOutlineColor(lineColor);
+
+    selectionColor.setAlpha(POLYLINE_SELECTED_HOVERED_ALPHA);
+    selected->setCenterColorHovered(selectionColor);
+    selected->setMiddleRingColorHovered(foregroundColor);
+    selected->setOutlineColorHovered(lineColor);
+}
+
+QColor NotationAutomationController::inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const
+{
+    // This method is necessary because automation colors are relative to the score inversion as opposed to the current UI theme. In an
+    // inverted score we use dark theme colors, and in a non-inverted score we use light theme colors...
+
+    // TODO: High contrast colors should actually be fully customizable (issue #34154)
+    const bool isHighContrast = uiConfiguration()->isHighContrast();
+    const muse::ui::ThemeCode lightTheme = isHighContrast ? muse::ui::HIGH_CONTRAST_WHITE_THEME_CODE : muse::ui::LIGHT_THEME_CODE;
+    const muse::ui::ThemeCode darkTheme = isHighContrast ? muse::ui::HIGH_CONTRAST_BLACK_THEME_CODE : muse::ui::DARK_THEME_CODE;
+
+    const bool inverted = notationConfiguration()->shouldInvertScore();
+
+    const muse::ui::ThemeList& themes = uiConfiguration()->themes();
+    for (const muse::ui::ThemeInfo& theme : themes) {
+        // Set line colors based on score inversion as opposed to current UI themes...
+        const bool foundLightTheme = !inverted && theme.codeKey == lightTheme;
+        const bool foundDarkTheme = inverted && theme.codeKey == darkTheme;
+        if (foundLightTheme || foundDarkTheme) {
+            return theme.values[key].toString();
+        }
+    }
+
+    ASSERT_X("Error scanning themes");
+
+    return QColor();
 }
 
 void NotationAutomationController::updatePolylinesGeometry()
@@ -442,7 +503,20 @@ void NotationAutomationController::updatePolylinesGeometry()
         polyline->setX(staffCanvasRect.x());
         polyline->setY(staffCanvasRect.y());
 
-        applyPolylineSizes(polyline);
+        applyPolylineColors(polyline);
+    }
+}
+
+void NotationAutomationController::updatePolylinesColors()
+{
+    for (const auto& [key, polylines] : m_stavesToLinesMap) {
+        IF_ASSERT_FAILED(key.isValid() && !polylines.empty()) {
+            continue;
+        }
+        // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
+        // providing a single polyline over the entire staff...
+        PolylinePlot* polyline = *polylines.begin();
+        applyPolylineColors(polyline);
     }
 }
 
