@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -61,7 +61,7 @@ static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& item, co
             if (t.mode == DrawText::Point) {
                 provider->drawText(t.rect.topLeft(), t.text);
             } else {
-                provider->drawText(t.rect, t.flags, t.text);
+                provider->drawText(t.rect, t.alignment, t.textFlags, t.text);
             }
         }
 
