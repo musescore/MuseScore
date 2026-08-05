@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include "actions/actiontypes.h"
 #include "async/channel.h"
 #include "async/notification.h"
 #include "async/promise.h"
@@ -122,9 +121,6 @@ public:
 
     virtual void seekElement(const engraving::EngravingItem* element, bool flushSound = true) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) = 0;
-
-    virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
-    virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;
 
     virtual muse::secs_t totalPlayTime() const = 0;
     virtual muse::async::Notification totalPlayTimeChanged() const = 0;
