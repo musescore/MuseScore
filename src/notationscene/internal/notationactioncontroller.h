@@ -260,6 +260,7 @@ private:
     void checkForScoreCorruptions();
 
     void toggleAutomation();
+    void selectAutomationType(const muse::rcommand::CommandQuery& query);
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);

@@ -577,6 +577,7 @@ void NotationActionController::init()
                     VoiceAssignment::ALL_VOICE_IN_STAFF);
 
     registerCommand(TOGGLE_AUTOMATION_COMMAND, &Controller::toggleAutomation);
+    registerCommand(SELECT_AUTOMATION_TYPE_COMMAND, &Controller::selectAutomationType);
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -3161,6 +3162,20 @@ void NotationActionController::toggleAutomation()
 
     const bool isEnabled = masterNotation->automation()->isAutomationModeEnabled();
     masterNotation->automation()->setAutomationModeEnabled(!isEnabled);
+}
+
+void NotationActionController::selectAutomationType(const muse::rcommand::CommandQuery& query)
+{
+    const std::string type = query.param("type").toString();
+
+    mu::engraving::AutomationType automationType = mu::engraving::AutomationType::Dynamics;
+    if (type == "volume") {
+        automationType = mu::engraving::AutomationType::Volume;
+    } else if (type == "pan") {
+        automationType = mu::engraving::AutomationType::Pan;
+    }
+
+    configuration()->setCurrentAutomationType(automationType);
 }
 
 bool NotationActionController::isNoteInputActionAllowed() const

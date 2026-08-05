@@ -28,6 +28,8 @@
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "notation/inotationinteraction.h"
+#include "notation/inotationautomation.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
 class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
@@ -36,6 +38,7 @@ class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
     QML_ELEMENT;
 
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:
     Q_INVOKABLE void loadItems(int elementType);
@@ -63,8 +66,11 @@ private:
     muse::uicomponents::MenuItemList makeHairpinItems();
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
     muse::uicomponents::MenuItemList makeTextItems();
+    muse::uicomponents::MenuItemList makeAutomationTypeItems();
 
     muse::uicomponents::MenuItem* makeEditStyle(const engraving::EngravingItem* element);
+    muse::uicomponents::MenuItem* makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
+                                                         const muse::TranslatableString& title);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
@@ -73,6 +79,7 @@ private:
 
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
+    INotationAutomationPtr automation() const;
 
     const engraving::EngravingItem* currentElement() const;
 

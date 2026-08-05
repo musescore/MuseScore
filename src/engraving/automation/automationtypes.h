@@ -73,6 +73,8 @@ inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve
 enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
+    Volume,
+    Pan,
 };
 
 struct AutomationCurveKey {
