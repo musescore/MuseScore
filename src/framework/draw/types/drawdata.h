@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_BUFFEREDDRAWTYPES_H
-#define MUSE_DRAW_BUFFEREDDRAWTYPES_H
+
+#pragma once
 
 #include <memory>
 
@@ -81,11 +81,12 @@ struct DrawText {
 
     Mode mode = Mode::Undefined;
     RectF rect;     // If mode is Point when use topLeft point
-    int flags = 0;
+    Alignment alignment = {};
+    TextFlags textFlags = {};
     String text;
     bool operator==(const DrawText& o) const
     {
-        return mode == o.mode && flags == o.flags && rect == o.rect && text == o.text;
+        return mode == o.mode && alignment == o.alignment && textFlags == o.textFlags && rect == o.rect && text == o.text;
     }
 
     bool operator!=(const DrawText& o) const { return !this->operator==(o); }
@@ -175,4 +176,3 @@ struct Diff {
     }
 };
 }
-#endif // MUSE_DRAW_BUFFEREDDRAWTYPES_H

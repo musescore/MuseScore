@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # MuseScore-CLA-applies
 #
-# MuseScore
+# MuseScore Studio
 # Music Composition & Notation
 #
 # Copyright (C) 2022 MuseScore Limited and others
@@ -22,8 +22,21 @@ set(MODULE_TEST muse_draw_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/painter_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fontrendercache_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fontfacext_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fontsprovider_qt_tests.cpp
 )
 
 set(MODULE_TEST_LINK muse_draw)
+
+set(MODULE_TEST_INCLUDE
+    ${MODULE_TEST_INCLUDE}
+    ${CMAKE_CURRENT_LIST_DIR}/..
+)
+
+set(MODULE_TEST_DEF
+    ${MODULE_TEST_DEF}
+    MUSE_DRAW_TEST_FONTS_DIR="${CMAKE_CURRENT_LIST_DIR}/fonts"
+)
 
 include(SetupGTest)

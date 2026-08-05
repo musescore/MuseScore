@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -318,7 +318,8 @@ static JsonObject toObj(const DrawText& text)
     } else {
         o["rect"] = toArr(text.rect);
     }
-    o["flags"] = text.flags;
+    o["alignment"] = static_cast<int>(text.alignment);
+    o["textFlags"] = static_cast<int>(text.textFlags);
     o["text"] = text.text;
     return o;
 }
@@ -334,7 +335,8 @@ static void fromObj(const JsonObject& obj, DrawText& text)
         fromArr(obj["rect"].toArray(), text.rect);
         text.mode = DrawText::Rect;
     }
-    text.flags = obj["flags"].toInt();
+    text.alignment = static_cast<Alignment>(obj["alignment"].toInt());
+    text.textFlags = static_cast<TextFlags>(obj["textFlags"].toInt());
     text.text = obj["text"].toString();
 }
 
