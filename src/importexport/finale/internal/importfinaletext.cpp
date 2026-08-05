@@ -1827,8 +1827,10 @@ void FinaleParser::importPageTexts()
     std::vector<MeasureBase**> topBoxes;
     std::vector<MeasureBase**> bottomBoxes;
     for (const Page* page : m_score->pages()) {
-        topBoxes.push_back(&page->firstMeasureBase());
-        bottomBoxes.push_back(&page->lastMeasureBase());
+        MeasureBase* firstMB = toMeasureBase(page->firstMeasureBase());
+        topBoxes.push_back(&firstMB);
+        MeasureBase* lastMB = toMeasureBase(page->lastMeasureBase());
+        bottomBoxes.push_back(&lastMB);
     }
     const double defaultSpatium = m_score->style().defaultSpatium();
 
@@ -1884,8 +1886,9 @@ void FinaleParser::importPageTexts()
                         setAndStyleProperty(pageFrame, Pid::BOTTOM_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                         pageFrame->ryoffset() -= headerDistance;
                     }
-                    topBoxes.at(i) = &pageFrame;
-                    return toMeasureBase(pageFrame);
+                    MeasureBase* pageMB = toMeasureBase(pageFrame);
+                    topBoxes.at(i) = &pageMB;
+                    return pageMB;
                 } else if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Bottom) {
                     if ((*bottomBoxes.at(i))->isVBox()) {
                         return *bottomBoxes.at(i);
@@ -1929,8 +1932,9 @@ void FinaleParser::importPageTexts()
                                             Spatium::fromAbsolute(boxToNotationDist, defaultSpatium));
                         setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                     }
-                    bottomBoxes.at(i) = &pageFrame;
-                    return toMeasureBase(pageFrame);
+                    MeasureBase* pageMB = toMeasureBase(pageFrame);
+                    bottomBoxes.at(i) = &pageMB;
+                    return pageMB;
                 }
                 // Don't add frames for text vertically aligned to the center.
                 /// @todo use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
