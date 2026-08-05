@@ -29,6 +29,15 @@ using namespace mu::appshell;
 
 static std::vector<QVariantMap> welcomeDialogData()
 {
+    QVariantMap museSoundsPro;
+    museSoundsPro.insert("title", muse::qtrc("appshell/welcome", "Unlock Premium Playback"));
+    museSoundsPro.insert("imageUrl", "qrc:/resources/welcomedialog/MuseSoundsPro.png");
+    museSoundsPro.insert("description", muse::qtrc("appshell/welcome",
+                                                   "Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio."));
+    museSoundsPro.insert("buttonText", muse::qtrc("appshell/welcome", "Get MuseSounds Pro"));
+    museSoundsPro.insert("destinationUrl",
+                         "https://www.musehub.com/muse-sounds/musesounds-pro?utm_medium=Referral&utm_source=MSS&utm_campaign=MH_WW_REF_MSS_APP_ALL_040826_crosslink&utm_content=welcome_screen");
+
     QVariantMap whatsNew;
     whatsNew.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
     whatsNew.insert("imageUrl", "qrc:/resources/welcomedialog/WhatsNew.png");
@@ -65,7 +74,7 @@ static std::vector<QVariantMap> welcomeDialogData()
                             "https://www.youtube.com/playlist?list=PLTYuWi2LmaPECOZrC6bkPHBkYY9_WEexT&utm_source=mss-app-welcome-tutorials&utm_medium=mss-app-welcome-tutorials&utm_campaign=mss-app-welcome-tutorials&utm_id=mss-app-welcome-tutorials");
 
     //! NOTE: This is the order the above items will appear in the carousel
-    return { whatsNew, cloudStorage, freeMuseSounds, exploreTutorials };
+    return { museSoundsPro, whatsNew, cloudStorage, freeMuseSounds, exploreTutorials };
 }
 
 WelcomeDialogModel::WelcomeDialogModel()
