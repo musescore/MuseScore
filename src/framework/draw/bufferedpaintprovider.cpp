@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -297,18 +297,12 @@ void BufferedPaintProvider::drawPolygon(const PointF* points, size_t pointCount,
 
 void BufferedPaintProvider::drawText(const PointF& point, const String& text)
 {
-    editableData().texts.push_back(DrawText { DrawText::Point, RectF(point, SizeF()), 0, text });
+    editableData().texts.push_back(DrawText { DrawText::Point, RectF(point, SizeF()), {}, {}, text });
 }
 
-void BufferedPaintProvider::drawText(const RectF& rect, int flags, const String& text)
+void BufferedPaintProvider::drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text)
 {
-    editableData().texts.push_back(DrawText { DrawText::Rect, rect, flags, text });
-}
-
-void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const String& text)
-{
-    setFont(f);
-    editableData().texts.push_back(DrawText { DrawText::Point, RectF(pos, SizeF()), 0, text });
+    editableData().texts.push_back(DrawText { DrawText::Rect, rect, alignment, textFlags, text });
 }
 
 void BufferedPaintProvider::drawSymbol(const PointF& point, char32_t ucs4Code)

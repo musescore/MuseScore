@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -38,11 +38,9 @@ public:
     int addFont(const FontDataKey& key, const io::path_t& path) override;
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
-    std::vector<FontDataKey> substitutionFonts(Font::Type type) const override;
+    std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const override;
     FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
     io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const override;
-
-    void addAdditionalFonts(const io::path_t& path) override;
 
 private:
 
@@ -58,7 +56,7 @@ private:
     const FontInfo& fontInfo(const FontDataKey& key) const;
 
     std::map<Font::Type, FontDataKey> m_defaults;
-    std::map<Font::Type, std::vector<FontDataKey> > m_substitutions;
+    std::map<FontDataKey, std::vector<FontDataKey> > m_familySubstitutions;
     std::vector<FontInfo> m_fonts;
 };
 }
