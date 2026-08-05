@@ -51,6 +51,10 @@ declare_muse_module_opt(DOCKWINDOW ON)
 declare_muse_module_opt(DRAW ON)
 option(MUSE_MODULE_DRAW_TRACE "Trace draw objects" OFF)
 option(MUSE_MODULE_DRAW_USE_QTFONTMETRICS "Use Qt font metrics (for some metrics)" ON)
+option(MUSE_MODULE_DRAW_USE_QTTEXTDRAW "Use Qt text drawing path" ON)
+option(MUSE_MODULE_DRAW_USE_STATIC_DEPS "Use static draw dependencies" OFF)
+option(MUSE_MODULE_DRAW_USE_FONTFACE_FT "Use FreeType font face backend" ON)
+option(MUSE_MODULE_DRAW_USE_FONTFACE_XT "Use XT font face backend" OFF)
 
 declare_muse_module_opt(EXTENSIONS ON)
 

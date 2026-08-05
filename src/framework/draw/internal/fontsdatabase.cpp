@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -29,8 +29,6 @@
 #endif
 
 #include "global/io/file.h"
-#include "global/io/dir.h"
-#include "global/serialization/json.h"
 
 #include "log.h"
 
@@ -46,8 +44,10 @@ void FontsDatabase::setDefaultFont(Font::Type type, const FontDataKey& key)
 
 void FontsDatabase::insertSubstitution(const String& familyName, const String& substituteName)
 {
-    UNUSED(familyName);
-    UNUSED(substituteName);
+    FontDataKey familyKey(familyName);
+    FontDataKey substituteKey(substituteName);
+    m_familySubstitutions[familyKey].push_back(substituteKey);
+
 #ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     QFont::insertSubstitution(familyName, substituteName);
 #endif
@@ -92,11 +92,11 @@ FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, Font::Type 
     return def;
 }
 
-std::vector<FontDataKey> FontsDatabase::substitutionFonts(Font::Type type) const
+std::vector<FontDataKey> FontsDatabase::substitutionFonts(const FontDataKey& requireKey) const
 {
-    auto it = m_substitutions.find(type);
-    if (it != m_substitutions.end()) {
-        return it->second;
+    auto familyIt = m_familySubstitutions.find(FontDataKey(requireKey.family()));
+    if (familyIt != m_familySubstitutions.end()) {
+        return familyIt->second;
     }
 
     static std::vector<FontDataKey> null;
@@ -145,43 +145,4 @@ const FontsDatabase::FontInfo& FontsDatabase::fontInfo(const FontDataKey& key) c
 
     static FontInfo null;
     return null;
-}
-
-void FontsDatabase::addAdditionalFonts(const io::path_t& path)
-{
-    io::File f(path + "/fontslist.json");
-    if (!f.open(io::IODevice::ReadOnly)) {
-        LOGE() << "failed open file: " << f.filePath();
-        return;
-    }
-
-    io::path_t absolutePath = io::Dir(path).absolutePath() + "/";
-
-    ByteArray data = f.readAll();
-    std::string err;
-    JsonDocument json = JsonDocument::fromJson(data, &err);
-    if (!err.empty()) {
-        LOGE() << "failed parse: " << f.filePath();
-        return;
-    }
-
-    JsonArray fontInfos = json.rootArray();
-    for (size_t i = 0; i < fontInfos.size(); ++i) {
-        JsonObject infoObj = fontInfos.at(i).toObject();
-
-        std::string file = infoObj.value("file").toStdString();
-        if (file.empty()) {
-            continue;
-        }
-        std::string family = infoObj.value("family").toStdString();
-        if (family.empty()) {
-            continue;
-        }
-        bool bold = infoObj.value("bold").toBool();
-        bool italic = infoObj.value("italic").toBool();
-
-        FontDataKey fontDataKey(family, bold, italic);
-        addFont(fontDataKey, absolutePath + file);
-        m_substitutions[Font::Type::Text].push_back(fontDataKey);
-    }
 }
