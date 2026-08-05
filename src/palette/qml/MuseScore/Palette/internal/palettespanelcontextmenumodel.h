@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
-#include "actions/iactionsdispatcher.h"
+#include "internal/ipalettecommandscontroller.h"
 
 namespace mu::palette {
 class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
@@ -37,7 +37,7 @@ class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuMod
     QML_ELEMENT
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<IPaletteCommandsController> commandsController = { this };
 
 public:
     explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);
