@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <limits>
+
 #include <QFile>
 #include <QFileInfo>
 
@@ -439,7 +441,13 @@ bool BBFile::read(const QString& name)
                     track->setOutChannel(channel);
                     _tracks.append(track);
                 }
-                Fraction tick = Fraction::fromTicks(a[idx] + (a[idx + 1] << 8) + (a[idx + 2] << 16) + (a[idx + 3] << 24));
+                uint32_t rawTick = uint32_t(a[idx]) + (uint32_t(a[idx + 1]) << 8) + (uint32_t(a[idx + 2]) << 16)
+                                   + (uint32_t(a[idx + 3]) << 24);
+                if (rawTick > uint32_t(std::numeric_limits<int>::max())) {
+                    LOGD("note event tick out of range at idx %04x", idx);
+                    continue;
+                }
+                Fraction tick = Fraction::fromTicks(int(rawTick));
                 tick -= Fraction::fromTicks(4 * bbDivision);
                 if (tick >= endTick) {
                     LOGD("event tick %d > %d", tick.ticks(), endTick.ticks());
@@ -450,7 +458,13 @@ bool BBFile::read(const QString& name)
                 note.setPitch(a[idx + 5]);
                 note.setVelo(a[idx + 6]);
                 note.setChannel(channel);
-                int len1 = a[idx + 8] + (a[idx + 9] << 8) + (a[idx + 10] << 16) + (a[idx + 11] << 24);
+                uint32_t rawLen = uint32_t(a[idx + 8]) + (uint32_t(a[idx + 9]) << 8) + (uint32_t(a[idx + 10]) << 16)
+                                  + (uint32_t(a[idx + 11]) << 24);
+                if (rawLen > uint32_t(std::numeric_limits<int>::max())) {
+                    LOGD("note event length out of range at idx %04x", idx);
+                    continue;
+                }
+                int len1 = int(rawLen);
                 if (len1 == 0) {
                     if (lastLen == 0) {
                         LOGD("note event of len 0 at idx %04x", idx);
@@ -459,7 +473,7 @@ bool BBFile::read(const QString& name)
                     len1 = lastLen;
                 }
                 lastLen = len1;
-                note.setDuration((len1* Constants::DIVISION) / bbDivision);
+                note.setDuration(int((uint64_t(len1) * Constants::DIVISION) / bbDivision));
                 track->append(note);
             } else if (type == 0xb0 || type == 0xc0) {
                 // ignore controller
