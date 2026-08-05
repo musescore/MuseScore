@@ -114,6 +114,21 @@ static BracketVisualSpan bracketVisualSpan(const ChordBracket* bracket)
     if (startStaff == endStaff) {
         result.topY = std::min(topY(startChord), topY(endChord)) - topPadding;
         result.bottomY = std::max(bottomY(startChord), bottomY(endChord)) + bottomPadding;
+
+        // Enforce the minimum length using endpoint coordinates.
+        const double minLen = 2 * spatium;
+        const double diff = minLen - std::abs(result.bottomY - result.topY);
+
+        if (diff > 0.0) {
+            if (bracket->hookPos() == DirectionV::DOWN) {
+                result.topY -= diff;
+            } else if (bracket->hookPos() == DirectionV::AUTO) {
+                result.topY -= 0.5 * diff;
+                result.bottomY += 0.5 * diff;
+            } else {
+                result.bottomY += diff;
+            }
+        }
     } else {
         const Chord* upperAnchor = startStaff < endStaff ? startChord : endChord;
         const Chord* lowerAnchor = startStaff < endStaff ? endChord : startChord;
