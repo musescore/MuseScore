@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include <stack>
@@ -132,7 +131,9 @@ public:
     void drawText(const PointF& point, const String& text);
     inline void drawText(double x, double y, const String& text);
 
-    void drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text);
+    void drawText(const RectF& rect, int flags, const String& text);
+
+    void drawTextWorkaround(const PointF& pos, const String& text);
 
     void drawSymbol(const PointF& point, char32_t ucs4Code);
 
