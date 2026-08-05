@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -444,23 +444,13 @@ void Painter::drawText(const PointF& point, const String& text)
     }
 }
 
-void Painter::drawText(const RectF& rect, int flags, const String& text)
+void Painter::drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text)
 {
     applyFontSizeScaling();
 
-    m_provider->drawText(rect, flags, text);
+    m_provider->drawText(rect, alignment, textFlags, text);
     if (extended) {
-        extended->drawText(rect, flags, text);
-    }
-}
-
-void Painter::drawTextWorkaround(const PointF& pos, const String& text)
-{
-    applyFontSizeScaling();
-
-    m_provider->drawTextWorkaround(font(), pos, text);
-    if (extended) {
-        m_provider->drawTextWorkaround(font(), pos, text);
+        extended->drawText(rect, alignment, textFlags, text);
     }
 }
 
@@ -535,6 +525,12 @@ const Painter::State& Painter::state() const
 void Painter::updateViewTransform()
 {
     State& st = editableState();
+    if (st.window.isNull()) {
+        st.viewTransform = Transform();
+        updateMatrix();
+        return;
+    }
+
     double scaleW = double(st.viewport.width()) / double(st.window.width());
     double scaleH = double(st.viewport.height()) / double(st.window.height());
     st.viewTransform = Transform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
