@@ -766,6 +766,7 @@ public:
     short readWord();
     int readDWord();
     unsigned readUnsigned();
+    void verifyLength(unsigned len) const;
     char* readString();
     QString readQString();
     void readExtra();
