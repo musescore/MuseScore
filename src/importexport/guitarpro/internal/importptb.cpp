@@ -903,7 +903,7 @@ void PowerTab::addToScore(ptSection& sec)
         memset(nvec.data(), 0, sizeof(Note*) * 10);
     }
 
-    if (sec.beats.size() > staves) {
+    if (sec.beats.size() > static_cast<size_t>(staves)) {
         LOGE() << "Found more beat lists than staves, some beat lists will be skipped";
     }
 

@@ -3957,7 +3957,7 @@ QList<MidiData*> MeasureData::getMidiDatas(MidiType type)
 
 static bool readLengthValid(const Block* dataBlock, unsigned int proposedReadLength)
 {
-    return dataBlock->size() > 0 && static_cast<unsigned int>(proposedReadLength) <= dataBlock->size();
+    return dataBlock->size() > 0 && proposedReadLength <= static_cast<unsigned int>(dataBlock->size());
 }
 
 StreamHandle::StreamHandle()
