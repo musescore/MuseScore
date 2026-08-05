@@ -109,7 +109,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::METRONOME, rcommand::Checkable::Yes)
     },
     CommandInfo{
-        SHOW_PLAYBACK_SETUP_COMMAND,
+        OPEN_PLAYBACK_SETUP_COMMAND,
         TranslatableString("playback", "Playback setup"),
         TranslatableString("playback", "Show playback setup"),
         InputSchema(),

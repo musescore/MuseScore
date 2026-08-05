@@ -99,62 +99,6 @@ void PlaybackController::init()
 {
     m_onlineSoundsController->regActions();
 
-    auto d = commandsDispatcher();
-
-    d->onRequest(this, PLAY_TOGGLE_COMMAND, [this]() { return togglePlay(); });
-    d->onRequest(this, PLAY_COMMAND, [this]() { return play(); });
-    d->onRequest(this, PLAY_SELECTION_COMMAND, [this]() { return playFromSelection(); });
-    d->onRequest(this, PAUSE_COMMAND, [this]() { return pause(); });
-    d->onRequest(this, PAUSE_AND_SELECT_COMMAND, [this]() { return pause(true); });
-    d->onRequest(this, STOP_COMMAND, [this]() { return stop(); });
-    d->onRequest(this, REWIND_COMMAND, [this](const rcommand::Request& request) { return rewind(request); });
-    d->onRequest(this, LOOP_TOGGLE_COMMAND, [this]() { return toggleLoopPlayback(); });
-    d->onRequest(this, LOOP_IN_COMMAND, [this]() { return addLoopBoundary(LoopBoundaryType::LoopIn); });
-    d->onRequest(this, LOOP_OUT_COMMAND, [this]() { return addLoopBoundary(LoopBoundaryType::LoopOut); });
-    d->onRequest(this, METRONOME_TOGGLE_COMMAND, [this]() { return toggleMetronome(); });
-    d->onRequest(this, SHOW_PLAYBACK_SETUP_COMMAND, [this]() { return showPlaybackSetup(); });
-    d->onRequest(this, MIDI_TOGGLE_COMMAND, [this]() { return toggleMidiInput(); });
-    d->onRequest(this, MIDI_INPUT_WRITTEN_PITCH_COMMAND, [this]() { return setMidiUseWrittenPitch(true); });
-    d->onRequest(this, MIDI_INPUT_SOUNDING_PITCH_COMMAND, [this]() { return setMidiUseWrittenPitch(false); });
-    d->onRequest(this, REPEATS_TOGGLE_COMMAND, [this]() { return togglePlayRepeats(); });
-    d->onRequest(this, CHORDSYMBOLS_TOGGLE_COMMAND, [this]() { return togglePlayChordSymbols(); });
-    d->onRequest(this, HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND, [this]() { return toggleHearPlaybackWhenEditing(); });
-    d->onRequest(this, PAN_TOGGLE_COMMAND, [this]() { return toggleAutomaticallyPan(); });
-    d->onRequest(this, COUNTIN_TOGGLE_COMMAND, [this]() { return toggleCountIn(); });
-    d->onRequest(this, RELOAD_PLAYBACK_CACHE_COMMAND, [this]() { return reloadPlaybackCache(); });
-
-    // compat
-    {
-        static std::map<ActionCode, rcommand::Command> actionToCommand = {
-            { "play", PLAY_TOGGLE_COMMAND },
-            { "play-from-selection", PLAY_SELECTION_COMMAND },
-            { "pause", PAUSE_COMMAND },
-            { "pause-and-select", PAUSE_AND_SELECT_COMMAND },
-            { "stop", STOP_COMMAND },
-            { "rewind", REWIND_COMMAND },
-            { "loop", LOOP_TOGGLE_COMMAND },
-            { "loop-in", LOOP_IN_COMMAND },
-            { "loop-out", LOOP_OUT_COMMAND },
-            { "metronome", METRONOME_TOGGLE_COMMAND },
-            { "playback-setup", SHOW_PLAYBACK_SETUP_COMMAND },
-            { "midi-on", MIDI_TOGGLE_COMMAND },
-            { "midi-input-written-pitch", MIDI_INPUT_WRITTEN_PITCH_COMMAND },
-            { "midi-input-sounding-pitch", MIDI_INPUT_SOUNDING_PITCH_COMMAND },
-            { "repeats", REPEATS_TOGGLE_COMMAND },
-            { "play-chord-symbols", CHORDSYMBOLS_TOGGLE_COMMAND },
-            { "toggle-hear-playback-when-editing", HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND },
-            { "pan", PAN_TOGGLE_COMMAND },
-            { "countin", COUNTIN_TOGGLE_COMMAND },
-            { "reload-playback-cache", RELOAD_PLAYBACK_CACHE_COMMAND },
-            { "clear-online-sounds-cache", CLEAR_ONLINESOUNDS_CACHE_COMMAND },
-        };
-
-        auto ad = dispatcher();
-        for (const auto& [actionCode, command] : actionToCommand) {
-            ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
-        }
-    }
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
@@ -723,16 +667,15 @@ muse::Ret PlaybackController::stop()
     return make_ok();
 }
 
-muse::rcommand::Response PlaybackController::rewind(const muse::rcommand::Request& request)
+muse::Ret PlaybackController::rewind(muse::secs_t secs)
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
-        return muse::rcommand::make_response(request, make_ret(Ret::Code::NotSupported));
+        return make_ret(Ret::Code::NotSupported);
     }
 
-    double secs = request.query.param("position", Val(0.0)).toDouble();
-    doRewind(secs_t(secs));
-    return muse::rcommand::make_response(request, make_ok());
+    doRewind(secs);
+    return make_ok();
 }
 
 muse::Ret PlaybackController::playFromSelection(bool showErrors)
@@ -1046,12 +989,6 @@ muse::Ret PlaybackController::reloadPlaybackCache()
         nPlayback->reload();
     }
 
-    return make_ok();
-}
-
-muse::Ret PlaybackController::showPlaybackSetup()
-{
-    interactive()->open("musescore://playback/soundprofiles");
     return make_ok();
 }
 
