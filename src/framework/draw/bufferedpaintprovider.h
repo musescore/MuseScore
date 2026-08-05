@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_BUFFEREDPAINTPROVIDER_H
-#define MUSE_DRAW_BUFFEREDPAINTPROVIDER_H
+
+#pragma once
 
 #include "ipaintprovider.h"
 #include "types/drawdata.h"
@@ -71,8 +71,7 @@ public:
     void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) override;
 
     void drawText(const PointF& point, const String& text) override;
-    void drawText(const RectF& rect, int flags, const String& text) override;
-    void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) override;
+    void drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text) override;
 
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 
@@ -116,5 +115,3 @@ private:
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 };
 }
-
-#endif // MUSE_DRAW_BUFFEREDPAINTPROVIDER_H
