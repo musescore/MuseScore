@@ -58,6 +58,16 @@ static FaceKey faceKeyForMetricsFont(const Font& f)
     return FaceKey(dataKeyForFont(f), f.type(), fontMetricsPixelSize(f));
 }
 
+static int loadedPixelSizeForFontPath(const io::path_t& path, int requirePixelSize)
+{
+    // FTX fonts store glyph metrics and images baked at LOADED_PIXEL_SIZE.
+    if (io::FileInfo::suffix(path).toLower() == u"ftx") {
+        return static_cast<int>(LOADED_PIXEL_SIZE);
+    }
+
+    return requirePixelSize;
+}
+
 static inline RectF fromFBBox(const FBBox& bb, double scale)
 {
     return RectF(from_f26d6(bb.left()) * scale, from_f26d6(bb.top()) * scale,
@@ -526,10 +536,17 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     //! (for example, if there is no required one)
     FontDataKey actualDataKey = fontsDatabase()->actualFont(requireKey.dataKey, requireKey.type);
 
+    io::path_t fontPath = fontsDatabase()->fontPath(requireKey.dataKey, requireKey.type);
+    IF_ASSERT_FAILED(!fontPath.empty()) {
+        return nullptr;
+    }
+
+    const int loadedPixelSize = loadedPixelSizeForFontPath(fontPath, requireKey.pixelSize);
+
     //! NOTE We are looking for the font face we real need among the previously loaded ones
     IFontFace* face = nullptr;
     for (IFontFace* ff : m_loadedFaces) {
-        if (ff->key().dataKey == actualDataKey && ff->key().pixelSize == requireKey.pixelSize && ff->isSymbolMode() == isSymbolMode) {
+        if (ff->key().dataKey == actualDataKey && ff->key().pixelSize == loadedPixelSize && ff->isSymbolMode() == isSymbolMode) {
             face = ff;
             break;
         }
@@ -537,15 +554,10 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
 
     //! NOTE If we haven't found a face, we'll create a new one
     if (!face) {
-        io::path_t fontPath = fontsDatabase()->fontPath(requireKey.dataKey, requireKey.type);
-        IF_ASSERT_FAILED(!fontPath.empty()) {
-            return nullptr;
-        }
-
         FaceKey loadedKey;
         loadedKey.dataKey = actualDataKey;
         loadedKey.type = requireKey.type;
-        loadedKey.pixelSize = requireKey.pixelSize;
+        loadedKey.pixelSize = loadedPixelSize;
 
         face = createFontFace(fontPath);
         IF_ASSERT_FAILED(face) {
@@ -564,25 +576,27 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
 
     auto subtitutionFontDataKeys = fontsDatabase()->substitutionFonts(requireKey.dataKey);
     for (const FontDataKey& dataKey : subtitutionFontDataKeys) {
+        io::path_t fontPath = fontsDatabase()->fontPath(dataKey, requireKey.type);
+        if (fontPath.empty()) {
+            LOGE() << "subtitution font path is empty: " << dataKey.family().id();
+            continue;
+        }
+
+        const int loadedPixelSize = loadedPixelSizeForFontPath(fontPath, requireKey.pixelSize);
+
         IFontFace* subtitutionFace = nullptr;
         for (IFontFace* ff : m_loadedFaces) {
-            if (ff->key().dataKey == dataKey && ff->key().pixelSize == requireKey.pixelSize && ff->isSymbolMode() == isSymbolMode) {
+            if (ff->key().dataKey == dataKey && ff->key().pixelSize == loadedPixelSize && ff->isSymbolMode() == isSymbolMode) {
                 subtitutionFace = ff;
                 break;
             }
         }
 
         if (!subtitutionFace) {
-            io::path_t fontPath = fontsDatabase()->fontPath(dataKey, requireKey.type);
-            if (fontPath.empty()) {
-                LOGE() << "subtitution font path is empty: " << dataKey.family().id();
-                continue;
-            }
-
             FaceKey loadedKey;
             loadedKey.dataKey = dataKey;
             loadedKey.type = requireKey.type;
-            loadedKey.pixelSize = requireKey.pixelSize;
+            loadedKey.pixelSize = loadedPixelSize;
 
             subtitutionFace = createFontFace(fontPath);
             if (!subtitutionFace) {
