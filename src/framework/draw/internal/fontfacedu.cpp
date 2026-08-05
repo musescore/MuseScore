@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -28,9 +28,6 @@ struct DummyGlyph {
     f26dot6_t textAdvance = 0;
     FBBox symBbox;
     f26dot6_t symAdvance = 0;
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-    msdfgen::Shape shape;
-#endif
 };
 
 static const DummyGlyph& dummyGlyph()
@@ -41,51 +38,6 @@ static const DummyGlyph& dummyGlyph()
         g.textAdvance = 4160;
         g.symBbox = FBBox(0, -4011, 2079, 4817);
         g.symAdvance = 2080;
-
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-        using namespace msdfgen;
-
-        g.shape.inverseYAxis = true;
-        g.shape.fillRule = static_cast<msdfgen::FillRule>(msdfgen::FillRule::NonZero);
-
-        Contour c1;
-        {
-            std::vector<Point2> points = {
-                Point2(0, -25), Point2(64, -25),
-                Point2(64, -25), Point2(64, 125),
-                Point2(64, 125), Point2(0, 125),
-                Point2(0, 125), Point2(0, -25)
-            };
-
-            for (size_t i = 0; i < 8;) {
-                EdgeSegment e;
-                e.actualType = EdgeSegment::ActualType::Linear;
-                e.segments.linear.p[0] = points.at(i++);
-                e.segments.linear.p[1] = points.at(i++);
-                c1.edges.push_back(e);
-            }
-        }
-        g.shape.contours.push_back(c1);
-
-        Contour c2;
-        {
-            std::vector<Point2> points = {
-                Point2(9, 115), Point2(54, 115),
-                Point2(54, 115), Point2(54, -15),
-                Point2(54, -15), Point2(9, -15),
-                Point2(9, -15), Point2(9, 115)
-            };
-
-            for (size_t i = 0; i < 8;) {
-                EdgeSegment e;
-                e.actualType = EdgeSegment::ActualType::Linear;
-                e.segments.linear.p[0] = points.at(i++);
-                e.segments.linear.p[1] = points.at(i++);
-                c2.edges.push_back(e);
-            }
-        }
-        g.shape.contours.push_back(c2);
-#endif
     }
 
     return g;
@@ -186,13 +138,12 @@ f26dot6_t FontFaceDU::glyphAdvance(glyph_idx_t idx) const
     return m_origin->glyphAdvance(idx);
 }
 
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-const msdfgen::Shape& FontFaceDU::glyphShape(glyph_idx_t idx) const
+const GlyphImage& FontFaceDU::glyphImage(glyph_idx_t idx) const
 {
     if (idx == 0) {
-        return dummyGlyph().shape;
+        static const GlyphImage emptyImage;
+        return emptyImage;
     }
-    return m_origin->glyphShape(idx);
-}
 
-#endif
+    return m_origin->glyphImage(idx);
+}

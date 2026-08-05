@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_DRAWTYPES_H
-#define MUSE_DRAW_DRAWTYPES_H
+
+#pragma once
 
 #include "global/types/flags.h"
 
@@ -86,6 +86,7 @@ enum class FillRule {
     WindingFill
 };
 
+// Keep in sync with Qt::AlignmentFlag (https://doc.qt.io/qt-6/qt.html#AlignmentFlag-enum)
 enum AlignmentFlag {
     AlignLeft = 0x0001,
     AlignLeading = AlignLeft,
@@ -112,6 +113,7 @@ enum AlignmentFlag {
 DECLARE_FLAGS(Alignment, AlignmentFlag)
 DECLARE_OPERATORS_FOR_FLAGS(Alignment)
 
+// Keep in sync with Qt::TextFlag (https://doc.qt.io/qt-6/qt.html#TextFlag-enum)
 enum TextFlag {
     TextSingleLine = 0x0100,
     TextDontClip = 0x0200,
@@ -129,6 +131,7 @@ enum TextFlag {
     // size of a multi-variant string.
     TextLongestVariant = 0x80000
 };
-}
 
-#endif // MUSE_DRAW_DRAWTYPES_H
+DECLARE_FLAGS(TextFlags, TextFlag)
+DECLARE_OPERATORS_FOR_FLAGS(TextFlags)
+}
