@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -139,6 +139,7 @@ struct Sdf {
 struct GlyphImage {
     muse::RectF rect;
     Sdf sdf;
+    float range = 0.f;
 
     bool isNull() const { return rect.isNull(); }
 };
