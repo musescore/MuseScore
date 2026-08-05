@@ -69,25 +69,21 @@ target_sources(muse_draw PRIVATE
 if (DRAW_NO_INTERNAL)
     target_compile_definitions(muse_draw PRIVATE DRAW_NO_INTERNAL DRAW_NO_QSVGRENDER)
 else()
-    target_sources(muse_draw PRIVATE
-        internal/qpainterprovider.cpp
-        internal/qpainterprovider.h
-        internal/qimageprovider.h
-        internal/qimageprovider.cpp
-        internal/qimagepainterprovider.cpp
-        internal/qimagepainterprovider.h
-    )
+    if (MUSE_QT_SUPPORT)
+        target_sources(muse_draw PRIVATE
+            internal/qpainterprovider.cpp
+            internal/qpainterprovider.h
+            internal/qimageprovider.h
+            internal/qimageprovider.cpp
+            internal/qimagepainterprovider.cpp
+            internal/qimagepainterprovider.h
+        )
+    else()
+        target_compile_definitions(muse_draw PRIVATE DRAW_NO_QSVGRENDER)
+    endif()
 
     # fonts
     target_sources(muse_draw PRIVATE
-        internal/fontproviderdispatcher.cpp
-        internal/fontproviderdispatcher.h
-
-        internal/qfontprovider.cpp
-        internal/qfontprovider.h
-        #internal/fontengineft.cpp
-        #internal/fontengineft.h
-
         internal/ifontsengine.h
         internal/ifontsdatabase.h
         internal/ifontface.h
@@ -97,28 +93,81 @@ else()
         internal/fontsdatabase.h
         internal/fontsengine.cpp
         internal/fontsengine.h
-        internal/fontfaceft.cpp
-        internal/fontfaceft.h
+        internal/fontrendercache.cpp
+        internal/fontrendercache.h
         internal/fontfacedu.cpp
         internal/fontfacedu.h
     )
 
-    include(cmake/SetupFreeType.cmake)
-    include(cmake/SetupHarfBuzz.cmake)
+    if (MUSE_QT_SUPPORT)
+        target_sources(muse_draw PRIVATE
+            internal/qfontprovider.cpp
+            internal/qfontprovider.h
+        )
+    endif()
 
-    target_compile_definitions(muse_draw PUBLIC MUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+    if (NOT MUSE_MODULE_DRAW_USE_FONTFACE_FT AND NOT MUSE_MODULE_DRAW_USE_FONTFACE_XT)
+        message(FATAL_ERROR "At least one font face backend must be enabled")
+    endif()
 
-    target_link_libraries(muse_draw PRIVATE
-        ${FREETYPE_LIBRARIES}
-        ${HARFBUZZ_LIBRARIES}
-        #msdfgen
-    )
+    if (MUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+        target_compile_definitions(muse_draw PUBLIC MUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+    endif()
 
-    target_include_directories(muse_draw PRIVATE
-        ${FREETYPE_INCLUDE_DIRS}
-        ${HARFBUZZ_INCLUDE_DIRS}
-        #${MSDFGEN_INCLUDE_DIRS}
-    )
+    if (MUSE_MODULE_DRAW_USE_FONTFACE_FT)
+        target_sources(muse_draw PRIVATE
+            internal/fontfaceft.cpp
+            internal/fontfaceft.h
+        )
+
+        target_compile_definitions(muse_draw PRIVATE MUSE_MODULE_DRAW_USE_FONTFACE_FT)
+
+        if (COMMAND freetype_add_to_build)
+            freetype_add_to_build()
+            set(DRAW_FREETYPE_LIBRARIES freetype::freetype)
+        else()
+            include(cmake/SetupFreeType.cmake)
+            set(DRAW_FREETYPE_LIBRARIES ${FREETYPE_LIBRARIES})
+            target_include_directories(muse_draw PRIVATE ${FREETYPE_INCLUDE_DIRS})
+        endif()
+
+        if (COMMAND harfbuzz_add_to_build)
+            harfbuzz_add_to_build()
+            set(DRAW_HARFBUZZ_LIBRARIES harfbuzz::harfbuzz)
+        else()
+            include(cmake/SetupHarfBuzz.cmake)
+            set(DRAW_HARFBUZZ_LIBRARIES ${HARFBUZZ_LIBRARIES})
+            target_include_directories(muse_draw PRIVATE ${HARFBUZZ_INCLUDE_DIRS})
+        endif()
+
+        target_link_libraries(muse_draw PRIVATE
+            ${DRAW_FREETYPE_LIBRARIES}
+            ${DRAW_HARFBUZZ_LIBRARIES}
+        )
+
+        if (NOT MUSE_MODULE_DRAW_USE_QTTEXTDRAW)
+            if (COMMAND msdfgen_add_to_build)
+                msdfgen_add_to_build()
+            endif()
+
+            target_link_libraries(muse_draw PRIVATE msdfgen::msdfgen)
+        endif()
+    endif()
+
+    if (MUSE_MODULE_DRAW_USE_FONTFACE_XT)
+        target_sources(muse_draw PRIVATE
+            internal/fontfacext.cpp
+            internal/fontfacext.h
+        )
+
+        target_compile_definitions(muse_draw PRIVATE MUSE_MODULE_DRAW_USE_FONTFACE_XT)
+
+        if (COMMAND lodepng_add_to_build)
+            lodepng_add_to_build()
+        endif()
+
+        target_link_libraries(muse_draw PRIVATE lodepng::lodepng)
+    endif()
 
 endif()
 
