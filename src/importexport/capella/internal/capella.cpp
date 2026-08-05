@@ -28,8 +28,6 @@
 #include <QFile>
 #include <QtMath>
 
-#include <limits>
-
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/box.h"
@@ -1486,9 +1484,7 @@ void TextObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
-    if (size == std::numeric_limits<unsigned>::max()) {
-        throw Capella::Error::BAD_FORMAT;
-    }
+    cap->verifyLength(size);
     std::vector<char> vtxt(size + 1);
     char* txt = vtxt.data();
     if (!cap->read(txt, size)) {
@@ -1577,9 +1573,12 @@ void MetafileObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
+    cap->verifyLength(size);
     std::vector<char> vEnhMetaFileBits(size);
     char* enhMetaFileBits = vEnhMetaFileBits.data();
-    cap->read(enhMetaFileBits, size);
+    if (!cap->read(enhMetaFileBits, size)) {
+        throw Capella::Error::BAD_FORMAT;
+    }
     // CAPELLA_TRACE("MetaFileObj::read %d bytes", size);
 }
 
@@ -2057,6 +2056,17 @@ bool Capella::read(void* p, qint64 len)
 }
 
 //---------------------------------------------------------
+//   verifyLength
+//---------------------------------------------------------
+
+void Capella::verifyLength(unsigned len) const
+{
+    if (len > f->bytesAvailable()) {
+        throw Capella::Error::BAD_FORMAT;
+    }
+}
+
+//---------------------------------------------------------
 //   readByte
 //---------------------------------------------------------
 
@@ -2161,9 +2171,7 @@ int Capella::readInt()
 char* Capella::readString()
 {
     unsigned len = readUnsigned();
-    if (len == std::numeric_limits<unsigned>::max()) {
-        throw Capella::Error::BAD_FORMAT;
-    }
+    verifyLength(len);
     char* buffer = new char[static_cast<size_t>(len) + 1];
     if (!read(buffer, len)) {
         delete[] buffer;
