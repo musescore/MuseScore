@@ -263,6 +263,21 @@ QList<int> NotationConfigurationStub::possibleZoomPercentageList() const
     return QList<int>();
 }
 
+engraving::AutomationType NotationConfigurationStub::currentAutomationType() const
+{
+    return engraving::AutomationType::Dynamics;
+}
+
+void NotationConfigurationStub::setCurrentAutomationType(engraving::AutomationType)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::currentAutomationTypeChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 qreal NotationConfigurationStub::scalingFromZoomPercentage(int) const
 {
     return 0.0;

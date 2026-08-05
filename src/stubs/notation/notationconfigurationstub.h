@@ -106,6 +106,10 @@ public:
 
     QList<int> possibleZoomPercentageList() const override;
 
+    engraving::AutomationType currentAutomationType() const override;
+    void setCurrentAutomationType(engraving::AutomationType type) override;
+    muse::async::Notification currentAutomationTypeChanged() const override;
+
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;
     int zoomPercentageFromScaling(qreal scaling) const override;
 

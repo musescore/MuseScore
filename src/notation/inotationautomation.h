@@ -24,7 +24,21 @@
 
 #include "async/notification.h"
 
+#include "engraving/automation/automationdata.h"
+#include "engraving/automation/automationtypes.h"
+
 namespace mu::notation {
+using AutomationType = mu::engraving::AutomationType;
+using AutomationCurveKey = mu::engraving::AutomationCurveKey;
+using AutomationCurve = mu::engraving::AutomationCurve;
+using AutomationCurveMap = mu::engraving::AutomationCurveMap;
+using AutomationPointEdit = mu::engraving::AutomationPointEdit;
+using AutomationPointEdits = mu::engraving::AutomationPointEdits;
+using AutomationChanges = mu::engraving::AutomationChanges;
+using AutomationData = mu::engraving::AutomationData;
+using AutomationDataPtr = mu::engraving::AutomationDataPtr;
+using AutomationDataConstPtr = mu::engraving::AutomationDataConstPtr;
+
 class INotationAutomation
 {
 public:
@@ -33,6 +47,9 @@ public:
     virtual bool isAutomationModeEnabled() const = 0;
     virtual void setAutomationModeEnabled(bool enabled) = 0;
     virtual muse::async::Notification automationModeEnabledChanged() const = 0;
+
+    virtual AutomationDataConstPtr automationData() const = 0;
+    virtual void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) = 0;
 };
 
 using INotationAutomationPtr = std::shared_ptr<INotationAutomation>;

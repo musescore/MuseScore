@@ -741,14 +741,11 @@ const AutomationCurve* PlaybackContext::dynamicsCurve(const track_idx_t trackIdx
 
     const AutomationCurve* curve = nullptr;
     if (staff) {
-        AutomationCurveKey key;
-        key.type = AutomationType::Dynamics;
-        key.staffId = staff->id();
-        key.voiceIdx = track2voice(trackIdx);
-
+        AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, staff->id(), track2voice(trackIdx));
         curve = &automation->curve(key);
+
         if (curve->empty()) {
-            key.voiceIdx.reset();
+            key = key.withoutVoice();
             curve = &automation->curve(key);
         }
     }

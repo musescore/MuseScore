@@ -33,19 +33,13 @@ class AutomationRW_Tests : public ::testing::Test
 {
 };
 
-TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
+TEST_F(AutomationRW_Tests, RoundTrip_StaffScope)
 {
-    // [GIVEN] Two curves on different staves: key1 holds a generated point (itemId set) plus
+    // [GIVEN] Two staff-scoped curves: key1 holds a generated point (itemId set) plus
     // an explicit-arrival and a FromPrevious point; key2 holds a custom point (no itemId)
     AutomationData data;
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
-    key2.voiceIdx = 2;
+    AutomationCurveKey key1 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
+    AutomationCurveKey key2 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(2), size_t(2));
 
     const AutomationPoint p1 = generatedPoint(0.3, 0.5);
     const AutomationPoint p2 = customPoint(0.6, 0.8);
@@ -81,4 +75,70 @@ TEST_F(AutomationRW_Tests, RoundTrip_MultipleCurves)
     const AutomationCurve& loadedCurve1 = loaded.curve(key1);
     EXPECT_TRUE(std::holds_alternative<AutomationPoint::ExplicitArrival>(loadedCurve1.at(300).value.inValue));
     EXPECT_TRUE(std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(loadedCurve1.at(400).value.inValue));
+}
+
+TEST_F(AutomationRW_Tests, RoundTrip_InstrumentScope)
+{
+    // [GIVEN] An instrument-scoped curve
+    // (e.g. Pan, owned by a specific part+instrument, not any particular staff)
+    AutomationData data;
+
+    InstrumentTrackId trackId;
+    trackId.partId = muse::ID(3);
+    trackId.instrumentId = u"instrument1";
+    AutomationCurveKey key = AutomationCurveKey::instrument(AutomationType::Pan, trackId);
+
+    const AutomationPoint p = customPoint(0.7, 0.9);
+
+    AutomationCurveMap curves;
+    curves[key] = { { 600, p } };
+    data.setCurves(curves);
+
+    // [WHEN] Serialized and deserialized
+    AutomationData loaded;
+    AutomationRW::read(loaded, AutomationRW::write(data, true /*writeGenerated*/));
+
+    // [THEN] The curve is preserved with its original points
+    checkCurvesMatch(loaded.curve(key), data.curve(key));
+
+    // [THEN] The loaded key is exactly equal to the original
+    ASSERT_EQ(loaded.curves().size(), 1u);
+
+    const auto loadedKeyIt = loaded.curves().find(key);
+    ASSERT_NE(loadedKeyIt, loaded.curves().end());
+    EXPECT_EQ(loadedKeyIt->first, key);
+    EXPECT_EQ(loadedKeyIt->first.type, AutomationType::Pan);
+    ASSERT_TRUE(loadedKeyIt->first.trackId().has_value());
+    EXPECT_EQ(loadedKeyIt->first.trackId()->partId, trackId.partId);
+    EXPECT_EQ(loadedKeyIt->first.trackId()->instrumentId, trackId.instrumentId);
+}
+
+TEST_F(AutomationRW_Tests, RoundTrip_GlobalScope)
+{
+    // [GIVEN] A global-scoped curve (e.g. Volume with no owning staff/instrument)
+    AutomationData data;
+    AutomationCurveKey key = AutomationCurveKey::global(AutomationType::Volume);
+
+    const AutomationPoint p = customPoint(0.2, 0.4);
+
+    AutomationCurveMap curves;
+    curves[key] = { { 500, p } };
+    data.setCurves(curves);
+
+    // [WHEN] Serialized and deserialized
+    AutomationData loaded;
+    AutomationRW::read(loaded, AutomationRW::write(data, true /*writeGenerated*/));
+
+    // [THEN] The curve is preserved with its original points
+    checkCurvesMatch(loaded.curve(key), data.curve(key));
+
+    // [THEN] The loaded key is exactly equal to the original
+    ASSERT_EQ(loaded.curves().size(), 1u);
+
+    const auto loadedKeyIt = loaded.curves().find(key);
+    ASSERT_NE(loadedKeyIt, loaded.curves().end());
+    EXPECT_EQ(loadedKeyIt->first, key);
+    EXPECT_EQ(loadedKeyIt->first.type, AutomationType::Volume);
+    EXPECT_FALSE(loadedKeyIt->first.trackId().has_value());
+    EXPECT_FALSE(loadedKeyIt->first.staffId().has_value());
 }

@@ -42,6 +42,10 @@ namespace muse::uicomponents {
 class PolylinePlot;
 }
 
+namespace mu::engraving {
+class Staff;
+}
+
 namespace mu::notation {
 class NotationAutomationController : public muse::Contextable, public muse::async::Asyncable
 {
@@ -110,7 +114,10 @@ private:
 
     SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
     muse::uicomponents::PolylinePlot* createPolylineForStaff(const System* system, staff_idx_t staffIdx);
-    QVector<PointData> pointsDataInStaff(const muse::ID& staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
+    QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
+                                         int endTick) const;
+
+    mu::engraving::AutomationType currentAutomationType() const;
 
     void applyPolylineStyle(muse::uicomponents::PolylinePlot* polyline) const;
     void applyPolylineColors(muse::uicomponents::PolylinePlot* polyline) const;

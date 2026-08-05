@@ -28,11 +28,13 @@
 #include "mpe/automationpoint.h"
 
 #include "engraving/infrastructure/eid.h"
+#include "engraving/types/types.h"
 
 #include <algorithm>
 #include <optional>
 #include <set>
 #include <tuple>
+#include <type_traits>
 #include <variant>
 #include <vector>
 
@@ -71,26 +73,111 @@ inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve
 enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
+    Volume,
+    Pan,
 };
 
 struct AutomationCurveKey {
+    //! NOTE: applies to a whole instrument (e.g. Volume, Pan)
+    struct Instrument {
+        InstrumentTrackId trackId;
+
+        bool isValid() const { return trackId.isValid(); }
+        bool operator==(const Instrument& o) const { return trackId == o.trackId; }
+        bool operator<(const Instrument& o) const { return trackId < o.trackId; }
+    };
+
+    //! NOTE: applies to a specific staff (and optionally voice) (e.g. Dynamics)
+    struct StaffVoice {
+        muse::ID staffId;
+        std::optional<size_t> voiceIdx;
+
+        bool isValid() const { return staffId.isValid(); }
+        bool operator==(const StaffVoice& o) const { return staffId == o.staffId && voiceIdx == o.voiceIdx; }
+        bool operator<(const StaffVoice& o) const { return std::tie(staffId, voiceIdx) < std::tie(o.staffId, o.voiceIdx); }
+    };
+
+    //! NOTE: std::monostate scope means the key applies to the whole score (e.g. Tempo)
+    using Scope = std::variant<std::monostate, Instrument, StaffVoice>;
+
     AutomationType type = AutomationType::Unknown;
-    muse::ID staffId;
-    std::optional<size_t> voiceIdx;
+    Scope scope;
+
+    static AutomationCurveKey global(AutomationType type)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        return key;
+    }
+
+    static AutomationCurveKey instrument(AutomationType type, const InstrumentTrackId& trackId)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        key.scope = Instrument { trackId };
+        return key;
+    }
+
+    static AutomationCurveKey staff(AutomationType type, const muse::ID& staffId, std::optional<size_t> voiceIdx = std::nullopt)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        key.scope = StaffVoice { staffId, voiceIdx };
+        return key;
+    }
 
     bool isValid() const
     {
-        return type != AutomationType::Unknown;
+        if (type == AutomationType::Unknown) {
+            return false;
+        }
+
+        return std::visit([](const auto& s) {
+            using T = std::decay_t<decltype(s)>;
+            if constexpr (std::is_same_v<T, std::monostate>) {
+                return true;
+            } else {
+                return s.isValid();
+            }
+        }, scope);
+    }
+
+    std::optional<InstrumentTrackId> trackId() const
+    {
+        const Instrument* instrument = std::get_if<Instrument>(&scope);
+        return instrument ? std::optional(instrument->trackId) : std::nullopt;
+    }
+
+    std::optional<muse::ID> staffId() const
+    {
+        const StaffVoice* staffVoice = std::get_if<StaffVoice>(&scope);
+        return staffVoice ? std::optional(staffVoice->staffId) : std::nullopt;
+    }
+
+    std::optional<size_t> voiceIdx() const
+    {
+        const StaffVoice* staffVoice = std::get_if<StaffVoice>(&scope);
+        return staffVoice ? staffVoice->voiceIdx : std::nullopt;
+    }
+
+    //! NOTE: same staff, but the shared (voice-independent) curve
+    AutomationCurveKey withoutVoice() const
+    {
+        AutomationCurveKey copy = *this;
+        if (StaffVoice* staffVoice = std::get_if<StaffVoice>(&copy.scope)) {
+            staffVoice->voiceIdx = std::nullopt;
+        }
+        return copy;
     }
 
     bool operator==(const AutomationCurveKey& k) const
     {
-        return type == k.type && staffId == k.staffId && voiceIdx == k.voiceIdx;
+        return type == k.type && scope == k.scope;
     }
 
     bool operator<(const AutomationCurveKey& k) const
     {
-        return std::tie(type, staffId, voiceIdx) < std::tie(k.type, k.staffId, k.voiceIdx);
+        return std::tie(type, scope) < std::tie(k.type, k.scope);
     }
 };
 

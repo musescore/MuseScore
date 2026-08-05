@@ -37,17 +37,20 @@ static std::optional<ChangedRange> computeChangedRange(const Score* score, const
     }
 
     size_t staffIdx = muse::nidx;
-    for (size_t i = 0; i < score->nstaves(); ++i) {
-        const Staff* staff = score->staff(i);
-        if (staff && staff->id() == key.staffId) {
-            staffIdx = i;
-            break;
+    if (const std::optional<muse::ID> staffId = key.staffId()) {
+        for (size_t i = 0; i < score->nstaves(); ++i) {
+            const Staff* staff = score->staff(i);
+            if (staff && staff->id() == *staffId) {
+                staffIdx = i;
+                break;
+            }
+        }
+
+        IF_ASSERT_FAILED(staffIdx != muse::nidx) {
+            return std::nullopt;
         }
     }
-
-    IF_ASSERT_FAILED(staffIdx != muse::nidx) {
-        return std::nullopt;
-    }
+    // else: Global/Instrument-scoped key - not tied to any staff, leave staffIdx as muse::nidx
 
     const RepeatList& repeatList = score->repeatList();
 

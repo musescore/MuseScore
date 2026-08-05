@@ -32,8 +32,11 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 
+#include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "notation/inotationselection.h"
+
+#include "notationscene/notationcommands.h"
 
 #include "widgets/editstyleutils.h"
 
@@ -47,6 +50,13 @@ void NotationContextMenuModel::loadItems(int elementType)
     AbstractMenuModel::load();
 
     MenuItemList items = makeItemsByElementType(static_cast<ElementType>(elementType));
+
+    const INotationAutomationPtr automation = this->automation();
+    if (automation && automation->isAutomationModeEnabled()) {
+        items << makeSeparator()
+              << makeMenu(TranslatableString::untranslatable("Automation type"), makeAutomationTypeItems());
+    }
+
     setItems(items);
 }
 
@@ -479,6 +489,36 @@ bool NotationContextMenuModel::isDrumsetStaff() const
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
 }
 
+MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
+{
+    return {
+        makeAutomationTypeItem(AutomationType::Dynamics, "dynamics", TranslatableString::untranslatable("Dynamics")),
+        makeAutomationTypeItem(AutomationType::Volume, "volume", TranslatableString::untranslatable("Volume")),
+        makeAutomationTypeItem(AutomationType::Pan, "pan", TranslatableString::untranslatable("Pan")),
+    };
+}
+
+MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
+                                                           const TranslatableString& title)
+{
+    MenuItem* item = makeMenuItem(SELECT_AUTOMATION_TYPE_COMMAND, title);
+    if (!item) {
+        return item;
+    }
+
+    item->setId(QString::fromStdString("automation-type-" + queryTypeParam));
+
+    ActionQuery query(SELECT_AUTOMATION_TYPE_COMMAND.toString());
+    query.addParam("type", Val(queryTypeParam));
+    item->setQuery(query);
+
+    ui::UiActionState state = item->state();
+    state.checked = notationConfiguration()->currentAutomationType() == type;
+    item->setState(state);
+
+    return item;
+}
+
 INotationInteractionPtr NotationContextMenuModel::interaction() const
 {
     INotationPtr notation = globalContext()->currentNotation();
@@ -489,6 +529,12 @@ INotationSelectionPtr NotationContextMenuModel::selection() const
 {
     INotationPtr notation = globalContext()->currentNotation();
     return notation ? notation->interaction()->selection() : nullptr;
+}
+
+INotationAutomationPtr NotationContextMenuModel::automation() const
+{
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    return masterNotation ? masterNotation->automation() : nullptr;
 }
 
 const EngravingItem* NotationContextMenuModel::currentElement() const

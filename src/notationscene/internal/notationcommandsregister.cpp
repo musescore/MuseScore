@@ -2914,6 +2914,15 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::AUTOMATION, rcommand::Checkable::Yes)
     },
+    CommandInfo {
+        SELECT_AUTOMATION_TYPE_COMMAND,
+        TranslatableString::untranslatable("Automation type"),
+        TranslatableString::untranslatable("Select automation type"),
+        InputSchema({
+            { "type", Arg(DataType::String, u"Automation type (dynamics, volume, pan)") },
+        }),
+        Decoration(rcommand::Checkable::Yes)
+    },
 
     // screen commands
 

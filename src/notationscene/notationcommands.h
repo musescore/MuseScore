@@ -111,7 +111,8 @@ inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_BY_DURATION_COMMAN
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_RHYTHM_COMMAND("command://notation/toggle-note-input-rhythm");
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REPITCH_COMMAND("command://notation/toggle-note-input-repitch");
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND("command://notation/toggle-note-input-realtime-auto");
-inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND("command://notation/toggle-note-input-realtime-manual");
+inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND(
+    "command://notation/toggle-note-input-realtime-manual");
 inline static const muse::rcommand::Command TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND("command://notation/toggle-note-input-timewise");
 inline static const muse::rcommand::Command TOGGLE_INSERT_MODE_COMMAND("command://notation/toggle-insert-mode");
 inline static const muse::rcommand::Command REALTIME_ADVANCE_COMMAND("command://notation/realtime-advance");
@@ -377,7 +378,8 @@ inline static const muse::rcommand::Command JOIN_MEASURES_COMMAND("command://not
 inline static const muse::rcommand::Command INSERT_MEASURE_COMMAND("command://notation/insert-measure");
 inline static const muse::rcommand::Command INSERT_MEASURES_COMMAND("command://notation/insert-measures"); // with params
 inline static const muse::rcommand::Command INSERT_MEASURES_AFTER_SELECTION_COMMAND("command://notation/insert-measures-after-selection"); // with params
-inline static const muse::rcommand::Command INSERT_MEASURES_AT_START_OF_SCORE_COMMAND("command://notation/insert-measures-at-start-of-score"); // with params
+inline static const muse::rcommand::Command INSERT_MEASURES_AT_START_OF_SCORE_COMMAND(
+    "command://notation/insert-measures-at-start-of-score"); // with params
 inline static const muse::rcommand::Command APPEND_MEASURE_COMMAND("command://notation/append-measure");
 inline static const muse::rcommand::Command APPEND_MEASURES_COMMAND("command://notation/append-measures"); // with params
 
@@ -481,6 +483,7 @@ inline static const muse::rcommand::Command AUTOPLACE_ENABLED_COMMAND("command:/
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_INSTR_COMMAND("command://notation/voice-assignment-all-in-instrument");
 inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAND("command://notation/voice-assignment-all-in-staff");
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
+inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("command://notation/select-automation-type"); // with params
 
 // TAB commands
 inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");
