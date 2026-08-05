@@ -293,7 +293,7 @@ void ChordBracketLayout::updateHorizontalSpacing(const Segment* firstSegment, co
 
 void ChordBracketLayout::updateVerticalGeometry(ChordBracket* bracket, LayoutContext& ctx)
 {
-    if (!bracket || !bracket->chord()) {
+    if (!bracket || !bracket->chord() || !bracket->chord()->segment()) {
         return;
     }
 
@@ -301,4 +301,14 @@ void ChordBracketLayout::updateVerticalGeometry(ChordBracket* bracket, LayoutCon
     const double x = bracket->ldata()->pos().x();
     TLayout::layoutItem(bracket, ctx);
     bracket->mutldata()->setPosX(x);
+
+    // Refresh cached shapes after restoring the segment-level position.
+    Chord* chord = bracket->chord();
+    Segment* segment = chord->segment();
+    ChordLayout::fillShape(chord, chord->mutldata());
+
+    const BracketVisualSpan span = bracketVisualSpan(bracket);
+    for (staff_idx_t staffIdx = span.topStaff; staffIdx <= span.bottomStaff; ++staffIdx) {
+        segment->createShape(staffIdx);
+    }
 }
