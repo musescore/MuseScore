@@ -27,6 +27,8 @@
 #include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 #include "accessibility/iqaccessibleinterfaceregister.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 
 #include "internal/paletteconfiguration.h"
 #include "internal/paletteuiactions.h"
@@ -34,6 +36,8 @@
 #include "internal/paletteworkspacesetup.h"
 #include "internal/paletteprovider.h"
 #include "internal/palettecell.h"
+#include "internal/palettecommandsregister.h"
+#include "internal/palettecommandsstate.h"
 
 #include "widgets/masterpalette.h"
 #include "widgets/specialcharactersdialog.h"
@@ -80,6 +84,11 @@ void PaletteModule::resolveImports()
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<PaletteCommandsRegister>());
+    }
 }
 
 void PaletteModule::onInit(const IApplication::RunMode&)
@@ -100,10 +109,16 @@ void PaletteContext::registerExports()
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
     ioc()->registerExport<IPaletteProvider>(mname, m_paletteProvider);
+    ioc()->registerExport<IPaletteCommandsController>(mname, m_actionsController);
 }
 
 void PaletteContext::resolveImports()
 {
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<PaletteCommandsState>(iocContext()));
+    }
+
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_paletteUiActions);

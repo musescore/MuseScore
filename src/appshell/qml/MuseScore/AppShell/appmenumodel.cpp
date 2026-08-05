@@ -564,8 +564,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 #endif
 
         MenuItemList audioItems {
-            makeMenuItem("action://audio/dev/use-drivermode"),
-            makeMenuItem("action://audio/dev/use-hybridmode"),
+            makeMenuItem("command://audio/dev/use-driver-mode"),
+            makeMenuItem("command://audio/dev/use-hybrid-mode"),
         };
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
