@@ -9703,12 +9703,12 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>Zavést &amp;zvuk do notového zápisu…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>Zavést zvuk do notového zápisu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -11439,7 +11439,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8041"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Odstranit neplatnou levou část rozdělené ligatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8049"/>
@@ -11449,7 +11449,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Odstranit neplatnou pravou část rozdělené ligatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8072"/>
@@ -26798,7 +26798,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="109"/>
         <source>Search sounds</source>
-        <translation type="unfinished"/>
+        <translation>Hledat zvuky</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="197"/>
@@ -35332,7 +35332,7 @@ se nezdařilo: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Zkuste to později nebo získejte pomoc s touto záhadou na musescore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>

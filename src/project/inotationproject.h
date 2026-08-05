@@ -24,16 +24,19 @@
 
 #include <memory>
 
+#include "global/async/channel.h"
+#include "global/async/notification.h"
 #include "global/io/path.h"
 #include "global/types/ret.h"
-#include "global/async/channel.h"
 
-#include "iprojectaudiosettings.h"
-#include "notation/imasternotation.h"
+#include "notation/inotation_fwd.h"
+
+#include "inotationproject_fwd.h"
 #include "types/projecttypes.h"
 
 namespace mu::project {
 struct ProjectCreateOptions;
+struct ProjectMeta;
 
 class INotationProject
 {
@@ -64,7 +67,8 @@ public:
 
     virtual void markAsUnsaved() = 0;
 
-    virtual muse::ValNt<bool> needSave() const = 0;
+    virtual bool isNeedSave() const = 0;
+    virtual muse::async::Notification needSaveChanged() const = 0;
     virtual muse::Ret canSave() const = 0;
 
     virtual bool needAutoSave() const = 0;

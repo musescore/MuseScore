@@ -30,6 +30,7 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/timesig.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationundostack.h" // IWYU pragma: keep
 

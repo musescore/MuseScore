@@ -34,6 +34,7 @@
 
 #include "engraving/dom/score.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationaccessibility.h"
 #include "notation/inotationstyle.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h" // IWYU pragma: keep

@@ -39,6 +39,7 @@
 #include "editing/transaction/transaction.h"
 #include "types/typesconv.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h" // IWYU pragma: keep
 #include "notation/inotationundostack.h"
 
@@ -557,6 +558,11 @@ QQmlListProperty<Page> Score::pages() const
 QQmlListProperty<System> Score::systems() const
 {
     return wrapContainerProperty<System>(this, score()->systems());
+}
+
+QQmlListProperty<EngravingItem> Score::brackets(int staffIdx)
+{
+    return wrapContainerProperty<EngravingItem>(this, score()->brackets(static_cast<staff_idx_t>(staffIdx)));
 }
 
 bool Score::hasLyrics() const

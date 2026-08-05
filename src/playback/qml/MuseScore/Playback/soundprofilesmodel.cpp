@@ -22,8 +22,11 @@
 
 #include "soundprofilesmodel.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationplayback.h"
+
 #include "project/inotationproject.h"
+#include "project/iprojectaudiosettings.h" // IWYU pragma: keep
 
 using namespace mu::playback;
 using namespace mu::project;

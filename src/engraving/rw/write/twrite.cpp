@@ -2720,22 +2720,7 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-
-    for (auto i : {
-        Pid::END_HOOK_TYPE,
-        Pid::LINE_VISIBLE,
-        Pid::BEGIN_HOOK_TYPE,
-        Pid::BEGIN_TEXT_OFFSET,
-        Pid::CONTINUE_TEXT_OFFSET,
-        Pid::END_TEXT_OFFSET
-    }) {
-        writeProperty(item, xml, i);
-    }
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        writeProperty(item, xml, spp.pid);
-    }
-
-    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -2944,7 +2929,7 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("isStaffVisible", item->visible());
     }
 
-    for (const BracketItem* i : item->brackets()) {
+    for (const BracketItem* i : item->score()->brackets(item->idx())) {
         write(i, xml);
     }
 

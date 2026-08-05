@@ -51,7 +51,7 @@ apt_packages_runtime=(
   libcups2
   libdbus-1-3
   libegl1-mesa-dev
-  libodbc1
+  libodbc2
   libpq-dev
   libxcomposite-dev
   libxcursor-dev
@@ -103,7 +103,7 @@ cd fonts-main
 
 echo "Installing Google Fonts..."
 mkdir -p "$FONTS_DIR"
-find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv -n -t "$FONTS_DIR"
+find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv --update=none -t "$FONTS_DIR"
 
 echo "Installing Fonts Cache..."
 fc-cache -f -v

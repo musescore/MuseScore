@@ -526,9 +526,10 @@ void RepeatList::collectRepeatListElements()
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
             sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
+            Measure* underlyingMeasure = m->isMMRest() ? m->mmRestFirst() : m;
 
             // Volta ?
-            if ((!preProcessedVoltas.empty()) && (preProcessedVoltas.front()->startMeasure() == m)) {
+            if ((!preProcessedVoltas.empty()) && (preProcessedVoltas.front()->startMeasure() == underlyingMeasure)) {
                 if (volta != nullptr) {
                     //if (volta->endMeasure()->tick() < m->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
@@ -546,7 +547,7 @@ void RepeatList::collectRepeatListElements()
             // Start
             if (m->repeatStart()) {
                 if (volta != nullptr) {
-                    if (volta->startMeasure() != m) {
+                    if (volta->startMeasure() != underlyingMeasure) {
                         // Volta and Start repeat are not on the same measure
                         // assume the previous volta was supposed to end before us (open volta case) -> insert the end
                         // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point

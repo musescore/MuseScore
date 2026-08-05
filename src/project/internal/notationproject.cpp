@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationproject.h"
 
 #include <memory>
@@ -27,6 +28,7 @@
 #include <QDir>
 #include <QFile>
 
+#include "global/concurrency/concurrent.h"
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/ioretcodes.h"
@@ -36,6 +38,7 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/measurebase.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editscoreproperties.h"
@@ -57,8 +60,7 @@
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
 #include "types/projectcreateoptions.h"
-
-#include "global/concurrency/concurrent.h"
+#include "types/projectmeta.h"
 
 #include "defer.h"
 #include "log.h"
@@ -589,7 +591,10 @@ muse::Ret NotationProject::savePage(const muse::io::path_t& path, const size_t p
     range.startStaffIdx = 0;
     range.endStaffIdx = score->nstaves();
     range.startMeasure = systems.front()->first();
-    range.endMeasure = systems.back()->last();
+    // StaffWrite::writeStaff stops before reaching endMeasure, so use the measure after
+    // the last one we want, otherwise the page's last measure/frame is dropped
+    MeasureBase* lastMeasure = systems.back()->last();
+    range.endMeasure = lastMeasure ? lastMeasure->next() : nullptr;
 
     write::WriteContext ctx(score);
     ctx.setRange(range);
@@ -1132,21 +1137,22 @@ void NotationProject::setNeedSave(bool needSave)
         m_hasNonUndoStackChanges = false;
     }
 
-    if (m_needSave == needSave) {
+    if (m_isNeedSave == needSave) {
         return;
     }
 
-    m_needSave = needSave;
-    m_needSaveNotification.notify();
+    m_isNeedSave = needSave;
+    m_needSaveChanged.notify();
 }
 
-ValNt<bool> NotationProject::needSave() const
+bool NotationProject::isNeedSave() const
 {
-    ValNt<bool> needSave;
-    needSave.val = m_needSave;
-    needSave.notification = m_needSaveNotification;
+    return m_isNeedSave;
+}
 
-    return needSave;
+muse::async::Notification NotationProject::needSaveChanged() const
+{
+    return m_needSaveChanged;
 }
 
 Ret NotationProject::canSave() const

@@ -26,7 +26,10 @@
 #include "translation.h"
 #include "log.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationplayback.h"
+
+#include "project/inotationproject.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -437,7 +440,7 @@ void MixerChannelItem::setVolumeLevel(float volumeLevel)
 
 void MixerChannelItem::setBalance(int balance)
 {
-    if (m_outParams.balance * BALANCE_SCALING_FACTOR == balance) {
+    if (m_outParams.balance.raw() * BALANCE_SCALING_FACTOR == balance) {
         return;
     }
 

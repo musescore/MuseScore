@@ -44,7 +44,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/clef.h"
@@ -89,7 +89,8 @@
 #include "dom/utils.h"
 #include "dom/volta.h"
 
-#include "editing/transpose.h"
+#include "../../editing/editstaffbrackets.h"
+#include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
@@ -1855,9 +1856,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             bool courtesySig = (curTick == m->endTick());
             segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
             segment->add(ks);
-            if (!courtesySig) {
-                staff->setKey(curTick, ks->keySigEvent());
-            }
+            staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Lyrics") {
             Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
             l->setTrack(ctx.track());
@@ -2409,9 +2408,9 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "keylist") {
             read400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
-            size_t col = staff->brackets().size();
-            staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-            staff->setBracketSpan(col, e.intAttribute("span", 0));
+            size_t col = ctx.score()->brackets(staff->idx()).size();
+            EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditStaffBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
             const int barLineSpan = e.readInt();

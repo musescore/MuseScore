@@ -30,6 +30,7 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
+#include "notation/inotation.h"
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
 
@@ -692,7 +693,7 @@ MenuItemList AppMenuModel::makeTupletsItems()
         makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
         makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
         makeMenuItem(notation::ADD_NONUPLET_COMMAND),
-        makeMenuItem(notation::SHOW_TUPLET_CONFIGURE_COMMAND)
+        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;

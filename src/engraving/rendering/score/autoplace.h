@@ -47,7 +47,7 @@ public:
 
     static double rebaseOffset(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool nox = true);
     static bool rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
-                                  double rebase, bool above, bool fix);
+                                  double rebase, bool above);
 
     static void setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute = true,
                                  const PointF& diff = PointF());

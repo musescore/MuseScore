@@ -23,6 +23,7 @@
 
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/measure.h"
+#include "engraving/dom/keysig.h"
 
 #include "translation.h"
 
@@ -58,7 +59,7 @@ void KeySignatureSettingsModel::loadProperties()
     bool enableCourtesy = true;
 
     for (const mu::engraving::EngravingItem* element : m_elementList) {
-        if (element->generated()) {
+        if (element->generated() || toKeySig(element)->isCourtesy()) {
             enableMode = false;
         }
 

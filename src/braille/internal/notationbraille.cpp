@@ -35,6 +35,7 @@
 
 #include "engraving/editing/noteinput.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
@@ -440,21 +441,21 @@ void NotationBraille::setKeys(const QString& sequence)
     m_keys.set(seq);
 
     if (seq == "Left") {
-        interaction()->moveSelection(MoveDirection::Left, MoveSelectionType::Chord);
+        interaction()->select(SelectionTarget::PrevChord);
     } else if (seq == "Right") {
-        interaction()->moveSelection(MoveDirection::Right, MoveSelectionType::Chord);
+        interaction()->select(SelectionTarget::NextChord);
     } else if (matchPattern(seq, "Ctrl+Left")) {
-        interaction()->moveSelection(MoveDirection::Left, MoveSelectionType::Measure);
+        interaction()->select(SelectionTarget::PrevMeasure);
     } else if (matchPattern(seq, "Ctrl+Right")) {
-        interaction()->moveSelection(MoveDirection::Right, MoveSelectionType::Measure);
+        interaction()->select(SelectionTarget::NextMeasure);
     } else if (matchPattern(seq, "Alt+Left")) {
-        interaction()->moveSelection(MoveDirection::Left, MoveSelectionType::EngravingItem);
+        interaction()->select(SelectionTarget::PrevItem);
     } else if (matchPattern(seq, "Alt+Right")) {
-        interaction()->moveSelection(MoveDirection::Right, MoveSelectionType::EngravingItem);
+        interaction()->select(SelectionTarget::NextItem);
     } else if (matchPattern(seq, "Ctrl+End")) {
-        interaction()->selectLastElement();
+        interaction()->select(SelectionTarget::LastItem);
     } else if (matchPattern(seq, "Ctrl+Home")) {
-        interaction()->selectFirstElement();
+        interaction()->select(SelectionTarget::FirstItem);
     } else if (seq == "Delete") {
         if (currentEngravingItem()) {
             interaction()->deleteSelection();

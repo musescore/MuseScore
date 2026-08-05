@@ -25,118 +25,179 @@
 #include "global/types/number.h"
 #include "global/types/sharedmap.h"
 
+#include "mpe/automationpoint.h"
+
 #include "engraving/infrastructure/eid.h"
 #include "engraving/types/types.h"
 
-#include <limits>
+#include <algorithm>
 #include <optional>
 #include <set>
+#include <tuple>
 #include <type_traits>
-#include <unordered_map>
 #include <variant>
 #include <vector>
 
 namespace mu::engraving {
-// Normalized [0.0, 1.0] dynamic levels, aligned with MPE dynamic level percentages (5% steps starting at 17.5%)
-inline const std::unordered_map<DynamicType, real_t> ORDINARY_DYNAMIC_VALUES {
-    { DynamicType::N,      0.000 },
-    { DynamicType::PPPPPP, 0.175 },
-    { DynamicType::PPPPP,  0.225 },
-    { DynamicType::PPPP,   0.275 },
-    { DynamicType::PPP,    0.325 },
-    { DynamicType::PP,     0.375 },
-    { DynamicType::P,      0.425 },
-    { DynamicType::MP,     0.475 },
-    { DynamicType::MF,     0.525 },
-    { DynamicType::F,      0.575 },
-    { DynamicType::FF,     0.625 },
-    { DynamicType::FFF,    0.675 },
-    { DynamicType::FFFF,   0.725 },
-    { DynamicType::FFFFF,  0.775 },
-    { DynamicType::FFFFFF, 0.825 },
-};
-
 struct AutomationPoint {
-    enum class InterpolationType : unsigned char {
-        Linear = 0,
-        Exponential,
-    };
+    using Bend = muse::mpe::AutomationPoint::Bend;
+    using ArrivalFromPrevious = muse::mpe::AutomationPoint::ArrivalFromPrevious;
+    using ExplicitArrival = muse::mpe::AutomationPoint::ExplicitArrival;
+    using InValue = muse::mpe::AutomationPoint::InValue;
 
-    //! NOTE: arrival value equals whatever precedes this point in the curve, resolved live
-    struct FromPrevious {
-        bool operator==(const FromPrevious&) const { return true; }
-    };
-    //! NOTE: arrival value equals this point's own outValue (a flat, held point)
-    struct SameAsOut {
-        bool operator==(const SameAsOut&) const { return true; }
-    };
-    using InValue = std::variant<FromPrevious, SameAsOut, muse::real_t>;
-
-    InValue inValue = FromPrevious {};
-    muse::real_t outValue = 0.; // [0; 1]
-    InterpolationType interpolation = InterpolationType::Linear;
+    muse::mpe::AutomationPoint value;
     std::optional<EID> itemId; // valid if it was created from an engraving item (e.g., Dynamic)
     bool generated = false; // true if the point was generated automatically and hasn't been edited by the user
 
     bool operator==(const AutomationPoint& p) const
     {
-        return inValue == p.inValue
-               && outValue == p.outValue
-               && interpolation == p.interpolation
-               && itemId == p.itemId
-               && generated == p.generated;
-    }
-};
-
-enum class AutomationType : unsigned char {
-    Unknown = 0,
-    Dynamics,
-};
-
-struct AutomationCurveKey {
-    AutomationType type = AutomationType::Unknown;
-    muse::ID staffId;
-    std::optional<size_t> voiceIdx;
-
-    bool isValid() const
-    {
-        return type != AutomationType::Unknown;
-    }
-
-    bool operator==(const AutomationCurveKey& k) const
-    {
-        return type == k.type && staffId == k.staffId && voiceIdx == k.voiceIdx;
-    }
-
-    bool operator<(const AutomationCurveKey& k) const
-    {
-        return std::tie(type, staffId, voiceIdx) < std::tie(k.type, k.staffId, k.voiceIdx);
+        return value == p.value && itemId == p.itemId && generated == p.generated;
     }
 };
 
 using utick_t = int;
 using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
-using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
 
-//! NOTE: resolves what a point's arrival value actually is, given where it sits in its curve
-inline muse::real_t resolvedInValue(const AutomationCurve& curve, AutomationCurve::const_iterator it)
+inline std::optional<AutomationPoint::Bend> bend(const AutomationPoint& point) noexcept
 {
-    return std::visit([&](const auto& v) -> muse::real_t {
-        using T = std::decay_t<decltype(v)>;
-        if constexpr (std::is_same_v<T, AutomationPoint::FromPrevious>) {
-            return it == curve.begin() ? muse::real_t(0.0) : std::prev(it)->second.outValue;
-        } else if constexpr (std::is_same_v<T, AutomationPoint::SameAsOut>) {
-            return it->second.outValue;
-        } else {
-            return v;
-        }
-    }, it->second.inValue);
+    return muse::mpe::bend(point.value);
 }
 
+inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve::const_iterator it)
+{
+    const std::optional<muse::real_t> prevOutValue = it == curve.begin()
+                                                     ? std::nullopt : std::optional(std::prev(it)->second.value.outValue);
+    return muse::mpe::resolveInValue(it->second.value, prevOutValue);
+}
+
+enum class AutomationType : unsigned char {
+    Unknown = 0,
+    Dynamics,
+    Volume,
+    Pan,
+};
+
+struct AutomationCurveKey {
+    //! NOTE: applies to a whole instrument (e.g. Volume, Pan)
+    struct Instrument {
+        InstrumentTrackId trackId;
+
+        bool isValid() const { return trackId.isValid(); }
+        bool operator==(const Instrument& o) const { return trackId == o.trackId; }
+        bool operator<(const Instrument& o) const { return trackId < o.trackId; }
+    };
+
+    //! NOTE: applies to a specific staff (and optionally voice) (e.g. Dynamics)
+    struct StaffVoice {
+        muse::ID staffId;
+        std::optional<size_t> voiceIdx;
+
+        bool isValid() const { return staffId.isValid(); }
+        bool operator==(const StaffVoice& o) const { return staffId == o.staffId && voiceIdx == o.voiceIdx; }
+        bool operator<(const StaffVoice& o) const { return std::tie(staffId, voiceIdx) < std::tie(o.staffId, o.voiceIdx); }
+    };
+
+    //! NOTE: std::monostate scope means the key applies to the whole score (e.g. Tempo)
+    using Scope = std::variant<std::monostate, Instrument, StaffVoice>;
+
+    AutomationType type = AutomationType::Unknown;
+    Scope scope;
+
+    static AutomationCurveKey global(AutomationType type)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        return key;
+    }
+
+    static AutomationCurveKey instrument(AutomationType type, const InstrumentTrackId& trackId)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        key.scope = Instrument { trackId };
+        return key;
+    }
+
+    static AutomationCurveKey staff(AutomationType type, const muse::ID& staffId, std::optional<size_t> voiceIdx = std::nullopt)
+    {
+        AutomationCurveKey key;
+        key.type = type;
+        key.scope = StaffVoice { staffId, voiceIdx };
+        return key;
+    }
+
+    bool isValid() const
+    {
+        if (type == AutomationType::Unknown) {
+            return false;
+        }
+
+        return std::visit([](const auto& s) {
+            using T = std::decay_t<decltype(s)>;
+            if constexpr (std::is_same_v<T, std::monostate>) {
+                return true;
+            } else {
+                return s.isValid();
+            }
+        }, scope);
+    }
+
+    std::optional<InstrumentTrackId> trackId() const
+    {
+        const Instrument* instrument = std::get_if<Instrument>(&scope);
+        return instrument ? std::optional(instrument->trackId) : std::nullopt;
+    }
+
+    std::optional<muse::ID> staffId() const
+    {
+        const StaffVoice* staffVoice = std::get_if<StaffVoice>(&scope);
+        return staffVoice ? std::optional(staffVoice->staffId) : std::nullopt;
+    }
+
+    std::optional<size_t> voiceIdx() const
+    {
+        const StaffVoice* staffVoice = std::get_if<StaffVoice>(&scope);
+        return staffVoice ? staffVoice->voiceIdx : std::nullopt;
+    }
+
+    //! NOTE: same staff, but the shared (voice-independent) curve
+    AutomationCurveKey withoutVoice() const
+    {
+        AutomationCurveKey copy = *this;
+        if (StaffVoice* staffVoice = std::get_if<StaffVoice>(&copy.scope)) {
+            staffVoice->voiceIdx = std::nullopt;
+        }
+        return copy;
+    }
+
+    bool operator==(const AutomationCurveKey& k) const
+    {
+        return type == k.type && scope == k.scope;
+    }
+
+    bool operator<(const AutomationCurveKey& k) const
+    {
+        return std::tie(type, scope) < std::tie(k.type, k.scope);
+    }
+};
+
+using AutomationCurveMap = muse::SharedMap<AutomationCurveKey, AutomationCurve>;
+
 struct AutomationPointEdit {
-    utick_t tick = 0; // tick to write the point at
-    AutomationPoint point; // the point's final value
-    std::optional<utick_t> moveFrom; // if set, the point currently at this tick is removed as part of this edit
+    //! NOTE: write point at tick
+    struct SetPoint {
+        AutomationPoint point;
+    };
+    //! NOTE: write point at tick, removing whatever point currently sits at from
+    struct MovePoint {
+        AutomationPoint point;
+        utick_t from = 0;
+    };
+    //! NOTE: erase whatever point currently sits at tick
+    struct ErasePoint {};
+
+    utick_t tick = 0; // destination tick for SetPoint/MovePoint, or the tick to erase for ErasePoint
+    std::variant<SetPoint, MovePoint, ErasePoint> change;
 };
 
 using AutomationPointEdits = std::vector<AutomationPointEdit>;
@@ -152,11 +213,16 @@ struct AutomationChanges {
         return !isFullReset && affectedKeys.empty();
     }
 
+    void extend(utick_t from, utick_t to)
+    {
+        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
+        tickTo = std::max(tickTo, to);
+    }
+
     void extend(const AutomationCurveKey& key, utick_t from, utick_t to)
     {
         affectedKeys.insert(key);
-        tickFrom = (tickFrom < 0) ? from : std::min(tickFrom, from);
-        tickTo = std::max(tickTo, to);
+        extend(from, to);
     }
 
     void clear()

@@ -23,8 +23,13 @@
 #include "notationswitchlistmodel.h"
 
 #include "log.h"
+#include "translation.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+
+#include "project/inotationproject.h"
 
 using namespace mu::notation;
 using namespace mu::project;
@@ -162,7 +167,7 @@ void NotationSwitchListModel::listenProjectSavingStatusChanged()
         return;
     }
 
-    currentProject->needSave().notification.onNotify(this, [this]() {
+    currentProject->needSaveChanged().onNotify(this, [this]() {
         INotationProjectPtr project = context()->currentProject();
         if (!project) {
             return;
@@ -206,7 +211,7 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleTitle: return QVariant::fromValue(notation->name());
     case RoleNeedSave: {
-        bool needSave = context()->currentProject()->needSave().val && isMasterNotation(notation);
+        bool needSave = context()->currentProject()->isNeedSave() && isMasterNotation(notation);
         return QVariant::fromValue(needSave);
     }
     case RoleIsCloud: {

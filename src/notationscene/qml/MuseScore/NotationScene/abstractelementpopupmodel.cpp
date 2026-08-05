@@ -25,6 +25,7 @@
 #include "engraving/dom/property.h"
 #include "engraving/dom/score.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 #include "notation/inotationundostack.h"
@@ -144,12 +145,12 @@ PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::
 
 muse::PointF AbstractElementPopupModel::fromLogical(muse::PointF point) const
 {
-    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(point) : muse::PointF();
+    return currentNotation() ? currentNotation()->viewState()->matrix().map(point) : muse::PointF();
 }
 
 muse::RectF AbstractElementPopupModel::fromLogical(muse::RectF rect) const
 {
-    return currentNotation()->viewState() ? currentNotation()->viewState()->matrix().map(rect) : muse::RectF();
+    return currentNotation() ? currentNotation()->viewState()->matrix().map(rect) : muse::RectF();
 }
 
 INotationUndoStackPtr AbstractElementPopupModel::undoStack() const

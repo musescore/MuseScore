@@ -537,6 +537,8 @@ protected:
 
     virtual void commitText();
 
+    bool textWasEdited(EditData& ed) const;
+
     bool m_layoutToParentWidth = false;
 
 private:

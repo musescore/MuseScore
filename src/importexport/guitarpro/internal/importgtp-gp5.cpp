@@ -1113,7 +1113,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    m_guitarBendImporter->applyBendsToChords();
+    m_guitarBendImporter->addElementsToScore();
     addGlissandos();
     utils::addPlayCountTexts(score);
 

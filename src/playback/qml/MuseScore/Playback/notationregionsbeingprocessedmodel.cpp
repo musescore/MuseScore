@@ -29,6 +29,8 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/system.h"
 
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
 #include "notation/inotationplayback.h" // IWYU pragma: keep
 

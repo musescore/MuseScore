@@ -379,7 +379,11 @@ MeasureBase* Selection::startMeasureBase() const
         return nullptr;
     }
 
-    return m_score->tick2measureBase(tickStart());
+    MeasureBase* mb = m_score->tick2measureBase(tickStart());
+    if (mb && mb->isMeasure()) {
+        mb = toMeasure(mb)->coveringMMRestOrThis();
+    }
+    return mb;
 }
 
 MeasureBase* Selection::endMeasureBase() const
@@ -399,7 +403,11 @@ MeasureBase* Selection::endMeasureBase() const
         return nullptr;
     }
 
-    return m_score->tick2measureBase(tickEnd() - Fraction::eps());
+    MeasureBase* mb = m_score->tick2measureBase(tickEnd() - Fraction::eps());
+    if (mb && mb->isMeasure()) {
+        mb = toMeasure(mb)->coveringMMRestOrThis();
+    }
+    return mb;
 }
 
 std::vector<System*> Selection::selectedSystems() const
@@ -417,8 +425,14 @@ std::vector<System*> Selection::selectedSystems() const
 
     std::vector<System*> systems;
     for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
+        if (!mb->isMeasure() && !mb->isHBox()) {
+            continue;
+        }
         System* sys = mb->system();
-        if ((mb->isMeasure() || mb->isHBox()) && (systems.empty() || sys != systems.back())) {
+        IF_ASSERT_FAILED(sys) {
+            continue;
+        }
+        if (systems.empty() || sys != systems.back()) {
             systems.push_back(sys);
         }
     }

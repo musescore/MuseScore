@@ -26,6 +26,7 @@
 #include "global/translation.h"
 
 #include "audio/common/audioerrors.h"
+#include "notation/imasternotation.h"
 #include "notation/inotationplayback.h" // IWYU pragma: keep
 #include "playback/playbackcommands.h"
 

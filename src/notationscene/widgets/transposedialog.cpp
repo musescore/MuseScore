@@ -22,6 +22,7 @@
 
 #include "transposedialog.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationselection.h"
 
@@ -50,7 +51,7 @@ TransposeDialog::TransposeDialog(QWidget* parent)
 void TransposeDialog::componentComplete()
 {
     if (selection()->isNone()) {
-        interaction()->selectAll();
+        interaction()->select(SelectionTarget::All);
         m_allSelected = true;
     }
 

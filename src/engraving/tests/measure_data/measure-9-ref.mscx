@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>C_C</eid>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>1</frameSystemDistance>
@@ -30,9 +30,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <eid>D_D</eid>
+      <eid>C_C</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -56,28 +56,28 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>F_F</eid>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>I_I</eid>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>I_I</eid>
         <voice>
           <Spanner type="HairPin">
             <HairPin>
@@ -85,7 +85,7 @@
               <veloChange>10</veloChange>
               <beginHookHeight>-1.9</beginHookHeight>
               <endHookHeight>-1.9</endHookHeight>
-              <eid>B_B</eid>
+              <eid>J_J</eid>
               </HairPin>
             <next>
               <location>

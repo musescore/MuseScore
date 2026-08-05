@@ -186,10 +186,10 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
 
     // Write automation
     {
-        if (score->automation()) {
-            ByteArray automationData = AutomationRW::write(*score->automation(), false /*writeGenerated*/);
-            if (!automationData.empty()) {
-                mscWriter.writeAutomationJsonFile(automationData);
+        if (score->automationData()) {
+            ByteArray data = AutomationRW::write(*score->automationData(), false /*writeGenerated*/);
+            if (!data.empty()) {
+                mscWriter.writeAutomationJsonFile(data);
             }
         }
     }

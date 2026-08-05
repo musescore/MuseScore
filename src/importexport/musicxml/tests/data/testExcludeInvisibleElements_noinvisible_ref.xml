@@ -474,7 +474,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="down" size="8" number="1"/>
           </direction-type>
@@ -519,7 +519,7 @@
         <type>quarter</type>
         <stem>up</stem>
         </note>
-      <direction placement="above">
+      <direction>
         <direction-type>
           <octave-shift type="stop" size="8" number="1"/>
           </direction-type>

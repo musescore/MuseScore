@@ -30,7 +30,7 @@
 #include "engraving/dom/score.h"
 
 #include "general/generalsettingsmodel.h"
-#include "systemlayout/systemlayoutsettingsmodel.h"
+#include "systemlayout/systempagelayoutsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
 #include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
@@ -234,8 +234,8 @@ void PropertiesPanelListModel::createModelsBySectionType(const PropertiesPanelSe
         case PropertiesPanelSectionType::SECTION_MEASURES:
             newModel = new MeasuresSettingsModel(this, iocContext(), m_repository.get());
             break;
-        case PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT:
-            newModel = new SystemLayoutSettingsModel(this, iocContext(), m_repository.get());
+        case PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT:
+            newModel = new SystemPageLayoutSettingsModel(this, iocContext(), m_repository.get());
             break;
         case PropertiesPanelSectionType::SECTION_EMPTY_STAVES:
             newModel = new EmptyStavesVisibilitySettingsModel(this, iocContext(), m_repository.get());
@@ -298,8 +298,9 @@ void PropertiesPanelListModel::removeUnusedModels(const ElementKeySet& newElemen
 
         m_modelList.removeAt(index);
 
-        delete model;
-        model = nullptr;
+        //! NOTE: may run synchronously from a model's own property-change callback;
+        //! deleting immediately would destroy "this" mid-call, so defer it
+        model->deleteLater();
 
         endRemoveRows();
     }

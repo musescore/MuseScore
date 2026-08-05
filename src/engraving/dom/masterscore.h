@@ -104,7 +104,10 @@ public:
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
-    IAutomation* automation() const override;
+
+    AutomationDataConstPtr automationData() const override;
+    void setAutomationData(AutomationDataPtr data);
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`

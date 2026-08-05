@@ -30,6 +30,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
+#include "notation/inotation.h"
 #include "notation/inotationinteraction.h"
 
 #include "log.h"

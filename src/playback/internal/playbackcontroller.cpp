@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "playbackcontroller.h"
 
 #include "async/notifylist.h"
@@ -37,10 +38,13 @@
 #include "engraving/dom/utils.h"
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
+#include "notation/imasternotation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationparts.h"
 #include "notation/inotationselection.h"
+
+#include "project/inotationproject.h"
 
 #include "../playbacktypes.h"
 #include "../playbackcommands.h"
@@ -1121,11 +1125,12 @@ void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode
 
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
 {
-    IF_ASSERT_FAILED(globalContext()->currentProject()) {
+    INotationProjectPtr project = globalContext()->currentProject();
+    IF_ASSERT_FAILED(project) {
         return nullptr;
     }
 
-    return globalContext()->currentProject()->audioSettings();
+    return project->audioSettings();
 }
 
 void PlaybackController::resetPlayback()

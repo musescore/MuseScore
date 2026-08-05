@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "propertiespanelabstractmodel.h"
 
 #include "engraving/dom/barline.h"
@@ -405,7 +406,7 @@ PropertiesPanelSectionTypeSet PropertiesPanelAbstractModel::sectionTypesByElemen
 
     if (isRange) {
         types << PropertiesPanelSectionType::SECTION_MEASURES;
-        types << PropertiesPanelSectionType::SECTION_SYSTEM_LAYOUT;
+        types << PropertiesPanelSectionType::SECTION_SYSTEM_PAGE_LAYOUT;
         types << PropertiesPanelSectionType::SECTION_EMPTY_STAVES;
     }
 
@@ -621,10 +622,17 @@ PropertyValue PropertiesPanelAbstractModel::valueToElementUnits(const mu::engrav
     P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
+        PointF point = toPoint(value);
+        if (pid == Pid::OFFSET) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            point.setY(-point.y());
+        }
+
         if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
-            return toPoint(value) * element->spatium();
+            return point * element->spatium();
         } else {
-            return toPoint(value) * mu::engraving::DPMM;
+            return point * mu::engraving::DPMM;
         }
     }
 
@@ -667,11 +675,20 @@ QVariant PropertiesPanelAbstractModel::valueFromElementUnits(const mu::engraving
 
     switch (value.type()) {
     case P_TYPE::POINT: {
+        PointF point = value.value<PointF>();
         if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
-            return value.value<PointF>().toQPointF() / element->spatium();
+            point = point / element->spatium();
         } else {
-            return value.value<PointF>().toQPointF() / mu::engraving::DPMM;
+            point = point / mu::engraving::DPMM;
         }
+
+        if (pid == Pid::OFFSET) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            point.setY(-point.y());
+        }
+
+        return point.toQPointF();
     }
 
     case P_TYPE::ABSOLUTE:
@@ -896,7 +913,7 @@ bool PropertiesPanelAbstractModel::isMasterNotation() const
         return false;
     }
 
-    return notation == context()->currentMasterNotation()->notation();
+    return notation->isMaster();
 }
 
 INotationSelectionPtr PropertiesPanelAbstractModel::selection() const

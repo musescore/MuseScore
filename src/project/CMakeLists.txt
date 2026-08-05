@@ -28,6 +28,7 @@ target_sources(project PRIVATE
     projecterrors.h
     projectextensionpoints.h
     iexportprojectscenario.h
+    inotationproject_fwd.h
     inotationproject.h
     iprojectcreator.h
     inotationreader.h
@@ -40,11 +41,21 @@ target_sources(project PRIVATE
     irecentfilescontroller.h
     imscmetareader.h
     iprojectautosaver.h
+    projectcommands.h
 
+    types/migrationtypes.h
     types/projectcreateoptions.h
-    types/projecttypes.h
+    types/projectfile.h
     types/projectmeta.h
+    types/projecttypes.h
+    types/recentfile.h
+    types/savelocation.h
+    types/template.h
 
+    internal/projectcommandsregister.cpp
+    internal/projectcommandsregister.h
+    internal/projectcommandsstate.cpp
+    internal/projectcommandsstate.h
     internal/iprojectmigrator.h
     internal/notationproject.cpp
     internal/notationproject.h
@@ -58,6 +69,7 @@ target_sources(project PRIVATE
     internal/notationwritersregister.h
     internal/projectautosaver.cpp
     internal/projectautosaver.h
+    internal/iprojectcommandscontroller.h
     internal/projectactionscontroller.cpp
     internal/projectactionscontroller.h
     internal/engravingpluginapihelper.cpp

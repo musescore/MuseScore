@@ -2837,7 +2837,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             Fraction missingCurr;
             int alt = -10;                          // any number outside range of xml-tag "alter"
             // note: chord and grace note handling done in note()
-            // dura > 0 iff valid rest or first note of chord found
+            // dura > 0 if valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
                            tupletStates, tuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
@@ -3968,6 +3968,7 @@ Text* MusicXmlParserDirection::addTextToHeader(const TextStyleType textStyleType
 {
     Text* t = Factory::createText(m_score->dummy(), textStyleType);
     t->setXmlText(m_wordsText.trimmed());
+    t->renderer()->layoutText1(t);
     MeasureBase* const firstMeasure = m_score->measures()->first();
     VBox* vbox
         = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score, Fraction(0, 1));
@@ -5131,12 +5132,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::BEGIN_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setBeginHookType(HookType::HOOK_90);
-                textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
             } else if (lineEnd == "down") {
                 textLine->setBeginHookType(HookType::HOOK_90);
+                textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
             } else if (lineEnd == "both") {
                 textLine->setBeginHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
@@ -5192,12 +5194,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setEndHookType(HookType::HOOK_90);
-                textLine->setEndHookHeight(-1 * textLine->endHookHeight());
             } else if (lineEnd == "down") {
                 textLine->setEndHookType(HookType::HOOK_90);
+                textLine->setEndHookHeight(-1 * textLine->endHookHeight());
             } else if (lineEnd == "both") {
                 textLine->setEndHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
@@ -5286,7 +5289,7 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
             return;
         }
         int ottavasize = m_e.intAttribute("size");
-        if (!(ottavasize == 8 || ottavasize == 15)) {
+        if (!(ottavasize == 8 || ottavasize == 15 || ottavasize == 22)) {
             m_logger->logError(String(u"unknown octave-shift size %1").arg(ottavasize), &m_e);
         } else {
             Ottava* o = spdesc.isStopped ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
@@ -5297,6 +5300,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VA);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MA);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MA);
                 }
             } else if (type == u"up") {
                 m_placement = m_placement.empty() ? u"below" : m_placement;
@@ -5304,6 +5309,8 @@ void MusicXmlParserDirection::octaveShift(const String& type, const int number,
                     o->setOttavaType(OttavaType::OTTAVA_8VB);
                 } else if (ottavasize == 15) {
                     o->setOttavaType(OttavaType::OTTAVA_15MB);
+                } else if (ottavasize == 22) {
+                    o->setOttavaType(OttavaType::OTTAVA_22MB);
                 }
             }
 
@@ -6740,7 +6747,7 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
     }
     if (tremoloNr) {
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, muPrintable(tremoloType), ticks, _tremStart);
-        if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
+        if (tremoloNr >= 1 && tremoloNr <= 6) {
             if (tremoloType.empty() || tremoloType == u"single") {
                 TremoloType type = TremoloType::INVALID_TREMOLO;
                 switch (tremoloNr) {
@@ -6751,6 +6758,10 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                 case 3: type = TremoloType::R32;
                     break;
                 case 4: type = TremoloType::R64;
+                    break;
+                case 5: type = TremoloType::R128;
+                    break;
+                case 6: type = TremoloType::R256;
                     break;
                 }
 
@@ -6780,6 +6791,10 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                     case 3: type = TremoloType::C32;
                         break;
                     case 4: type = TremoloType::C64;
+                        break;
+                    case 5: type = TremoloType::C128;
+                        break;
+                    case 6: type = TremoloType::C256;
                         break;
                     }
 
