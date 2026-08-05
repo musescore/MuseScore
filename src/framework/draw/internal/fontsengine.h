@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -29,7 +29,7 @@
 #include "global/modularity/ioc.h"
 #include "ifontsdatabase.h"
 
-//#include "fontrendercache.h"
+#include "fontrendercache.h"
 
 namespace muse::draw {
 class IFontFace;
@@ -43,6 +43,7 @@ public:
     ~FontsEngine();
 
     void init();
+    void setRenderCacheDirPath(const io::path_t& path, const std::string& revision = std::string()) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
@@ -74,6 +75,11 @@ private:
         int lenght = 0;
     };
 
+    struct FontFaceTextBlock {
+        TextBlock text;
+        const IFontFace* face = nullptr;
+    };
+
     struct RequireFace {
         IFontFace* face = nullptr;   // real loaded face
         std::vector<IFontFace*> subtitutionFaces;
@@ -86,14 +92,13 @@ private:
     IFontFace* createFontFace(const io::path_t& path) const;
     RequireFace* fontFace(const Font& f, bool isSymbolMode = false) const;
 
-    std::vector<TextBlock> splitTextByLines(const std::u32string& text) const;
-    std::vector<TextBlock> splitTextByFontFaces(const RequireFace* rf, const TextBlock& text) const;
+    std::vector<FontFaceTextBlock> splitTextByFontFaces(const RequireFace* rf, const TextBlock& text) const;
 
     FontFaceFactory m_fontFaceFactory;
 
     mutable std::vector<IFontFace*> m_loadedFaces;
     mutable std::vector<RequireFace*> m_requiredFaces;
 
-    //mutable FontRenderCache m_renderCache;
+    mutable FontRenderCache m_renderCache;
 };
 }

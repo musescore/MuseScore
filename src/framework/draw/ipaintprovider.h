@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_IPAINTPROVIDER_H
-#define MUSE_DRAW_IPAINTPROVIDER_H
+
+#pragma once
 
 #include <memory>
 
@@ -75,8 +75,7 @@ public:
     virtual void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) = 0;
 
     virtual void drawText(const PointF& point, const String& text) = 0;
-    virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
-    virtual void drawTextWorkaround(const Font& f, const PointF& pos, const String& text) = 0;
+    virtual void drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text) = 0;
 
     virtual void drawSymbol(const PointF& point, char32_t ucs4Code) = 0;
 
@@ -97,5 +96,3 @@ public:
 
 using IPaintProviderPtr = std::shared_ptr<IPaintProvider>;
 }
-
-#endif // MUSE_DRAW_IPAINTPROVIDER_H

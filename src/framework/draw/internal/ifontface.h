@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -20,10 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
-
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-#include <msdfgen.h>
-#endif
 
 #include "global/io/path.h"
 #include "types/fontstypes.h"
@@ -66,74 +62,6 @@ public:
     virtual FBBox glyphBbox(glyph_idx_t idx) const = 0;
     virtual f26dot6_t glyphAdvance(glyph_idx_t idx) const = 0;
 
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-    virtual const msdfgen::Shape& glyphShape(glyph_idx_t idx) const = 0;
-#endif
+    virtual const GlyphImage& glyphImage(glyph_idx_t idx) const = 0;
 };
 }
-
-#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
-{
-    if (s1.inverseYAxis != s2.inverseYAxis) {
-        return false;
-    }
-
-    if (s1.fillRule != s2.fillRule) {
-        return false;
-    }
-
-    if (s1.contours.size() != s2.contours.size()) {
-        return false;
-    } else {
-        auto pointsIsEqual = [](const msdfgen::Point2* p1, const msdfgen::Point2* p2, int count) {
-            for (int i = 0; i < count; ++i) {
-                if (p1[i] != p2[i]) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        for (size_t ci = 0; ci < s1.contours.size(); ++ci) {
-            const msdfgen::Contour& c1 = s1.contours.at(ci);
-            const msdfgen::Contour& c2 = s2.contours.at(ci);
-            if (c1.edges.size() != c2.edges.size()) {
-                return false;
-            } else {
-                for (size_t ei = 0; ei < c1.edges.size(); ++ei) {
-                    const msdfgen::EdgeSegment& e1 = c1.edges.at(ei);
-                    const msdfgen::EdgeSegment& e2 = c2.edges.at(ei);
-                    if (e1.actualType != e2.actualType) {
-                        return false;
-                    } else {
-                        switch (e1.actualType) {
-                        case msdfgen::EdgeSegment::ActualType::Undefined: {
-                            continue;
-                        } break;
-                        case msdfgen::EdgeSegment::ActualType::Linear: {
-                            if (!pointsIsEqual(e1.segments.linear.p, e2.segments.linear.p, 2)) {
-                                return false;
-                            }
-                        } break;
-                        case msdfgen::EdgeSegment::ActualType::Quadratic: {
-                            if (!pointsIsEqual(e1.segments.quadratic.p, e2.segments.quadratic.p, 3)) {
-                                return false;
-                            }
-                        } break;
-                        case msdfgen::EdgeSegment::ActualType::Cubic: {
-                            if (!pointsIsEqual(e1.segments.cubic.p, e2.segments.cubic.p, 4)) {
-                                return false;
-                            }
-                        } break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-#endif
