@@ -44,6 +44,7 @@ public:
     MOCK_METHOD(muse::async::Channel<bool>, loopEnabledChanged, (), (const, override));
 
     MOCK_METHOD(const InstrumentTrackIdMap&, instrumentTrackIdMap, (), (const, override));
+    MOCK_METHOD(engraving::InstrumentTrackIdSet, audibleInstrumentTrackIds, (), (const, override));
 
     MOCK_METHOD(const AuxTrackIdMap&, auxTrackIdMap, (), (const, override));
 

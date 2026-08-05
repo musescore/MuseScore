@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <cmath>
+#include <limits>
 #include <memory>
 
 #include "async/asyncable.h"
@@ -35,6 +36,7 @@
 #include "engraving/dom/chord.h"
 
 #include "engraving/playback/playbackmodel.h"
+#include "engraving/playback/playbacknoteindex.h"
 
 #include "utils/scorerw.h"
 
@@ -50,6 +52,24 @@ static const String PLAYBACK_MODEL_TEST_FILES_DIR("playback/playbackmodel_data/"
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
 static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
+
+static mpe::NoteEvent makeNoteEventWithPitchLevel(timestamp_t actualTimestamp, duration_t actualDuration, pitch_level_t pitchLevel)
+{
+    ArrangementContext arrangement;
+    arrangement.actualTimestamp = actualTimestamp;
+    arrangement.actualDuration = actualDuration;
+
+    PitchContext pitch;
+    pitch.nominalPitchLevel = pitchLevel;
+
+    return mpe::NoteEvent(std::move(arrangement), std::move(pitch), ExpressionContext {});
+}
+
+static mpe::NoteEvent makeNoteEvent(timestamp_t actualTimestamp, duration_t actualDuration, int midiPitch)
+{
+    return makeNoteEventWithPitchLevel(actualTimestamp, actualDuration,
+                                       (midiPitch - ZERO_PITCH_LEVEL_MIDI_EQUIVALENT) * PITCH_LEVEL_STEP);
+}
 
 class Engraving_PlaybackModelTests : public ::testing::Test, public muse::async::Asyncable
 {
@@ -86,6 +106,156 @@ protected:
 
     std::shared_ptr<NiceMock<ArticulationProfilesRepositoryMock> > m_repositoryMock = nullptr;
 };
+
+TEST(Engraving_PlaybackNoteIndexTests, UsesActualTimingAndSemiOpenIntervals)
+{
+    PlaybackEventsMap events;
+    events[999999].push_back(makeNoteEvent(100, 6000000, 64));
+    events[0].push_back(makeNoteEvent(-100, 200, 63));
+
+    PlaybackNoteIndex index;
+    index.add(events);
+    index.finalize();
+
+    EXPECT_TRUE(index.activePitches(-101).empty());
+    EXPECT_EQ(index.activePitches(-100), std::vector<muse::midi::note_idx_t>({ 63 }));
+    EXPECT_EQ(index.activePitches(99), std::vector<muse::midi::note_idx_t>({ 63 }));
+    EXPECT_EQ(index.activePitches(100), std::vector<muse::midi::note_idx_t>({ 64 }));
+    EXPECT_EQ(index.activePitches(3000000), std::vector<muse::midi::note_idx_t>({ 64 }));
+    EXPECT_TRUE(index.activePitches(6000100).empty());
+}
+
+TEST(Engraving_PlaybackNoteIndexTests, UsesNearestSoundingPianoKeyBeforeValidatingMidiRange)
+{
+    PlaybackEventsMap events;
+    events[0].push_back(makeNoteEventWithPitchLevel(0, 100, (48 * PITCH_LEVEL_STEP) + 24)); // MIDI 60.48 -> 60
+    events[0].push_back(makeNoteEventWithPitchLevel(0, 100, (48 * PITCH_LEVEL_STEP) + 25)); // MIDI 60.5 -> 61
+    events[0].push_back(makeNoteEventWithPitchLevel(0, 100, (48 * PITCH_LEVEL_STEP) + 30)); // MIDI 60.6 -> 61
+    events[0].push_back(makeNoteEventWithPitchLevel(0, 100, (115 * PITCH_LEVEL_STEP) + 30)); // MIDI 127.6 -> invalid
+    events[0].push_back(makeNoteEventWithPitchLevel(0, 100, (-12 * PITCH_LEVEL_STEP) - 30)); // MIDI -0.6 -> invalid
+
+    PlaybackNoteIndex index;
+    index.add(events);
+    index.finalize();
+
+    EXPECT_EQ(index.activePitches(0), std::vector<muse::midi::note_idx_t>({ 60, 61 }));
+}
+
+TEST(Engraving_PlaybackNoteIndexTests, MergesDuplicateAndAdjacentIntervals)
+{
+    PlaybackEventsMap firstTrack;
+    firstTrack[0].push_back(makeNoteEvent(0, 100, 72));
+    firstTrack[0].push_back(makeNoteEvent(20, 20, 72));
+    firstTrack[0].push_back(makeNoteEvent(0, 300, 60));
+
+    PlaybackEventsMap secondTrack;
+    secondTrack[100].push_back(makeNoteEvent(100, 100, 72));
+    secondTrack[200].push_back(makeNoteEvent(200, 100, 72));
+    secondTrack[0].push_back(makeNoteEvent(0, 300, 60));
+
+    PlaybackNoteIndex index;
+    index.add(firstTrack);
+    index.add(secondTrack);
+    index.finalize();
+
+    EXPECT_EQ(index.activePitches(150), std::vector<muse::midi::note_idx_t>({ 60, 72 }));
+    EXPECT_TRUE(index.activePitches(300).empty());
+}
+
+TEST(Engraving_PlaybackNoteIndexTests, HandlesInfiniteAndOverflowingDurations)
+{
+    constexpr timestamp_t MAX_TIMESTAMP = std::numeric_limits<timestamp_t>::max();
+
+    PlaybackEventsMap events;
+    events[0].push_back(makeNoteEvent(10, INFINITE_DURATION, 40));
+    events[0].push_back(makeNoteEvent(MAX_TIMESTAMP - 5, 10, 41));
+    events[0].push_back(makeNoteEvent(MAX_TIMESTAMP - 5, 5, 42));
+
+    PlaybackNoteIndex index;
+    index.add(events);
+    index.finalize();
+
+    EXPECT_EQ(index.activePitches(MAX_TIMESTAMP - 1), std::vector<muse::midi::note_idx_t>({ 40, 41, 42 }));
+    EXPECT_EQ(index.activePitches(MAX_TIMESTAMP), std::vector<muse::midi::note_idx_t>({ 40 }));
+}
+
+TEST(Engraving_PlaybackNoteIndexTests, SkipsInvalidEvents)
+{
+    PlaybackEventsMap events;
+    events[0].push_back(std::monostate {});
+    events[0].push_back(makeNoteEvent(0, 100, -1));
+    events[0].push_back(makeNoteEvent(0, 100, 128));
+    events[0].push_back(makeNoteEvent(0, 0, 60));
+    events[0].push_back(makeNoteEvent(0, -1, 61));
+    events[0].push_back(makeNoteEvent(0, 100, 62));
+
+    PlaybackNoteIndex index;
+    index.add(events);
+    index.finalize();
+
+    EXPECT_EQ(index.activePitches(0), std::vector<muse::midi::note_idx_t>({ 62 }));
+}
+
+TEST_F(Engraving_PlaybackModelTests, ActivePlaybackPitchesFiltersTracksAndSurvivesReload)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().front();
+    ASSERT_TRUE(part);
+
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.load(score);
+
+    const InstrumentTrackIdSet includedTracks = part->instrumentTrackIdSet();
+    EXPECT_EQ(model.activePlaybackPitches(0, includedTracks), std::vector<muse::midi::note_idx_t>({ 65 }));
+    EXPECT_TRUE(model.activePlaybackPitches(0, {}).empty());
+    EXPECT_TRUE(model.activePlaybackPitches(0, { model.metronomeTrackId() }).empty());
+    EXPECT_EQ(model.activePlaybackPitches(0, includedTracks), std::vector<muse::midi::note_idx_t>({ 65 }));
+
+    model.reload();
+
+    EXPECT_EQ(model.activePlaybackPitches(0, includedTracks), std::vector<muse::midi::note_idx_t>({ 65 }));
+}
+
+TEST_F(Engraving_PlaybackModelTests, ScoreChangeInvalidatesActivePlaybackPitches)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+
+    ASSERT_TRUE(score);
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.load(score);
+
+    const InstrumentTrackIdSet includedTracks = score->parts().front()->instrumentTrackIdSet();
+    EXPECT_EQ(model.activePlaybackPitches(0, includedTracks), std::vector<muse::midi::note_idx_t>({ 65 }));
+
+    Segment* firstSegment = score->firstMeasure()->first(SegmentType::ChordRest);
+    ASSERT_TRUE(firstSegment);
+
+    Chord* firstChord = toChord(firstSegment->element(0));
+    ASSERT_TRUE(firstChord);
+    score->deleteItem(firstChord);
+
+    ScoreChanges changes;
+    changes.tickFrom = 0;
+    changes.tickTo = 480;
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+    changes.changedTypes = { ElementType::NOTE };
+    score->changesChannel().send(changes);
+
+    EXPECT_TRUE(model.activePlaybackPitches(0, includedTracks).empty());
+}
 
 /**
  * @brief PlaybackModelTests_SimpleRepeat
@@ -239,6 +409,14 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
     }
 
     EXPECT_EQ(timestampCount, expectedSizePerTimestamp.size());
+
+    const InstrumentTrackIdSet includedTracks = part->instrumentTrackIdSet();
+    const timestamp_t postRepeatTremoloStart = 8 * 2 * QUARTER_NOTE_DURATION;
+    EXPECT_EQ(model.activePlaybackPitches(postRepeatTremoloStart, includedTracks),
+              std::vector<muse::midi::note_idx_t>({ 72 }));
+    EXPECT_EQ(model.activePlaybackPitches(postRepeatTremoloStart + QUARTER_NOTE_DURATION / 32, includedTracks),
+              std::vector<muse::midi::note_idx_t>({ 72 }));
+    EXPECT_TRUE(model.activePlaybackPitches(postRepeatTremoloStart + 2 * QUARTER_NOTE_DURATION, includedTracks).empty());
 }
 
 /**
@@ -271,11 +449,13 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
 
     // [THEN] The duration of the tied note matches expectations
     size_t noteEventCount = 0;
+    const mpe::NoteEvent* tiedNoteEvent = nullptr;
     for (const auto& pair : result) {
         for (const PlaybackEvent& event : pair.second) {
             if (std::holds_alternative<mpe::NoteEvent>(event)) {
                 const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
                 EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, 8 * QUARTER_NOTE_DURATION);
+                tiedNoteEvent = &noteEvent;
 
                 ++noteEventCount;
             }
@@ -284,6 +464,18 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
 
     // [THEN] The amount of note events matches expectations
     EXPECT_EQ(noteEventCount, 1);
+    ASSERT_TRUE(tiedNoteEvent);
+
+    const ArrangementContext& arrangement = tiedNoteEvent->arrangementCtx();
+    const InstrumentTrackIdSet includedTracks = part->instrumentTrackIdSet();
+    EXPECT_TRUE(model.activePlaybackPitches(arrangement.actualTimestamp - 1, includedTracks).empty());
+    EXPECT_EQ(model.activePlaybackPitches(arrangement.actualTimestamp, includedTracks),
+              std::vector<muse::midi::note_idx_t>({ 67 }));
+    EXPECT_EQ(model.activePlaybackPitches(arrangement.actualTimestamp + arrangement.actualDuration / 2, includedTracks),
+              std::vector<muse::midi::note_idx_t>({ 67 }));
+    EXPECT_EQ(model.activePlaybackPitches(arrangement.actualTimestamp + arrangement.actualDuration - 1, includedTracks),
+              std::vector<muse::midi::note_idx_t>({ 67 }));
+    EXPECT_TRUE(model.activePlaybackPitches(arrangement.actualTimestamp + arrangement.actualDuration, includedTracks).empty());
 }
 
 /**

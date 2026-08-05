@@ -22,6 +22,7 @@ set(MODULE_TEST playback_test)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/playbackcontrollermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/playbackcontroller_tests.cpp
 )
 
 set(MODULE_TEST_LINK playback)
@@ -29,4 +30,3 @@ set(MODULE_TEST_LINK playback)
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(SetupGTest)
-

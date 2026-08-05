@@ -41,6 +41,7 @@ public:
     muse::async::Channel<bool> loopEnabledChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+    engraving::InstrumentTrackIdSet audibleInstrumentTrackIds() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 
     muse::async::Channel<muse::audio::TrackId> trackAdded() const override;

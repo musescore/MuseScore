@@ -55,6 +55,8 @@ public:
     bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const override;
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
+    std::vector<muse::midi::note_idx_t> activePlaybackPitches(
+        muse::audio::secs_t position, const engraving::InstrumentTrackIdSet& includedTracks) const override;
 
     void triggerEventsForItems(const std::vector<const engraving::EngravingItem*>& items, muse::mpe::duration_t duration,
                                bool flushSound) override;
