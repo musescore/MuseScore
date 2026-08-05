@@ -240,7 +240,8 @@ void ChordBracketLayout::updateHorizontalSpacing(const Segment* firstSegment, co
 
     auto updateForBrackets = [&](const Segment* segment, const Shape& otherShape, bool rightSide) {
         for (ChordBracket* bracket : chordBracketsInSegment(segment)) {
-            if (bracket->chord()->onTabStaff() || !bracket->visible() || !bracket->addToSkyline() || bracket->rightSide() != rightSide) {
+            const Chord* owner = bracket->chord();
+            if (!owner || owner->onTabStaff() || !bracket->visible() || !bracket->addToSkyline() || bracket->rightSide() != rightSide) {
                 continue;
             }
 
@@ -250,7 +251,7 @@ void ChordBracketLayout::updateHorizontalSpacing(const Segment* firstSegment, co
                 continue;
             }
 
-            const double x = bracket->chord()->pos().x() + bracket->pos().x();
+            const double x = owner->pos().x() + bracket->pos().x();
             const Shape bracketShape = bracketCollisionShape(bracket, span, staffIdx, x);
 
             if (bracketShape.empty()) {
