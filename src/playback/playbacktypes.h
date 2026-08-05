@@ -25,6 +25,7 @@
 #include <QTime>
 
 #include "audio/common/audiotypes.h"
+#include "engraving/types/types.h"
 
 namespace mu::playback {
 static constexpr muse::audio::aux_channel_idx_t AUX_CHANNEL_NUM = 2;
@@ -122,4 +123,6 @@ enum OnlineSoundsShowProgressBarMode {
     DuringPlayback,
     Never,
 };
+
+using LoopBoundaryType = mu::engraving::LoopBoundaryType;
 }

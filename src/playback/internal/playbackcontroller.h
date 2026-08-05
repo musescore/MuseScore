@@ -77,8 +77,30 @@ public:
     bool isPlaying() const override;
     muse::async::Channel<bool> isPlayingChanged() const override;
 
+    muse::Ret togglePlay() override;
+    muse::Ret play(bool showErrors = true) override;
+    muse::Ret playFromSelection(bool showErrors = true) override;
+    muse::Ret pause(bool select = false) override;
+    muse::Ret stop() override;
+    muse::Ret rewind(muse::secs_t secs) override;
+
     bool isLoopEnabled() const override;
     muse::async::Channel<bool> loopEnabledChanged() const override;
+    muse::Ret toggleLoopPlayback() override;
+    muse::Ret addLoopBoundary(LoopBoundaryType type) override;
+
+    muse::Ret toggleMetronome() override;
+
+    muse::Ret toggleMidiInput() override;
+    muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch) override;
+
+    muse::Ret togglePlayRepeats() override;
+    muse::Ret togglePlayChordSymbols() override;
+    muse::Ret toggleAutomaticallyPan() override;
+    muse::Ret toggleCountIn() override;
+    muse::Ret toggleHearPlaybackWhenEditing() override;
+
+    muse::Ret reloadPlaybackCache() override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -172,13 +194,6 @@ private:
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
-    muse::Ret togglePlay();
-    muse::Ret play(bool showErrors = true);
-    muse::Ret playFromSelection(bool showErrors = true);
-    muse::Ret pause(bool select = false);
-    muse::Ret stop();
-    muse::rcommand::Response rewind(const muse::rcommand::Request& request);
-
     void doRewind(muse::secs_t newPosition);
     void doPlay();
     void doPause(bool select = false);
@@ -189,22 +204,7 @@ private:
 
     engraving::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
-    muse::Ret togglePlayRepeats();
-    muse::Ret togglePlayChordSymbols();
-    muse::Ret toggleAutomaticallyPan();
-    muse::Ret toggleMetronome();
-    muse::Ret toggleCountIn();
-    muse::Ret toggleMidiInput();
-    muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch);
-    muse::Ret toggleHearPlaybackWhenEditing();
-
-    muse::Ret reloadPlaybackCache();
-
-    muse::Ret showPlaybackSetup();
-
-    muse::Ret toggleLoopPlayback();
-    muse::Ret addLoopBoundary(engraving::LoopBoundaryType type);
-    void addLoopBoundaryToTick(engraving::LoopBoundaryType type, int tick);
+    void addLoopBoundaryToTick(LoopBoundaryType type, int tick);
     void updateLoop();
 
     void enableLoop();

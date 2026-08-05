@@ -36,7 +36,7 @@ inline static const muse::rcommand::Command LOOP_TOGGLE_COMMAND("command://playb
 inline static const muse::rcommand::Command LOOP_IN_COMMAND("command://playback/loop-in");
 inline static const muse::rcommand::Command LOOP_OUT_COMMAND("command://playback/loop-out");
 inline static const muse::rcommand::Command METRONOME_TOGGLE_COMMAND("command://playback/metronome-toggle");
-inline static const muse::rcommand::Command SHOW_PLAYBACK_SETUP_COMMAND("command://playback/show-playback-setup");
+inline static const muse::rcommand::Command OPEN_PLAYBACK_SETUP_COMMAND("command://playback/open-playback-setup");
 inline static const muse::rcommand::Command MIDI_TOGGLE_COMMAND("command://playback/midi-toggle");
 inline static const muse::rcommand::Command MIDI_INPUT_WRITTEN_PITCH_COMMAND("command://playback/midi-input-written-pitch");
 inline static const muse::rcommand::Command MIDI_INPUT_SOUNDING_PITCH_COMMAND("command://playback/midi-input-sounding-pitch");

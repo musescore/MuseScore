@@ -163,12 +163,6 @@ enum class LayoutBreakType : unsigned char;
 enum class CommandType : signed char;
 enum class SystemDividerType : unsigned char;
 
-enum class LoopBoundaryType : signed char {
-    Unknown = -1,
-    LoopIn = 0,
-    LoopOut = 1
-};
-
 struct Position {
     Segment* segment = nullptr;
     staff_idx_t staffIdx = muse::nidx;
