@@ -37,11 +37,13 @@
 #include "rcommand/icommandsstate.h"
 #include "interactive/iinteractive.h"
 #include "../iplaybackcontroller.h"
+#include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
 class PlaybackCommandsController : public IPlaybackCommandsController, public muse::Contextable, public muse::actions::Actionable,
     public muse::rcommand::Commandable
 {
+    muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
@@ -57,6 +59,10 @@ private:
 
     muse::Ret rewind(const muse::rcommand::CommandQuery& query);
     muse::Ret showPlaybackSetup();
+
+    muse::Ret toggleMixerSection(const muse::rcommand::CommandQuery& query);
+    muse::Ret toggleAuxSend(const muse::rcommand::CommandQuery& query);
+    muse::Ret toggleAuxChannel(const muse::rcommand::CommandQuery& query);
 
     void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret()>&);
     void registerCommand(const muse::rcommand::Command&, const std::function<muse::Ret(const muse::rcommand::CommandQuery&)>&);

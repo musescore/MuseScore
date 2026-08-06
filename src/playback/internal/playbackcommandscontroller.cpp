@@ -22,14 +22,31 @@
 
 #include "playbackcommandscontroller.h"
 
+#include <vector>
+
+#include "actions/actiontypes.h"
 #include "rcommand/actiontocommand.h"
+#include "rcommand/commandtypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "../playbackcommands.h"
-#include <vector>
 
 using namespace muse;
 using namespace muse::rcommand;
+using namespace muse::audio;
 using namespace mu::playback;
+
+static rcommand::CommandQuery mixerSectionToggle(const rcommand::Command& command, const actions::ActionData& args)
+{
+    rcommand::CommandQuery q(command);
+    if (args.empty()) {
+        return q;
+    }
+
+    std::string section = str_conv(static_cast<MixerSectionType>(args.arg<int>(0)));
+    q.addParam("section", Val(section));
+    return q;
+}
 
 void PlaybackCommandsController::init()
 {
@@ -55,6 +72,10 @@ void PlaybackCommandsController::init()
     registerCommand(OPEN_PLAYBACK_SETUP_COMMAND, [this]() { return showPlaybackSetup(); });
     registerCommand(RELOAD_PLAYBACK_CACHE_COMMAND, &IPlaybackController::reloadPlaybackCache);
 
+    registerCommand(TOGGLE_MIXER_SECTION_COMMAND, [this](const muse::rcommand::CommandQuery& query) { return toggleMixerSection(query); });
+    registerCommand(TOGGLE_AUX_SEND_COMMAND, [this](const muse::rcommand::CommandQuery& query) { return toggleAuxSend(query); });
+    registerCommand(TOGGLE_AUX_CHANNEL_COMMAND, [this](const muse::rcommand::CommandQuery& query) { return toggleAuxChannel(query); });
+
     // compat
     {
         static std::vector<ActionToCommand> actionToCommand = {
@@ -79,6 +100,9 @@ void PlaybackCommandsController::init()
             { "countin", COUNTIN_TOGGLE_COMMAND, {} },
             { "reload-playback-cache", RELOAD_PLAYBACK_CACHE_COMMAND, {} },
             { "clear-online-sounds-cache", CLEAR_ONLINESOUNDS_CACHE_COMMAND, {} },
+            { "toggle-mixer-section", TOGGLE_MIXER_SECTION_COMMAND, mixerSectionToggle },
+            { "toggle-aux-send", TOGGLE_AUX_SEND_COMMAND, make_conv({ { "auxsend-index", param<int> } }) },
+            { "toggle-aux-channel", TOGGLE_AUX_CHANNEL_COMMAND, make_conv({ { "auxchannel-index", param<int> } }) },
         };
 
         registerActionToCommand(this, actionToCommand, dispatcher(), actionsDispatcher());
@@ -94,6 +118,42 @@ muse::Ret PlaybackCommandsController::rewind(const muse::rcommand::CommandQuery&
 muse::Ret PlaybackCommandsController::showPlaybackSetup()
 {
     interactive()->open("musescore://playback/soundprofiles");
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::toggleMixerSection(const muse::rcommand::CommandQuery& query)
+{
+    MixerSectionType section = str_conv(query.param("section", Val("unknown")).toString(), MixerSectionType::Unknown);
+    if (section == MixerSectionType::Unknown) {
+        return make_ret(Ret::Code::BadArgs);
+    }
+
+    bool visible = configuration()->isMixerSectionVisible(section);
+    configuration()->setMixerSectionVisible(section, !visible);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::toggleAuxSend(const muse::rcommand::CommandQuery& query)
+{
+    if (!query.contains("auxsend-index")) {
+        return make_ret(Ret::Code::BadArgs);
+    }
+
+    aux_channel_idx_t auxSendIndex = static_cast<aux_channel_idx_t>(query.param("auxsend-index", Val(0)).toInt());
+    bool visible = configuration()->isAuxSendVisible(auxSendIndex);
+    configuration()->setAuxSendVisible(auxSendIndex, !visible);
+    return make_ok();
+}
+
+muse::Ret PlaybackCommandsController::toggleAuxChannel(const muse::rcommand::CommandQuery& query)
+{
+    if (!query.contains("auxchannel-index")) {
+        return make_ret(Ret::Code::BadArgs);
+    }
+
+    aux_channel_idx_t auxChannelIndex = static_cast<aux_channel_idx_t>(query.param("auxchannel-index", Val(0)).toInt());
+    bool visible = configuration()->isAuxChannelVisible(auxChannelIndex);
+    configuration()->setAuxChannelVisible(auxChannelIndex, !visible);
     return make_ok();
 }
 
