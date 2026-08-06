@@ -471,3 +471,33 @@ Changelog
 
 9 February 2021 (Daniel Spreadbury) Bravura Text 1.393
 – Corrected style name of Bravura Text to 'Regular' from incorrect 'Normal'
+
+30 March 2021 (Daniel Spreadbury) Bravura 1.394
+– Fixed U+1D123 (bass clef with 8 above) and U+1D124 (bass clef with 8 below).
+– Fixed tesselation of wiggleArpeggioUp (U+EAA9) and wiggleArpeggioUpArrow (U+EAAD).
+
+16 September 2022 (Daniel Spreadbury) Bravura 1.395
+– Revised design for noteheads in 'Technique noteheads' range (U+EE70–U+EE73).
+
+11 October 2024 (Daniel Spreadbury) Bravura 1.396
+– Added kerning pairs for 'Tuplets' range (U+E880–U+E88A).
+
+1 July 2025 (Daniel Spreadbury) Bravura 1.453
+– Improve the appearance of U+E0D7 (noteheadDiamondDoubleWhole) and U+E0D8 (noteheadDiamondWhole).
+– Added 'Tuplets supplement' range (U+EF10-U+EF1F) with italic and roman parentheses and square brackets for tuplet digits.
+
+2 July 2025 (Daniel Spreadbury) Bravura 1.454
+– Added stylistic alternates for new 'Tuplets supplement' range.
+
+29 July 2025 (Daniel Spreadbury) Bravura 1.455
+– Added stylistic alternate for U+E830 guitarVibratoBarScoop.
+
+22 October 2025 (Daniel Spreadbury) Bravura 1.456
+– Tweak to U+E000 (brace) to make it more similar to appearance prior to v1.451.
+
+6 August 2026 (Daniel Spreadbury) Bravura 1.480
+– Bravura is now built from UFO sources, which can be found at https://github.com/w3c-cg/smufl.
+– Bravura and Bravura Text are now generated using a new pipeline from UFO to OTF using fontmake and otfautohint.
+– ss05 stylistic set removed, its five oversized notehead glyphs (noteheadDoubleWhole, noteheadDoubleWholeSquare, noteheadWhole, noteheadHalf, noteheadBlack) merged into ss08.
+– Bravura Text's ~15,500 "combining staff position" ligatures previously overflowed the Private Use Area, spilling all the way up to U+13285 and colliding with other Unicode blocks; they now live entirely within U+F0000–U+F3CBF, Plane 15's Supplementary Private Use Area-A.
+– Version number corrected from the originally-released 1.4900 to 1.480, since head.fontRevision cannot actually represent a 4-digit fraction.
