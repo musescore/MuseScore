@@ -1485,15 +1485,23 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                     if (cr->isChord()) {
                         elements.chords.push_back(toChord(cr));
 
-                        auto collectBends = [&elements] (Chord* chord) {
+                        auto collectBends = [&elements, system] (Chord* chord) {
                             for (Note* note : chord->notes()) {
                                 for (Spanner* sp : note->spannerBack()) {
                                     if (sp->isGuitarBend()) {
                                         elements.guitarBends.push_back(toGuitarBend(sp));
                                     }
                                 }
-                                if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
-                                    elements.guitarBends.push_back(bendFor);
+
+                                for (Spanner* sp : note->spannerFor()) {
+                                    if (sp->isGuitarBend()) {
+                                        GuitarBend* bend = toGuitarBend(sp);
+                                        Note* endNote = bend->endNote();
+                                        if (bend->bendType() == GuitarBendType::SLIGHT_BEND
+                                            || (endNote && endNote->tick() >= system->endTick())) {
+                                            elements.guitarBends.push_back(bend);
+                                        }
+                                    }
                                 }
                             }
                         };
@@ -1834,7 +1842,9 @@ void SystemLayout::layoutTiesAndBends(const ElementsToLayout& elementsToLayout, 
     GuitarDiveLayout::updateDiveSequences(elementsToLayout.guitarBends, ctx);
 
     for (GuitarBend* bend : elementsToLayout.guitarBends) {
-        TLayout::layoutGuitarBend(bend, ctx);
+        /* Bends which cross a system break are collected by both systems they touch, so we
+         * lay out only the segment which belongs to this one: */
+        TLayout::layoutGuitarBend(bend, ctx, system);
     }
 }
 
