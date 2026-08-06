@@ -25,7 +25,9 @@ target_sources(palette PRIVATE
     palettemodule.h
     ipaletteconfiguration.h
     palettetypes.h
+    palettecommands.h
 
+    internal/ipalettecommandscontroller.h
     internal/paletteconfiguration.cpp
     internal/paletteconfiguration.h
     internal/paletteworkspacesetup.cpp
@@ -34,6 +36,10 @@ target_sources(palette PRIVATE
     internal/paletteuiactions.h
     internal/paletteactionscontroller.cpp
     internal/paletteactionscontroller.h
+    internal/palettecommandsregister.cpp
+    internal/palettecommandsregister.h
+    internal/palettecommandsstate.cpp
+    internal/palettecommandsstate.h
 
     internal/ipaletteprovider.h
     internal/paletteprovider.cpp

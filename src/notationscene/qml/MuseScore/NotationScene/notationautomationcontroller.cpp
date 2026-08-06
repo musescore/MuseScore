@@ -71,25 +71,74 @@ static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx
 static const muse::real_t DYNAMICS_DISPLAY_RANGE_MIN = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::PPPP);
 static const muse::real_t DYNAMICS_DISPLAY_RANGE_MAX = mu::engraving::ORDINARY_DYNAMIC_VALUES.at(mu::engraving::DynamicType::FFFF);
 
-// Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
-// other types ap 1:1 onto the display range
-static double automationValueToDisplay(AutomationType type, muse::real_t value)
+// Must match muse::audio::VOLUME_DB_MIN/MAX
+static constexpr double VOLUME_RANGE_MIN_DB = -60.0;
+static constexpr double VOLUME_RANGE_MAX_DB = 12.0;
+
+// Mirrors VolumeSlider.qml's fader curve, so dragging a point feels like moving the mixer fader -
+// a plain linear map would put 0dB at 83% up the lane instead of the center
+static constexpr double VOLUME_LOCAL_CENTER_DB = -24.0;
+static constexpr double VOLUME_LOGICAL_CENTER_DB = -12.0;
+static constexpr double VOLUME_HIGH_ACCURACY_STEP = 1.5;
+static constexpr double VOLUME_LOW_ACCURACY_STEP = 0.75;
+
+// logical (actual) dB -> local (linear-in-display) dB
+static double volumeLogicalDbToLocalDb(double logicalDb)
 {
-    if (type != AutomationType::Dynamics) {
-        return std::clamp(static_cast<double>(value), 0.0, 1.0);
+    if (logicalDb > VOLUME_LOGICAL_CENTER_DB) {
+        const double diff = VOLUME_RANGE_MAX_DB - logicalDb;
+        return VOLUME_RANGE_MAX_DB - diff * VOLUME_HIGH_ACCURACY_STEP;
     }
 
-    const double display = (value - DYNAMICS_DISPLAY_RANGE_MIN) / (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
-    return std::clamp(display, 0.0, 1.0);
+    const double diff = VOLUME_LOGICAL_CENTER_DB - logicalDb;
+    return VOLUME_LOCAL_CENTER_DB - diff * VOLUME_LOW_ACCURACY_STEP;
+}
+
+// local (linear-in-display) dB -> logical (actual) dB
+static double volumeLocalDbToLogicalDb(double localDb)
+{
+    if (localDb > VOLUME_LOCAL_CENTER_DB) {
+        const double diff = VOLUME_RANGE_MAX_DB - localDb;
+        return VOLUME_RANGE_MAX_DB - diff / VOLUME_HIGH_ACCURACY_STEP;
+    }
+
+    const double diff = VOLUME_LOCAL_CENTER_DB - localDb;
+    return VOLUME_LOGICAL_CENTER_DB - diff / VOLUME_LOW_ACCURACY_STEP;
+}
+
+// Values are stored normalized [0, 1]; Dynamics rescales that into its own sub-range for display,
+// Volume additionally applies the fader curve above, other types map 1:1 onto the display range
+static double automationValueToDisplay(AutomationType type, muse::real_t value)
+{
+    if (type == AutomationType::Dynamics) {
+        const double display = (value - DYNAMICS_DISPLAY_RANGE_MIN) / (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
+        return std::clamp(display, 0.0, 1.0);
+    }
+
+    if (type == AutomationType::Volume) {
+        const double logicalDb = VOLUME_RANGE_MIN_DB + static_cast<double>(value) * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        const double localDb = volumeLogicalDbToLocalDb(logicalDb);
+        const double display = (localDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        return std::clamp(display, 0.0, 1.0);
+    }
+
+    return std::clamp(static_cast<double>(value), 0.0, 1.0);
 }
 
 static muse::real_t automationValueFromDisplay(AutomationType type, double displayValue)
 {
-    if (type != AutomationType::Dynamics) {
-        return muse::real_t(displayValue);
+    if (type == AutomationType::Dynamics) {
+        return DYNAMICS_DISPLAY_RANGE_MIN + displayValue * (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
     }
 
-    return DYNAMICS_DISPLAY_RANGE_MIN + displayValue * (DYNAMICS_DISPLAY_RANGE_MAX - DYNAMICS_DISPLAY_RANGE_MIN);
+    if (type == AutomationType::Volume) {
+        const double localDb = VOLUME_RANGE_MIN_DB + displayValue * (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        const double logicalDb = volumeLocalDbToLogicalDb(localDb);
+        const double normalized = (logicalDb - VOLUME_RANGE_MIN_DB) / (VOLUME_RANGE_MAX_DB - VOLUME_RANGE_MIN_DB);
+        return muse::real_t(normalized);
+    }
+
+    return muse::real_t(displayValue);
 }
 
 static const Segment* lastSegmentOfSystem(const System* system)

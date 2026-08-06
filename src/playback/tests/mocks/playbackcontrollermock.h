@@ -40,8 +40,30 @@ public:
     MOCK_METHOD(bool, isPlaying, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, isPlayingChanged, (), (const, override));
 
+    MOCK_METHOD(muse::Ret, togglePlay, (), (override));
+    MOCK_METHOD(muse::Ret, play, (bool), (override));
+    MOCK_METHOD(muse::Ret, playFromSelection, (bool), (override));
+    MOCK_METHOD(muse::Ret, pause, (bool), (override));
+    MOCK_METHOD(muse::Ret, stop, (), (override));
+    MOCK_METHOD(muse::Ret, rewind, (muse::secs_t), (override));
+
     MOCK_METHOD(bool, isLoopEnabled, (), (const, override));
     MOCK_METHOD(muse::async::Channel<bool>, loopEnabledChanged, (), (const, override));
+    MOCK_METHOD(muse::Ret, toggleLoopPlayback, (), (override));
+    MOCK_METHOD(muse::Ret, addLoopBoundary, (LoopBoundaryType), (override));
+
+    MOCK_METHOD(muse::Ret, toggleMetronome, (), (override));
+
+    MOCK_METHOD(muse::Ret, toggleMidiInput, (), (override));
+    MOCK_METHOD(muse::Ret, setMidiUseWrittenPitch, (bool), (override));
+
+    MOCK_METHOD(muse::Ret, togglePlayRepeats, (), (override));
+    MOCK_METHOD(muse::Ret, togglePlayChordSymbols, (), (override));
+    MOCK_METHOD(muse::Ret, toggleAutomaticallyPan, (), (override));
+    MOCK_METHOD(muse::Ret, toggleCountIn, (), (override));
+    MOCK_METHOD(muse::Ret, toggleHearPlaybackWhenEditing, (), (override));
+
+    MOCK_METHOD(muse::Ret, reloadPlaybackCache, (), (override));
 
     MOCK_METHOD(const InstrumentTrackIdMap&, instrumentTrackIdMap, (), (const, override));
 
@@ -70,9 +92,6 @@ public:
 
     MOCK_METHOD(void, seekElement, (const engraving::EngravingItem*, bool), (override));
     MOCK_METHOD(void, seekBeat, (int, int, bool), (override));
-
-    MOCK_METHOD(bool, actionChecked, (const muse::actions::ActionCode&), (const, override));
-    MOCK_METHOD(muse::async::Channel<muse::actions::ActionCode>, actionCheckedChanged, (), (const, override));
 
     MOCK_METHOD(muse::secs_t, totalPlayTime, (), (const, override));
     MOCK_METHOD(muse::async::Notification, totalPlayTimeChanged, (), (const, override));
