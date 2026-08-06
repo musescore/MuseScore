@@ -52,8 +52,11 @@ protected:
         ASSERT_EQ(s_score->parts().size(), 2);
         ASSERT_EQ(s_score->nstaves(), 3);
 
-        s_playbackCtx = std::make_shared<PlaybackContext>();
-        s_playbackCtx->update(s_score->parts().front()->id(), s_score);
+        s_playbackCtx = std::make_shared<PlaybackContext>(s_score);
+        const Part* part = s_score->parts().front();
+        const TrackRange trackRange = part->trackRange();
+        const int lastTick = s_score->endTick().ticks();
+        s_playbackCtx->update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
         s_profile = std::make_shared<ArticulationsProfile>();
         s_profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());

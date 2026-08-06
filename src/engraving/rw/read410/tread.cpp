@@ -131,6 +131,8 @@
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
+
+#include "../../editing/editstaffbrackets.h"
 #include "../../editing/transpose.h"
 
 #include "../xmlreader.h"
@@ -3945,11 +3947,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(s->brackets().size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        s->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        s->setBracketSpan(col, e.intAttribute("span", 0));
-        s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
+        EditStaffBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        EditStaffBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
+        EditStaffBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();

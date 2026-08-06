@@ -574,7 +574,6 @@
                 </Channel>
               </Instrument>
             <eid>AB_AB</eid>
-            <autoplace>0</autoplace>
             <text>Instrument</text>
             </InstrumentChange>
           <Spanner type="Pedal">

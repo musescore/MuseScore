@@ -108,12 +108,14 @@ target_sources(engraving PRIVATE
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
+    editing/editaccidentalbrackets.cpp
+    editing/editaccidentalbrackets.h
     editing/editautomationpoints.cpp
     editing/editautomationpoints.h
     editing/editbeam.cpp
     editing/editbeam.h
-    editing/editbrackets.cpp
-    editing/editbrackets.h
+    editing/editstaffbrackets.cpp
+    editing/editstaffbrackets.h
     editing/editcapo.cpp
     editing/editcapo.h
     editing/editchord.cpp
@@ -371,7 +373,6 @@ target_sources(engraving PRIVATE
 
     automation/automationtypes.h
     automation/automationtypes_fwd.h
-    automation/automationutils.h
     automation/automationdata.cpp
     automation/automationdata.h
     automation/internal/automationrw.cpp

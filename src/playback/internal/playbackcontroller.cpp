@@ -26,7 +26,6 @@
 #include "containers.h"
 #include "modularity/ioc.h"
 #include "log.h"
-#include "rcommand/commandtypes.h"
 #include "types/ret.h"
 
 #include "audio/common/audioutils.h"
@@ -39,6 +38,7 @@
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
+#include "notation/inotationautomation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationparts.h"
@@ -47,11 +47,9 @@
 #include "project/inotationproject.h"
 
 #include "../playbacktypes.h"
-#include "../playbackcommands.h"
 #include "onlinesoundscontroller.h"
 
 using namespace muse;
-using namespace muse::actions;
 using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::midi;
@@ -99,62 +97,6 @@ void PlaybackController::init()
 {
     m_onlineSoundsController->regActions();
 
-    auto d = commandsDispatcher();
-
-    d->onRequest(this, PLAY_TOGGLE_COMMAND, [this]() { return togglePlay(); });
-    d->onRequest(this, PLAY_COMMAND, [this]() { return play(); });
-    d->onRequest(this, PLAY_SELECTION_COMMAND, [this]() { return playFromSelection(); });
-    d->onRequest(this, PAUSE_COMMAND, [this]() { return pause(); });
-    d->onRequest(this, PAUSE_AND_SELECT_COMMAND, [this]() { return pause(true); });
-    d->onRequest(this, STOP_COMMAND, [this]() { return stop(); });
-    d->onRequest(this, REWIND_COMMAND, [this](const rcommand::Request& request) { return rewind(request); });
-    d->onRequest(this, LOOP_TOGGLE_COMMAND, [this]() { return toggleLoopPlayback(); });
-    d->onRequest(this, LOOP_IN_COMMAND, [this]() { return addLoopBoundary(LoopBoundaryType::LoopIn); });
-    d->onRequest(this, LOOP_OUT_COMMAND, [this]() { return addLoopBoundary(LoopBoundaryType::LoopOut); });
-    d->onRequest(this, METRONOME_TOGGLE_COMMAND, [this]() { return toggleMetronome(); });
-    d->onRequest(this, SHOW_PLAYBACK_SETUP_COMMAND, [this]() { return showPlaybackSetup(); });
-    d->onRequest(this, MIDI_TOGGLE_COMMAND, [this]() { return toggleMidiInput(); });
-    d->onRequest(this, MIDI_INPUT_WRITTEN_PITCH_COMMAND, [this]() { return setMidiUseWrittenPitch(true); });
-    d->onRequest(this, MIDI_INPUT_SOUNDING_PITCH_COMMAND, [this]() { return setMidiUseWrittenPitch(false); });
-    d->onRequest(this, REPEATS_TOGGLE_COMMAND, [this]() { return togglePlayRepeats(); });
-    d->onRequest(this, CHORDSYMBOLS_TOGGLE_COMMAND, [this]() { return togglePlayChordSymbols(); });
-    d->onRequest(this, HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND, [this]() { return toggleHearPlaybackWhenEditing(); });
-    d->onRequest(this, PAN_TOGGLE_COMMAND, [this]() { return toggleAutomaticallyPan(); });
-    d->onRequest(this, COUNTIN_TOGGLE_COMMAND, [this]() { return toggleCountIn(); });
-    d->onRequest(this, RELOAD_PLAYBACK_CACHE_COMMAND, [this]() { return reloadPlaybackCache(); });
-
-    // compat
-    {
-        static std::map<ActionCode, rcommand::Command> actionToCommand = {
-            { "play", PLAY_TOGGLE_COMMAND },
-            { "play-from-selection", PLAY_SELECTION_COMMAND },
-            { "pause", PAUSE_COMMAND },
-            { "pause-and-select", PAUSE_AND_SELECT_COMMAND },
-            { "stop", STOP_COMMAND },
-            { "rewind", REWIND_COMMAND },
-            { "loop", LOOP_TOGGLE_COMMAND },
-            { "loop-in", LOOP_IN_COMMAND },
-            { "loop-out", LOOP_OUT_COMMAND },
-            { "metronome", METRONOME_TOGGLE_COMMAND },
-            { "playback-setup", SHOW_PLAYBACK_SETUP_COMMAND },
-            { "midi-on", MIDI_TOGGLE_COMMAND },
-            { "midi-input-written-pitch", MIDI_INPUT_WRITTEN_PITCH_COMMAND },
-            { "midi-input-sounding-pitch", MIDI_INPUT_SOUNDING_PITCH_COMMAND },
-            { "repeats", REPEATS_TOGGLE_COMMAND },
-            { "play-chord-symbols", CHORDSYMBOLS_TOGGLE_COMMAND },
-            { "toggle-hear-playback-when-editing", HEAR_PLAYBACK_WHEN_EDITING_TOGGLE_COMMAND },
-            { "pan", PAN_TOGGLE_COMMAND },
-            { "countin", COUNTIN_TOGGLE_COMMAND },
-            { "reload-playback-cache", RELOAD_PLAYBACK_CACHE_COMMAND },
-            { "clear-online-sounds-cache", CLEAR_ONLINESOUNDS_CACHE_COMMAND },
-        };
-
-        auto ad = dispatcher();
-        for (const auto& [actionCode, command] : actionToCommand) {
-            ad->reg(this, actionCode, [d, command]() { return d->dispatch(command); });
-        }
-    }
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
@@ -181,6 +123,10 @@ void PlaybackController::init()
         updateCurrentTempo();
 
         updateLoop();
+
+        // Tempo/repeat/duration changes shift what secs_t a given tick maps to,
+        // which invalidates any Volume/Pan automation envelope already sent to the engine
+        resendAutomatedControlParams();
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
@@ -723,16 +669,15 @@ muse::Ret PlaybackController::stop()
     return make_ok();
 }
 
-muse::rcommand::Response PlaybackController::rewind(const muse::rcommand::Request& request)
+muse::Ret PlaybackController::rewind(muse::secs_t secs)
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
-        return muse::rcommand::make_response(request, make_ret(Ret::Code::NotSupported));
+        return make_ret(Ret::Code::NotSupported);
     }
 
-    double secs = request.query.param("position", Val(0.0)).toDouble();
-    doRewind(secs_t(secs));
-    return muse::rcommand::make_response(request, make_ok());
+    doRewind(secs);
+    return make_ok();
 }
 
 muse::Ret PlaybackController::playFromSelection(bool showErrors)
@@ -1049,12 +994,6 @@ muse::Ret PlaybackController::reloadPlaybackCache()
     return make_ok();
 }
 
-muse::Ret PlaybackController::showPlaybackSetup()
-{
-    interactive()->open("musescore://playback/soundprofiles");
-    return make_ok();
-}
-
 muse::Ret PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
     if (isPlaying()) {
@@ -1116,11 +1055,6 @@ void PlaybackController::disableLoop()
 
     currentPlayer()->resetLoop();
     notationPlayback()->setLoopBoundariesEnabled(false);
-}
-
-void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode)
-{
-    m_actionCheckedChanged.send(actionCode);
 }
 
 mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
@@ -1276,7 +1210,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     trackParams.source = inParams;
     trackParams.fxChain = originParams.fxChain;
     trackParams.auxSends = originParams.auxSends;
-    trackParams.control = originParams.control();
+    trackParams.control = trackControlParams(instrumentTrackId, originParams);
 
     playback()->addTrack(title, std::move(playbackData), trackParams)
     .onResolve(this, [this, title, instrumentTrackId, playbackKey, onFinished, originMeta, originParams](const TrackId trackId,
@@ -1387,7 +1321,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
     }
 
     AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
-    ControlParams control = outParams.control();
+    ControlParams control = trackControlParams(instrumentTrackId, outParams, /*rebuildVolume*/ false, /*rebuildPan*/ false);
 
     control.muted = !isActive;
 
@@ -1413,6 +1347,104 @@ AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId&
     }
 
     return result;
+}
+
+ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& instrumentTrackId,
+                                                     const AudioOutputParams& outParams,
+                                                     bool rebuildVolume, bool rebuildPan)
+{
+    ControlParams control = outParams.control();
+    const auto it = m_automatedControlParamsCache.find(instrumentTrackId);
+    if (it != m_automatedControlParamsCache.end()) {
+        control.volume = it->second.volume;
+        control.balance = it->second.balance;
+    }
+
+    if (!rebuildVolume && !rebuildPan) {
+        return control;
+    }
+
+    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
+    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
+    if (!automationData || !instrumentTrackId.isValid()) {
+        m_automatedControlParamsCache.erase(instrumentTrackId);
+        return outParams.control();
+    }
+
+    auto buildAutomationEnvelope = [this](const AutomationCurve& curve) {
+        muse::audio::AutomationEnvelope envelope;
+        for (const auto& [tick, point] : curve) {
+            envelope.insert({ playedTickToSecs(tick), point.value });
+        }
+        return envelope;
+    };
+
+    if (rebuildVolume) {
+        const AutomationCurve& volumeCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Volume,
+                                                                                                  instrumentTrackId));
+        control.volume = !volumeCurve.empty() ? AutomatableValue<volume_db_t>(buildAutomationEnvelope(volumeCurve))
+                         : AutomatableValue<volume_db_t>(outParams.volume);
+    }
+
+    if (rebuildPan) {
+        const AutomationCurve& panCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Pan, instrumentTrackId));
+        control.balance = !panCurve.empty() ? AutomatableValue<balance_t>(buildAutomationEnvelope(panCurve))
+                          : AutomatableValue<balance_t>(outParams.balance);
+    }
+
+    m_automatedControlParamsCache[instrumentTrackId] = control;
+
+    return control;
+}
+
+void PlaybackController::onAutomationDataChanged(const AutomationChanges& changes)
+{
+    if (changes.isFullReset) {
+        resendAutomatedControlParams();
+        return;
+    }
+
+    InstrumentTrackIdSet volumeTrackIds;
+    InstrumentTrackIdSet panTrackIds;
+
+    for (const AutomationCurveKey& key : changes.affectedKeys) {
+        const std::optional<InstrumentTrackId> trackId = key.trackId();
+        if (!trackId) {
+            continue;
+        }
+
+        if (key.type == AutomationType::Volume) {
+            volumeTrackIds.insert(*trackId);
+        } else if (key.type == AutomationType::Pan) {
+            panTrackIds.insert(*trackId);
+        }
+    }
+
+    if (volumeTrackIds.empty() && panTrackIds.empty()) {
+        return;
+    }
+
+    resendAutomatedControlParams(volumeTrackIds, panTrackIds);
+}
+
+void PlaybackController::resendAutomatedControlParams(std::optional<InstrumentTrackIdSet> volumeTrackIds,
+                                                      std::optional<InstrumentTrackIdSet> panTrackIds)
+{
+    if (!playback()) {
+        return;
+    }
+
+    for (const auto& pair : m_instrumentTrackIdMap) {
+        const bool rebuildVolume = !volumeTrackIds || muse::contains(*volumeTrackIds, pair.first);
+        const bool rebuildPan = !panTrackIds || muse::contains(*panTrackIds, pair.first);
+
+        if (!rebuildVolume && !rebuildPan) {
+            continue;
+        }
+
+        const AudioOutputParams outParams = trackOutputParams(pair.first);
+        playback()->setControlParams(pair.second, trackControlParams(pair.first, outParams, rebuildVolume, rebuildPan));
+    }
 }
 
 void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
@@ -1441,6 +1473,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
+    m_automatedControlParamsCache.erase(instrumentTrackId);
 }
 
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)
@@ -1681,7 +1714,7 @@ void PlaybackController::updateSoloMuteStates()
         params.forceMute = shouldForceMute;
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
-        playback()->setControlParams(trackId, params.control());
+        playback()->setControlParams(trackId, trackControlParams(instrumentTrackId, params, /*rebuildVolume*/ false, /*rebuildPan*/ false));
     }
 
     updateAuxMuteStates();
@@ -1700,16 +1733,6 @@ void PlaybackController::updateAuxMuteStates()
         params.muted = soloMuteState.mute;
         playback()->setControlParams(pair.second, params.control());
     }
-}
-
-bool PlaybackController::actionChecked(const ActionCode&) const
-{
-    return false;
-}
-
-Channel<ActionCode> PlaybackController::actionCheckedChanged() const
-{
-    return m_actionCheckedChanged;
 }
 
 secs_t PlaybackController::totalPlayTime() const
@@ -1882,6 +1905,10 @@ void PlaybackController::setMasterNotation(notation::IMasterNotationPtr masterNo
         m_masterNotation->hasPartsChanged().disconnect(this);
         m_masterNotation->playback()->loopBoundariesChanged().disconnect(this);
         m_masterNotation->playback()->loopEnabledChanged().disconnect(this);
+
+        if (const AutomationDataConstPtr automationData = m_masterNotation->automation()->automationData()) {
+            automationData->changed().disconnect(this);
+        }
     }
 
     m_masterNotation = masterNotation;
@@ -1903,6 +1930,12 @@ void PlaybackController::setMasterNotation(notation::IMasterNotationPtr masterNo
     m_masterNotation->playback()->loopEnabledChanged().onReceive(this, [this](bool value) {
         m_loopEnabledChanged.send(value);
     });
+
+    if (const AutomationDataConstPtr automationData = m_masterNotation->automation()->automationData()) {
+        automationData->changed().onReceive(this, [this](const AutomationChanges& changes) {
+            onAutomationDataChanged(changes);
+        });
+    }
 }
 
 void PlaybackController::setIsExportingAudio(bool exporting)
@@ -1919,7 +1952,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     }
 }
 
-bool PlaybackController::canReceiveAction(const ActionCode&) const
+bool PlaybackController::canReceiveAction(const muse::actions::ActionCode&) const
 {
     if (!m_masterNotation || !m_masterNotation->hasParts()) {
         return false;

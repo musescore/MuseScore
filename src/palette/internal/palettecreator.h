@@ -48,7 +48,7 @@ public:
     PalettePtr newRepeatsPalette(bool defaultPalette = false);
     PalettePtr newBeamPalette();
     PalettePtr newDynamicsPalette(bool defaultPalette = false);
-    PalettePtr newLayoutPalette(bool defaultPalette = false);
+    PalettePtr newLayoutPalette();
     PalettePtr newFingeringPalette(bool defaultPalette = false);
     PalettePtr newTremoloPalette();
     PalettePtr newNoteHeadsPalette();

@@ -61,6 +61,9 @@ using grace_segment_map_t = std::map<size_t /* idx in chord */, GraceNotesImport
 using GraceAfterTrackMap = std::unordered_map<mu::engraving::track_idx_t,
                                               std::map<mu::engraving::Fraction, grace_segment_map_t> >;
 
+using TiedNotesTrackMap = std::unordered_map<mu::engraving::track_idx_t,
+                                             std::map<mu::engraving::Fraction, segment_data_map_t> >;
+
 // ---- bend types ----
 
 struct BendChordData {
@@ -122,8 +125,6 @@ struct ImportedDiveInfo {
     int quarterTones = 0;
     double startFactor = 0.0;
     double endFactor = 1.0;
-    int whammyOriginQt = 0;
-    int whammyDestQt = 0;
     std::vector<SegmentData> graceDiveSegments;
 };
 
@@ -133,7 +134,7 @@ struct BendDataContextSplitChord;
 
 struct BendDataContext {
     GraceAfterTrackMap graceAfterBendData;
-    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t > > tiedNotesBendsData;
+    TiedNotesTrackMap tiedNotesBendsData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t > > prebendData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t > > slightBendData;
     std::unique_ptr<BendDataContextSplitChord> splitChordCtx;
@@ -141,6 +142,7 @@ struct BendDataContext {
 
 struct DiveDataContext {
     GraceAfterTrackMap graceAfterDiveData;
+    TiedNotesTrackMap tiedNotesDivesData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, segment_data_map_t> > preDiveData;
 };
 } // mu::iex::guitarpro

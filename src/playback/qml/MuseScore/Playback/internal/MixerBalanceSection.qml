@@ -52,11 +52,13 @@ MixerPanelSection {
             KnobControl {
                 id: balanceKnob
 
-                from: -100
-                to: 100
+                from: content.channelItem.balanceMin
+                to: content.channelItem.balanceMax
                 value: content.channelItem.balance
                 stepSize: 1
                 isBalanceKnob: true
+                enabled: !content.channelItem.hasBalanceAutomation
+                opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
                 navigation.panel: content.channelItem.panel
                 navigation.row: root.navigationRowStart
@@ -80,6 +82,8 @@ MixerPanelSection {
                 height: 24
                 width: 36
 
+                enabled: !content.channelItem.hasBalanceAutomation
+
                 textHorizontalAlignment: Qt.AlignHCenter
                 textSidePadding: 0
                 background.radius: 2
@@ -95,13 +99,13 @@ MixerPanelSection {
 
                 validator: IntInputValidator {
                     id: intInputValidator
-                    top: 100
-                    bottom: -100
+                    top: content.channelItem.balanceMax
+                    bottom: content.channelItem.balanceMin
                 }
 
                 currentText: content.channelItem.balance
 
-                onTextChanged: function(newTextValue) {
+                onTextEdited: function(newTextValue) {
                     if (content.channelItem.balance !== Number(newTextValue)) {
                         content.channelItem.balance = Number(newTextValue)
                     }

@@ -72,6 +72,7 @@ enum class ActionIconType : signed char {
     NOTE_ANCHORED_LINE,
 
     SYSTEM_LOCK,
+    PAGE_LOCK
 };
 
 //! Dummy element, used for drag&drop

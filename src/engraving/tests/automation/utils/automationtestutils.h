@@ -23,7 +23,7 @@
 
 #include <gtest/gtest.h>
 
-#include "engraving/automation/automationutils.h"
+#include "engraving/automation/automationtypes.h"
 
 namespace mu::engraving {
 using AutomationBend = AutomationPoint::Bend;
@@ -33,9 +33,8 @@ inline AutomationPoint generatedPoint(double inVal, double outVal, AutomationBen
     static uint64_t lastId = 0;
 
     AutomationPoint p;
-    p.inValue = inVal;
-    p.outValue = outVal;
-    p.bend = bend;
+    p.value.outValue = outVal;
+    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), bend };
     p.itemId = EID::newUniqueTestMode(lastId);
     p.generated = true;
 
@@ -45,9 +44,8 @@ inline AutomationPoint generatedPoint(double inVal, double outVal, AutomationBen
 inline AutomationPoint customPoint(double inVal, double outVal, AutomationBend bend = AutomationBend::none())
 {
     AutomationPoint p;
-    p.inValue = inVal;
-    p.outValue = outVal;
-    p.bend = bend;
+    p.value.outValue = outVal;
+    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), bend };
     p.generated = false;
 
     return p;
@@ -64,10 +62,11 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
         const AutomationPoint& actualPoint = actualIt->second;
         const AutomationPoint& expectedPoint = expectedIt->second;
 
-        EXPECT_NEAR(resolvedInValue(actualCurve, actualIt), resolvedInValue(expectedCurve, expectedIt), 0.0001)
+        EXPECT_NEAR(resolveInValue(actualCurve, actualIt), resolveInValue(expectedCurve, expectedIt), 0.0001)
             << "inValue mismatch at tick " << tick;
-        EXPECT_NEAR(actualPoint.outValue, expectedPoint.outValue, 0.0001) << "outValue mismatch at tick " << tick;
-        EXPECT_EQ(actualPoint.bend, expectedPoint.bend) << "bend mismatch at tick " << tick;
+        EXPECT_NEAR(actualPoint.value.outValue, expectedPoint.value.outValue, 0.0001) << "outValue mismatch at tick " << tick;
+        EXPECT_EQ(bend(actualPoint).value_or(AutomationBend::none()), bend(expectedPoint).value_or(AutomationBend::none()))
+            << "bend mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;
     }
 }

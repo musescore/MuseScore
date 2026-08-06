@@ -168,6 +168,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score, bool disa
     TRACEFUNC;
 
     setScore(score);
+    std::static_pointer_cast<NotationAutomation>(m_notationAutomation)->setMasterScore(score);
 
     score->updateSwing();
 
@@ -309,7 +310,9 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
 
-        score->clearSystemLocks();
+        for (mu::engraving::Score* s : score->scoreList()) {
+            s->clearSystemLocks();
+        }
         clearMeasures(score);
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)

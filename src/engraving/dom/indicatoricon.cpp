@@ -39,3 +39,8 @@ Font IndicatorIcon::font() const
     font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE * magS());
     return font;
 }
+
+Fraction IndicatorIcon::tick() const
+{
+    return system() ? system()->endTick() : Fraction(0, 1);
+}

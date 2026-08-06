@@ -29,6 +29,9 @@
 #include <engraving/dom/measure.h>
 #include <engraving/dom/note.h>
 #include <engraving/dom/score.h>
+#include <engraving/dom/part.h>
+#include <engraving/dom/staff.h>
+#include <engraving/dom/stringdata.h>
 #include <engraving/dom/tie.h>
 #include <engraving/dom/tuplet.h>
 
@@ -43,18 +46,19 @@ static std::vector<Chord*> createGraceChords(Chord* chord, const grace_segment_m
 static void reindexGraceNotes(Chord* chord);
 static void createSlightBends(const BendDataContext& bendDataCtx, Score* score);
 static void createPreBends(const BendDataContext& bendDataCtx, Score* score);
-static void createTiedNotesBends(const BendDataContext& bendDataCtx, Score* score);
 static void createPreDives(const DiveDataContext& diveDataCtx, Score* score);
 static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType type, Score* score);
+static void createTiedSpans(const TiedNotesTrackMap& data, GuitarBendType type, Score* score);
 
 void BendBuilder::addElementsToScore(Score* score, const BendDataContext& bendCtx, const DiveDataContext& diveCtx)
 {
     createPreBends(bendCtx, score);
     createSlightBends(bendCtx, score);
     createGraceAfterNotes(bendCtx.graceAfterBendData, GuitarBendType::BEND, score);
+    createTiedSpans(bendCtx.tiedNotesBendsData, GuitarBendType::BEND, score);
     createPreDives(diveCtx, score);
+    createTiedSpans(diveCtx.tiedNotesDivesData, GuitarBendType::DIVE, score);
     createGraceAfterNotes(diveCtx.graceAfterDiveData, GuitarBendType::DIVE, score);
-    createTiedNotesBends(bendCtx, score);
 
     if (bendCtx.splitChordCtx) {
         m_bendDataProcessorSplitChord = std::make_unique<BendDataProcessorSplitChord>(score);
@@ -212,15 +216,29 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                 const auto& graceData = tickEntry.at(noteIndex);
                 const auto& lastGraceData = graceData.lastNoteData;
 
+                const bool isDive = (type == GuitarBendType::DIVE);
+
                 Note* currentNote = mainNote;
                 for (size_t graceIndex = 0; graceIndex < graceData.data.size(); graceIndex++) {
                     const auto& noteData = graceData.data[graceIndex];
                     Chord* graceChord = graceChords[graceIndex];
 
                     Note* graceNote = Factory::createNote(graceChord);
-                    graceNote->setPitch(currentNote->pitch() + noteData.quarterTones / 2);
+                    const int gracePitch = currentNote->pitch() + noteData.quarterTones / 2;
+                    graceNote->setPitch(gracePitch);
                     graceNote->setTpcFromPitch();
                     graceChord->add(graceNote);
+
+                    if (isDive) {
+                        graceNote->setString(mainNote->string());
+                        const Staff* staff = mainNote->staff();
+                        const StringData* sd = mainNote->part()->stringData(mainNote->tick(), staff->idx());
+                        const int offset = staff->pitchOffset(mainNote->tick());
+                        const int fret = sd->fret(gracePitch + offset, mainNote->string(), staff);
+                        if (fret >= 0) {
+                            graceNote->setFret(fret);
+                        }
+                    }
 
                     GuitarBend* bend = score->addGuitarBend(type, currentNote, graceNote);
                     IF_ASSERT_FAILED(bend) {
@@ -230,7 +248,7 @@ static void createGraceAfterNotes(const GraceAfterTrackMap& data, GuitarBendType
                     }
 
                     // Bend quarterTones are absolute from chain start, dive quarterTones are deltas
-                    const int endPitch = (type == GuitarBendType::DIVE)
+                    const int endPitch = isDive
                                          ? currentNote->pitch() + noteData.quarterTones / 2
                                          : bend->startNoteOfChain()->pitch() + noteData.quarterTones / 2;
 
@@ -276,7 +294,10 @@ static void createPreDives(const DiveDataContext& diveDataCtx, Score* score)
                 Note* note = chord->notes()[noteIndex];
                 const SegmentData& pd = tickInfo.at(noteIndex);
 
-                const int attackPitch = note->pitch() - pd.quarterTones / 2;
+                const int writtenPitch = note->pitch();
+                const int originalString = note->string();
+                const int originalFret = note->fret();
+                const int attackPitch = writtenPitch - pd.quarterTones / 2;
 
                 note->transposeDiatonic(-1, true, false);
                 GuitarBend* preDive = score->addGuitarBend(GuitarBendType::PRE_DIVE, note);
@@ -289,68 +310,81 @@ static void createPreDives(const DiveDataContext& diveDataCtx, Score* score)
 
                 Note* ghostNote = preDive->startNote();
                 if (ghostNote) {
-                    ghostNote->setPitch(note->pitch());
+                    ghostNote->setPitch(writtenPitch);
                     ghostNote->setTpcFromPitch();
+                    ghostNote->setString(originalString);
+                    ghostNote->setFret(originalFret);
                 }
 
                 note->setPitch(attackPitch);
                 note->setTpcFromPitch();
+                note->setString(originalString);
+                note->setFret(originalFret);
             }
         }
     }
 }
 
-static void createTiedNotesBends(const BendDataContext& bendDataCtx, Score* score)
+static void createTiedSpans(const TiedNotesTrackMap& data, GuitarBendType type, Score* score)
 {
-    for (const auto& [track, trackInfo] : bendDataCtx.tiedNotesBendsData) {
-        for (const auto& [tick, tickInfo] : trackInfo) {
+    const bool isDive = (type == GuitarBendType::DIVE);
+
+    for (const auto& [track, trackInfo] : data) {
+        for (const auto& [tick, tickEntry] : trackInfo) {
             Chord* chord = utils::getLocatedChord(score, tick, track);
             if (!chord) {
                 continue;
             }
 
             for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
-                if (!muse::contains(tickInfo, noteIndex)) {
+                if (!muse::contains(tickEntry, noteIndex)) {
                     continue;
                 }
 
-                const auto& noteInfo = tickInfo.at(noteIndex);
+                const auto& noteInfo = tickEntry.at(noteIndex);
                 Note* startNote = chord->notes()[noteIndex];
                 Note* endNote = startNote->tieFor() ? startNote->tieFor()->endNote() : nullptr;
                 if (!endNote) {
-                    LOGE() << "bend import error: not found tied note for track " << track << ", tick " << tick.ticks();
+                    LOGE() << "bend/dive import error: not found tied note for track " << track << ", tick " << tick.ticks();
                     continue;
                 }
-
-                GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, endNote);
-                IF_ASSERT_FAILED(bend) {
-                    LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
-                    continue;
-                }
-
-                int quarterOff = noteInfo.quarterTones % 2;
-                bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteInfo.quarterTones / 2, quarterOff);
-                bend->setStartTimeFactor(noteInfo.startFactor);
-                bend->setEndTimeFactor(noteInfo.endFactor);
-                endNote->setParenthesesMode(ParenthesesMode::BOTH);
 
                 Tie* tie = startNote->tieFor();
                 if (tie) {
                     startNote->remove(tie);
                 }
 
-                tie = endNote->tieFor();
-                while (tie) {
-                    Note* nextNote = tie->endNote();
+                GuitarBend* bend = score->addGuitarBend(type, startNote, endNote);
+                IF_ASSERT_FAILED(bend) {
+                    LOGE() << "bend/dive wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    continue;
+                }
+
+                if (isDive && startNote->tieBack()) {
+                    startNote->setPitch(startNote->tieBack()->startNote()->pitch());
+                    startNote->setTpcFromPitch();
+                }
+
+                int rootPitch = isDive
+                                ? startNote->pitch()
+                                : bend->startNoteOfChain()->pitch();
+
+                bend->setEndNotePitch(rootPitch + noteInfo.quarterTones / 2, noteInfo.quarterTones % 2);
+                bend->setStartTimeFactor(noteInfo.startFactor);
+                bend->setEndTimeFactor(noteInfo.endFactor);
+                endNote->setParenthesesMode(ParenthesesMode::BOTH);
+
+                Tie* endTie = endNote->tieFor();
+                while (endTie) {
+                    Note* nextNote = endTie->endNote();
                     IF_ASSERT_FAILED(nextNote) {
-                        LOGE() << "bend import error: not found tied note for track " << track << ", tick " << tick.ticks();
+                        LOGE() << "bend/dive import error: not found tied note for track " << track << ", tick " << tick.ticks();
                         break;
                     }
-
                     nextNote->setPitch(endNote->pitch());
                     nextNote->setTpcFromPitch();
                     nextNote->setParenthesesMode(ParenthesesMode::BOTH);
-                    tie = nextNote->tieFor();
+                    endTie = nextNote->tieFor();
                 }
             }
         }

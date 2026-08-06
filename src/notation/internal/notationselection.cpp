@@ -41,6 +41,7 @@
 #include "notationerrors.h"
 
 #include "log.h"
+#include "thirdparty/kors_logger/src/log_base.h"
 
 using namespace muse;
 using namespace mu::notation;
@@ -243,6 +244,12 @@ void NotationSelection::select(SelectionTarget target)
     case SelectionTarget::PrevSystem:
         moveSelection(MoveDirection::Left, MoveSelectionType::System);
         break;
+    case SelectionTarget::AboveStaff:
+        moveSelection(MoveDirection::Up, MoveSelectionType::Track);
+        break;
+    case SelectionTarget::BelowStaff:
+        moveSelection(MoveDirection::Down, MoveSelectionType::Track);
+        break;
     case SelectionTarget::UpNoteInChord:
         moveChordNoteSelection(MoveDirection::Up);
         break;
@@ -254,6 +261,12 @@ void NotationSelection::select(SelectionTarget target)
         break;
     case SelectionTarget::BottomNoteInChord:
         selectTopOrBottomOfChord(MoveDirection::Down);
+        break;
+    case SelectionTarget::TopStaff:
+        selectTopStaff();
+        break;
+    case SelectionTarget::EmptyTrailingMeasure:
+        selectEmptyTrailingMeasure();
         break;
     case SelectionTarget::Similar:
         selectAllSimilarElements();
@@ -272,6 +285,33 @@ void NotationSelection::select(SelectionTarget target)
         break;
     case SelectionTarget::Section:
         selectSection();
+        break;
+    }
+}
+
+void NotationSelection::addToSelection(SelectionTarget target)
+{
+    switch (target) {
+    case SelectionTarget::NextChord:
+        addToSelection(MoveDirection::Right, MoveSelectionType::Chord);
+        break;
+    case SelectionTarget::PrevChord:
+        addToSelection(MoveDirection::Left, MoveSelectionType::Chord);
+        break;
+    case SelectionTarget::NextMeasure:
+        addToSelection(MoveDirection::Right, MoveSelectionType::Measure);
+        break;
+    case SelectionTarget::PrevMeasure:
+        addToSelection(MoveDirection::Left, MoveSelectionType::Measure);
+        break;
+    case SelectionTarget::AboveStaff:
+        addToSelection(MoveDirection::Up, MoveSelectionType::Track);
+        break;
+    case SelectionTarget::BelowStaff:
+        addToSelection(MoveDirection::Down, MoveSelectionType::Track);
+        break;
+    default:
+        NOT_SUPPORTED << "SelectionTarget: " << str_conv(target);
         break;
     }
 }
@@ -467,6 +507,64 @@ void NotationSelection::moveSelection(MoveDirection d, MoveSelectionType type)
     m_interaction->showItem(item);
 }
 
+ChordRest* NotationSelection::activeCr(const mu::engraving::Score* score) const
+{
+    ChordRest* cr = score->selection().activeCR();
+    if (!cr) {
+        cr = score->selection().lastChordRest();
+        if (!cr && score->noteEntryMode()) {
+            cr = score->inputState().cr();
+        }
+    }
+    return cr;
+}
+
+void NotationSelection::addToSelection(MoveDirection d, MoveSelectionType type)
+{
+    ChordRest* cr = activeCr(score());
+    if (!cr) {
+        return;
+    }
+    ChordRest* el = 0;
+    switch (type) {
+    case MoveSelectionType::Chord: {
+        ChordRestNavigateOptions options;
+        options.skipGrace = true;
+        if (d == MoveDirection::Right) {
+            el = mu::engraving::Navigation::nextChordRest(cr, options);
+        } else {
+            el = mu::engraving::Navigation::prevChordRest(cr, options);
+        }
+        break;
+    }
+    case MoveSelectionType::Measure:
+        if (d == MoveDirection::Right) {
+            el = mu::engraving::Navigation::nextMeasure(score(), cr, true, true);
+        } else {
+            el = mu::engraving::Navigation::prevMeasure(score(), cr, true);
+        }
+        break;
+    case MoveSelectionType::Track:
+        if (d == MoveDirection::Up) {
+            el = mu::engraving::Navigation::upStaff(cr);
+        } else {
+            el = mu::engraving::Navigation::downStaff(score(), cr);
+        }
+    case MoveSelectionType::EngravingItem:
+    case MoveSelectionType::Frame:
+    case MoveSelectionType::System:
+    case MoveSelectionType::String:
+    case MoveSelectionType::Undefined:
+        break;
+    }
+
+    if (el) {
+        select({ el }, SelectType::RANGE, el->staffIdx());
+        m_interaction->showItem(el);
+        m_interaction->resetHitElementContext();
+    }
+}
+
 void NotationSelection::moveElementSelection(MoveDirection d)
 {
     EngravingItem* el = score()->selection().element();
@@ -519,7 +617,7 @@ void NotationSelection::moveElementSelection(MoveDirection d)
             el = cr->isChord() ? toChord(cr)->upNote() : toEngravingItem(cr);
         }
         if (el) {
-            toEl = el; // Restoring previous selection.
+            toEl = el;     // Restoring previous selection.
         } else {
             toEl = isLeftDirection ? Navigation::lastElement(score()) : Navigation::firstElement(score());
             if (isHorizontalLayout) {
@@ -642,6 +740,41 @@ void NotationSelection::selectTopOrBottomOfChord(MoveDirection d)
 
     select({ target }, SelectType::SINGLE);
     m_interaction->showItem(target);
+}
+
+void NotationSelection::selectTopStaff()
+{
+    EngravingItem* el = Navigation::topStaff(score(), activeCr(score()));
+    if (score()->noteEntryMode()) {
+        score()->inputState().moveInputPos(el);
+    }
+
+    if (el->isChord()) {
+        el = mu::engraving::toChord(el)->upNote();
+    }
+
+    select({ el }, SelectType::SINGLE, 0);
+    m_interaction->showItem(el);
+    m_interaction->resetHitElementContext();
+}
+
+void NotationSelection::selectEmptyTrailingMeasure()
+{
+    ChordRest* cr = activeCr(score());
+    const Measure* ftm = score()->firstTrailingMeasure(cr ? &cr : nullptr);
+    if (!ftm) {
+        ftm = score()->lastMeasure();
+    }
+    if (ftm) {
+        if (score()->style().styleB(mu::engraving::Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
+            ftm = ftm->coveringMMRestOrThis();
+        }
+        EngravingItem* el
+            = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(mu::engraving::trackZeroVoice(cr->track()), false);
+        score()->inputState().moveInputPos(el);
+        select({ el }, SelectType::SINGLE);
+        m_interaction->resetHitElementContext();
+    }
 }
 
 FilterElementsOptions NotationSelection::elementsFilterOptions(const EngravingItem* element) const

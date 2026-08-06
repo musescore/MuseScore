@@ -66,7 +66,10 @@ static const std::vector<Command> HAS_SELECTION_REQUIRED_COMMANDS = {
     SET_DOUBLE_DURATION_DOTTED_COMMAND,
     SET_HALVE_DURATION_DOTTED_COMMAND,
     TOGGLE_SNAP_TO_PREV_COMMAND,
-    TOGGLE_SNAP_TO_NEXT_COMMAND
+    TOGGLE_SNAP_TO_NEXT_COMMAND,
+    MIRROR_NOTEHEAD_COMMAND,
+    MOVE_UP_COMMAND,
+    MOVE_DOWN_COMMAND,
 };
 
 static const std::vector<Command> UNDO_REDO_COMMANDS = {
@@ -75,6 +78,12 @@ static const std::vector<Command> UNDO_REDO_COMMANDS = {
 };
 
 static const std::vector<Command> TEXT_EDITING_COMMANDS = {
+    EDITTEXT_TOGGLE_BOLD_COMMAND,
+    EDITTEXT_TOGGLE_ITALIC_COMMAND,
+    EDITTEXT_TOGGLE_UNDERLINE_COMMAND,
+    EDITTEXT_TOGGLE_STRIKE_COMMAND,
+    EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND,
+    EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND,
     EDITTEXT_NEXT_ELEMENT_COMMAND,
     EDITTEXT_PREV_ELEMENT_COMMAND,
     EDITTEXT_NEXT_WORD_COMMAND,
@@ -187,8 +196,8 @@ static const std::vector<Command> NOTE_COMMANDS = {
     INSERT_NOTE_B_COMMAND
 };
 
-static const std::vector<Command> TUPLET_COMMANDS = {
-    SHOW_TUPLET_CONFIGURE_COMMAND,
+static const std::vector<Command> NOTE_OR_REST_SELECTED_COMMANDS = {
+    OPEN_TUPLET_CONFIGURE_COMMAND,
     ADD_TUPLET_COMMAND,
     ADD_DUPLET_COMMAND,
     ADD_TRIPLET_COMMAND,
@@ -197,7 +206,10 @@ static const std::vector<Command> TUPLET_COMMANDS = {
     ADD_SEXTUPLET_COMMAND,
     ADD_SEPTUPLET_COMMAND,
     ADD_OCTUPLET_COMMAND,
-    ADD_NONUPLET_COMMAND
+    ADD_NONUPLET_COMMAND,
+    ADD_DYNAMIC_COMMAND,
+    ADD_HAIRPIN_COMMAND,
+    ADD_HAIRPIN_REVERSE_COMMAND
 };
 
 static const std::map<Command, MoveSelectionType> MOVE_SELECTION_COMMANDS = {
@@ -217,6 +229,36 @@ static const std::vector<Command> LAYOUT_BREAK_COMMANDS = {
     TOGGLE_SYSTEM_BREAK_COMMAND,
     TOGGLE_PAGE_BREAK_COMMAND,
     TOGGLE_SECTION_BREAK_COMMAND
+};
+
+static const std::map<Command, ScoreConfigType> SCORE_CONFIG_COMMANDS = {
+    { SHOW_INVISIBLE_COMMAND, ScoreConfigType::ShowInvisibleElements },
+    { SHOW_UNPRINTABLE_COMMAND, ScoreConfigType::ShowUnprintableElements },
+    { SHOW_FRAMES_COMMAND, ScoreConfigType::ShowFrames },
+    { SHOW_PAGEBORDERS_COMMAND, ScoreConfigType::ShowPageMargins },
+    { SHOW_SOUNDFLAGS_COMMAND, ScoreConfigType::ShowSoundFlags },
+    { SHOW_IRREGULAR_COMMAND, ScoreConfigType::MarkIrregularMeasures }
+};
+
+static const std::vector<Command> STYLE_COMMANDS = {
+    TOGGLE_CONCERT_PITCH_COMMAND
+};
+
+static const std::vector<Command> TAB_COMMANDS = {
+    SET_DURATION_WHOLE_TAB_COMMAND,
+    SET_DURATION_HALF_TAB_COMMAND,
+    SET_DURATION_QUARTER_TAB_COMMAND,
+    SET_DURATION_EIGHTH_TAB_COMMAND,
+    SET_DURATION_16TH_TAB_COMMAND,
+    SET_DURATION_32ND_TAB_COMMAND,
+    SET_DURATION_64TH_TAB_COMMAND,
+    SET_DURATION_128TH_TAB_COMMAND,
+    SET_DURATION_256TH_TAB_COMMAND,
+    SET_DURATION_512TH_TAB_COMMAND,
+    SET_DURATION_1024TH_TAB_COMMAND,
+    ENTER_REST_TAB_COMMAND,
+    GOTO_STRING_ABOVE_COMMAND,
+    GOTO_STRING_BELOW_COMMAND
 };
 
 std::string NotationCommandsState::moduleName() const
@@ -244,9 +286,10 @@ void NotationCommandsState::init()
         updateCommandStates(ADD_COMMANDS);
         updateCommandStates({ TOGGLE_REST_COMMAND });
         updateCommandStates(commands(VOICE_COMMANDS));
-        updateCommandStates(TUPLET_COMMANDS);
+        updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
         updateCommandStates(commands(MOVE_SELECTION_COMMANDS));
         updateCommandStates(LAYOUT_BREAK_COMMANDS);
+        updateCommandStates(TAB_COMMANDS);
     });
 
     controller()->stackChanged().onNotify(this, [this]() {
@@ -274,7 +317,19 @@ void NotationCommandsState::init()
         updateCommandStates(commands(ADD_ARTICULATION_COMMANDS));
         updateCommandStates(commands(VOICE_COMMANDS));
         updateCommandStates(NOTE_COMMANDS);
-        updateCommandStates(TUPLET_COMMANDS);
+        updateCommandStates(NOTE_OR_REST_SELECTED_COMMANDS);
+    });
+
+    controller()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+        updateCommandStates({ muse::key(SCORE_CONFIG_COMMANDS, configType) });
+    });
+
+    controller()->notationStyleChanged().onNotify(this, [this]() {
+        updateCommandStates(STYLE_COMMANDS);
+    });
+
+    controller()->automationModeEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ TOGGLE_AUTOMATION_COMMAND });
     });
 
     updateCommandStates();
@@ -289,6 +344,9 @@ void NotationCommandsState::deinit()
     controller()->textEditingChanged().disconnect(this);
     controller()->isNoteInputAllowedChanged().disconnect(this);
     controller()->noteInputStateChanged().disconnect(this);
+    controller()->scoreConfigChanged().disconnect(this);
+    controller()->notationStyleChanged().disconnect(this);
+    controller()->automationModeEnabledChanged().disconnect(this);
 }
 
 void NotationCommandsState::updateCommandStates(const std::vector<Command>& commands)
@@ -382,12 +440,29 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
     }
 
-    if (muse::contains(TUPLET_COMMANDS, command)) {
+    if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
     }
 
     if (muse::contains(LAYOUT_BREAK_COMMANDS, command)) {
         return CommandState(controller()->isToggleLayoutBreakAvailable(), false);
+    }
+
+    if (muse::contains(SCORE_CONFIG_COMMANDS, command)) {
+        return CommandState(true, controller()->scoreConfig().isShown(SCORE_CONFIG_COMMANDS.at(command)));
+    }
+
+    if (muse::contains(STYLE_COMMANDS, command)) {
+        auto style = controller()->notationStyle();
+        return CommandState(true, style ? style->styleValue(StyleId::concertPitch).toBool() : false);
+    }
+
+    if (muse::contains(TAB_COMMANDS, command)) {
+        return CommandState(controller()->isTablatureStaff(), false);
+    }
+
+    if (command == TOGGLE_AUTOMATION_COMMAND) {
+        return CommandState(true, controller()->isAutomationModeEnabled());
     }
 
     return CommandState(true, false);

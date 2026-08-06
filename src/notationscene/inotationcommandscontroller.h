@@ -28,6 +28,7 @@
 
 #include "notation/types/noteinputtypes.h"
 #include "notation/notationtypes.h"
+#include "notation/inotationstyle.h"
 
 namespace mu::notation {
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
@@ -68,5 +69,16 @@ public:
     virtual bool isMoveSelectionAvailable(MoveSelectionType type) const = 0;
 
     virtual bool isToggleLayoutBreakAvailable() const = 0;
+
+    virtual ScoreConfig scoreConfig() const = 0;
+    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
+
+    virtual INotationStylePtr notationStyle() const = 0;
+    virtual muse::async::Notification notationStyleChanged() const = 0;
+
+    virtual bool isTablatureStaff() const = 0;
+
+    virtual bool isAutomationModeEnabled() const = 0;
+    virtual muse::async::Notification automationModeEnabledChanged() const = 0;
 };
 }

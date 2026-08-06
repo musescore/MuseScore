@@ -8,7 +8,8 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/bend.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
@@ -1092,7 +1093,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     if (tR->staffCount() > 1) {
-        part->staff(0)->addBracket(mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
+        EditStaffBrackets::addBracket(_score, part->staff(0)->idx(),
+                                      mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
         part->staff(0)->setBarLineSpan(true);
     }
 
@@ -1270,7 +1272,15 @@ void GPConverter::addContinuousSlideHammerOn()
             }
 
             if (nextCr->isChord() && !toChord(nextCr)->graceNotes().empty()) {
-                nextCr = toChord(nextCr)->graceNotes().front();
+                Chord* firstGrace = toChord(nextCr)->graceNotes().front();
+                bool isDiveGrace = false;
+                if (!firstGrace->notes().empty()) {
+                    Note* gn = firstGrace->notes().front();
+                    isDiveGrace = gn->ghost() || gn->diveFor() || gn->diveBack();
+                }
+                if (!isDiveGrace) {
+                    nextCr = firstGrace;
+                }
             }
         }
 
@@ -1308,6 +1318,10 @@ void GPConverter::addContinuousSlideHammerOn()
             GuitarBend* bend = bendNote->bendFor();
 
             while (bend) {
+                if (bend->isDive()) {
+                    break;
+                }
+
                 bendNote = bend->endNote();
                 IF_ASSERT_FAILED(bendNote) {
                     LOGE() << "glissando start note may be incorrect";
@@ -2363,32 +2377,27 @@ void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
-                                                        beat->hasWhammy());
-
-    if (!cr->isChord()) {
+    if (!beat->hasWhammy() || !cr->isChord()) {
         return;
     }
 
+    //! GPX reuses the same GPBeat pointer for multiple beat positions — treat as hold.
     const track_idx_t track = cr->track();
-
-    if (beat->hasWhammy()) {
-        auto it = m_lastWhammyState.find(track);
-        const auto& w = beat->whammy();
-
-        //! NOTE: GPX reuses the same GPBeat for multiple positions — treat repeated beat as hold.
-        if (it != m_lastWhammyState.end() && it->second.beat == beat && it->second.destValue != 0) {
-            const float holdValue = it->second.destValue;
-            PitchValues holdCurve;
-            holdCurve.push_back(PitchValue(0, holdValue));
-            holdCurve.push_back(PitchValue(PitchValue::MAX_TIME, holdValue));
-            m_guitarBendImporter->collectDive(toChord(cr), holdCurve);
-            return;
-        }
-
-        m_lastWhammyState[track] = { w.destinationValue, beat };
-        m_guitarBendImporter->collectDive(toChord(cr), gpBendCurveToPitchValues(w));
+    PitchValues pitchValues;
+    if (m_lastWhammyBeat[track] == beat && beat->whammy().destinationValue != 0) {
+        const float holdValue = beat->whammy().destinationValue;
+        pitchValues.push_back(PitchValue(0, holdValue));
+        pitchValues.push_back(PitchValue(PitchValue::MAX_TIME, holdValue));
+    } else {
+        pitchValues = gpBendCurveToPitchValues(beat->whammy());
     }
+    m_lastWhammyBeat[track] = beat;
+
+    if (pitchValues.size() < 2) {
+        return;
+    }
+
+    m_guitarBendImporter->collectDive(toChord(cr), pitchValues);
 }
 
 void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)

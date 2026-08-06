@@ -111,6 +111,14 @@ private:
         track_idx_t trackTo = muse::nidx;
     };
 
+    struct PartData
+    {
+        muse::mpe::DynamicLevelLayers dynamics;
+        std::map<muse::mpe::timestamp_t, muse::mpe::SoundPresetChangeEventList> soundPresets;
+        std::map<muse::mpe::timestamp_t, muse::mpe::TextArticulationEventList> textArticulations;
+        std::map<muse::mpe::timestamp_t, muse::mpe::SyllableEventList> syllables;
+    };
+
     InstrumentTrackId idKey(const EngravingItem* item) const;
     InstrumentTrackId idKey(const std::vector<const EngravingItem*>& items) const;
     InstrumentTrackId idKey(const ID& partId, const String& instrumentId) const;
@@ -118,8 +126,8 @@ private:
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                 ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
-    void updateContext(const track_idx_t trackFrom, const track_idx_t trackTo);
-    void updateContext(const InstrumentTrackId& trackId);
+    void updateContext(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo);
+    void applyContextToTrackData(const InstrumentTrackId& trackId, const PartData& data);
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
@@ -132,9 +140,9 @@ private:
 
     bool hasToReloadTracks(const ScoreChanges& changes) const;
     bool hasToReloadScore(const ScoreChanges& changes) const;
+    bool hasAutomationChange(const ScoreChanges& changes) const;
 
     void clearExpiredTracks();
-    void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                             ChangedTrackIdSet* trackChanges = nullptr);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
@@ -156,8 +164,6 @@ private:
 
     muse::mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
 
-    PlaybackContextPtr playbackCtx(const InstrumentTrackId& trackId);
-
     static void applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries);
     static void applyTieTickBoundaries(const Tie* tie, TickBoundaries& tickBoundaries);
 
@@ -170,7 +176,7 @@ private:
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
 
-    std::unordered_map<InstrumentTrackId, PlaybackContextPtr> m_playbackCtxMap;
+    PlaybackContextPtr m_playbackCtx;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
     std::unordered_map<InstrumentTrackId, bool> m_sendEventsOnScoreChangeMap;
 

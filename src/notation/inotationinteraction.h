@@ -88,6 +88,8 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) = 0;
     virtual void select(SelectionTarget target) = 0;
+    virtual void addToSelection(SelectionTarget target) = 0;
+    virtual void expandSelection(ExpandSelectionMode mode) = 0;
     virtual void clearSelection() = 0;
 
     virtual void selectAndStartEditIfNeeded(EngravingItem* element) = 0;
@@ -98,10 +100,6 @@ public:
     virtual void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) = 0;
 
     virtual void moveLyrics(MoveDirection d) = 0;
-    virtual void expandSelection(ExpandSelectionMode mode) = 0;
-    virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
-    virtual void selectTopStaff() = 0;
-    virtual void selectEmptyTrailingMeasure() = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 
@@ -134,7 +132,7 @@ public:
     virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
-    virtual void setDropRect(const muse::RectF& rect) = 0;
+    virtual void setDropRects(const std::vector<muse::RectF>& rects) = 0;
     virtual void endDrop() = 0;
     virtual muse::async::Notification dropChanged() const = 0;
 
@@ -165,9 +163,6 @@ public:
     virtual muse::async::Notification textEditingStarted() const = 0;
     virtual muse::async::Notification textEditingChanged() const = 0;
     virtual muse::async::Channel<TextBase*> textEditingEnded() const = 0;
-
-    // Display
-    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
 
     // Grip edit
     virtual bool isGripEditStarted() const = 0;
@@ -291,6 +286,7 @@ public:
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(const ScoreConfig& config) = 0;
+    virtual muse::async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
 
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;

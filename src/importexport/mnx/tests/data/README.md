@@ -19,14 +19,40 @@ Project-authored MNX test cases and their expected MuseScore outputs.
 This directory contains source files used to regenerate MNX project test cases when the schema changes.
 
 - File formats:
-  - `.enigmaxml` — exported by **denigma** from Finale sources
+  - `.enigmaxml.zip` — exported by **denigma** from Finale sources, stored zipped
   - `.mscx` — MuseScore scores created within MuseScore
 - Origin: Finale (via denigma) and MuseScore
+- Storage:
+  - Each `.enigmaxml` is zipped individually. Uncompressed they run to several megabytes apiece,
+    which is most of a Finale document's style and font tables rather than notation, and they
+    compress roughly 35x. Zipping them keeps the repository small and keeps diffs of this
+    directory from swamping unrelated review.
+  - Denigma reads `.enigmaxml.zip` directly, so no unzipping step is needed.
 - Conversion:
-  - These files may be converted to MNX using the **denigma** command-line tool as an aid when updating test cases, particularly across significant schema changes.
   - Denigma may be downloaded or built from its [GitHub repository](https://github.com/rpatters1/denigma).
   - Maintaining source material from multiple platforms remains valuable for cross-tool validation.
-  - Planned denigma support: repackaging `.enigmaxml` back into a Finale-readable bundle to allow source edits in Finale before re-exporting.
+  - Denigma can also repackage an `.enigmaxml` into a Finale-readable `.musx` (`--musx`), if a
+    source needs editing in Finale before being re-exported.
+
+#### Regenerating `project_examples/` after a schema change
+
+A schema bump generally requires a denigma built from source at a revision that emits the
+target schema; a released binary will usually be behind. If denigma emits something the new
+schema rejects, the fix belongs in denigma rather than in these files.
+
+From this directory:
+
+```sh
+# one file
+denigma export project_sources/arpeggios.enigmaxml.zip --mnx project_examples/
+
+# all of them
+denigma export project_sources --mnx project_examples/ --recursive
+```
+
+Then regenerate the affected `*_ref.mscx` with `MUE_MNX_WRITE_REFS` set and read the diffs
+before committing. Hand-edited examples (listed at the end of this file) are **not** regenerated
+this way — they are edited derivatives and must be updated by hand or left alone.
 
 ### Official MNX W3 examples (external)
 Official reference examples from the [MNX W3 project](https://github.com/w3c/mnx)
@@ -78,7 +104,7 @@ and `mscx_reference_examples/` should be reviewed and refreshed as needed.
   - `.mnx` — project-specific MNX test data
   - `.json` — official MNX reference examples loaded externally via `MNX_W3C_EXAMPLES_PATH`
   - `.mscx` — MuseScore reference files
-  - `.enigmaxml` — Finale-derived sources exported by denigma
+  - `.enigmaxml.zip` — Finale-derived sources exported by denigma, stored zipped
 - All `.mnx` files in this directory are JSON-based.
 - MSCX files, when present, serve as authoritative expected-output references for MNX import into MuseScore.
 
@@ -89,6 +115,7 @@ All located in `project_examples/`.
 - `altoFluteTremMissingKey.mnx`: Removed `key` node to test that importer correctly imports transposed key signatures when no first key signature is present.
 - `barlineTypesWithShort.mnx`: Modified a dashed barline to "dotted" and a tick barline to "short" to test full range of barline type in mnx.
 - `clarinet38MissingTime.mnx`: Removed `time` node to test that importer handles missing time signature gracefully.
+- `enharmonics.mnx`: Hand-edited example to exercise extremes of enharmonic respelling of transposed notes.
 - `key56Wrapped56Edited.mnx` : Hand-edited to test keyFifthsWrapAt values +/-5 and +/-6.
 - `layoutBrackets.mnx`: Minimal layout with nested group brackets to exercise layout import/export bracket handling.
 - `layoutBarlineStylesInstrument.mnx`: Hand-authored SATB mensurstrich choir layout (no bracket symbol) with separate piano accompaniment, to verify mensurstrich handling without bracket coupling.

@@ -76,28 +76,32 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 65</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>J_J</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>14</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            <Note>
+              <eid>L_L</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <fret>12</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -108,20 +112,10 @@
               </Note>
             <Note>
               <eid>M_M</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    <grace>1</grace>
-                    </location>
-                  </prev>
-                </Spanner>
-              </Note>
-            <Note>
-              <eid>N_N</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
+              <fret>12</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -132,21 +126,23 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>12</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0.5</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>Q_Q</eid>
+                  <eid>P_P</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -162,15 +158,17 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>10</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0.5</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>S_S</eid>
+                  <eid>R_R</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -186,15 +184,17 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
+              <fret>10</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0.5</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>U_U</eid>
+                  <eid>T_T</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -211,13 +211,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>W_W</eid>
+              <eid>V_V</eid>
               <parentheses>both</parentheses>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -229,7 +229,7 @@
                   <guitarBendType>pre-bend</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>X_X</eid>
+                  <eid>W_W</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -239,15 +239,15 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>W_W</NoteEID>
+                <NoteEID>V_V</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>Y_Y</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -257,7 +257,7 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>a_a</eid>
+                  <eid>Z_Z</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -274,7 +274,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>b_b</eid>
+              <eid>a_a</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>12</fret>
@@ -284,7 +284,7 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>c_c</eid>
+                  <eid>b_b</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -294,7 +294,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>d_d</eid>
+              <eid>c_c</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <fret>12</fret>
@@ -304,7 +304,7 @@
                   <guitarBendType>dive</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>e_e</eid>
+                  <eid>d_d</eid>
                   </GuitarBend>
                 <next>
                   <location>
@@ -314,19 +314,12 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>f_f</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>g_g</eid>
+            <eid>f_f</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

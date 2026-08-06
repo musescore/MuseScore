@@ -77,7 +77,7 @@ int gpPitchToQuarterTones(int gpPitch)
     return static_cast<int>(std::lround(static_cast<float>(gpPitch) / GP_PITCH_PER_QUARTERTONE));
 }
 
-ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValues)
+ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValues, bool isContinuedWhammy)
 {
     ImportedDiveInfo info;
 
@@ -88,32 +88,27 @@ ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValu
     const int originPitch = pitchValues.front().pitch;
     const int destPitch = pitchValues.back().pitch;
     const int originQuarterTones = gpPitchToQuarterTones(originPitch);
-    const int destQuarterTones = gpPitchToQuarterTones(destPitch);
 
     std::vector<SegmentData> chain = classifyDiveSegments(pitchValues);
 
-    if (originPitch != 0 && destPitch == originPitch) {
+    if (isContinuedWhammy && destPitch == originPitch) {
+        return info;
+    } else if (!isContinuedWhammy && originPitch != 0 && destPitch == originPitch) {
         info.type = DiveType::PRE_DIVE;
         info.quarterTones = -gpPitchToQuarterTones(originPitch);
         info.endFactor = 1.0;
         return info;
-    }
-
-    if (originPitch != 0) {
+    } else if (!isContinuedWhammy && originPitch != 0) {
         info.type = DiveType::PRE_DIVE;
         info.quarterTones = -originQuarterTones;
         info.endFactor = 1.0;
         info.graceDiveSegments = std::move(chain);
         return info;
-    }
-
-    if (chain.empty()) {
+    } else if (chain.empty()) {
         return info;
     }
 
     info.type = DiveType::DIVE;
-    info.whammyOriginQt = originQuarterTones;
-    info.whammyDestQt = destQuarterTones;
     info.graceDiveSegments = std::move(chain);
 
     if (info.graceDiveSegments.size() == 1) {
@@ -126,13 +121,13 @@ ImportedDiveInfo DiveInfoConverter::fromPitchValues(const PitchValues& pitchValu
     return info;
 }
 
-ImportedDiveInfo DiveInfoConverter::fillDiveInfo(const Note* note, const PitchValues& pitchValues)
+ImportedDiveInfo DiveInfoConverter::fillDiveInfo(const Note* note, const PitchValues& pitchValues, bool isContinuedWhammy)
 {
     if (!note || pitchValues.size() < 2) {
         return {};
     }
 
-    ImportedDiveInfo info = fromPitchValues(pitchValues);
+    ImportedDiveInfo info = fromPitchValues(pitchValues, isContinuedWhammy);
 
     if (info.type == DiveType::NONE) {
         return info;

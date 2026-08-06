@@ -31,7 +31,7 @@
 #include "dom/beam.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/factory.h"
@@ -157,9 +157,19 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
+
+        bool sharedTrackMapChanged = false;
         if (!systemLock) {
-            StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
+            for (Part* p : ctx.dom().parts()) {
+                if (p->isSharedPart()) {
+                    SharedPart* sp = toSharedPart(p);
+                    prevMeasureState.sharedTrackMaps[sp] = sp->trackMapAtTick(ctx.mutState().curMeasure()->tick());
+                }
+            }
+
+            sharedTrackMapChanged = StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
         }
+
         MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
 
         if (ctx.state().curMeasure()->isMeasure()) {
@@ -229,6 +239,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                 system->removeLastMeasure();
                 ctx.mutState().curMeasure()->setParent(oldSystem);
+            }
+
+            if (sharedTrackMapChanged) {
+                // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
+                StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx);
             }
 
             break;
@@ -362,7 +377,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                     MeasureLayout::updateGraceNotes(m, ctx);
 
-                    prevMeasureState.restoreMeasure();
+                    prevMeasureState.restoreMeasure(ctx);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
                     SystemLayout::restoreOldSystemLayout(m->system(), ctx);
@@ -504,19 +519,20 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
 {
     UNUSED(ctx);
 
-    const std::vector<SystemLockIndicator*> lockIndicators = system->lockIndicators();
+    const std::vector<SystemLockIndicator*> lockIndicators = system->systemLockIndicators();
     // In PAGE view, at most ONE lock indicator can exist per system.
     assert(lockIndicators.size() <= 1);
-    system->deleteLockIndicators();
+    system->deleteSystemLockIndicators();
 
     const RangeLock* lock = system->systemLock();
     if (!lock) {
         return;
     }
 
-    SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+    SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
     lockIndicator->setParent(system);
-    system->addLockIndicator(lockIndicator);
+    system->addSystemLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
@@ -535,7 +551,8 @@ void SystemLayout::layoutPageLockIndicators(System* system)
         return;
     }
 
-    PageLockIndicator* lockIndicator = new PageLockIndicator(system, lock);
+    PageLockIndicator* lockIndicator = Factory::createPageLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
     lockIndicator->setParent(system);
     system->setPageLockIndicator(lockIndicator);
 
@@ -713,7 +730,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     if (ctx.dom().nstaves() == 1) {
-        // One staff, show iff not manually hidden score-wide
+        // One staff, show if not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
         system->setHasStaffVisibilityIndicator(false);
@@ -2100,14 +2117,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
 {
-    ElementsToLayout elements(system);
-    for (MeasureBase* mb : system->measures()) {
-        if (mb->isMeasure()) {
-            collectElementsToLayout(toMeasure(mb), elements, ctx);
-        }
-    }
-
-    layoutTiesAndBends(elements, ctx);
+    layoutSystemElements(system, ctx);
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth)
@@ -2822,4 +2832,38 @@ void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* syste
     double yDiff = yBaseLine - numberBbox.top();
 
     mmRest->mutldata()->yNumberPos += yDiff;
+}
+
+void SystemLayout::MeasureState::clear()
+{
+    measure = nullptr;
+    measureWidth = 0.0;
+    measurePos = 0.0;
+    elementPositions.clear();
+    elementWidths.clear();
+    sharedTrackMaps.clear();
+}
+
+void SystemLayout::MeasureState::restoreMeasure(LayoutContext& ctx)
+{
+    bool mapChanged = false;
+    Fraction tick = measure->tick();
+    for (auto& [sharedPart, sharedTrackMap] : sharedTrackMaps) {
+        if (sharedPart->trackMapAtTick(tick) != sharedTrackMap) {
+            sharedPart->setTrackMapAtTick(sharedTrackMap, tick);
+            mapChanged = true;
+        }
+    }
+    if (mapChanged) {
+        StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(measure, ctx);
+    }
+
+    measure->mutldata()->setPosX(measurePos);
+    measure->setWidth(measureWidth);
+    for (auto pair : elementPositions) {
+        pair.first->setPos(pair.second);
+    }
+    for (auto pair : elementWidths) {
+        pair.first->setWidth(pair.second);
+    }
 }

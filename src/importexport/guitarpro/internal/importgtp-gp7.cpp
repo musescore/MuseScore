@@ -25,7 +25,7 @@
 
 #include "gtp/gp7dombuilder.h"
 #include "engraving/dom/factory.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"

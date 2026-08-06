@@ -29,7 +29,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
@@ -2371,10 +2371,6 @@ class Staff : public ScoreElement
     /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::Staff * primaryStaff READ primaryStaff)
 
-    /// List of bracket items for this staff.
-    /// \since MuseScore 4.6
-    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> brackets READ brackets)
-
 public:
     /// \cond MS_INTERNAL
     Staff(mu::engraving::Staff* staff, Ownership own = Ownership::PLUGIN)
@@ -2387,7 +2383,6 @@ public:
     int idx() { return int(staff()->idx()); }
     bool show() { return staff()->show(); }
     Staff* primaryStaff() { return wrap<Staff>(staff()->primaryStaff()); }
-    QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); }
     /// \endcond
 
     /// The current clef type at a given tick in the score, one of

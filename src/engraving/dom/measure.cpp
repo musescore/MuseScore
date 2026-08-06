@@ -27,12 +27,14 @@
 
 #include "measure.h"
 
+#include "../editing/editstaffbrackets.h"
 #include "../editing/editclef.h"
 #include "../editing/editkeysig.h"
 #include "../editing/editmeasures.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
+#include "../editing/editpagelocks.h"
 #include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/mscoreview.h"
@@ -45,7 +47,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "chord.h"
 #include "clef.h"
 #include "durationelement.h"
@@ -1407,7 +1409,7 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::LAYOUT_BREAK:
         // Always drop to all staves
         if (viewer) {
-            viewer->setDropRectangle(canvasBoundingRect());
+            viewer->setDropRectangles({ canvasBoundingRect() });
         }
         return true;
 
@@ -1418,9 +1420,9 @@ bool Measure::acceptDrop(EditData& data) const
         // Drop to all staves or single staff depending on modifier
         if (viewer) {
             if (data.modifiers & ControlModifier) {
-                viewer->setDropRectangle(staffRect);
+                viewer->setDropRectangles({ staffRect });
             } else {
-                viewer->setDropRectangle(canvasBoundingRect());
+                viewer->setDropRectangles({ canvasBoundingRect() });
             }
         }
         return true;
@@ -1436,14 +1438,14 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
         if (viewer) {
-            viewer->setDropRectangle(staffRect);
+            viewer->setDropRectangles({ staffRect });
         }
         return true;
 
     case ElementType::STRING_TUNINGS: {
         const bool canAdd = canAddStringTunings(staffIdx);
         if (viewer && canAdd) {
-            viewer->setDropRectangle(staffRect);
+            viewer->setDropRectangles({ staffRect });
         }
         return canAdd;
     }
@@ -1462,7 +1464,7 @@ bool Measure::acceptDrop(EditData& data) const
                 }
             }
             if (viewer) {
-                viewer->setDropRectangle(canvasBoundingRect());
+                viewer->setDropRectangles({ canvasBoundingRect() });
             }
             return true;
         }
@@ -1471,7 +1473,7 @@ bool Measure::acceptDrop(EditData& data) const
                 return false;
             }
             if (viewer) {
-                viewer->setDropRectangle(staffRect);
+                viewer->setDropRectangles({ staffRect });
             }
             return true;
         case ActionIconType::SYSTEM_LOCK:
@@ -1479,7 +1481,38 @@ bool Measure::acceptDrop(EditData& data) const
             LayoutMode layoutMode = score()->layoutMode();
             if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
                 if (viewer) {
-                    viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                    const MeasureBase* first = system() ? system()->first() : nullptr;
+                    const PointF topLeft = first ? first->canvasBoundingRect().topLeft() : PointF(0.0, 0.0);
+                    viewer->setDropRectangles({ RectF(topLeft, canvasBoundingRect().bottomRight()) });
+                }
+                return true;
+            }
+            return false;
+        }
+        case ActionIconType::PAGE_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            if (layoutMode == LayoutMode::PAGE) {
+                if (viewer) {
+                    std::vector<RectF> dropRects;
+                    for (System* sys : page()->systems()) {
+                        const bool lastSelectedSys = sys == system();
+                        const MeasureBase* first = sys ? sys->first() : nullptr;
+                        const MeasureBase* last = sys ? sys->last() : nullptr;
+                        if (lastSelectedSys) {
+                            last = this;
+                        }
+                        if (!first || !last) {
+                            continue;
+                        }
+                        dropRects.push_back(RectF(first->canvasBoundingRect().topLeft(),
+                                                  last->canvasBoundingRect().bottomRight()));
+
+                        if (lastSelectedSys) {
+                            break;
+                        }
+                    }
+                    viewer->setDropRectangles(dropRects);
                 }
                 return true;
             }
@@ -1512,7 +1545,6 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         return nullptr;
     }
     Staff* staff = score()->staff(staffIdx);
-    //bool fromPalette = (e->track() == -1);
 
     switch (e->type()) {
     case ElementType::MARKER:
@@ -1553,7 +1585,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
         for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
-            for (const BracketItem* bi : score()->staff(idx)->brackets()) {
+            for (const BracketItem* bi : score()->brackets(idx)) {
                 if (bi->intersects(firstStaff, lastStaff)) {
                     level = std::max(level, bi->column() + 1);
                 }
@@ -1562,9 +1594,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
 
         Bracket* b = toBracket(e);
         if (sel.isRange()) {
-            score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+            EditStaffBrackets::undoAddBracket(score(), staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {
-            score()->undoAddBracket(staff, level, b->bracketType(), 1);
+            EditStaffBrackets::undoAddBracket(score(), staff, level, b->bracketType(), 1);
         }
         delete b;
     }
@@ -1627,7 +1659,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             }
             break;
         case LayoutBreakType::NOBREAK:
-            if (measure->noBreak()) {
+            if (measure->noBreak() || measure->isEndOfSystemLock() || measure->isEndOfPageLock()) {
                 delete b;
                 b = 0;
             } else {
@@ -1637,6 +1669,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
             break;
         }
         if (b) {
+            if (b->layoutBreakType() != LayoutBreakType::NOBREAK) {
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, score(), b->layoutBreakType(), this);
+            }
             b->setTrack(0);
             b->setParent(measure);
             score()->undoAddElement(b);
@@ -1805,6 +1840,9 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         }
         case ActionIconType::SYSTEM_LOCK:
             EditSystemLocks::makeIntoSystem(tx, score(), system()->first(), this);
+            break;
+        case ActionIconType::PAGE_LOCK:
+            EditPageLocks::makeIntoPage(tx, score(), page()->firstMeasureBase(), this);
             break;
         default:
             break;
@@ -2583,17 +2621,17 @@ bool Measure::isOnlyRests(track_idx_t track) const
 }
 
 //---------------------------------------------------------
-//   isOnlyDeletedRests
+//   isOnlyGapRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyDeletedRests(track_idx_t track) const
+bool Measure::isOnlyGapRests(track_idx_t track) const
 {
     static const SegmentType st { SegmentType::ChordRest };
     for (const Segment* s = first(st); s; s = s->next(st)) {
         if (s->segmentType() != st || !s->element(track)) {
             continue;
         }
-        if (s->element(track)->isRest() ? !toRest(s->element(track))->isGap() : !s->element(track)->isRest()) {
+        if (!s->element(track)->isRest() || !toRest(s->element(track))->isGap()) {
             return false;
         }
     }
