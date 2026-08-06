@@ -112,7 +112,6 @@ if $DO_SIGN; then
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
     codesign --force \
-        --deep \
         --options runtime \
         --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
         -s "Developer ID Application: MuseScore" \
