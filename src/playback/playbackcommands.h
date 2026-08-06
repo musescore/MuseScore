@@ -48,4 +48,8 @@ inline static const muse::rcommand::Command COUNTIN_TOGGLE_COMMAND("command://pl
 inline static const muse::rcommand::Command CLEAR_ONLINESOUNDS_CACHE_COMMAND("command://playback/clear-onlinesounds-cache");
 inline static const muse::rcommand::Command PROCESS_ONLINESOUNDS_COMMAND("command://playback/process-onlinesounds");
 inline static const muse::rcommand::Command RELOAD_PLAYBACK_CACHE_COMMAND("command://playback/reload-playback-cache");
+
+inline static const muse::rcommand::Command TOGGLE_MIXER_SECTION_COMMAND("command://playback/toggle-mixer-section"); // with params
+inline static const muse::rcommand::Command TOGGLE_AUX_SEND_COMMAND("command://playback/toggle-aux-send");
+inline static const muse::rcommand::Command TOGGLE_AUX_CHANNEL_COMMAND("command://playback/toggle-aux-channel");
 }
