@@ -8366,6 +8366,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             slurs[slurNo] = SlurDesc();
 
             if (newSlur->endElement() == cr && note) {
+                newSlur->setEndElement(nullptr);
                 delete newSlur;
 
                 // Slur starts & ends on same chord - add lv instead
@@ -8377,6 +8378,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             const Fraction tick2 = newSlur->endElement()->tick();
             if (tick2 < tick) {
                 logger->logError(String(u"slur end is before slur start"), xmlreader);
+                newSlur->setEndElement(nullptr);
                 delete newSlur;
                 return;
             }
@@ -8427,6 +8429,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             slurs[slurNo] = SlurDesc();
 
             if (newSlur->startElement() == cr && note) {
+                newSlur->setStartElement(nullptr);
                 delete newSlur;
 
                 // Slur starts & ends on same chord - add lv instead

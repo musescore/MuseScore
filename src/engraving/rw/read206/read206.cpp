@@ -3653,6 +3653,18 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
+    // Discard slurs that were started but never terminated
+    for (Spanner* sp : score->spannerList()) {
+        if (sp->isSlur() && sp->ticks() <= Fraction(0, 1) && sp->startElement() == sp->endElement()) {
+            LOGW() << "discarding slur (id " << ctx.spannerId(sp) << ") that has no end";
+            assert(sp->startElement() && sp->startElement()->isChord());
+
+            ctx.removeSpanner(sp);
+            score->removeSpanner(sp);
+            delete sp;
+        }
+    }
+
     for (Staff* s : score->staves()) {
         s->updateOttava();
     }
