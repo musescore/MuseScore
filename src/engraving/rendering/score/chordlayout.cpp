@@ -2013,12 +2013,28 @@ void ChordLayout::calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, 
                     // thus user can force notes to be shared despite differing number of dots or either being stemless
                     // by setting one of the notehead types to match the other or by making one notehead invisible
                     // TODO: consider adding a style option, staff properties, or note property to control sharing
-                    if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
+
+                    // check if the notes are unison
+                    bool unisonMatch = (n->pitch() == p->pitch() && n->tpc() == p->tpc());
+
+                    // for unisons we allow half noteheads to merge even with different durations,
+                    // as the stem, flag, or beam makes the duration clear.
+                    // dotted notes can also merge with non-dotted notes at unison.
+                    if (((!unisonMatch && nchord->dots() != pchord->dots()) || !nchord->stem() || !pchord->stem()
+                         || (nHeadType != pHeadType && !unisonMatch)
                          || n->isSmall() || p->isSmall())
                         && ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)
                             || nHeadType != pHeadType)
                         && (n->visible() == p->visible())) {
                         shareHeads = false;
+                    } else if (nHeadType != pHeadType && unisonMatch) {
+                        // ensure if a unison includes an open notehead this is shown in
+                        // preference to a filled notehead
+                        if (nHeadType == NoteHeadType::HEAD_QUARTER) {
+                            n->setHideNotehead(true);
+                        } else if (pHeadType == NoteHeadType::HEAD_QUARTER) {
+                            p->setHideNotehead(true);
+                        }
                     }
                 }
 
@@ -2407,6 +2423,7 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
         // by default, notes and dots are not hidden
         // this may be changed later to allow unisons to share noteheads
         note->setHidden(false);
+        note->setHideNotehead(false);
         note->setDotsHidden(false);
 
         // be sure chord position is initialized
