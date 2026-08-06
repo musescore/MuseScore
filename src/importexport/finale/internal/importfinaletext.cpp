@@ -1824,13 +1824,11 @@ void FinaleParser::importPageTexts()
         }
     };
 
-    std::vector<MeasureBase**> topBoxes;
-    std::vector<MeasureBase**> bottomBoxes;
+    std::vector<MeasureBase*> topBoxes;
+    std::vector<MeasureBase*> bottomBoxes;
     for (const Page* page : m_score->pages()) {
-        MeasureBase* firstMB = toMeasureBase(page->firstMeasureBase());
-        topBoxes.push_back(&firstMB);
-        MeasureBase* lastMB = toMeasureBase(page->lastMeasureBase());
-        bottomBoxes.push_back(&lastMB);
+        topBoxes.push_back(toMeasureBase(page->firstMeasureBase()));
+        bottomBoxes.push_back(toMeasureBase(page->lastMeasureBase()));
     }
     const double defaultSpatium = m_score->style().defaultSpatium();
 
@@ -1841,8 +1839,8 @@ void FinaleParser::importPageTexts()
             MeasureBase* mb = [&]() {
                 // Create frames at given position if needed
                 if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top) {
-                    if ((*topBoxes.at(i))->isVBox()) {
-                        return *topBoxes.at(i);
+                    if (topBoxes.at(i)->isVBox()) {
+                        return topBoxes.at(i);
                     }
 
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
@@ -1887,11 +1885,11 @@ void FinaleParser::importPageTexts()
                         pageFrame->ryoffset() -= headerDistance;
                     }
                     MeasureBase* pageMB = toMeasureBase(pageFrame);
-                    topBoxes.at(i) = &pageMB;
+                    topBoxes.at(i) = pageMB;
                     return pageMB;
                 } else if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Bottom) {
-                    if ((*bottomBoxes.at(i))->isVBox()) {
-                        return *bottomBoxes.at(i);
+                    if (bottomBoxes.at(i)->isVBox()) {
+                        return bottomBoxes.at(i);
                     }
 
                     VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
@@ -1933,7 +1931,7 @@ void FinaleParser::importPageTexts()
                         setAndStyleProperty(pageFrame, Pid::TOP_GAP, Spatium::fromAbsolute(boxToStaffDist, defaultSpatium));
                     }
                     MeasureBase* pageMB = toMeasureBase(pageFrame);
-                    bottomBoxes.at(i) = &pageMB;
+                    bottomBoxes.at(i) = pageMB;
                     return pageMB;
                 }
                 // Don't add frames for text vertically aligned to the center.
@@ -1970,7 +1968,7 @@ void FinaleParser::importPageTexts()
         Page* page = m_score->pages().at(i);
         if (page->pageLock()) {
             m_score->removePageLock(page->pageLock());
-            m_score->addPageLock(new RangeLock(*topBoxes.at(i), *bottomBoxes.at(i)));
+            m_score->addPageLock(new RangeLock(topBoxes.at(i), bottomBoxes.at(i)));
         }
     }
 }
