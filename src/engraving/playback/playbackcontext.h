@@ -64,7 +64,7 @@ public:
         const track_idx_t trackFrom, const track_idx_t trackTo) const;
     muse::mpe::SyllableEvent syllable(const track_idx_t trackIdx, const int nominalPositionTick) const;
 
-    muse::mpe::DynamicLevelLayers dynamicLevelLayers(const track_idx_t trackFrom, const track_idx_t trackTo) const;
+    muse::mpe::DynamicAutomationLayers dynamicLevelLayers(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
     bool hasSoundFlags(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
@@ -98,7 +98,6 @@ private:
     void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
 
     const AutomationCurve* dynamicsCurve(const track_idx_t trackIdx) const;
-    muse::mpe::DynamicLevelMap buildDynamicLevelMap(const AutomationCurve& curve) const;
 
     bool hasOnlyOneLyricsVerse(const RepeatSegment* repeat, const track_idx_t track) const;
 
