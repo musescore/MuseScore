@@ -80,6 +80,8 @@ public:
     virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
+    virtual void showSearch() = 0;
+
     virtual void showElementPopup(const ElementType& elementType) = 0;
     virtual void hideElementPopup(const ElementType& elementType) = 0;
     virtual void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) = 0;
@@ -91,6 +93,8 @@ public:
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 
     virtual QQuickItem* asItem() = 0;
+
+    virtual void scheduleRedraw(const muse::RectF& rect = muse::RectF()) = 0;
 };
 
 class NotationViewInputController : public INotationViewController, public muse::Contextable, public muse::async::Asyncable
@@ -133,6 +137,10 @@ public:
     void openContextMenuOfSelection() override;
 
     void togglePopupForItemIfSupports(const EngravingItem* item) override;
+
+    void showSearch() override;
+
+    void redrawView() override;
     // -----------------------
 
     void initZoom();

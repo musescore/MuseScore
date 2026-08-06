@@ -53,5 +53,10 @@ public:
     virtual void openContextMenuOfSelection() = 0;
 
     virtual void togglePopupForItemIfSupports(const mu::engraving::EngravingItem* item) = 0;
+
+    virtual void showSearch() = 0;
+
+    // diagnostic
+    virtual void redrawView() = 0;
 };
 }

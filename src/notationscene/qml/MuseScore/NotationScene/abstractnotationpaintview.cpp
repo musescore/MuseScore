@@ -121,13 +121,6 @@ void AbstractNotationPaintView::load()
 
     m_continuousPanel = std::make_unique<ContinuousPanel>();
 
-    //! NOTE For diagnostic tools
-    if (!dispatcher()->isReg(this)) {
-        dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
-            scheduleRedraw();
-        });
-    }
-
     m_inputController->setReadonly(m_readonly);
     m_inputController->init();
 
@@ -251,15 +244,6 @@ void AbstractNotationPaintView::selectOnNavigationActive()
     }
 
     interaction->select(SelectionTarget::FirstItem);
-}
-
-bool AbstractNotationPaintView::canReceiveAction(const ActionCode& actionCode) const
-{
-    if (actionCode == "diagnostic-notationview-redraw") {
-        return true;
-    }
-
-    return hasFocus();
 }
 
 void AbstractNotationPaintView::onCurrentNotationChanged()
@@ -676,6 +660,11 @@ void AbstractNotationPaintView::hideContextMenu()
     if (m_isContextMenuOpen) {
         emit hideContextMenuRequested();
     }
+}
+
+void AbstractNotationPaintView::showSearch()
+{
+    emit showSearchRequested();
 }
 
 void AbstractNotationPaintView::showElementPopup(const ElementType& elementType)
