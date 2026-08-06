@@ -3101,6 +3101,34 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+
+    CommandInfo {
+        SHOW_SEARCH_COMMAND,
+        TranslatableString("action", "Show search"),
+        TranslatableString("action", "Show search"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // piano keyboard commands
+    CommandInfo {
+        PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND,
+        TranslatableString("action", "Piano keyboard: Set number of keys"),
+        TranslatableString("action", "Set number of keys for piano keyboard"),
+        InputSchema({
+            { "keys", Arg(DataType::Integer, u"Number of keys") },
+        }),
+        Decoration()
+    },
+
+    // diagnostic commands
+    CommandInfo {
+        DIAGNOSTIC_VIEW_REDRAW_COMMAND,
+        TranslatableString("action", "Diagnostic: View redraw"),
+        TranslatableString("action", "Redraw the view"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const

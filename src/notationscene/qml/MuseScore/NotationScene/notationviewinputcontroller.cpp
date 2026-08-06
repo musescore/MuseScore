@@ -1773,6 +1773,11 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     }
 }
 
+void NotationViewInputController::showSearch()
+{
+    m_view->showSearch();
+}
+
 void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide)
 {
     const mu::engraving::ShadowNote* shadowNote = viewInteraction()->shadowNote();
@@ -1782,4 +1787,9 @@ void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide
     }
 
     m_view->showElementPopup(ElementType::SHADOW_NOTE);
+}
+
+void NotationViewInputController::redrawView()
+{
+    m_view->scheduleRedraw();
 }

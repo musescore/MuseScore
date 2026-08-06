@@ -552,4 +552,12 @@ inline static const muse::rcommand::Command TOP_OF_FIRST_PAGE_COMMAND("command:/
 inline static const muse::rcommand::Command BOTTOM_OF_LAST_PAGE_COMMAND("command://notation/view/bottom-of-last-page");
 
 inline static const muse::rcommand::Command CONTEXT_MENU_OF_SELECTION_COMMAND("command://notation/view/context-menu-of-selection");
+
+inline static const muse::rcommand::Command SHOW_SEARCH_COMMAND("command://notation/view/show-search");
+
+// piano keyboard commands
+inline static const muse::rcommand::Command PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND("command://notation/piano-keyboard/set-number-of-keys");
+
+// diagnostic commands
+inline static const muse::rcommand::Command DIAGNOSTIC_VIEW_REDRAW_COMMAND("command://notation/diagnostic/view-redraw");
 }

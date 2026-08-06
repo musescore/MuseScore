@@ -40,6 +40,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "notationscene/inotationsceneconfiguration.h"
 
 #include "notation/inotation_fwd.h"
 #include "notation/notationtypes.h"
@@ -51,6 +52,7 @@ class NotationActionController : public INotationCommandsController, public muse
     public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<INotationSceneConfiguration> sceneConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
@@ -293,6 +295,8 @@ private:
     void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)(P1), P1);
 
     muse::Ret zoomToPercent(const muse::rcommand::CommandQuery& query);
+
+    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::CommandQuery& query);
 
     INotationViewController* m_viewController = nullptr;
 

@@ -649,6 +649,13 @@ void NotationActionController::init()
 
     registerViewCommand(CONTEXT_MENU_OF_SELECTION_COMMAND, &ViewController::openContextMenuOfSelection);
 
+    registerViewCommand(SHOW_SEARCH_COMMAND, &ViewController::showSearch);
+
+    registerQueryCommand(PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND, &Controller::setPianoKeyboardNumberOfKeys);
+
+    // diagnostic commands
+    registerViewCommand(DIAGNOSTIC_VIEW_REDRAW_COMMAND, &ViewController::redrawView);
+
     // compat
     {
         using namespace muse::rcommand;
@@ -1064,6 +1071,9 @@ void NotationActionController::init()
             { "page-top", TOP_OF_FIRST_PAGE_COMMAND, {} },
             { "page-end", BOTTOM_OF_LAST_PAGE_COMMAND, {} },
             { "notation-context-menu", CONTEXT_MENU_OF_SELECTION_COMMAND, {} },
+            { "piano-keyboard-set-number-of-keys", PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND, make_conv({ { "keys", param<int> } }) },
+            { "find", SHOW_SEARCH_COMMAND, {} },
+            { "diagnostic-notationview-redraw", DIAGNOSTIC_VIEW_REDRAW_COMMAND, {} },
         };
 
         rcommand::registerActionToCommand(this, actionToCommand, commandDispatcher(), dispatcher());
@@ -3485,5 +3495,16 @@ muse::Ret NotationActionController::zoomToPercent(const muse::rcommand::CommandQ
 
     int zoomPercentage = query.param("percent").toInt();
     m_viewController->setZoom(zoomPercentage);
+    return muse::make_ok();
+}
+
+muse::Ret NotationActionController::setPianoKeyboardNumberOfKeys(const muse::rcommand::CommandQuery& query)
+{
+    if (!query.contains("keys")) {
+        return muse::make_ret(Ret::Code::BadArgs);
+    }
+
+    int numberOfKeys = query.param("keys").toInt();
+    sceneConfiguration()->setPianoKeyboardNumberOfKeys(numberOfKeys);
     return muse::make_ok();
 }
