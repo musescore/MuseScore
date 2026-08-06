@@ -529,4 +529,27 @@ inline static const muse::rcommand::Command ADD_HAMMER_ON_PULL_OFF_COMMAND("comm
 
 inline static const muse::rcommand::Command GOTO_STRING_ABOVE_COMMAND("command://notation/goto-string-above");
 inline static const muse::rcommand::Command GOTO_STRING_BELOW_COMMAND("command://notation/goto-string-below");
+
+// view commands
+inline static const muse::rcommand::Command ZOOM_IN_COMMAND("command://notation/view/zoom-in");
+inline static const muse::rcommand::Command ZOOM_OUT_COMMAND("command://notation/view/zoom-out");
+inline static const muse::rcommand::Command ZOOM_TO_PAGE_WIDTH_COMMAND("command://notation/view/zoom-to-page-width");
+inline static const muse::rcommand::Command ZOOM_TO_WHOLE_PAGE_COMMAND("command://notation/view/zoom-to-whole-page");
+inline static const muse::rcommand::Command ZOOM_TO_TWO_PAGES_COMMAND("command://notation/view/zoom-to-two-pages");
+inline static const muse::rcommand::Command ZOOM_TO_100_COMMAND("command://notation/view/zoom-to-100");
+inline static const muse::rcommand::Command ZOOM_TO_PERCENT_COMMAND("command://notation/view/zoom-to-percent"); // with params
+
+inline static const muse::rcommand::Command VIEW_MODE_PAGE_COMMAND("command://notation/view/mode-page");
+inline static const muse::rcommand::Command VIEW_MODE_FLOAT_COMMAND("command://notation/view/mode-float");
+inline static const muse::rcommand::Command VIEW_MODE_CONTINUOUS_COMMAND("command://notation/view/mode-continuous");
+inline static const muse::rcommand::Command VIEW_MODE_SINGLE_COMMAND("command://notation/view/mode-single");
+
+inline static const muse::rcommand::Command NEXT_SCREEN_COMMAND("command://notation/view/next-screen");
+inline static const muse::rcommand::Command PREV_SCREEN_COMMAND("command://notation/view/prev-screen");
+inline static const muse::rcommand::Command NEXT_PAGE_COMMAND("command://notation/view/next-page");
+inline static const muse::rcommand::Command PREV_PAGE_COMMAND("command://notation/view/prev-page");
+inline static const muse::rcommand::Command TOP_OF_FIRST_PAGE_COMMAND("command://notation/view/top-of-first-page");
+inline static const muse::rcommand::Command BOTTOM_OF_LAST_PAGE_COMMAND("command://notation/view/bottom-of-last-page");
+
+inline static const muse::rcommand::Command CONTEXT_MENU_OF_SELECTION_COMMAND("command://notation/view/context-menu-of-selection");
 }

@@ -31,11 +31,17 @@
 #include "notation/inotationstyle.h"
 
 namespace mu::notation {
+class INotationViewController;
 class INotationCommandsController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(INotationCommandsController)
 public:
     virtual ~INotationCommandsController() = default;
+
+    //! NOTE We need to set a "current" view controller that will "receive" commands, such as zoom.
+    //! Don't forget to reset the current view controller when deleting, but only if it is the current one.
+    virtual void setViewController(INotationViewController* controller) = 0;
+    virtual INotationViewController* viewController() const = 0;
 
     virtual bool hasSelection() const = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
