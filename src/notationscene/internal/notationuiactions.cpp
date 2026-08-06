@@ -2626,10 +2626,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Insert staff type change"),
              IconCode::Code::STAFF_TYPE_CHANGE
              ),
-    UiAction("notation-popup-menu",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_NOTATION_FOCUSED
-             ),
     UiAction("standard-bend",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,

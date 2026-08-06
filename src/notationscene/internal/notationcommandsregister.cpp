@@ -2968,6 +2968,139 @@ static const std::vector<CommandInfo> s_commandInfos = {
         }),
         Decoration()
     },
+
+    // view commands
+    CommandInfo {
+        ZOOM_IN_COMMAND,
+        TranslatableString("action", "Zoom in"),
+        TranslatableString("action", "Zoom in"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_IN)
+    },
+    CommandInfo {
+        ZOOM_OUT_COMMAND,
+        TranslatableString("action", "Zoom out"),
+        TranslatableString("action", "Zoom out"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_OUT)
+    },
+    CommandInfo {
+        ZOOM_TO_100_COMMAND,
+        TranslatableString("action", "Zoom to 100%"),
+        TranslatableString("action", "Zoom to 100%"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PAGE_WIDTH_COMMAND,
+        TranslatableString("action", "Zoom to page width"),
+        TranslatableString("action", "Zoom to page width"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_WHOLE_PAGE_COMMAND,
+        TranslatableString("action", "Zoom to whole page"),
+        TranslatableString("action", "Zoom to whole page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_TWO_PAGES_COMMAND,
+        TranslatableString("action", "Zoom to two pages"),
+        TranslatableString("action", "Zoom to two pages"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PERCENT_COMMAND,
+        TranslatableString("action", "Zoom to percent"),
+        TranslatableString("action", "Zoom to percent"),
+        InputSchema({
+            { "percent", Arg(DataType::Integer, u"Percent") },
+        }),
+        Decoration()
+    },
+
+    CommandInfo {
+        VIEW_MODE_PAGE_COMMAND,
+        TranslatableString("action", "Page view"),
+        TranslatableString("action", "Display page view"),
+        InputSchema(),
+        Decoration(IconCode::Code::PAGE_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_FLOAT_COMMAND,
+        TranslatableString("action", "Floating"),
+        TranslatableString("action", "Display floating view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        VIEW_MODE_CONTINUOUS_COMMAND,
+        TranslatableString("action", "Continuous view (horizontal)"),
+        TranslatableString("action", "Display continuous view (horizontal)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_SINGLE_COMMAND,
+        TranslatableString("action", "Continuous view (vertical)"),
+        TranslatableString("action", "Display continuous view (vertical)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW_VERTICAL)
+    },
+
+    CommandInfo {
+        NEXT_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Next"),
+        TranslatableString("action", "Jump to next screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Previous"),
+        TranslatableString("action", "Jump to previous screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        NEXT_PAGE_COMMAND,
+        TranslatableString("action", "Page: Next"),
+        TranslatableString("action", "Jump to next page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_PAGE_COMMAND,
+        TranslatableString("action", "Page: Previous"),
+        TranslatableString("action", "Jump to previous page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        TOP_OF_FIRST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Top of first"),
+        TranslatableString("action", "Jump to top of first page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        BOTTOM_OF_LAST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Bottom of last"),
+        TranslatableString("action", "Jump to bottom of last page"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        CONTEXT_MENU_OF_SELECTION_COMMAND,
+        TranslatableString("action", "Context menu of selection"),
+        TranslatableString("action", "Open context menu of selection"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const
