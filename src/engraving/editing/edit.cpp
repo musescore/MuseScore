@@ -2827,7 +2827,6 @@ void Score::deleteItem(EngravingItem* el)
         el = chord;
     }
     // fall through
-
     case ElementType::CHORD:
     {
         Chord* chord = toChord(el);
@@ -3147,6 +3146,7 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
+
     case ElementType::REHEARSAL_MARK:
     case ElementType::TEMPO_TEXT:
     {
@@ -3180,6 +3180,7 @@ void Score::deleteItem(EngravingItem* el)
 
         break;
     }
+
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::TRILL_SEGMENT:
@@ -3250,10 +3251,12 @@ void Score::deleteItem(EngravingItem* el)
             undoRemoveElement(el);
         }
         break;
+
     case ElementType::PLAY_COUNT_TEXT: {
         PlayCountText* pct = toPlayCountText(el);
         pct->barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
     } break;
+
     case ElementType::INSTRUMENT_CHANGE:
     {
         InstrumentChange* ic = static_cast<InstrumentChange*>(el);
@@ -3334,6 +3337,7 @@ void Score::deleteItem(EngravingItem* el)
         EditSystemLocks::undoRemoveSystemLock(this, systemLock);
     }
     break;
+
     case ElementType::PARENTHESIS: {
         Parenthesis* paren = toParenthesis(el);
         // Use EditChord::removeChordParentheses when parent is a chord, fall through for all others
@@ -3352,7 +3356,7 @@ void Score::deleteItem(EngravingItem* el)
             break;
         }
     }
-
+    // fall through
     default:
         undoRemoveElement(el);
         break;
