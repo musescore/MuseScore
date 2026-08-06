@@ -934,6 +934,9 @@ void StaveSharingLayout::makeSharedBreaths(StaveSharingContext& ctx)
     std::vector<EngravingItem*> sharedBreaths;
 
     const SharedTrackMap& trackMap = ctx.curTrackMap;
+    if (trackMap.empty()) {
+        return;
+    }
     track_idx_t startOriginTrack = trackMap.begin()->first;
     track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
@@ -1082,6 +1085,9 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
     Score* score = ctx.score;
 
     const SharedTrackMap& trackMap = ctx.curTrackMap;
+    if (trackMap.empty()) {
+        return;
+    }
     track_idx_t startOriginTrack = trackMap.begin()->first;
     track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
@@ -1140,6 +1146,9 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
 void StaveSharingLayout::makeSharedSpanners(StaveSharingContext& ctx)
 {
     const SharedTrackMap& trackMap = ctx.curTrackMap;
+    if (trackMap.empty()) {
+        return;
+    }
     track_idx_t startOriginTrack = trackMap.begin()->first;
     track_idx_t endOriginTrack = trackMap.rbegin()->first;
 
