@@ -6746,7 +6746,7 @@ SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* sy
 {
     SpannerSegment* seg = nullptr;
     for (SpannerSegment* ss : spanner->spannerSegments()) {
-        if (!ss->system() || ss->isTappingHalfSlurSegment()) {
+        if (!ss->system() || ss->system() == system || ss->isTappingHalfSlurSegment()) {
             seg = ss;
             break;
         }
