@@ -25,6 +25,9 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
 
 #include "utils/scorerw.h"
 
@@ -78,4 +81,52 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
     score->endCmd();
 
     testChordSymToFretDiagram(score);
+}
+
+TEST_F(Engraving_FretDiagramTests, enharmonicFallbackRootAndBass)
+{
+    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+
+    // Root fallback: Fbdim7 -> Edim7 (Fb->E)
+    ASSERT_FALSE(fd->patternsFromHarmony(String(u"Edim7")).empty());
+    EXPECT_FALSE(fd->patternsFromHarmony(String(u"Fbdim7")).empty())
+        << "Fbdim7 should resolve via enharmonic root fallback (Fb->E)";
+
+    // Bass fallback: Am/Fb -> Am/E (Fb->E)
+    ASSERT_FALSE(fd->patternsFromHarmony(String(u"Am/E")).empty());
+    EXPECT_FALSE(fd->patternsFromHarmony(String(u"Am/Fb")).empty())
+        << "Am/Fb should resolve via enharmonic bass fallback (Fb->E)";
+
+    delete fd;
+    delete score;
+}
+
+// linkSiblingHarmonies: when Harmony is a sibling annotation of FretDiagram
+// (not a child), the post-read pass must link them.
+
+TEST_F(Engraving_FretDiagramTests, linkSiblingHarmonies)
+{
+    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"sibling_harmony.mscx");
+    ASSERT_TRUE(score);
+
+    Measure* m = score->firstMeasure();
+    ASSERT_TRUE(m);
+
+    FretDiagram* fd = nullptr;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next()) {
+        for (EngravingItem* e : seg->annotations()) {
+            if (e->isFretDiagram()) {
+                fd = toFretDiagram(e);
+                break;
+            }
+        }
+        if (fd) {
+            break;
+        }
+    }
+    ASSERT_NE(fd, nullptr) << "FretDiagram not found";
+    EXPECT_NE(fd->harmony(), nullptr) << "sibling Harmony should be linked as child of FretDiagram";
+
+    delete score;
 }
