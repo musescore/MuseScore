@@ -455,11 +455,6 @@
             <acciaccatura/>
             <Note>
               <eid>r_r</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
@@ -549,11 +544,6 @@
             <acciaccatura/>
             <Note>
               <eid>7_7</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
@@ -623,11 +613,6 @@
             <grace16/>
             <Note>
               <eid>IB_IB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
@@ -638,11 +623,6 @@
             <grace16/>
             <Note>
               <eid>KB_KB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
@@ -653,11 +633,6 @@
             <grace16/>
             <Note>
               <eid>MB_MB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
@@ -668,11 +643,6 @@
             <grace16/>
             <Note>
               <eid>OB_OB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>

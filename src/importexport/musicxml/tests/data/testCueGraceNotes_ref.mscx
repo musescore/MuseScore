@@ -161,11 +161,6 @@
             <acciaccatura/>
             <Note>
               <eid>N_N</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
@@ -261,11 +256,6 @@
             <acciaccatura/>
             <Note>
               <eid>d_d</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
@@ -345,11 +335,6 @@
             <acciaccatura/>
             <Note>
               <eid>r_r</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
@@ -454,11 +439,6 @@
             <acciaccatura/>
             <Note>
               <eid>+_+</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -537,11 +517,6 @@
             <appoggiatura/>
             <Note>
               <eid>NB_NB</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -597,11 +572,6 @@
                 <subtype>accidentalNatural</subtype>
                 <eid>YB_YB</eid>
                 </Accidental>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -788,11 +758,6 @@
                 <subtype>accidentalFlat</subtype>
                 <eid>6B_6B</eid>
                 </Accidental>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <play>0</play>
@@ -912,11 +877,6 @@
                 <subtype>accidentalSharp</subtype>
                 <eid>PC_PC</eid>
                 </Accidental>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <play>0</play>
@@ -994,11 +954,6 @@
             <acciaccatura/>
             <Note>
               <eid>cC_cC</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>

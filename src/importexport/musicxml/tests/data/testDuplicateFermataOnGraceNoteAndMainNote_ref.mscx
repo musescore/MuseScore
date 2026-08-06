@@ -259,11 +259,6 @@
             <grace16/>
             <Note>
               <eid>T_T</eid>
-              <Events>
-                <Event>
-                  <len>0</len>
-                  </Event>
-                </Events>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>

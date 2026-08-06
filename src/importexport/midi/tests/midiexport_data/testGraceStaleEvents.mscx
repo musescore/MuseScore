@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="workTitle">TestGraceStaleEvents</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>TestGraceStaleEvents</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Tempo>
+            <tempo>1</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 60</text>
+            </Tempo>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
+          <!-- Appoggiatura (pitch 71) before half (pitch 72) at beat 1.
+               Grace note has a stale stored Event with len=0, as written by MuseScore
+               whenever a score containing grace notes is saved. The grace should still
+               be exported with correct timing. -->
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <!-- Acciaccatura (pitch 71) before quarter (pitch 72) at beat 3.
+               Also has a stored Event with len=0, as saved by MuseScore. -->
+          <Chord>
+            <durationType>eighth</durationType>
+            <acciaccatura/>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
