@@ -38,7 +38,7 @@ using namespace mu::engraving;
 using namespace muse::draw;
 using namespace mu::engraving::rendering::score;
 
-void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)
+void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx, System* system)
 {
     Note* startNote = toNote(item->startElement());
     Note* endNote = toNote(item->endElement());
@@ -49,7 +49,7 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)
     System* system1 = startNote->findMeasure()->system();
     System* system2 = endNote->findMeasure()->system();
 
-    if (!system1 || !system2) {
+    if (!system1) { // system2 may be null if the end note's system hasn't been laid out yet
         return;
     }
 
@@ -72,6 +72,11 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)
     }
 
     for (SpannerSegment* segment : item->spannerSegments()) {
+        if (!segment->system() || (system && segment->system() != system)) {
+            /* this segment belongs to a system which either has already been
+             * laid out or will be laid out in a later pass */
+            continue;
+        }
         segment->setTrack(item->track());
         TLayout::layoutLineSegment(toLineSegment(segment), ctx);
     }
@@ -115,15 +120,9 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     }
 
     System* startSystem = startNote->chord()->segment()->system();
-    System* endSystem = endNote->chord()->segment()->system();
-    if (!startSystem || !endSystem) {
+    if (!startSystem) {
         return;
     }
-
-    Chord* startChord = startNote->chord();
-    PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
-    Chord* endChord = endNote->chord();
-    PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
 
     const bool up = bend->ldata()->up();
     const int upSign = up ? -1 : 1;
@@ -137,6 +136,8 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     PointF endPos;
 
     if (item->isSingleBeginType()) {
+        Chord* startChord = startNote->chord();
+        PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
         startPos = startNotePos;
 
         double xOff = (isInside ? 1 : 0.5) * startNote->width() + horizontalIndent * startNote->mag();
@@ -147,12 +148,18 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
 
         startPos += PointF(xOff, yOff);
     } else {
+        System* endSystem = endNote->chord()->segment()->system();
+        if (!endSystem) {
+            return;
+        }
         double x = endSystem->firstNoteRestSegmentX(true);
         double y = endNote->y() + upSign * 0.5 * endNote->height() - 0.5 * heightDiff;
         startPos = PointF(x, y);
     }
 
     if (item->isSingleEndType()) {
+        Chord* endChord = endNote->chord();
+        PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
         endPos = endNotePos;
 
         double xOff = (isInside ? 0 : 0.5) * endNote->width() - horizontalIndent * endNote->mag();
