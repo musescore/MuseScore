@@ -22,11 +22,15 @@
 
 #pragma once
 
+#include <optional>
+#include <unordered_map>
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
 #include "context/iglobalcontext.h"
 #include "engraving/types/types.h"
+#include "notation/inotationautomation.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
 #include "project/iprojectaudiosettings.h"
@@ -216,7 +220,15 @@ private:
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     project::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+
+    muse::audio::ControlParams trackControlParams(const engraving::InstrumentTrackId& instrumentTrackId,
+                                                  const project::AudioOutputParams& outParams, bool rebuildVolume = true,
+                                                  bool rebuildPan = true);
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
+
+    void onAutomationDataChanged(const notation::AutomationChanges& changes);
+    void resendAutomatedControlParams(std::optional<engraving::InstrumentTrackIdSet> volumeTrackIds = std::nullopt,
+                                      std::optional<engraving::InstrumentTrackIdSet> panTrackIds = std::nullopt);
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
@@ -246,6 +258,8 @@ private:
 
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;
+
+    std::unordered_map<engraving::InstrumentTrackId, muse::audio::ControlParams> m_automatedControlParamsCache;
 
     muse::Progress m_loadingProgress;
     size_t m_loadingTrackCount = 0;

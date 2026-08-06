@@ -38,6 +38,7 @@
 
 #include "notation/iexcerptnotation.h" // IWYU pragma: keep
 #include "notation/imasternotation.h"
+#include "notation/inotationautomation.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationparts.h"
@@ -122,6 +123,10 @@ void PlaybackController::init()
         updateCurrentTempo();
 
         updateLoop();
+
+        // Tempo/repeat/duration changes shift what secs_t a given tick maps to,
+        // which invalidates any Volume/Pan automation envelope already sent to the engine
+        resendAutomatedControlParams();
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
@@ -1176,7 +1181,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     trackParams.source = inParams;
     trackParams.fxChain = originParams.fxChain;
     trackParams.auxSends = originParams.auxSends;
-    trackParams.control = originParams.control();
+    trackParams.control = trackControlParams(instrumentTrackId, originParams);
 
     playback()->addTrack(title, std::move(playbackData), trackParams)
     .onResolve(this, [this, title, instrumentTrackId, playbackKey, onFinished, originMeta, originParams](const TrackId trackId,
@@ -1287,7 +1292,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
     }
 
     AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
-    ControlParams control = outParams.control();
+    ControlParams control = trackControlParams(instrumentTrackId, outParams, /*rebuildVolume*/ false, /*rebuildPan*/ false);
 
     control.muted = !isActive;
 
@@ -1313,6 +1318,104 @@ AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId&
     }
 
     return result;
+}
+
+ControlParams PlaybackController::trackControlParams(const InstrumentTrackId& instrumentTrackId,
+                                                     const AudioOutputParams& outParams,
+                                                     bool rebuildVolume, bool rebuildPan)
+{
+    ControlParams control = outParams.control();
+    const auto it = m_automatedControlParamsCache.find(instrumentTrackId);
+    if (it != m_automatedControlParamsCache.end()) {
+        control.volume = it->second.volume;
+        control.balance = it->second.balance;
+    }
+
+    if (!rebuildVolume && !rebuildPan) {
+        return control;
+    }
+
+    const INotationAutomationPtr automation = m_masterNotation ? m_masterNotation->automation() : nullptr;
+    const AutomationDataConstPtr automationData = automation ? automation->automationData() : nullptr;
+    if (!automationData || !instrumentTrackId.isValid()) {
+        m_automatedControlParamsCache.erase(instrumentTrackId);
+        return outParams.control();
+    }
+
+    auto buildAutomationEnvelope = [this](const AutomationCurve& curve) {
+        muse::audio::AutomationEnvelope envelope;
+        for (const auto& [tick, point] : curve) {
+            envelope.insert({ playedTickToSecs(tick), point.value });
+        }
+        return envelope;
+    };
+
+    if (rebuildVolume) {
+        const AutomationCurve& volumeCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Volume,
+                                                                                                  instrumentTrackId));
+        control.volume = !volumeCurve.empty() ? AutomatableValue<volume_db_t>(buildAutomationEnvelope(volumeCurve))
+                         : AutomatableValue<volume_db_t>(outParams.volume);
+    }
+
+    if (rebuildPan) {
+        const AutomationCurve& panCurve = automationData->curve(AutomationCurveKey::instrument(AutomationType::Pan, instrumentTrackId));
+        control.balance = !panCurve.empty() ? AutomatableValue<balance_t>(buildAutomationEnvelope(panCurve))
+                          : AutomatableValue<balance_t>(outParams.balance);
+    }
+
+    m_automatedControlParamsCache[instrumentTrackId] = control;
+
+    return control;
+}
+
+void PlaybackController::onAutomationDataChanged(const AutomationChanges& changes)
+{
+    if (changes.isFullReset) {
+        resendAutomatedControlParams();
+        return;
+    }
+
+    InstrumentTrackIdSet volumeTrackIds;
+    InstrumentTrackIdSet panTrackIds;
+
+    for (const AutomationCurveKey& key : changes.affectedKeys) {
+        const std::optional<InstrumentTrackId> trackId = key.trackId();
+        if (!trackId) {
+            continue;
+        }
+
+        if (key.type == AutomationType::Volume) {
+            volumeTrackIds.insert(*trackId);
+        } else if (key.type == AutomationType::Pan) {
+            panTrackIds.insert(*trackId);
+        }
+    }
+
+    if (volumeTrackIds.empty() && panTrackIds.empty()) {
+        return;
+    }
+
+    resendAutomatedControlParams(volumeTrackIds, panTrackIds);
+}
+
+void PlaybackController::resendAutomatedControlParams(std::optional<InstrumentTrackIdSet> volumeTrackIds,
+                                                      std::optional<InstrumentTrackIdSet> panTrackIds)
+{
+    if (!playback()) {
+        return;
+    }
+
+    for (const auto& pair : m_instrumentTrackIdMap) {
+        const bool rebuildVolume = !volumeTrackIds || muse::contains(*volumeTrackIds, pair.first);
+        const bool rebuildPan = !panTrackIds || muse::contains(*panTrackIds, pair.first);
+
+        if (!rebuildVolume && !rebuildPan) {
+            continue;
+        }
+
+        const AudioOutputParams outParams = trackOutputParams(pair.first);
+        playback()->setControlParams(pair.second, trackControlParams(pair.first, outParams, rebuildVolume, rebuildPan));
+    }
 }
 
 void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
@@ -1341,6 +1444,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
+    m_automatedControlParamsCache.erase(instrumentTrackId);
 }
 
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)
@@ -1575,7 +1679,7 @@ void PlaybackController::updateSoloMuteStates()
         params.forceMute = shouldForceMute;
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
-        playback()->setControlParams(trackId, params.control());
+        playback()->setControlParams(trackId, trackControlParams(instrumentTrackId, params, /*rebuildVolume*/ false, /*rebuildPan*/ false));
     }
 
     updateAuxMuteStates();
@@ -1766,6 +1870,10 @@ void PlaybackController::setMasterNotation(notation::IMasterNotationPtr masterNo
         m_masterNotation->hasPartsChanged().disconnect(this);
         m_masterNotation->playback()->loopBoundariesChanged().disconnect(this);
         m_masterNotation->playback()->loopEnabledChanged().disconnect(this);
+
+        if (const AutomationDataConstPtr automationData = m_masterNotation->automation()->automationData()) {
+            automationData->changed().disconnect(this);
+        }
     }
 
     m_masterNotation = masterNotation;
@@ -1787,6 +1895,12 @@ void PlaybackController::setMasterNotation(notation::IMasterNotationPtr masterNo
     m_masterNotation->playback()->loopEnabledChanged().onReceive(this, [this](bool value) {
         m_loopEnabledChanged.send(value);
     });
+
+    if (const AutomationDataConstPtr automationData = m_masterNotation->automation()->automationData()) {
+        automationData->changed().onReceive(this, [this](const AutomationChanges& changes) {
+            onAutomationDataChanged(changes);
+        });
+    }
 }
 
 void PlaybackController::setIsExportingAudio(bool exporting)
