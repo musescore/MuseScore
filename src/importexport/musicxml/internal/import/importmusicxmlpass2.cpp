@@ -4205,6 +4205,28 @@ void MusicXmlParserDirection::swing()
 }
 
 //---------------------------------------------------------
+//   musicXmlDynamicToMarkup
+//---------------------------------------------------------
+
+/**
+ Convert a single child of a dynamics node to the SMuFL markup MuseScore spells it with.
+ A child element names a dynamic; other-dynamics carries arbitrary text that may still name one.
+ Spelling the children out in glyphs is what lets them be concatenated into a single marking:
+ their names cannot be, as "sf" + "mp" gives "sfmp", which names no dynamic and would end up as
+ plain text. Text naming no dynamic is passed through unchanged.
+ */
+
+static String musicXmlDynamicToMarkup(const String& text)
+{
+    const std::string name = text.toStdString();
+    if (!TConv::dynamicValid(name)) {
+        return text;
+    }
+    const DynamicType type = TConv::fromXml(name, DynamicType::OTHER);
+    return type == DynamicType::OTHER ? text : Dynamic::dynamicText(type);
+}
+
+//---------------------------------------------------------
 //   dynamics
 //---------------------------------------------------------
 
@@ -4218,13 +4240,21 @@ void MusicXmlParserDirection::dynamics()
     m_enclosure = m_e.attribute("enclosure");
     m_dynamicsPlacement = m_e.attribute("placement");
 
+    // A dynamics node is a single marking, whose children spell out the glyphs it is drawn with,
+    // as in the "<sf/><mp/>" the MusicXML specification gives for dynamics elements combined to
+    // create marks not covered by a single element. Collect them into one dynamic.
+    String markup;
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "other-dynamics") {
-            m_dynamicsList.push_back(m_e.readText());
+            markup += musicXmlDynamicToMarkup(m_e.readText());
         } else {
-            m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
+            markup += musicXmlDynamicToMarkup(String::fromAscii(m_e.name().ascii()));
             m_e.skipCurrentElement();
         }
+    }
+
+    if (!markup.empty()) {
+        m_dynamicsList.push_back(markup);
     }
 }
 
@@ -8500,13 +8530,19 @@ void MusicXmlParserNotations::dynamics()
     m_dynamicsColor = Color::fromString(m_e.attribute("color"));
     m_dynamicsPlacement = m_e.attribute("placement");
 
+    // As in MusicXmlParserDirection::dynamics, the children spell out one marking
+    String markup;
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "other-dynamics") {
-            m_dynamicsList.push_back(m_e.readText());
+            markup += musicXmlDynamicToMarkup(m_e.readText());
         } else {
-            m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
+            markup += musicXmlDynamicToMarkup(String::fromAscii(m_e.name().ascii()));
             m_e.skipCurrentElement();  // skip but don't log
         }
+    }
+
+    if (!markup.empty()) {
+        m_dynamicsList.push_back(markup);
     }
 }
 
@@ -9538,7 +9574,8 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         }
     }
 
-    // more than one dynamic ???
+    // One dynamic per dynamics node, as its children spell out a single marking,
+    // and a notations node may hold more than one of them
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     // TODO: remove duplicate code (see MusicXml::direction)
     for (const String& d : std::as_const(m_dynamicsList)) {
