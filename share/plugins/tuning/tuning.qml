@@ -1,6 +1,7 @@
 // Apply a choice of tempraments and tunings.
 // Copyright (C) 2018-2019  Bill Hails
 // Copyright (C) 2025 XiaoMigros
+// Copyright (C) 2026 Ashraf El Droubi
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,7 +45,7 @@ MuseScore {
      * Each row is ordered in the cycle of fifths, so C, G, D, A, E, B, F#, C#, G#/Ab, Eb, Bb, F.
      * Values are adjusted for root and 'pure' note before being applied to the score.
      *
-     * Arabic tunings and most of western ones were provided by Fernando Martins. 
+     * Arabic tunings and most of western ones were provided by Fernando Martins.
      */
     function readDefaults() {
         return [
@@ -96,7 +97,7 @@ MuseScore {
             { "id": "w45",      "name": "C Cm D♭ E♭ Em F Fm G Gm A♭ Am Bm",     "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],                      "root": 0, "pure": 0, "globalOffset": 0 },
             { "id": "w46",      "name": "C Cm D Dm E♭ Em F♯m G Gm A♭ B♭ Bm",    "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],                      "root": 0, "pure": 0, "globalOffset": 0 },
             { "id": "w47",      "name": "C D E♭m E Em F♯ F♯m G G♯m B♭m B Bm",   "offsets": [0, 2, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],                  "root": 0, "pure": 0, "globalOffset": 0 },
-            
+
             { "id": "separatorLine", "name": qsTr("Arabic modal systems") },
             { "id": "a01",      "name": "Melodic 1♯ 2♭",                        "offsets": [0, 2, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2],          "root": 0, "pure": 0, "globalOffset": 0 },
             { "id": "a02",      "name": "Harmonic 1♯ 2♭",                       "offsets": [0, 2, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
@@ -122,13 +123,8 @@ MuseScore {
             { "id": "a22",      "name": "Rakb",                                 "offsets": [0, 2, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
             { "id": "a23",      "name": "Sikah Baladi",                         "offsets": [0, 2, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2],     "root": 0, "pure": 0, "globalOffset": 0 },
             { "id": "a24",      "name": "Iraq (Cadence)",                       "offsets": [0, 2, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2],    "root": 0, "pure": 0, "globalOffset": 0 },
-            
-            { "id": "separatorLine", "name": qsTr("Custom tunings") },
-            { "id": "c01",      "name": qsTr("Custom 1"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
-            { "id": "c02",      "name": qsTr("Custom 2"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
-            { "id": "c03",      "name": qsTr("Custom 3"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
-            { "id": "c04",      "name": qsTr("Custom 4"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 },
-            { "id": "c05",      "name": qsTr("Custom 5"),   "offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "root": 0,  "pure": 0, "globalOffset": 0 }
+
+            { "id": "separatorLine", "name": qsTr("Custom tunings") }
         ]
     }
 
@@ -167,23 +163,25 @@ MuseScore {
 
     onRefresh: {
         saveIsAvailable = formatCurrentValues() != options.data // modifying tuningModel here is intended and necessary
-        resetIsAvailable = JSON.stringify(defaultTuning[currentTemperament]) != JSON.stringify(tuningModel[currentTemperament])
+        resetIsAvailable = !tuningModel[currentTemperament].id.startsWith("c") && JSON.stringify(defaultTuning[currentTemperament]) != JSON.stringify(tuningModel[currentTemperament])
         refreshTextFields()
     }
 
     function calculateTuningFromIndex(index) {
         // index here is modulo pitch
         var rootOffset = tuningModel[currentTemperament].offsets[(fifthsOffsets[index] - currentRoot + 12) % 12]
-        var pureToneOffset = defaultTuning[currentTemperament].offsets[(currentPureTone - currentRoot + 12) % 12] - defaultTuning[currentTemperament].offsets[0] // 0 because definitions are aligned to root C / pure C
+        var pureToneOffset = tuningModel[currentTemperament].offsets[(currentPureTone - currentRoot + 12) % 12] - tuningModel[currentTemperament].offsets[0] // 0 because definitions are aligned to root C / pure C
         return roundValue(rootOffset - pureToneOffset + currentGlobalOffset)
     }
 
     onRun: {
         tuningModel = restoreSavedValues()
+        tuningsFlickable.model = tuningModel // retrigger the ListView with the loaded model
         currentRoot = tuningModel[currentTemperament].root
         currentPureTone = tuningModel[currentTemperament].pure
         currentGlobalOffset = tuningModel[currentTemperament].globalOffset
         root.refresh()
+        tuningsFlickable.positionViewAtIndex(currentTemperament, tuningsFlickable.Center)
     }
 
     function applyTemperament() {
@@ -356,12 +354,107 @@ MuseScore {
         return Number(value.toFixed(root.decimals))
     }
 
+    function addCustomTuning() {
+        var newCustomTuning = {
+			"id": "c" + (customCount() + 1),
+			"name": "Custom " + (customCount() + 1),
+			"offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			"root": 0,
+			"pure": 0,
+			"globalOffset": 0
+		}
+
+		var oldTemperamentIndex = currentTemperament
+
+		commandHistory.add(
+			function () {
+				tuningModel.pop()
+				tuningsFlickable.model = tuningModel
+				tuningsFlickable.positionViewAtIndex(oldTemperamentIndex, ListView.Center)
+				currentTemperament = oldTemperamentIndex
+				currentRoot = tuningModel[oldTemperamentIndex].root
+				currentPureTone = tuningModel[oldTemperamentIndex].pure
+				currentGlobalOffset = tuningModel[oldTemperamentIndex].globalOffset
+			},
+			function() {
+				tuningModel.push(newCustomTuning)
+				tuningsFlickable.model = tuningModel
+				tuningsFlickable.positionViewAtIndex(tuningModel.length - 1, ListView.Center)
+
+				var newIndex = tuningModel.length - 1
+				currentTemperament = newIndex
+				currentRoot = tuningModel[newIndex].root
+				currentPureTone = tuningModel[newIndex].pure
+				currentGlobalOffset = tuningModel[newIndex].globalOffset
+			},
+			"Add custom tuning"
+		)
+    }
+
+    function customCount() {
+        var count = tuningModel.length - readDefaults().length
+        return count
+    }
+
+    function deleteCustomTuning(index) {
+        var oldCustomTuning = tuningModel[index]
+		var oldTemperamentIndex = currentTemperament
+		var targetIndex = index - 1
+
+		if (tuningModel[targetIndex].id == "separatorLine") {
+			targetIndex--
+		}
+
+		commandHistory.add(
+			function () {
+				currentTemperament = oldTemperamentIndex
+				currentRoot = oldCustomTuning.root
+				currentPureTone = oldCustomTuning.pure
+				currentGlobalOffset = oldCustomTuning.globalOffset
+				tuningModel.splice(index, 0, oldCustomTuning)
+				tuningsFlickable.model = tuningModel
+				tuningsFlickable.positionViewAtIndex(index, tuningsFlickable.Center)
+
+			},
+			function() {
+				currentTemperament = targetIndex
+				currentRoot = tuningModel[targetIndex].root
+				currentPureTone = tuningModel[targetIndex].pure
+				currentGlobalOffset = tuningModel[targetIndex].globalOffset
+				tuningModel.splice(index, 1)
+				tuningsFlickable.model = tuningModel // necessary to trigger the ListView update
+				tuningsFlickable.positionViewAtIndex(targetIndex, tuningsFlickable.Center)
+
+			},
+			"Delete custom tuning"
+		)
+    }
+
+    function renameCustomTuning(index, currentText){
+		var oldName = tuningModel[index].name
+
+		commandHistory.add(
+			function () {
+				tuningModel[index].name = oldName
+				tuningsFlickable.model = tuningModel
+				tuningsFlickable.positionViewAtIndex(index, tuningsFlickable.Center)
+			},
+			function() {
+				tuningModel[index].name = currentText
+				tuningsFlickable.model = tuningModel
+				tuningsFlickable.positionViewAtIndex(index, tuningsFlickable.Center)
+			},
+			"Rename custom tuning"
+		)
+	}
+
     ColumnLayout {
         anchors.centerIn: parent
         spacing: defaultSpacing
         Row {
             spacing: defaultSpacing
             MU.StyledGroupBox {
+                id: temperamentBox
                 title: qsTr("Tuning systems and temperaments")
                 width: tuningsFlickable.width + defaultSpacing + tuningsFlickable.visualScrollBarInset - tuningsFlickable.scrollBarThickness
                 height: configureRow.height
@@ -378,6 +471,7 @@ MuseScore {
                     delegate: Item {
                         id: tuningItem
                         readonly property bool isSeparatorLine: modelData.id == "separatorLine"
+                        property bool editing: false
                         anchors.left: parent ? parent.left : undefined
                         anchors.right: parent ? parent.right : undefined
                         anchors.rightMargin: defaultSpacing + tuningsFlickable.visualScrollBarInset
@@ -385,7 +479,7 @@ MuseScore {
 
                         MU.StyledTextLabel {
                             id: tuningLabel
-                            visible: tuningItem.isSeparatorLine
+                            visible: tuningItem.isSeparatorLine && index != tuningModel.length - 1 // don't show separator line for custom tunings if there are none
                             text: modelData.name
                             font: ui.theme.bodyBoldFont
                             width: parent.width
@@ -404,6 +498,33 @@ MuseScore {
                             onToggled: {
                                 temperamentClicked(index)
                             }
+                            onDoubleClicked: {
+                                if (modelData.id.startsWith("c")) {
+                                    tuningItem.editing = true
+                                    textField.text = modelData.name
+                                }
+                            }
+                        }
+
+                        MU.TextInputField {
+                            id: textField
+                            anchors.left: radioButton.left
+                            anchors.leftMargin: 25
+                            anchors.right: radioButton.right
+                            anchors.verticalCenter: radioButton.verticalCenter
+                            visible: tuningItem.editing
+                            currentText: modelData.name
+                            focus: true
+
+                            onVisibleChanged: {
+                                if (visible) {
+                                    ensureActiveFocus()
+                                }
+                            }
+                            onTextEdited: function (newText) { currentText = newText }
+                            onAccepted: renameCustomTuning(index, currentText)
+							onTextEditingFinished: tuningItem.editing = false
+							Keys.onEscapePressed: tuningItem.editing = false
                         }
                     }
                 }
@@ -563,7 +684,7 @@ MuseScore {
                         spacing: 8
                         MU.FlatButton {
                             id: saveButton
-                            text: qsTranslate("PrefsDialogBase", "Save") 
+                            text: qsTranslate("PrefsDialogBase", "Save")
                             Layout.preferredWidth: 100
                             enabled: root.saveIsAvailable
                             onClicked: {
@@ -601,10 +722,34 @@ MuseScore {
                 }
             }
         }
+
         RowLayout {
-            spacing: 8
+            spacing: 0
+
+            MU.FlatButton {
+                id: addCustomButton
+                Layout.preferredWidth: temperamentBox.width - deleteButton.width - 5
+                text: "Add custom tuning"
+                onClicked: {
+                    addCustomTuning()
+                }
+            }
+            Item {
+                width: 5
+            }
+            MU.FlatButton {
+                id: deleteButton
+                enabled: tuningModel[currentTemperament].id.startsWith("c")
+                icon: IconCode.DELETE_TANK
+                onClicked: {
+                    deleteCustomTuning(currentTemperament)
+                }
+            }
+            Item {
+                width: defaultSpacing
+            }
             MU.CheckBox {
-                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignTop
                 id: annotateBox
                 text: qsTr("Annotate tunings in score")
                 checked: false
@@ -612,6 +757,12 @@ MuseScore {
                     checked = !checked
                 }
             }
+        }
+
+        RowLayout {
+            spacing: 8
+            Layout.alignment: Qt.AlignRight
+
             MU.FlatButton {
                 text: curScore ? qsTranslate("PrefsDialogBase", "Cancel") : qsTranslate("PrefsDialogBase", "Quit")
                 onClicked: {
@@ -708,11 +859,15 @@ MuseScore {
     }
 
     function restoreSavedValues() {
-        var newValues = tuningModel
+        var newValues = JSON.parse(JSON.stringify(tuningModel))
         try {
             var data = JSON.parse(options.data)
             for (var i in data) {
                 if (data[i].id == "separatorLine") {
+                    continue
+                }
+                if (data[i].id.startsWith("c")) {
+                    newValues.push(data[i])
                     continue
                 }
                 for (var j in newValues) {
