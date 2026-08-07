@@ -37,9 +37,54 @@ namespace mu::engraving {
 //   StaffTypeChange
 //---------------------------------------------------------
 
+namespace {
+Fraction tickFromDropX(const Measure* measure, const PointF& dropPos)
+{
+    IF_ASSERT_FAILED(measure) {
+        return Fraction(0, 1);
+    }
+
+    const Fraction startTick = measure->tick();
+    const Fraction endTick = measure->endTick();
+    if (endTick <= startTick) {
+        return startTick;
+    }
+
+    const Fraction oneTick = Fraction::fromTicks(1);
+    const Fraction lastTickInMeasure = endTick - oneTick;
+    const double x = dropPos.x() - measure->canvasPos().x();
+
+    if (x <= measure->tick2pos(startTick)) {
+        return startTick;
+    }
+    if (x >= measure->tick2pos(lastTickInMeasure)) {
+        return lastTickInMeasure;
+    }
+
+    Fraction lo = startTick;
+    Fraction hi = lastTickInMeasure;
+
+    // Bisection in Fraction space preserves non-integer rhythmic subdivisions.
+    for (int i = 0; i < 64 && (hi - lo) > oneTick; ++i) {
+        const Fraction mid = (lo + hi) / 2;
+        const double midX = measure->tick2pos(mid);
+        if (midX <= x) {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+
+    const double x0 = measure->tick2pos(lo);
+    const double x1 = measure->tick2pos(hi);
+    return ((x1 - x) < (x - x0)) ? hi : lo;
+}
+}
+
 StaffTypeChange::StaffTypeChange(MeasureBase* parent)
     : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent)
 {
+    setTickFromMeasure(toMeasure(parent));
     m_lw = spatium() * 0.3;
 }
 
@@ -47,6 +92,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
     : EngravingItem(lb)
 {
     m_lw = lb.m_lw;
+    m_tick = lb.m_tick;
     m_ownsStaffType = lb.m_ownsStaffType;
     if (lb.m_ownsStaffType && lb.m_staffType) {
         m_staffType = new StaffType(*lb.m_staffType);
@@ -72,6 +118,78 @@ void StaffTypeChange::setStaffType(StaffType* st, bool owned)
     m_ownsStaffType = owned && (st != nullptr);
 }
 
+// Keep staff type and tick aligned when both are updated.
+void StaffTypeChange::setStaffTypeAndTick(StaffType* st, bool owned, const Fraction& tick)
+{
+    setTick(tick);
+    setStaffType(st, owned);
+}
+
+void StaffTypeChange::setTick(const Fraction& tick)
+{
+    assert(!tick.negative());
+
+    if (tick == m_tick) {
+        return;
+    }
+
+    const Fraction oldTick = m_tick;
+    Staff* st = staff();
+    if (st && m_staffType && st->staffType(oldTick) == m_staffType) {
+        st->moveStaffType(oldTick, tick);
+    }
+
+    m_tick = tick;
+}
+
+void StaffTypeChange::setTickFromMeasure(const Measure* measure)
+{
+    // Resolve the base tick from the measure provided by the caller.
+    // Constructors and split/join operations use the same measure-start fallback.
+    // This keeps recreated items on the same base tick as the shared helper.
+    setTick(insertionTick(measure));
+}
+
+void StaffTypeChange::setTickFromDropPosition(const Measure* measure, const PointF& dropPos)
+{
+    setTick(insertionTick(measure, dropPos));
+}
+
+Fraction StaffTypeChange::insertionTick(const Measure* measure)
+{
+    return measure ? measure->tick() : Fraction(0, 1);
+}
+
+// Map drop x-position to the nearest tick in the measure.
+Fraction StaffTypeChange::insertionTick(const Measure* measure, const PointF& dropPos)
+{
+    if (!measure) {
+        return insertionTick(measure);
+    }
+
+    return tickFromDropX(measure, dropPos);
+}
+
+void StaffTypeChange::moveTicks(const Fraction& diff)
+{
+    if (diff.numerator() == 0) {
+        return;
+    }
+
+    setTick(m_tick + diff);
+}
+
+bool StaffTypeChange::isAtMeasureStart() const
+{
+    const Measure* currentMeasure = measure();
+    return currentMeasure ? m_tick == currentMeasure->tick() : m_tick.isZero();
+}
+
+Fraction StaffTypeChange::rtick() const
+{
+    return measure() ? m_tick - measure()->tick() : m_tick;
+}
+
 //---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
@@ -88,6 +206,8 @@ void StaffTypeChange::spatiumChanged(double, double)
 PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::TICK:
+        return m_tick;
     case Pid::STEP_OFFSET:
         return m_staffType->stepOffset();
     case Pid::STAFF_LINES:
@@ -134,6 +254,9 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
 bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
+    case Pid::TICK:
+        setTick(v.value<Fraction>());
+        break;
     case Pid::STEP_OFFSET:
         m_staffType->setStepOffset(v.toInt());
         break;
@@ -205,7 +328,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     }
 
     if (explicitParent()) {
-        staff()->staffTypeListChanged(measure()->tick());
+        staff()->staffTypeListChanged(m_tick);
     }
     return true;
 }
@@ -217,6 +340,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue StaffTypeChange::propertyDefault(Pid id) const
 {
     switch (id) {
+    case Pid::TICK:
+        return insertionTick(measure());
     case Pid::STEP_OFFSET:
         return 0;
     case Pid::STAFF_LINES:

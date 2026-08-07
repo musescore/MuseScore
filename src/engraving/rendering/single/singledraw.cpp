@@ -2240,8 +2240,18 @@ void SingleDraw::draw(const Spacer* item, Painter* painter, const PaintOptions&)
 void SingleDraw::draw(const StaffLines* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
-    painter->setPen(Pen(item->curColor(opt), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLines(item->lines());
+    const std::vector<StaffLines::ColoredLine>& coloredLines = item->coloredLines();
+    if (!coloredLines.empty()) {
+        for (const StaffLines::ColoredLine& coloredLine : coloredLines) {
+            const double lineWidth = coloredLine.width > 0.0 ? coloredLine.width : item->lw();
+            painter->setPen(Pen(item->curColor(item->visible(), coloredLine.color, opt),
+                                lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+            painter->drawLine(coloredLine.line);
+        }
+    } else {
+        painter->setPen(Pen(item->curColor(opt), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+        painter->drawLines(item->lines());
+    }
 }
 
 void SingleDraw::draw(const StaffState* item, Painter* painter, const PaintOptions&)

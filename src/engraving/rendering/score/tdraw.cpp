@@ -2364,8 +2364,8 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
         painter->setFont(f);
 
         const double startPosX = ldata->bbox().x();
-        const double yOffset = tab->fretFontYOffset();
-        painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
+        const double fretYOffset = tab->fretFontYOffset();
+        painter->drawText(PointF(startPosX, fretYOffset * item->magS()), item->fretString());
     }
     // NOT tablature
     else {
@@ -2754,8 +2754,18 @@ void TDraw::draw(const StaffLines* item, Painter* painter, const PaintOptions& o
 
     setMask(item, painter);
 
-    painter->setPen(Pen(item->curColor(opt), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLines(item->lines());
+    const std::vector<StaffLines::ColoredLine>& coloredLines = item->coloredLines();
+    if (!coloredLines.empty()) {
+        for (const StaffLines::ColoredLine& coloredLine : coloredLines) {
+            const double lineWidth = coloredLine.width > 0.0 ? coloredLine.width : item->lw();
+            painter->setPen(Pen(item->curColor(item->visible(), coloredLine.color, opt),
+                                lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+            painter->drawLine(coloredLine.line);
+        }
+    } else {
+        painter->setPen(Pen(item->curColor(opt), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+        painter->drawLines(item->lines());
+    }
 
     painter->restore();
 }
