@@ -123,7 +123,7 @@ Item {
                         required property int index
 
                         property int string: repeater.count - index - 1
-                        property string finger: root.model ? root.model.fingerings[string] : 0
+                        property string finger: root.model ? root.model.displayFingerings[string] : ""
 
                         Layout.preferredWidth: 40
                         spacing: 8
@@ -150,25 +150,18 @@ Item {
 
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
-                            isIndeterminate: {
-                                const fingerInt = parseInt(repeaterItem.finger)
-                                return isNaN(fingerInt) || fingerInt < 1 || fingerInt > 5
-                            }
+                            isIndeterminate: !repeaterItem.finger || repeaterItem.finger.length === 0
 
                             currentText: isIndeterminate ? '' : repeaterItem.finger
 
-                            validator: IntInputValidator {
-                                top: 5
-                                bottom: 0
-                            }
+                            validator: RegularExpressionValidator { regularExpression: /^[1-5TtPp]?$/ }
 
                             navigation.name: `Finger ${repeaterItem.string + 1} text input`
                             navigation.panel: root.navigationPanel
                             navigation.row: repeater.navigationRowStart + repeaterItem.index
                             navigation.accessible.name: qsTrc("propertiespanel", "Finger for string %1").arg(repeaterItem.string + 1)
 
-                            onTextEditingFinished: function (newTextValue) {
-                                var newFinger = parseInt(newTextValue)
+                            onTextEditingFinished: function (newFinger) {
                                 if (root.model) {
                                     root.model.setFingering(repeaterItem.string, newFinger)
                                 }
