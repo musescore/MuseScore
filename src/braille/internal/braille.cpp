@@ -790,9 +790,11 @@ QString TextToUEBBraille::braille(const QString& text)
     return rez.readAll();
 }
 
-Braille::Braille(Score* s)
+Braille::Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection, mu::braille::BrailleVoiceOrder voiceOrder)
 {
     m_score = s;
+    m_intervalDirection = intervalDirection;
+    m_voiceOrder = voiceOrder;
     for (size_t i = 0; i < m_score->staves().size(); ++i) {
         m_context.previousNote.push_back(nullptr);
         m_context.currentClefType.push_back(ClefType::INVALID);
@@ -1166,6 +1168,15 @@ bool Braille::hasTies(ChordRest* chordRest)
 
 bool Braille::ascendingChords(ClefType clefType)
 {
+    switch (m_intervalDirection) {
+    case mu::braille::BrailleIntervalDirection::Up:
+        return true;
+    case mu::braille::BrailleIntervalDirection::Down:
+        return false;
+    case mu::braille::BrailleIntervalDirection::Auto:
+        break;
+    }
+
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
     // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
@@ -1214,6 +1225,73 @@ bool Braille::ascendingChords(ClefType clefType)
         break;
     }
     return false;
+}
+
+bool Braille::ascendingVoices(ClefType clefType)
+{
+    switch (m_voiceOrder) {
+    case mu::braille::BrailleVoiceOrder::Up:
+        return true;
+    case mu::braille::BrailleVoiceOrder::Down:
+        return false;
+    case mu::braille::BrailleVoiceOrder::Auto:
+        break;
+    }
+
+    // 11.1.3. Page 88. Music Braille Code 2015
+    // In Treble, Soprano, Alto clefs: voices are written from the highest sounding to the lowest sounding.
+    // In Tenor, Baritone, Bass clefs: voices are written from the lowest sounding to the highest sounding.
+    // Assuming proper engraving (Voice 1 = highest, Voice 2 = next, ...), this means iterating
+    // ascending voice indices on treble-style clefs and descending on bass-style clefs.
+    switch (clefType) {
+    case ClefType::G:              //Treble clef
+    case ClefType::G15_MB:         //Treble clef 15ma bassa
+    case ClefType::G8_VB:          //Treble clef 8va bassa
+    case ClefType::G8_VA:          //Treble clef 8va alta
+    case ClefType::G15_MA:         //Treble clef 15ma alta
+    case ClefType::G8_VB_O:        //Double treble clef 8va bassa on 2nd line
+    case ClefType::G8_VB_P:        //Treble clef optional 8va bassa
+    case ClefType::G_1:            //French violin clef
+    case ClefType::C1:             //Soprano clef
+    case ClefType::C1_F18C:        //Soprano clef (French, 18th century)
+    case ClefType::C1_F20C:        //Soprano clef (French, 20th century)
+    case ClefType::C2:             //Mezzo-soprano clef
+    case ClefType::C3:             //Alto clef
+    case ClefType::C3_F18C:        //Alto clef (French, 18th century)
+    case ClefType::C3_F20C:        //Alto clef (French, 20th century)
+    case ClefType::C_19C:          //C clef, H shape (19th century)
+    case ClefType::TAB:            //TAB
+    case ClefType::TAB4:           //TAB
+    case ClefType::TAB_SERIF:      //TAB
+    case ClefType::TAB4_SERIF:     //TAB
+        return false;
+    case ClefType::C4:             //Tenor clef
+    case ClefType::C4_8VB:         //Tenor clef ottava bassa
+    case ClefType::C4_F18C:        //Tenor clef (French, 18th century)
+    case ClefType::C4_F20C:        //Tenor clef (French, 20th century)
+    case ClefType::C5:             //Baritone clef (C clef)
+    case ClefType::F:              //Bass clef
+    case ClefType::F_F18C:         //F clef (French, 18th century)
+    case ClefType::F_19C:          //F clef (19th century)
+    case ClefType::F15_MB:         //Bass clef 15ma bassa
+    case ClefType::F8_VB:          //Bass clef 8va bassa
+    case ClefType::F_8VA:          //Bass clef 8va alta
+    case ClefType::F_15MA:         //Bass clef 15ma alta
+    case ClefType::F_B:            //Baritone clef (F clef)
+    case ClefType::F_C:            //Subbass clef
+        return true;
+    case ClefType::PERC:           //Percussion
+    case ClefType::PERC2:          //Percussion
+        return false;
+    default:
+        break;
+    }
+    return false;
+}
+
+ClefType Braille::clefForStaff(size_t staffIdx) const
+{
+    return m_score->staff(staffIdx)->clef(Fraction(0, 1));
 }
 
 BarLine* Braille::firstBarline(Measure* measure, track_idx_t track)
@@ -1323,20 +1401,34 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
         }
     }
 
-    //Render everything that is in Voice 1
+    // 11.1.3. Page 88. Music Braille Code 2015.
+    // Pick the voice that owns the clef/keysig/timesig prefix based on clef:
+    // - treble-style clefs: voice 0 (highest sounding, by engraving convention) is written first
+    // - bass-style clefs: the highest-index voice present (lowest sounding, by convention) is written first
+    bool bassStyle = ascendingVoices(clefForStaff(staffCount));
+    size_t mainVoiceIdx = 0;
+    if (bassStyle) {
+        for (size_t i = 0; i < VOICES; ++i) {
+            if (measure->hasVoice(staffCount * VOICES + i)) {
+                mainVoiceIdx = i;
+            }
+        }
+    }
+
+    //Render everything that is in the main voice
     for (auto seg = measure->first(); seg; seg = seg->next()) {
         for (EngravingItem* annotation : seg->annotations()) {
             if (annotation->isTempoText()) {
                 beiz->addEngravingItem(annotation, brailleTempoText(toTempoText(annotation), staffCount));
             }
-            if (annotation->track() == staffCount * VOICES) {
+            if (annotation->track() == staffCount * VOICES + mainVoiceIdx) {
                 if (annotation->isDynamic()) {
                     beiz->addEngravingItem(annotation, brailleDynamic(toDynamic(annotation)));
                 }
             }
         }
 
-        EngravingItem* el = seg->element(staffCount * VOICES);
+        EngravingItem* el = seg->element(staffCount * VOICES + mainVoiceIdx);
         if (!el) {
             continue;
         }
@@ -1362,8 +1454,24 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
         }
     }
 
-    // Render the rest of the voices
-    for (size_t i = 1; i < VOICES; ++i) {
+    // Render the rest of the voices. In bass-style clefs we walk indices descending (skipping mainVoiceIdx)
+    // so that voices are emitted from lowest sounding to highest sounding.
+    std::vector<size_t> secondaryVoices;
+    if (bassStyle) {
+        for (size_t i = VOICES; i-- > 0;) {
+            if (i != mainVoiceIdx) {
+                secondaryVoices.push_back(i);
+            }
+        }
+    } else {
+        for (size_t i = 0; i < VOICES; ++i) {
+            if (i != mainVoiceIdx) {
+                secondaryVoices.push_back(i);
+            }
+        }
+    }
+
+    for (size_t i : secondaryVoices) {
         if (measure->hasVoice(staffCount * VOICES + i)) {
             // 11.1.1. Page 87. Music Braille Code 2015.
             // All voices must be complete when writing the other voices in Braille.
@@ -1785,7 +1893,7 @@ QString Braille::brailleChord(Chord* chord)
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
     // All intervals are relative to the original (highest or lowest) note.
     std::vector<Note*> notes;
-    if (ascendingChords(m_context.currentClefType[chord->staffIdx()])) {
+    if (ascendingChords(clefForStaff(chord->staffIdx()))) {
         for (auto it = chord->notes().begin(); it != chord->notes().end(); ++it) {
             notes.push_back(*it);
         }
