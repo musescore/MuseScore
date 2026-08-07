@@ -70,15 +70,19 @@ static AutomationPoint readPoint(const muse::JsonObject& obj)
     if (inValueKind == u"FromPrevious") {
         point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
     } else {
-        AutomationPoint::Bend bend;
-        if (obj.contains("bend")) {
-            const muse::JsonObject bendObj = obj.value("bend").toObject();
-            bend.t = bendObj.value("t").toDouble();
-            bend.value = bendObj.value("value").toDouble();
+        AutomationPoint::Ease ease;
+        if (obj.contains("ease")) {
+            // Array for forward-compat; only element 0 is used, since Ease only holds one point
+            const muse::JsonArray easeArray = obj.value("ease").toArray();
+            if (!easeArray.empty()) {
+                const muse::JsonObject controlPointObj = easeArray.at(0).toObject();
+                ease.t = controlPointObj.value("t").toDouble();
+                ease.value = controlPointObj.value("value").toDouble();
+            }
         }
 
         const muse::real_t value = muse::real_t(obj.value("inValue").toDouble());
-        point.value.inValue = AutomationPoint::ExplicitArrival { value, bend };
+        point.value.inValue = AutomationPoint::ExplicitArrival { value, ease };
     }
 
     if (obj.contains("itemId")) {
@@ -117,11 +121,14 @@ static void writePoint(const AutomationPoint& point, muse::JsonObject& obj)
     } else {
         const AutomationPoint::ExplicitArrival& explicitArrival = std::get<AutomationPoint::ExplicitArrival>(point.value.inValue);
         obj["inValue"] = explicitArrival.value;
-        if (!explicitArrival.bend.isNone()) {
-            muse::JsonObject bendObj;
-            bendObj["t"] = explicitArrival.bend.t.raw();
-            bendObj["value"] = explicitArrival.bend.value.raw();
-            obj["bend"] = bendObj;
+        if (!explicitArrival.ease.isNone()) {
+            muse::JsonObject controlPointObj;
+            controlPointObj["t"] = explicitArrival.ease.t.raw();
+            controlPointObj["value"] = explicitArrival.ease.value.raw();
+
+            muse::JsonArray easeArray;
+            easeArray << controlPointObj;
+            obj["ease"] = easeArray;
         }
     }
 
@@ -183,13 +190,6 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
 
     muse::JsonArray rootArray;
     for (const auto& [key, curve] : data.curves()) {
-        if (curve.empty()) {
-            continue;
-        }
-
-        muse::JsonObject curveObj;
-        writeKey(key, curveObj);
-
         muse::JsonArray pointArray;
         for (const auto& [tick, point] : curve) {
             if (!writeGenerated && point.generated) {
@@ -203,6 +203,8 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
         }
 
         if (!pointArray.empty()) {
+            muse::JsonObject curveObj;
+            writeKey(key, curveObj);
             curveObj["points"] = pointArray;
             rootArray << curveObj;
         }

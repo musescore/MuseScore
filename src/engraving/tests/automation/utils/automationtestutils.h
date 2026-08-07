@@ -26,26 +26,26 @@
 #include "engraving/automation/automationtypes.h"
 
 namespace mu::engraving {
-using AutomationBend = AutomationPoint::Bend;
+using AutomationEase = AutomationPoint::Ease;
 
-inline AutomationPoint generatedPoint(double inVal, double outVal, AutomationBend bend = AutomationBend::none())
+inline AutomationPoint generatedPoint(double inVal, double outVal, AutomationEase ease = AutomationEase::none())
 {
     static uint64_t lastId = 0;
 
     AutomationPoint p;
     p.value.outValue = outVal;
-    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), bend };
+    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), ease };
     p.itemId = EID::newUniqueTestMode(lastId);
     p.generated = true;
 
     return p;
 }
 
-inline AutomationPoint customPoint(double inVal, double outVal, AutomationBend bend = AutomationBend::none())
+inline AutomationPoint customPoint(double inVal, double outVal, AutomationEase ease = AutomationEase::none())
 {
     AutomationPoint p;
     p.value.outValue = outVal;
-    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), bend };
+    p.value.inValue = AutomationPoint::ExplicitArrival { muse::real_t(inVal), ease };
     p.generated = false;
 
     return p;
@@ -65,8 +65,8 @@ inline void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
         EXPECT_NEAR(resolveInValue(actualCurve, actualIt), resolveInValue(expectedCurve, expectedIt), 0.0001)
             << "inValue mismatch at tick " << tick;
         EXPECT_NEAR(actualPoint.value.outValue, expectedPoint.value.outValue, 0.0001) << "outValue mismatch at tick " << tick;
-        EXPECT_EQ(bend(actualPoint).value_or(AutomationBend::none()), bend(expectedPoint).value_or(AutomationBend::none()))
-            << "bend mismatch at tick " << tick;
+        EXPECT_EQ(ease(actualPoint).value_or(AutomationEase::none()), ease(expectedPoint).value_or(AutomationEase::none()))
+            << "ease mismatch at tick " << tick;
         EXPECT_EQ(actualPoint.generated, expectedPoint.generated) << "generated mismatch at ticK " << tick;
     }
 }
