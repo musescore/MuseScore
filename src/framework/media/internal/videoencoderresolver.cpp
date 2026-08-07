@@ -26,6 +26,7 @@
 #include "io/path.h"
 #include "log.h"
 
+#include "internal/ffmpeg/v9/videoencoder.h"
 #include "internal/ffmpeg/v8/videoencoder.h"
 #include "internal/ffmpeg/v7/videoencoder.h"
 #include "internal/ffmpeg/v6/videoencoder.h"
@@ -67,24 +68,23 @@ void VideoEncoderResolver::deinit()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
-    const FFmpegLibPaths paths = findLibraryPaths(ffmpegLibsDir);
-    if (paths.avFormatPath.empty()) {
-        resetFFmpegSettings();
+    const FFmpegLibPathsList libraryPaths = findLibraryPaths(ffmpegLibsDir);
+    for (const FFmpegLibPaths& paths : libraryPaths) {
+        EncoderInfo encoderInfo = makeEncoder(paths);
+        if (!encoderInfo.encoder) {
+            continue;
+        }
+
+        setCurrentVideoEncoder(encoderInfo.encoder);
+
+        configuration()->setFFmpegLibsDir(encoderInfo.ffmpegLibsDir);
+
+        m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
+        m_loadedFFmpegChanged.notify();
         return;
     }
 
-    EncoderInfo encoderInfo = makeEncoder(paths);
-    if (!encoderInfo.encoder) {
-        resetFFmpegSettings();
-        return;
-    }
-
-    setCurrentVideoEncoder(encoderInfo.encoder);
-
-    configuration()->setFFmpegLibsDir(encoderInfo.ffmpegLibsDir);
-
-    m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
-    m_loadedFFmpegChanged.notify();
+    resetFFmpegSettings();
 }
 
 void VideoEncoderResolver::setIsSettingMode(bool arg)
@@ -137,6 +137,7 @@ void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
 
 void VideoEncoderResolver::resetFFmpegSettings()
 {
+    setCurrentVideoEncoder(nullptr);
     m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
     configuration()->setFFmpegLibsDir({});
 
@@ -157,8 +158,11 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
 {
     EncoderInfo result;
 
-    const FFmpegVersion version = versionFromAVFormatPath(ffmpegLibsPaths.avFormatPath);
+    const FFmpegVersion version = ffmpegLibsPaths.ffmpegVersion;
     switch (version) {
+    case FFMPEG_V9:
+        result.encoder = tryCreateEncoder<ffmpeg::v9::VideoEncoder>(ffmpegLibsPaths);
+        break;
     case FFMPEG_V8:
         result.encoder = tryCreateEncoder<ffmpeg::v8::VideoEncoder>(ffmpegLibsPaths);
         break;
@@ -179,7 +183,7 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     }
 
     if (result.encoder) {
-        result.ffmpegLibsDir = io::dirpath(ffmpegLibsPaths.avFormatPath);
+        result.ffmpegLibsDir = ffmpegLibsPaths.searchDir;
         result.ffmpegVersion = version;
 
         LOGD() << "FFmpeg loaded, version: " << version;

@@ -29,6 +29,7 @@
 #include "../mediatypes.h"
 
 namespace muse::media {
+static const FFmpegVersion FFMPEG_V9 = 9;
 static const FFmpegVersion FFMPEG_V8 = 8;
 static const FFmpegVersion FFMPEG_V7 = 7;
 static const FFmpegVersion FFMPEG_V6 = 6;
@@ -50,6 +51,7 @@ struct FFmpegVersionInfo {
 
 static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_VERSIONS = {
     // ffmpeg           avFormat    avUtil      avCodec     swScale    swResample
+    { FFMPEG_V9,        { 63,       61,         63,         10,        7 } },
     { FFMPEG_V8,        { 62,       60,         62,         9,         6 } },
     { FFMPEG_V7,        { 61,       59,         61,         8,         5 } },
     { FFMPEG_V6,        { 60,       58,         60,         7,         4 } },
@@ -58,6 +60,8 @@ static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_V
 };
 
 struct FFmpegLibPaths {
+    FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERSION;
+    io::path_t searchDir;
     io::path_t avUtilPath;
     io::path_t avCodecPath;
     io::path_t avFormatPath;
@@ -65,8 +69,11 @@ struct FFmpegLibPaths {
     io::path_t swResamplePath;
 };
 
+using FFmpegLibPathsList = std::vector<FFmpegLibPaths>;
+
 io::paths_t defaultSearchPaths();
 
-FFmpegLibPaths findLibraryPaths(const io::path_t& ffmpegLibsDir);
+FFmpegLibPathsList findLibraryPaths(const io::path_t& ffmpegLibsDir);
+FFmpegLibPathsList findLibraryPaths(const io::path_t& ffmpegLibsDir, const io::paths_t& defaultPaths);
 FFmpegVersion versionFromAVFormatPath(const io::path_t& path);
 }

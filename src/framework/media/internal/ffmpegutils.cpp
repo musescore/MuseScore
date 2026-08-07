@@ -22,6 +22,8 @@
 
 #include "ffmpegutils.h"
 
+#include <algorithm>
+
 #include "io/fileinfo.h"
 #include "io/path.h"
 
@@ -68,6 +70,8 @@ io::paths_t defaultSearchPaths()
     paths.push_back("/usr/lib64");
     paths.push_back("/usr/lib");
 #endif
+    std::sort(paths.begin(), paths.end());
+    paths.erase(std::unique(paths.begin(), paths.end()), paths.end());
     return paths;
 }
 
@@ -115,6 +119,8 @@ static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::path_t& se
     if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
         && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)
         && io::FileInfo::exists(swresamplePath)) {
+        result.ffmpegVersion = ffmpegVer;
+        result.searchDir = searchDir;
         result.avUtilPath = avutilPath;
         result.avCodecPath = avcodecPath;
         result.avFormatPath = avformatPath;
@@ -171,28 +177,92 @@ FFmpegVersion versionFromAVFormatPath(const io::path_t& path)
     return FFMPEG_INVALID_VERSION;
 }
 
-FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)
+static io::path_t normalizedSearchPath(const io::path_t& path)
 {
-    FFmpegLibPaths result;
+    const io::FileInfo fileInfo(path);
+    const String canonicalPath = fileInfo.canonicalFilePath();
+    return canonicalPath.empty() ? io::path_t(fileInfo.absoluteFilePath()) : io::path_t(canonicalPath);
+}
 
-    io::paths_t searchPaths;
-    if (!configPath.empty() && io::FileInfo::exists(configPath)) {
-        searchPaths.push_back(io::FileInfo(configPath).entryType() == io::EntryType::Dir
-                              ? configPath : io::dirpath(configPath));
+static String searchPathKey(const io::path_t& path)
+{
+#if defined(Q_OS_WIN)
+    return path.toString().toLower();
+#else
+    return path.toString();
+#endif
+}
+
+static bool containsSearchPath(const io::paths_t& paths, const io::path_t& path)
+{
+    const String pathKey = searchPathKey(path);
+    return std::find_if(paths.cbegin(), paths.cend(), [&pathKey](const io::path_t& candidate) {
+        return searchPathKey(candidate) == pathKey;
+    }) != paths.cend();
+}
+
+static io::paths_t normalizedSearchPaths(const io::paths_t& paths)
+{
+    io::paths_t result;
+    result.reserve(paths.size());
+
+    for (const io::path_t& path : paths) {
+        const io::path_t normalizedPath = normalizedSearchPath(path);
+        if (normalizedPath.empty() || containsSearchPath(result, normalizedPath)) {
+            continue;
+        }
+
+        result.push_back(normalizedPath);
     }
 
-    for (const io::path_t& p : defaultSearchPaths()) {
-        searchPaths.push_back(p);
-    }
+    std::sort(result.begin(), result.end(), [](const io::path_t& first, const io::path_t& second) {
+        return searchPathKey(first) < searchPathKey(second);
+    });
+    return result;
+}
 
-    for (const io::path_t& path : searchPaths) {
-        for (const auto& [ffmpegVer, _] : FFMPEG_COMPONENTS_VERSIONS) {
-            result = libraryPathsForVersion(ffmpegVer, path);
-            if (!result.avFormatPath.empty()) {
-                return result;
-            }
+static void appendLibraryPathsForAllVersions(FFmpegLibPathsList& result, const io::path_t& searchPath)
+{
+    for (const auto& [ffmpegVersion, _] : FFMPEG_COMPONENTS_VERSIONS) {
+        FFmpegLibPaths paths = libraryPathsForVersion(ffmpegVersion, searchPath);
+        if (!paths.avFormatPath.empty()) {
+            result.push_back(std::move(paths));
         }
     }
+}
+
+FFmpegLibPathsList findLibraryPaths(const io::path_t& configPath)
+{
+    return findLibraryPaths(configPath, defaultSearchPaths());
+}
+
+FFmpegLibPathsList findLibraryPaths(const io::path_t& configPath, const io::paths_t& defaultPaths)
+{
+    FFmpegLibPathsList result;
+    const io::paths_t automaticSearchPaths = normalizedSearchPaths(defaultPaths);
+
+    if (!configPath.empty() && io::FileInfo::exists(configPath)) {
+        const io::path_t configuredSearchPath = normalizedSearchPath(
+            io::FileInfo(configPath).entryType() == io::EntryType::Dir ? configPath : io::dirpath(configPath));
+
+        if (!containsSearchPath(automaticSearchPaths, configuredSearchPath)) {
+            appendLibraryPathsForAllVersions(result, configuredSearchPath);
+        }
+    }
+
+    FFmpegLibPathsList automaticCandidates;
+    for (const io::path_t& path : automaticSearchPaths) {
+        appendLibraryPathsForAllVersions(automaticCandidates, path);
+    }
+
+    std::sort(automaticCandidates.begin(), automaticCandidates.end(), [](const FFmpegLibPaths& first, const FFmpegLibPaths& second) {
+        if (first.ffmpegVersion != second.ffmpegVersion) {
+            return first.ffmpegVersion > second.ffmpegVersion;
+        }
+        return searchPathKey(first.searchDir) < searchPathKey(second.searchDir);
+    });
+
+    result.insert(result.end(), automaticCandidates.cbegin(), automaticCandidates.cend());
 
     return result;
 }
