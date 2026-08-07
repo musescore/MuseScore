@@ -64,7 +64,8 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
     Q_PROPERTY(
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
-    Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
+
+    Q_PROPERTY(QColor engravingColor READ engravingColor WRITE setEngravingColor NOTIFY engravingColorChanged)
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
@@ -107,7 +108,8 @@ public:
 
     bool scoreInversionEnabled() const;
     bool isOnlyInvertInDarkTheme() const;
-    bool isCurrentThemeDark() const;
+
+    QColor engravingColor() const;
 
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
@@ -130,6 +132,7 @@ public slots:
     void setForegroundWallpaperPath(const QString& path);
     void setScoreInversionEnabled(bool value);
     void setOnlyInvertInDarkTheme(bool value);
+    void setEngravingColor(const QColor& color);
 
 signals:
     void isFollowSystemThemeChanged();
@@ -144,6 +147,7 @@ signals:
     void foregroundWallpaperPathChanged();
     void invertScoreColorChanged();
     void isOnlyInvertInDarkThemeChanged();
+    void engravingColorChanged();
 
 private:
     muse::ui::ThemeInfo currentTheme() const;

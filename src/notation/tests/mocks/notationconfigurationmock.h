@@ -31,6 +31,9 @@ class NotationConfigurationMock : public INotationConfiguration
 {
 public:
     MOCK_METHOD(QColor, notationColor, (), (const, override));
+    MOCK_METHOD(void, setNotationColor, (const QColor& color), (override));
+    MOCK_METHOD(muse::async::Notification, notationColorChanged, (), (const, override));
+    MOCK_METHOD(void, resetNotationColor, (), (override));
 
     MOCK_METHOD(QColor, backgroundColor, (), (const, override));
     MOCK_METHOD(void, setBackgroundColor, (const QColor& color), (override));

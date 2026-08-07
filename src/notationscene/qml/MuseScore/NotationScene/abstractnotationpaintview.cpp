@@ -795,6 +795,10 @@ void AbstractNotationPaintView::onNotationSetup()
         scheduleRedraw();
     });
 
+    notationConfiguration()->notationColorChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         scheduleRedraw();
     }, async::Asyncable::Mode::SetReplace);

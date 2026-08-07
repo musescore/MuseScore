@@ -31,6 +31,9 @@ public:
     NotationConfigurationStub() = default;
 
     QColor notationColor() const override;
+    void setNotationColor(const QColor& color) override;
+    muse::async::Notification notationColorChanged() const override;
+    void resetNotationColor() override;
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color)  override;

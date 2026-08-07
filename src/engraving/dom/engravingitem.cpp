@@ -690,9 +690,9 @@ Color EngravingItem::curColor(bool isVisible, const rendering::PaintOptions& opt
 
 Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const
 {
-    // the default element color is always interpreted as black in printing
     if (opt.isPrinting) {
-        return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
+        // For printing, always use the actual color of the item (default black unless overridden by the user)
+        return normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
@@ -727,13 +727,13 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
         return configuration()->invisibleColor();
     }
 
-    if (opt.invertColors) {
-        if (normalColor == configuration()->defaultColor()) {
-            return maybeOverrideColor(configuration()->scoreInversionColor());
-        }
-        return maybeOverrideColor(normalColor.inverted());
+    if (!opt.ignoreDisplayedDefaultColor && normalColor == configuration()->defaultColor()) {
+        return maybeOverrideColor(configuration()->displayedDefaultColor(opt.invertColors));
     }
 
+    if (opt.invertColors) {
+        return maybeOverrideColor(normalColor.inverted());
+    }
     return maybeOverrideColor(normalColor);
 }
 
