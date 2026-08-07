@@ -725,6 +725,10 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 
 void System::scanElements(std::function<void(EngravingItem*)> func)
 {
+    if (m_pageLockIndicator) {
+        func(m_pageLockIndicator);
+    }
+
     if (vbox()) {
         return;
     }
@@ -741,10 +745,6 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     if (m_staffVisibilityIndicator) {
         func(m_staffVisibilityIndicator);
-    }
-
-    if (m_pageLockIndicator) {
-        func(m_pageLockIndicator);
     }
 
     for (auto i : m_systemLockIndicators) {
