@@ -132,90 +132,81 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="GradualTempoChange">
-            <GradualTempoChange>
-              <tempoChangeType>ritardando</tempoChangeType>
-              <beginHookHeight>1.9</beginHookHeight>
-              <endHookType>0</endHookType>
-              <endHookHeight>1.9</endHookHeight>
-              <beginText>Rit.</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <eid>J_J</eid>
-              </GradualTempoChange>
-            <next>
-              <location>
-                <measures>3</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>K_K</eid>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>M_M</eid>
         <voice>
           <Rest>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>O_O</eid>
         <voice>
-          <Spanner type="GradualTempoChange">
-            <prev>
-              <location>
-                <measures>-3</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>Q_Q</eid>
         <voice>
           <Rest>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>S_S</eid>
         <voice>
           <Rest>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <GradualTempoChange>
+        <tempoChangeType>ritardando</tempoChangeType>
+        <beginHookHeight>1.9</beginHookHeight>
+        <endHookType>0</endHookType>
+        <endHookHeight>1.9</endHookHeight>
+        <beginText>Rit.</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <track2>0</track2>
+        <ticks>3/1</ticks>
+        <eid>V_V</eid>
+        <track>0</track>
+        </GradualTempoChange>
+      </SpannerMap>
     </Score>
   </museScore>

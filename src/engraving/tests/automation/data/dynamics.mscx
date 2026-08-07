@@ -280,25 +280,6 @@
             <velocity>49</velocity>
             <eid>5BLYJoU/SKG_ox3qTXKMpvD</eid>
             </Dynamic>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <eid>mKDXDkjfayH_mC2bfSNNLhN</eid>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0.5038" y="-1.10899"/>
-                <off2 x="-0.5038" y="0"/>
-                <eid>oLBdafea+MN_Q1dHAakpIeJ</eid>
-                <offset x="0.5038" y="-1.10899"/>
-                </Segment>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>gbo/hKc4NfN_TTxkZmaRGDE</eid>
             <durationType>quarter</durationType>
@@ -352,14 +333,6 @@
             <velocity>49</velocity>
             <eid>5+yAmVJbXLL_xjpGuMLBKBE</eid>
             </Dynamic>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>HKREoCoG53K_R8xt5DjtNFC</eid>
             <durationType>quarter</durationType>
@@ -495,5 +468,23 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <track2>0</track2>
+        <startTick>5/2</startTick>
+        <ticks>1/2</ticks>
+        <eid>mKDXDkjfayH_mC2bfSNNLhN</eid>
+        <track>0</track>
+        <Segment>
+          <subtype>0</subtype>
+          <offset x="0.5038" y="-1.10899"/>
+          <off2 x="-0.5038" y="0"/>
+          <eid>oLBdafea+MN_Q1dHAakpIeJ</eid>
+          <track>0</track>
+          <offset x="0.5038" y="-1.10899"/>
+          </Segment>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

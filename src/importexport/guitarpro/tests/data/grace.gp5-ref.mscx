@@ -199,21 +199,12 @@
             <eid>f_f</eid>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>g_g</eid>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <appoggiatura/>
             <Note>
-              <eid>h_h</eid>
+              <eid>g_g</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>i_i</eid>
+                <eid>h_h</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -222,17 +213,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>j_j</eid>
+            <eid>i_i</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <grace>0</grace>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>k_k</eid>
+              <eid>j_j</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -240,13 +224,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>l_l</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>n_n</eid>
+                <eid>m_m</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>24</tpc>
@@ -257,18 +241,18 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>o_o</eid>
+        <eid>n_n</eid>
         <voice>
           <Chord>
-            <eid>p_p</eid>
+            <eid>o_o</eid>
             <durationType>eighth</durationType>
             <duration>1/16</duration>
             <acciaccatura/>
             <Note>
-              <eid>q_q</eid>
+              <eid>p_p</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>r_r</eid>
+                <eid>q_q</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -277,16 +261,20 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>t_t</eid>
+              <eid>s_s</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>0</string>
               </Note>
             </Chord>
+          <Rest>
+            <eid>t_t</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>u_u</eid>
             <durationType>quarter</durationType>
@@ -295,12 +283,16 @@
             <eid>v_v</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>w_w</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>f_f</startElement>
+        <endElement>i_i</endElement>
+        <eid>w_w</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

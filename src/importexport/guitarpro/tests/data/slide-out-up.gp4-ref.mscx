@@ -75,44 +75,23 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
               <string>4</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>M_M</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             <ChordLine>
               <subtype>2</subtype>
-              <eid>N_N</eid>
+              <eid>L_L</eid>
               </ChordLine>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>N_N</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -120,43 +99,36 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
-              <eid>Q_Q</eid>
+              <eid>O_O</eid>
               </ChordLine>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>S_S</eid>
+              <eid>Q_Q</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>17</fret>
               <string>4</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>K_K</startElement>
+                <endElement>Q_Q</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             <ChordLine>
               <subtype>2</subtype>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               </ChordLine>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>10</fret>
@@ -164,21 +136,29 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
-              <eid>W_W</eid>
+              <eid>V_V</eid>
               </ChordLine>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>X_X</eid>
+        <eid>W_W</eid>
         <voice>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>P_P</endElement>
+        <eid>Y_Y</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

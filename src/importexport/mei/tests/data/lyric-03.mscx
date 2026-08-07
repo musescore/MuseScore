@@ -319,17 +319,6 @@
               </Lyrics>
             <Note>
               <eid>7_7</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>8_8</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -337,22 +326,20 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>9_9</eid>
+        <eid>8_8</eid>
         <voice>
           <Chord>
-            <eid>+_+</eid>
+            <eid>9_9</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <eid>/_/</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>+_+</eid>
+              <Tie>
+                <startElement>7_7</startElement>
+                <endElement>+_+</endElement>
+                <eid>/_/</eid>
+                <track>0</track>
+                </Tie>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -675,17 +662,6 @@
               </Lyrics>
             <Note>
               <eid>/B_/B</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>AC_AC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -695,19 +671,17 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>BC_BC</eid>
+            <eid>AC_AC</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <eid>CC_CC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>BC_BC</eid>
+              <Tie>
+                <startElement>/B_/B</startElement>
+                <endElement>BC_BC</endElement>
+                <eid>CC_CC</eid>
+                <track>4</track>
+                </Tie>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -836,17 +810,6 @@
               </Lyrics>
             <Note>
               <eid>dC_dC</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>eC_eC</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
@@ -856,18 +819,16 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>fC_fC</eid>
+            <eid>eC_eC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>gC_gC</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>fC_fC</eid>
+              <Tie>
+                <startElement>dC_dC</startElement>
+                <endElement>fC_fC</endElement>
+                <eid>gC_gC</eid>
+                <track>4</track>
+                </Tie>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>

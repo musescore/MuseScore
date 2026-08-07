@@ -198,33 +198,22 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>R_R</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <head>cross</head>
               </Note>
             <Note>
-              <eid>U_U</eid>
+              <eid>T_T</eid>
               <pitch>51</pitch>
               <tpc>11</tpc>
               <head>cross</head>
@@ -233,21 +222,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>U_U</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>W_W</eid>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>W_W</endElement>
+                <eid>X_X</eid>
+                <track>0</track>
+                </Tie>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>

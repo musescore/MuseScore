@@ -104,91 +104,37 @@
           <Chord>
             <eid>I_I</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>J_J</eid>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>L_L</eid>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>M_M</eid>
+              <eid>J_J</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>N_N</eid>
+              <eid>K_K</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>O_O</eid>
+              <eid>L_L</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>N_N</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>O_O</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>P_P</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -196,5 +142,28 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>I_I</startElement>
+        <endElement>M_M</endElement>
+        <eid>Q_Q</eid>
+        <track>0</track>
+        <up>down</up>
+        </Slur>
+      <Slur>
+        <startElement>I_I</startElement>
+        <endElement>M_M</endElement>
+        <eid>R_R</eid>
+        <track>0</track>
+        <up>up</up>
+        </Slur>
+      <Slur>
+        <startElement>I_I</startElement>
+        <endElement>M_M</endElement>
+        <eid>S_S</eid>
+        <track>0</track>
+        <up>up</up>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

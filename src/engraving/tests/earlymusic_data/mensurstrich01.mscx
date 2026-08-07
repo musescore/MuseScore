@@ -153,16 +153,6 @@
             <durationType>breve</durationType>
             <Note>
               <eid>H_H</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>I_I</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>altbrevis</head>
@@ -178,13 +168,12 @@
             <durationType>breve</durationType>
             <Note>
               <eid>L_L</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>H_H</startElement>
+                <endElement>L_L</endElement>
+                <eid>I_I</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>altbrevis</head>
@@ -208,17 +197,6 @@
             <durationType>half</durationType>
             <Note>
               <eid>Q_Q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>R_R</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -233,14 +211,12 @@
             <durationType>half</durationType>
             <Note>
               <eid>U_U</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>U_U</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -277,17 +253,6 @@
             <durationType>half</durationType>
             <Note>
               <eid>b_b</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>c_c</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -301,14 +266,12 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>e_e</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>b_b</startElement>
+                <endElement>e_e</endElement>
+                <eid>c_c</eid>
+                <track>4</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -326,17 +289,6 @@
             <durationType>whole</durationType>
             <Note>
               <eid>i_i</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>j_j</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/1</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>altbrevis</head>
@@ -351,14 +303,12 @@
             <durationType>whole</durationType>
             <Note>
               <eid>l_l</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>i_i</startElement>
+                <endElement>l_l</endElement>
+                <eid>j_j</eid>
+                <track>4</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -368,17 +318,6 @@
             <durationType>whole</durationType>
             <Note>
               <eid>n_n</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>o_o</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/1</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -392,14 +331,12 @@
             <durationType>half</durationType>
             <Note>
               <eid>q_q</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/1</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>n_n</startElement>
+                <endElement>q_q</endElement>
+                <eid>o_o</eid>
+                <track>4</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>

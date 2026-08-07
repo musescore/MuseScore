@@ -28,6 +28,9 @@
 #include "dom/part.h"
 #include "dom/excerpt.h"
 #include "dom/staff.h"
+#include "dom/segment.h"
+
+#include "global/io/buffer.h"
 
 #include "../xmlwriter.h"
 #include "../inoutdata.h"
@@ -259,6 +262,8 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     }
     ctx.setCurTrack(muse::nidx);
 
+    TWrite::writeScoreSpanners(score, xml, ctx);
+
     hook.onWriteExcerpts302(score, xml, ctx);
 
     TWrite::writePageLocks(score, xml);
@@ -272,21 +277,102 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::Writ
     }
 }
 
-void Writer::writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t strack, track_idx_t etrack,
-                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig, Fraction& curTick)
+void Writer::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack, track_idx_t etrack,
+                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
-    WriteContext ctx(sseg->score());
-    ctx.setClipboardmode(true);
-    ctx.setFilter(*filter);
     ctx.setCurTrack(strack);
-    ctx.setCurTick(curTick);
     TWrite::writeSegments(xml, ctx, strack, etrack, sseg, eseg, writeSystemElements, forceTimeSig);
-    curTick = ctx.curTick();
 }
 
 void Writer::doWriteItem(const EngravingItem* item, XmlWriter& xml)
 {
-    WriteContext ctx(item->score());
-    ctx.setClipboardmode(true);
+    WriteContext ctx(item->score(), /* clipboardMode = */ true);
     TWrite::writeItem(item, xml, ctx);
+}
+
+muse::ByteArray Writer::writeStaffSelection(Score* score, const SelectionFilter& filter, staff_idx_t staffStart, staff_idx_t staffEnd,
+                                            const Fraction& tickStart, const Fraction& tickEnd, Segment* startSegment,
+                                            Segment* endSegment)
+{
+    auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
+    XmlWriter xml(&buffer);
+
+    xml.startDocument();
+
+    Fraction ticks = tickEnd - tickStart;
+    int staves = static_cast<int>(staffEnd - staffStart);
+
+    XmlWriter::Attributes staffListAttributes = {
+        { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
+        { "tick", tickStart.toString() },
+        { "len", ticks.toString() },
+        { "staff", staffStart },
+        { "staves", staves },
+    };
+
+    // Note: canCopy() ensures that the whole selection has a single time stretch ratio.
+    Fraction timeStretch = score->staff(staffStart)->timeStretch(tickStart);
+    if (timeStretch != Fraction(1, 1)) {
+        staffListAttributes.push_back({ "timeStretch", timeStretch.toString() });
+    }
+
+    xml.startElement("StaffList", staffListAttributes);
+
+    WriteContext ctx(score, /* clipboardMode = */ true);
+    ctx.setFilter(filter);
+    ctx.setFirstClipboardTick(tickStart);
+
+    for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack   = startTrack + VOICES;
+
+        xml.startElement("Staff", { { "id", staffIdx } });
+
+        Staff* staff = score->staff(staffIdx);
+        Part* part = staff->part();
+        Interval interval = part->instrument(startSegment->tick())->transpose();
+        if (interval.chromatic) {
+            xml.tag("transposeChromatic", interval.chromatic);
+        }
+        if (interval.diatonic) {
+            xml.tag("transposeDiatonic", interval.diatonic);
+        }
+        writeSegments(xml, ctx, startTrack, endTrack, startSegment, endSegment, false, false);
+        xml.endElement();
+    }
+
+    TWrite::writeScoreSpanners(score, staff2track(staffStart), staff2track(staffEnd), startSegment, endSegment, xml, ctx);
+
+    xml.endElement();
+    xml.flush();
+    return buffer.data();
+}
+
+muse::ByteArray Writer::writeSymbolListSelection(track_idx_t fromTrack, track_idx_t toTrack,
+                                                 const std::vector<SelectedSymbol>& symbols)
+{
+    auto buffer = io::Buffer::opened(io::IODevice::WriteOnly);
+    XmlWriter xml(&buffer);
+
+    xml.startDocument();
+
+    xml.startElement("SymbolList", { { "version", Constants::MSC_VERSION_STR },
+                         { "fromtrack", fromTrack },
+                         { "totrack", toTrack } });
+
+    track_idx_t currTrack = muse::nidx;
+    for (const SelectedSymbol& symbol : symbols) {
+        if (currTrack != symbol.track) {
+            xml.tag("trackOffset", static_cast<int>(symbol.track - fromTrack));
+            currTrack = symbol.track;
+        }
+        xml.tag("tickOffset", symbol.tickOffset);
+        xml.tag("segDelta", symbol.segDelta);
+        doWriteItem(symbol.element, xml);
+    }
+
+    xml.endElement();
+    xml.flush();
+    buffer.close();
+    return buffer.data();
 }

@@ -1307,9 +1307,6 @@ void Score::addElement(EngravingItem* element)
     case ElementType::PARTIAL_LYRICSLINE:
     {
         Spanner* spanner = toSpanner(element);
-        if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE) {
-            break;
-        }
         addSpanner(spanner);
         for (SpannerSegment* ss : spanner->spannerSegments()) {
             if (ss->system()) {
@@ -1508,9 +1505,6 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::HAIRPIN:
     {
         Spanner* spanner = toSpanner(element);
-        if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE) {
-            break;
-        }
         spanner->triggerLayout();
         removeSpanner(spanner);
     }
