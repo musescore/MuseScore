@@ -69,6 +69,7 @@ static const QStringList ALL_PAGE_CODES {
     "spacing",
     "sizes",
     "header-and-footer",
+    "watermark",
     "measure-number",
     "system",
     "instrument-names",
@@ -975,6 +976,16 @@ void EditStyle::classBegin()
         QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml")));
     voltasPage.widget->setMinimumSize(504, 400);
     voltasPageWidget->layout()->addWidget(voltasPage.widget);
+
+    // ====================================================
+    // Watermark STYLE PAGE (QML)
+    // ====================================================
+
+    auto watermarkPage = createQmlWidget(
+        pageWatermark,
+        QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/WatermarkPage.qml")));
+    watermarkPage.widget->setMinimumSize(224, 400);
+    pageWatermark->layout()->addWidget(watermarkPage.widget);
 
     // ====================================================
     // Bar Numbers STYLE PAGE (QML)

@@ -25,6 +25,7 @@
 #include <QBuffer>
 
 #include "draw/painter.h"
+#include "engraving/rendering/score/paint.h"
 
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
@@ -112,6 +113,13 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
                                                     Val(configuration()->exportSvgWithTransparentBackground())).toBool();
     if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, muse::draw::Color::WHITE);
+    }
+
+    // Draw watermark behind notation
+    {
+        mu::engraving::rendering::IScoreRenderer::ScorePaintOptions paintOpt;
+        paintOpt.applyWatermark = muse::value(options, OptionKey::APPLY_WATERMARK, Val(true)).toBool();
+        mu::engraving::rendering::score::Paint::paintWatermark(&painter, score, pageRect, paintOpt);
     }
 
     engraving::rendering::PaintOptions eopt;
