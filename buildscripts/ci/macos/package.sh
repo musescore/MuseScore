@@ -22,8 +22,8 @@ echo "Package MuseScore"
 trap 'echo Package failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
-SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
-SIGN_CERTIFICATE_PASSWORD="''"
+SIGN_CERTIFICATE_ENCRYPT_SECRET=""
+SIGN_CERTIFICATE_PASSWORD=""
 
 SIGN_ARGS=""
 
@@ -39,11 +39,8 @@ done
 if [ -z "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then echo "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"; fi
 if [ -z "$SIGN_CERTIFICATE_PASSWORD" ]; then echo "warning: not set SIGN_CERTIFICATE_PASSWORD"; fi
 
-echo "SIGN_CERTIFICATE_ENCRYPT_SECRET: $SIGN_CERTIFICATE_ENCRYPT_SECRET"
-echo "SIGN_CERTIFICATE_PASSWORD: $SIGN_CERTIFICATE_PASSWORD"
-
 # Setup keychain for code sign
-if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then
+if [ -n "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then
 
     7z x -y ./buildscripts/ci/macos/resources/mac_musescore.p12.enc -o./buildscripts/ci/macos/resources/ -p${SIGN_CERTIFICATE_ENCRYPT_SECRET}
 
