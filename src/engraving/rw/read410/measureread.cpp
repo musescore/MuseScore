@@ -195,6 +195,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
     }
     ctx.setCurrentMeasure(nullptr);
 
+    FretDiagram::linkSiblingHarmonies(measure);
     measure->connectTremolo();
 }
 

@@ -32,6 +32,7 @@ namespace mu::engraving {
 class Chord;
 class Factory;
 class Harmony;
+class Measure;
 class StringData;
 class Transaction;
 
@@ -189,6 +190,8 @@ public:
     String harmonyDisplayText() const;
     Harmony* harmony() const { return m_harmony; }
     void setHarmony(String harmonyText);
+
+    static void linkSiblingHarmonies(Measure* measure);
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
