@@ -84,7 +84,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             return slurSegment;
         }
         if (item->ticks().isZero() && !(item->startCR() && item->startCR()->isGrace()) && !(item->endCR() && item->endCR()->isGrace())
-            && !item->isIncoming() && !item->isOutgoing()) {
+            && !item->isIncoming() && !item->isOutgoing() && !item->isTappingHalfSlur()) {
             LOGD("Slur::layout(): track %zu tick %d zero-length slur, skipping",
                  item->track(), item->tick().ticks());
             return slurSegment;
