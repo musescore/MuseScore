@@ -256,7 +256,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
         assert(ctx.state().curSystem() != nextSystem);
         ctx.mutState().setCurSystem(nextSystem);
 
-        MeasureBase* endMB = ctx.state().prevSystem()->lastMeasure();
+        MeasureBase* endMB = ctx.state().prevSystem()->last();
         bool endOfPageLock = endMB && endMB->isEndOfPageLock();
         const MeasureBase* nextMB = endMB ? endMB->nextMM() : nullptr;
         bool pageLockStart = nextMB && nextMB->isStartOfPageLock();
