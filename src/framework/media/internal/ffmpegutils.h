@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <optional>
 #include <vector>
 
 #include "io/path.h"
@@ -59,8 +60,14 @@ static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_V
     { FFMPEG_V4,        { 58,       56,         58,         5,         3 } },
 };
 
+enum class FFmpegCandidateOrigin {
+    Automatic,
+    Configured
+};
+
 struct FFmpegLibPaths {
     FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERSION;
+    FFmpegCandidateOrigin origin = FFmpegCandidateOrigin::Automatic;
     io::path_t searchDir;
     io::path_t avUtilPath;
     io::path_t avCodecPath;
@@ -75,5 +82,6 @@ io::paths_t defaultSearchPaths();
 
 FFmpegLibPathsList findLibraryPaths(const io::path_t& ffmpegLibsDir);
 FFmpegLibPathsList findLibraryPaths(const io::path_t& ffmpegLibsDir, const io::paths_t& defaultPaths);
+std::optional<io::path_t> configuredPathToPersist(const io::path_t& requestedPath, const FFmpegLibPaths& loadedCandidate);
 FFmpegVersion versionFromAVFormatPath(const io::path_t& path);
 }

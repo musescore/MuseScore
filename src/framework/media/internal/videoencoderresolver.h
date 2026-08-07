@@ -55,6 +55,7 @@ public:
     void setIsSettingMode(bool arg) override;
 
 private:
+    void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir, bool persistRequestedPath);
     void resetFFmpegSettings();
     void startWatchingFfmpegsDirs();
 
@@ -68,6 +69,7 @@ private:
 
     IVideoEncoderPtr m_encoder;
     FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
+    io::path_t m_loadedFFmpegDir;
 
     async::Notification m_loadedFFmpegChanged;
 

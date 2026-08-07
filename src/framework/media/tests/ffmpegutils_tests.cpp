@@ -97,7 +97,9 @@ TEST(FFmpegUtilsTests, AutomaticCandidatesPreferNewestVersion)
 
     ASSERT_EQ(candidates.size(), 2u);
     EXPECT_EQ(candidates[0].ffmpegVersion, FFMPEG_V9);
+    EXPECT_EQ(candidates[0].origin, FFmpegCandidateOrigin::Automatic);
     EXPECT_EQ(candidates[1].ffmpegVersion, FFMPEG_V8);
+    EXPECT_EQ(candidates[1].origin, FFmpegCandidateOrigin::Automatic);
 }
 
 TEST(FFmpegUtilsTests, CustomPathRetainsPriority)
@@ -113,8 +115,10 @@ TEST(FFmpegUtilsTests, CustomPathRetainsPriority)
 
     ASSERT_EQ(candidates.size(), 2u);
     EXPECT_EQ(candidates[0].ffmpegVersion, FFMPEG_V8);
+    EXPECT_EQ(candidates[0].origin, FFmpegCandidateOrigin::Configured);
     EXPECT_EQ(candidates[0].searchDir.toQString(), canonicalPath(customDir));
     EXPECT_EQ(candidates[1].ffmpegVersion, FFMPEG_V9);
+    EXPECT_EQ(candidates[1].origin, FFmpegCandidateOrigin::Automatic);
 }
 
 TEST(FFmpegUtilsTests, RegisteredConfiguredPathRemainsAutomatic)
@@ -131,7 +135,9 @@ TEST(FFmpegUtilsTests, RegisteredConfiguredPathRemainsAutomatic)
 
     ASSERT_EQ(candidates.size(), 2u);
     EXPECT_EQ(candidates[0].ffmpegVersion, FFMPEG_V9);
+    EXPECT_EQ(candidates[0].origin, FFmpegCandidateOrigin::Automatic);
     EXPECT_EQ(candidates[1].ffmpegVersion, FFMPEG_V8);
+    EXPECT_EQ(candidates[1].origin, FFmpegCandidateOrigin::Automatic);
 }
 
 TEST(FFmpegUtilsTests, IncompleteCandidateIsSkipped)
@@ -163,4 +169,33 @@ TEST(FFmpegUtilsTests, SameVersionCandidatesUseStablePathOrder)
     ASSERT_EQ(candidates.size(), 2u);
     EXPECT_EQ(candidates[0].searchDir.toQString(), canonicalPath(firstDir));
     EXPECT_EQ(candidates[1].searchDir.toQString(), canonicalPath(secondDir));
+}
+
+TEST(FFmpegUtilsTests, PersistsOnlyRequestedLoadedPath)
+{
+    QTemporaryDir tempDir;
+    ASSERT_TRUE(tempDir.isValid());
+    const QString requestedDir = tempDir.filePath(QStringLiteral("requested"));
+    const QString fallbackDir = tempDir.filePath(QStringLiteral("fallback"));
+    createLibraries(requestedDir, FFMPEG_V8);
+    createLibraries(fallbackDir, FFMPEG_V9);
+
+    const FFmpegLibPathsList candidates = findLibraryPaths(io::path_t(requestedDir), { io::path_t(fallbackDir) });
+    ASSERT_EQ(candidates.size(), 2u);
+
+    const std::optional<io::path_t> requestedUpdate = configuredPathToPersist(io::path_t(requestedDir), candidates[0]);
+    ASSERT_TRUE(requestedUpdate.has_value());
+    EXPECT_EQ(requestedUpdate->toQString(), canonicalPath(requestedDir));
+
+    EXPECT_FALSE(configuredPathToPersist(io::path_t(requestedDir), candidates[1]).has_value());
+}
+
+TEST(FFmpegUtilsTests, EmptyRequestedPathClearsConfiguration)
+{
+    FFmpegLibPaths automaticCandidate;
+    automaticCandidate.searchDir = io::path_t("/automatic");
+
+    const std::optional<io::path_t> update = configuredPathToPersist({}, automaticCandidate);
+    ASSERT_TRUE(update.has_value());
+    EXPECT_TRUE(update->empty());
 }

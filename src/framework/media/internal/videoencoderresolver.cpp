@@ -39,13 +39,13 @@ using namespace muse::media;
 
 void VideoEncoderResolver::init()
 {
-    loadFFmpeg(configuration()->ffmpegLibsDir());
+    loadFFmpeg(configuration()->ffmpegLibsDir(), false);
 
     //! NOTE: We need to search for and reload the FFmpeg libraries with a delay,
     //!       because this is a resource-intensive operation.
     m_reloadFfmpegTimer = std::make_shared<Timer>(std::chrono::seconds(1));
     m_reloadFfmpegTimer->onTimeout(this, [this](){
-        loadFFmpeg(configuration()->ffmpegLibsDir());
+        loadFFmpeg(configuration()->ffmpegLibsDir(), false);
 
         m_reloadFfmpegTimer->stop();
     });
@@ -68,6 +68,11 @@ void VideoEncoderResolver::deinit()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
+    loadFFmpeg(ffmpegLibsDir, true);
+}
+
+void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir, bool persistRequestedPath)
+{
     const FFmpegLibPathsList libraryPaths = findLibraryPaths(ffmpegLibsDir);
     for (const FFmpegLibPaths& paths : libraryPaths) {
         EncoderInfo encoderInfo = makeEncoder(paths);
@@ -76,14 +81,23 @@ void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
         }
 
         setCurrentVideoEncoder(encoderInfo.encoder);
-
-        configuration()->setFFmpegLibsDir(encoderInfo.ffmpegLibsDir);
-
+        m_loadedFFmpegDir = encoderInfo.ffmpegLibsDir;
         m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
+
+        if (persistRequestedPath) {
+            const std::optional<io::path_t> pathToPersist = configuredPathToPersist(ffmpegLibsDir, paths);
+            if (pathToPersist.has_value()) {
+                configuration()->setFFmpegLibsDir(pathToPersist.value());
+            }
+        }
+
         m_loadedFFmpegChanged.notify();
         return;
     }
 
+    if (persistRequestedPath && ffmpegLibsDir.empty()) {
+        configuration()->setFFmpegLibsDir({});
+    }
     resetFFmpegSettings();
 }
 
@@ -112,7 +126,7 @@ void VideoEncoderResolver::startWatchingFfmpegsDirs()
 
 muse::io::path_t VideoEncoderResolver::loadedFFmpegDir() const
 {
-    return configuration()->ffmpegLibsDir();
+    return m_loadedFFmpegDir;
 }
 
 FFmpegVersion VideoEncoderResolver::loadedFFmpegVersion() const
@@ -139,7 +153,7 @@ void VideoEncoderResolver::resetFFmpegSettings()
 {
     setCurrentVideoEncoder(nullptr);
     m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
-    configuration()->setFFmpegLibsDir({});
+    m_loadedFFmpegDir = io::path_t();
 
     m_loadedFFmpegChanged.notify();
 }
