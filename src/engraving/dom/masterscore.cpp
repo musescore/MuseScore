@@ -35,8 +35,9 @@
 #include "style/defaultstyle.h"
 
 #include "engravingproject.h"
-
 #include "automation/internal/scoreautomationcontroller.h"
+#include "automation/internal/automationrw.h"
+#include "automation/automationdata.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -283,6 +284,128 @@ MasterScore* MasterScore::clone()
 
     score->doLayout();
     return score;
+}
+
+void MasterScore::addSnapshot(const mu::engraving::String& name, bool fileOpened)
+{
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
+    rw::RWRegister::writer()->writeScore(this, &buffer);
+    buffer.close();
+
+    Snapshot snap;
+    snap.name = name;
+    snap.scoreData = buffer.data();
+
+    AutomationDataConstPtr autoData = automationData();
+    if (autoData && !autoData->isEmpty()) {
+        snap.automationData = AutomationRW::write(*autoData, true /*writeGenerated*/);
+    }
+
+    if (fileOpened) {
+        m_snapshots.insert(m_snapshots.begin(), snap);
+    } else {
+        m_snapshots.push_back(snap);
+    }
+
+    return;
+}
+
+void MasterScore::updateSnapshot(int index)
+{
+    auto buffer = Buffer::opened(IODevice::WriteOnly);
+    rw::RWRegister::writer()->writeScore(this, &buffer);
+    buffer.close();
+
+    m_snapshots[index].scoreData = buffer.data();
+    return;
+}
+
+void MasterScore::clearScore()
+{
+    deselectAll();
+    inputState() = InputState();
+
+    std::vector<Spanner*> spanners = spannerList();
+    for (Spanner* spanner : spanners) {
+        removeSpanner(spanner);
+        deleteItem(spanner);
+    }
+
+    while (first()) {
+        MeasureBase* mb = first();
+        m_measures.remove(mb);
+    }
+
+    for (Staff* s : m_staves) {
+        delete s;
+    }
+    m_staves.clear();
+
+    while (!m_parts.empty()) {
+        removePart(m_parts.back());
+    }
+
+    clearSystemObjectStaves();
+    m_metaTags.clear();
+
+    muse::DeleteAll(m_excerpts);
+    m_eidRegister.clear();
+}
+
+void MasterScore::restoreSnapshot(size_t index)
+{
+    clearScore();
+    muse::ByteArray& data = m_snapshots[index].scoreData;
+    XmlReader xmlReader(data);
+    MscLoader().readMasterScore(this, xmlReader, true);
+
+    doLayout();
+
+    initAutomation();
+
+    AutomationDataConstPtr currentData = automationData();
+    if (currentData) {
+        const_cast<AutomationData*>(currentData.get())->setCurves({});
+    }
+    if (!m_snapshots[index].automationData.empty() && currentData) {
+        AutomationData temp;
+        AutomationRW::read(temp, m_snapshots[index].automationData);
+        const_cast<AutomationData*>(currentData.get())->setCurves(temp.curves());
+    }
+
+    ScoreChanges changes;
+    changes.tickFrom = 0;
+    changes.tickTo = std::numeric_limits<int>::max();
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = nstaves();
+
+    changes.changedTypes.insert(ElementType::INSTRUMENT_CHANGE);
+    changes.changedTypes.insert(ElementType::STAFF);
+    changes.changedTypes.insert(ElementType::PART);
+    changes.changedTypes.insert(ElementType::SCORE);
+
+    changesChannel().send(changes);
+
+    delete m_undoStack;
+    m_undoStack = new UndoStack();
+
+    return;
+}
+
+void MasterScore::removeSnapshot(size_t index)
+{
+    TRACEFUNC;
+
+    if (index >= m_snapshots.size()) {
+        LOGE() << "Invalid snapshot index: " << index;
+        return;
+    }
+
+    muse::String name = m_snapshots[index].name;
+    m_snapshots.erase(m_snapshots.begin() + index);
+
+    LOGI() << "Snapshot removed: " << name;
+    return;
 }
 
 Score* MasterScore::createScore()
