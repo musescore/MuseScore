@@ -221,7 +221,7 @@ public:
 
     virtual void autoFlipHairpinsType(engraving::Dynamic* selDyn) = 0;
 
-    virtual void toggleDynamicPopup() = 0;
+    virtual void toggleDynamicPopup(bool allowAnyGrip = false) = 0;
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void moveMeasureToPrevSystem() = 0;

@@ -440,6 +440,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
         return CommandState(true, controller()->currentVoice() == VOICE_COMMANDS.at(command));
     }
 
+    if (command == ADD_DYNAMIC_COMMAND) {
+        return CommandState(controller()->isNoteOrRestSelected() || controller()->isHairpinSelected(), false);
+    }
+
     if (muse::contains(NOTE_OR_REST_SELECTED_COMMANDS, command)) {
         return CommandState(controller()->isNoteOrRestSelected(), false);
     }
