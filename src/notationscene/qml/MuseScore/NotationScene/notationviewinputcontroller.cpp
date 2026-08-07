@@ -146,7 +146,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
 
         const TextBase* item = notation->interaction()->editedText();
-        if (AbstractElementPopupModel::hasTextStylePopup(item)) {
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->selected()) {
             static const std::set<ElementType> TYPES_NEEDING_STAFF {
                 ElementType::LYRICS,
                 ElementType::FINGERING,
@@ -180,7 +180,7 @@ void NotationViewInputController::onNotationChanged()
         }
 
         const TextBase* item = notation->interaction()->editedText();
-        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection() && item->selected()) {
             m_view->showElementPopup(item->type());
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -1004,7 +1004,7 @@ void NotationViewInputController::updateTextCursorPosition()
         // Show text style popup
         const TextBase* item = viewInteraction()->editedText();
         if (AbstractElementPopupModel::hasTextStylePopup(item)
-            && (!item->isLyrics() || !item->empty())) {
+            && (!item->isLyrics() || !item->empty()) && item->selected()) {
             m_view->showElementPopup(item->type());
         }
     }
