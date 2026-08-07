@@ -86,6 +86,7 @@ public:
 
     virtual notation::IMasterNotationPtr masterNotation() const = 0;
     virtual IProjectAudioSettingsPtr audioSettings() const = 0;
+    virtual IProjectVideoSettingsPtr videoSettings() const = 0;
 };
 
 using INotationProjectPtr = std::shared_ptr<INotationProject>;

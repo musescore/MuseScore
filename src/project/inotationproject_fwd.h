@@ -30,4 +30,7 @@ using INotationProjectPtr = std::shared_ptr<INotationProject>;
 
 class IProjectAudioSettings;
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
+
+class IProjectVideoSettings;
+using IProjectVideoSettingsPtr = std::shared_ptr<IProjectVideoSettings>;
 }

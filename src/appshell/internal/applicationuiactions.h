@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "braille/ibrailleconfiguration.h"
+#include "context/iglobalcontext.h"
 
 #include "dockwindow/idockwindowprovider.h"
 
@@ -38,6 +39,7 @@ class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Con
 {
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::ContextInject<IAppShellState> appShellState = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
 
@@ -58,6 +60,7 @@ public:
 
 private:
     void listenOpenedDocksChanged(muse::dock::IDockWindow* window);
+    void listenCurrentProjectVideoSettings();
 
     static const muse::ui::UiActionList m_actions;
 

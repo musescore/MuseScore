@@ -44,6 +44,7 @@
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
 #include "../isoundprofilesrepository.h"
+#include "project/iprojectvideosettings.h"
 
 namespace mu::playback {
 class OnlineSoundsController;
@@ -202,6 +203,8 @@ private:
     void disableLoop();
 
     project::IProjectAudioSettingsPtr audioSettings() const;
+    project::IProjectVideoSettingsPtr videoSettings() const;
+    void updateMasterControlParams();
 
     void resetPlayback();
     void setupPlayback();

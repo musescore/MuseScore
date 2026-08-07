@@ -296,6 +296,9 @@ QString EditStyleUtils::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::SYSTEM:
             return "system";
 
+        case TextStyleType::VIDEO_HIT_POINT:
+            return "video-hit-point";
+
         case TextStyleType::STAFF:
             return "staff";
 

@@ -39,6 +39,14 @@
 #include "inotationsceneconfiguration.h"
 
 class QQuickView;
+class QComboBox;
+class QButtonGroup;
+class QSpinBox;
+class QToolButton;
+
+namespace Awl {
+class ColorLabel;
+}
 
 namespace mu::notation {
 class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
@@ -117,6 +125,12 @@ private:
     std::vector<QComboBox*> verticalPlacementComboBoxes;
 
     QPushButton* buttonApplyToAllParts = nullptr;
+    QButtonGroup* videoHitPointLineStyle = nullptr;
+    QSpinBox* videoHitPointLineTransparency = nullptr;
+    Awl::ColorLabel* videoHitPointLineColor = nullptr;
+    QToolButton* resetVideoHitPointLineStyle = nullptr;
+    QToolButton* resetVideoHitPointLineTransparency = nullptr;
+    QToolButton* resetVideoHitPointLineColor = nullptr;
 
     void unhandledType(const StyleWidget);
     engraving::PropertyValue getValue(engraving::Sid idx);
