@@ -22,10 +22,6 @@
 
 #include "ffmpeglibhandler.h"
 
-#if !defined(Q_OS_WIN)
-#include <dlfcn.h>
-#endif
-
 #include "io/fileinfo.h"
 #include "global/dlib.h"
 
@@ -34,21 +30,20 @@
 namespace muse::media::ffmpeg::v9 {
 #define RESOLVE_FROM(lib, name) do { \
         name = reinterpret_cast<decltype(name)>(getSymbol(lib, #name)); \
-        if (!name) { LOGW() << "FFmpeg: missing symbol " #name; return false; } \
+        if (!name) { LOGW() << "FFmpeg: missing symbol " #name; clearFunctions(); return false; } \
 } while (0)
+
+FFmpegLibHandler::~FFmpegLibHandler()
+{
+    unload();
+}
 
 void* FFmpegLibHandler::getSymbol(void* lib, const char* name) const
 {
     if (!lib) {
         return nullptr;
     }
-    void* sym = muse::getLibFunc(lib, name);
-    if (!sym) {
-#if !defined(Q_OS_WIN)
-        sym = dlsym(RTLD_DEFAULT, name);
-#endif
-    }
-    return sym;
+    return muse::getLibFunc(lib, name);
 }
 
 bool FFmpegLibHandler::loadApi()
@@ -122,6 +117,7 @@ bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& a
         || !tryLoadPath(m_swsScaleLibrary, swScalePath)
         || !tryLoadPath(m_avCodecLibrary, avCodecPath)
         || !tryLoadPath(m_avFormatLibrary, avFormatPath)) {
+        unload();
         return false;
     }
 

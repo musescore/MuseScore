@@ -44,6 +44,9 @@ class FFmpegLibHandler
 {
 public:
     FFmpegLibHandler() = default;
+    ~FFmpegLibHandler();
+    FFmpegLibHandler(const FFmpegLibHandler&) = delete;
+    FFmpegLibHandler& operator=(const FFmpegLibHandler&) = delete;
 
     bool loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath, const io::path_t& swScalePath,
                  const io::path_t& swResamplePath);
