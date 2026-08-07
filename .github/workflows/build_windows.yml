@@ -290,10 +290,9 @@ jobs:
 
 
   windows_portable:
-    # Disable on pull_request and on framework PR builds
+    # Disable on pull_request
     if: |
       github.event_name != 'pull_request' &&
-      inputs.framework_ref == '' &&
       (inputs.platforms == '' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2025
     steps:
