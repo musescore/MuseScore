@@ -27,6 +27,8 @@
 #include <optional>
 #include <set>
 
+#include "async/async.h"
+
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
 #include "engraving/automation/automationdata.h"
@@ -39,6 +41,8 @@
 #include "notation/inotation.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
+
+#include "global/containers.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -203,6 +207,26 @@ static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
     }
 
     return AutomationCurveKey::staff(type, staff->id());
+}
+
+static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
+{
+    if (!changes.changedObjects.empty() && !changes.isValidBoundary()) {
+        return true;
+    }
+
+    static const std::unordered_set<mu::engraving::ElementType> STRUCTURAL_TYPES {
+        mu::engraving::ElementType::MEASURE,
+        mu::engraving::ElementType::PART,
+    };
+
+    for (const mu::engraving::ElementType type : changes.changedTypes) {
+        if (muse::contains(STRUCTURAL_TYPES, type)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
@@ -617,13 +641,119 @@ void NotationAutomationController::setViewMatrix(const muse::draw::Transform& vi
 void NotationAutomationController::onCurrentNotationChanged()
 {
     m_pendingChanges.clear();
+    m_pendingScoreState = PendingScoreState();
     rebuildAllPolylines();
 
     if (automationData()) {
         automationData()->changed().onReceive(this, [this](const mu::engraving::AutomationChanges& changes) {
-            onAutomationChanged(changes);
+            mergePendingChanges(changes);
+            scheduleUpdate();
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
+
+    if (score()) {
+        score()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
+            mergePendingScoreChanges(changes);
+            scheduleUpdate();
+        }, Asyncable::Mode::SetReplace /* FIXME */);
+    }
+}
+
+void NotationAutomationController::mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes)
+{
+    const bool firstChange = !m_pendingScoreState.hasChanges;
+    m_pendingScoreState.hasChanges = true;
+    m_pendingScoreState.structural = m_pendingScoreState.structural || isStructuralChange(changes);
+
+    if (!changes.isValidBoundary()) {
+        m_pendingScoreState.boundary = std::nullopt;
+        return;
+    }
+    if (!firstChange && !m_pendingScoreState.boundary) {
+        return;
+    }
+
+    const TickStaffRange changeRange { changes.tickFrom, changes.tickTo, changes.staffIdxFrom, changes.staffIdxTo };
+    TickStaffRange range = m_pendingScoreState.boundary.value_or(changeRange);
+    range.tickFrom = std::min(range.tickFrom, changeRange.tickFrom);
+    range.tickTo = std::max(range.tickTo, changeRange.tickTo);
+    range.staffIdxFrom = std::min(range.staffIdxFrom, changeRange.staffIdxFrom);
+    range.staffIdxTo = std::max(range.staffIdxTo, changeRange.staffIdxTo);
+    m_pendingScoreState.boundary = range;
+}
+
+void NotationAutomationController::scheduleUpdate()
+{
+    if (m_updateScheduled) {
+        return;
+    }
+    m_updateScheduled = true;
+
+    muse::async::Async::call(this, [this]() {
+        m_updateScheduled = false;
+        processPendingChanges();
+    });
+}
+
+void NotationAutomationController::processPendingChanges()
+{
+    if (!m_pendingScoreState.hasChanges && m_pendingChanges.isEmpty()) {
+        return;
+    }
+    const PendingScoreState scoreState = m_pendingScoreState;
+    m_pendingScoreState = PendingScoreState();
+
+    const bool automationVisible = automation() && automation()->isAutomationModeEnabled();
+
+    if (scoreState.structural) {
+        if (!automationVisible) {
+            // Nothing visible right now; defer the rebuild until automation mode is enabled again
+            m_pendingChanges.isFullReset = true;
+            return;
+        }
+        rebuildAllPolylines();
+        m_pendingChanges.clear();
+        return;
+    }
+
+    if (!automationVisible) {
+        // Nothing visible right now; m_pendingChanges keeps accumulating for next time
+        return;
+    }
+
+    if (!m_pendingChanges.isEmpty()) {
+        applyAutomationChanges(m_pendingChanges);
+        m_pendingChanges.clear();
+        return;
+    }
+
+    // No automation-data change and nothing structural - just layout drift
+    // (e.g. measure widths shifted); refresh point positions using the batch's own range
+    for (const auto& [key, polylines] : m_stavesToLinesMap) {
+        IF_ASSERT_FAILED(key.isValid()) {
+            continue;
+        }
+        const Staff* staff = score()->staff(key.staffIdx);
+        if (!staff) {
+            continue;
+        }
+
+        const int systemStartTick = key.system->first()->tick().ticks();
+        const int systemEndTick = key.system->last()->endTick().ticks();
+        if (scoreState.boundary) {
+            const TickStaffRange& range = *scoreState.boundary;
+            if (staff->idx() < range.staffIdxFrom || staff->idx() > range.staffIdxTo) {
+                continue;
+            }
+            if (systemEndTick < range.tickFrom || systemStartTick > range.tickTo) {
+                continue;
+            }
+        }
+
+        updateStaffPointsInRange(key, systemStartTick, systemEndTick);
+    }
+
+    updatePolylinesGeometry();
 }
 
 void NotationAutomationController::rebuildAllPolylines()
@@ -703,16 +833,6 @@ void NotationAutomationController::updateStaffPointsInRange(const SysStaffKey& k
     }
     polyline->setPoints(points);
     polyline->update();
-}
-
-void NotationAutomationController::onAutomationChanged(const mu::engraving::AutomationChanges& changes)
-{
-    if (!automation() || !automation()->isAutomationModeEnabled()) {
-        mergePendingChanges(changes);
-        return;
-    }
-
-    applyAutomationChanges(changes);
 }
 
 void NotationAutomationController::mergePendingChanges(const mu::engraving::AutomationChanges& changes)

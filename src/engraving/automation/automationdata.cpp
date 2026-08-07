@@ -267,6 +267,67 @@ muse::async::Channel<AutomationChanges> AutomationData::changed() const
     return m_changesChannel;
 }
 
+std::string AutomationData::dump() const
+{
+    auto typeName = [](AutomationType type) -> const char* {
+        switch (type) {
+        case AutomationType::Dynamics: return "Dynamics";
+        case AutomationType::Volume: return "Volume";
+        case AutomationType::Pan: return "Pan";
+        case AutomationType::Unknown: break;
+        }
+        return "Unknown";
+    };
+
+    auto scopeStr = [](const AutomationCurveKey& key) -> std::string {
+        if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
+            return "instrument = " + trackId->partId.toStdString() + "/" + trackId->instrumentId.toStdString();
+        }
+
+        if (const std::optional<muse::ID> staffId = key.staffId()) {
+            std::string scope = "staff = " + staffId->toStdString();
+            if (const std::optional<size_t> voiceIdx = key.voiceIdx()) {
+                scope += ", voice = " + std::to_string(*voiceIdx);
+            }
+            return scope;
+        }
+
+        return "global";
+    };
+
+    auto inValueStr = [](const AutomationPoint::InValue& inValue) -> std::string {
+        if (std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(inValue)) {
+            return "in = <from previous>";
+        }
+
+        const AutomationPoint::ExplicitArrival& arrival = std::get<AutomationPoint::ExplicitArrival>(inValue);
+        std::string result = "in = " + std::to_string(arrival.value.raw());
+        if (!arrival.bend.isNone()) {
+            result += " (bend t = " + std::to_string(arrival.bend.t.raw()) + ", value = " + std::to_string(arrival.bend.value.raw()) + ")";
+        }
+        return result;
+    };
+
+    std::string result = "AutomationData: " + std::to_string(m_curveMap.size()) + " curves";
+
+    for (const auto& [key, curve] : m_curveMap) {
+        result += "\n[" + std::string(typeName(key.type)) + " " + scopeStr(key) + "] " + std::to_string(curve.size()) + " points";
+
+        for (const auto& [tick, point] : curve) {
+            result += "\n    tick = " + std::to_string(tick) + ", " + inValueStr(point.value.inValue)
+                      + ", out = " + std::to_string(point.value.outValue.raw());
+            if (point.generated) {
+                result += ", [generated]";
+            }
+            if (point.itemId.has_value()) {
+                result += ", itemId = " + point.itemId->toStdString();
+            }
+        }
+    }
+
+    return result;
+}
+
 void AutomationData::notifyChanged(const AutomationChanges& changes)
 {
     if (changes.isEmpty()) {

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 #include <QPointF>
@@ -44,6 +45,7 @@ class PolylinePlot;
 
 namespace mu::engraving {
 class Staff;
+struct ScoreChanges;
 }
 
 namespace mu::notation {
@@ -71,7 +73,7 @@ private:
 
         bool isValid() const
         {
-            return system && system->first() && staffIdx != muse::nidx;
+            return system && !system->measures().empty() && staffIdx != muse::nidx;
         }
 
         bool operator==(const SysStaffKey& k) const
@@ -112,6 +114,19 @@ private:
 
     using PointsDataMap = std::map<SysStaffKey, QVector<PointData> >;
 
+    struct TickStaffRange {
+        int tickFrom = -1;
+        int tickTo = -1;
+        staff_idx_t staffIdxFrom = muse::nidx;
+        staff_idx_t staffIdxTo = muse::nidx;
+    };
+
+    struct PendingScoreState {
+        bool hasChanges = false;
+        bool structural = false;
+        std::optional<TickStaffRange> boundary;
+    };
+
     SysStaffToPolylinesMap createPolylinesForSystem(const System* system);
     muse::uicomponents::PolylinePlot* createPolylineForStaff(const System* system, staff_idx_t staffIdx);
     QVector<PointData> pointsDataInStaff(const mu::engraving::Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick,
@@ -131,8 +146,10 @@ private:
 
     void updateStaffPointsInRange(const SysStaffKey& key, int tickFrom, int tickTo);
 
-    void onAutomationChanged(const mu::engraving::AutomationChanges& changes);
     void mergePendingChanges(const mu::engraving::AutomationChanges& changes);
+    void mergePendingScoreChanges(const mu::engraving::ScoreChanges& changes);
+    void scheduleUpdate();
+    void processPendingChanges();
     void applyAutomationChanges(const mu::engraving::AutomationChanges& changes);
 
     bool requestEditPoint(const PointData& oldPointData, const SysStaffKey& key, qreal x, qreal y);
@@ -152,5 +169,7 @@ private:
     PointsDataMap m_pointsDataByStaff;
     muse::draw::Transform m_viewMatrix;
     mu::engraving::AutomationChanges m_pendingChanges;
+    PendingScoreState m_pendingScoreState;
+    bool m_updateScheduled = false;
 };
 }

@@ -51,6 +51,65 @@ static constexpr real_t DYNAMIC_STEP = real_t::make(0.05);
 // Dynamics and measure repeats can only appear on these segment types
 static constexpr SegmentType RELEVANT_SEGMENT_TYPES = SegmentType::ChordRest | SegmentType::TimeTick;
 
+//! NOTE: moves all points with tick >= tickFrom by diff ticks
+static void moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves)
+{
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto startIt = curve.lower_bound(tickFrom);
+        if (startIt == curve.end()) {
+            continue;
+        }
+
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+}
+
+//! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
+static void removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves)
+{
+    IF_ASSERT_FAILED(tickFrom <= tickTo) {
+        return;
+    }
+
+    const utick_t diff = tickFrom - tickTo;
+
+    for (auto& entry : curves) {
+        AutomationCurve& curve = entry.second;
+
+        const auto eraseFromIt = curve.lower_bound(tickFrom);
+        if (eraseFromIt == curve.end()) {
+            continue;
+        }
+
+        curve.erase(eraseFromIt, curve.upper_bound(tickTo));
+
+        const auto startIt = curve.lower_bound(tickTo);
+        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
+        for (auto it = startIt; it != curve.end(); ++it) {
+            toMove.emplace_back(it->first + diff, it->second);
+        }
+
+        curve.erase(startIt, curve.end());
+        for (auto& pair : toMove) {
+            curve.insert(curve.end(), std::move(pair));
+        }
+    }
+
+    for (auto it = curves.begin(); it != curves.end();) {
+        it = it->second.empty() ? curves.erase(it) : std::next(it);
+    }
+}
+
 ScoreAutomationController::StaffRange::StaffRange(const Score* score, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo)
 {
     const staff_idx_t lastStaffIdx = score->nstaves() - 1;
@@ -251,7 +310,7 @@ void ScoreAutomationController::insertTime(const Fraction& tick, const Fraction&
     AutomationCurveMap curves = m_automationData->curves();
 
     if (diff < 0) {
-        removeTicks(utick + diff, utick, curves);
+        removeTicks(utick, utick - diff, curves);
     } else if (diff > 0) {
         moveTicks(utick, diff, curves);
     }
@@ -392,65 +451,6 @@ void ScoreAutomationController::mirrorGlobalAndInstrumentPointsToRepeats(UpdateC
 
             curve.insert_or_assign(edit.tick, setPoint->point);
         }
-    }
-}
-
-//! NOTE: moves all points with tick >= tickFrom by diff ticks
-void ScoreAutomationController::moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves)
-{
-    for (auto& entry : curves) {
-        AutomationCurve& curve = entry.second;
-
-        const auto startIt = curve.lower_bound(tickFrom);
-        if (startIt == curve.end()) {
-            continue;
-        }
-
-        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
-        for (auto it = startIt; it != curve.end(); ++it) {
-            toMove.emplace_back(it->first + diff, it->second);
-        }
-
-        curve.erase(startIt, curve.end());
-        for (auto& pair : toMove) {
-            curve.insert(curve.end(), std::move(pair));
-        }
-    }
-}
-
-//! NOTE: removes points in [tickFrom, tickTo], shifts later points back to close the gap
-void ScoreAutomationController::removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves)
-{
-    IF_ASSERT_FAILED(tickFrom <= tickTo) {
-        return;
-    }
-
-    const utick_t diff = tickFrom - tickTo;
-
-    for (auto& entry : curves) {
-        AutomationCurve& curve = entry.second;
-
-        const auto eraseFromIt = curve.lower_bound(tickFrom);
-        if (eraseFromIt == curve.end()) {
-            continue;
-        }
-
-        curve.erase(eraseFromIt, curve.upper_bound(tickTo));
-
-        const auto startIt = curve.lower_bound(tickTo);
-        std::vector<std::pair<utick_t, AutomationPoint> > toMove;
-        for (auto it = startIt; it != curve.end(); ++it) {
-            toMove.emplace_back(it->first + diff, it->second);
-        }
-
-        curve.erase(startIt, curve.end());
-        for (auto& pair : toMove) {
-            curve.insert(curve.end(), std::move(pair));
-        }
-    }
-
-    for (auto it = curves.begin(); it != curves.end();) {
-        it = it->second.empty() ? curves.erase(it) : std::next(it);
     }
 }
 

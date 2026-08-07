@@ -26,6 +26,7 @@
 #include "automationtypes.h"
 
 #include <memory>
+#include <string>
 
 namespace mu::engraving {
 class AutomationData
@@ -46,6 +47,8 @@ public:
     void editPoints(const AutomationCurveKey& key, const AutomationPointEdits& edits);
 
     muse::async::Channel<AutomationChanges> changed() const;
+
+    std::string dump() const;
 
 private:
     void notifyChanged(const AutomationChanges& changes);
