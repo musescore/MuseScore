@@ -156,8 +156,8 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     const AutomationCurveMap curvesBefore = controller.automationData()->curves();
     ASSERT_FALSE(curvesBefore.empty());
 
-    // [WHEN] Remove the first measure: -1920 ticks starting at tick 1920 -> erases points in [0, 1920]
-    controller.insertTime(Fraction(4, 4), Fraction(-4, 4));
+    // [WHEN] Remove the first measure: -1920 ticks starting at tick 0 -> erases points in [0, 1920]
+    controller.insertTime(Fraction(0, 1), Fraction(-4, 4));
 
     // [THEN] Points in the removed range are gone; points beyond it shift back by 1920 ticks
     const AutomationCurveMap& curvesAfter = controller.automationData()->curves();
@@ -259,7 +259,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     controller.setAutomationData(data);
 
     // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
-    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-200));
+    controller.insertTime(Fraction::fromTicks(300), Fraction::fromTicks(-200));
 
     // [THEN] Points at 300 and 500 removed; 700 shifts to 500
     AutomationCurve expected;
@@ -284,7 +284,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
     controller.setAutomationData(data);
 
     // [WHEN] Remove ticks in range [100, 500]
-    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-400));
+    controller.insertTime(Fraction::fromTicks(100), Fraction::fromTicks(-400));
 
     // [THEN] Curve entry is removed from the map
     EXPECT_TRUE(controller.automationData()->isEmpty());
