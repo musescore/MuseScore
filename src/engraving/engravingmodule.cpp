@@ -252,7 +252,7 @@ void EngravingModule::onInit(const IApplication::RunMode&)
 
     MScore::warnPitchRange      = true;
     MScore::warnGuitarBends     = true;
-    MScore::pedalEventsMinTicks = 1;
+    MScore::pedalReleaseGapMs = 0;
 
     Drumset::initDrumset();
     FiguredBass::readConfigFile(String());
