@@ -59,6 +59,13 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::harmonyDuration,
     StyleId::displayCapoChords,
     StyleId::capoPosition,
+    StyleId::capoChordDisplayMode,
+    StyleId::capoChordParenthesized,
+    StyleId::capoChordTextStyle,
+    StyleId::capoChordStackedSpacing,
+    StyleId::capoLabelVisible,
+    StyleId::capoLabelFormat,
+    StyleId::capoLabelTextStyle,
 })
 {
 }
@@ -266,3 +273,80 @@ QVariantList ChordSymbolsPageModel::possibleCapoDisplayOptions() const
 }
 
 StyleItem* ChordSymbolsPageModel::capoPosition() const { return styleItem(StyleId::capoPosition); }
+
+// Style item selecting how capo chords are laid out (inline next to, or stacked above, the base chord).
+StyleItem* ChordSymbolsPageModel::capoChordDisplayMode() const
+{
+    return styleItem(StyleId::capoChordDisplayMode);
+}
+
+// Dropdown choices for the capo chord display mode: Inline and Stacked.
+QVariantList ChordSymbolsPageModel::possibleCapoChordDisplayModeOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Inline (Em(Dm))") },
+            { "value", static_cast<int>(mu::engraving::CapoChordDisplayMode::INLINE) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Stacked ((Dm) above Em)") },
+            { "value", static_cast<int>(mu::engraving::CapoChordDisplayMode::STACKED) } },
+    };
+
+    return options;
+}
+
+// Style item toggling parentheses around capo chords in stacked display mode.
+StyleItem* ChordSymbolsPageModel::capoChordParenthesized() const
+{
+    return styleItem(StyleId::capoChordParenthesized);
+}
+
+// Style item selecting the text style applied to the capo chord symbol.
+StyleItem* ChordSymbolsPageModel::capoChordTextStyle() const
+{
+    return styleItem(StyleId::capoChordTextStyle);
+}
+
+// Dropdown choices for a chord-symbol text style: the primary and alternate harmony styles.
+QVariantList ChordSymbolsPageModel::possibleCapoChordTextStyleOptions() const
+{
+    QVariantList options {
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Chord symbol") },
+            { "value", static_cast<int>(mu::engraving::TextStyleType::HARMONY_A) } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Chord symbol (alternate)") },
+            { "value", static_cast<int>(mu::engraving::TextStyleType::HARMONY_B) } },
+    };
+    return options;
+}
+
+// Style item for the vertical gap (in spatium) between the stacked capo chord and the base chord.
+StyleItem* ChordSymbolsPageModel::capoChordStackedSpacing() const
+{
+    return styleItem(StyleId::capoChordStackedSpacing);
+}
+
+// Style item toggling the "Capo N:" label shown before the first chord in the score.
+StyleItem* ChordSymbolsPageModel::capoLabelVisible() const
+{
+    return styleItem(StyleId::capoLabelVisible);
+}
+
+// Style item holding the format string used to build the "Capo N:" label text.
+StyleItem* ChordSymbolsPageModel::capoLabelFormat() const
+{
+    return styleItem(StyleId::capoLabelFormat);
+}
+
+// Style item selecting the text style applied to the "Capo N:" label.
+StyleItem* ChordSymbolsPageModel::capoLabelTextStyle() const
+{
+    return styleItem(StyleId::capoLabelTextStyle);
+}
+
+// Dropdown choices for the capo label text style; reuses the capo chord text style options.
+QVariantList ChordSymbolsPageModel::possibleCapoLabelTextStyleOptions() const
+{
+    return possibleCapoChordTextStyleOptions();
+}
