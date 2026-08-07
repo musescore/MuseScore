@@ -6945,19 +6945,3 @@ SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext&
     LAYOUT_CALL_ITEM(line);
     return SlurTieLayout::layoutSystem(line, system, ctx);
 }
-
-// Called after layout of all systems is done so precise
-// number of systems for this spanner becomes available.
-void TLayout::layoutSystemsDone(Spanner* item)
-{
-    LAYOUT_CALL_ITEM(item);
-    std::vector<SpannerSegment*> validSegments;
-    for (SpannerSegment* seg : item->spannerSegments()) {
-        if (seg->system()) {
-            validSegments.push_back(seg);
-        } else { // TODO: score()->selection().remove(ss); needed?
-            item->pushUnusedSegment(seg);
-        }
-    }
-    item->setSpannerSegments(validSegments);
-}

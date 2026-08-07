@@ -381,7 +381,6 @@ public:
     static SpannerSegment* layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Volta* line, System* system, LayoutContext& ctx);
     static SpannerSegment* layoutSystem(Slur* line, System* system, LayoutContext& ctx);
-    static void layoutSystemsDone(Spanner* item);
 
 private:
 
