@@ -260,6 +260,9 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     m_masterNotation->notation()->soloMuteState()->read(reader);
     const int mscVersion = m_masterNotation->mscVersion();
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         const INotationPtr excerptNotation = excerpt->notation();
         if (!excerpt->hasFileName() || mscVersion < 440) {
             m_masterNotation->initNotationSoloMuteState(excerptNotation);
@@ -922,8 +925,11 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         return make_ret(Ret::Code::Ok);
     }
 
-    // Write excerpt view settings and solo-mute state
+    // Write excerpt view settings and solo-mute state (skip uninitialised excerpts)
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
 

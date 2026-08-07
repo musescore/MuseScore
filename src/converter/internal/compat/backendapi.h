@@ -100,6 +100,5 @@ private:
     static void renderExcerptsContents(notation::IMasterNotationPtr masterNotation);
 
     static notation::ExcerptNotationList allExcerpts(notation::IMasterNotationPtr masterNotation);
-    static void initPotentialExcerpts(notation::IMasterNotationPtr masterNotation);
 };
 }
