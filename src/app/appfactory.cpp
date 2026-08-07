@@ -202,6 +202,9 @@
 #else
 #include "stubs/importexport/musicxml/musicxmlmodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_FINALE_MODULE
+#include "importexport/finale/finalemodule.h"
+#endif
 #ifdef MUE_BUILD_IMPEXP_OVE_MODULE
 #include "importexport/ove/ovemodule.h"
 #else
@@ -402,6 +405,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
 #endif
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
     app->addModule(new mu::iex::ove::OveModule());
+#ifdef MUE_BUILD_IMPEXP_FINALE_MODULE
+    app->addModule(new mu::iex::finale::FinaleModule());
+#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
@@ -526,6 +532,9 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
 #endif
     app->addModule(new mu::iex::musicxml::MusicXmlModule());
     app->addModule(new mu::iex::ove::OveModule());
+#ifdef MUE_BUILD_IMPEXP_FINALE_MODULE
+    app->addModule(new mu::iex::finale::FinaleModule());
+#endif
 #ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
 #endif
