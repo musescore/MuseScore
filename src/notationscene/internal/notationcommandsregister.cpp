@@ -1874,6 +1874,15 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
 
+    // appearance commands
+    CommandInfo{
+        FREEZE_CURRENT_PLACEMENT_COMMAND,
+        TranslatableString("action", "Freeze current placement"),
+        TranslatableString("action", "Turn off auto-place and freeze the selection’s current position"),
+        InputSchema(),
+        Decoration()
+    },
+
     // show commands
     CommandInfo{
         SHOW_INVISIBLE_COMMAND,

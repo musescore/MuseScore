@@ -929,7 +929,6 @@ void GuitarBendSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         UNREACHABLE;
@@ -1181,7 +1180,6 @@ void GuitarBendHoldSegment::dragGrip(EditData& ed)
         break;
     case Grip::MIDDLE:
         setOffset(offset() + delta);
-        setOffsetChanged(true);
         break;
     default:
         break;
