@@ -4558,7 +4558,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     const int col = static_cast<int>(cursor->column());
     if (col > 1) {
         const String prev = cursor->extractText(row, col - 2, row, col - 1);
-        useCloseQuote = prev != String(" ");
+        useCloseQuote = !prev.isEmpty() && !prev.front().isSpace();
     }
 
     //: Means: an editing operation triggered by a keystroke
