@@ -97,6 +97,7 @@
 #include "engraving/editing/textedit.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
+#include "ui/iuiactionsregister.h"
 
 #include "notationerrors.h"
 #include "notation.h"
@@ -1410,12 +1411,30 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
         endOutgoingDrag();
     }
 
+    std::unique_ptr<ActionIcon> parenthesisActionIcon;
+    const EngravingItem* dragElement = element;
+    if (element->type() == ElementType::PARENTHESIS) {
+        if (!score()) {
+            return;
+        }
+
+        muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+        const muse::actions::ActionCode code = "add-parentheses";
+        const muse::ui::UiAction& action = actionsRegister()->action(code);
+
+        parenthesisActionIcon = std::make_unique<ActionIcon>(score()->dummy());
+        parenthesisActionIcon->setActionType(ActionIconType::PARENTHESES);
+        parenthesisActionIcon->setAction(code, static_cast<char16_t>(action.iconCode));
+        engravingRenderer()->layoutItem(parenthesisActionIcon.get());
+        dragElement = parenthesisActionIcon.get();
+    }
+
     QMimeData* mimeData = new QMimeData();
-    if (element->isSpannerSegment()) {
-        Spanner* s = toSpannerSegment(element)->spanner();
+    if (dragElement->isSpannerSegment()) {
+        Spanner* s = toSpannerSegment(dragElement)->spanner();
         mimeData->setData(mu::engraving::mimeSymbolFormat, s->mimeData().toQByteArray());
     } else {
-        mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
+        mimeData->setData(mu::engraving::mimeSymbolFormat, dragElement->mimeData().toQByteArray());
     }
 
     m_outgoingDrag = new QDrag(dragSource);
@@ -1429,7 +1448,7 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
     const qreal physDpiRatio = screen->physicalDotsPerInch() / mu::engraving::DPI;
     const qreal devicePixelRatio = screen->devicePixelRatio();
 
-    const RectF bbox = element->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
+    const RectF bbox = dragElement->ldata()->bbox().adjusted(-4.0, -4.0, 4.0, 4.0);
     const double scaledWidth = bbox.width() * physDpiRatio;
     const double scaledHeight = bbox.height() * physDpiRatio;
 
@@ -1448,10 +1467,11 @@ void NotationInteraction::startOutgoingDragElement(const EngravingItem* element,
 
     mu::engraving::rendering::PaintOptions opt;
     opt.invertColors = configuration()->shouldInvertScore();
-    engravingRenderer()->drawItem(element, &p, opt);
+    engravingRenderer()->drawItem(dragElement, &p, opt);
 
     m_outgoingDrag->setPixmap(pixmap);
-    m_outgoingDrag->setHotSpot((hotSpot * physDpiRatio).toQPoint());
+    const PointF dragHotSpot = parenthesisActionIcon ? PointF(bbox.width() * 0.5, bbox.height() * 0.5) : hotSpot;
+    m_outgoingDrag->setHotSpot((dragHotSpot * physDpiRatio).toQPoint());
 
     m_outgoingDrag->exec(Qt::CopyAction);
 }
