@@ -46,6 +46,8 @@ qt_add_qml_module(preferences_qml
         importpreferencesmodel.h
         noteinputpreferencesmodel.cpp
         noteinputpreferencesmodel.h
+        organpedalmarkspreferencesmodel.h
+        organpedalmarkspreferencesmodel.cpp
         percussionpreferencesmodel.cpp
         percussionpreferencesmodel.h
         preferencepageitem.cpp
@@ -70,6 +72,7 @@ qt_add_qml_module(preferences_qml
         ImportPreferencesPage.qml
         MidiDeviceMappingPreferencesPage.qml
         NoteInputPreferencesPage.qml
+        OrganPedalMarksPreferencesPage.qml
         PercussionPreferencesPage.qml
         PreferencesDialog.qml
         PreferencesPage.qml

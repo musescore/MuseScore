@@ -55,6 +55,11 @@ static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fr
 
 static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
 
+static const Settings::Key ORGAN_PEDAL_MARKS_PLACEMENT_KEY("engraving",  "ui/organPedalMarksPlacement");
+static const Settings::Key ORGAN_PEDAL_MARKS_POPUP_SET_KEY("engraving",  "ui/organPedalMarksPopupSet");
+static const Settings::Key ORGAN_PEDAL_MARKS_NAVIGATION_PLACEMENT_KEY("engraving",  "ui/organPedalMarksNavigationPlacement");
+static const Settings::Key ORGAN_PEDAL_MARKS_DEFAULT_PEDAL_MARK_KEY("engraving",  "ui/organPedalMarksDefaultPedalMark");
+
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -157,6 +162,23 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
     settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
     settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
+
+    settings()->setDefaultValue(ORGAN_PEDAL_MARKS_PLACEMENT_KEY, Val(false));
+    settings()->valueChanged(ORGAN_PEDAL_MARKS_PLACEMENT_KEY).onReceive(this, [this](const Val&) {
+        m_organPedalMarksPlacementChanged.notify();
+    });
+    settings()->setDefaultValue(ORGAN_PEDAL_MARKS_POPUP_SET_KEY, Val(false));
+    settings()->valueChanged(ORGAN_PEDAL_MARKS_POPUP_SET_KEY).onReceive(this, [this](const Val&) {
+        m_organPedalMarksPopupSetChanged.notify();
+    });
+    settings()->setDefaultValue(ORGAN_PEDAL_MARKS_NAVIGATION_PLACEMENT_KEY, Val(false));
+    settings()->valueChanged(ORGAN_PEDAL_MARKS_NAVIGATION_PLACEMENT_KEY).onReceive(this, [this](const Val&) {
+        m_organPedalMarksNavigationPlacementChanged.notify();
+    });
+    settings()->setDefaultValue(ORGAN_PEDAL_MARKS_DEFAULT_PEDAL_MARK_KEY, Val(SymId::keyboardPedalToe2));
+    settings()->valueChanged(ORGAN_PEDAL_MARKS_DEFAULT_PEDAL_MARK_KEY).onReceive(this, [this](const Val&) {
+        m_organPedalMarksDefaultPedalMarkChanged.notify();
+    });
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -487,4 +509,64 @@ void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameSt
 bool EngravingConfiguration::keepDeadNotesUnchangedOnTranspose() const
 {
     return false;
+}
+
+PlacementV EngravingConfiguration::organPedalMarksPlacement() const
+{
+    return settings()->value(ORGAN_PEDAL_MARKS_PLACEMENT_KEY).toEnum<PlacementV>();
+}
+
+void EngravingConfiguration::setOrganPedalMarksPlacement(PlacementV placement)
+{
+    settings()->setSharedValue(ORGAN_PEDAL_MARKS_PLACEMENT_KEY, Val(placement));
+}
+
+muse::async::Notification EngravingConfiguration::organPedalMarksPlacementChanged() const
+{
+    return m_organPedalMarksPlacementChanged;
+}
+
+OrganPedalMarksPopupSet EngravingConfiguration::organPedalMarksPopupSet() const
+{
+    return settings()->value(ORGAN_PEDAL_MARKS_POPUP_SET_KEY).toEnum<OrganPedalMarksPopupSet>();
+}
+
+void EngravingConfiguration::setOrganPedalMarksPopupSet(OrganPedalMarksPopupSet pedalMarksPopupSet)
+{
+    settings()->setSharedValue(ORGAN_PEDAL_MARKS_POPUP_SET_KEY, Val(pedalMarksPopupSet));
+}
+
+muse::async::Notification EngravingConfiguration::organPedalMarksPopupSetChanged() const
+{
+    return m_organPedalMarksPopupSetChanged;
+}
+
+OrganPedalMarksNavigationPlacement EngravingConfiguration::organPedalMarksNavigationPlacement() const
+{
+    return settings()->value(ORGAN_PEDAL_MARKS_NAVIGATION_PLACEMENT_KEY).toEnum<OrganPedalMarksNavigationPlacement>();
+}
+
+void EngravingConfiguration::setOrganPedalMarksNavigationPlacement(OrganPedalMarksNavigationPlacement navigationPlacement)
+{
+    settings()->setSharedValue(ORGAN_PEDAL_MARKS_NAVIGATION_PLACEMENT_KEY, Val(navigationPlacement));
+}
+
+muse::async::Notification EngravingConfiguration::organPedalMarksNavigationPlacementChanged() const
+{
+    return m_organPedalMarksNavigationPlacementChanged;
+}
+
+SymId EngravingConfiguration::organPedalMarksDefaultPedalMark() const
+{
+    return settings()->value(ORGAN_PEDAL_MARKS_DEFAULT_PEDAL_MARK_KEY).toEnum<SymId>();
+}
+
+void EngravingConfiguration::setOrganPedalMarksDefaultPedalMark(SymId pedalMark)
+{
+    settings()->setSharedValue(ORGAN_PEDAL_MARKS_DEFAULT_PEDAL_MARK_KEY, Val(pedalMark));
+}
+
+muse::async::Notification EngravingConfiguration::organPedalMarksDefaultPedalMarkChanged() const
+{
+    return m_organPedalMarksDefaultPedalMarkChanged;
 }

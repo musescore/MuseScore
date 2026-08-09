@@ -200,7 +200,10 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/AdvancedPreferencesPage.qml"),
 
         makeItem("braille", QT_TRANSLATE_NOOP("preferences", "Braille"), IconCode::Code::BRAILLE,
-                 "Preferences/BraillePreferencesPage.qml")
+                 "Preferences/BraillePreferencesPage.qml"),
+
+        makeItem("organ-pedal-marks", QT_TRANSLATE_NOOP("preferences", "Organ pedal marks"), IconCode::Code::PEDAL_MARKING,
+                 "Preferences/OrganPedalMarksPreferencesPage.qml")
     };
 
     for (PreferencePageItem* item: items) {

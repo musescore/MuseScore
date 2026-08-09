@@ -135,6 +135,22 @@ public:
 
     virtual bool allowReadingImagesFromOutsideMscz() const = 0;
 
+    virtual PlacementV organPedalMarksPlacement() const = 0;
+    virtual void setOrganPedalMarksPlacement(PlacementV placement) = 0;
+    virtual muse::async::Notification organPedalMarksPlacementChanged() const = 0;
+
+    virtual OrganPedalMarksPopupSet organPedalMarksPopupSet() const = 0;
+    virtual void setOrganPedalMarksPopupSet(OrganPedalMarksPopupSet pedalMarksPopupSet) = 0;
+    virtual muse::async::Notification organPedalMarksPopupSetChanged() const = 0;
+
+    virtual OrganPedalMarksNavigationPlacement organPedalMarksNavigationPlacement() const = 0;
+    virtual void setOrganPedalMarksNavigationPlacement(OrganPedalMarksNavigationPlacement navigationPlacement) = 0;
+    virtual muse::async::Notification organPedalMarksNavigationPlacementChanged() const = 0;
+
+    virtual SymId organPedalMarksDefaultPedalMark() const = 0;
+    virtual void setOrganPedalMarksDefaultPedalMark(SymId pedalMark) = 0;
+    virtual muse::async::Notification organPedalMarksDefaultPedalMarkChanged() const = 0;
+
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
     virtual bool negativeFretsAllowed() const = 0;

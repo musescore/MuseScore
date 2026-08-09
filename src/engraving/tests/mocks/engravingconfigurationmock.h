@@ -96,6 +96,22 @@ public:
 
     MOCK_METHOD(bool, allowReadingImagesFromOutsideMscz, (), (const, override));
 
+    MOCK_METHOD(PlacementV, organPedalMarksPlacement, (), (const, override));
+    MOCK_METHOD(void, setOrganPedalMarksPlacement, (PlacementV), (override));
+    MOCK_METHOD(muse::async::Notification, organPedalMarksPlacementChanged, (), (const, override));
+
+    MOCK_METHOD(OrganPedalMarksPopupSet, organPedalMarksPopupSet, (), (const, override));
+    MOCK_METHOD(void, setOrganPedalMarksPopupSet, (OrganPedalMarksPopupSet), (override));
+    MOCK_METHOD(muse::async::Notification, organPedalMarksPopupSetChanged, (), (const, override));
+
+    MOCK_METHOD(OrganPedalMarksNavigationPlacement, organPedalMarksNavigationPlacement, (), (const, override));
+    MOCK_METHOD(void, setOrganPedalMarksNavigationPlacement, (OrganPedalMarksNavigationPlacement), (override));
+    MOCK_METHOD(muse::async::Notification, organPedalMarksNavigationPlacementChanged, (), (const, override));
+
+    MOCK_METHOD(SymId, organPedalMarksDefaultPedalMark, (), (const, override));
+    MOCK_METHOD(void, setOrganPedalMarksDefaultPedalMark, (SymId), (override));
+    MOCK_METHOD(muse::async::Notification, organPedalMarksDefaultPedalMarkChanged, (), (const, override));
+
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));

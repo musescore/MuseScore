@@ -109,6 +109,22 @@ public:
 
     bool allowReadingImagesFromOutsideMscz() const override;
 
+    PlacementV organPedalMarksPlacement() const override;
+    void setOrganPedalMarksPlacement(PlacementV placement) override;
+    muse::async::Notification organPedalMarksPlacementChanged() const override;
+
+    OrganPedalMarksPopupSet organPedalMarksPopupSet() const override;
+    void setOrganPedalMarksPopupSet(OrganPedalMarksPopupSet pedalMarksPopupSet) override;
+    muse::async::Notification organPedalMarksPopupSetChanged() const override;
+
+    OrganPedalMarksNavigationPlacement organPedalMarksNavigationPlacement() const override;
+    void setOrganPedalMarksNavigationPlacement(OrganPedalMarksNavigationPlacement navigationPlacement) override;
+    muse::async::Notification organPedalMarksNavigationPlacementChanged() const override;
+
+    SymId organPedalMarksDefaultPedalMark() const override;
+    void setOrganPedalMarksDefaultPedalMark(SymId pedalMark) override;
+    muse::async::Notification organPedalMarksDefaultPedalMarkChanged() const override;
+
     bool guitarProImportExperimental() const override;
     bool negativeFretsAllowed() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
@@ -131,6 +147,11 @@ private:
     muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
+
+    muse::async::Notification m_organPedalMarksPlacementChanged;
+    muse::async::Notification m_organPedalMarksPopupSetChanged;
+    muse::async::Notification m_organPedalMarksNavigationPlacementChanged;
+    muse::async::Notification m_organPedalMarksDefaultPedalMarkChanged;
 
     bool m_multiVoice = false;
 };
