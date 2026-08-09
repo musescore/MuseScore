@@ -285,6 +285,11 @@ public:
 
     void addFiguredBass() override;
 
+    void addOrganPedalMark() override;
+    void changeOrganPedalMark(engraving::SymId pedalMarkSymId) override;
+    void navigateToOrganPedalMark(MoveDirection direction, engraving::OrganPedalMarksNavigationPlacement placement, bool keepPedalMark) override;
+    bool isOrganPedalMarkSelected() const override;
+
     void addStretch(qreal value) override;
 
     Measure* selectedMeasure() const override;

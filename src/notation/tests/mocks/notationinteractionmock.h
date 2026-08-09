@@ -217,6 +217,11 @@ public:
 
     MOCK_METHOD(void, addFiguredBass, (), (override));
 
+    MOCK_METHOD(void, addOrganPedalMark, (), (override));
+    MOCK_METHOD(void, changeOrganPedalMark, (engraving::SymId), (override));
+    MOCK_METHOD(void, navigateToOrganPedalMark, (MoveDirection, engraving::OrganPedalMarksNavigationPlacement, bool), (override));
+    MOCK_METHOD(bool, isOrganPedalMarkSelected, (), (const, override));
+
     MOCK_METHOD(void, addStretch, (qreal), (override));
 
     MOCK_METHOD(Measure*, selectedMeasure, (), (const, override));

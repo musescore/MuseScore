@@ -77,6 +77,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/dom/organpedalmark.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
@@ -1934,6 +1935,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::ACCIDENTAL:
     case ElementType::TEXT:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
@@ -2291,6 +2293,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::ACCIDENTAL:
     case ElementType::TEXT:
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
@@ -2936,7 +2939,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         return;
     }
 
-    if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
+    if (element->isTextBase() && !element->isFingering() && !element->isSticking() && !element->isOrganPedalMark()) {
         Segment* firstSegment = sel.startSegment();
         staff_idx_t firstStaffIndex = sel.staffStart();
         staff_idx_t lastStaffIndex = sel.staffEnd();
@@ -4640,7 +4643,7 @@ bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
 
 void NotationInteraction::startEditText(EngravingItem* element, const PointF& cursorPos)
 {
-    if (!element) {
+    if (!element || element->isOrganPedalMark()) {
         return;
     }
 
@@ -6619,6 +6622,7 @@ bool NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIt
         TextStyleType::REHEARSAL_MARK,
         TextStyleType::INSTRUMENT_CHANGE,
         TextStyleType::FINGERING,
+        TextStyleType::ORGAN_PEDAL_MARK,
         TextStyleType::LH_GUITAR_FINGERING,
         TextStyleType::RH_GUITAR_FINGERING,
         TextStyleType::STRING_NUMBER,
@@ -6764,6 +6768,151 @@ void NotationInteraction::addFiguredBass()
     } else {
         rollback();
     }
+}
+
+void NotationInteraction::addOrganPedalMark()
+{
+    EngravingItem* el = score()->selection().element();
+
+    if (!el || !el->isNote()) {
+        MScore::setError(MsError::NO_NOTE_SELECTED);
+        checkAndShowError();
+        return;
+    }
+
+    Note* note = toNote(el);
+    EngravingItem* pedalMark = nullptr;
+
+    // Check if note already has a pedal mark
+    for (EngravingItem* e : note->el()) {
+        if (e->isOrganPedalMark()) {
+            pedalMark = e;
+            break;
+        }
+    }
+
+    // Only create a pedal mark when no mark is present already
+    if (!pedalMark) {
+        startEdit(TranslatableString("undoableAction", "Add organ pedal mark"));
+        pedalMark = score()->addText(TextStyleType::ORGAN_PEDAL_MARK, el);
+    }
+
+    score()->select(pedalMark);
+    apply();
+}
+
+void NotationInteraction::changeOrganPedalMark(SymId pedalMarkSymId)
+{
+    EngravingItem* el = score()->selection().element();
+    if (!el || !el->isOrganPedalMark()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Change organ pedal mark"));
+    toOrganPedalMark(el)->setPedalMark(pedalMarkSymId);
+    apply();
+}
+
+void NotationInteraction::navigateToOrganPedalMark(MoveDirection direction, OrganPedalMarksNavigationPlacement placement, bool keepPedalMark)
+{
+    EngravingItem* element = score()->selection().element();
+    if (!element || !element->isOrganPedalMark()) {
+        return;
+    }
+
+    OrganPedalMark* currentPedalMark = toOrganPedalMark(element);
+
+    bool navigateBackwards = direction == MoveDirection::Left;
+    EngravingItem* el = navigateBackwards ? score()->prevElement() : score()->nextElement();
+
+    Note* note = nullptr;
+
+    bool boundaryReached = false;
+
+    // Find a new note to add a pedal mark
+    while (el) {
+        if (el->isNote()) {
+            note = toNote(el);
+
+            if (note != toNote(currentPedalMark->parent())) {
+                break;
+            }
+        }
+
+        // Find previous or next element
+        score()->select(el);
+        EngravingItem* el2 = navigateBackwards ? score()->prevElement() : score()->nextElement();
+
+        // Check if start or end of score is reached
+        if (el2 == el) {
+            boundaryReached = true;
+            break;
+        }
+
+        el = el2;
+    }
+
+    // Handle if nothing found
+    if (!el || !el->isNote()) {
+        score()->select(currentPedalMark);
+        return;
+    }
+
+    // Prevent navigation at start or end of score
+    if (boundaryReached) {
+        return;
+    }
+
+    EngravingItem* pedalMark = nullptr;
+
+    // Check if note already has a pedal mark
+    for (EngravingItem* e : note->el()) {
+        if (e->isOrganPedalMark()) {
+            pedalMark = e;
+            break;
+        }
+    }
+
+    // Only create a pedal mark when no mark is present already
+    if (!pedalMark) {
+        startEdit(TranslatableString("undoableAction", "Add organ pedal mark"));
+        pedalMark = score()->addText(TextStyleType::ORGAN_PEDAL_MARK, el);
+
+        // Set placement
+        switch (placement) {
+        case OrganPedalMarksNavigationPlacement::ABOVE:
+            pedalMark->setPlacement(PlacementV::ABOVE);
+            break;
+        case OrganPedalMarksNavigationPlacement::BELOW:
+            pedalMark->setPlacement(PlacementV::BELOW);
+            break;
+        case OrganPedalMarksNavigationPlacement::ALTERNATING:
+            pedalMark->setPlacement(currentPedalMark->placeAbove() ? PlacementV::BELOW : PlacementV::ABOVE);
+            break;
+        case OrganPedalMarksNavigationPlacement::AS_PREVIOUS:
+            pedalMark->setPlacement(currentPedalMark->placement());
+            break;
+        default:
+            pedalMark->setPlacement(PlacementV::ABOVE);
+            break;
+        }
+    }
+
+    // Check if current pedal mark should be deleted
+    if (!keepPedalMark) {
+        score()->select(currentPedalMark);
+        score()->cmdDeleteSelection();
+    }
+
+    score()->select(pedalMark);
+    apply();
+}
+
+bool NotationInteraction::isOrganPedalMarkSelected() const
+{
+    EngravingItem* el = score()->selection().element();
+
+    return el && el->isOrganPedalMark();
 }
 
 void NotationInteraction::addStretch(qreal value)

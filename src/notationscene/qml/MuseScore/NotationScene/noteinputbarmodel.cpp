@@ -310,7 +310,9 @@ MenuItemList NoteInputBarModel::makeTextItems()
         makeMenuItem("nashville-number-text"),
         makeMenuItem("lyrics"),
         makeMenuItem("figured-bass"),
-        makeMenuItem("tempo")
+        makeMenuItem("tempo"),
+        makeSeparator(),
+        makeMenuItem("add-organ-pedal-mark")
     };
 
     return items;

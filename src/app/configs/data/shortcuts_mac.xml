@@ -942,6 +942,46 @@
     <seq>Ctrl+G</seq>
     </SC>
   <SC>
+    <key>add-organ-pedal-mark</key>
+    <seq>Ctrl+Shift+O</seq>
+    </SC>
+  <SC>
+    <key>organ-pedal-mark-toe-2</key>
+    <seq>C</seq>
+    </SC>
+  <SC>
+    <key>organ-pedal-mark-heel-1</key>
+    <seq>V</seq>
+    </SC>
+  <SC>
+    <key>organ-pedal-mark-heel-3</key>
+    <seq>B</seq>
+    </SC>
+  <SC>
+    <key>organ-pedal-mark-toe-1</key>
+    <seq>N</seq>
+    </SC>
+  <SC>
+    <key>organ-pedal-mark-heel-2</key>
+    <seq>M</seq>
+    </SC>
+  <SC>
+    <key>previous-organ-pedal-mark</key>
+    <seq>,</seq>
+    </SC>
+  <SC>
+    <key>next-organ-pedal-mark</key>
+    <seq>.</seq>
+    </SC>
+  <SC>
+    <key>previous-organ-pedal-mark-skip</key>
+    <seq>Shift+,</seq>
+    </SC>
+  <SC>
+    <key>next-organ-pedal-mark-skip</key>
+    <seq>Shift+.</seq>
+    </SC>
+  <SC>
     <key>masterpalette</key>
     <seq>Shift+F9</seq>
     <autorepeat>0</autorepeat>

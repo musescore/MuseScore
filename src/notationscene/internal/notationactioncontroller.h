@@ -168,6 +168,11 @@ private:
     void addText(TextStyleType type);
     void addImage();
     void addFiguredBass();
+
+    void addOrganPedalMark();
+    void changeOrganPedalMark(engraving::SymId pedalMarkSymId);
+    void navigateToOrganPedalMark(MoveDirection direction, bool keepPedalMark);
+
     void addGuitarBend(GuitarBendType bendType);
     void addFretboardDiagram();
 

@@ -258,6 +258,15 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         return !notation->interaction()->selection()->isRange();
+    } else if (CTX_NOTATION_ORGAN_PEDAL_MARKS_INTERACTION == scContext) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return notation->interaction()->isOrganPedalMarkSelected();
     }
 
     IF_ASSERT_FAILED(CTX_ANY == scContext) {

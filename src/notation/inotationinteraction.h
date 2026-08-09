@@ -268,6 +268,12 @@ public:
     virtual void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) = 0;
 
     virtual void addFiguredBass() = 0;
+
+    virtual void addOrganPedalMark() = 0;
+    virtual void changeOrganPedalMark(engraving::SymId pedalMarkSymId) = 0;
+    virtual void navigateToOrganPedalMark(MoveDirection direction, engraving::OrganPedalMarksNavigationPlacement placement, bool keepPedalMark) = 0;
+    virtual bool isOrganPedalMarkSelected() const = 0;
+
     virtual void addFretboardDiagram() = 0;
 
     virtual void addStretch(qreal value) = 0;

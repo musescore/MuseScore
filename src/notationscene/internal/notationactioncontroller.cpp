@@ -437,6 +437,17 @@ void NotationActionController::init()
 
     registerAction("figured-bass", [this]() { addFiguredBass(); });
 
+    registerAction("add-organ-pedal-mark", [this]() { addOrganPedalMark(); });
+    registerAction("organ-pedal-mark-toe-2", [this]() { changeOrganPedalMark(engraving::SymId::keyboardPedalToe2); });
+    registerAction("organ-pedal-mark-heel-1", [this]() { changeOrganPedalMark(engraving::SymId::keyboardPedalHeel1); });
+    registerAction("organ-pedal-mark-heel-3", [this]() { changeOrganPedalMark(engraving::SymId::keyboardPedalHeel3); });
+    registerAction("organ-pedal-mark-toe-1", [this]() { changeOrganPedalMark(engraving::SymId::keyboardPedalToe1); });
+    registerAction("organ-pedal-mark-heel-2", [this]() { changeOrganPedalMark(engraving::SymId::keyboardPedalHeel2); });
+    registerAction("previous-organ-pedal-mark", [this]() { navigateToOrganPedalMark(MoveDirection::Left, true); });
+    registerAction("next-organ-pedal-mark", [this]() { navigateToOrganPedalMark(MoveDirection::Right, true); });
+    registerAction("previous-organ-pedal-mark-skip", [this]() { navigateToOrganPedalMark(MoveDirection::Left, false); });
+    registerAction("next-organ-pedal-mark-skip", [this]() { navigateToOrganPedalMark(MoveDirection::Right, false); });
+
     registerAction("stretch-", [this]() { addStretch(-STRETCH_STEP); });
     registerAction("stretch+", [this]() { addStretch(STRETCH_STEP); });
 
@@ -2085,6 +2096,40 @@ void NotationActionController::addFiguredBass()
     }
 
     interaction->addFiguredBass();
+}
+
+void NotationActionController::addOrganPedalMark()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addOrganPedalMark();
+}
+
+void NotationActionController::changeOrganPedalMark(engraving::SymId pedalMarkSymId)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->changeOrganPedalMark(pedalMarkSymId);
+}
+
+void NotationActionController::navigateToOrganPedalMark(MoveDirection direction, bool keepPedalMark)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    engraving::OrganPedalMarksNavigationPlacement placement = engravingConfiguration()->organPedalMarksNavigationPlacement();
+
+    interaction->navigateToOrganPedalMark(direction, placement, keepPedalMark);
 }
 
 void NotationActionController::addGuitarBend(GuitarBendType bendType)
