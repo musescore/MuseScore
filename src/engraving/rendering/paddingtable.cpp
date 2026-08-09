@@ -194,9 +194,11 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::BAR_LINE][ElementType::CHORDLINE] = 0.65 * spatium;
     table[ElementType::CHORDLINE][ElementType::BAR_LINE] = 0.65 * spatium;
 
-    // For the x -> fingering padding use the same values as x -> accidental
+    // For the x -> fingering and organ pedal marks padding use the same values as x -> accidental
     for (auto& elem : table) {
         elem[ElementType::FINGERING] = elem[ElementType::ACCIDENTAL];
+        // NOTE: dummy implementation from Fingering
+        elem[ElementType::ORGAN_PEDAL_MARK] = elem[ElementType::ACCIDENTAL];
     }
 
     // This is needed for beamlets, not beams themselves

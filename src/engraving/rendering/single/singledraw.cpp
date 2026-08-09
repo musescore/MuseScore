@@ -88,6 +88,7 @@
 #include "dom/note.h"
 #include "dom/noteline.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -269,6 +270,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::NOTELINE_SEGMENT:     draw(item_cast<const NoteLineSegment*>(item), painter, opt);
         break;
 
+    case ElementType::ORGAN_PEDAL_MARK:     draw(item_cast<const OrganPedalMark*>(item), painter, opt);
+        break;
     case ElementType::ORNAMENT:             draw(item_cast<const Ornament*>(item), painter, opt);
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
@@ -609,6 +612,12 @@ void SingleDraw::draw(const NoteLineSegment*, Painter*, const PaintOptions&)
 {
     // TRACE_DRAW_ITEM;
     // To be implemented
+}
+
+void SingleDraw::draw(const OrganPedalMark* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter, opt);
 }
 
 void SingleDraw::draw(const Ornament* item, Painter* painter, const PaintOptions& opt)

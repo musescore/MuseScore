@@ -80,6 +80,8 @@
 #include "../../dom/note.h"
 #include "../../dom/notedot.h"
 
+#include "../../dom/organpedalmark.h"
+
 #include "../../dom/pagelockindicator.h"
 #include "../../dom/parenthesis.h"
 #include "../../dom/playcounttext.h"
@@ -297,6 +299,7 @@ public:
     static void layoutNoteLine(NoteLine* item, LayoutContext& ctx);
     static void layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx);
 
+    static void layoutOrganPedalMark(const OrganPedalMark* item, OrganPedalMark::LayoutData* ldata);
     static void layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 

@@ -113,6 +113,8 @@ public:
 
     static void layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx);
 
+    static void layoutOrganPedalMarks(Chord* chord, System* system, LayoutContext& ctx);
+
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 
     static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);

@@ -107,6 +107,7 @@ class Note;
 class NoteDot;
 class NoteLineSegment;
 
+class OrganPedalMark;
 class Ornament;
 
 class Ottava;
@@ -266,6 +267,7 @@ private:
     static void draw(const NoteHead* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const NoteLineSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
+    static void draw(const OrganPedalMark* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Ornament* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 

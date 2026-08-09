@@ -96,6 +96,7 @@
 #include "dom/notedot.h"
 #include "dom/noteline.h"
 
+#include "dom/organpedalmark.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -314,10 +315,13 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
     case ElementType::NOTELINE_SEGMENT: draw(item_cast<const NoteLineSegment*>(item), painter, opt);
         break;
 
+    case ElementType::ORGAN_PEDAL_MARK: draw(item_cast<const OrganPedalMark*>(item), painter, opt);
+        break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter, opt);
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
         break;
+
     case ElementType::PAGE_LOCK_INDICATOR: draw(item_cast<const PageLockIndicator*>(item), painter, opt);
         break;
     case ElementType::PARENTHESIS:          draw(item_cast<const Parenthesis*>(item), painter, opt);
@@ -598,6 +602,12 @@ void TDraw::draw(const Articulation* item, Painter* painter, const PaintOptions&
     } else {
         drawTextBase(item->text(), painter, opt);
     }
+}
+
+void TDraw::draw(const OrganPedalMark* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter, opt);
 }
 
 void TDraw::draw(const Ornament* item, Painter* painter, const PaintOptions& opt)
