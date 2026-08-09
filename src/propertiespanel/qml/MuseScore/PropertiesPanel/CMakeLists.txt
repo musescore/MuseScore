@@ -164,6 +164,8 @@ qt_add_qml_module(propertiespanel_qml
         notation/notes/notesettingsproxymodel.h
         notation/notes/stems/stemsettingsmodel.cpp
         notation/notes/stems/stemsettingsmodel.h
+        notation/organpedalmarks/organpedalmarksettingsmodel.cpp
+        notation/organpedalmarks/organpedalmarksettingsmodel.h
         notation/ornaments/ornamentsettingsmodel.cpp
         notation/ornaments/ornamentsettingsmodel.h
         notation/playcounttext/playcounttextsettingsmodel.cpp
@@ -348,6 +350,7 @@ qt_add_qml_module(propertiespanel_qml
         notation/notes/noteheads/HeadSettings.qml
         notation/notes/NoteSettings.qml
         notation/notes/stems/StemSettings.qml
+        notation/organpedalmarks/OrganPedalMarkSettings.qml
         notation/ornaments/OrnamentSettings.qml
         notation/playcounttext/PlayCountSettings.qml
         notation/rests/beams/RestBeamSettings.qml
@@ -421,6 +424,7 @@ target_include_directories(propertiespanel_qml PRIVATE
     notation/notes/hooks
     notation/notes/noteheads
     notation/notes/stems
+    notation/organpedalmarks
     notation/ornaments
     notation/playcounttext
     notation/rests

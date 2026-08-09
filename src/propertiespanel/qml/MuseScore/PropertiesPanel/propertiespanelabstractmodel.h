@@ -157,6 +157,7 @@ public:
         TYPE_SYMBOL,
         TYPE_NOTELINE,
         TYPE_PLAY_COUNT_TEXT,
+        TYPE_ORGAN_PEDAL_MARK,
     };
     Q_ENUM(PropertiesPanelModelType)
 

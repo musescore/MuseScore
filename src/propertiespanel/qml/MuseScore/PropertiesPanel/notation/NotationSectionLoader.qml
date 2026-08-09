@@ -64,6 +64,7 @@ import "expressions"
 import "stringtunings"
 import "symbols"
 import "playcounttext"
+import "organpedalmarks"
 
 Loader {
     id: root
@@ -151,6 +152,7 @@ Loader {
             case PropertiesPanelAbstractModel.TYPE_SYMBOL: return symbolComp
             case PropertiesPanelAbstractModel.TYPE_PLAY_COUNT_TEXT: return playCountTextComp
             case PropertiesPanelAbstractModel.TYPE_CHORD_BRACKET: return arpeggioComp
+            case PropertiesPanelAbstractModel.TYPE_ORGAN_PEDAL_MARK: return organPedalMarkComp
             }
 
             return null
@@ -586,6 +588,15 @@ Loader {
         id: arpeggioComp
         ChordBracketSettings {
             model: root.model as ChordBracketSettingsModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
+    }
+
+    Component {
+        id: organPedalMarkComp
+        OrganPedalMarkSettings {
+            model: root.model as OrganPedalMarkSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
         }

@@ -80,6 +80,7 @@
 #include "notation/symbols/symbolsettingsmodel.h"
 #include "notation/playcounttext/playcounttextsettingsmodel.h"
 #include "notation/lines/chordbracketsettingsmodel.h"
+#include "notation/organpedalmarks/organpedalmarksettingsmodel.h"
 
 #include "general/playback/internal/arpeggioplaybackmodel.h"
 #include "general/playback/internal/breathplaybackmodel.h"
@@ -231,6 +232,8 @@ PropertiesPanelAbstractModel* PropertiesPanelModelFactory::newPropertiesPanelLis
         return new BreathPlaybackModel(parent, iocCtx, repository);
     case PropertiesPanelModelType::TYPE_ARPEGGIO:
         return new ArpeggioPlaybackModel(parent, iocCtx, repository);
+    case PropertiesPanelModelType::TYPE_ORGAN_PEDAL_MARK:
+        return new OrganPedalMarkSettingsModel(parent, iocCtx, repository);
     case PropertiesPanelModelType::TYPE_UNDEFINED:
         break;
     }

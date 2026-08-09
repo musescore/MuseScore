@@ -137,6 +137,7 @@ static const QMap<mu::engraving::ElementType, PropertiesPanelModelType> NOTATION
     { mu::engraving::ElementType::SYMBOL, PropertiesPanelModelType::TYPE_SYMBOL },
     { mu::engraving::ElementType::SYSTEM_DIVIDER, PropertiesPanelModelType::TYPE_SYMBOL },
     { mu::engraving::ElementType::CHORD_BRACKET, PropertiesPanelModelType::TYPE_CHORD_BRACKET },
+    { mu::engraving::ElementType::ORGAN_PEDAL_MARK, PropertiesPanelModelType::TYPE_ORGAN_PEDAL_MARK },
 };
 
 static const QMap<mu::engraving::HairpinType, PropertiesPanelModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
