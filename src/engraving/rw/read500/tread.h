@@ -123,6 +123,7 @@ class NoteDot;
 class NoteHead;
 class NoteLine;
 
+class OrganPedalMark;
 class Ornament;
 class Ottava;
 
@@ -280,6 +281,8 @@ public:
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
     static void read(NoteHead* h, XmlReader& xml, ReadContext& ctx);
     static void read(NoteLine* nl, XmlReader& xml, ReadContext& ctx);
+
+    static void read(OrganPedalMark* pm, XmlReader& xml, ReadContext& ctx);
     static void read(Ornament* o, XmlReader& xml, ReadContext& ctx);
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
 

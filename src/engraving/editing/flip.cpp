@@ -33,6 +33,7 @@
 #include "../dom/hairpin.h"
 #include "../dom/hook.h"
 #include "../dom/note.h"
+#include "../dom/organpedalmark.h"
 #include "../dom/ornament.h"
 #include "../dom/score.h"
 #include "../dom/select.h"
@@ -217,6 +218,7 @@ void Flip::flip(Transaction&, Score* score)
                    || e->isStringTunings()
                    || e->isSticking()
                    || e->isFingering()
+                   || e->isOrganPedalMark()
                    || e->isHarmony()
                    || e->isFretDiagram()
                    || e->isHarpPedalDiagram()

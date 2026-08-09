@@ -203,6 +203,28 @@ const TextStyle fingeringTextStyle {
     { Sid::fingeringOffset, Sid::fingeringOffset }
 };
 
+const TextStyle organPedalMarkTextStyle {
+    { {
+        { TextStylePropertyType::FontFace,             Sid::organPedalMarkFontFace,                 Pid::FONT_FACE },
+        { TextStylePropertyType::FontSize,             Sid::organPedalMarkFontSize,                 Pid::FONT_SIZE },
+        { TextStylePropertyType::LineSpacing,          Sid::organPedalMarkLineSpacing,              Pid::TEXT_LINE_SPACING },
+        { TextStylePropertyType::SizeSpatiumDependent, Sid::organPedalMarkFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
+        { TextStylePropertyType::FontStyle,            Sid::organPedalMarkFontStyle,                Pid::FONT_STYLE },
+        { TextStylePropertyType::Color,                Sid::organPedalMarkColor,                    Pid::COLOR },
+        { TextStylePropertyType::TextAlign,            Sid::organPedalMarkAlign,                    Pid::ALIGN },
+        { TextStylePropertyType::FrameType,            Sid::organPedalMarkFrameType,                Pid::FRAME_TYPE },
+        { TextStylePropertyType::FramePadding,         Sid::organPedalMarkFramePadding,             Pid::FRAME_PADDING },
+        { TextStylePropertyType::FrameWidth,           Sid::organPedalMarkFrameWidth,               Pid::FRAME_WIDTH },
+        { TextStylePropertyType::FrameRound,           Sid::organPedalMarkFrameRound,               Pid::FRAME_ROUND },
+        { TextStylePropertyType::FrameBorderColor,     Sid::organPedalMarkFrameFgColor,             Pid::FRAME_FG_COLOR },
+        { TextStylePropertyType::FrameFillColor,       Sid::organPedalMarkFrameBgColor,             Pid::FRAME_BG_COLOR },
+        { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+        { TextStylePropertyType::MusicalSymbolsSize,   Sid::organPedalMarkMusicalSymbolSize,        Pid::MUSIC_SYMBOL_SIZE },
+        { TextStylePropertyType::Position,             Sid::organPedalMarkPosition,                 Pid::POSITION },
+    } },
+    { Sid::organPedalMarkOffset, Sid::organPedalMarkOffset }
+};
+
 const TextStyle tabFretNumberTextStyle {
     { {
         { TextStylePropertyType::FontFace,             Sid::tabFretNumberFontFace,                Pid::FONT_FACE },
@@ -1727,6 +1749,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::ARTICULATION: return &articulationTextStyle;
     case TextStyleType::STICKING: return &stickingTextStyle;
     case TextStyleType::FINGERING: return &fingeringTextStyle;
+    case TextStyleType::ORGAN_PEDAL_MARK: return &organPedalMarkTextStyle;
     case TextStyleType::TAB_FRET_NUMBER: return &tabFretNumberTextStyle;
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;

@@ -279,6 +279,7 @@ enum class TextStyleType : unsigned char {
     ARTICULATION            = int(mu::engraving::TextStyleType::ARTICULATION),
     STICKING                = int(mu::engraving::TextStyleType::STICKING),
     FINGERING               = int(mu::engraving::TextStyleType::FINGERING),
+    ORGAN_PEDAL_MARK        = int(mu::engraving::ElementType::ORGAN_PEDAL_MARK),
     TAB_FRET_NUMBER         = int(mu::engraving::TextStyleType::TAB_FRET_NUMBER),
     LH_GUITAR_FINGERING     = int(mu::engraving::TextStyleType::LH_GUITAR_FINGERING),
     RH_GUITAR_FINGERING     = int(mu::engraving::TextStyleType::RH_GUITAR_FINGERING),

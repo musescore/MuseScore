@@ -373,6 +373,7 @@ void Cursor::add(EngravingItem* wrapped)
         [[fallthrough]];
     }
     case ElementType::FINGERING:
+    case ElementType::ORGAN_PEDAL_MARK:
     case ElementType::BEND:
     case ElementType::NOTEHEAD: {
         mu::engraving::EngravingItem* curElement = currentElement();

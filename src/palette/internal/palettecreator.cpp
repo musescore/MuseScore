@@ -65,6 +65,7 @@
 #include "engraving/dom/measurenumber.h"
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/organpedalmark.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/palmmute.h"
@@ -134,6 +135,7 @@ IMPL_WRAPPER(Jump, score->dummy()->measure())
 IMPL_WRAPPER(MeasureNumber, score->dummy()->measure())
 
 IMPL_WRAPPER(Fingering, score->dummy()->note())
+IMPL_WRAPPER(OrganPedalMark, score->dummy()->note())
 IMPL_WRAPPER(NoteHead, score->dummy()->note())
 
 // Dispatcher method ...
@@ -175,6 +177,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newHarpPalette());
     tree->append(newGuitarPalette());
     tree->append(newFingeringPalette());
+    tree->append(newOrganPalette());
     tree->append(newFretboardDiagramPalette());
     tree->append(newAccordionPalette());
     tree->append(newBagpipeEmbellishmentPalette());
@@ -212,6 +215,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
+    defaultPalette->append(newOrganPalette(true));
     defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
@@ -630,6 +634,47 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
         s->setSymId(i);
         sp->appendElement(s, s->subtypeUserName());
     }
+    return sp;
+}
+
+PalettePtr PaletteCreator::newOrganPalette(bool defaultPalette)
+{
+    PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Organ);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Organ"));
+    sp->setMag(1.2);
+    sp->setGridSize(30, 35);
+    sp->setDrawGrid(true);
+    sp->setVisible(false);
+
+    static const SymIdList defaultOrganPedalMarks {
+        SymId::keyboardPedalToe2,
+        SymId::keyboardPedalHeel1,
+        SymId::keyboardPedalHeel3,
+        SymId::keyboardPedalToe1,
+        SymId::keyboardPedalHeel2,
+        SymId::keyboardPedalToeToHeel,
+        SymId::keyboardPedalHeelToToe
+    };
+
+    static const SymIdList masterOrganPedalMarks {
+        SymId::keyboardPedalToe2,
+        SymId::keyboardPedalHeel1,
+        SymId::keyboardPedalHeel3,
+        SymId::keyboardPedalToe1,
+        SymId::keyboardPedalHeel2,
+        SymId::keyboardPedalToeToHeel,
+        SymId::keyboardPedalHeelToToe,
+        SymId::keyboardPedalHeelToe
+    };
+
+    for (auto pedalMarkSymId : defaultPalette ? defaultOrganPedalMarks : masterOrganPedalMarks) {
+        auto pedalMark = makeElement<OrganPedalMark>(paletteScore());
+
+        pedalMark->setPedalMark(pedalMarkSymId);
+
+        sp->appendElement(pedalMark, pedalMark->subtypeUserName());
+    }
+
     return sp;
 }
 

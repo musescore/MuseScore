@@ -123,6 +123,7 @@ class Measure;
 class MeasureBase;
 class MuseScoreView;
 class Note;
+class OrganPedalMark;
 class Page;
 class Part;
 class RehearsalMark;
@@ -717,9 +718,12 @@ public:
     void scanElementsInRange(std::function<void(EngravingItem*)> func);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
-    FiguredBass* addFiguredBass();
+
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
+
+    FiguredBass* addFiguredBass();
+    OrganPedalMark* addOrganPedalMark();
 
     void cmdEnterRest(const TDuration& d);
     void enterRest(const TDuration& d, InputState* externalInputState = nullptr);

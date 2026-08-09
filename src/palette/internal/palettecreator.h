@@ -50,6 +50,7 @@ public:
     PalettePtr newDynamicsPalette(bool defaultPalette = false);
     PalettePtr newLayoutPalette(bool defaultPalette = false);
     PalettePtr newFingeringPalette(bool defaultPalette = false);
+    PalettePtr newOrganPalette(bool defaultPalette = false);
     PalettePtr newTremoloPalette();
     PalettePtr newNoteHeadsPalette();
     PalettePtr newArticulationsPalette(bool defaultPalette = false);

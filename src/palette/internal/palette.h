@@ -77,6 +77,7 @@ public:
         Tempo,
         Dynamic,
         Fingering,
+        Organ,
         Repeat,
         FretboardDiagram,
         Accordion,

@@ -119,6 +119,7 @@ enum class ElementType : unsigned char {
     MARKER,
     JUMP,
     FINGERING,
+    ORGAN_PEDAL_MARK,
     TUPLET,
     TEMPO_TEXT,
     STAFF_TEXT,
@@ -233,6 +234,7 @@ const static std::unordered_set<ElementType> TEXTBASE_TYPES {
     ElementType::DYNAMIC,
     ElementType::EXPRESSION,
     ElementType::FINGERING,
+    ElementType::ORGAN_PEDAL_MARK,
     ElementType::HARMONY,
     ElementType::MARKER,
     ElementType::JUMP,
@@ -859,6 +861,22 @@ enum RepeatPlayCountPreset : unsigned char {
 };
 
 //-------------------------------------------------------------------
+// Organ pedal marks
+//-------------------------------------------------------------------
+
+enum class OrganPedalMarksPopupSet : unsigned char {
+    DEFAULT,
+    CONCISE
+};
+
+enum class OrganPedalMarksNavigationPlacement : unsigned char {
+    ABOVE,
+    BELOW,
+    ALTERNATING,
+    AS_PREVIOUS
+};
+
+//-------------------------------------------------------------------
 // TextStyleType
 // Must be in sync with textStyles (in textstyle.cpp)
 // P_TYPE::TEXT_STYLE
@@ -916,6 +934,7 @@ enum class TextStyleType : unsigned char {
     ARTICULATION,
     STICKING,
     FINGERING,
+    ORGAN_PEDAL_MARK,
     TAB_FRET_NUMBER,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,

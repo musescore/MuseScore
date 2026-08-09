@@ -63,6 +63,7 @@
 #include "../dom/measurerepeat.h"
 #include "../dom/note.h"
 #include "../dom/noteline.h"
+#include "../dom/organpedalmark.h"
 #include "../dom/ottava.h"
 #include "../dom/pagelockindicator.h"
 #include "../dom/part.h"
@@ -747,6 +748,18 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         textBox = Factory::createFingering(toNote(destinationElement), type);
         textBox->setTrack(destinationElement->track());
         textBox->setParent(destinationElement);
+        undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::ORGAN_PEDAL_MARK: {
+        if (!destinationElement || !destinationElement->isNote()) {
+            break;
+        }
+
+        textBox = Factory::createOrganPedalMark(toNote(destinationElement));
+        textBox->setTrack(destinationElement->track());
+        textBox->setParent(destinationElement);
+        textBox->setPlacement(score()->configuration()->organPedalMarksPlacement());
         undoAddElement(textBox);
         break;
     }
@@ -4031,6 +4044,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::LAISSEZ_VIB
         || et == ElementType::PARTIAL_TIE
         || et == ElementType::PARENTHESIS
+        || et == ElementType::ORGAN_PEDAL_MARK
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;

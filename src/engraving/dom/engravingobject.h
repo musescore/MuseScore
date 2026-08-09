@@ -123,6 +123,7 @@ class NoteDot;
 class NoteHead;
 class NoteLine;
 class NoteLineSegment;
+class OrganPedalMark;
 class Ornament;
 class Ottava;
 class OttavaSegment;
@@ -426,6 +427,7 @@ public:
     CONVERT(Symbol,        SYMBOL)
     CONVERT(FSymbol,       FSYMBOL)
     CONVERT(Fingering,     FINGERING)
+    CONVERT(OrganPedalMark,  ORGAN_PEDAL_MARK)
     CONVERT(NoteHead,      NOTEHEAD)
     CONVERT(PartialLyricsLine,    PARTIAL_LYRICSLINE)
     CONVERT(PartialLyricsLineSegment, PARTIAL_LYRICSLINE_SEGMENT)
@@ -760,6 +762,7 @@ CONVERT(Symbol)
 CONVERT(FSymbol)
 CONVERT(BSymbol)
 CONVERT(Fingering)
+CONVERT(OrganPedalMark)
 CONVERT(NoteHead)
 CONVERT(LyricsLine)
 CONVERT(LyricsLineSegment)

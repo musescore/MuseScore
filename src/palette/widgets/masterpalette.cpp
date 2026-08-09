@@ -128,6 +128,7 @@ void MasterPalette::componentComplete()
     addPalette(creator.newTempoPalette());
     addPalette(creator.newDynamicsPalette());
     addPalette(creator.newFingeringPalette());
+    addPalette(creator.newOrganPalette());
     addPalette(creator.newRepeatsPalette());
     addPalette(creator.newFretboardDiagramPalette());
     addPalette(creator.newAccordionPalette());

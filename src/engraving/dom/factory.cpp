@@ -72,6 +72,7 @@
 #include "mmrestrange.h"
 #include "note.h"
 #include "noteline.h"
+#include "organpedalmark.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -235,6 +236,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TIE:               return new Tie(parent);
     case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::ORGAN_PEDAL_MARK:  return new OrganPedalMark(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::HBOX:              return new HBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::VBOX:              return new VBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::TBOX:              return new TBox(parent->isSystem() ? toSystem(parent) : dummy->system());
@@ -603,6 +605,9 @@ Fingering* Factory::createFingering(Note * parent, TextStyleType textStyleType,
 
     return fingering;
 }
+
+CREATE_ITEM_IMPL(OrganPedalMark, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(OrganPedalMark)
 
 CREATE_ITEM_IMPL(Harmony, EngravingItem, isAccessibleEnabled)
 

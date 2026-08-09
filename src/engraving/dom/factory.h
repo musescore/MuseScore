@@ -215,6 +215,9 @@ public:
     static Fingering* createFingering(Note* parent, bool isAccessibleEnabled = true);
     static Fingering* createFingering(Note* parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 
+    static OrganPedalMark* createOrganPedalMark(Note* parent, bool isAccessibleEnabled = true);
+    static OrganPedalMark* copyOrganPedalMark(const OrganPedalMark& src);
+
     static Harmony* createHarmony(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static TempoText* createTempoText(Segment* parent, bool isAccessibleEnabled = true);
