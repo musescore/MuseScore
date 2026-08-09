@@ -48,6 +48,8 @@ qt_add_qml_module(notationscene_qml
         elementpopups/dynamicpopupmodel.h
         elementpopups/harppedalpopupmodel.cpp
         elementpopups/harppedalpopupmodel.h
+        elementpopups/organpedalmarkpopupmodel.cpp
+        elementpopups/organpedalmarkpopupmodel.h
         elementpopups/partialtiepopupmodel.cpp
         elementpopups/partialtiepopupmodel.h
         elementpopups/percussionnotepopupcontentmodel.cpp
@@ -173,6 +175,7 @@ qt_add_qml_module(notationscene_qml
         elementpopups/DynamicPopup.qml
         elementpopups/ElementPopupLoader.qml
         elementpopups/HarpPedalPopup.qml
+        elementpopups/OrganPedalMarkPopup.qml
         elementpopups/PartialTieMenuRowItem.qml
         elementpopups/PartialTiePopup.qml
         elementpopups/PercussionNotePopupContent.qml

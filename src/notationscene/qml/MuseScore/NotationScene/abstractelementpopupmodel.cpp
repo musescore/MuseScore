@@ -52,6 +52,7 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::REHEARSAL_MARK, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::INSTRUMENT_CHANGE, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::FINGERING, PopupModelType::TYPE_TEXT },
+    { mu::engraving::ElementType::ORGAN_PEDAL_MARK, PopupModelType::TYPE_ORGAN_PEDAL_MARK },
     { mu::engraving::ElementType::STICKING, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::LYRICS, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::FIGURED_BASS, PopupModelType::TYPE_TEXT },
@@ -84,6 +85,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::TEMPO_TEXT,
         mu::engraving::ElementType::PLAY_COUNT_TEXT } },
     { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
+    { PopupModelType::TYPE_ORGAN_PEDAL_MARK, { mu::engraving::ElementType::ORGAN_PEDAL_MARK } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
