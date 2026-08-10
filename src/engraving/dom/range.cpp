@@ -316,7 +316,7 @@ void TrackList::append(EngravingItem* e)
         }
     } else {
         EngravingItem* c = e->clone();
-        c->resetExplicitParent();
+        c->moveToDummy();   // the clone is unattached until it is written back into a segment
         std::vector<EngravingItem*>::push_back(c);
     }
 }
@@ -826,7 +826,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
-                ns->resetExplicitParent();
+                ns->moveToDummy();
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);

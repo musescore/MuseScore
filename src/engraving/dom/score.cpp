@@ -1882,7 +1882,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         Spanner* ns = toSpanner(spanner->clone());
         ns->setScore(this);
-        ns->resetExplicitParent();
+        ns->moveToDummy();
         ns->setTick(spanner->tick() - startTick + tickOfAppend);
         ns->setTick2(spanner->tick2() - startTick + tickOfAppend);
         ns->computeStartElement();
