@@ -87,6 +87,7 @@ private:
 
         bool isSymbolMode() const;
         double pixelScale() const;
+        double pixelScaleFor(const IFontFace* loadedFace) const;
     };
 
     IFontFace* createFontFace(const io::path_t& path) const;
