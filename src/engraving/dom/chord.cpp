@@ -2435,7 +2435,7 @@ EngravingItem* Chord::nextElement()
         break;
 
     case ElementType::ACCIDENTAL:
-        e = e->parentItem();
+        e = toAccidental(e)->note();
     // fall through
 
     case ElementType::NOTE: {

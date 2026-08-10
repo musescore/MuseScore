@@ -183,7 +183,7 @@ void Score::getSelectedStartEndChordRests(ChordRest*& cr1, ChordRest*& cr2) cons
     cr2 = 0;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         if (e->isChordRest()) {
             ChordRest* cr = toChordRest(e);
@@ -212,7 +212,7 @@ std::set<ChordRest*> Score::getSelectedChordRests() const
     std::set<ChordRest*> set;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         if (e->isChordRest()) {
             set.insert(toChordRest(e));
@@ -234,7 +234,7 @@ Fraction Score::pos()
     if (el) {
         switch (el->type()) {
         case ElementType::NOTE:
-            el = el->parentItem();
+            el = toNote(el)->chord();
         // fall through
         case ElementType::MEASURE_REPEAT:
         case ElementType::REST:
@@ -4781,7 +4781,7 @@ void Score::undoRemoveHopoText(HammerOnPullOffText* hopoText)
         return;
     }
 
-    HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(hopoText->parentItem());
+    HammerOnPullOffSegment* hopoSegment = hopoText->hopoSegment();
     HammerOnPullOff* hopo = hopoSegment ? hopoSegment->hammerOnPullOff() : nullptr;
     IF_ASSERT_FAILED(hopo) {
         return;

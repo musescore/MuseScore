@@ -103,7 +103,7 @@ std::vector<LineF> SystemDivider::dragAnchorLines() const
 {
     std::vector<LineF> result;
 
-    const System* system = toSystem(parentItem());
+    const System* system = this->system();
     IF_ASSERT_FAILED(system) {
         return result;
     }

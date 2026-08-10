@@ -54,7 +54,7 @@ NoteDot::NoteDot(Rest* parent)
 
 EngravingItem* NoteDot::elementBase() const
 {
-    return parentItem();
+    return parentItem(); // a dot can belong to a note or a rest
 }
 
 //---------------------------------------------------------

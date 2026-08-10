@@ -288,7 +288,7 @@ std::vector<LineF> HammerOnPullOffText::dragAnchorLines() const
 
     PointF p1 = canvasPos();
 
-    HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(parent());
+    HammerOnPullOffSegment* hopoSeg = hopoSegment();
     const Shape& hopoSegShape = hopoSeg->ldata()->shape();
     double x = ldata()->pos().x();// + hopoSegShape.bbox().x();
     double y = hopoSeg->hammerOnPullOff()->up() ? hopoSegShape.topAtX(x) : hopoSegShape.bottomAtX(x);

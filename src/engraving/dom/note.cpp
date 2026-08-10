@@ -2441,7 +2441,7 @@ double Note::mag() const
 //---------------------------------------------------------
 EngravingItem* Note::elementBase() const
 {
-    return parentItem();
+    return chord();
 }
 
 //---------------------------------------------------------

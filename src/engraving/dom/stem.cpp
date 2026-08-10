@@ -48,7 +48,7 @@ Stem::Stem(Chord* parent)
 
 EngravingItem* Stem::elementBase() const
 {
-    return parentItem();
+    return chord();
 }
 
 staff_idx_t Stem::vStaffIdx() const

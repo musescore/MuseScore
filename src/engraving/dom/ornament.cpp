@@ -252,7 +252,9 @@ bool Ornament::showCueNote()
 
 void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 {
-    Chord* parentChord = explicitParent() ? toChord(parent()) : nullptr;
+    ChordRest* parentChordRest = chordRest();
+    Chord* parentChord = parentChordRest && parentChordRest->isChord() ? toChord(parentChordRest) : nullptr;
+
     const Note* mainNote = parentChord ? parentChord->upNote() : nullptr;
 
     if (!mainNote) {
@@ -260,7 +262,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
     }
 
     if (m_cueNoteChord && !m_cueNoteChord->explicitParent()) {
-        m_cueNoteChord->setParent(toSegment(parentChord->segment()));
+        m_cueNoteChord->setParent(parentChord->segment());
     }
 
     for (size_t i = 0; i < m_notesAboveAndBelow.size(); ++i) {
@@ -394,9 +396,12 @@ void Ornament::updateAccidentalsAboveAndBelow()
 
 void Ornament::updateCueNote()
 {
+    ChordRest* parentChordRest = chordRest();
+    Chord* parentChord = parentChordRest && parentChordRest->isChord() ? toChord(parentChordRest) : nullptr;
+
     if (!showCueNote()) {
-        if (noteAbove() && explicitParent()) {
-            noteAbove()->setParent(toChord(parentItem()));
+        if (noteAbove() && parentChord) {
+            noteAbove()->setParent(parentChord);
         }
         if (m_cueNoteChord) {
             m_cueNoteChord->notes().clear();
@@ -406,11 +411,10 @@ void Ornament::updateCueNote()
         return;
     }
 
-    if (!explicitParent()) {
+    if (!parentChord) {
         return;
     }
 
-    Chord* parentChord = toChord(parentItem());
     Note* cueNote = noteAbove();
     // If needed, create cue note
     if (!m_cueNoteChord) {

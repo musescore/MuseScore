@@ -132,8 +132,8 @@ TappingText::TappingText(const TappingText& t)
 
 Color TappingText::curColor(const rendering::PaintOptions& opt) const
 {
-    if (parentItem()) {
-        return parentItem()->curColor(opt);
+    if (Tapping* t = tapping()) {
+        return t->curColor(opt);
     }
 
     return EngravingItem::curColor(opt);
