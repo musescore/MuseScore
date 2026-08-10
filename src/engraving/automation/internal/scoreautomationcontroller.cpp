@@ -513,7 +513,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     if (auto ordinaryIt = ORDINARY_DYNAMIC_VALUES.find(dynamicType); ordinaryIt != ORDINARY_DYNAMIC_VALUES.end()) {
         info.kind = DynamicInfo::Ordinary { ordinaryIt->second };
     } else if (auto singleNoteIt = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); singleNoteIt != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        DynamicInfo::SingleNote singleNote { singleNoteIt->second };
+        DynamicInfo::SingleNote singleNote { singleNoteIt->second, std::nullopt };
         if (const Segment* nextSeg = dynamic->segment()->next()) {
             singleNote.nextTick = nextSeg->tick().ticks() + tickOffset;
         }
