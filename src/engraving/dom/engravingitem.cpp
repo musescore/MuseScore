@@ -176,6 +176,11 @@ EngravingItem* EngravingItem::parentItem(bool explicitParent) const
     return nullptr;
 }
 
+EngravingItem* EngravingItem::layoutParent() const
+{
+    return parentItem();
+}
+
 static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
 {
     for (EngravingObject* ch : item->children()) {
