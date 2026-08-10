@@ -142,12 +142,12 @@ System::System(Score* parent)
     : EngravingItem(ElementType::SYSTEM, parent)
 {
     // Owned by its score right away; a page only places it later
-    setParent(parent);
+    setOwnershipParent(parent);
 }
 
-void System::setParent(Score* score)
+void System::setOwnershipParent(Score* score)
 {
-    EngravingItem::setParent(score);
+    EngravingItem::setOwnershipParent(score);
 }
 
 EngravingItem* System::layoutParent() const
@@ -333,7 +333,7 @@ void System::setHasStaffVisibilityIndicator(bool has)
 {
     if (has && !m_staffVisibilityIndicator) {
         m_staffVisibilityIndicator = Factory::createStaffVisibilityIndicator(this);
-        m_staffVisibilityIndicator->setParent(this);
+        m_staffVisibilityIndicator->setOwnershipParent(this);
     } else if (!has && m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
         m_staffVisibilityIndicator = nullptr;
@@ -516,7 +516,7 @@ void System::add(EngravingItem* el)
     } else if (el->isSpannerSegment()) {
         toSpannerSegment(el)->setSystem(this);
     } else if (!el->isBeam()) {   // a beam's placement is derived from its elements
-        el->setParent(this);
+        el->setOwnershipParent(this);
     }
 
     switch (el->type()) {

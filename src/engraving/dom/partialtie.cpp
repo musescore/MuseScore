@@ -63,7 +63,7 @@ void PartialTie::setEndNote(Note* note)
     setPartialSpannerDirection(PartialSpannerDirection::INCOMING);
     Tie::setStartNote(nullptr);
     Tie::setEndNote(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 bool PartialTie::allJumpPointsInactive() const

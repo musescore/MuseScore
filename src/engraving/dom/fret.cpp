@@ -989,7 +989,7 @@ void FretDiagram::setHarmony(String harmonyText)
 
 void FretDiagram::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     if (e->isHarmony()) {
         m_harmony = toHarmony(e);
 
@@ -1060,7 +1060,7 @@ EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
-        h->setParent(ownershipParent());
+        h->setOwnershipParent(ownershipParent());
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {

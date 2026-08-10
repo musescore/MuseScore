@@ -65,9 +65,9 @@ TimeSig::TimeSig(Segment* parent)
     setMinDistance(0.5_sp); // TODO: style
 }
 
-void TimeSig::setParent(Segment* parent)
+void TimeSig::setOwnershipParent(Segment* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------

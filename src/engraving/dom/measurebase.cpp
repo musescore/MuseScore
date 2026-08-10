@@ -44,17 +44,17 @@ MeasureBase::MeasureBase(const ElementType& type, Score* parent)
     : EngravingItem(type, parent)
 {
     // Owned by its score right away; a system only places it later
-    setParent(parent);
+    setOwnershipParent(parent);
 }
 
-void MeasureBase::setParent(Score* score)
+void MeasureBase::setOwnershipParent(Score* score)
 {
-    EngravingItem::setParent(score);
+    EngravingItem::setOwnershipParent(score);
 }
 
-void MeasureBase::setParent(Box* box)
+void MeasureBase::setOwnershipParent(Box* box)
 {
-    EngravingItem::setParent(box);
+    EngravingItem::setOwnershipParent(box);
 }
 
 EngravingItem* MeasureBase::layoutParent() const
@@ -201,7 +201,7 @@ Page* MeasureBase::nextPage() const
 void MeasureBase::add(EngravingItem* e)
 {
     if (e->ownershipParent() != this) {
-        e->setParent(this);
+        e->setOwnershipParent(this);
     }
 
     if (e->isLayoutBreak()) {
@@ -528,7 +528,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(0);
-        lb->setParent(mb);
+        lb->setOwnershipParent(mb);
         score()->undoAddElement(lb);
     }
     cleanupLayoutBreaks(true);
@@ -914,7 +914,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         nb->setSystem(ob->system());
     }
     for (EngravingItem* e : nb->el()) {
-        e->setParent(nb);
+        e->setOwnershipParent(nb);
     }
 }
 

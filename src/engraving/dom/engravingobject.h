@@ -229,9 +229,13 @@ public:
     void setEID(EID id) const;
     EID assignNewEID() const;
 
+    //! The raw tree link, i.e. the inverse of children(): the ownership parent
+    //! if there is one, otherwise the dummy the object is parked on. Prefer
+    //! ownershipParent(), which reports "not attached to anything" as null.
     EngravingObject* parent() const;
-    void setParent(EngravingObject* p);
-    //! The parent this object has explicitly been attached to via setParent().
+
+    void setOwnershipParent(EngravingObject* p);
+    //! The parent this object has explicitly been attached to via setOwnershipParent().
     //! Null while the object is merely constructed with a context parent, or parked on the dummy.
     EngravingObject* ownershipParent() const;
     void moveToDummy();

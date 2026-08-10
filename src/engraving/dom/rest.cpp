@@ -310,7 +310,7 @@ void Rest::checkDots()
     int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(this);
-        dot->setParent(this);
+        dot->setOwnershipParent(this);
         dot->setVisible(visible());
         score()->undoAddElement(dot);
     }
@@ -536,7 +536,7 @@ String Rest::screenReaderInfo() const
 void Rest::add(EngravingItem* e)
 {
     if (e->ownershipParent() != this) {
-        e->setParent(this);
+        e->setOwnershipParent(this);
     }
     e->setTrack(track());
 

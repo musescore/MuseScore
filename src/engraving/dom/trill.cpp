@@ -225,11 +225,11 @@ void Trill::computeStartElement()
 {
     Spanner::computeStartElement();
     if (startElement() && startElement()->isChord() && m_ornament) {
-        m_ornament->setParent(startElement());
+        m_ornament->setOwnershipParent(startElement());
 
         Chord* cueChord = m_ornament->cueNoteChord();
         if (cueChord) {
-            cueChord->setParent(toChord(startElement())->segment());
+            cueChord->setOwnershipParent(toChord(startElement())->segment());
         }
     }
 }

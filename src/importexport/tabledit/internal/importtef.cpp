@@ -565,7 +565,7 @@ static void addContinuousSlideHammerOn(Score* _score, const std::map<const TefNo
             gl->setTick(startTick);
             gl->setTick2(endNote->chord()->tick());
             gl->setEndElement(endNote);
-            gl->setParent(startNote);
+            gl->setOwnershipParent(startNote);
             gl->setText(u"Sl");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             gl->setGlissandoStyle(startNote->part()->instrument(startTick)->glissandoStyle());

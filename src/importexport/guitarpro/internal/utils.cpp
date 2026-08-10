@@ -150,7 +150,7 @@ static void addParenthesesToNotes(Chord* ch, const std::vector<Note*>& notes)
 {
     auto createParen = [ch](DirectionH dir) {
         Parenthesis* p = Factory::createParenthesis(ch);
-        p->setParent(ch);
+        p->setOwnershipParent(ch);
         p->setTrack(ch->track());
         p->setDirection(dir);
         return p;
@@ -203,7 +203,7 @@ void addPlayCountTexts(Score* score)
         }
         PlayCountText* pct = Factory::createPlayCountText(endBarSeg);
         pct->setTrack(0);
-        pct->setParent(endBarSeg);
+        pct->setOwnershipParent(endBarSeg);
         score->addElement(pct);
     }
 }

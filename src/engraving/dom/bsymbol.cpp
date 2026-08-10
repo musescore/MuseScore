@@ -54,7 +54,7 @@ BSymbol::BSymbol(const BSymbol& s)
     m_align = s.m_align;
     for (EngravingItem* e : s.m_leafs) {
         EngravingItem* ee = e->clone();
-        ee->setParent(this);
+        ee->setOwnershipParent(this);
         m_leafs.push_back(ee);
     }
 }
@@ -66,7 +66,7 @@ BSymbol::BSymbol(const BSymbol& s)
 void BSymbol::add(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         m_leafs.push_back(e);
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
@@ -122,7 +122,7 @@ EngravingItem* BSymbol::drop(Transaction&, EditData& data)
 {
     EngravingItem* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {
-        el->setParent(this);
+        el->setOwnershipParent(this);
         PointF p = data.pos - pageBoundingRect().topLeft() - data.dragOffset;
         if (p == PointF()) {
             // offset position so newly added child is visible

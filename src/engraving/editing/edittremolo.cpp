@@ -77,7 +77,7 @@ void MoveTremolo::redo()
     c1->setTremoloTwoChord(trem);
     c2->setTremoloTwoChord(trem);
     trem->setChords(c1, c2);
-    trem->setParent(c1);
+    trem->setOwnershipParent(c1);
 
     // Tremolo would cross barline, so remove it
     if (m1 != m2) {
@@ -98,5 +98,5 @@ void MoveTremolo::undo()
     oldC1->setTremoloTwoChord(trem);
     oldC2->setTremoloTwoChord(trem);
     trem->setChords(oldC1, oldC2);
-    trem->setParent(oldC1);
+    trem->setOwnershipParent(oldC1);
 }

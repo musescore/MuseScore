@@ -77,9 +77,9 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     m_showCourtesy           = lb.m_showCourtesy;
 }
 
-void LayoutBreak::setParent(MeasureBase* parent)
+void LayoutBreak::setOwnershipParent(MeasureBase* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 char16_t LayoutBreak::iconCode() const

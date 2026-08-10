@@ -112,7 +112,7 @@ EngravingItem::EngravingItem(const EngravingItem& e, bool link)
 
     if (e.m_leftParenthesis) {
         m_leftParenthesis = e.m_leftParenthesis->clone();
-        m_leftParenthesis->setParent(this);
+        m_leftParenthesis->setOwnershipParent(this);
         m_leftParenthesis->setTrack(track());
         if (link) {
             score()->undo(new Link(m_leftParenthesis, e.m_leftParenthesis));
@@ -120,7 +120,7 @@ EngravingItem::EngravingItem(const EngravingItem& e, bool link)
     }
     if (e.m_rightParenthesis) {
         m_rightParenthesis = e.m_rightParenthesis->clone();
-        m_rightParenthesis->setParent(this);
+        m_rightParenthesis->setOwnershipParent(this);
         m_rightParenthesis->setTrack(track());
         if (link) {
             score()->undo(new Link(m_rightParenthesis, e.m_rightParenthesis));
@@ -2554,7 +2554,7 @@ void EngravingItem::setHasLeftParenthesis(bool v, bool addToLinked, bool generat
     if (v) {
         if (!m_leftParenthesis) {
             Parenthesis* paren = Factory::createParenthesis(this);
-            paren->setParent(this);
+            paren->setOwnershipParent(this);
             paren->setTrack(track());
             paren->setDirection(DirectionH::LEFT);
             paren->setGenerated(generated);
@@ -2583,7 +2583,7 @@ void EngravingItem::setHasRightParenthesis(bool v, bool addToLinked, bool genera
     if (v) {
         if (!m_rightParenthesis) {
             Parenthesis* paren = Factory::createParenthesis(this);
-            paren->setParent(this);
+            paren->setOwnershipParent(this);
             paren->setTrack(track());
             paren->setDirection(DirectionH::RIGHT);
             paren->setGenerated(generated);

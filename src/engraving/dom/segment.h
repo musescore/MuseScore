@@ -128,7 +128,7 @@ public:
 
     ~Segment();
 
-    void setParent(Measure* parent);
+    void setOwnershipParent(Measure* parent);
 
     Segment* clone() const override { return new Segment(*this); }
 

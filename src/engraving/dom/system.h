@@ -123,9 +123,9 @@ public:
     EngravingItem* layoutParent() const override;
 
     //! A system is owned by its score; a page merely places it, see setPage().
-    //! This overload hides EngravingItem::setParent, so that no other parent
-    //! can be set by accident.
-    void setParent(Score* score);
+    //! This overload hides EngravingItem::setOwnershipParent, so that no other
+    //! parent can be set by accident.
+    void setOwnershipParent(Score* score);
 
     void clear(); ///< Clear measure list.
 

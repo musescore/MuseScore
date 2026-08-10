@@ -158,7 +158,7 @@ public:
     virtual Note* clone() const override { return new Note(*this, false); }
 
     Chord* chord() const { return (Chord*)ownershipParent(); }
-    void setParent(Chord* ch);
+    void setOwnershipParent(Chord* ch);
 
     void undoUnlink() override;
 

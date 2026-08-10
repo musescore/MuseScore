@@ -68,7 +68,7 @@ void RootItem::init()
     setupAccessible();
 #endif
 
-    m_dummy->setParent(this);
+    m_dummy->setOwnershipParent(this);
     m_dummy->init();
 }
 

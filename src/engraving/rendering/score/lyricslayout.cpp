@@ -492,7 +492,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
             item->setSeparator(separator);
             ctx.mutDom().addUnmanagedSpanner(item->separator());
         }
-        item->separator()->setParent(item);
+        item->separator()->setOwnershipParent(item);
         item->separator()->setTick(cr->tick());
         item->separator()->setTicks(lyricsLineTicks);
         item->separator()->setTrack(item->track());

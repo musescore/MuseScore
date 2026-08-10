@@ -988,7 +988,7 @@ static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std
 static void addInferredStickings(ChordRest* cr, const std::vector<Sticking*>& numberedStickings)
 {
     for (Sticking* sticking : numberedStickings) {
-        sticking->setParent(cr->segment());
+        sticking->setOwnershipParent(cr->segment());
         sticking->setTrack(cr->track());
         cr->score()->addElement(sticking);
     }
@@ -1069,7 +1069,7 @@ void MusicXmlParserPass2::addElemOffset(engraving::EngravingItem* el, engraving:
             }
         }
         if (!found) {
-            el->setParent(s);
+            el->setOwnershipParent(s);
             addSystemElement(el, elTick);
         }
     } else {
@@ -1146,7 +1146,7 @@ static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
     tuplet->setBracketType(tupletDesc.bracket);
     tuplet->setNumberType(tupletDesc.shownumber);
     tuplet->setDirection(tupletDesc.direction);
-    tuplet->setParent(cr->measure());
+    tuplet->setOwnershipParent(cr->measure());
 }
 
 //---------------------------------------------------------
@@ -1908,7 +1908,7 @@ static void cleanupUnterminatedTie(Tie* tie, const Score* score, bool fixForCros
 
     // Add Laissez Vibrer instead
     LaissezVib* lvTie = Factory::createLaissezVib(unterminatedTieNote);
-    lvTie->setParent(unterminatedTieNote);
+    lvTie->setOwnershipParent(unterminatedTieNote);
     unterminatedTieNote->score()->undoAddElement(lvTie);
 }
 
@@ -2649,7 +2649,7 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
             std::vector<EngravingItem*> el = graceChord->el(); // copy, because modified during loop
             for (EngravingItem* e : el) {
                 if (e->isFermata()) {
-                    e->setParent(c->segment());
+                    e->setOwnershipParent(c->segment());
                     c->segment()->add(e);
                     graceChord->removeFermata(toFermata(e));
                 }
@@ -2679,7 +2679,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
         std::vector<EngravingItem*> el = gc->el(); // copy, because modified during loop
         for (EngravingItem* e : el) {
             if (e->isFermata()) {
-                e->setParent(c->segment());
+                e->setOwnershipParent(c->segment());
                 c->segment()->add(e);
                 gc->removeFermata(toFermata(e));
             }
@@ -7695,7 +7695,7 @@ FiguredBass* MusicXmlParserPass2::figuredBass()
         } else if (m_e.name() == "figure") {
             FiguredBassItem* pItem = figure(idx++, parentheses, fb);
             pItem->setTrack(0 /* TODO fb->track() */);
-            pItem->setParent(fb);
+            pItem->setOwnershipParent(fb);
             fb->appendItem(pItem);
             // add item normalized text
             if (!normalizedText.empty()) {
@@ -8368,7 +8368,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
 
                 // Slur starts & ends on same chord - add lv instead
                 LaissezVib* lvTie = Factory::createLaissezVib(note);
-                lvTie->setParent(note);
+                lvTie->setOwnershipParent(note);
                 note->score()->undoAddElement(lvTie);
                 return;
             }
@@ -8426,7 +8426,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
 
                 // Slur starts & ends on same chord - add lv instead
                 LaissezVib* lvTie = Factory::createLaissezVib(note);
-                lvTie->setParent(note);
+                lvTie->setOwnershipParent(note);
                 note->score()->undoAddElement(lvTie);
                 return;
             }
@@ -8979,7 +8979,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             gliss->setStartElement(note);
             gliss->setTick(tick);
             gliss->setTrack(track);
-            gliss->setParent(note);
+            gliss->setOwnershipParent(note);
             gliss->setVisible(notation.visible());
             colorItem(gliss, Color::fromString(notation.attribute(u"color")));
             if (lineType == u"dashed") {
@@ -9006,7 +9006,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             cl->setChordLineType(ChordLineType::FALL);
             cl->setWavy(gliss->glissandoType() == GlissandoType::WAVY ? true : false);
             cl->setStraight(true);
-            cl->setParent(note);
+            cl->setOwnershipParent(note);
             note->chord()->add(cl);
             spanners.erase(gliss);
             delete gliss;
@@ -9170,7 +9170,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
         }
     } else if (type == "let-ring") {
         LaissezVib* lvTie = Factory::createLaissezVib(note);
-        lvTie->setParent(note);
+        lvTie->setOwnershipParent(note);
         lvTie->setVisible(notation.visible());
         colorItem(lvTie, Color::fromString(notation.attribute(u"color")));
 

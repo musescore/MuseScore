@@ -1460,7 +1460,7 @@ EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
-        fd->setParent(ownershipParent());
+        fd->setOwnershipParent(ownershipParent());
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {

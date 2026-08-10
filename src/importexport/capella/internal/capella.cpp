@@ -582,7 +582,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setBaseLen(d);
                     tuplet->setTrack(track);
                     tuplet->setTick(tick);
-                    tuplet->setParent(m);
+                    tuplet->setOwnershipParent(m);
                     Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                     tuplet->setTicks(nn);
                 }
@@ -672,7 +672,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setBaseLen(d);
                     tuplet->setTrack(track);
                     tuplet->setTick(tick);
-                    tuplet->setParent(m);
+                    tuplet->setOwnershipParent(m);
                     Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                     tuplet->setTicks(nn);
                 }
@@ -1047,7 +1047,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     score->addMeasure(mb, measure);
                     measure = mb;
                 }
-                s->setParent(measure);
+                s->setOwnershipParent(measure);
                 measure->add(s);
             }
             break;

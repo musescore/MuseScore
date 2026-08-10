@@ -859,7 +859,7 @@ void HarmonyLayout::renderActionScale(const RenderActionScalePtr& a, HarmonyRend
 void HarmonyLayout::renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     Parenthesis* p = Factory::createParenthesis(item);
-    p->setParent(item);
+    p->setOwnershipParent(item);
     p->setDirection(a->direction());
     p->setColor(item->color());
     p->setFollowParentColor(true);

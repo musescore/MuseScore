@@ -42,14 +42,14 @@ Page::Page(Score* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
     // Owned by its score right away; Score::m_pages manages page lifetime
-    setParent(parent);
+    setOwnershipParent(parent);
 
     m_bspTreeValid = false;
 }
 
-void Page::setParent(Score* score)
+void Page::setOwnershipParent(Score* score)
 {
-    EngravingItem::setParent(score);
+    EngravingItem::setOwnershipParent(score);
 }
 
 EngravingItem* Page::layoutParent() const

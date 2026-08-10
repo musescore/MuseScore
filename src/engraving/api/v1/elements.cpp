@@ -240,7 +240,7 @@ void Note::addInternal(mu::engraving::Note* note, mu::engraving::EngravingItem* 
 {
     // Provide parentage for element.
     s->setScore(note->score());
-    s->setParent(note);
+    s->setOwnershipParent(note);
     s->setTrack(note->track());
 
     if (s && isChildAllowed(s->type())) {
@@ -368,7 +368,7 @@ void Chord::addInternal(mu::engraving::Chord* chord, mu::engraving::EngravingIte
 {
     // Provide parentage for element.
     s->setScore(chord->score());
-    s->setParent(chord);
+    s->setOwnershipParent(chord);
     // If a note, ensure the element has proper Tpc values. (Will crash otherwise)
     if (s->isNote()) {
         s->setTrack(chord->track());
@@ -460,7 +460,7 @@ void MeasureBase::add(apiv1::EngravingItem* wrapped)
 void MeasureBase::addInternal(mu::engraving::MeasureBase* measureBase, mu::engraving::EngravingItem* s)
 {
     s->setScore(measureBase->score());
-    s->setParent(measureBase);
+    s->setOwnershipParent(measureBase);
     measureBase->score()->undoAddElement(s);
 }
 

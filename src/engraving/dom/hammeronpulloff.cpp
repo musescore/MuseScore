@@ -134,7 +134,7 @@ void HammerOnPullOffSegment::updateHopoText()
             m_hopoText.push_back(curHopoText);
         }
 
-        curHopoText->setParent(this);
+        curHopoText->setOwnershipParent(this);
         curHopoText->setTrack(track());
         curHopoText->setIsValid(curRegion.isValid);
         curHopoText->setIsHammerOn(curRegion.isHammerOn);
