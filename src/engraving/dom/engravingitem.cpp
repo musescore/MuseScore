@@ -176,6 +176,16 @@ EngravingItem* EngravingItem::parentItem(bool explicitParent) const
     return nullptr;
 }
 
+EngravingItem* EngravingItem::accessibleParentItem() const
+{
+    EngravingItem* p = layoutParent();
+    if (p) {
+        return p;
+    }
+
+    return parentItem(false /*not explicit*/);
+}
+
 EngravingItem* EngravingItem::layoutParent() const
 {
     return parentItem();
@@ -2696,10 +2706,10 @@ void EngravingItem::initAccessibleIfNeed()
 void EngravingItem::doInitAccessible()
 {
     EngravingItemList parents;
-    auto parent = parentItem(false /*not explicit*/);
+    EngravingItem* parent = accessibleParentItem();
     while (parent) {
         parents.push_back(parent);
-        parent = parent->parentItem(false /*not explicit*/);
+        parent = parent->accessibleParentItem();
     }
 
     for (auto it = parents.rbegin(); it != parents.rend(); ++it) {

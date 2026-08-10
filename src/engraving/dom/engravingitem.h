@@ -485,6 +485,10 @@ public:
     bool accessibleEnabled() const;
     void setAccessibleEnabled(bool enabled);
 
+    //! Parent in the accessibility hierarchy: the layout parent when placed,
+    //! otherwise the raw parent (so that e.g. palette items reach the dummy).
+    EngravingItem* accessibleParentItem() const;
+
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
     //  if the screen-reader needs a special string (see note for example)

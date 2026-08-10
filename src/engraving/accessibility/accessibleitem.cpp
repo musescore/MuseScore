@@ -120,7 +120,7 @@ const IAccessible* AccessibleItem::accessibleParent() const
         return nullptr;
     }
 
-    EngravingItem* p = m_element->parentItem(false /*not explicit*/);
+    EngravingItem* p = m_element->accessibleParentItem();
     if (!p) {
         return nullptr;
     }
