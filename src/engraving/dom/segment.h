@@ -183,7 +183,7 @@ public:
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
     Measure* measure() const { return toMeasure(explicitParent()); }
-    System* system() const { return toSystem(explicitParent()->explicitParent()); }
+    System* system() const;
     double x() const override { return ldata()->pos().x(); }
 
     void insertStaff(staff_idx_t staff);

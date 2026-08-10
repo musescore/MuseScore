@@ -598,7 +598,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             }
         }
 
-        Measure* newMeasure = Factory::createMeasure(score->dummy()->system());
+        Measure* newMeasure = Factory::createMeasure(score);
         newMeasure->setTick(tick);
 
         if (actualBeforeMeasure) {

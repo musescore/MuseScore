@@ -84,7 +84,7 @@ TEST_F(Engraving_EIDTests, deletedExcerptScoreItemsAreUnregistered)
     MasterScore* master = compat::ScoreAccess::createMasterScore(nullptr);
     Score* partScore = master->createScore();
 
-    Measure* measure = Factory::createMeasure(partScore->dummy()->system());
+    Measure* measure = Factory::createMeasure(partScore);
     partScore->measures()->append(measure);
 
     EID eid = measure->assignNewEID();

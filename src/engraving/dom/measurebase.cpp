@@ -22,6 +22,7 @@
 
 #include "measurebase.h"
 
+#include "box.h"
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
@@ -39,9 +40,30 @@ using namespace mu::engraving;
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(const ElementType& type, System* system)
-    : EngravingItem(type, system)
+MeasureBase::MeasureBase(const ElementType& type, Score* parent)
+    : EngravingItem(type, parent)
 {
+    // Owned by its score right away; a system only places it later
+    setParent(parent);
+}
+
+void MeasureBase::setParent(Score* score)
+{
+    EngravingItem::setParent(score);
+}
+
+void MeasureBase::setParent(Box* box)
+{
+    EngravingItem::setParent(box);
+}
+
+EngravingItem* MeasureBase::layoutParent() const
+{
+    if (m_system) {
+        return m_system;
+    }
+    // e.g. a horizontal frame nested inside a vertical frame is placed within its parent frame
+    return EngravingItem::layoutParent();
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -888,7 +910,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         m_first = nb;
     }
     if (nb->isBox()) {
-        nb->setParent(ob->system());
+        nb->setSystem(ob->system());
     }
     for (EngravingItem* e : nb->el()) {
         e->setParent(nb);

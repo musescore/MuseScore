@@ -59,7 +59,7 @@ static const ElementStyle hBoxStyle {
 
 static const String FRET_BOX_DIAGRAMS_SEPARATOR = u",";
 
-Box::Box(const ElementType& type, System* parent)
+Box::Box(const ElementType& type, Score* parent)
     : MeasureBase(type, parent)
 {
 }
@@ -300,7 +300,7 @@ void Box::copyValues(Box* origin)
 //   HBox
 //---------------------------------------------------------
 
-HBox::HBox(System* parent)
+HBox::HBox(Score* parent)
     : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
@@ -607,7 +607,7 @@ PropertyValue HBox::propertyDefault(Pid id) const
 //   VBox
 //---------------------------------------------------------
 
-VBox::VBox(const ElementType& type, System* parent)
+VBox::VBox(const ElementType& type, Score* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
@@ -617,7 +617,7 @@ VBox::VBox(const ElementType& type, System* parent)
     setLineBreak(true);
 }
 
-VBox::VBox(System* parent)
+VBox::VBox(Score* parent)
     : VBox(ElementType::VBOX, parent)
 {
 }
@@ -696,7 +696,7 @@ void VBox::startDragGrip(EditData& ed)
 ///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
-FBox::FBox(System* parent)
+FBox::FBox(Score* parent)
     : VBox(ElementType::FBOX, parent)
 {
     resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
@@ -960,7 +960,7 @@ StringList FBox::diagramsOrder() const
 //   TBox
 //---------------------------------------------------------
 
-TBox::TBox(System* parent)
+TBox::TBox(Score* parent)
     : VBox(ElementType::TBOX, parent)
 {
     resetProperty(Pid::BOX_HEIGHT);

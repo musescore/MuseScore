@@ -102,7 +102,7 @@ Measure* Fermata::measure() const
 System* Fermata::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->explicitParent() : 0);
+    return m ? m->system() : nullptr;
 }
 
 //---------------------------------------------------------

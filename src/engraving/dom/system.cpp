@@ -156,7 +156,7 @@ System::~System()
     }
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
     }
     muse::DeleteAll(m_staves);
@@ -192,7 +192,7 @@ void System::clear()
 {
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
     }
     m_ml.clear();
@@ -212,7 +212,7 @@ void System::clear()
 void System::appendMeasure(MeasureBase* mb)
 {
     assert(!mb->isMeasure() || !(style().styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
-    mb->setParent(this);
+    mb->setSystem(this);
     m_ml.push_back(mb);
 }
 
@@ -224,7 +224,7 @@ void System::removeMeasure(MeasureBase* mb)
 {
     m_ml.erase(std::remove(m_ml.begin(), m_ml.end(), mb), m_ml.end());
     if (mb->system() == this) {
-        mb->resetExplicitParent();
+        mb->setSystem(nullptr);
     }
 }
 
@@ -240,8 +240,18 @@ void System::removeLastMeasure()
     MeasureBase* mb = m_ml.back();
     m_ml.pop_back();
     if (mb->system() == this) {
-        mb->resetExplicitParent();
+        mb->setSystem(nullptr);
     }
+}
+
+EngravingItemList System::accessibleChildren() const
+{
+    // The measures are owned by the score, but it is the system that places them, so
+    // the system is where the accessibility tree finds them.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    children.insert(children.end(), m_ml.begin(), m_ml.end());
+
+    return children;
 }
 
 //---------------------------------------------------------
@@ -489,7 +499,11 @@ void System::add(EngravingItem* el)
     }
 // LOGD("%p System::add: %p %s", this, el, el->typeName());
 
-    el->setParent(this);
+    if (el->isMeasureBase()) {
+        toMeasureBase(el)->setSystem(this);
+    } else {
+        el->setParent(this);
+    }
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:

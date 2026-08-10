@@ -816,7 +816,7 @@ void MnxImporter::importGlobalMeasures()
     int lastDisplayNum = 0;
     for (const mnx::global::Measure& mnxMeasure : mnxDocument().global().measures()) {
         const bool isFirst = mnxMeasure.calcArrayIndex() == 0;
-        Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        Measure* measure = Factory::createMeasure(m_score);
         Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
         measure->setTick(tick);
         if (const std::optional<mnx::TimeSignature>& mnxTimeSig = mnxMeasure.time()) {

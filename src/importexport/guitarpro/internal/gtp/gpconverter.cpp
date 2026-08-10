@@ -1012,12 +1012,12 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
-        m = Factory::createTitleVBox(_score->dummy()->system());
+        m = Factory::createTitleVBox(_score);
         _score->measures()->append(m);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createTitleVBox(_score->dummy()->system());
+            MeasureBase* mb = Factory::createTitleVBox(_score);
             _score->addMeasure(mb, m);
             m = mb;
         }
@@ -1704,7 +1704,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
 Measure* GPConverter::addMeasure(const GPMasterBar* mB)
 {
     Fraction tick = _score->measures()->last() ? _score->measures()->last()->endTick() : Fraction(0, 1);
-    Measure* measure = Factory::createMeasure(_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(_score);
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);

@@ -226,7 +226,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         if (doBreak) {
             breakMeasure = ctx.mutState().curMeasure();
             system->removeLastMeasure();
-            ctx.mutState().curMeasure()->setParent(oldSystem);
+            ctx.mutState().curMeasure()->setSystem(oldSystem);
             while (ctx.state().prevMeasure() && ctx.state().prevMeasure()->noBreak() && system->measures().size() > 1) {
                 ctx.mutState().setTick(ctx.state().tick() - ctx.state().curMeasure()->ticks());
                 if (ctx.state().curMeasure()->isMeasure()) {
@@ -238,7 +238,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure()->prev());
 
                 system->removeLastMeasure();
-                ctx.mutState().curMeasure()->setParent(oldSystem);
+                ctx.mutState().curMeasure()->setSystem(oldSystem);
             }
 
             if (sharedTrackMapChanged) {
@@ -453,7 +453,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     bool createBrackets = false;
     for (MeasureBase* mb : system->measures()) {
         if (mb->isMeasure()) {
-            mb->setParent(system);
+            mb->setSystem(system);
             Measure* m = toMeasure(mb);
             MeasureLayout::layoutMeasureElements(m, ctx);
             MeasureLayout::layoutStaffLines(m, ctx);

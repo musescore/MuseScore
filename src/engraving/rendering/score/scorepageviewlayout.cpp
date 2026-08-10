@@ -152,9 +152,9 @@ void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
         }
 
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
-                toMeasure(mb)->mmRest()->moveToDummy();
+                toMeasure(mb)->mmRest()->setSystem(nullptr);
             }
         }
         muse::DeleteAll(score->systems());

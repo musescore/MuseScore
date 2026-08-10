@@ -134,7 +134,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
         }
 
         for (MeasureBase* mb = ctx.mutDom().first(); mb; mb = mb->next()) {
-            mb->resetExplicitParent();
+            mb->setSystem(nullptr);
         }
 
         page = Factory::createPage(ctx.mutDom().rootItem());
@@ -312,7 +312,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
 
     while (ctx.state().curMeasure()) {
         if (ctx.state().curMeasure()->isVBoxBase()) {
-            ctx.mutState().curMeasure()->resetExplicitParent();
+            ctx.mutState().curMeasure()->setSystem(nullptr);
             MeasureLayout::getNextMeasure(ctx);
             MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
             continue;
@@ -324,7 +324,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         if (ctx.state().curMeasure()->isMeasure()) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
             if (m->mmRest()) {
-                m->mmRest()->resetExplicitParent();
+                m->mmRest()->setSystem(nullptr);
             }
             if (firstMeasureInScore) {
                 SystemLayout::layoutSystem(system, ctx, curSystemWidth);
