@@ -261,7 +261,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         return;
     }
 
-    if (m_cueNoteChord && !m_cueNoteChord->explicitParent()) {
+    if (m_cueNoteChord && !m_cueNoteChord->ownershipParent()) {
         m_cueNoteChord->setParent(parentChord->segment());
     }
 

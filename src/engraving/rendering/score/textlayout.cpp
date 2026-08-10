@@ -33,7 +33,7 @@ using namespace muse::draw;
 
 void TextLayout::layoutBaseTextBase(const TextBase* item, TextBase::LayoutData* ldata)
 {
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 

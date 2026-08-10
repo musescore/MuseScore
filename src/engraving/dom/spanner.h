@@ -51,7 +51,7 @@ public:
 
     //! The spanner that owns this segment - derived from the explicit parent,
     //! so that it can never go stale.
-    Spanner* spanner() const { return toSpanner(explicitParent()); }
+    Spanner* spanner() const { return toSpanner(ownershipParent()); }
     void setSpanner(Spanner* val);
 
     void setSpannerSegmentType(SpannerSegmentType s) { m_spannerSegmentType = s; }

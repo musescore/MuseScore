@@ -55,7 +55,7 @@ public:
     int subtype() const override { return int(m_arpeggioType); }
     TranslatableString subtypeUserName() const override;
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
+    Chord* chord() const { return (Chord*)ownershipParent(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;

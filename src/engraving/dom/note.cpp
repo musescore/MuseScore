@@ -1354,7 +1354,7 @@ void Note::removeSpanner(Spanner* l)
 
 void Note::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
+    if (e->ownershipParent() != this) {
         e->setParent(this);
     }
     e->setTrack(track());

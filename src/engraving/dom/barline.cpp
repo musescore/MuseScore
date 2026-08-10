@@ -121,7 +121,7 @@ void BarLine::setParent(Segment* parent)
 PointF BarLine::canvasPos() const
 {
     PointF pos = EngravingItem::canvasPos();
-    if (explicitParent()) {
+    if (ownershipParent()) {
         System* system = measure()->system();
         double yoff = system ? system->staff(staffIdx())->y() : 0.0;
         pos.ry() += yoff;
@@ -231,7 +231,7 @@ void BarLine::calcY()
 {
     BarLine::LayoutData* data = mutldata();
     double _spatium = spatium();
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         // for use in palette
         data->y1 = m_spanFrom * _spatium * .5;
         data->y2 = (8 - m_spanTo) * _spatium * .5;
@@ -545,7 +545,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
 void BarLine::styleChanged()
 {
-    if (explicitParent() && m_barLineType == BarLineType::END_REPEAT) {
+    if (ownershipParent() && m_barLineType == BarLineType::END_REPEAT) {
         score()->undoUpdatePlayCountText(measure());
     }
     EngravingItem::styleChanged();

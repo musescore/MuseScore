@@ -40,7 +40,7 @@ using namespace mu::engraving::rendering::score;
 void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
                                   const LayoutContext& ctx)
 {
-    if (!item->explicitParent()) {
+    if (!item->ownershipParent()) {
         ldata->setPos(0.0, 0.0);
         const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
     }
@@ -80,8 +80,8 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
 PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
 {
     const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->staffHeight(item->tick()) : 0.0;
-    const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
-                            ? toFretDiagram(item->explicitParent())
+    const FretDiagram* fd = (item->ownershipParent() && item->ownershipParent()->isFretDiagram())
+                            ? toFretDiagram(item->ownershipParent())
                             : nullptr;
     const bool alignToFretDiagram = fd && fd->visible();
 

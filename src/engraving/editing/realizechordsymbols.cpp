@@ -235,7 +235,8 @@ void RealizeChordSymbols::realizeChordSymbols(Transaction&, Score* score, bool l
             continue;
         }
         const RealizedHarmony& r = h->getRealizedHarmony();
-        Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
+        Segment* seg = h->ownershipParent()->isSegment() ? toSegment(h->ownershipParent()) : toSegment(
+            h->ownershipParent()->ownershipParent());
         Fraction tick = seg->tick();
         Fraction duration = r.getActualDuration(tick.ticks(), durationType) * h->staff()->timeStretch(tick);
         bool concertPitch = score->style().styleB(Sid::concertPitch);

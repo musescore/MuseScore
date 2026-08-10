@@ -48,7 +48,7 @@ public:
 
     ChordLine* clone() const override { return new ChordLine(*this); }
 
-    Chord* chord() const { return (Chord*)(explicitParent()); }
+    Chord* chord() const { return (Chord*)(ownershipParent()); }
 
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return m_chordLineType; }

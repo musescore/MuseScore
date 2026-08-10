@@ -62,8 +62,8 @@ public:
     Dynamic(Segment* parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
-    Segment* segment() const { return (Segment*)explicitParent(); }
-    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent()->ownershipParent(); }
 
     void setDynamicType(DynamicType val) { m_dynamicType = val; }
     void setDynamicType(const String&);

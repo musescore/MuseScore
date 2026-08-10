@@ -74,7 +74,7 @@ public:
     virtual PropertyValue propertyDefault(Pid) const override;
 
     double baseLine() const override { return 0.0; }
-    virtual Segment* segment() const { return (Segment*)explicitParent(); }
+    virtual Segment* segment() const { return (Segment*)ownershipParent(); }
 
     void reset() override;
 
@@ -105,7 +105,7 @@ public:
     String accessibleInfo() const override;
 
     double baseLine() const override { return 0.0; }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
     const muse::draw::Font& font() const { return m_font; }
     char32_t code() const { return m_code; }
     void setFont(const muse::draw::Font& f);

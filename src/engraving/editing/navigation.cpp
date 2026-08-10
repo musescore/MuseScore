@@ -159,10 +159,10 @@ ChordRest* Navigation::nextChordRest(const ChordRest* cr, const ChordRestNavigat
 
     if (cr->isGrace()) {
         const Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->explicitParent());
+        Chord* pc = toChord(cr->ownershipParent());
 
         if (options.skipGrace) {
-            cr = toChordRest(cr->explicitParent());
+            cr = toChordRest(cr->ownershipParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
             auto i = std::find(group.begin(), group.end(), c);
@@ -242,10 +242,10 @@ ChordRest* Navigation::prevChordRest(const ChordRest* cr, const ChordRestNavigat
 
     if (cr->isGrace()) {
         const Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->explicitParent());
+        Chord* pc = toChord(cr->ownershipParent());
 
         if (options.skipGrace) {
-            cr = toChordRest(cr->explicitParent());
+            cr = toChordRest(cr->ownershipParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
             auto i = std::find(group.begin(), group.end(), c);
@@ -955,7 +955,7 @@ EngravingItem* Score::nextElement()
         case ElementType::FRET_DIAGRAM: {
             FretDiagram* fretDiagram = toFretDiagram(e);
             if (fretDiagram->isInFretBox()) {
-                const ElementList& diagrams = toFBox(fretDiagram->explicitParent())->el();
+                const ElementList& diagrams = toFBox(fretDiagram->ownershipParent())->el();
 
                 size_t index = muse::indexOf(diagrams, fretDiagram);
                 if (index != muse::nidx) {
@@ -1203,8 +1203,8 @@ EngravingItem* Score::prevElement()
         case ElementType::HARMONY: {
             Harmony* harmony = toHarmony(e);
             if (harmony->isInFretBox()) {
-                FretDiagram* fretDiagram = toFretDiagram(harmony->explicitParent());
-                FBox* fretBox = toFBox(fretDiagram->explicitParent());
+                FretDiagram* fretDiagram = toFretDiagram(harmony->ownershipParent());
+                FBox* fretBox = toFBox(fretDiagram->ownershipParent());
                 const ElementList& diagrams = fretBox->el();
 
                 size_t index = muse::indexOf(diagrams, fretDiagram);
@@ -1216,13 +1216,13 @@ EngravingItem* Score::prevElement()
                 }
 
                 return fretBox;
-            } else if (harmony->explicitParent()->isFretDiagram()) {
-                EngravingItem* prev = harmony->getParentSeg()->prevAnnotation(toFretDiagram(harmony->explicitParent()));
+            } else if (harmony->ownershipParent()->isFretDiagram()) {
+                EngravingItem* prev = harmony->getParentSeg()->prevAnnotation(toFretDiagram(harmony->ownershipParent()));
                 if (prev) {
                     return prev;
                 }
 
-                e = toFretDiagram(harmony->explicitParent());
+                e = toFretDiagram(harmony->ownershipParent());
             }
             break;
         }
@@ -1267,7 +1267,7 @@ Lyrics* Navigation::lastLyricsInMeasure(const Segment* seg, const staff_idx_t st
 
 Lyrics* Navigation::prevLyrics(const Lyrics* lyrics)
 {
-    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
+    Segment* seg = lyrics->ownershipParent() ? lyrics->segment() : nullptr;
     if (!seg) {
         return nullptr;
     }
@@ -1287,7 +1287,7 @@ Lyrics* Navigation::prevLyrics(const Lyrics* lyrics)
 
 Lyrics* Navigation::nextLyrics(const Lyrics* lyrics)
 {
-    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
+    Segment* seg = lyrics->ownershipParent() ? lyrics->segment() : nullptr;
     if (!seg) {
         return nullptr;
     }

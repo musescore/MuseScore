@@ -200,7 +200,7 @@ Page* MeasureBase::nextPage() const
 
 void MeasureBase::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
+    if (e->ownershipParent() != this) {
         e->setParent(this);
     }
 
@@ -371,9 +371,9 @@ double MeasureBase::pause() const
 MeasureBase* MeasureBase::top() const
 {
     const MeasureBase* mb = this;
-    while (mb->explicitParent()) {
-        if (mb->explicitParent()->isMeasureBase()) {
-            mb = toMeasureBase(mb->explicitParent());
+    while (mb->ownershipParent()) {
+        if (mb->ownershipParent()->isMeasureBase()) {
+            mb = toMeasureBase(mb->ownershipParent());
         } else {
             break;
         }

@@ -71,7 +71,7 @@ public:
     virtual EngravingItem* drop(Transaction& tx, EditData&) override;
     virtual void undoUnlink() override;
 
-    virtual Segment* segment() const { return (Segment*)explicitParent(); }
+    virtual Segment* segment() const { return (Segment*)ownershipParent(); }
 
     void setBeamMode(BeamMode m) { m_beamMode = m; }
     BeamMode beamMode() const { return m_beamMode; }

@@ -1111,7 +1111,7 @@ Note* SLine::guessFinalNote(Note* startNote)
         }
     }
 
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 

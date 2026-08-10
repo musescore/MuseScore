@@ -52,7 +52,7 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
-    MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
+    MeasureBase* measure() const { return (MeasureBase*)ownershipParent(); }
     double pause() const { return m_pause; }
     void setPause(double v) { m_pause = v; }
     bool startWithLongNames() const { return m_startWithLongNames; }

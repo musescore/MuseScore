@@ -44,7 +44,7 @@ public:
 
     StemSlash* clone() const override { return new StemSlash(*this); }
 
-    Chord* chord() const { return (Chord*)explicitParent(); }
+    Chord* chord() const { return (Chord*)ownershipParent(); }
 
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;

@@ -419,7 +419,7 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
 
         if (endNote->chord()->isGraceAfter()) {
             if (currentNotes.empty()) {
-                IF_ASSERT_FAILED(note->chord() == endNote->chord()->explicitParent()) {
+                IF_ASSERT_FAILED(note->chord() == endNote->chord()->ownershipParent()) {
                     LOGE() << "error in filling bends midi data for note on track " << note->track() << ", tick " << note->tick().ticks();
                     return {};
                 }
@@ -812,7 +812,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     int tieLen = calculateTieLength(note);
     if (chord->isGrace()) {
         assert(!CompatMidiRendererInternal::graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
-        chord = toChord(chord->explicitParent());
+        chord = toChord(chord->ownershipParent());
     }
 
     int ticks = chord->actualTicks().ticks();   // ticks of the actual note

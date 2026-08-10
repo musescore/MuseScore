@@ -45,7 +45,7 @@ public:
     void setHookType(int v);
     int hookType() const { return m_hookType; }
 
-    Chord* chord() const { return toChord(explicitParent()); }
+    Chord* chord() const { return toChord(ownershipParent()); }
     PointF smuflAnchor() const;
 
     //! @p index: the number of flags (positive: upwards, negative: downwards)

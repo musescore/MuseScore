@@ -267,7 +267,7 @@ public:
     Note* startNote() const;
     Note* endNote() const;
 
-    GuitarBend* guitarBend() const { return toGuitarBend(explicitParent()); }
+    GuitarBend* guitarBend() const { return toGuitarBend(ownershipParent()); }
 
     double lineWidth() const;
 

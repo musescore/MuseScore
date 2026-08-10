@@ -268,8 +268,8 @@ SymId Accidental::symId() const
 
 bool Accidental::parentNoteHasParentheses() const
 {
-    const EngravingObject* parent = explicitParent();
-    return parent && parent->isNote() && toNote(parent)->parenthesisInfo();
+    const EngravingObject* owner = ownershipParent();
+    return owner && owner->isNote() && toNote(owner)->parenthesisInfo();
 }
 
 //---------------------------------------------------------

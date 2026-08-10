@@ -59,7 +59,7 @@ public:
     bool init() const { return m_init; }
     void setInit(bool init) { m_init = init; }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
 
     PropertyValue propertyDefault(Pid) const override;
 

@@ -181,8 +181,8 @@ void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
             Tuplet* st = toTuplet(de);
             Tuplet* dt = toTuplet(e);
             appendTuplet(st, dt);
-        } else if (de->explicitParent() && de->explicitParent()->isSegment()) {
-            Segment* seg = toSegment(de->explicitParent());
+        } else if (de->ownershipParent() && de->ownershipParent()->isSegment()) {
+            Segment* seg = toSegment(de->ownershipParent());
             for (EngravingItem* ee : seg->annotations()) {
                 bool addSysObject = ee->systemFlag() && !ee->isLinked() && ee->track() == 0 && e->track() == 0;
                 if (addSysObject || (!ee->systemFlag() && ee->track() == e->track())) {
@@ -993,7 +993,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     }
     for (const Annotation& a : m_annotations) {
         Measure* tm = score->tick2measure(a.tick);
-        Segment* op = toSegment(a.e->explicitParent());
+        Segment* op = toSegment(a.e->ownershipParent());
         Fraction destTick = a.e->isRehearsalMark() ? tm->tick() : a.tick; // Ensure reharsal mark can only go at measure start
         Segment* s = tm->undoGetSegment(op->segmentType(), destTick);
         if (s) {

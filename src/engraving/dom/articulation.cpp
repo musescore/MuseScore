@@ -195,8 +195,8 @@ muse::TranslatableString Articulation::subtypeUserName() const
 
 ChordRest* Articulation::chordRest() const
 {
-    if (explicitParent() && explicitParent()->isChordRest()) {
-        return toChordRest(explicitParent());
+    if (ownershipParent() && ownershipParent()->isChordRest()) {
+        return toChordRest(ownershipParent());
     }
     return 0;
 }
@@ -210,11 +210,11 @@ Segment* Articulation::segment() const
 
     Segment* s = 0;
     if (cr->isGrace()) {
-        if (cr->explicitParent()) {
-            s = toSegment(cr->explicitParent()->explicitParent());
+        if (cr->ownershipParent()) {
+            s = toSegment(cr->ownershipParent()->ownershipParent());
         }
     } else {
-        s = toSegment(cr->explicitParent());
+        s = toSegment(cr->ownershipParent());
     }
 
     return s;
@@ -223,7 +223,7 @@ Segment* Articulation::segment() const
 Measure* Articulation::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->explicitParent() : 0);
+    return toMeasure(s ? s->ownershipParent() : 0);
 }
 
 System* Articulation::system() const

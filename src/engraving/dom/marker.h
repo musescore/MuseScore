@@ -64,7 +64,7 @@ public:
     int subtype() const override { return int(m_markerType); }
     TranslatableString subtypeUserName() const override;
 
-    Measure* measure() const { return (Measure*)explicitParent(); }
+    Measure* measure() const { return (Measure*)ownershipParent(); }
 
     String label() const { return m_label; }
     void setLabel(const String& s) { m_label = s; }

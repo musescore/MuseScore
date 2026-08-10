@@ -352,7 +352,7 @@ void ChangeElement::flip()
         }
     }
 
-    if (oldElement->explicitParent() == nullptr) {
+    if (oldElement->ownershipParent() == nullptr) {
         newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);

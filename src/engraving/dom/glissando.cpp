@@ -272,8 +272,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE16:
     case NoteType::GRACE32:
         // move unto parent chord and proceed to standard case
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            chord = toChord(chord->explicitParent());
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            chord = toChord(chord->ownershipParent());
         } else {
             return 0;
         }
@@ -282,8 +282,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            return toChord(chord->explicitParent())->upNote();
+        if (chord->ownershipParent() && chord->ownershipParent()->isChord()) {
+            return toChord(chord->ownershipParent())->upNote();
         } else {                                // no parent or parent is not a chord?
             return nullptr;
         }
@@ -303,7 +303,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
     // standard case (NORMAL or grace before chord)
 
     // if parent not a segment, can't locate a target note
-    if (!chord->explicitParent()->isSegment()) {
+    if (!chord->ownershipParent()->isSegment()) {
         return 0;
     }
 

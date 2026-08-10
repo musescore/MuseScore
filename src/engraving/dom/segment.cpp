@@ -686,7 +686,7 @@ void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
-    if (el->explicitParent() != this) {
+    if (el->ownershipParent() != this) {
         el->setParent(this);
     }
 
@@ -2003,7 +2003,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STICKING:
     case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             next = nextAnnotation(e);
 
             if (next && next->isFretDiagram()) {
@@ -2237,7 +2237,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         }
 
         EngravingItem* prevAnnotation = nullptr;
-        if (e->explicitParent() == this) {
+        if (e->ownershipParent() == this) {
             prevAnnotation = this->prevAnnotation(e);
         }
         if (prevAnnotation) {

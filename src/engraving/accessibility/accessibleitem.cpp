@@ -95,7 +95,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
-    RootItem* rootItem = m_element->explicitParent() ? score->rootItem() : score->dummy()->rootItem();
+    RootItem* rootItem = m_element->ownershipParent() ? score->rootItem() : score->dummy()->rootItem();
     return dynamic_cast<AccessibleRoot*>(rootItem->accessible().get());
 }
 

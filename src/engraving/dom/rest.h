@@ -74,7 +74,7 @@ public:
 
     Rest* clone() const override { return new Rest(*this, false); }
     EngravingItem* linkedClone() override { return new Rest(*this, true); }
-    Measure* measure() const override { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : 0; }
+    Measure* measure() const override { return ownershipParent() ? toMeasure(ownershipParent()->ownershipParent()) : 0; }
     double mag() const override;
     double intrinsicMag() const override;
 

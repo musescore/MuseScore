@@ -188,7 +188,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         triggerLayoutToEnd();
     } else {
         triggerLayout();
-        if (explicitParent() && measure()->next()) {
+        if (ownershipParent() && measure()->next()) {
             measure()->next()->triggerLayout();
         }
     }

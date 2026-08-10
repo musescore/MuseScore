@@ -189,7 +189,7 @@ EngravingItemList EngravingItem::accessibleChildren() const
 
 EngravingItem* EngravingItem::parentItem() const
 {
-    EngravingObject* p = explicitParent();
+    EngravingObject* p = ownershipParent();
     if (p && p->isEngravingItem()) {
         return toEngravingItem(p);
     }
@@ -636,7 +636,7 @@ void EngravingItem::setVoice(voice_idx_t v)
 Fraction EngravingItem::tick() const
 {
     // walks EngravingObject, because the chain leaves EngravingItem at the score
-    for (const EngravingObject* e = explicitParent(); e; e = e->explicitParent()) {
+    for (const EngravingObject* e = ownershipParent(); e; e = e->ownershipParent()) {
         if (e->isSegment()) {
             return toSegment(e)->tick();
         } else if (e->isMeasureBase()) {
@@ -652,7 +652,7 @@ Fraction EngravingItem::tick() const
 
 Fraction EngravingItem::rtick() const
 {
-    for (const EngravingObject* e = explicitParent(); e; e = e->explicitParent()) {
+    for (const EngravingObject* e = ownershipParent(); e; e = e->ownershipParent()) {
         if (e->isSegment()) {
             return toSegment(e)->rtick();
         }
@@ -1026,7 +1026,7 @@ void EngravingItem::dump() const
          typeName(), ldata->pos().x(), ldata->pos().y(),
          ldata->bbox().x(), ldata->bbox().y(), ldata->bbox().width(), ldata->bbox().height(),
          pageBoundingRect().x(), pageBoundingRect().y(), pageBoundingRect().width(), pageBoundingRect().height(),
-         explicitParent());
+         ownershipParent());
 }
 
 //---------------------------------------------------------
@@ -1233,8 +1233,8 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
     case Pid::HAS_PARENTHESES:
         return parenthesesMode();
     default:
-        if (explicitParent()) {
-            return explicitParent()->getProperty(propertyId);
+        if (ownershipParent()) {
+            return ownershipParent()->getProperty(propertyId);
         }
 
         return PropertyValue();
@@ -1315,8 +1315,8 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setParenthesesMode(v.value<ParenthesesMode>());
         break;
     default:
-        if (explicitParent()) {
-            return explicitParent()->setProperty(propertyId, v);
+        if (ownershipParent()) {
+            return ownershipParent()->setProperty(propertyId, v);
         }
 
         LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.value<String>();
@@ -1716,8 +1716,8 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
             return v;
         }
 
-        if (explicitParent()) {
-            return explicitParent()->propertyDefault(pid);
+        if (ownershipParent()) {
+            return ownershipParent()->propertyDefault(pid);
         }
 
         return PropertyValue();
@@ -1766,7 +1766,7 @@ bool EngravingItem::isPlayable() const
     case ElementType::CHORD:
         return true;
     case ElementType::HARMONY:
-        return explicitParent() && explicitParent()->isSegment();
+        return ownershipParent() && ownershipParent()->isSegment();
     default:
         return false;
     }
@@ -2209,7 +2209,7 @@ bool EngravingItem::isUserModified() const
 
 void EngravingItem::triggerLayout() const
 {
-    if (explicitParent()) {
+    if (ownershipParent()) {
         score()->setLayout(tick(), staffIdx(), this);
     }
 }
@@ -2224,14 +2224,14 @@ void EngravingItem::triggerLayout() const
 
 void EngravingItem::triggerLayoutAll() const
 {
-    if (explicitParent()) {
+    if (ownershipParent()) {
         score()->setLayoutAll(staffIdx(), this);
     }
 }
 
 void EngravingItem::triggerLayoutToEnd() const
 {
-    if (explicitParent()) {
+    if (ownershipParent()) {
         score()->setLayout(tick(), score()->endTick(), staffIdx(), staffIdx(), this);
     }
 }
@@ -2369,8 +2369,8 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
         xp += e->x();
     }
     double yp;
-    if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
-        Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
+    if (ownershipParent()->isSegment() || ownershipParent()->isMeasure()) {
+        Measure* meas = ownershipParent()->isSegment() ? toSegment(ownershipParent())->measure() : toMeasure(ownershipParent());
         System* system = meas->system();
         const staff_idx_t stIdx = effectiveStaffIdx();
         if (stIdx == muse::nidx) {

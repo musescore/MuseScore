@@ -240,12 +240,12 @@ EngravingItem* FretDiagram::linkedClone()
 
 Segment* FretDiagram::segment() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     if (!parent || !parent->isSegment()) {
         return nullptr;
     }
 
-    return toSegment(explicitParent());
+    return toSegment(ownershipParent());
 }
 
 void FretDiagram::updateDiagram(const String& harmonyName)
@@ -1060,7 +1060,7 @@ EngravingItem* FretDiagram::drop(Transaction&, EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
-        h->setParent(explicitParent());
+        h->setParent(ownershipParent());
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
@@ -1376,7 +1376,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
 bool FretDiagram::isInFretBox() const
 {
-    EngravingObject* parent = explicitParent();
+    EngravingObject* parent = ownershipParent();
     return parent ? parent->isFBox() : false;
 }
 
