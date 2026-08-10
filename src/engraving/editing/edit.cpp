@@ -2668,7 +2668,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     if (cr->beam()) {
         Beam* beam = cr->beam();
         if (beam->generated()) {
-            beam->parentItem()->remove(beam);
+            removeElement(beam);
             delete beam;
         } else {
             undoRemoveElement(beam);

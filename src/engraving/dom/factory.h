@@ -66,8 +66,8 @@ public:
     static BarLine* copyBarLine(const BarLine& src);
     static std::shared_ptr<BarLine> makeBarLine(Segment* parent);
 
-    static Beam* createBeam(System* parent, bool isAccessibleEnabled = true);
-    static std::shared_ptr<Beam> makeBeam(System* parent);
+    static Beam* createBeam(Score* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Beam> makeBeam(Score* parent);
 
     static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(Note* parent);

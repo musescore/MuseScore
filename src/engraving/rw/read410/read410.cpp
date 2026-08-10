@@ -741,10 +741,9 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     breath->setParent(segment);
                     score->undoChangeElement(segment->element(ctx.track()), breath);
                 } else if (tag == "Beam") {
-                    Beam* beam = Factory::createBeam(score->dummy()->system());
+                    Beam* beam = Factory::createBeam(score);
                     beam->setTrack(ctx.track());
                     TRead::read(beam, e, ctx);
-                    beam->resetExplicitParent();
                     if (startingBeam) {
                         LOGD("The read beam was not used");
                         delete startingBeam;

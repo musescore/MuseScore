@@ -1421,7 +1421,7 @@ void MnxImporter::createBeams(const mnx::part::Measure& mnxMeasure)
                 }
             }
             if (beamElements.size() > 1) {
-                Beam* msBeam = Factory::createBeam(m_score->dummy()->system());
+                Beam* msBeam = Factory::createBeam(m_score);
                 msBeam->setTrack(beamElements.front()->track());
                 msBeam->setDirection(beamDirection);
                 for (ChordRest* cr : beamElements) {

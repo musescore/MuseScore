@@ -3157,10 +3157,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
             int beamId = e.attribute("id").toInt();
-            Beam* beam = Factory::createBeam(ctx.dummy()->system());
+            Beam* beam = Factory::createBeam(ctx.score());
             beam->setTrack(ctx.track());
             read400::TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             ctx.addBeam(beamId, beam);
         } else if (tag == "Segment") {
             if (segment) {
