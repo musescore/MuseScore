@@ -2955,7 +2955,8 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
         return true;
     }
     if (c1->isGraceBefore() && c2->isGraceAfter() && c1->parentItem() == c2->parentItem()) {
-        if (toChord(c1->parentItem())->stem() && toChord(c1->parentItem())->up() != up) {
+        const Chord* mainChord = toChord(c1->parentItem());
+        if (mainChord->stem() && mainChord->up() != up) {
             return true;
         }
     }
