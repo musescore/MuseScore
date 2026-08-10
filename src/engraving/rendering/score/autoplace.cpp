@@ -32,12 +32,16 @@
 #include "dom/system.h"
 #include "dom/measure.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
 void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
+
     // TODO: proper item-to-item table for horizontal clearance in skyline
     const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleAbsolute(
         Sid::skylineMinHorizontalClearance) * item->mag();
@@ -111,6 +115,9 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
 
 void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
 {
+    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
+
     if (item->autoplace() && item->explicitParent()) {
         const Measure* m = toMeasure(item->explicitParent());
 
@@ -170,6 +177,9 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata, double sp)
 {
+    // If this fires, item's type is missing from the true set of autoplaceAppliesToType()
+    DO_ASSERT(autoplaceAppliesToType(item->type()));
+
     if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
         return;
     }
