@@ -29,6 +29,10 @@
 using namespace mu::engraving;
 
 namespace mu::iex::midi {
+namespace {
+const QString UNEXPECTED_EOF_ERROR("bad midifile: unexpected EOF");
+}
+
 MidiFile::MidiFile()
 {
     fp               = 0;
@@ -317,8 +321,16 @@ bool MidiFile::readTrack()
 
     for (;;) {
         MidiEvent event;
-        if (!readEvent(&event)) {
-            return true;
+        try {
+            if (!readEvent(&event)) {
+                return true;
+            }
+        } catch (const QString& error) {
+            if (fp->atEnd() && error == UNEXPECTED_EOF_ERROR) {
+                LOGW("MIDI track ends unexpectedly; treating EOF as end-of-track");
+                break;
+            }
+            throw;
         }
 
         // check for end of track:
@@ -347,7 +359,7 @@ void MidiFile::read(void* p, qint64 len)
     curPos += len;
     qint64 rv = fp->read((char*)p, len);
     if (rv != len) {
-        throw(QString("bad midifile: unexpected EOF"));
+        throw(UNEXPECTED_EOF_ERROR);
     }
 }
 
