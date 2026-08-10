@@ -408,7 +408,7 @@ void AppearanceSettingsModel::updateIsAutoplaceEnabled()
 {
     bool isEnabled = false;
     for (EngravingItem* item : m_elementsForOffsetProperty) {
-        if (item->autoplace()) {
+        if (item->autoplace() && autoplaceAppliesToType(item->type())) {
             isEnabled = true;
             break;
         }

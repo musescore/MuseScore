@@ -37,7 +37,7 @@ void EditPosition::freezeItemsPositions(Transaction& tx, std::vector<EngravingIt
 
 void EditPosition::freezeItemPosition(Transaction&, EngravingItem* item)
 {
-    if (item->generated() || !item->autoplace()) {
+    if (item->generated() || !item->autoplace() || !autoplaceAppliesToType(item->type())) {
         return;
     }
 
