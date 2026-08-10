@@ -3297,7 +3297,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
         }
     }
 
-    for (; e && !e->isSegment(); e = e->parentItem()) {
+    for (; e && !e->isSegment(); e = e->layoutParent()) {
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();

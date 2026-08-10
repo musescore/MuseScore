@@ -3108,7 +3108,7 @@ void Score::collectMatch(ElementPattern* p, EngravingItem* e)
                 }
                 break;
             }
-            ee = ee->parentItem();
+            ee = ee->layoutParent();
         } while (ee);
     }
 

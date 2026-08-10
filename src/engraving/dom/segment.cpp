@@ -2083,7 +2083,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             }
         }
         EngravingItem* el = p;
-        for (; p && !p->isSegment(); p = p->parentItem()) {
+        for (; p && !p->isSegment(); p = p->layoutParent()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
