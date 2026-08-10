@@ -43,7 +43,7 @@ enum class ImageType : char {
 //   @@ Image
 //---------------------------------------------------------
 
-class Image final : public BSymbol, public muse::Contextable
+class Image final : public BSymbol
 {
     OBJECT_ALLOCATOR(engraving, Image)
     DECLARE_CLASSOF(ElementType::IMAGE)
