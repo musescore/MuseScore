@@ -934,14 +934,14 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     if (!tickChanged || pointType == PointData::PointType::BOTH) {
         mu::engraving::AutomationPoint editedPoint = existingPoint;
-        const mu::engraving::AutomationPoint::Bend preservedBend
-            = mu::engraving::bend(editedPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
+        const mu::engraving::AutomationPoint::Ease preservedEase
+            = mu::engraving::ease(editedPoint).value_or(mu::engraving::AutomationPoint::Ease::none());
         if (pointType == PointData::PointType::IN) {
             // The user explicitly chose this arrival value; it no longer follows whatever precedes it
-            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newValue, preservedBend };
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newValue, preservedEase };
         } else if (pointType == PointData::PointType::BOTH) {
             editedPoint.value.outValue = newValue;
-            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { editedPoint.value.outValue, preservedBend };
+            editedPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { editedPoint.value.outValue, preservedEase };
         } else {
             editedPoint.value.outValue = newValue;
         }
@@ -958,19 +958,19 @@ bool NotationAutomationController::requestEditPoint(const PointData& oldPointDat
 
     // oldTick becomes a flat BOTH point, so its inValue is frozen to outValue at edit time (it no
     // longer live-tracks outValue if it's edited again later)
-    const mu::engraving::AutomationPoint::Bend originalBend
-        = mu::engraving::bend(existingPoint).value_or(mu::engraving::AutomationPoint::Bend::none());
+    const mu::engraving::AutomationPoint::Ease originalEase
+        = mu::engraving::ease(existingPoint).value_or(mu::engraving::AutomationPoint::Ease::none());
 
     mu::engraving::AutomationPoint updatedOldPoint = existingPoint;
     if (pointType == PointData::PointType::OUT) {
         updatedOldPoint.value.outValue = existingInValue;
     }
-    updatedOldPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { updatedOldPoint.value.outValue, originalBend };
+    updatedOldPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { updatedOldPoint.value.outValue, originalEase };
     updatedOldPoint.generated = false;
 
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = newValue;
-    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue, originalBend };
+    newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue, originalEase };
     newPoint.itemId = existingPoint.itemId;
 
     mu::engraving::AutomationPointEdits edits {
@@ -1005,7 +1005,7 @@ bool NotationAutomationController::requestAddPoint(const SysStaffKey& key, qreal
     mu::engraving::AutomationPoint newPoint;
     newPoint.value.outValue = automationValueFromDisplay(currentAutomationType(), 1.0 - y);
     newPoint.value.inValue = mu::engraving::AutomationPoint::ExplicitArrival { newPoint.value.outValue,
-                                                                               mu::engraving::AutomationPoint::Bend::none() };
+                                                                               mu::engraving::AutomationPoint::Ease::none() };
     newPoint.generated = false;
 
     const mu::engraving::AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);
