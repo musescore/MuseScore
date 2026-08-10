@@ -326,6 +326,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.h
+    ${CMAKE_CURRENT_LIST_DIR}/tabdurationsymbol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tabdurationsymbol.h
     ${CMAKE_CURRENT_LIST_DIR}/tapping.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tapping.h
     ${CMAKE_CURRENT_LIST_DIR}/tempo.cpp

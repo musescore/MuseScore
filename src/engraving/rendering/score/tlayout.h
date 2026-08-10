@@ -100,6 +100,7 @@
 #include "../../dom/systemtext.h"
 #include "../../dom/soundflag.h"
 
+#include "../../dom/tabdurationsymbol.h"
 #include "../../dom/tapping.h"
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"

@@ -751,32 +751,6 @@ Spatium StaffType::physStringToYOffset(int strg) const
 }
 
 //---------------------------------------------------------
-//   TabDurationSymbol
-//---------------------------------------------------------
-
-TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
-    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
-{
-    setGenerated(true);
-    m_tab        = 0;
-    m_text       = String();
-}
-
-TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots)
-    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
-{
-    setGenerated(true);
-    setDuration(type, dots, tab);
-}
-
-TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
-    : EngravingItem(e)
-{
-    m_tab = e.m_tab;
-    m_text = e.m_text;
-}
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 
