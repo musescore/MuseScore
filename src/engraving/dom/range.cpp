@@ -304,7 +304,8 @@ void TrackList::append(EngravingItem* e)
                             ++idx;
                         }
                         delete element;
-                        element = 0;
+                        element = nullptr;
+                        m_clonedChord.erase(chord);
                     }
                 }
             }
