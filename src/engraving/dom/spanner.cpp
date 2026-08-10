@@ -50,14 +50,16 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : EngravingItem(type, parent, f)
+    : EngravingItem(type, sp, f)
 {
+    UNUSED(parent); // a fresh segment is not placed yet; see moveToSystem
     m_spanner = sp;
+    setParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
 SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementFlags f)
-    : EngravingItem(type, parent, f)
+    : EngravingItem(type, parent->score()->dummy(), f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
     m_spanner = 0;
@@ -70,6 +72,30 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
     m_spannerSegmentType = s.m_spannerSegmentType;
     m_p2                 = s.m_p2;
     m_offset2            = s.m_offset2;
+}
+
+SpannerSegment::~SpannerSegment()
+{
+    // A system only places a segment, so it holds a plain back-reference to it: take
+    // that reference with us, rather than relying on every deletion site to do it.
+    moveToSystem(nullptr);
+}
+
+Spanner* SpannerSegment::setSpanner(Spanner* val)
+{
+    m_spanner = val;
+    setParent(val);
+    return m_spanner;
+}
+
+void SpannerSegment::setParent(Spanner* spanner)
+{
+    EngravingItem::setParent(spanner);
+}
+
+EngravingItem* SpannerSegment::layoutParent() const
+{
+    return m_system;
 }
 
 //---------------------------------------------------------
@@ -90,20 +116,20 @@ Fraction SpannerSegment::tick() const
 }
 
 //---------------------------------------------------------
-//   setSystem
+//   moveToSystem
 //---------------------------------------------------------
 
-void SpannerSegment::setSystem(System* s)
+void SpannerSegment::moveToSystem(System* s)
 {
-    if (system() != s) {
-        if (system()) {
-            system()->remove(this);
-        }
-        if (s) {
-            s->add(this);
-        } else {
-            resetExplicitParent();
-        }
+    if (m_system == s) {
+        return;
+    }
+    if (m_system) {
+        m_system->remove(this);
+    }
+    m_system = s;
+    if (s) {
+        s->add(this);
     }
 }
 
@@ -444,8 +470,7 @@ Spanner::Spanner(const Spanner& s)
 
     for (auto* segment : s.m_segments) {
         SpannerSegment* newSegment = toSpannerSegment(segment->clone());
-        newSegment->setParent(nullptr);
-        add(newSegment);
+        add(newSegment);   // reparents the clone to this spanner
     }
 }
 
@@ -491,6 +516,18 @@ void Spanner::remove(EngravingItem* e)
     m_segments.erase(std::remove(m_segments.begin(), m_segments.end(), ss), m_segments.end());
 }
 
+EngravingItemList Spanner::accessibleChildren() const
+{
+    // A segment that is placed on a system belongs to that system in the accessibility
+    // tree, even though this spanner is what owns it.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    muse::remove_if(children, [](EngravingItem* item) {
+        return item->isSpannerSegment() && toSpannerSegment(item)->system();
+    });
+
+    return children;
+}
+
 //---------------------------------------------------------
 //   removeUnmanaged
 //
@@ -506,8 +543,7 @@ void Spanner::removeUnmanaged()
 {
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system()) {
-//                  ss->system()->remove(ss);
-            ss->setSystem(nullptr);
+            ss->moveToSystem(nullptr);
         }
     }
     score()->removeUnmanagedSpanner(this);
@@ -1476,7 +1512,7 @@ void Spanner::pushUnusedSegment(SpannerSegment* seg)
     if (!seg) {
         return;
     }
-    seg->setSystem(nullptr);
+    seg->moveToSystem(nullptr);
     m_unusedSegments.push_back(seg);
 }
 
@@ -1577,13 +1613,11 @@ bool Spanner::isUserModified() const
 
 void Spanner::eraseSpannerSegments()
 {
+    // Unplace the used segments explicitly, so that System::remove() calls removed()
+    // on a fully alive segment. ~SpannerSegment would unplace them too, but from there
+    // the virtual call no longer reaches overrides below SpannerSegment.
+    // Unused segments were already unplaced on their way into m_unusedSegments.
     for (SpannerSegment* seg : m_segments) {
-        if (System* system = seg->system()) {
-            system->remove(seg);
-        }
-    }
-
-    for (SpannerSegment* seg : m_unusedSegments) {
         if (System* system = seg->system()) {
             system->remove(seg);
         }

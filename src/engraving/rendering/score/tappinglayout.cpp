@@ -170,7 +170,7 @@ void TappingLayout::layoutHalfSlur(Tapping* item, TappingHalfSlur* slur, LayoutC
     }
 
     for (SpannerSegment* seg : slur->spannerSegments()) {
-        seg->resetExplicitParent();
+        seg->moveToSystem(nullptr);
     }
 
     Skyline& skyline = system->staff(item->staffIdx())->skyline();

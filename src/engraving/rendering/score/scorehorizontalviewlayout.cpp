@@ -121,7 +121,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
     if (layoutAll) {
         for (System* s : mutDom.systems()) {
             for (SpannerSegment* ss : s->spannerSegments()) {
-                ss->resetExplicitParent();
+                ss->setSystem(nullptr);
             }
         }
         muse::DeleteAll(mutDom.systems());
