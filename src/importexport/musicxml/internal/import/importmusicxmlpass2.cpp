@@ -2966,17 +2966,19 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     for (auto& harmony : delayedHarmony) {
         HarmonyDesc harmonyDesc = harmony.second;
         Fraction tick = Fraction::fromTicks(harmony.first);
-        if (harmonyDesc.m_fretDiagram) {
-            harmonyDesc.m_fretDiagram->setTrack(harmonyDesc.m_track);
+        if (FretDiagram* fd = harmonyDesc.m_fretDiagram) {
+            fd->setTrack(harmonyDesc.m_track);
             Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            harmonyDesc.m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
-            s->add(harmonyDesc.m_fretDiagram);
-        }
-
-        if (harmonyDesc.m_harmony) {
-            harmonyDesc.m_harmony->setTrack(harmonyDesc.m_track);
+            if (Harmony* harmony = harmonyDesc.m_harmony) {
+                harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+                harmony->setTrack(harmonyDesc.m_track);
+                fd->add(harmony);
+            }
+            s->add(fd);
+        } else if (Harmony* harmony = harmonyDesc.m_harmony) {
+            harmony->setTrack(harmonyDesc.m_track);
             Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            s->add(harmonyDesc.m_harmony);
+            s->add(harmony);
         }
     }
 

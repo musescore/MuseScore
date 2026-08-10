@@ -145,6 +145,14 @@
           <FretDiagram>
             <frets>5</frets>
             <eid>L_L</eid>
+            <Harmony>
+              <harmonyInfo>
+                <name>add9</name>
+                <root>13</root>
+                <bass>17</bass>
+                </harmonyInfo>
+              <eid>L_L</eid>
+              </Harmony>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -166,14 +174,6 @@
                 </string>
               </fretDiagram>
             </FretDiagram>
-          <Harmony>
-            <harmonyInfo>
-              <name>add9</name>
-              <root>13</root>
-              <bass>17</bass>
-              </harmonyInfo>
-            <eid>M_M</eid>
-            </Harmony>
           <Chord>
             <eid>N_N</eid>
             <durationType>whole</durationType>
@@ -191,6 +191,12 @@
           <FretDiagram>
             <frets>5</frets>
             <eid>Q_Q</eid>
+            <Harmony>
+              <harmonyInfo>
+                <root>12</root>
+                </harmonyInfo>
+              <eid>Q_Q</eid>
+              </Harmony>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -207,12 +213,6 @@
               <barre start="1" end="5">1</barre>
               </fretDiagram>
             </FretDiagram>
-          <Harmony>
-            <harmonyInfo>
-              <root>12</root>
-              </harmonyInfo>
-            <eid>R_R</eid>
-            </Harmony>
           <Chord>
             <eid>S_S</eid>
             <durationType>whole</durationType>
