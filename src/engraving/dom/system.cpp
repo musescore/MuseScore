@@ -27,6 +27,8 @@
 
 #include "system.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "style/style.h"
 
 #include "../editing/navigation.h"
@@ -35,7 +37,6 @@
 #include "box.h"
 #include "bracket.h"
 #include "bracketitem.h"
-#include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"

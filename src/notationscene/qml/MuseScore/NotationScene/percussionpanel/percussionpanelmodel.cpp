@@ -31,6 +31,7 @@
 
 #include "ui/view/iconcodes.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
 

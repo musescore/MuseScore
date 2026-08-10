@@ -26,7 +26,7 @@
 
 #include "defer.h"
 
-#include "style/style.h"
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "chord.h"
 #include "note.h"

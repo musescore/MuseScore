@@ -26,6 +26,8 @@
 
 #include "containers.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
 

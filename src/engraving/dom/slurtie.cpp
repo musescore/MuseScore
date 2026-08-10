@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "slurtie.h"
 
 #include "draw/types/pen.h"
+
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "../editing/elementeditdata.h"
 #include "../editing/mscoreview.h"

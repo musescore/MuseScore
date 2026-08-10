@@ -22,6 +22,8 @@
 
 #include "transpose.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../dom/factory.h"
 #include "../dom/fret.h"
 #include "../dom/harmony.h"

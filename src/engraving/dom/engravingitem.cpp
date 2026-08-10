@@ -33,6 +33,8 @@
 #include "io/buffer.h"
 #include "translation.h"
 
+#include "iengravingconfiguration.h"
+#include "iengravingcontextconfiguration.h"
 #include "iengravingfont.h"
 
 #include "rw/rwregister.h"

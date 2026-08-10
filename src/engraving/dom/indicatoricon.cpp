@@ -22,6 +22,8 @@
 
 #include "indicatoricon.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "mscore.h"
 #include "system.h"
 

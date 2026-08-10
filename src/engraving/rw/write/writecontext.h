@@ -49,10 +49,7 @@ public:
     WriteContext(const Score* s, bool clipboardMode = false)
         : m_score(s), _clipboardmode(clipboardMode) {}
 
-    std::shared_ptr<IEngravingConfiguration> configuration() const
-    {
-        return m_score->configuration();
-    }
+    std::shared_ptr<IEngravingConfiguration> configuration() const;
 
     Fraction curTick() const { return _curTick; }
     void setCurTick(const Fraction& v) { _curTick   = v; }

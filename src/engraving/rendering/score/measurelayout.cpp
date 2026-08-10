@@ -23,6 +23,8 @@
 
 #include "measurelayout.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "dom/ambitus.h"
 #include "dom/barline.h"
 #include "dom/beam.h"

@@ -26,8 +26,6 @@
 #include "draw/types/geometry.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingconfiguration.h"
-#include "../iengravingcontextconfiguration.h"
 #include "../rendering/iscorerenderer.h"
 #include "../rendering/paintoptions.h"
 
@@ -54,6 +52,9 @@ class Painter;
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
+class IEngravingConfiguration;
+class IEngravingContextConfiguration;
+
 class Transaction;
 
 template<typename T>

@@ -23,9 +23,10 @@
 #include "stafftype.h"
 
 #include "draw/fontmetrics.h"
-#include "draw/painter.h"
 #include "io/file.h"
 #include "translation.h"
+
+#include "iengravingconfiguration.h"
 
 #include "rw/xmlreader.h"
 #include "style/defaultstyle.h"
@@ -65,6 +66,8 @@ constexpr int NUM_OF_BASSSTRINGS_WITH_NUMBER = 2;     // the max number of bass 
 //---------------------------------------------------------
 
 constexpr double TAB_DEFAULT_DUR_YOFFS = -1.0;
+
+muse::GlobalInject<IEngravingConfiguration> StaffType::configuration;
 
 std::vector<TablatureFretFont> StaffType::m_fretFonts = {};
 std::vector<TablatureDurationFont> StaffType::m_durationFonts = {};

@@ -31,6 +31,7 @@
 
 #include "uicomponents/qml/Muse/UiComponents/polylineplot.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/dynamicvalues.h"
 #include "engraving/dom/masterscore.h"

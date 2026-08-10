@@ -21,6 +21,7 @@
  */
 #include "twrite.h"
 
+#include "../../iengravingconfiguration.h" // IWYU pragma: keep
 #include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"

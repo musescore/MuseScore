@@ -22,6 +22,8 @@
 
 #include "tread.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"

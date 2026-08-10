@@ -32,7 +32,6 @@
 #include "../types/types.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
 class Chord;
@@ -152,7 +151,8 @@ enum class ParenthesizeTiedFret : unsigned char {
 
 class StaffType
 {
-    static inline muse::GlobalInject<IEngravingConfiguration> configuration;
+    static muse::GlobalInject<class IEngravingConfiguration> configuration;
+
 public:
     StaffType();
 

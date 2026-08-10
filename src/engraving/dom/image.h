@@ -22,14 +22,20 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+
+#include "draw/types/pixmap.h"
+
 #include "bsymbol.h"
 
-#include "modularity/ioc.h"
-#include "draw/iimageprovider.h"
-
 namespace muse::draw {
+class IImageProvider;
 class Pixmap;
 class SvgRenderer;
+}
+
+namespace muse::io {
+struct path_t;
 }
 
 namespace mu::engraving {

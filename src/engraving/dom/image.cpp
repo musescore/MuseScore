@@ -25,6 +25,7 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
+#include "draw/iimageprovider.h" // IWYU pragma: keep
 #include "draw/types/pixmap.h"
 #include "draw/svgrenderer.h"
 

@@ -22,6 +22,8 @@
 
 #include "log.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "types/typesconv.h"
 
 #include "layoutbreak.h"
