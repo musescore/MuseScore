@@ -2107,10 +2107,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
             int beamId = e.intAttribute("id");
-            Beam* beam = Factory::createBeam(ctx.dummy()->system());
+            Beam* beam = Factory::createBeam(ctx.score());
             beam->setTrack(ctx.track());
             read400::TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             ctx.addBeam(beamId, beam);
         } else if (tag == "Segment") {
             if (segment) {
@@ -2918,9 +2917,8 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             readExcerpt(ex, e, ctx);
             masterScore->m_excerpts.push_back(ex);
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(masterScore->dummy()->system());
+            Beam* beam = Factory::createBeam(masterScore);
             read400::TRead::read(beam, e, ctx);
-            beam->resetExplicitParent();
             // _beams.append(beam);
             delete beam;
         } else {

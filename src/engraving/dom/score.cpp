@@ -1085,6 +1085,10 @@ void Score::addElement(EngravingItem* element)
         return;
     }
 
+    if (et == ElementType::BEAM) {            // a beam is not attached to its system
+        parent = nullptr;
+    }
+
     if (parent) {
         parent->add(element);
     }
@@ -1283,9 +1287,8 @@ void Score::removeElement(EngravingItem* element)
         return;
     }
 
-    if (et == ElementType::BEAM) {            // beam parent does not survive layout
-        element->resetExplicitParent();
-        parent = 0;
+    if (et == ElementType::BEAM) {            // a beam is not attached to its system
+        parent = nullptr;
     }
 
     if (parent) {

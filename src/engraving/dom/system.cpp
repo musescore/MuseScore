@@ -515,7 +515,7 @@ void System::add(EngravingItem* el)
         toMeasureBase(el)->setSystem(this);
     } else if (el->isSpannerSegment()) {
         toSpannerSegment(el)->setSystem(this);
-    } else {
+    } else if (!el->isBeam()) {   // a beam's placement is derived from its elements
         el->setParent(this);
     }
 

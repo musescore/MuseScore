@@ -2487,7 +2487,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
             removeBeam(beam);
         }
         // create a new beam
-        beam = Factory::createBeam(cr->score()->dummy()->system());
+        beam = Factory::createBeam(cr->score());
         beam->setTrack(cr->track());
         beam->setDirection(sd);
         colorItem(beam, beamColor);

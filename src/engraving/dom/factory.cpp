@@ -373,8 +373,8 @@ CREATE_ITEM_IMPL(BarLine, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, Segment)
 
-CREATE_ITEM_IMPL(Beam, System, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Beam, System)
+CREATE_ITEM_IMPL(Beam, Score, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Beam, Score)
 
 CREATE_ITEM_IMPL(Bend, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Bend, Note)

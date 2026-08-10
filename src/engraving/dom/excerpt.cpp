@@ -1019,7 +1019,6 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 Beam* nb = ocr->beam()->clone();
                                 nb->clear();
                                 nb->setTrack(track);
-                                nb->setParent(nm->system());
                                 nb->setScore(score);
                                 nb->add(ncr);
                                 ncr->setBeam(nb);
