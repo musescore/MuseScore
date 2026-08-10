@@ -166,16 +166,6 @@ void EngravingItem::setAccessibleEnabled(bool enabled)
     m_accessibleEnabled = enabled;
 }
 
-EngravingItem* EngravingItem::parentItem(bool explicitParent) const
-{
-    EngravingObject* p = explicitParent ? this->explicitParent() : parent();
-    if (p && p->isEngravingItem()) {
-        return toEngravingItem(p);
-    }
-
-    return nullptr;
-}
-
 EngravingItem* EngravingItem::accessibleParentItem() const
 {
     EngravingItem* p = layoutParent();
@@ -183,12 +173,28 @@ EngravingItem* EngravingItem::accessibleParentItem() const
         return p;
     }
 
-    return parentItem(false /*not explicit*/);
+    // fall back to the raw parent, so that e.g. palette items reach the dummy
+    EngravingObject* raw = parent();
+    if (raw && raw->isEngravingItem()) {
+        return toEngravingItem(raw);
+    }
+
+    return nullptr;
 }
 
 EngravingItemList EngravingItem::accessibleChildren() const
 {
     return childrenItems();
+}
+
+EngravingItem* EngravingItem::parentItem() const
+{
+    EngravingObject* p = explicitParent();
+    if (p && p->isEngravingItem()) {
+        return toEngravingItem(p);
+    }
+
+    return nullptr;
 }
 
 EngravingItem* EngravingItem::layoutParent() const

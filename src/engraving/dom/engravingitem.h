@@ -173,8 +173,11 @@ public:
 
     void deleteLater();
 
-    EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
+
+    //! Item-typed variant of explicitParent(); additionally null when the
+    //! parent is not an item.
+    EngravingItem* parentItem() const;
 
     //! The parent in the visual hierarchy, which positions are relative to.
     //! Defaults to the DOM parent; overridden where placement differs from
