@@ -32,6 +32,10 @@ using namespace muse::modularity;
 using namespace mu::notation;
 using namespace mu::project;
 
+//! NOTE: Should match value in aboutmodel.cpp
+static const QString GITHUB_REVISION_URL("https://github.com/musescore/MuseScore/commit/");
+static const QString SOURCEFORGE_REVISION_URL("https://sourceforge.net/p/mscore/code/");
+
 ProjectPropertiesModel::ProjectPropertiesModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -159,17 +163,23 @@ QString ProjectPropertiesModel::version() const
 
 QString ProjectPropertiesModel::revision() const
 {
-    int rev = m_projectMetaInfo.musescoreRevision;
-    QString revision;
-    if (rev > 0 && rev <= 5709) { // MuseScore 1.x and earlier used decimal numbers, referring to a commit on SourceForge.net, the largest being 5709
-        revision = QString("<a href=\"https://sourceforge.net/p/mscore/code/%1/\">%1</a>").arg(QString::number(rev, 10));
-    } else if (rev > 0xffffff) { // MuseScore 2.0 and later use a >= 7-digit hex SHA, referring to a commit on GitHub.com
-        revision = QString("<a href=\"https://github.com/musescore/MuseScore/commit/%1\">%1</a>").arg(QString::number(rev, 16));
-    } else { // unknown, like in a self-built development version, or in a very old version of MuseScore before the revision number was tracked
-        revision = QString::number(rev, 10); // or "" or "Unknown"?
+    const int rev = m_projectMetaInfo.musescoreRevision;
+    if (rev > 0 && rev <= 5709) {
+        // MuseScore 1.x and earlier used decimal numbers, referring to a commit on SourceForge.net, the largest being 5709
+        const QString revText = QString::number(rev, 10);
+        const QString revUrl = SOURCEFORGE_REVISION_URL + revText;
+        return QString("<a href=\"%1\">%2</a>").arg(revUrl, revText);
     }
 
-    return revision;
+    if (rev > 0xffffff) {
+        // MuseScore 2.0 and later use a >= 7-digit hex SHA, referring to a commit on GitHub.com
+        const QString revText = QString::number(rev, 16);
+        const QString revUrl = GITHUB_REVISION_URL + revText;
+        return QString("<a href=\"%1\">%2</a>").arg(revUrl, revText);
+    }
+
+    // unknown, like in a self-built development version, or in a very old version of MuseScore before the revision number was tracked
+    return muse::qtrc("global", "Unknown");
 }
 
 QString ProjectPropertiesModel::apiLevel() const

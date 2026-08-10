@@ -83,7 +83,7 @@ StyledDialogView {
 
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: qsTrc("appshell/about", "Version:") + " " + aboutModel.museScoreVersion()
+                    text: qsTrc("appshell/about", "Version: %1").arg(aboutModel.museScoreVersion())
                     font: ui.theme.bodyBoldFont
                 }
 
@@ -93,7 +93,7 @@ StyledDialogView {
 
                     StyledTextLabel {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell/about", "Revision:") + " " + aboutModel.museScoreRevision()
+                        text: qsTrc("appshell/about", "Revision: %1").arg(aboutModel.museScoreRevisionLink())
                     }
 
                     FlatButton {
