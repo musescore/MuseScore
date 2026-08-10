@@ -392,7 +392,7 @@ void Accidental::setAccidentalType(AccidentalType t)
 
 void Accidental::computeMag()
 {
-    double m = explicitParent() ? parentItem()->mag() : 1.0;
+    double m = layoutParent() ? layoutParent()->mag() : 1.0;
     if (isSmall()) {
         m *= style().styleD(Sid::smallNoteMag);
     }

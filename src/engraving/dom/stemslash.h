@@ -40,7 +40,7 @@ class StemSlash final : public EngravingItem
 
 public:
 
-    double mag() const override { return parentItem()->mag(); }
+    double mag() const override { return layoutParent()->mag(); }
 
     StemSlash* clone() const override { return new StemSlash(*this); }
 

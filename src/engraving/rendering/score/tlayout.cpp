@@ -3350,7 +3350,7 @@ void TLayout::layoutHook(const Hook* item, Hook::LayoutData* ldata)
 void TLayout::layoutImage(const Image* item, Image::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->layoutParent()) {
         return;
     }
 
@@ -3361,8 +3361,8 @@ void TLayout::layoutImage(const Image* item, Image::LayoutData* ldata)
 
     // if autoscale && inside a box, scale to box relevant size
     if (item->autoScale()
-        && ((item->explicitParent()->isHBox() || item->explicitParent()->isVBox()))) {
-        const EngravingItem::LayoutData* parentLD = item->parentItem()->ldata();
+        && ((item->layoutParent()->isHBox() || item->layoutParent()->isVBox()))) {
+        const EngravingItem::LayoutData* parentLD = item->layoutParent()->ldata();
 
         LD_CONDITION(parentLD->isSetBbox());
 
@@ -3421,7 +3421,7 @@ void TLayout::layoutInstrumentName(const InstrumentName* item, InstrumentName::L
 void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
+    LD_CONDITION(item->layoutParent()->ldata()->isSetBbox());
 
     TextLayout::layoutBaseTextBase(item, ldata);
 
@@ -5816,8 +5816,8 @@ Shape TLayout::recalculateTextLineBaseSegmentShape(const TextLineBaseSegment* it
 void TLayout::layoutText(const Text* item, Text::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    if (item->explicitParent() && item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
+    if (item->layoutParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->layoutParent()->ldata()->isSetBbox());
     }
 
     TextLayout::layoutBaseTextBase(item, ldata);

@@ -277,7 +277,7 @@ bool Articulation::layoutCloseToNote() const
 std::vector<LineF> Articulation::dragAnchorLines() const
 {
     std::vector<LineF> result;
-    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
+    result.push_back(LineF(canvasPos(), layoutParent()->canvasPos()));
     return result;
 }
 
@@ -564,7 +564,7 @@ void Articulation::resetProperty(Pid id)
 
 double Articulation::mag() const
 {
-    return explicitParent() ? parentItem()->mag() * style().styleD(Sid::articulationMag) : 1.0;
+    return layoutParent() ? layoutParent()->mag() * style().styleD(Sid::articulationMag) : 1.0;
 }
 
 void Articulation::computeCategories()

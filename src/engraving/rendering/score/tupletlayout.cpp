@@ -523,9 +523,9 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
         item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
 
-    PointF mp(item->parentItem()->pagePos());
-    if (item->explicitParent()->isMeasure()) {
-        System* s = toMeasure(item->explicitParent())->system();
+    PointF mp(item->layoutParent()->pagePos());
+    if (item->layoutParent()->isMeasure()) {
+        System* s = toMeasure(item->layoutParent())->system();
         if (s) {
             SysStaff* tupletStaff = s->staff(item->vStaffIdx());
             mp.ry() += tupletStaff ? tupletStaff->y() : 0.0;

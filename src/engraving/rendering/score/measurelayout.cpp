@@ -1378,7 +1378,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
 static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom, LayoutContext& ctx)
 {
-    EngravingItem* parent = item->parentItem();
+    EngravingItem* parent = item->layoutParent();
     const double spatium = item->spatium();
     if (!parent) {
         return;
