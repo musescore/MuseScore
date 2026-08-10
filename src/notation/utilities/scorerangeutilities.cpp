@@ -22,6 +22,7 @@
 
 #include "scorerangeutilities.h"
 
+#include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"

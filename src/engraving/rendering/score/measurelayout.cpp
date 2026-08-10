@@ -40,6 +40,7 @@
 #include "dom/parenthesis.h"
 #include "dom/spacer.h"
 #include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
 #include "dom/tie.h"
@@ -48,10 +49,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
 
-#include "editing/addremoveelement.h"
 #include "editing/editkeysig.h"
-#include "editing/editmeasures.h"
-#include "editing/editproperty.h"
 #include "types/typesconv.h"
 
 #include "arpeggiolayout.h"

@@ -27,6 +27,7 @@
 #include "../../style/textstyle.h"
 #include "../../infrastructure/rtti.h"
 
+#include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/factory.h"
@@ -164,6 +165,7 @@
 #include "editing/transpose.h"
 
 #include "../xmlwriter.h"
+#include "types/types.h"
 #include "writecontext.h"
 #include "connectorinfowriter.h"
 

@@ -49,8 +49,6 @@
 #include "../style/style.h"
 #include "../style/pagestyle.h"
 
-#include "../compat/midi/compatmidirenderinternal.h"
-
 #include "../editing/cmd.h"
 
 #include "chordlist.h"
@@ -60,6 +58,7 @@
 #include "property.h"
 #include "rootitem.h"
 #include "scoreorder.h"
+#include "segment.h"
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"

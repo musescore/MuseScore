@@ -90,6 +90,7 @@
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
+#include "dom/measure.h"
 #include "dom/measurebase.h"
 #include "dom/measurenumber.h"
 #include "dom/measurenumberbase.h"

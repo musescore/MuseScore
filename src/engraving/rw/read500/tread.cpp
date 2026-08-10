@@ -26,6 +26,8 @@
 #include "../../infrastructure/rtti.h"
 #include "../../infrastructure/htmlparser.h"
 
+#include "../../compat/midi/event.h"
+
 #include "../../dom/accidental.h"
 #include "../../dom/actionicon.h"
 #include "../../dom/ambitus.h"
@@ -77,6 +79,7 @@
 #include "../../dom/lyrics.h"
 #include "../../dom/marker.h"
 #include "../../dom/masterscore.h"
+#include "../../dom/measure.h"
 #include "../../dom/measurenumber.h"
 #include "../../dom/measurerepeat.h"
 #include "../../dom/mmrest.h"

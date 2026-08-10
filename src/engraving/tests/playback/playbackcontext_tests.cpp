@@ -27,9 +27,10 @@
 
 #include "utils/scorerw.h"
 
+#include "engraving/dom/measure.h"
 #include "engraving/dom/part.h"
-#include "engraving/dom/staff.h"
 #include "engraving/dom/repeatlist.h"
+#include "engraving/dom/staff.h"
 
 #include "engraving/playback/playbackcontext.h"
 #include "engraving/playback/utils/arrangementutils.h"

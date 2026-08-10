@@ -82,6 +82,7 @@
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
+#include "dom/measure.h"
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 

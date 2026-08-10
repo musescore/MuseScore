@@ -32,6 +32,7 @@
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"

@@ -33,7 +33,8 @@
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
-#include "capo.h"
+
+#include "types/types.h"
 
 using namespace mu;
 

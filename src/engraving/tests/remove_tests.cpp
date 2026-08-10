@@ -24,6 +24,7 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/spanner.h"
 
 #include "utils/scorerw.h"
