@@ -112,7 +112,7 @@ System* Fermata::system() const
 Page* Fermata::page() const
 {
     System* s = system();
-    return toPage(s ? s->explicitParent() : 0);
+    return s ? s->page() : nullptr;
 }
 
 //---------------------------------------------------------

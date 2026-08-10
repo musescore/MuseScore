@@ -1256,6 +1256,7 @@ void Score::removeElement(EngravingItem* element)
             Page* page = system->page();
             if (page) {
                 muse::remove(page->systems(), system);
+                system->setPage(nullptr);
             }
 
             muse::remove(m_systems, system);

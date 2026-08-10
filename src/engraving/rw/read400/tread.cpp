@@ -3290,7 +3290,7 @@ void TRead::read(Page* p, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "System") {
-            System* system = Factory::createSystem(p->score()->dummy()->page());
+            System* system = Factory::createSystem(p->score());
             p->score()->systems().push_back(system);
             read(system, e, ctx);
         } else {

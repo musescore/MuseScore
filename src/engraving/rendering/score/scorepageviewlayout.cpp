@@ -148,7 +148,8 @@ void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
                     score->setSelectionChanged(true);
                 }
             }
-            s->resetExplicitParent();
+            // no need to clear the page placement: the systems are deleted below,
+            // and ~System unlinks itself from its page
         }
 
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {

@@ -568,7 +568,7 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     bool isVBox = ctx.state().curMeasure()->isVBox();
     System* system = nullptr;
     if (ctx.state().systemList().empty()) {
-        system = Factory::createSystem(ctx.mutDom().dummyParent()->page());
+        system = Factory::createSystem(ctx.mutDom().dummyParent()->score());
         ctx.mutState().setSystemOldMeasure(nullptr);
     } else {
         system = muse::takeFirst(ctx.mutState().systemList());

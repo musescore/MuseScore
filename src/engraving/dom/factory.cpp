@@ -570,7 +570,7 @@ COPY_ITEM_IMPL(Stem)
 CREATE_ITEM_IMPL(StemSlash, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(StemSlash)
 
-CREATE_ITEM_IMPL(System, Page, isAccessibleEnabled)
+CREATE_ITEM_IMPL(System, Score, isAccessibleEnabled)
 
 SystemText* Factory::createSystemText(Segment * parent, TextStyleType textStyleType, ElementType type, bool isAccessibleEnabled)
 {

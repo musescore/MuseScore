@@ -235,7 +235,7 @@ System* Articulation::system() const
 Page* Articulation::page() const
 {
     System* s = system();
-    return toPage(s ? s->explicitParent() : 0);
+    return s ? s->page() : nullptr;
 }
 
 bool Articulation::isHiddenOnTabStaff() const

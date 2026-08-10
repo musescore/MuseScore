@@ -44,6 +44,15 @@ Page::Page(RootItem* parent)
     m_bspTreeValid = false;
 }
 
+Page::~Page()
+{
+    for (System* s : m_systems) {
+        if (s->page() == this) {
+            s->setPage(nullptr);
+        }
+    }
+}
+
 MeasureBase* Page::firstMeasureBase() const
 {
     if (m_systems.empty()) {
@@ -88,8 +97,18 @@ std::vector<EngravingItem*> Page::items(const PointF& point)
 
 void Page::appendSystem(System* s)
 {
-    s->moveToPage(this);
+    s->setPage(this);
     m_systems.push_back(s);
+}
+
+EngravingItemList Page::accessibleChildren() const
+{
+    // The systems are owned by the score, but it is the page that places them, so the
+    // page is where the accessibility tree finds them.
+    EngravingItemList children = EngravingItem::accessibleChildren();
+    children.insert(children.end(), m_systems.begin(), m_systems.end());
+
+    return children;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
