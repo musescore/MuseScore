@@ -1129,7 +1129,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         note->add(a);
     } else if (tag == "Tie") {
         Tie* tie = Factory::createTie(note);
-        tie->setParent(note);
+        tie->setOwnershipParent(note);
         tie->setTrack(note->track());
         readTie206(e, ctx, tie);
         tie->setStartNote(note);
@@ -1286,7 +1286,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             sp->setStartElement(note);
             sp->setTick(ctx.tick());
             note->addSpannerFor(sp);
-            sp->setParent(note);
+            sp->setOwnershipParent(note);
             adjustPlacement(sp);
         }
     } else if (tag == "offset") {
@@ -1604,7 +1604,7 @@ static void readTuplet206(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "Number") {
             Text* _number = Factory::createText(tuplet);
-            _number->setParent(tuplet);
+            _number->setOwnershipParent(tuplet);
             _number->setComposition(true);
             tuplet->setNumber(_number);
             // _number reads property defaults from parent tuplet as "composition" is set:
@@ -1644,7 +1644,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Number") {
             _verseNumber = Factory::createText(lyrics);
             readText206(e, ctx, _verseNumber, lyrics);
-            _verseNumber->setParent(lyrics);
+            _verseNumber->setOwnershipParent(lyrics);
         } else if (tag == "style") {
             e.readText();          // ignore style
         } else if (!read400::TRead::readProperties(lyrics, e, ctx)) {
@@ -1715,7 +1715,7 @@ bool Read206::readTupletProperties206(XmlReader& e, ReadContext& ctx, Tuplet* de
         Text* _number = Factory::createText(de);
         de->setNumber(_number);
         _number->setComposition(true);
-        _number->setParent(de);
+        _number->setOwnershipParent(de);
 //            _number->setSubStyleId(SubStyleId::TUPLET);
 //            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
         for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
@@ -1966,7 +1966,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
         read400::TRead::read(arpeggio, e, ctx);
-        arpeggio->setParent(ch);
+        arpeggio->setOwnershipParent(ch);
         ch->add(arpeggio);
     }
     // old glissando format, chord-to-chord, attached to its final chord
@@ -1993,11 +1993,11 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         tcompat.parent = ch;
         read400::TRead::read(tcompat, e, ctx);
         if (tcompat.two) {
-            tcompat.two->setParent(ch);
+            tcompat.two->setOwnershipParent(ch);
             tcompat.two->setDurationType(ch->durationType());
             ch->setTremoloTwoChord(tcompat.two, false);
         } else if (tcompat.single) {
-            tcompat.single->setParent(ch);
+            tcompat.single->setOwnershipParent(ch);
             tcompat.single->setDurationType(ch->durationType());
             ch->setTremoloSingleChord(tcompat.single);
         } else {
@@ -2113,7 +2113,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
-            note->setParent(chord);
+            note->setOwnershipParent(chord);
             readNote206(note, e, ctx);
             chord->add(note);
         } else if (tag == "Stem") {
@@ -2358,7 +2358,7 @@ void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
         } else if (tag == "Accidental") {
             Accidental* _accidental = Factory::createAccidental(t);
             readAccidental206(_accidental, e, ctx);
-            _accidental->setParent(t);
+            _accidental->setOwnershipParent(t);
             t->setAccidental(_accidental);
             if (t->ornament()) {
                 t->ornament()->setTrillOldCompatAccidental(_accidental);
@@ -2754,7 +2754,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
             Chord* chord = Factory::createChord(segment);
             chord->setTrack(ctx.track());
-            chord->setParent(segment);
+            chord->setOwnershipParent(segment);
             readChord(chord, e, ctx);
             if (chord->noteType() != NoteType::NORMAL) {
                 graceNotes.push_back(chord);
@@ -2774,7 +2774,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (m->isMMRest()) {
                 segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
                 MMRest* mmr = Factory::createMMRest(segment);
-                mmr->setParent(segment);
+                mmr->setOwnershipParent(segment);
                 mmr->setTrack(ctx.track());
                 read400::TRead::read(mmr, e, ctx);
                 mmr->setTicks(m->ticks());
@@ -2787,7 +2787,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
-                rest->setParent(segment);
+                rest->setOwnershipParent(segment);
                 readRest(rest, e, ctx);
                 segment->add(rest);
 
@@ -3126,7 +3126,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
-            tuplet->setParent(m);
+            tuplet->setOwnershipParent(m);
             readTuplet206(tuplet, e, ctx);
             ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
@@ -3171,7 +3171,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             MeasureNumber* noText = new MeasureNumber(m);
             readText206(e, ctx, noText, m);
             noText->setTrack(ctx.track());
-            noText->setParent(m);
+            noText->setOwnershipParent(m);
             m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
@@ -3181,7 +3181,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::Ambitus, ctx.tick());
             Ambitus* range = Factory::createAmbitus(segment);
             readAmbitus(range, e, ctx);
-            range->setParent(segment);                // a parent segment is needed for setTrack() to work
+            range->setOwnershipParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(ctx.track()));
             segment->add(range);
         } else if (tag == "multiMeasureRest") {

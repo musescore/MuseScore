@@ -732,7 +732,7 @@ CREATE_ITEM_IMPL(FBox, Score, isAccessibleEnabled)
 Image* Factory::createImage(EngravingItem * parent)
 {
     Image* image = new Image(parent);
-    image->setParent(parent);
+    image->setOwnershipParent(parent);
 
     return image;
 }

@@ -114,9 +114,9 @@ Tuplet::~Tuplet()
     delete m_number;
 }
 
-void Tuplet::setParent(Measure* parent)
+void Tuplet::setOwnershipParent(Measure* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------

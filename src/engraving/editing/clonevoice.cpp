@@ -96,7 +96,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                 if (nt == 0) {
                     nt = toTuplet(maybeLinkedClone(ot));
                     nt->setTrack(dstTrack);
-                    nt->setParent(dm);
+                    nt->setOwnershipParent(dm);
                     tupletMap.add(ot, nt);
 
                     Tuplet* nt1 = nt;
@@ -105,7 +105,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                         if (nt2 == 0) {
                             nt2 = toTuplet(maybeLinkedClone(ot->tuplet()));
                             nt2->setTrack(dstTrack);
-                            nt2->setParent(dm);
+                            nt2->setOwnershipParent(dm);
                             tupletMap.add(ot->tuplet(), nt2);
                         }
                         nt2->add(nt1);
@@ -183,7 +183,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                         }
                         tremolo = item_cast<TremoloTwoChord*>(maybeLinkedClone(oldChord->tremoloTwoChord()));
                         tremolo->setScore(newChord->score());
-                        tremolo->setParent(newChord);
+                        tremolo->setOwnershipParent(newChord);
                         tremolo->setTrack(newChord->track());
                         tremolo->setChords(newChord, nullptr);
                         newChord->setTremoloTwoChord(tremolo);
@@ -214,7 +214,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
                 if (!ns) {
                     ns = dm->undoGetSegment(oseg->segmentType(), oseg->tick());
                 }
-                ncr->setParent(ns);
+                ncr->setOwnershipParent(ns);
                 destScore->doUndoAddElement(ncr);
             } else {
                 // To all linked staves (implode/explode)
@@ -230,7 +230,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             rest->setTrack(dstTrack);
             if (link) {
                 Segment* segment = dm->undoGetSegment(SegmentType::ChordRest, dm->tick());
-                rest->setParent(segment);
+                rest->setOwnershipParent(segment);
                 destScore->doUndoAddElement(rest);
             } else {
                 destScore->undoAddCR(rest, dm, dm->tick());
@@ -249,7 +249,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             if (!ns) {
                 ns = dm->undoGetSegment(oseg->segmentType(), oseg->tick());
             }
-            newAnnotation->setParent(ns);
+            newAnnotation->setOwnershipParent(ns);
 
             // Add element
             if (link) {
@@ -277,7 +277,7 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
             Spanner* ns = toSpanner(maybeLinkedClone(sp));
 
             ns->setScore(destScore);
-            ns->setParent(0);
+            ns->setOwnershipParent(0);
             ns->setTrack(dstTrack);
             ns->setTrack2(dstTrack);
 

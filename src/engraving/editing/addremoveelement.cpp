@@ -392,7 +392,7 @@ void ChangeParent::flip()
     EngravingItem* p = element->parentItem();
     staff_idx_t si = element->staffIdx();
     p->remove(element);
-    element->setParent(parent);
+    element->setOwnershipParent(parent);
     element->setTrack(staffIdx * VOICES + element->voice());
     parent->add(element);
     staffIdx = si;
@@ -475,7 +475,7 @@ void ChangeSegmentParent::flip()
     Measure* p = segment->measure();
     Fraction oldTick = segment->rtick();
     p->remove(segment);
-    segment->setParent(parent);
+    segment->setOwnershipParent(parent);
     segment->setRtick(tick);
     parent->add(segment);
 

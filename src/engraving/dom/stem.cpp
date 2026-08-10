@@ -133,7 +133,7 @@ EngravingItem* Stem::drop(Transaction&, EditData& data)
 
     switch (e->type()) {
     case ElementType::TREMOLO_SINGLECHORD:
-        item_cast<TremoloSingleChord*>(e)->setParent(ch);
+        item_cast<TremoloSingleChord*>(e)->setOwnershipParent(ch);
         undoAddElement(e);
         return e;
     default:

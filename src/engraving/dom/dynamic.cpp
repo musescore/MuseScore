@@ -327,7 +327,7 @@ EngravingItem* Dynamic::drop(Transaction& tx, EditData& ed)
 
     if (item->isExpression()) {
         item->setTrack(track());
-        item->setParent(segment());
+        item->setOwnershipParent(segment());
         toExpression(item)->setVoiceAssignment(voiceAssignment());
         score()->undoAddElement(item);
         return item;

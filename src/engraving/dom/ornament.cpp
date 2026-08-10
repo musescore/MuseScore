@@ -68,7 +68,7 @@ Ornament::Ornament(const Ornament& o)
             continue;
         }
         Accidental* newAccidental = oldAccidental->clone();
-        newAccidental->setParent(this);
+        newAccidental->setOwnershipParent(this);
         m_accidentalsAboveAndBelow[i] = newAccidental;
     }
 }
@@ -262,7 +262,7 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
     }
 
     if (m_cueNoteChord && !m_cueNoteChord->ownershipParent()) {
-        m_cueNoteChord->setParent(parentChord->segment());
+        m_cueNoteChord->setOwnershipParent(parentChord->segment());
     }
 
     for (size_t i = 0; i < m_notesAboveAndBelow.size(); ++i) {
@@ -384,7 +384,7 @@ void Ornament::updateAccidentalsAboveAndBelow()
         if (accidental) {
             if (!curAccidental) {
                 curAccidental = accidental->clone();
-                curAccidental->setParent(this);
+                curAccidental->setOwnershipParent(this);
                 curAccidental->setPlacement(i == 0 ? PlacementV::ABOVE : PlacementV::BELOW);
             } else {
                 curAccidental->setAccidentalType(accidental->accidentalType());
@@ -400,8 +400,8 @@ void Ornament::updateCueNote()
     Chord* parentChord = parentChordRest && parentChordRest->isChord() ? toChord(parentChordRest) : nullptr;
 
     if (!showCueNote()) {
-        if (noteAbove() && parentChord) {
-            noteAbove()->setParent(parentChord);
+        if (noteAbove() && ownershipParent()) {
+            noteAbove()->setOwnershipParent(parentChord);
         }
         if (m_cueNoteChord) {
             m_cueNoteChord->notes().clear();
@@ -422,13 +422,13 @@ void Ornament::updateCueNote()
         m_cueNoteChord->setSmall(true);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         m_cueNoteChord->add(cueNote);
-        cueNote->setParent(m_cueNoteChord);
+        cueNote->setOwnershipParent(m_cueNoteChord);
 
         Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         EditParentheses::addParenthesesToNotes(tx, { cueNote });
     }
     m_cueNoteChord->setTrack(track());
-    m_cueNoteChord->setParent(parentChord->segment());
+    m_cueNoteChord->setOwnershipParent(parentChord->segment());
     m_cueNoteChord->setStaffMove(parentChord->staffMove());
     cueNote->updateLine();
     cueNote->setIsTrillCueNote(true);

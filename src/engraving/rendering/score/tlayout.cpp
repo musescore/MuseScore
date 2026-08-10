@@ -985,7 +985,7 @@ void TLayout::layoutArticulation(Articulation* item, Articulation::LayoutData* l
         Text* text = item->text();
         text->setXmlText(TConv::text(item->textType()));
         text->setTrack(item->track());
-        text->setParent(item);
+        text->setOwnershipParent(item);
         text->setSelected(item->selected());
 
         TextLayout::layoutBaseTextBase(item->text(), item->text()->mutldata());
@@ -1542,7 +1542,7 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
 
     if (!item->text()) {
         Text* bracketText = new Text(const_cast<Bracket*>(item), TextStyleType::GROUP_BRACKET);
-        bracketText->setParent(const_cast<Bracket*>(item));
+        bracketText->setOwnershipParent(const_cast<Bracket*>(item));
         bracketText->setSelected(item->selected());
         bracketText->setGenerated(true);
         const_cast<Bracket*>(item)->setText(bracketText);
@@ -6537,7 +6537,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
                                  : a->shape().minVerticalDistance(Shape(box));
             y = (accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin) + yOff;
             a->setPos(x, y);
-            a->setParent(item);
+            a->setOwnershipParent(item);
         }
     } else {
         switch (trill->trillType()) {

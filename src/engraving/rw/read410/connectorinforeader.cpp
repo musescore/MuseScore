@@ -388,13 +388,13 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                     n = n->tieFor()->endNote();
                 }
                 Tie* tie = toTie(sp);
-                tie->setParent(n);
+                tie->setOwnershipParent(n);
                 tie->setStartNote(n);
                 n->setTieFor(tie);
             } else {
                 sp->setStartElement(item);
                 item->addSpannerFor(sp);
-                sp->setParent(item);
+                sp->setOwnershipParent(item);
             }
         } else if (info->isEnd()) {
             sp->setTrack2(l.track());

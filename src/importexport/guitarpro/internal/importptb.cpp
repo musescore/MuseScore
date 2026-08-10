@@ -741,7 +741,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
 
         if (beat.tuplet && !tuple) {
             tuple = Factory::createTuplet(measure);
-            tuple->setParent(measure);
+            tuple->setOwnershipParent(measure);
             tuple->setTrack(cr->track());
             tuple->setTick(cr->tick());
             tuple->setBaseLen(l);

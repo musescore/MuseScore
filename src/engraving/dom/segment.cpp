@@ -113,7 +113,7 @@ const char* Segment::subTypeName(SegmentType t)
 void Segment::setElement(track_idx_t track, EngravingItem* el)
 {
     if (el) {
-        el->setParent(this);
+        el->setOwnershipParent(this);
         m_elist[track] = el;
         setEmpty(false);
     } else {
@@ -149,14 +149,14 @@ void Segment::removeElement(track_idx_t track)
 Segment::Segment(Measure* m)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
+    setOwnershipParent(m);
     init();
 }
 
 Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
     : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
-    setParent(m);
+    setOwnershipParent(m);
 //      assert(t >= Fraction(0,1));
 //      assert(t <= m->ticks());
     m_segmentType = st;
@@ -184,16 +184,16 @@ Segment::Segment(const Segment& s)
         EngravingItem* ne = 0;
         if (e) {
             ne = e->clone();
-            ne->setParent(this);
+            ne->setOwnershipParent(this);
         }
         m_elist.push_back(ne);
     }
     m_shapes  = s.m_shapes;
 }
 
-void Segment::setParent(Measure* parent)
+void Segment::setOwnershipParent(Measure* parent)
 {
-    EngravingItem::setParent(parent);
+    EngravingItem::setOwnershipParent(parent);
 }
 
 //---------------------------------------------------------
@@ -687,7 +687,7 @@ void Segment::add(EngravingItem* el)
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
     if (el->ownershipParent() != this) {
-        el->setParent(this);
+        el->setOwnershipParent(this);
     }
 
     track_idx_t track = el->track();

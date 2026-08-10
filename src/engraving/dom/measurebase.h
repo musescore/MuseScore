@@ -87,9 +87,9 @@ public:
 
     //! A measure or frame is owned by its score, or by the frame it is nested in.
     //! A system merely places it; see setSystem(). These overloads hide
-    //! EngravingItem::setParent, so that no other parent can be set by accident.
-    void setParent(Score* score);
-    void setParent(Box* box);
+    //! EngravingItem::setOwnershipParent, so that no other parent can be set by accident.
+    void setOwnershipParent(Score* score);
+    void setOwnershipParent(Box* box);
 
     System* prevNonVBoxSystem() const;
     System* nextNonVBoxSystem() const;

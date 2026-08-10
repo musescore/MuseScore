@@ -108,7 +108,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
         if (link) {
             nl->linkTo(l);
         }
-        nl->setParent(this);
+        nl->setOwnershipParent(this);
         nl->setTrack(track());
         m_lyrics.push_back(nl);
     }
@@ -220,7 +220,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             delete b;
             return existingBreath;
         } else {
-            b->setParent(seg);
+            b->setOwnershipParent(seg);
             score()->undoAddElement(b);
             return e;
         }
@@ -258,7 +258,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
                 l = toBarLine(obl->linkedClone());
             }
             l->setTrack(st->idx() * VOICES);
-            l->setParent(seg);
+            l->setOwnershipParent(seg);
             score->undoAddElement(l);
         }
 
@@ -280,7 +280,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
                 } else {
                     e->setPlacement(el->placement());
                     e->setTrack(track());
-                    e->setParent(segment());
+                    e->setOwnershipParent(segment());
                     score()->undoChangeElement(el, e);
                     return e;
                 }
@@ -294,14 +294,14 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         e->setTrack(track());
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         score()->undoAddElement(e);
         return e;
 
     case ElementType::DYNAMIC:
         e->setTrack(track());
         e->checkVoiceAssignmentCompatibleWithTrack();
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         score()->undoAddElement(e);
         return e;
 
@@ -346,7 +346,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     case ElementType::HARP_DIAGRAM:
     case ElementType::REHEARSAL_MARK:
     {
-        e->setParent(segment());
+        e->setOwnershipParent(segment());
         e->setTrack(trackZeroVoice(track()));
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
@@ -367,7 +367,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
             return nullptr;
         } else {
             InstrumentChange* ic = toInstrumentChange(e);
-            ic->setParent(segment());
+            ic->setOwnershipParent(segment());
             ic->setTrack(trackZeroVoice(track()));
 
             const Instrument* prevInstr = part()->instrument(tick());
@@ -391,7 +391,7 @@ EngravingItem* ChordRest::drop(Transaction& tx, EditData& data)
     {
         bool bNew;
         FiguredBass* fb = toFiguredBass(e);
-        fb->setParent(segment());
+        fb->setOwnershipParent(segment());
         fb->setTrack(trackZeroVoice(track()));
         fb->setTicks(ticks());
         fb->setOnNote(true);
@@ -565,7 +565,7 @@ String ChordRest::durationUserName() const
 
 void ChordRest::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
@@ -1303,7 +1303,7 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
     }
 
     a->setTrack(/*a->systemFlag() ? 0 : */ track());
-    a->setParent(seg);
+    a->setOwnershipParent(seg);
     score()->undoAddElement(a);
 }
 

@@ -385,7 +385,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
             break;
         }
         lb->setTrack(0);
-        lb->setParent(this);
+        lb->setOwnershipParent(this);
         score()->undoAddElement(lb);
         return lb;
     }
@@ -393,7 +393,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
     case ElementType::STAFF_TEXT:
     {
         Text* text = Factory::createText(this, TextStyleType::FRAME);
-        text->setParent(this);
+        text->setOwnershipParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
         delete e;
@@ -425,7 +425,7 @@ EngravingItem* Box::drop(Transaction&, EditData& data)
     case ElementType::TEXT:
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         score()->undoAddElement(e);
         return e;
     default:
@@ -468,7 +468,7 @@ void Box::manageExclusionFromParts(bool exclude)
                     if (MeasureBase* localPrevMeasure = score->tick2measure(prevMeasure->tick())) {
                         EngravingItem* newSectionBreak = sectionBreak->linkedClone();
                         newSectionBreak->setScore(score);
-                        newSectionBreak->setParent(localPrevMeasure);
+                        newSectionBreak->setOwnershipParent(localPrevMeasure);
                         score->doUndoAddElement(newSectionBreak);
                     }
                 }
@@ -769,7 +769,7 @@ void FBox::init()
         String newName = diagramsNamesInScore[i];
         if (!muse::contains(oldDiagramsNames, newName)) {
             FretDiagram* newDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyOrDiagramsInScore[i]);
-            newDiagram->setParent(this);
+            newDiagram->setOwnershipParent(this);
             String nameOfDiagramBeforeThis = i > 0 ? diagramsNamesInScore[i - 1] : String();
             size_t idx = computeInsertionIdx(nameOfDiagramBeforeThis);
             score()->undo(new AddFretDiagramToFretBox(newDiagram, idx));
@@ -779,7 +779,7 @@ void FBox::init()
 
 void FBox::add(EngravingItem* e)
 {
-    e->setParent(this);
+    e->setOwnershipParent(this);
     if (e->isFretDiagram()) {
         addAtIdx(toFretDiagram(e), muse::nidx);
     } else {
@@ -966,7 +966,7 @@ TBox::TBox(Score* parent)
     resetProperty(Pid::BOX_HEIGHT);
     m_text  = Factory::createText(this, TextStyleType::FRAME);
     m_text->setLayoutToParentWidth(true);
-    m_text->setParent(this);
+    m_text->setOwnershipParent(this);
 }
 
 TBox::TBox(const TBox& tbox)
@@ -1018,7 +1018,7 @@ void TBox::add(EngravingItem* e)
         }
         m_text = toText(e);
         m_text->setLayoutToParentWidth(true);
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->added();
     } else {
         VBox::add(e);
@@ -1039,7 +1039,7 @@ void TBox::remove(EngravingItem* el)
         LOGD("TBox::remove() - replacing _text");
         m_text = Factory::createText(this, TextStyleType::FRAME);
         m_text->setLayoutToParentWidth(true);
-        m_text->setParent(this);
+        m_text->setOwnershipParent(this);
         el->removed();
     } else {
         VBox::remove(el);

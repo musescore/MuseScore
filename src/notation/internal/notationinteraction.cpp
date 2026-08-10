@@ -1493,7 +1493,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 
     edd.ed.dropElement = image;
     edd.ed.dragOffset = QPointF();
-    edd.ed.dropElement->setParent(nullptr);
+    edd.ed.dropElement->setOwnershipParent(nullptr);
 
     engravingRenderer()->layoutItem(edd.ed.dropElement);
 
@@ -2039,7 +2039,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(engraving::Transaction& tx, c
         el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
         if (el && el->isMeasure()) {
             edd.ed.dropElement->setTrack(staff2track(staffIdx));
-            edd.ed.dropElement->setParent(seg);
+            edd.ed.dropElement->setOwnershipParent(seg);
 
             if (applyUserOffset) {
                 edd.ed.dropElement->setOffset(offset);
@@ -5680,7 +5680,7 @@ void NotationInteraction::toggleDynamicPopup()
             Measure* measure = score()->tick2measure(tick);
             Segment* segment = measure->undoGetChordRestOrTimeTickSegment(tick);
             Dynamic* dynamic = Factory::createDynamic(segment);
-            dynamic->setParent(segment);
+            dynamic->setOwnershipParent(segment);
             dynamic->setTrack(track);
             dynamic->setVoiceAssignment(voiceAssignment);
             score()->undoAddElement(dynamic);
@@ -6647,7 +6647,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics = Factory::createLyrics(cr);
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
-        nextLyrics->setParent(cr);
+        nextLyrics->setOwnershipParent(cr);
         nextLyrics->setVerse(verse);
         nextLyrics->setTextStyleType(styleType);
         nextLyrics->setPlacement(placement);
@@ -6828,7 +6828,7 @@ void NotationInteraction::navigateToNextSyllable()
 
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
-            toLyrics->setParent(initialCR);
+            toLyrics->setOwnershipParent(initialCR);
             toLyrics->setVerse(verse);
             toLyrics->setTextStyleType(styleType);
             toLyrics->setPlacement(placement);
@@ -6904,7 +6904,7 @@ void NotationInteraction::navigateToNextSyllable()
 
         toLyrics = Factory::createLyrics(toLyricsChord);
         toLyrics->setTrack(track);
-        toLyrics->setParent(toLyricsChord);
+        toLyrics->setOwnershipParent(toLyricsChord);
 
         toLyrics->setVerse(verse);
         toLyrics->setTextStyleType(styleType);
@@ -7007,7 +7007,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     if (!lyrics) {
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
-        lyrics->setParent(cr);
+        lyrics->setOwnershipParent(cr);
         lyrics->setVerse(verse);
         lyrics->setTextStyleType(styleType);
         lyrics->setPlacement(placement);
@@ -7743,7 +7743,7 @@ void NotationInteraction::addMelisma()
     if (!toLyrics) {
         toLyrics = Factory::createLyrics(nextCR);
         toLyrics->setTrack(track);
-        toLyrics->setParent(nextCR);
+        toLyrics->setOwnershipParent(nextCR);
 
         toLyrics->setVerse(verse);
         const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
@@ -7827,7 +7827,7 @@ void NotationInteraction::addLyricsVerse()
 
     mu::engraving::Lyrics* lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
-    lyrics->setParent(oldLyrics->chordRest());
+    lyrics->setOwnershipParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
 
@@ -7943,7 +7943,7 @@ void NotationInteraction::addFretboardDiagram()
         Harmony* harmony = toHarmony(element);
         diagram->updateDiagram(harmony->harmonyName());
 
-        diagram->setParent(harmony->parent());
+        diagram->setOwnershipParent(harmony->parent());
         score->undoAddElement(diagram);
         created.push_back(diagram);
         lastAddedDiagram = diagram;
@@ -8025,7 +8025,7 @@ mu::engraving::Harmony* NotationInteraction::createHarmony(mu::engraving::Segmen
 {
     mu::engraving::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
     harmony->setScore(score());
-    harmony->setParent(segment);
+    harmony->setOwnershipParent(segment);
     harmony->setTrack(track);
     harmony->setHarmonyType(type);
 

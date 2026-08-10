@@ -49,7 +49,7 @@ public:
     virtual double mag() const override;
     virtual Fraction tick() const override;
 
-    //! The spanner that owns this segment - derived from the explicit parent,
+    //! The spanner that owns this segment - derived from the ownership parent,
     //! so that it can never go stale.
     Spanner* spanner() const { return toSpanner(ownershipParent()); }
     void setSpanner(Spanner* val);
@@ -78,9 +78,9 @@ public:
     EngravingItem* layoutParent() const override;
 
     //! A segment is owned by its spanner; a system merely places it, see
-    //! setSystem()/moveToSystem(). This overload hides EngravingItem::setParent,
+    //! setSystem()/moveToSystem(). This overload hides EngravingItem::setOwnershipParent,
     //! so that no other parent can be set by accident.
-    void setParent(Spanner* spanner);
+    void setOwnershipParent(Spanner* spanner);
 
     const PointF& userOff2() const { return m_offset2; }
     void setUserOff2(const PointF& o) { m_offset2 = o; }

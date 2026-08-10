@@ -52,7 +52,7 @@ namespace mu::engraving {
 SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, ElementFlags f)
     : EngravingItem(type, sp, f)
 {
-    setParent(sp);
+    setOwnershipParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
@@ -73,12 +73,12 @@ SpannerSegment::~SpannerSegment()
 
 void SpannerSegment::setSpanner(Spanner* val)
 {
-    setParent(val);
+    setOwnershipParent(val);
 }
 
-void SpannerSegment::setParent(Spanner* spanner)
+void SpannerSegment::setOwnershipParent(Spanner* spanner)
 {
-    EngravingItem::setParent(spanner);
+    EngravingItem::setOwnershipParent(spanner);
 }
 
 EngravingItem* SpannerSegment::layoutParent() const
@@ -965,7 +965,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
     track_idx_t endTrack = endNote ? endNote->track() : startNote->track();
 
     setScore(score);
-    setParent(parent);
+    setOwnershipParent(parent);
     setStartElement(startNote);
     setEndElement(endNote);
     setTick(tick);

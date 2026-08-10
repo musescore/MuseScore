@@ -133,7 +133,7 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                     dstChord->setDurationType(chord->durationType());
                     dstChord->setTicks(chord->ticks());
                     dstChord->setTuplet(dstCR->tuplet());
-                    dstChord->setParent(s);
+                    dstChord->setOwnershipParent(s);
                     elementScore->undoRemoveElement(dstCR);
                 }
             } else if (!chord->tuplet()) {
@@ -189,7 +189,7 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                 dstChord->setTrack(dstTrack);
                 dstChord->setDurationType(chord->durationType());
                 dstChord->setTicks(chord->ticks());
-                dstChord->setParent(s);
+                dstChord->setOwnershipParent(s);
                 // makeGapVoice will not back-fill an empty voice
                 if (voice && !dstCR) {
                     elementScore->expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
@@ -206,7 +206,7 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
             // create & add new note
             Note* newNote = Factory::copyNote(*note);
             newNote->setSelected(false);
-            newNote->setParent(dstChord);
+            newNote->setOwnershipParent(dstChord);
             elementScore->undoAddElement(newNote);
             newElements.push_back(newNote);
             // add new chord if one was created
@@ -294,13 +294,13 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                 r->setDurationType(chord->durationType());
                 r->setTicks(chord->ticks());
                 r->setTuplet(chord->tuplet());
-                r->setParent(s);
+                r->setOwnershipParent(s);
                 // if there were grace notes, move them
                 while (!chord->graceNotes().empty()) {
                     Chord* gc = chord->graceNotes().front();
                     Chord* ngc = Factory::copyChord(*gc);
                     elementScore->undoRemoveElement(gc);
-                    ngc->setParent(dstChord);
+                    ngc->setOwnershipParent(dstChord);
                     ngc->setTrack(dstChord->track());
                     elementScore->undoAddElement(ngc);
                 }
@@ -316,7 +316,7 @@ void EditVoice::changeSelectedElementsVoice(Transaction&, Score* score, voice_id
                 }
 
                 Lyrics* newLyric = Factory::copyLyrics(*lyric);
-                newLyric->setParent(dstChord);
+                newLyric->setOwnershipParent(dstChord);
                 newLyric->setSelected(false);
                 newLyric->setTrack(dstTrack);
                 elementScore->undoAddElement(newLyric);

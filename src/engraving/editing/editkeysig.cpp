@@ -122,7 +122,7 @@ void EditKeySig::undoChangeKeySig(Transaction& tx, Score* score, Staff* ostaff, 
             tx.push(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
         } else {
             KeySig* nks = Factory::createKeySig(s);
-            nks->setParent(s);
+            nks->setOwnershipParent(s);
             nks->setTrack(track);
             nks->setKeySigEvent(nkey);
             staffScore->doUndoAddElement(nks);

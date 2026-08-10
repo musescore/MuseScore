@@ -824,7 +824,7 @@ void GuitarBend::updateHoldLine()
     m_holdLine->setTrack(track());
     m_holdLine->setTrack2(track());
     m_holdLine->setGenerated(true);
-    m_holdLine->setParent(this);
+    m_holdLine->setOwnershipParent(this);
 }
 
 double GuitarBend::lineWidth() const
@@ -848,7 +848,7 @@ GuitarBendSegment::GuitarBendSegment(GuitarBend* sp)
     : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text = new GuitarBendText(this);
-    m_text->setParent(this);
+    m_text->setOwnershipParent(this);
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
@@ -857,7 +857,7 @@ GuitarBendSegment::GuitarBendSegment(const GuitarBendSegment& s)
 {
     m_vertexPointOff = s.m_vertexPointOff;
     m_text = new GuitarBendText(this);
-    m_text->setParent(this);
+    m_text->setOwnershipParent(this);
 }
 
 GuitarBendSegment::~GuitarBendSegment()

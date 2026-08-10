@@ -56,7 +56,7 @@ class TimeSig final : public EngravingItem
 
 public:
 
-    void setParent(Segment* parent);
+    void setOwnershipParent(Segment* parent);
 
     String ssig() const;
     void setSSig(const String&);

@@ -322,7 +322,7 @@ Chord::Chord(const Chord& c, bool link)
         if (link) {
             score()->undo(new Link(na, a));
         }
-        na->setParent(this);
+        na->setOwnershipParent(this);
         na->setTrack(track());
         m_articulations.push_back(na);
     }
@@ -400,9 +400,9 @@ Chord::Chord(const Chord& c, bool link)
     if (!c.noteParentheses().empty()) {
         for (const NoteParenthesisInfo* info : c.noteParentheses()) {
             Parenthesis* newLeftParen = toParenthesis(info->leftParen()->clone());
-            newLeftParen->setParent(this);
+            newLeftParen->setOwnershipParent(this);
             Parenthesis* newRightParen = toParenthesis(info->rightParen()->clone());
-            newRightParen->setParent(this);
+            newRightParen->setOwnershipParent(this);
 
             if (link && !info->leftParen()->generated()) {
                 score()->undo(new Link(newLeftParen, info->leftParen()));
@@ -617,7 +617,7 @@ void Chord::setTremoloSingleChord(TremoloSingleChord* tr)
 void Chord::add(EngravingItem* e)
 {
     if (e->ownershipParent() != this) {
-        e->setParent(this);
+        e->setOwnershipParent(this);
     }
     e->setTrack(track());
     switch (e->type()) {
@@ -1087,7 +1087,7 @@ bool Chord::shouldHaveHook() const
 void Chord::createStem()
 {
     Stem* stem = Factory::createStem(this);
-    stem->setParent(this);
+    stem->setOwnershipParent(this);
     stem->setGenerated(true);
     //! score()->undoAddElement calls add(), which assigns this created stem to _stem
     score()->doUndoAddElement(stem);
@@ -1109,7 +1109,7 @@ void Chord::removeStem()
 void Chord::createHook()
 {
     Hook* hook = new Hook(this);
-    hook->setParent(this);
+    hook->setOwnershipParent(this);
     hook->setGenerated(true);
     score()->doUndoAddElement(hook);
 }
@@ -1205,7 +1205,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
                 if (spanner->isTrill()) {
                     Ornament* ornament = toTrill(spanner)->ornament();
                     if (ornament) {
-                        ornament->setParent(this);
+                        ornament->setOwnershipParent(this);
                         ornament->computeNotesAboveAndBelow(as);
                     }
                 }
@@ -1523,7 +1523,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 }
                 atr->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
-            atr->setParent(this);
+            atr->setOwnershipParent(this);
             atr->setTrack(track());
 
             // Immediately add if the chord has no existing articulations, toggle otherwise...
@@ -1537,7 +1537,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
     }
 
     case ElementType::CHORDLINE:
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1551,7 +1551,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 return nullptr;
             }
         }
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1587,7 +1587,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
                 return 0;
             }
         }
-        e->setParent(this);
+        e->setOwnershipParent(this);
         e->setTrack(track());
         score()->undoAddElement(e);
         break;
@@ -1600,7 +1600,7 @@ EngravingItem* Chord::drop(Transaction& tx, EditData& data)
             score()->undoRemoveElement(arpeggio());
         }
         a->setTrack(track());
-        a->setParent(this);
+        a->setOwnershipParent(this);
         score()->undoAddElement(a);
     }
         return e;

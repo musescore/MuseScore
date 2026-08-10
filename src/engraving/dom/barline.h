@@ -86,7 +86,7 @@ public:
 
     BarLine& operator=(const BarLine&) = delete;
 
-    void setParent(Segment* parent);
+    void setOwnershipParent(Segment* parent);
 
     BarLine* clone() const override { return new BarLine(*this); }
     PointF canvasPos() const override;      ///< position in canvas coordinates

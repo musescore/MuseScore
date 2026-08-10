@@ -443,7 +443,7 @@ double Tie::scalingFactor() const
 void Tie::setStartNote(Note* note)
 {
     setStartElement(note);
-    setParent(note);
+    setOwnershipParent(note);
 }
 
 Note* Tie::startNote() const
@@ -520,7 +520,7 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
 
     score->undoRemoveElement(oldTie);
 
-    newTie->setParent(startNote);
+    newTie->setOwnershipParent(startNote);
     newTie->setStartNote(startNote);
     newTie->setTick(startNote->tick());
     newTie->setTrack(startNote->track());

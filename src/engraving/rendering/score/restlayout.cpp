@@ -100,7 +100,7 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
             } else {
                 item->tabDur()->setDuration(type, dots, stt);
             }
-            item->tabDur()->setParent(const_cast<Rest*>(item));
+            item->tabDur()->setOwnershipParent(const_cast<Rest*>(item));
 // needed?        _tabDur->setTrack(track());
             TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
             ldata->setBbox(item->tabDur()->ldata()->bbox());

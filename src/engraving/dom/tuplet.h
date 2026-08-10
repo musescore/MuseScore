@@ -103,7 +103,7 @@ public:
     Tuplet(const Tuplet&);
     ~Tuplet();
 
-    void setParent(Measure* parent);
+    void setOwnershipParent(Measure* parent);
 
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(track_idx_t val) override;

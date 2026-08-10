@@ -182,7 +182,7 @@ void EngravingObject::moveToDummy()
     Score* sc = score();
     if (sc) {
         if (sc->dummy() && sc->dummy() != this) {
-            setParent(sc->dummy());
+            setOwnershipParent(sc->dummy());
         }
     }
 }
@@ -216,7 +216,7 @@ void EngravingObject::setScore(Score* s)
     if (m_parent->isType(ElementType::DUMMY)) {
         moveToDummy();
     } else if (m_parent->isType(ElementType::SCORE)) {
-        setParent(s);
+        setOwnershipParent(s);
     }
 }
 
@@ -251,7 +251,7 @@ EngravingObject* EngravingObject::ownershipParent() const
     return m_parent;
 }
 
-void EngravingObject::setParent(EngravingObject* p)
+void EngravingObject::setOwnershipParent(EngravingObject* p)
 {
     IF_ASSERT_FAILED(this != p) {
         return;

@@ -55,9 +55,9 @@ public:
 
     Page* clone() const override { return new Page(*this); }
 
-    //! A page is owned by its score. This overload hides EngravingItem::setParent,
+    //! A page is owned by its score. This overload hides EngravingItem::setOwnershipParent,
     //! so that no other parent can be set by accident.
-    void setParent(Score* score);
+    void setOwnershipParent(Score* score);
 
     EngravingItem* layoutParent() const override;
     EngravingItem* accessibleParentItem() const override;

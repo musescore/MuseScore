@@ -518,7 +518,7 @@ void SingleLayout::layout(Articulation* item, const Context& ctx)
         Text* text = item->text();
         text->setXmlText(TConv::text(item->textType()));
         text->setTrack(item->track());
-        text->setParent(item);
+        text->setOwnershipParent(item);
 
         layoutTextBase(item->text(), ctx, item->text()->mutldata());
         bbox = text->ldata()->bbox();
@@ -838,7 +838,7 @@ void SingleLayout::layoutGroupBracket(Bracket* item, const Context& ctx)
 
     if (!item->text()) {
         const_cast<Bracket*>(item)->setText(new Text(const_cast<Bracket*>(item)));
-        item->text()->setParent(const_cast<Bracket*>(item));
+        item->text()->setOwnershipParent(const_cast<Bracket*>(item));
     }
 
     Text* text = item->text();
@@ -1112,7 +1112,7 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
     }
 
     HammerOnPullOffText* hopoText = hopoTexts.front();
-    hopoText->setParent(item);
+    hopoText->setOwnershipParent(item);
     hopoText->setXmlText("H/P");
 
     Align align;
@@ -1675,7 +1675,7 @@ void SingleLayout::layout(Tapping* item, const Context& ctx)
         text = new TappingText(item);
     }
 
-    text->setParent(item);
+    text->setOwnershipParent(item);
     item->setText(text);
     text->setTrack(item->track());
     DO_ASSERT(item->hand() != TappingHand::INVALID);
@@ -1918,7 +1918,7 @@ void SingleLayout::layout(TrillSegment* item, const Context& ctx)
                                  : a->shape().minVerticalDistance(Shape(box));
             y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
             a->setPos(x, y);
-            a->setParent(item);
+            a->setOwnershipParent(item);
         }
     } else {
         item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
@@ -1978,7 +1978,7 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
     double hookHeight = item->absoluteFromSpatium(item->volta()->beginHookHeight());
     if (item->text()) {
         Text* text = item->text();
-        text->setParent(item);
+        text->setOwnershipParent(item);
         RectF textBBox = text->ldata()->bbox().translated(text->pos());
         text->mutldata()->moveY(hookHeight - textBBox.bottom());
         text->mutldata()->moveX(0.5 * spatium);

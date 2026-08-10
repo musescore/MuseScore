@@ -586,7 +586,7 @@ void CustomizeKitDialog::updateExample()
     chord->setTrack(v);
     chord->setIsUiItem(true);
     Note* note = Factory::createNote(chord.get());
-    note->setParent(chord.get());
+    note->setOwnershipParent(chord.get());
     note->setTrack(v);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -597,7 +597,7 @@ void CustomizeKitDialog::updateExample()
     note->mutldata()->cachedNoteheadSym.set_value(static_cast<SymId>(quarterCmb->currentData().toInt()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
-    stem->setParent(chord.get());
+    stem->setOwnershipParent(chord.get());
     stem->setBaseLength(up ? -3.0_sp : 3.0_sp);
     engravingRenderer()->layoutItem(stem);
     chord->add(stem);

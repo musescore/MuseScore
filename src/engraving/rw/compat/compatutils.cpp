@@ -356,7 +356,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
         Chord* parentChord = toChord(oldOrnament->chordRest());
 
         Ornament* newOrnament = Factory::createOrnament(score->dummy()->chord());
-        newOrnament->setParent(parentChord);
+        newOrnament->setOwnershipParent(parentChord);
         newOrnament->setTrack(oldOrnament->track());
         newOrnament->setSymId(oldOrnament->symId());
         newOrnament->setPos(oldOrnament->pos());
@@ -403,7 +403,7 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
         Segment* parentSegment = oldExpression->segment();
 
         Expression* newExpression = Factory::createExpression(score->dummy()->segment());
-        newExpression->setParent(parentSegment);
+        newExpression->setOwnershipParent(parentSegment);
         newExpression->setTrack(oldExpression->track());
         newExpression->setXmlText(oldExpression->xmlText());
         newExpression->mapPropertiesFromOldExpressions(oldExpression);
@@ -488,7 +488,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
                 delete newArtic;
                 continue;
             }
-            newArtic->setParent(parentChord);
+            newArtic->setOwnershipParent(parentChord);
             newArtic->setTrack(combinedArtic->track());
             newArtic->setPos(combinedArtic->pos());
             newArtic->setDirection(combinedArtic->direction());
@@ -836,7 +836,7 @@ NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
     Note* endNote = toNote(textLine->endElement());
 
     NoteLine* noteLine = Factory::createNoteLine(startNote);
-    noteLine->setParent(startNote);
+    noteLine->setOwnershipParent(startNote);
     noteLine->setStartElement(startNote);
     noteLine->setTrack(textLine->track());
     noteLine->setTick(textLine->tick());
@@ -965,7 +965,7 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
         parentChord->remove(oldArtic);
 
         LaissezVib* lv = Factory::createLaissezVib(parentNote);
-        lv->setParent(parentNote);
+        lv->setOwnershipParent(parentNote);
         parentNote->add(lv);
 
         delete oldArtic;

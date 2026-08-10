@@ -166,7 +166,7 @@ void TupletLayout::createNumber(Tuplet* item, LayoutContext& ctx)
         Text* number = Factory::createText(item, TextStyleType::TUPLET);
         number->setComposition(true);
         number->setTrack(item->track());
-        number->setParent(item);
+        number->setOwnershipParent(item);
         number->setVisible(item->visible());
         number->setColor(item->color());
         item->setNumber(number);

@@ -59,8 +59,8 @@ Ambitus::Ambitus(Segment* parent)
 
     m_topAccidental = Factory::createAccidental(this, false);
     m_bottomAccidental = Factory::createAccidental(this, false);
-    m_topAccidental->setParent(this);
-    m_bottomAccidental->setParent(this);
+    m_topAccidental->setOwnershipParent(this);
+    m_bottomAccidental->setOwnershipParent(this);
 }
 
 Ambitus::Ambitus(const Ambitus& a)
@@ -73,10 +73,10 @@ Ambitus::Ambitus(const Ambitus& a)
     m_lineWidth = a.m_lineWidth;
 
     m_topAccidental = a.m_topAccidental->clone();
-    m_topAccidental->setParent(this);
+    m_topAccidental->setOwnershipParent(this);
 
     m_bottomAccidental = a.m_bottomAccidental->clone();
-    m_bottomAccidental->setParent(this);
+    m_bottomAccidental->setOwnershipParent(this);
 
     m_topPitch = a.m_topPitch;
     m_topTpc = a.m_topTpc;

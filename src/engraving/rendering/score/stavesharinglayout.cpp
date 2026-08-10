@@ -834,7 +834,7 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
             if (!sharedCR) {
                 sharedCR = toChordRest(originCR->clone());
                 sharedCR->setTrack(sharedTrack);
-                sharedCR->setParent(seg);
+                sharedCR->setOwnershipParent(seg);
                 score->undoAddElement(sharedCR);
             }
 
@@ -851,7 +851,7 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                     if (!sharedTuplet) {
                         sharedTuplet = toTuplet(originTuplet->clone());
                         sharedTuplet->setTrack(sharedTrack);
-                        sharedTuplet->setParent(originTuplet->measure());
+                        sharedTuplet->setOwnershipParent(originTuplet->measure());
                         score->undoAddElement(sharedTuplet);
                     }
                 } else {
@@ -891,7 +891,7 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                 if (!sharedNote) {
                     sharedNote = originNote->clone();
                     sharedNote->setTrack(sharedTrack);
-                    sharedNote->setParent(sharedChord);
+                    sharedNote->setOwnershipParent(sharedChord);
                     score->undoAddElement(sharedNote);
                 }
 
@@ -919,7 +919,7 @@ void StaveSharingLayout::makeSharedChordRests(StaveSharingContext& ctx)
                 if (!sharedGrace) {
                     sharedGrace = toChord(originGrace->clone());
                     sharedGrace->setTrack(sharedTrack);
-                    sharedGrace->setParent(sharedChord);
+                    sharedGrace->setOwnershipParent(sharedChord);
                     score->undoAddElement(sharedGrace);
                 }
 
@@ -964,7 +964,7 @@ void StaveSharingLayout::makeSharedBreaths(StaveSharingContext& ctx)
             if (!sharedBreath) {
                 sharedBreath = toBreath(originBreath->clone());
                 sharedBreath->setTrack(sharedTrack);
-                sharedBreath->setParent(seg);
+                sharedBreath->setOwnershipParent(seg);
                 ctx.score->undoAddElement(sharedBreath);
             }
 
@@ -992,7 +992,7 @@ void StaveSharingLayout::makeSharedArticulations(Chord* originChord, Chord* shar
         if (!sharedArt) {
             sharedArt = originArt->clone();
             sharedArt->setTrack(sharedChord->track());
-            sharedArt->setParent(sharedChord);
+            sharedArt->setOwnershipParent(sharedChord);
 
             score->undoAddElement(sharedArt);
         }
@@ -1130,7 +1130,7 @@ void StaveSharingLayout::makeSharedAnnotations(StaveSharingContext& ctx)
             if (!sharedItem) {
                 sharedItem = originItem->clone();
                 sharedItem->setTrack(sharedTrack);
-                sharedItem->setParent(seg);
+                sharedItem->setOwnershipParent(seg);
                 score->undoAddElement(sharedItem);
             }
 
@@ -1223,7 +1223,7 @@ void StaveSharingLayout::makeStaveSharingLabels(StaveSharingContext& ctx)
 
         if (!label) {
             label = Factory::createStaveSharingLabel(segment);
-            label->setParent(segment);
+            label->setOwnershipParent(segment);
             label->setTrack(unisonNote->track());
             label->setXmlText(text);
 

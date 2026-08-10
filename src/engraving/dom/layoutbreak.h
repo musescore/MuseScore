@@ -40,7 +40,7 @@ class LayoutBreak final : public EngravingItem
 
 public:
 
-    void setParent(MeasureBase* parent);
+    void setOwnershipParent(MeasureBase* parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(m_layoutBreakType); }
