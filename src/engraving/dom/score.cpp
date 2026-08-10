@@ -2747,7 +2747,7 @@ void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
         m_is.setTrack(e->track());
         selState = SelState::LIST;
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         if (e->isChordRest()) {
             m_is.setLastSegment(m_is.segment());
@@ -2829,7 +2829,7 @@ static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* d
     ChordRest* cr = nullptr;
 
     if (e->isNote()) {
-        cr = toChordRest(e->parentItem());
+        cr = toNote(e)->chord();
     } else if (e->isChordRest()) {
         cr = toChordRest(e);
     } else if (EngravingItem* c = e->findAncestor(ElementType::CHORD)) {
@@ -2939,7 +2939,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
             deselectAll();
         }
 
-        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
+        ChordRest* cr = e->isNote() ? static_cast<ChordRest*>(toNote(e)->chord()) : toChordRest(e);
 
         SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
         m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
@@ -3480,7 +3480,7 @@ void Score::lassoSelectEnd()
         }
         ++noteRestCount;
         if (e->isNote()) {
-            e = e->parentItem();
+            e = toNote(e)->chord();
         }
         Segment* seg = toChordRest(e)->segment();
         if ((startSegment == 0) || (*seg < *startSegment)) {

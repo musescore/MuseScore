@@ -4336,7 +4336,7 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
         return;
     }
 
-    Chord* parentChord = toChord(item->parentItem());
+    Chord* parentChord = toChord(item->chordRest());
     Chord* cueNoteChord = item->cueNoteChord();
 
     if (!cueNoteChord) {

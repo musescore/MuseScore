@@ -353,7 +353,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
     }
 
     for (Articulation* oldOrnament : oldOrnaments) {
-        Chord* parentChord = toChord(oldOrnament->parentItem());
+        Chord* parentChord = toChord(oldOrnament->chordRest());
 
         Ornament* newOrnament = Factory::createOrnament(score->dummy()->chord());
         newOrnament->setParent(parentChord);
@@ -400,7 +400,7 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
     }
 
     for (StaffText* oldExpression : oldExpressions) {
-        Segment* parentSegment = toSegment(oldExpression->parentItem());
+        Segment* parentSegment = oldExpression->segment();
 
         Expression* newExpression = Factory::createExpression(score->dummy()->segment());
         newExpression->setParent(parentSegment);
@@ -480,7 +480,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
     // separate into individual articulations
     for (Articulation* combinedArtic : toRemove) {
         auto components = mu::engraving::splitArticulations({ combinedArtic->symId() });
-        Chord* parentChord = toChord(combinedArtic->parentItem());
+        Chord* parentChord = toChord(combinedArtic->chordRest());
         for (SymId id : components) {
             Articulation* newArtic = Factory::createArticulation(masterScore->dummy()->chord());
             newArtic->setSymId(id);
@@ -515,7 +515,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
                     continue;
                 }
                 Articulation* oldArtic = toArticulation(linkedItem);
-                Chord* oldParent = toChord(oldArtic->parentItem());
+                Chord* oldParent = toChord(oldArtic->chordRest());
                 oldParent->add(newArtic->linkedClone());
             }
         }
@@ -524,7 +524,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
     for (Articulation* combinedArtic : toRemove) {
         LinkedObjects* links = combinedArtic->links();
         if (!links || links->empty()) {
-            Chord* parentChord = toChord(combinedArtic->parentItem());
+            Chord* parentChord = toChord(combinedArtic->chordRest());
             parentChord->remove(combinedArtic);
             delete combinedArtic;
             continue;
@@ -538,12 +538,12 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
         }
         for (Articulation* linkedArtic : removeLinks) {
             if (linkedArtic != combinedArtic) {
-                Chord* linkedParent = toChord(linkedArtic->parentItem());
+                Chord* linkedParent = toChord(linkedArtic->chordRest());
                 linkedParent->remove(linkedArtic);
                 delete linkedArtic;
             }
         }
-        Chord* parentChord = toChord(combinedArtic->parentItem());
+        Chord* parentChord = toChord(combinedArtic->chordRest());
         parentChord->remove(combinedArtic);
         delete combinedArtic;
     }
@@ -959,7 +959,7 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
     }
 
     for (Articulation* oldArtic : oldArtics) {
-        Chord* parentChord = toChord(oldArtic->parentItem());
+        Chord* parentChord = toChord(oldArtic->chordRest());
         Note* parentNote = oldArtic->up() ? parentChord->upNote() : parentChord->downNote();
 
         parentChord->remove(oldArtic);

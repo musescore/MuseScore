@@ -1073,7 +1073,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     System* system = elementsToLayout.system;
 
     for (Parenthesis* e : elementsToLayout.parenthesis) {
-        Segment* s = toSegment(e->parentItem());
+        Segment* s = e->segment();
         if (s->isType(SegmentType::TimeSigTypes)) {
             EngravingItem* el = s->element(e->track());
             TimeSig* timeSig = el ? toTimeSig(el) : nullptr;

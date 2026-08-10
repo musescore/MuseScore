@@ -155,7 +155,7 @@ ChordRest* Selection::cr() const
         return 0;
     }
     if (e->isNote()) {
-        e = e->parentItem();
+        e = toNote(e)->chord();
     }
     if (e->isChordRest()) {
         return toChordRest(e);
@@ -295,7 +295,7 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
     ChordRest* cr = nullptr;
     for (EngravingItem* el : m_el) {
         if (el->isNote()) {
-            el = el->parentItem();
+            el = toNote(el)->chord();
         }
         if (el->isChordRest()) {
             if (track != muse::nidx && el->track() != track) {

@@ -227,9 +227,8 @@ void MusicXmlLyricsExtend::setExtend(const int verse, const track_idx_t track, c
 {
     std::vector<Lyrics*> list;
     for (Lyrics* l : m_lyrics) {
-        const EngravingItem* el = l->parentItem();
-        if (el->isChordRest()) {
-            const ChordRest* par = toChordRest(el);
+        const ChordRest* par = l->chordRest();
+        if (par) {
             // no = -1: stop all extends on this track
             // otherwise, stop all extends in the stave with the same no and placement
             if ((verse == -1 && par->track() == track)

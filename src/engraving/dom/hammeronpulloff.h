@@ -37,6 +37,8 @@ public:
 
     bool isEditAllowed(EditData&) const override { return false; }
 
+    HammerOnPullOffSegment* hopoSegment() const { return toHammerOnPullOffSegment(explicitParent()); }
+
     Chord* startChord() const { return m_startChord; }
     Chord* endChord() const { return m_endChord; }
     void setStartChord(Chord* c) { m_startChord = c; }
