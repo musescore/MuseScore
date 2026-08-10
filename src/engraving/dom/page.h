@@ -52,6 +52,8 @@ class Page final : public EngravingItem
     DECLARE_CLASSOF(ElementType::PAGE)
 
 public:
+    ~Page() override;
+
     Page* clone() const override { return new Page(*this); }
 
     const std::vector<System*>& systems() const { return m_systems; }
@@ -74,6 +76,7 @@ public:
     double rm() const;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
+    EngravingItemList accessibleChildren() const override;
 
     std::vector<EngravingItem*> items(const RectF& r);
     std::vector<EngravingItem*> items(const PointF& p);

@@ -203,7 +203,7 @@ public:
     static StemSlash* createStemSlash(Chord* parent, bool isAccessibleEnabled = true);
     static StemSlash* copyStemSlash(const StemSlash& src);
 
-    static System* createSystem(Page* parent, bool isAccessibleEnabled = true);
+    static System* createSystem(Score* parent, bool isAccessibleEnabled = true);
     static SystemText* createSystemText(Segment* parent, TextStyleType textStyleType = TextStyleType::SYSTEM,
                                         ElementType type = ElementType::SYSTEM_TEXT, bool isAccessibleEnabled = true);
 

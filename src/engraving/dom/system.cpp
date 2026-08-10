@@ -138,9 +138,21 @@ void SysStaff::removeInstrumentName(InstrumentNameRole role)
 //   System
 //---------------------------------------------------------
 
-System::System(Page* parent)
+System::System(Score* parent)
     : EngravingItem(ElementType::SYSTEM, parent)
 {
+    // Owned by its score right away; a page only places it later
+    setParent(parent);
+}
+
+void System::setParent(Score* score)
+{
+    EngravingItem::setParent(score);
+}
+
+EngravingItem* System::layoutParent() const
+{
+    return m_page;
 }
 
 //---------------------------------------------------------
@@ -149,6 +161,9 @@ System::System(Page* parent)
 
 System::~System()
 {
+    if (m_page) {
+        muse::remove(m_page->systems(), this);
+    }
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system() == this) {
             ss->resetExplicitParent();
@@ -177,11 +192,6 @@ AccessibleItemPtr System::createAccessible()
 }
 
 #endif
-
-void System::moveToPage(Page* parent)
-{
-    setParent(parent);
-}
 
 //---------------------------------------------------------
 ///   clear

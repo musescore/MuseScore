@@ -122,7 +122,8 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
                     score->setSelectionChanged(true);
                 }
             }
-            s->resetExplicitParent();
+            // no need to clear the page placement: the systems are deleted below,
+            // and ~System unlinks itself from its page
         }
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             mb->setSystem(nullptr);

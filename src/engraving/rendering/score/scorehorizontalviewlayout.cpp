@@ -142,7 +142,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
         page->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setPageNumber(0);
 
-        System* system = Factory::createSystem(page);
+        System* system = Factory::createSystem(page->score());
         ctx.mutDom().systems().push_back(system);
         page->appendSystem(system);
         system->adjustStavesNumber(ctx.dom().nstaves());
