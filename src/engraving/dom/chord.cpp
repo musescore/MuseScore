@@ -2092,8 +2092,8 @@ double Chord::mag() const
 
 Segment* Chord::segment() const
 {
-    EngravingItem* e = parentItem();
-    for (; e && !e->isSegment(); e = e->parentItem()) {
+    EngravingItem* e = ownershipParentItem();
+    for (; e && !e->isSegment(); e = e->ownershipParentItem()) {
     }
     return toSegment(e);
 }
@@ -2104,8 +2104,8 @@ Segment* Chord::segment() const
 
 Measure* Chord::measure() const
 {
-    EngravingItem* e = parentItem();
-    for (; e && !e->isMeasure(); e = e->parentItem()) {
+    EngravingItem* e = ownershipParentItem();
+    for (; e && !e->isMeasure(); e = e->ownershipParentItem()) {
     }
     return toMeasure(e);
 }

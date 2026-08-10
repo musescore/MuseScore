@@ -1262,7 +1262,7 @@ void Score::styleChanged()
 
 void Score::addElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentItem();
+    EngravingItem* parent = element->ownershipParentItem();
     element->triggerLayout();
 
 //      LOGD("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
@@ -1420,7 +1420,7 @@ void Score::doUndoAddElement(EngravingItem* element)
 
 void Score::removeElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentItem();
+    EngravingItem* parent = element->ownershipParentItem();
     element->triggerLayout();
 
     // special for MEASURE, HBOX, VBOX

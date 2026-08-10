@@ -2594,7 +2594,7 @@ bool TextBase::isPropertyLinkedToMaster(Pid id) const
 
 bool TextBase::isUnlinkedFromMaster() const
 {
-    EngravingItem* parent = parentItem();
+    EngravingItem* parent = ownershipParentItem();
     if (parent && parent->isUnlinkedFromMaster()) {
         return true;
     }

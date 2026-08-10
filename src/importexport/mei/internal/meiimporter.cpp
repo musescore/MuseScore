@@ -3165,7 +3165,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
         Trill* trill = toTrill(this->addSpanner(meiTrill, measure, trillNode));
         if (trill) {
             // move ornament to spanner
-            ornament->parentItem()->remove(ornament);
+            ornament->ownershipParentItem()->remove(ornament);
             trill->setOrnament(ornament);
             // @color
             Convert::colorlineFromMEI(trill, meiTrill);

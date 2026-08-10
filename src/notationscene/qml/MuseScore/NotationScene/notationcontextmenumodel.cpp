@@ -419,7 +419,7 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 MenuItemList NotationContextMenuModel::makeTextItems()
 {
     const EngravingItem* element = currentElement();
-    if (!(element->parentItem() && element->parentItem()->isBarLine())) {
+    if (!(element->ownershipParentItem() && element->ownershipParentItem()->isBarLine())) {
         // Regular text
         return makeElementItems();
     }

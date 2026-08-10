@@ -239,7 +239,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    const Note* note = toNote(parentItem());
+    const Note* note = toNote(ownershipParentItem());
     const Chord* chord = note ? note->chord() : nullptr;
     const Measure* measure = chord ? chord->measure() : nullptr;
     if (!measure) {

@@ -2549,7 +2549,7 @@ void SystemLayout::removeElementFromSkyline(EngravingItem* element, const System
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
 
     skylineLine.remove_if([element](ShapeElement& shapeEl) {
-        return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->parentItem());
+        return shapeEl.item() && (element == shapeEl.item() || element == shapeEl.item()->ownershipParentItem());
     });
 }
 
@@ -2561,9 +2561,9 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
         if (itemInSkyline && itemInSkyline->isText()) {
-            const EngravingItem* parent = itemInSkyline->parentItem();
-            if (parent && parent->isSLineSegment()) {
-                itemInSkyline = parent;
+            const EngravingItem* owner = itemInSkyline->ownershipParentItem();
+            if (owner && owner->isSLineSegment()) {
+                itemInSkyline = owner;
             }
         }
         if (itemInSkyline == element) {

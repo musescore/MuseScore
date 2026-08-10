@@ -71,7 +71,7 @@ static bool itemAccepted(const EngravingItem* item)
 
 static bool isChordArticulation(const EngravingItem* item)
 {
-    const EngravingItem* parent = item->parentItem();
+    const EngravingItem* parent = item->ownershipParentItem();
     if (!parent || !parent->isChord()) {
         return false;
     }
@@ -157,7 +157,7 @@ static void addElementInfoIfNeed(ScannerData* scannerData, EngravingItem* item)
         }
         info.duration = durationInfo(chord->durationType());
     } else if (isChordArticulation(item)) {
-        Chord* chord = toChord(item->parentItem());
+        Chord* chord = toChord(item->ownershipParentItem());
         scannerData->chords.insert(chord);
         info.name = item->translatedSubtypeUserName();
         info.notes = chordToNotes(chord);

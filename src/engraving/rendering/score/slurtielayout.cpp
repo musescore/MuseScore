@@ -1167,7 +1167,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleBeginType()) {
         if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(startCR->parentItem());
+            Chord* parent = toChord(startCR->ownershipParentItem());
             if (parent) {
                 startSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -1182,7 +1182,7 @@ Shape SlurTieLayout::getSegmentShapes(SlurSegment* slurSeg, ChordRest* startCR, 
     if (slurSeg->isSingleEndType()) {
         if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
             // if this is a grace-note-after, the shape is stored the *appended* segment
-            Chord* parent = toChord(endCR->parentItem());
+            Chord* parent = toChord(endCR->ownershipParentItem());
             if (parent) {
                 endSeg = parent->graceNotesAfter().appendedSegment();
             }
@@ -1262,11 +1262,11 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
     // Remove items that the slur shouldn't try to avoid
     segShape.remove_if([&](ShapeElement& shapeEl) {
-        if (!shapeEl.item() || !shapeEl.item()->parentItem() || !shapeEl.item()->visible()) {
+        if (!shapeEl.item() || !shapeEl.item()->ownershipParentItem() || !shapeEl.item()->visible()) {
             return true;
         }
         const EngravingItem* item = shapeEl.item();
-        const EngravingItem* parent = item->parentItem();
+        const EngravingItem* parent = item->ownershipParentItem();
         // Don't remove arpeggio starting on a different voice and ending on the same voice as endCR when slur is on the outside
         if ((item->isArpeggio() || item->isChordBracket()) && (endCR->track() == toArpeggio(item)->endTrack())
             && endCR->tick() == item->tick()
@@ -1281,7 +1281,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         }
         // Ornament accidentals on start or end chord
         if (item->isAccidental() && parent->isOrnament()) {
-            EngravingItem* parentParent = parent->parentItem();
+            EngravingItem* parentParent = parent->ownershipParentItem();
             if (parentParent && (parentParent == startCR || parentParent == endCR)) {
                 return true;
             }
@@ -2954,8 +2954,8 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
     if (c2->isGrace() && c2->up() != up) {
         return true;
     }
-    if (c1->isGraceBefore() && c2->isGraceAfter() && c1->parentItem() == c2->parentItem()) {
-        const Chord* mainChord = toChord(c1->parentItem());
+    if (c1->isGraceBefore() && c2->isGraceAfter() && c1->ownershipParentItem() == c2->ownershipParentItem()) {
+        const Chord* mainChord = toChord(c1->ownershipParentItem());
         if (mainChord->stem() && mainChord->up() != up) {
             return true;
         }

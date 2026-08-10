@@ -2350,7 +2350,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
         return;
     }
 
-    Fraction tick = item->parentItem()->tick();
+    Fraction tick = item->ownershipParentItem()->tick();
     const Staff* st = item->staff();
     if (st && st->isTabStaff(tick)
         && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
@@ -5553,7 +5553,7 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
         return;
     }
 
-    const EngravingItem* parent = item->parentItem();
+    const EngravingItem* parent = item->ownershipParentItem();
     if (!parent) {
         return;
     }

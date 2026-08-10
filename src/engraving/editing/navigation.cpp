@@ -940,12 +940,12 @@ EngravingItem* Score::nextElement()
             continue;
         }
         case ElementType::SOUND_FLAG:
-            if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
+            if (EngravingItem* parent = toSoundFlag(e)->ownershipParentItem()) {
                 return parent;
             }
             break;
         case ElementType::HARMONY: {
-            if (EngravingItem* parent = toHarmony(e)->parentItem()) {
+            if (EngravingItem* parent = toHarmony(e)->ownershipParentItem()) {
                 if (parent->isFretDiagram()) {
                     return parent;
                 }
@@ -1347,7 +1347,7 @@ EngravingItem* Navigation::move(Score* score, const String& cmd)
         // cr is the ChordRest to move from on other cmd's
         track_idx_t track = el->track();                // keep note of element track
         if (!el->isBox()) {
-            el = el->parentItem();
+            el = el->ownershipParentItem();
         }
         // element with no parent (eg, a newly-added line) - no way to find context
         if (!el) {

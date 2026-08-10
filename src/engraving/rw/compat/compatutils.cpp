@@ -910,11 +910,11 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
     for (TextLine* oldLine : oldLines) {
         NoteLine* newLine = createNoteLineFromTextLine(oldLine);
         if (!newLine) {
-            oldLine->parentItem()->remove(oldLine);
+            oldLine->ownershipParentItem()->remove(oldLine);
             delete oldLine;
             continue;
         }
-        EngravingItem* parent = newLine->parentItem();
+        EngravingItem* parent = newLine->ownershipParentItem();
 
         parent->remove(oldLine);
         parent->add(newLine);

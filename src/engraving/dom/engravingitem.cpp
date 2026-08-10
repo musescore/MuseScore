@@ -187,7 +187,7 @@ EngravingItemList EngravingItem::accessibleChildren() const
     return childrenItems();
 }
 
-EngravingItem* EngravingItem::parentItem() const
+EngravingItem* EngravingItem::ownershipParentItem() const
 {
     EngravingObject* p = ownershipParent();
     if (p && p->isEngravingItem()) {
@@ -199,7 +199,7 @@ EngravingItem* EngravingItem::parentItem() const
 
 EngravingItem* EngravingItem::layoutParent() const
 {
-    return parentItem();
+    return ownershipParentItem();
 }
 
 static void collectChildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)

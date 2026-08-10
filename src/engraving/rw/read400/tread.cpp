@@ -4327,7 +4327,7 @@ void TRead::read(Trill* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Ornament") {
             Ornament* ornament = t->ornament();
             if (!ornament) {
-                ornament = Factory::createOrnament(toChordRest(t->parentItem()));
+                ornament = Factory::createOrnament(toChordRest(t->ownershipParentItem()));
                 t->setOrnament(ornament);
             }
             ornament->setSymId(Ornament::fromTrillType(t->trillType()));
