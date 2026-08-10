@@ -236,7 +236,6 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
-        dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
         engravingRender()->layoutItem(dragElement);

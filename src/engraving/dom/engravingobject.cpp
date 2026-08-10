@@ -272,16 +272,7 @@ void EngravingObject::setParentInternal(EngravingObject* p)
         doSetScore(m_parent->score());
     }
 
-    if (p && !p->isType(ElementType::DUMMY)) {
-        m_isParentExplicitlySet = true;
-    } else {
-        m_isParentExplicitlySet = false;
-    }
-}
-
-void EngravingObject::resetExplicitParent()
-{
-    m_isParentExplicitlySet = false;
+    m_isParentExplicitlySet = p && !p->isType(ElementType::DUMMY);
 }
 
 Score* EngravingObject::score() const

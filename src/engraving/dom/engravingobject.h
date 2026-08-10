@@ -231,8 +231,9 @@ public:
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
+    //! The parent this object has explicitly been attached to via setParent().
+    //! Null while the object is merely constructed with a context parent, or parked on the dummy.
     EngravingObject* explicitParent() const;
-    void resetExplicitParent();
     void moveToDummy();
 
     const EngravingObjectList& children() const { return m_children; }
