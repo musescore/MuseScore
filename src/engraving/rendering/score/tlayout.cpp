@@ -4895,7 +4895,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
         }
         LineSegment* lineSegm = item->segmentAt(segIdx++);
         lineSegm->setTrack(item->track());           // DEBUG
-        lineSegm->setSystem(system);
+        lineSegm->moveToSystem(system);
 
         if (sysIdx1 == sysIdx2) {
             // single segment
@@ -6771,7 +6771,7 @@ SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* sy
             spanner->add(seg);
         }
     }
-    seg->setSystem(system);
+    seg->moveToSystem(system);
     seg->setSpanner(spanner);
     seg->setTrack(spanner->track());
     seg->setVisible(spanner->visible());

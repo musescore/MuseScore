@@ -1854,7 +1854,7 @@ void SystemLayout::layoutNoteAnchoredSpanners(System* system, Chord* chord)
     for (Note* note : chord->notes()) {
         for (Spanner* spanner : note->spannerFor()) {
             for (SpannerSegment* spannerSeg : spanner->spannerSegments()) {
-                spannerSeg->setSystem(system);
+                spannerSeg->moveToSystem(system);
             }
         }
     }

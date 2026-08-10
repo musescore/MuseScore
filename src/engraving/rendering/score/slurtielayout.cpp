@@ -1605,7 +1605,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     TieSegment* segment = item->segmentAt(0);
     segment->setTrack(item->track());
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
-    segment->setSystem(system);   // Needed to populate System.spannerSegments
+    segment->moveToSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
 
@@ -1666,7 +1666,7 @@ TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContex
     item->fixupSegments(2);
     TieSegment* segment = item->segmentAt(1);
     segment->setTrack(item->track());
-    segment->setSystem(system);
+    segment->moveToSystem(system);
     segment->resetAdjustmentOffset();
 
     if (chord) {
@@ -1820,7 +1820,7 @@ void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
             continue;
         }
         SlurSegment* lineSegm = item->segmentAt(segIdx++);
-        lineSegm->setSystem(system);
+        lineSegm->moveToSystem(system);
         if (startSysIdx == endSysIdx) {
             lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
         } else if (i == startSysIdx) {
@@ -1910,7 +1910,7 @@ LaissezVibSegment* SlurTieLayout::createLaissezVibSegment(LaissezVib* item)
     LaissezVibSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     segment->setTrack(item->track());
-    segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
+    segment->moveToSystem(item->startNote()->chord()->segment()->measure()->system());
     segment->resetAdjustmentOffset();
 
     return segment;
@@ -1989,7 +1989,7 @@ PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
     item->fixupSegments(1);
     PartialTieSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    segment->setSystem(chord->segment()->measure()->system());
+    segment->moveToSystem(chord->segment()->measure()->system());
     segment->setTrack(item->track());
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();

@@ -166,7 +166,7 @@ System::~System()
     }
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system() == this) {
-            ss->resetExplicitParent();
+            ss->setSystem(nullptr);
         }
     }
     for (MeasureBase* mb : measures()) {
@@ -208,7 +208,7 @@ void System::clear()
     m_ml.clear();
     for (SpannerSegment* ss : m_spannerSegments) {
         if (ss->system() == this) {
-            ss->resetExplicitParent();             // assume parent() is System
+            ss->setSystem(nullptr);
         }
     }
     m_spannerSegments.clear();
@@ -256,10 +256,12 @@ void System::removeLastMeasure()
 
 EngravingItemList System::accessibleChildren() const
 {
-    // The measures are owned by the score, but it is the system that places them, so
-    // the system is where the accessibility tree finds them.
+    // The measures are owned by the score and the spanner segments by their spanner,
+    // but it is the system that places them, so the system is where the accessibility
+    // tree finds them.
     EngravingItemList children = EngravingItem::accessibleChildren();
     children.insert(children.end(), m_ml.begin(), m_ml.end());
+    children.insert(children.end(), m_spannerSegments.begin(), m_spannerSegments.end());
 
     return children;
 }
@@ -511,6 +513,8 @@ void System::add(EngravingItem* el)
 
     if (el->isMeasureBase()) {
         toMeasureBase(el)->setSystem(this);
+    } else if (el->isSpannerSegment()) {
+        toSpannerSegment(el)->setSystem(this);
     } else {
         el->setParent(this);
     }
@@ -648,11 +652,17 @@ void System::remove(EngravingItem* el)
     case ElementType::NOTELINE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
-        if (!muse::remove(m_spannerSegments, toSpannerSegment(el))) {
+    {
+        SpannerSegment* ss = toSpannerSegment(el);
+        if (!muse::remove(m_spannerSegments, ss)) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             assert(score() == el->score());
         }
-        break;
+        if (ss->system() == this) {
+            ss->setSystem(nullptr);
+        }
+    }
+    break;
     case ElementType::SYSTEM_DIVIDER:
         if (el == m_systemDividerLeft) {
             m_systemDividerLeft = 0;

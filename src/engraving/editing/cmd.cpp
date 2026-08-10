@@ -282,7 +282,7 @@ static void deletePostponed(CmdState& cmdState)
             std::list<SpannerSegment*> spanners = s->spannerSegments();
             for (SpannerSegment* ss : spanners) {
                 if (ss->system() == s) {
-                    ss->setSystem(0);
+                    ss->moveToSystem(nullptr);
                 }
             }
         }

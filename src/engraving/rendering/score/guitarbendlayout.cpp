@@ -62,12 +62,12 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx, 
         item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
     }
 
-    item->frontSegment()->setSystem(system1);
+    item->frontSegment()->moveToSystem(system1);
     if (segmentsNeeded == 1) {
         item->frontSegment()->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     } else {
         item->frontSegment()->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-        item->backSegment()->setSystem(system2);
+        item->backSegment()->moveToSystem(system2);
         item->backSegment()->setSpannerSegmentType(SpannerSegmentType::END);
     }
 
