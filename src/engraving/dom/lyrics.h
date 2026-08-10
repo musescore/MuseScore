@@ -139,7 +139,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     void removeUnmanaged() override;
 
     virtual Lyrics* lyrics() const { return toLyrics(explicitParent()); }
@@ -172,7 +172,7 @@ class LyricsLineSegment : public LineSegment
     DECLARE_CLASSOF(ElementType::LYRICSLINE_SEGMENT)
 
 public:
-    LyricsLineSegment(LyricsLine*, System* parent);
+    LyricsLineSegment(LyricsLine*);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
 
@@ -207,7 +207,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(LyricsLineSegment)
 
 protected:
-    LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    LyricsLineSegment(const ElementType& type, LyricsLine* sp, ElementFlags f = ElementFlag::NOTHING);
     void rebaseAnchors(EditData&, Grip) override;
 };
 
@@ -220,7 +220,7 @@ public:
     PartialLyricsLine(EngravingItem* parent);
     PartialLyricsLine(const PartialLyricsLine&);
     PartialLyricsLine* clone() const override { return new PartialLyricsLine(*this); }
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     Lyrics* lyrics() const override { return nullptr; }
 
@@ -254,7 +254,7 @@ class PartialLyricsLineSegment final : public LyricsLineSegment
     DECLARE_CLASSOF(ElementType::PARTIAL_LYRICSLINE_SEGMENT)
 
 public:
-    PartialLyricsLineSegment(PartialLyricsLine*, System* parent);
+    PartialLyricsLineSegment(PartialLyricsLine*);
 
     LyricsLineSegment* clone() const override { return new PartialLyricsLineSegment(*this); }
 

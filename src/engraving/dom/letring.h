@@ -38,7 +38,7 @@ class LetRingSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::LET_RING_SEGMENT)
 
 public:
-    LetRingSegment(LetRing* sp, System* parent);
+    LetRingSegment(LetRing* sp);
 
     LetRingSegment* clone() const override { return new LetRingSegment(*this); }
 
@@ -63,7 +63,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

@@ -1030,7 +1030,7 @@ void SingleLayout::layout(Glissando* item, const Context& ctx)
     double spatium = item->spatium();
 
     if (item->spannerSegments().empty()) {
-        item->add(item->createLineSegment(ctx.dummyParent()->system()));
+        item->add(item->createLineSegment());
     }
     LineSegment* s = item->frontSegment();
     s->setPos(PointF(-spatium * Glissando::GLISS_PALETTE_WIDTH / 2, spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
@@ -1083,7 +1083,7 @@ void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
     double spatium = item->spatium();
     HammerOnPullOffSegment* s = nullptr;
     if (item->spannerSegments().empty()) {
-        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s = new HammerOnPullOffSegment(item);
         s->setTrack(item->track());
         item->add(s);
     } else {
@@ -1529,12 +1529,12 @@ void SingleLayout::layout(RehearsalMark* item, const Context& ctx)
     layoutTextBase(item, ctx, item->mutldata());
 }
 
-void SingleLayout::layout(Slur* item, const Context& ctx)
+void SingleLayout::layout(Slur* item, const Context&)
 {
     double spatium = item->spatium();
     SlurSegment* s = nullptr;
     if (item->spannerSegments().empty()) {
-        s = new SlurSegment(ctx.dummyParent()->system());
+        s = new SlurSegment(item);
         s->setTrack(item->track());
         item->add(s);
     } else {

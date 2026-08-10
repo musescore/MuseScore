@@ -39,8 +39,8 @@ namespace mu::engraving {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
-    : LineSegment(type, sp, parent, f)
+TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, TextLineBase* sp, ElementFlags f)
+    : LineSegment(type, sp, f)
 {
     m_text    = Factory::createText(this, TextStyleType::DEFAULT, false);
     m_endText = Factory::createText(this, TextStyleType::DEFAULT, false);

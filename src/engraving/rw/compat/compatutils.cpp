@@ -852,7 +852,7 @@ NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
     }
 
     for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
-        LineSegment* newSeg = noteLine->createLineSegment(oldSeg->system());
+        LineSegment* newSeg = noteLine->createLineSegment();
         newSeg->setOffset(oldSeg->offset());
         newSeg->setUserOff2(oldSeg->userOff2());
 

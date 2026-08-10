@@ -87,7 +87,7 @@ class TappingHalfSlurSegment : public SlurSegment
     DECLARE_CLASSOF(ElementType::TAPPING_HALF_SLUR_SEGMENT)
 
 public:
-    TappingHalfSlurSegment(System* parent);
+    TappingHalfSlurSegment(TappingHalfSlur* sp);
     TappingHalfSlurSegment(const TappingHalfSlurSegment& other);
     TappingHalfSlurSegment* clone() const override { return new TappingHalfSlurSegment(*this); }
 
@@ -106,7 +106,7 @@ public:
     TappingHalfSlur(EngravingItem* parent);
     TappingHalfSlur(const TappingHalfSlur&);
     TappingHalfSlur* clone() const override { return new TappingHalfSlur(*this); }
-    TappingHalfSlurSegment* newSlurTieSegment(System* parent) override { return new TappingHalfSlurSegment(parent); }
+    TappingHalfSlurSegment* newSlurTieSegment() override { return new TappingHalfSlurSegment(this); }
 
     Tapping* tapping() const { return toTapping(parent()); }
 

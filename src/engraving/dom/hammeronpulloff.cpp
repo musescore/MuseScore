@@ -42,8 +42,8 @@ HammerOnPullOff::HammerOnPullOff(const HammerOnPullOff& other)
 {
 }
 
-HammerOnPullOffSegment::HammerOnPullOffSegment(System* parent)
-    : SlurSegment(parent, ElementType::HAMMER_ON_PULL_OFF_SEGMENT)
+HammerOnPullOffSegment::HammerOnPullOffSegment(HammerOnPullOff* sp)
+    : SlurSegment(sp, ElementType::HAMMER_ON_PULL_OFF_SEGMENT)
 {
 }
 

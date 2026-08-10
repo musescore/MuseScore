@@ -44,8 +44,8 @@ namespace mu::engraving {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(const ElementType& type, System* parent)
-    : SpannerSegment(type, parent)
+SlurTieSegment::SlurTieSegment(const ElementType& type, SlurTie* sp)
+    : SpannerSegment(type, sp)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -446,7 +446,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
 
 void SlurTie::fixupSegments(unsigned nsegs)
 {
-    Spanner::fixupSegments(nsegs, [this](System* parent) { return newSlurTieSegment(parent); });
+    Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
 }
 
 //---------------------------------------------------------

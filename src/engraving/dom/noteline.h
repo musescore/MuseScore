@@ -20,19 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_NOTELINE_H
-#define MU_ENGRAVING_NOTELINE_H
+#pragma once
 
 #include "textlinebase.h"
 
 namespace mu::engraving {
+class NoteLine;
+
 class NoteLineSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, NoteLineSegment)
     DECLARE_CLASSOF(ElementType::NOTELINE_SEGMENT)
 
 public:
-    NoteLineSegment(Spanner* sp, System* parent);
+    NoteLineSegment(NoteLine* sp);
 
     NoteLine* noteLine() const { return toNoteLine(spanner()); }
 
@@ -55,7 +56,7 @@ public:
 
     Anchor anchor() const override { return Anchor::NOTE; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid) const override;
     PropertyValue getProperty(Pid) const override;
@@ -77,5 +78,4 @@ protected:
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;
 };
-} // namespace mu::engraving
-#endif
+}

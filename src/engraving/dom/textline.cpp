@@ -125,8 +125,8 @@ static const ElementStyle systemTextLineStyle {
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
-    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TextLineSegment::TextLineSegment(TextLine* sp, bool system)
+    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
     initStyle();
@@ -218,9 +218,9 @@ void TextLineSegment::initStyle()
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* TextLine::createLineSegment(System* parent)
+LineSegment* TextLine::createLineSegment()
 {
-    TextLineSegment* seg = new TextLineSegment(this, parent, systemFlag());
+    TextLineSegment* seg = new TextLineSegment(this, systemFlag());
     seg->setTrack(track());
     // note-anchored line segments are relative to system not to staff
     if (anchor() == Spanner::Anchor::NOTE) {

@@ -65,8 +65,8 @@ static const ElementStyle letRingStyle {
     { Sid::dummyMusicalSymbolsScale,             Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
-    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+LetRingSegment::LetRingSegment(LetRing* sp)
+    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -98,9 +98,9 @@ static const ElementStyle letRingSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment(System* parent)
+LineSegment* LetRing::createLineSegment()
 {
-    LetRingSegment* lr = new LetRingSegment(this, parent);
+    LetRingSegment* lr = new LetRingSegment(this);
     lr->setTrack(track());
     lr->initElementStyle(&letRingSegmentStyle);
     return lr;

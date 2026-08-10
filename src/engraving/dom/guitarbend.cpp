@@ -67,9 +67,9 @@ GuitarBend::~GuitarBend()
     }
 }
 
-LineSegment* GuitarBend::createLineSegment(System* parent)
+LineSegment* GuitarBend::createLineSegment()
 {
-    GuitarBendSegment* seg = new GuitarBendSegment(this, parent);
+    GuitarBendSegment* seg = new GuitarBendSegment(this);
     seg->setTrack(track());
     seg->setColor(lineColor());
     return seg;
@@ -844,8 +844,8 @@ double GuitarBend::lineWidth() const
  *              GuitarBendSegment
  * **************************************/
 
-GuitarBendSegment::GuitarBendSegment(GuitarBend* sp, System* parent)
-    : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+GuitarBendSegment::GuitarBendSegment(GuitarBend* sp)
+    : LineSegment(ElementType::GUITAR_BEND_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text = new GuitarBendText(this);
     m_text->setParent(this);
@@ -1115,9 +1115,9 @@ GuitarBendHold::GuitarBendHold(const GuitarBendHold& h)
 {
 }
 
-LineSegment* GuitarBendHold::createLineSegment(System* parent)
+LineSegment* GuitarBendHold::createLineSegment()
 {
-    GuitarBendHoldSegment* seg = new GuitarBendHoldSegment(this, parent);
+    GuitarBendHoldSegment* seg = new GuitarBendHoldSegment(this);
     seg->setTrack(track());
     seg->setColor(lineColor());
     return seg;
@@ -1156,8 +1156,8 @@ double GuitarBendHold::lineWidth() const
  *         GuitarBendHoldSegment
  * **************************************/
 
-GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp, System* parent)
-    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+GuitarBendHoldSegment::GuitarBendHoldSegment(GuitarBendHold* sp)
+    : LineSegment(ElementType::GUITAR_BEND_HOLD_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }

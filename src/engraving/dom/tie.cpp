@@ -55,13 +55,13 @@ namespace mu::engraving {
 //   TieSegment
 //---------------------------------------------------------
 
-TieSegment::TieSegment(System* parent)
-    : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+TieSegment::TieSegment(Tie* sp)
+    : SlurTieSegment(ElementType::TIE_SEGMENT, sp)
 {
 }
 
-TieSegment::TieSegment(const ElementType& type, System* parent)
-    : SlurTieSegment(type, parent)
+TieSegment::TieSegment(const ElementType& type, Tie* sp)
+    : SlurTieSegment(type, sp)
 {
 }
 

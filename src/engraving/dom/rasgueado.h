@@ -38,7 +38,7 @@ class RasgueadoSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::RASGUEADO_SEGMENT)
 
 public:
-    RasgueadoSegment(Rasgueado* sp, System* parent);
+    RasgueadoSegment(Rasgueado* sp);
 
     RasgueadoSegment* clone() const override { return new RasgueadoSegment(*this); }
 
@@ -63,7 +63,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

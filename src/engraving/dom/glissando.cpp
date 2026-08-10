@@ -71,8 +71,8 @@ static const ElementStyle glissandoElementStyle {
 //   GlissandoSegment
 //=========================================================
 
-GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
-    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+GlissandoSegment::GlissandoSegment(Glissando* sp)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, ElementFlag::MOVABLE)
 {
 }
 
@@ -141,9 +141,9 @@ Glissando::Glissando(const Glissando& g)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Glissando::createLineSegment(System* parent)
+LineSegment* Glissando::createLineSegment()
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, parent);
+    GlissandoSegment* seg = new GlissandoSegment(this);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;

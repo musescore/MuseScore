@@ -63,8 +63,8 @@ static const ElementStyle noteLineStyle {
     { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
-    : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
+NoteLineSegment::NoteLineSegment(NoteLine* sp)
+    : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, ElementFlag::MOVABLE)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -115,9 +115,9 @@ NoteLine::NoteLine(const NoteLine& nl)
 {
 }
 
-LineSegment* NoteLine::createLineSegment(System* parent)
+LineSegment* NoteLine::createLineSegment()
 {
-    NoteLineSegment* seg = new NoteLineSegment(this, parent);
+    NoteLineSegment* seg = new NoteLineSegment(this);
     seg->setTrack(track());
     return seg;
 }

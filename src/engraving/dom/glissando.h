@@ -42,7 +42,7 @@ class GlissandoSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::GLISSANDO_SEGMENT)
 
 public:
-    GlissandoSegment(Glissando* sp, System* parent);
+    GlissandoSegment(Glissando* sp);
 
     Glissando* glissando() const { return toGlissando(spanner()); }
 
@@ -88,7 +88,7 @@ public:
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
 
     bool allowTimeAnchor() const override { return false; }
 
