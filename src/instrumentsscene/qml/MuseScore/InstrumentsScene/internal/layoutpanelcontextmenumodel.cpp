@@ -51,13 +51,23 @@ LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
 
 void LayoutPanelContextMenuModel::load()
 {
-    dispatcher()->reg(this, SET_INSTRUMENTS_ORDER_CODE, this, &LayoutPanelContextMenuModel::setInstrumentsOrder);
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         updateMenu();
     });
 
     updateMenu();
+}
+
+void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
+{
+    if (itemId == EXPAND_ALL_CODE) {
+        emit expandCollapseAllRequested(true);
+    } else if (itemId == COLLAPSE_ALL_CODE) {
+        emit expandCollapseAllRequested(false);
+    } else if (itemId == SET_INSTRUMENTS_ORDER_CODE) {
+        const MenuItem& item = findItem(itemId);
+        setInstrumentsOrder(item.args());
+    }
 }
 
 void LayoutPanelContextMenuModel::updateMenu()
@@ -200,10 +210,6 @@ MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
     UiActionState state;
     state.enabled = true;
     item->setState(state);
-
-    dispatcher()->reg(this, action.code, [this, expand]() {
-        emit expandCollapseAllRequested(expand);
-    });
 
     return item;
 }
