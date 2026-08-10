@@ -117,11 +117,16 @@ bool FontsEngine::RequireFace::isSymbolMode() const
 
 double FontsEngine::RequireFace::pixelScale() const
 {
-    if (!face) {
+    return pixelScaleFor(face);
+}
+
+double FontsEngine::RequireFace::pixelScaleFor(const IFontFace* loadedFace) const
+{
+    if (!loadedFace) {
         return 0.0;
     }
-    double scale = static_cast<double>(requireKey.pixelSize) / static_cast<double>(face->key().pixelSize);
-    return scale;
+
+    return static_cast<double>(requireKey.pixelSize) / static_cast<double>(loadedFace->key().pixelSize);
 }
 
 FontsEngine::~FontsEngine()
@@ -237,7 +242,7 @@ double FontsEngine::horizontalAdvance(const Font& f, const std::u32string& text)
         return 0.0;
     }
 
-    f26dot6_t advance = 0;
+    double advance = 0.0;
 
     TextBlock textBlock;
     textBlock.text = &text[0];
@@ -254,13 +259,14 @@ double FontsEngine::horizontalAdvance(const Font& f, const std::u32string& text)
             fontFace = rf->face;
         }
 
+        const double pixelScale = rf->pixelScaleFor(fontFace);
         std::vector<GlyphPos> glyphs = fontFace->glyphs(ffBlock.text.text, ffBlock.text.lenght);
         for (const GlyphPos& g : glyphs) {
-            advance += g.x_advance;
+            advance += from_f26d6(g.x_advance) * pixelScale;
         }
     }
 
-    return from_f26d6(advance) * rf->pixelScale();
+    return advance;
 }
 
 RectF FontsEngine::boundingRect(const Font& f, const char32_t& ch) const
@@ -436,7 +442,6 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
     }
 
 #ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
-    double pixelScale = rf->pixelScale();
     double glyphLeft = 0;
 
     TextBlock textBlock;
@@ -449,6 +454,7 @@ std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string&
             continue;
         }
 
+        double pixelScale = rf->pixelScaleFor(ffBlock.face);
         std::vector<GlyphPos> glyphs = ffBlock.face->glyphs(ffBlock.text.text, ffBlock.text.lenght);
 
         for (const GlyphPos& g : glyphs) {
@@ -528,10 +534,6 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
         }
     }
 
-    //! If we didn't find it, we create a new require font
-    RequireFace* newFont = new RequireFace();
-    newFont->requireKey = requireKey;
-
     //! Let's find out which real font will be used
     //! (for example, if there is no required one)
     FontDataKey actualDataKey = fontsDatabase()->actualFont(requireKey.dataKey, requireKey.type);
@@ -542,6 +544,10 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
     }
 
     const int loadedPixelSize = loadedPixelSizeForFontPath(fontPath, requireKey.pixelSize);
+
+    //! If we didn't find it, we create a new require font
+    RequireFace* newFont = new RequireFace();
+    newFont->requireKey = requireKey;
 
     //! NOTE We are looking for the font face we real need among the previously loaded ones
     IFontFace* face = nullptr;
