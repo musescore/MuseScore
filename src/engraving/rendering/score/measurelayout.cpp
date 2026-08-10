@@ -82,7 +82,7 @@ using namespace mu::engraving::rendering::score;
 
 void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
 {
-    assert(item->explicitParent());
+    assert(item->system());
     assert(ctx.dom().nstaves() == item->mstaves().size());
 
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {

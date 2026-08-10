@@ -229,7 +229,7 @@ Measure* Articulation::measure() const
 System* Articulation::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->explicitParent() : 0);
+    return m ? m->system() : nullptr;
 }
 
 Page* Articulation::page() const

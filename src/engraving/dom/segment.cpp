@@ -608,6 +608,12 @@ EngravingItem* Segment::element(track_idx_t track) const
     return m_elist[track];
 }
 
+System* Segment::system() const
+{
+    Measure* m = measure();
+    return m ? m->system() : nullptr;
+}
+
 //---------------------------------------------------------
 //   insertStaff
 //---------------------------------------------------------

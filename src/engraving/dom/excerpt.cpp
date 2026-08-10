@@ -891,23 +891,23 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
-        nmb = Factory::createHBox(score->dummy()->system());
+        nmb = Factory::createHBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isVBox()) {
         if (toBox(mb)->isTitleFrame()) {
-            nmb = Factory::createTitleVBox(score->dummy()->system());
+            nmb = Factory::createTitleVBox(score);
         } else {
-            nmb = Factory::createVBox(score->dummy()->system());
+            nmb = Factory::createVBox(score);
         }
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isFBox()) {
-        nmb = Factory::createFBox(score->dummy()->system());
+        nmb = Factory::createFBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
-        nmb = Factory::createTBox(score->dummy()->system());
+        nmb = Factory::createTBox(score);
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
         Text* text = toTBox(mb)->text();
@@ -916,7 +916,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         nmb->add(ne);
     } else if (mb->isMeasure()) {
         const Measure* m  = toMeasure(mb);
-        Measure* nm = Factory::createMeasure(score->dummy()->system());
+        Measure* nm = Factory::createMeasure(score);
         nmb = nm;
         nm->setTick(m->tick());
         nm->setTicks(m->ticks());

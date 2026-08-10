@@ -1505,7 +1505,7 @@ bool ChordLayout::computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremo
         return tremolo->up();
     }
 
-    if (!measure->explicitParent()) {
+    if (!measure->system()) {
         // this method will be called later (from Measure::layoutCrossStaff) after the
         // system is completely laid out.
         // this is necessary because otherwise there's no way to deal with cross-staff beams

@@ -1134,7 +1134,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
         }
 
         if (!vBox) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
 
         Text* text = Factory::createText(vBox, textStyle);
@@ -1442,7 +1442,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     meiMeasure.Read(measureNode);
     Convert::MeasureStruct measureSt = Convert::measureFromMEI(meiMeasure, warning);
 
-    Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(m_score);
     this->readXmlId(measure, meiMeasure.m_xmlId);
     measure->setTick(m_ticks);
     measure->setTimesig(m_currentTimeSig);
@@ -3545,7 +3545,7 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 {
     if (!str.isEmpty()) {
         if (vBox == nullptr) {
-            vBox = Factory::createTitleVBox(m_score->dummy()->system());
+            vBox = Factory::createTitleVBox(m_score);
         }
         Text* text = Factory::createText(vBox, textStyleType);
         text->setPlainText(str);

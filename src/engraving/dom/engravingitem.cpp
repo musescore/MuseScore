@@ -629,14 +629,13 @@ void EngravingItem::setVoice(voice_idx_t v)
 
 Fraction EngravingItem::tick() const
 {
-    const EngravingItem* e = this;
-    while (e->explicitParent()) {
-        if (e->explicitParent()->isSegment()) {
-            return toSegment(e->explicitParent())->tick();
-        } else if (e->explicitParent()->isMeasureBase()) {
-            return toMeasureBase(e->explicitParent())->tick();
+    // walks EngravingObject, because the chain leaves EngravingItem at the score
+    for (const EngravingObject* e = explicitParent(); e; e = e->explicitParent()) {
+        if (e->isSegment()) {
+            return toSegment(e)->tick();
+        } else if (e->isMeasureBase()) {
+            return toMeasureBase(e)->tick();
         }
-        e = e->parentItem();
     }
     return Fraction(0, 1);
 }
@@ -647,12 +646,10 @@ Fraction EngravingItem::tick() const
 
 Fraction EngravingItem::rtick() const
 {
-    const EngravingItem* e = this;
-    while (e->explicitParent()) {
-        if (e->explicitParent()->isSegment()) {
-            return toSegment(e->explicitParent())->rtick();
+    for (const EngravingObject* e = explicitParent(); e; e = e->explicitParent()) {
+        if (e->isSegment()) {
+            return toSegment(e)->rtick();
         }
-        e = e->parentItem();
     }
     return Fraction(0, 1);
 }

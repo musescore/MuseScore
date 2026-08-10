@@ -180,7 +180,7 @@ void MStaff::setTrack(track_idx_t track)
 //   Measure
 //---------------------------------------------------------
 
-Measure::Measure(System* parent)
+Measure::Measure(Score* parent)
     : MeasureBase(ElementType::MEASURE, parent), m_timesig(4, 4)
 {
     setTicks(Fraction(4, 4));
@@ -373,11 +373,6 @@ AccessibleItemPtr Measure::createAccessible()
 }
 
 #endif
-
-void Measure::setParent(System* s)
-{
-    MeasureBase::setParent(s);
-}
 
 //---------------------------------------------------------
 //   findAccidental
@@ -2653,7 +2648,7 @@ Fraction Measure::stretchedLen(const Staff* staff) const
 
 Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 {
-    Measure* m      = new Measure(sc->dummy()->system());
+    Measure* m      = new Measure(sc);
     m->m_timesig    = m_timesig;
     m->m_len         = m_len;
     m->m_repeatCount = m_repeatCount;

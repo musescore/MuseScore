@@ -2232,11 +2232,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
             b->add(image);
         }
     } else if (tag == "HBox") {
-        HBox* hb = Factory::createHBox(b->system());
+        HBox* hb = Factory::createHBox(b->score());
         readBox(e, ctx, hb);
         b->add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = Factory::createVBox(b->system());
+        VBox* vb = Factory::createVBox(b->score());
         readBox(e, ctx, vb);
         b->add(vb);
     }
@@ -2259,17 +2259,16 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
     b->setBoxHeight(0_sp); // override default set in constructor
     b->setBoxWidth(0_sp);
     bool keepMargins = false; // whether original margins have to be kept when reading old file
-    System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(bSystem);
+            HBox* hb = Factory::createHBox(b->score());
             readBox(e, ctx, hb);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(bSystem);
+            VBox* vb = Factory::createVBox(b->score());
             readBox(e, ctx, vb);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
@@ -2305,7 +2304,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
 
         if (tag == "Measure") {
             if (staff == 0) {
-                measure = Factory::createMeasure(score->dummy()->system());
+                measure = Factory::createMeasure(score);
                 measure->setTick(ctx.tick());
                 const SigEvent& ev = score->sigmap()->timesig(measure->tick());
                 measure->setTicks(ev.timesig());
@@ -2331,7 +2330,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             } else {
                 if (measure == 0) {
                     LOGD("Score::readStaff(): missing measure!");
-                    measure = Factory::createMeasure(score->dummy()->system());
+                    measure = Factory::createMeasure(score);
                     measure->setTick(ctx.tick());
                     score->measures()->append(measure);
                 }

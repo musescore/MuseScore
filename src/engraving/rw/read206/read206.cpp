@@ -3213,11 +3213,11 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(b->score()->dummy()->system());
+            HBox* hb = Factory::createHBox(b->score());
             read400::TRead::read(hb, e, ctx);
             b->add(hb);
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(b->score()->dummy()->system());
+            VBox* vb = Factory::createVBox(b->score());
             read400::TRead::read(vb, e, ctx);
             b->add(vb);
         } else if (tag == "Text") {
@@ -3264,7 +3264,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 readMeasureLast = true;
 
                 Measure* measure = nullptr;
-                measure = Factory::createMeasure(score->dummy()->system());
+                measure = Factory::createMeasure(score);
                 measure->setTick(ctx.tick());
                 //
                 // inherit timesig from previous measure
@@ -3325,7 +3325,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
             if (tag == "Measure") {
                 if (measure == 0) {
                     LOGD("Score::readStaff(): missing measure!");
-                    measure = Factory::createMeasure(score->dummy()->system());
+                    measure = Factory::createMeasure(score);
                     measure->setTick(ctx.tick());
                     score->measures()->append(measure);
                 }

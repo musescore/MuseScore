@@ -888,7 +888,7 @@ void GuitarPro::createMeasures()
     //      for (int i = 0; i < measures; ++i) {
     for (size_t i = 0; i < bars.size(); ++i) {     // ?? (ws)
         Fraction nts = bars[i].timesig;
-        Measure* m = Factory::createMeasure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score);
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -1067,7 +1067,7 @@ bool GuitarPro1::read(IODevice* io)
     Fraction tick = { 0, 1 };
     for (size_t i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = Factory::createMeasure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score);
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -1462,7 +1462,7 @@ bool GuitarPro2::read(IODevice* io)
     Fraction tick = { 0, 1 };
     for (size_t i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = Factory::createMeasure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score);
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -2182,7 +2182,7 @@ bool GuitarPro3::read(IODevice* io)
     Fraction tick = { 0, 1 };
     for (size_t i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = Factory::createMeasure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score);
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -2787,12 +2787,12 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
 
     MeasureBase* m = nullptr;
     if (!score->measures()->first()) {
-        m = Factory::createTitleVBox(score->dummy()->system());
+        m = Factory::createTitleVBox(score);
         score->measures()->append(m);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createTitleVBox(score->dummy()->system());
+            MeasureBase* mb = Factory::createTitleVBox(score);
             score->addMeasure(mb, m);
             m = mb;
         }

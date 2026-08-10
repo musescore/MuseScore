@@ -129,7 +129,7 @@ public:
     static LyricsLine* createLyricsLine(EngravingItem* parent, bool isAccessibleEnabled = true);
     static LyricsLine* copyLyricsLine(const LyricsLine& src);
 
-    static Measure* createMeasure(System* parent, bool isAccessibleEnabled = true);
+    static Measure* createMeasure(Score* parent, bool isAccessibleEnabled = true);
     static Measure* copyMeasure(const Measure& src);
 
     static MeasureRepeat* createMeasureRepeat(Segment* parent, bool isAccessibleEnabled = true);
@@ -295,17 +295,17 @@ public:
 
     static Dynamic* createDynamic(Segment* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createVBox(System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createVBox(const ElementType& type, System* parent, bool isAccessibleEnabled = true);
+    static VBox* createVBox(const ElementType& type, Score* parent, bool isAccessibleEnabled = true);
 
-    static VBox* createTitleVBox(System* parent, bool isAccessibleEnabled = true);
+    static VBox* createTitleVBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static HBox* createHBox(System* parent, bool isAccessibleEnabled = true);
+    static HBox* createHBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static TBox* createTBox(System* parent, bool isAccessibleEnabled = true);
+    static TBox* createTBox(Score* parent, bool isAccessibleEnabled = true);
 
-    static FBox* createFBox(System* parent, bool isAccessibleEnabled = true);
+    static FBox* createFBox(Score* parent, bool isAccessibleEnabled = true);
 
     static Image* createImage(EngravingItem* parent);
 

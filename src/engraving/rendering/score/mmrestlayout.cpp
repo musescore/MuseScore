@@ -110,7 +110,7 @@ void MMRestLayout::reuseExistingMMRest(LayoutContext& ctx, Measure* mmrMeasure, 
             nextLastMeasure = nextLastMeasure ? nextLastMeasure : ctx.mutDom().lastMeasure();
             const int numMeasuresInNewMMRest = nextLastMeasure->measureIndex() - nextFirstMeasure->measureIndex() + 1;
 
-            Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
+            Measure* nextMMRMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->score());
             nextMMRMeasure->setTicks(remainingMMRDuration);
             nextMMRMeasure->setTick(nextFirstMeasure->tick());
             ctx.mutDom().undo(new ChangeMMRest(nextFirstMeasure, nextMMRMeasure));
@@ -183,7 +183,7 @@ void MMRestLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measu
     if (mmrMeasure) {
         reuseExistingMMRest(ctx, mmrMeasure, lastMeasure, len);
     } else {
-        mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
+        mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->score());
         mmrMeasure->setTicks(len);
         mmrMeasure->setTick(firstMeasure->tick());
         ctx.mutDom().undo(new ChangeMMRest(firstMeasure, mmrMeasure));

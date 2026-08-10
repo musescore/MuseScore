@@ -207,7 +207,7 @@ bool EditTimeSig::rewriteMeasures(Transaction& tx, Score* score, Measure* startM
         Measure* newLastMeasure = nullptr;
         Fraction tick     = startMeasure->tick();
         for (int i = 0; i < newMeasures; ++i) {
-            Measure* m = Factory::createMeasure(s->dummy()->system());
+            Measure* m = Factory::createMeasure(s);
             m->setPrev(newLastMeasure);
             if (newLastMeasure) {
                 newLastMeasure->setNext(m);

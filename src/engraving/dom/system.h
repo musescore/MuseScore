@@ -113,6 +113,7 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
+    EngravingItemList accessibleChildren() const override;
 
     void appendMeasure(MeasureBase*);
     void removeMeasure(MeasureBase*);
