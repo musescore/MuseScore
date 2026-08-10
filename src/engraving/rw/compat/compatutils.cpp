@@ -400,7 +400,7 @@ void CompatUtils::replaceOldWithNewExpressions(MasterScore* score)
     }
 
     for (StaffText* oldExpression : oldExpressions) {
-        Segment* parentSegment = toSegment(oldExpression->parentItem(true));
+        Segment* parentSegment = toSegment(oldExpression->parentItem());
 
         Expression* newExpression = Factory::createExpression(score->dummy()->segment());
         newExpression->setParent(parentSegment);
