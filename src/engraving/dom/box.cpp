@@ -532,9 +532,10 @@ RectF HBox::drag(EditData& data)
     RectF r(canvasBoundingRect());
     double diff = data.evtDelta.x();
     double x1   = offset().x() + diff;
-    if (explicitParent()->isVBox()) {
-        VBox* vb = toVBox(explicitParent());
-        double x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+    EngravingItem* parent = layoutParent();
+    if (parent && parent->isVBox()) {
+        VBox* vb = toVBox(parent);
+        double x2 = parent->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {

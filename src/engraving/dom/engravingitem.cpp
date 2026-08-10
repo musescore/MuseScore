@@ -270,7 +270,8 @@ void EngravingItem::localSpatiumChanged(double oldValue, double newValue)
 
 double EngravingItem::spatium() const
 {
-    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
+    EngravingItem* p = layoutParent();
+    if (systemFlag() || (p && p->systemFlag())) {
         return style().spatium();
     }
     Staff* s = staff();
@@ -755,10 +756,10 @@ PointF EngravingItem::systemPos() const
     }
 
     PointF result = pos();
-    EngravingItem* ancestor = parentItem();
+    EngravingItem* ancestor = layoutParent();
     while (ancestor && !ancestor->isSystem()) {
         result += ancestor->pos();
-        ancestor = ancestor->parentItem();
+        ancestor = ancestor->layoutParent();
     }
 
     return result;
@@ -772,7 +773,8 @@ PointF EngravingItem::systemPos() const
 PointF EngravingItem::pagePos() const
 {
     PointF p(pos());
-    if (explicitParent() == nullptr) {
+    EngravingItem* parent = layoutParent();
+    if (parent == nullptr) {
         return p;
     }
 
@@ -807,7 +809,6 @@ PointF EngravingItem::pagePos() const
     if (m_flags & ElementFlag::ON_STAFF) {
         // Segments, measures and systems all contain multiple staves
         // Find the position of the stave that this item is on
-        EngravingItem* parent = parentItem();
         if (parent->isSegment()) {
             Segment* segment = toSegment(parent);
             Measure* measure = segment ? segment->measure() : nullptr;
@@ -825,8 +826,8 @@ PointF EngravingItem::pagePos() const
         }
         p.rx() = pageX();
     } else {
-        if (explicitParent()->explicitParent()) {
-            p += parentItem()->pagePos();
+        if (parent->layoutParent()) {
+            p += parent->pagePos();
         }
     }
     return p;
@@ -839,7 +840,8 @@ PointF EngravingItem::pagePos() const
 PointF EngravingItem::canvasPos() const
 {
     PointF p(pos());
-    if (explicitParent() == nullptr) {
+    EngravingItem* parent = layoutParent();
+    if (parent == nullptr) {
         return p;
     }
 
@@ -881,7 +883,6 @@ PointF EngravingItem::canvasPos() const
     if (m_flags & ElementFlag::ON_STAFF) {
         // Segments, measures and systems all contain multiple staves
         // Find the position of the stave that this item is on
-        EngravingItem* parent = parentItem();
         if (parent->isSegment()) {
             Segment* segment = toSegment(parent);
             Measure* measure = segment ? segment->measure() : nullptr;
@@ -901,7 +902,7 @@ PointF EngravingItem::canvasPos() const
         }
         p.rx() = canvasX();
     } else {
-        p += parentItem()->canvasPos();
+        p += parent->canvasPos();
     }
     return p;
 }
@@ -913,7 +914,7 @@ PointF EngravingItem::canvasPos() const
 double EngravingItem::pageX() const
 {
     double xp = x();
-    for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
+    for (EngravingItem* e = layoutParent(); e && e->layoutParent(); e = e->layoutParent()) {
         xp += e->x();
     }
     return xp;
@@ -926,7 +927,7 @@ double EngravingItem::pageX() const
 double EngravingItem::canvasX() const
 {
     double xp = x();
-    for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
+    for (EngravingItem* e = layoutParent(); e; e = e->layoutParent()) {
         xp += e->x();
     }
     return xp;
@@ -2346,7 +2347,7 @@ void EngravingItem::endDrag(EditData& ed)
 std::vector<LineF> EngravingItem::genericDragAnchorLines() const
 {
     double xp = 0.0;
-    for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
+    for (EngravingItem* e = layoutParent(); e; e = e->layoutParent()) {
         xp += e->x();
     }
     double yp;
@@ -2366,7 +2367,7 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
             yp += staff()->staffTypeForElement(this)->yoffset().val() * spatium();
         }
     } else {
-        yp = parentItem()->canvasPos().y();
+        yp = layoutParent()->canvasPos().y();
     }
     PointF p1(xp, yp);
     LineF anchorLine(p1, canvasPos());

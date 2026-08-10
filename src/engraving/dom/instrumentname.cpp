@@ -62,7 +62,7 @@ InstrumentName::InstrumentName(System* s)
 
 double InstrumentName::largestStaffSpatium() const
 {
-    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
+    if (systemFlag() || (layoutParent() && layoutParent()->systemFlag())) {
         return style().spatium();
     }
 

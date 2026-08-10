@@ -454,10 +454,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
     sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
     if (scr->isGrace()) {
-        sp->p1 += scr->parentItem()->pos();
+        sp->p1 += scr->layoutParent()->pos();
     }
     if (ecr->isGrace()) {
-        sp->p2 += ecr->parentItem()->pos();
+        sp->p2 += ecr->layoutParent()->pos();
     }
 
     // adjust for cross-staff

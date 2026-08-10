@@ -531,10 +531,10 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
 void ParenthesisLayout::setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
 {
     const double spatium = item->spatium();
-    EngravingItem* parent = item->parentItem();
+    EngravingItem* parent = item->layoutParent();
     RectF bbox = parent->ldata()->bbox();
 
-    ldata->setMag(item->parentItem()->mag());
+    ldata->setMag(parent->mag());
     ldata->startY = bbox.top() - 0.25 * spatium;
     ldata->height = bbox.height() + 0.5 * spatium;
     ldata->midPointThickness.set_value(ldata->height / 60 * ldata->mag());  // 0.1sp for a height of 6sp

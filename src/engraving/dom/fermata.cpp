@@ -122,7 +122,7 @@ Page* Fermata::page() const
 std::vector<LineF> Fermata::dragAnchorLines() const
 {
     std::vector<LineF> result;
-    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
+    result.push_back(LineF(canvasPos(), layoutParent()->canvasPos()));
     return result;
 }
 

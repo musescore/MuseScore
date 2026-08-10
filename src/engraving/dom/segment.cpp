@@ -2666,8 +2666,9 @@ void Segment::createShape(staff_idx_t staffIdx)
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
             PointF pos = e->pos();
             // Harmony attached to invisible fret diagram
-            if (e->isHarmony() && e->parent()->isFretDiagram()) {
-                pos += e->parentItem()->pos();
+            const EngravingItem* parent = e->layoutParent();
+            if (e->isHarmony() && parent && parent->isFretDiagram()) {
+                pos += parent->pos();
             }
             RectF bbox = e->ldata()->bbox().translated(pos);
             if (Parenthesis* p = e->leftParen()) {

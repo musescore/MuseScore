@@ -241,9 +241,9 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
         curY += toFretDiagram(item)->ldata()->gridHeight;
         break;
     case ElementType::HARMONY: {
-        EngravingItem* parentItem = toHarmony(item)->parentItem();
-        if (parentItem && parentItem->isFretDiagram()) {
-            curY += parentItem->pos().y();
+        EngravingItem* parent = toHarmony(item)->layoutParent();
+        if (parent && parent->isFretDiagram()) {
+            curY += parent->pos().y();
         }
         break;
     }
