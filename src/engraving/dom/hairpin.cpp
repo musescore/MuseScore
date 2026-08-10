@@ -91,8 +91,8 @@ static const ElementStyle hairpinStyle {
 //   HairpinSegment
 //---------------------------------------------------------
 
-HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
-    : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HairpinSegment::HairpinSegment(Hairpin* sp)
+    : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -593,9 +593,9 @@ static const ElementStyle hairpinSegmentStyle {
     { Sid::hairpinMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Hairpin::createLineSegment(System* parent)
+LineSegment* Hairpin::createLineSegment()
 {
-    HairpinSegment* h = new HairpinSegment(this, parent);
+    HairpinSegment* h = new HairpinSegment(this);
     h->setTrack(track());
     h->initElementStyle(&hairpinSegmentStyle);
     return h;

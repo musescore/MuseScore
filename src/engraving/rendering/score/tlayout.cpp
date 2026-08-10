@@ -4873,7 +4873,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
     int segCount = int(item->spannerSegments().size());
 
     if (segmentsNeeded != segCount) {
-        item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
+        item->fixupSegments(segmentsNeeded, [item]() { return item->createLineSegment(); });
         if (segmentsNeeded > segCount) {
             for (int i = segCount; i < segmentsNeeded; ++i) {
                 LineSegment* lineSegm = item->segmentAt(i);
@@ -6744,7 +6744,7 @@ SpannerSegment* TLayout::layoutSystem(Spanner* item, System* system, LayoutConte
 }
 
 SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* system,
-                                                    std::function<SpannerSegment* (System* parent)> createSegment)
+                                                    std::function<SpannerSegment* ()> createSegment)
 {
     // Prefer a segment which has already been added to the system
     SpannerSegment* seg = nullptr;
@@ -6766,7 +6766,7 @@ SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* sy
         if ((seg = spanner->popUnusedSegment())) {
             spanner->reuse(seg);
         } else {
-            seg = createSegment(system);
+            seg = createSegment();
             assert(seg);
             spanner->add(seg);
         }
@@ -6785,8 +6785,8 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    LineSegment* lineSegm = toLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line](System* parent) {
-        return line->createLineSegment(parent);
+    LineSegment* lineSegm = toLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line]() {
+        return line->createLineSegment();
     }));
 
     SpannerSegmentType sst;
@@ -6910,8 +6910,8 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    LyricsLineSegment* lineSegm = toLyricsLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line](System* parent) {
-        return line->createLineSegment(parent);
+    LyricsLineSegment* lineSegm = toLyricsLineSegment(TLayout::getNextLayoutSystemSegment(line, system, [line]() {
+        return line->createLineSegment();
     }));
 
     SpannerSegmentType sst;

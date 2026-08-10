@@ -49,17 +49,10 @@ namespace mu::engraving {
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, ElementFlags f)
     : EngravingItem(type, sp, f)
 {
-    UNUSED(parent); // a fresh segment is not placed yet; see moveToSystem
     setParent(sp);
-    setSpannerSegmentType(SpannerSegmentType::SINGLE);
-}
-
-SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementFlags f)
-    : EngravingItem(type, parent->score()->dummy(), f)
-{
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
@@ -1578,7 +1571,7 @@ int Spanner::reuseSegments(int number)
 //    Previously unused segments are added via reuse() call
 //---------------------------------------------------------
 
-void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System* parent)> createSegment)
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment)
 {
     const int diff = targetNumber - int(nsegments());
     if (diff == 0) {
@@ -1587,7 +1580,7 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
     if (diff > 0) {
         const int ncreate = reuseSegments(diff);
         for (int i = 0; i < ncreate; ++i) {
-            add(createSegment(score()->dummy()->system()));
+            add(createSegment());
         }
     } else { // diff < 0
         const int nremove = -diff;

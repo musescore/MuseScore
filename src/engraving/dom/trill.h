@@ -39,8 +39,7 @@ class TrillSegment final : public LineSegment
     DECLARE_CLASSOF(ElementType::TRILL_SEGMENT)
 
 public:
-    TrillSegment(Trill* sp, System* parent);
-    TrillSegment(System* parent);
+    TrillSegment(Trill* sp);
 
     Trill* trill() const { return (Trill*)spanner(); }
 
@@ -84,7 +83,7 @@ public:
 
     Anchor anchor() const override { return Anchor::SEGMENT; }
 
-    LineSegment* createLineSegment(System* parent) override;
+    LineSegment* createLineSegment() override;
     void remove(EngravingItem*) override;
 
     void setTrack(track_idx_t n) override;

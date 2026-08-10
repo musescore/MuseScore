@@ -42,7 +42,7 @@ class TextLineBaseSegment : public LineSegment
     OBJECT_ALLOCATOR(engraving, TextLineBaseSegment)
 
 public:
-    TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    TextLineBaseSegment(const ElementType& type, TextLineBase*, ElementFlags f = ElementFlag::NOTHING);
     TextLineBaseSegment(const TextLineBaseSegment&);
     ~TextLineBaseSegment();
 

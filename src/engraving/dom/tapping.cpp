@@ -106,8 +106,8 @@ TappingHalfSlur::TappingHalfSlur(const TappingHalfSlur& other)
 {
 }
 
-TappingHalfSlurSegment::TappingHalfSlurSegment(System* parent)
-    : SlurSegment(parent, ElementType::TAPPING_HALF_SLUR_SEGMENT)
+TappingHalfSlurSegment::TappingHalfSlurSegment(TappingHalfSlur* sp)
+    : SlurSegment(sp, ElementType::TAPPING_HALF_SLUR_SEGMENT)
 {
 }
 

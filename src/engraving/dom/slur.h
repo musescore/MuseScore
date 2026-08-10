@@ -42,7 +42,7 @@ class SlurSegment : public SlurTieSegment
     M_PROPERTY2(PointF, endPointOff2, setEndPointOff2, PointF(0.0, 0.0))
 
 public:
-    SlurSegment(System* parent, ElementType type = ElementType::SLUR_SEGMENT);
+    SlurSegment(Slur* sp, ElementType type = ElementType::SLUR_SEGMENT);
     SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
@@ -120,7 +120,7 @@ public:
     const StemFloated& stemFloated() const { return m_stemFloated; }
     StemFloated& stemFloated() { return m_stemFloated; }
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
+    SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(this); }
 
     double scalingFactor() const override;
 

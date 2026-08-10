@@ -77,8 +77,8 @@ static const ElementStyle palmMuteStyle {
     { Sid::dummyMusicalSymbolsScale,              Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
-    : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+PalmMuteSegment::PalmMuteSegment(PalmMute* sp)
+    : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -110,9 +110,9 @@ static const ElementStyle palmMuteSegmentStyle {
     { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE },
 };
 
-LineSegment* PalmMute::createLineSegment(System* parent)
+LineSegment* PalmMute::createLineSegment()
 {
-    PalmMuteSegment* pms = new PalmMuteSegment(this, parent);
+    PalmMuteSegment* pms = new PalmMuteSegment(this);
     pms->setTrack(track());
     pms->initElementStyle(&palmMuteSegmentStyle);
     return pms;

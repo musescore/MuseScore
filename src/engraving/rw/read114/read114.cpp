@@ -1128,7 +1128,7 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
     } else if (tag == "endHookType") {
         tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
     } else if (tag == "Segment") {
-        LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
+        LineSegment* ls = tl->createLineSegment();
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
         tl->add(ls);
         readLineSegment114(e, ctx, ls);
