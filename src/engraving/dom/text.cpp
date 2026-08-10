@@ -95,7 +95,7 @@ PropertyValue Text::getProperty(Pid id) const
     switch (id) {
     case Pid::VOICE_ASSIGNMENT:
         if (hasVoiceAssignmentProperties()) {
-            return ownershipParentItem()->getProperty(id);
+            return ownershipParent()->getProperty(id);
         }
     // fallthrough
     default:

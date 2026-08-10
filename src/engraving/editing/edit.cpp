@@ -3306,7 +3306,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
         return;
     }
 
-    if (element->ownershipParentItem() == parent && staffIdx == element->staffIdx()) {
+    if (element->ownershipParent() == parent && staffIdx == element->staffIdx()) {
         return;
     }
 
@@ -4033,7 +4033,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::PARTIAL_TIE
         || et == ElementType::PARENTHESIS
         ) {
-        const EngravingItem* parent = element->ownershipParentItem();
+        const EngravingObject* parent = element->ownershipParent();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
 
         // don't link part name

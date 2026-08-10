@@ -2485,7 +2485,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
 {
     TRACE_DRAW_ITEM;
 
-    EngravingItem* parent = item->ownershipParentItem();
+    EngravingObject* parent = item->ownershipParent();
     TimeSig* parentTs = parent && parent->isTimeSig() ? toTimeSig(parent) : nullptr;
 
     if (parentTs && !parentTs->showOnThisStaff()) {
