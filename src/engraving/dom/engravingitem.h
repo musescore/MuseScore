@@ -176,6 +176,11 @@ public:
     EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
 
+    //! The parent in the visual hierarchy, which positions are relative to.
+    //! Defaults to the DOM parent; overridden where placement differs from
+    //! ownership (e.g. measures are placed on systems, but not owned by them).
+    virtual EngravingItem* layoutParent() const;
+
     const std::shared_ptr<IEngravingConfiguration>& configuration() const;
     const muse::modularity::ContextPtr& iocContext() const;
     const std::shared_ptr<IEngravingContextConfiguration>& contextConfiguration() const;
