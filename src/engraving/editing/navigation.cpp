@@ -764,7 +764,7 @@ EngravingItem* Score::nextElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && !e->isSegment(); e = e->parentItem()) {
+            for (; e && !e->isSegment(); e = e->layoutParent()) {
             }
             Segment* s = toSegment(e);
             EngravingItem* next = s->nextElement(staffId);
@@ -972,7 +972,7 @@ EngravingItem* Score::nextElement()
         default:
             break;
         }
-        e = e->parentItem();
+        e = e->layoutParent();
     }
     return Navigation::lastElement(score());
 }
@@ -1019,7 +1019,7 @@ EngravingItem* Score::prevElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && !e->isSegment(); e = e->parentItem()) {
+            for (; e && !e->isSegment(); e = e->layoutParent()) {
             }
             EngravingItem* previousElement = toSegment(e)->prevElement(staffId);
 
@@ -1237,7 +1237,7 @@ EngravingItem* Score::prevElement()
         default:
             break;
         }
-        e = e->parentItem();
+        e = e->layoutParent();
     }
     return Navigation::firstElement(score());
 }

@@ -1767,7 +1767,7 @@ EngravingItem* EngravingItem::findAncestor(ElementType t)
 {
     EngravingItem* e = this;
     while (e && e->type() != t) {
-        e = e->parentItem();
+        e = e->layoutParent();
     }
     return e;
 }
@@ -1776,7 +1776,7 @@ const EngravingItem* EngravingItem::findAncestor(ElementType t) const
 {
     const EngravingItem* e = this;
     while (e && e->type() != t) {
-        e = e->parentItem();
+        e = e->layoutParent();
     }
     return e;
 }
@@ -1789,8 +1789,8 @@ Measure* EngravingItem::findMeasure()
 {
     if (isMeasure()) {
         return toMeasure(this);
-    } else if (explicitParent()) {
-        return parentItem()->findMeasure();
+    } else if (EngravingItem* p = layoutParent()) {
+        return p->findMeasure();
     } else {
         return 0;
     }
@@ -1814,8 +1814,8 @@ MeasureBase* EngravingItem::findMeasureBase()
 {
     if (isMeasureBase()) {
         return toMeasureBase(this);
-    } else if (explicitParent()) {
-        return parentItem()->findMeasureBase();
+    } else if (EngravingItem* p = layoutParent()) {
+        return p->findMeasureBase();
     } else {
         return 0;
     }
@@ -1974,7 +1974,7 @@ EngravingItem* EngravingItem::nextElement()
         case ElementType::BAR_LINE:
             return nextSegmentElement();
         default: {
-            return e->parentItem()->nextElement();
+            return e->layoutParent()->nextElement();
         }
         }
     }
@@ -2008,7 +2008,7 @@ EngravingItem* EngravingItem::prevElement()
         case ElementType::BAR_LINE:
             return prevSegmentElement();
         default: {
-            return e->parentItem()->prevElement();
+            return e->layoutParent()->prevElement();
         }
         }
     }
@@ -2058,7 +2058,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         default:
             break;
         }
-        p = p->parentItem();
+        p = p->layoutParent();
     }
     return Navigation::firstElement(score());
 }
@@ -2106,7 +2106,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         default:
             break;
         }
-        p = p->parentItem();
+        p = p->layoutParent();
     }
     return Navigation::firstElement(score());
 }
@@ -2291,7 +2291,7 @@ RectF EngravingItem::drag(EditData& ed)
                 p = toPage(e);
                 break;
             }
-            e = e->parentItem();
+            e = e->layoutParent();
         }
         if (p) {
             bool move = false;
@@ -2583,7 +2583,7 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
     EngravingItem::BarBeat barBeat = { 0, 0, 0.0F };
     const EngravingItem* parent = this;
     while (parent && !parent->isSegment() && !parent->isMeasure()) {
-        parent = parent->parentItem();
+        parent = parent->layoutParent();
     }
 
     if (!parent) {
