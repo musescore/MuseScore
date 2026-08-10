@@ -1352,7 +1352,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
     FretDiagram* fretDiagram = nullptr;
 
-    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->ownershipParentItem()->isFretDiagram()) {
+    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
         Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
 
         fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
@@ -1360,8 +1360,8 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         fretDiagram->updateDiagram(harmony->plainText());
 
         fretDiagram->add(harmony);
-    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->ownershipParentItem()->isFretDiagram()) {
-        fretDiagram = toFretDiagram(harmonyOrFretDiagram->ownershipParentItem())->clone();
+    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->ownershipParent()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram->ownershipParent())->clone();
     } else if (harmonyOrFretDiagram->isFretDiagram()) {
         fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
         fretDiagram->setOffset(PointF());

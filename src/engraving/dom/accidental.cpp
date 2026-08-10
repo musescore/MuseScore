@@ -248,6 +248,12 @@ Accidental::Accidental(EngravingItem* parent)
 {
 }
 
+Note* Accidental::note() const
+{
+    EngravingObject* owner = ownershipParent();
+    return owner && owner->isNote() ? toNote(owner) : nullptr;
+}
+
 //---------------------------------------------------------
 //   subTypeUserName
 //---------------------------------------------------------

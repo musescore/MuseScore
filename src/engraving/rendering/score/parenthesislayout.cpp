@@ -171,8 +171,8 @@ bool ParenthesisLayout::isInternalParenPadding(const EngravingItem* item1, const
 {
     const Chord* chord1 = toChord(item1->findAncestor(ElementType::CHORD));
     const Chord* chord2 = toChord(item2->findAncestor(ElementType::CHORD));
-    const EngravingItem* parent1 = item1->ownershipParentItem();
-    const EngravingItem* parent2 = item2->ownershipParentItem();
+    const EngravingObject* parent1 = item1->ownershipParent();
+    const EngravingObject* parent2 = item2->ownershipParent();
 
     bool internalPadding = (item1->isParenthesis() && parent1 == item2)
                            || (item2->isParenthesis() && parent2 == item1)
@@ -346,7 +346,7 @@ void ParenthesisLayout::createSmuflShape(Parenthesis* item, Parenthesis::LayoutD
 
 void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    if (!item->ownershipParentItem()) {
+    if (!item->ownershipParent()) {
         return;
     }
 
@@ -356,7 +356,7 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
     ldata->symId.reset();
 
     // Set ldata values based on parent
-    switch (item->ownershipParentItem()->type()) {
+    switch (item->ownershipParent()->type()) {
     case ElementType::CHORD:
         setChordValues(item, ldata);
         break;
@@ -404,7 +404,7 @@ void ParenthesisLayout::setClefValues(Parenthesis* item, Parenthesis::LayoutData
 
 void ParenthesisLayout::setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    const TimeSig* parentTs = toTimeSig(item->ownershipParentItem());
+    const TimeSig* parentTs = toTimeSig(item->ownershipParent());
     if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::NORMAL) {
         return;
     }
@@ -415,7 +415,7 @@ void ParenthesisLayout::setTimeSigValues(Parenthesis* item, Parenthesis::LayoutD
 
 void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
 {
-    Chord* chord = toChord(item->ownershipParentItem());
+    Chord* chord = toChord(item->ownershipParent());
 
     ldata->setMag(chord->mag());
     ldata->intrinsicMag = chord->intrinsicMag();    // Scaling information not linked to staff size. item->spatium is NOT scaled by this
@@ -477,7 +477,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
 void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
     const double spatium = item->spatium();
-    Harmony* parent = toHarmony(item->ownershipParentItem());
+    Harmony* parent = toHarmony(item->ownershipParent());
     RectF bbox = parent->ldata()->bbox();
 
     double endPointThickness = 0.03;

@@ -351,7 +351,7 @@ Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegmen
 
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
-    Segment* curSeg = toSegment(element->ownershipParentItem());
+    Segment* curSeg = toSegment(element->ownershipParent());
     Segment* newSeg = getNewSegment(element, curSeg, forward);
 
     if (newSeg) {

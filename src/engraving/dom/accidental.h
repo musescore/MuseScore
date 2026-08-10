@@ -238,7 +238,7 @@ public:
 
     Accidental* clone() const override { return new Accidental(*this); }
 
-    Note* note() const { return (ownershipParent() && ownershipParent()->isNote()) ? toNote(ownershipParent()) : 0; }
+    Note* note() const;
 
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);

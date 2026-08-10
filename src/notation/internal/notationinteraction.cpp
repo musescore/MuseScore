@@ -6520,7 +6520,7 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
 
     if (m_editData.element && m_editData.element->isStaffText()) {
         EngravingItem* element = newSelectedElements.front();
-        if (element && element->isSoundFlag() && element->ownershipParentItem() == m_editData.element) {
+        if (element && element->isSoundFlag() && element->ownershipParent() == m_editData.element) {
             return false;
         }
     }
@@ -6540,7 +6540,7 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
 
     if (m_editData.element && m_editData.element->isStaffText()) {
         EngravingItem* element = newSelectedElements.front();
-        if (element && element->isSoundFlag() && element->ownershipParentItem() == m_editData.element) {
+        if (element && element->isSoundFlag() && element->ownershipParent() == m_editData.element) {
             return false;
         }
     }
