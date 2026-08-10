@@ -102,10 +102,10 @@ bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
     case Pid::SPANNER_TICKS:
     {
         // if parent lyrics has a melisma, change its length too
-        if (explicitParent() && explicitParent()->isLyrics()
+        if (ownershipParent() && ownershipParent()->isLyrics()
             && isEndMelisma()) {
-            Fraction newTicks   = toLyrics(explicitParent())->ticks() + v.value<Fraction>() - ticks();
-            explicitParent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
+            Fraction newTicks   = toLyrics(ownershipParent())->ticks() + v.value<Fraction>() - ticks();
+            ownershipParent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
         }
         setTicks(v.value<Fraction>());
     }

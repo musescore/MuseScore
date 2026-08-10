@@ -182,7 +182,7 @@ public:
     void setElement(track_idx_t track, EngravingItem* el);
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
-    Measure* measure() const { return toMeasure(explicitParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()); }
     System* system() const;
     double x() const override { return ldata()->pos().x(); }
 

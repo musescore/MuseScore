@@ -202,7 +202,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     }
 
-    if (explicitParent()) {
+    if (ownershipParent()) {
         staff()->staffTypeListChanged(measure()->tick());
     }
     return true;

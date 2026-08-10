@@ -553,7 +553,7 @@ RectF HBox::drag(EditData& data)
 
 bool HBox::isMovable() const
 {
-    return explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox());
+    return ownershipParent() && (ownershipParent()->isHBox() || ownershipParent()->isVBox());
 }
 
 //---------------------------------------------------------

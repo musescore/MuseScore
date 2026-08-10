@@ -1227,8 +1227,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setTieBack(toTie(sp));
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent() && note->explicitParent()->isChord()) {
-                    toChord(note->explicitParent())->setEndsNoteAnchoredLine(true);
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->ownershipParent() && note->ownershipParent()->isChord()) {
+                    toChord(note->ownershipParent())->setEndsNoteAnchoredLine(true);
                 }
                 note->addSpannerBack(sp);
             }

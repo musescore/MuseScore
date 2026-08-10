@@ -58,7 +58,7 @@ class Bend final : public EngravingItem
 public:
     Bend* clone() const override { return new Bend(*this); }
 
-    Note* note() const { return toNote(explicitParent()); }
+    Note* note() const { return toNote(ownershipParent()); }
 
     static const char* label[13];
 

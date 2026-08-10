@@ -801,7 +801,7 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 
 void Measure::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
+    if (e->ownershipParent() != this) {
         e->setParent(this);
     }
 
@@ -939,7 +939,7 @@ void Measure::add(EngravingItem* e)
 
 void Measure::remove(EngravingItem* e)
 {
-    assert(e->explicitParent() == this);
+    assert(e->ownershipParent() == this);
     assert(e->score() == score());
 
     switch (e->type()) {
@@ -3280,7 +3280,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromI
     }
 
     // handle measure elements
-    if (e->explicitParent() == this) {
+    if (e->ownershipParent() == this) {
         auto i = std::find(el().begin(), el().end(), e);
         if (i != el().end()) {
             if (++i != el().end()) {
@@ -3316,7 +3316,7 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
     }
 
     // handle measure elements
-    if (e->explicitParent() == this) {
+    if (e->ownershipParent() == this) {
         auto i = std::find(el().rbegin(), el().rend(), e);
         if (i != el().rend()) {
             if (++i != el().rend()) {

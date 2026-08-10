@@ -2395,7 +2395,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         // understand adding an articulation to another articulation as adding it to the chord it's attached to
         EngravingItem* e = sel.elements().front();
         if (e->isArticulationFamily()) {
-            if (Chord* c = toChord(toArticulation(e)->explicitParent())) {
+            if (Chord* c = toChord(toArticulation(e)->ownershipParent())) {
                 applyDropPaletteElement(score, c->notes().front(), element, modifiers);
             }
         } else {
@@ -5466,7 +5466,7 @@ void NotationInteraction::toggleArticulationForSelection(SymbolId articulationSy
         // no notes, but maybe they have an articulation selected. we should use that chord
         EngravingItem* e = score()->selection().element();
         if (e && e->isArticulationFamily()) {
-            Chord* c = toChord(toArticulation(e)->explicitParent());
+            Chord* c = toChord(toArticulation(e)->ownershipParent());
             if (c) {
                 notes.insert(notes.begin(), c->notes().begin(), c->notes().end());
             }
@@ -7919,7 +7919,7 @@ void NotationInteraction::addFretboardDiagram()
                 continue;
             }
 
-            if (!element->explicitParent()->isFretDiagram()) {
+            if (!element->ownershipParent()->isFretDiagram()) {
                 filteredElements.emplace_back(element);
             }
         }

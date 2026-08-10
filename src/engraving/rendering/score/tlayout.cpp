@@ -794,7 +794,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         ldata->setPos(PointF());
     }
 
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -1297,7 +1297,7 @@ void TLayout::layoutBeam1(Beam* item, LayoutContext& ctx)
 void TLayout::layoutBend(const Bend* item, Bend::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -1635,7 +1635,7 @@ void TLayout::layoutChord(Chord* item, LayoutContext& ctx)
 void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -1939,7 +1939,7 @@ void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const Lay
 void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -2346,7 +2346,7 @@ void TLayout::layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData
 void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -2594,7 +2594,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
     ldata->setShape(shape);
 
-    if (item->explicitParent()->isSegment()) {
+    if (item->ownershipParent()->isSegment()) {
         // We need to get the width of the notehead/rest in order to position the fret diagram correctly
         Segment* pSeg = item->segment();
         double noteheadWidth = 0.0;
@@ -3120,7 +3120,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
 
-    if (!item->explicitParent()) {
+    if (!item->ownershipParent()) {
         item->setPos(PointF());
         item->roffset() = PointF();
         return;
@@ -3298,7 +3298,7 @@ void TLayout::layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiag
     TextLayout::layoutBaseTextBase(item, ldata);
 
     if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
 
         LD_CONDITION(ldata->isSetPos());
@@ -3396,7 +3396,7 @@ void TLayout::layoutInstrumentChange(const InstrumentChange* item, InstrumentCha
     TextLayout::layoutBaseTextBase(item, ldata);
 
     if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
@@ -4332,7 +4332,7 @@ void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, 
 void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    if (!item->explicitParent()) {
+    if (!item->ownershipParent()) {
         return;
     }
 
@@ -4557,7 +4557,7 @@ void TLayout::layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechA
     }
 
     if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
@@ -5136,7 +5136,7 @@ void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
     PainterPath path = PainterPath();
     double w = spatium;
     double b = w * .5;
-    double h = item->explicitParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));        // limit length for palette
+    double h = item->ownershipParent() ? item->absoluteGap() : item->absoluteFromSpatium(std::min(item->gap(), 4.0_sp));        // limit length for palette
 
     switch (item->spacerType()) {
     case SpacerType::DOWN:
@@ -5291,7 +5291,7 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     TextLayout::layoutBaseTextBase(item, ldata);
 
     if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
@@ -5401,7 +5401,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
 void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -5475,8 +5475,8 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     LAYOUT_CALL_ITEM(item);
     TextLayout::layoutBaseTextBase(item, ldata);
 
-    if (item->autoplace() && item->explicitParent()) {
-        const Segment* s = toSegment(item->explicitParent());
+    if (item->autoplace() && item->ownershipParent()) {
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
@@ -5576,7 +5576,7 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
@@ -5655,8 +5655,8 @@ void TLayout::layoutSystemText(const SystemText* item, SystemText::LayoutData* l
     LAYOUT_CALL_ITEM(item);
     TextLayout::layoutBaseTextBase(item, ldata);
 
-    if (item->autoplace() && item->explicitParent()) {
-        const Segment* s = toSegment(item->explicitParent());
+    if (item->autoplace() && item->ownershipParent()) {
+        const Segment* s = toSegment(item->ownershipParent());
         const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
@@ -5682,7 +5682,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     double xpos, ypos;           // position coords
 
     ldata->beamGrid = TabBeamGrid::NONE;
-    Chord* chord = item->explicitParent() && item->explicitParent()->isChord() ? toChord(item->explicitParent()) : nullptr;
+    Chord* chord = item->ownershipParent() && item->ownershipParent()->isChord() ? toChord(item->ownershipParent()) : nullptr;
 // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (!chord || !chord->isChord()
         || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
@@ -5695,7 +5695,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
         ypos  = item->tab()->durationFontYOffset();
         ybb   = item->tab()->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
-        if (item->explicitParent() && item->explicitParent()->isRest()) {
+        if (item->ownershipParent() && item->ownershipParent()->isRest()) {
             ybb  += TAB_RESTSYMBDISPL.toAbsolute(spatium);
             ypos += TAB_RESTSYMBDISPL.toAbsolute(spatium);
         }
@@ -5741,7 +5741,7 @@ void TLayout::layoutTappingHalfSlur(TappingHalfSlur* item)
 void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 

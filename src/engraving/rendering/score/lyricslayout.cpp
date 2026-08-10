@@ -43,7 +43,7 @@ using namespace mu::engraving::rendering::score;
 
 void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
-    if (!item->explicitParent()) {   // palette & clone trick
+    if (!item->ownershipParent()) {   // palette & clone trick
         item->setPos(PointF());
         TextLayout::layoutBaseTextBase1(item, ctx);
         return;

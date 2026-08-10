@@ -616,7 +616,7 @@ void Chord::setTremoloSingleChord(TremoloSingleChord* tr)
 
 void Chord::add(EngravingItem* e)
 {
-    if (e->explicitParent() != this) {
+    if (e->ownershipParent() != this) {
         e->setParent(this);
     }
     e->setTrack(track());
@@ -1123,7 +1123,7 @@ bool Chord::underBeam() const
     if (m_noteType == NoteType::NORMAL) {
         return false;
     }
-    const Chord* cr = toChord(explicitParent());
+    const Chord* cr = toChord(ownershipParent());
     Beam* beam = cr->beam();
     if (!beam || !cr->beam()->up()) {
         return false;
@@ -1245,12 +1245,12 @@ PointF Chord::pagePos() const
     }
 
     PointF p(pos());
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return p;
     }
     p.rx() = pageX();
 
-    const Chord* pc = toChord(explicitParent());
+    const Chord* pc = toChord(ownershipParent());
     System* system = pc->segment()->system();
     if (!system) {
         return p;
@@ -2171,7 +2171,7 @@ Chord* Chord::graceNoteAt(size_t idx) const
 //---------------------------------------------------------
 std::vector<Chord*> Chord::allGraceChordsOfMainChord()
 {
-    Chord* mainChord = isGrace() ? toChord(explicitParent()) : this;
+    Chord* mainChord = isGrace() ? toChord(ownershipParent()) : this;
     std::vector<Chord*> chords = { mainChord };
     const GraceNotesGroup& gnBefore = mainChord->graceNotesBefore();
     const GraceNotesGroup& gnAfter = mainChord->graceNotesAfter();
@@ -2190,14 +2190,14 @@ void Chord::setShowStemSlashInAdvance()
         return;
     }
     if (isGraceBefore()) {
-        GraceNotesGroup& graceBefore = toChord(explicitParent())->graceNotesBefore();
+        GraceNotesGroup& graceBefore = toChord(ownershipParent())->graceNotesBefore();
         Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
         if (grace && grace->beamMode() != BeamMode::NONE && grace->beamMode() != BeamMode::BEGIN) {
             grace->requestShowStemSlash(showStemSlash());
         }
     }
     if (isGraceAfter()) {
-        GraceNotesGroup& graceAfter = toChord(explicitParent())->graceNotesAfter();
+        GraceNotesGroup& graceAfter = toChord(ownershipParent())->graceNotesAfter();
         Chord* grace = graceAfter.empty() ? nullptr : graceAfter.back();
         if (grace && grace->beamMode() != BeamMode::NONE) {
             grace->requestShowStemSlash(showStemSlash());
@@ -2377,7 +2377,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::FINGERING:
     case ElementType::TEXT:
     case ElementType::BEND: {
-        Note* n = toNote(e->explicitParent());
+        Note* n = toNote(e->ownershipParent());
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;

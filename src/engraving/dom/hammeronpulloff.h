@@ -37,7 +37,7 @@ public:
 
     bool isEditAllowed(EditData&) const override { return false; }
 
-    HammerOnPullOffSegment* hopoSegment() const { return toHammerOnPullOffSegment(explicitParent()); }
+    HammerOnPullOffSegment* hopoSegment() const { return toHammerOnPullOffSegment(ownershipParent()); }
 
     Chord* startChord() const { return m_startChord; }
     Chord* endChord() const { return m_endChord; }

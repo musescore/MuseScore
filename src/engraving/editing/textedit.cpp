@@ -174,7 +174,7 @@ void TextBase::endEdit(EditData& ed)
     }
 
     // TBox'es manage their Text themselves and are not removed if text is empty
-    const bool removeTextIfEmpty = !(explicitParent() && explicitParent()->isTBox());
+    const bool removeTextIfEmpty = !(ownershipParent() && ownershipParent()->isTBox());
 
     if (actualPlainText.isEmpty() && removeTextIfEmpty) {
         LOGD("actual text is empty");
@@ -219,8 +219,8 @@ void TextBase::endEdit(EditData& ed)
             }
         }
 
-        if (isHarmony() && explicitParent()->isFretDiagram()) {
-            score()->select(toFretDiagram(explicitParent()), SelectType::SINGLE);
+        if (isHarmony() && ownershipParent()->isFretDiagram()) {
+            score()->select(toFretDiagram(ownershipParent()), SelectType::SINGLE);
         }
 
         return;

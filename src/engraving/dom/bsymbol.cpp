@@ -187,7 +187,7 @@ std::vector<LineF> BSymbol::dragAnchorLines() const
 
 PointF BSymbol::pagePos() const
 {
-    if (explicitParent() && (explicitParent()->isSegment())) {
+    if (ownershipParent() && (ownershipParent()->isSegment())) {
         PointF p(pos());
         System* system = segment()->measure()->system();
         if (system) {
@@ -206,9 +206,9 @@ PointF BSymbol::pagePos() const
 
 PointF BSymbol::canvasPos() const
 {
-    if (explicitParent() && (explicitParent()->isSegment())) {
+    if (ownershipParent() && (ownershipParent()->isSegment())) {
         PointF p(pos());
-        Segment* s = toSegment(explicitParent());
+        Segment* s = toSegment(ownershipParent());
 
         System* system = s->measure()->system();
         if (system) {

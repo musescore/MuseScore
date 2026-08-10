@@ -211,7 +211,7 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
     items << makeSeparator();
 
     if (element) {
-        engraving::EngravingObject* parent = element->isHarmony() ? element->explicitParent() : nullptr;
+        engraving::EngravingObject* parent = element->isHarmony() ? element->ownershipParent() : nullptr;
         bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
         if (!hasLinkedFretboardDiagram) {
             items << makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND);

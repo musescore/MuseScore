@@ -3376,7 +3376,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
 
 bool ChordLayout::leaveSpaceForTie(const Articulation* item)
 {
-    if (!item->explicitParent() || !item->explicitParent()->isChord()) {
+    if (!item->ownershipParent() || !item->ownershipParent()->isChord()) {
         return false;
     }
 

@@ -52,8 +52,8 @@ public:
 
     TempoText* clone() const override { return new TempoText(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
-    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()->ownershipParent()); }
 
     TempoTextType tempoTextType() const { return m_tempoTextType; }
     void setTempoTextType(TempoTextType);

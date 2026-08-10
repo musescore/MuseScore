@@ -104,7 +104,7 @@ public:
     Chord* cueNoteChord() const { return m_cueNoteChord; }
     void setCueNoteChord(Chord* c) { m_cueNoteChord = c; }
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return (Segment*)ownershipParent(); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

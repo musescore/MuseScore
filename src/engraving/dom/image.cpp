@@ -145,11 +145,11 @@ muse::SizeF Image::imageSize() const
 
 bool Image::isImageFramed() const
 {
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return false;
     }
 
-    return explicitParent()->isBox();
+    return ownershipParent()->isBox();
 }
 
 //---------------------------------------------------------

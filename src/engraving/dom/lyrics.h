@@ -56,9 +56,9 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(Transaction& tx, EditData&) override;
 
-    Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
-    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
-    ChordRest* chordRest() const { return toChordRest(explicitParent()); }
+    Segment* segment() const { return toSegment(ownershipParent()->ownershipParent()); }
+    Measure* measure() const { return toMeasure(ownershipParent()->ownershipParent()->ownershipParent()); }
+    ChordRest* chordRest() const { return toChordRest(ownershipParent()); }
 
     int subtype() const override { return m_verse; }
     TranslatableString subtypeUserName() const override;
@@ -142,7 +142,7 @@ public:
     LineSegment* createLineSegment() override;
     void removeUnmanaged() override;
 
-    virtual Lyrics* lyrics() const { return toLyrics(explicitParent()); }
+    virtual Lyrics* lyrics() const { return toLyrics(ownershipParent()); }
     Lyrics* nextLyrics() const { return m_nextLyrics; }
     void setNextLyrics(Lyrics* l) { m_nextLyrics = l; }
     virtual bool isEndMelisma() const { return lyrics() && lyrics()->ticks().isNotZero(); }

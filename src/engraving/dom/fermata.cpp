@@ -92,7 +92,7 @@ muse::TranslatableString Fermata::subtypeUserName() const
 Measure* Fermata::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->explicitParent() : 0);
+    return toMeasure(s ? s->ownershipParent() : 0);
 }
 
 //---------------------------------------------------------

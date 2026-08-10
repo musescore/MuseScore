@@ -243,14 +243,14 @@ void Clef::undoSetShowCourtesy(bool v)
 Clef* Clef::otherClef()
 {
     // if not in a clef-segment-measure hierarchy, do nothing
-    if (!explicitParent() || !explicitParent()->isSegment()) {
+    if (!ownershipParent() || !ownershipParent()->isSegment()) {
         return nullptr;
     }
-    Segment* segm = toSegment(explicitParent());
-    if (!segm->explicitParent() || !segm->explicitParent()->isMeasure()) {
+    Segment* segm = toSegment(ownershipParent());
+    if (!segm->ownershipParent() || !segm->ownershipParent()->isMeasure()) {
         return 0;
     }
-    Measure* meas = toMeasure(segm->explicitParent());
+    Measure* meas = toMeasure(segm->ownershipParent());
     Measure* otherMeas = nullptr;
     Segment* otherSegm = nullptr;
     Fraction segmTick  = segm->tick();
@@ -343,7 +343,7 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 {
     m_clefToBarlinePosition = newPos;
 
-    if (!explicitParent()) {
+    if (!ownershipParent()) {
         return;
     }
 

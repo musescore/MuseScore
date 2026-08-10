@@ -261,7 +261,7 @@ void Note::remove(apiv1::EngravingItem* wrapped)
     mu::engraving::EngravingItem* s = wrapped->element();
     if (!s) {
         LOGW("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->explicitParent() != note()) {
+    } else if (s->ownershipParent() != note()) {
         LOGW("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
@@ -387,7 +387,7 @@ void Chord::remove(apiv1::EngravingItem* wrapped)
     mu::engraving::EngravingItem* s = wrapped->element();
     if (!s) {
         LOGW("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->explicitParent() != chord()) {
+    } else if (s->ownershipParent() != chord()) {
         LOGW("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
     } else if (chord()->notes().size() <= 1 && s->isNote()) {
         LOGW("PluginAPI::Chord::remove: Removal of final note is not allowed.");
@@ -469,7 +469,7 @@ void MeasureBase::remove(apiv1::EngravingItem* wrapped)
     mu::engraving::EngravingItem* s = wrapped->element();
     if (!s) {
         LOGW("PluginAPI::MeasureBase::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->explicitParent() != measureBase()) {
+    } else if (s->ownershipParent() != measureBase()) {
         LOGW("PluginAPI::MeasureBase::remove: The element is not a child of this measure base. Use removeElement() instead.");
     } else {
         measureBase()->score()->deleteItem(s);     // Create undo op and remove the element.

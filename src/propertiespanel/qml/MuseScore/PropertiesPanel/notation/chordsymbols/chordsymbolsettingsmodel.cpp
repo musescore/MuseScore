@@ -128,7 +128,7 @@ void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
     bool hasHarmonyWhithoutFretboardDiagram = false;
 
     for (mu::engraving::EngravingItem* item : m_elementList) {
-        engraving::EngravingObject* parent = item->explicitParent();
+        engraving::EngravingObject* parent = item->ownershipParent();
         if (parent && !parent->isFretDiagram()) {
             hasHarmonyWhithoutFretboardDiagram = true;
             break;

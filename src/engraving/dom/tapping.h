@@ -108,7 +108,7 @@ public:
     TappingHalfSlur* clone() const override { return new TappingHalfSlur(*this); }
     TappingHalfSlurSegment* newSlurTieSegment() override { return new TappingHalfSlurSegment(this); }
 
-    Tapping* tapping() const { return toTapping(explicitParent()); }
+    Tapping* tapping() const { return toTapping(ownershipParent()); }
 
 protected:
     bool isInSpannerMap() const override { return false; }
@@ -127,7 +127,7 @@ public:
     TappingText(const TappingText& t);
     TappingText* clone() const override { return new TappingText(*this); }
 
-    Tapping* tapping() const { return toTapping(explicitParent()); }
+    Tapping* tapping() const { return toTapping(ownershipParent()); }
 
     Color curColor(const rendering::PaintOptions& opt) const override;
 

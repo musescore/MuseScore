@@ -243,7 +243,7 @@ EngravingObject* EngravingObject::parent() const
     return m_parent;
 }
 
-EngravingObject* EngravingObject::explicitParent() const
+EngravingObject* EngravingObject::ownershipParent() const
 {
     if (!m_isParentExplicitlySet) {
         return nullptr;

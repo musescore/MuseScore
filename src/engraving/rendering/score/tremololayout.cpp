@@ -40,11 +40,11 @@ using namespace mu::engraving::rendering::score;
 
 void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
 {
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
-    item->setChord1(toChord(item->explicitParent()));
+    item->setChord1(toChord(item->ownershipParent()));
 
     Note* anchor1 = item->chord1()->up() ? item->chord1()->upNote() : item->chord1()->downNote();
     Stem* stem    = item->chord1()->stem();
@@ -65,7 +65,7 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
 
 void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
 {
-    IF_ASSERT_FAILED(item->explicitParent()) {
+    IF_ASSERT_FAILED(item->ownershipParent()) {
         return;
     }
 
