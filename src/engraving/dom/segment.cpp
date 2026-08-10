@@ -2083,7 +2083,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             p = sp->startElement();
         } else {
             p = e;
-            EngravingItem* pp = p->parentItem();
+            EngravingItem* pp = p->ownershipParentItem();
             if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote())) {
                 p = pp;
             }
@@ -2314,9 +2314,9 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             el = sp->startElement();
             seg = sp->startSegment();
         } else {
-            EngravingItem* ep = e->parentItem();
+            EngravingItem* ep = e->ownershipParentItem();
             if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote())) {
-                el = e->parentItem();
+                el = e->ownershipParentItem();
             }
         }
 

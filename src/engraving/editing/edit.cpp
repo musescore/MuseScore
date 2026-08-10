@@ -2301,7 +2301,7 @@ void Score::cmdDeleteSelection()
             } else if (e->ownershipParent()
                        && (e->ownershipParent()->isSegment() || e->ownershipParent()->isChord() || e->ownershipParent()->isNote()
                            || e->ownershipParent()->isRest())) {
-                tick = e->parentItem()->tick();
+                tick = e->ownershipParentItem()->tick();
             }
             //else tick < 0
             track = e->track();
@@ -2341,8 +2341,8 @@ void Score::cmdDeleteSelection()
                     }
                 } else if (e->isHarmony()) {
                     Harmony* harmony = toHarmony(e);
-                    if (harmony->parentItem()->isFretDiagram()) {
-                        elSelectedAfterDeletion = harmony->parentItem();
+                    if (harmony->ownershipParentItem()->isFretDiagram()) {
+                        elSelectedAfterDeletion = harmony->ownershipParentItem();
                     }
                 }
             }
@@ -3306,7 +3306,7 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
         return;
     }
 
-    if (element->parentItem() == parent && staffIdx == element->staffIdx()) {
+    if (element->ownershipParentItem() == parent && staffIdx == element->staffIdx()) {
         return;
     }
 
@@ -4033,7 +4033,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::PARTIAL_TIE
         || et == ElementType::PARENTHESIS
         ) {
-        const EngravingItem* parent = element->parentItem();
+        const EngravingItem* parent = element->ownershipParentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
 
         // don't link part name
@@ -4341,7 +4341,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             }
             doUndoAddElement(ne);
         } else if (element->isHarmony() && element->ownershipParent()->isFretDiagram()) {
-            EngravingItem* parentFd = element->parentItem();
+            EngravingItem* parentFd = element->ownershipParentItem();
             if (parentFd->score() != score) {
                 // Find linked fret diagram
                 EngravingItem* linkedFd = parentFd->findLinkedInScore(score);
@@ -4472,7 +4472,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             }
 
             if (sp->isTextLine() && sp != nsp) {
-                EngravingItem* parent = sp->parentItem();
+                EngravingItem* parent = sp->ownershipParentItem();
                 if (parent && parent->isNote()) {
                     nsp->setOwnershipParent(parent->findLinkedInStaff(staff));
                 }

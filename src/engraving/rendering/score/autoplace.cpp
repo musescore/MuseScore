@@ -386,9 +386,9 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return true;
     }
 
-    const EngravingItem* skylineItemParent = itemInSkyline->parentItem();
-    if (itemInSkyline->isText() && skylineItemParent && skylineItemParent->isSLineSegment()) {
-        return itemsShouldIgnoreEachOther(itemToAutoplace, skylineItemParent);
+    const EngravingItem* skylineItemOwner = itemInSkyline->ownershipParentItem();
+    if (itemInSkyline->isText() && skylineItemOwner && skylineItemOwner->isSLineSegment()) {
+        return itemsShouldIgnoreEachOther(itemToAutoplace, skylineItemOwner);
     }
 
     ElementType type1 = itemToAutoplace->type();
@@ -399,7 +399,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     }
 
     if (type1 == ElementType::FRET_DIAGRAM && (type2 == ElementType::FRET_DIAGRAM || type2 == ElementType::HARMONY)) {
-        bool isFretDiagAgainstItsOwnHarmony = skylineItemParent == itemToAutoplace;
+        bool isFretDiagAgainstItsOwnHarmony = skylineItemOwner == itemToAutoplace;
         bool areOnDifferentSegments = itemToAutoplace->findAncestor(ElementType::SEGMENT)
                                       != itemInSkyline->findAncestor(ElementType::SEGMENT);
         return isFretDiagAgainstItsOwnHarmony || areOnDifferentSegments;

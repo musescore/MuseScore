@@ -177,7 +177,7 @@ public:
 
     //! Item-typed variant of ownershipParent(); additionally null when the
     //! owner is not an item.
-    EngravingItem* parentItem() const;
+    EngravingItem* ownershipParentItem() const;
 
     //! The parent in the visual hierarchy, which positions are relative to.
     //! Defaults to the owner; overridden where placement differs from ownership

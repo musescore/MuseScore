@@ -357,7 +357,7 @@ void ChangeElement::flip()
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {
-        oldElement->parentItem()->change(oldElement, newElement);
+        oldElement->ownershipParentItem()->change(oldElement, newElement);
     }
 
     if (newElement->isKeySig()) {
@@ -389,7 +389,7 @@ void ChangeElement::flip()
 
 void ChangeParent::flip()
 {
-    EngravingItem* p = element->parentItem();
+    EngravingItem* p = element->ownershipParentItem();
     staff_idx_t si = element->staffIdx();
     p->remove(element);
     element->setOwnershipParent(parent);

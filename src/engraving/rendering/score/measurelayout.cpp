@@ -1801,7 +1801,7 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
         TLayout::layoutClef(clef, clef->mutldata(), ctx.conf());
         cSegment->setEnabled(true);
     } else if (clef) {
-        clef->parentItem()->remove(clef);
+        clef->ownershipParentItem()->remove(clef);
         if (clef->generated()) {
             delete clef;
         }
@@ -1875,7 +1875,7 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
         }
 
         if (remove) {
-            keysig->parentItem()->remove(keysig);
+            keysig->ownershipParentItem()->remove(keysig);
             if (keysig->generated()) {
                 delete keysig;
             }

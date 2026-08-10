@@ -39,7 +39,7 @@ static constexpr bool IGNORE_UNPLAYABLE = false;
 static const Chord* principalChord(const Chord* chord)
 {
     if (chord->isGrace()) {
-        const EngravingItem* parent = chord->parentItem();
+        const EngravingItem* parent = chord->ownershipParentItem();
         if (parent && parent->isChord()) {
             return toChord(parent);
         }
