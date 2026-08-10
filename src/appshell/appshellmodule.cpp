@@ -29,6 +29,8 @@
 
 #include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
@@ -37,6 +39,8 @@
 #include "internal/startupscenario.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/sessionsmanager.h"
+#include "internal/appshellcommandsregister.h"
+#include "internal/appshellcommandsstate.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosappmenumodelhook.h"
@@ -77,6 +81,11 @@ void AppShellModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://about/musicxml"), "MuseScore.AppShell", "AboutMusicXMLDialog");
         ir->registerQmlUri(Uri("musescore://welcomedialog"), "MuseScore.AppShell", "WelcomeDialog");
         ir->registerQmlUri(Uri("musescore://firstLaunchSetup"), "MuseScore.AppShell", "FirstLaunchSetupDialog");
+    }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<AppshellCommandsRegister>());
     }
 }
 
@@ -122,6 +131,11 @@ void AppShellContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_applicationUiActions);
+    }
+
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<AppshellCommandsState>(iocContext()));
     }
 }
 

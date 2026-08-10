@@ -27,6 +27,8 @@
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/commandable.h"
+#include "rcommand/commandtypes.h"
 #include "rcommand/icommanddispatcher.h"
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
@@ -50,7 +52,7 @@ class QDropEvent;
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public muse::Contextable, public muse::actions::Actionable,
-    public muse::async::Asyncable
+    public muse::async::Asyncable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
@@ -98,7 +100,8 @@ private:
 
     void setupConnections();
 
-    bool quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    muse::Ret quit(const muse::rcommand::CommandQuery& query);
+    muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
     void restart();
 
     void toggleFullScreen();
@@ -111,6 +114,7 @@ private:
     void openAccessibilityStatementPage();
     void openPreferencesDialog();
     void doOpenPreferencesDialog();
+    void openExtensions();
 
     void revertToFactorySettings();
 

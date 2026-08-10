@@ -30,15 +30,20 @@
 #include <QWindow>
 #include <QMimeData>
 
-#include "async/async.h"
+#include "global/async/async.h"
+#include "global/types/ret.h"
+#include "global/translation.h"
+
 #include "audio/common/soundfonttypes.h"
 
-#include "translation.h"
+#include "rcommand/actiontocommand.h"
+
+#include "../appshellcommands.h"
+
 #include "log.h"
 
-using namespace mu::appshell;
 using namespace muse;
-using namespace muse::actions;
+using namespace mu::appshell;
 
 void ApplicationActionController::preInit()
 {
@@ -47,31 +52,42 @@ void ApplicationActionController::preInit()
 
 void ApplicationActionController::init()
 {
-    dispatcher()->reg(this, "quit", [this](const ActionData& args) {
-        bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
-        muse::io::path_t installatorPath = args.count() > 1 ? args.arg<muse::io::path_t>(1) : "";
-        quit(isAllInstances, installatorPath);
-    });
+    auto cd = commandDispatcher();
+    cd->onRequest(this, APP_QUIT_COMMAND, [this](const rcommand::CommandQuery& query) { return quit(query); });
+    cd->onRequest(this, APP_RESTART_COMMAND, [this]() { restart(); return muse::make_ok(); });
+    cd->onRequest(this, APP_FULLSCREEN_COMMAND, [this]() { toggleFullScreen(); return muse::make_ok(); });
 
-    dispatcher()->reg(this, "restart", [this]() {
-        restart();
-    });
+    cd->onRequest(this, APP_ABOUT_MUSESCORE_COMMAND, [this]() { openAboutDialog(); return muse::make_ok(); });
+    cd->onRequest(this, APP_ABOUT_QT_COMMAND, [this]() { openAboutQtDialog(); return muse::make_ok(); });
+    cd->onRequest(this, APP_ABOUT_MUSICXML_COMMAND, [this]() { openAboutMusicXMLDialog(); return muse::make_ok(); });
+    cd->onRequest(this, APP_ONLINE_HANDBOOK_COMMAND, [this]() { openOnlineHandbookPage(); return muse::make_ok(); });
+    cd->onRequest(this, APP_ASK_HELP_COMMAND, [this]() { openAskForHelpPage(); return muse::make_ok(); });
 
-    dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
+    cd->onRequest(this, APP_ACCESSIBILITY_STATEMENT_COMMAND, [this]() { openAccessibilityStatementPage(); return muse::make_ok(); });
+    cd->onRequest(this, APP_PREFERENCES_COMMAND, [this]() { openPreferencesDialog(); return muse::make_ok(); });
+    cd->onRequest(this, APP_REVERT_TO_FACTORY_COMMAND, [this]() { revertToFactorySettings(); return muse::make_ok(); });
+    cd->onRequest(this, APP_EXTENSIONS_COMMAND, [this]() { openExtensions(); return muse::make_ok(); });
 
-    dispatcher()->reg(this, "about-musescore", this, &ApplicationActionController::openAboutDialog);
-    dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
-    dispatcher()->reg(this, "about-musicxml", this, &ApplicationActionController::openAboutMusicXMLDialog);
-    dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
-    dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
-    dispatcher()->reg(this, "accessibility-statement", this, &ApplicationActionController::openAccessibilityStatementPage);
-    dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
+    // compat
+    {
+        using namespace muse::rcommand;
+        static const std::vector<ActionToCommand> actionToCommands = {
+            { "quit", APP_QUIT_COMMAND, make_conv({ { "all_instances", param<bool> }, { "installer_path", param<io::path_t> } }) },
+            { "restart", APP_RESTART_COMMAND, {} },
+            { "fullscreen", APP_FULLSCREEN_COMMAND, {} },
+            { "about-musescore", APP_ABOUT_MUSESCORE_COMMAND, {} },
+            { "about-qt", APP_ABOUT_QT_COMMAND, {} },
+            { "about-musicxml", APP_ABOUT_MUSICXML_COMMAND, {} },
+            { "online-handbook", APP_ONLINE_HANDBOOK_COMMAND, {} },
+            { "ask-help", APP_ASK_HELP_COMMAND, {} },
+            { "accessibility-statement", APP_ACCESSIBILITY_STATEMENT_COMMAND, {} },
+            { "preference-dialog", APP_PREFERENCES_COMMAND, {} },
+            { "revert-factory", APP_REVERT_TO_FACTORY_COMMAND, {} },
+            { "manage-plugins", APP_EXTENSIONS_COMMAND, {} },
+        };
 
-    dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
-
-    dispatcher()->reg(this, "manage-plugins", [this]() {
-        interactive()->open("musescore://home?section=plugins");
-    });
+        rcommand::registerActionToCommand(this, actionToCommands, commandDispatcher(), dispatcher());
+    }
 }
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
@@ -91,7 +107,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 
             if (projectFilesController()->isUrlSupported(url)) {
                 if (startupScenario()->startupCompleted()) {
-                    dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(url));
+                    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(url));
                 } else {
                     startupScenario()->setStartupScoreFile(project::ProjectFile { url });
                 }
@@ -209,17 +225,24 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
     return false;
 }
 
-bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
+muse::Ret ApplicationActionController::quit(const muse::rcommand::CommandQuery& query)
+{
+    bool isAllInstances = query.param("all_instances", Val(true)).toBool();
+    muse::io::path_t installatorPath = query.param("installer_path", Val("")).toString();
+    return quit(isAllInstances, installatorPath);
+}
+
+muse::Ret ApplicationActionController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
 {
     if (m_quiting) {
-        return false;
+        return muse::make_ret(Ret::Code::Busy);
     }
 
     m_quiting = true;
 
     if (!projectFilesController()->closeOpenedProject(false)) {
         m_quiting = false;
-        return false;
+        return muse::make_ret(Ret::Code::UnknownError);
     }
 
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
@@ -242,7 +265,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         multiwindowsProvider()->quitWindow(iocContext());
     }
 
-    return true;
+    return muse::make_ok();
 }
 
 void ApplicationActionController::restart()
@@ -367,4 +390,9 @@ void ApplicationActionController::revertToFactorySettings()
             }
         });
     });
+}
+
+void ApplicationActionController::openExtensions()
+{
+    interactive()->open("musescore://home?section=plugins");
 }
