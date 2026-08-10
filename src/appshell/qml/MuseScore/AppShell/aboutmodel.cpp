@@ -30,6 +30,9 @@
 
 using namespace mu::appshell;
 
+//! NOTE: Should match value in projectpropertiesmodel.cpp
+static const QString GITHUB_REVISION_URL("https://github.com/musescore/MuseScore/commit/");
+
 AboutModel::AboutModel(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -43,10 +46,14 @@ QString AboutModel::museScoreVersion() const
            : version;
 }
 
-QString AboutModel::museScoreRevision() const
+QString AboutModel::museScoreRevisionLink() const
 {
-    return QString("<a href=\"https://github.com/musescore/MuseScore/commit/%1\">%1</a>")
-           .arg(QString::fromStdString(configuration()->museScoreRevision()));
+    const QString rev = QString::fromStdString(configuration()->museScoreRevision());
+    if (rev.isEmpty()) {
+        return muse::qtrc("global", "Unknown");
+    }
+    const QString revUrl = GITHUB_REVISION_URL + rev;
+    return QString("<a href=\"%1\">%2</a>").arg(revUrl, rev);
 }
 
 QString AboutModel::museScoreBuildDateTime() const
@@ -106,17 +113,23 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 
 void AboutModel::copyRevisionToClipboard() const
 {
-    QGuiApplication::clipboard()->setText(
-        QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: "
-                "[%6](https://github.com/musescore/MuseScore/commit/%6)")
-        .arg(QSysInfo::prettyProductName()
-             + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
-                ? " or later" : ""), QSysInfo::currentCpuArchitecture())
-        .arg(QSysInfo::WordSize)
-        .arg(application()->version().toString(), application()->build())
-        +
-        QString(application()->revision().isEmpty() ? "" : ", revision: [%1](https://github.com/musescore/MuseScore/commit/%1)")
-        .arg(application()->revision()));
+    QString osName = QSysInfo::prettyProductName();
+    if (QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11")) {
+        osName += " or later";
+    }
+
+    QString forClipboard = QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5")
+                           .arg(osName, QSysInfo::currentCpuArchitecture())
+                           .arg(QSysInfo::WordSize)
+                           .arg(application()->version().toString(), application()->build());
+
+    const QString rev = QString::fromStdString(configuration()->museScoreRevision());
+    if (!rev.isEmpty()) {
+        const QString revUrl = GITHUB_REVISION_URL + rev;
+        forClipboard += QString(", revision: [%1](%2)").arg(rev, revUrl);
+    }
+
+    QGuiApplication::clipboard()->setText(forClipboard);
 }
 
 void AboutModel::toggleDevMode()
