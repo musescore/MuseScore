@@ -160,7 +160,8 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
 
 void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
 {
-    Segment* segment = element->parentItem() && element->parentItem()->isSegment() ? toSegment(element->parentItem()) : nullptr;
+    EngravingObject* parent = element->explicitParent();
+    Segment* segment = parent && parent->isSegment() ? toSegment(parent) : nullptr;
     if (!segment) {
         return;
     }
@@ -232,7 +233,8 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
 
 void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditData& ed)
 {
-    Segment* segment = element->explicitParent() && element->parent()->isSegment() ? toSegment(element->parent()) : nullptr;
+    EngravingObject* parent = element->explicitParent();
+    Segment* segment = parent && parent->isSegment() ? toSegment(parent) : nullptr;
     if (!segment) {
         return;
     }

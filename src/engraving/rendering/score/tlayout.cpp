@@ -5553,7 +5553,7 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
         return;
     }
 
-    const EngravingItem* parent = toStaffText(item->parentItem());
+    const EngravingItem* parent = item->parentItem();
     if (!parent) {
         return;
     }

@@ -2560,8 +2560,11 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
-        if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
-            itemInSkyline = itemInSkyline->parentItem();
+        if (itemInSkyline && itemInSkyline->isText()) {
+            const EngravingItem* parent = itemInSkyline->parentItem();
+            if (parent && parent->isSLineSegment()) {
+                itemInSkyline = parent;
+            }
         }
         if (itemInSkyline == element) {
             shapeEl.translate(0.0, yMove);
