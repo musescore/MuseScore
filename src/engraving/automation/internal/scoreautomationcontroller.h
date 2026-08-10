@@ -115,9 +115,6 @@ private:
 
     void update(int tickFrom, staff_idx_t staffIdxFrom, staff_idx_t staffIdxTo);
 
-    static void moveTicks(utick_t tickFrom, utick_t diff, AutomationCurveMap& curves);
-    static void removeTicks(utick_t tickFrom, utick_t tickTo, AutomationCurveMap& curves);
-
     static void copyCurvesForRebuild(const AutomationCurveMap& curves, const StaffRange& range, utick_t clearFromUTick,
                                      AutomationCurveMap& destCurves);
 
