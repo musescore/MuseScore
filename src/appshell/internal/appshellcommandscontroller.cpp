@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "applicationactioncontroller.h"
+#include "appshellcommandscontroller.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -33,6 +33,7 @@
 #include "global/async/async.h"
 #include "global/types/ret.h"
 #include "global/translation.h"
+#include "global/containers.h"
 
 #include "audio/common/soundfonttypes.h"
 
@@ -41,16 +42,34 @@
 #include "../appshellcommands.h"
 
 #include "log.h"
+#include "rcommand/commandtypes.h"
 
 using namespace muse;
 using namespace mu::appshell;
 
-void ApplicationActionController::preInit()
+static const std::map<rcommand::Command, DockName> s_dockToggleCommands = {
+    { DOCK_TOGGLE_PLAYBACK_COMMAND, PLAYBACK_TOOLBAR_NAME },
+    { DOCK_TOGGLE_NOTEINPUT_COMMAND, NOTE_INPUT_BAR_NAME },
+    { DOCK_TOGGLE_PALETTES_COMMAND, PALETTES_PANEL_NAME },
+    { DOCK_TOGGLE_INSTRUMENTS_COMMAND, LAYOUT_PANEL_NAME },
+    { DOCK_TOGGLE_PROPERTIES_COMMAND, PROPERTIES_PANEL_NAME },
+    { DOCK_TOGGLE_SELECTION_FILTER_COMMAND, SELECTION_FILTERS_PANEL_NAME },
+    { DOCK_TOGGLE_UNDO_HISTORY_COMMAND, UNDO_HISTORY_PANEL_NAME },
+    { DOCK_TOGGLE_NAVIGATOR_COMMAND, NOTATION_NAVIGATOR_PANEL_NAME },
+    { DOCK_TOGGLE_BRAILLE_COMMAND, NOTATION_BRAILLE_PANEL_NAME },
+    { DOCK_TOGGLE_TIMELINE_COMMAND, TIMELINE_PANEL_NAME },
+    { DOCK_TOGGLE_MIXER_COMMAND, MIXER_PANEL_NAME },
+    { DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND, PIANO_KEYBOARD_PANEL_NAME },
+    { DOCK_TOGGLE_PERCUSSION_COMMAND, PERCUSSION_PANEL_NAME },
+    { DOCK_TOGGLE_STATUSBAR_COMMAND, NOTATION_STATUSBAR_NAME },
+};
+
+void AppshellCommandsController::preInit()
 {
     qApp->installEventFilter(this);
 }
 
-void ApplicationActionController::init()
+void AppshellCommandsController::init()
 {
     auto cd = commandDispatcher();
     cd->onRequest(this, APP_QUIT_COMMAND, [this](const rcommand::CommandQuery& query) { return quit(query); });
@@ -68,6 +87,13 @@ void ApplicationActionController::init()
     cd->onRequest(this, APP_REVERT_TO_FACTORY_COMMAND, [this]() { revertToFactorySettings(); return muse::make_ok(); });
     cd->onRequest(this, APP_EXTENSIONS_COMMAND, [this]() { openExtensions(); return muse::make_ok(); });
 
+    for (const auto& [command, dockName] : s_dockToggleCommands) {
+        cd->onRequest(this, command, [this, dockName]() {
+            m_dockToggleRequested.send(dockName);
+            return muse::make_ok();
+        });
+    }
+
     // compat
     {
         using namespace muse::rcommand;
@@ -84,13 +110,27 @@ void ApplicationActionController::init()
             { "preference-dialog", APP_PREFERENCES_COMMAND, {} },
             { "revert-factory", APP_REVERT_TO_FACTORY_COMMAND, {} },
             { "manage-plugins", APP_EXTENSIONS_COMMAND, {} },
+            { "toggle-transport", DOCK_TOGGLE_PLAYBACK_COMMAND, {} },
+            { "toggle-noteinput", DOCK_TOGGLE_NOTEINPUT_COMMAND, {} },
+            { "toggle-palettes", DOCK_TOGGLE_PALETTES_COMMAND, {} },
+            { "toggle-instruments", DOCK_TOGGLE_INSTRUMENTS_COMMAND, {} },
+            { "toggle-properties-panel", DOCK_TOGGLE_PROPERTIES_COMMAND, {} },
+            { "toggle-selection-filter", DOCK_TOGGLE_SELECTION_FILTER_COMMAND, {} },
+            { "toggle-undo-history-panel", DOCK_TOGGLE_UNDO_HISTORY_COMMAND, {} },
+            { "toggle-navigator", DOCK_TOGGLE_NAVIGATOR_COMMAND, {} },
+            { "toggle-braille-panel", DOCK_TOGGLE_BRAILLE_COMMAND, {} },
+            { "toggle-timeline", DOCK_TOGGLE_TIMELINE_COMMAND, {} },
+            { "toggle-mixer", DOCK_TOGGLE_MIXER_COMMAND, {} },
+            { "toggle-piano-keyboard", DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND, {} },
+            { "toggle-percussion-panel", DOCK_TOGGLE_PERCUSSION_COMMAND, {} },
+            { "toggle-statusbar", DOCK_TOGGLE_STATUSBAR_COMMAND, {} },
         };
 
         rcommand::registerActionToCommand(this, actionToCommands, commandDispatcher(), dispatcher());
     }
 }
 
-bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
+bool AppshellCommandsController::eventFilter(QObject* watched, QEvent* event)
 {
     if ((event->type() == QEvent::Close && watched == qWindow())
         || event->type() == QEvent::Quit) {
@@ -136,12 +176,27 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-QWindow* ApplicationActionController::qWindow() const
+muse::rcommand::Command AppshellCommandsController::dockToggleCommand(const DockName& dockName) const
+{
+    return muse::key(s_dockToggleCommands, dockName);
+}
+
+DockName AppshellCommandsController::commandDockName(const muse::rcommand::Command& command) const
+{
+    return muse::value(s_dockToggleCommands, command);
+}
+
+muse::async::Channel<DockName> AppshellCommandsController::dockToggleRequested() const
+{
+    return m_dockToggleRequested;
+}
+
+QWindow* AppshellCommandsController::qWindow() const
 {
     return mainWindow() ? mainWindow()->qWindow() : nullptr;
 }
 
-ApplicationActionController::DragTarget ApplicationActionController::dragTarget(const QUrl& url) const
+AppshellCommandsController::DragTarget AppshellCommandsController::dragTarget(const QUrl& url) const
 {
     if (projectFilesController()->isUrlSupported(url)) {
         return DragTarget::ProjectFile;
@@ -156,12 +211,12 @@ ApplicationActionController::DragTarget ApplicationActionController::dragTarget(
     return DragTarget::Unknown;
 }
 
-bool ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
+bool AppshellCommandsController::onDragEnterEvent(QDragEnterEvent* event)
 {
     return onDragMoveEvent(event);
 }
 
-bool ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
+bool AppshellCommandsController::onDragMoveEvent(QDragMoveEvent* event)
 {
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
@@ -178,7 +233,7 @@ bool ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     return false;
 }
 
-bool ApplicationActionController::onDropEvent(QDropEvent* event)
+bool AppshellCommandsController::onDropEvent(QDropEvent* event)
 {
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
@@ -225,14 +280,14 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
     return false;
 }
 
-muse::Ret ApplicationActionController::quit(const muse::rcommand::CommandQuery& query)
+muse::Ret AppshellCommandsController::quit(const muse::rcommand::CommandQuery& query)
 {
     bool isAllInstances = query.param("all_instances", Val(true)).toBool();
     muse::io::path_t installatorPath = query.param("installer_path", Val("")).toString();
     return quit(isAllInstances, installatorPath);
 }
 
-muse::Ret ApplicationActionController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
+muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
 {
     if (m_quiting) {
         return muse::make_ret(Ret::Code::Busy);
@@ -268,7 +323,7 @@ muse::Ret ApplicationActionController::quit(bool isAllInstances, const muse::io:
     return muse::make_ok();
 }
 
-void ApplicationActionController::restart()
+void AppshellCommandsController::restart()
 {
     if (projectFilesController()->closeOpenedProject(false)) {
         if (multiwindowsProvider()->windowCount() == 1) {
@@ -281,45 +336,45 @@ void ApplicationActionController::restart()
     }
 }
 
-void ApplicationActionController::toggleFullScreen()
+void AppshellCommandsController::toggleFullScreen()
 {
     mainWindow()->toggleFullScreen();
 }
 
-void ApplicationActionController::openAboutDialog()
+void AppshellCommandsController::openAboutDialog()
 {
     interactive()->open("musescore://about/musescore");
 }
 
-void ApplicationActionController::openAboutQtDialog()
+void AppshellCommandsController::openAboutQtDialog()
 {
     QApplication::aboutQt();
 }
 
-void ApplicationActionController::openAboutMusicXMLDialog()
+void AppshellCommandsController::openAboutMusicXMLDialog()
 {
     interactive()->open("musescore://about/musicxml");
 }
 
-void ApplicationActionController::openOnlineHandbookPage()
+void AppshellCommandsController::openOnlineHandbookPage()
 {
     std::string handbookUrl = configuration()->handbookUrl();
     platformInteractive()->openUrl(handbookUrl);
 }
 
-void ApplicationActionController::openAskForHelpPage()
+void AppshellCommandsController::openAskForHelpPage()
 {
     std::string askForHelpUrl = configuration()->askForHelpUrl();
     platformInteractive()->openUrl(askForHelpUrl);
 }
 
-void ApplicationActionController::openAccessibilityStatementPage()
+void AppshellCommandsController::openAccessibilityStatementPage()
 {
     std::string accessibilityStatementUrl = configuration()->accessibilityStatementUrl();
     platformInteractive()->openUrl(accessibilityStatementUrl);
 }
 
-void ApplicationActionController::openPreferencesDialog()
+void AppshellCommandsController::openPreferencesDialog()
 {
     const context::IPlaybackStatePtr state = globalContext()->playbackState();
     if (state->isPlaying()) {
@@ -338,7 +393,7 @@ void ApplicationActionController::openPreferencesDialog()
     doOpenPreferencesDialog();
 }
 
-void ApplicationActionController::doOpenPreferencesDialog()
+void AppshellCommandsController::doOpenPreferencesDialog()
 {
     if (multiwindowsProvider()->isPreferencesAlreadyOpened()) {
         multiwindowsProvider()->activateWindowWithOpenedPreferences();
@@ -348,7 +403,7 @@ void ApplicationActionController::doOpenPreferencesDialog()
     interactive()->open("muse://preferences");
 }
 
-void ApplicationActionController::revertToFactorySettings()
+void AppshellCommandsController::revertToFactorySettings()
 {
     std::string title = muse::trc("appshell", "Are you sure you want to revert to factory settings?");
     std::string question = muse::trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
@@ -392,7 +447,7 @@ void ApplicationActionController::revertToFactorySettings()
     });
 }
 
-void ApplicationActionController::openExtensions()
+void AppshellCommandsController::openExtensions()
 {
     interactive()->open("musescore://home?section=plugins");
 }

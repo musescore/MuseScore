@@ -30,13 +30,20 @@
 #include "global/modularity/ioc.h"
 #include "rcommand/icommandsregister.h"
 #include "ui/imainwindow.h"
+#include "braille/ibrailleconfiguration.h"
+#include "dockwindow/idockwindowprovider.h"
+#include "iappshellstate.h"
+#include "iappshellcommandscontroller.h"
 
 namespace mu::appshell {
 class AppshellCommandsState : public muse::rcommand::IModuleCommandsState, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<muse::rcommand::ICommandsRegister> commandsRegister;
+    muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
-
+    muse::ContextInject<IAppShellState> appShellState = { this };
+    muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::ContextInject<IAppshellCommandsController> commandsController = { this };
 public:
     AppshellCommandsState(const muse::modularity::ContextPtr& ctx)
         : muse::Contextable(ctx) {}

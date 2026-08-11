@@ -24,14 +24,15 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "rcommand/commandable.h"
 #include "rcommand/commandtypes.h"
+
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
 #include "rcommand/icommanddispatcher.h"
 #include "ui/iuiactionsregister.h"
-#include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
 #include "interactive/iinteractive.h"
@@ -46,13 +47,15 @@
 #include "context/iglobalcontext.h"
 #include "context/iuicontextresolver.h"
 
+#include "iappshellcommandscontroller.h"
+
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;
 
 namespace mu::appshell {
-class ApplicationActionController : public QObject, public muse::Contextable, public muse::actions::Actionable,
-    public muse::async::Asyncable, public muse::rcommand::Commandable
+class AppshellCommandsController : public QObject, public IAppshellCommandsController, public muse::Contextable,
+    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
@@ -72,11 +75,19 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
 
 public:
-    ApplicationActionController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    AppshellCommandsController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx)
+    {
+    }
 
     void preInit();
     void init();
+
+    // IAppshellCommandsController
+    muse::rcommand::Command dockToggleCommand(const DockName& dockName) const override;
+    DockName commandDockName(const muse::rcommand::Command& command) const override;
+    muse::async::Channel<DockName> dockToggleRequested() const override;
+    // ------------------------------
 
     muse::ValCh<bool> isFullScreen() const;
 
@@ -120,6 +131,7 @@ private:
 
     bool m_quiting = false;
 
+    muse::async::Channel<DockName> m_dockToggleRequested;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
