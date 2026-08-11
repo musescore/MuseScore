@@ -26,6 +26,8 @@
 #include "global/async/channel.h"
 #include "global/async/notification.h"
 
+#include "rcommand/commandtypes.h"
+
 #include "notation/types/noteinputtypes.h"
 #include "notation/notationtypes.h"
 #include "notation/inotationstyle.h"
@@ -86,5 +88,8 @@ public:
 
     virtual bool isAutomationModeEnabled() const = 0;
     virtual muse::async::Notification automationModeEnabledChanged() const = 0;
+
+    virtual bool isDebuggingCommandEnabled(const muse::rcommand::Command& command) const = 0;
+    virtual muse::async::Notification debuggingOptionsChanged() const = 0;
 };
 }

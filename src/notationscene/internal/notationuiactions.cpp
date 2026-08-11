@@ -3054,11 +3054,6 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
         }
     }
 
-    auto engravingDebuggingActionsSearch = NotationActionController::engravingDebuggingActions.find(act.code);
-    if (engravingDebuggingActionsSearch != NotationActionController::engravingDebuggingActions.cend()) {
-        return engravingConfiguration()->debuggingOptions().*(engravingDebuggingActionsSearch->second);
-    }
-
     return false;
 }
 

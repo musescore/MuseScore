@@ -3124,8 +3124,99 @@ static const std::vector<CommandInfo> s_commandInfos = {
     // diagnostic commands
     CommandInfo {
         DIAGNOSTIC_VIEW_REDRAW_COMMAND,
-        TranslatableString("action", "Diagnostic: View redraw"),
-        TranslatableString("action", "Redraw the view"),
+        TranslatableString("action", "View redraw"),
+        TranslatableString("action", "Diagnostic: Redraw the view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show element bounding rects"),
+        TranslatableString("action", "Diagnostic: Show element bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_ELEMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color element shapes"),
+        TranslatableString("action", "Diagnostic: Color element shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Show segment shapes"),
+        TranslatableString("action", "Diagnostic: Show segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color segment shapes"),
+        TranslatableString("action", "Diagnostic: Color segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SKYLINES_COMMAND,
+        TranslatableString("action", "Show Skylines"),
+        TranslatableString("action", "Diagnostic: Show Skylines"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SYSTEM_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show system bounding rects"),
+        TranslatableString("action", "Diagnostic: Show system bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_MASKS_COMMAND,
+        TranslatableString("action", "Show element masks"),
+        TranslatableString("action", "Diagnostic: Show element masks"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_LINE_ATTACH_POINTS_COMMAND,
+        TranslatableString("action", "Show line attach points"),
+        TranslatableString("action", "Diagnostic: Show line attach points"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_EMPTY_STAFF_COMMAND,
+        TranslatableString("action", "Mark empty staff"),
+        TranslatableString("action", "Diagnostic: Mark empty staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_CORRUPTED_MEASURES_COMMAND,
+        TranslatableString("action", "Mark corrupted measures"),
+        TranslatableString("action", "Diagnostic: Mark corrupted measures"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_GAP_RESTS_COMMAND,
+        TranslatableString("action", "Show gap rests"),
+        TranslatableString("action", "Diagnostic: Show gap rests"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ORIGIN_AND_COMBINED_COMMAND,
+        TranslatableString("action", "Show origin and combined"),
+        TranslatableString("action", "Diagnostic: Show origin and combined"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        CHECK_FOR_SCORE_CORRUPTIONS_COMMAND,
+        TranslatableString("action", "Check for score corruptions"),
+        TranslatableString("action", "Diagnostic: Check for score corruptions"),
         InputSchema(),
         Decoration()
     },
