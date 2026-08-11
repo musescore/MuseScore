@@ -22,12 +22,11 @@
 
 #include "slurtie.h"
 
-#include "draw/types/pen.h"
-
 #include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "../editing/elementeditdata.h"
 #include "../editing/mscoreview.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "note.h"
 #include "page.h"

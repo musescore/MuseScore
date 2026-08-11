@@ -41,6 +41,7 @@
 
 #include "types/typesconv.h"
 
+#include "rendering/iscorerenderer.h"
 #include "rendering/score/autoplace.h"
 #include "rendering/score/chordlayout.h"
 #include "rendering/score/tlayout.h"

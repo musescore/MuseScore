@@ -30,6 +30,7 @@
 
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "anchors.h"
 #include "barline.h"

@@ -26,7 +26,6 @@
 #include "draw/types/geometry.h"
 
 #include "modularity/ioc.h"
-#include "../rendering/iscorerenderer.h"
 #include "../rendering/paintoptions.h"
 
 #include "../infrastructure/ld_access.h"
@@ -50,6 +49,10 @@ class Painter;
     const LayoutData* ldata() const { return static_cast<const Class::LayoutData*>(EngravingItem::ldata()); } \
     LayoutData* mutldata() { return static_cast<Class::LayoutData*>(EngravingItem::mutldata()); } \
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
+
+namespace mu::engraving::rendering {
+class IScoreRenderer;
+}
 
 namespace mu::engraving {
 class IEngravingConfiguration;

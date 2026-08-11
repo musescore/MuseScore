@@ -48,6 +48,8 @@
 #include "editing/transpose.h"
 #include "editing/editstaffbrackets.h"
 
+#include "rendering/iscorerenderer.h"
+
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/dummyelement.h"

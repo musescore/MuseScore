@@ -128,6 +128,7 @@
 #include "engraving/editing/textedit.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 

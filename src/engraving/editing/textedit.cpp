@@ -35,6 +35,8 @@
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
 
+#include "../rendering/iscorerenderer.h"
+
 #include "log.h"
 
 using namespace mu::engraving;

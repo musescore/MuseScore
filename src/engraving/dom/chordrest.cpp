@@ -64,6 +64,8 @@
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
+#include "rendering/iscorerenderer.h"
+
 #include "log.h"
 
 using namespace mu;
