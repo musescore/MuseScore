@@ -86,6 +86,7 @@ public:
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
+    virtual engraving::InstrumentTrackIdSet audibleInstrumentTrackIds() const = 0;
 
     using AuxTrackIdMap = std::map<muse::audio::aux_channel_idx_t, muse::audio::TrackId>;
     virtual const AuxTrackIdMap& auxTrackIdMap() const = 0;

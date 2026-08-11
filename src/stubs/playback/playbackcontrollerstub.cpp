@@ -154,6 +154,11 @@ const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrum
     return m;
 }
 
+mu::engraving::InstrumentTrackIdSet PlaybackControllerStub::audibleInstrumentTrackIds() const
+{
+    return {};
+}
+
 const IPlaybackController::AuxTrackIdMap& PlaybackControllerStub::auxTrackIdMap() const
 {
     static const AuxTrackIdMap m;

@@ -63,6 +63,7 @@ public:
     muse::Ret reloadPlaybackCache() override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
+    engraving::InstrumentTrackIdSet audibleInstrumentTrackIds() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 
     muse::async::Channel<muse::audio::TrackId> trackAdded() const override;
