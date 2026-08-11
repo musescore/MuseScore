@@ -217,7 +217,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                             if (element->isChordBracket()) {
                                 ChordBracket* bracket = toChordBracket(element);
                                 if (c->onTabStaff()) {
-                                    ArpeggioLayout::layoutArpeggio2(bracket, ctx);
+                                    TLayout::layoutItem(bracket, ctx);
                                 } else {
                                     ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
                                 }

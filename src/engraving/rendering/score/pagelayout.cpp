@@ -369,7 +369,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                 if (e->isChordBracket()) {
                                     ChordBracket* bracket = toChordBracket(e);
                                     if (c->onTabStaff()) {
-                                        ArpeggioLayout::layoutArpeggio2(bracket, ctx);
+                                        TLayout::layoutItem(bracket, ctx);
                                     } else {
                                         ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
                                     }

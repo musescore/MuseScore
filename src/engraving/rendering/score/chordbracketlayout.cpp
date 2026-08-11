@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,21 +40,11 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-namespace {
-struct BracketVisualSpan {
-    staff_idx_t topStaff = 0;
-    staff_idx_t bottomStaff = 0;
-
-    // Staff-local coordinates.
-    double topY = 0.0;
-    double bottomY = 0.0;
-};
-
 //---------------------------------------------------------
 //   chordBracketsInSegment
 //---------------------------------------------------------
 
-static std::vector<ChordBracket*> chordBracketsInSegment(const Segment* segment)
+std::vector<ChordBracket*> ChordBracketLayout::chordBracketsInSegment(const Segment* segment)
 {
     std::vector<ChordBracket*> result;
 
@@ -81,7 +71,7 @@ static std::vector<ChordBracket*> chordBracketsInSegment(const Segment* segment)
 //   bracketVisualSpan
 //---------------------------------------------------------
 
-static BracketVisualSpan bracketVisualSpan(const ChordBracket* bracket)
+ChordBracketLayout::BracketVisualSpan ChordBracketLayout::bracketVisualSpan(const ChordBracket* bracket)
 {
     const Chord* startChord = bracket->chord();
     EngravingItem* endItem = startChord->segment()->element(bracket->endTrack());
@@ -147,8 +137,8 @@ static BracketVisualSpan bracketVisualSpan(const ChordBracket* bracket)
 //   bracketCollisionShape
 //---------------------------------------------------------
 
-static Shape bracketCollisionShape(const ChordBracket* bracket, const BracketVisualSpan& span, staff_idx_t staffIdx,
-                                   double x)
+Shape ChordBracketLayout::bracketCollisionShape(const ChordBracket* bracket, const BracketVisualSpan& span, staff_idx_t staffIdx,
+                                                double x)
 {
     if (staffIdx < span.topStaff || staffIdx > span.bottomStaff) {
         return Shape();
@@ -177,7 +167,7 @@ static Shape bracketCollisionShape(const ChordBracket* bracket, const BracketVis
 //---------------------------------------------------------
 //   layoutHorizontal
 //---------------------------------------------------------
-static void layoutHorizontal(ChordBracket* bracket)
+void ChordBracketLayout::layoutHorizontal(ChordBracket* bracket)
 {
     Chord* owner = bracket->chord();
     Segment* segment = owner->segment();
@@ -214,7 +204,6 @@ static void layoutHorizontal(ChordBracket* bracket)
 
     bracket->mutldata()->setPosX(bracket->rightSide() ? requiredDistance : -requiredDistance);
 }
-} // namespace
 
 //---------------------------------------------------------
 //   layoutSegment
