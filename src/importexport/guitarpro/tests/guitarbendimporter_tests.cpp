@@ -370,4 +370,8 @@ TEST_F(GuitarBendImporter_Tests, gpDiveCrossZeroUp) {
 TEST_F(GuitarBendImporter_Tests, gpDiveArtificialHarmonic) {
     gpReadTest(u"dive_artificial_harmonic", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpPrediveWithGrace) {
+    gpReadTest(u"predive_with_grace", u"gp");
+}
 }
