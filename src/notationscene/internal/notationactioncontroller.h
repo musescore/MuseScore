@@ -118,6 +118,9 @@ public:
     bool isAutomationModeEnabled() const override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
+    bool isDebuggingCommandEnabled(const muse::rcommand::Command& command) const override;
+    muse::async::Notification debuggingOptionsChanged() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -126,9 +129,6 @@ public:
 
     IMasterNotationPtr currentMasterNotation() const;
     muse::async::Notification currentMasterNotationChanged() const;
-
-    using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
-    static const std::unordered_map<muse::actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
 
 private:
     INotationPtr currentNotation() const;

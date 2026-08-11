@@ -56,6 +56,7 @@
 #include "../notationcommands.h"
 
 #include "log.h"
+#include "rcommand/commandtypes.h"
 
 using namespace mu;
 using namespace muse;
@@ -69,20 +70,20 @@ static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static constexpr bool DONT_PLAY_CHORD = false;
 
-using EngravingDebuggingOptions = NotationActionController::EngravingDebuggingOptions;
-const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> NotationActionController::engravingDebuggingActions {
-    { "show-element-bounding-rects", &EngravingDebuggingOptions::showElementBoundingRects },
-    { "color-element-shapes", &EngravingDebuggingOptions::colorElementShapes },
-    { "show-segment-shapes", &EngravingDebuggingOptions::showSegmentShapes },
-    { "color-segment-shapes", &EngravingDebuggingOptions::colorSegmentShapes },
-    { "show-skylines", &EngravingDebuggingOptions::showSkylines },
-    { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
-    { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
-    { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
-    { "mark-empty-staff-visibility-overrides", &EngravingDebuggingOptions::markEmptyStaffVisibilityOverrides },
-    { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures },
-    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests },
-    { "show-both-origin-and-combined", &EngravingDebuggingOptions::showOriginAndCombinedStaves },
+using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
+static const std::map<muse::rcommand::Command, bool EngravingDebuggingOptions::*> s_debuggingCommands = {
+    { SHOW_ELEMENT_BOUNDING_RECTS_COMMAND, &EngravingDebuggingOptions::showElementBoundingRects },
+    { COLOR_ELEMENT_SHAPES_COMMAND, &EngravingDebuggingOptions::colorElementShapes },
+    { SHOW_SEGMENT_SHAPES_COMMAND, &EngravingDebuggingOptions::showSegmentShapes },
+    { COLOR_SEGMENT_SHAPES_COMMAND, &EngravingDebuggingOptions::colorSegmentShapes },
+    { SHOW_SKYLINES_COMMAND, &EngravingDebuggingOptions::showSkylines },
+    { SHOW_SYSTEM_BOUNDING_RECTS_COMMAND, &EngravingDebuggingOptions::showSystemBoundingRects },
+    { SHOW_ELEMENT_MASKS_COMMAND, &EngravingDebuggingOptions::showElementMasks },
+    { SHOW_LINE_ATTACH_POINTS_COMMAND, &EngravingDebuggingOptions::showLineAttachPoints },
+    { MARK_EMPTY_STAFF_COMMAND, &EngravingDebuggingOptions::markEmptyStaffVisibilityOverrides },
+    { MARK_CORRUPTED_MEASURES_COMMAND, &EngravingDebuggingOptions::markCorruptedMeasures },
+    { SHOW_GAP_RESTS_COMMAND, &EngravingDebuggingOptions::showGapRests },
+    { SHOW_ORIGIN_AND_COMBINED_COMMAND, &EngravingDebuggingOptions::showOriginAndCombinedStaves },
 };
 
 //! NOTE Just for more readable
@@ -656,6 +657,17 @@ void NotationActionController::init()
     // diagnostic commands
     registerViewCommand(DIAGNOSTIC_VIEW_REDRAW_COMMAND, &ViewController::redrawView);
 
+    registerCommand(CHECK_FOR_SCORE_CORRUPTIONS_COMMAND, &Controller::checkForScoreCorruptions);
+
+    // debugging commands
+    for (auto& [command, member] : s_debuggingCommands) {
+        registerCommand(command, [this, member = member]() {
+            EngravingDebuggingOptions options = engravingConfiguration()->debuggingOptions();
+            options.*member = !(options.*member);
+            engravingConfiguration()->setDebuggingOptions(options);
+        });
+    }
+
     // compat
     {
         using namespace muse::rcommand;
@@ -1128,20 +1140,6 @@ void NotationActionController::init()
     globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](muse::audio::PlaybackStatus) {
         m_isNoteInputAllowedChanged.send(isNoteInputAllowed());
     }, Asyncable::Mode::SetReplace);
-
-    // Register engraving debugging options actions
-    for (auto& [code, member] : engravingDebuggingActions) {
-        dispatcher()->reg(this, code, [this, member = member]() {
-            EngravingDebuggingOptions options = engravingConfiguration()->debuggingOptions();
-            bool showGapRests = options.showGapRests;
-            options.*member = !(options.*member);
-            engravingConfiguration()->setDebuggingOptions(options);
-            if (options.showGapRests != showGapRests) {
-                currentNotation()->interaction()->toggleDebugShowGapRests();
-            }
-        });
-    }
-    dispatcher()->reg(this, "check-for-score-corruptions", [this] { checkForScoreCorruptions(); });
 }
 
 void NotationActionController::setViewController(INotationViewController* controller)
@@ -3192,6 +3190,21 @@ bool NotationActionController::isAutomationModeEnabled() const
 muse::async::Notification NotationActionController::automationModeEnabledChanged() const
 {
     return m_automationModeEnabledChanged;
+}
+
+bool NotationActionController::isDebuggingCommandEnabled(const muse::rcommand::Command& command) const
+{
+    auto it = s_debuggingCommands.find(command);
+    if (it != s_debuggingCommands.cend()) {
+        return engravingConfiguration()->debuggingOptions().*(it->second);
+    }
+
+    return false;
+}
+
+muse::async::Notification NotationActionController::debuggingOptionsChanged() const
+{
+    return engravingConfiguration()->debuggingOptionsChanged();
 }
 
 bool NotationActionController::isEditingElement() const
