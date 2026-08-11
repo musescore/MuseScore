@@ -44,6 +44,10 @@ void TextStylePopupModel::doInit()
 {
     AbstractElementPopupModel::init();
 
+    IF_ASSERT_FAILED(m_item) {
+        return;
+    }
+
     m_textSettingsModel = new TextSettingsModel(this, iocContext(), m_elementRepositoryService.get());
     m_textSettingsModel->init();
 
