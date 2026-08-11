@@ -434,6 +434,15 @@ public:
     bool isTrillCueNote() const { return m_isTrillCueNote; }
     void setIsTrillCueNote(bool v);
 
+    int playbackStartOffset() const { return m_playbackStartOffset; }
+    void setPlaybackStartOffset(int offset) { m_playbackStartOffset = offset; }
+
+    int playbackDurationOffset() const { return m_playbackDurationOffset; }
+    void setPlaybackDurationOffset(int offset) { m_playbackDurationOffset = offset; }
+
+    int effectivePlaybackStartTime() const;
+    int effectivePlaybackDuration() const;
+
     SymId noteHead() const;
     bool isNoteName() const;
 
@@ -561,5 +570,8 @@ private:
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
     TieJumpPointList m_jumpPoints { this };
+
+    int m_playbackStartOffset = 0;  // offset in ticks to add to chord's tick for playback start
+    int m_playbackDurationOffset = 0; // offset in ticks to add to chord's ticks for playback duration
 };
 } // namespace mu::engraving

@@ -128,6 +128,13 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
         return;
     }
 
+    int startTicks = note->effectivePlaybackStartTime();
+    int durationTicks = note->effectivePlaybackDuration();
+
+    auto effectiveTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, startTicks, durationTicks, 0);
+    noteCtx.timestamp = effectiveTnD.timestamp;
+    noteCtx.duration = effectiveTnD.duration;
+
     const Tie* tieFor = note->tieFor();
     if (tieFor && tieFor->playSpanner()) {
         if (tieFor->isPartialTie()) {

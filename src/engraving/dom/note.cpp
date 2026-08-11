@@ -3132,6 +3132,10 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::PLAYBACK_START_OFFSET:
+        return m_playbackStartOffset;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        return m_playbackDurationOffset;
     case Pid::HAS_PARENTHESES:
         return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
     case Pid::HIDE_GENERATED_PARENTHESES:
@@ -3240,6 +3244,12 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FIXED_LINE:
         setFixedLine(v.toInt());
         break;
+    case Pid::PLAYBACK_START_OFFSET:
+        setPlaybackStartOffset(v.toInt());
+        break;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        setPlaybackDurationOffset(v.toInt());
+        break;
     case Pid::HAS_PARENTHESES:
         if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
             ASSERT_X("Notes cannot set left & right parens individually");
@@ -3306,6 +3316,10 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return 0;
     case Pid::TPC2:
         return getProperty(Pid::TPC1);
+    case Pid::PLAYBACK_START_OFFSET:
+        return 0;
+    case Pid::PLAYBACK_DURATION_OFFSET:
+        return 0;
     case Pid::PITCH:
     case Pid::TPC1:
         return PropertyValue();
@@ -4180,6 +4194,32 @@ int Note::stringOrLine() const
 {
     // The number string() returns doesn't count spaces.  This should be used where it is expected even numbers are spaces and odd are lines
     return staff()->staffType(tick())->isTabStaff() ? string() * 2 : line();
+}
+
+//--------------------------------------------------------
+//   effectivePlaybackStartTime
+//--------------------------------------------------------
+
+int Note::effectivePlaybackStartTime() const
+{
+    const Chord* ch = chord();
+    if (!ch) {
+        return 0;
+    }
+    return ch->tick().ticks() + playbackStartOffset();
+}
+
+//--------------------------------------------------------
+//   effectivePlaybackDuration
+//--------------------------------------------------------
+
+int Note::effectivePlaybackDuration() const
+{
+    const Chord* ch = chord();
+    if (!ch) {
+        return 0;
+    }
+    return ch->ticks().ticks() - playbackStartOffset() + playbackDurationOffset();
 }
 
 //---------------------------------------------------------
