@@ -113,7 +113,7 @@ private:
 
     struct PartData
     {
-        muse::mpe::DynamicLevelLayers dynamics;
+        muse::mpe::DynamicAutomationLayers dynamics;
         std::map<muse::mpe::timestamp_t, muse::mpe::SoundPresetChangeEventList> soundPresets;
         std::map<muse::mpe::timestamp_t, muse::mpe::TextArticulationEventList> textArticulations;
         std::map<muse::mpe::timestamp_t, muse::mpe::SyllableEventList> syllables;

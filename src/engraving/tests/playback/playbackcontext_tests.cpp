@@ -34,16 +34,32 @@
 #include "engraving/playback/playbackcontext.h"
 #include "engraving/playback/utils/arrangementutils.h"
 
-#include "engraving/types/typesconv.h"
-
 using namespace mu::engraving;
 using namespace muse::mpe;
 using namespace muse;
 
 static const muse::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playback/playbackcontext_data/");
 
-static constexpr int STEPS_COUNT = 24;
 static constexpr int TICKS_STEP = 480;
+
+static void expectLevelsMatch(const DynamicAutomationLayers& actualLayers, const std::map<timestamp_t, dynamic_level_t>& expectedDynamics)
+{
+    EXPECT_FALSE(actualLayers.empty());
+    for (const auto& layer : actualLayers) {
+        for (const auto& [timestamp, expectedLevel] : expectedDynamics) {
+            const dynamic_level_t actualLevel = dynamicLevelFromNormalized(evaluateCurveAt(layer.second, timestamp));
+            EXPECT_EQ(actualLevel, expectedLevel) << "at timestamp " << timestamp;
+        }
+    }
+}
+
+static void expectLevelNear(const DynamicAutomationLayers& actualLayers, timestamp_t timestamp, dynamic_level_t expectedLevel)
+{
+    for (const auto& layer : actualLayers) {
+        const dynamic_level_t actualLevel = dynamicLevelFromNormalized(evaluateCurveAt(layer.second, timestamp));
+        EXPECT_LE(std::abs(actualLevel - expectedLevel), 1) << "at timestamp " << timestamp;
+    }
+}
 
 class Engraving_PlaybackContextTests : public ::testing::Test
 {
@@ -74,69 +90,38 @@ TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
     const int lastTick = score->endTick().ticks();
     ctx.update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
-    // [GIVEN]
-    DynamicLevelMap expectedDynamics;
-
     // [GIVEN] 1st hairpin (before the repeat): p -> f
     constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
 
-    const std::map<int, double> p_to_f_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(f - p),
-                                                                       ChangeMethod::NORMAL);
-
-    for (const auto& pair : p_to_f_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        ASSERT_FALSE(expectedDynamics.contains(time));
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
+    std::map<timestamp_t, dynamic_level_t> expectedDynamics {
+        { timestampFromTicks(score, 0), p },
+        { timestampFromTicks(score, 1920), f },
+    };
 
     // [GIVEN] 2nd hairpin (inside the repeat): f -> fff
     constexpr mpe::dynamic_level_t fff = dynamicLevelFromType(mpe::DynamicType::fff);
     constexpr int f_to_fff_startTick = 1920;
-
-    const std::map<int, double> f_to_fff_curve = TConv::easingValueCurve(1440, STEPS_COUNT, static_cast<double>(fff - f),
-                                                                         ChangeMethod::NORMAL);
+    constexpr int f_to_fff_endTick = f_to_fff_startTick + 1440;
 
     for (const mu::engraving::RepeatSegment* repeatSegment : repeats) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
-
-        for (const auto& pair : f_to_fff_curve) {
-            int tick = f_to_fff_startTick + pair.first + tickPositionOffset;
-            mpe::timestamp_t time = timestampFromTicks(score, tick);
-
-            if (tick != f_to_fff_startTick) { // f already added by the previous hairpin
-                ASSERT_FALSE(expectedDynamics.contains(time));
-            }
-
-            expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-        }
+        expectedDynamics.emplace(timestampFromTicks(score, f_to_fff_startTick + tickPositionOffset), f);
+        expectedDynamics.emplace(timestampFromTicks(score, f_to_fff_endTick + tickPositionOffset), fff);
     }
 
     // [GIVEN] 3rd hairpin (right after the repeat): ppp -> p
     constexpr mpe::dynamic_level_t ppp = dynamicLevelFromType(mpe::DynamicType::ppp);
     constexpr int ppp_to_p_startTick = 3840 + 1920; // real tick + repeat tick
 
-    const std::map<int, double> ppp_to_p_curve = TConv::easingValueCurve(1440, STEPS_COUNT, static_cast<double>(p - ppp),
-                                                                         ChangeMethod::NORMAL);
-
-    for (const auto& pair : ppp_to_p_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
-        ASSERT_FALSE(expectedDynamics.contains(time));
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(ppp + pair.second)));
-    }
-
-    ASSERT_FALSE(expectedDynamics.empty());
+    expectedDynamics.emplace(timestampFromTicks(score, ppp_to_p_startTick), ppp);
+    expectedDynamics.emplace(timestampFromTicks(score, ppp_to_p_startTick + 1440), p);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+    DynamicAutomationLayers layers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
-    EXPECT_FALSE(layers.empty());
-
-    for (const auto& layer : layers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    expectLevelsMatch(layers, expectedDynamics);
 
     delete score;
 }
@@ -161,7 +146,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     const int lastTick = score->endTick().ticks();
     ctx.update(track0Range.startTrack, track0Range.endTrack, 0, lastTick);
 
-    DynamicLevelMap expectedDynamics {
+    std::map<timestamp_t, dynamic_level_t> expectedDynamics {
         // 1st measure
         { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::Natural) },
 
@@ -183,14 +168,10 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     };
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers layers = ctx.dynamicLevelLayers(track0Range.startTrack, track0Range.endTrack);
+    DynamicAutomationLayers layers = ctx.dynamicLevelLayers(track0Range.startTrack, track0Range.endTrack);
 
     // [THEN] The dynamics match the expectation
-    EXPECT_FALSE(layers.empty());
-    for (const auto& layer : layers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    expectLevelsMatch(layers, expectedDynamics);
 
     // [WHEN] Parse dynamics for the 2nd instrument (without measure repeats)
     const TrackRange track1Range = parts.at(1)->trackRange();
@@ -210,11 +191,7 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     };
 
     // [THEN] The dynamics match the expectation
-    EXPECT_FALSE(layers.empty());
-    for (const auto& layer : layers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    expectLevelsMatch(layers, expectedDynamics);
 
     delete score;
 }
@@ -240,10 +217,10 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
     ctx.update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+    DynamicAutomationLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
-    DynamicLevelLayers expectedLayers;
+    std::map<layer_idx_t, std::map<timestamp_t, dynamic_level_t> > expectedLayers;
 
     auto addDynToAllStavesAndVoices = [score, part, &expectedLayers](mpe::DynamicType dyn, int tick) {
         const TrackRange trackRange = part->trackRange();
@@ -283,7 +260,16 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
     // 5th measure
     addDynToAllStavesAndVoices(mpe::DynamicType::ff, 7680); // "Apply to all voices"
 
-    EXPECT_EQ(actualLayers, expectedLayers);
+    ASSERT_EQ(actualLayers.size(), expectedLayers.size());
+    for (const auto& [layerIdx, expectedLevels] : expectedLayers) {
+        auto actualIt = actualLayers.find(layerIdx);
+        ASSERT_TRUE(actualIt != actualLayers.end());
+
+        for (const auto& [timestamp, expectedLevel] : expectedLevels) {
+            const dynamic_level_t actualLevel = dynamicLevelFromNormalized(evaluateCurveAt(actualIt->second, timestamp));
+            EXPECT_EQ(actualLevel, expectedLevel) << "layer " << layerIdx << " at timestamp " << timestamp;
+        }
+    }
 
     delete score;
 }
@@ -310,33 +296,24 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     ctx.update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+    DynamicAutomationLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
-    DynamicLevelMap expectedDynamics;
-
-    // 1st measure: Diminuendo ff -> pp (ends at the 1920 tick)
     constexpr mpe::dynamic_level_t ff = dynamicLevelFromType(mpe::DynamicType::ff);
     constexpr mpe::dynamic_level_t pp = dynamicLevelFromType(mpe::DynamicType::pp);
 
-    // The automation curve holds { inValue=pp, outValue=ff } at tick 1920; since that's a discontinuity, the
-    // diminuendo's true target (pp) is recorded one tick early (tick 1919), so the ramp's own interval is
-    // shortened by a tick to land on it.
-    const std::map<int, double> ff_to_pp_curve = TConv::easingValueCurve(1919,
-                                                                         STEPS_COUNT, static_cast<double>(pp - ff), ChangeMethod::NORMAL);
-    for (const auto& pair : ff_to_pp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(ff + pair.second)));
-    }
+    std::map<timestamp_t, dynamic_level_t> expectedDynamics {
+        // 1st measure: Diminuendo ff -> pp
+        { timestampFromTicks(score, 0), ff },
 
-    // 2nd measure: ff (starts at the 1920 tick)
-    expectedDynamics.emplace(timestampFromTicks(score, 1920), ff);
+        // 2nd measure: ff (starts at the 1920 tick)
+        { timestampFromTicks(score, 1920), ff },
+    };
 
-    EXPECT_FALSE(actualLayers.empty());
-    for (const auto& layer : actualLayers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    expectLevelsMatch(actualLayers, expectedDynamics);
+
+    // The curve holds { inValue=pp, outValue=ff } at tick 1920, so the ramp approaches pp but never reaches it
+    expectLevelNear(actualLayers, timestampFromTicks(score, 1919), pp);
 
     delete score;
 }
@@ -362,46 +339,31 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     ctx.update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+    DynamicAutomationLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
-    DynamicLevelMap expectedDynamics;
-
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
     constexpr mpe::dynamic_level_t n = dynamicLevelFromType(mpe::DynamicType::ppppppppp);
 
-    const std::map<int, double> f_to_n_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(n - f), ChangeMethod::NORMAL);
-    const std::map<int, double> n_to_f_curve = TConv::easingValueCurve(1920, STEPS_COUNT, static_cast<double>(f - n), ChangeMethod::NORMAL);
+    std::map<timestamp_t, dynamic_level_t> expectedDynamics {
+        // 1st measure: Dim. al niente with 'n' dynamic
+        { timestampFromTicks(score, 0), f },
+        { timestampFromTicks(score, 1920), n },
 
-    // 1st measure: Dim. al niente with 'n' dynamic
-    for (const auto& pair : f_to_n_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
+        // 3rd measure: same, now with niente circle
+        { timestampFromTicks(score, 3840), f },
+        { timestampFromTicks(score, 3840 + 1920), n },
 
-    // 3rd measure: same, now with niente circle
-    for (const auto& pair : f_to_n_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, 3840 + pair.first);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
+        // 5th measure: Cresc. dal niente with 'n' dynamic
+        { timestampFromTicks(score, 7680), n },
+        { timestampFromTicks(score, 7680 + 1920), f },
 
-    // 5th measure: Cresc. dal niente with 'n' dynamic
-    for (const auto& pair : n_to_f_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, 7680 + pair.first);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(n + pair.second)));
-    }
+        // 7th measure: same, now with niente circle
+        { timestampFromTicks(score, 11520), n },
+        { timestampFromTicks(score, 11520 + 1920), f },
+    };
 
-    // 7th measure: same, now with niente circle
-    for (const auto& pair : n_to_f_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, 11520 + pair.first);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(n + pair.second)));
-    }
-
-    EXPECT_FALSE(actualLayers.empty());
-    for (const auto& layer : actualLayers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    expectLevelsMatch(actualLayers, expectedDynamics);
 
     delete score;
 }
@@ -427,11 +389,9 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     ctx.update(trackRange.startTrack, trackRange.endTrack, 0, lastTick);
 
     // [WHEN] Get the actual dynamics
-    DynamicLevelLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
+    DynamicAutomationLayers actualLayers = ctx.dynamicLevelLayers(trackRange.startTrack, trackRange.endTrack);
 
     // [THEN] The dynamics match the expectation
-    DynamicLevelMap expectedDynamics;
-
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
     constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
     constexpr mpe::dynamic_level_t pp = dynamicLevelFromType(mpe::DynamicType::pp);
@@ -439,83 +399,34 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     constexpr int measureTicks = 1920;
     constexpr int compoundDynamicTicks = 384;
 
-    // 1st and 2nd measures: fp -> f
-    const std::map<int, double> fp_curve = TConv::easingValueCurve(compoundDynamicTicks, STEPS_COUNT, static_cast<double>(p - f),
-                                                                   ChangeMethod::NORMAL);
-    const std::map<int, double> p_to_f_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, STEPS_COUNT,
-                                                                       static_cast<double>(f - p), ChangeMethod::NORMAL);
+    std::map<timestamp_t, dynamic_level_t> expectedDynamics {
+        // 1st and 2nd measures: fp -> f
+        { timestampFromTicks(score, 0 * measureTicks), f },
+        { timestampFromTicks(score, 0 * measureTicks + compoundDynamicTicks), p },
+        { timestampFromTicks(score, 1 * measureTicks), f },
+        { timestampFromTicks(score, 1 * measureTicks + compoundDynamicTicks), p },
+        { timestampFromTicks(score, 2 * measureTicks), f },
 
-    for (const auto& pair : fp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 0 * measureTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
+        // 4th and 5th measures: fp -> pp, then jump back to f. The hairpin's end tick is claimed by the next
+        // dynamic marking (fp/f), which contradicts the pp hairpin's direction; that marking's own value wins
+        // there, so the ramp never actually reaches pp (see the expectLevelNear checks below).
+        { timestampFromTicks(score, 3 * measureTicks), f },
+        { timestampFromTicks(score, 3 * measureTicks + compoundDynamicTicks), p },
+        { timestampFromTicks(score, 4 * measureTicks), f },
+        { timestampFromTicks(score, 4 * measureTicks + compoundDynamicTicks), p },
+        { timestampFromTicks(score, 5 * measureTicks), f },
 
-    for (const auto& pair : p_to_f_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 0 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
+        // 7th measure: fp -> pp, now don't jump back to f
+        { timestampFromTicks(score, 6 * measureTicks), f },
+        { timestampFromTicks(score, 6 * measureTicks + compoundDynamicTicks), p },
+        { timestampFromTicks(score, 7 * measureTicks), pp },
+    };
 
-    for (const auto& pair : fp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 1 * measureTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
+    expectLevelsMatch(actualLayers, expectedDynamics);
 
-    for (const auto& pair : p_to_f_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 1 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
-
-    const std::map<int, double> p_to_pp_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, STEPS_COUNT,
-                                                                        static_cast<double>(pp - p), ChangeMethod::NORMAL);
-
-    // The hairpin's end tick is claimed by the next dynamic marking (fp/f), which contradicts the pp hairpin's
-    // direction; that marking's own value wins there, so the ramp's true target (pp) is instead recorded one
-    // tick early, shortening the ramp's own interval by a tick to land on it.
-    const std::map<int, double> p_to_pp_curve_short = TConv::easingValueCurve(measureTicks - compoundDynamicTicks - 1, STEPS_COUNT,
-                                                                              static_cast<double>(pp - p), ChangeMethod::NORMAL);
-
-    // 4th and 5th measures: fp -> pp, then jump back to f
-    for (const auto& pair : fp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 3 * measureTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
-
-    for (const auto& pair : p_to_pp_curve_short) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 3 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
-
-    for (const auto& pair : fp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 4 * measureTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
-
-    for (const auto& pair : p_to_pp_curve_short) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 4 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
-
-    {
-        mpe::timestamp_t time = timestampFromTicks(score, 5 * measureTicks);
-        expectedDynamics.emplace(time, f);
-    }
-
-    // 7th measure: fp -> pp, now don't jump back to f
-    for (const auto& pair : fp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 6 * measureTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(f + pair.second)));
-    }
-
-    for (const auto& pair : p_to_pp_curve) {
-        mpe::timestamp_t time = timestampFromTicks(score, pair.first + 6 * measureTicks + compoundDynamicTicks);
-        expectedDynamics.emplace(time, static_cast<dynamic_level_t>(std::lround(p + pair.second)));
-    }
-
-    EXPECT_FALSE(actualLayers.empty());
-    for (const auto& layer : actualLayers) {
-        const DynamicLevelMap& actualDynamics = layer.second;
-        EXPECT_EQ(actualDynamics, expectedDynamics);
-    }
+    // The ramps into the 4th and 5th measures get arbitrarily close to pp without ever reaching it exactly
+    expectLevelNear(actualLayers, timestampFromTicks(score, 4 * measureTicks - 1), pp);
+    expectLevelNear(actualLayers, timestampFromTicks(score, 5 * measureTicks - 1), pp);
 
     delete score;
 }

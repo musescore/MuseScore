@@ -513,7 +513,7 @@ void ScoreAutomationController::addDynamicPoints(const Dynamic* dynamic, int tic
     if (auto ordinaryIt = ORDINARY_DYNAMIC_VALUES.find(dynamicType); ordinaryIt != ORDINARY_DYNAMIC_VALUES.end()) {
         info.kind = DynamicInfo::Ordinary { ordinaryIt->second };
     } else if (auto singleNoteIt = SINGLE_NOTE_DYNAMIC_VALUES.find(dynamicType); singleNoteIt != SINGLE_NOTE_DYNAMIC_VALUES.end()) {
-        DynamicInfo::SingleNote singleNote { singleNoteIt->second };
+        DynamicInfo::SingleNote singleNote { singleNoteIt->second, std::nullopt };
         if (const Segment* nextSeg = dynamic->segment()->next()) {
             singleNote.nextTick = nextSeg->tick().ticks() + tickOffset;
         }
@@ -572,8 +572,8 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
         if (singleNote->nextTick) {
             // Recovers to whatever was active before this dynamic
             AutomationPoint nextPoint = prevPoint ? *prevPoint : AutomationPoint{};
-            const AutomationPoint::Bend preservedBend = bend(nextPoint).value_or(AutomationPoint::Bend::none());
-            nextPoint.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, preservedBend };
+            const AutomationPoint::Ease preservedEase = ease(nextPoint).value_or(AutomationPoint::Ease::none());
+            nextPoint.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, preservedEase };
             nextPoint.generated = true;
             tryAddDynamicPoint(key, *singleNote->nextTick, nextPoint, info.priority, ctx);
         }
@@ -591,7 +591,7 @@ void ScoreAutomationController::addDynamicPoints(const DynamicInfo& info, const 
 
         AutomationPoint endPoint;
         endPoint.value.outValue = compound->endValue;
-        endPoint.value.inValue = AutomationPoint::ExplicitArrival { endPoint.value.outValue, AutomationPoint::Bend::none() };
+        endPoint.value.inValue = AutomationPoint::ExplicitArrival { endPoint.value.outValue, AutomationPoint::Ease::none() };
         endPoint.itemId = info.eid;
         endPoint.generated = true;
         tryAddDynamicPoint(key, compound->endPointTick, endPoint, info.priority, ctx);
@@ -717,8 +717,8 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
             canModify = tickIt == prioKeyIt->second.end() || info.priority >= tickIt->second;
         }
         if (canModify) {
-            const AutomationPoint::Bend preservedBend = bend(endPointIt->second).value_or(AutomationPoint::Bend::none());
-            endPointIt->second.value.inValue = AutomationPoint::ExplicitArrival { valueTo, preservedBend };
+            const AutomationPoint::Ease preservedEase = ease(endPointIt->second).value_or(AutomationPoint::Ease::none());
+            endPointIt->second.value.inValue = AutomationPoint::ExplicitArrival { valueTo, preservedEase };
         }
         return;
     }
@@ -726,7 +726,7 @@ void ScoreAutomationController::addHairpinPoints(const HairpinInfo& info, const 
     if (info.from < info.to) {
         AutomationPoint point;
         point.value.outValue = valueTo;
-        point.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, AutomationPoint::Bend::none() };
+        point.value.inValue = AutomationPoint::ExplicitArrival { point.value.outValue, AutomationPoint::Ease::none() };
         point.itemId = info.eid;
         point.generated = true;
         tryAddDynamicPoint(key, info.to, point, info.priority, ctx);

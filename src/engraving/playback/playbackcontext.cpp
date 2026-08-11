@@ -238,7 +238,7 @@ SyllableEvent PlaybackContext::syllable(const track_idx_t trackIdx, const int no
     return result;
 }
 
-DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const track_idx_t trackFrom, const track_idx_t trackTo) const
+DynamicAutomationLayers PlaybackContext::dynamicLevelLayers(const track_idx_t trackFrom, const track_idx_t trackTo) const
 {
     TRACEFUNC;
 
@@ -246,9 +246,9 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const track_idx_t trackFr
         return {};
     }
 
-    DynamicLevelLayers result;
+    DynamicAutomationLayers result;
     const AutomationCurve* lastCurve = nullptr;
-    DynamicLevelMap lastLevelMap;
+    DynamicAutomationMap lastLevelMap;
 
     for (track_idx_t trackIdx = trackFrom; trackIdx < trackTo; ++trackIdx) {
         const AutomationCurve* curve = dynamicsCurve(trackIdx);
@@ -257,91 +257,25 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const track_idx_t trackFr
         }
 
         if (curve != lastCurve) {
-            lastLevelMap = buildDynamicLevelMap(*curve);
+            lastLevelMap.clear();
             lastCurve = curve;
+            auto hint = lastLevelMap.end();
+
+            if (curve->cbegin()->first > 0) {
+                AutomationPoint naturalPoint;
+                naturalPoint.value.outValue = real_t(NATURAL_DYNAMIC_LEVEL) / real_t(MAX_DYNAMIC_LEVEL);
+                hint = lastLevelMap.insert(hint, { timestampFromTicks(m_score, 0), naturalPoint.value });
+            }
+
+            for (const auto& [tick, point] : *curve) {
+                hint = lastLevelMap.insert(hint, { timestampFromTicks(m_score, tick), point.value });
+            }
         }
 
         result[static_cast<layer_idx_t>(trackIdx)] = lastLevelMap;
     }
 
     return result;
-}
-
-DynamicLevelMap PlaybackContext::buildDynamicLevelMap(const AutomationCurve& curve) const
-{
-    TRACEFUNC;
-
-    std::vector<std::pair<timestamp_t, dynamic_level_t> > levels;
-
-    // Ramp ticks are generated in ascending order, but truncation in the tick calculation below
-    // can repeat a timestamp; overwrite the last entry in that case instead of duplicating it
-    auto appendLevel = [&levels](timestamp_t timestamp, dynamic_level_t level) {
-        if (!levels.empty() && levels.back().first == timestamp) {
-            levels.back().second = level;
-        } else {
-            levels.emplace_back(timestamp, level);
-        }
-    };
-
-    if (curve.cbegin()->first > 0) {
-        appendLevel(timestampFromTicks(m_score, 0), NATURAL_DYNAMIC_LEVEL);
-    }
-
-    for (auto it = curve.cbegin(); it != curve.cend(); ++it) {
-        appendLevel(timestampFromTicks(m_score, it->first), toDynamicLevel(it->second.value.outValue));
-
-        const auto nextIt = std::next(it);
-        if (nextIt == curve.cend()) {
-            continue;
-        }
-
-        const dynamic_level_t baseLvl = toDynamicLevel(it->second.value.outValue);
-        const dynamic_level_t nextLvl = toDynamicLevel(resolveInValue(curve, nextIt));
-        const int range = nextLvl - baseLvl;
-        const std::optional<AutomationPoint::Bend> nextBend = bend(nextIt->second);
-        const bool isLinear = !nextBend || nextBend->isNone();
-        if (range == 0 && isLinear) {
-            continue;
-        }
-
-        // nextIt's own curve entry stores outValue, not inValue - if it's a discontinuity, end the ramp
-        // one tick early so it still approaches the true target (inValue)
-        const bool nextIsDiscontinuity = !muse::RealIsEqual(resolveInValue(curve, nextIt), nextIt->second.value.outValue);
-        const utick_t targetTick = nextIsDiscontinuity ? nextIt->first - 1 : nextIt->first;
-        const int intervalDuration = targetTick - it->first;
-        const int steps = std::max(intervalDuration / (Constants::DIVISION / 4), 24);
-
-        for (int j = 1; j < steps; ++j) {
-            const utick_t tick = it->first + static_cast<utick_t>(static_cast<double>(j) * intervalDuration / steps);
-            if (tick == it->first) {
-                // Truncation on very short ramps (intervalDuration < steps) can land back on the
-                // segment's own start tick; skip rather than overwrite its exact baseLvl with an approximation
-                continue;
-            }
-
-            const double t = static_cast<double>(j) / static_cast<double>(steps);
-
-            dynamic_level_t level = 0;
-            if (isLinear) {
-                level = static_cast<dynamic_level_t>(std::lround(baseLvl + t * range));
-            } else {
-                level = toDynamicLevel(muse::mpe::evaluateAt(nextIt->second.value, it->second.value.outValue, t));
-            }
-            appendLevel(timestampFromTicks(m_score, tick), level);
-        }
-
-        if (nextIsDiscontinuity && targetTick != it->first) {
-            appendLevel(timestampFromTicks(m_score, targetTick), nextLvl);
-        }
-    }
-
-    DynamicLevelMap levelMap;
-    auto hint = levelMap.end();
-    for (const auto& [timestamp, level] : levels) {
-        hint = levelMap.insert(hint, { timestamp, level });
-    }
-
-    return levelMap;
 }
 
 void PlaybackContext::update(const track_idx_t trackFrom, const track_idx_t trackTo, const int tickFrom, const int tickTo,
@@ -729,7 +663,7 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
     }
 }
 
-const AutomationCurve* PlaybackContext::dynamicsCurve(const track_idx_t trackIdx) const
+const mu::engraving::AutomationCurve* PlaybackContext::dynamicsCurve(const track_idx_t trackIdx) const
 {
     auto cacheIt = m_dynamicsCurveByTrack.find(trackIdx);
     if (cacheIt != m_dynamicsCurveByTrack.end()) {
