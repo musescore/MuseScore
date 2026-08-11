@@ -988,10 +988,16 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         if (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND || type == GuitarBendType::PRE_DIVE) {
             const GraceNotesGroup& gracesBefore = chord->graceNotesBefore();
 
-            // Create grace note
-            Note* graceNote = gracesBefore.empty()
-                              ? setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2)
-                              : addNote(gracesBefore.back(), note->noteVal());
+            // Add to existing grace chord only if it already has a bend/dive ghost.
+            const bool hasGhostGrace = !gracesBefore.empty()
+                                       && std::any_of(gracesBefore.back()->notes().begin(),
+                                                      gracesBefore.back()->notes().end(),
+                                                      [](const Note* n) {
+                return n->isPreBendOrDiveStart() || n->isGraceBendStart();
+            });
+            Note* graceNote = hasGhostGrace
+                              ? addNote(gracesBefore.back(), note->noteVal())
+                              : setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
             graceNote->transposeDiatonic(type == GuitarBendType::PRE_DIVE ? 1 : -1, true, false);
             GuitarBend::fixNotesFrettingForGraceBend(graceNote, note);
 
