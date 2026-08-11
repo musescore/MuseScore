@@ -9704,12 +9704,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation>スコアにオーディオをインポート(&amp;U)…</translation>
+        <translation>オーディオをスコアにインポート(&amp;U)…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation>スコアにオーディオをインポート</translation>
+        <translation>オーディオをスコアにインポート</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -11412,7 +11412,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="210"/>
         <source>Toggle partial tie</source>
-        <translation>部分的なタイを切り替え</translation>
+        <translation>部分タイを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="3879"/>
@@ -11433,27 +11433,27 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/editing/edit.cpp" line="7975"/>
         <location filename="../../src/engraving/editing/edit.cpp" line="8155"/>
         <source>Remove stale partial tie</source>
-        <translation>無効なタイを削除</translation>
+        <translation>古い部分タイを削除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8041"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation>無効な入力側スラーを削除</translation>
+        <translation>無効な前方からの部分スラーを削除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8049"/>
         <source>Reset incoming partial slur</source>
-        <translation>入力側スラーをリセット</translation>
+        <translation>前方からの部分スラーをリセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation>無効な出力側スラーを削除</translation>
+        <translation>後方への無効な部分スラーを削除</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8072"/>
         <source>Reset outgoing partial slur</source>
-        <translation>出力側スラーをリセット</translation>
+        <translation>後方への部分スラーをリセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -11678,12 +11678,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>partial tie segment(s)</source>
-        <translation><numerusform>部分的なタイセグメント</numerusform></translation>
+        <translation><numerusform>部分タイセグメント</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Partial tie segment(s)</source>
-        <translation><numerusform>部分的なタイセグメント</numerusform></translation>
+        <translation><numerusform>部分タイセグメント</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -11918,12 +11918,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>partial tie(s)</source>
-        <translation><numerusform>部分的なタイ</numerusform></translation>
+        <translation><numerusform>部分タイ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Partial tie(s)</source>
-        <translation><numerusform>部分的なタイ</numerusform></translation>
+        <translation><numerusform>部分タイ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
@@ -13867,7 +13867,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/partialtiepopupmodel.cpp" line="222"/>
         <source>Remove partial tie</source>
-        <translation>部分的なタイを削除</translation>
+        <translation>部分タイを削除</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="778"/>
@@ -24194,17 +24194,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="52"/>
         <source>Gap to staff/frames</source>
-        <translation>譜表/フレームとの間隔</translation>
+        <translation>譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
         <source>Gap to staff/frames above</source>
-        <translation>上の譜表／フレームまでの間隔</translation>
+        <translation>上の譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
         <source>Gap to staff/frames below</source>
-        <translation>下の譜表／フレームまでの間隔</translation>
+        <translation>下の譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
@@ -24458,7 +24458,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
         <source>Hooks</source>
-        <translation>かぎ</translation>
+        <translation>フック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="69"/>
@@ -25921,7 +25921,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="60"/>
         <source>Tie (partial)</source>
-        <translation>タイ (部分的)</translation>
+        <translation>タイ (部分)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="65"/>
@@ -26968,7 +26968,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
         <source>Notation/tab in open position</source>
-        <translation>開放位置の記譜／タブ</translation>
+        <translation>開放位置の記譜/タブ</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
@@ -28101,7 +28101,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="138"/>
         <source>Cannot paste between different local time signatures</source>
-        <translation>異なる局所的な拍子記号の間では貼り付けできません</translation>
+        <translation>異なるローカル拍子記号の間では貼り付けできません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
@@ -28187,12 +28187,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
         <source>Can’t explode or implode</source>
-        <translation>パートに分解／1つのパートに集結ができません</translation>
+        <translation>和音の分散または集約ができません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="184"/>
         <source>Cannot explode or implode between different local time signatures</source>
-        <translation>異なる局所的な拍子記号の間ではパートに分解／1つのパートに集結ができません</translation>
+        <translation>異なるローカル拍子記号の間では和音の分散または集約ができません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="123"/>
@@ -29676,7 +29676,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="143"/>
         <source>Partial slurs across repeats and breaks:</source>
-        <translation>繰り返しや区切りをまたぐ部分的なスラー:</translation>
+        <translation>繰り返しや区切りをまたぐ部分スラー:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="153"/>
@@ -33348,7 +33348,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="627"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation>作業中、オーディオはバックグラウンドで処理されます。自分で処理を開始するには、環境設定 → オーディオと MIDI → オンラインサウンド で自動処理をオフにしてください。</translation>
+        <translation>作業中、オーディオはバックグラウンドで処理されます。手動で処理を開始するには、環境設定 &gt; オーディオと MIDI &gt; オンラインサウンド で自動処理をオフにしてください。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="641"/>
@@ -35548,17 +35548,17 @@ failed: %2</source>
         <translation>マスクの互換性 (Adobe Illustrator のみ)</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="142"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="131"/>
         <source>16-bit integer</source>
         <translation>16ビット整数</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="144"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="133"/>
         <source>24-bit integer</source>
         <translation>24ビット整数</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="146"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="135"/>
         <source>32-bit float</source>
         <translation>32ビット浮動小数点数</translation>
     </message>
@@ -35785,50 +35785,50 @@ failed: %2</source>
         <translation>LRC ファイル</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="363"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="370"/>
         <source>Each page to a separate file</source>
         <translation>各ページを別ファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="364"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="371"/>
         <source>Each part to a separate file</source>
         <translation>各パートを別ファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="365"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="372"/>
         <source>All parts combined in one file</source>
         <translation>すべてのパートを1つのファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="628"/>
         <source>Use page layout</source>
         <translation>ページレイアウトを使用</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="629"/>
         <source>Reflow to fit video resolution</source>
         <translation>動画の解像度に合わせて再配置</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="857"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>すべてのレイアウト</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="852"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="859"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>段区切りとページ区切り</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="854"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="861"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>手動で追加した段区切りとページ区切りのみ</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="856"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="863"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>段区切りとページ区切りを含めない</translation>
