@@ -33,11 +33,10 @@
 #include "rcommand/icommandsstate.h"
 
 #include "internal/applicationuiactions.h"
-#include "internal/applicationactioncontroller.h"
+#include "internal/appshellcommandscontroller.h"
 #include "internal/appshellconfiguration.h"
 #include "internal/appshellstate.h"
 #include "internal/startupscenario.h"
-#include "internal/applicationactioncontroller.h"
 #include "internal/sessionsmanager.h"
 #include "internal/appshellcommandsregister.h"
 #include "internal/appshellcommandsstate.h"
@@ -111,13 +110,14 @@ muse::modularity::IContextSetup* AppShellModule::newContext(const muse::modulari
 void AppShellContext::registerExports()
 {
     m_appshellState = std::make_shared<AppShellState>(iocContext());
-    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
+    m_commandsController = std::make_shared<AppshellCommandsController>(iocContext());
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_commandsController, iocContext());
     m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
 
     ioc()->registerExport<IAppShellState>(mname, m_appshellState);
     ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
     ioc()->registerExport<ISessionsManager>(mname, m_sessionsManager);
+    ioc()->registerExport<IAppshellCommandsController>(mname, m_commandsController);
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IAppMenuModelHook>(mname, std::make_shared<MacOSAppMenuModelHook>());
@@ -141,7 +141,7 @@ void AppShellContext::resolveImports()
 
 void AppShellContext::onPreInit(const muse::IApplication::RunMode&)
 {
-    m_applicationActionController->preInit();
+    m_commandsController->preInit();
 }
 
 void AppShellContext::onInit(const muse::IApplication::RunMode& mode)
@@ -150,7 +150,7 @@ void AppShellContext::onInit(const muse::IApplication::RunMode& mode)
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_applicationUiActions->init();
-        m_applicationActionController->init();
+        m_commandsController->init();
     }
 }
 

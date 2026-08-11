@@ -22,10 +22,14 @@
 
 #include "appshellcommandsstate.h"
 
+#include "dockwindow/idockwindow.h"
+
 #include "../appshellcommands.h"
+#include <vector>
 
 using namespace muse;
 using namespace muse::rcommand;
+using namespace muse::dock;
 using namespace mu::appshell;
 
 std::string AppshellCommandsState::moduleName() const
@@ -42,6 +46,31 @@ void AppshellCommandsState::init()
 
     mainWindow()->isFullScreenChanged().onNotify(this, [this]() {
         updateCommandStates({ APP_FULLSCREEN_COMMAND });
+    });
+
+    appShellState()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
+        updateCommandStates({ DOCK_TOGGLE_NAVIGATOR_COMMAND });
+    });
+
+    brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ DOCK_TOGGLE_BRAILLE_COMMAND });
+    });
+
+    dockWindowProvider()->windowChanged().onNotify(this, [this]() {
+        const IDockWindow* window = dockWindowProvider()->window();
+        if (!window) {
+            return;
+        }
+
+        window->docksOpenStatusChanged().onReceive(this, [this](const QStringList& dockNames) {
+            std::vector<Command> commands;
+            commands.reserve(dockNames.size());
+            for (const QString& dockName : dockNames) {
+                commands.push_back(commandsController()->dockToggleCommand(dockName));
+            }
+
+            updateCommandStates({ commands });
+        });
     });
 
     updateCommandStates();
@@ -73,6 +102,21 @@ CommandState AppshellCommandsState::commandState(const Command& command) const
 {
     if (command == APP_FULLSCREEN_COMMAND) {
         return CommandState(true, mainWindow()->isFullScreen());
+    }
+
+    if (command == DOCK_TOGGLE_NAVIGATOR_COMMAND) {
+        return CommandState(true, appShellState()->isNotationNavigatorVisible());
+    }
+
+    if (command == DOCK_TOGGLE_BRAILLE_COMMAND) {
+        return CommandState(true, brailleConfiguration()->braillePanelEnabled());
+    }
+
+    const DockName dockName = commandsController()->commandDockName(command);
+    if (!dockName.isEmpty()) {
+        const IDockWindow* window = dockWindowProvider()->window();
+        bool opened = window ? window->isDockOpen(dockName) : false;
+        return CommandState(true, opened);
     }
 
     return CommandState(true, false);

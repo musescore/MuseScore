@@ -23,7 +23,7 @@
 #pragma once
 
 #include "ui/iuiactionsmodule.h"
-#include "applicationactioncontroller.h"
+#include "appshellcommandscontroller.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
@@ -42,7 +42,7 @@ class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Con
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
 
 public:
-    ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const muse::modularity::ContextPtr& iocCtx);
+    ApplicationUiActions(std::shared_ptr<AppshellCommandsController> controller, const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 
@@ -61,7 +61,7 @@ private:
 
     static const muse::ui::UiActionList m_actions;
 
-    std::shared_ptr<ApplicationActionController> m_controller;
+    std::shared_ptr<AppshellCommandsController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };

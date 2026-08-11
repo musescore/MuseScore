@@ -118,6 +118,106 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
         ),
+
+    // docks commands
+    CommandInfo(
+        DOCK_TOGGLE_PLAYBACK_COMMAND,
+        TranslatableString("action", "Toggle playback"),
+        TranslatableString("action", "Dock: Toggle playback"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_NOTEINPUT_COMMAND,
+        TranslatableString("action", "Toggle note input"),
+        TranslatableString("action", "Dock: Toggle note input"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_PALETTES_COMMAND,
+        TranslatableString("action", "Toggle palettes"),
+        TranslatableString("action", "Dock: Toggle palettes"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_INSTRUMENTS_COMMAND,
+        TranslatableString("action", "Toggle instruments"),
+        TranslatableString("action", "Dock: Toggle instruments"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_PROPERTIES_COMMAND,
+        TranslatableString("action", "Toggle properties"),
+        TranslatableString("action", "Dock: Toggle properties"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_SELECTION_FILTER_COMMAND,
+        TranslatableString("action", "Toggle selection filter"),
+        TranslatableString("action", "Dock: Toggle selection filter"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_UNDO_HISTORY_COMMAND,
+        TranslatableString("action", "Toggle undo history"),
+        TranslatableString("action", "Dock: Toggle undo history"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_NAVIGATOR_COMMAND,
+        TranslatableString("action", "Toggle navigator"),
+        TranslatableString("action", "Dock: Toggle navigator"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_BRAILLE_COMMAND,
+        TranslatableString("action", "Toggle braille"),
+        TranslatableString("action", "Dock: Toggle braille"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_TIMELINE_COMMAND,
+        TranslatableString("action", "Toggle timeline"),
+        TranslatableString("action", "Dock: Toggle timeline"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_MIXER_COMMAND,
+        TranslatableString("action", "Toggle mixer"),
+        TranslatableString("action", "Dock: Toggle mixer"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND,
+        TranslatableString("action", "Toggle piano keyboard"),
+        TranslatableString("action", "Dock: Toggle piano keyboard"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_PERCUSSION_COMMAND,
+        TranslatableString("action", "Toggle percussion"),
+        TranslatableString("action", "Dock: Toggle percussion"),
+        InputSchema(),
+        Decoration()
+        ),
+    CommandInfo(
+        DOCK_TOGGLE_STATUSBAR_COMMAND,
+        TranslatableString("action", "Toggle statusbar"),
+        TranslatableString("action", "Dock: Toggle statusbar"),
+        InputSchema(),
+        Decoration()
+        ),
 };
 
 std::string AppshellCommandsRegister::moduleName() const

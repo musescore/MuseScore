@@ -27,14 +27,15 @@ target_sources(appshell PRIVATE
     appshelltypes.h
     appshellcommands.h
 
-    internal/appshellstate.cpp
-    internal/appshellstate.h
-    internal/applicationactioncontroller.cpp
-    internal/applicationactioncontroller.h
+    internal/iappshellcommandscontroller.h
+    internal/appshellcommandscontroller.cpp
+    internal/appshellcommandscontroller.h
     internal/appshellcommandsregister.cpp
     internal/appshellcommandsregister.h
     internal/appshellcommandsstate.cpp
     internal/appshellcommandsstate.h
+    internal/appshellstate.cpp
+    internal/appshellstate.h
     internal/applicationuiactions.cpp
     internal/applicationuiactions.h
     internal/appshellconfiguration.cpp
