@@ -172,7 +172,6 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::TIME_STRETCH:
         setTimeStretch(v.toDouble());
-        score()->setUpTempoMapLater();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -293,21 +292,4 @@ Sid Fermata::defaultPosSid() const
     return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
 }
 
-void Fermata::added()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-void Fermata::removed()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
 }

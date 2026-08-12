@@ -53,6 +53,7 @@
 #include "staff.h"
 #include "tempo.h"
 #include "timesig.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 

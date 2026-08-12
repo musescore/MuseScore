@@ -3573,7 +3573,7 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setFileDivision(Constants::DIVISION);
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     if (score->isMaster()) {
         // While reading the score, some elements might use `score->repeatList()` (which is incorrect
         // anyway, because the repeatList will be incomplete because the score is incomplete, but some

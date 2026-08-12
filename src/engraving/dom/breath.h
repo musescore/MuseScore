@@ -76,10 +76,6 @@ public:
 
     static const std::vector<BreathType> BREATH_LIST;
 
-protected:
-    void added() override;
-    void removed() override;
-
 private:
 
     friend class Factory;

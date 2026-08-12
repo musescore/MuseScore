@@ -100,13 +100,9 @@ public:
     static constexpr double DEFAULT_SYM_SIZE_RATIO = 5.0 / 3.0;
 
 protected:
-    void added() override;
-    void removed() override;
     void commitText() override;
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-
-    void updateScore();
 
     TempoTextType m_tempoTextType;
     BeatsPerSecond m_tempo;             // beats per second

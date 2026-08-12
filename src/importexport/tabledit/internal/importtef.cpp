@@ -713,7 +713,7 @@ void TablEdit::createMeasures(const MeasureHandler& measureHandler)
 
         tick += actualLength;
     }
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
 }
 
 void TablEdit::createNotesFrame()

@@ -351,28 +351,9 @@ TranslatableString GradualTempoChange::subtypeUserName() const
     return TConv::userName(m_tempoChangeType);
 }
 
-void GradualTempoChange::added()
-{
-    requestToRebuildTempo();
-}
-
-void GradualTempoChange::removed()
-{
-    requestToRebuildTempo();
-}
-
 Sid GradualTempoChange::defaultPosSid() const
 {
     return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
-}
-
-void GradualTempoChange::requestToRebuildTempo()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
 }
 
 GradualTempoChangeSegment::GradualTempoChangeSegment(GradualTempoChange* annotation, System* parent)
@@ -470,28 +451,5 @@ TempoText* GradualTempoChangeSegment::findElementToSnapAfter() const
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
     TextLineBaseSegment::endEdit(editData);
-    tempoChange()->requestToRebuildTempo();
-}
-
-void GradualTempoChangeSegment::added()
-{
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
-    tempoChange()->requestToRebuildTempo();
-}
-
-void GradualTempoChangeSegment::removed()
-{
-    IF_ASSERT_FAILED(tempoChange()) {
-        return;
-    }
-
-    tempoChange()->requestToRebuildTempo();
 }
