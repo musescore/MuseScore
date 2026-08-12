@@ -964,6 +964,20 @@ void Braille::resetOctaves()
 static QString brailleSpecialNoteheadPrefix(Note* note);
 static QString brailleNoteSizePrefix(Note* note);
 
+// 8.4, page 71, and 8.5, page 72. Music Braille Code 2015. The rendered tuplet-number sign:
+// the single-cell triplet sign, or the three-/four-cell sign (dots 456, numeral, dot 3) used
+// for other irregular groups.
+static QString brailleTupletSignCode(const Tuplet* tuplet)
+{
+    if (!tuplet) {
+        return QString();
+    }
+    if (tuplet->ratio().numerator() == 3) {
+        return QString("2");
+    }
+    return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");
+}
+
 // 1.12. Doubling of Signs. Page 45. Music Braille Code 2015.
 // When the same sign appears on more than three consecutive notes
 // (ignoring any rests between them), it is doubled before the first note of the group and
@@ -1122,6 +1136,50 @@ void Braille::computeSignDoubling()
         for (const auto& pair : openSignRuns) {
             finalizeRun(pair.first, pair.second);
         }
+
+        // 8.4/8.5. Doubling of the tuplet-number sign. Unlike the signs above, this sign is
+        // written once per tuplet (on its first element), not once per note, so a "run" here
+        // is a sequence of immediately consecutive tuplets sharing the same sign, rather than a
+        // sequence of consecutive notes. Any intervening non-tuplet note or rest breaks the run.
+        Tuplet* prevTuplet = nullptr;
+        QString openTupletRunKey;
+        std::vector<const EngravingItem*> openTupletRun;
+
+        auto closeTupletRun = [&]() {
+            finalizeRun(openTupletRunKey, openTupletRun);
+            openTupletRun.clear();
+        };
+
+        for (Segment* seg = m_score->firstSegment(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
+            EngravingItem* el = seg->element(track);
+            if (!el || (!el->isChord() && !el->isRest())) {
+                continue;
+            }
+
+            Tuplet* tuplet = toChordRest(el)->tuplet();
+            if (tuplet == prevTuplet) {
+                // Still inside the same tuplet (or the same non-tuplet stretch): no boundary.
+                continue;
+            }
+
+            if (!tuplet) {
+                closeTupletRun();
+                prevTuplet = nullptr;
+                continue;
+            }
+
+            // el is the first element of a newly entered tuplet.
+            const QString key = QStringLiteral("tuplet:") + brailleTupletSignCode(tuplet);
+            if (!openTupletRun.empty() && key == openTupletRunKey) {
+                openTupletRun.push_back(el);
+            } else {
+                closeTupletRun();
+                openTupletRunKey = key;
+                openTupletRun.push_back(el);
+            }
+            prevTuplet = tuplet;
+        }
+        closeTupletRun();
     }
 }
 
@@ -3230,12 +3288,35 @@ QString Braille::brailleTuplet(Tuplet* tuplet, DurationElement* el)
         return QString();
     }
 
-    if (tuplet->ratio().numerator() == 3) {
-        // Special handling for triplets.
-        return QString("2"); // '⠆' (dots 2-3)
+    if (!m_context.signDoublingComputed) {
+        computeSignDoubling();
     }
 
-    return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");
+    const bool isTriplet = tuplet->ratio().numerator() == 3;
+    const QString numeral = QString::number(tuplet->ratio().numerator());
+    const QString signKey = QStringLiteral("tuplet:") + brailleTupletSignCode(tuplet);
+
+    switch (signDoublingState(el, signKey)) {
+    case SignDoubling::Double:
+        if (isTriplet) {
+            // 8.4, page 71: the single-cell triplet sign is doubled for four or more
+            // successive triplets of the same value, by brailling the sign twice.
+            return QString("22"); // '⠆⠆' (dots 2-3, dots 2-3)
+        }
+        // 8.5, page 72: the three-/four-cell sign is doubled for four or more successive
+        // like groups, by brailling the dots 456 and numeral twice, followed by one dot 3.
+        return QString("_") + numeral + QString("_") + numeral + QString("'");
+    case SignDoubling::Omit:
+        // Middle of a doubled group: the sign is not written.
+        return QString();
+    case SignDoubling::Terminate:
+    case SignDoubling::Single:
+    default:
+        if (isTriplet) {
+            return QString("2"); // '⠆' (dots 2-3)
+        }
+        return QString("_") + numeral + QString("'");
+    }
 }
 
 QString Braille::brailleVolta(Measure* measure, Volta* volta, int staffCount)
