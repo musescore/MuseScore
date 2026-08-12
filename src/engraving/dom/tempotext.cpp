@@ -75,7 +75,6 @@ TempoText::TempoText(Segment* parent)
 void TempoText::setTempoTextType(TempoTextType ttt)
 {
     m_tempoTextType = ttt;
-    score()->setUpTempoMapLater();
 }
 
 double TempoText::tempoBpm() const
@@ -218,15 +217,6 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 }
 
 //---------------------------------------------------------
-// updateScore
-//---------------------------------------------------------
-
-void TempoText::updateScore()
-{
-    score()->setUpTempoMapLater();
-}
-
-//---------------------------------------------------------
 // updateRelative
 //---------------------------------------------------------
 
@@ -288,7 +278,6 @@ void TempoText::updateTempo()
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     m_relative = 1.0;
                     m_isRelative = false;
-                    updateScore();
                 }
                 break;
             }
@@ -308,7 +297,6 @@ void TempoText::updateTempo()
                     m_relative = pa2.f / pa.f;
                     m_isRelative = true;
                     updateRelative();
-                    updateScore();
                     return;
                 }
             }
@@ -359,11 +347,9 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::PLAY:
         setPlayTempoText(v.toBool());
-        score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
-        score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         setFollowText(v.toBool());
@@ -477,16 +463,6 @@ String TempoText::tempoInfo() const
     }
 
     return info;
-}
-
-void TempoText::added()
-{
-    updateScore();
-}
-
-void TempoText::removed()
-{
-    updateScore();
 }
 
 void TempoText::commitText()

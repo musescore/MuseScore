@@ -64,14 +64,9 @@ public:
     PointF linePos(Grip grip, System** system) const override;
 
 protected:
-    void added() override;
-    void removed() override;
-
     Sid defaultPosSid() const override;
 
 private:
-    void requestToRebuildTempo();
-
     GradualTempoChangeType m_tempoChangeType = GradualTempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
     std::optional<float> m_tempoChangeFactor;
@@ -96,8 +91,6 @@ public:
     GradualTempoChange* tempoChange() const;
 
     void endEdit(EditData& editData) override;
-    void added() override;
-    void removed() override;
 
     GradualTempoChangeSegment* findElementToSnapBefore() const;
     TempoText* findElementToSnapAfter() const;

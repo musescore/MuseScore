@@ -545,9 +545,10 @@ public:
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false, SegmentType segType = SegmentType::ChordRest) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
-    void setUpTempoMapLater();
-    void setUpTempoMap();
-    bool needSetUpTempoMap() const { return m_needSetUpTempoMap; }
+    void updateTicksAndTimeSigMap();
+    void updateTicksAndTimeSigMapLater() { m_needUpdateTicksAndTimeSigMap = true; }
+    bool needUpdateTicksAndTimeSigMap() const { return m_needUpdateTicksAndTimeSigMap; }
+    void rebuildTempoMap();
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -912,7 +913,8 @@ private:
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
+    void rebuildTimeSigMap(Measure* m);
+    void rebuildTempoForMeasure(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
     void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
 
     void doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo = true);
@@ -986,6 +988,7 @@ private:
     bool m_printing = false;                // True if we are drawing to a printer
     bool m_savedCapture = false;            // True if we saved an image capture
     bool m_corrupted = false;
+    bool m_needUpdateTicksAndTimeSigMap = false;
 
     ShowAnchors m_showAnchors;
 
@@ -995,7 +998,6 @@ private:
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
-    bool m_needSetUpTempoMap = true;
 
     std::map<String, String> m_metaTags;
 

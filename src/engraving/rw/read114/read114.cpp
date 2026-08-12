@@ -3097,7 +3097,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
-    masterScore->setUpTempoMap();
+    masterScore->updateTicksAndTimeSigMap();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
         BeatsPerSecond tempo   = i.second.tempo;
@@ -3118,7 +3118,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    masterScore->setUpTempoMap();
+    masterScore->updateTicksAndTimeSigMap();
     // While reading the score, some elements might use `score->repeatList()` (which is incorrect
     // anyway, because the repeatList will be incomplete because the score is incomplete, but some
     // elements still do it).

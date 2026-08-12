@@ -109,7 +109,7 @@ void InsertRemoveMeasures::insertMeasures()
     score->measures()->insert(fm, lm);
 
     if (fm->isMeasure()) {
-        score->setUpTempoMap();
+        score->updateTicksAndTimeSigMap();
         score->insertTime(fm->tick(), lm->endTick() - fm->tick());
 
         // move ownership of Instrument back to part
@@ -293,7 +293,7 @@ void InsertRemoveMeasures::removeMeasures()
     score->measures()->remove(fm, lm);
 
     if (fm->isMeasure()) {
-        score->setUpTempoMap();
+        score->updateTicksAndTimeSigMap();
         score->invalidateRepeatList();
 
         // check if there is a clef at the end of last measure
@@ -383,7 +383,8 @@ void ChangeMeasureLen::flip()
         measure->remove(s);
     }
     measure->setTicks(len);
-    measure->score()->setUpTempoMap();
+    measure->score()->updateTicksAndTimeSigMap();
+    measure->score()->invalidateRepeatList();
     len = oLen;
 }
 

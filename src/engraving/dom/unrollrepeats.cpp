@@ -160,7 +160,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     removeRepeatMarkings(score);
 
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
 
     score->setLayoutAll();
     score->doLayout();

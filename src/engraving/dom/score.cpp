@@ -427,16 +427,10 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
     m_measures.add(m);
 }
 
-void Score::setUpTempoMapLater()
-{
-    m_needSetUpTempoMap = true;
-}
-
 //---------------------------------------------------------
-//    setUpTempoMap
+//    updateTicksAndTimeSigMap
 //    update:
 //      - measure ticks
-//      - tempo map
 //      - time signature map
 //---------------------------------------------------------
 
@@ -447,7 +441,7 @@ void Score::setUpTempoMapLater()
       - after inserting/deleting time (changes the sigmap)
 */
 
-void Score::setUpTempoMap()
+void Score::updateTicksAndTimeSigMap()
 {
     TRACEFUNC;
 
@@ -462,13 +456,9 @@ void Score::setUpTempoMap()
     }
 
     if (isMaster()) {
-        tempomap()->clear();
         sigmap()->clear();
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
-    std::vector<Measure*> anacrusisMeasures;
-
-    auto tempoPrimo = std::optional<BeatsPerSecond> {};
 
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (!mb->isMeasure()) {
@@ -483,102 +473,159 @@ void Score::setUpTempoMap()
         if (m->mmRest()) {
             m->mmRest()->moveTicks(diff);
         }
-        if (m->isAnacrusis()) {
-            anacrusisMeasures.push_back(m);
-        }
 
-        rebuildTempoAndTimeSigMaps(m, tempoPrimo);
+        rebuildTimeSigMap(m);
 
         tick += measureTicks;
     }
 
     m_measures.updateTickIndex();
+    m_needUpdateTicksAndTimeSigMap = false;
+}
 
-    if (isMaster()) {
-        for (const auto& pair : spanner()) {
-            const Spanner* spannerItem = pair.second;
-            if (!spannerItem || !spannerItem->isGradualTempoChange() || !spannerItem->playSpanner()) {
-                continue;
-            }
+//---------------------------------------------------------
+//    rebuildTimeSigMap
+///    updates the time signature map for a measure
+//---------------------------------------------------------
 
-            const GradualTempoChange* tempoChange = toGradualTempoChange(spannerItem);
-            if (!tempoChange) {
-                continue;
-            }
-
-            int tickPositionFrom = tempoChange->tick().ticks();
-            BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
-            BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
-
-            int totalTicks = tempoChange->ticks().ticks();
-            int stepsCount = std::max(8, totalTicks / Constants::DIVISION);
-            std::map<int, double> tempoCurve = TConv::easingValueCurve(totalTicks,
-                                                                       stepsCount,
-                                                                       newBps.val - currentBps.val,
-                                                                       tempoChange->easingMethod());
-
-            for (const auto& pair2 : tempoCurve) {
-                int tick2 = tickPositionFrom + pair2.first;
-
-                if (tempomap()->find(tick2) == tempomap()->end()) {
-                    tempomap()->setTempo(tick2, roundTempo(currentBps.val + pair2.second));
-                }
+void Score::rebuildTimeSigMap(Measure* measure)
+{
+    for (Segment& segment : measure->segments()) {
+        if (!segment.isTimeSigType()) {
+            continue;
+        }
+        for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
+            TimeSig* ts = toTimeSig(segment.element(staffIdx * VOICES));
+            if (ts) {
+                staff(staffIdx)->addTimeSig(ts);
             }
         }
+    }
 
-        if (tempomap()->empty()) {
-            tempomap()->setTempo(0, Constants::DEFAULT_TEMPO);
+    if (!isMaster()) {
+        return;
+    }
+
+    // create event if measure len and time signature are different
+    // even if they are equivalent 4/4 vs 2/2
+    // also check if nominal time signature has changed
+
+    const Fraction mTicks = measure->isMMRest() ? measure->mmRestFirst()->ticks() : measure->ticks();     // for time signature the underlying measure length matters for MM rests
+
+    const Measure* pm = measure->prevMeasure();
+    // prevMeasure() doesn't return MM rest so we don't handle it here
+
+    if (pm && (!mTicks.identical(pm->ticks()) || !measure->timesig().identical(pm->timesig()))) {
+        sigmap()->add(measure->tick().ticks(), SigEvent(mTicks, measure->timesig(), measure->measureNumber()));
+    }
+}
+
+//---------------------------------------------------------
+//    rebuildTempoMap
+//---------------------------------------------------------
+
+void Score::rebuildTempoMap()
+{
+    TRACEFUNC;
+
+    if (!isMaster()) {
+        return;
+    }
+
+    Measure* fm = firstMeasure();
+    if (!fm) {
+        return;
+    }
+
+    tempomap()->clear();
+
+    std::vector<Measure*> anacrusisMeasures;
+    auto tempoPrimo = std::optional<BeatsPerSecond> {};
+
+    for (Measure* m = fm; m; m = m->nextMeasure()) {
+        if (m->isAnacrusis()) {
+            anacrusisMeasures.push_back(m);
         }
+
+        rebuildTempoForMeasure(m, tempoPrimo);
+    }
+
+    for (const auto& pair : spanner()) {
+        const Spanner* spannerItem = pair.second;
+        if (!spannerItem || !spannerItem->isGradualTempoChange() || !spannerItem->playSpanner()) {
+            continue;
+        }
+
+        const GradualTempoChange* tempoChange = toGradualTempoChange(spannerItem);
+        if (!tempoChange) {
+            continue;
+        }
+
+        int tickPositionFrom = tempoChange->tick().ticks();
+        BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
+        BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
+
+        int totalTicks = tempoChange->ticks().ticks();
+        int stepsCount = std::max(8, totalTicks / Constants::DIVISION);
+        std::map<int, double> tempoCurve = TConv::easingValueCurve(totalTicks,
+                                                                   stepsCount,
+                                                                   newBps.val - currentBps.val,
+                                                                   tempoChange->easingMethod());
+
+        for (const auto& pair2 : tempoCurve) {
+            int tick2 = tickPositionFrom + pair2.first;
+
+            if (tempomap()->find(tick2) == tempomap()->end()) {
+                tempomap()->setTempo(tick2, roundTempo(currentBps.val + pair2.second));
+            }
+        }
+    }
+
+    if (tempomap()->empty()) {
+        tempomap()->setTempo(0, Constants::DEFAULT_TEMPO);
     }
 
     masterScore()->updateRepeatListTempo();
     if (!anacrusisMeasures.empty()) {
         fixAnacrusisTempo(anacrusisMeasures);
     }
-    m_needSetUpTempoMap = false;
 }
 
 //---------------------------------------------------------
-//    fixTicks
-///    updates tempomap and time sig map for a measure
+//    rebuildTempoForMeasure
 //---------------------------------------------------------
 
-void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerSecond>& tempoPrimo)
+void Score::rebuildTempoForMeasure(Measure* measure, std::optional<BeatsPerSecond>& tempoPrimo)
 {
-    if (isMaster()) {
-        // Reset tempo to set correct time stretch for fermata.
-        const Fraction& startTick = measure->tick();
-        resetTempoRange(startTick, measure->endTick());
+    // Reset tempo to set correct time stretch for fermata.
+    const Fraction& startTick = measure->tick();
+    resetTempoRange(startTick, measure->endTick());
 
-        // Implement section break rest
-        for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
-            if (mb->pause()) {
-                tempomap()->setPause(startTick.ticks(), mb->pause());
+    // Implement section break rest
+    for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
+        if (mb->pause()) {
+            tempomap()->setPause(startTick.ticks(), mb->pause());
+        }
+    }
+
+    // Add pauses from the end of the previous measure (at measure->tick()):
+    for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
+        if (!s->isBreathType()) {
+            continue;
+        }
+        double length = 0.0;
+        for (EngravingItem* e : s->elist()) {
+            if (e && e->isBreath()) {
+                length = std::max(length, toBreath(e)->pause());
             }
         }
-
-        // Add pauses from the end of the previous measure (at measure->tick()):
-        for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
-            if (!s->isBreathType()) {
-                continue;
-            }
-            double length = 0.0;
-            for (EngravingItem* e : s->elist()) {
-                if (e && e->isBreath()) {
-                    length = std::max(length, toBreath(e)->pause());
-                }
-            }
-            if (!RealIsNull(length)) {
-                tempomap()->setPause(startTick.ticks(), length);
-            }
+        if (!RealIsNull(length)) {
+            tempomap()->setPause(startTick.ticks(), length);
         }
     }
 
     for (Segment& segment : measure->segments()) {
         if (segment.isBreathType()) {
-            if (!isMaster()) {
-                continue;
-            }
             double length = 0.0;
             Fraction tick = segment.tick();
             // find longest pause
@@ -592,17 +639,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
             if (!RealIsNull(length)) {
                 tempomap()->setPause(tick.ticks(), length);
             }
-        } else if (segment.isTimeSigType()) {
-            for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
-                TimeSig* ts = toTimeSig(segment.element(staffIdx * VOICES));
-                if (ts) {
-                    staff(staffIdx)->addTimeSig(ts);
-                }
-            }
         } else if (segment.isChordRestType() || segment.isTimeTickType()) {
-            if (!isMaster()) {
-                continue;
-            }
             double stretch = 0.0;
             for (EngravingItem* e : segment.annotations()) {
                 if (e->isFermata() && toFermata(e)->play()) {
@@ -657,23 +694,6 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     tempomap()->setTempo(etick.ticks(), otempo);
                 }
             }
-        }
-    }
-
-    // update time signature map
-    // create event if measure len and time signature are different
-    // even if they are equivalent 4/4 vs 2/2
-    // also check if nominal time signature has changed
-
-    if (isMaster()) {
-        const Measure* m = measure;
-        const Fraction mTicks = m->isMMRest() ? m->mmRestFirst()->ticks() : m->ticks();     // for time signature the underlying measure length matters for MM rests
-
-        const Measure* pm = measure->prevMeasure();
-        // prevMeasure() doesn't return MM rest so we don't handle it here
-
-        if (pm && (!mTicks.identical(pm->ticks()) || !m->timesig().identical(pm->timesig()))) {
-            sigmap()->add(m->tick().ticks(), SigEvent(mTicks, m->timesig(), m->measureNumber()));
         }
     }
 }
@@ -3777,13 +3797,6 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
     if (zeroInRange) {
         tempomap()->setTempo(0, Constants::DEFAULT_TEMPO);
     }
-    sigmap()->clearRange(tick1.ticks(), tick2.ticks());
-    if (zeroInRange) {
-        Measure* m = firstMeasure();
-        if (m) {
-            sigmap()->add(0, SigEvent(m->ticks(),  m->timesig(), 0));
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -3907,7 +3920,6 @@ void Score::appendPart(const InstrumentTemplate* t)
         staff->init(t, stt, int(i));
     }
     undoInsertPart(part, m_parts.size());
-    setUpTempoMapLater();
     masterScore()->rebuildMidiMapping();
 }
 

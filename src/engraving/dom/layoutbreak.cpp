@@ -164,7 +164,6 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
-        score()->setUpTempoMapLater();
         break;
     case Pid::START_WITH_LONG_NAMES:
         setStartWithLongNames(v.toBool());
@@ -238,24 +237,6 @@ muse::TranslatableString LayoutBreak::subtypeUserName() const
 String LayoutBreak::accessibleInfo() const
 {
     return translatedSubtypeUserName();
-}
-
-void LayoutBreak::added()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
-}
-
-void LayoutBreak::removed()
-{
-    IF_ASSERT_FAILED(score()) {
-        return;
-    }
-
-    score()->setUpTempoMapLater();
 }
 
 Font LayoutBreak::font() const

@@ -78,9 +78,6 @@ public:
     char16_t iconCode() const;
 
     muse::draw::Font font() const;
-protected:
-    void added() override;
-    void removed() override;
 
 private:
 
