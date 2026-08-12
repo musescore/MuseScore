@@ -172,13 +172,13 @@ void Dynamic::setChangeInVelocity(int val)
 //    the time over which the velocity change occurs
 //---------------------------------------------------------
 
-Fraction Dynamic::velocityChangeLength() const
+Fraction Dynamic::velocityChangeLength(BeatsPerSecond tempo) const
 {
     if (changeInVelocity() == 0) {
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->multipliedTempo(segment()->tick()).val / Constants::DEFAULT_TEMPO.val;
+    double ratio = tempo.val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:

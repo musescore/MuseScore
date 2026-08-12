@@ -63,6 +63,7 @@ public:
     void setTempo(BeatsPerSecond v);
     bool isRelative() const { return m_isRelative; }
     void setRelative(double v) { m_isRelative = true; m_relative = v; }
+    double relativeValue() const { return m_relative; }
 
     bool isNormal() const { return m_tempoTextType == TempoTextType::NORMAL; }
     void setNormal() { setTempoTextType(TempoTextType::NORMAL); }

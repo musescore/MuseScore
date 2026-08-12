@@ -75,6 +75,12 @@ private:
     std::vector<const Measure*> m_measureList;
 };
 
+struct RepeatSegmentInfo {
+    int tick = 0;
+    int endTick = 0;
+    int utick = 0;
+};
+
 //---------------------------------------------------------
 //   RepeatList
 //---------------------------------------------------------
@@ -99,6 +105,7 @@ public:
     int ticks() const;
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
+    std::vector<RepeatSegmentInfo> segmentInfoList() const;
 
 private:
     void collectRepeatListElements();

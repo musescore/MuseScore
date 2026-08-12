@@ -24,6 +24,7 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editautomationpoints.h"
 #include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
 #include "editing/transaction/transaction.h"
@@ -145,14 +146,22 @@ void MasterScore::setAutomationData(AutomationDataPtr data)
     m_automationController->setAutomationData(std::move(data));
 }
 
-void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable)
 {
-    m_automationController->editPoints(key, edits);
+    IF_ASSERT_FAILED(key.isValid() && !edits.empty()) {
+        return;
+    }
+
+    if (undoable) {
+        undo(new EditAutomationPoints(this, m_automationController, key, edits));
+    } else {
+        m_automationController->editPoints(key, edits);
+    }
 }
 
-void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments)
 {
-    m_automationController->insertTime(tick, len);
+    m_automationController->insertTime(tick, len, oldSegments);
 }
 
 //---------------------------------------------------------
@@ -223,6 +232,7 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) c
 
 const TempoTimeline& MasterScore::tempoTimeline() const
 {
+    m_automationController->ensureInitialized(const_cast<MasterScore*>(this));
     return m_automationController->tempoTimeline();
 }
 
