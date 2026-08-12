@@ -29,15 +29,18 @@
 #include "transaction/undoablecommand.h"
 
 #include "engraving/dom/score.h"
-#include "engraving/automation/automationdata.h"
+#include "engraving/automation/automationtypes.h"
 
 namespace mu::engraving {
+class ScoreAutomationController;
+
 class EditAutomationPoints : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, EditAutomationPoints)
 
 public:
-    EditAutomationPoints(Score* score, AutomationDataPtr automationData, const AutomationCurveKey& key, const AutomationPointEdits& edits);
+    EditAutomationPoints(Score* score, ScoreAutomationController* controller, const AutomationCurveKey& key,
+                         const AutomationPointEdits& edits);
 
     UNDO_TYPE(CommandType::EditAutomationPoints)
     UNDO_NAME("EditAutomationPoints")
@@ -49,7 +52,7 @@ private:
     void flip() override;
 
     Score* m_score = nullptr;
-    AutomationDataPtr m_automationData;
+    ScoreAutomationController* m_controller = nullptr;
     AutomationCurveKey m_key;
     std::map<utick_t, std::optional<AutomationPoint> > m_pointStates; // tick -> point to write next, or nullopt to erase
     std::optional<ChangedRange> m_changedRange;

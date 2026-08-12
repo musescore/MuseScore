@@ -123,6 +123,7 @@ class Page;
 class Part;
 class RehearsalMark;
 class RepeatList;
+struct RepeatSegmentInfo;
 class Rest;
 class Score;
 class IEngravingFont;
@@ -658,6 +659,8 @@ public:
     const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+    /// Read-only snapshot, safe to call mid-edit (e.g. before a structural change invalidates the current repeatList)
+    std::vector<RepeatSegmentInfo> repeatSegmentInfoList() const;
 
     void invalidateRepeatList();
 
@@ -792,7 +795,7 @@ public:
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     ChordRest* findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const;
     ChordRest* findChordRestEndingBeforeTickInTrack(const Fraction& tick, track_idx_t trackIdx) const;
-    void insertTime(const Fraction& tickPos, const Fraction& tickLen);
+    void insertTime(const Fraction& tickPos, const Fraction& tickLen, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     std::shared_ptr<IEngravingFont> engravingFont() const { return m_engravingFont; }
     void setEngravingFont(std::shared_ptr<IEngravingFont> f) { m_engravingFont = f; }
@@ -859,7 +862,7 @@ public:
     void addSystemDivider(size_t systemIdx, SystemDivider* divider);
 
     virtual AutomationDataConstPtr automationData() const;
-    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
+    virtual void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true);
 
     friend class Chord;
 
@@ -870,7 +873,7 @@ public:
     size_t bracketLevels(staff_idx_t staffIdx) const;
 
 protected:
-    virtual void onTimeInserted(const Fraction& tick, const Fraction& len);
+    virtual void onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments);
 
     friend class MasterScore;
     Score(const muse::modularity::ContextPtr& iocCtx);

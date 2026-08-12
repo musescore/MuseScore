@@ -198,18 +198,32 @@ static std::optional<int> tickFromCanvasX(const System* system, const muse::Rect
 static AutomationCurveKey curveKeyFor(AutomationType type, const Staff* staff)
 {
     switch (type) {
+    case AutomationType::Dynamics:
+        return AutomationCurveKey::staff(type, staff->id());
+    case AutomationType::Tempo:
+        return AutomationCurveKey::global(type);
     case AutomationType::Volume:
     case AutomationType::Pan: {
         const Part* part = staff->part();
         const InstrumentTrackId trackId { part->id(), part->instrumentId() };
         return AutomationCurveKey::instrument(type, trackId);
     }
-    case AutomationType::Dynamics:
     case AutomationType::Unknown:
         break;
     }
 
-    return AutomationCurveKey::staff(type, staff->id());
+    return AutomationCurveKey();
+}
+
+static staff_idx_t firstVisibleStaffIdx(const Score* score)
+{
+    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+        if (score->staff(i)->show()) {
+            return i;
+        }
+    }
+
+    return muse::nidx;
 }
 
 static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
@@ -323,6 +337,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     }
 
     const AutomationCurveKey curveKey = curveKeyFor(currentAutomationType(), staff);
+    if (curveKey.isGlobal() && staffIdx != firstVisibleStaffIdx(score())) {
+        // Score-scoped automation is only drawn on the score's first staff
+        return nullptr;
+    }
+
     if (curveKey.trackId().has_value() && !staff->isTop()) {
         // Instrument-scoped automation is only drawn on the instrument's first staff
         return nullptr;

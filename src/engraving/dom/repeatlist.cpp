@@ -289,6 +289,18 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
     return cend();
 }
 
+std::vector<RepeatSegmentInfo> RepeatList::segmentInfoList() const
+{
+    std::vector<RepeatSegmentInfo> result;
+    result.reserve(size());
+
+    for (const RepeatSegment* seg : *this) {
+        result.push_back({ seg->tick, seg->endTick(), seg->utick });
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   flatten
 ///   Make this repeat list flat (don't expand repeats)

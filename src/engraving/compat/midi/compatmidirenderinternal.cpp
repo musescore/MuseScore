@@ -1829,7 +1829,7 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                 direction = ChangeDirection::DECREASING;
             }
 
-            const Fraction etick = change != 0 ? tick + d->velocityChangeLength() : tick;
+            const Fraction etick = change != 0 ? tick + d->velocityChangeLength(mainScore->multipliedTempo(tick)) : tick;
 
             switch (d->voiceAssignment()) {
             case VoiceAssignment::ALL_VOICE_IN_STAFF: {

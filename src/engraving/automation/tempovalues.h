@@ -40,4 +40,6 @@ constexpr BeatsPerSecond denormalizeTempo(const muse::real_t normalized)
 }
 
 inline constexpr muse::real_t DEFAULT_NORMALIZED_TEMPO = normalizeTempo(Constants::DEFAULT_TEMPO);
+inline constexpr muse::real_t MIN_NORMALIZED_TEMPO = normalizeTempo(Constants::MIN_TEMPO);
+inline constexpr muse::real_t MAX_NORMALIZED_TEMPO = normalizeTempo(Constants::MAX_TEMPO);
 }

@@ -49,6 +49,7 @@ class Excerpt;
 class MasterScore;
 class Part;
 class RepeatList;
+struct RepeatSegmentInfo;
 class Revisions;
 class TempoTimeline;
 class TimeSigMap;
@@ -106,7 +107,7 @@ public:
 
     AutomationDataConstPtr automationData() const override;
     void setAutomationData(AutomationDataPtr data);
-    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable = true) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -198,7 +199,7 @@ private:
 
     void updateAutomation(const ScoreChanges& changes);
 
-    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
+    void onTimeInserted(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments) override;
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();

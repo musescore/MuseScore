@@ -3734,7 +3734,7 @@ bool Score::isSpannerStartEnd(const Fraction& tick, track_idx_t track) const
     return false;
 }
 
-void Score::insertTime(const Fraction& tick, const Fraction& len)
+void Score::insertTime(const Fraction& tick, const Fraction& len, const std::vector<RepeatSegmentInfo>& oldSegments)
 {
     for (Staff* staff : staves()) {
         staff->insertTime(tick, len);
@@ -3743,10 +3743,10 @@ void Score::insertTime(const Fraction& tick, const Fraction& len)
         part->insertTime(tick, len);
     }
 
-    onTimeInserted(tick, len);
+    onTimeInserted(tick, len, oldSegments);
 }
 
-void Score::onTimeInserted(const Fraction&, const Fraction&)
+void Score::onTimeInserted(const Fraction&, const Fraction&, const std::vector<RepeatSegmentInfo>&)
 {
 }
 
@@ -5163,9 +5163,9 @@ size_t Score::bracketLevels(staff_idx_t staffIdx) const
 
 AutomationDataConstPtr Score::automationData() const { return m_masterScore->automationData(); }
 
-void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+void Score::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits, bool undoable)
 {
-    m_masterScore->editAutomationPoints(key, edits);
+    m_masterScore->editAutomationPoints(key, edits, undoable);
 }
 
 TransactionManager* Score::transactionManager() const { return m_masterScore->transactionManager(); }
@@ -5174,6 +5174,12 @@ const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(
 const RepeatList& Score::repeatList(bool expandRepeats, bool updateTies)  const
 {
     return m_masterScore->repeatList(expandRepeats, updateTies);
+}
+
+std::vector<RepeatSegmentInfo> Score::repeatSegmentInfoList() const
+{
+    // Read-only: don't trigger tie/jump-point cleanup, safe to call mid-edit
+    return repeatList(m_masterScore->expandRepeats(), false).segmentInfoList();
 }
 
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }
