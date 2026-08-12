@@ -22,8 +22,15 @@
 
 #include "writecontext.h"
 
+#include "iengravingconfiguration.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::write;
+
+std::shared_ptr<IEngravingConfiguration> WriteContext::configuration() const
+{
+    return m_score->configuration();
+}
 
 bool WriteContext::canWrite(const EngravingItem* e) const
 {

@@ -39,6 +39,7 @@
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/mscore.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/types/symnames.h"

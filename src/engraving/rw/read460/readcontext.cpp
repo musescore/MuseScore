@@ -24,6 +24,7 @@
 
 #include "dom/linkedobjects.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/trill.h"
 

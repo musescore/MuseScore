@@ -23,11 +23,12 @@
 #include <cmath>
 #include <stack>
 
-#include "dom/harppedaldiagram.h"
 #include "draw/fontmetrics.h"
 
-#include "engraving/rendering/score/textlayout.h"
 #include "iengravingfont.h"
+
+#include "rendering/score/textlayout.h"
+#include "rendering/iscorerenderer.h"
 
 #include "style/textstyle.h"
 
@@ -43,6 +44,7 @@
 
 #include "anchors.h"
 #include "box.h"
+#include "harppedaldiagram.h"
 #include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"

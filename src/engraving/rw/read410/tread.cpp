@@ -19,12 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "tread.h"
+
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../infrastructure/rtti.h"
-#include "../../infrastructure/htmlparser.h"
+
+#include "../../compat/midi/event.h"
 
 #include "../../dom/accidental.h"
 #include "../../dom/actionicon.h"

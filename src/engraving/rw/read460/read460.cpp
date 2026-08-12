@@ -40,6 +40,7 @@
 #include "dom/harmony.h"
 #include "dom/lyrics.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
 #include "dom/part.h"

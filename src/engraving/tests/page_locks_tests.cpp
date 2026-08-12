@@ -22,13 +22,12 @@
 
 #include <gtest/gtest.h>
 
+#include "engraving/dom/measure.h" // IWYU pragma: keep
 #include "engraving/dom/page.h"
 #include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
-#include "utils/testutils.h"
 
 using namespace mu::engraving;
 

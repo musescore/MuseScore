@@ -22,17 +22,20 @@
 
 #include "transpose.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
+#include "../dom/factory.h"
+#include "../dom/fret.h"
 #include "../dom/harmony.h"
+#include "../dom/keysig.h"
+#include "../dom/linkedobjects.h"
+#include "../dom/measure.h"
+#include "../dom/note.h"
 #include "../dom/part.h"
 #include "../dom/segment.h"
 #include "../dom/staff.h"
 #include "../dom/utils.h"
-#include "../dom/note.h"
-#include "../dom/factory.h"
-#include "../dom/keysig.h"
-#include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
-#include "../dom/fret.h"
 
 #include "editenharmonicspelling.h"
 #include "editfretboarddiagram.h"

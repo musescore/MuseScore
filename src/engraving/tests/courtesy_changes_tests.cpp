@@ -24,9 +24,9 @@
 #include <gmock/gmock.h>
 
 #include "engraving/dom/barline.h"
+#include "engraving/dom/measure.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 using namespace mu::engraving;
 static const String COURTESY_CHANGES_DATA(u"courtesy_changes_data/");

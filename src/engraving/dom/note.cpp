@@ -31,6 +31,9 @@
 
 #include "translation.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+#include "iengravingfont.h"
+
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
@@ -39,7 +42,6 @@
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
-#include "iengravingfont.h"
 
 #include "rendering/score/horizontalspacing.h"
 

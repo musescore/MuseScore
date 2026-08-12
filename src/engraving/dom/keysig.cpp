@@ -25,6 +25,7 @@
 #include "types/typesconv.h"
 
 #include "masterscore.h"
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"

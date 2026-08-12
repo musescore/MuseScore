@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/chord.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
 

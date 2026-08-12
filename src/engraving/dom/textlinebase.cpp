@@ -22,6 +22,8 @@
 
 #include "textlinebase.h"
 
+#include "rendering/iscorerenderer.h"
+
 #include "factory.h"
 #include "score.h"
 #include "system.h"

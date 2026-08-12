@@ -23,12 +23,12 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/note.h"
 
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 using namespace mu;
 using namespace mu::engraving;

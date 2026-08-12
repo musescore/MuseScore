@@ -22,11 +22,11 @@
 
 #include "playcounttext.h"
 
-#include "../editing/textedit.h"
 #include "../editing/transaction/undostack.h"
 #include "../types/typesconv.h"
 
 #include "barline.h"
+#include "measure.h"
 #include "score.h"
 
 using namespace mu::engraving;

@@ -109,9 +109,6 @@ public:
     void setDebuggingOptions(const DebuggingOptions& options) override;
     muse::async::Notification debuggingOptionsChanged() const override;
 
-    bool doNotSaveEIDsForBackCompat() const override;
-    void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
-
     bool allowReadingImagesFromOutsideMscz() const override;
 
     bool guitarProImportExperimental() const override;

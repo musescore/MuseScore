@@ -46,6 +46,8 @@
 #include "draw/painter.h"
 #include "draw/types/pen.h"
 
+#include "engraving/iengravingconfiguration.h" // IWYU pragma: keep
+
 // TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
@@ -126,6 +128,7 @@
 #include "engraving/editing/textedit.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 

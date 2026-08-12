@@ -35,6 +35,7 @@
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editstaffbrackets.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/rendering/iscorerenderer.h"
 #include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/style/style.h"

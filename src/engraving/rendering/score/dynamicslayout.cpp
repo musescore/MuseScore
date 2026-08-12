@@ -26,6 +26,7 @@
 #include "textlayout.h"
 
 #include "../dom/hairpin.h"
+#include "../dom/measure.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
 #include "../types/typesconv.h"

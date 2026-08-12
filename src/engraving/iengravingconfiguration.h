@@ -140,9 +140,6 @@ public:
     virtual void setDebuggingOptions(const DebuggingOptions& options) = 0;
     virtual muse::async::Notification debuggingOptionsChanged() const = 0;
 
-    virtual bool doNotSaveEIDsForBackCompat() const = 0;
-    virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
-
     virtual bool allowReadingImagesFromOutsideMscz() const = 0;
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294

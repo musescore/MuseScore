@@ -23,9 +23,10 @@
 #include "stafftype.h"
 
 #include "draw/fontmetrics.h"
-#include "draw/painter.h"
 #include "io/file.h"
 #include "translation.h"
+
+#include "iengravingconfiguration.h"
 
 #include "rw/xmlreader.h"
 #include "style/defaultstyle.h"
@@ -65,6 +66,8 @@ constexpr int NUM_OF_BASSSTRINGS_WITH_NUMBER = 2;     // the max number of bass 
 //---------------------------------------------------------
 
 constexpr double TAB_DEFAULT_DUR_YOFFS = -1.0;
+
+muse::GlobalInject<IEngravingConfiguration> StaffType::configuration;
 
 std::vector<TablatureFretFont> StaffType::m_fretFonts = {};
 std::vector<TablatureDurationFont> StaffType::m_durationFonts = {};
@@ -745,32 +748,6 @@ Spatium StaffType::physStringToYOffset(int strg) const
     // if TAB upside down, flip around top line
     yOffset = m_upsideDown ? (double)(m_lines - 1) - yOffset : yOffset;
     return yOffset * m_lineDistance;
-}
-
-//---------------------------------------------------------
-//   TabDurationSymbol
-//---------------------------------------------------------
-
-TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
-    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
-{
-    setGenerated(true);
-    m_tab        = 0;
-    m_text       = String();
-}
-
-TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots)
-    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
-{
-    setGenerated(true);
-    setDuration(type, dots, tab);
-}
-
-TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
-    : EngravingItem(e)
-{
-    m_tab = e.m_tab;
-    m_text = e.m_text;
 }
 
 //---------------------------------------------------------

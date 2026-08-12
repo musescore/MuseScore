@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #pragma warning(disable: 4459) // _t hides global declaration
 #endif
@@ -33,6 +34,7 @@
 #include "engraving/editing/textedit.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

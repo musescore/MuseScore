@@ -26,14 +26,15 @@
 
 #include "defer.h"
 
-#include "style/style.h"
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 
 #include "chord.h"
 #include "note.h"
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
-#include "capo.h"
+
+#include "types/types.h"
 
 using namespace mu;
 
