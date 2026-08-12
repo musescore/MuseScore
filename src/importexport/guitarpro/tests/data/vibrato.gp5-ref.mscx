@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Steel Guitar</trackName>
       <Instrument id="cavaquinho">
-        <longName>Steel Guitar</longName>
+        <InstrumentLabel>
+          <longName>Steel Guitar</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -49,38 +51,27 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>guitarVibrato</subtype>
-              <eid>I_I</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>J_J</eid>
             <durationType>whole</durationType>
@@ -113,30 +104,11 @@
       <Measure>
         <eid>O_O</eid>
         <voice>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>vibratoSawtooth</subtype>
-              <eid>P_P</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -146,37 +118,38 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Vibrato>
+        <subtype>guitarVibrato</subtype>
+        <track2>0</track2>
+        <ticks>8/4</ticks>
+        <eid>U_U</eid>
+        <track>0</track>
+        </Vibrato>
+      <Vibrato>
+        <subtype>vibratoSawtooth</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>8/4</ticks>
+        <eid>V_V</eid>
+        <track>0</track>
+        </Vibrato>
+      </SpannerMap>
     </Score>
   </museScore>

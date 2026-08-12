@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,17 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_INOTATIONWRITER_H
-#define MU_PROJECT_INOTATIONWRITER_H
+#pragma once
 
 #include <map>
 
 #include "global/types/ret.h"
 #include "global/types/val.h"
 #include "global/io/iodevice.h"
-#include "global/async/channel.h"
 #include "global/progress.h"
-#include "notation/inotation.h"
+#include "notation/inotation_fwd.h"
 
 namespace mu::project {
 class INotationWriter
@@ -49,7 +47,13 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        BEATS_COLORS
+        BEATS_COLORS,
+        WAIT_FOR_COMPLETION,
+
+        WITH_AUDIO,
+
+        LEADING_SILENCE_SEC,
+        TRAILING_SILENCE_SEC,
     };
 
     using Options = std::map<OptionKey, muse::Val>;
@@ -67,5 +71,3 @@ public:
 
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;
 }
-
-#endif // MU_PROJECT_INOTATIONWRITER_H

@@ -36,12 +36,12 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
@@ -76,28 +76,19 @@
       <HBox>
         <width>5</width>
         <boxAutoSize>0</boxAutoSize>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </HBox>
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>F_F</eid>
-            </Clef>
-          <KeySig>
             <eid>G_G</eid>
-            <concertKey>0</concertKey>
-            </KeySig>
-          <TimeSig>
-            <eid>H_H</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
+            </Clef>
           <Rest>
-            <eid>I_I</eid>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -105,16 +96,20 @@
         </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <eid>J_J</eid>
+        <eid>I_I</eid>
+        <mmRestLast>J_J</mmRestLast>
         <voice>
-          <TimeSig>
+          <KeySig>
             <eid>K_K</eid>
-            <linkedTo>H_H</linkedTo>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
@@ -122,27 +117,27 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>N_N</eid>
         <voice>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>J_J</eid>
         <voice>
           <Rest>
             <eid>R_R</eid>

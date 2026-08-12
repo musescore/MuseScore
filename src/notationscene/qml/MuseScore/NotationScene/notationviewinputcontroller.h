@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,10 +23,10 @@
 
 #include <QtEvents>
 
+#include "../../../internal/inotationviewcontroller.h"
+
 #include "modularity/ioc.h"
 
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
 #include "async/asyncable.h"
 
 #include "context/iglobalcontext.h"
@@ -34,12 +34,17 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
+#include "notation/types/viewmode.h"
+
+#include "notationscene/inotationcommandscontroller.h"
 
 #include "playback/iplaybackcontroller.h"
 
 #include "global/iglobalconfiguration.h"
 #include "ui/idragcontroller.h"
 #include "ui/iuiconfiguration.h"
+#include "rcommand/icommanddispatcher.h"
 
 #include "abstractelementpopupmodel.h"
 
@@ -75,6 +80,8 @@ public:
     virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
+    virtual void showSearch() = 0;
+
     virtual void showElementPopup(const ElementType& elementType) = 0;
     virtual void hideElementPopup(const ElementType& elementType) = 0;
     virtual void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) = 0;
@@ -86,35 +93,60 @@ public:
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 
     virtual QQuickItem* asItem() = 0;
+
+    virtual void scheduleRedraw(const muse::RectF& rect = muse::RectF()) = 0;
 };
 
-class NotationViewInputController : public muse::actions::Actionable, public muse::Contextable, public muse::async::Asyncable
+class NotationViewInputController : public INotationViewController, public muse::Contextable, public muse::async::Asyncable
 {
 public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IDragController> dragController = { this };
+    muse::ContextInject<INotationCommandsController> commandsController = { this };
 
 public:
     NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);
+    ~NotationViewInputController();
 
     void init();
+    void deinit();
+
+    // INotationViewController
+    void zoomIn() override;
+    void zoomOut() override;
+    void zoomToPageWidth() override;
+    void zoomToWholePage() override;
+    void zoomToTwoPages() override;
+    void setZoom(int zoomPercentage) override;
+
+    void setViewMode(ViewMode viewMode) override;
+
+    void nextScreen() override;
+    void previousScreen() override;
+    void nextPage() override;
+    void previousPage() override;
+    void startOfScore() override;
+    void endOfScore() override;
+
+    void openContextMenuOfSelection() override;
+
+    void togglePopupForItemIfSupports(const EngravingItem* item) override;
+
+    void showSearch() override;
+
+    void redrawView() override;
+    // -----------------------
 
     void initZoom();
-    void initCanvasPos();
     void updateZoomAfterSizeChange();
-    void zoomIn();
-    void zoomOut();
-    void nextScreen();
-    void previousScreen();
-    void nextPage();
-    void previousPage();
-    void startOfScore();
-    void endOfScore();
+
+    void initCanvasPos();
 
     bool readonly() const;
     void setReadonly(bool readonly);
@@ -153,29 +185,23 @@ private:
 
     void onNotationChanged();
 
-    void zoomToPageWidth();
     void doZoomToPageWidth();
-    void zoomToWholePage();
     void doZoomToWholePage();
-    void zoomToTwoPages();
     void doZoomToTwoPages();
-    void moveScreen(int direction);
-    void movePage(int direction);
-
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
     muse::PointF findZoomFocusPoint() const;
-    void setScaling(qreal scaling, const muse::PointF& pos = muse::PointF(), bool overrideZoomType = true);
-    void setZoom(int zoomPercentage, const muse::PointF& pos = muse::PointF());
-
+    void doSetZoom(int zoomPercentage, const muse::PointF& pos);
     qreal scalingFromZoomPercentage(int zoomPercentage) const;
     int zoomPercentageFromScaling(qreal scaling) const;
 
-    void setViewMode(const ViewMode& viewMode);
+    void moveScreen(int direction);
+    void movePage(int direction);
+
+    void setScaling(qreal scaling, const muse::PointF& pos = muse::PointF(), bool overrideZoomType = true);
 
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
-    void togglePopupForItemIfSupports(const EngravingItem* item);
     void updateShadowNotePopupVisibility(bool forceHide = false);
 
     float hitWidth() const;

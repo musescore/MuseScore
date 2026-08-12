@@ -22,13 +22,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
@@ -62,50 +62,36 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Join Measure+Hairpin</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <KeySig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <veloChange>10</veloChange>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>K_K</eid>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>L_L</eid>
             <durationType>quarter</durationType>
@@ -133,13 +119,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>R_R</eid>
             <durationType>quarter</durationType>
@@ -152,5 +131,17 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <veloChange>10</veloChange>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>0</track2>
+        <ticks>3/4</ticks>
+        <eid>T_T</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

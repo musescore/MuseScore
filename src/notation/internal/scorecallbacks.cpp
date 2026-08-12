@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -62,13 +62,13 @@ void ScoreCallbacks::setDropTarget(mu::engraving::EngravingItem* dropTarget)
     m_interaction->setDropTarget(dropTarget, false);
 }
 
-void ScoreCallbacks::setDropRectangle(const muse::RectF& rect)
+void ScoreCallbacks::setDropRectangles(const std::vector<muse::RectF>& rects)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;
     }
 
-    m_interaction->setDropRect(rect);
+    m_interaction->setDropRects(rects);
 }
 
 void ScoreCallbacks::changeEditElement(mu::engraving::EngravingItem* newElement)

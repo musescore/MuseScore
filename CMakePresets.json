@@ -30,8 +30,7 @@
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MUSE_COMPILE_BUILD_64": "ON"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -94,6 +93,15 @@
             "inherits": "clang-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Qt-Clang-Release",
+            "displayName": "Qt Clang Release",
+            "description": "Use current Qt with Clang compiler (Release)",
+            "inherits": "clang-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {

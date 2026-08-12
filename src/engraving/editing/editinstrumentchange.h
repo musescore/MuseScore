@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,20 +22,20 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/instrchange.h"
 
 namespace mu::engraving {
 /// change instrument in an InstrumentChange element
-class ChangeInstrument : public UndoCommand
+class ChangeInstrument : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrument)
 
     InstrumentChange* is = nullptr;
     Instrument* instrument = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrument(InstrumentChange* _is, Instrument* i)

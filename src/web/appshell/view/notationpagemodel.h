@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
-#define MU_APPSHELL_NOTATIONPAGEMODEL_H
+
+#pragma once
 
 #include <QQuickItem>
 
@@ -64,7 +64,7 @@ public:
 
     Q_INVOKABLE QString palettesPanelName() const;
     Q_INVOKABLE QString layoutPanelName() const;
-    Q_INVOKABLE QString inspectorPanelName() const;
+    Q_INVOKABLE QString propertiesPanelName() const;
     Q_INVOKABLE QString selectionFiltersPanelName() const;
     Q_INVOKABLE QString undoHistoryPanelName() const;
 
@@ -89,5 +89,3 @@ private:
     void updatePercussionPanelVisibility();
 };
 }
-
-#endif // MU_APPSHELL_NOTATIONPAGEMODEL_H

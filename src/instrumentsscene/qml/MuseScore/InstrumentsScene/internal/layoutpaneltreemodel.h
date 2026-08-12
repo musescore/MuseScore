@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,6 @@
 #include <QAbstractItemModel>
 #include <QQmlParserStatus>
 #include <QVariant>
-#include <QtQml/qqmlparserstatus.h>
 #include <qqmlintegration.h>
 
 #include "abstractlayoutpaneltreeitem.h"
@@ -63,6 +62,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
+    Q_PROPERTY(bool isStaveSharingEnabled READ isStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
 
     QML_ELEMENT
 
@@ -94,7 +94,10 @@ public:
     QString addInstrumentsKeyboardShortcut() const;
     int selectedItemsType() const;
 
+    bool isStaveSharingEnabled() const;
+
     Q_INVOKABLE void load();
+    Q_INVOKABLE void toggleStaveSharing(bool on);
     Q_INVOKABLE void setLayoutPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
@@ -105,6 +108,8 @@ public:
     Q_INVOKABLE void removeSelectedRows();
     Q_INVOKABLE void changeVisibilityOfSelectedRows(bool visible);
     Q_INVOKABLE void changeVisibility(const QModelIndex& index, bool visible);
+    Q_INVOKABLE void changeEnabledOfSelectedRows(bool enable);
+    Q_INVOKABLE void changeEnabled(const QModelIndex& index, bool enable);
 
     Q_INVOKABLE void startActiveDrag();
     Q_INVOKABLE void endActiveDrag();
@@ -123,6 +128,7 @@ signals:
     void isEmptyChanged();
     void addInstrumentsKeyboardShortcutChanged();
     void selectedItemsTypeChanged(int type);
+    void isStaveSharingEnabledChanged(bool enabled);
 
 private slots:
     void updateRearrangementAvailability();
@@ -131,6 +137,7 @@ private slots:
     void updateRemovingAvailability();
     void updateSelectedItemsType();
     void updateIsAddingSystemMarkingsAvailable();
+    void updateIsStaveSharingEnabled();
 
 private:
     void classBegin() override;
@@ -153,14 +160,15 @@ private:
     void onBeforeChangeNotation();
     void setLoadingBlocked(bool blocked);
 
-    static void sortParts(notation::PartList& parts, notation::PartList& referenceParts);
+    using PartList = std::vector<const engraving::Part*>;
+    static void sortParts(PartList& parts, const PartList& referenceParts);
 
     void setupPartsConnections();
     void setupStavesConnections(const muse::ID& partId);
     void setupNotationConnections();
 
     void updateSelectedRows();
-    void onScoreChanged(const mu::engraving::ScoreChanges& changes = {});
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes);
 
     void clear();
     void deleteItems();
@@ -174,6 +182,7 @@ private:
     bool needWarnOnRemoveRows(int row, int count);
     bool warnAboutRemovingInstrumentsIfNecessary(int count);
 
+    AbstractLayoutPanelTreeItem* buildSharedPartItem(const notation::Part* part);
     AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
     AbstractLayoutPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
     AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff,
@@ -191,6 +200,8 @@ private:
     bool m_isLoadingBlocked = false;
     bool m_notationChangedWhileLoadingWasBlocked = false;
     bool m_isAddingSystemMarkingsAvailable = false;
+
+    bool m_isStaveSharingEnabled = false;
 
     LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 

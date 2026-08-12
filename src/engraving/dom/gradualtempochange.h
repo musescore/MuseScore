@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,6 +40,8 @@ public:
 
     GradualTempoChange* clone() const override;
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
 
     GradualTempoChangeType tempoChangeType() const;
@@ -64,6 +66,8 @@ public:
 protected:
     void added() override;
     void removed() override;
+
+    Sid defaultPosSid() const override;
 
 private:
     void requestToRebuildTempo();
@@ -94,7 +98,6 @@ public:
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;
-    Sid getPropertyStyle(Pid id) const override;
 
     GradualTempoChangeSegment* findElementToSnapBefore() const;
     TempoText* findElementToSnapAfter() const;

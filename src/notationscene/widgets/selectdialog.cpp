@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "selectdialog.h"
 
 /**
@@ -26,8 +27,15 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 #include "notation/notationtypes.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -38,12 +46,15 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 SelectDialog::SelectDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("SelectDialog");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
 
+void SelectDialog::componentComplete()
+{
     const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
     IF_ASSERT_FAILED(interaction) {
         return;

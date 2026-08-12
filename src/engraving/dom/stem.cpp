@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -118,7 +118,7 @@ bool Stem::acceptDrop(EditData& data) const
     const EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::TREMOLO_SINGLECHORD:
-        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
+        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R256;
     default:
         break;
     }
@@ -126,7 +126,7 @@ bool Stem::acceptDrop(EditData& data) const
     return false;
 }
 
-EngravingItem* Stem::drop(EditData& data)
+EngravingItem* Stem::drop(Transaction&, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     Chord* ch  = chord();

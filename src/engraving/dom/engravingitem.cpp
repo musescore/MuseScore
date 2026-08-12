@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -52,6 +52,7 @@
 #include "../editing/editdata.h"
 #include "../editing/editproperty.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/navigation.h"
 
 #include "chord.h"
 #include "factory.h"
@@ -192,14 +193,19 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     return list;
 }
 
+const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+{
+    return score()->configuration.get();
+}
+
 const muse::modularity::ContextPtr& EngravingItem::iocContext() const
 {
     return score()->iocContext();
 }
 
-const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+const std::shared_ptr<IEngravingContextConfiguration>& EngravingItem::contextConfiguration() const
 {
-    return score()->configuration.get();
+    return score()->contextConfiguration.get();
 }
 
 const std::shared_ptr<rendering::IScoreRenderer>& EngravingItem::renderer() const
@@ -286,6 +292,29 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
+Sid EngravingItem::defaultPosSid() const
+{
+    return Sid::NOSTYLE;
+}
+
+PointF EngravingItem::defaultPos() const
+{
+    Sid styleId = defaultPosSid();
+
+    if (styleId == Sid::NOSTYLE) {
+        return PointF();
+    }
+
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
+}
+
 PlacementV EngravingItem::placement() const
 {
     return flag(ElementFlag::PLACE_ABOVE) && !isSystemObjectBelowBottomStaff() ? PlacementV::ABOVE : PlacementV::BELOW;
@@ -334,7 +363,7 @@ void EngravingItem::deleteLater()
     if (selected()) {
         score()->deselect(this);
     }
-    masterScore()->deleteLater(this);
+    masterScore()->cmdState().deleteLater(this);
 }
 
 //---------------------------------------------------------
@@ -364,12 +393,6 @@ bool EngravingItem::collectForDrawing() const
         return false;
     }
 
-    bool isAnnotation = parent() && parent()->isSegment() && toSegment(parent())->element(track()) != this;
-    if (isAnnotation) {
-        Segment* segment = toSegment(parent());
-        return systemFlag() || (segment->measure() && segment->measure()->visible(staffIdx()));
-    }
-
     return true;
 }
 
@@ -384,7 +407,6 @@ void EngravingItem::reset()
     undoResetProperty(Pid::MIN_DISTANCE);
     undoResetProperty(Pid::OFFSET);
     undoResetProperty(Pid::LEADING_SPACE);
-    setOffsetChanged(false);
     EngravingObject::reset();
 }
 
@@ -668,9 +690,9 @@ Color EngravingItem::curColor(bool isVisible, const rendering::PaintOptions& opt
 
 Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const
 {
-    // the default element color is always interpreted as black in printing
     if (opt.isPrinting) {
-        return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
+        // For printing, always use the actual color of the item (default black unless overridden by the user)
+        return normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
@@ -705,13 +727,13 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
         return configuration()->invisibleColor();
     }
 
-    if (opt.invertColors) {
-        if (normalColor == configuration()->defaultColor()) {
-            return maybeOverrideColor(configuration()->scoreInversionColor());
-        }
-        return maybeOverrideColor(normalColor.inverted());
+    if (!opt.ignoreDisplayedDefaultColor && normalColor == configuration()->defaultColor()) {
+        return maybeOverrideColor(configuration()->displayedDefaultColor(opt.invertColors));
     }
 
+    if (opt.invertColors) {
+        return maybeOverrideColor(normalColor.inverted());
+    }
     return maybeOverrideColor(normalColor);
 }
 
@@ -1297,6 +1319,60 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+EngravingItem* EngravingItem::sharedItem() const
+{
+    return ldata()->m_sharedItem;
+}
+
+const std::vector<EngravingItem*>& EngravingItem::originItems() const
+{
+    return ldata()->m_originItems;
+}
+
+void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    if (originItem->ldata()->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->type() == originItem->type()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->ldata()->m_sharedItem == nullptr && originItem->ldata()->m_originItems.empty()) {
+        return;
+    }
+
+    originItem->mutldata()->m_sharedItem = sharedItem;
+
+    std::vector<EngravingItem*>& curOriginItems = sharedItem->mutldata()->m_originItems;
+    auto it = std::lower_bound(curOriginItems.begin(), curOriginItems.end(), originItem, [](EngravingItem* item1, EngravingItem* item2) {
+        return item1->track() < item2->track();
+    });
+
+    curOriginItems.insert(it, originItem);
+}
+
+void EngravingItem::disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    IF_ASSERT_FAILED(originItem->m_layoutData->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    originItem->m_layoutData->m_sharedItem = nullptr;
+
+    DO_ASSERT(muse::remove(sharedItem->m_layoutData->m_originItems, originItem));
+}
+
+void EngravingItem::disconnectAllOriginItems(EngravingItem* sharedItem)
+{
+    for (EngravingItem* originItem : sharedItem->originItems()) {
+        originItem->m_layoutData->m_sharedItem = nullptr;
+    }
+
+    sharedItem->m_layoutData->m_originItems.clear();
+}
+
 bool EngravingItem::isBefore(const EngravingItem* item) const
 {
     if (!item) {
@@ -1365,8 +1441,6 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t refTrack) const
 void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
 {
     PlacementV oldPlacement = placement();
-    bool offsetIsStyled = isStyled(Pid::OFFSET);
-
     PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
@@ -1397,7 +1471,7 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
                 if (segment && segment->isTimeTickType() && segment->measure() != measure) {
                     // Edge case: this is a TimeTick segment at the end of previous measure. Happens only
                     // when dynamic is anchorToEndOfPrevious. In this case look for preceding segment.
-                    segment = segment->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+                    segment = segment->prev1(SegmentType::Duration);
                     assert(segment);
                     measure = segment->measure();
                 }
@@ -1419,9 +1493,6 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
 
     if (newPlacement != oldPlacement) {
         setPlacement(newPlacement);
-        if (offsetIsStyled) {
-            resetProperty(Pid::OFFSET);
-        }
     }
 }
 
@@ -1557,6 +1628,14 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
     EngravingObject::undoChangeProperty(pid, val, ps);
 }
 
+void EngravingItem::undoResetProperty(Pid id)
+{
+    EngravingObject::undoResetProperty(id);
+    if (id == Pid::OFFSET) {
+        setOffsetChanged(false);
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -1580,10 +1659,6 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        PropertyValue v = EngravingObject::propertyDefault(pid);
-        if (v.isValid()) {        // if it's a styled property
-            return v;
-        }
         return PropertyValue::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
@@ -1976,7 +2051,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 //------------------------------------------------------------------------------------------
@@ -2024,7 +2099,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         }
         p = p->parentItem();
     }
-    return score()->firstElement();
+    return Navigation::firstElement(score());
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -2598,7 +2673,7 @@ void EngravingItem::setVisible(bool f)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-    if (!configuration()->isAccessibleEnabled()) {
+    if (!contextConfiguration() || !contextConfiguration()->isAccessibleEnabled()) {
         return;
     }
 
@@ -2723,9 +2798,11 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t elementTrack, const 
         return false;
     }
 
-    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT && (part->startTrack() <= refTrack
-                                                                        && part->endTrack() - 1 >= refTrack)) {
-        return true;
+    if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT) {
+        const TrackRange range = part->trackRange();
+        if (range.startTrack <= refTrack && range.endTrack - 1 >= refTrack) {
+            return true;
+        }
     }
     return false;
 }

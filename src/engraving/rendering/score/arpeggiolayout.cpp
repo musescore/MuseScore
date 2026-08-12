@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 
 #include "tlayout.h"
 
@@ -128,8 +129,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
     const Chord* endChord = endEl && endEl->isChord() ? toChord(endEl) : item->chord();
 
     const Part* part = item->part();
-    const track_idx_t partStartTrack = part->startTrack();
-    const track_idx_t partEndTrack = part->endTrack();
+    const TrackRange trackRange = part->trackRange();
     const PaddingTable& paddingTable = item->score()->paddingTable();
 
     double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * item->mag();
@@ -139,7 +139,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
     double arpX = arpShape.right();
     double largestOverlap = 0.0;
 
-    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
+    for (track_idx_t track = trackRange.startTrack; track < trackRange.endTrack; ++track) {
         EngravingItem* e = seg->element(track);
         if (!e || !e->isChord()) {
             continue;
@@ -198,7 +198,7 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
             continue;
         }
 
-        double chordX = -chordShape.left();
+        double chordX = chordShape.left();
         double diff = chordX - arpX;
 
         if (!muse::RealIsNull(diff)) {

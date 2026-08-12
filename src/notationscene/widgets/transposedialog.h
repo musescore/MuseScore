@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,8 @@
  */
 
 #pragma once
+
+#include "ui/view/widgetdialog.h"
 
 #include "ui_transposedialog.h"
 
@@ -46,7 +48,7 @@ struct TransposeDialogState {
     int needTransposeDoubleSharpsFlatsIdx = 1;
 };
 
-class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Contextable
+class TransposeDialog : public muse::ui::WidgetDialog, private Ui::TransposeDialogBase
 {
     Q_OBJECT
 
@@ -55,6 +57,8 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Co
 public:
 
     TransposeDialog(QWidget* parent = 0);
+
+    void componentComplete() override;
 
 private slots:
     void transposeByKeyToggled(bool);

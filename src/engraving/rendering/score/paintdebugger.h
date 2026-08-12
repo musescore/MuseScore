@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PAINTDEBUGGER_DEV_H
-#define MU_ENGRAVING_PAINTDEBUGGER_DEV_H
+
+#pragma once
 
 #include "draw/ipaintprovider.h"
 
@@ -69,7 +69,8 @@ public:
     void drawPolygon(const muse::PointF* points, size_t pointCount, muse::draw::PolygonMode mode) override;
 
     void drawText(const muse::PointF& point, const muse::String& text) override;
-    void drawText(const muse::RectF& rect, int flags, const muse::String& text) override;
+    void drawText(const muse::RectF& rect, muse::draw::Alignment alignment, muse::draw::TextFlags textFlags,
+                  const muse::String& text) override;
 
     void drawSymbol(const muse::PointF& point, char32_t ucs4Code) override;
 
@@ -94,5 +95,3 @@ private:
     muse::draw::Color m_debugPenColor;
 };
 }
-
-#endif // MU_ENGRAVING_PAINTDEBUGGER_DEV_H

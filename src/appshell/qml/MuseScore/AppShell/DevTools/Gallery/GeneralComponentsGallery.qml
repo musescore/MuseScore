@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -1116,13 +1116,8 @@ Rectangle {
                     max: 15
                 }
                 ListElement {
-                    name: "Tony"
-                    age: 15
-                    valueType: "Int"
-                }
-                ListElement {
-                    name: "Fred"
-                    age: 10
+                    name: "Anna"
+                    age: 11
                     valueType: "Int"
                 }
                 ListElement {
@@ -1131,8 +1126,13 @@ Rectangle {
                     valueType: "Int"
                 }
                 ListElement {
-                    name: "Anna"
-                    age: 11
+                    name: "Fred"
+                    age: 10
+                    valueType: "Int"
+                }
+                ListElement {
+                    name: "Tony"
+                    age: 15
                     valueType: "Int"
                 }
             }
@@ -1145,16 +1145,26 @@ Rectangle {
         StyledTableView  {
             id: tableView
 
-            width: 560
-            height: 226
+            width: 1100
+            height: 360
 
             TestTableViewModel {
                 id: tableModel
             }
 
-            model: tableModel
+            TableSortFilterProxyModel {
+                id: tableProxy
+
+                sourceModel: tableModel
+            }
+
+            model: tableProxy
 
             headerCapitalization: Font.Capitalize
+            horizontalHeaderNavigationEnabled: true
+
+            navigationPanel.section: navSec
+            navigationPanel.order: 2
 
             sourceComponentCallback: function(type) {
                 switch(type) {
@@ -1162,6 +1172,13 @@ Rectangle {
                 }
 
                 return null
+            }
+
+            sortIndicatorColumn: tableProxy.sortIndicatorColumn
+            sortIndicatorOrder: tableProxy.sortIndicatorOrder
+
+            onHorizontalHeaderClicked: function (column) {
+                tableProxy.toggleColumnSort(column)
             }
 
             Component {
@@ -1174,6 +1191,10 @@ Rectangle {
                     property string val
                     property int row
                     property int column
+
+                    property NavigationPanel navigationPanel
+                    property int navigationRow
+                    property int navigationColumnStart
 
                     property string accessibleName: label.text
 

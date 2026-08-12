@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,9 +29,14 @@
 
 #include "editpitch.h"
 
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/editing/editpart.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
@@ -48,7 +53,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& strings, int frets)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("EditStringData");
     setupUi(this);
@@ -58,6 +63,11 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
     _strings = strings;
     _frets = frets;
 
+    qApp->installEventFilter(this);
+}
+
+void EditStringData::componentComplete()
+{
     if (_strings.empty()) {
         initStringsData();
     }
@@ -66,8 +76,6 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
-
-    qApp->installEventFilter(this);
 }
 
 std::vector<instrString> EditStringData::strings() const
@@ -115,9 +123,8 @@ QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) c
 
 INotationSelectionPtr EditStringData::currentNotationSelection() const
 {
-    auto currentNotation = globalContext()->currentNotation();
-    auto interaction = currentNotation ? currentNotation->interaction() : nullptr;
-    return interaction ? interaction->selection() : nullptr;
+    notation::INotationPtr currentNotation = globalContext()->currentNotation();
+    return currentNotation ? currentNotation->interaction()->selection() : nullptr;
 }
 
 //---------------------------------------------------------

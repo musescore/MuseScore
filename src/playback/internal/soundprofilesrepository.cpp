@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,15 +40,15 @@ void SoundProfilesRepository::init()
     museProfile.name = config()->museSoundsProfileName();
     m_profilesMap.emplace(museProfile.name, std::move(museProfile));
 
-    if (playback()->isAudioStarted()) {
+    if (playback()->isInited()) {
         refresh();
         return;
     }
 
-    playback()->isAudioStartedChanged().onReceive(this, [this](bool started) {
-        if (started) {
+    playback()->initedChanged().onReceive(this, [this](bool inited) {
+        if (inited) {
             refresh();
-            playback()->isAudioStartedChanged().disconnect(this);
+            playback()->initedChanged().disconnect(this);
         }
     });
 }
@@ -67,11 +67,11 @@ void SoundProfilesRepository::refresh()
                 continue;
             }
 
-            if (resource.type == AudioResourceType::FluidSoundfont) {
+            if (isResourceType(resource, AudioResourceType::FluidSoundfont)) {
                 basicProfile.data.emplace(mpe::PlaybackSetupData::fromString(setup->second), resource);
             }
 
-            if (resource.type == AudioResourceType::MuseSamplerSoundPack) {
+            if (isResourceType(resource, AudioResourceType::MuseSamplerSoundPack)) {
                 museProfile.data.emplace(mpe::PlaybackSetupData::fromString(setup->second), resource);
             }
         }

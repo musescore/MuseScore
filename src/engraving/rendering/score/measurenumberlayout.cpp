@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,7 @@
 #include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 #include "dom/system.h"
 
 using namespace mu::engraving;
@@ -91,6 +92,11 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
         ldata->moveX(-itemBBox.right());
     }
 
+    Staff* staff = item->staff();
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
+
+    ldata->move(defaultPos);
+
     checkBarlineCollisions(item, barlineSeg, hPlacement, ldata);
 }
 
@@ -114,6 +120,11 @@ void MeasureNumberLayout::layoutMMRestRange(MMRestRange* item, MMRestRange::Layo
     } else {
         ldata->setPosX(measureStartEnd.x1 - itemBBox.left());
     }
+
+    Staff* staff = item->staff();
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
+
+    ldata->move(defaultPos);
 }
 
 void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
@@ -132,7 +143,7 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
         if (staff && staff->lines(item->tick()) == 1) {
             yoff += 2.0 * item->spatium();
         } else {
-            yoff += item->staff()->staffHeight();
+            yoff += item->staff() ? item->staff()->staffHeight() : 0.0;
         }
 
         ldata->setPosY(yoff);
@@ -146,11 +157,6 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
 
         ldata->setPosY(yoff);
     }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        PointF offset = item->propertyDefault(Pid::OFFSET).value<PointF>() * item->staff()->staffMag(item->tick());
-        item->setOffset(offset);
-    }
 }
 
 const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item, bool alignToBarline, AlignH hPlacement)
@@ -160,7 +166,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     if (alignToBarline || hPlacement == AlignH::LEFT) {
         for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick() && seg->system() == measure->system();
              seg = seg->prev1MMenabled()) {
-            if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
+            if (seg->isType(SegmentType::BarLineTypes) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
             }
@@ -168,7 +174,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     } else {
         for (Segment* seg = measure->first(SegmentType::ChordRest);
              seg && seg->tick() <= measure->endTick() && seg->system() == measure->system(); seg = seg->next1enabled()) {
-            if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
+            if (seg->isType(SegmentType::BarLineTypes) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
             }

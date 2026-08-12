@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Track 1</trackName>
       <Instrument id="cavaquinho">
-        <longName>Track 1</longName>
+        <InstrumentLabel>
+          <longName>Track 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -49,40 +51,28 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <endRepeat>2</endRepeat>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Dynamic>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>1</beginText>
-              <eid>I_I</eid>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
@@ -140,13 +130,6 @@
       <Measure>
         <eid>T_T</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>U_U</eid>
             <durationType>quarter</durationType>
@@ -204,26 +187,14 @@
       <Measure>
         <eid>e_e</eid>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>1,2</beginText>
-              <eid>f_f</eid>
-              <endings>1,2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>g_g</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>g_g</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>i_i</eid>
+                <eid>h_h</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
@@ -232,10 +203,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>j_j</eid>
+            <eid>i_i</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>k_k</eid>
+              <eid>j_j</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -243,13 +214,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>l_l</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>n_n</eid>
+                <eid>m_m</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>
@@ -258,13 +229,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>o_o</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>q_q</eid>
+                <eid>p_p</eid>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -275,35 +246,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>r_r</eid>
+        <eid>q_q</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>3</beginText>
-              <eid>s_s</eid>
-              <endings>3</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>t_t</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>u_u</eid>
+              <eid>s_s</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>v_v</eid>
+                <eid>t_t</eid>
                 </Accidental>
               <pitch>51</pitch>
               <tpc>11</tpc>
@@ -312,13 +264,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>w_w</eid>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>x_x</eid>
+              <eid>v_v</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>y_y</eid>
+                <eid>w_w</eid>
                 </Accidental>
               <pitch>52</pitch>
               <tpc>18</tpc>
@@ -327,10 +279,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>z_z</eid>
+            <eid>x_x</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>0_0</eid>
+              <eid>y_y</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -338,13 +290,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>1_1</eid>
+            <eid>z_z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>0_0</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>3_3</eid>
+                <eid>1_1</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
@@ -355,23 +307,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>4_4</eid>
+        <eid>2_2</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>5_5</eid>
+            <eid>3_3</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>6_6</eid>
+              <eid>4_4</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>7_7</eid>
+                <eid>5_5</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
@@ -380,13 +325,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>8_8</eid>
+            <eid>6_6</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>9_9</eid>
+              <eid>7_7</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>+_+</eid>
+                <eid>8_8</eid>
                 </Accidental>
               <pitch>47</pitch>
               <tpc>19</tpc>
@@ -395,10 +340,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>AB_AB</eid>
+              <eid>+_+</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -406,13 +351,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>BB_BB</eid>
+            <eid>/_/</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>CB_CB</eid>
+              <eid>AB_AB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>DB_DB</eid>
+                <eid>BB_BB</eid>
                 </Accidental>
               <pitch>49</pitch>
               <tpc>21</tpc>
@@ -423,25 +368,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>EB_EB</eid>
+        <eid>CB_CB</eid>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>4</beginText>
-              <eid>FB_FB</eid>
-              <endings>4</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>GB_GB</eid>
+            <eid>DB_DB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>HB_HB</eid>
+              <eid>EB_EB</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <fret>1</fret>
@@ -449,13 +382,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>IB_IB</eid>
+            <eid>FB_FB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>JB_JB</eid>
+              <eid>GB_GB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>KB_KB</eid>
+                <eid>HB_HB</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
@@ -464,10 +397,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>LB_LB</eid>
+            <eid>IB_IB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>MB_MB</eid>
+              <eid>JB_JB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -475,13 +408,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>NB_NB</eid>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>OB_OB</eid>
+              <eid>LB_LB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>PB_PB</eid>
+                <eid>MB_MB</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
@@ -492,33 +425,14 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>QB_QB</eid>
+        <eid>NB_NB</eid>
         <startRepeat/>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>5</beginText>
-              <eid>RB_RB</eid>
-              <endings>5</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>SB_SB</eid>
+            <eid>OB_OB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>TB_TB</eid>
+              <eid>PB_PB</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <fret>12</fret>
@@ -526,13 +440,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>UB_UB</eid>
+            <eid>QB_QB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>VB_VB</eid>
+              <eid>RB_RB</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>WB_WB</eid>
+                <eid>SB_SB</eid>
                 </Accidental>
               <pitch>75</pitch>
               <tpc>11</tpc>
@@ -541,10 +455,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>XB_XB</eid>
+            <eid>TB_TB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>YB_YB</eid>
+              <eid>UB_UB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>10</fret>
@@ -552,13 +466,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>ZB_ZB</eid>
+            <eid>VB_VB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>aB_aB</eid>
+              <eid>WB_WB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>bB_bB</eid>
+                <eid>XB_XB</eid>
                 </Accidental>
               <pitch>73</pitch>
               <tpc>21</tpc>
@@ -569,33 +483,14 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>cB_cB</eid>
+        <eid>YB_YB</eid>
         <endRepeat>2</endRepeat>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>1,2,3,4,5,6</beginText>
-              <eid>dB_dB</eid>
-              <endings>1,2,3,4,5,6</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>eB_eB</eid>
+            <eid>ZB_ZB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>fB_fB</eid>
+              <eid>aB_aB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -603,10 +498,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>gB_gB</eid>
+            <eid>bB_bB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>hB_hB</eid>
+              <eid>cB_cB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -614,13 +509,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>iB_iB</eid>
+            <eid>dB_dB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>jB_jB</eid>
+              <eid>eB_eB</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>kB_kB</eid>
+                <eid>fB_fB</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -629,10 +524,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>lB_lB</eid>
+            <eid>gB_gB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>mB_mB</eid>
+              <eid>hB_hB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -642,27 +537,38 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>nB_nB</eid>
+        <eid>iB_iB</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>7,8</beginText>
-              <eid>oB_oB</eid>
-              <endings>7,8</endings>
-              </Volta>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
+          <Chord>
+            <eid>jB_jB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>kB_kB</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>lB_lB</eid>
+                </Accidental>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <fret>4</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>mB_mB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>nB_nB</eid>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                <eid>oB_oB</eid>
+                </Accidental>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
           <Chord>
             <eid>pB_pB</eid>
             <durationType>quarter</durationType>
@@ -672,9 +578,9 @@
                 <subtype>accidentalSharp</subtype>
                 <eid>rB_rB</eid>
                 </Accidental>
-              <pitch>68</pitch>
-              <tpc>22</tpc>
-              <fret>4</fret>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -687,51 +593,72 @@
                 <subtype>accidentalNatural</subtype>
                 <eid>uB_uB</eid>
                 </Accidental>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>3</fret>
-              <string>0</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>vB_vB</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>wB_wB</eid>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                <eid>xB_xB</eid>
-                </Accidental>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              <fret>2</fret>
-              <string>0</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>yB_yB</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>zB_zB</eid>
-              <Accidental>
-                <subtype>accidentalNatural</subtype>
-                <eid>0B_0B</eid>
-                </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>1</fret>
               <string>0</string>
               </Note>
             </Chord>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <beginText>1</beginText>
+        <startElement>E_E</startElement>
+        <endElement>E_E</endElement>
+        <eid>vB_vB</eid>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <Volta>
+        <beginText>1,2</beginText>
+        <startElement>e_e</startElement>
+        <endElement>e_e</endElement>
+        <eid>wB_wB</eid>
+        <track>0</track>
+        <endings>1,2</endings>
+        </Volta>
+      <Volta>
+        <beginText>3</beginText>
+        <startElement>q_q</startElement>
+        <endElement>q_q</endElement>
+        <eid>xB_xB</eid>
+        <track>0</track>
+        <endings>3</endings>
+        </Volta>
+      <Volta>
+        <beginText>4</beginText>
+        <startElement>CB_CB</startElement>
+        <endElement>CB_CB</endElement>
+        <eid>yB_yB</eid>
+        <track>0</track>
+        <endings>4</endings>
+        </Volta>
+      <Volta>
+        <beginText>5</beginText>
+        <startElement>NB_NB</startElement>
+        <endElement>NB_NB</endElement>
+        <eid>zB_zB</eid>
+        <track>0</track>
+        <endings>5</endings>
+        </Volta>
+      <Volta>
+        <beginText>1,2,3,4,5,6</beginText>
+        <startElement>YB_YB</startElement>
+        <endElement>YB_YB</endElement>
+        <eid>0B_0B</eid>
+        <track>0</track>
+        <endings>1,2,3,4,5,6</endings>
+        </Volta>
+      <Volta>
+        <beginText>7,8</beginText>
+        <startElement>iB_iB</startElement>
+        <endElement>iB_iB</endElement>
+        <eid>1B_1B</eid>
+        <track>0</track>
+        <endings>7,8</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

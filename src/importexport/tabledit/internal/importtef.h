@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -81,6 +81,8 @@ struct TefNote {
     int graceFret { -1 };   // invalid
     int fingeringLH { 0 };
     int fingeringRH { 0 };
+    int simpleEffect { 0 };
+    int complexEffect { 0 };
 };
 
 struct TefReadingListItem {
@@ -147,6 +149,7 @@ class TablEdit
 
     void allocateVoices(std::vector<VoiceAllocator>& allocator);
     void createContents(const MeasureHandler& measureHandler);
+    void createEffects();
     void createLinkedTabs();
     void createMeasures(const MeasureHandler& measureHandler);
     void createNotesFrame();
@@ -174,6 +177,8 @@ class TablEdit
     std::vector<TefMeasure> tefMeasures;
     std::vector<TefReadingListItem> tefReadingList;
     std::vector<std::string> tefTexts;
+
+    std::map<const TefNote* const, mu::engraving::Note*> effectMap;
 
 public:
     TablEdit(muse::io::IODevice* f, mu::engraving::MasterScore* s)

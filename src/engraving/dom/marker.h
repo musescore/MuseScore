@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -95,8 +95,8 @@ public:
     String symbolString() const;
 
 private:
-    MarkerType m_markerType = MarkerType::SEGNO;
-    String m_label;                 ///< referenced from Jump() element
+    MarkerType m_markerType = MarkerType::FINE;
+    String m_label = u"fine";                 ///< referenced from Jump() element
 
     bool m_centerOnSymbol = true;
 };

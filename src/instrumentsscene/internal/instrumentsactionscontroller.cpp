@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,18 @@
 
 #include "instrumentsactionscontroller.h"
 
+#include "rcommand/actiontocommand.h"
+
 #include "engraving/dom/instrchange.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
+
+#include "../instrumentscommands.h"
+#include "types/ret.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -31,8 +42,19 @@ using namespace muse::actions;
 
 void InstrumentsActionsController::init()
 {
-    dispatcher()->reg(this, "instruments", this, &InstrumentsActionsController::selectInstruments);
-    dispatcher()->reg(this, "change-instrument", this, &InstrumentsActionsController::changeInstrument);
+    commandDispatcher()->onRequest(this, INSTRUMENTS_SELECT_COMMAND, [this]() { selectInstruments(); return muse::make_ok(); });
+    commandDispatcher()->onRequest(this, INSTRUMENTS_CHANGE_COMMAND, [this]() { changeInstrument(); return muse::make_ok(); });
+
+    // compat
+    {
+        using namespace muse::rcommand;
+        static const std::vector<ActionToCommand> actions = {
+            { "instruments", INSTRUMENTS_SELECT_COMMAND, {} },
+            { "change-instrument", INSTRUMENTS_CHANGE_COMMAND, {} },
+        };
+
+        registerActionToCommand(this, actions, commandDispatcher(), dispatcher());
+    }
 }
 
 bool InstrumentsActionsController::canReceiveAction(const ActionCode&) const
@@ -60,11 +82,21 @@ void InstrumentsActionsController::changeInstrument()
         return;
     }
 
-    const mu::engraving::EngravingItem* element = master->notation()->interaction()->selection()->element();
-    const mu::engraving::InstrumentChange* instrumentChange = element ? mu::engraving::toInstrumentChange(element) : nullptr;
-    if (!instrumentChange) {
+    INotationPtr notation = context()->currentNotation();
+    IF_ASSERT_FAILED(notation) {
         return;
     }
+
+    const mu::engraving::EngravingItem* element = notation->interaction()->hitElementContext().element;
+    if (!element) {
+        element = notation->interaction()->selection()->element();
+    }
+
+    if (!element || !element->isInstrumentChange()) {
+        return;
+    }
+
+    const mu::engraving::InstrumentChange* instrumentChange = mu::engraving::toInstrumentChange(element);
 
     InstrumentKey key;
     key.instrumentId = instrumentChange->instrument()->id();

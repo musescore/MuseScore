@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,6 +32,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/transpose.h"
+#include "engraving/types/typesconv.h"
 #include "framework/global/containers.h"
 
 #include "mnxtypesconv.h"
@@ -39,6 +40,34 @@
 using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
+namespace {
+const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAnchorTable = {
+    { mnx::Orientation::Auto,       ArticulationAnchor::AUTO },
+    { mnx::Orientation::Below,      ArticulationAnchor::BOTTOM },
+    { mnx::Orientation::Above,      ArticulationAnchor::TOP },
+};
+} // namespace
+
+ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+{
+    return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
+}
+
+mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
+{
+    return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
+}
+
+mnx::Orientation toMnxOrientation(PlacementV placement)
+{
+    switch (placement) {
+    case PlacementV::ABOVE: return mnx::Orientation::Above;
+    case PlacementV::BELOW: return mnx::Orientation::Below;
+    }
+    ASSERT_X("invalid placement value");
+    return mnx::Orientation::Auto;
+}
+
 namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
@@ -60,6 +89,38 @@ BarLineType toMuseScoreBarLineType(mnx::BarlineType blt)
 mnx::BarlineType toMnxBarLineType(BarLineType blt)
 {
     return muse::key(barLineTypeTable, blt, mnx::BarlineType::Regular);
+}
+
+std::optional<mnx::TimeSignatureDisplay> toMnxTimeSignatureDisplay(TimeSigType type)
+{
+    switch (type) {
+    case TimeSigType::NORMAL:
+        return std::nullopt;
+    case TimeSigType::FOUR_FOUR:
+        return mnx::TimeSignatureDisplay::Common;
+    case TimeSigType::ALLA_BREVE:
+        return mnx::TimeSignatureDisplay::Cut;
+    case TimeSigType::CUT_BACH:
+    case TimeSigType::CUT_TRIPLE:
+        // MNX has no encoding for these glyphs. Exporting them as Cut would silently
+        // substitute timeSigCutCommon for timeSigCut2/timeSigCut3 on the way back in,
+        // so omit the display and keep the numeric time signature instead.
+        LOGW() << "MNX has no time signature glyph for " << int(type) << "; exporting numbers only.";
+        return std::nullopt;
+    }
+    return std::nullopt;
+}
+
+TimeSigType toMuseScoreTimeSigType(std::optional<mnx::TimeSignatureDisplay> display)
+{
+    if (!display) {
+        return TimeSigType::NORMAL;
+    }
+    switch (display.value()) {
+    case mnx::TimeSignatureDisplay::Common: return TimeSigType::FOUR_FOUR;
+    case mnx::TimeSignatureDisplay::Cut: return TimeSigType::ALLA_BREVE;
+    }
+    return TimeSigType::NORMAL;
 }
 
 std::optional<mnx::TimeSignatureUnit> toMnxTimeSignatureUnit(int denominator)
@@ -262,38 +323,287 @@ std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
     return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
 }
 
-DynamicType toMuseScoreDynamicType(const String& glyph)
+MnxDynamicMapping toMnxDynamicType(DynamicType type)
 {
-    // Currently there is very little clarity around dynamics in mnx.
-    // This will likely change considerably as the details emerge.
-    static const std::unordered_map<String, DynamicType> dynamicTypes {
-        { u"<sym>dynamicPPPPPP</sym>",              DynamicType::PPPPPP },
-        { u"<sym>dynamicPPPPP</sym>",               DynamicType::PPPPP },
-        { u"<sym>dynamicPPPP</sym>",                DynamicType::PPPP },
-        { u"<sym>dynamicPPP</sym>",                 DynamicType::PPP },
-        { u"<sym>dynamicPP</sym>",                  DynamicType::PP },
-        { u"<sym>dynamicP</sym>",                   DynamicType::P },
-        { u"<sym>dynamicMP</sym>",                  DynamicType::MP },
-        { u"<sym>dynamicMF</sym>",                  DynamicType::MF },
-        { u"<sym>dynamicPF</sym>",                  DynamicType::PF },
-        { u"<sym>dynamicF</sym>",                   DynamicType::F },
-        { u"<sym>dynamicFF</sym>",                  DynamicType::FF },
-        { u"<sym>dynamicFFF</sym>",                 DynamicType::FFF },
-        { u"<sym>dynamicFFFF</sym>",                DynamicType::FFFF },
-        { u"<sym>dynamicFFFFF</sym>",               DynamicType::FFFFF },
-        { u"<sym>dynamicFFFFFF</sym>",              DynamicType::FFFFFF },
-        { u"<sym>dynamicFortePiano</sym>",          DynamicType::FP },
-        { u"<sym>dynamicForzando</sym>",            DynamicType::FZ },
-        { u"<sym>dynamicSforzando1</sym>",          DynamicType::SF },
-        { u"<sym>dynamicSforzandoPiano</sym>",      DynamicType::SFP },
-        { u"<sym>dynamicSforzandoPianissimo</sym>", DynamicType::SFPP },
-        { u"<sym>dynamicSforzato</sym>",            DynamicType::SFZ },
-        { u"<sym>dynamicSforzatoPiano</sym>",       DynamicType::SFZ }, // SFZP does not exist
-        { u"<sym>dynamicSforzatoFF</sym>",          DynamicType::SFFZ },
-        { u"<sym>dynamicRinforzando1</sym>",        DynamicType::RF },
-        { u"<sym>dynamicRinforzando2</sym>",        DynamicType::RFZ },
+    using Prefix = mnx::DynamicPrefix;
+    using Suffix = mnx::DynamicSuffix;
+    using Value = mnx::DynamicValue;
+
+    MnxDynamicMapping result;
+
+    // Accents spell themselves out as accentPrefix + value + accentSuffix + residualValue,
+    // so `value` is the initial attack and `residualValue` is what remains after it.
+    auto accent = [&](Prefix prefix, Value value, Suffix suffix, std::optional<Value> residual = std::nullopt) {
+        result.isAccent = true;
+        result.accentPrefix = prefix;
+        result.accentSuffix = suffix;
+        result.value = value;
+        result.residualValue = residual;
     };
-    return muse::value(dynamicTypes, glyph, DynamicType::OTHER);
+
+    switch (type) {
+    case DynamicType::PPPPPP:
+        result.value = Value::pppppp;
+        break;
+    case DynamicType::PPPPP:
+        result.value = Value::ppppp;
+        break;
+    case DynamicType::PPPP:
+        result.value = Value::pppp;
+        break;
+    case DynamicType::PPP:
+        result.value = Value::ppp;
+        break;
+    case DynamicType::PP:
+        result.value = Value::pp;
+        break;
+    case DynamicType::P:
+        result.value = Value::p;
+        break;
+    case DynamicType::MP:
+        result.value = Value::mp;
+        break;
+    case DynamicType::MF:
+        result.value = Value::mf;
+        break;
+    case DynamicType::F:
+        result.value = Value::f;
+        break;
+    case DynamicType::FF:
+        result.value = Value::ff;
+        break;
+    case DynamicType::FFF:
+        result.value = Value::fff;
+        break;
+    case DynamicType::FFFF:
+        result.value = Value::ffff;
+        break;
+    case DynamicType::FFFFF:
+        result.value = Value::fffff;
+        break;
+    case DynamicType::FFFFFF:
+        result.value = Value::ffffff;
+        break;
+    case DynamicType::N:
+        result.value = Value::n;
+        break;
+    // FP and PF carry no accent letters, but residualValue is only available on an accent,
+    // so that is the only MNX dynamic type able to express them.
+    case DynamicType::FP:
+        accent(Prefix::None, Value::f, Suffix::None, Value::p);
+        break;
+    case DynamicType::PF:
+        accent(Prefix::None, Value::p, Suffix::None, Value::f);
+        break;
+    case DynamicType::SF:
+        accent(Prefix::s, Value::f, Suffix::None);
+        break;
+    case DynamicType::SFZ:
+        accent(Prefix::s, Value::f, Suffix::z);
+        break;
+    case DynamicType::FZ:
+        accent(Prefix::None, Value::f, Suffix::z);
+        break;
+    case DynamicType::RF:
+        accent(Prefix::r, Value::f, Suffix::None);
+        break;
+    case DynamicType::RFZ:
+        accent(Prefix::r, Value::f, Suffix::z);
+        break;
+    case DynamicType::SFF:
+        accent(Prefix::s, Value::ff, Suffix::None);
+        break;
+    case DynamicType::SFFZ:
+        accent(Prefix::s, Value::ff, Suffix::z);
+        break;
+    case DynamicType::SFFF:
+        accent(Prefix::s, Value::fff, Suffix::None);
+        break;
+    case DynamicType::SFFFZ:
+        accent(Prefix::s, Value::fff, Suffix::z);
+        break;
+    case DynamicType::SFP:
+        accent(Prefix::s, Value::f, Suffix::None, Value::p);
+        break;
+    case DynamicType::SFPP:
+        accent(Prefix::s, Value::f, Suffix::None, Value::pp);
+        break;
+    // These have no MNX equivalent. The caller falls back to exporting the glyphs.
+    case DynamicType::OTHER:
+    case DynamicType::M:
+    case DynamicType::R:
+    case DynamicType::S:
+    case DynamicType::Z:
+    case DynamicType::LAST:
+        break;
+    }
+
+    return result;
+}
+
+namespace {
+/// Maps each SMuFL dynamic glyph to the letters it spells, derived from MuseScore's own
+/// DynamicType table so that ligatures such as dynamicFFF decompose to "fff" without a
+/// second table to maintain. Several types share a glyph -- SymId::dynamicSforzando belongs
+/// to both S ("s") and SF ("sf") -- and the glyph on its own renders the shortest of them,
+/// so the shortest spelling wins. This is also why TConv::dynamicType(SymId) cannot be used
+/// here: it returns whichever type the table lists first.
+const std::unordered_map<SymId, std::string>& dynamicGlyphLetters()
+{
+    static const std::unordered_map<SymId, std::string> letters = []() {
+        std::unordered_map<SymId, std::string> result;
+        for (int index = 0; index < int(DynamicType::LAST); index++) {
+            const DynamicType type = DynamicType(index);
+            const SymId symId = TConv::symId(type);
+            if (symId == SymId::noSym) {
+                continue;
+            }
+            const std::string spelling = TConv::toXml(type).ascii();
+            const auto existing = result.find(symId);
+            if (existing == result.end() || spelling.size() < existing->second.size()) {
+                result[symId] = spelling;
+            }
+        }
+        return result;
+    }();
+    return letters;
+}
+
+/// Consumes the longest dynamic value spelled at @p pos, e.g. "ffff" rather than "f".
+std::optional<mnx::DynamicValue> takeDynamicValue(const std::string& letters, size_t& pos)
+{
+    std::optional<mnx::DynamicValue> result;
+    size_t bestEnd = pos;
+    for (const auto& [value, spelling] : mnx::EnumStringMapping<mnx::DynamicValue>::enumToString()) {
+        const size_t end = pos + spelling.size();
+        if (end > bestEnd && letters.compare(pos, spelling.size(), spelling) == 0) {
+            bestEnd = end;
+            result = value;
+        }
+    }
+    pos = bestEnd;
+    return result;
+}
+} // namespace
+
+std::optional<MnxDynamicMapping> toMnxDynamicFromLetters(const std::string& dynamicLetters)
+{
+    // MNX spells a dynamic as accentPrefix + value + accentSuffix + residualValue. Reading the
+    // affixes a character at a time is only unambiguous because no DynamicValue spells itself
+    // with s, r, or z -- every one of them is a run of p, m, f, or n -- so a peek here can never
+    // consume a letter that belongs to the value that follows.
+    MnxDynamicMapping mapping;
+    size_t pos = 0;
+    if (pos < dynamicLetters.size() && (dynamicLetters[pos] == 's' || dynamicLetters[pos] == 'r')) {
+        mapping.accentPrefix = dynamicLetters[pos] == 's' ? mnx::DynamicPrefix::s : mnx::DynamicPrefix::r;
+        pos++;
+    }
+    mapping.value = takeDynamicValue(dynamicLetters, pos);
+    if (!mapping.value) {
+        return std::nullopt; // no sounding level, so MNX has nothing to anchor the dynamic to
+    }
+    if (pos < dynamicLetters.size() && dynamicLetters[pos] == 'z') {
+        mapping.accentSuffix = mnx::DynamicSuffix::z;
+        pos++;
+    }
+    if (pos < dynamicLetters.size()) {
+        mapping.residualValue = takeDynamicValue(dynamicLetters, pos);
+        if (!mapping.residualValue) {
+            return std::nullopt;
+        }
+    }
+    if (pos != dynamicLetters.size()) {
+        return std::nullopt; // trailing letters we cannot account for
+    }
+
+    mapping.isAccent = mapping.accentPrefix != mnx::DynamicPrefix::None
+                       || mapping.accentSuffix != mnx::DynamicSuffix::None
+                       || mapping.residualValue.has_value();
+    return mapping;
+}
+
+std::optional<MnxDynamicMapping> toMnxDynamicFromSymIds(const std::vector<engraving::SymId>& symIds)
+{
+    if (symIds.empty()) {
+        return std::nullopt;
+    }
+
+    std::string letters;
+    for (const SymId symId : symIds) {
+        const auto it = dynamicGlyphLetters().find(symId);
+        if (it == dynamicGlyphLetters().end()) {
+            return std::nullopt; // not a dynamic spelling
+        }
+        letters += it->second;
+    }
+
+    return toMnxDynamicFromLetters(letters);
+}
+
+std::optional<DynamicType> toMuseScoreDynamicType(const MnxDynamicMapping& mapping)
+{
+    if (!mapping.value) {
+        return std::nullopt;
+    }
+    // Search the forward table rather than keeping a second one that could drift from it.
+    // Every DynamicType maps to a distinct combination, so the first match is the only one.
+    for (int index = 0; index < int(DynamicType::LAST); index++) {
+        const DynamicType type = DynamicType(index);
+        const MnxDynamicMapping candidate = toMnxDynamicType(type);
+        if (!candidate.value || candidate.value != mapping.value
+            || candidate.residualValue != mapping.residualValue
+            || candidate.isAccent != mapping.isAccent) {
+            continue;
+        }
+        // The affixes only distinguish accents; they are meaningless otherwise.
+        if (!candidate.isAccent
+            || (candidate.accentPrefix == mapping.accentPrefix && candidate.accentSuffix == mapping.accentSuffix)) {
+            return type;
+        }
+    }
+    return std::nullopt;
+}
+
+std::vector<std::string> toMuseScoreDynamicGlyphNames(mnx::DynamicValue value)
+{
+    // Every MNX dynamic value is a run of p/m/f/n, so the SMuFL glyphs follow from the
+    // characters of its JSON representation.
+    static const std::unordered_map<char, std::string> glyphNames = {
+        { 'p', "dynamicPiano" },
+        { 'm', "dynamicMezzo" },
+        { 'f', "dynamicForte" },
+        { 'n', "dynamicNiente" },
+    };
+
+    const auto& valueNames = mnx::EnumStringMapping<mnx::DynamicValue>::enumToString();
+    std::vector<std::string> result;
+    for (const char ch : muse::value(valueNames, value, std::string {})) {
+        const std::string glyphName = muse::value(glyphNames, ch, std::string {});
+        IF_ASSERT_FAILED(!glyphName.empty()) {
+            continue;
+        }
+        result.push_back(glyphName);
+    }
+    return result;
+}
+
+std::string toMuseScoreDynamicGlyphName(mnx::DynamicPrefix prefix)
+{
+    switch (prefix) {
+    case mnx::DynamicPrefix::None: return {};
+    case mnx::DynamicPrefix::r: return "dynamicRinforzando";
+    case mnx::DynamicPrefix::s: return "dynamicSforzando";
+    }
+    return {};
+}
+
+std::string toMuseScoreDynamicGlyphName(mnx::DynamicSuffix suffix)
+{
+    switch (suffix) {
+    case mnx::DynamicSuffix::None: return {};
+    case mnx::DynamicSuffix::z: return "dynamicZ";
+    }
+    return {};
 }
 
 namespace {
@@ -342,8 +652,68 @@ std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration
 }
 
 namespace {
+const std::unordered_map<mnx::FermataSymbol, SymId> symIdToFermataSym {
+    { mnx::FermataSymbol::Normal,       SymId::fermataAbove },
+    { mnx::FermataSymbol::Angled,       SymId::fermataShortAbove },
+    { mnx::FermataSymbol::Square,       SymId::fermataLongAbove },
+    { mnx::FermataSymbol::DoubleAngled, SymId::fermataVeryShortAbove },
+    { mnx::FermataSymbol::DoubleSquare, SymId::fermataVeryLongAbove },
+    { mnx::FermataSymbol::DoubleDot,    SymId::fermataLongHenzeAbove },
+    { mnx::FermataSymbol::HalfCurve,    SymId::fermataShortHenzeAbove },
+    { mnx::FermataSymbol::Curlew,       SymId::curlewSign },
+};
+} // namespace
+
+SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol)
+{
+    return muse::value(symIdToFermataSym, fermataSymbol, SymId::fermataAbove);
+}
+
+namespace {
+const std::unordered_map<FermataType, mnx::FermataDuration> fermataDuraTable {
+    { FermataType::Normal,      mnx::FermataDuration::Normal },
+    { FermataType::Long,        mnx::FermataDuration::Long },
+    { FermataType::LongHenze,   mnx::FermataDuration::Long },
+    { FermataType::Short,       mnx::FermataDuration::Short },
+    { FermataType::ShortHenze,  mnx::FermataDuration::Short },
+    { FermataType::VeryLong,    mnx::FermataDuration::VeryLong },
+    { FermataType::VeryShort,   mnx::FermataDuration::VeryShort },
+};
+} // namespace
+
+mnx::FermataDuration toMnxFermataDuration(FermataType fermataType)
+{
+    return muse::value(fermataDuraTable, fermataType, mnx::FermataDuration::Auto);
+}
+
+namespace {
+const std::unordered_map<SymId, mnx::FermataSymbol> fermataSymToSymId {
+    { SymId::fermataAbove,              mnx::FermataSymbol::Normal },
+    { SymId::fermataBelow,              mnx::FermataSymbol::Normal },
+    { SymId::fermataShortAbove,         mnx::FermataSymbol::Angled },
+    { SymId::fermataShortBelow,         mnx::FermataSymbol::Angled },
+    { SymId::fermataLongAbove,          mnx::FermataSymbol::Square, },
+    { SymId::fermataLongBelow,          mnx::FermataSymbol::Square, },
+    { SymId::fermataVeryShortAbove,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryShortBelow,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryLongAbove,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataVeryLongBelow,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataLongHenzeAbove,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataLongHenzeBelow,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataShortHenzeAbove,    mnx::FermataSymbol::HalfCurve },
+    { SymId::fermataShortHenzeBelow,    mnx::FermataSymbol::HalfCurve },
+    { SymId::curlewSign,                mnx::FermataSymbol::Curlew },
+};
+} // namespace
+
+mnx::FermataSymbol toMnxFermataSymbol(SymId sym)
+{
+    return muse::value(fermataSymToSymId, sym, mnx::FermataSymbol::Normal);
+}
+
+namespace {
 /// @todo Grow this table as MNX grows it.
-static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
+const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
     { mnx::JumpType::Segno,         JumpType::DSS },
 };
@@ -360,7 +730,7 @@ std::optional<mnx::JumpType> toMnxJumpType(JumpType jt)
 }
 
 namespace {
-static const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
+const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
     { mnx::LyricLineType::Whole,        LyricsSyllabic::SINGLE },
     { mnx::LyricLineType::Start,        LyricsSyllabic::BEGIN },
     { mnx::LyricLineType::Middle,       LyricsSyllabic::MIDDLE },
@@ -486,6 +856,7 @@ NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, Key key,
     if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
         nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+        LOGW() << "Enharmonically transposing pitch with alteration value out of range.";
     } else {
         nval.tpc1 = step2tpc(step, AccidentalVal(alteration));
     }
@@ -571,7 +942,7 @@ Fraction toMuseScoreFraction(const mnx::FractionValue& fraction)
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
-mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
+mnx::FractionValue toMnxFractionValue(const Fraction& fraction)
 {
     return mnx::FractionValue(fraction.numerator(), fraction.denominator());
 }
@@ -599,6 +970,22 @@ PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
     default:
         return PreferSharpFlat::NONE;
     }
+}
+
+PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingItem* item)
+{
+    switch (orient) {
+    case mnx::Orientation::Above:
+        return PlacementV::ABOVE;
+    case mnx::Orientation::Below:
+        return PlacementV::BELOW;
+    case mnx::Orientation::Auto:
+        IF_ASSERT_FAILED(item) {
+            break;
+        }
+        return item->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
+    }
+    return PlacementV::ABOVE;
 }
 
 int toMnxKeyFifthsFlipValue(PreferSharpFlat prefer, const Interval& keyTransposition)

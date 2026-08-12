@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,10 +29,11 @@
 #include "draw/types/font.h"
 
 namespace mu::engraving {
-class Factory;
-class StringData;
 class Chord;
+class Factory;
 class Harmony;
+class StringData;
+class Transaction;
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -206,15 +207,15 @@ public:
 
     RectF drag(EditData&) override;
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-
-    void setVisible(bool f) override;
 
     void setTrack(track_idx_t val) override;
 

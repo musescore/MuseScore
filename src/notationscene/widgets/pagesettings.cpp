@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "pagesettings.h"
 
 #include <QKeyEvent>
@@ -30,6 +31,11 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/style/pagestyle.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -37,13 +43,16 @@ using namespace muse::ui;
 using namespace mu::engraving;
 
 PageSettings::PageSettings(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("PageSettings");
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
+}
 
+void PageSettings::componentComplete()
+{
     mmUnit = configuration()->metricUnit();
     _changeFlag = false;
 

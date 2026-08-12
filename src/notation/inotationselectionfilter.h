@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "notationtypes.h"
+#include "engraving/dom/selectionfilter.h"
 
 namespace mu::notation {
 class INotationSelectionFilter
@@ -30,8 +30,8 @@ class INotationSelectionFilter
 public:
     virtual ~INotationSelectionFilter() = default;
 
-    virtual bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const = 0;
-    virtual void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) = 0;
+    virtual bool isSelectionTypeFiltered(const engraving::SelectionFilterTypesVariant& variant) const = 0;
+    virtual void setSelectionTypeFiltered(const engraving::SelectionFilterTypesVariant& variant, bool filtered) = 0;
 
     virtual bool includeSingleNotes() const = 0;
     virtual void setIncludeSingleNotes(bool include) = 0;

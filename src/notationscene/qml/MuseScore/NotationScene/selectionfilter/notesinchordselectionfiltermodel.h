@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -52,20 +52,20 @@ private:
 
     void loadTypes() override;
 
-    bool isFiltered(const SelectionFilterTypesVariant& variant) const override;
-    void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered) override;
+    bool isFiltered(const engraving::SelectionFilterTypesVariant& variant) const override;
+    void setFiltered(const engraving::SelectionFilterTypesVariant& variant, bool filtered) override;
 
-    bool isAllowed(const SelectionFilterTypesVariant& variant) const override;
+    bool isAllowed(const engraving::SelectionFilterTypesVariant& variant) const override;
 
-    SelectionFilterTypesVariant getAllMask() const override { return engraving::NotesInChordSelectionFilterTypes::ALL; }
-    SelectionFilterTypesVariant getNoneMask() const override { return engraving::NotesInChordSelectionFilterTypes::NONE; }
+    engraving::SelectionFilterTypesVariant getAllMask() const override { return engraving::NotesInChordSelectionFilterTypes::ALL; }
+    engraving::SelectionFilterTypesVariant getNoneMask() const override { return engraving::NotesInChordSelectionFilterTypes::NONE; }
 
     bool includeSingleNotes() const;
     void setIncludeSingleNotes(bool include);
 
     bool multipleIndicesSelected() const;
 
-    QString titleForType(const SelectionFilterTypesVariant& variant) const override;
+    QString titleForType(const engraving::SelectionFilterTypesVariant& variant) const override;
     size_t noteIdxForType(const engraving::NotesInChordSelectionFilterTypes& type) const;
     engraving::NotesInChordSelectionFilterTypes typeForNoteIdx(size_t noteIdx) const;
     void updateTopNoteIdx();

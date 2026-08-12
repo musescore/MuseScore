@@ -10,7 +10,7 @@ qt_add_qml_module(musesounds_qml
         devtools/musesoundsdevtoolsmodel.h
     QML_FILES
         MuseSoundsPage.qml
-        internal/SoundCatalogueListView.qml
+        internal/SoundCatalogListView.qml
         internal/SoundLibraryItem.qml
         MuseSoundsReleaseInfoDialog.qml
         internal/MuseSoundsReleaseInfoBottomPanel.qml

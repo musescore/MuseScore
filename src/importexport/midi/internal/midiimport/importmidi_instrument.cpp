@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -42,6 +42,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
+#include "engraving/editing/editstaffbrackets.h"
 
 using namespace std::literals;
 using namespace mu::engraving;
@@ -646,22 +647,23 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             part->setStaves(1);
         }
 
+        Staff* staff = part->staff(0);
         if (part->nstaves() == 1) {
             if (track.mtrack->drumTrack()) {
-                part->staff(0)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                 if (!instr) {
                     part->instrument()->setDrumset(smDrumset);
                 }
             }
         } else {
             if (!instr) {
-                part->staff(0)->setBarLineSpan(true);
-                part->staff(0)->setBracketType(0, BracketType::BRACE);
+                staff->setBarLineSpan(true);
+                EditStaffBrackets::setBracketType(score, staff->idx(), 0, BracketType::BRACE);
             } else {
-                part->staff(0)->setBarLineSpan(instr->barlineSpan[0]);
-                part->staff(0)->setBracketType(0, instr->bracket[0]);
+                staff->setBarLineSpan(instr->barlineSpan[0]);
+                EditStaffBrackets::setBracketType(score, staff->idx(), 0, instr->bracket[0]);
             }
-            part->staff(0)->setBracketSpan(0, 2);
+            EditStaffBrackets::setBracketSpan(score, staff->idx(), 0, 2);
         }
 
         if (instr) {

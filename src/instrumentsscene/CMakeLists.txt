@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -23,6 +23,7 @@ muse_create_module(instrumentsscene)
 target_sources(instrumentsscene PRIVATE
     instrumentsscenemodule.cpp
     instrumentsscenemodule.h
+    instrumentscommands.h
 
     internal/selectinstrumentscenario.cpp
     internal/selectinstrumentscenario.h
@@ -30,6 +31,10 @@ target_sources(instrumentsscene PRIVATE
     internal/instrumentsuiactions.h
     internal/instrumentsactionscontroller.cpp
     internal/instrumentsactionscontroller.h
+    internal/instrumentscommandsregister.cpp
+    internal/instrumentscommandsregister.h
+    internal/instrumentscommandsstate.cpp
+    internal/instrumentscommandsstate.h
 )
 
 target_link_libraries(instrumentsscene PRIVATE engraving)

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -40,7 +40,9 @@ SlursAndTiesPageModel::SlursAndTiesPageModel(QObject* parent)
     StyleId::tiePlacementChord,
     StyleId::tieDotsPlacement,
     StyleId::minLaissezVibLength,
-    StyleId::laissezVibUseSmuflSym
+    StyleId::laissezVibUseSmuflSym,
+    StyleId::maskSlurs,
+    StyleId::maskTies
 })
 {
 }
@@ -123,4 +125,14 @@ StyleItem* SlursAndTiesPageModel::minLaissezVibLength() const
 StyleItem* SlursAndTiesPageModel::laissezVibUseSmuflSym() const
 {
     return styleItem(StyleId::laissezVibUseSmuflSym);
+}
+
+StyleItem* SlursAndTiesPageModel::maskSlurs() const
+{
+    return styleItem(StyleId::maskSlurs);
+}
+
+StyleItem* SlursAndTiesPageModel::maskTies() const
+{
+    return styleItem(StyleId::maskTies);
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -297,6 +297,11 @@ void ProjectConfigurationStub::setShouldDestinationFolderBeOpenedOnExport(bool)
 }
 
 QUrl ProjectConfigurationStub::supportForumUrl() const
+{
+    return QUrl();
+}
+
+QUrl ProjectConfigurationStub::dotComBugReportUrl() const
 {
     return QUrl();
 }

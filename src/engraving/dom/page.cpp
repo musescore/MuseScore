@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -42,6 +42,24 @@ Page::Page(RootItem* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
     m_bspTreeValid = false;
+}
+
+MeasureBase* Page::firstMeasureBase() const
+{
+    if (m_systems.empty()) {
+        return nullptr;
+    }
+    System* firstSys = m_systems.front();
+    return firstSys ? firstSys->first() : nullptr;
+}
+
+MeasureBase* Page::lastMeasureBase() const
+{
+    if (m_systems.empty()) {
+        return nullptr;
+    }
+    System* lastSys = m_systems.back();
+    return lastSys ? lastSys->last() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -153,12 +171,21 @@ void Page::doRebuildBspTree()
 }
 
 //---------------------------------------------------------
+//   getDisplayPageNumber
+//---------------------------------------------------------
+
+int Page::getDisplayPageNumber() const
+{
+    return static_cast<int>(m_pageNumber) + 1 + score()->pageNumberOffset();
+}
+
+//---------------------------------------------------------
 //   isOdd
 //---------------------------------------------------------
 
 bool Page::isOdd() const
 {
-    return (m_pageNumber + 1 + score()->pageNumberOffset()) & 1;
+    return getDisplayPageNumber() & 1;
 }
 
 //---------------------------------------------------------
@@ -253,4 +280,27 @@ RectF Page::tbbox() const
 Fraction Page::endTick() const
 {
     return m_systems.empty() ? Fraction(-1, 1) : m_systems.back()->measures().back()->endTick();
+}
+
+Measure* Page::firstMeasure() const
+{
+    for (System* s : m_systems) {
+        if (Measure* m = s->firstMeasure()) {
+            return m;
+        }
+    }
+
+    return nullptr;
+}
+
+bool Page::isLocked() const
+{
+    MeasureBase* firstMeasure = firstMeasureBase();
+    return firstMeasure ? firstMeasure->isStartOfPageLock() : false;
+}
+
+const RangeLock* Page::pageLock() const
+{
+    MeasureBase* firstMeasure = firstMeasureBase();
+    return firstMeasure ? firstMeasure->pageLock() : nullptr;
 }

@@ -48,6 +48,7 @@
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
       <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <groupBracketFontFace>Times New Roman</groupBracketFontFace>
       <expressionFontFace>Times New Roman</expressionFontFace>
       <tempoFontFace>Times New Roman</tempoFontFace>
       <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
@@ -58,6 +59,7 @@
       <translatorFontFace>Times New Roman</translatorFontFace>
       <systemTextFontFace>Times New Roman</systemTextFontFace>
       <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <staveSharingLabelFontFace>Times New Roman</staveSharingLabelFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
@@ -102,24 +104,30 @@ Arranged by [Arranger]</metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff>
-        <eid>C_C</eid>
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          </StaffType>
-        <bracket type="1" span="2" col="1" visible="1"/>
-        <barLineSpan>1</barLineSpan>
-        </Staff>
+      <eid>C_C</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>1</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -176,57 +184,46 @@ Arranged by [Arranger]</metaTag>
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>[Title]</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>[COMPOSER]<br/>Arranged by [Arranger]</text>
           </Text>
         </VBox>
       <HBox>
         <width>5</width>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         </HBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Clef>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <text>for Piano</text>
             </StaffText>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>O_O</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>O_O</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -251,44 +248,31 @@ Arranged by [Arranger]</metaTag>
             <StemDirection>down</StemDirection>
             <Note>
               <eid>T_T</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>T_T</endElement>
+                <eid>U_U</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>X_X</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Y_Y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <staves>1</staves>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>Y_Y</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -341,25 +325,23 @@ Arranged by [Arranger]</metaTag>
             <StemDirection>down</StemDirection>
             <Note>
               <eid>h_h</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <staves>-1</staves>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>Y_Y</startElement>
+                <endElement>h_h</endElement>
+                <eid>i_i</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>

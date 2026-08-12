@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,10 +21,14 @@
  */
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_selectnotedialog.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+
+#include "notation/notationtypes.h"
 
 namespace mu::engraving {
 struct NotePattern;
@@ -32,7 +36,7 @@ class Note;
 }
 
 namespace mu::notation {
-class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog, public muse::Contextable
+class SelectNoteDialog : public muse::ui::WidgetDialog, private Ui::SelectNoteDialog
 {
     Q_OBJECT
 
@@ -40,6 +44,8 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog, public muse::Cont
 
 public:
     SelectNoteDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
     bool doReplace() const;
     bool doAdd() const;

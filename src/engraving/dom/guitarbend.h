@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -66,6 +66,8 @@ public:
     GuitarBend* clone() const override { return new GuitarBend(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+
+    Anchor anchor() const override { return Anchor::NOTE; }
 
     bool allowTimeAnchor() const override { return false; }
 
@@ -156,6 +158,9 @@ public:
         bool m_aboveStaff = false;
     };
     DECLARE_LAYOUTDATA_METHODS(GuitarBend)
+
+protected:
+    bool isInSpannerMap() const override { return false; }
 
 private:
     GuitarBendType m_bendType = GuitarBendType::BEND;
@@ -251,6 +256,8 @@ public:
 
     GuitarBendHold* clone() const override { return new GuitarBendHold(*this); }
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     LineSegment* createLineSegment(System* parent) override;
 
     PropertyValue propertyDefault(Pid id) const override;
@@ -263,6 +270,9 @@ public:
     GuitarBend* guitarBend() const { return toGuitarBend(explicitParent()); }
 
     double lineWidth() const;
+
+protected:
+    bool isInSpannerMap() const override { return false; }
 };
 
 class GuitarBendHoldSegment final : public LineSegment

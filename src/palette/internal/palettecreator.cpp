@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -75,9 +75,11 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"
+#include "engraving/dom/tapping.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
@@ -88,6 +90,8 @@
 #include "engraving/dom/vibrato.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
+
+#include "engraving/editing/editstaffbrackets.h"
 
 using namespace mu;
 using namespace mu::palette;
@@ -199,7 +203,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
-    defaultPalette->append(newLayoutPalette(true));
+    defaultPalette->append(newLayoutPalette());
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -278,8 +282,9 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
         auto hairpin = Factory::makeHairpin(paletteScore()->dummy());
         hairpin->setHairpinType(hairpinType);
         qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE) ? 1 : 0.9;
-        const QPointF offset = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DIM_LINE)
-                               ? QPointF(1, 0.25) : QPointF(0, 0);
+        const QPointF offset = hairpinType == HairpinType::CRESC_LINE ? QPointF(1, 0.25)
+                               : hairpinType == HairpinType::DIM_LINE ? QPointF(1, 0.0)
+                               : QPointF(0, 0);
         sp->appendElement(hairpin, hairpin->subtypeUserName(), mag, offset);
     }
 
@@ -524,7 +529,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
+PalettePtr PaletteCreator::newLayoutPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Layout);
     //: The name of a palette
@@ -536,6 +541,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
         LayoutBreakType::SECTION,
+        LayoutBreakType::NOBREAK
     };
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
         auto lb = Factory::makeLayoutBreak(paletteScore()->dummy()->measure());
@@ -543,13 +549,8 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
         sp->appendElement(lb, TConv::userName(layoutBreakType));
     }
 
-    if (!defaultPalette) {
-        auto lb = Factory::makeLayoutBreak(paletteScore()->dummy()->measure());
-        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-        sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
-    }
-
     sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
+    sp->appendActionIcon(ActionIconType::PAGE_LOCK, "toggle-page-lock");
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,
@@ -644,7 +645,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
 
-    for (int i = int(TremoloType::C8); i <= int(TremoloType::C64); ++i) {
+    for (int i = int(TremoloType::C8); i <= int(TremoloType::C256); ++i) {
         auto tremolo = Factory::makeTremoloTwoChord(paletteScore()->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
@@ -924,24 +925,31 @@ PalettePtr PaletteCreator::newBracketsPalette()
     PalettePtr sp = std::make_shared<Palette>(iocContext(), Palette::Type::Bracket);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Brackets"));
     sp->setMag(0.7);
-    sp->setGridSize(40, 60);
+    sp->setGridSize(40, 80);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    const std::array<std::pair<BracketType, const char*>, 4> types { {
+    const std::array<std::pair<BracketType, const char*>, 5> types { {
         { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
         { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
         { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
-        { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") }
+        { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") },
+        { BracketType::GROUP,  QT_TRANSLATE_NOOP("palette", "Group bracket") }
     } };
 
-    static Part* bracketItemOwnerPart = new Part(paletteScore());
-    static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
-    bracketItemOwner->setBracketType(types.size() - 1, BracketType::NORMAL);
+    static Part* bracketItemOwnerPart = nullptr;
+    static Staff* bracketItemOwner = nullptr;
+    if (!bracketItemOwner) {
+        bracketItemOwnerPart = new Part(paletteScore());
+        bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
+        paletteScore()->appendStaff(bracketItemOwner);
+    }
+
+    EditStaffBrackets::setBracketType(paletteScore(), bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(paletteScore()->dummy());
-        auto bi1 = bracketItemOwner->brackets()[i];
+        auto bi1 = paletteScore()->brackets(bracketItemOwner->idx())[i];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);
@@ -1218,6 +1226,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     pedal = makeElement<Pedal>(paletteScore());
     pedal->setLineVisible(false);
+    pedal->setEndHookType(HookType::ROSETTE);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
@@ -1870,6 +1879,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 
     auto pedal = makeElement<Pedal>(paletteScore());
     pedal->setLineVisible(false);
+    pedal->setEndHookType(HookType::ROSETTE);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());

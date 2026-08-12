@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,7 @@ import QtQuick.Controls
 import Muse.Ui
 import Muse.UiComponents
 
-Row {
+Column {
     id: root
 
     property alias colors: colorsList.colors
@@ -34,7 +34,7 @@ Row {
     property NavigationPanel navigation: NavigationPanel {
         name: titleLabel.text
         enabled: root.enabled && root.visible
-        direction: NavigationPanel.Horizontal
+        direction: NavigationPanel.Both
         accessible.name: titleLabel.text
 
         onActiveChanged: function(active) {
@@ -48,14 +48,12 @@ Row {
 
     signal accentColorChangeRequested(var newColorIndex)
 
-    height: colorsList.height
     spacing: 12
 
     StyledTextLabel {
         id: titleLabel
         width: root.columnWidth
 
-        anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Qt.AlignLeft
 
         text: qsTrc("preferences", "Accent color")
@@ -65,8 +63,6 @@ Row {
         id: colorsList
 
         navigationPanel: root.navigation
-
-        sampleSize: 30
 
         onAccentColorChangeRequested: function(newColorIndex) {
             root.accentColorChangeRequested(newColorIndex)

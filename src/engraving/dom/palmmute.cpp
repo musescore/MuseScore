@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -54,7 +54,6 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMutePosition,                      Pid::END_TEXT_POSITION },
     { Sid::palmMuteHookHeight,                    Pid::BEGIN_HOOK_HEIGHT },
     { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT },
-    { Sid::palmMutePosBelow,                      Pid::OFFSET },
     { Sid::palmMuteLineStyle,                     Pid::LINE_STYLE },
     { Sid::palmMuteDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::palmMuteDashGapLen,                    Pid::DASH_GAP_LEN },
@@ -62,7 +61,6 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
     { Sid::palmMutePlacement,                     Pid::PLACEMENT },
-    { Sid::palmMutePosBelow,                      Pid::OFFSET },
     { Sid::palmMuteEndLineArrowHeight,            Pid::END_LINE_ARROW_HEIGHT },
     { Sid::palmMuteEndLineArrowWidth,             Pid::END_LINE_ARROW_WIDTH },
     { Sid::palmMuteBeginLineArrowHeight,          Pid::BEGIN_LINE_ARROW_HEIGHT },
@@ -71,6 +69,12 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMuteEndFilledArrowWidth,           Pid::END_FILLED_ARROW_WIDTH },
     { Sid::palmMuteBeginFilledArrowHeight,        Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::palmMuteBeginFilledArrowWidth,         Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
@@ -78,26 +82,6 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
-}
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid PalmMuteSegment::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return spanner()->placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
-    }
-    return TextLineBaseSegment::getPropertyStyle(pid);
-}
-
-Sid PalmMute::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
-    }
-    return TextLineBase::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------
@@ -123,7 +107,6 @@ PalmMute::PalmMute(EngravingItem* parent)
 //---------------------------------------------------------
 
 static const ElementStyle palmMuteSegmentStyle {
-    { Sid::palmMutePosBelow,                      Pid::OFFSET },
     { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE },
 };
 
@@ -203,5 +186,10 @@ void PalmMute::setChannel()
         staff()->insertIntoChannelList(voice(), startCR->tick(), idx);
         staff()->insertIntoChannelList(voice(), endCR->endTick(), 0);
     }
+}
+
+Sid PalmMute::defaultPosSid() const
+{
+    return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
 }
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "aboutmodel.h"
 
-#include "translation.h"
-
-#include <QApplication>
 #include <QClipboard>
+#include <QGuiApplication>
 #include <QUrl>
+
+#include "translation.h"
 
 using namespace mu::appshell;
 
@@ -67,7 +68,7 @@ QVariantMap AboutModel::museScoreContributionUrl() const
 
 QVariantMap AboutModel::museScorePrivacyPolicyUrl() const
 {
-    QUrl museScorePrivacyPolicyUrl(QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl()));
+    QUrl museScorePrivacyPolicyUrl(QString::fromStdString(updateConfiguration()->privacyPolicyUrl()));
     return makeUrl(museScorePrivacyPolicyUrl);
 }
 
@@ -85,7 +86,7 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 
 void AboutModel::copyRevisionToClipboard() const
 {
-    QApplication::clipboard()->setText(
+    QGuiApplication::clipboard()->setText(
         QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: github-musescore-musescore-%6")
         .arg(QSysInfo::prettyProductName()
              + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))

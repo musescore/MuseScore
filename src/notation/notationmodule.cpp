@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 #include "project/inotationwritersregister.h"
 
 #include "internal/notationconfiguration.h"
+#include "internal/notationcontextconfiguration.h"
 #include "internal/positionswriter.h"
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
@@ -94,4 +95,9 @@ void NotationModule::onInit(const IApplication::RunMode&)
 IContextSetup* NotationModule::newContext(const ContextPtr& ctx) const
 {
     return new NotationContext(ctx);
+}
+
+void NotationContext::registerExports()
+{
+    ioc()->registerExport<INotationContextConfiguration>(mname, new NotationContextConfiguration(iocContext()));
 }

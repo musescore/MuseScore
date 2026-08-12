@@ -21,15 +21,15 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Part 1</trackName>
       <Instrument id="piano">
-        <trackName>Part 1</trackName>
+        <trackName></trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
@@ -84,30 +84,30 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <startRepeat/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             </Clef>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -115,21 +115,8 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1, 2.</beginText>
-              <eid>K_K</eid>
-              <endings>1,2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>L_L</eid>
             <dots>1</dots>
@@ -169,31 +156,12 @@
       <Measure>
         <eid>S_S</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>3.</beginText>
-              <eid>T_T</eid>
-              <endings>3</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               </Note>
@@ -201,22 +169,22 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>X_X</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>Z_Z</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -224,21 +192,14 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>a_a</eid>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>c_c</eid>
+            <eid>b_b</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>c_c</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -246,5 +207,24 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>1, 2.</beginText>
+        <startElement>K_K</startElement>
+        <endElement>N_N</endElement>
+        <eid>d_d</eid>
+        <track>0</track>
+        <endings>1,2</endings>
+        </Volta>
+      <Volta>
+        <beginText>3.</beginText>
+        <startElement>S_S</startElement>
+        <endElement>V_V</endElement>
+        <eid>e_e</eid>
+        <track>0</track>
+        <endings>3</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

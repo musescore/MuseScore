@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,11 +22,12 @@
 
 #include "lyrics.h"
 
+#include "../editing/navigation.h"
+
 #include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"
-#include "navigate.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
@@ -49,9 +50,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
-    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
@@ -59,9 +58,7 @@ LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFl
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
-    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const LyricsLine& g)
@@ -169,13 +166,11 @@ void LyricsLineSegment::rebaseAnchors(EditData&, Grip)
 LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
     : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF)
 {
-    setGenerated(true);
 }
 
 LyricsLineSegment::LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f)
     : LineSegment(type, sp, parent, f)
 {
-    setGenerated(true);
 }
 
 double LyricsLineSegment::baseLineShift() const
@@ -292,6 +287,31 @@ Sid PartialLyricsLine::getPropertyStyle(Pid propertyId) const
     }
 }
 
+void PartialLyricsLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::VERSE && verse() != v.toInt()) {
+        ChordRest* endCR = endElement()
+                           && endElement()->isChordRest() ? toChordRest(endElement()) : nullptr;
+        Lyrics* endLyrics = nullptr;
+        if (endCR) {
+            for (Lyrics* lyr : endCR->lyrics()) {
+                if (lyr->verse() == verse()) {
+                    endLyrics = lyr;
+                    break;
+                }
+            }
+        }
+
+        LyricsLine::undoChangeProperty(id, v, ps);
+        if (endLyrics && endLyrics->verse() != v.toInt()) {
+            endLyrics->undoChangeProperty(id, v, ps);
+        }
+        return;
+    }
+
+    LyricsLine::undoChangeProperty(id, v, ps);
+}
+
 void PartialLyricsLine::doComputeEndElement()
 {
     LyricsLine::doComputeEndElement();
@@ -357,7 +377,7 @@ Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg() const
     const std::vector<Measure*> measures = findPreviousRepeatMeasures(findStartMeasure());
 
     for (const Measure* measure : measures) {
-        Lyrics* prev = lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), verse(), placement());
+        Lyrics* prev = Navigation::lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), verse(), placement());
 
         if (!prev) {
             continue;

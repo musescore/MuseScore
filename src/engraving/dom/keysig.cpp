@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,6 +30,8 @@
 #include "staff.h"
 #include "part.h"
 
+#include "editing/editkeysig.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
 #include "log.h"
@@ -79,7 +81,7 @@ bool KeySig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* KeySig::drop(EditData& data)
+EngravingItem* KeySig::drop(Transaction& tx, EditData& data)
 {
     KeySig* ks = toKeySig(data.dropElement);
     if (!ks->isKeySig()) {
@@ -91,12 +93,12 @@ EngravingItem* KeySig::drop(EditData& data)
     if (data.modifiers & ControlModifier) {
         // apply only to this stave
         if (!(k == keySigEvent())) {
-            score()->undoChangeKeySig(staff(), tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), staff(), tick(), k);
         }
     } else {
         // apply to all staves:
         for (Staff* s : score()->masterScore()->staves()) {
-            score()->undoChangeKeySig(s, tick(), k);
+            EditKeySig::undoChangeKeySig(tx, score(), s, tick(), k);
         }
     }
     return this;
@@ -191,7 +193,6 @@ EngravingObject* KeySig::propertyDelegate(Pid propertyId) const
     case Pid::KEY_CONCERT:
     case Pid::SHOW_COURTESY:
     case Pid::KEYSIG_MODE:
-    case Pid::IS_COURTESY:
     {
         Segment* thisSeg = segment();
         Segment* nextKSSeg = thisSeg ? thisSeg->next1(SegmentType::KeySig) : nullptr;
@@ -279,6 +280,27 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
     triggerLayoutAll();
     setGenerated(false);
     return true;
+}
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void KeySig::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (EngravingObject* e = propertyDelegate(id)) {
+        /* If this is a courtesy, we must change the property of the _real_ key signature,
+         * and we want to avoid EngravingObject::undoChangeProperty unsetting GENERATED
+         * unless something really has changed about the courtesy itself: */
+        e->undoChangeProperty(id, v, ps);
+        // If removing the courtesy, deselect it first:
+        if (id == Pid::SHOW_COURTESY && _isCourtesy && !v.toBool() && selected() && e->isKeySig()) {
+            score()->deselect(this);
+            score()->select(toEngravingItem(e), SelectType::ADD, staffIdx());
+        }
+        return;
+    }
+    EngravingItem::undoChangeProperty(id, v, ps);
 }
 
 //---------------------------------------------------------

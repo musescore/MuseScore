@@ -47,6 +47,7 @@
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
       <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <groupBracketFontFace>Times New Roman</groupBracketFontFace>
       <expressionFontFace>Times New Roman</expressionFontFace>
       <tempoFontFace>Times New Roman</tempoFontFace>
       <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
@@ -57,6 +58,7 @@
       <translatorFontFace>Times New Roman</translatorFontFace>
       <systemTextFontFace>Times New Roman</systemTextFontFace>
       <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <staveSharingLabelFontFace>Times New Roman</staveSharingLabelFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
@@ -100,15 +102,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>[Unnamed (treble staff)]</trackName>
       <Instrument id="grand-piano">
-        <longName>[Unnamed (treble staff)]</longName>
+        <InstrumentLabel>
+          <longName>[Unnamed (treble staff)]</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -166,37 +170,26 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </VBox>
       <HBox>
         <width>5</width>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         </HBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>I_I</eid>
-              </Ottava>
-            <next>
-              <location>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>J_J</eid>
             <durationType>eighth</durationType>
@@ -218,41 +211,12 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>N_N</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>P_P</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Q_Q</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>O_O</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -260,53 +224,61 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>T_T</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>R_R</eid>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>R_R</endElement>
+                <eid>S_S</eid>
+                <track>0</track>
+                </Tie>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>X_X</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <ticks>1/2</ticks>
+        <eid>X_X</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>0</track2>
+        <startTick>1/2</startTick>
+        <ticks>2/2</ticks>
+        <eid>Y_Y</eid>
+        <track>0</track>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

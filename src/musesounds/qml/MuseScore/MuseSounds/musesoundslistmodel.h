@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
     Q_OBJECT
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+    Q_PROPERTY(bool noResultsFound READ noResultsFound NOTIFY noResultsFoundChanged)
+    Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
 
     QML_ELEMENT
 
@@ -53,18 +55,27 @@ public:
     Q_INVOKABLE void load();
 
     bool isEmpty() const;
+    bool noResultsFound() const;
+
+    QString searchText() const;
+    void setSearchText(const QString& text);
 
 signals:
     void isEmptyChanged();
+    void noResultsFoundChanged();
+    void searchTextChanged();
 
 private:
     enum Roles {
-        rCatalogueTitle = Qt::UserRole + 1,
-        rCatalogueSoundLibraries
+        rCatalogTitle = Qt::UserRole + 1,
+        rCatalogSoundLibraries
     };
 
-    void setSoundsCatalogs(const SoundCatalogueInfoList& soundsCatalogs);
+    void setSoundsCatalogs(const SoundCatalogInfoList& soundsCatalogs);
+    void applyFilter(bool narrowing = false);
 
-    SoundCatalogueInfoList m_soundsCatalogs;
+    SoundCatalogInfoList m_soundsCatalogs;
+    SoundCatalogInfoList m_filteredCatalogs;
+    QString m_searchText;
 };
 }

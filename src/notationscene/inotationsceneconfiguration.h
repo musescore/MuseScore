@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,10 +47,6 @@ public:
     virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 
-    virtual bool useNewPercussionPanel() const = 0;
-    virtual void setUseNewPercussionPanel(bool use) = 0;
-    virtual muse::async::Notification useNewPercussionPanelChanged() const = 0;
-
     virtual bool percussionPanelUseNotationPreview() const = 0;
     virtual void setPercussionPanelUseNotationPreview(bool use) = 0;
     virtual muse::async::Notification percussionPanelUseNotationPreviewChanged() const = 0;
@@ -70,13 +66,5 @@ public:
     virtual bool percussionPanelMoveMidiNotesAndShortcuts() const = 0;
     virtual void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) = 0;
     virtual muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const = 0;
-
-    virtual int styleDialogLastPageIndex() const = 0;
-    virtual void setStyleDialogLastPageIndex(int value) = 0;
-
-    virtual int styleDialogLastSubPageIndex() const = 0;
-    virtual void setStyleDialogLastSubPageIndex(int value) = 0;
-
-    virtual void resetStyleDialogPageIndices() = 0;
 };
 }

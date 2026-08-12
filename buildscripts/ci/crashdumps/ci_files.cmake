@@ -13,7 +13,6 @@ set(CI_FILES
 
     win/dump_syms.7z
     linux/aarch64/dump_syms.7z
-    linux/armv7l/dump_syms.7z
     linux/x86-64/dump_syms.7z
     macos/dump_syms.7z
 )

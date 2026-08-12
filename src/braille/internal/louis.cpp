@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,8 +29,8 @@
 
 #include <QString>
 
-#include "braille/thirdparty/liblouis/liblouis/internal.h"
-#include "braille/thirdparty/liblouis/liblouis/liblouis.h"
+#include "internal.h"
+#include "liblouis.h"
 
 #define WIDECHARS_ARE_UCS4
 
@@ -44,7 +44,7 @@ typedef uint32_t ucs4_t;
 int
 u8_uctomb(uint8_t* s, ucs4_t uc, int n)
 {
-    if (uc < 0x80) {
+    if (uc < 0x80U) {
         if (n > 0) {
             s[0] = uc;
             return 1;
@@ -53,15 +53,15 @@ u8_uctomb(uint8_t* s, ucs4_t uc, int n)
     } else {
         int count;
 
-        if (uc < 0x800) {
+        if (uc < 0x800U) {
             count = 2;
-        } else if (uc < 0x10000) {
-            if (uc < 0xd800 || uc >= 0xe000) {
+        } else if (uc < 0x10000U) {
+            if (uc < 0xd800U || uc >= 0xe000U) {
                 count = 3;
             } else {
                 return -1;
             }
-        } else if (uc < 0x110000) {
+        } else if (uc < 0x110000U) {
             count = 4;
         } else {
             return -1;
@@ -131,7 +131,7 @@ FUNC(const SRC_UNIT* s, size_t n, DST_UNIT* resultbuf, size_t* lengthp)
         if (count == -2) {
             DST_UNIT* memory;
 
-            allocated = (allocated > 0 ? 2 * allocated : 12);
+            allocated = (allocated > 0U ? 2 * allocated : 12);
             if (length + 6 > allocated) {
                 allocated = length + 6;
             }
@@ -162,7 +162,7 @@ FUNC(const SRC_UNIT* s, size_t n, DST_UNIT* resultbuf, size_t* lengthp)
         length += count;
     }
 
-    if (length == 0) {
+    if (length == 0U) {
         if (result == NULL) {
             /* Return a non-NULL value.  NULL means error.  */
             result = (DST_UNIT*)malloc(1);
@@ -308,7 +308,7 @@ std::string braille_long_translate(const char* table_name, std::string txt)
 {
     std::vector<std::string> lines = split_string(txt, 256);
 
-    if (lines.size() == 0) {
+    if (lines.size() == 0U) {
         return "";
     }
 

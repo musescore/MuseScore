@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,6 +31,15 @@ using namespace muse;
 FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
+}
+
+bool FoldersPreferencesModel::vstEnabled() const
+{
+#ifdef MUSE_MODULE_VST
+    return true;
+#else
+    return false;
+#endif
 }
 
 int FoldersPreferencesModel::rowCount(const QModelIndex&) const
@@ -233,6 +242,13 @@ QModelIndex FoldersPreferencesModel::folderIndex(FoldersPreferencesModel::Folder
     }
 
     return QModelIndex();
+}
+
+void FoldersPreferencesModel::rescanVstPlugins()
+{
+    if (registerAudioPluginsScenario()) {
+        registerAudioPluginsScenario()->rescanAllPlugins();
+    }
 }
 
 QString FoldersPreferencesModel::pathsToString(const io::paths_t& paths) const

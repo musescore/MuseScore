@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,9 @@ target_sources(palette PRIVATE
     palettemodule.h
     ipaletteconfiguration.h
     palettetypes.h
+    palettecommands.h
 
+    internal/ipalettecommandscontroller.h
     internal/paletteconfiguration.cpp
     internal/paletteconfiguration.h
     internal/paletteworkspacesetup.cpp
@@ -34,6 +36,10 @@ target_sources(palette PRIVATE
     internal/paletteuiactions.h
     internal/paletteactionscontroller.cpp
     internal/paletteactionscontroller.h
+    internal/palettecommandsregister.cpp
+    internal/palettecommandsregister.h
+    internal/palettecommandsstate.cpp
+    internal/palettecommandsstate.h
 
     internal/ipaletteprovider.h
     internal/paletteprovider.cpp
@@ -75,8 +81,6 @@ target_sources(palette PRIVATE
     widgets/specialcharactersdialog.h
     widgets/customizekitdialog.h
     widgets/customizekitdialog.cpp
-    widgets/drumsetpalette.cpp
-    widgets/drumsetpalette.h
 )
 
 target_link_libraries(palette PRIVATE

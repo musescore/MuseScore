@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -366,7 +366,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                           profile,
                           playbackCtx };
 
-    NoteArticulationsParser::parsePlayingTechnique(ctx, ctx.commonArticulations, false /*sustainAllowed*/);
+    NoteArticulationsParser::parsePlayingTechnique(ctx, note->track(), ctx.commonArticulations, false /*sustainAllowed*/);
     NoteArticulationsParser::parseGhostNote(note, ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseNoteHead(note, ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseSymbols(note, ctx, ctx.commonArticulations);

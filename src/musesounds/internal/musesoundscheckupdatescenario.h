@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -30,11 +30,13 @@
 #include "musesounds/imusesoundsconfiguration.h"
 
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::GlobalInject<IMuseSoundsCheckUpdateService> service;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 

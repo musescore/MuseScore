@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,17 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_MASTERNOTATIONPARTS_H
-#define MU_NOTATION_MASTERNOTATIONPARTS_H
+#pragma once
 
 #include "notationparts.h"
-#include "imasternotation.h"
 
 namespace mu::notation {
 class MasterNotationParts : public NotationParts
 {
 public:
-    MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack);
+    MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack, INotationStylePtr style);
 
     void setExcerpts(ExcerptNotationList excerpts);
 
@@ -65,5 +63,3 @@ private:
     ExcerptNotationList m_excerpts;
 };
 }
-
-#endif // MU_NOTATION_MASTERNOTATIONPARTS_H

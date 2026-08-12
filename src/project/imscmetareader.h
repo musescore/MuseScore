@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,15 +24,15 @@
 
 #include "global/modularity/imoduleinterface.h"
 
-#include <QPixmap>
-
 #include "global/io/path.h"
 #include "global/types/retval.h"
 
-#include "types/projectmeta.h"
-#include "types/projecttypes.h"
+class QPixmap;
 
 namespace mu::project {
+struct ProjectMeta;
+struct CloudProjectInfo;
+
 class IMscMetaReader : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMscMetaReader)

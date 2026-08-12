@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -34,7 +34,7 @@ class IMuseSoundsRepository : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IMuseSoundsRepository() = default;
 
-    virtual const SoundCatalogueInfoList& soundsCatalogueList() const = 0;
-    virtual muse::async::Notification soundsCatalogueListChanged() const = 0;
+    virtual const SoundCatalogInfoList& soundsCatalogs() const = 0;
+    virtual muse::async::Notification soundsCatalogsChanged() const = 0;
 };
 }

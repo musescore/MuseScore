@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,7 @@
 #include <engraving/types/pitchvalue.h>
 #include <engraving/types/types.h>
 
-#include "benddatacontext.h"
+#include "guitarbendimporttypes.h"
 #include "splitchord/benddatacollectorsplitchord.h"
 
 namespace mu::engraving {

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -139,7 +139,7 @@ void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
             const String alter = e.readText();
             bool ok;
             m_alter = MusicXmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
-            if (!ok || m_alter < -2 || m_alter > 2) {
+            if (!ok || m_alter < -3 || m_alter > 3) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
                 const double altervalue = alter.toDouble(&ok2);

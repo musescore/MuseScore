@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,9 +24,12 @@
 
 #include "audio/common/audioerrors.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 #include "translation.h"
+
+#include "../playbackcommands.h"
+
+#include "log.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -49,19 +52,13 @@ OnlineSoundsController::OnlineSoundsController(const muse::modularity::ContextPt
 
 void OnlineSoundsController::regActions()
 {
-    dispatcher()->reg(this, "process-online-sounds", this, &OnlineSoundsController::processOnlineSounds);
-    dispatcher()->reg(this, "clear-online-sounds-cache", this, &OnlineSoundsController::clearOnlineSoundsCache);
+    commandsDispatcher()->onRequest(this, PROCESS_ONLINESOUNDS_COMMAND, [this]() { return processOnlineSounds(); });
+    commandsDispatcher()->onRequest(this, CLEAR_ONLINESOUNDS_CACHE_COMMAND, [this]() { return clearOnlineSoundsCache(); });
 }
 
-void OnlineSoundsController::setCurrentSequence(TrackSequenceId seqId)
-{
-    m_currentSequenceId = seqId;
-}
-
-void OnlineSoundsController::resetCurrentSequence()
+void OnlineSoundsController::reset()
 {
     const bool hadOnlineSounds = !m_onlineSounds.empty();
-    m_currentSequenceId = -1;
     m_onlineSounds.clear();
     m_onlineSoundsBeingProcessed.clear();
     m_onlineLibrariesWithExceededLimit.clear();
@@ -117,7 +114,7 @@ void OnlineSoundsController::removeOnlineTrack(const TrackId trackId)
 
 void OnlineSoundsController::listenProcessingProgress(const TrackId trackId)
 {
-    playback()->inputProcessingProgress(m_currentSequenceId, trackId)
+    playback()->inputProcessingProgress(trackId)
     .onResolve(this, [this, trackId](InputProcessingProgress inputProgress) {
         inputProgress.processedChannel.onReceive(this, [this, trackId]
                                                  (const InputProcessingProgress::StatusInfo& status,
@@ -227,18 +224,20 @@ void OnlineSoundsController::showLimitReachedErrorIfNeed(const InputProcessingPr
     interactive()->warning(muse::trc("playback", "Unable to process online sounds"), text);
 }
 
-void OnlineSoundsController::processOnlineSounds()
+muse::Ret OnlineSoundsController::processOnlineSounds()
 {
     IF_ASSERT_FAILED(playback()) {
-        return;
+        return make_ret(Ret::Code::InternalError);
     }
 
     for (const auto& pair : m_onlineSounds) {
-        playback()->processInput(m_currentSequenceId, pair.first);
+        playback()->processInput(pair.first);
     }
+
+    return make_ok();
 }
 
-void OnlineSoundsController::clearOnlineSoundsCache()
+muse::Ret OnlineSoundsController::clearOnlineSoundsCache()
 {
     auto promise = interactive()->warning(
         muse::trc("playback", "Are you sure you want to clear online sounds cache?"),
@@ -257,7 +256,9 @@ void OnlineSoundsController::clearOnlineSoundsCache()
         }
 
         for (const auto& pair : m_onlineSounds) {
-            playback()->clearCache(m_currentSequenceId, pair.first);
+            playback()->clearCache(pair.first);
         }
     });
+
+    return make_ok();
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -118,7 +118,7 @@ bool BSymbol::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* BSymbol::drop(EditData& data)
+EngravingItem* BSymbol::drop(Transaction&, EditData& data)
 {
     EngravingItem* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {

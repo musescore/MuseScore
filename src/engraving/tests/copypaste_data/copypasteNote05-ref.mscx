@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>D_D</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <pageNumberMusicalSymbolSize>9</pageNumberMusicalSymbolSize>
@@ -36,13 +40,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
+      <eid>E_E</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
@@ -75,49 +79,32 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>G_G</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>H_H</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>I_I</eid>
           <style>subtitle</style>
           <text>Copy-Paste</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>K_K</eid>
             </Clef>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <eid>J_J</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>K_K</eid>
-              <autoplace>0</autoplace>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              <headScheme>name-pitch-german</headScheme>
-              <tuning>30</tuning>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>L_L</eid>
-        <voice>
           <Chord>
             <eid>M_M</eid>
             <durationType>whole</durationType>
@@ -130,38 +117,55 @@
               <tuning>30</tuning>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>O_O</eid>
+        <voice>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>B_B</eid>
+              <autoplace>0</autoplace>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              <headScheme>name-pitch-german</headScheme>
+              <tuning>30</tuning>
+              </Note>
+            </Chord>
           <BarLine>
             <span>1</span>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>R_R</eid>
         <voice>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <span>1</span>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>U_U</eid>
         <voice>
           <Rest>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>

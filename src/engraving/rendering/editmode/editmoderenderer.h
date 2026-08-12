@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -62,8 +62,7 @@ private:
     static void drawSlurTieSegment(const SlurTieSegment* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
                                    const PaintOptions& opt);
 
-    static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
-                             const PaintOptions& opt);
+    static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, double currentViewScaling, const PaintOptions& opt);
     static void draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter);
     static void draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter);
 };

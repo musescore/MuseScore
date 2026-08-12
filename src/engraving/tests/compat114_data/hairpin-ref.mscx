@@ -33,22 +33,28 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff>
-        <eid>C_C</eid>
-        <StaffType group="pitched">
-          </StaffType>
-        <bracket type="1" span="2" col="0" visible="1"/>
-        <barLineSpan>1</barLineSpan>
-        </Staff>
+      <eid>C_C</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -83,64 +89,50 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>Hairpin</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <KeySig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>O_O</eid>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>P_P</eid>
             <durationType>quarter</durationType>
@@ -191,14 +183,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>a_a</eid>
             <durationType>quarter</durationType>
@@ -823,5 +807,17 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>0</track2>
+        <startTick>5/4</startTick>
+        <ticks>5/4</ticks>
+        <eid>9B_9B</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

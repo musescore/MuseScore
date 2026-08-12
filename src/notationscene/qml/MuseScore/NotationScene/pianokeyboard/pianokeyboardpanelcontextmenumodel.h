@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,11 +24,9 @@
 
 #include <qqmlintegration.h>
 
-#include "actions/actionable.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "inotationsceneconfiguration.h"
 
 namespace muse {
@@ -36,7 +34,7 @@ class TranslatableString;
 }
 
 namespace mu::notation {
-class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -46,12 +44,12 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
     QML_ELEMENT
 
     muse::GlobalInject<INotationSceneConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+    Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
 
     qreal keyWidthScaling() const;
     void setKeyWidthScaling(qreal scaling);

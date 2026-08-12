@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -48,6 +48,8 @@ void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
     m_checkInProgress = true;
     m_checkInProgressChanged.notify();
 
+    LOGI() << "Checking for MuseSounds update...";
+
     service()->checkForUpdate().onResolve(this, [this, manual](const RetVal<ReleaseInfo>& res) {
         DEFER {
             m_checkInProgress = false;
@@ -56,7 +58,7 @@ void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
 
         if (!res.ret) {
             if (res.ret.code() != static_cast<int>(Err::NoUpdate)) {
-                LOGE() << res.ret.toString();
+                LOGE() << "Unable to check for MuseSounds update: " << res.ret.toString();
             }
             return;
         }
@@ -176,11 +178,11 @@ void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const
     LOGI() << "try open: " << action;
 
     if (muse::strings::startsWith(action, "http")) { // or https
-        interactive()->openUrl(action);
+        platformInteractive()->openUrl(action);
         return;
     }
 
-    interactive()->openApp(muse::UriQuery(action)).onReject(this, [this, actions](int, const std::string&) {
+    platformInteractive()->openApp(muse::UriQuery(action)).onReject(this, [this, actions](int, const std::string&) {
         tryOpenMuseHub(actions);
     });
 }

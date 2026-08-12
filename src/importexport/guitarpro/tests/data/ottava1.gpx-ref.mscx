@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
-        <longName>Nylon Guitar</longName>
-        <shortName>N-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Nylon Guitar</longName>
+          <shortName>N-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -50,55 +52,33 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>I_I</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>K_K</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>L_L</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -106,17 +86,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>M_M</eid>
+              <Tie>
+                <startElement>K_K</startElement>
+                <endElement>M_M</endElement>
+                <eid>N_N</eid>
+                <track>0</track>
+                </Tie>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -136,17 +115,6 @@
                 <subtype>accidentalSharp</subtype>
                 <eid>R_R</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>S_S</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>4</fret>
@@ -154,40 +122,30 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>V_V</eid>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                </Tie>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>4</fret>
               <string>3</string>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>X_X</eid>
             <durationType>quarter</durationType>
@@ -199,52 +157,22 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>Z_Z</eid>
-              </Ottava>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>a_a</eid>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>a_a</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>15mb</subtype>
-              <eid>c_c</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>-3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>d_d</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>c_c</eid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -252,37 +180,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>f_f</eid>
+            <eid>d_d</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>g_g</eid>
+        <eid>e_e</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>h_h</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>i_i</eid>
+            <eid>f_f</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>g_g</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -290,39 +199,40 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>k_k</eid>
+            <eid>h_h</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>l_l</eid>
+        <eid>i_i</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>15ma</subtype>
-              <eid>m_m</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
+          <Chord>
+            <eid>j_j</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>k_k</eid>
+              <pitch>33</pitch>
+              <tpc>17</tpc>
+              <fret>7</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <BarLine>
+            <eid>l_l</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>m_m</eid>
+        <voice>
           <Chord>
             <eid>n_n</eid>
             <durationType>whole</durationType>
             <Note>
               <eid>o_o</eid>
-              <pitch>33</pitch>
-              <tpc>17</tpc>
-              <fret>7</fret>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <fret>9</fret>
               <string>3</string>
               </Note>
             </Chord>
@@ -334,66 +244,11 @@
       <Measure>
         <eid>q_q</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>15mb</subtype>
-              <eid>r_r</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>t_t</eid>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              <fret>9</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <BarLine>
-            <eid>u_u</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>v_v</eid>
-        <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>w_w</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <eid>x_x</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>y_y</eid>
+              <eid>s_s</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
@@ -401,18 +256,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>z_z</eid>
+            <eid>t_t</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>0_0</eid>
+        <eid>u_u</eid>
         <voice>
           <Chord>
-            <eid>1_1</eid>
+            <eid>v_v</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>w_w</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -420,27 +275,77 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>3_3</eid>
+            <eid>x_x</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>4_4</eid>
+        <eid>y_y</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>5_5</eid>
+            <eid>z_z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <ticks>5/4</ticks>
+        <eid>0_0</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <startTick>6/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>1_1</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>15mb</subtype>
+        <track2>0</track2>
+        <startTick>7/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>2_2</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>3_3</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>15ma</subtype>
+        <track2>0</track2>
+        <startTick>12/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>4_4</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>15mb</subtype>
+        <track2>0</track2>
+        <startTick>16/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>5_5</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <startTick>20/4</startTick>
+        <ticks>8/4</ticks>
+        <eid>6_6</eid>
+        <track>0</track>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,12 @@
 #include "internal/globalcontext.h"
 #include "internal/uicontextresolver.h"
 #include "shortcutcontext.h"
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+#include "internal/shortcutresolver.h"
+#endif
 
 using namespace mu::context;
 using namespace muse::modularity;
@@ -50,6 +56,10 @@ void ContextModuleContext::registerExports()
     ioc()->registerExport<IGlobalContext>(mname, m_globalContext);
     ioc()->registerExport<IUiContextResolver>(mname, m_uicontextResolver);
     ioc()->registerExport<IShortcutContextPriority>(mname, new ShortcutContextPriority());
+
+#ifdef MUSE_MODULE_SHORTCUTS_V2
+    ioc()->registerExport<IShortcutsResolver>(mname, new ShortcutResolver(iocContext()));
+#endif
 }
 
 void ContextModuleContext::onInit(const muse::IApplication::RunMode& mode)

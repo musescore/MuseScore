@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,12 +28,23 @@
 using namespace mu::instrumentsscene;
 using namespace muse::modularity;
 
+static const std::string mname("instrumentsscene_stub");
+
 std::string InstrumentsSceneModule::moduleName() const
 {
-    return "instrumentsscene";
+    return mname;
 }
 
 void InstrumentsSceneModule::registerExports()
 {
-    globalIoc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
+}
+
+IContextSetup* InstrumentsSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new InstrumentsSceneContext(ctx);
+}
+
+void InstrumentsSceneContext::registerExports()
+{
+    ioc()->registerExport<notation::ISelectInstrumentsScenario>(mname, new SelectInstrumentsScenarioStub());
 }

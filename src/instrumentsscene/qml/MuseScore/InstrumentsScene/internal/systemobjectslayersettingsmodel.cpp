@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,6 +23,10 @@
 #include "systemobjectslayersettingsmodel.h"
 
 #include "layoutpanelutils.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -105,7 +109,7 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
         DO_ASSERT(group.staff);
         group.staff->undoSetShowMeasureNumbers(visible);
     } else {
-        for (EngravingItem* item : group.items) {
+        for (engraving::EngravingItem* item : group.items) {
             item->undoSetVisible(visible);
         }
     }

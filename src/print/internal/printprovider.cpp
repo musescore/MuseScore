@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,10 @@
 #include <QPrintDialog>
 #include <QWindow>
 
+#include "draw/painter.h"
+
+#include "notation/inotationpainting.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -43,7 +47,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
         return make_ret(Ret::Code::InternalError);
     }
 
-    auto painting = notation->painting();
+    INotationPaintingPtr painting = notation->painting();
 
     SizeF pageSizeInch = painting->pageSizeInch();
     QPrinter printerDev(QPrinter::HighResolution);

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,17 @@ class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
+
+    void registerExports() override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class MuseSoundsContext : public muse::modularity::IContextSetup
+{
+public:
+    MuseSoundsContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
 };

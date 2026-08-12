@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -52,6 +52,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
+
+#include "engraving/editing/editchord.h"
 
 #include "guitarprodrumset.h"
 
@@ -245,7 +247,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
     if (noteBits & NOTE_SFORZATO) {             // 0x40
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }
@@ -364,7 +366,6 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
                 ChordRest* cr2 = toChord(note->chord());
 
                 Slur* slur1 = Factory::createSlur(score->dummy());
-                slur1->setAnchor(Spanner::Anchor::CHORD);
                 slur1->setStartElement(cr1);
                 slur1->setEndElement(cr2);
                 slur1->setTick(cr1->tick());
@@ -742,7 +743,6 @@ bool GuitarPro4::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
 
         int patch = channelDefaults[midiChannel].patch;
@@ -1091,7 +1091,6 @@ bool GuitarPro4::read(IODevice* io)
                                     for (auto n : cr1->notes()) {
                                         if (n->string() == last->string()) {
                                             Glissando* s = mu::engraving::Factory::createGlissando(n);
-                                            s->setAnchor(Spanner::Anchor::NOTE);
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
                                             s->setTrack(chord->track());
@@ -1171,7 +1170,6 @@ bool GuitarPro4::read(IODevice* io)
                             break;
                         }
                         Glissando* s = new Glissando(n);
-                        s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());
@@ -1193,8 +1191,9 @@ bool GuitarPro4::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    m_guitarBendImporter->applyBendsToChords();
+    m_guitarBendImporter->addElementsToScore();
     addTunings();
+    utils::addPlayCountTexts(score);
 
     return true;
 }

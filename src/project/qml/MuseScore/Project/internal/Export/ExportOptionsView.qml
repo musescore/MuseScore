@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -35,6 +35,10 @@ Column {
 
     required property ExportDialogModel exportModel
     property alias navigation: navPanel
+
+    readonly property bool isExportAvailable: Boolean(pageLoader.item)
+                                              ? pageLoader.item.isExportAvailable
+                                              : true
 
     spacing: 12
 
@@ -184,11 +188,15 @@ Column {
     SeparatorLine {
         anchors.topMargin: 24
         anchors.bottomMargin: 24
+
+        visible: root.isExportAvailable
     }
 
     CheckBox {
         width: parent.width
         text: qsTrc("project/export", "Open destination folder on export")
+
+        visible: root.isExportAvailable
 
         navigation.name: "OpenDestinationFolderOnExportCheckbox"
         navigation.panel: navPanel

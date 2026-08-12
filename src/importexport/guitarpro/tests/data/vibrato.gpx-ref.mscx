@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
-        <longName>Electric Guitar</longName>
-        <shortName>E-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Electric Guitar</longName>
+          <shortName>E-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -50,39 +52,28 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>guitarVibrato</subtype>
-              <eid>I_I</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
@@ -94,13 +85,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <eid>L_L</eid>
             <durationType>quarter</durationType>
@@ -121,35 +105,21 @@
       <Measure>
         <eid>P_P</eid>
         <voice>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>guitarVibratoWide</subtype>
-              <eid>Q_Q</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
+          <Rest>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>T_T</eid>
             <durationType>quarter</durationType>
@@ -158,110 +128,103 @@
             <eid>U_U</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>V_V</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <BarLine>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>X_X</eid>
+        <eid>W_W</eid>
         <voice>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>vibratoSawtooth</subtype>
-              <eid>Y_Y</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>Y_Y</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
+          <Rest>
+            <eid>Z_Z</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>a_a</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>b_b</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <eid>c_c</eid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>d_d</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <BarLine>
-            <eid>e_e</eid>
+            <eid>c_c</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>f_f</eid>
+        <eid>d_d</eid>
         <voice>
-          <Spanner type="Vibrato">
-            <Vibrato>
-              <subtype>vibratoSawtoothWide</subtype>
-              <eid>g_g</eid>
-              </Vibrato>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>h_h</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>f_f</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Spanner type="Vibrato">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>j_j</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>k_k</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>l_l</eid>
+            <eid>i_i</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Vibrato>
+        <subtype>guitarVibrato</subtype>
+        <track2>0</track2>
+        <ticks>1/4</ticks>
+        <eid>j_j</eid>
+        <track>0</track>
+        </Vibrato>
+      <Vibrato>
+        <subtype>guitarVibratoWide</subtype>
+        <track2>0</track2>
+        <startTick>4/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>k_k</eid>
+        <track>0</track>
+        </Vibrato>
+      <Vibrato>
+        <subtype>vibratoSawtooth</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>l_l</eid>
+        <track>0</track>
+        </Vibrato>
+      <Vibrato>
+        <subtype>vibratoSawtoothWide</subtype>
+        <track2>0</track2>
+        <startTick>12/4</startTick>
+        <ticks>1/4</ticks>
+        <eid>m_m</eid>
+        <track>0</track>
+        </Vibrato>
+      </SpannerMap>
     </Score>
   </museScore>

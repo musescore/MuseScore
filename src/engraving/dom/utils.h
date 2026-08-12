@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,11 +31,13 @@
 namespace mu::engraving {
 class Chord;
 class ChordRest;
+class Drumset;
 class EngravingItem;
 class KeySig;
 class Lyrics;
 class Measure;
 class Note;
+class PartialLyricsLine;
 class Rest;
 class Score;
 class Score;
@@ -55,7 +57,6 @@ extern RectF handleRect(const PointF& pos);
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);
-extern int quantizeLen(int, int);
 
 extern String pitch2string(int v, bool useFlats = false);
 extern int string2pitch(const String& s);
@@ -63,8 +64,6 @@ extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
-extern Segment* nextSeg1(Segment* s);
-extern Segment* prevSeg1(Segment* seg);
 
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
 
@@ -124,10 +123,13 @@ extern bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSe
 extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
 
+extern PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics);
+
 extern bool isElementInFretBox(const EngravingItem* item);
 
 extern std::vector<EngravingItem*> filterTargetElements(const Selection& sel, EngravingItem* dropElement, bool& unique);
 
 extern Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p);
 extern bool noteIsBefore(const Note* n1, const Note* n2);
+extern void updatePercussionNotes(Chord* c, const Drumset* drumset);
 } // namespace mu::engraving

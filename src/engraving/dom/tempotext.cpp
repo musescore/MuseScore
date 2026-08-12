@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -69,7 +69,7 @@ TempoText::TempoText(Segment* parent)
     m_relative       = 1.0;
     m_isRelative     = false;
 
-    setSymbolSize(styleValue(Pid::FONT_SIZE, Sid::tempoFontSize).toDouble() * TempoText::DEFAULT_SYM_SIZE_RATIO);
+    resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
 void TempoText::setTempoTextType(TempoTextType ttt)
@@ -224,7 +224,6 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 void TempoText::updateScore()
 {
     score()->setUpTempoMapLater();
-    score()->setPlaylistDirty();
 }
 
 //---------------------------------------------------------
@@ -399,8 +398,6 @@ PropertyValue TempoText::propertyDefault(Pid id) const
         return false;
     case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
         return true;
-    case Pid::MUSIC_SYMBOL_SIZE:
-        return size() * DEFAULT_SYM_SIZE_RATIO;
     default:
         return TextBase::propertyDefault(id);
     }

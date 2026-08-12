@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -105,6 +105,14 @@ void TremoloSingleChord::setTremoloType(TremoloType t)
     case TremoloType::R64:
     case TremoloType::C64:
         m_lines = 4;
+        break;
+    case TremoloType::R128:
+    case TremoloType::C128:
+        m_lines = 5;
+        break;
+    case TremoloType::R256:
+    case TremoloType::C256:
+        m_lines = 6;
         break;
     default:
         m_lines = 1;
@@ -237,6 +245,10 @@ Fraction TremoloSingleChord::tremoloLen() const
     case 3: f.set(1, 32);
         break;
     case 4: f.set(1, 64);
+        break;
+    case 5: f.set(1, 128);
+        break;
+    case 6: f.set(1, 256);
         break;
     }
     return f;

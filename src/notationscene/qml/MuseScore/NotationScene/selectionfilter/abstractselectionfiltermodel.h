@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,8 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+
+#include "engraving/dom/selectionfilter.h"
 
 namespace mu::notation {
 class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
@@ -75,24 +77,24 @@ protected:
     virtual bool isAllSelected() const;
     virtual bool isNoneSelected() const;
 
-    virtual SelectionFilterTypesVariant getAllMask() const = 0;
-    virtual SelectionFilterTypesVariant getNoneMask() const = 0;
+    virtual engraving::SelectionFilterTypesVariant getAllMask() const = 0;
+    virtual engraving::SelectionFilterTypesVariant getNoneMask() const = 0;
 
     INotationInteractionPtr currentNotationInteraction() const;
     INotationSelectionFilterPtr currentNotationSelectionFilter() const;
 
-    virtual bool isFiltered(const SelectionFilterTypesVariant& variant) const;
-    virtual void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+    virtual bool isFiltered(const engraving::SelectionFilterTypesVariant& variant) const;
+    virtual void setFiltered(const engraving::SelectionFilterTypesVariant& variant, bool filtered);
 
-    virtual bool isAllowed(const SelectionFilterTypesVariant&) const { return true; }
-    virtual QString titleForType(const SelectionFilterTypesVariant& variant) const = 0;
-    bool isIndeterminate(const SelectionFilterTypesVariant& variant) const;
+    virtual bool isAllowed(const engraving::SelectionFilterTypesVariant&) const { return true; }
+    virtual QString titleForType(const engraving::SelectionFilterTypesVariant& variant) const = 0;
+    bool isIndeterminate(const engraving::SelectionFilterTypesVariant& variant) const;
 
     virtual void onSelectionChanged();
     virtual void onNotationChanged();
-    void notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant);
+    void notifyAboutDataChanged(const QModelIndex& index, const engraving::SelectionFilterTypesVariant& variant);
 
-    QList<SelectionFilterTypesVariant> m_types;
+    QList<engraving::SelectionFilterTypesVariant> m_types;
 
 private:
     INotationPtr currentNotation() const;

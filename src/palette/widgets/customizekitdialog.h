@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_CUSTOMIZEKITDIALOG_H
-#define MU_PALETTE_CUSTOMIZEKITDIALOG_H
+
+#pragma once
+
+#include "ui/view/widgetdialog.h"
 
 #include "ui_customizekitdialog.h"
 
@@ -34,13 +36,14 @@
 #include "ui/iuiconfiguration.h"
 
 #include "engraving/dom/drumset.h"
+#include "notation/types/instrumentstypes.h"
 
 namespace mu::palette {
 //---------------------------------------------------------
 //   CustomizeKitDialog
 //---------------------------------------------------------
 
-class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog, public muse::Contextable
+class CustomizeKitDialog : public muse::ui::WidgetDialog, private Ui::CustomizeKitDialog
 {
     Q_OBJECT
 
@@ -54,6 +57,8 @@ public:
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -92,5 +97,3 @@ private:
     engraving::Drumset m_editedDrumset;
 };
 }
-
-#endif // MU_PALETTE_CUSTOMIZEKITDIALOG_H

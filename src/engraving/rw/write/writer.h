@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,7 +32,7 @@
 namespace mu::engraving::write {
 class Writer : public rw::IWriter
 {
-    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalThreadSafeInject<muse::IApplication> application;
 
 public:
 
@@ -42,10 +42,16 @@ public:
 
     static void write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::WriteScoreHook& hook);
 
-    void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool,
-                       Fraction& curTick) override;
+    muse::ByteArray writeStaffSelection(Score* score, const SelectionFilter& filter, staff_idx_t staffStart, staff_idx_t staffEnd,
+                                        const Fraction& tickStart, const Fraction& tickEnd, Segment* startSegment,
+                                        Segment* endSegment) override;
+
+    muse::ByteArray writeSymbolListSelection(track_idx_t fromTrack, track_idx_t toTrack,
+                                             const std::vector<SelectedSymbol>& symbols) override;
 
 private:
+    void writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool,
+                       bool) override;
     void doWriteItem(const EngravingItem* item, XmlWriter& xml) override;
 };
 }

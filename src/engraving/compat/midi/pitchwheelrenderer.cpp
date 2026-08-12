@@ -1,5 +1,7 @@
 #include "pitchwheelrenderer.h"
 
+#include <algorithm>
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -104,6 +106,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventsHolder& pitchWheelEvents,
             for (const auto& pitch : pitches) {
                 finalPitch += pitch;
             }
+            finalPitch = std::clamp(finalPitch, 0, 2 * _wheelSpec.mLimit - 1);
             if (forceUpdate || finalPitch != prevPitch || tick == start) {
                 NPlayEvent evb(ME_PITCHBEND, channel, finalPitch % 128, finalPitch / 128);
                 evb.setEffect(effect);

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -182,8 +182,8 @@ EID EID::fromStdString(const std::string_view& s)
 EID EID::newUnique()
 {
     static std::random_device s_device;
-    static std::mt19937_64 s_engine(s_device());
-    static std::uniform_int_distribution<uint64_t> s_unifDist;
+    thread_local static std::mt19937_64 s_engine(s_device());
+    thread_local static std::uniform_int_distribution<uint64_t> s_unifDist;
 
     return EID(s_unifDist(s_engine), s_unifDist(s_engine));
 }

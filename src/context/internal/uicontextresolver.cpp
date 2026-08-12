@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,11 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "uicontextresolver.h"
 
 #include <QTimer>
 
 #include "diagnostics/diagnosticutils.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "shortcutcontext.h"
 
@@ -49,11 +55,15 @@ constexpr int CURRENT_URI_CHANGED_TIMEOUT = 500; // msec
 
 void UiContextResolver::init()
 {
+    m_currentUriChangedTimer.setSingleShot(true);
+    m_currentUriChangedTimer.setInterval(CURRENT_URI_CHANGED_TIMEOUT);
+    QObject::connect(&m_currentUriChangedTimer, &QTimer::timeout, [this]() {
+        updateCurrentUiContext();
+    });
+
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE Let the page/dialog open and show itself first
-        QTimer::singleShot(CURRENT_URI_CHANGED_TIMEOUT, [this]() {
-            updateCurrentUiContext();
-        });
+        m_currentUriChangedTimer.start();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -106,7 +106,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingI
 {
     const bool clipboardmode = ctx->clipboardmode();
     if ((!sp->startElement() || !sp->endElement())
-        && (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE)) {
+        && (sp->anchor() == Spanner::Anchor::CHORDREST || sp->anchor() == Spanner::Anchor::NOTE)) {
         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }

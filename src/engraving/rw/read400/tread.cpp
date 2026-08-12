@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -124,11 +123,13 @@
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
+
+#include "../../editing/editstaffbrackets.h"
 #include "../../editing/transpose.h"
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
-#include "../read460/tread.h"
+#include "../read500/tread.h"
 #include "../compat/compatutils.h"
 #include "readcontext.h"
 #include "connectorinforeader.h"
@@ -327,6 +328,10 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
+    if (pid == Pid::OFFSET && ctx.mscVersion() >= 302) {    // in 301 files "pos" is written before placement. Migrate offset after both have been read
+        compat::CompatUtils::migrateOffset500(item, v);
+    }
+
     if (!ctx.shouldSkipProperty(pid)) {
         item->setProperty(pid, v);
         if (item->isStyled(pid)) {
@@ -450,6 +455,8 @@ void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
@@ -471,6 +478,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
         t->setVisible(false);
     }
 
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
+
     t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
@@ -488,6 +497,7 @@ void TRead::read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
@@ -589,6 +599,8 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(d, ctx.mscVersion());
 }
 
 void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
@@ -601,6 +613,8 @@ void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(expr, ctx.mscVersion());
 }
 
 void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
@@ -757,6 +771,7 @@ void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(a, ctx.mscVersion());
 }
 
 void TRead::read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx)
@@ -803,9 +818,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
 
     const AsciiStringView tag(e.name());
     if (tag == "longName") {
-        item->setLongName(read460::TRead::readStaffName(e));
+        item->setLongName(read500::TRead::readLegacyStaffName(e));
     } else if (tag == "shortName") {
-        item->setShortName(read460::TRead::readStaffName(e));
+        item->setShortName(read500::TRead::readLegacyStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitch") {      // obsolete
@@ -1058,6 +1073,8 @@ void TRead::read(InstrumentChange* c, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::migrateOffsetPre302(c, ctx.mscVersion());
+
     if (c->score()->mscVersion() < 206) {
         // previous versions did not honor transposition of instrument change
         // except in ways that it should not have
@@ -1309,6 +1326,8 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
     if (b->items().size() > 0) {
         b->setXmlText(normalizedText);          // this is the text to show while editing
     }
+
+    compat::CompatUtils::migrateOffsetPre302(b, ctx.mscVersion());
 }
 
 void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
@@ -1634,6 +1653,8 @@ void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
         }
     }
     m->setMarkerType(mt);
+
+    compat::CompatUtils::migrateOffsetPre302(m, ctx.mscVersion());
 }
 
 void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
@@ -1652,6 +1673,8 @@ void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(j, ctx.mscVersion());
 }
 
 void TRead::read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx)
@@ -1666,6 +1689,8 @@ void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(b, ctx.mscVersion());
 }
 
 bool TRead::readProperties(MeasureNumberBase* n, XmlReader& xml, ReadContext& ctx)
@@ -1834,17 +1859,6 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
         return false;
     }
     return true;
-}
-
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
-        }
-    }
 }
 
 void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)
@@ -2091,6 +2105,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(b);
         TRead::read(lb, e, ctx);
+        lb->setTrack(0);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
         case LayoutBreakType::LINE:
@@ -2590,6 +2605,7 @@ void TRead::read(Fingering* f, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(f, ctx.mscVersion());
 }
 
 void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
@@ -2776,6 +2792,8 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::migrateOffsetPre302(h, ctx.mscVersion());
+
     h->addChord(info);
 
     h->afterRead();
@@ -2917,6 +2935,8 @@ void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
             l->ryoffset() = off.y();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(l, ctx.mscVersion());
 }
 
 void TRead::read(LineSegment* l, XmlReader& e, ReadContext& ctx)
@@ -2926,6 +2946,8 @@ void TRead::read(LineSegment* l, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(l, ctx.mscVersion());
 }
 
 bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
@@ -3115,10 +3137,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             n->add(s);
         }
@@ -3296,10 +3318,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
-
     read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
@@ -3396,8 +3414,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideMod
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {
@@ -3549,11 +3565,10 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Segment") {
         LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
         ls->setTrack(l->track());     // needed in read to get the right staff mag
-        TRead::read(ls, e, ctx);
         l->add(ls);
+        TRead::read(ls, e, ctx);
         ls->setVisible(l->visible());
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DIAGONAL)) {
-    } else if (TRead::readProperty(l, tag, e, ctx, Pid::ANCHOR)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_WIDTH)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DASH_LINE_LEN)) {
@@ -3603,8 +3618,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
             s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
         }
         SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
-        TRead::read(sts, e, ctx);
         s->add(sts);
+        TRead::read(sts, e, ctx);
     } else if (!readProperties(toSpanner(s), e, ctx)) {
         return false;
     }
@@ -3823,11 +3838,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(s->brackets().size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        s->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        s->setBracketSpan(col, e.intAttribute("span", 0));
-        s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
+        EditStaffBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        EditStaffBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
+        EditStaffBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
@@ -3973,6 +3988,7 @@ void TRead::read(Text* t, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void TRead::read(TextLine* l, XmlReader& e, ReadContext& ctx)
@@ -4360,12 +4376,6 @@ bool TRead::readProperties(Volta* v, XmlReader& e, ReadContext& ctx)
 {
     if (!readProperties(toTextLineBase(v), e, ctx)) {
         return false;
-    }
-
-    if (v->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(v->anchor()), int(Volta::VOLTA_ANCHOR));
-        v->setAnchor(Volta::VOLTA_ANCHOR);
     }
 
     return true;

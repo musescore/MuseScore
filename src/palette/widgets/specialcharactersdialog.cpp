@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,6 +33,9 @@
 #include "engraving/dom/symbol.h"
 #include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
 
 #include "ui/view/widgetstatestore.h"
 
@@ -480,6 +483,13 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     connect(m_lws, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateSmufl);
     connect(m_lwu, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateUnicode);
+}
+
+void SpecialCharactersDialog::classBegin()
+{
+    m_pCommon->setIocContext();
+    m_pSmufl->setIocContext();
+    m_pUnicode->setIocContext();
 
     // others are done in setFont
     populateSmufl();

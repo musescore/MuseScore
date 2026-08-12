@@ -22,7 +22,18 @@
 
 #include "notationautomation.h"
 
+#include "engraving/dom/masterscore.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "translation.h"
+#include "log.h"
+
 using namespace mu::notation;
+
+NotationAutomation::NotationAutomation(INotationUndoStackPtr undoStack)
+    : m_undoStack(std::move(undoStack))
+{
+}
 
 bool NotationAutomation::isAutomationModeEnabled() const
 {
@@ -34,7 +45,6 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
     if (m_isAutomationModeEnabled == enabled) {
         return;
     }
-
     m_isAutomationModeEnabled = enabled;
     m_automationModeEnabledChanged.notify();
 }
@@ -42,4 +52,26 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
 muse::async::Notification NotationAutomation::automationModeEnabledChanged() const
 {
     return m_automationModeEnabledChanged;
+}
+
+AutomationDataConstPtr NotationAutomation::automationData() const
+{
+    return m_masterScore ? m_masterScore->automationData() : nullptr;
+}
+
+void NotationAutomation::editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    IF_ASSERT_FAILED(m_masterScore && m_undoStack) {
+        return;
+    }
+
+    m_undoStack->transaction(muse::TranslatableString("undoableAction", "Edit automation points"),
+                             [&](engraving::Transaction&) {
+        m_masterScore->editAutomationPoints(key, edits);
+    });
+}
+
+void NotationAutomation::setMasterScore(engraving::MasterScore* masterScore)
+{
+    m_masterScore = masterScore;
 }

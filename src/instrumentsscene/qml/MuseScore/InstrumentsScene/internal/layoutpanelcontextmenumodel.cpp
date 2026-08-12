@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,6 +26,9 @@
 #include "types/translatablestring.h"
 
 #include "log.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
 
 using namespace mu::context;
 using namespace mu::instrumentsscene;
@@ -48,13 +51,23 @@ LayoutPanelContextMenuModel::LayoutPanelContextMenuModel(QObject* parent)
 
 void LayoutPanelContextMenuModel::load()
 {
-    dispatcher()->reg(this, SET_INSTRUMENTS_ORDER_CODE, this, &LayoutPanelContextMenuModel::setInstrumentsOrder);
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         updateMenu();
     });
 
     updateMenu();
+}
+
+void LayoutPanelContextMenuModel::handleMenuItem(const QString& itemId)
+{
+    if (itemId == EXPAND_ALL_CODE) {
+        emit expandCollapseAllRequested(true);
+    } else if (itemId == COLLAPSE_ALL_CODE) {
+        emit expandCollapseAllRequested(false);
+    } else if (itemId == SET_INSTRUMENTS_ORDER_CODE) {
+        const MenuItem& item = findItem(itemId);
+        setInstrumentsOrder(item.args());
+    }
 }
 
 void LayoutPanelContextMenuModel::updateMenu()
@@ -197,10 +210,6 @@ MenuItem* LayoutPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
     UiActionState state;
     state.enabled = true;
     item->setState(state);
-
-    dispatcher()->reg(this, action.code, [this, expand]() {
-        emit expandCollapseAllRequested(expand);
-    });
 
     return item;
 }

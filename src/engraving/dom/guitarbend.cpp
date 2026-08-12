@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,13 +22,16 @@
 
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/editnote.h"
+#include "../editing/navigation.h"
+#include "../editing/noteinput.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
 #include "accidental.h"
 #include "actionicon.h"
 #include "chord.h"
 #include "guitarbend.h"
-#include "navigate.h"
 #include "note.h"
 #include "part.h"
 #include "rest.h"
@@ -46,7 +49,6 @@ namespace mu::engraving {
 GuitarBend::GuitarBend(EngravingItem* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 GuitarBend::GuitarBend(const GuitarBend& g)
@@ -163,10 +165,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
     auto doChangeEndNotePitch = [&]() {
-        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        EditNote::undoChangePitch(score(), note, pitch, targetTpc1, targetTpc2);
         Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
         while (tiedNote) {
-            score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+            EditNote::undoChangePitch(score(), tiedNote, pitch, targetTpc1, targetTpc2);
             tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
         }
     };
@@ -185,10 +187,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
         if (Accidental::isMicrotonal(accidentalType)) {
             doChangeEndNotePitch();
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
         } else {
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
             doChangeEndNotePitch();
         }
     } else {
@@ -290,9 +292,9 @@ Note* GuitarBend::createEndNote(Note* startNote, GuitarBendType bendType)
         endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
         Chord* endChord = endSegment ? toChord(endSegment->element(track)) : nullptr;
         endNote = endChord ? endChord->upNote() : nullptr;
-    } else { // isChord
+    } else if (item->isChord()) {
         Chord* chord = toChord(item);
-        endNote = score->addNote(chord, noteVal);
+        endNote = NoteInput::addNote(score->transactionManager()->currentOrDummyTransaction(), score, chord, noteVal);
     }
 
     if (endNote) {
@@ -410,8 +412,6 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue GuitarBend::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return static_cast<int>(Anchor::NOTE);
     case Pid::DIRECTION:
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
@@ -635,12 +635,12 @@ GuitarBend* GuitarBend::findPrecedingBend() const
     }
 
     if (bendType() == GuitarBendType::PRE_DIVE || bendType() == GuitarBendType::PRE_BEND) {
-        ChordRest* prevCR = prevChordRest(startN->chord());
+        ChordRest* prevCR = Navigation::prevChordRest(startN->chord());
         if (prevCR && prevCR->isRest() && isDive()) {
             WhammyBar* whammyBar = findOverlappingWhammyBar(prevCR->tick(), tick2());
             if (whammyBar) {
                 while (prevCR && prevCR->isRest() && prevCR->tick() > whammyBar->tick()) {
-                    prevCR = prevChordRest(prevCR);
+                    prevCR = Navigation::prevChordRest(prevCR);
                 }
             }
         }
@@ -683,12 +683,12 @@ GuitarBend* GuitarBend::findFollowingPreBendOrDive() const
         endN = endN->tieFor()->endNote();
     }
 
-    ChordRest* nextCR = nextChordRest(endN->chord());
+    ChordRest* nextCR = Navigation::nextChordRest(endN->chord());
     if (isDive() && nextCR && nextCR->isRest()) {
         WhammyBar* whammyBar = findOverlappingWhammyBar(tick(), nextCR->endTick());
         if (whammyBar) {
             while (nextCR && nextCR->isRest() && nextCR->tick() < whammyBar->tick2()) {
-                nextCR = nextChordRest(nextCR);
+                nextCR = Navigation::nextChordRest(nextCR);
             }
         }
     }
@@ -815,7 +815,6 @@ void GuitarBend::updateHoldLine()
         m_holdLine = new GuitarBendHold(this);
     }
 
-    m_holdLine->setAnchor(Spanner::Anchor::NOTE);
     m_holdLine->setStartElement(startOfHold);
     m_holdLine->setEndElement(endOfHold);
     m_holdLine->setTick(startOfHold->tick());
@@ -1106,7 +1105,6 @@ void GuitarBend::setTargetTimeFactor(float f)
 GuitarBendHold::GuitarBendHold(GuitarBend* parent)
     : SLine(ElementType::GUITAR_BEND_HOLD, parent, ElementFlag::MOVABLE)
 {
-    resetProperty(Pid::ANCHOR);
     resetProperty(Pid::LINE_STYLE);
 }
 
@@ -1126,8 +1124,6 @@ LineSegment* GuitarBendHold::createLineSegment(System* parent)
 PropertyValue GuitarBendHold::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return static_cast<int>(Anchor::NOTE);
     case Pid::LINE_STYLE:
         return LineType::DASHED;
     default:

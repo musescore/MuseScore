@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -261,7 +261,6 @@ enum class Pid : short {
     USER_STRETCH,
     MEASURE_NUMBER_OFFSET,
     EXCLUDE_FROM_NUMBERING,
-    ANCHOR,
     SLUR_UOFF1,
     SLUR_UOFF2,
     SLUR_UOFF3,
@@ -334,6 +333,9 @@ enum class Pid : short {
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
 
+    GROUP_BRACKET_SHOW_TEXT,
+    GROUP_BRACKET_SHOW_BRACKET,
+
     TEXT_STYLE,
 
     FONT_FACE,
@@ -368,6 +370,12 @@ enum class Pid : short {
     BEGIN_FONT_FACE,
     BEGIN_FONT_SIZE,
     BEGIN_FONT_STYLE,
+    BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE,
+    CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE,
+    END_TEXT_MUSICAL_SYMBOLS_SCALE,
+    BEGIN_TEXT_MUSIC_SYMBOLS_SIZE,
+    CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE,
+    END_TEXT_MUSIC_SYMBOLS_SIZE,
     BEGIN_TEXT_OFFSET,
     GAP_BETWEEN_TEXT_AND_LINE,
 
@@ -482,6 +490,7 @@ enum class Pid : short {
 
     TIE_PLACEMENT,
     MIN_LENGTH,
+    MASK_SLURTIE,
 
     PARTIAL_SPANNER_DIRECTION,
 
@@ -497,6 +506,7 @@ enum class Pid : short {
     SCORE_FONT,
     SYMBOLS_SIZE,
     SYMBOL_ANGLE,
+    TEXT_ANGLE,
 
     APPLY_TO_ALL_STAVES,
 
@@ -515,6 +525,8 @@ enum class Pid : short {
     STAFF_HIDE_SYSTEM_BARLINE,
     STAFF_MERGE_MATCHING_RESTS,
     STAFF_REFLECT_TRANSPOSITION,
+
+    SHARED_PART_ENABLED,
 
     END
 };

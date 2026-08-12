@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -69,6 +69,7 @@ enum class ElementType : unsigned char {
     INVALID = 0,
     BRACKET_ITEM,
     PART,
+    SHARED_PART,
     STAFF,
     SCORE,
     TEXT,
@@ -79,9 +80,13 @@ enum class ElementType : unsigned char {
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,
+    SLUR,
     SLUR_SEGMENT,
+    TIE,
     TIE_SEGMENT,
+    LAISSEZ_VIB,
     LAISSEZ_VIB_SEGMENT,
+    PARTIAL_TIE,
     PARTIAL_TIE_SEGMENT,
     STEM_SLASH,
     ARPEGGIO,
@@ -101,9 +106,6 @@ enum class ElementType : unsigned char {
     SYMBOL,
     BREATH,
     MEASURE_REPEAT,
-    TIE,
-    LAISSEZ_VIB,
-    PARTIAL_TIE,
     ARTICULATION,
     ORNAMENT,
     FERMATA,
@@ -121,6 +123,7 @@ enum class ElementType : unsigned char {
     TEMPO_TEXT,
     STAFF_TEXT,
     SYSTEM_TEXT,
+    STAVE_SHARING_LABEL,
     SOUND_FLAG,
     PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
@@ -136,23 +139,40 @@ enum class ElementType : unsigned char {
     BEND,
     TREMOLOBAR,
     VOLTA,
-    HAIRPIN_SEGMENT,
-    OTTAVA_SEGMENT,
-    TRILL_SEGMENT,
-    LET_RING_SEGMENT,
-    GRADUAL_TEMPO_CHANGE_SEGMENT,
-    VIBRATO_SEGMENT,
-    PALM_MUTE_SEGMENT,
-    WHAMMY_BAR_SEGMENT,
-    RASGUEADO_SEGMENT,
-    HARMONIC_MARK_SEGMENT,
-    PICK_SCRAPE_SEGMENT,
-    TEXTLINE_SEGMENT,
     VOLTA_SEGMENT,
+    HAIRPIN,
+    HAIRPIN_SEGMENT,
+    OTTAVA,
+    OTTAVA_SEGMENT,
+    TRILL,
+    TRILL_SEGMENT,
+    LET_RING,
+    LET_RING_SEGMENT,
+    GRADUAL_TEMPO_CHANGE,
+    GRADUAL_TEMPO_CHANGE_SEGMENT,
+    VIBRATO,
+    VIBRATO_SEGMENT,
+    PALM_MUTE,
+    PALM_MUTE_SEGMENT,
+    WHAMMY_BAR,
+    WHAMMY_BAR_SEGMENT,
+    RASGUEADO,
+    RASGUEADO_SEGMENT,
+    HARMONIC_MARK,
+    HARMONIC_MARK_SEGMENT,
+    PICK_SCRAPE,
+    PICK_SCRAPE_SEGMENT,
+    TEXTLINE,
+    TEXTLINE_SEGMENT,
+    PEDAL,
     PEDAL_SEGMENT,
+    LYRICSLINE,
     LYRICSLINE_SEGMENT,
+    PARTIAL_LYRICSLINE,
     PARTIAL_LYRICSLINE_SEGMENT,
+    GLISSANDO,
     GLISSANDO_SEGMENT,
+    NOTELINE,
     NOTELINE_SEGMENT,
     STAFF_VISIBILITY_INDICATOR,
     SYSTEM_LOCK_INDICATOR,
@@ -168,29 +188,12 @@ enum class ElementType : unsigned char {
     TAB_DURATION_SYMBOL,
     FSYMBOL,
     PAGE,
-    HAIRPIN,
-    OTTAVA,
-    PEDAL,
-    TRILL,
-    LET_RING,
-    GRADUAL_TEMPO_CHANGE,
-    VIBRATO,
-    PALM_MUTE,
-    WHAMMY_BAR,
-    RASGUEADO,
-    HARMONIC_MARK,
-    PICK_SCRAPE,
-    TEXTLINE,
+    PAGE_LOCK_INDICATOR,
     TEXTLINE_BASE,
-    NOTELINE,
-    LYRICSLINE,
-    PARTIAL_LYRICSLINE,
-    GLISSANDO,
     BRACKET,
     SEGMENT,
     SYSTEM,
     CHORD,
-    SLUR,
     HBOX,
     VBOX,
     TBOX,
@@ -223,6 +226,36 @@ enum class ElementType : unsigned char {
 };
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
+
+const static std::unordered_set<ElementType> TEXTBASE_TYPES {
+    ElementType::TEXT,
+    ElementType::LYRICS,
+    ElementType::DYNAMIC,
+    ElementType::EXPRESSION,
+    ElementType::FINGERING,
+    ElementType::HARMONY,
+    ElementType::MARKER,
+    ElementType::JUMP,
+    ElementType::STAFF_TEXT,
+    ElementType::STAVE_SHARING_LABEL,
+    ElementType::SYSTEM_TEXT,
+    ElementType::TRIPLET_FEEL,
+    ElementType::PLAY_COUNT_TEXT,
+    ElementType::PLAYTECH_ANNOTATION,
+    ElementType::CAPO,
+    ElementType::STRING_TUNINGS,
+    ElementType::REHEARSAL_MARK,
+    ElementType::INSTRUMENT_CHANGE,
+    ElementType::FIGURED_BASS,
+    ElementType::TEMPO_TEXT,
+    ElementType::INSTRUMENT_NAME,
+    ElementType::MEASURE_NUMBER,
+    ElementType::MMREST_RANGE,
+    ElementType::STICKING,
+    ElementType::HARP_DIAGRAM,
+    ElementType::GUITAR_BEND_TEXT,
+    ElementType::HAMMER_ON_PULL_OFF_TEXT,
+};
 
 using ElementTypeSet = std::unordered_set<ElementType>;
 
@@ -286,6 +319,13 @@ enum class InstrumentNamesAlign : unsigned char {
     LEFT_RIGHT,
 };
 
+enum class InstrumentNamesFormat : unsigned char {
+    NAME_IN_TRANSP_NUM,
+    NAME_NUM_IN_TRANSP,
+    TRANSP_NAME_NUM,
+    CUSTOM,
+};
+
 struct Align {
     AlignH horizontal = AlignH::LEFT;
     AlignV vertical = AlignV::TOP;
@@ -341,6 +381,12 @@ enum class DirectionH : unsigned char {
 enum class Orientation : signed char {
     VERTICAL,
     HORIZONTAL
+};
+
+enum class SharedLabelOrientation : signed char {
+    HORIZONTAL,
+    VERTICAL,
+    VOICE,
 };
 
 enum class AutoOnOff : unsigned char {
@@ -464,7 +510,9 @@ enum class NoteHeadScheme : signed char {
     HEAD_AUTO = -1,
     HEAD_NORMAL,
     HEAD_PITCHNAME,
+    HEAD_PITCHNAME_NO_ACCIDENTALS,
     HEAD_PITCHNAME_GERMAN,
+    HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
     HEAD_SOLFEGE,
     HEAD_SOLFEGE_FIXED,
     HEAD_SHAPE_NOTE_4,
@@ -829,6 +877,7 @@ enum class TextStyleType : unsigned char {
     INSTRUMENT_LONG,
     INSTRUMENT_SHORT,
     INSTRUMENT_CHANGE,
+    GROUP_BRACKET,
     HEADER,
     FOOTER,
     COPYRIGHT,
@@ -851,6 +900,7 @@ enum class TextStyleType : unsigned char {
 
     // Staff oriented styles
     STAFF,
+    STAVE_SHARING,
     EXPRESSION,
     DYNAMICS,
     HAIRPIN,
@@ -1105,8 +1155,8 @@ struct InstrumentTrackId {
 // Tremolo subtypes:
 enum class TremoloType : signed char {
     INVALID_TREMOLO = -1,
-    R8 = 0, R16, R32, R64, BUZZ_ROLL,    // one note tremolo (repeat)
-    C8, C16, C32, C64       // two note tremolo (change)
+    R8 = 0, R16, R32, R64, R128, R256, BUZZ_ROLL,     // one note tremolo (repeat)
+    C8, C16, C32, C64, C128, C256                     // two note tremolo (change)
 };
 
 inline bool isTremoloTwoChord(TremoloType type)
@@ -1124,7 +1174,7 @@ enum class TremoloChordType : unsigned char {
 };
 
 enum class BracketType : signed char {
-    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
+    NORMAL, BRACE, SQUARE, LINE, GROUP, NO_BRACKET = -1
 };
 
 using InstrumentTrackIdList = std::vector<InstrumentTrackId>;
@@ -1354,6 +1404,12 @@ enum class LayoutFlag : unsigned char {
 };
 
 typedef muse::Flags<LayoutFlag> LayoutFlags;
+
+enum class LoopBoundaryType : signed char {
+    Unknown = -1,
+    LoopIn = 0,
+    LoopOut = 1
+};
 } // mu::engraving
 
 template<>

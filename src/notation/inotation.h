@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
+#include "async/channel.h"
 #include "async/notification.h"
+#include "draw/types/geometry.h"
+#include "modularity/ioc.h"
 
-#include "inotationaccessibility.h"
-#include "inotationelements.h"
-#include "inotationinteraction.h"
-#include "inotationmidiinput.h"
-#include "inotationpainting.h"
-#include "inotationparts.h"
-#include "inotationsolomutestate.h"
-#include "inotationstyle.h"
-#include "inotationviewstate.h"
-#include "internal/inotationundostack.h"
-#include "notationtypes.h"
+#include "inotation_fwd.h" // IWYU pragma: export
+#include "types/viewmode.h"
 
 class QString;
 
@@ -42,18 +37,12 @@ class INotationProject;
 }
 
 namespace mu::notation {
-class INotation;
-using INotationPtr = std::shared_ptr<INotation>;
-using INotationWeakPtr = std::weak_ptr<INotation>;
-using INotationPtrList = std::vector<INotationPtr>;
-
-class IMasterNotation;
-using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
-
 class INotation
 {
 public:
     virtual ~INotation() = default;
+
+    virtual const muse::modularity::ContextPtr& iocContext() const = 0;
 
     virtual project::INotationProject* project() const = 0;
     virtual IMasterNotationPtr masterNotation() const = 0;
@@ -114,4 +103,6 @@ public:
     // notify
     virtual muse::async::Channel<muse::RectF> notationChanged() const = 0;
 };
+
+using INotationPtr = std::shared_ptr<INotation>;
 }

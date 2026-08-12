@@ -26,14 +26,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>right hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -42,13 +42,13 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>left hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -59,40 +59,44 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         </VBox>
-      <Measure>
-        <eid>F_F</eid>
+      <Measure len="3/4">
+        <eid>H_H</eid>
         <LayoutBreak>
-          <eid>G_G</eid>
+          <eid>I_I</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <KeySig>
+            <eid>J_J</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
-            <eid>H_H</eid>
-            <sigN>3</sigN>
+            <eid>K_K</eid>
+            <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>I_I</eid>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
-            <duration>3/4</duration>
+            <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>M_M</eid>
         <LayoutBreak>
-          <eid>K_K</eid>
+          <eid>N_N</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>L_L</eid>
+            <eid>O_O</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>P_P</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -101,19 +105,23 @@
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure>
+      <Measure len="3/4">
         <voice>
+          <KeySig>
+            <eid>Q_Q</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>R_R</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>O_O</eid>
+            <eid>S_S</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>T_T</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -123,11 +131,11 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>U_U</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>V_V</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

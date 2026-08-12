@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -178,8 +178,8 @@ void MCursor::addPart(const String& instrument)
     }
 
     part->initFromInstrTemplate(it);
-    staff->init(it, 0, 0);
     m_score->appendPart(part);
     m_score->insertStaff(staff, 0);
+    staff->init(it, 0, 0);
 }
 }

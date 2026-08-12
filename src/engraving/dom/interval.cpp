@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -42,6 +42,23 @@ void Interval::flip()
 {
     diatonic = -diatonic;
     chromatic = -chromatic;
+}
+
+//---------------------------------------------------------
+//   reduce
+//---------------------------------------------------------
+
+void Interval::reduce()
+{
+    diatonic = diatonic % 7;
+    chromatic = chromatic % 12;
+}
+
+Interval Interval::reduced()
+{
+    Interval interval(diatonic, chromatic);
+    interval.reduce();
+    return interval;
 }
 
 //---------------------------------------------------------

@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 echo "Publish Docker MuseScore"
+trap 'echo Publish Docker failed; exit 1' ERR
 
 ARTIFACTS_DIR=build.artifacts
 MU_VERSION=""
@@ -45,7 +46,7 @@ echo "Login Docker"
 echo $ACCESS_TOKEN | docker login ghcr.io -u $ACCESS_USER --password-stdin
 
 echo "Push Docker"
-docker push ghcr.io/musescore/converter_4:${MU_VERSION}
+docker push ghcr.io/musescore/converter_5:${MU_VERSION}
 
 echo "Done!!"
 

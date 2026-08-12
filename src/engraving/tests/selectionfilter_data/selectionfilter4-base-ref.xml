@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0/1" len="4/4" staff="0" staves="1">
   <Staff id="0">
-    <voiceOffset>
-      <voice id="0">0</voice>
-      </voiceOffset>
     <Chord>
+      <eid>B_B</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>C_C</eid>
         <Fingering>
+          <eid>D_D</eid>
           <text>0</text>
           </Fingering>
         <pitch>72</pitch>
@@ -15,9 +15,12 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>E_E</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>F_F</eid>
         <Fingering>
+          <eid>G_G</eid>
           <text>1</text>
           </Fingering>
         <pitch>74</pitch>
@@ -25,9 +28,12 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>H_H</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>I_I</eid>
         <Fingering>
+          <eid>J_J</eid>
           <text>5</text>
           </Fingering>
         <pitch>76</pitch>
@@ -35,9 +41,12 @@
         </Note>
       </Chord>
     <Chord>
+      <eid>K_K</eid>
       <durationType>quarter</durationType>
       <Note>
+        <eid>L_L</eid>
         <Fingering>
+          <eid>M_M</eid>
           <text>3</text>
           </Fingering>
         <pitch>77</pitch>

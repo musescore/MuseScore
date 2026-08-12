@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0/1" len="4/4" staff="0" staves="1">
   <Staff id="0">
-    <voiceOffset>
-      <voice id="1">0</voice>
-      </voiceOffset>
     <location>
       <voices>1</voices>
       </location>
     <Chord>
+      <eid>J_J</eid>
       <durationType>half</durationType>
       <Note>
+        <eid>K_K</eid>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
+      <eid>L_L</eid>
       <durationType>half</durationType>
       <Note>
+        <eid>M_M</eid>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>

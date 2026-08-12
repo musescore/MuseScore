@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,17 +24,18 @@
 #include "async/notification.h"
 #include "types/ret.h"
 
-#include "inotation.h"
-#include "iexcerptnotation.h"
-#include "inotationplayback.h"
-#include "inotationautomation.h"
+#include "inotation_fwd.h"
+
+namespace mu::engraving {
+class MasterScore;
+}
 
 namespace mu::project {
 class INotationProject;
 }
 
 namespace mu::notation {
-using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
+struct ScoreCreateOptions;
 
 class IMasterNotation
 {
@@ -58,7 +59,7 @@ public:
 
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
-    virtual void resetExcerpt(IExcerptNotationPtr excerpt) = 0;
+    virtual void resetExcerpt(IExcerptNotationPtr& excerpt) = 0;
     virtual void sortExcerpts(ExcerptNotationList& excerpts) = 0;
 
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;

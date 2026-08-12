@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 
 namespace mu::engraving {
 class Dynamic;
+class Transaction;
 
 class Expression final : public TextBase
 {
@@ -48,7 +49,7 @@ public:
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
     bool acceptDrop(EditData& ed) const override;
-    EngravingItem* drop(EditData& ed) override;
+    EngravingItem* drop(Transaction& tx, EditData& ed) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;

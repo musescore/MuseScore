@@ -52,16 +52,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -117,53 +119,37 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text><font size="22"/>Untitled score</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text><font size="14"/>Subtitle</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="GradualTempoChange">
-            <GradualTempoChange>
-              <tempoChangeType>ritardando</tempoChangeType>
-              <beginHookHeight>1.9</beginHookHeight>
-              <endHookType>0</endHookType>
-              <endHookHeight>1.9</endHookHeight>
-              <beginText>rit.</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <eid>K_K</eid>
-              </GradualTempoChange>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
             <eid>L_L</eid>
             <durationType>measure</durationType>
@@ -188,13 +174,6 @@
             <subtype>fermataAbove</subtype>
             <eid>P_P</eid>
             </Fermata>
-          <Spanner type="GradualTempoChange">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>Q_Q</eid>
             <durationType>quarter</durationType>
@@ -220,5 +199,19 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <GradualTempoChange>
+        <tempoChangeType>ritardando</tempoChangeType>
+        <beginHookHeight>1.9</beginHookHeight>
+        <endHookType>0</endHookType>
+        <endHookHeight>1.9</endHookHeight>
+        <beginText>rit.</beginText>
+        <beginTextOffset x="0" y="0"/>
+        <track2>0</track2>
+        <ticks>8/4</ticks>
+        <eid>V_V</eid>
+        <track>0</track>
+        </GradualTempoChange>
+      </SpannerMap>
     </Score>
   </museScore>

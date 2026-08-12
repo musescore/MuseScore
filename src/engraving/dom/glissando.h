@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -78,6 +78,8 @@ public:
     Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     static Note* guessInitialNote(Chord* chord);
 
     std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }
@@ -99,6 +101,9 @@ public:
     TranslatableString subtypeUserName() const override;
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
+
+protected:
+    bool isInSpannerMap() const override { return false; }
 
 private:
 

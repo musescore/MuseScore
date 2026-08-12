@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,7 @@
 #include "uicomponents/view/topleveldialog.h"
 
 namespace mu::palette {
-class TimeDialog;
+class TimeEditor;
 class KeyEditor;
 class SymbolDialog;
 
@@ -41,6 +41,8 @@ class MasterPalette : public muse::uicomponents::TopLevelDialog, Ui::MasterPalet
 
 public:
     explicit MasterPalette(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
     QString selectedPaletteName() const;
 
@@ -62,7 +64,7 @@ private:
     void addPalette(PalettePtr palette);
     void retranslate(bool firstTime = false);
 
-    TimeDialog* m_timeDialog = nullptr;
+    TimeEditor* m_timeEditor = nullptr;
     KeyEditor* m_keyEditor = nullptr;
     QTreeWidgetItem* m_keyItem = nullptr;
     QTreeWidgetItem* m_timeItem = nullptr;

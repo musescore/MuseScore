@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,6 +30,9 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/symbol.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+
 #include "palettewidget.h"
 
 using namespace mu::engraving;
@@ -41,7 +44,7 @@ using namespace mu::palette;
 
 void SymbolDialog::createSymbolPalette()
 {
-    m_symbolsWidget = new PaletteWidget(this);
+    m_symbolsWidget = new PaletteWidget(this, true /*setIocContext*/);
     createSymbols();
 }
 

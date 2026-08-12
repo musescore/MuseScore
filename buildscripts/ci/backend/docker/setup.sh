@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -51,7 +51,7 @@ apt_packages_runtime=(
   libcups2
   libdbus-1-3
   libegl1-mesa-dev
-  libodbc1
+  libodbc2
   libpq-dev
   libxcomposite-dev
   libxcursor-dev
@@ -103,7 +103,7 @@ cd fonts-main
 
 echo "Installing Google Fonts..."
 mkdir -p "$FONTS_DIR"
-find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv -n -t "$FONTS_DIR"
+find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv --update=none -t "$FONTS_DIR"
 
 echo "Installing Fonts Cache..."
 fc-cache -f -v

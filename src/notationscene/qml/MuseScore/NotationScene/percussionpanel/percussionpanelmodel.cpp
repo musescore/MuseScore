@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,7 +33,16 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/undo.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
+
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
@@ -517,11 +526,10 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
 
     interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    NoteInputParams params;
-    params.drumPitch = pitch;
-
-    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
-    dispatcher()->dispatch("note-action", args);
+    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
+    query.set("pitch", muse::Val(pitch));
+    query.set("mode", muse::Val(str_conv(addingMode)));
+    commandDispatcher()->dispatch(query);
 }
 
 void PercussionPanelModel::playPitch(int pitch)
@@ -554,7 +562,8 @@ void PercussionPanelModel::resetLayout()
     }
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
-    const bool isMuseSamplerDrumset = resourceMeta.type == muse::audio::AudioResourceType::MuseSamplerSoundPack;
+    const bool isMuseSamplerDrumset = muse::audio::isResourceType(resourceMeta,
+                                                                  muse::audio::AudioResourceType::MuseSamplerSoundPack);
 
     Drumset defaultDrumset = isMuseSamplerDrumset ? museSamplerDefaultDrumset() : standardDefaultDrumset();
 
@@ -594,7 +603,7 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
 
-    const int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+    const int instrumentId = muse::audio::intAttribute(resourceMeta, u"museUID");
 
     const muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
     IF_ASSERT_FAILED(!drumMapping.empty()) {

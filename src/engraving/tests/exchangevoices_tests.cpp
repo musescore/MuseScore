@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,7 +28,10 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/score.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/editvoice.h"
+#include "engraving/editing/exchangevoices.h"
+#include "engraving/editing/transaction/transaction.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -54,7 +57,7 @@ TEST_F(Engraving_ExchangevoicesTests, slurs)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     // compare
@@ -74,7 +77,7 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     // compare
@@ -93,7 +96,7 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
     score->endCmd();
 
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
@@ -130,7 +133,7 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
     }
     // change voice
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->changeSelectedElementsVoice(1);
+    EditVoice::changeSelectedElementsVoice(score->transactionManager()->currentOrDummyTransaction(), score, 1);
     score->endCmd(false, /*layoutAllParts = */ true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

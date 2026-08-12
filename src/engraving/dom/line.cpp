@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "containers.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/navigation.h"
 
 #include "anchors.h"
 #include "barline.h"
@@ -298,16 +299,16 @@ bool LineSegment::edit(EditData& ed)
             break;
         case Key_Up:
             if (moveStart) {
-                note1 = toNote(score()->upAlt(note1));
+                note1 = toNote(Navigation::chordNoteAbove(score(), note1));
             } else if (moveEnd) {
-                note2 = toNote(score()->upAlt(note2));
+                note2 = toNote(Navigation::chordNoteAbove(score(), note2));
             }
             break;
         case Key_Down:
             if (moveStart) {
-                note1 = toNote(score()->downAlt(note1));
+                note1 = toNote(Navigation::chordNoteBelow(score(), note1));
             } else if (moveEnd) {
-                note2 = toNote(score()->downAlt(note2));
+                note2 = toNote(Navigation::chordNoteBelow(score(), note2));
             }
             break;
         default:
@@ -332,7 +333,7 @@ bool LineSegment::edit(EditData& ed)
     }
     break;
     case Spanner::Anchor::MEASURE:
-    case Spanner::Anchor::CHORD:
+    case Spanner::Anchor::CHORDREST:
     {
         Measure* m1 = l->startMeasure();
         Measure* m2 = l->endMeasure();
@@ -713,11 +714,6 @@ void LineSegment::dragGrip(EditData& ed)
     case Grip::START:         // Resize the begin of element (left grip)
         setOffset(offset() + deltaResize);
         m_offset2 -= deltaResize;
-
-        if (isStyled(Pid::OFFSET)) {
-            setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-        }
-
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::END:         // Resize the end of element (right grip)
@@ -729,9 +725,6 @@ void LineSegment::dragGrip(EditData& ed)
         const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
         setOffsetChanged(true);
-        if (isStyled(Pid::OFFSET)) {
-            setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-        }
         rebaseAnchors(ed, ed.curGrip);
     }
     break;
@@ -819,11 +812,6 @@ RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
     setOffsetChanged(true);
-
-    if (isStyled(Pid::OFFSET)) {
-        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-    }
-
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();
@@ -921,14 +909,14 @@ PointF SLine::linePos(Grip grip, System** system) const
         }
         return note->pagePos() - (*system)->pagePos();
     }
-    case Spanner::Anchor::CHORD:
+    case Spanner::Anchor::CHORDREST:
     case Spanner::Anchor::SEGMENT:
     {
         Segment* segment = start ? startSegment() : endSegment();
         if (!segment) {
             return PointF();
         }
-        if (anchor() == Spanner::Anchor::CHORD && !segment->isChordRestType()) {
+        if (anchor() == Spanner::Anchor::CHORDREST && !segment->isChordRestType()) {
             return PointF();
         }
         if (!start) {

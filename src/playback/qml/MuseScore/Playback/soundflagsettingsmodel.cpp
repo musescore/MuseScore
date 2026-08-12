@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,13 +22,19 @@
 
 #include "soundflagsettingsmodel.h"
 
-#include "engraving/types/types.h"
+#include "actions/actiontypes.h"
+#include "audio/common/audioutils.h"
+
 #include "engraving/dom/utils.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
+#include "engraving/types/types.h"
 
-#include "audio/common/audioutils.h"
-#include "actions/actiontypes.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+
+#include "project/inotationproject.h" // IWYU pragma: keep
+#include "project/iprojectaudiosettings.h"
 
 #include "translation.h"
 #include "log.h"
@@ -264,7 +270,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
         return {};
     }
 
-    auto isResetEnabled = [=]() {
+    auto isResetEnabled = [this, soundFlag]() {
         bool enabled = false;
 
         const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();

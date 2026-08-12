@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,8 +22,11 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
 
+#include "engraving/editing/reset.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "types/translatablestring.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -49,7 +52,9 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testReadWriteResetPositions)
 
         MasterScore* score = ScoreRW::readScore(readFile);
         EXPECT_TRUE(score);
-        score->cmdResetAllPositions();
+        score->transactionManager()->transaction(muse::TranslatableString::untranslatable("Reset all positions"), [&](Transaction& tx) {
+            Reset::resetAllPositions(tx, score);
+        });
         score->undoRedo(/* undo */ true, nullptr);
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, readFile));
 

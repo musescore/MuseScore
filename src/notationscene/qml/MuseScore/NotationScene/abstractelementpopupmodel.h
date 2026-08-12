@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -92,10 +92,10 @@ protected:
     notation::INotationPtr currentNotation() const;
     INotationInteractionPtr interaction() const;
 
-    void changeItemProperty(engraving::Pid id, const PropertyValue& value);
-    void changeItemProperty(engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+    void changeItemProperty(engraving::Pid id, const engraving::PropertyValue& value);
+    void changeItemProperty(engraving::Pid id, const engraving::PropertyValue& value, engraving::PropertyFlags flags);
 
-    EngravingItem* m_item = nullptr;
+    engraving::EngravingItem* m_item = nullptr;
     QRect m_itemRect;
 
 private:

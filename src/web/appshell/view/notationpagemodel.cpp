@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,12 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationpagemodel.h"
 
 #include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
 #include "async/async.h"
+
+#include "notation/inotationinteraction.h"
+#include "notation/inotationnoteinput.h"
 
 #include "log.h"
 
@@ -53,7 +57,7 @@ void NotationPageModel::init()
 
     for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
         DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
-        dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
+        dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
     }
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -109,9 +113,9 @@ QString NotationPageModel::layoutPanelName() const
     return LAYOUT_PANEL_NAME;
 }
 
-QString NotationPageModel::inspectorPanelName() const
+QString NotationPageModel::propertiesPanelName() const
 {
-    return INSPECTOR_PANEL_NAME;
+    return PROPERTIES_PANEL_NAME;
 }
 
 QString NotationPageModel::selectionFiltersPanelName() const

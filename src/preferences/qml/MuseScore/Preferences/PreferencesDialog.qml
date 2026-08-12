@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -116,10 +116,12 @@ StyledDialogView {
             for (var i in pages) {
                 var page = pages[i]
                 var obj = root.prv.pagesObjects[page.id]
-                obj.reset()
+                if (obj) {
+                    obj.reset()
+                }
             }
 
-            preferencesModel.resetFactorySettings()
+            Qt.callLater(preferencesModel.resetFactorySettings)
         }
     }
 
@@ -182,7 +184,9 @@ StyledDialogView {
                 for (var i in pages) {
                     var page = pages[i]
                     var obj = root.prv.pagesObjects[page.id]
-                    ok &= obj.apply()
+                    if (obj) {
+                        ok &= obj.apply()
+                    }
                 }
 
                 if (ok) {

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,11 @@
 #include "context/iglobalcontext.h"
 
 #include "async/asyncable.h"
+
+namespace mu::engraving {
+class Drumset;
+class ShadowNote;
+}
 
 namespace mu::notation {
 class PercussionNotePopupContentModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -63,8 +68,8 @@ private:
     INotationInteractionPtr interaction() const;
     INotationNoteInputPtr noteInput() const;
 
-    const mu::engraving::ShadowNote* currentShadowNote() const;
-    const Drumset* currentDrumset() const;
+    const engraving::ShadowNote* currentShadowNote() const;
+    const engraving::Drumset* currentDrumset() const;
 
     int currentDrumPitch() const;
 };

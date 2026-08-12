@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -98,8 +98,8 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx, 
     for (Fraction tick = startTick; tick <= endTick; tick += halfDivision) {
         anchorTicks.insert(tick);
     }
-    for (Segment* seg = measure->first(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg;
-         seg = seg->next(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+    for (Segment* seg = measure->first(SegmentType::Duration); seg;
+         seg = seg->next(SegmentType::Duration)) {
         anchorTicks.insert(seg->rtick());
     }
 
@@ -372,11 +372,11 @@ Segment* MoveElementAnchors::getNewSegment(EngravingItem* element, Segment* curS
 
 Segment* MoveElementAnchors::findNewAnchorableSegment(const Segment* curSeg, bool forward)
 {
-    Segment* newSeg = forward ? curSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : curSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    Segment* newSeg = forward ? curSeg->next1(SegmentType::Duration) : curSeg->prev1(SegmentType::Duration);
 
     // Continue until we get to a different tick than where we are
     while (newSeg && newSeg->tick() == curSeg->tick()) {
-        newSeg = forward ? newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        newSeg = forward ? newSeg->next1(SegmentType::Duration) : newSeg->prev1(SegmentType::Duration);
     }
     if (!newSeg) {
         return nullptr;
@@ -464,8 +464,8 @@ void MoveElementAnchors::doMoveSegment(FiguredBass* element, Segment* newSeg, Fr
     if (newSeg->tick() > oldSeg->tick()) {
         FiguredBass* nextFB = nullptr;
         Fraction endTick = newSeg->tick() + element->ticks();
-        for (Segment* seg = newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->tick() <= endTick;
-             seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        for (Segment* seg = newSeg->next1(SegmentType::Duration); seg && seg->tick() <= endTick;
+             seg = seg->next1(SegmentType::Duration)) {
             nextFB = toFiguredBass(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
             if (nextFB) {
                 break;
@@ -479,8 +479,8 @@ void MoveElementAnchors::doMoveSegment(FiguredBass* element, Segment* newSeg, Fr
     // Shorten previous if needed
     if (newSeg->tick() < oldSeg->tick()) {
         FiguredBass* prevFB = nullptr;
-        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
-             seg = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        for (Segment* seg = newSeg->prev1(SegmentType::Duration); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
+             seg = seg->prev1(SegmentType::Duration)) {
             prevFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
             if (prevFB) {
                 break;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,10 @@
 #include "io/buffer.h"
 
 #include "compat/writescorehook.h"
+#include "editing/editkeysig.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/transaction.h"
+#include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"
@@ -33,7 +36,7 @@
 
 #include "engravingproject.h"
 
-#include "automation/internal/automationcontroller.h"
+#include "automation/internal/scoreautomationcontroller.h"
 
 #include "barline.h"
 #include "excerpt.h"
@@ -65,10 +68,11 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     : Score(iocCtx)
 {
     m_project = project;
+    m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
-    m_automationController = new AutomationController();
+    m_automationController = new ScoreAutomationController();
     m_expandedRepeatList  = new RepeatList(this);
     m_nonExpandedRepeatList = new RepeatList(this);
     setMasterScore(this);
@@ -140,33 +144,37 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
-bool MasterScore::saved() const
-{
-    return m_saved;
-}
-
-void MasterScore::setSaved(bool v)
-{
-    m_saved = v;
-}
-
 String MasterScore::name() const
 {
     return fileInfo()->displayName();
 }
 
-IAutomation* MasterScore::automation() const
+AutomationDataConstPtr MasterScore::automationData() const
 {
-    return m_automationController->automation();
+    return m_automationController->automationData();
+}
+
+void MasterScore::setAutomationData(AutomationDataPtr data)
+{
+    m_automationController->setAutomationData(std::move(data));
+}
+
+void MasterScore::editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits)
+{
+    m_automationController->editPoints(key, edits);
+}
+
+void MasterScore::onTimeInserted(const Fraction& tick, const Fraction& len)
+{
+    m_automationController->insertTime(tick, len);
 }
 
 //---------------------------------------------------------
-//   setPlaylistDirty
+//   invalidateRepeatLists
 //---------------------------------------------------------
 
-void MasterScore::setPlaylistDirty()
+void MasterScore::invalidateRepeatList()
 {
-    m_playlistDirty = true;
     m_expandedRepeatList->setScoreChanged();
     m_nonExpandedRepeatList->setScoreChanged();
 }
@@ -181,7 +189,7 @@ void MasterScore::setExpandRepeats(bool expand)
         return;
     }
     m_expandRepeats = expand;
-    setPlaylistDirty();
+    invalidateRepeatList();
 }
 
 //---------------------------------------------------------
@@ -383,6 +391,19 @@ void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_
 
         m_cmdState.setElement(e);
     }
+}
+
+void MasterScore::initAutomation()
+{
+    IF_ASSERT_FAILED(m_automationController) {
+        return;
+    }
+    m_automationController->init(this);
+}
+
+void MasterScore::updateAutomation(const ScoreChanges& changes)
+{
+    m_automationController->update(changes);
 }
 
 //---------------------------------------------------------
@@ -598,6 +619,10 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
 
+            if (measureInsert->hasMMRest() && score->style().value(Sid::createMultiMeasureRests).toBool()) {
+                measureInsert = measureInsert->mmRest();
+            }
+
             if (pm && !options.moveSignaturesClef && !isBeginning) {
                 Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                 if (ps && ps->enabled()) {
@@ -606,6 +631,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         if (pc) {
                             previousClefList.push_back(toClef(pc));
                             doUndoRemoveElement(pc);
+                            pc->undoUnlink();
                             if (ps->empty()) {
                                 undoRemoveElement(ps);
                             }
@@ -660,13 +686,15 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             }
                             keySigList.push_back(ks);
                             // if instrument change on that place, set correct key signature for instrument change
+                            const TrackRange trackRange = e->part()->trackRange();
                             bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                                      e->part()->startTrack(),
-                                                                                      e->part()->endTrack() - 1);
+                                                                                      trackRange.startTrack,
+                                                                                      trackRange.endTrack - 1);
                             if (ic) {
                                 KeySigEvent ke = ks->keySigEvent();
                                 ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke);
+                                EditKeySig::undoChangeKeySig(transactionManager()->currentOrDummyTransaction(), this, ks->staff(),
+                                                             e->tick(), ke);
                             } else {
                                 ee = e;
                             }
@@ -690,6 +718,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         }
                         if (ee) {
                             doUndoRemoveElement(ee);
+                            ee->undoUnlink();
                             if (s->empty() && s->isTimeSigType()) {
                                 undoRemoveElement(s);
                             }

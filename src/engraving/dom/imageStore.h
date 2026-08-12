@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -56,6 +56,7 @@ public:
     bool isUsed() const { return !m_references.empty(); }
     std::string hashName() const;
     const muse::ByteArray& hash() const { return m_hash; }
+    const std::string& type() const { return m_type; }
     void set(const muse::ByteArray& b, const muse::ByteArray& h) { m_buffer = b; m_hash = h; }
 
 private:

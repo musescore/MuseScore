@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,20 +22,21 @@
 
 #include "timelineview.h"
 
-#include "widgets/timeline.h"
-
 #include <QApplication>
 #include <QQuickWindow>
 #include <QSplitter>
 #include <QTimer>
 
-#include "log.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+
+#include "widgets/timeline.h"
 
 namespace mu::notation {
 class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget
 {
 public:
-    TimelineAdapter()
+    TimelineAdapter(const muse::modularity::ContextPtr& iocCtx)
         : QSplitter(nullptr)
     {
         setFocusPolicy(Qt::NoFocus);
@@ -43,7 +44,7 @@ public:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setObjectName("TimelineAdapter");
 
-        m_msTimeline = new Timeline(this);
+        m_msTimeline = new Timeline(this, iocCtx);
     }
 
     void updateView()
@@ -141,7 +142,7 @@ void TimelineView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    auto timeline = std::make_shared<TimelineAdapter>();
+    auto timeline = std::make_shared<TimelineAdapter>(iocContext());
 
     auto updateView = [this, timeline]() {
         update();

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
 #include "types/translatablestring.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
 using namespace mu::playback;
 using namespace mu::notation;
@@ -50,12 +52,12 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Play from selection"),
              IconCode::Code::PLAY
              ),
-    UiAction("stop",
+    UiAction("pause",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Stop"),
-             TranslatableString("action", "Stop playback"),
-             IconCode::Code::STOP
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Pause"),
+             TranslatableString("action", "Pause playback"),
+             IconCode::Code::PAUSE
              ),
     UiAction("pause-and-select",
              mu::context::UiCtxProjectOpened,
@@ -63,6 +65,13 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Pause and select"),
              TranslatableString("action", "Pause and select playback position"),
              IconCode::Code::PAUSE
+             ),
+    UiAction("stop",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Stop"),
+             TranslatableString("action", "Stop playback"),
+             IconCode::Code::STOP
              ),
     UiAction("rewind",
              mu::context::UiCtxProjectOpened,
@@ -209,11 +218,7 @@ PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> control
 
 void PlaybackUiActions::init()
 {
-    m_controller->actionCheckedChanged().onReceive(this, [this](const ActionCode& code) {
-        m_actionCheckedChanged.send({ code });
-    });
-
-    m_controller->isPlayAllowedChanged().onNotify(this, [this]() {
+    m_controller->isPlayAllowedChanged().onReceive(this, [this](bool) {
         const UiActionList& actions = actionsList();
 
         ActionCodeList codes;
@@ -279,15 +284,20 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
     if (act.code == PLAY_FROM_SELECTION_CODE) {
         const INotationPtr currNotation = globalContext()->currentNotation();
         const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
-        return interaction && !interaction->selection()->isNone() && !interaction->isEditingElement();
+        const INotationSelectionPtr selection = interaction ? interaction->selection() : nullptr;
+        if (!selection) {
+            return false;
+        }
+        const bool selectionValid = !selection->isNone() || selection->lastElementHit();
+        return selectionValid && !interaction->isEditingElement();
     }
 
     return true;
 }
 
-bool PlaybackUiActions::actionChecked(const UiAction& act) const
+bool PlaybackUiActions::actionChecked(const UiAction&) const
 {
-    return m_controller->actionChecked(act.code);
+    return false;
 }
 
 muse::async::Channel<ActionCodeList> PlaybackUiActions::actionEnabledChanged() const

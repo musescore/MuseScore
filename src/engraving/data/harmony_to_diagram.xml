@@ -30,458 +30,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="2">normal</dot>
-                </string>
-                <barre start="0" end="-1">1</barre>
-            </fretDiagram>
-            <barre>1</barre>
-        </FretDiagram>
-        <pattern>-[6-O][6-O][5-O]--;B4[0-5]</pattern>
-        <Harmony>
-            <name>ab</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="3">normal</dot>
-                </string>
-                <barre start="1" end="-1">1</barre>
-            </fretDiagram>
-            <barre>1</barre>
-        </FretDiagram>
-        <pattern>X-[3-O][3-O][3-O]-;B1[1-5]</pattern>
-        <Harmony>
-            <name>a#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="4">normal</dot>
-                </string>
-                <barre start="1" end="-1">2</barre>
-            </fretDiagram>
-            <barre>1</barre>
-        </FretDiagram>
-        <pattern>X-[4-O][4-O][4-O]-;B2[1-5]</pattern>
-        <Harmony>
-            <name>b</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="3">normal</dot>
-                </string>
-                <barre start="1" end="-1">1</barre>
-            </fretDiagram>
-            <barre>1</barre>
-        </FretDiagram>
-        <pattern>X-[3-O][3-O][3-O]-;B1[1-5]</pattern>
-        <Harmony>
-            <name>bb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="3">
-                    <marker>circle</marker>
-                </string>
-                <string no="4">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>circle</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[3-O][2-O]O[1-O]O</pattern>
-        <Harmony>
-            <name>c</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="4">normal</dot>
-                </string>
-                <barre start="1" end="-1">2</barre>
-            </fretDiagram>
-            <barre>1</barre>
-        </FretDiagram>
-        <pattern>X-[4-O][4-O][4-O]-;B2[1-5]</pattern>
-        <Harmony>
-            <name>cb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-                <barre start="2" end="4">3</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[4-O]---X;B6[2-4]</pattern>
-        <Harmony>
-            <name>c#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <marker>circle</marker>
-                </string>
-                <string no="3">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="5">
-                    <dot fret="2">normal</dot>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>XXO[2-O][3-O][2-O]</pattern>
-        <Harmony>
-            <name>d</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-                <barre start="2" end="4">3</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[4-O]---X;B6[2-4]</pattern>
-        <Harmony>
-            <name>db</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>5</fretOffset>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-                <barre start="2" end="4">3</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[6-O]---X;B8[2-4]</pattern>
-        <Harmony>
-            <name>d#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>circle</marker>
-                </string>
-                <string no="1">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="4">
-                    <marker>circle</marker>
-                </string>
-                <string no="5">
-                    <marker>circle</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>O[2-O][2-O][1-O]OO</pattern>
-        <Harmony>
-            <name>e</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>5</fretOffset>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-                <barre start="2" end="4">3</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[6-O]---X;B8[2-4]</pattern>
-        <Harmony>
-            <name>eb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="2">
-                    <marker>cross</marker>
-                </string>
-                <string no="3">
-                    <marker>cross</marker>
-                </string>
-                <string no="4">
-                    <marker>cross</marker>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>X[4-O]XXXX</pattern>
-        <Harmony>
-            <name>n.c./c#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="2">normal</dot>
-                </string>
-                <barre start="0" end="5">1</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[3-O][3-O][2-O]--;B1[0-5]</pattern>
-        <Harmony>
-            <name>f</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>circle</marker>
-                </string>
-                <string no="1">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="4">
-                    <marker>circle</marker>
-                </string>
-                <string no="5">
-                    <marker>circle</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>O[2-O][2-O][1-O]OO</pattern>
-        <Harmony>
-            <name>fb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <barre start="0" end="5">2</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[4-O][4-O][3-O]--;B2[0-5]</pattern>
-        <Harmony>
-            <name>f#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="1">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="2">
-                    <marker>circle</marker>
-                </string>
-                <string no="3">
-                    <marker>circle</marker>
-                </string>
-                <string no="4">
-                    <marker>circle</marker>
-                </string>
-                <string no="5">
-                    <dot fret="3">normal</dot>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>[3-O][2-O]OOO[3-O]</pattern>
-        <Harmony>
-            <name>g</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <barre start="0" end="5">2</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[4-O][4-O][3-O]--;B2[0-5]</pattern>
-        <Harmony>
-            <name>gb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="2">normal</dot>
-                </string>
-                <barre start="0" end="5">1</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[6-O][6-O][5-O]--;B4[0-5]</pattern>
-        <Harmony>
-            <name>g#</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -3824,6 +3372,27 @@
         <pattern>XX[1-O][2-O][1-O]X</pattern>
         <Harmony>
             <name>adim/eb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>3</fretOffset>
+            <fretDiagram>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="2">normal</dot>
+                </string>
+                <barre start="0" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[6-O][6-O][5-O]--;B4[0-5]</pattern>
+        <Harmony>
+            <name>ab</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -9571,7 +9140,6 @@
                 </string>
                 <barre start="4" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XO[2-O][2-O]--;B1[4-5]</pattern>
         <Harmony>
@@ -11126,6 +10694,29 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="1" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X-[3-O][3-O][3-O]-;B1[1-5]</pattern>
+        <Harmony>
+            <name>a#</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretOffset>1</fretOffset>
             <fretDiagram>
                 <string no="0">
@@ -12390,6 +11981,29 @@
         <pattern>[3-O]X[2-O][2-O][3-O]O</pattern>
         <Harmony>
             <name>asus/g</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="4">normal</dot>
+                </string>
+                <barre start="1" end="5">2</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X-[4-O][4-O][4-O]-;B2[1-5]</pattern>
+        <Harmony>
+            <name>b</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -14833,6 +14447,29 @@
                 <string no="0">
                     <marker>cross</marker>
                 </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="1" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X-[3-O][3-O][3-O]-;B1[1-5]</pattern>
+        <Harmony>
+            <name>bb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
                 <barre start="1" end="5">1</barre>
             </fretDiagram>
         </FretDiagram>
@@ -15918,13 +15555,12 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <fretOffset>5</fretOffset>
             <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
+                <string no="0">
                     <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
                 </string>
                 <string no="4">
                     <marker>cross</marker>
@@ -15932,10 +15568,10 @@
                 <string no="5">
                     <marker>cross</marker>
                 </string>
-                <barre start="0" end="2">1</barre>
+                <barre start="1" end="3">1</barre>
             </fretDiagram>
         </FretDiagram>
-        <pattern>-[8-O]-XXX;B6[0-2]</pattern>
+        <pattern>X-[3-O]-XX;B1[1-3]</pattern>
         <Harmony>
             <name>bb7(no3)</name>
         </Harmony>
@@ -17663,28 +17299,18 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretOffset>5</fretOffset>
             <fretDiagram>
                 <string no="0">
-                    <dot fret="4">normal</dot>
+                    <marker>cross</marker>
                 </string>
                 <string no="1">
                     <marker>cross</marker>
                 </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
+                <barre start="2" end="-1">1</barre>
             </fretDiagram>
         </FretDiagram>
-        <pattern>[4-O]X[3-O][3-O][2-O]X</pattern>
+        <pattern>XX----;B6[2-5]</pattern>
         <Harmony>
             <name>bbm/ab</name>
         </Harmony>
@@ -21196,29 +20822,6 @@
                     <marker>cross</marker>
                 </string>
                 <string no="1">
-                    <marker>circle</marker>
-                </string>
-                <string no="2">
-                    <dot fret="4">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="4">normal</dot>
-                </string>
-                <barre start="4" end="5">2</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>XO[4-O][4-O]--;B2[4-5]</pattern>
-        <Harmony>
-            <name>bm(add2)/a</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
                     <dot fret="4">normal</dot>
                 </string>
                 <string no="2">
@@ -21258,6 +20861,34 @@
         <pattern>O[2-O]O---;B2[3-5]</pattern>
         <Harmony>
             <name>bm9/e</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <marker>circle</marker>
+                </string>
+                <string no="2">
+                    <marker>circle</marker>
+                </string>
+                <string no="3">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>XOO[4-O][2-O]X</pattern>
+        <Harmony>
+            <name>bm(add2)/a</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -22890,6 +22521,34 @@
                     <dot fret="1">normal</dot>
                 </string>
                 <string no="5">
+                    <marker>circle</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[3-O][2-O]O[1-O]O</pattern>
+        <Harmony>
+            <name>c</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="3">
+                    <marker>circle</marker>
+                </string>
+                <string no="4">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
                     <dot fret="2">normal</dot>
                 </string>
             </fretDiagram>
@@ -23146,34 +22805,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <marker>circle</marker>
-                </string>
-                <string no="3">
-                    <marker>circle</marker>
-                </string>
-                <string no="4">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>circle</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>XXOO[1-O]O</pattern>
-        <Harmony>
-            <name>cadd2/d</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
             <fretOffset>2</fretOffset>
             <fretDiagram>
                 <string no="0">
@@ -23301,7 +22932,6 @@
                 </string>
                 <barre start="1" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X-[5-O][5-O]--;B3[1-5]</pattern>
         <Harmony>
@@ -24420,6 +24050,34 @@
         <pattern>X[3-O][3-O][3-O][2-O]X</pattern>
         <Harmony>
             <name>c7b9sus4</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <marker>circle</marker>
+                </string>
+                <string no="4">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="5">
+                    <dot fret="1">normal</dot>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[3-O][3-O]O[2-O][1-O]</pattern>
+        <Harmony>
+            <name>c7sus4(addb9)</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -25578,6 +25236,35 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretOffset>2</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>circle</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[5-O][5-O][5-O][3-O]O</pattern>
+        <Harmony>
+            <name>cadd2/d</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -26337,6 +26024,29 @@
                 <string no="0">
                     <marker>cross</marker>
                 </string>
+                <string no="2">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="4">normal</dot>
+                </string>
+                <barre start="1" end="5">2</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X-[4-O][4-O][4-O]-;B2[1-5]</pattern>
+        <Harmony>
+            <name>cb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
                 <string no="1">
                     <dot fret="2">normal</dot>
                 </string>
@@ -27025,7 +26735,6 @@
                 </string>
                 <barre start="2" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>[7-O]X-[7-O][7-O]-;B6[2-5]</pattern>
         <Harmony>
@@ -28544,7 +28253,6 @@
                 </string>
                 <barre start="1" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X-[5-O][6-O][4-O]-;B3[1-5]</pattern>
         <Harmony>
@@ -28598,7 +28306,6 @@
                 </string>
                 <barre start="1" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X-[6-O][5-O][4-O]-;B3[1-5]</pattern>
         <Harmony>
@@ -30206,12 +29913,18 @@
                 <string no="0">
                     <marker>cross</marker>
                 </string>
-                <barre start="1" end="5">1</barre>
+                <string no="1">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+                <barre start="2" end="4">3</barre>
             </fretDiagram>
         </FretDiagram>
-        <pattern>X-----;B4[1-5]</pattern>
+        <pattern>X[4-O]---X;B6[2-4]</pattern>
         <Harmony>
-            <name>c#11</name>
+            <name>c#</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -33711,6 +33424,34 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <marker>circle</marker>
+                </string>
+                <string no="3">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="5">
+                    <dot fret="2">normal</dot>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>XXO[2-O][3-O][2-O]</pattern>
+        <Harmony>
+            <name>d</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretOffset>4</fretOffset>
             <fretDiagram>
                 <string no="0">
@@ -37029,6 +36770,27 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretOffset>3</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+                <barre start="2" end="4">3</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[4-O]---X;B6[2-4]</pattern>
+        <Harmony>
+            <name>db</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretOffset>2</fretOffset>
             <fretDiagram>
                 <string no="0">
@@ -40093,7 +39855,6 @@
                 </string>
                 <barre start="1" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X-[7-O][6-O]--;B4[1-5]</pattern>
         <Harmony>
@@ -40533,17 +40294,12 @@
                     <marker>circle</marker>
                 </string>
                 <string no="3">
-                    <dot fret="3">normal</dot>
+                    <dot fret="2">normal</dot>
                 </string>
-                <string no="4">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="5">
-                    <dot fret="1">normal</dot>
-                </string>
+                <barre start="4" end="-1">1</barre>
             </fretDiagram>
         </FretDiagram>
-        <pattern>XXO[3-O][1-O][1-O]</pattern>
+        <pattern>XXO[2-O]--;B1[4-5]</pattern>
         <Harmony>
             <name>dm7</name>
         </Harmony>
@@ -43063,6 +42819,27 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretOffset>5</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+                <barre start="2" end="4">3</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[6-O]---X;B8[2-4]</pattern>
+        <Harmony>
+            <name>d#</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
@@ -44995,6 +44772,34 @@
                     <marker>circle</marker>
                 </string>
                 <string no="1">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="4">
+                    <marker>circle</marker>
+                </string>
+                <string no="5">
+                    <marker>circle</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>O[2-O][2-O][1-O]OO</pattern>
+        <Harmony>
+            <name>e</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>circle</marker>
+                </string>
+                <string no="1">
                     <marker>circle</marker>
                 </string>
                 <string no="4">
@@ -45002,7 +44807,6 @@
                 </string>
                 <barre start="2" end="-1">2</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>OO--[3-O]-;B2[2-5]</pattern>
         <Harmony>
@@ -48143,6 +47947,27 @@
                 <string no="0">
                     <marker>cross</marker>
                 </string>
+                <string no="1">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+                <barre start="2" end="4">3</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[6-O]---X;B8[2-4]</pattern>
+        <Harmony>
+            <name>eb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>5</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
                 <string no="2">
                     <dot fret="2">normal</dot>
                 </string>
@@ -50344,7 +50169,6 @@
                 </string>
                 <barre start="3" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X[6-O][5-O]-[6-O]-;B3[3-5]</pattern>
         <Harmony>
@@ -50550,7 +50374,6 @@
                 </string>
                 <barre start="3" end="-1">2</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XX[3-O]-[4-O]-;B2[3-5]</pattern>
         <Harmony>
@@ -50659,34 +50482,6 @@
         <pattern>XX[4-O]-[4-O]-;B2[3-5]</pattern>
         <Harmony>
             <name>ebdim/gb</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
-                <string no="1">
-                    <marker>cross</marker>
-                </string>
-                <string no="2">
-                    <dot fret="1">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="4">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="5">
-                    <marker>cross</marker>
-                </string>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>XX[1-O][3-O][3-O]X</pattern>
-        <Harmony>
-            <name>ebm(#7)</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -51976,6 +51771,30 @@
         <pattern>X--[3-O][3-O]-;B1[1-5]</pattern>
         <Harmony>
             <name>ebmaj9/bb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>5</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="4">
+                    <dot fret="2">normal</dot>
+                </string>
+                <barre start="1" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X-[8-O][7-O][7-O]-;B6[1-5]</pattern>
+        <Harmony>
+            <name>ebm(#7)</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -53512,7 +53331,7 @@
                     <marker>circle</marker>
                 </string>
                 <string no="1">
-                    <dot fret="3">normal</dot>
+                    <dot fret="2">normal</dot>
                 </string>
                 <string no="2">
                     <marker>circle</marker>
@@ -53521,14 +53340,14 @@
                     <marker>circle</marker>
                 </string>
                 <string no="4">
-                    <dot fret="1">normal</dot>
+                    <marker>circle</marker>
                 </string>
                 <string no="5">
                     <marker>circle</marker>
                 </string>
             </fretDiagram>
         </FretDiagram>
-        <pattern>O[3-O]OO[1-O]O</pattern>
+        <pattern>O[2-O]OOOO</pattern>
         <Harmony>
             <name>em7</name>
         </Harmony>
@@ -54451,7 +54270,6 @@
                 </string>
                 <barre start="3" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XO[5-O]-[5-O]-;B3[3-5]</pattern>
         <Harmony>
@@ -56469,6 +56287,26 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretDiagram>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="2">normal</dot>
+                </string>
+                <barre start="0" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[3-O][3-O][2-O]--;B1[0-5]</pattern>
+        <Harmony>
+            <name>f</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretOffset>2</fretOffset>
             <fretDiagram>
                 <string no="0">
@@ -58310,23 +58148,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="3">normal</dot>
-                </string>
-                <barre start="0" end="5">1</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[3-O]-[3-O]--;B1[0-5]</pattern>
-        <Harmony>
-            <name>f7sus4</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
                 </string>
@@ -59052,7 +58873,6 @@
                 </string>
                 <barre start="0" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>-[4-O][3-O][2-O]--;B1[0-5]</pattern>
         <Harmony>
@@ -59507,6 +59327,34 @@
                     <dot fret="2">normal</dot>
                 </string>
                 <string no="3">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="4">
+                    <marker>circle</marker>
+                </string>
+                <string no="5">
+                    <marker>circle</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>O[2-O][2-O][1-O]OO</pattern>
+        <Harmony>
+            <name>fb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <marker>circle</marker>
+                </string>
+                <string no="1">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="3">
                     <marker>cross</marker>
                 </string>
                 <string no="4">
@@ -59805,7 +59653,6 @@
                 </string>
                 <barre start="0" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>-[3-O][3-O]---;B1[0-5]</pattern>
         <Harmony>
@@ -60113,7 +59960,6 @@
                 </string>
                 <barre start="4" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XXO[3-O]--;B1[4-5]</pattern>
         <Harmony>
@@ -62119,6 +61965,26 @@
         <pattern>XX-[6-O][6-O]-;B5[2-5]</pattern>
         <Harmony>
             <name>f+/g</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="1">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="0" end="5">2</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[4-O][4-O][3-O]--;B2[0-5]</pattern>
+        <Harmony>
+            <name>f#</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -65970,7 +65836,6 @@
                 </string>
                 <barre start="3" end="-1">3</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XX[4-O]---;B3[3-5]</pattern>
         <Harmony>
@@ -66730,6 +66595,34 @@
         <pattern>XOX[2-O][1-O][3-O]</pattern>
         <Harmony>
             <name>fsus2no2add9/a</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
+                <string no="0">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="1">
+                    <dot fret="2">normal</dot>
+                </string>
+                <string no="2">
+                    <marker>circle</marker>
+                </string>
+                <string no="3">
+                    <marker>circle</marker>
+                </string>
+                <string no="4">
+                    <marker>circle</marker>
+                </string>
+                <string no="5">
+                    <dot fret="3">normal</dot>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>[3-O][2-O]OOO[3-O]</pattern>
+        <Harmony>
+            <name>g</name>
         </Harmony>
     </HarmonyToDiagram>
     <HarmonyToDiagram>
@@ -67857,7 +67750,6 @@
                 </string>
                 <barre start="4" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>X[2-O][3-O]O--;B1[4-5]</pattern>
         <Harmony>
@@ -70352,6 +70244,26 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretDiagram>
+                <string no="1">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="4">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="3">normal</dot>
+                </string>
+                <barre start="0" end="5">2</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[4-O][4-O][3-O]--;B2[0-5]</pattern>
+        <Harmony>
+            <name>gb</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretDiagram>
                 <string no="0">
                     <dot fret="2">normal</dot>
                 </string>
@@ -70587,7 +70499,6 @@
                 </string>
                 <barre start="1" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>[2-O]---[2-O]-;B1[1-5]</pattern>
         <Harmony>
@@ -70732,7 +70643,6 @@
                 </string>
                 <barre start="0" end="-1">2</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>-[4-O]-[3-O][4-O]-;B2[0-5]</pattern>
         <Harmony>
@@ -73992,7 +73902,6 @@
                 </string>
                 <barre start="1" end="-1">2</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>[3-O]---[3-O]-;B2[1-5]</pattern>
         <Harmony>
@@ -75822,6 +75731,27 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
+            <fretOffset>3</fretOffset>
+            <fretDiagram>
+                <string no="1">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="2">
+                    <dot fret="3">normal</dot>
+                </string>
+                <string no="3">
+                    <dot fret="2">normal</dot>
+                </string>
+                <barre start="0" end="5">1</barre>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>-[6-O][6-O][5-O]--;B4[0-5]</pattern>
+        <Harmony>
+            <name>g#</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
             <fretDiagram>
                 <string no="0">
                     <dot fret="3">normal</dot>
@@ -76172,7 +76102,6 @@
                 </string>
                 <barre start="3" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>XX[5-O]---;B4[3-5]</pattern>
         <Harmony>
@@ -76787,7 +76716,6 @@
                 </string>
                 <barre start="0" end="-1">1</barre>
             </fretDiagram>
-            <barre>1</barre>
         </FretDiagram>
         <pattern>-[6-O]--[6-O]-;B4[0-5]</pattern>
         <Harmony>
@@ -78376,6 +78304,35 @@
         <pattern>[1-O]XOO[1-O][3-O]</pattern>
         <Harmony>
             <name>gsus/f</name>
+        </Harmony>
+    </HarmonyToDiagram>
+    <HarmonyToDiagram>
+        <FretDiagram>
+            <fretOffset>3</fretOffset>
+            <fretDiagram>
+                <string no="0">
+                    <marker>cross</marker>
+                </string>
+                <string no="1">
+                    <dot fret="1">normal</dot>
+                </string>
+                <string no="2">
+                    <marker>cross</marker>
+                </string>
+                <string no="3">
+                    <marker>cross</marker>
+                </string>
+                <string no="4">
+                    <marker>cross</marker>
+                </string>
+                <string no="5">
+                    <marker>cross</marker>
+                </string>
+            </fretDiagram>
+        </FretDiagram>
+        <pattern>X[4-O]XXXX</pattern>
+        <Harmony>
+            <name>n.c./c#</name>
         </Harmony>
     </HarmonyToDiagram>
 </Data>

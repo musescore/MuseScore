@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -123,6 +123,7 @@ StyledDialogView {
             text: pagesStack.currentIndex === 0
                   ? chooseInstrumentsAndTemplatePage.description
                   : ""
+            displayTruncatedTextOnHover: true
 
             Layout.fillWidth: true
             Layout.maximumHeight: buttonBox.height

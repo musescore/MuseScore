@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "abstractstyledialogmodel.h"
 
 #include "engraving/style/style.h"
+
+#include "notation/inotation.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -71,8 +74,18 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id) const
 
 QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& logicalValue) const
 {
-    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+    P_TYPE type = mu::engraving::MStyle::valueType(id);
+
+    if (type == P_TYPE::SPATIUM) {
         return logicalValue.value<mu::engraving::Spatium>().val();
+    }
+
+    if (type == P_TYPE::POINT) {
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        PointF point = logicalValue.value<PointF>();
+        point.setY(-point.y());
+        return point.toQPointF();
     }
 
     return logicalValue.toQVariant();
@@ -80,9 +93,19 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
 
 PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
-    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+    P_TYPE type = mu::engraving::MStyle::valueType(id);
+
+    if (type == P_TYPE::SPATIUM) {
         return mu::engraving::Spatium(uiValue.toDouble());
     }
 
-    return PropertyValue::fromQVariant(uiValue, mu::engraving::MStyle::valueType(id));
+    if (type == P_TYPE::POINT) {
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        PointF point = PointF::fromQPointF(uiValue.value<QPointF>());
+        point.setY(-point.y());
+        return point;
+    }
+
+    return PropertyValue::fromQVariant(uiValue, type);
 }

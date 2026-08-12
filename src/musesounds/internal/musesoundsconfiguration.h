@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -27,13 +27,12 @@
 #include "imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
-class MuseSoundsConfiguration : public IMuseSoundsConfiguration, public muse::Contextable
+class MuseSoundsConfiguration : public IMuseSoundsConfiguration
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
 
 public:
-    MuseSoundsConfiguration(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    MuseSoundsConfiguration() = default;
 
     void init();
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,7 @@
  */
 #include "appmenumodel.h"
 
+#include "log.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -29,7 +30,9 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
-#include "log.h"
+#include "notation/inotation.h"
+#include "notation/inotationundostack.h"
+#include "notationscene/notationcommands.h"
 
 using namespace muse;
 using namespace mu::appshell;
@@ -209,6 +212,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
+        makeMenuItem("file-import-audio-to-score"),
         makeMenuItem("file-export"),
         makeSeparator(),
         makeMenuItem("project-properties"),
@@ -243,17 +247,17 @@ MenuItemList AppMenuModel::makePublishOnlineSubItems()
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem("action://notation/undo"),
-        makeMenuItem("action://notation/redo"),
+        makeMenuItem("command://notation/undo"),
+        makeMenuItem("command://notation/redo"),
         makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-paste-half"),
         makeMenuItem("notation-paste-double"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("action://notation/delete"),
+        makeMenuItem("command://notation/delete"),
         makeSeparator(),
         makeMenuItem("notation-select-all"),
         makeMenuItem("notation-select-section"),
@@ -275,13 +279,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(ActionCode("action://notation/undo"));
+    MenuItem& undoItem = findItem(ActionCode("command://notation/undo"));
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(ActionCode("action://notation/redo"));
+    MenuItem& redoItem = findItem(ActionCode("command://notation/redo"));
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")
@@ -300,7 +304,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-palettes"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),
-        makeMenuItem("inspector"),
+        makeMenuItem("toggle-properties-panel"),
         makeMenuItem("toggle-selection-filter"),
         historyItem,
         makeMenuItem("toggle-navigator"),
@@ -309,7 +313,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
         makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("playback-setup"),
+        makeMenuItem("command://playback/open-playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
@@ -473,7 +477,7 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     if (isMuseSamplerModuleAdded()) {
-        helpItems << makeMenuItem("clear-online-sounds-cache");
+        helpItems << makeMenuItem("command://playback/clear-onlinesounds-cache");
         helpItems << makeSeparator();
     }
 #endif
@@ -493,7 +497,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenuItem("playback-reload-cache"),
+        makeMenuItem("command://playback/reload-playback-cache"),
         makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 
@@ -512,6 +516,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
     if (globalConfiguration()->devModeEnabled()) {
         MenuItemList actionsItems {
             makeMenuItem("diagnostic-show-actions"),
+            makeMenuItem("diagnostic-show-rcommands"),
             makeMenuItem("action://diagnostic/actions/query"),
             makeMenuItem("action://diagnostic/actions/query_params1?param1=val1"),
             makeMenuItem("action://diagnostic/actions/query_params2?param1=val1")
@@ -538,6 +543,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("show-gap-rests"),
             makeMenuItem("show-line-attach-points"),
             makeMenuItem("mark-empty-staff-visibility-overrides"),
+            makeMenuItem("show-both-origin-and-combined"),
             makeMenuItem("mark-corrupted-measures"),
             makeMenuItem("check-for-score-corruptions")
         };
@@ -546,8 +552,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("extensions-show-apidump"),
         };
 
-        MenuItemList autobotItems {
-            makeMenuItem("autobot-show-scripts"),
+        MenuItemList testflowItems {
+            makeMenuItem("testflow-show-scripts"),
         };
 
 #ifdef MUSE_MODULE_VST
@@ -558,16 +564,15 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 #endif
 
         MenuItemList audioItems {
-            makeMenuItem("action://audio/dev/use-workermode"),
-            makeMenuItem("action://audio/dev/use-drivermode"),
-            makeMenuItem("action://audio/dev/use-workerrpcmode"),
+            makeMenuItem("command://audio/dev/use-driver-mode"),
+            makeMenuItem("command://audio/dev/use-hybrid-mode"),
         };
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot");
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-testflow");
 
 #ifdef MUSE_MODULE_VST
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst");
@@ -627,23 +632,23 @@ MenuItemList AppMenuModel::appendClearRecentSection(const muse::uicomponents::Me
 MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("note-input"),
+        makeMenuItem("command://notation/toggle-note-input"),
         makeSeparator(),
-        makeMenuItem("note-c"),
-        makeMenuItem("note-d"),
-        makeMenuItem("note-e"),
-        makeMenuItem("note-f"),
-        makeMenuItem("note-g"),
-        makeMenuItem("note-a"),
-        makeMenuItem("note-b"),
+        makeMenuItem("command://notation/enter-note-c"),
+        makeMenuItem("command://notation/enter-note-d"),
+        makeMenuItem("command://notation/enter-note-e"),
+        makeMenuItem("command://notation/enter-note-f"),
+        makeMenuItem("command://notation/enter-note-g"),
+        makeMenuItem("command://notation/enter-note-a"),
+        makeMenuItem("command://notation/enter-note-b"),
         makeSeparator(),
-        makeMenuItem("chord-c"),
-        makeMenuItem("chord-d"),
-        makeMenuItem("chord-e"),
-        makeMenuItem("chord-f"),
-        makeMenuItem("chord-g"),
-        makeMenuItem("chord-a"),
-        makeMenuItem("chord-b")
+        makeMenuItem("command://notation/add-note-c"),
+        makeMenuItem("command://notation/add-note-d"),
+        makeMenuItem("command://notation/add-note-e"),
+        makeMenuItem("command://notation/add-note-f"),
+        makeMenuItem("command://notation/add-note-g"),
+        makeMenuItem("command://notation/add-note-a"),
+        makeMenuItem("command://notation/add-note-b"),
     };
 
     return items;
@@ -680,15 +685,15 @@ MenuItemList AppMenuModel::makeIntervalsItems()
 MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
-        makeMenuItem("duplet"),
-        makeMenuItem("triplet"),
-        makeMenuItem("quadruplet"),
-        makeMenuItem("quintuplet"),
-        makeMenuItem("sextuplet"),
-        makeMenuItem("septuplet"),
-        makeMenuItem("octuplet"),
-        makeMenuItem("nonuplet"),
-        makeMenuItem("tuplet-dialog")
+        makeMenuItem(notation::ADD_DUPLET_COMMAND),
+        makeMenuItem(notation::ADD_TRIPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUADRUPLET_COMMAND),
+        makeMenuItem(notation::ADD_QUINTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEXTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_SEPTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_OCTUPLET_COMMAND),
+        makeMenuItem(notation::ADD_NONUPLET_COMMAND),
+        makeMenuItem(notation::OPEN_TUPLET_CONFIGURE_COMMAND)
     };
 
     return items;

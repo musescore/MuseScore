@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,8 @@
 #include "textbase.h"
 
 namespace mu::engraving {
+class Transaction;
+
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -52,7 +54,7 @@ public:
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
@@ -91,11 +93,12 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const String& txt) override;
+    void paste(const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     void triggerLayout() const override;
 
     double yRelativeToStaff() const;
@@ -109,8 +112,6 @@ private:
     friend class Factory;
     Lyrics(ChordRest* parent);
     Lyrics(const Lyrics&);
-
-    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     int m_verse = 0;              // row index
     Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
@@ -136,6 +137,8 @@ public:
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
 
@@ -150,6 +153,8 @@ public:
 
 protected:
     LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+
+    bool isInSpannerMap() const override { return false; }
 
     Lyrics* m_nextLyrics = nullptr;
 
@@ -229,12 +234,14 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid propertyId) const override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     Lyrics* findLyricsInPreviousRepeatSeg() const;
     Lyrics* findAdjacentLyricsOrDefault() const;
 
 protected:
     void doComputeEndElement() override;
+    bool isInSpannerMap() const override { return true; }
 
 private:
     bool m_isEndMelisma = false;

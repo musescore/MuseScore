@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,11 +24,10 @@
 
 #include "types/translatablestring.h"
 
+#include "../editing/navigation.h"
 #include "../editing/textedit.h"
-#include "../editing/undo.h"
 
 #include "measure.h"
-#include "navigate.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -168,10 +167,10 @@ bool Lyrics::isMelisma() const
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& ed, const String& txt)
+void Lyrics::paste(const String& txt)
 {
     if (txt.startsWith('<') && txt.contains('>')) {
-        TextBase::paste(ed, txt);
+        TextBase::paste(txt);
         return;
     }
 
@@ -184,14 +183,14 @@ void Lyrics::paste(EditData& ed, const String& txt)
     StringList hyph = sl.at(0).split(u'-');
     score()->startCmd(TranslatableString("undoableAction", "Paste lyrics"));
 
-    deleteSelectedText(ed);
+    deleteSelectedText();
 
     if (hyph.size() > 1) {
-        score()->undo(new InsertText(cursorFromEditData(ed), hyph[0]), &ed);
+        score()->undo(new InsertText(cursor(), hyph[0]));
         hyph.removeAt(0);
         sl[0] =  hyph.join(u"-");
     } else if (sl.size() > 1 && sl[1] == u"-") {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
         sl.removeAt(0);
     } else if (sl[0].startsWith(u"_")) {
@@ -201,17 +200,17 @@ void Lyrics::paste(EditData& ed, const String& txt)
         }
     } else if (sl[0].contains(u"_")) {
         size_t p = sl[0].indexOf(u'_');
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl[0] = sl[0].mid(p + 1);
         if (sl[0].isEmpty()) {
             sl.removeAt(0);
         }
     } else if (sl.size() > 1 && sl[1] == "_") {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
         sl.removeAt(0);
     } else {
-        score()->undo(new InsertText(cursorFromEditData(ed), sl[0]), &ed);
+        score()->undo(new InsertText(cursor(), sl[0]));
         sl.removeAt(0);
     }
 
@@ -240,11 +239,11 @@ bool Lyrics::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Lyrics::drop(EditData& data)
+EngravingItem* Lyrics::drop(Transaction& tx, EditData& data)
 {
     ElementType type = data.dropElement->type();
     if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
-        TextBase::drop(data);
+        TextBase::drop(tx, data);
         return 0;
     }
     if (!data.dropElement->isText()) {
@@ -299,8 +298,8 @@ bool Lyrics::isEditAllowed(EditData& ed) const
 
 void Lyrics::adjustPrevious()
 {
-    Lyrics* prev = prevLyrics(toLyrics(this));
-    if (prev) {
+    Lyrics* prev = Navigation::prevLyrics(toLyrics(this));
+    if (prev && prev->ticks().isNotZero()) {
         // search for lyric spanners to split at this point if necessary
         if (prev->tick() + prev->ticks() >= tick()) {
             // the previous lyric has a spanner attached that goes through this one
@@ -313,10 +312,10 @@ void Lyrics::adjustPrevious()
                 } else {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::eps());
                 }
-                prev->setNeedRemoveInvalidSegments();
-                prev->triggerLayout();
             }
         }
+        prev->setNeedRemoveInvalidSegments();
+        prev->triggerLayout();
     }
 }
 
@@ -365,15 +364,9 @@ void Lyrics::removeFromScore()
     }
 
     if (!plainText().isEmpty()) {
-        for (auto sp : score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks())) {
-            if (!sp.value->isPartialLyricsLine() || sp.value->track() != track()) {
-                continue;
-            }
-            PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-            if (partialLine->isEndMelisma() || partialLine->verse() != verse() || partialLine->placement() != placement()) {
-                continue;
-            }
-            score()->undoRemoveElement(partialLine);
+        PartialLyricsLine* partialDash = findPrevPartialLyricsLineDash(this);
+        if (partialDash) {
+            score()->undoRemoveElement(partialDash);
         }
     }
 
@@ -382,7 +375,7 @@ void Lyrics::removeFromScore()
         delete m_separator;
         m_separator = 0;
     }
-    Lyrics* prev = prevLyrics(this);
+    Lyrics* prev = Navigation::prevLyrics(this);
     if (prev) {
         // check to make sure we haven't created an invalid segment by deleting this lyric
         prev->setNeedRemoveInvalidSegments();
@@ -423,10 +416,10 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
     {
         PlacementV newVal = v.value<PlacementV>();
         if (newVal != placement()) {
-            if (Lyrics* l = prevLyrics(this)) {
+            if (Lyrics* l = Navigation::prevLyrics(this)) {
                 l->setNeedRemoveInvalidSegments();
             }
-            if (nextLyrics(this)) {
+            if (Navigation::nextLyrics(this)) {
                 setNeedRemoveInvalidSegments();
             }
             setPlacement(newVal);
@@ -458,7 +451,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     case Pid::VERSE: {
-        if (Lyrics* l = prevLyrics(this)) {
+        if (Lyrics* l = Navigation::prevLyrics(this)) {
             l->setNeedRemoveInvalidSegments();
         }
         bool followTextStyle = getProperty(Pid::TEXT_STYLE) == propertyDefault(Pid::TEXT_STYLE);
@@ -470,6 +463,9 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
     }
     case Pid::AVOID_BARLINES:
         m_avoidBarlines = v.toBool();
+        break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -557,6 +553,8 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::VERSE && verse() != v.toInt()) {
+        PartialLyricsLine* prevPartial = findPrevPartialLyricsLineDash(this);
+
         for (Lyrics* l : chordRest()->lyrics()) {
             if (l->verse() == v.toInt()) {
                 // verse already exists, swap
@@ -568,7 +566,13 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             }
         }
         TextBase::undoChangeProperty(id, v, ps);
+        if (prevPartial && prevPartial->verse() != v.toInt()) {
+            // Skip logic to update Lyrics by calling parent class
+            prevPartial->LyricsLine::undoChangeProperty(id, v, ps);
+        }
         return;
+    } else if (id == Pid::VISIBLE && separator()) {
+        separator()->undoChangeProperty(Pid::VISIBLE, v.toBool(), ps);
     }
 
     TextBase::undoChangeProperty(id, v, ps);

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MASTERSCORE_H
-#define MU_ENGRAVING_MASTERSCORE_H
+
+#pragma once
 
 #include <array>
+#include <memory>
 
 #include "../infrastructure/ifileinfoprovider.h"
 #include "../infrastructure/eidregister.h"
@@ -35,6 +36,7 @@ class EngravingProject;
 class MscReader;
 class MscWriter;
 class MscLoader;
+class TransactionManager;
 }
 
 namespace mu::engraving::compat {
@@ -51,7 +53,7 @@ class Revisions;
 class TempoMap;
 class TimeSigMap;
 class UndoStack;
-class AutomationController;
+class ScoreAutomationController;
 
 class MidiMapping
 {
@@ -97,15 +99,15 @@ public:
 
     bool readOnly() const override { return m_readOnly; }
     void setReadOnly(bool ro) { m_readOnly = ro; }
-    UndoStack* undoStack() const override { return m_undoStack; }
+    TransactionManager* transactionManager() const { return m_transactionManager.get(); }
+    UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
-    IAutomation* automation() const override;
 
-    bool playlistDirty() const override { return m_playlistDirty; }
-    void setPlaylistDirty() override;
-    void setPlaylistClean() { m_playlistDirty = false; }
+    AutomationDataConstPtr automationData() const override;
+    void setAutomationData(AutomationDataPtr data);
+    void editAutomationPoints(const AutomationCurveKey& key, AutomationPointEdits& edits) override;
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
@@ -115,13 +117,13 @@ public:
     void updateRepeatListTempo();
     void updateRepeatList();
 
-    const RepeatList& repeatList() const override;
-    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const override;
+    const RepeatList& repeatList() const;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+
+    void invalidateRepeatList();
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
-    //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>& activeMidiPitches() override { return m_activeMidiPitches; }
 
     void setUpdateAll() override;
 
@@ -138,6 +140,9 @@ public:
     bool excerptsChanged() const { return m_cmdState.excerptsChanged; }
     bool instrumentsChanged() const { return m_cmdState.instrumentsChanged; }
 
+    void update() { update(true); }
+    void lockUpdates(bool locked);
+
     void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return m_midiPortCount; }
@@ -153,7 +158,6 @@ public:
     bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
     int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
-//    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth);
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
@@ -170,6 +174,8 @@ public:
     void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
+    void initAutomation(); // TODO: Placeholder?
+
     void setPlaybackScore(Score*);
     Score* playbackScore() { return m_playbackScore; }
     const Score* playbackScore() const { return m_playbackScore; }
@@ -183,17 +189,16 @@ public:
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    bool saved() const;
-    void setSaved(bool v);
-
     String name() const override;
 
     muse::Ret sanityCheck();
 
-    void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
-    double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
-
 private:
+    void update(bool resetCmdState, bool layoutAllParts = false);
+
+    void updateAutomation(const ScoreChanges& changes);
+
+    void onTimeInserted(const Fraction& tick, const Fraction& len) override;
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -207,6 +212,7 @@ private:
     friend class compat::ScoreAccess;
     friend class read114::Read114;
     friend class read400::Read400;
+    friend class TransactionManager;
 
     MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
     MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
@@ -215,14 +221,15 @@ private:
     void initParts(Excerpt*);
 
     EIDRegister m_eidRegister;
+    std::unique_ptr<TransactionManager> m_transactionManager;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
     TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
-    AutomationController* m_automationController = nullptr;
+    ScoreAutomationController* m_automationController = nullptr;
     bool m_expandRepeats = true;
-    bool m_playlistDirty = true;
+
     std::vector<Excerpt*> m_excerpts;
     std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
     Score* m_playbackScore = nullptr;
@@ -231,25 +238,19 @@ private:
     bool m_readOnly = false;
 
     CmdState m_cmdState;       // modified during cmd processing
+    bool m_updatesLocked = false;
 
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 
     int m_midiPortCount = 0;                           // A count of ALSA midi out ports
-    //    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
-    std::list<MidiInputEvent> m_activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> m_midiMapping;
     bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
     // don't decrease and don't have gaps
-    double m_widthOfSegmentCell = 3;
 
     std::weak_ptr<EngravingProject> m_project;
 
     // FIXME: Move to EngravingProject
     // We can't yet, because m_project is not set on every MasterScore
     IFileInfoProviderPtr m_fileInfoProvider;
-
-    bool m_saved = false;
 };
 }
-
-#endif // MU_ENGRAVING_MASTERSCORE_H

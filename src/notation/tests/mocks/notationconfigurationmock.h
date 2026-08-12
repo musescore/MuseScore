@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,6 +31,9 @@ class NotationConfigurationMock : public INotationConfiguration
 {
 public:
     MOCK_METHOD(QColor, notationColor, (), (const, override));
+    MOCK_METHOD(void, setNotationColor, (const QColor& color), (override));
+    MOCK_METHOD(muse::async::Notification, notationColorChanged, (), (const, override));
+    MOCK_METHOD(void, resetNotationColor, (), (override));
 
     MOCK_METHOD(QColor, backgroundColor, (), (const, override));
     MOCK_METHOD(void, setBackgroundColor, (const QColor& color), (override));
@@ -105,8 +108,9 @@ public:
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
 
-    MOCK_METHOD(qreal, scalingFromZoomPercentage, (int), (const, override));
-    MOCK_METHOD(int, zoomPercentageFromScaling, (qreal), (const, override));
+    MOCK_METHOD(engraving::AutomationType, currentAutomationType, (), (const, override));
+    MOCK_METHOD(void, setCurrentAutomationType, (engraving::AutomationType), (override));
+    MOCK_METHOD(muse::async::Notification, currentAutomationTypeChanged, (), (const, override));
 
     MOCK_METHOD(int, mouseZoomPrecision, (), (const, override));
     MOCK_METHOD(void, setMouseZoomPrecision, (int), (override));
@@ -173,9 +177,7 @@ public:
 
     MOCK_METHOD(bool, isCountInEnabled, (), (const, override));
     MOCK_METHOD(void, setIsCountInEnabled, (bool), (override));
-
-    MOCK_METHOD(double, guiScaling, (), (const, override));
-    MOCK_METHOD(double, notationScaling, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, isCountInEnabledChanged, (), (const, override));
 
     MOCK_METHOD(muse::ValCh<muse::Orientation>, canvasOrientation, (), (const, override));
     MOCK_METHOD(void, setCanvasOrientation, (muse::Orientation), (override));

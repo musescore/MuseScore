@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Fingered tremolos</title>
+            <respStmt>
+               <persName role="composer" />
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2026-03-29T20:48:47" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead func="first">
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Fingered tremolos</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer"></rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Violin</label>
+                        <labelAbbr>Vln.</labelAbbr>
+                        <instrDef midi.instrnum="40" />
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="mig8ke7" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <fTrem xml:id="f63zflz" unitdur="8">
+                              <note xml:id="n1fserbn" dur="1" pname="c" oct="5" />
+                              <note xml:id="n754mm4" dur="1" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m11vu8ds" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <fTrem xml:id="f11tvbfz" unitdur="16">
+                              <note xml:id="n1qj2f82" dur="1" pname="c" oct="5" />
+                              <note xml:id="nmx2ovz" dur="1" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="mvog6id" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <fTrem xml:id="fa0tf6u" unitdur="32">
+                              <note xml:id="n76ca5v" dur="1" pname="c" oct="5" />
+                              <note xml:id="n17l5zz4" dur="1" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="mkztngg" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <fTrem xml:id="f115pjkr" unitdur="64">
+                              <note xml:id="n1ae2vkp" dur="1" pname="c" oct="5" />
+                              <note xml:id="n9cz85l" dur="1" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="mg273bk" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <fTrem xml:id="f1bi22v1" unitdur="8">
+                              <note xml:id="nbfhvly" dur="2" pname="c" oct="5" />
+                              <note xml:id="njs8lfn" dur="2" pname="g" oct="4" />
+                           </fTrem>
+                           <fTrem xml:id="f1gwk1s2" unitdur="16">
+                              <note xml:id="n1vjv2tq" dur="2" pname="c" oct="5" />
+                              <note xml:id="ntqp5x3" dur="2" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="mrf5nj7" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <fTrem xml:id="f1i977p1" unitdur="32">
+                              <note xml:id="n1dw4qzt" dur="2" pname="c" oct="5" />
+                              <note xml:id="n12ezenm" dur="2" pname="g" oct="4" />
+                           </fTrem>
+                           <fTrem xml:id="f8cbx1w" unitdur="64">
+                              <note xml:id="n23hln0" dur="2" pname="c" oct="5" />
+                              <note xml:id="nse8xt9" dur="2" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m5f4zv1" right="end" n="7">
+                     <staff xml:id="m7s1" n="1">
+                        <layer xml:id="m7s1l1" n="1">
+                           <fTrem xml:id="fuskxej" unitdur="8">
+                              <note xml:id="n7s8e39" dur="4" pname="c" oct="5" />
+                              <note xml:id="n1j75786" dur="4" pname="g" oct="4" />
+                           </fTrem>
+                           <fTrem xml:id="f1q02n39" unitdur="16">
+                              <note xml:id="n18kb9c4" dur="4" pname="c" oct="5" />
+                              <note xml:id="n1t2i9dg" dur="4" pname="g" oct="4" />
+                           </fTrem>
+                           <fTrem xml:id="f10nhx0f" unitdur="32">
+                              <note xml:id="ni8tp9c" dur="4" pname="c" oct="5" />
+                              <note xml:id="nn4vcia" dur="4" pname="g" oct="4" />
+                           </fTrem>
+                           <fTrem xml:id="fxwy2fo" unitdur="64">
+                              <note xml:id="n1kzwiwf" dur="4" pname="c" oct="5" />
+                              <note xml:id="n1xz8nle" dur="4" pname="g" oct="4" />
+                           </fTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

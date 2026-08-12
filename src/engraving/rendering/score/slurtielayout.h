@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -94,6 +94,8 @@ private:
     static bool stemSideEndForBeam(Slur* slur) { return stemSideForBeam(slur, false); }
     static bool isOverBeams(Slur* slur);
     static double computeShoulderHeight(SlurSegment* slurSeg, double slurLengthInSp, PointF shoulderOffset);
+
+    static double endingXForOpenEndedSlurTie(const Measure* measure, staff_idx_t staffIdx);
 
     static bool tieSegmentShouldBeSkipped(const Tie* item);
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);

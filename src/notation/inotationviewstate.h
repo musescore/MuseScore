@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,14 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include <memory>
 
 #include "async/channel.h"
+#include "io/path.h"
 #include "types/retval.h"
 
-#include "notationtypes.h"
+#include "types/viewmode.h"
+#include "types/zoomtype.h"
 
 namespace muse::draw {
 class Transform;
@@ -61,6 +64,12 @@ public:
 
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& mode) = 0;
+
+    // Style dialog
+    virtual int styleDialogLastPageIndex() const = 0;
+    virtual void setStyleDialogLastPageIndex(int value) = 0;
+    virtual int styleDialogLastSubPageIndex() const = 0;
+    virtual void setStyleDialogLastSubPageIndex(int value) = 0;
 
     virtual muse::async::Notification stateChanged() const = 0;
 

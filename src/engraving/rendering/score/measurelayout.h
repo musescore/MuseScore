@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -51,12 +51,14 @@ public:
     static void layout2(Measure* item, LayoutContext& ctx);
 
     static void getNextMeasure(LayoutContext& ctx);
+    static void updateTicksMeasNumbersAndMMRests(MeasureBase* currentMB, LayoutContext& ctx);
+    static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
+
     static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
     static void layoutPlayCountText(Measure* m, LayoutContext& ctx);
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
-    static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
 
     static void createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
@@ -82,23 +84,16 @@ public:
 
     static void updateKeySignatures(const Measure* measure, LayoutContext& ctx);
 
-private:
-
-    static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
-    static void cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mmrSeg, LayoutContext& ctx);
-
     static int adjustMeasureNumber(Measure* m, int measureNumber);
 
+private:
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
 
     static void moveToNextMeasure(LayoutContext& ctx);
-    static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
-    static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
-    static void createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutContext& ctx);
-    static void removeMMRestElements(Measure* mmRestMeasure);
+    static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 

@@ -25,6 +25,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include "project/inotationproject.h"
+
 #include "util.h"
 
 #include "log.h"
@@ -38,6 +40,11 @@ namespace mu::engraving::apiv1 {
 
 FileIO::FileIO(QObject* parent)
     : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
+{
+}
+
+FileIO::FileIO(const muse::modularity::ContextPtr& ctx, QObject* parent)
+    : QObject(parent), muse::Contextable(ctx)
 {
 }
 
@@ -113,7 +120,7 @@ QString FileIO::projectPath()
         return QString();
     }
 
-    auto project = globalContext()->currentProject();
+    project::INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         return QString();
     }

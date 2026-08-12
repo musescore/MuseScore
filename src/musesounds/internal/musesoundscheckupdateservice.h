@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -29,20 +29,19 @@
 #include "network/inetworkmanagercreator.h"
 #include "global/iglobalconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace mu::musesounds {
-class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Contextable, public muse::async::Asyncable
+class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
-    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
 
 public:
-    MuseSoundsCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    MuseSoundsCheckUpdateService() = default;
 
     muse::Ret needCheckForUpdate() const override;
 

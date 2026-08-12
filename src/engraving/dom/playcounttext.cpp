@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,13 +23,12 @@
 #include "playcounttext.h"
 
 #include "../editing/textedit.h"
-#include "../editing/undo.h"
+#include "../editing/transaction/undostack.h"
 #include "../types/typesconv.h"
 
 #include "barline.h"
 #include "score.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static ElementStyle playCountStyle {
@@ -45,11 +44,7 @@ PlayCountText::PlayCountText(Segment* parent, TextStyleType tid)
 
 void PlayCountText::endEdit(EditData& ed)
 {
-    UndoStack* undo = score()->undoStack();
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
-
-    if (textWasEdited) {
+    if (textWasEdited(ed)) {
         score()->startCmd(TranslatableString("undoableAction", "Update play count text"));
         barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT, xmlText());
         barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::CUSTOM);

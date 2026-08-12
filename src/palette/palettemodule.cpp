@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,8 @@
 #include "interactive/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 #include "accessibility/iqaccessibleinterfaceregister.h"
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
 
 #include "internal/paletteconfiguration.h"
 #include "internal/paletteuiactions.h"
@@ -34,6 +36,8 @@
 #include "internal/paletteworkspacesetup.h"
 #include "internal/paletteprovider.h"
 #include "internal/palettecell.h"
+#include "internal/palettecommandsregister.h"
+#include "internal/palettecommandsstate.h"
 
 #include "widgets/masterpalette.h"
 #include "widgets/specialcharactersdialog.h"
@@ -68,8 +72,8 @@ void PaletteModule::resolveImports()
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
         ir->registerWidgetUri<TimeSignaturePropertiesDialog>(Uri("musescore://palette/timesignatureproperties"));
         ir->registerWidgetUri<CustomizeKitDialog>(Uri("musescore://palette/customizekit"));
-        ir->registerWidgetUri<KeyEditor>(Uri("musescore://notation/keysignatures"));
-        ir->registerWidgetUri<TimeDialog>(Uri("musescore://notation/timesignatures"));
+        ir->registerWidgetUri<KeyEditorDialog>(Uri("musescore://notation/keysignatures"));
+        ir->registerWidgetUri<TimeEditorDialog>(Uri("musescore://notation/timesignatures"));
 
         ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
@@ -79,6 +83,11 @@ void PaletteModule::resolveImports()
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
+    }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<PaletteCommandsRegister>());
     }
 }
 
@@ -100,10 +109,16 @@ void PaletteContext::registerExports()
     m_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>(iocContext());
 
     ioc()->registerExport<IPaletteProvider>(mname, m_paletteProvider);
+    ioc()->registerExport<IPaletteCommandsController>(mname, m_actionsController);
 }
 
 void PaletteContext::resolveImports()
 {
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<PaletteCommandsState>(iocContext()));
+    }
+
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_paletteUiActions);

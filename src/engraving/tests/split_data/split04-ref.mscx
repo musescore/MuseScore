@@ -22,13 +22,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
@@ -62,62 +62,51 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Split Measure</text>
           </Text>
         </VBox>
       <Measure len="2/4">
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>O_O</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>O_O</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -132,23 +121,21 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>R_R</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>R_R</endElement>
+                <eid>S_S</eid>
+                <track>0</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -156,7 +143,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>

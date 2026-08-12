@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -97,13 +97,13 @@ bool Expression::acceptDrop(EditData& ed) const
     return ed.dropElement->isDynamic() || TextBase::acceptDrop(ed);
 }
 
-EngravingItem* Expression::drop(EditData& ed)
+EngravingItem* Expression::drop(Transaction& tx, EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
     if (item->isDynamic()) {
         Dynamic* snappedDyn = snappedDynamic();
         if (snappedDyn) {
-            return snappedDyn->drop(ed);
+            return snappedDyn->drop(tx, ed);
         }
 
         item->setTrack(track());
@@ -113,7 +113,7 @@ EngravingItem* Expression::drop(EditData& ed)
         return item;
     }
 
-    return TextBase::drop(ed);
+    return TextBase::drop(tx, ed);
 }
 
 PropertyValue Expression::getProperty(Pid propertyId) const
@@ -155,10 +155,9 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setPlacement(staffText->placement());
         setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     }
-    if (staffText->offset() != propertyDefault(Pid::OFFSET).value<PointF>()) {
+    if (!staffText->offset().isNull()) {
         setOffset(staffText->offset());
         setSnapToDynamics(false);
-        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
     }
     if (staffText->frameType() != FrameType::NO_FRAME) {
@@ -182,7 +181,7 @@ void Expression::reset()
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextBase::reset();
     Dynamic* snappedDyn = snappedDynamic();
-    if (snappedDyn && snappedDyn->getProperty(Pid::OFFSET) != snappedDyn->propertyDefault(Pid::OFFSET)) {
+    if (snappedDyn && !snappedDyn->offset().isNull()) {
         snappedDyn->reset();
     }
 }

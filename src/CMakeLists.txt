@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -17,9 +17,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-# Framework, should be first to work pch
-add_subdirectory(framework)
 
 # Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)
@@ -38,10 +35,10 @@ add_subdirectory(engraving)
 
 add_subdirectory(importexport)
 
-if (MUE_BUILD_INSPECTOR_MODULE)
-    add_subdirectory(inspector)
+if (MUE_BUILD_PROPERTIESPANEL_MODULE)
+    add_subdirectory(propertiespanel)
 else()
-    add_subdirectory(stubs/inspector)
+    add_subdirectory(stubs/propertiespanel)
 endif()
 
 if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)

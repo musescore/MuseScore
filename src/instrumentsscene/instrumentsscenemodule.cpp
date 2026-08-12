@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,12 +24,16 @@
 
 #include "modularity/ioc.h"
 
+#include "rcommand/icommandsregister.h"
+#include "rcommand/icommandsstate.h"
+#include "interactive/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
+
 #include "internal/selectinstrumentscenario.h"
 #include "internal/instrumentsuiactions.h"
 #include "internal/instrumentsactionscontroller.h"
-
-#include "interactive/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
+#include "internal/instrumentscommandsregister.h"
+#include "internal/instrumentscommandsstate.h"
 
 using namespace mu::instrumentsscene;
 using namespace muse;
@@ -47,6 +51,11 @@ void InstrumentsSceneModule::resolveImports()
     auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://instruments/select"), "MuseScore.InstrumentsScene", "InstrumentsDialog");
+    }
+
+    auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
+    if (cr) {
+        cr->reg(std::make_shared<InstrumentsCommandsRegister>());
     }
 }
 
@@ -69,6 +78,11 @@ void InstrumentsSceneContext::resolveImports()
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<InstrumentsUiActions>(iocContext()));
+    }
+
+    auto cs = ioc()->resolve<muse::rcommand::ICommandsState>(mname);
+    if (cs) {
+        cs->reg(std::make_shared<InstrumentsCommandsState>(iocContext()));
     }
 }
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,7 @@
 #include "dom/beam.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/factory.h"
@@ -45,6 +45,8 @@
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
+#include "dom/page.h"
+#include "dom/pagelockindicator.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
@@ -56,6 +58,7 @@
 #include "dom/staff.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
+#include "dom/systemlockindicator.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolosinglechord.h"
@@ -76,11 +79,13 @@
 #include "harmonylayout.h"
 #include "lyricslayout.h"
 #include "measurelayout.h"
+#include "mmrestlayout.h"
 #include "tupletlayout.h"
 #include "restlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
+#include "stavesharinglayout.h"
 #include "systemheaderlayout.h"
 
 #include "defer.h"
@@ -108,8 +113,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                             == InstrumentLabelVisibility::LONG;
-    bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
-                           == InstrumentLabelVisibility::LONG;
     if (measure) {
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
         if (const LayoutBreak* layoutBreak = measure->sectionBreakElement()) {
@@ -130,12 +133,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
 
-    Fraction lcmTick = ctx.state().curMeasure()->tick();
-    bool longNames = ctx.mutState().firstSystem() ? ctx.mutState().startWithLongNames() : subsSysLongName;
-    SystemHeaderLayout::setInstrumentNames(system, ctx, longNames, lcmTick);
-
     double curSysWidth = 0.0;
-    double layoutSystemMinWidth = 0.0;
+    double leadingHBoxesWidth = 0.0;
     double targetSystemWidth = ctx.conf().styleD(Sid::pagePrintableWidth) * DPI;
     system->setWidth(targetSystemWidth);
 
@@ -148,12 +147,30 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
-    const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
-                                   ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
+    const RangeLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
+                                  ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
+
+    if (systemLock) {
+        StaveSharingLayout::updateStaveSharingForFullSystem(systemLock->startMB(), systemLock->endMB(), ctx);
+    }
 
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
+
+        bool sharedTrackMapChanged = false;
+        if (!systemLock) {
+            for (Part* p : ctx.dom().parts()) {
+                if (p->isSharedPart()) {
+                    SharedPart* sp = toSharedPart(p);
+                    prevMeasureState.sharedTrackMaps[sp] = sp->trackMapAtTick(ctx.mutState().curMeasure()->tick());
+                }
+            }
+
+            sharedTrackMapChanged = StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
+        }
+
+        MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
 
         if (ctx.state().curMeasure()->isMeasure()) {
             Measure* m = toMeasure(ctx.mutState().curMeasure());
@@ -166,8 +183,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
 
             if (m->isFirstInSystem()) {
-                layoutSystemMinWidth = curSysWidth;
-                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+                leadingHBoxesWidth = curSysWidth;
+                SystemLayout::layoutSystem(system, ctx, curSysWidth);
                 MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
             } else {
                 bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
@@ -224,6 +241,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 ctx.mutState().curMeasure()->setParent(oldSystem);
             }
 
+            if (sharedTrackMapChanged) {
+                // The last added measure caused sharedTrackMap to change. Now we are removing that measure so we must restore it.
+                StaveSharingLayout::updateStaveSharingForFullSystem(system->first(), system->last(), ctx);
+            }
+
             break;
         }
 
@@ -259,8 +281,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
-            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
-                        || (next && next->isStartOfSystemLock());
+            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock() || mb->isEndOfPageLock()
+                        || (next && next->isStartOfSystemLock()) || (next && next->isStartOfPageLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
@@ -285,6 +307,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 prevMeasureState.measureWidth = nmb->width();
                 for (Segment& seg : toMeasure(nmb)->segments()) {
                     prevMeasureState.elementPositions.emplace(&seg, seg.ldata()->pos());
+                    prevMeasureState.elementWidths.emplace(&seg, seg.width());
                     for (EngravingItem* item : seg.annotations()) {
                         if (item->isHarmony() || item->isFretDiagram()) {
                             prevMeasureState.elementPositions.emplace(item, item->ldata()->pos());
@@ -354,10 +377,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                     MeasureLayout::updateGraceNotes(m, ctx);
 
-                    prevMeasureState.restoreMeasure();
+                    prevMeasureState.restoreMeasure(ctx);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
                     SystemLayout::restoreOldSystemLayout(m->system(), ctx);
+
                     if (m == nm || !m->noBreak()) {
                         break;
                     }
@@ -398,7 +422,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     // Relayout system to account for newly hidden/unhidden staves
-    SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -495,21 +519,44 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
 {
     UNUSED(ctx);
 
-    const std::vector<SystemLockIndicator*> lockIndicators = system->lockIndicators();
+    const std::vector<SystemLockIndicator*> lockIndicators = system->systemLockIndicators();
     // In PAGE view, at most ONE lock indicator can exist per system.
     assert(lockIndicators.size() <= 1);
-    system->deleteLockIndicators();
+    system->deleteSystemLockIndicators();
 
-    const SystemLock* lock = system->systemLock();
+    const RangeLock* lock = system->systemLock();
     if (!lock) {
         return;
     }
 
-    SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+    SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
     lockIndicator->setParent(system);
-    system->addLockIndicator(lockIndicator);
+    system->addSystemLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+}
+
+void SystemLayout::layoutPageLockIndicators(System* system)
+{
+    Page* page = system->page();
+    system->deletePageLockIndicator();
+
+    IF_ASSERT_FAILED(!page->systems().empty()) {
+        return;
+    }
+
+    const RangeLock* lock = page->pageLock();
+    if (!lock || page->systems().back() != system) {
+        return;
+    }
+
+    PageLockIndicator* lockIndicator = Factory::createPageLockIndicator(system, lock);
+    lockIndicator->setTrack(0);
+    lockIndicator->setParent(system);
+    system->setPageLockIndicator(lockIndicator);
+
+    TLayout::layoutPageLockIndicator(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------
@@ -548,6 +595,10 @@ enum class StaffHideMode {
 static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
                                      bool& hasSystemSpecificOverrides)
 {
+    if (Part* part = staff->part(); part && part->isSharedPart() && staff != part->staves().front()) {
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    }
+
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
     bool hasSystemSpecificOverrideDontHide = false;
@@ -679,7 +730,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     if (ctx.dom().nstaves() == 1) {
-        // One staff, show iff not manually hidden score-wide
+        // One staff, show if not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
         system->setHasStaffVisibilityIndicator(false);
@@ -785,7 +836,7 @@ void SystemLayout::updateTimeSigAboveStavesXPos(System* system, LayoutContext& c
         }
         Measure* measure = toMeasure(mb);
         for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
 
@@ -888,7 +939,7 @@ void SystemLayout::clearBigTimeSigNotShown(System* system, LayoutContext& ctx)
             continue;
         }
         for (Segment& seg : toMeasure(mb)->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
@@ -1023,7 +1074,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
 
     for (Parenthesis* e : elementsToLayout.parenthesis) {
         Segment* s = toSegment(e->parentItem());
-        if (s->isType(SegmentType::TimeSigType)) {
+        if (s->isType(SegmentType::TimeSigTypes)) {
             EngravingItem* el = s->element(e->track());
             TimeSig* timeSig = el ? toTimeSig(el) : nullptr;
             if (!timeSig) {
@@ -1067,12 +1118,12 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     }
 
     // Only vertically align one chord symbol per tick & staff
-    std::map<Fraction, staff_idx_t> harmonyPositions;
+    std::set<std::pair<Fraction, staff_idx_t> > harmonyPositions;
     std::vector<EngravingItem*> harmonyItemsAlign;
     std::vector<EngravingItem*> harmonyItemsNoAlign;
 
     for (Harmony* h : harmonies) {
-        if (muse::contains(harmonyPositions, h->tick())) {
+        if (muse::contains(harmonyPositions, { h->tick(), h->staffIdx() })) {
             harmonyItemsNoAlign.push_back(h);
             continue;
         }
@@ -1114,13 +1165,13 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
     }
 
     // Only vertically align one fd per tick & staff
-    std::map<Fraction, staff_idx_t> fretHarmonyPositions;
+    std::set<std::pair<Fraction, staff_idx_t> > fretHarmonyPositions;
     std::vector<EngravingItem*> fretItemsAlign;
     std::vector<EngravingItem*> fretOrHarmonyItemsNoAlign;
     std::vector<Harmony*> harmonyItemsAlign(elements.harmonies.begin(), elements.harmonies.end());
 
     for (FretDiagram* fd : elements.fretDiagrams) {
-        if (muse::contains(fretHarmonyPositions, fd->tick())) {
+        if (muse::contains(fretHarmonyPositions, { fd->tick(), fd->staffIdx() })) {
             fretOrHarmonyItemsNoAlign.push_back(fd);
             if (fd->harmony()) {
                 harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), fd->harmony()));
@@ -1140,7 +1191,7 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
         if (h->getParentFretDiagram()) {
             continue;
         }
-        if (muse::contains(fretHarmonyPositions, h->tick())) {
+        if (muse::contains(fretHarmonyPositions, { h->tick(), h->staffIdx() })) {
             harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), h));
             fretOrHarmonyItemsNoAlign.push_back(h);
             continue;
@@ -1161,7 +1212,7 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
             Autoplace::autoplaceSegmentElement(item, item->mutldata());
             Harmony* harmony = toFretDiagram(item)->harmony();
             if (harmony) {
-                autoplaceHarmony(item);
+                autoplaceHarmony(harmony);
             }
         } else if (item->isHarmony()) {
             autoplaceHarmony(item);
@@ -1191,7 +1242,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         Measure* measure = toMeasure(mb);
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
-        MeasureLayout::layoutMMRestRange(measure, ctx);
+        MMRestLayout::layoutMMRestRange(measure, ctx);
         MeasureLayout::layoutPlayCountText(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
@@ -1308,7 +1359,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
-    for (StaffText* st : elementsToLayout.staffText) {
+    for (StaffTextBase* st : elementsToLayout.staffText) {
         TLayout::layoutItem(st, ctx);
     }
 
@@ -1420,7 +1471,7 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 continue;
             }
 
-            if (s->isType(SegmentType::BarLineType)) {
+            if (s->isType(SegmentType::BarLineTypes)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
                 }
@@ -1495,7 +1546,8 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 }
                 break;
             case ElementType::STAFF_TEXT:
-                elements.staffText.push_back(toStaffText(item));
+            case ElementType::STAVE_SHARING_LABEL:
+                elements.staffText.push_back(toStaffTextBase(item));
                 break;
             case ElementType::INSTRUMENT_CHANGE:
                 elements.instrChanges.push_back(toInstrumentChange(item));
@@ -1625,12 +1677,12 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                     continue;
                 }
                 PointF p(s.pos() + m->pos());
-                if (s.isType(SegmentType::BarLineType)) {
+                if (s.isType(SegmentType::BarLineTypes)) {
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         skyline.add(bl->shape().translated(bl->pos() + p + bl->staffOffset()));
                     }
-                } else if (s.isType(SegmentType::TimeSigType)) {
+                } else if (s.isType(SegmentType::TimeSigTypes)) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
                     if (ts && ts->addToSkyline() && ts->showOnThisStaff()) {
                         TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
@@ -1845,7 +1897,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::v
             }
         }
         for (SpannerSegment* ss : segments) {
-            if (!ss->isStyled(Pid::OFFSET)) {
+            if (!ss->offset().isNull()) {
                 continue;
             }
             const double& staffY = ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
@@ -2065,50 +2117,14 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
 {
-    ElementsToLayout elements(system);
-    for (MeasureBase* mb : system->measures()) {
-        if (mb->isMeasure()) {
-            collectElementsToLayout(toMeasure(mb), elements, ctx);
-        }
-    }
-
-    layoutTiesAndBends(elements, ctx);
+    layoutSystemElements(system, ctx);
 }
 
-void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
+void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth)
 {
-    if (system->staves().empty()) {                 // ignore vbox
-        return;
-    }
-
-    SystemHeaderLayout::computeInstrumentNameOffset(system, ctx);
-    double instrumentNameOffset = system->ldata()->instrumentNameOffset();
+    SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
 
     size_t nstaves = system->staves().size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //---------------------------------------------------
-    SystemHeaderLayout::layoutBrackets(system, ctx);
-    double maxBracketsWidth = SystemHeaderLayout::totalBracketOffset(ctx);
-
-    SystemHeaderLayout::computeInstrumentNamesWidth(system, ctx);
-    double maxNamesWidth = system->ldata()->totalNamesWidth();
-    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
-    if (isFirstSystem && firstSystemIndent) {
-        indent = std::max(indent, system->styleP(Sid::firstSystemIndentationValue) * system->mag() - maxBracketsWidth);
-        maxNamesWidth = indent - instrumentNameOffset;
-    }
-
-    if (muse::RealIsNull(indent)) {
-        if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
-            system->setLeftMargin(0.0);
-        } else {
-            system->setLeftMargin(maxBracketsWidth);
-        }
-    } else {
-        system->setLeftMargin(indent + maxBracketsWidth);
-    }
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s = system->staves().at(staffIdx);
@@ -2122,11 +2138,11 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
             double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
-            s->setbbox(system->leftMargin() + xo1, -h, 0.0, 2 * h);
+            s->setbbox(system->leftMargin() + leadingHBoxesWidth, -h, 0.0, 2 * h);
         } else {
             double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * system->spatium();
-            s->setbbox(system->leftMargin() + xo1, 0.0, 0.0, h);
+            s->setbbox(system->leftMargin() + leadingHBoxesWidth, 0.0, 0.0, h);
         }
     }
 
@@ -2134,9 +2150,10 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //  layout brackets
     //---------------------------------------------------
 
-    system->setBracketsXPosition(xo1 + system->leftMargin());
+    SystemHeaderLayout::setBracketsXPosition(system, system->leftMargin() + leadingHBoxesWidth);
 
     SystemHeaderLayout::setInstrumentNamesHorizontalPos(system);
+    SystemHeaderLayout::setGroupBracketsHorizontalPos(system);
 
     for (MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {
@@ -2287,7 +2304,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     //  layout brackets vertical position
     //---------------------------------------------------
 
-    SystemLayout::layoutBracketsVertical(system, ctx);
+    SystemHeaderLayout::layoutBracketsVertical(system, ctx);
 
     //---------------------------------------------------
     //  layout instrument names
@@ -2385,6 +2402,11 @@ void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
 
     system->setHeight(system->systemHeight());
     SystemLayout::setMeasureHeight(system, system->systemHeight(), ctx);
+
+    // Reused systems can move across pages during partial relayout.
+    // Refresh geometry derived from SysStaff vertical positions.
+    SystemHeaderLayout::layoutBracketsVertical(system, ctx);
+    SystemHeaderLayout::setInstrumentNamesVerticalPos(system, ctx);
 }
 
 void SystemLayout::setMeasureHeight(System* system, double height, const LayoutContext& ctx)
@@ -2406,40 +2428,6 @@ void SystemLayout::setMeasureHeight(System* system, double height, const LayoutC
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }
-    }
-}
-
-void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
-{
-    for (Bracket* b : system->brackets()) {
-        int staffIdx1 = static_cast<int>(b->firstStaff());
-        int staffIdx2 = static_cast<int>(b->lastStaff());
-        double sy = 0;                           // assume bracket not visible
-        double ey = 0;
-        // if start staff not visible, try next staff
-        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx1)->show()) {
-            ++staffIdx1;
-        }
-        // if end staff not visible, try prev staff
-        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx2)->show()) {
-            --staffIdx2;
-        }
-        // if the score doesn't have "alwaysShowBracketsWhenEmptyStavesAreHidden" as true,
-        // the bracket will be shown IF:
-        // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
-        // it spans just one visible staff (staffIdx1 == staffIdx2) but it is required to do so
-        // (the second case happens at least when the bracket is initially dropped)
-        bool notHidden = ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
-                         ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
-        if (notHidden) {                        // set vert. pos. and height to visible spanned staves
-            sy = system->staves().at(staffIdx1)->bbox().top();
-            ey = system->staves().at(staffIdx2)->bbox().bottom();
-        }
-
-        Bracket::LayoutData* bldata = b->mutldata();
-        bldata->setPosY(sy);
-        bldata->bracketHeight = ey - sy;
-        TLayout::layoutBracket(b, bldata, ctx.conf());
     }
 }
 
@@ -2615,7 +2603,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
             continue;
         }
         for (Segment& segment : toMeasure(mb)->segments()) {
-            if (!segment.isType(SegmentType::TimeSigType)) {
+            if (!segment.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -2732,7 +2720,7 @@ bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment
 
 bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
 {
-    double elemShapeLeft = -elementShape.left();
+    double elemShapeLeft = elementShape.left();
     double elemShapeRight = elementShape.right();
     double elemShapeTop = elementShape.top();
     double elemShapeBottom = elementShape.bottom();
@@ -2844,4 +2832,38 @@ void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* syste
     double yDiff = yBaseLine - numberBbox.top();
 
     mmRest->mutldata()->yNumberPos += yDiff;
+}
+
+void SystemLayout::MeasureState::clear()
+{
+    measure = nullptr;
+    measureWidth = 0.0;
+    measurePos = 0.0;
+    elementPositions.clear();
+    elementWidths.clear();
+    sharedTrackMaps.clear();
+}
+
+void SystemLayout::MeasureState::restoreMeasure(LayoutContext& ctx)
+{
+    bool mapChanged = false;
+    Fraction tick = measure->tick();
+    for (auto& [sharedPart, sharedTrackMap] : sharedTrackMaps) {
+        if (sharedPart->trackMapAtTick(tick) != sharedTrackMap) {
+            sharedPart->setTrackMapAtTick(sharedTrackMap, tick);
+            mapChanged = true;
+        }
+    }
+    if (mapChanged) {
+        StaveSharingLayout::updateNotationWithoutRecomputingTrackMap(measure, ctx);
+    }
+
+    measure->mutldata()->setPosX(measurePos);
+    measure->setWidth(measureWidth);
+    for (auto pair : elementPositions) {
+        pair.first->setPos(pair.second);
+    }
+    for (auto pair : elementWidths) {
+        pair.first->setWidth(pair.second);
+    }
 }

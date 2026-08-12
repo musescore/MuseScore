@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,12 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_REALIZEDHARMONY_H
-#define MU_ENGRAVING_REALIZEDHARMONY_H
+#pragma once
 
 #include <map>
 
-#include "containers.h"
 #include "../types/fraction.h"
 
 namespace mu::engraving {
@@ -105,5 +103,3 @@ private:
     bool m_literal = false;   //use all notes when possible and do not add any notes
 };
 }
-
-#endif // __REALIZEDHARMONY_H__

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,22 +30,21 @@ using namespace mu::appshell;
 static std::vector<QVariantMap> welcomeDialogData()
 {
     QVariantMap item1;
-    item1.insert("title", muse::qtrc("appshell/welcome", "Enjoy free cloud storage"));
-    item1.insert("imageUrl", "qrc:/resources/welcomedialog/MuseScoreCom.png");
+    item1.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
+    item1.insert("imageUrl", "qrc:/resources/welcomedialog/WhatsNew.png");
     item1.insert("description", muse::qtrc("appshell/welcome",
-                                           "Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world."));
-    item1.insert("buttonText", muse::qtrc("appshell/welcome", "View my scores online"));
-    item1.insert("destinationUrl",
-                 "https://musescore.com/my-scores?utm_source=mss-app-welcome-musescore-com&utm_medium=mss-app-welcome-musescore-com&utm_campaign=mss-app-welcome-musescore-com");
+                                           "Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow."));
+    item1.insert("buttonText", muse::qtrc("appshell/welcome", "Watch video"));
+    item1.insert("destinationUrl", "https://youtu.be/grKX-cBEEmM");
 
     QVariantMap item2;
-    item2.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
-    item2.insert("imageUrl", "qrc:/resources/welcomedialog/WhatsNew.png");
+    item2.insert("title", muse::qtrc("appshell/welcome", "Enjoy free cloud storage"));
+    item2.insert("imageUrl", "qrc:/resources/welcomedialog/MuseScoreCom.png");
     item2.insert("description", muse::qtrc("appshell/welcome",
-                                           "Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more."));
-    item2.insert("buttonText", muse::qtrc("appshell/welcome", "Watch video"));
+                                           "Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world."));
+    item2.insert("buttonText", muse::qtrc("appshell/welcome", "View my scores online"));
     item2.insert("destinationUrl",
-                 "https://www.youtube.com/watch?v=J2gY9CbMuoI&utm_source=mss-app-yt-4.6-release&utm_medium=mss-app-yt-4.6-release&utm_campaign=mss-app-yt-4.6-release");
+                 "https://musescore.com/my-scores?utm_source=mss-app-welcome-musescore-com&utm_medium=mss-app-welcome-musescore-com&utm_campaign=mss-app-welcome-musescore-com");
 
     QVariantMap item3;
     item3.insert("title", muse::qtrc("appshell/welcome", "Install our free MuseSounds libraries"));

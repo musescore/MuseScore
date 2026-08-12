@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,6 +24,9 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "inotationundostack.h"
 
 using namespace mu::notation;
 
@@ -107,11 +110,10 @@ void ExcerptNotation::undoSetName(const QString& name)
     }
 
     //: Means: "edit the name of a part score"
-    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
+    undoStack()->transaction(muse::TranslatableString("undoableAction", "Rename part"), [&](engraving::Transaction& tx) {
+        tx.push(new engraving::ChangeExcerptTitle(m_excerpt, name));
+    });
 
-    score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
-
-    undoStack()->commitChanges();
     notifyAboutNotationChanged();
 }
 

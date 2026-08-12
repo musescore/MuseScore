@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -86,6 +86,17 @@ enum class SelState : char {
     // is selected
 };
 
+//---------------------------------------------------------
+//   SelectedSymbol
+//---------------------------------------------------------
+
+struct SelectedSymbol {
+    track_idx_t track = muse::nidx;
+    int tickOffset = 0;
+    int segDelta = 0;
+    EngravingItem* element = nullptr;
+};
+
 //-------------------------------------------------------------------
 //   Selection
 //    For SelState::LIST state only visible elements can be selected
@@ -115,7 +126,7 @@ public:
     std::vector<Note*> noteList(track_idx_t track = muse::nidx) const;
 
     const std::list<EngravingItem*> uniqueElements() const;
-    std::list<Note*> uniqueNotes(track_idx_t track = muse::nidx, bool tied = true) const;
+    std::vector<Note*> uniqueNotes(track_idx_t track = muse::nidx, bool tied = true) const;
 
     bool isSingle() const { return (m_state == SelState::LIST) && (m_el.size() == 1); }
     bool elementsSelected(const ElementTypeSet& types) const;
@@ -132,6 +143,7 @@ public:
     MeasureBase* startMeasureBase() const;
     MeasureBase* endMeasureBase() const;
     std::vector<System*> selectedSystems() const;
+    std::vector<Page*> pagesContainingSelection() const;
     void update();
     void updateState();
     void dump();

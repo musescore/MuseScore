@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,7 @@
 #include "global/progress.h"
 
 namespace mu::converter {
-class IConverterController : MODULE_GLOBAL_INTERFACE
+class IConverterController : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IConverterController)
 public:
@@ -58,7 +58,8 @@ public:
 
     virtual muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
+                                       bool withAudio = true) = 0;
 
     virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };

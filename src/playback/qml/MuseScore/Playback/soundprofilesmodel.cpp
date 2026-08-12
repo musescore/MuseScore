@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,11 @@
 
 #include "soundprofilesmodel.h"
 
+#include "notation/imasternotation.h" // IWYU pragma: keep
+#include "notation/inotationplayback.h"
+
 #include "project/inotationproject.h"
+#include "project/iprojectaudiosettings.h" // IWYU pragma: keep
 
 using namespace mu::playback;
 using namespace mu::project;

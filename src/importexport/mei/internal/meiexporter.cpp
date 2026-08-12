@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -616,25 +616,29 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
     IF_ASSERT_FAILED(staff) {
         return false;
     }
+    const staff_idx_t staffIdx = staff->idx();
 
-    for (size_t j = 0; j < staff->bracketLevels() + 1; j++) {
-        if (staff->bracketType(j) != BracketType::NO_BRACKET) {
-            libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(staff->bracketType(j), staff->barLineSpan());
-            // mark at which staff we will need to close the staffGrp
-            int end = static_cast<int>(staff->idx() + staff->bracketSpan(j)) - 1;
-            // Something is wrong, maybe a staff was delete in the MuseScore file?
-            if (end >= static_cast<int>(ends.size())) {
-                continue;
-            }
-            ends.at(end)++;
-            //
-            m_currentNode = m_currentNode.append_child();
-            meiStaffGrp.Write(m_currentNode);
-            // If we have a part and reached the latest level, write the label and labelAbbr
-            if (staffGrpPart && j == staff->bracketLevels()) {
-                this->writeLabel(m_currentNode, staffGrpPart);
-                this->writeInstrDef(m_currentNode, staffGrpPart);
-            }
+    for (size_t j = 0; j < m_score->bracketLevels(staffIdx) + 1; j++) {
+        BracketType bracketType = m_score->bracketType(staffIdx, j);
+        if (bracketType == BracketType::NO_BRACKET) {
+            continue;
+        }
+
+        libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(bracketType, staff->barLineSpan());
+        // mark at which staff we will need to close the staffGrp
+        int end = static_cast<int>(staffIdx + m_score->bracketSpan(staffIdx, j)) - 1;
+        // Something is wrong, maybe a staff was delete in the MuseScore file?
+        if (end >= static_cast<int>(ends.size())) {
+            continue;
+        }
+        ends.at(end)++;
+        //
+        m_currentNode = m_currentNode.append_child();
+        meiStaffGrp.Write(m_currentNode);
+        // If we have a part and reached the latest level, write the label and labelAbbr
+        if (staffGrpPart && j == m_score->bracketLevels(staffIdx)) {
+            this->writeLabel(m_currentNode, staffGrpPart);
+            this->writeInstrDef(m_currentNode, staffGrpPart);
         }
     }
     return true;
@@ -1249,6 +1253,10 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
     bool closingBeamInTuplet = false;
     this->writeBeamAndTuplet(chord, closingBeam, closingTuplet, closingBeamInTuplet);
 
+    if (chord->tremoloChordType() == TremoloChordType::TremoloFirstChord) {
+        this->writeFTrem(chord->tremoloTwoChord());
+    }
+
     bool isBTrem = (chord->tremoloChordType() == TremoloChordType::TremoloSingle);
     if (isBTrem) {
         this->writeBTrem(chord->tremoloSingleChord());
@@ -1289,11 +1297,35 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
         m_currentNode = m_currentNode.parent();
     }
 
+    if (chord->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
+        // This is the end of the <fTrem> - non critical assert
+        assert(isCurrentNode(libmei::FTrem()));
+        m_currentNode = m_currentNode.parent();
+    }
+
     this->writeBeamAndTupletEnd(closingBeam, closingTuplet, closingBeamInTuplet);
 
     if (chord->graceNotes().size() > 0) {
         this->writeGraceGrp(chord, staff, true);
     }
+
+    return true;
+}
+
+/**
+ * Write a fTrem.
+ */
+
+bool MeiExporter::writeFTrem(const TremoloTwoChord* tremolo)
+{
+    IF_ASSERT_FAILED(tremolo) {
+        return false;
+    }
+
+    m_currentNode = m_currentNode.append_child();
+    libmei::FTrem meiFTrem;
+    meiFTrem.SetUnitdur(Convert::unitdurToMEI(tremolo));
+    meiFTrem.Write(m_currentNode, this->getXmlIdFor(tremolo, 'f'));
 
     return true;
 }

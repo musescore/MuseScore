@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -62,8 +62,6 @@ protected:
     void rebaseAnchors(EditData& ed, Grip grip) override;
 
 private:
-    Sid getPropertyStyle(Pid) const override;
-
     SymIdList m_symbols;
 };
 
@@ -83,6 +81,8 @@ public:
 
     Trill* clone() const override { return new Trill(*this); }
     EngravingItem* linkedClone() override;
+
+    Anchor anchor() const override { return Anchor::SEGMENT; }
 
     LineSegment* createLineSegment(System* parent) override;
     void remove(EngravingItem*) override;
@@ -116,13 +116,12 @@ public:
     Ornament* ornament() const { return m_ornament; }
     void setOrnament(Ornament* o) { m_ornament = o; }
 
+    Sid defaultPosSid() const override;
+
 protected:
     void doComputeEndElement() override;
 
 private:
-
-    Sid getPropertyStyle(Pid) const override;
-
     TrillType m_trillType = TrillType::TRILL_LINE;
     Accidental* m_accidental = nullptr;
     Chord* m_cueNoteChord = nullptr;

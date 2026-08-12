@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,8 +29,12 @@
 #include "async/channel.h"
 #include "types/retval.h"
 #include "io/path.h"
-#include "notationtypes.h"
 #include "global/globaltypes.h"
+
+#include "types/noteinputtypes.h"
+#include "types/zoomtype.h"
+
+#include "engraving/automation/automationtypes.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_GLOBAL_INTERFACE
@@ -41,6 +45,9 @@ public:
     virtual ~INotationConfiguration() = default;
 
     virtual QColor notationColor() const = 0;
+    virtual void setNotationColor(const QColor& color) = 0;
+    virtual muse::async::Notification notationColorChanged() const = 0;
+    virtual void resetNotationColor() = 0;
 
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
@@ -115,8 +122,9 @@ public:
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
-    virtual qreal scalingFromZoomPercentage(int zoomPercentage) const = 0;
-    virtual int zoomPercentageFromScaling(qreal scaling) const = 0;
+    virtual mu::engraving::AutomationType currentAutomationType() const = 0;
+    virtual void setCurrentAutomationType(mu::engraving::AutomationType type) = 0;
+    virtual muse::async::Notification currentAutomationTypeChanged() const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
@@ -183,9 +191,7 @@ public:
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
-
-    virtual double guiScaling() const = 0;
-    virtual double notationScaling() const = 0;
+    virtual muse::async::Notification isCountInEnabledChanged() const = 0;
 
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;

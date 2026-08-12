@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -59,7 +59,10 @@ void StaffTreeItem::init(const Staff* masterStaff)
         staff = masterStaff;
     }
 
-    QString staffName = staff->staffName();
+    QString staffName = staff->staffType()->longName();
+    if (staffName.isEmpty()) {
+        staffName = staff->staffName();
+    }
 
     //: Prefix for the display name for a linked staff. Preferably, keep this short.
     QString title = masterStaff->isLinked() ? muse::qtrc("layoutpanel", "[LINK] %1").arg(staffName) : staffName;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -64,6 +64,22 @@ void ThemesPageModel::setFollowSystemTheme(bool enabled)
 ThemeList ThemesPageModel::allThemes() const
 {
     return uiConfiguration()->themes();
+}
+
+QStringList ThemesPageModel::generalThemeCodes() const
+{
+    return {
+        QString::fromStdString(LIGHT_THEME_CODE),
+        QString::fromStdString(DARK_THEME_CODE)
+    };
+}
+
+QStringList ThemesPageModel::highContrastThemeCodes() const
+{
+    return {
+        QString::fromStdString(HIGH_CONTRAST_WHITE_THEME_CODE),
+        QString::fromStdString(HIGH_CONTRAST_BLACK_THEME_CODE)
+    };
 }
 
 QVariantList ThemesPageModel::generalThemes() const

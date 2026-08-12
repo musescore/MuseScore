@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -89,6 +89,7 @@ void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutC
 void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape, bool itemAddToSkyline,
                                           const LayoutContext& ctx)
 {
+    UNUSED(ctx);
     if (!leftParen || !rightParen) {
         // 1 parenthesis
         Parenthesis* paren = leftParen ? leftParen : rightParen;
@@ -312,8 +313,8 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
 
     PointF startPoint = PointF();
     double midThickness = 2 * midPointThickness;
-    int nbShapes = round(5.0 * heightInSpatium);
-    nbShapes = std::clamp(nbShapes, 20, 50);
+    int nbShapes = round(2.0 * heightInSpatium);
+    nbShapes = std::clamp(nbShapes, 3, 10);
     PointF bezier1mid = bezier1for - PointF(midPointThickness * direction, 0.0);
     PointF bezier2mid = bezier2for - PointF(midPointThickness * direction, 0.0);
     const CubicBezier b(startPoint, bezier1mid, bezier2mid, endNormalised);
@@ -551,7 +552,9 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
         return !s.item() || s.item()->isParenthesis()
                || (s.item()->isLaissezVibSegment() && isChord)
                || (s.item()->isHook() && isChord)
-               || (s.item()->isStem() && isChord);
+               || (s.item()->isStem() && isChord)
+               || (s.item()->isArpeggio() && isChord)
+               || (s.item()->isChordBracket() && isChord);
     });
 
     return parentShape;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -50,6 +50,8 @@ MixerPanelSection {
             height: 24
             width: 46
 
+            enabled: !content.channelItem.hasVolumeAutomation
+
             textHorizontalAlignment: Qt.AlignHCenter
             textSidePadding: 0
             background.radius: 2
@@ -66,14 +68,14 @@ MixerPanelSection {
 
             validator: DoubleInputValidator {
                 id: doubleInputValidator
-                top: 12.0
-                bottom: -60.0
+                top: content.channelItem.volumeLevelMax
+                bottom: content.channelItem.volumeLevelMin
                 decimal: 1
             }
 
             currentText: Math.round(content.channelItem.volumeLevel * 10) / 10
 
-            onTextChanged: function(newTextValue) {
+            onTextEdited: function(newTextValue) {
                 if (content.channelItem.volumeLevel !== Number(newTextValue)) {
                     content.channelItem.volumeLevel = Number(newTextValue)
                 }

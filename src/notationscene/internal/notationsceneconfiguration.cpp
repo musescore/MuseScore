@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,8 @@
  */
 
 #include "notationsceneconfiguration.h"
+
+#include "global/translation.h"
 
 #include "muse_framework_config.h"
 
@@ -38,15 +40,13 @@ static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canv
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
-static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
 static const Settings::Key PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY(module_name,  "ui/percussionPanelUseNotationPreview");
 static const Settings::Key PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY(module_name,  "ui/percussionPanelAutoShowMode");
 static const Settings::Key AUTO_CLOSE_PERCUSSION_PANEL_KEY(module_name, "ui/autoClosePercussionPanel");
 static const Settings::Key SHOW_PERCUSSION_PANEL_SWAP_DIALOG(module_name,  "ui/showPercussionPanelPadSwapDialog");
 static const Settings::Key PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS(module_name,  "ui/percussionPanelMoveMidiNotesAndShortcuts");
 
-NotationSceneConfiguration::NotationSceneConfiguration(const muse::modularity::ContextPtr& ctx)
-    : Contextable(ctx)
+NotationSceneConfiguration::NotationSceneConfiguration()
 {
 }
 
@@ -68,11 +68,6 @@ void NotationSceneConfiguration::init()
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
     settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
-    });
-
-    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(true));
-    settings()->valueChanged(USE_NEW_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
-        m_useNewPercussionPanelChanged.notify();
     });
 
     settings()->setDefaultValue(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY, Val(false));
@@ -99,13 +94,6 @@ void NotationSceneConfiguration::init()
     settings()->valueChanged(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS).onReceive(this, [this](const Val&) {
         m_percussionPanelMoveMidiNotesAndShortcutsChanged.notify();
     });
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    // FIXME: configuration is global, and does not have the access to per-context injections
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
-#endif
 }
 
 bool NotationSceneConfiguration::isSmoothPanning() const
@@ -146,21 +134,6 @@ ValCh<int> NotationSceneConfiguration::pianoKeyboardNumberOfKeys() const
 void NotationSceneConfiguration::setPianoKeyboardNumberOfKeys(int number)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
-}
-
-bool NotationSceneConfiguration::useNewPercussionPanel() const
-{
-    return settings()->value(USE_NEW_PERCUSSION_PANEL_KEY).toBool();
-}
-
-void NotationSceneConfiguration::setUseNewPercussionPanel(bool use)
-{
-    settings()->setSharedValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(use));
-}
-
-Notification NotationSceneConfiguration::useNewPercussionPanelChanged() const
-{
-    return m_useNewPercussionPanelChanged;
 }
 
 bool NotationSceneConfiguration::percussionPanelUseNotationPreview() const
@@ -236,30 +209,4 @@ void NotationSceneConfiguration::setPercussionPanelMoveMidiNotesAndShortcuts(boo
 Notification NotationSceneConfiguration::percussionPanelMoveMidiNotesAndShortcutsChanged() const
 {
     return m_percussionPanelMoveMidiNotesAndShortcutsChanged;
-}
-
-int NotationSceneConfiguration::styleDialogLastPageIndex() const
-{
-    return m_styleDialogLastPageIndex;
-}
-
-void NotationSceneConfiguration::setStyleDialogLastPageIndex(int value)
-{
-    m_styleDialogLastPageIndex = value;
-}
-
-int NotationSceneConfiguration::styleDialogLastSubPageIndex() const
-{
-    return m_styleDialogLastSubPageIndex;
-}
-
-void NotationSceneConfiguration::setStyleDialogLastSubPageIndex(int value)
-{
-    m_styleDialogLastSubPageIndex = value;
-}
-
-void NotationSceneConfiguration::resetStyleDialogPageIndices()
-{
-    setStyleDialogLastPageIndex(0);
-    setStyleDialogLastSubPageIndex(0);
 }

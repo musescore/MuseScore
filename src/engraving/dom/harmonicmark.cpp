@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -54,7 +54,14 @@ static const ElementStyle harmonicMarkStyle {
     { Sid::letRingFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
-    { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
+    { Sid::ottava8VAPlacement,                   Pid::PLACEMENT },
+
+    { Sid::letRingMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::letRingMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::letRingMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
@@ -195,5 +202,10 @@ Sid HarmonicMark::getPropertyStyle(Pid id) const
         break;
     }
     return TextLineBase::getPropertyStyle(id);
+}
+
+Sid HarmonicMark::defaultPosSid() const
+{
+    return placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow;
 }
 }

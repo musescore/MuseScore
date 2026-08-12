@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H
-#define MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "inotationproject.h"
-
 #include "types/retval.h"
+
+#include "inotationproject_fwd.h"
+#include "types/projecttypes.h"
+#include "types/savelocation.h"
 
 namespace mu::project {
 class IOpenSaveProjectScenario : MODULE_CONTEXT_INTERFACE
@@ -54,5 +55,3 @@ public:
     virtual muse::Ret showAudioCloudShareError(const muse::Ret& ret) const = 0;
 };
 }
-
-#endif // MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H

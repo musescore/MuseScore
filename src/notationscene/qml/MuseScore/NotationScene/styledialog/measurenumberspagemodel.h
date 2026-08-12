@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -37,7 +37,7 @@ class MeasureNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * measureNumberHPlacement READ measureNumberHPlacement CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberPlacementMode READ measureNumberPlacementMode CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberPosAbove READ measureNumberPosAbove NOTIFY measureNumberPosAboveChanged FINAL)
-    Q_PROPERTY(mu::notation::StyleItem * measureNumberPosBelow READ measureNumberPosBelow CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * measureNumberPosBelow READ measureNumberPosBelow NOTIFY measureNumberPosBelowChanged FINAL)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberAlignToBarline READ measureNumberAlignToBarline CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * mmRestShowMeasureNumberRange READ mmRestShowMeasureNumberRange CONSTANT)
@@ -81,6 +81,7 @@ public:
 
 signals:
     void measureNumberPosAboveChanged() const;
+    void measureNumberPosBelowChanged() const;
 
 private:
     StyleItem* buildStyleItem(StyleId id) const override;

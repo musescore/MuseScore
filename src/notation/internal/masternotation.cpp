@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "masternotation.h"
 
-#include <cmath>
 #include <QFileInfo>
 
 #include "log.h"
@@ -39,14 +39,19 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/keysig.h"
-#include "engraving/dom/rest.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/editing/undo.h"
 
+#include "engraving/editing/editkeysig.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
+
+#include "inotationelements.h" // IWYU pragma: keep
+#include "inotationsolomutestate.h"
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "notationautomation.h"
+#include "types/scorecreateoptions.h"
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
 #include "notationplayback.h"
@@ -78,7 +83,7 @@ static IExcerptNotationPtr createAndInitExcerptNotation(MasterNotation* master, 
 MasterNotation::MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx)
     : Notation(this, iocCtx), m_project(project)
 {
-    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack(), style());
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
     m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged, iocCtx);
@@ -86,7 +91,7 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
     m_notationPlayback = std::make_shared<NotationPlaybackStub>();
 #endif
 
-    m_notationAutomation = std::make_shared<NotationAutomation>();
+    m_notationAutomation = std::make_shared<NotationAutomation>(undoStack());
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -163,6 +168,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score, bool disa
     TRACEFUNC;
 
     setScore(score);
+    std::static_pointer_cast<NotationAutomation>(m_notationAutomation)->setMasterScore(score);
 
     score->updateSwing();
 
@@ -196,7 +202,7 @@ static void clearMeasures(mu::engraving::MasterScore* masterScore)
         measures->clear();
     }
 
-    masterScore->setPlaylistDirty();
+    masterScore->invalidateRepeatList();
     masterScore->updateRepeatList();
 }
 
@@ -244,11 +250,12 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         // Add timesigs...
         TimeSig* timesig = Factory::createTimeSig(masterScore->dummy()->segment());
         timesig->setSig(scoreOptions.globalTimesig, scoreOptions.timesigType);
-        masterScore->cmdAddTimeSig(measure, /*staffIdx*/ 0, timesig, /*local*/ false);
+        Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
+        EditTimeSig::addTimeSig(tx, masterScore, measure, /*staffIdx*/ 0, timesig, /*local*/ false);
 
         for (Staff* staff : masterScore->staves()) {
             // Add keysig for each staff...
-            masterScore->undoChangeKeySig(staff, measure->tick(), keySigEvent);
+            mu::engraving::EditKeySig::undoChangeKeySig(tx, masterScore, staff, measure->tick(), keySigEvent);
         }
     }
 }
@@ -270,6 +277,8 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
     score->updateCapo();
 
     applyOptions(score, scoreOptions);
+
+    score->initAutomation();
 
     initAfterSettingScore(score);
     addExcerptsToMasterScore(score->excerpts());
@@ -301,7 +310,9 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
 
-        score->clearSystemLocks();
+        for (mu::engraving::Score* s : score->scoreList()) {
+            s->clearSystemLocks();
+        }
         clearMeasures(score);
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
@@ -530,7 +541,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(excerpts);
 }
 
-void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
+void MasterNotation::resetExcerpt(IExcerptNotationPtr& excerptNotation)
 {
     if (!excerptNotation || !excerptNotation->isInited()) {
         return;

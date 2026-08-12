@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/tremolotwochord.h"
 
 namespace mu::engraving {
-class MoveTremolo : public UndoCommand
+class MoveTremolo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, MoveTremolo)
 
@@ -40,8 +40,8 @@ class MoveTremolo : public UndoCommand
     Chord* oldC1 = nullptr;
     Chord* oldC2 = nullptr;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     MoveTremolo(Score* s, Fraction c1, Fraction c2, TremoloTwoChord* tr, track_idx_t t)

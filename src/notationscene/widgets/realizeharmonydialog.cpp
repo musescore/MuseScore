@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,18 +23,26 @@
 #include "realizeharmonydialog.h"
 
 #include "engraving/dom/harmony.h"
-#include "engraving/dom/staff.h"
+#include "engraving/dom/realizedharmony.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 #include "translation.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("RealizeHarmonyDialog");
     setupUi(this);
+}
 
+void RealizeHarmonyDialog::componentComplete()
+{
     chordTable->setVisible(false);
     connect(showButton, SIGNAL(clicked()), SLOT(toggleChordTable()));
 
@@ -48,12 +56,12 @@ RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
         return;
     }
 
-    const std::vector<mu::engraving::EngravingItem*>& selectedElements = interaction->selection()->elements();
-    QList<mu::engraving::Harmony*> selectedHarmonyList;
+    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
+    QList<Harmony*> selectedHarmonyList;
 
-    for (mu::engraving::EngravingItem* element : selectedElements) {
+    for (EngravingItem* element : selectedElements) {
         if (element->isHarmony()) {
-            selectedHarmonyList << mu::engraving::toHarmony(element);
+            selectedHarmonyList << toHarmony(element);
         }
     }
 
@@ -74,10 +82,8 @@ void RealizeHarmonyDialog::accept()
     }
 
     bool optionsOverride = optionsBox->isChecked();
-    Voicing voicing = optionsOverride ? Voicing(voicingSelect->getVoicing())
-                      : Voicing::INVALID;
-    HarmonyDurationType durationType = optionsOverride ? HarmonyDurationType(voicingSelect->getDuration())
-                                       : HarmonyDurationType::INVALID;
+    Voicing voicing = optionsOverride ? Voicing(voicingSelect->getVoicing()) : Voicing::INVALID;
+    HDuration durationType = optionsOverride ? HDuration(voicingSelect->getDuration()) : HDuration::INVALID;
 
     interaction->realizeSelectedChordSymbols(voicingSelect->getLiteral(), voicing, durationType);
 

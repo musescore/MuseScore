@@ -46,6 +46,7 @@
         <maxPitchA>108</maxPitchA>
         <instrumentId>keyboard.piano.electric</instrumentId>
         <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -182,6 +183,7 @@
         <minPitchA>53</minPitchA>
         <maxPitchA>89</maxPitchA>
         <instrumentId>pitched-percussion.vibraphone</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -245,6 +247,7 @@
         <minPitchA>53</minPitchA>
         <maxPitchA>89</maxPitchA>
         <instrumentId>pitched-percussion.vibraphone</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -310,6 +313,7 @@
         <maxPitchA>96</maxPitchA>
         <instrumentId>pitched-percussion.marimba</instrumentId>
         <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -374,6 +378,7 @@
         <maxPitchA>96</maxPitchA>
         <instrumentId>pitched-percussion.marimba</instrumentId>
         <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -438,6 +443,7 @@
         <maxPitchA>96</maxPitchA>
         <instrumentId>pitched-percussion.marimba</instrumentId>
         <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -508,6 +514,7 @@
         <instrumentId>pitched-percussion.glockenspiel</instrumentId>
         <concertClef>G15ma</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -577,6 +584,7 @@
         <instrumentId>pitched-percussion.xylophone</instrumentId>
         <concertClef>G8va</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -798,6 +806,7 @@
             <panelColumn>4</panelColumn>
           </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1260,6 +1269,7 @@
         <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1428,6 +1438,7 @@
           <panelColumn>0</panelColumn>
         </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1728,6 +1739,7 @@
           <panelColumn>5</panelColumn>
         </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -1902,6 +1914,7 @@
           <panelColumn>5</panelColumn>
         </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -2088,6 +2101,7 @@
           <panelColumn>4</panelColumn>
         </Drum>
         <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

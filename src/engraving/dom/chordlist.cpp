@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -543,7 +543,7 @@ void ParsedChord::configure(const ChordList* cl)
     // TODO: allow this to be parameterized via chord list
     m_major << u"ma" << u"maj" << u"major" << u"t" << u"^";
     m_minor << u"mi" << u"min" << u"minor" << u"-" << u"=";
-    m_diminished << u"dim" << u"o";
+    m_diminished << u"dim" << u"dim." << u"o";
     m_augmented << u"aug" << u"+";
     m_lower << u"b" << u"-" << u"dim";
     m_raise << u"#" << u"+" << u"aug";
@@ -1590,8 +1590,8 @@ double ChordList::position(const StringList& names, bool stackModifiers, bool su
             const double base = stackHeight / 2;                            // Baseline of bottom modifier in the stack
             yAdj += base - modifierIdx * modifierHeight * (1 + LINE_SPACING);
         }
-        Char c = name.isEmpty() ? name.at(0) : u'0';
-        if (c.isDigit() || c.isPunct()) {
+
+        if (!name.isEmpty()) {
             yAdj += m_madjust;
         }
         return yAdj;
@@ -1645,7 +1645,8 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
     for (auto tokIt = m_tokenList.begin(); tokIt != m_tokenList.end(); tokIt++) {
         const ChordToken& tok = *tokIt;
         const String n = tok.names.front();
-        if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
+        if ((n == u"/" || n == u"," || n == u"\\" || n == u" ")
+            && (stackSusOrAdd || (stackModifiersEnabled && tok.tokenClass == ChordTokenClass::MODIFIER))) {
             continue;
         }
 
@@ -1737,8 +1738,14 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                 };
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
                 // Make sure degrees are aligned when there are accidentals
-                const String& nextMod = modIdx != finalModIdx ? m_modifierList.at(modIdx + 1) : u"";
-                bool nextModStartsWithAcc = startsWithAcc(nextMod);
+                // -- nextMod now searches to the end of modifierList to support stacks of 3+ modifiers
+                auto it = std::find_if(
+                    m_modifierList.begin() + (modIdx + 1),
+                    m_modifierList.end(),
+                    [&startsWithAcc](const String& s) { return startsWithAcc(s); }
+                    );
+                const String& nextMod = (it != m_modifierList.end()) ? *it : u"";
+                bool nextModStartsWithAcc = (it != m_modifierList.end());
                 bool curModStartsWithAcc = startsWithAcc(curMod);
                 bool nIsAcc = startsWithAcc(n);
                 bool curModStartsWithSusOrAdd = startsWithSusOrAdd(curMod);
@@ -1760,7 +1767,19 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                     String nextAcc = nextMod;
                     static const std::wregex DEGREE_REGEX = std::wregex(L"[0-9]+");
                     nextAcc.replace(DEGREE_REGEX, u"");
-                    m_renderList.emplace_back(new RenderActionMoveTextWidth(nextAcc));
+                    // Apply scaling and use renderList to match the behavior of standard accidental rendering
+                    m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
+                    const ChordToken accTok = cl->token(nextAcc, ChordTokenClass::MODIFIER);
+                    if (accTok.isValid()) {
+                        for (const RenderActionPtr& a : accTok.renderList) {
+                            if (a->actionType() == RenderAction::RenderActionType::SET) {
+                                m_renderList.emplace_back(new RenderActionMoveTextWidth(u"s" + nextAcc));
+                            } else {
+                                m_renderList.emplace_back(a);
+                            }
+                        }
+                    }
+                    m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
                 }
 
                 // Set scale

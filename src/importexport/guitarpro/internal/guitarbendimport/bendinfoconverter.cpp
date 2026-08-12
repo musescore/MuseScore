@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -130,7 +130,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
     }
 
     if (importedInfo.segments.size() == 1 && importedInfo.type == BendType::NORMAL_BEND
-        && importedInfo.segments.front().pitchDiff() == 25) {
+        && importedInfo.segments.front().pitchDiff() == GP_PITCH_PER_QUARTERTONE) {
         importedInfo.type = BendType::SLIGHT_BEND;
     }
 

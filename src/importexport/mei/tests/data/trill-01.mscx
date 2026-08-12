@@ -22,16 +22,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">The Art of Trill</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piccolo">
-        <longName>Piccolo</longName>
-        <shortName>Picc.</shortName>
+        <InstrumentLabel>
+          <longName>Piccolo</longName>
+          <shortName>Picc.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>7</transposeDiatonic>
         <transposeChromatic>12</transposeChromatic>
@@ -43,57 +45,32 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>The Art of Trill</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
-              <eid>I_I</eid>
-              <Ornament>
-                <subtype>ornamentTrill</subtype>
-                <eid>J_J</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <measures>4</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>L_L</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>M_M</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>K_K</eid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -101,30 +78,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>L_L</eid>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>P_P</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Q_Q</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>N_N</eid>
+              <Tie>
+                <startElement>K_K</startElement>
+                <endElement>N_N</endElement>
+                <eid>O_O</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -132,30 +98,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>T_T</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>U_U</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>R_R</eid>
+              <Tie>
+                <startElement>N_N</startElement>
+                <endElement>R_R</endElement>
+                <eid>S_S</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -163,20 +118,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>U_U</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>X_X</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>V_V</eid>
+              <Tie>
+                <startElement>R_R</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -184,50 +138,13 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>X_X</eid>
         <voice>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <measures>-4</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
+          <Chord>
+            <eid>Y_Y</eid>
+            <durationType>half</durationType>
+            <Note>
               <eid>Z_Z</eid>
-              <Ornament>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  <eid>a_a</eid>
-                  </Accidental>
-                <intervalAbove>second,major</intervalAbove>
-                <subtype>ornamentTrill</subtype>
-                <eid>b_b</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <measures>4</measures>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <eid>c_c</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>d_d</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>e_e</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -235,30 +152,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>f_f</eid>
+        <eid>a_a</eid>
         <voice>
           <Chord>
-            <eid>g_g</eid>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>h_h</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>i_i</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>c_c</eid>
+              <Tie>
+                <startElement>Z_Z</startElement>
+                <endElement>c_c</endElement>
+                <eid>d_d</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -266,30 +172,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>j_j</eid>
+        <eid>e_e</eid>
         <voice>
           <Chord>
-            <eid>k_k</eid>
+            <eid>f_f</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>l_l</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>m_m</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>g_g</eid>
+              <Tie>
+                <startElement>c_c</startElement>
+                <endElement>g_g</endElement>
+                <eid>h_h</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -297,20 +192,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>n_n</eid>
+        <eid>i_i</eid>
         <voice>
           <Chord>
-            <eid>o_o</eid>
+            <eid>j_j</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>p_p</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>k_k</eid>
+              <Tie>
+                <startElement>g_g</startElement>
+                <endElement>k_k</endElement>
+                <eid>l_l</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -318,53 +212,53 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>q_q</eid>
+        <eid>m_m</eid>
         <voice>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <measures>-4</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
+          <Chord>
+            <eid>n_n</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>o_o</eid>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>p_p</eid>
+        <voice>
+          <Chord>
+            <eid>q_q</eid>
+            <durationType>half</durationType>
+            <Note>
               <eid>r_r</eid>
-              <color r="255" g="38" b="0" a="255"/>
-              <Ornament>
-                <Accidental>
-                  <subtype>accidentalFlat</subtype>
-                  <eid>s_s</eid>
-                  </Accidental>
-                <intervalAbove>second,minor</intervalAbove>
-                <subtype>ornamentTrill</subtype>
-                <anchor>1</anchor>
-                <eid>t_t</eid>
-                <color r="255" g="38" b="0" a="255"/>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <measures>4</measures>
-                </location>
-              </next>
-            </Spanner>
+              <Tie>
+                <startElement>o_o</startElement>
+                <endElement>r_r</endElement>
+                <eid>s_s</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>t_t</eid>
+        <voice>
           <Chord>
             <eid>u_u</eid>
             <durationType>half</durationType>
             <Note>
               <eid>v_v</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>w_w</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
+              <Tie>
+                <startElement>r_r</startElement>
+                <endElement>v_v</endElement>
+                <eid>w_w</eid>
+                <track>0</track>
+                </Tie>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
@@ -379,23 +273,12 @@
             <durationType>half</durationType>
             <Note>
               <eid>z_z</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>0_0</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>v_v</startElement>
+                <endElement>z_z</endElement>
+                <eid>0_0</eid>
+                <track>0</track>
+                </Tie>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
@@ -410,46 +293,28 @@
             <durationType>half</durationType>
             <Note>
               <eid>3_3</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>4_4</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>5_5</eid>
+        <eid>4_4</eid>
         <voice>
           <Chord>
-            <eid>6_6</eid>
+            <eid>5_5</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>7_7</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
+              <eid>6_6</eid>
+              <Tie>
+                <startElement>3_3</startElement>
+                <endElement>6_6</endElement>
+                <eid>7_7</eid>
+                <track>0</track>
+                </Tie>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           </voice>
@@ -457,46 +322,17 @@
       <Measure>
         <eid>8_8</eid>
         <voice>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <measures>-4</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <Trill>
-              <subtype>trill</subtype>
-              <eid>9_9</eid>
-              <Ornament>
-                <intervalAbove>second,minor</intervalAbove>
-                <subtype>ornamentTrill</subtype>
-                <anchor>0</anchor>
-                <eid>+_+</eid>
-                </Ornament>
-              </Trill>
-            <next>
-              <location>
-                <measures>3</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>AB_AB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>BB_BB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>+_+</eid>
+              <Tie>
+                <startElement>6_6</startElement>
+                <endElement>+_+</endElement>
+                <eid>/_/</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
@@ -504,108 +340,97 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>CB_CB</eid>
+        <eid>AB_AB</eid>
         <voice>
           <Chord>
-            <eid>DB_DB</eid>
+            <eid>BB_BB</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>EB_EB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>FB_FB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>CB_CB</eid>
+              <Tie>
+                <startElement>+_+</startElement>
+                <endElement>CB_CB</endElement>
+                <eid>DB_DB</eid>
+                <track>0</track>
+                </Tie>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>GB_GB</eid>
-        <voice>
-          <Chord>
-            <eid>HB_HB</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>IB_IB</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>JB_JB</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>KB_KB</eid>
-        <voice>
-          <Chord>
-            <eid>LB_LB</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>MB_MB</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <measures>-3</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Trill">
-            <prev>
-              <location>
-                <measures>-3</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <BarLine>
             <subtype>end</subtype>
-            <eid>NB_NB</eid>
+            <eid>EB_EB</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <ticks>4/2</ticks>
+        <eid>FB_FB</eid>
+        <track>0</track>
+        <Ornament>
+          <subtype>ornamentTrill</subtype>
+          <eid>GB_GB</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <startTick>4/2</startTick>
+        <ticks>4/2</ticks>
+        <eid>HB_HB</eid>
+        <track>0</track>
+        <Ornament>
+          <Accidental>
+            <subtype>accidentalSharp</subtype>
+            <eid>IB_IB</eid>
+            </Accidental>
+          <intervalAbove>second,major</intervalAbove>
+          <subtype>ornamentTrill</subtype>
+          <eid>JB_JB</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <startTick>8/2</startTick>
+        <ticks>4/2</ticks>
+        <eid>KB_KB</eid>
+        <track>0</track>
+        <color r="255" g="38" b="0" a="255"/>
+        <Ornament>
+          <Accidental>
+            <subtype>accidentalFlat</subtype>
+            <eid>LB_LB</eid>
+            </Accidental>
+          <intervalAbove>second,minor</intervalAbove>
+          <subtype>ornamentTrill</subtype>
+          <anchor>1</anchor>
+          <eid>MB_MB</eid>
+          <track>0</track>
+          <color r="255" g="38" b="0" a="255"/>
+          </Ornament>
+        </Trill>
+      <Trill>
+        <subtype>trill</subtype>
+        <track2>0</track2>
+        <startTick>12/2</startTick>
+        <ticks>4/2</ticks>
+        <eid>NB_NB</eid>
+        <track>0</track>
+        <Ornament>
+          <intervalAbove>second,minor</intervalAbove>
+          <subtype>ornamentTrill</subtype>
+          <anchor>0</anchor>
+          <eid>OB_OB</eid>
+          <track>0</track>
+          </Ornament>
+        </Trill>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
-class IMuseSoundsCheckUpdateScenario : MODULE_GLOBAL_INTERFACE
+class IMuseSoundsCheckUpdateScenario : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
 

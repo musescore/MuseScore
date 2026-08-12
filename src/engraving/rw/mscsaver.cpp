@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,14 +21,24 @@
  */
 #include "mscsaver.h"
 
+#include <cmath>
+
 #include "global/io/buffer.h"
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
+#include <future>
+#endif
+
+#include "draw/painter.h"
 
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
 #include "dom/imageStore.h"
-#include "dom/audio.h"
+#include "dom/mscore.h"
+#include "dom/page.h"
 
-#include "engraving/automation/iautomation.h"
+#include "engraving/automation/internal/automationrw.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"
@@ -81,36 +91,62 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         if (!ctx || !ctx->shouldWriteRange()) {
             const std::vector<Excerpt*>& excerpts = score->excerpts();
 
-            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
-                Excerpt* excerpt = excerpts.at(excerptIndex);
+            struct ExcerptData {
+                String fileName;
+                ByteArray styleData;
+                ByteArray scoreData;
+            };
 
+            auto serializeExcerpt = [masterWriteOutData, score](Excerpt* excerpt, size_t excerptIndex) -> ExcerptData {
                 Score* partScore = excerpt->excerptScore();
                 IF_ASSERT_FAILED(partScore && partScore != score) {
-                    continue;
+                    return ExcerptData();
                 }
 
                 excerpt->updateFileName(excerptIndex);
 
-                // Write excerpt style
-                {
-                    ByteArray excerptStyleData;
-                    auto styleStyleBuf = Buffer::opened(IODevice::WriteOnly, &excerptStyleData);
-                    partScore->style().write(&styleStyleBuf);
+                ExcerptData data;
+                data.fileName = excerpt->fileName();
 
-                    mscWriter.addExcerptStyleFile(excerpt->fileName(), excerptStyleData);
-                }
+                auto styleBuf = Buffer::opened(IODevice::WriteOnly, &data.styleData);
+                partScore->style().write(&styleBuf);
 
-                // Write excerpt
-                {
-                    ByteArray excerptData;
-                    auto excerptBuf = Buffer::opened(IODevice::ReadWrite, &excerptData);
+                WriteInOutData writeOutData = masterWriteOutData;
+                auto scoreBuf = Buffer::opened(IODevice::ReadWrite, &data.scoreData);
+                RWRegister::writer()->writeScore(partScore, &scoreBuf, &writeOutData);
 
-                    RWRegister::writer()->writeScore(
-                        excerpt->excerptScore(), &excerptBuf, &masterWriteOutData);
+                return data;
+            };
 
-                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
-                }
+#ifdef MUSE_THREADS_SUPPORT
+            // Parallelize excerpt serialization (CPU-bound, independent per excerpt)
+            std::vector<std::future<ExcerptData> > futures;
+            futures.reserve(excerpts.size());
+
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                Excerpt* excerpt = excerpts.at(excerptIndex);
+
+                futures.push_back(std::async(std::launch::async, [serializeExcerpt, excerpt, excerptIndex]() {
+                    return serializeExcerpt(excerpt, excerptIndex);
+                }));
             }
+
+            // Wait for all serializations to complete, then write to mscWriter sequentially
+            // (MscWriter is not thread-safe)
+            for (auto& future : futures) {
+                ExcerptData data = future.get();
+                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
+                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+            }
+#else
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                Excerpt* excerpt = excerpts.at(excerptIndex);
+
+                ExcerptData data = serializeExcerpt(excerpt, excerptIndex);
+                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
+                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+            }
+#endif
         }
     }
 
@@ -139,7 +175,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
     // Write thumbnail
     {
         if (createThumbnail && !score->pages().empty()) {
-            auto pixmap = score->createThumbnail();
+            auto pixmap = this->createThumbnail(score);
 
             ByteArray ba;
             auto b = Buffer::opened(IODevice::WriteOnly, &ba);
@@ -148,17 +184,13 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         }
     }
 
-    // Write audio
-    {
-        if (score->audio()) {
-            mscWriter.writeAudioFile(score->audio()->data());
-        }
-    }
-
     // Write automation
     {
-        if (score->automation()) {
-            mscWriter.writeAutomationJsonFile(score->automation()->toJson());
+        if (score->automationData()) {
+            ByteArray data = AutomationRW::write(*score->automationData(), false /*writeGenerated*/);
+            if (!data.empty()) {
+                mscWriter.writeAutomationJsonFile(data);
+            }
         }
     }
 
@@ -189,7 +221,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     // Write thumbnail
     {
         if (!partScore->pages().empty()) {
-            auto pixmap = partScore->createThumbnail();
+            auto pixmap = createThumbnail(partScore);
 
             ByteArray ba;
             auto b = Buffer::opened(IODevice::WriteOnly, &ba);
@@ -199,4 +231,44 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
     }
 
     return true;
+}
+
+std::shared_ptr<muse::draw::Pixmap> MscSaver::createThumbnail(Score* score)
+{
+    TRACEFUNC;
+
+    LayoutMode mode = score->layoutMode();
+    score->switchToPageMode();
+
+    Page* page = score->pages().at(0);
+    RectF fr = page->pageBoundingRect();
+    double mag = 512.0 / std::max(fr.width(), fr.height());
+    int w = int(fr.width() * mag);
+    int h = int(fr.height() * mag);
+
+    int dpm = lrint(DPMM * 1000.0);
+
+    auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
+
+    auto painterProvider = imageProvider()->painterForImage(pixmap);
+    muse::draw::Painter p(painterProvider, "thumbnail");
+
+    p.setAntialiasing(true);
+    p.scale(mag, mag);
+
+    rendering::IScoreRenderer::ScorePaintOptions opt;
+    opt.isPrinting = true;
+    opt.isSetViewport = false;
+    opt.printPageBackground = false;
+    opt.fromPage = 0;
+    opt.toPage = 0;
+    scoreRenderer()->paintScore(&p, score, opt);
+
+    p.endDraw();
+
+    if (score->layoutMode() != mode) {
+        score->setLayoutMode(mode);
+        score->doLayout();
+    }
+    return pixmap;
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 
 namespace mu::engraving {
 class Factory;
+class Transaction;
 
 //---------------------------------------------------------
 //   @@ LayoutBreak
@@ -49,7 +50,7 @@ public:
     LayoutBreakType layoutBreakType() const { return m_layoutBreakType; }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     double pause() const { return m_pause; }

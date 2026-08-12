@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,9 @@
 #include <functional>
 
 #include "style/style.h"
+
+#include "../editing/edittimesig.h"
+#include "../editing/transaction/transaction.h"
 
 #include "score.h"
 #include "segment.h"
@@ -102,16 +105,16 @@ bool TimeSig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* TimeSig::drop(EditData& data)
+EngravingItem* TimeSig::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->isTimeSig()) {
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
-        // ownership of e is transferred to cmdAddTimeSig
+        // ownership of e is transferred to EditTimeSig::addTimeSig
 
         if (tick() != measure()->endTick()) {
-            score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
+            EditTimeSig::addTimeSig(tx, score(), measure(), staffIdx(), toTimeSig(e), false);
             return nullptr;
         }
 
@@ -126,7 +129,7 @@ EngravingItem* TimeSig::drop(EditData& data)
         }
 
         // Apply change to next measure
-        score()->cmdAddTimeSig(measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
+        EditTimeSig::addTimeSig(tx, score(), measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
         return nullptr;
     }
     delete e;

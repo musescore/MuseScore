@@ -22,22 +22,24 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">mops</metaTag>
     <Part id="1">
-      <Staff>
-        <eid>C_C</eid>
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          </StaffType>
-        </Staff>
+      <eid>C_C</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
       <Instrument id="voice">
-        <longName>Voice</longName>
-        <shortName>Vo.</shortName>
+        <InstrumentLabel>
+          <longName>Voice</longName>
+          <shortName>Vo.</shortName>
+          </InstrumentLabel>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -79,37 +81,26 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>J_J</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>1</staves>
-                  <fractions>1/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>K_K</eid>
               <pitch>60</pitch>
@@ -165,14 +156,6 @@
           <Chord>
             <eid>U_U</eid>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>-1</staves>
-                  <fractions>-1/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>V_V</eid>
               <pitch>59</pitch>
@@ -194,5 +177,13 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>U_U</endElement>
+        <eid>Z_Z</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,8 +47,6 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
         return ElementType::LET_RING;
     case import_t::PALM_MUTE:
         return ElementType::PALM_MUTE;
-    case import_t::WHAMMY_BAR:
-        return ElementType::WHAMMY_BAR;
     case import_t::RASGUEADO:
         return ElementType::RASGUEADO;
     case import_t::PICK_SCRAPE:

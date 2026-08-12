@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "../abstractelementpopupmodel.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Tie;
 class TieJumpPoint;
 }
@@ -48,7 +49,7 @@ public:
 
     QVariantList items() const;
     bool tieDirection() const;
-    static bool canOpen(const EngravingItem* element);
+    static bool canOpen(const engraving::EngravingItem* element);
     QPointF dialogPosition() const;
 
     Q_INVOKABLE void init() override;

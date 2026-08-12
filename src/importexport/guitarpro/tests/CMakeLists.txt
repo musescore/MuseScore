@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -39,3 +39,9 @@ set(MODULE_TEST_LINK
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(SetupGTest)
+
+# libpng/zlib are built as external deps — add their lib dirs to rpath
+# so the test binary can find @rpath/libpng16.16.dylib at runtime.
+set_target_properties(${MODULE_TEST} PROPERTIES
+    BUILD_RPATH "${PROJECT_BINARY_DIR}/_deps/libpng/lib;${PROJECT_BINARY_DIR}/_deps/zlib/lib"
+)

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -171,7 +171,7 @@ int Location::track(const EngravingItem* e)
         const MeasureBase* mb = e->findMeasureBase();
         if (mb && !mb->isMeasure()) {
             // Such elements are written in the first staff,
-            // see writeMeasure() in scorefile.cpp
+            // see writeMeasure() in rw/write/measurewrite.cpp
             track = 0;
         }
     }

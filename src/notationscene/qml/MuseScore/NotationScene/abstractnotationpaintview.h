@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,17 +22,16 @@
 #pragma once
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
 
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "playback/iplaybackcontroller.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
@@ -41,6 +40,7 @@
 
 #include "notationscene/inotationsceneconfiguration.h"
 #include "notationviewinputcontroller.h"
+#include "notationautomationcontroller.h"
 #include "noteinputcursor.h"
 #include "notationruler.h"
 #include "playbackcursor.h"
@@ -50,7 +50,7 @@
 
 namespace mu::notation {
 class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Contextable,
-    public muse::async::Asyncable, public muse::actions::Actionable
+    public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -65,6 +65,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
+    Q_PROPERTY(bool automationMode READ automationMode NOTIFY automationModeChanged)
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
@@ -72,9 +73,8 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
     muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
@@ -125,6 +125,8 @@ public:
     void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
 
+    void showSearch() override;
+
     void showElementPopup(const ElementType& elementType) override;
     void hideElementPopup(const ElementType& elementType) override;
     void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) override;
@@ -136,6 +138,8 @@ public:
     INotationPlaybackPtr notationPlayback() const override;
 
     QQuickItem* asItem() override;
+
+    void scheduleRedraw(const muse::RectF& rect = muse::RectF()) override;
 
     qreal startHorizontalScrollPosition() const;
     qreal horizontalScrollbarSize() const;
@@ -151,12 +155,16 @@ public:
     bool publishMode() const;
     void setPublishMode(bool arg);
 
+    bool automationMode() const;
+
     bool isMainView() const;
     void setIsMainView(bool isMainView);
 
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
+
+    void showSearchRequested();
 
     void showElementPopupRequested(mu::notation::AbstractElementPopupModel::PopupModelType modelType);
     void hideElementPopupRequested();
@@ -169,6 +177,7 @@ signals:
     void matrixChanged();
     void viewportChanged();
     void publishModeChanged();
+    void automationModeChanged();
 
     void activeFocusRequested();
 
@@ -208,18 +217,17 @@ private:
     INotationElementsPtr notationElements() const;
     INotationStylePtr notationStyle() const;
     INotationSelectionPtr notationSelection() const;
+    INotationAutomationPtr notationAutomation() const;
 
     void clear();
     void initBackground();
     void initNavigatorOrientation();
 
-    bool canReceiveAction(const muse::actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
-    void scheduleRedraw(const muse::RectF& rect = muse::RectF());
     muse::RectF correctDrawRect(const muse::RectF& rect) const;
 
     // Input
@@ -256,8 +264,9 @@ private:
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
+    void updatePlaybackCursorInterpolated();
     void movePlaybackCursor(muse::midi::tick_t tick);
-    bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
+    bool shouldAdjustCanvasVerticallyDuringPlayback(const muse::RectF& cursorRect);
 
     void onPlaybackCursorRectChanged();
 
@@ -277,6 +286,8 @@ private:
 
     bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
+    QQuickItem* m_automationLinesContainer = nullptr;
+    std::unique_ptr<NotationAutomationController> m_notationAutomationController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;
@@ -303,6 +314,21 @@ private:
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
 
+    struct PageCache {
+        const Page* page = nullptr;
+        std::optional<bool> adjustVerticallyDuringPlayback;
+
+        void clear()
+        {
+            *this = PageCache();
+        }
+    } mutable m_pageCache;
+
     QQuickItem* m_playbackCursorItem = nullptr;
+
+    muse::secs_t m_lastPlaybackPosition = 0.;
+    qint64 m_lastPlaybackPositionUpdateTimeNs = 0;
+    QTimer m_updatePlaybackCursorInterpolatedTimer;
+    QElapsedTimer m_elapsedTimer;
 };
 }

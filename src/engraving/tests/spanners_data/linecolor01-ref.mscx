@@ -22,16 +22,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -85,78 +87,72 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
-              <eid>F_F</eid>
-              <color r="255" g="0" b="0" a="255"/>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0" y="4"/>
-                <off2 x="0" y="0"/>
-                <minDistance>0</minDistance>
-                <eid>G_G</eid>
-                <color r="255" g="0" b="0" a="255"/>
-                </Segment>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
-            <eid>H_H</eid>
+            <eid>G_G</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>I_I</eid>
+        <eid>H_H</eid>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>J_J</eid>
         <voice>
           <Rest>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>L_L</eid>
         <voice>
           <Rest>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Pedal>
+        <beginHookType>1</beginHookType>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>0</track2>
+        <ticks>1/1</ticks>
+        <eid>N_N</eid>
+        <track>0</track>
+        <color r="255" g="0" b="0" a="255"/>
+        <Segment>
+          <subtype>0</subtype>
+          <offset x="0" y="0"/>
+          <off2 x="0" y="0"/>
+          <minDistance>0</minDistance>
+          <eid>O_O</eid>
+          <track>0</track>
+          <color r="255" g="0" b="0" a="255"/>
+          </Segment>
+        </Pedal>
+      </SpannerMap>
     </Score>
   </museScore>

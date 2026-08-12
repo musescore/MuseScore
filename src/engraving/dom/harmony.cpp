@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,12 +26,10 @@
 #include "translation.h"
 
 #include "draw/fontmetrics.h"
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 
-#include "../editing/textedit.h"
-#include "../editing/undo.h"
 #include "../editing/transpose.h"
+#include "../editing/transaction/transaction.h"
+#include "../editing/transaction/undostack.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -325,9 +323,11 @@ const ElementStyle chordSymbolStyle {
 //   Harmony
 //---------------------------------------------------------
 
-Harmony::Harmony(Segment* parent)
+Harmony::Harmony(EngravingItem* parent)
     : TextBase(ElementType::HARMONY, parent, TextStyleType::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    assert(!parent || parent->isSegment() || parent->isFretDiagram());
+
     m_rootCase   = NoteCaseType::CAPITAL;
     m_bassCase   = NoteCaseType::CAPITAL;
     m_harmonyType = HarmonyType::STANDARD;
@@ -387,6 +387,10 @@ int Harmony::id() const
 Segment* Harmony::getParentSeg() const
 {
     Segment* seg = nullptr;
+    if (!explicitParent()) {
+        return nullptr;
+    }
+
     if (explicitParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
@@ -816,39 +820,50 @@ void Harmony::endEdit(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
+    const bool textEdited = textWasEdited(ed);
+
     TextBase::endEdit(ed);
 
-    if (links()) {
-        for (EngravingObject* e : *links()) {
-            if (e == this) {
-                continue;
-            }
-            Harmony* h = toHarmony(e);
-            // transpose if necessary
-            // at this point chord will already have been rendered in same key as original
-            // (as a result of TextBase::endEdit() calling setText() for linked elements)
-            // we may now need to change the TPC's and the text, and re-render
-            if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
-                Staff* staffDest = h->staff();
-                Segment* segment = getParentSeg();
-                Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-                Interval interval = staffDest->transpose(tick);
-                if (!interval.isZero()) {
-                    if (!h->style().styleB(Sid::concertPitch)) {
-                        interval.flip();
-                    }
-                    for (HarmonyInfo* info : h->m_chords) {
-                        int rootTpc = Transpose::transposeTpc(info->rootTpc(), interval, true);
-                        int bassTpc = Transpose::transposeTpc(info->bassTpc(), interval, true);
-                        info->setRootTpc(rootTpc);
-                        info->setBassTpc(bassTpc);
-                        // score()->undoTransposeHarmony(h, rootTpc, bassTpc);
-                        h->setPlainText(h->harmonyName());
-                        h->setHarmony(h->plainText());
-                        h->triggerLayout();
-                    }
-                }
-            }
+    if (!links() || !textEdited) {
+        return;
+    }
+
+    const bool thisConcertPitch = style().styleB(Sid::concertPitch);
+    const Interval thisInterval = thisConcertPitch ? Interval(0, 0) : staff()->transpose(tick());
+
+    for (EngravingObject* e : *links()) {
+        if (e == this) {
+            continue;
+        }
+        Harmony* h = toHarmony(e);
+        // transpose if necessary
+        // at this point chord will already have been rendered in same key as original
+        // (as a result of TextBase::endEdit() calling setText() for linked elements)
+        // we may now need to change the TPC's and the text, and re-render
+        const bool linkedConcertPitch = h->style().styleB(Sid::concertPitch);
+        if (thisConcertPitch == linkedConcertPitch) {
+            continue;
+        }
+
+        Score* linkedScore = h->score();
+        const Staff* linkedStaff = h->staff();
+        const Interval linkedInterval = linkedConcertPitch ? Interval(0, 0) : linkedStaff->transpose(h->tick());
+        const Interval transposeDiff(thisInterval.diatonic - linkedInterval.diatonic, thisInterval.chromatic - linkedInterval.chromatic);
+        if (transposeDiff.isZero()) {
+            continue;
+        }
+
+        UndoStack* undoStack = linkedScore->undoStack();
+        const size_t undoIdx = undoStack->currentIndex();
+
+        score()->transactionManager()->transaction(TranslatableString("undoableAction", "Transpose harmony"), [&](auto& tx) {
+            Transpose::undoTransposeHarmony(tx, h, transposeDiff);
+        });
+
+        // Merge with end of text editing
+        if (undoIdx != undoStack->currentIndex() && undoStack->currentIndex() >= 2) {
+            const size_t penultimateCmdIdx = undoStack->currentIndex() - 2;
+            undoStack->mergeTransactions(penultimateCmdIdx);
         }
     }
 }
@@ -1437,7 +1452,7 @@ bool Harmony::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Harmony::drop(EditData& data)
+EngravingItem* Harmony::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
@@ -1446,7 +1461,7 @@ EngravingItem* Harmony::drop(EditData& data)
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
-        TextBase::drop(data);
+        TextBase::drop(tx, data);
         renderer()->layoutText1(this);
         e = 0;          // cannot select
     } else {
@@ -1461,6 +1476,28 @@ void Harmony::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 {
     if (id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE) {
         EngravingItem::undoChangeProperty(id, v, ps);
+    } else if (id == Pid::EXCLUDE_VERTICAL_ALIGN) {
+        TextBase::undoChangeProperty(id, v, ps);
+
+        bool val = v.toBool();
+        FretDiagram* fd = getParentFretDiagram();
+        if (fd && fd->excludeVerticalAlign() != val) {
+            fd->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+        }
+        Segment* parentSeg = getParentSeg();
+        if (!parentSeg) {
+            return;
+        }
+        for (EngravingItem* item : parentSeg->annotations()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
+                continue;
+            }
+
+            if (item->excludeVerticalAlign() != val) {
+                item->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+            }
+        }
+        return;
     }
 
     TextBase::undoChangeProperty(id, v, ps);
@@ -1524,25 +1561,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         m_realizedHarmony.setDuration(HDuration(v.toInt()));
         break;
     case Pid::EXCLUDE_VERTICAL_ALIGN: {
-        bool val = v.toBool();
-        setExcludeVerticalAlign(val);
-        FretDiagram* fd = getParentFretDiagram();
-        if (fd && fd->excludeVerticalAlign() != val) {
-            fd->setExcludeVerticalAlign(val);
-        }
-        Segment* parentSeg = getParentSeg();
-        if (!parentSeg) {
-            break;
-        }
-        for (EngravingItem* item : parentSeg->annotations()) {
-            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
-                continue;
-            }
-
-            if (item->excludeVerticalAlign() != val) {
-                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
-            }
-        }
+        setExcludeVerticalAlign(v.toBool());
         break;
     }
     case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
@@ -1603,13 +1622,6 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::OFFSET: {
-        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-        if (fd && fd->visible()) {
-            v = PropertyValue::fromValue(PointF(0.0, 0.0));
-            break;
-        }
-    }
     // fall-through
     default:
         v = TextBase::propertyDefault(id);
@@ -1629,21 +1641,6 @@ bool Harmony::positionRelativeToNoteheadRest() const
 
 Sid Harmony::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
-        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-
-        if (fd && fd->visible()) {
-            return Sid::NOSTYLE;
-        } else if (textStyleType() == TextStyleType::HARMONY_A) {
-            return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_B) {
-            return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_ROMAN) {
-            return placeAbove() ? Sid::romanNumeralPosAbove : Sid::romanNumeralPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_NASHVILLE) {
-            return placeAbove() ? Sid::nashvilleNumberPosAbove : Sid::nashvilleNumberPosBelow;
-        }
-    }
     if (pid == Pid::PLACEMENT) {
         switch (m_harmonyType) {
         case HarmonyType::STANDARD:

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../compat/midi/midipatch.h"
 #include "../dom/drumset.h"
@@ -31,7 +31,7 @@
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class InsertPart : public UndoCommand
+class InsertPart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertPart)
 
@@ -40,8 +40,8 @@ class InsertPart : public UndoCommand
 
 public:
     InsertPart(Part* p, size_t targetPartIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::InsertPart)
@@ -49,7 +49,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class RemovePart : public UndoCommand
+class RemovePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemovePart)
 
@@ -58,8 +58,8 @@ class RemovePart : public UndoCommand
 
 public:
     RemovePart(Part*, size_t partIdx);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::RemovePart)
@@ -67,7 +67,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
-class SetSoloist : public UndoCommand
+class SetSoloist : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetSoloist)
 
@@ -76,26 +76,25 @@ class SetSoloist : public UndoCommand
 
 public:
     SetSoloist(Part* p, bool b);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
     UNDO_TYPE(CommandType::SetSoloist)
     UNDO_NAME("SetSoloist")
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangePart : public UndoCommand
+class ChangePart : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePart)
 
     Part* part = nullptr;
     Instrument* instrument = nullptr;
-    String partName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
-    ChangePart(Part*, Instrument*, const String& name);
+    ChangePart(Part*, Instrument*);
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::ChangePart)
@@ -103,7 +102,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentLong : public UndoCommand
+class ChangeInstrumentLong : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentLong)
 
@@ -111,7 +110,7 @@ class ChangeInstrumentLong : public UndoCommand
     Fraction tick;
     String longName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentLong(const Fraction&, Part*, const String&);
@@ -121,7 +120,7 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeInstrumentShort : public UndoCommand
+class ChangeInstrumentShort : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentShort)
 
@@ -129,7 +128,7 @@ class ChangeInstrumentShort : public UndoCommand
     Fraction tick;
     String shortName;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeInstrumentShort(const Fraction&, Part*, const String&);
@@ -139,7 +138,45 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
-class ChangeDrumset : public UndoCommand
+class ChangeInstrumentGroupOptions : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeInstrumentGroupOptions)
+
+    Part* part = nullptr;
+    Fraction tick;
+    bool useCustom;
+    String longName;
+    String shortName;
+
+    void flip() override;
+
+public:
+    ChangeInstrumentGroupOptions(const Fraction&, Part*, bool, const String&, const String&);
+
+    UNDO_TYPE(CommandType::ChangeInstrumentGroupOptions)
+    UNDO_NAME("ChangeInstrumentGroupOptions")
+    UNDO_CHANGED_OBJECTS({ part })
+};
+
+class ChangeInstrumentNumber : public UndoableCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeInstrumentNumber)
+
+    Part* part = nullptr;
+    Fraction tick;
+    int number;
+
+    void flip() override;
+
+public:
+    ChangeInstrumentNumber(const Fraction&, Part*, int v);
+
+    UNDO_TYPE(CommandType::ChangeInstrumentNumber)
+    UNDO_NAME("ChangeInstrumentNumber")
+    UNDO_CHANGED_OBJECTS({ part })
+};
+
+class ChangeDrumset : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeDrumset)
 
@@ -147,7 +184,7 @@ class ChangeDrumset : public UndoCommand
     Drumset drumset;
     Part* part = nullptr;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeDrumset(Instrument* i, const Drumset& d, Part* p)
@@ -157,7 +194,7 @@ public:
     UNDO_NAME("ChangeDrumset")
 };
 
-class ChangeStringData : public UndoCommand
+class ChangeStringData : public UndoableCommand
 {
     Instrument* m_instrument = nullptr;
     StringTunings* m_stringTunings = nullptr;
@@ -169,11 +206,11 @@ public:
     ChangeStringData(Instrument* instrument, const StringData& stringData)
         : m_instrument(instrument), m_stringData(stringData) {}
 
-    void flip(EditData*) override;
+    void flip() override;
     UNDO_NAME("ChangeStringData")
 };
 
-class ChangePatch : public UndoCommand
+class ChangePatch : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePatch)
 
@@ -181,7 +218,7 @@ class ChangePatch : public UndoCommand
     InstrChannel* channel = nullptr;
     MidiPatch patch;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
@@ -190,14 +227,14 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class SetUserBankController : public UndoCommand
+class SetUserBankController : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, SetUserBankController)
 
     InstrChannel* channel = nullptr;
     bool val = false;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     SetUserBankController(InstrChannel* c, bool v)
@@ -205,6 +242,8 @@ public:
     UNDO_NAME("SetUserBankController")
 };
 
+class InstrumentTemplate;
+struct ScoreOrder;
 class Staff;
 class StaffType;
 enum class PreferSharpFlat : char;
@@ -213,8 +252,7 @@ enum class StaffTypes : signed char;
 class EditPart
 {
 public:
-    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr,
-                                      const String& partName = String());
+    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr);
 
     static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
 
@@ -223,6 +261,9 @@ public:
     static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
     static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
     static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
+    static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+                                              const String& shortName);
+    static void setInstrumentCustomGroupAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
 
     static void removeParts(Score* score, const std::vector<Part*>& parts);
@@ -233,5 +274,20 @@ public:
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+
+    static Staff* appendStaff(Score* score, Part* destinationPart);
+    static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
+
+    static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
+
+    static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset);
+
+    static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
+    static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
+
+    static void setScoreOrder(Score* score, const ScoreOrder& order);
+
+private:
+    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };
 }

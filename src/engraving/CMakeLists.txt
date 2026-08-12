@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -69,6 +69,7 @@ target_sources(engraving PRIVATE
     engravingproject.h
     iengravingpluginapihelper.h
     iengravingconfiguration.h
+    iengravingcontextconfiguration.h
     iengravingfont.h
     iengravingfontsprovider.h
 
@@ -102,68 +103,124 @@ target_sources(engraving PRIVATE
 
     editing/addremoveelement.cpp
     editing/addremoveelement.h
+    editing/clonevoice.cpp
+    editing/clonevoice.h
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
-    editing/editbrackets.cpp
-    editing/editbrackets.h
+    editing/editaccidentalbrackets.cpp
+    editing/editaccidentalbrackets.h
+    editing/editautomationpoints.cpp
+    editing/editautomationpoints.h
+    editing/editbeam.cpp
+    editing/editbeam.h
+    editing/editstaffbrackets.cpp
+    editing/editstaffbrackets.h
     editing/editcapo.cpp
     editing/editcapo.h
     editing/editchord.cpp
     editing/editchord.h
     editing/editclef.cpp
     editing/editclef.h
-    editing/editharppedaldiagram.cpp
-    editing/editharppedaldiagram.h
-    editing/editinstrumentchange.cpp
-    editing/editinstrumentchange.h
+    editing/editcrossstaff.cpp
+    editing/editcrossstaff.h
     editing/editdata.cpp
     editing/editdata.h
+    editing/editduration.cpp
+    editing/editduration.h
+    editing/editenharmonicspelling.cpp
+    editing/editenharmonicspelling.h
     editing/editexcerpt.cpp
     editing/editexcerpt.h
     editing/editfretboarddiagram.cpp
     editing/editfretboarddiagram.h
+    editing/edithairpin.cpp
+    editing/edithairpin.h
+    editing/editharppedaldiagram.cpp
+    editing/editharppedaldiagram.h
+    editing/editinstrumentchange.cpp
+    editing/editinstrumentchange.h
     editing/editkeysig.cpp
     editing/editkeysig.h
+    editing/editmeasurerepeat.cpp
+    editing/editmeasurerepeat.h
     editing/editmeasures.cpp
     editing/editmeasures.h
     editing/editnote.cpp
     editing/editnote.h
+    editing/editpagelocks.cpp
+    editing/editpagelocks.h
+    editing/editparentheses.cpp
+    editing/editparentheses.h
     editing/editpart.cpp
     editing/editpart.h
     editing/editproperty.cpp
     editing/editproperty.h
+    editing/editrehearsalmark.cpp
+    editing/editrehearsalmark.h
     editing/editscoreproperties.cpp
     editing/editscoreproperties.h
+    editing/editslashnotation.cpp
+    editing/editslashnotation.h
     editing/editsoundflag.cpp
     editing/editsoundflag.h
     editing/editspanner.cpp
     editing/editspanner.h
     editing/editstaff.cpp
     editing/editstaff.h
+    editing/editstavesharing.cpp
+    editing/editstavesharing.h
+    editing/editstretch.cpp
+    editing/editstretch.h
     editing/editstyle.cpp
     editing/editstyle.h
     editing/editsystemlocks.cpp
     editing/editsystemlocks.h
     editing/edittie.cpp
     editing/edittie.h
+    editing/edittimesig.cpp
+    editing/edittimesig.h
     editing/edittremolo.cpp
     editing/edittremolo.h
-    editing/editvoicing.cpp
-    editing/editvoicing.h
+    editing/editvisibility.cpp
+    editing/editvisibility.h
+    editing/editvoice.cpp
+    editing/editvoice.h
+    editing/elementeditdata.h
+    editing/exchangevoices.cpp
+    editing/exchangevoices.h
+    editing/flip.cpp
+    editing/flip.h
+    editing/implodeexplode.cpp
+    editing/implodeexplode.h
     editing/inserttime.cpp
     editing/inserttime.h
-    editing/elementeditdata.h
     editing/mscoreview.cpp
     editing/mscoreview.h
+    editing/navigation.cpp
+    editing/navigation.h
+    editing/noteinput.cpp
+    editing/noteinput.h
+    editing/paste.cpp
+    editing/paste.h
+    editing/realizechordsymbols.cpp
+    editing/realizechordsymbols.h
+    editing/regroup.cpp
+    editing/regroup.h
+    editing/reset.cpp
+    editing/reset.h
     editing/splitjoinmeasure.cpp
     editing/splitjoinmeasure.h
     editing/textedit.cpp
     editing/textedit.h
+    editing/transaction/transaction.cpp
+    editing/transaction/transaction.h
+    editing/transaction/undoablecommand.cpp
+    editing/transaction/undoablecommand.h
+    editing/transaction/undostack.cpp
+    editing/transaction/undostack.h
     editing/transpose.cpp
     editing/transpose.h
-    editing/undo.cpp
-    editing/undo.h
 
     rw/ireader.h
     rw/iwriter.h
@@ -244,6 +301,17 @@ target_sources(engraving PRIVATE
     rw/read460/connectorinforeader.cpp
     rw/read460/connectorinforeader.h
 
+    rw/read500/read500.cpp
+    rw/read500/read500.h
+    rw/read500/staffread.cpp
+    rw/read500/staffread.h
+    rw/read500/measureread.cpp
+    rw/read500/measureread.h
+    rw/read500/readcontext.cpp
+    rw/read500/readcontext.h
+    rw/read500/tread.cpp
+    rw/read500/tread.h
+
     rw/compat/readstyle.cpp
     rw/compat/readstyle.h
     rw/compat/readchordlisthook.cpp
@@ -302,11 +370,13 @@ target_sources(engraving PRIVATE
     rendering/paddingtable.h
 
     automation/automationtypes.h
-    automation/iautomation.h
-    automation/internal/automation.cpp
-    automation/internal/automation.h
-    automation/internal/automationcontroller.cpp
-    automation/internal/automationcontroller.h
+    automation/automationtypes_fwd.h
+    automation/automationdata.cpp
+    automation/automationdata.h
+    automation/internal/automationrw.cpp
+    automation/internal/automationrw.h
+    automation/internal/scoreautomationcontroller.cpp
+    automation/internal/scoreautomationcontroller.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
@@ -332,10 +402,12 @@ endif()
 if (ENGRAVING_NO_INTERNAL)
     target_compile_definitions(engraving PUBLIC ENGRAVING_NO_INTERNAL ENGRAVING_NO_INTERACTIVE ENGRAVING_NO_API)
 else()
-    include(${CMAKE_CURRENT_LIST_DIR}/api/v1/api_v1.cmake)
+    include(api/v1/api_v1.cmake)
     target_sources(engraving PRIVATE
         internal/engravingconfiguration.cpp
         internal/engravingconfiguration.h
+        internal/engravingcontextconfiguration.cpp
+        internal/engravingcontextconfiguration.h
         internal/qmimedataadapter.cpp
         internal/qmimedataadapter.h
         internal/engravingfontsprovider.cpp
@@ -361,7 +433,7 @@ set_source_files_properties(
     dom/transpose.cpp
     editing/transpose.cpp
     style/style.cpp
-    #${CMAKE_CURRENT_LIST_DIR}/api/vi/style.cpp
+    #api/vi/style.cpp
 
     infrastructure/mscreader.cpp
     infrastructure/mscwriter.cpp
@@ -389,6 +461,13 @@ set_source_files_properties(
     rw/read460/readcontext.cpp
     rw/read460/tread.cpp
     rw/read460/connectorinforeader.cpp
+    
+    #rw/read500/read500.cpp
+    rw/read500/staffread.cpp
+    rw/read500/measureread.cpp
+    rw/read500/readcontext.cpp
+    rw/read500/tread.cpp
+    rw/read500/connectorinforeader.cpp
 
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
 )
@@ -412,7 +491,7 @@ endif()
 
 target_include_directories(engraving PRIVATE
     infrastructure
-    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    thirdparty/dtl
 )
 
 target_link_libraries(engraving PRIVATE muse::draw)

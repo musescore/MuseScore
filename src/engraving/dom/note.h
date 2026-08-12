@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,17 +34,18 @@
 #include "tiejumppointlist.h"
 
 namespace mu::engraving {
-class Factory;
-class Tie;
-class Chord;
-class Text;
-class Score;
-class AccidentalState;
 class Accidental;
+class AccidentalState;
+class Chord;
+class Factory;
 class NoteDot;
+class NoteEditData;
+class Score;
 class Spanner;
 class StaffType;
-class NoteEditData;
+class Text;
+class Tie;
+class Transaction;
 enum class AccidentalType : unsigned char;
 enum class NoteType : unsigned char;
 struct NoteParenthesisInfo;
@@ -104,7 +105,7 @@ static const int INVALID_LINE = -10000;
 //   @P elements         array[EngravingItem]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
-//   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
+//   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_NO_ACCIDENTALS, .HEAD_PITCHNAME_GERMAN, .HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
 //   @P headGroup        enum (NoteHeadGroup.HEAD_NORMAL, .HEAD_BREVIS_ALT, .HEAD_CROSS, .HEAD_DIAMOND, .HEAD_DO, .HEAD_FA, .HEAD_LA, .HEAD_MI, .HEAD_RE, .HEAD_SLASH, .HEAD_LARGE_DIAMOND, .HEAD_SOL, .HEAD_TI, .HEAD_XCIRCLE, .HEAD_TRIANGLE)
 //   @P headType         enum (NoteHeadType.HEAD_AUTO, .HEAD_BREVIS, .HEAD_HALF, .HEAD_QUARTER, .HEAD_WHOLE)
 //   @P hidden           bool             hidden, not played note (read only)
@@ -166,6 +167,8 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
+
+    staff_idx_t vStaffIdx() const override;
 
     int playTicks() const;
     Fraction playTicksFraction() const;
@@ -296,7 +299,7 @@ public:
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     bool hidden() const { return m_hidden; }
     void setHidden(bool val) { m_hidden = val; }
@@ -375,7 +378,6 @@ public:
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }
     void setScore(Score* s) override;
-    void setDotRelativeLine(int);
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
@@ -385,7 +387,7 @@ public:
     EngravingItem* prevInEl(EngravingItem* e);
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
-    virtual EngravingItem* lastElementBeforeSegment();
+    EngravingItem* lastElementBeforeSegment();
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
@@ -449,6 +451,8 @@ public:
 
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
+
+    bool isExactUnison(Note* other);
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };

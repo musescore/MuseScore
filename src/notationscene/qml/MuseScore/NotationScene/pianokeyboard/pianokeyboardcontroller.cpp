@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2022 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,7 +22,14 @@
 #include "pianokeyboardcontroller.h"
 
 #include "defer.h"
-#include "log.h"
+
+#include "midi/midievent.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
+#include "notation/inotationmidiinput.h"
+#include "notation/inotationnoteinput.h" // IWYU pragma: keep
+#include "notation/inotationselection.h" // IWYU pragma: keep
 
 using namespace mu::notation;
 using namespace muse::midi;

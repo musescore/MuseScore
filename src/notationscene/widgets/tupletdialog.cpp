@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "tupletdialog.h"
 
 #include "engraving/dom/tuplet.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationstyle.h"
+#include "notationcommands.h"
+
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse::ui;
-using namespace muse::actions;
+using namespace muse;
 
 //---------------------------------------------------------
 //   TupletDialog
 //---------------------------------------------------------
 
 TupletDialog::TupletDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("TupletDialog");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
 
+void TupletDialog::componentComplete()
+{
     connect(buttonBox, &QDialogButtonBox::clicked, this, &TupletDialog::bboxClicked);
 
     defaultToStyleSettings();
@@ -119,13 +128,12 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    TupletOptions options;
-    options.ratio = Fraction(actualNotes->value(), normalNotes->value());
-    options.numberType = numberType();
-    options.bracketType = bracketType();
+    rcommand::CommandQuery query(ADD_TUPLET_COMMAND);
+    query.addParam("ratio", Val(Fraction(actualNotes->value(), normalNotes->value()).toString().toStdString()));
+    query.addParam("number-type", Val(engraving::str_conv(numberType())));
+    query.addParam("bracket-type", Val(engraving::str_conv(bracketType())));
 
-    ActionData data_ = ActionData::make_arg1<TupletOptions>(options);
-    dispatcher()->dispatch("custom-tuplet", data_);
+    dispatcher()->dispatch(query);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)

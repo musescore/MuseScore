@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,14 +22,15 @@
 
 #pragma once
 
-#include <QPaintEvent>
 #include <QFrame>
+#include <QPaintEvent>
+
+#include "draw/types/transform.h"
 
 #include "engraving/editing/mscoreview.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "draw/types/transform.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -55,7 +56,7 @@ public:
     void removeScore() override;
 
     void changeEditElement(engraving::EngravingItem*) override;
-    void setDropRectangle(const muse::RectF&) override;
+    void setDropRectangles(const std::vector<muse::RectF>& rects) override;
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
 
@@ -67,7 +68,7 @@ protected:
     muse::PointF toLogical(const QPointF& point);
 
 private:
-    void drawElements(muse::draw::Painter& painter, const std::vector<EngravingItem*>& el);
+    void drawElements(muse::draw::Painter& painter, const std::vector<engraving::EngravingItem*>& el);
     void paintEvent(QPaintEvent*) override;
     void wheelEvent(QWheelEvent*) override;
     void constraintCanvas(int* dxx);

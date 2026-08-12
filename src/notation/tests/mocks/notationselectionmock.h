@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -52,6 +52,7 @@ public:
     MOCK_METHOD(mu::engraving::MeasureBase*, startMeasureBase, (), (const, override));
     MOCK_METHOD(mu::engraving::MeasureBase*, endMeasureBase, (), (const, override));
     MOCK_METHOD(std::vector<System*>, selectedSystems, (), (const, override));
+    MOCK_METHOD(std::vector<Page*>, pagesContainingSelection, (), (const, override));
 
     MOCK_METHOD(bool, elementsSelected, (const mu::engraving::ElementTypeSet&), (const, override));
 };

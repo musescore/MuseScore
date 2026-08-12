@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -213,6 +213,13 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
 
         { "guzheng", { SoundId::Guzheng, SoundCategory::Strings, { SoundSubCategory::Chinese,
                                                                    SoundSubCategory::Plucked } } },
+        { "guqin", { SoundId::Guqin, SoundCategory::Strings, { SoundSubCategory::Chinese,
+                                                               SoundSubCategory::Plucked } } },
+        { "pipa", { SoundId::Pipa, SoundCategory::Strings, { SoundSubCategory::Chinese,
+                                                             SoundSubCategory::Plucked } } },
+        { "yangqin", { SoundId::Yangqin, SoundCategory::Strings, { SoundSubCategory::Chinese } } },
+        { "gayageum", { SoundId::Gayageum, SoundCategory::Strings, { SoundSubCategory::Korean,
+                                                                     SoundSubCategory::Plucked } } },
         { "koto", { SoundId::Koto, SoundCategory::Strings, { SoundSubCategory::Japanese,
                                                              SoundSubCategory::Plucked } } },
         { "oud", { SoundId::Oud, SoundCategory::Strings, { SoundSubCategory::African,
@@ -263,6 +270,7 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
         { "octobass", { SoundId::Octobass, SoundCategory::Strings } },
         { "erhu", { SoundId::Erhu, SoundCategory::Strings, { SoundSubCategory::Chinese } } },
         { "nyckelharpa", { SoundId::Nyckelharpa, SoundCategory::Strings, { SoundSubCategory::Swedish } } },
+        { "ajaeng", { SoundId::Ajaeng, SoundCategory::Strings, { SoundSubCategory::Korean } } },
 
         { "bass-synthesizer", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                                 SoundSubCategory::Bass,

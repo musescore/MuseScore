@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,10 +22,13 @@
 
 #include "onlinesoundsstatusmodel.h"
 
-#include "audio/common/audioerrors.h"
+#include "global/async/async.h"
+#include "global/translation.h"
 
-#include "async/async.h"
-#include "translation.h"
+#include "audio/common/audioerrors.h"
+#include "notation/imasternotation.h"
+#include "notation/inotationplayback.h" // IWYU pragma: keep
+#include "playback/playbackcommands.h"
 
 using namespace mu::notation;
 using namespace mu::playback;
@@ -91,7 +94,7 @@ void OnlineSoundsStatusModel::load()
 void OnlineSoundsStatusModel::processOnlineSounds()
 {
     if (m_manualProcessingAllowed) {
-        dispatcher()->dispatch("process-online-sounds");
+        commandsDispatcher()->dispatch(PROCESS_ONLINESOUNDS_COMMAND);
     }
 }
 
@@ -176,8 +179,8 @@ void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault
     setManualProcessingAllowed(enableByDefault);
 
     m_tracksDataChanged = master->playback()->tracksDataChanged();
-    m_tracksDataChanged.onReceive(this, [this](const InstrumentTrackIdSet& changedTrackIdSet) {
-        for (const InstrumentTrackId& trackId : changedTrackIdSet) {
+    m_tracksDataChanged.onReceive(this, [this](const engraving::InstrumentTrackIdSet& changedTrackIdSet) {
+        for (const engraving::InstrumentTrackId& trackId : changedTrackIdSet) {
             if (muse::contains(m_onlineTrackIdSet, trackId)) {
                 setManualProcessingAllowed(true);
                 return;
@@ -196,7 +199,7 @@ void OnlineSoundsStatusModel::setManualProcessingAllowed(bool allowed)
     emit manualProcessingAllowedChanged();
 
     if (allowed && m_shouldNotifyToursThatManualProcessingAllowed) {
-        muse::async::Async::call(this, [=]() {
+        muse::async::Async::call(this, [this]() {
             tours()->onEvent(u"online_sounds_manual_processing_allowed");
         });
 

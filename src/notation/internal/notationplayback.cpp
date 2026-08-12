@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,7 +37,6 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempo.h"
-#include "engraving/dom/tempotext.h"
 #include "engraving/dom/utils.h"
 
 #include "notationerrors.h"
@@ -176,10 +175,10 @@ void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& cou
 {
     muse::mpe::duration_t durationInMicrosecs = 0;
     m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
-    countInDuration = audio::microsecsToSecs(durationInMicrosecs);
+    countInDuration = muse::usecs_to_secs(durationInMicrosecs);
 }
 
-void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick)
+void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, staff_idx_t staffIdx, int tick)
 {
     if (list.empty()) {
         return;
@@ -201,7 +200,7 @@ void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEvent
     };
 
     mpe::PlaybackData& data = m_playbackModel.resolveTrackPlaybackData(trackId);
-    data.offStream.send(events, {}, false /*flushOffstream*/);
+    data.offStream.send(events, false /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
@@ -378,11 +377,17 @@ void NotationPlayback::setLoopBoundariesEnabled(bool enabled)
 
     m_loopBoundaries.enabled = enabled;
     m_loopBoundariesChanged.notify();
+    m_loopEnabledChanged.send(enabled);
 }
 
 bool NotationPlayback::isLoopEnabled() const
 {
     return !m_loopBoundaries.isNull() && m_loopBoundaries.enabled;
+}
+
+Channel<bool> NotationPlayback::loopEnabledChanged() const
+{
+    return m_loopEnabledChanged;
 }
 
 const LoopBoundaries& NotationPlayback::loopBoundaries() const

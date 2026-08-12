@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,7 +40,11 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
-    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY themesChanged)
+    Q_PROPERTY(QStringList generalThemeCodes READ generalThemeCodes CONSTANT)
+    Q_PROPERTY(QStringList highContrastThemeCodes READ highContrastThemeCodes CONSTANT)
+
+    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
+
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
@@ -64,7 +68,8 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
     Q_PROPERTY(
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
-    Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)
+
+    Q_PROPERTY(QColor engravingColor READ engravingColor WRITE setEngravingColor NOTIFY engravingColorChanged)
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
@@ -86,6 +91,8 @@ public:
     bool isFollowSystemTheme() const;
 
     bool highContrastEnabled() const;
+    QStringList generalThemeCodes() const;
+    QStringList highContrastThemeCodes() const;
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
 
@@ -107,7 +114,8 @@ public:
 
     bool scoreInversionEnabled() const;
     bool isOnlyInvertInDarkTheme() const;
-    bool isCurrentThemeDark() const;
+
+    QColor engravingColor() const;
 
     Q_INVOKABLE void resetAppearancePreferencesToDefault();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
@@ -130,9 +138,11 @@ public slots:
     void setForegroundWallpaperPath(const QString& path);
     void setScoreInversionEnabled(bool value);
     void setOnlyInvertInDarkTheme(bool value);
+    void setEngravingColor(const QColor& color);
 
 signals:
     void isFollowSystemThemeChanged();
+    void highContrastEnabledChanged();
     void themesChanged();
     void currentFontIndexChanged();
     void bodyTextSizeChanged();
@@ -144,9 +154,12 @@ signals:
     void foregroundWallpaperPathChanged();
     void invertScoreColorChanged();
     void isOnlyInvertInDarkThemeChanged();
+    void engravingColorChanged();
 
 private:
     muse::ui::ThemeInfo currentTheme() const;
     muse::ui::ThemeList allThemes() const;
+
+    bool m_lastHighContrast = false;
 };
 }

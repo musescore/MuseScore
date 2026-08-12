@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,16 +22,15 @@
 #include "playbackcontrollerstub.h"
 
 using namespace mu::playback;
-using namespace muse::actions;
 
 bool PlaybackControllerStub::isPlayAllowed() const
 {
     return false;
 }
 
-muse::async::Notification PlaybackControllerStub::isPlayAllowedChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::isPlayAllowedChanged() const
 {
-    return muse::async::Notification();
+    return {};
 }
 
 bool PlaybackControllerStub::isPlaying() const
@@ -39,28 +38,114 @@ bool PlaybackControllerStub::isPlaying() const
     return false;
 }
 
-muse::async::Notification PlaybackControllerStub::isPlayingChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::isPlayingChanged() const
 {
-    return muse::async::Notification();
+    return {};
 }
 
-void PlaybackControllerStub::reset()
+bool PlaybackControllerStub::isPlaybackInited() const
 {
+    return false;
 }
 
-muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
 {
-    return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
+    return {};
 }
 
-muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
+muse::Ret PlaybackControllerStub::togglePlay()
 {
-    return 0;
+    return muse::make_ok();
 }
 
-muse::async::Notification PlaybackControllerStub::currentTrackSequenceIdChanged() const
+muse::Ret PlaybackControllerStub::play(bool)
 {
-    return muse::async::Notification();
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::playFromSelection(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::pause(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::stop()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::rewind(muse::secs_t)
+{
+    return muse::make_ok();
+}
+
+bool PlaybackControllerStub::isLoopEnabled() const
+{
+    return false;
+}
+
+muse::async::Channel<bool> PlaybackControllerStub::loopEnabledChanged() const
+{
+    return {};
+}
+
+muse::Ret PlaybackControllerStub::toggleLoopPlayback()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::addLoopBoundary(LoopBoundaryType)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleMetronome()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleMidiInput()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::setMidiUseWrittenPitch(bool)
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::togglePlayRepeats()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::togglePlayChordSymbols()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleAutomaticallyPan()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleCountIn()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::toggleHearPlaybackWhenEditing()
+{
+    return muse::make_ok();
+}
+
+muse::Ret PlaybackControllerStub::reloadPlaybackCache()
+{
+    return muse::make_ok();
 }
 
 const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrumentTrackIdMap() const
@@ -112,11 +197,11 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
-void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&, const PlayParams&, bool)
+void PlaybackControllerStub::playElements(const std::vector<const engraving::EngravingItem*>&, const PlayParams&, bool)
 {
 }
 
-void PlaybackControllerStub::playNotes(const notation::NoteValList&, notation::staff_idx_t, const notation::Segment*,
+void PlaybackControllerStub::playNotes(const engraving::NoteValList&, engraving::staff_idx_t, const engraving::Segment*,
                                        const PlayParams&)
 {
 }
@@ -125,26 +210,16 @@ void PlaybackControllerStub::playMetronome(int)
 {
 }
 
-void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int)
+void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, engraving::staff_idx_t, int)
 {
 }
 
-void PlaybackControllerStub::seekElement(const notation::EngravingItem*, bool)
+void PlaybackControllerStub::seekElement(const engraving::EngravingItem*, bool)
 {
 }
 
 void PlaybackControllerStub::seekBeat(int, int, bool)
 {
-}
-
-bool PlaybackControllerStub::actionChecked(const ActionCode&) const
-{
-    return false;
-}
-
-muse::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() const
-{
-    return {};
 }
 
 muse::secs_t PlaybackControllerStub::totalPlayTime() const
@@ -168,7 +243,7 @@ muse::async::Notification PlaybackControllerStub::currentTempoChanged() const
     return {};
 }
 
-mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
+mu::engraving::MeasureBeat PlaybackControllerStub::currentBeat() const
 {
     return {};
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -350,7 +350,7 @@ extern braille_code Braille_FigureExtension;
 extern braille_code Braille_FirstValueRange;
 //#16th-128th notes range
 extern braille_code Braille_SecondValueRange;
-//#256th notes and and further range
+//#256th notes and further range
 extern braille_code Braille_ThirdValueRange;
 
 extern braille_code* Braille_ValueRanges[];

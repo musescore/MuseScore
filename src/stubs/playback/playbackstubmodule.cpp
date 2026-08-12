@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,13 +30,24 @@
 using namespace mu::playback;
 using namespace muse::modularity;
 
+static const std::string mname("playback_stub");
+
 std::string PlaybackModule::moduleName() const
 {
-    return "playback_stub";
+    return mname;
 }
 
 void PlaybackModule::registerExports()
 {
-    globalIoc()->registerExport<IPlaybackController>(moduleName(), new PlaybackControllerStub());
     globalIoc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfigurationStub());
+}
+
+IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new PlaybackContext(ctx);
+}
+
+void PlaybackContext::registerExports()
+{
+    ioc()->registerExport<IPlaybackController>(mname, new PlaybackControllerStub());
 }

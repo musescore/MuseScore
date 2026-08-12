@@ -17,7 +17,6 @@
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/measurerepeat.h"
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/noteevent.h"
 #include "dom/part.h"
@@ -35,7 +34,7 @@
 #include "dom/trill.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
+#include "editing/navigation.h"
 #include "types/constants.h"
 
 namespace mu::engraving {
@@ -119,7 +118,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 Chord* nextChord = nullptr;
                 ChordRestNavigateOptions options;
                 options.skipGrace = true;
-                if (ChordRest* chr = nextChordRest(chord, options); chr && chr->isChord()) {
+                if (ChordRest* chr = Navigation::nextChordRest(chord, options); chr && chr->isChord()) {
                     nextChord = toChord(chr);
                 }
 

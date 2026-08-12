@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -36,8 +36,8 @@ qt_add_qml_module(preferences_qml
         braillepreferencesmodel.h
         canvaspreferencesmodel.cpp
         canvaspreferencesmodel.h
-        commonaudioapiconfigurationmodel.cpp
-        commonaudioapiconfigurationmodel.h
+        commonaudiodriverconfigurationmodel.cpp
+        commonaudiodriverconfigurationmodel.h
         folderspreferencesmodel.cpp
         folderspreferencesmodel.h
         generalpreferencesmodel.cpp
@@ -56,8 +56,8 @@ qt_add_qml_module(preferences_qml
         saveandpublishpreferencesmodel.h
         scorepreferencesmodel.cpp
         scorepreferencesmodel.h
-        updatepreferencesmodel.cpp
-        updatepreferencesmodel.h
+        videopreferencesmodel.cpp
+        videopreferencesmodel.h
     QML_FILES
         AccentColorsList.qml
         AdvancedPreferencesPage.qml
@@ -77,11 +77,11 @@ qt_add_qml_module(preferences_qml
         ScorePreferencesPage.qml
         ShortcutsPreferencesPage.qml
         ThemeSamplesList.qml
-        UpdatePreferencesPage.qml
+        VideoPreferencesPage.qml
 
         internal/AccentColorsSection.qml
         internal/AdvancedTopSection.qml
-        internal/AudioApiSection.qml
+        internal/AudioDriverSection.qml
         internal/AudioEngineSection.qml
         internal/AutomaticUpdateSection.qml
         internal/AutoSaveSection.qml
@@ -91,7 +91,7 @@ qt_add_qml_module(preferences_qml
         internal/CharsetsSection.qml
         internal/ColorAndWallpaperSection.qml
         internal/ComboBoxWithTitle.qml
-        internal/CommonAudioApiConfiguration.qml
+        internal/CommonAudioDriverConfiguration.qml
         internal/DefaultStyleSection.qml
         internal/FoldersSection.qml
         internal/ImportStyleSection.qml
@@ -105,6 +105,7 @@ qt_add_qml_module(preferences_qml
         internal/MiscellaneousSection.qml
         internal/MixerSection.qml
         internal/MusicXmlSection.qml
+        internal/PlaybackQualitySection.qml
         internal/NoteInput/FretboardDiagramsSection.qml
         internal/NoteInput/MidiInputSection.qml
         internal/NoteInput/NoteColorsSection.qml
@@ -127,6 +128,7 @@ qt_add_qml_module(preferences_qml
         internal/UiFontSection.qml
         internal/WelcomeDialogSection.qml
         internal/ZoomSection.qml
+        internal/FFmpegSection.qml
     IMPORTS
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml

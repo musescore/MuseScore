@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,15 +23,14 @@
 #include "readcontext.h"
 
 #include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
 #include "dom/score.h"
 #include "dom/trill.h"
-#include "editing/undo.h"
 
 #include "connectorinforeader.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::read460;
 
@@ -329,6 +328,10 @@ void ReadContext::clearOrphanedConnectors()
                         deletedLinks.insert(ornament->links());
                     }
                 }
+            }
+
+            if (conn->eid().isValid()) {
+                conn->masterScore()->eidRegister()->removeItem(conn);
             }
 
             delete conn;

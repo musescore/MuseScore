@@ -21,16 +21,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -85,36 +87,26 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>I_I</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>J_J</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
@@ -125,24 +117,12 @@
             <durationType>half</durationType>
             <Note>
               <eid>L_L</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>M_M</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>J_J</startElement>
+                <endElement>L_L</endElement>
+                <eid>M_M</eid>
+                <track>0</track>
+                </Tie>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
@@ -158,29 +138,27 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>P_P</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>L_L</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                </Tie>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

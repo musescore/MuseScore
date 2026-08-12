@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -58,6 +58,7 @@ class VBox;
 class FBox;
 class TBox;
 class Bracket;
+class BracketItem;
 class Breath;
 
 class Chord;
@@ -91,6 +92,7 @@ class Hook;
 class Instrument;
 class InstrChannel;
 class InstrumentChange;
+class InstrumentLabel;
 
 class Jump;
 
@@ -145,7 +147,7 @@ class SlurTieSegment;
 class Spanner;
 class Spacer;
 class Staff;
-class StaffName;
+class StaffLabel;
 class StaffState;
 class StaffText;
 class StaffTextBase;
@@ -393,8 +395,6 @@ public:
     static void readItemEID(EngravingObject* item, XmlReader& xml);
     static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
 
-    static String readStaffName(XmlReader& xml);
-
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);
@@ -406,7 +406,7 @@ private:
 
     static void readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx);
 
-    static void lineBreakFromTag(String& str);
+    static String lineBreakFromTag(const String& str);
 
     static void readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx);
 };

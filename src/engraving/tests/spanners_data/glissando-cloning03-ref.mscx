@@ -22,23 +22,25 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff>
-        <eid>C_C</eid>
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          </StaffType>
-        </Staff>
+      <eid>C_C</eid>
       <Staff>
         <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
+      <Staff>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -80,31 +82,20 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>I_I</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
@@ -114,22 +105,22 @@
               <eid>K_K</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>I_I</startElement>
+                <endElement>K_K</endElement>
+                <eid>L_L</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
@@ -140,31 +131,19 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>O_O</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>P_P</eid>
+            <linkedTo>H_H</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
-              <linkedTo>H_H</linkedTo>
+              <eid>Q_Q</eid>
+              <linkedTo>I_I</linkedTo>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>Q_Q</eid>
-                  <linkedTo>I_I</linkedTo>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
@@ -176,13 +155,14 @@
               <linkedTo>K_K</linkedTo>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>Q_Q</startElement>
+                <endElement>S_S</endElement>
+                <eid>T_T</eid>
+                <linkedTo>L_L</linkedTo>
+                <track>4</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>
@@ -190,8 +170,8 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>T_T</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>U_U</eid>
+            <linkedTo>N_N</linkedTo>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>

@@ -1,5 +1,5 @@
 //=============================================================================
-//  MuseScore
+//  MuseScore Studio
 //  Music Composition & Notation
 //
 //  Copyright (C) 2013 Werner Schweer

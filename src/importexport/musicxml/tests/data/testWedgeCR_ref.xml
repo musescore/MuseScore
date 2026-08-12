@@ -202,27 +202,20 @@
         <voice>1</voice>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>3</duration>
-        </backup>
       <direction placement="above">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>1</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
@@ -268,27 +261,20 @@
         <voice>1</voice>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>3</duration>
-        </backup>
       <direction placement="above">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>1</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
@@ -312,27 +298,20 @@
         <voice>1</voice>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>3</duration>
-        </backup>
       <direction placement="above">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>1</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>

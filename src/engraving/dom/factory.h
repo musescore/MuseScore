@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,20 +25,14 @@
 #include <memory>
 
 #include "engravingitem.h"
-#include "durationtype.h"
-#include "tapping.h"
-
 namespace mu::engraving {
 class Instrument;
 class RootItem;
-
-class TremoloTwoChord;
+class RangeLock;
 class TremoloSingleChord;
+class TremoloTwoChord;
 
-class SoundFlag;
-class StaffVisibilityIndicator;
-class SystemLock;
-
+enum class SegmentType;
 enum class TripletFeelType : unsigned char;
 
 class Factory
@@ -82,7 +76,7 @@ public:
     static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
     static BracketItem* createBracketItem(EngravingItem* parent);
-    static BracketItem* createBracketItem(EngravingItem* parent, BracketType a, int b);
+    static BracketItem* createBracketItem(EngravingItem* parent, BracketType bracketType, size_t span);
 
     static Breath* createBreath(Segment* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Breath> makeBreath(Segment* parent);
@@ -126,7 +120,7 @@ public:
 
     static StaffVisibilityIndicator* createStaffVisibilityIndicator(System* parent, bool isAccessibleEnabled = true);
 
-    static SystemLockIndicator* createSystemLockIndicator(System* parent, const SystemLock* lock, bool isAccessibleEnabled = true);
+    static SystemLockIndicator* createSystemLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
     static SystemLockIndicator* copySystemLockIndicator(const SystemLockIndicator& src);
 
     static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
@@ -154,6 +148,9 @@ public:
 
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
+    static PageLockIndicator* createPageLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
+    static PageLockIndicator* copyPageLockIndicator(const PageLockIndicator& src);
+
     static Parenthesis* createParenthesis(EngravingItem* parent, bool isAccessibleEnabled = true);
     static Parenthesis* copyParenthesis(const Parenthesis& src);
 
@@ -166,7 +163,7 @@ public:
     static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);
     static Rest* createRest(Segment* parent, const TDuration& t, bool isAccessibleEnabled = true);
     static Rest* copyRest(const Rest& src, bool link = false);
-    static MMRest* createMMRest(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static MMRest* createMMRest(Segment* parent, bool isAccessibleEnabled = true);
 
     static DeadSlapped* createDeadSlapped(Rest* parent, bool isAccessibleEnabled = true);
     static DeadSlapped* copyDeadSlapped(const DeadSlapped& src);
@@ -191,6 +188,8 @@ public:
     static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(MeasureBase* parent);
 
     static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
+    static StaveSharingLabel* createStaveSharingLabel(Segment* parent, TextStyleType textStyleType = TextStyleType::STAVE_SHARING,
+                                                      bool isAccessibleEnabled = true);
 
     static SoundFlag* createSoundFlag(EngravingItem* parent, bool isAccessibleEnabled = true);
 
@@ -216,7 +215,7 @@ public:
     static Fingering* createFingering(Note* parent, bool isAccessibleEnabled = true);
     static Fingering* createFingering(Note* parent, TextStyleType textStyleType, bool isAccessibleEnabled = true);
 
-    static Harmony* createHarmony(Segment* parent, bool isAccessibleEnabled = true);
+    static Harmony* createHarmony(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static TempoText* createTempoText(Segment* parent, bool isAccessibleEnabled = true);
 
@@ -295,8 +294,6 @@ public:
     static Pedal* createPedal(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Dynamic* createDynamic(Segment* parent, bool isAccessibleEnabled = true);
-
-    static Harmony* createHarmony(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static VBox* createVBox(System* parent, bool isAccessibleEnabled = true);
 

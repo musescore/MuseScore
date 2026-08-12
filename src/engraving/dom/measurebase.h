@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -35,7 +35,7 @@ class LayoutBreak;
 class Measure;
 class Score;
 class System;
-class SystemLock;
+class RangeLock;
 
 //---------------------------------------------------------
 //   Repeat
@@ -82,6 +82,9 @@ public:
     System* system() const { return toSystem(explicitParent()); }
     System* prevNonVBoxSystem() const;
     System* nextNonVBoxSystem() const;
+    Page* page() const;
+    Page* prevPage() const;
+    Page* nextPage() const;
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     virtual void scanElements(std::function<void(EngravingItem*)> func) override;
@@ -160,9 +163,13 @@ public:
     bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
     bool isAfterOrEqual(const MeasureBase* other) const { return !isBefore(other); }
 
-    const SystemLock* systemLock() const;
+    const RangeLock* systemLock() const;
     bool isStartOfSystemLock() const;
     bool isEndOfSystemLock() const;
+
+    const RangeLock* pageLock() const;
+    bool isStartOfPageLock() const;
+    bool isEndOfPageLock() const;
 
 protected:
     MeasureBase(const ElementType& type, System* system = 0);
@@ -203,6 +210,7 @@ public:
     void updateTickIndex();
 
     Measure* measureByTick(int tick) const;
+    MeasureBase* firstMeasureBaseAtTick(int tick) const;
     std::vector<MeasureBase*> measureBasesAtTick(int tick) const;
 
 private:

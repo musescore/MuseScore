@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -39,9 +39,9 @@ public:
 private:
     void loadTypes() override;
 
-    SelectionFilterTypesVariant getAllMask() const override { return engraving::VoicesSelectionFilterTypes::ALL; }
-    SelectionFilterTypesVariant getNoneMask() const override { return engraving::VoicesSelectionFilterTypes::NONE; }
+    engraving::SelectionFilterTypesVariant getAllMask() const override { return engraving::VoicesSelectionFilterTypes::ALL; }
+    engraving::SelectionFilterTypesVariant getNoneMask() const override { return engraving::VoicesSelectionFilterTypes::NONE; }
 
-    QString titleForType(const SelectionFilterTypesVariant& variant) const override;
+    QString titleForType(const engraving::SelectionFilterTypesVariant& variant) const override;
 };
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,17 +29,38 @@ class PlaybackControllerStub : public IPlaybackController
 {
 public:
     bool isPlayAllowed() const override;
-    muse::async::Notification isPlayAllowedChanged() const override;
+    muse::async::Channel<bool> isPlayAllowedChanged() const override;
 
     bool isPlaying() const override;
-    muse::async::Notification isPlayingChanged() const override;
+    muse::async::Channel<bool> isPlayingChanged() const override;
 
-    void reset() override;
+    bool isPlaybackInited() const override;
+    muse::async::Channel<bool> playbackInitedChanged() const override;
 
-    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
+    muse::Ret togglePlay() override;
+    muse::Ret play(bool showErrors = true) override;
+    muse::Ret playFromSelection(bool showErrors = true) override;
+    muse::Ret pause(bool select = false) override;
+    muse::Ret stop() override;
+    muse::Ret rewind(muse::secs_t secs) override;
 
-    muse::audio::TrackSequenceId currentTrackSequenceId() const override;
-    muse::async::Notification currentTrackSequenceIdChanged() const override;
+    bool isLoopEnabled() const override;
+    muse::async::Channel<bool> loopEnabledChanged() const override;
+    muse::Ret toggleLoopPlayback() override;
+    muse::Ret addLoopBoundary(LoopBoundaryType type) override;
+
+    muse::Ret toggleMetronome() override;
+
+    muse::Ret toggleMidiInput() override;
+    muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch) override;
+
+    muse::Ret togglePlayRepeats() override;
+    muse::Ret togglePlayChordSymbols() override;
+    muse::Ret toggleAutomaticallyPan() override;
+    muse::Ret toggleCountIn() override;
+    muse::Ret toggleHearPlaybackWhenEditing() override;
+
+    muse::Ret reloadPlaybackCache() override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -56,19 +77,16 @@ public:
     const SoloMuteState& trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
 
-    void playElements(const std::vector<const notation::EngravingItem*>& elements,
+    void playElements(const std::vector<const engraving::EngravingItem*>& elements,
                       const PlayParams& params = PlayParams(), bool isMidi = false) override;
-    void playNotes(const notation::NoteValList& notes, notation::staff_idx_t staffIdx, const notation::Segment* segment,
+    void playNotes(const engraving::NoteValList& notes, engraving::staff_idx_t staffIdx, const engraving::Segment* segment,
                    const PlayParams& params = PlayParams()) override;
     void playMetronome(int tick) override;
 
-    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, engraving::staff_idx_t staffIdx, int tick) override;
 
-    void seekElement(const notation::EngravingItem* element, bool flushSound = true) override;
+    void seekElement(const engraving::EngravingItem* element, bool flushSound = true) override;
     void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
-
-    bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
-    muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
 
     muse::secs_t totalPlayTime() const override;
     muse::async::Notification totalPlayTimeChanged() const override;
@@ -76,7 +94,7 @@ public:
     const notation::Tempo& currentTempo() const override;
     muse::async::Notification currentTempoChanged() const override;
 
-    notation::MeasureBeat currentBeat() const override;
+    engraving::MeasureBeat currentBeat() const override;
     muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;

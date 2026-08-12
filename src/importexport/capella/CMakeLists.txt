@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,7 @@ target_sources(iex_capella PRIVATE
     internal/capxml.cpp
 )
 
-add_subdirectory(${THIRDPARTY_DIR}/rtf2html rtf2html)
+add_subdirectory(thirdparty/rtf2html)
 
 target_link_libraries(iex_capella PRIVATE
     rtf2html

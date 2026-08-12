@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,6 +22,8 @@
 
 #include "notationstatusbarmodel.h"
 
+#include "defer.h"
+#include "log.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -30,8 +32,13 @@
 #include "workspace/qml/Muse/Workspace/workspacesmenumodel.h"
 #endif
 
-#include "defer.h"
-#include "log.h"
+#include "engraving/dom/score.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationaccessibility.h"
+#include "notation/inotationstyle.h" // IWYU pragma: keep
+#include "notation/inotationundostack.h" // IWYU pragma: keep
+#include "notation/inotationviewstate.h" // IWYU pragma: keep
 
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -329,7 +336,8 @@ void NotationStatusBarModel::initAvailableZoomList()
         return muse::TranslatableString::untranslatable("%1%").arg(percentage);
     };
 
-    auto buildZoomItem = [=](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
+    auto buildZoomItem
+        = [this, currZoomType, currZoomPercentage](ZoomType type, const muse::TranslatableString& title = {}, int value = 0) {
         MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
 

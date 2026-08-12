@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -93,6 +93,8 @@ public:
 
     Tie* clone() const override { return new Tie(*this); }
 
+    Anchor anchor() const override { return Anchor::NOTE; }
+
     virtual ~Tie() {}
 
     virtual Note* startNote() const;
@@ -142,6 +144,8 @@ public:
 
 protected:
     Tie(const ElementType& type, EngravingItem* parent = nullptr);
+
+    bool isInSpannerMap() const override { return false; }
 
     bool m_isInside = false;
     TiePlacement m_tiePlacement = TiePlacement::AUTO;

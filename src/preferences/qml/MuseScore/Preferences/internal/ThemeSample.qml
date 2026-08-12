@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,8 @@ import Muse.UiComponents
 Rectangle {
     id: root
 
-    property var theme
+    required property var theme
+    property bool highContrast: false
 
     signal clicked
 
@@ -110,6 +111,7 @@ Rectangle {
 
                     radius: 3
                     color: Utils.colorWithAlpha(root.theme.accentColor, root.theme.buttonOpacityNormal)
+                    border.color: root.highContrast ? root.theme.strokeColor : "transparent"
                 }
 
                 Rectangle {
@@ -118,6 +120,7 @@ Rectangle {
 
                     radius: 3
                     color: Utils.colorWithAlpha(root.theme.buttonColor, root.theme.buttonOpacityNormal)
+                    border.color: root.highContrast ? root.theme.strokeColor : "transparent"
                 }
             }
         }
@@ -129,7 +132,7 @@ Rectangle {
         color: "transparent"
         radius: 4
         border.width: 1
-        border.color: mouseArea.containsMouse ? root.theme.accentColor : root.theme.strokeColor
+        border.color: mouseArea.containsMouse ? ui.theme.accentColor : ui.theme.strokeColor
     }
 
     MouseArea {

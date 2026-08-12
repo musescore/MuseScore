@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@ BaseSection {
     property alias isFollowSystemTheme: followSystemThemeCheckBox.checked
 
     property alias themes: themeSamplesList.themes
+    property alias themeCodes: themeSamplesList.themeCodes
     property alias currentThemeCode: themeSamplesList.currentThemeCode
 
     property alias accentColors: accentColorsSection.colors
@@ -56,6 +57,7 @@ BaseSection {
             id: themeSamplesList
             width: parent.width
             spacing: root.columnWidth + root.columnSpacing - sampleWidth
+            highContrast: root.highContrastEnabled
 
             navigationPanel: root.navigation
             navigationRow: 0
@@ -102,26 +104,26 @@ BaseSection {
                 }
             }
         }
-    }
 
-    AccentColorsSection {
-        id: accentColorsSection
+        AccentColorsSection {
+            id: accentColorsSection
 
-        columnWidth: root.columnWidth
-        spacing: root.columnSpacing
+            columnWidth: root.columnWidth
+            spacing: root.columnSpacing
 
-        visible: !root.highContrastEnabled
+            visible: !root.highContrastEnabled
 
-        navigation.section: root.navigation.section
-        navigation.order: root.navigation.order + 1
+            navigation.section: root.navigation.section
+            navigation.order: root.navigation.order + 1
 
-        onAccentColorChangeRequested: function(newColorIndex) {
-            root.accentColorChangeRequested(newColorIndex)
-        }
+            onAccentColorChangeRequested: function(newColorIndex) {
+                root.accentColorChangeRequested(newColorIndex)
+            }
 
-        onFocusChanged: {
-            if (activeFocus) {
-                root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
 #include "async/asyncable.h"
@@ -44,6 +45,8 @@ class Notation : virtual public INotation, public IGetScore, public muse::Contex
 public:
     explicit Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
     ~Notation() override;
+
+    const muse::modularity::ContextPtr& iocContext() const override;
 
     project::INotationProject* project() const override;
     IMasterNotationPtr masterNotation() const override;

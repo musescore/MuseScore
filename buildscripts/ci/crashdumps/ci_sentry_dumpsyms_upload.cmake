@@ -10,6 +10,7 @@ set(SENTRY_URL "" CACHE STRING "Sentry URL")
 set(SENTRY_AUTH_TOKEN "" CACHE STRING "Sentry Auth Token")
 set(SENTRY_ORG "" CACHE STRING "Sentry Organization")
 set(SENTRY_PROJECT "" CACHE STRING "Sentry Project")
+set(STAGE "" CACHE STRING "Build stage (e.g. stable, testing, nightly, devel)")
 
 # Check
 if(NOT SYMBOLS_PATH)
@@ -34,6 +35,7 @@ message(STATUS "SENTRY_URL: ${SENTRY_URL}")
 message(STATUS "SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN}")
 message(STATUS "SENTRY_ORG: ${SENTRY_ORG}")
 message(STATUS "SENTRY_PROJECT: ${SENTRY_PROJECT}")
+message(STATUS "STAGE: ${STAGE}")
 
 # Upload symbols
 set(ENV{SENTRY_URL} ${SENTRY_URL})
@@ -46,25 +48,30 @@ if(WIN32)
 
     file(MAKE_DIRECTORY ${INSTALL_PATH})
     file(DOWNLOAD ${SENTRY_DOWNLOAD_Windows_x86_64} ${SENTRY_CLI})
-
-    execute_process(
-        COMMAND ${SENTRY_CLI} upload-dif -o ${SENTRY_ORG} -p ${SENTRY_PROJECT} ${SYMBOLS_PATH}
-        RESULT_VARIABLE result
-    )
 else()
     set(SENTRY_CLI_INSTALL_SCRIPT "sentry-cli.sh")
     file(DOWNLOAD ${SENTRY_DOWNLOAD_SCRIPT} ${SENTRY_CLI_INSTALL_SCRIPT})
     execute_process(COMMAND bash ${SENTRY_CLI_INSTALL_SCRIPT})
 
     set(SENTRY_CLI "sentry-cli")
-    execute_process(
-        COMMAND ${SENTRY_CLI} upload-dif -o ${SENTRY_ORG} -p ${SENTRY_PROJECT} ${SYMBOLS_PATH}
-        RESULT_VARIABLE result
-    )
 endif()
 
-if(result EQUAL 0)
-    message(STATUS "Success symbols uploaded")
-else()
+execute_process(
+    COMMAND ${SENTRY_CLI} upload-dif -o ${SENTRY_ORG} -p ${SENTRY_PROJECT} ${SYMBOLS_PATH}
+    RESULT_VARIABLE result
+    OUTPUT_VARIABLE output
+    ERROR_VARIABLE output
+    ECHO_OUTPUT_VARIABLE
+    ECHO_ERROR_VARIABLE
+)
+
+if(NOT result EQUAL 0)
     message(FATAL_ERROR "Failed symbols uploaded, code: ${result}")
 endif()
+
+# sentry-cli exits 0 even when nothing was uploaded — detect that explicitly
+if(STAGE STREQUAL "stable" AND output MATCHES "No debug information files found")
+    message(FATAL_ERROR "Failed symbols uploaded: no debug information files found in ${SYMBOLS_PATH}")
+endif()
+
+message(STATUS "Success symbols uploaded")

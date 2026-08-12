@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -39,8 +39,8 @@ public:
     static void collectPage(LayoutContext& ctx);
 
 private:
-    static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding);
-    static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding);
+    static void layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding, bool squeezeToFit);
+    static void distributeStaves(LayoutContext& ctx, Page* page, double footerPadding, bool squeezeToFit);
 
     static void layoutCrossStaffElements(LayoutContext& ctx, Page* page);
     static void layoutCrossStaffSlurs(LayoutContext& ctx, System* system);

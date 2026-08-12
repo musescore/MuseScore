@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,9 +22,10 @@
 
 #include "transposedialog.h"
 
-#include "async/notifylist.h"
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselection.h"
 
-#include "notation/internal/mscoreerrorscontroller.h"
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
@@ -35,7 +36,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 TransposeDialog::TransposeDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("TransposeDialog");
     setupUi(this);
@@ -45,9 +46,12 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     connect(transposeByInterval, &QGroupBox::clicked, this, &TransposeDialog::transposeByIntervalToggled);
     connect(chromaticBox,        &QGroupBox::clicked, this, &TransposeDialog::chromaticBoxToggled);
     connect(diatonicBox,         &QGroupBox::clicked, this, &TransposeDialog::diatonicBoxToggled);
+}
 
+void TransposeDialog::componentComplete()
+{
     if (selection()->isNone()) {
-        interaction()->selectAll();
+        interaction()->select(SelectionTarget::All);
         m_allSelected = true;
     }
 
@@ -209,7 +213,6 @@ INotationSelectionPtr TransposeDialog::selection() const
 void TransposeDialog::apply()
 {
     TransposeOptions options;
-
     options.mode = mode();
     options.direction = direction();
     options.key = transposeKey();
@@ -221,8 +224,6 @@ void TransposeDialog::apply()
     saveState();
 
     interaction()->transpose(options);
-
-    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 
     if (m_allSelected) {
         interaction()->clearSelection();

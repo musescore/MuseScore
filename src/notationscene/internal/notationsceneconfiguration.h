@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,18 +23,14 @@
 #pragma once
 
 #include "async/asyncable.h"
-#include "context/iglobalcontext.h"
-#include "modularity/ioc.h"
 
 #include "inotationsceneconfiguration.h"
 
 namespace mu::notation {
-class NotationSceneConfiguration : public INotationSceneConfiguration, public muse::async::Asyncable, public muse::Contextable
+class NotationSceneConfiguration : public INotationSceneConfiguration, public muse::async::Asyncable
 {
-    muse::ContextInject<context::IGlobalContext> context = { this };
-
 public:
-    explicit NotationSceneConfiguration(const muse::modularity::ContextPtr& ctx);
+    explicit NotationSceneConfiguration();
 
     void init();
 
@@ -48,10 +44,6 @@ public:
 
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
-
-    bool useNewPercussionPanel() const override;
-    void setUseNewPercussionPanel(bool use) override;
-    muse::async::Notification useNewPercussionPanelChanged() const override;
 
     bool percussionPanelUseNotationPreview() const override;
     void setPercussionPanelUseNotationPreview(bool use) override;
@@ -73,26 +65,14 @@ public:
     void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) override;
     muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
-    int styleDialogLastPageIndex() const override;
-    void setStyleDialogLastPageIndex(int value) override;
-
-    int styleDialogLastSubPageIndex() const override;
-    void setStyleDialogLastSubPageIndex(int value) override;
-
-    void resetStyleDialogPageIndices() override;
-
 private:
     muse::async::Notification m_isSmoothPanningChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
-    muse::async::Notification m_useNewPercussionPanelChanged;
     muse::async::Notification m_percussionPanelUseNotationPreviewChanged;
     muse::async::Notification m_percussionPanelAutoShowModeChanged;
     muse::async::Notification m_autoClosePercussionPanelChanged;
     muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
     muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
-
-    int m_styleDialogLastPageIndex = 0;
-    int m_styleDialogLastSubPageIndex = 0;
 };
 }

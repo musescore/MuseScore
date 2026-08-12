@@ -21,16 +21,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -85,85 +87,74 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>G_G</eid>
+              <eid>H_H</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
-          <Rest>
-            <eid>H_H</eid>
-            <durationType>eighth</durationType>
-            </Rest>
           <Rest>
             <eid>I_I</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <voice>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>T_T</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
@@ -179,29 +170,27 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>W_W</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>T_T</startElement>
+                <endElement>W_W</endElement>
+                <eid>X_X</eid>
+                <track>0</track>
+                </Tie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -55,6 +55,12 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaFontStyle,                    Pid::BEGIN_FONT_STYLE },
     { Sid::ottavaFontStyle,                    Pid::CONTINUE_FONT_STYLE },
     { Sid::ottavaFontStyle,                    Pid::END_FONT_STYLE },
+    { Sid::ottavaMusicalSymbolsScale,          Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::ottavaMusicalSymbolsScale,          Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::ottavaMusicalSymbolsScale,          Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::ottavaTextAlignAbove,               Pid::BEGIN_TEXT_ALIGN },
     { Sid::ottavaTextAlignAbove,               Pid::CONTINUE_TEXT_ALIGN },
     { Sid::ottavaTextAlignAbove,               Pid::END_TEXT_ALIGN },
@@ -65,7 +71,6 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaLineStyle,                    Pid::LINE_STYLE },
     { Sid::ottavaDashLineLen,                  Pid::DASH_LINE_LEN },
     { Sid::ottavaDashGapLen,                   Pid::DASH_GAP_LEN },
-    { Sid::ottavaPosAbove,                     Pid::OFFSET },
     { Sid::ottavaFontSpatiumDependent,         Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::ottavaEndLineArrowHeight,           Pid::END_LINE_ARROW_HEIGHT },
     { Sid::ottavaEndLineArrowWidth,            Pid::END_LINE_ARROW_WIDTH },
@@ -150,20 +155,6 @@ void Ottava::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
     }
 }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid OttavaSegment::getPropertyStyle(Pid pid) const
-{
-    switch (pid) {
-    case Pid::OFFSET:
-        return spanner()->placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
-    default:
-        return TextLineBaseSegment::getPropertyStyle(pid);
-    }
-}
-
 Sid Ottava::getPropertyStyle(Pid pid) const
 {
     static_assert(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
@@ -210,8 +201,6 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 
     size_t idx = size_t(m_ottavaType) * 3 + (m_numbersOnly ? 0 : ss.size() / 2);
     switch (pid) {
-    case Pid::OFFSET:
-        return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
     case Pid::PLACEMENT:
         return ss[idx];
     case Pid::BEGIN_TEXT:
@@ -275,7 +264,6 @@ int Ottava::pitchShift() const
 //---------------------------------------------------------
 
 static const ElementStyle ottavaSegmentStyle {
-    { Sid::ottavaPosAbove, Pid::OFFSET },
     { Sid::ottavaMinDistance, Pid::MIN_DISTANCE },
 };
 
@@ -458,5 +446,10 @@ PointF Ottava::linePos(Grip grip, System** system) const
 void Ottava::doComputeEndElement()
 {
     setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track())));
+}
+
+Sid Ottava::defaultPosSid() const
+{
+    return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
 }
 }

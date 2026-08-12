@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  review_status: false
+  review_details: false
+  poem: false
+  high_level_summary: false
+  high_level_summary_in_walkthrough: false
+  changed_files_summary: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  related_issues: false
+  assess_linked_issues: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
+  auto_review:
+    enabled: true
+    drafts: false
+  slop_detection:
+    enabled: true
+    label: "slop"
+chat:
+  auto_reply: true
+
+issue_enrichment:
+  auto_enrich:
+    enabled: false  
+
+knowledge_base:
+  linked_repositories:
+    - repository: "musescore/muse_framework.git"
+      instructions: "Contains muse_framework(muse) submodule"

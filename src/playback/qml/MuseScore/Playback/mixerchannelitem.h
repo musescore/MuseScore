@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@
 #include "ui/qml/Muse/Ui/navigationpanel.h"
 
 #include "audio/common/audiotypes.h"
+#include "project/iprojectaudiosettings.h"
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
 #include "auxsenditem.h"
@@ -59,7 +60,13 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
 
     Q_PROPERTY(float volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
+    Q_PROPERTY(float volumeLevelMin READ volumeLevelMin CONSTANT)
+    Q_PROPERTY(float volumeLevelMax READ volumeLevelMax CONSTANT)
     Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY balanceChanged)
+    Q_PROPERTY(int balanceMin READ balanceMin CONSTANT)
+    Q_PROPERTY(int balanceMax READ balanceMax CONSTANT)
+    Q_PROPERTY(bool hasVolumeAutomation READ hasVolumeAutomation NOTIFY hasVolumeAutomationChanged)
+    Q_PROPERTY(bool hasBalanceAutomation READ hasBalanceAutomation NOTIFY hasBalanceAutomationChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool forceMute READ forceMute NOTIFY forceMuteChanged)
@@ -104,7 +111,13 @@ public:
     float rightChannelPressure() const;
 
     float volumeLevel() const;
+    float volumeLevelMin() const;
+    float volumeLevelMax() const;
     int balance() const;
+    int balanceMin() const;
+    int balanceMax() const;
+    bool hasVolumeAutomation() const;
+    bool hasBalanceAutomation() const;
     bool solo() const;
     bool muted() const;
     bool forceMute() const;
@@ -113,18 +126,21 @@ public:
     void setPanelOrder(int panelOrder);
     void setPanelSection(muse::ui::INavigationSection* section);
 
+    void updateHasAutomationFlags();
+
     void setOutputResourceItemCount(size_t count);
 
-    void loadInputParams(const muse::audio::AudioInputParams& newParams);
-    void loadOutputParams(const muse::audio::AudioOutputParams& newParams);
+    void loadInputParams(const project::AudioInputParams& newParams);
+    void loadOutputParams(const project::AudioOutputParams& newParams);
     void loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState);
 
-    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges&& audioSignalChanges);
+    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges& audioSignalChanges);
+    void subscribeOnAutomatedControlParamsChanges(muse::audio::AutomatedControlParamsChanges& changes);
 
     bool outputOnly() const;
 
-    const muse::audio::AudioInputParams& inputParams() const;
-    const muse::audio::AudioOutputParams& outputParams() const;
+    const project::AudioInputParams& inputParams() const;
+    const project::AudioOutputParams& outputParams() const;
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
@@ -151,14 +167,18 @@ signals:
 
     void volumeLevelChanged(float volumeLevel);
     void balanceChanged(int balance);
+    void hasVolumeAutomationChanged();
+    void hasBalanceAutomationChanged();
     void soloChanged();
     void mutedChanged();
     void forceMuteChanged();
 
     void panelChanged(muse::ui::NavigationPanel* panel);
 
-    void inputParamsChanged(const muse::audio::AudioInputParams& params);
-    void outputParamsChanged(const muse::audio::AudioOutputParams& params);
+    void inputParamsChanged(const project::AudioInputParams& params);
+    void controlParamsChanged(const project::AudioOutputParams& params);
+    void fxChainParamsChanged(const project::AudioOutputParams& params);
+    void auxSendsParamsChanged(const project::AudioOutputParams& params);
     void soloMuteStateChanged(const notation::INotationSoloMuteState::SoloMuteState& state);
 
     void inputResourceItemChanged();
@@ -190,19 +210,29 @@ protected:
 
     bool askAboutChangingSound();
 
+    void setDisplayedVolumeLevel(float volumeLevel);
+    void setDisplayedBalance(int balance);
+
     Type m_type = Type::Unknown;
 
     muse::audio::TrackId m_trackId = -1;
     engraving::InstrumentTrackId m_instrumentTrackId;
 
-    muse::audio::AudioInputParams m_inputParams;
-    muse::audio::AudioOutputParams m_outParams;
+    project::AudioInputParams m_inputParams;
+    project::AudioOutputParams m_outParams;
+
+    float m_volumeLevel = 0.f;
+    int m_balance = 0;
+
+    bool m_hasVolumeAutomation = false;
+    bool m_hasBalanceAutomation = false;
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<muse::audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
     QMap<muse::audio::aux_channel_idx_t, AuxSendItem*> m_auxSendItems;
 
     muse::audio::AudioSignalChanges m_audioSignalChanges;
+    muse::audio::AutomatedControlParamsChanges m_automatedControlParamsChanges;
 
     QString m_title;
     bool m_outputOnly = false;

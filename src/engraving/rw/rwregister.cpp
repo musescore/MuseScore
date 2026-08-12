@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "read400/read400.h"
 #include "read410/read410.h"
 #include "read460/read460.h"
+#include "read500/read500.h"
 
 #include "write/writer.h"
 
@@ -51,9 +52,11 @@ IReaderPtr RWRegister::reader(int version)
         return std::make_shared<read400::Read400>();
     } else if (version < 460) {
         return std::make_shared<read410::Read410>();
+    } else if (version < 500) {
+        return std::make_shared<read460::Read460>();
     }
 
-    return std::make_shared<read460::Read460>();
+    return std::make_shared<read500::Read500>();
 }
 
 IWriterPtr RWRegister::writer()

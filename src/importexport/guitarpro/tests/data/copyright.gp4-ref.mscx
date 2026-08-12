@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Track 1</trackName>
       <Instrument id="cavaquinho">
-        <longName>Track 1</longName>
+        <InstrumentLabel>
+          <longName>Track 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -49,35 +51,35 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Dynamic>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>K_K</eid>
+                <eid>L_L</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>
@@ -86,10 +88,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>

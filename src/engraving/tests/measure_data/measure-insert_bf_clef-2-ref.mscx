@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -33,13 +35,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>c_c</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
@@ -140,10 +142,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>f_f</eid>
         <voice>
           <Rest>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

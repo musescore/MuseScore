@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "mainwindowtitleprovider.h"
+
 #include "translation.h"
+
+#include "notation/inotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::appshell;
 
@@ -39,7 +44,7 @@ void MainWindowTitleProvider::load()
                 update();
             });
 
-            currentProject->needSave().notification.onNotify(this, [this]() {
+            currentProject->needSaveChanged().onNotify(this, [this]() {
                 update();
             });
         }
@@ -111,5 +116,5 @@ void MainWindowTitleProvider::update()
 
     setFilePath((project->isNewlyCreated() || project->isCloudProject())
                 ? "" : project->path().toQString());
-    setFileModified(project->needSave().val);
+    setFileModified(project->isNeedSave());
 }

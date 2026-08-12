@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -87,16 +87,18 @@ Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
         queryBuffer->setData(configuration()->getMuseSamplerVersionQuery().toUtf8());
         auto receivedData = std::make_shared<QBuffer>();
 
-        m_networkManager = networkManagerCreator()->makeNetworkManager();
+        if (!m_networkManager) {
+            m_networkManager = networkManagerCreator()->makeNetworkManager();
+        }
+
         RetVal<Progress> progress = m_networkManager->post(configuration()->checkForMuseSamplerUpdateUrl(),
                                                            queryBuffer, receivedData,
                                                            configuration()->headers());
         if (!progress.ret) {
-            m_networkManager = nullptr;
             return resolve(RetVal<bool>::make_ret(progress.ret));
         }
 
-        progress.val.finished().onReceive(this, [this, receivedData, localVersion, resolve](const ProgressResult& res) {
+        progress.val.finished().onReceive(this, [receivedData, localVersion, resolve](const ProgressResult& res) {
             RetVal<bool> result = RetVal<bool>::make_ok(false);
 
             if (res.ret) {
@@ -108,7 +110,6 @@ Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
             }
 
             (void)resolve(result);
-            m_networkManager = nullptr;
         });
 
         return Promise<RetVal<bool> >::dummy_result();

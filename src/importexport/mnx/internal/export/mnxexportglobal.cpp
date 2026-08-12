@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,8 +33,10 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tempotext.h"
+#include "engraving/dom/timesig.h"
 #include "log.h"
 #include "internal/shared/mnxtypesconv.h"
 
@@ -95,11 +97,32 @@ private:
 //   assignTimeSignature
 //---------------------------------------------------------
 
+/// Finds the time signature element that this measure introduces, if any. The
+/// measure's own timesig() is only a fraction, so this is the only source for the glyph.
+static const TimeSig* findTimeSigElement(const Measure* measure)
+{
+    const Segment* segment = measure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    if (!segment) {
+        return nullptr;
+    }
+    for (const EngravingItem* item : segment->elist()) {
+        if (item && item->isTimeSig()) {
+            return toTimeSig(item);
+        }
+    }
+    return nullptr;
+}
+
 static void assignTimeSignature(mnx::global::Measure& mnxMeasure, const Measure* measure,
-                                std::optional<Fraction>& prevTimeSig)
+                                std::optional<Fraction>& prevTimeSig,
+                                std::optional<mnx::TimeSignatureDisplay>& prevDisplay)
 {
     const Fraction timeSig = measure->timesig();
-    if (prevTimeSig && timeSig.identical(*prevTimeSig)) {
+    const TimeSig* timeSigElement = findTimeSigElement(measure);
+    const auto display = toMnxTimeSignatureDisplay(timeSigElement ? timeSigElement->timeSigType() : TimeSigType::NORMAL);
+
+    // A change of glyph alone (2/2 to cut time, say) still needs to be emitted.
+    if (prevTimeSig && timeSig.identical(*prevTimeSig) && display == prevDisplay) {
         return;
     }
 
@@ -109,8 +132,14 @@ static void assignTimeSignature(mnx::global::Measure& mnxMeasure, const Measure*
         return;
     }
 
-    mnxMeasure.ensure_time(timeSig.numerator(), *unit);
+    auto mnxTimeSig = mnxMeasure.ensure_time(timeSig.numerator(), *unit);
+    if (display) {
+        mnxTimeSig.set_display(display.value());
+    } else {
+        mnxTimeSig.clear_display();
+    }
     prevTimeSig = timeSig;
+    prevDisplay = display;
 }
 
 //---------------------------------------------------------
@@ -286,8 +315,8 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
         }
     }
 
-    for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-        for (EngravingItem* item : segment->annotations()) {
+    for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+        for (const EngravingItem* item : segment->annotations()) {
             IF_ASSERT_FAILED(item) {
                 continue;
             }
@@ -299,6 +328,23 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
                 break;
             default:
                 break;
+            }
+        }
+    }
+
+    if (const BarLine* barLine = measure->endBarLine()) {
+        if (const Segment* seg = barLine->segment()) {
+            for (const EngravingItem* item : seg->annotations()) {
+                IF_ASSERT_FAILED(item) {
+                    continue;
+                }
+                if (item->isFermata()) {
+                    const Fermata* fermata = toFermata(item);
+                    DO_ASSERT(fermata);
+                    if (fermata) {
+                        mnxMeasure.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+                    }
+                }
             }
         }
     }
@@ -320,6 +366,7 @@ void MnxExporter::createGlobal()
     auto mnxMeasures = m_mnxDocument.global().measures();
     MeasureNumberState measureNumberState;
     std::optional<Fraction> prevTimeSig;
+    std::optional<mnx::TimeSignatureDisplay> prevTimeSigDisplay;
     std::optional<int> prevKeyFifths;
     size_t measureIndex = 0;
 
@@ -330,7 +377,7 @@ void MnxExporter::createGlobal()
 
         assignBarline(mnxMeasure, measure);
         assignRepeats(mnxMeasure, measure);
-        assignTimeSignature(mnxMeasure, measure, prevTimeSig);
+        assignTimeSignature(mnxMeasure, measure, prevTimeSig, prevTimeSigDisplay);
         assignKeySignature(mnxMeasure, m_score, measure, prevKeyFifths);
         exportMeasureElements(mnxMeasure, measure);
 

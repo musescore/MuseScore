@@ -26,14 +26,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>unnamed1</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -44,38 +44,33 @@
     <Staff id="1">
       <VBox>
         <height>4</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </VBox>
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>F_F</eid>
-            </Clef>
-          <TimeSig>
             <eid>G_G</eid>
+            </Clef>
+          <KeySig>
+            <eid>H_H</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <eid>H_H</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>I_I</eid>
-              <pitch>24</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>K_K</eid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
+              <pitch>24</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -83,8 +78,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>M_M</eid>
-              <pitch>28</pitch>
-              <tpc>18</tpc>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -92,6 +87,15 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>O_O</eid>
+              <pitch>28</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Q_Q</eid>
               <pitch>29</pitch>
               <tpc>13</tpc>
               </Note>
@@ -99,24 +103,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>R_R</eid>
         <voice>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>31</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>T_T</eid>
-              <pitch>33</pitch>
-              <tpc>17</tpc>
+              <pitch>31</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -124,8 +119,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>V_V</eid>
-              <pitch>35</pitch>
-              <tpc>19</tpc>
+              <pitch>33</pitch>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -133,6 +128,15 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>X_X</eid>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Y_Y</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Z_Z</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
@@ -140,24 +144,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>a_a</eid>
         <voice>
-          <Chord>
-            <eid>Z_Z</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>a_a</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>c_c</eid>
-              <pitch>40</pitch>
-              <tpc>18</tpc>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -165,8 +160,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>e_e</eid>
-              <pitch>41</pitch>
-              <tpc>13</tpc>
+              <pitch>40</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -174,6 +169,15 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>g_g</eid>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>h_h</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>i_i</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
@@ -181,28 +185,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>h_h</eid>
+        <eid>j_j</eid>
         <LayoutBreak>
-          <eid>i_i</eid>
+          <eid>k_k</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Chord>
-            <eid>j_j</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>k_k</eid>
-              <pitch>45</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <eid>l_l</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>m_m</eid>
-              <pitch>47</pitch>
-              <tpc>19</tpc>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -210,8 +205,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>o_o</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -219,6 +214,15 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>q_q</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>r_r</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>s_s</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               </Note>
@@ -226,30 +230,21 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>r_r</eid>
+        <eid>t_t</eid>
         <voice>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>s_s</eid>
+            <eid>u_u</eid>
             </Clef>
-          <Chord>
-            <eid>t_t</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>u_u</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <eid>v_v</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>w_w</eid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -257,8 +252,8 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>y_y</eid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -266,6 +261,15 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>0_0</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>1_1</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>2_2</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
@@ -273,17 +277,17 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>1_1</eid>
+        <eid>3_3</eid>
         <LayoutBreak>
-          <eid>2_2</eid>
+          <eid>4_4</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>3_3</eid>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4_4</eid>
+              <eid>6_6</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>

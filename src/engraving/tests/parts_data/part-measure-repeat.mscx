@@ -13,6 +13,8 @@
       <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <windsNameByGroup>1</windsNameByGroup>
+      <vocalsNameByGroup>1</vocalsNameByGroup>
       <enableVerticalSpread>1</enableVerticalSpread>
       <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
       <lyricsMinDistance>0.25</lyricsMinDistance>
@@ -89,6 +91,8 @@
       <slurMidWidth>0.21</slurMidWidth>
       <tieEndWidth>0.05</tieEndWidth>
       <tieMidWidth>0.21</tieMidWidth>
+      <maskSlurs>1</maskSlurs>
+      <maskTies>1</maskTies>
       <musicalSymbolFont>Leland</musicalSymbolFont>
       <musicalTextFont>Leland Text</musicalTextFont>
       <showHeader>1</showHeader>
@@ -252,16 +256,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
     <Part id="1">
+      <eid>+B_+B</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -290,16 +296,18 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>/B_/B</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>

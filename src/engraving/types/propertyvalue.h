@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -75,6 +75,7 @@ enum class P_TYPE : unsigned char {
     DIRECTION_V,
     DIRECTION_H,
     ORIENTATION,
+    SHARED_LABEL_ORIENTATION,
     BEAM_MODE,
     ACCIDENTAL_ROLE,
     TIE_PLACEMENT,
@@ -131,6 +132,7 @@ enum class P_TYPE : unsigned char {
     CAPO_TRANSPOSE_MODE,
 
     INSTRUMENT_NAMES_ALIGN,
+    INSTRUMENT_NAMES_FORMAT,
 
     // Other
     GROUPS,
@@ -224,6 +226,9 @@ public:
 
     PropertyValue(Orientation v)
         : m_type(P_TYPE::ORIENTATION), m_data(make_data<Orientation>(v)) {}
+
+    PropertyValue(SharedLabelOrientation v)
+        : m_type(P_TYPE::SHARED_LABEL_ORIENTATION), m_data(make_data<SharedLabelOrientation>(v)) {}
 
     PropertyValue(BeamMode v)
         : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}
@@ -366,6 +371,9 @@ public:
 
     PropertyValue(const InstrumentNamesAlign& v)
         : m_type(P_TYPE::INSTRUMENT_NAMES_ALIGN), m_data(make_data<InstrumentNamesAlign>(v)) {}
+
+    PropertyValue(const InstrumentNamesFormat& v)
+        : m_type(P_TYPE::INSTRUMENT_NAMES_FORMAT), m_data(make_data<InstrumentNamesFormat>(v)) {}
 
     bool isValid() const;
 

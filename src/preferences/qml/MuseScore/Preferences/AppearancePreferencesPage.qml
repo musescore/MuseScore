@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -46,6 +46,7 @@ PreferencesPage {
             width: parent.width
 
             themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
+            themeCodes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemeCodes : appearanceModel.generalThemeCodes
             currentThemeCode: appearanceModel.currentThemeCode
             highContrastEnabled: appearanceModel.highContrastEnabled
             isFollowSystemThemeAvailable: appearanceModel.isFollowSystemThemeAvailable
@@ -118,8 +119,9 @@ PreferencesPage {
 
             scoreInversionEnabled: appearanceModel.scoreInversionEnabled
             isOnlyInvertInDarkTheme: appearanceModel.isOnlyInvertInDarkTheme
-            isCurrentThemeDark: appearanceModel.isCurrentThemeDark
+            engravingColor: appearanceModel.engravingColor
 
+            colorAndWallpaper.colorLabel: qsTrc("preferences", "Page color")
             colorAndWallpaper.useColor: appearanceModel.foregroundUseColor
             colorAndWallpaper.color: appearanceModel.foregroundColor
             colorAndWallpaper.wallpaperPath: appearanceModel.foregroundWallpaperPath
@@ -135,6 +137,10 @@ PreferencesPage {
 
             onIsOnlyInvertInDarkThemeChangeRequested: function(enable) {
                 appearanceModel.isOnlyInvertInDarkTheme = enable
+            }
+
+            onEngravingColorChangeRequested: function(newColor) {
+                appearanceModel.engravingColor = newColor
             }
 
             colorAndWallpaper.onUseColorChangeRequested: function(newValue) {

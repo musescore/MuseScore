@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "tlayout.h"
 
 #include "dom/beam.h"
+#include "dom/staff.h"
 #include "dom/system.h"
 
 using namespace muse;
@@ -622,7 +623,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             measureShape.remove_if([] (const ShapeElement& shapeEl) {
                 const EngravingItem* shapeItem = shapeEl.item();
                 return shapeItem && ((shapeItem->isRest() && toRest(shapeItem)->isFullMeasureRest())
-                                     || shapeItem->isBarLine() || shapeItem->isAccidental());
+                                     || shapeItem->isBarLine() || shapeItem->isAccidental() || shapeItem->isFermata());
             });
 
             if (measureShape.size() == 0) {

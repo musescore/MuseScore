@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,37 +23,42 @@
 #include "compatutils.h"
 
 #include "dom/articulation.h"
+#include "dom/capo.h"
 #include "dom/chord.h"
 #include "dom/dynamic.h"
+#include "dom/excerpt.h"
 #include "dom/expression.h"
+#include "dom/factory.h"
 #include "dom/harmony.h"
 #include "dom/image.h"
+#include "dom/key.h"
+#include "dom/keylist.h"
 #include "dom/laissezvib.h"
-#include "dom/masterscore.h"
-#include "dom/note.h"
-#include "dom/score.h"
-#include "dom/excerpt.h"
-#include "dom/part.h"
-#include "dom/stem.h"
 #include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
 #include "dom/measure.h"
-#include "dom/factory.h"
+#include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
+#include "dom/part.h"
+#include "dom/playtechannotation.h"
 #include "dom/rest.h"
+#include "dom/score.h"
+#include "dom/staff.h"
 #include "dom/stafftext.h"
 #include "dom/stafftextbase.h"
-#include "dom/playtechannotation.h"
-#include "dom/capo.h"
-#include "dom/noteline.h"
-#include "dom/textline.h"
-#include "style/styledef.h"
-#include "style/defaultstyle.h"
+#include "dom/stem.h"
 #include "dom/tempotext.h"
+#include "dom/textline.h"
 
 #include "editing/editchord.h"
+#include "editing/editkeysig.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
 
-#include "engraving/style/textstyle.h"
+#include "style/defaultstyle.h"
+#include "style/styledef.h"
+#include "style/textstyle.h"
 
 #include "types/string.h"
 
@@ -184,6 +189,10 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     if (masterScore->mscVersion() < 450) {
         convertTextLineToNoteAnchoredLine(masterScore);
         convertLaissezVibArticToTie(masterScore);
+    }
+
+    if (masterScore->mscVersion() < 500) {
+        removeMMRestElements(masterScore);
     }
 }
 
@@ -752,7 +761,8 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
                     }
                     kse.setConcertKey(cKey);
                     kse.setKey(key);
-                    score->undoChangeKeySig(staff, Fraction(0, 1), kse);
+                    EditKeySig::undoChangeKeySig(score->transactionManager()->currentOrDummyTransaction(), score, staff,
+                                                 Fraction(0, 1), kse);
                 }
             }
         }
@@ -817,7 +827,11 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
 
 NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
 {
-    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    IF_ASSERT_FAILED((textLine->startElement() && textLine->startElement()->isNote())
+                     && (textLine->endElement() && textLine->endElement()->isNote())) {
+        LOGW("Skipping textline with non note endpoints");
+        return nullptr;
+    }
     Note* startNote = toNote(textLine->startElement());
     Note* endNote = toNote(textLine->endElement());
 
@@ -871,7 +885,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                 Chord* chord = toChord(el);
                 for (Note* note : chord->notes()) {
                     for (Spanner* spanner : note->spannerFor()) {
-                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                        if (!spanner->isTextLine()) {
                             continue;
                         }
 
@@ -883,8 +897,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                         }
 
                         for (EngravingObject* linked : *links) {
-                            if (linked != spanner && linked && linked->isTextLine()
-                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                            if (linked != spanner && linked && linked->isTextLine()) {
                                 oldLines.insert(toTextLine(linked));
                             }
                         }
@@ -896,6 +909,11 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
 
     for (TextLine* oldLine : oldLines) {
         NoteLine* newLine = createNoteLineFromTextLine(oldLine);
+        if (!newLine) {
+            oldLine->parentItem()->remove(oldLine);
+            delete oldLine;
+            continue;
+        }
         EngravingItem* parent = newLine->parentItem();
 
         parent->remove(oldLine);
@@ -974,7 +992,7 @@ void CompatUtils::setPositionStylesFromAlign(MStyle* style, std::vector<Sid> ign
         if (muse::contains(ignoreSids, st.sid)) {
             continue;
         }
-        Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
+        Sid positionSid = CompatUtils::positionStyleFromAlign(st.sid);
         if (positionSid == Sid::NOSTYLE) {
             continue;
         }
@@ -1015,7 +1033,7 @@ void CompatUtils::resetHookHeightSign(TextLineBase* tl)
     }
 }
 
-void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
+void CompatUtils::setMusicSymbolSize470(MStyle& style)
 {
     // Music symbols have their own point size in 4.7
     // Initialize this to the text type's default font size
@@ -1051,7 +1069,7 @@ void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
     }
 }
 
-void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item)
+void CompatUtils::doMigrateNoteParens(EngravingItem* item)
 {
     if (!item->isNote()) {
         return;
@@ -1076,7 +1094,7 @@ void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item
 
 static constexpr double PRE_470_DPI = 360;
 
-Spatium mu::engraving::compat::CompatUtils::convertPre470FrameRadius(double frameRadius)
+Spatium CompatUtils::convertPre470FrameRadius(double frameRadius)
 {
     // The frame radius used to be expressed in raster units and divided by 2 at drawing. Since 4.7 it is expressed in spatium.
     return Spatium(frameRadius * (DPI / PRE_470_DPI) / DefaultStyle::baseStyle().value(Sid::spatium).toDouble()) / 2;
@@ -1087,5 +1105,88 @@ void CompatUtils::convertPre470ImageSize(Image* image)
     if (image->size().isNull() && image->score()->mscVersion() < 470) {
         image->init();
         image->setSize(image->size() * (DPI / PRE_470_DPI));
+    }
+}
+
+PointF CompatUtils::getAdjustedOffset(EngravingItem* item, PointF offset)
+{
+    PointF defaultOffset = item->defaultPos();
+    return offset - defaultOffset;
+}
+
+void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
+{
+    if (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) {
+        return;
+    }
+
+    // We need additional context for items with voice assignment properties
+    // Migrate in EngravingCompat after layout
+    if (item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    offset = getAdjustedOffset(item, offset.value<PointF>());
+}
+
+void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
+{
+    if (mscVersion > 301 || item->offset().isNull()) {
+        return;
+    }
+
+    PropertyValue offset = item->getProperty(Pid::OFFSET);
+    CompatUtils::migrateOffset500(item, offset);
+    item->setProperty(Pid::OFFSET, offset);
+}
+
+void CompatUtils::removeMMRestElements(MasterScore* masterScore)
+{
+    // <5.0 MMRests had copies of underlying elements. We now move the element when toggling the rests.
+    // Remove redundant copies which are written to the file
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            Measure* mmrest = m->mmRest();
+
+            if (!mmrest) {
+                continue;
+            }
+
+            // Remove jumps/markers/layout breaks
+            std::vector<EngravingItem*> measureEls = mmrest->el();
+            for (EngravingItem* el : measureEls) {
+                el->unlink();
+                score->removeElement(el);
+                delete el;
+            }
+
+            // Remove annotations
+            for (Segment& seg : mmrest->segments()) {
+                std::vector<EngravingItem*> annotations = seg.annotations();
+                for (EngravingItem* annotation : annotations) {
+                    annotation->unlink();
+                    score->removeElement(annotation);
+                    delete annotation;
+                }
+                if (seg.isChordRestType()) {
+                    continue;
+                }
+                // Remove time sigs, key sigs, clefs, ambitus, breaths, barlines
+                for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                    EngravingItem* el = seg.element(staff2track(staffIdx));
+                    if (!el) {
+                        continue;
+                    }
+                    el->unlink();
+                    score->removeElement(el);
+                    delete el;
+                }
+            }
+        }
     }
 }

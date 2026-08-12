@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -43,6 +43,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/editing/transpose.h"
 
 #include "log.h"
@@ -720,8 +721,8 @@ bool MuseData::read(const QString& name)
                 score->appendStaff(staff);
 
                 if ((staves == 2) && (i == 0)) {
-                    staff->setBracketType(0, BracketType::BRACE);
-                    staff->setBracketSpan(0, 2);
+                    EditStaffBrackets::setBracketType(score, staff->idx(), 0, BracketType::BRACE);
+                    EditStaffBrackets::setBracketSpan(score, staff->idx(), 0, 2);
                 }
             }
             score->appendPart(mpart);

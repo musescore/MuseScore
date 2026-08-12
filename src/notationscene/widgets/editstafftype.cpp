@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,7 +47,9 @@ using namespace muse::ui;
 mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
     mu::engraving::NoteHeadScheme::HEAD_NORMAL,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_NO_ACCIDENTALS,
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+    mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN_NO_ACCIDENTALS,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
@@ -60,8 +62,8 @@ mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
 //   EditStaffType
 //---------------------------------------------------------
 
-EditStaffType::EditStaffType(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+EditStaffType::EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* parent)
+    : QDialog(parent), muse::Contextable(ctx)
 {
     setObjectName("EditStaffType");
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -157,7 +159,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
 
-    connect(editTextStyleButton, &QPushButton::clicked, this, [=]() {
+    connect(editTextStyleButton, &QPushButton::clicked, this, [this]() {
         UriQuery uri("musescore://notation/style");
         uri.addParam("currentPageCode", Val("text-styles"));
         uri.addParam("currentSubPageCode", Val("tab-fret-number"));
@@ -268,11 +270,9 @@ Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::
     }
     score->rebuildMidiMapping();
     for (mu::engraving::Score* s : score->scoreList()) {
-        s->setPlaylistDirty();
         s->setLayoutAll();
     }
     score->updateChannel();
-    score->setSaved(true);
     score->update();
 
     return score->sanityCheck();

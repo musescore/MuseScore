@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,30 @@
 
 #pragma once
 
-#include "actions/actionable.h"
 #include "async/asyncable.h"
+#include "rcommand/commandable.h"
 
 #include "modularity/ioc.h"
 
 #include "playback/iplaybackconfiguration.h"
-#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "audio/main/iplayback.h"
 #include "interactive/iinteractive.h"
 
 namespace mu::playback {
-class OnlineSoundsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class OnlineSoundsController : public muse::rcommand::Commandable, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     OnlineSoundsController(const muse::modularity::ContextPtr& iocCtx);
 
     void regActions();
 
-    void setCurrentSequence(muse::audio::TrackSequenceId seqId);
-    void resetCurrentSequence();
+    void reset();
 
     void addOnlineTrack(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
     void removeOnlineTrack(const muse::audio::TrackId trackId);
@@ -62,10 +61,9 @@ private:
     void listenProcessingProgress(const muse::audio::TrackId trackId);
     void showLimitReachedErrorIfNeed(const muse::audio::InputProcessingProgress::StatusInfo& status);
 
-    void processOnlineSounds();
-    void clearOnlineSoundsCache();
+    muse::Ret processOnlineSounds();
+    muse::Ret clearOnlineSoundsCache();
 
-    muse::audio::TrackSequenceId m_currentSequenceId = -1;
     std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::unordered_set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     std::unordered_set<muse::String> m_onlineLibrariesWithExceededLimit;

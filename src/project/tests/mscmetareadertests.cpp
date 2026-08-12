@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,8 @@
 #include "global/io/path.h"
 
 #include "project/internal/mscmetareader.h"
+#include "project/types/projectmeta.h"
+#include "project/types/projecttypes.h"
 
 namespace stdfs = std::filesystem;
 using namespace Qt::StringLiterals;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>R_R</eid>
+    <eid>S_S</eid>
     <name>Klarinet in B♭</name>
     <Tracklist sTrack="0" dstTrack="0"/>
     <Tracklist sTrack="2" dstTrack="1"/>
@@ -21,6 +21,8 @@
       <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
       <lyricsMelismaPad>0.1</lyricsMelismaPad>
       <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
@@ -43,6 +45,8 @@
       <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
       <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
       <arpeggioAccidentalDistance>0.5</arpeggioAccidentalDistance>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <tiePlacementChord>inside</tiePlacementChord>
       <dynamicsPosAbove x="0" y="-1.5"/>
       <dynamicsPosBelow x="0" y="2.5"/>
@@ -66,24 +70,26 @@
     <open>1</open>
     <metaTag name="partName">Klarinet in B♭</metaTag>
     <Part id="1">
+      <eid>T_T</eid>
       <Staff>
-        <eid>S_S</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>U_U</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Staff>
-        <eid>T_T</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>V_V</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Klarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Klarinet in B♭</longName>
-        <shortName>Kl. in B♭</shortName>
+        <InstrumentLabel>
+          <longName>Klarinet in B♭</longName>
+          <shortName>Kl. in B♭</shortName>
+          </InstrumentLabel>
         <trackName>Klarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -99,27 +105,27 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>U_U</eid>
+        <eid>W_W</eid>
         <voice>
           <KeySig>
-            <eid>V_V</eid>
-            <linkedTo>F_F</linkedTo>
+            <eid>X_X</eid>
+            <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>W_W</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>Y_Y</eid>
+            <linkedTo>H_H</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>X_X</eid>
-            <linkedTo>H_H</linkedTo>
+            <eid>Z_Z</eid>
+            <linkedTo>I_I</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>Y_Y</eid>
-              <linkedTo>I_I</linkedTo>
+              <eid>a_a</eid>
+              <linkedTo>J_J</linkedTo>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -132,24 +138,24 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>Z_Z</eid>
-            <linkedTo>F_F</linkedTo>
+            <eid>b_b</eid>
+            <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>a_a</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>c_c</eid>
+            <linkedTo>N_N</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>b_b</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>d_d</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>c_c</eid>
-              <linkedTo>K_K</linkedTo>
+              <eid>e_e</eid>
+              <linkedTo>L_L</linkedTo>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>

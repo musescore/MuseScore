@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@ class Factory;
 class System;
 class Text;
 class Measure;
+class RangeLock;
 
 class Score;
 class MeasureBase;
@@ -58,10 +59,14 @@ public:
     System* system(size_t idx) { return m_systems[idx]; }
     const System* system(size_t idx) const { return m_systems.at(idx); }
 
+    MeasureBase* firstMeasureBase() const;
+    MeasureBase* lastMeasureBase() const;
+
     void appendSystem(System* s);
 
     page_idx_t pageNumber() const { return m_pageNumber; }
     void setPageNumber(page_idx_t n) { m_pageNumber = n; }
+    int getDisplayPageNumber() const;
     bool isOdd() const;
     double tm() const;              // margins in pixel
     double bm() const;
@@ -77,11 +82,15 @@ public:
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     RectF tbbox() const;                             // tight bounding box, excluding white space
     Fraction endTick() const;
+    Measure* firstMeasure() const;
 
     Text* headerText(int index) const { return m_headerTexts.at(index); }
     Text* footerText(int index) const { return m_footerTexts.at(index); }
     void setHeaderText(int index, Text* t) { m_headerTexts.at(index) = t; }
     void setFooterText(int index, Text* t) { m_footerTexts.at(index) = t; }
+
+    bool isLocked() const;
+    const RangeLock* pageLock() const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;

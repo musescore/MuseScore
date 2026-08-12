@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -58,7 +58,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Full screen"),
              TranslatableString("action", "Full screen"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("about-musescore",
              mu::context::UiCtxAny,
@@ -112,14 +112,14 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Playback controls"),
              TranslatableString("action", "Show/hide playback controls"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-noteinput",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
              TranslatableString("action", "Show/hide note input toolbar"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Vertical panels
@@ -128,35 +128,35 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
              TranslatableString("action", "Show/hide palettes"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-instruments",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Layout"),
              TranslatableString("action", "Show/hide layout panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
-    UiAction("inspector",
+    UiAction("toggle-properties-panel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
              TranslatableString("action", "Show/hide properties"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "S&election filter"),
              TranslatableString("action", "Show/hide selection filter"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-undo-history-panel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&History"),
              TranslatableString("action", "Show/hide undo history"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Navigator
@@ -165,7 +165,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
              TranslatableString("action", "Show/hide navigator"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Braille panel
@@ -174,7 +174,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Braille"),
              TranslatableString("action", "Show/hide braille panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Horizontal panels
@@ -183,7 +183,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
              TranslatableString("action", "Show/hide timeline"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-mixer",
              mu::context::UiCtxProjectOpened,
@@ -191,27 +191,27 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Mixer"),
              TranslatableString("action", "Show/hide mixer"),
              IconCode::Code::MIXER,
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
              TranslatableString("action", "Show/hide piano keyboard"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Percussion"),
              TranslatableString("action", "Show/hide percussion panel"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Score comparison tool"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     // Status bar
@@ -220,7 +220,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
              TranslatableString("action", "Show/hide status bar"),
-             Checkable::Yes
+             ui::Checkable::Yes
              ),
 
     UiAction("preference-dialog",
@@ -228,64 +228,10 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "&Preferences…"),
              TranslatableString("action", "Preferences")
-             ),
-
-    UiAction("action://copy",
-             { "action://notation/copy" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "&Copy"),
-             TranslatableString("action", "Copy"),
-             IconCode::Code::COPY
-             ),
-    UiAction("action://cut",
-             { "action://notation/cut" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Cu&t"),
-             TranslatableString("action", "Cut"),
-             IconCode::Code::CUT
-             ),
-    UiAction("action://paste",
-             { "action://notation/paste" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Past&e"),
-             TranslatableString("action", "Paste"),
-             IconCode::Code::PASTE
-             ),
-    UiAction("action://undo",
-             { "action://notation/undo" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Undo"),
-             TranslatableString("action", "Undo"),
-             IconCode::Code::UNDO
-             ),
-    UiAction("action://redo",
-             { "action://notation/redo" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Redo"),
-             TranslatableString("action", "Redo"),
-             IconCode::Code::REDO
-             ),
-    UiAction("action://delete",
-             { "action://notation/delete" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "De&lete"),
-             TranslatableString("action", "Delete"),
-             IconCode::Code::DELETE_TANK
-             ),
-    UiAction("action://cancel",
-             { "action://notation/cancel" },
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
-             ),
+             )
 };
 
-ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const modularity::ContextPtr& iocCtx)
+ApplicationUiActions::ApplicationUiActions(std::shared_ptr<AppshellCommandsController> controller, const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_controller(controller)
 {
 }
@@ -296,7 +242,7 @@ void ApplicationUiActions::init()
         m_actionCheckedChanged.send({ FULL_SCREEN_CODE });
     });
 
-    configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
+    appShellState()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
     });
 
@@ -306,10 +252,6 @@ void ApplicationUiActions::init()
 
     dockWindowProvider()->windowChanged().onNotify(this, [this]() {
         listenOpenedDocksChanged(dockWindowProvider()->window());
-    });
-
-    notationSceneConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
-        m_actionEnabledChanged.send({ TOGGLE_PERCUSSION_PANEL_ACTION_CODE });
     });
 }
 
@@ -343,10 +285,6 @@ const muse::ui::UiActionList& ApplicationUiActions::actionsList() const
 
 bool ApplicationUiActions::actionEnabled(const UiAction& act) const
 {
-    if (act.code == TOGGLE_PERCUSSION_PANEL_ACTION_CODE) {
-        return notationSceneConfiguration()->useNewPercussionPanel();
-    }
-
     return m_controller->canReceiveAction(act.code);
 }
 
@@ -364,7 +302,7 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
     }
 
     if (dockName == NOTATION_NAVIGATOR_PANEL_NAME) {
-        return configuration()->isNotationNavigatorVisible();
+        return appShellState()->isNotationNavigatorVisible();
     }
 
     if (dockName == NOTATION_BRAILLE_PANEL_NAME) {
@@ -393,7 +331,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
 
         { "toggle-palettes", PALETTES_PANEL_NAME },
         { "toggle-instruments", LAYOUT_PANEL_NAME },
-        { "inspector", INSPECTOR_PANEL_NAME },
+        { "toggle-properties-panel", PROPERTIES_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
         { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },
 

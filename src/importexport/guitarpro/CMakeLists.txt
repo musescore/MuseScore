@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -47,13 +47,16 @@ target_sources(iex_guitarpro PRIVATE
     internal/guitarbendimport/guitarbendimporttypes.h
     internal/guitarbendimport/guitarbendimporter.cpp
     internal/guitarbendimport/guitarbendimporter.h
-    internal/guitarbendimport/benddatacontext.h
     internal/guitarbendimport/benddatacollector.cpp
     internal/guitarbendimport/benddatacollector.h
     internal/guitarbendimport/bendinfoconverter.cpp
     internal/guitarbendimport/bendinfoconverter.h
-    internal/guitarbendimport/benddataprocessor.cpp
-    internal/guitarbendimport/benddataprocessor.h
+    internal/guitarbendimport/bendbuilder.cpp
+    internal/guitarbendimport/bendbuilder.h
+    internal/guitarbendimport/diveinfoconverter.cpp
+    internal/guitarbendimport/diveinfoconverter.h
+    internal/guitarbendimport/divedatacollector.cpp
+    internal/guitarbendimport/divedatacollector.h
 
     internal/guitarbendimport/splitchord/benddatacontextsplitchord.h
     internal/guitarbendimport/splitchord/benddatacollectorsplitchord.cpp

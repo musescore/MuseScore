@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,7 +26,6 @@
 */
 
 #include "global/containers.h"
-#include "global/io/buffer.h"
 
 #include "../types/types.h"
 
@@ -55,6 +54,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "notedot.h"
+#include "pagelockindicator.h"
 #include "part.h"
 #include "partialtie.h"
 #include "rest.h"
@@ -66,6 +66,7 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
+#include "system.h"
 #include "tie.h"
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -76,7 +77,6 @@
 #include "log.h"
 
 using namespace mu;
-using namespace muse::io;
 using namespace mu::engraving;
 
 // ====================================================
@@ -364,7 +364,7 @@ MeasureBase* Selection::startMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -377,17 +377,18 @@ MeasureBase* Selection::startMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickStart();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    MeasureBase* mb = m_score->tick2measureBase(tickStart());
+    if (mb && mb->isMeasure()) {
+        mb = toMeasure(mb)->coveringMMRestOrThis();
+    }
+    return mb;
 }
 
 MeasureBase* Selection::endMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -400,16 +401,17 @@ MeasureBase* Selection::endMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickEnd() - Fraction::eps();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    MeasureBase* mb = m_score->tick2measureBase(tickEnd() - Fraction::eps());
+    if (mb && mb->isMeasure()) {
+        mb = toMeasure(mb)->coveringMMRestOrThis();
+    }
+    return mb;
 }
 
 std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
-    if (el && (el->isSystemLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
+    if (el && (el->isSystemLockIndicator() || el->isPageLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
         return { const_cast<System*>(toIndicatorIcon(el)->system()) };
     }
 
@@ -419,16 +421,40 @@ std::vector<System*> Selection::selectedSystems() const
         return {};
     }
 
-    bool mmrests = score()->style().styleB(Sid::createMultiMeasureRests);
     std::vector<System*> systems;
-    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
+        if (!mb->isMeasure() && !mb->isHBox()) {
+            continue;
+        }
         System* sys = mb->system();
-        if ((mb->isMeasure() || mb->isHBox()) && (systems.empty() || sys != systems.back())) {
+        IF_ASSERT_FAILED(sys) {
+            continue;
+        }
+        if (systems.empty() || sys != systems.back()) {
             systems.push_back(sys);
         }
     }
 
     return systems;
+}
+
+std::vector<Page*> mu::engraving::Selection::pagesContainingSelection() const
+{
+    EngravingItem* el = element();
+    if (el && (el->isPageLockIndicator())) {
+        return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
+    }
+
+    std::vector<System*> systems = selectedSystems();
+    std::vector<Page*> pages;
+    for (System* system : systems) {
+        Page* page = system->page();
+        if (page && std::find(pages.begin(), pages.end(), page) == pages.end()) {
+            pages.push_back(page);
+        }
+    }
+
+    return pages;
 }
 
 void Selection::deselectAll()
@@ -456,13 +482,12 @@ void Selection::clear()
     }
 
     for (EngravingItem* e : m_el) {
+        e->score()->addRefresh(changeSelection(e, false));
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
                 e->score()->addRefresh(changeSelection(s, false));
             }
-        } else {
-            e->score()->addRefresh(changeSelection(e, false));
         }
     }
     m_el.clear();
@@ -801,13 +826,14 @@ void Selection::updateSelectedElements()
     for (Chord* singleNoteChord : singleNoteChords) {
         if (!m_rangeContainsMultiNoteChords || selectionFilter().includeSingleNotes()) {
             appendChordRest(singleNoteChord);
+        } else {
+            // Include elements anchored to the note even if the note itself isn't included...
+            const Note* note = singleNoteChord->notes().front();
+            const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
+            appendFiltered(noteAnchored);
+            const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(singleNoteChord);
+            appendFiltered(crAnchored);
         }
-        // Include elements anchored to the note even if the note itself isn't included...
-        const Note* note = singleNoteChord->notes().front();
-        const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
-        appendFiltered(noteAnchored);
-        const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(singleNoteChord);
-        appendFiltered(crAnchored);
     }
 
     for (Tuplet* tuplet : innerTuplets) {
@@ -1048,95 +1074,10 @@ muse::ByteArray Selection::mimeData() const
     return a;
 }
 
-static bool hasElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
-{
-    for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
-        if (!seg->enabled()) {
-            continue;
-        }
-        if (seg->element(track)) {
-            return seg->tick();
-        }
-    }
-    return Fraction(-1, 1);
-}
-
 muse::ByteArray Selection::staffMimeData() const
 {
-    auto buffer = Buffer::opened(IODevice::WriteOnly);
-    XmlWriter xml(&buffer);
-
-    xml.startDocument();
-
-    SelectionFilter filter = selectionFilter();
-    Fraction curTick;
-
-    Fraction ticks = tickEnd() - tickStart();
-    int staves = static_cast<int>(staffEnd() - staffStart());
-
-    XmlWriter::Attributes staffListAttributes = {
-        { "version", (MScore::testMode ? "2.00" : Constants::MSC_VERSION_STR) },
-        { "tick", tickStart().toString() },
-        { "len", ticks.toString() },
-        { "staff", staffStart() },
-        { "staves", staves },
-    };
-
-    // Note: canCopy() ensures that the whole selection has a single time stretch ratio.
-    Fraction timeStretch = score()->staff(staffStart())->timeStretch(tickStart());
-    if (timeStretch != Fraction(1, 1)) {
-        staffListAttributes.push_back({ "timeStretch", timeStretch.toString() });
-    }
-
-    xml.startElement("StaffList", staffListAttributes);
-
-    Segment* seg1 = m_startSegment;
-    Segment* seg2 = m_endSegment;
-
-    for (staff_idx_t staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
-        track_idx_t startTrack = staffIdx * VOICES;
-        track_idx_t endTrack   = startTrack + VOICES;
-
-        xml.startElement("Staff", { { "id", staffIdx } });
-
-        Staff* staff = m_score->staff(staffIdx);
-        Part* part = staff->part();
-        Interval interval = part->instrument(seg1->tick())->transpose();
-        if (interval.chromatic) {
-            xml.tag("transposeChromatic", interval.chromatic);
-        }
-        if (interval.diatonic) {
-            xml.tag("transposeDiatonic", interval.diatonic);
-        }
-        xml.startElement("voiceOffset");
-        for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-            if (hasElementInTrack(seg1, seg2, startTrack + voice) && filter.canSelectVoice(voice)) {
-                Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
-                xml.tag("voice", { { "id", voice } }, offset.ticks());
-            }
-        }
-        xml.endElement();     // </voiceOffset>
-
-        rw::RWRegister::writer()->writeSegments(xml, &filter, startTrack, endTrack, seg1, seg2, false, false, curTick);
-        xml.endElement();
-    }
-
-    xml.endElement();
-    xml.flush();
-    return buffer.data();
+    return rw::RWRegister::writer()->writeStaffSelection(m_score, selectionFilter(), staffStart(), staffEnd(), tickStart(), tickEnd(),
+                                                         m_startSegment, m_endSegment);
 }
 
 muse::ByteArray Selection::symbolListMimeData() const
@@ -1145,11 +1086,6 @@ muse::ByteArray Selection::symbolListMimeData() const
         EngravingItem* e;
         Segment* s;
     };
-
-    auto buffer = Buffer::opened(IODevice::WriteOnly);
-    XmlWriter xml(&buffer);
-
-    xml.startDocument();
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;
@@ -1184,6 +1120,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
+        case ElementType::STAVE_SHARING_LABEL:
             seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::EXPRESSION:
@@ -1263,22 +1200,18 @@ muse::ByteArray Selection::symbolListMimeData() const
         map.insert(std::pair<int64_t, MapData>(((int64_t)track << 32) + seg->tick().ticks(), mapData));
     }
 
-    xml.startElement("SymbolList", { { "version", Constants::MSC_VERSION_STR },
-                         { "fromtrack", topTrack },
-                         { "totrack", bottomTrack } });
-
-    // scan the map, outputting elements each with a relative <track> tag on track change,
-    // a relative tick and the number of CR segments to skip
+    // scan the map, computing for each element a relative track and tick offset,
+    // and the number of CR segments to skip
+    std::vector<SelectedSymbol> symbols;
     track_idx_t currTrack = muse::nidx;
     for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
         int numSegs;
         track_idx_t track = static_cast<track_idx_t>(iter->first >> 32);
         if (currTrack != track) {
-            xml.tag("trackOffset", static_cast<int>(track - topTrack));
             currTrack = track;
             seg       = firstSeg;
         }
-        xml.tag("tickOffset", static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks());
+        int tickOffset = static_cast<int>(iter->first & 0xFFFFFFFF) - firstTick.ticks();
         numSegs = 0;
         // with figured bass, we need to look for the proper segment
         // not only according to ChordRest elements, but also annotations
@@ -1318,14 +1251,10 @@ muse::ByteArray Selection::symbolListMimeData() const
                 numSegs++;
             }
         }
-        xml.tag("segDelta", numSegs);
-        rw::RWRegister::writer()->writeItem(iter->second.e, xml);
+        symbols.push_back({ track, tickOffset, numSegs, iter->second.e });
     }
 
-    xml.endElement();
-    xml.flush();
-    buffer.close();
-    return buffer.data();
+    return rw::RWRegister::writer()->writeSymbolListSelection(topTrack, bottomTrack, symbols);
 }
 
 std::vector<EngravingItem*> Selection::elements(ElementType type) const
@@ -1597,9 +1526,9 @@ const std::list<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-std::list<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
+std::vector<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
 {
-    std::list<Note*> l;
+    std::vector<Note*> l;
 
     auto addNote = [&l](Note* note) {
         bool alreadyThere = false;

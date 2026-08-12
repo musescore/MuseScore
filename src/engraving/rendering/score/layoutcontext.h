@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -63,14 +63,15 @@ class Score;
 class Spanner;
 class SpannerMap;
 class System;
-class SystemLocks;
+class RangeLocks;
 class Staff;
 class Measure;
 class ChordRest;
 class Segment;
+class BracketItem;
 struct PaddingTable;
 
-class UndoCommand;
+class UndoableCommand;
 class EditData;
 
 class Selection;
@@ -149,6 +150,7 @@ public:
     // Const access
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<Part*> visibleParts() const;
 
     size_t npages() const;
     const std::vector<Page*>& pages() const;
@@ -177,9 +179,12 @@ public:
 
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
-    const SystemLocks* systemLocks() const;
+    const RangeLocks* systemLocks() const;
+    const RangeLocks* pageLocks() const;
 
     const PaddingTable& paddingTable() const;
+
+    const std::vector<BracketItem*>& brackets(staff_idx_t staffIdx) const;
 
     // Mutable access
     std::vector<Page*>& pages();
@@ -201,10 +206,11 @@ public:
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);
-    void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
+    void undo(UndoableCommand* cmd) const;
     void addElement(EngravingItem* item);
     void removeElement(EngravingItem* item);
-    void updateSystemLocksOnCreateMMRest(Measure* first, Measure* last);
+    void updateLocksOnCreateMMRest(Measure* first, Measure* last);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents = true);
 
     void addUnmanagedSpanner(Spanner* s);
     const std::set<Spanner*>& unmanagedSpanners() const;
@@ -246,6 +252,8 @@ public:
 
     bool rangeDone() const { return m_rangeDone; }
 
+    bool mustRecomputeHeadersFooters() const { return m_mustRecomputeHeadersFooters; }
+
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
 
     // Mutable
@@ -283,6 +291,8 @@ public:
 
     void setRangeDone(bool val) { m_rangeDone = val; }
 
+    void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
+
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
 
 private:
@@ -313,6 +323,8 @@ private:
     std::set<Spanner*> m_processedSpanners;
 
     bool m_rangeDone = false;
+
+    bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
 
     // cache
     double m_totalBracketsWidth = -1.0;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,6 +26,10 @@
 #include <qqmlintegration.h>
 
 #include "../abstractelementpopupmodel.h"
+
+namespace mu::engraving {
+class EngravingItem;
+}
 
 namespace mu::notation {
 namespace ShadowNotePopupContent {
@@ -52,7 +56,7 @@ class ShadowNotePopupModel : public AbstractElementPopupModel
 public:
     explicit ShadowNotePopupModel(QObject* parent = nullptr);
 
-    static bool canOpen(const EngravingItem* shadowNote);
+    static bool canOpen(const engraving::EngravingItem* shadowNote);
 
     Q_INVOKABLE void init() override;
 

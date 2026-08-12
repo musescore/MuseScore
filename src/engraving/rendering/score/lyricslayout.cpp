@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,7 +21,7 @@
  */
 #include "lyricslayout.h"
 
-#include "dom/masterscore.h"
+#include "dom/factory.h"
 #include "dom/repeatlist.h"
 #include "style/styledef.h"
 
@@ -30,12 +30,12 @@
 #include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 #include "dom/stafftype.h"
 #include "dom/system.h"
 
 #include "tlayout.h"
 #include "textlayout.h"
-#include "autoplace.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -116,14 +116,18 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         }
     }
 
-    PointF o(item->propertyDefault(Pid::OFFSET).value<PointF>());
-
     // Negate ChordRest offset
     ChordRest* cr = item->chordRest();
-    double x = o.x() - cr->x();
+    double x = -cr->x();
 
+    /* Preserve the vertical position: a lyric's Y is set in computeVerticalPositions(). Necessary
+     * because layoutBaseTextBase1() ends with ldata->move(defaultPos), which accumulates a downward
+     * shift of the lyric if the current function is called in a partially-relaid system without a
+     * following computeVerticalPositions() call. */
+    const double posY = ldata->pos().y();
     TextLayout::layoutBaseTextBase1(item, ctx);
     TextLayout::computeTextHighResShape(item, ldata);
+    ldata->setPosY(posY);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;
@@ -481,8 +485,10 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
 
     if (isEndMelisma() || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
         if (!item->separator()) {
-            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
+            LyricsLine* separator = Factory::createLyricsLine(ctx.mutDom().dummyParent());
+            separator->setGenerated(true);
             separator->setTick(cr->tick());
+            separator->setVisible(item->visible());
             item->setSeparator(separator);
             ctx.mutDom().addUnmanagedSpanner(item->separator());
         }
@@ -491,7 +497,6 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         item->separator()->setTicks(lyricsLineTicks);
         item->separator()->setTrack(item->track());
         item->separator()->setTrack2(item->track());
-        item->separator()->setVisible(item->visible());
         item->separator()->styleChanged();
     } else {
         if (item->separator()) {
@@ -590,6 +595,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = -(maxVerseAbove - verse) * lyrics->lineSpacing() * lyricsLineHeightFactor;
+            PointF defaultPos = lyrics->defaultPos();
+            y += defaultPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -603,6 +610,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = staffHeight + verse * lyrics->lineSpacing() * lyricsLineHeightFactor;
+            PointF defaultPos = lyrics->defaultPos();
+            y += defaultPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -775,6 +784,9 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
     const System* system = item->system();
     const LyricsLine* lyricsLine = item->lyricsLine();
     const ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    if (!endChordRest) {
+        return system->endingXForOpenEndedLines();
+    }
     const double systemPageX = system->pageX();
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
@@ -843,7 +855,8 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         if (nextLyrics) {
-            ldata->setPosY(nextLyrics->offset().y());
+            PointF nextLyricsDefaultPos = nextLyrics->defaultPos();
+            ldata->setPosY(nextLyrics->offset().y() + nextLyricsDefaultPos.y());
         } else {
             PointF lyricsOffset = item->styleValue(Pid::OFFSET,
                                                    item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
@@ -853,15 +866,22 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     }
 
     if (item->isSingleBeginType()) {
-        ldata->setPosY(startLyrics->offset().y());
+        PointF startLyricsDefaultPos = startLyrics->defaultPos();
+        ldata->setPosY(startLyrics->offset().y() + startLyricsDefaultPos.y());
         return;
     }
 
     if (melisma || !endLyrics) {
-        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        ldata->setPosY(nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y());
+        const Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
+
+        const Lyrics* refLyrics = nextLyrics ? nextLyrics : startLyrics;
+        PointF refLyricsDefaultPos = refLyrics->defaultPos();
+
+        ldata->setPosY(refLyrics->offset().y() + refLyricsDefaultPos.y());
         return;
     }
 
-    ldata->setPosY(endLyrics->offset().y());
+    PointF endLyricsDefaultPos = endLyrics->defaultPos();
+
+    ldata->setPosY(endLyrics->offset().y() + endLyricsDefaultPos.y());
 }

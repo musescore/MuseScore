@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,10 +47,6 @@ MMRest::MMRest(Segment* s)
 MMRest::MMRest(const MMRest& r, bool link)
     : Rest(r, link)
 {
-    if (link) {
-        score()->undo(new Link(this, const_cast<MMRest*>(&r)));
-        setAutoplace(true);
-    }
     m_numberVisible = r.m_numberVisible;
 }
 

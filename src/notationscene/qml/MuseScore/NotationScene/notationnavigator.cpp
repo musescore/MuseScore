@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationnavigator.h"
 
 #include "log.h"
+
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 using namespace muse;
 using namespace mu::notation;
@@ -68,7 +71,13 @@ void NotationNavigator::load()
 
     AbstractNotationPaintView::load();
 
-    rescale();
+    rescaleIfVisible();
+}
+
+void NotationNavigator::onLoadNotation(INotationPtr notation)
+{
+    AbstractNotationPaintView::onLoadNotation(notation);
+    rescaleIfVisible();
 }
 
 bool NotationNavigator::isVerticalOrientation() const
@@ -86,7 +95,7 @@ const PageList& NotationNavigator::pages() const
     return notation()->elements()->pages();
 }
 
-void NotationNavigator::rescale()
+void NotationNavigator::rescaleIfVisible()
 {
     TRACEFUNC;
 
@@ -236,9 +245,7 @@ void NotationNavigator::initOrientation()
 void NotationNavigator::initVisible()
 {
     connect(this, &NotationNavigator::visibleChanged, [this]() {
-        if (isVisible()) {
-            rescale();
-        }
+        rescaleIfVisible();
     });
 }
 
@@ -266,11 +273,7 @@ void NotationNavigator::paint(QPainter* painter)
 
 void NotationNavigator::onViewSizeChanged()
 {
-    if (!isVisible()) {
-        return;
-    }
-
-    rescale();
+    rescaleIfVisible();
 }
 
 void NotationNavigator::paintPageNumbers(QPainter* painter)

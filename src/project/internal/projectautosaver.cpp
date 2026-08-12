@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "projectautosaver.h"
 
 #include "engraving/infrastructure/mscio.h"
+
+#include "project/inotationproject.h"
 
 #include "defer.h"
 #include "log.h"
@@ -58,7 +61,7 @@ void ProjectAutoSaver::init()
     update();
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
-        if (auto project = currentProject()) {
+        if (INotationProjectPtr project = currentProject()) {
             if (project->isNewlyCreated() && !project->isImported()) {
                 Ret ret = project->save(configuration()->newProjectTemporaryPath(), SaveMode::AutoSave);
                 if (!ret) {
@@ -71,7 +74,7 @@ void ProjectAutoSaver::init()
                 update();
             });
 
-            project->needSave().notification.onNotify(this, [this]() {
+            project->needSaveChanged().onNotify(this, [this]() {
                 update();
             });
         }
@@ -151,19 +154,21 @@ void ProjectAutoSaver::onTrySave()
         }
     };
 
+    LOGI() << "[autosave] trying to auto save";
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        LOGD() << "[autosave] no project";
+        LOGI() << "[autosave] no project";
         return;
     }
 
     if (!project->needAutoSave()) {
-        LOGD() << "[autosave] project does not need save";
+        LOGI() << "[autosave] project does not need save";
         return;
     }
 
     if (!project->canSave()) {
-        LOGD() << "[autosave] project could not be saved";
+        LOGI() << "[autosave] project could not be saved";
         return;
     }
 
@@ -178,7 +183,7 @@ void ProjectAutoSaver::onTrySave()
 
     project->setNeedAutoSave(false);
 
-    LOGD() << "[autosave] successfully saved project";
+    LOGI() << "[autosave] successfully saved project";
 }
 
 muse::io::path_t ProjectAutoSaver::projectPath(INotationProjectPtr project) const

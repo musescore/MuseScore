@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,6 @@
 #include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
 #include "../../dom/beam.h"
@@ -105,6 +104,7 @@
 #include "../../dom/soundflag.h"
 #include "../../dom/spacer.h"
 #include "../../dom/spanner.h"
+#include "../../dom/staff.h"
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
@@ -131,12 +131,14 @@
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
+
+#include "../../editing/editstaffbrackets.h"
 #include "../../editing/transpose.h"
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
 #include "../read400/tread.h"
-#include "../read460/tread.h"
+#include "../read500/tread.h"
 #include "../compat/compatutils.h"
 #include "../compat/tremolocompat.h"
 #include "readcontext.h"
@@ -496,6 +498,10 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
+    }
+
+    if (pid == Pid::OFFSET) {
+        compat::CompatUtils::migrateOffset500(item, v);
     }
 
     if (!ctx.shouldSkipProperty(pid)) {
@@ -998,9 +1004,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     if (tag == "soundId") {
         item->setSoundId(e.readText());
     } else if (tag == "longName") {
-        item->setLongName(read460::TRead::readStaffName(e));
+        item->setLongName(read500::TRead::readLegacyStaffName(e));
     } else if (tag == "shortName") {
-        item->setShortName(read460::TRead::readStaffName(e));
+        item->setShortName(read500::TRead::readLegacyStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {
@@ -1975,17 +1981,6 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
     return true;
 }
 
-void TRead::read(Audio* a, XmlReader& e, ReadContext&)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            a->setPath(e.readText());
-        } else {
-            e.unknown();
-        }
-    }
-}
-
 void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)
 {
     while (e.readNextStartElement()) {
@@ -2236,6 +2231,7 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
     if (tag == "LayoutBreak") {
         LayoutBreak* lb = Factory::createLayoutBreak(b);
         TRead::read(lb, e, ctx);
+        lb->setTrack(0);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
         case LayoutBreakType::LINE:
@@ -3301,10 +3297,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
             n->setParenthesesMode(ParenthesesMode::BOTH);
-            ctx.score()->deleteLater(s);
+            s->deleteLater();
         } else {
             n->add(s);
         }
@@ -3494,10 +3490,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
-
     read400::TRead::read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
@@ -3545,8 +3537,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideMod
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {
@@ -3692,11 +3682,10 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Segment") {
         LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
         ls->setTrack(l->track());     // needed in read to get the right staff mag
-        TRead::read(ls, e, ctx);
         l->add(ls);
+        TRead::read(ls, e, ctx);
         ls->setVisible(l->visible());
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DIAGONAL)) {
-    } else if (TRead::readProperty(l, tag, e, ctx, Pid::ANCHOR)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_WIDTH)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DASH_LINE_LEN)) {
@@ -3751,8 +3740,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
             s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
         }
         SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
-        TRead::read(sts, e, ctx);
         s->add(sts);
+        TRead::read(sts, e, ctx);
     } else if (!readProperties(toSpanner(s), e, ctx)) {
         return false;
     }
@@ -3957,11 +3946,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(s->brackets().size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        s->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        s->setBracketSpan(col, e.intAttribute("span", 0));
-        s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
+        EditStaffBrackets::setBracketType(ctx.score(), s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        EditStaffBrackets::setBracketSpan(ctx.score(), s->idx(), col, e.intAttribute("span", 0));
+        EditStaffBrackets::setBracketVisible(ctx.score(), s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
@@ -4490,12 +4479,6 @@ bool TRead::readProperties(Volta* v, XmlReader& e, ReadContext& ctx)
         return false;
     }
 
-    if (v->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(v->anchor()), int(Volta::VOLTA_ANCHOR));
-        v->setAnchor(Volta::VOLTA_ANCHOR);
-    }
-
     return true;
 }
 
@@ -4545,5 +4528,5 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         return;
     }
 
-    score->addSystemLock(new SystemLock(startMeas, endMeas));
+    score->addSystemLock(new RangeLock(startMeas, endMeas));
 }

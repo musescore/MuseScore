@@ -1,71 +1,50 @@
 #ifndef MU_APP_GUIAPP_H
 #define MU_APP_GUIAPP_H
 
-#include <vector>
 #include <memory>
 
-#include <QTimer>
-
-#include "global/internal/baseapplication.h"
+#include "ui/internal/guiapplication.h"
 #include "../cmdoptions.h"
-
-#include "modularity/imodulesetup.h"
-#include "global/globalmodule.h"
 
 #include "modularity/ioc.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "appshell/iappshellconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
+#include "appshell/widgets/splashscreen/splashscreen.h"
+
 class QQuickWindow;
 
-namespace mu::appshell {
-class SplashScreen;
-}
-
 namespace mu::app {
-class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
+class MuseScoreGuiApp : public muse::ui::GuiApplication
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<appshell::IAppShellConfiguration> appshellConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
-    GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
+    MuseScoreGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
-    void addModule(muse::modularity::IModuleSetup* module);
-
-    void setup() override;
-    void finish() override;
-
-    muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
-    void destroyContext(const muse::modularity::ContextPtr& ctx) override;
-    size_t contextCount() const override;
-    std::vector<muse::modularity::ContextPtr> contexts() const override;
+    void showSplash() override;
 
 private:
-    void applyCommandLineOptions(const CmdOptions& options);
 
-    struct Context {
-        muse::modularity::ContextPtr ctx;
-        std::vector<muse::modularity::IContextSetup*> setups;
-        QQuickWindow* window = nullptr;
-
-        bool isValid() const { return ctx != nullptr && !setups.empty(); }
+    struct SplashConfig {
+        appshell::SplashScreen::SplashScreenType type = appshell::SplashScreen::SplashScreenType::Default;
+        bool forNewScore = false;
+        QString openingFileName;
     };
 
-    Context& context(const muse::modularity::ContextPtr& ctx);
+    SplashConfig splashConfig(const std::shared_ptr<muse::CmdOptions>& options) const;
 
-    CmdOptions m_options;
+    void applyCommandLineOptions(const std::shared_ptr<muse::CmdOptions>& options) override;
+
+    std::shared_ptr<muse::CmdOptions> makeContextOptions(const muse::StringList& args) const override;
+    void showContextSplash(const muse::modularity::ContextPtr& ctxId) override;
+    QString mainWindowQmlPath(const QString& platform) const override;
+    void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
 
     appshell::SplashScreen* m_splashScreen = nullptr;
-
-    //! NOTE Separately to initialize logger and profiler as early as possible
-    muse::GlobalModule* m_globalModule = nullptr;
-    std::vector<muse::modularity::IModuleSetup*> m_modules;
-    QTimer m_delayedInitTimer;
-
-    std::vector<Context> m_contexts;
 };
 }
 

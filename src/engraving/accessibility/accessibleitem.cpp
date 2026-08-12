@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -203,8 +203,7 @@ QString AccessibleItem::accessibleName() const
                    .arg(m_element->screenReaderInfo().toQString())
                    .arg(m_element->visible() ? "" : " " + muse::qtrc("engraving", "invisible"))
                    .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "")
-                   .arg(root->isRangeSelection() ? ("; " + muse::qtrc("engraving", "selected")) : "");
-
+                   .arg((root && root->isRangeSelection()) ? ("; " + muse::qtrc("engraving", "selected")) : "");
     return readable(name);
 }
 
@@ -215,7 +214,7 @@ QString AccessibleItem::accessibleDescription() const
     }
 
     AccessibleRoot* root = accessibleRoot();
-    if (root->isRangeSelection()) {
+    if (root && root->isRangeSelection()) {
         return readable(root->rangeSelectionInfo());
     }
 

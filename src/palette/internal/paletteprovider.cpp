@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,6 +30,9 @@
 #include <QStandardPaths>
 
 #include "engraving/dom/mscore.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h" // IWYU pragma: keep
 
 #include "palettecreator.h"
 
@@ -138,7 +141,7 @@ void PaletteElementEditor::open()
 
         paletteProvider()->addCustomItemRequested().onReceive(this, [this](ElementPtr item) {
             onElementAdded(item);
-        });
+        }, async::Asyncable::Mode::SetReplace);
 
         if (interactive()->isOpened(uri).val) {
             interactive()->raise(uri);
@@ -381,7 +384,7 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    : muse::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
 
             showHideOrDeleteDialog(question)
-            .onResolve(this, [=](RemoveAction action) {
+            .onResolve(this, [this, removeIndices](RemoveAction action) {
                 remove(removeIndices, action);
             });
             return;
@@ -407,7 +410,7 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    : muse::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
 
             showHideOrDeleteDialog(question)
-            .onResolve(this, [=](RemoveAction action) { remove(removeIndices, action); });
+            .onResolve(this, [this, removeIndices](RemoveAction action) { remove(removeIndices, action); });
             return;
         } else {
             action = RemoveAction::Hide;

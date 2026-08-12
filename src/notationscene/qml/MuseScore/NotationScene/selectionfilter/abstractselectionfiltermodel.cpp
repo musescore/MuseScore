@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,12 @@
 
 #include "log.h"
 
+#include "notation/inotation.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationselectionfilter.h"
+
 using namespace mu::notation;
+using namespace mu::engraving;
 
 AbstractSelectionFilterModel::AbstractSelectionFilterModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))

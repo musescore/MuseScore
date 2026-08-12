@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "async/asyncable.h"
 
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
 #include "context/iglobalcontext.h"
 #include "musesampler/imusesamplerinfo.h"
 #include "notation/iinstrumentsrepository.h"
@@ -79,6 +80,7 @@ class PercussionPanelModel : public QObject, public muse::Contextable, public mu
     muse::GlobalInject<IInstrumentsRepository> instrumentsRepository;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<mu::playback::IPlaybackController> playbackController = { this };
 
 public:

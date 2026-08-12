@@ -2,6 +2,9 @@
 
 #include <QList>
 
+#include "audio/common/audioutils.h"
+#include "vst/vstpluginattrs.h"
+
 #include "log.h"
 #include "translation.h"
 #include "stringutils.h"
@@ -97,11 +100,11 @@ void OutputResourceItem::handleMenuItem(const QString& menuItemId)
     } else if (menuItemId == GET_MORE_EFFECTS) {
         const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
         const QString urlParams("plugins?utm_source=mss-mixer-fx&utm_medium=mh-fx&utm_campaign=mss-mixer-fx-mainpage");
-        interactive()->openUrl(url + urlParams);
+        platformInteractive()->openUrl(url + urlParams);
         return;
     }
 
-    const AudioResourceId& newSelectedResourceId = menuItemId.toStdString();
+    const audioplugins::PluginResourceId& newSelectedResourceId = menuItemId.toStdString();
 
     for (const auto& pair : m_fxByVendorMap) {
         for (const AudioResourceMeta& fxResourceMeta : pair.second) {
@@ -181,7 +184,9 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
     requestToCloseNativeEditorView();
 
     audio::AudioFxParams newParams = m_currentFxParams;
+    newParams.categories = audio::audioFxCategoriesFromString(newMeta.attributeVal(vst::CATEGORIES_ATTRIBUTE));
     newParams.resourceMeta = newMeta;
+    newParams.configuration.clear();
     newParams.active = newMeta.isValid();
 
     setParams(newParams);
@@ -209,5 +214,5 @@ bool OutputResourceItem::isBlank() const
 
 bool OutputResourceItem::hasNativeEditorSupport() const
 {
-    return m_currentFxParams.resourceMeta.hasNativeEditorSupport;
+    return muse::audio::hasNativeEditorSupport(m_currentFxParams.resourceMeta);
 }

@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -24,33 +24,46 @@ target_sources(notation PRIVATE
     notationmodule.cpp
     notationmodule.h
 
+    inotation_fwd.h
+    inotation.h
     imasternotation.h
     iexcerptnotation.h
-    inotation.h
     inotationpainting.h
     inotationviewstate.h
     inotationsolomutestate.h
     inotationnoteinput.h
     inotationselection.h
     inotationselectionfilter.h
+    inotationselectionrange.h
     inotationautomation.h
     inotationinteraction.h
-    internal/inotationundostack.h
     inotationstyle.h
+    inotationundostack.h
     inotationaccessibility.h
     inotationmidiinput.h
-    notationtypes.h
     inotationconfiguration.h
+    inotationcontextconfiguration.h
     notationerrors.h
     inotationplayback.h
     inotationelements.h
     inotationparts.h
     iinstrumentsrepository.h
 
+    notationtypes.h
+    types/instrumentstypes.h
+    types/loopboundaries.h
+    types/noteinputtypes.h
+    types/propertystyletypes.h
+    types/scorecreateoptions.h
+    types/staffparttypes.h
+    types/stringtunings.h
+    types/tempo.h
+    types/viewmode.h
+    types/zoomtype.h
+
     internal/excerptnotation.cpp
     internal/excerptnotation.h
     internal/igetscore.h
-    internal/inotationselectionrange.h
     internal/instrumentsrepository.cpp
     internal/instrumentsrepository.h
     internal/masternotation.cpp
@@ -66,6 +79,8 @@ target_sources(notation PRIVATE
     internal/notationaccessibility.cpp
     internal/notationconfiguration.cpp
     internal/notationconfiguration.h
+    internal/notationcontextconfiguration.cpp
+    internal/notationcontextconfiguration.h
     internal/notationautomation.cpp
     internal/notationautomation.h
     internal/notationelements.cpp
@@ -129,6 +144,7 @@ if(NOT OS_IS_WASM)
 endif()
 
 target_link_libraries(notation PRIVATE
+    Qt::Widgets # for QApplication::cursorFlashTime() in notationinteraction.cpp
     muse::draw
     engraving
 )

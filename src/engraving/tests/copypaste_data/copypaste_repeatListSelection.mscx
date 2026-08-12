@@ -196,6 +196,10 @@
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
+            <TremoloSingleChord>
+              <subtype>r32</subtype>
+              <eid>TyV3eAHfObD_rvJlqWRqZbD</eid>
+              </TremoloSingleChord>
             </Chord>
           <Rest>
             <eid>b8TZkQz9N7L_ZYNIAWhUDDP</eid>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,6 +24,9 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+
+#include "engraving/editing/paste.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -342,7 +345,7 @@ TEST_F(Engraving_SelectionFilterTests, notesInChordsCopyPaste)
         score->select(auxMeasure, SelectType::SINGLE);
 
         score->startCmd(TranslatableString::untranslatable("Selection filter - copy/paste test"));
-        score->cmdPasteStaffList(mimeData);
+        Paste::pasteStaffList(score->transactionManager()->currentOrDummyTransaction(), score, mimeData);
         score->endCmd();
     };
 

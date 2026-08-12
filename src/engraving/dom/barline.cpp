@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,6 @@
 
 #include "translation.h"
 
-#include "../editing/undo.h"
 #include "../types/symnames.h"
 
 #include "articulation.h"
@@ -394,7 +393,7 @@ bool BarLine::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* BarLine::drop(EditData& data)
+EngravingItem* BarLine::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
 
@@ -481,7 +480,7 @@ EngravingItem* BarLine::drop(EditData& data)
             if (left && segment()->isEndBarLineType() && m->nextMeasureMM()) {
                 m = m->nextMeasureMM();
             }
-            return m->drop(data);
+            return m->drop(tx, data);
         }
     }
     return nullptr;

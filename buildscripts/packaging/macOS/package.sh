@@ -7,6 +7,33 @@ APP_NAME="MuseScore Studio"
 VOL_NAME="MuseScore-Studio"
 DO_SIGN=false
 
+function change_rpath() {
+   for P in `otool -L $1 | awk '{print $1}'`
+   do
+      if [[ "$P" == *@rpath* ]]
+      then
+         if [[ "$P" == *Qt* ]]
+         then
+            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+            for P1 in `otool -L $FNAME | awk '{print $1}'`
+            do
+               if [[ "$P1" == *@rpath* ]]
+               then
+                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
+                   install_name_tool -change $P1 $PSLASH1 $FNAME
+               fi
+            done
+         else
+            PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+         fi
+      fi
+   done
+}
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --app-name) APP_NAME="$2"; shift ;;
@@ -40,6 +67,27 @@ macdeployqt ${APP_PATH} \
 echo "otool -L post-macdeployqt"
 otool -L ${APP_PATH}/Contents/MacOS/mscore
 
+# Fix rpath after packaging, needed for generating dump symbols
+APPNAME=mscore
+VOLUME=applebuild
+SOURCE_BIN_FILE=${APP_PATH}/Contents/MacOS/${APPNAME}
+if [[ -f "$SOURCE_BIN_FILE" ]]
+then
+    change_rpath "$SOURCE_BIN_FILE"
+fi
+
+SOURCE_FRAMEWORKS=${APP_PATH}/Contents/Frameworks
+if [[ -d "$SOURCE_FRAMEWORKS" ]]
+then
+    for LIB_FILE in $SOURCE_FRAMEWORKS/*.dylib
+    do
+        if [[ -f "$LIB_FILE" ]]
+        then
+            change_rpath "$LIB_FILE"
+        fi
+    done
+fi
+
 # Remove dSYM files
 echo "Remove dSYM files"
 find ${APP_PATH}/Contents -type d -name "*.dSYM" -exec rm -r {} +
@@ -64,6 +112,7 @@ if $DO_SIGN; then
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
     codesign --force \
+        --deep \
         --options runtime \
         --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
         -s "Developer ID Application: MuseScore" \

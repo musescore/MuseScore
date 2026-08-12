@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "../imasternotation.h"
 
 namespace mu::engraving {
+class Excerpt;
 class MasterScore;
 }
 
@@ -60,7 +61,7 @@ public:
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
-    void resetExcerpt(IExcerptNotationPtr excerptNotation) override;
+    void resetExcerpt(IExcerptNotationPtr& excerptNotation) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;
 
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;

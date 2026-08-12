@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,27 +27,21 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::Contextable
+class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus);
     QML_ELEMENT;
 
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     explicit SearchPopupModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void search(const QString& text);
-
-signals:
-    void showPopupRequested();
 
 private:
     void classBegin() override;

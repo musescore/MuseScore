@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -78,6 +78,12 @@ Item {
 
             navigation.panel: centralNavPanel
             navigation.row: 0
+            accessible.name: {
+                if (!writeButton.accentButton) {
+                    return writeButton.text
+                }
+                return writeButton.text + ", " + qsTrc("ui", "selected")
+            }
 
             backgroundItem: RoundedRectangle {
                 id: writeButtonBackground
@@ -145,6 +151,12 @@ Item {
 
             navigation.panel: centralNavPanel
             navigation.row: 1
+            accessible.name: {
+                if (!previewButton.accentButton) {
+                    return previewButton.text
+                }
+                return previewButton.text + ", " + qsTrc("ui", "selected")
+            }
 
             backgroundItem: RoundedRectangle {
                 id: previewButtonBackground

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,10 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
+#include "../editing/editchord.h"
+#include "../editing/editmeasurerepeat.h"
+#include "../editing/noteinput.h"
+#include "../editing/transaction/transaction.h"
 
 #include "actionicon.h"
 #include "articulation.h"
@@ -190,14 +194,14 @@ bool Rest::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-EngravingItem* Rest::drop(EditData& data)
+EngravingItem* Rest::drop(Transaction& tx, EditData& data)
 {
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARTICULATION:
     {
         Articulation* a = toArticulation(e);
-        if (!a->isFermata() || !score()->toggleArticulation(this, a)) {
+        if (!a->isFermata() || !EditChord::toggleArticulation(score(), this, a)) {
             delete e;
             e = nullptr;
         }
@@ -215,9 +219,9 @@ EngravingItem* Rest::drop(EditData& data)
         if (!d.isZero()) {
             Segment* seg = score()->setNoteRest(segment(), track(), nval, d, dir);
             if (seg) {
-                ChordRest* cr = toChordRest(seg->element(track()));
+                const ChordRest* cr = toChordRest(seg->element(track()));
                 if (cr) {
-                    score()->nextInputPos(cr, false);
+                    NoteInput::nextInputPos(tx, score(), cr, false);
                 }
             }
         }
@@ -228,13 +232,13 @@ EngravingItem* Rest::drop(EditData& data)
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
         if (durationType().type() == DurationType::V_MEASURE) {
-            score()->cmdAddMeasureRepeat(measure(), numMeasures, staffIdx());
+            EditMeasureRepeat::addMeasureRepeat(tx, score(), measure(), numMeasures, staffIdx());
         }
         break;
     }
 
     default:
-        return ChordRest::drop(data);
+        return ChordRest::drop(tx, data);
     }
     return 0;
 }

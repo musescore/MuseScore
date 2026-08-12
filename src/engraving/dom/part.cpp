@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -36,6 +36,7 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "score.h"
+#include "sharedpart.h"
 #include "staff.h"
 #include "system.h"
 #include "stringtunings.h"
@@ -51,8 +52,8 @@ const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 //   Part
 //---------------------------------------------------------
 
-Part::Part(Score* s)
-    : EngravingObject(ElementType::PART, s)
+Part::Part(Score* s, ElementType type)
+    : EngravingObject(type, s)
 {
     m_color   = DEFAULT_COLOR;
     m_show    = true;
@@ -67,7 +68,6 @@ Part::Part(Score* s)
 
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
-    m_partName = t->instrumentName.longName();
     setInstrument(Instrument::fromTemplate(t));
 }
 
@@ -248,6 +248,16 @@ void Part::removeStaff(Staff* staff)
         LOGD("Part::removeStaff: not found %p", staff);
         return;
     }
+}
+
+bool Part::show() const
+{
+    if (score()->configuration()->debuggingOptions().showOriginAndCombinedStaves) {
+        return m_show;
+    }
+
+    bool sharedPartEnabled = sharedPart() && sharedPart()->enabled();
+    return m_show && !sharedPartEnabled;
 }
 
 //---------------------------------------------------------
@@ -557,6 +567,26 @@ void Part::setShortNameAll(const String& s)
     }
 }
 
+int Part::number(const Fraction& tick) const
+{
+    return instrument(tick)->number();
+}
+
+void Part::setNumber(int v, const Fraction& tick)
+{
+    instrument(tick)->setNumber(v);
+}
+
+String Part::transposition(const Fraction& tick) const
+{
+    return instrument(tick)->transposition();
+}
+
+void Part::setTransposition(const String& s, const Fraction& tick)
+{
+    instrument(tick)->setTransposition(s);
+}
+
 //---------------------------------------------------------
 //   setPlainLongName
 //---------------------------------------------------------
@@ -645,30 +675,14 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
     return true;
 }
 
-//---------------------------------------------------------
-//   startTrack
-//---------------------------------------------------------
-
-track_idx_t Part::startTrack() const
+TrackRange Part::trackRange() const
 {
     IF_ASSERT_FAILED(!m_staves.empty()) {
-        return muse::nidx;
+        return {};
     }
 
-    return m_staves.front()->idx() * VOICES;
-}
-
-//---------------------------------------------------------
-//   endTrack
-//---------------------------------------------------------
-
-track_idx_t Part::endTrack() const
-{
-    IF_ASSERT_FAILED(!m_staves.empty()) {
-        return muse::nidx;
-    }
-
-    return m_staves.back()->idx() * VOICES + VOICES;
+    const track_idx_t startTrack = m_staves.front()->idx() * VOICES;
+    return { startTrack, startTrack + m_staves.size() * VOICES };
 }
 
 InstrumentTrackIdList Part::instrumentTrackIdList() const
@@ -832,6 +846,25 @@ Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
     return Fraction::fromTicks(i->first);
 }
 
+String Part::partName() const
+{
+    const Instrument* i = instrument();
+    String fullName = i->longName();
+
+    const String& transp = i->transposition();
+    if (!transp.empty()) {
+        //: For instrument transposition, e.g. Horn in F
+        fullName += u" " + muse::mtrc("notation", "in") + u" " + transp;
+    }
+
+    int n = number();
+    if (n != 0) {
+        fullName += u" " + String::number(n);
+    }
+
+    return fullName;
+}
+
 bool Part::isVisible() const
 {
     return m_show;
@@ -853,8 +886,9 @@ int Part::lyricCount() const
 
     size_t count = 0;
     SegmentType st = SegmentType::ChordRest;
+    const TrackRange range = trackRange();
     for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (track_idx_t i = startTrack(); i < endTrack(); ++i) {
+        for (track_idx_t i = range.startTrack; i < range.endTrack; ++i) {
             ChordRest* cr = toChordRest(seg->element(i));
             if (cr) {
                 count += cr->lyrics().size();
@@ -881,10 +915,11 @@ int Part::harmonyCount() const
 
     SegmentType st = SegmentType::ChordRest;
     int count = 0;
+    const TrackRange range = trackRange();
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
         for (const EngravingItem* e : seg->annotations()) {
-            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack()
-                && e->track() < endTrack()) {
+            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= range.startTrack
+                && e->track() < range.endTrack) {
                 count++;
             }
         }

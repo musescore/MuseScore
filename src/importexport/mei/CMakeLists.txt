@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -83,9 +83,10 @@ target_sources(iex_mei PRIVATE
     thirdparty/libmei/shared.h   
 )
 
+get_property(_pugixml_src GLOBAL PROPERTY pugixml_SOURCE_DIR)
 target_include_directories(iex_mei PRIVATE
     internal
-    ${CMAKE_SOURCE_DIR}/src/framework/global/thirdparty/pugixml
+    ${_pugixml_src}/pugixml/src
 )
 
 target_link_libraries(iex_mei PRIVATE engraving)

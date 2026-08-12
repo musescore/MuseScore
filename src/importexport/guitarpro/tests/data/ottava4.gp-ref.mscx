@@ -18,16 +18,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
-        <longName>Nylon Guitar</longName>
-        <shortName>N-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Nylon Guitar</longName>
+          <shortName>N-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -51,16 +53,18 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
-        <longName>Electric Guitar</longName>
-        <shortName>E-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Electric Guitar</longName>
+          <shortName>E-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
@@ -85,44 +89,33 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>I_I</eid>
+            <eid>K_K</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>J_J</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -130,18 +123,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -149,31 +142,13 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>S_S</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>S_S</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>T_T</eid>
             <durationType>whole</durationType>
@@ -193,13 +168,6 @@
       <Measure>
         <eid>W_W</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <eid>X_X</eid>
             <durationType>whole</durationType>
@@ -319,22 +287,11 @@
             <velocity>80</velocity>
             <eid>u_u</eid>
             </Dynamic>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <eid>v_v</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>2</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>w_w</eid>
+            <eid>v_v</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>x_x</eid>
+              <eid>w_w</eid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -342,17 +299,17 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>y_y</eid>
+            <eid>x_x</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>z_z</eid>
+            <eid>y_y</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>0_0</eid>
+              <eid>z_z</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -360,35 +317,17 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>1_1</eid>
+            <eid>0_0</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>2_2</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>3_3</eid>
+            <eid>1_1</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>4_4</eid>
+              <eid>2_2</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -396,24 +335,17 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>5_5</eid>
+            <eid>3_3</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>6_6</eid>
+            <eid>4_4</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>7_7</eid>
+              <eid>5_5</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -421,17 +353,17 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>8_8</eid>
+            <eid>6_6</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>9_9</eid>
+            <eid>7_7</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>+_+</eid>
+              <eid>8_8</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -439,20 +371,20 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>AB_AB</eid>
+            <eid>+_+</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>BB_BB</eid>
+              <eid>/_/</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>CB_CB</eid>
+                <eid>AB_AB</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>24</tpc>
@@ -461,23 +393,35 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>DB_DB</eid>
+            <eid>BB_BB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>EB_EB</eid>
+            <eid>CB_CB</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>FB_FB</eid>
+              <eid>DB_DB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <eid>EB_EB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>FB_FB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
           <BarLine>
             <eid>GB_GB</eid>
             </BarLine>
@@ -490,20 +434,40 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <eid>IB_IB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>JB_JB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>0</track2>
+        <ticks>8/4</ticks>
+        <eid>IB_IB</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8va</subtype>
+        <track2>4</track2>
+        <ticks>8/4</ticks>
+        <eid>JB_JB</eid>
+        <track>4</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>0</track2>
+        <startTick>8/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>KB_KB</eid>
+        <track>0</track>
+        </Ottava>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>4</track2>
+        <startTick>8/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>LB_LB</eid>
+        <track>4</track>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

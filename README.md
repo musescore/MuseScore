@@ -23,9 +23,9 @@ MuseScore Studio is an open source and free music notation software. For support
 
 ## More info
 
-- [MuseScore Homepage](https://musescore.org)
-- [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
-- [How to compile MuseScore?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
+- [MuseScore Studio Homepage](https://musescore.org)
+- [MuseScore Studio Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
+- [How to compile MuseScore Studio?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
 
 ## License
 
@@ -43,8 +43,10 @@ See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStr
 
 If using git to download repo of entire code history, type:
 
-    git clone https://github.com/musescore/MuseScore.git
+    git clone  --recurse-submodules https://github.com/musescore/MuseScore.git
     cd MuseScore
+
+(The `--recurse-submodules` ensures that the [`muse_framework`](https://github.com/musescore/muse_framework) git submodule is checked out into the `muse/` subdirectory.)
 
 Otherwise, you can just download the latest source release tarball from the [Releases page](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
 
@@ -56,6 +58,9 @@ Otherwise, you can just download the latest source release tarball from the [Rel
 To compile MuseScore Studio for release, type:
 
     cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release
+
+On MacOS, append `-G Ninja` in order to use the `ninja` build tool (which you may need to install), since this
+is required to compile Swift components.
 
 If something goes wrong, append the word "clean" to the above command to delete the build subdirectory:
 
@@ -81,7 +86,7 @@ used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
 
-See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
+See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Studio Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
 
 ### Code Formatting
 

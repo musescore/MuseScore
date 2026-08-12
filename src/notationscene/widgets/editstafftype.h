@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,9 @@
 
 #include "engraving/dom/stafftype.h"
 
-#include "notation/notationtypes.h"
+namespace mu::engraving {
+class Instrument;
+}
 
 namespace mu::notation {
 class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::Contextable
@@ -69,12 +71,12 @@ private slots:
     void addToTemplatesClicked();
 
 public:
-    EditStaffType(QWidget* parent = nullptr);
+    EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* parent = nullptr);
     ~EditStaffType() {}
     void setStaffType(const mu::engraving::StaffType* staffType);
     mu::engraving::StaffType getStaffType() const { return staffType; }
 
-    void setInstrument(const Instrument& instrument);
+    void setInstrument(const engraving::Instrument& instrument);
 
 private:
     muse::Ret loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path);

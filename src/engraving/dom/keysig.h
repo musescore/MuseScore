@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_KEYSIG_H
-#define MU_ENGRAVING_KEYSIG_H
+#pragma once
 
 #include "key.h"
 #include "engravingitem.h"
@@ -29,6 +28,7 @@
 namespace mu::engraving {
 class Factory;
 class Segment;
+class Transaction;
 
 class KeySig final : public EngravingItem
 {
@@ -42,7 +42,7 @@ public:
     KeySig* clone() const override { return new KeySig(*this); }
 
     bool acceptDrop(EditData&) const override;
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     double mag() const override;
 
@@ -81,6 +81,8 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    using EngravingItem::undoChangeProperty;
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
     PropertyValue propertyDefault(Pid id) const override;
     EngravingObject* propertyDelegate(Pid) const override;
 
@@ -108,5 +110,4 @@ private:
     bool m_hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent m_sig;
 };
-} // namespace mu::engraving
-#endif
+}

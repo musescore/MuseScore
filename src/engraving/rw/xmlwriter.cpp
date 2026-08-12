@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -156,6 +156,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, int(data.value<bool>()));
         break;
     case P_TYPE::INT:
+    case P_TYPE::SIZE_T:
         element(name, data.value<int>());
         break;
     case P_TYPE::REAL:

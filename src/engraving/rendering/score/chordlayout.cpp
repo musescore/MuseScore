@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -38,7 +38,6 @@
 #include "dom/ledgerline.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
-#include "dom/navigate.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
@@ -56,8 +55,8 @@
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/utils.h"
-#include "editing/undo.h"
 #include "editing/editchord.h"
+#include "editing/navigation.h"
 
 #include "accidentalslayout.h"
 #include "arpeggiolayout.h"
@@ -163,12 +162,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                     f->setbbox(RectF());
                 }
             }
-        }
-    }
-
-    for (EngravingItem* e : item->el()) {
-        if (e->isChordBracket()) {
-            TLayout::layoutItem(e, ctx);
         }
     }
 
@@ -296,7 +289,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     }
 
     for (EngravingItem* e : item->el()) {
-        if (e->isSlur()) {       // we cannot at this time as chordpositions are not fixed
+        // Cannot layout slurs as chord positions are not fixed
+        // Chord brackets should be the outermost element
+        if (e->isSlur() || e->isChordBracket()) {
             continue;
         }
         TLayout::layoutItem(e, ctx);
@@ -341,6 +336,12 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
 
+    for (EngravingItem* e : item->el()) {
+        if (e->isChordBracket()) {
+            TLayout::layoutItem(e, ctx);
+        }
+    }
+
     fillShape(item, item->mutldata(), ctx.conf());
 }
 
@@ -372,7 +373,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
         note->updateFrettingForTiesAndBends();
-        note->setDotRelativeLine(0);
+        ChordLayout::setDotRelativeLine(note, 0, ctx);
         TLayout::layoutNote(note, note->mutldata());
         // set headWidth to max fret text width
         double fretWidth = note->ldata()->bbox().width();
@@ -403,7 +404,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
             Chord* startChord = startNote ? startNote->chord() : nullptr;
-            if (startChord && startChord->measure() == item->measure() && startChord == prevChordRest(item)) {
+            if (startChord && startChord->measure() == item->measure() && startChord == Navigation::prevChordRest(item)) {
                 double startNoteWidth = startNote->width();
                 // overlap into start chord?
                 // if in start chord, there are several notes or stem and tie in same direction
@@ -528,7 +529,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         bool repeat = false;
         if (!item->noStem()) {
             // check duration of prev. CR segm
-            ChordRest* prevCR = prevChordRest(item);
+            ChordRest* prevCR = Navigation::prevChordRest(item);
             if (prevCR == 0) {
                 needTabDur = true;
             } else if (item->beamMode() != BeamMode::AUTO
@@ -1655,6 +1656,26 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+static void relayoutChordBracketsAfterSegmentLayout(const std::vector<Chord*>& chords, LayoutContext& ctx)
+{
+    for (Chord* chord : chords) {
+        bool hasChordBracket = false;
+
+        for (EngravingItem* e : chord->el()) {
+            if (!e->isChordBracket()) {
+                continue;
+            }
+
+            hasChordBracket = true;
+            TLayout::layoutItem(e, ctx);
+        }
+
+        if (hasChordBracket) {
+            ChordLayout::fillShape(chord, chord->mutldata(), ctx.conf());
+        }
+    }
+}
+
 void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
@@ -2243,8 +2264,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     // we need to check all the notes in all the staves of the part so that we don't get weird collisions
     // between accidentals etc with moved notes
     const Part* part = staff->part();
-    const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
-    const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
+    const TrackRange partTrackRangeOrDefault = part ? part->trackRange() : TrackRange { startTrack, endTrack };
+    const track_idx_t partStartTrack = partTrackRangeOrDefault.startTrack;
+    const track_idx_t partEndTrack = partTrackRangeOrDefault.endTrack;
 
     if (isTab) {
         skipAccidentals(segment, startTrack, endTrack);
@@ -2300,6 +2322,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             TLayout::layoutOrnamentCueNote(ornament, ctx);
         }
     }
+
+    // Chord brackets depend on the final layouts of all voices in the same segment and visual staff.
+    // Re-layout them after the segment elements have been laid out.
+    relayoutChordBracketsAfterSegmentLayout(posInfo.chords, ctx);
 }
 
 //---------------------------------------------------------
@@ -2463,7 +2489,7 @@ double ChordLayout::centerX(const Chord* chord)
 //   placeDots
 //---------------------------------------------------------
 
-void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes)
+void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes, LayoutContext& ctx)
 {
     Chord* chord = nullptr;
     for (Chord* c : chords) {
@@ -2472,7 +2498,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             break;
         } else {
             for (Note* note : c->notes()) {
-                note->setDotRelativeLine(0); // this manages the deletion of dots
+                ChordLayout::setDotRelativeLine(note, 0, ctx); // this manages the deletion of dots
             }
         }
     }
@@ -2505,7 +2531,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
                 }
                 // set y for this note
                 if (note == otherNote) {
-                    note->setDotRelativeLine(dotMove);
+                    ChordLayout::setDotRelativeLine(note, dotMove, ctx);
                     finished = true;
                     anchoredDots.push_back(note->line() + dotMove);
                     alreadyAdded[otherNote->line() + dotMove] = otherNote;
@@ -2528,7 +2554,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
                     }
                     // set y for this note
                     if (note == otherNote) {
-                        note->setDotRelativeLine(dotMove);
+                        ChordLayout::setDotRelativeLine(note, dotMove, ctx);
                         finished = true;
                         anchoredDots.push_back(note->line() + dotMove);
                         break;
@@ -2541,23 +2567,75 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             IF_ASSERT_FAILED(finished) {
                 // this should never happen
                 // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
-                note->setDotRelativeLine(0);
+                ChordLayout::setDotRelativeLine(note, 0, ctx);
             }
         } else {
             // on a space; usually this means the dot is on this same line, but there is an exception
             // for a unison within the same chord.
             for (Note* otherNote : note->chord()->notes()) {
                 if (note == otherNote) {
-                    note->setDotRelativeLine(0); // same space as notehead
+                    ChordLayout::setDotRelativeLine(note, 0, ctx); // same space as notehead
                     break;
                 }
                 if (note->line() == otherNote->line()) {
                     bool adjustDown = (note->chord()->voice() & 1) && !note->chord()->up();
-                    note->setDotRelativeLine(adjustDown ? 2 : -2);
+                    ChordLayout::setDotRelativeLine(note, adjustDown ? 2 : -2, ctx);
                     break;
                 }
             }
         }
+    }
+}
+
+void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx)
+{
+    double y = dotMove / 2.0;
+    if (note->staff()->isTabStaff(note->chord()->tick())) {
+        // with TAB's, dotPosX is not set:
+        // get dot X from width of fret text and use TAB default spacing
+        const Staff* st = note->staff();
+        const StaffType* tab = st->staffTypeForElement(note);
+        if (tab->stemThrough()) {
+            // if fret mark on lines, use standard processing
+            if (!tab->onLines()) {
+                // if fret marks above lines, raise the dots by half line distance
+                y = -0.5;
+            } else if (dotMove == 0) {
+                bool oddVoice = note->voice() & 1;
+                y = oddVoice ? 0.5 : -0.5;
+            } else {
+                y = 0.5;
+            }
+        }
+        // if stems beside staff, do nothing
+        else {
+            return;
+        }
+    }
+    y *= note->spatium() * note->staff()->lineDistance(note->tick());
+
+    // apply to dots
+
+    int cdots = static_cast<int>(note->chord()->dots());
+    int ndots = static_cast<int>(note->dots().size());
+
+    int n = cdots - ndots;
+    for (int i = 0; i < n; ++i) {
+        NoteDot* dot = Factory::createNoteDot(note);
+        dot->setParent(note);
+        dot->setTrack(note->track());      // needed to know the staff it belongs to (and detect tablature)
+        dot->setVisible(note->visible());
+        ctx.mutDom().undoAddElement(dot);
+    }
+    if (n < 0) {
+        for (int i = 0; i < -n; ++i) {
+            ctx.mutDom().undoRemoveElement(note->dots().back());
+        }
+    }
+
+    for (NoteDot* dot : note->dots()) {
+        TLayout::layoutNoteDot(dot, dot->mutldata());
+        dot->mutldata()->setPosY(y);
     }
 }
 
@@ -2701,7 +2779,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     }
 
     // Now, we can resolve note conflicts as a superchord
-    placeDots(chords, notes);
+    placeDots(chords, notes, ctx);
 
     // Calculate the chords' dotPosX, and find the leftmost point for accidental layout
     for (Chord* chord : chords) {
@@ -2801,8 +2879,9 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
     bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks(), true);
     bool hasUpperCrossNotes = false;
     bool hasLowerCrossNotes = false;
-    staff_idx_t partTopStaff = c->part()->startTrack() / VOICES;
-    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
+    const TrackRange partTrackRange = c->part()->trackRange();
+    staff_idx_t partTopStaff = track2staff(partTrackRange.startTrack);
+    staff_idx_t partBottomStaff = track2staff(partTrackRange.endTrack);
     track_idx_t startVoice = c->track() - c->voice();
     // Get the last track we need to check for cross staff notes.
     // Either 1 stave away from the stave we are laying out or the bottom staff of the part
@@ -3167,7 +3246,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // with TAB's, dot Y is not calculated during layoutChords3(),
             // as layoutChords3() is not even called for TAB's;
             // setDotRelativeLine() actually also manages creation/deletion of NoteDot's
-            item->setDotRelativeLine(0);
+            ChordLayout::setDotRelativeLine(item, 0, ctx);
 
             // use TAB default note-to-dot spacing
             dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X.toAbsolute(item->spatium());

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -30,6 +30,9 @@
 #include "engraving/dom/interval.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/types/types.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 // api
 #include "engravingapiv1.h"
@@ -185,6 +188,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    qmlRegisterAnonymousType<Harmony>("MuseScore", 3);
+    qmlRegisterAnonymousType<FretDiagram>("MuseScore", 3);
     qmlRegisterAnonymousType<Drumset>("MuseScore", 3);
     qmlRegisterAnonymousType<MeasureBase>("MuseScore", 3);
     qmlRegisterAnonymousType<System>("MuseScore", 3);
@@ -235,6 +240,12 @@ void PluginAPI::setup(QQmlEngine* e)
 
 PluginAPI::PluginAPI(QQuickItem* parent)
     : QQuickItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
+{
+    setRequiresScore(true); // by default plugins require a score to work
+}
+
+PluginAPI::PluginAPI(const muse::modularity::ContextPtr& ctx)
+    : muse::Contextable(ctx)
 {
     setRequiresScore(true); // by default plugins require a score to work
 }
@@ -408,14 +419,14 @@ apiv1::Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, 
 void PluginAPI::cmd(const QString& s)
 {
     static const QMap<QString, QString> COMPAT_CMD_MAP = {
-        { "escape", "action://notation/cancel" },
-        { "cut", "action://notation/cut" },
-        { "copy", "action://notation/copy" },
-        { "paste", "action://notation/paste" },
+        { "escape", "command://notation/cancel" },
+        { "cut", "command://notation/cut" },
+        { "copy", "command://notation/copy" },
+        { "paste", "command://notation/paste" },
         { "paste-half", "notation-paste-half" },
         { "paste-double", "notation-paste-double" },
         { "select-all", "notation-select-all" },
-        { "delete", "action://notation/delete" },
+        { "delete", "command://notation/delete" },
         { "next-chord", "notation-move-right" },
         { "prev-chord", "notation-move-left" },
         { "prev-measure", "notation-move-left-quickly" }
@@ -490,8 +501,8 @@ void PluginAPI::quit()
 
 mu::engraving::Score* PluginAPI::currentScore() const
 {
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->elements()->msScore();
+    if (notation::INotationPtr notation = context()->currentNotation()) {
+        return notation->elements()->msScore();
     }
 
     return nullptr;

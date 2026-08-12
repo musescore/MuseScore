@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@ import QtQuick.Controls
 
 import Muse.Ui
 import Muse.Shortcuts
+import Muse.Toast
 import Muse.Tours
 
 import MuseScore.AppShell
@@ -81,6 +82,9 @@ ApplicationWindow {
         id: windowContentItem
         anchors.fill: parent
     }
+
+    //! NOTE Must be declared after windowContentItem so toasts render on top of the main content
+    ToastProvider { }
 
     function showMinimizedWithSavePreviousState() {
         bridge.showMinimizedWithSavePreviousState()

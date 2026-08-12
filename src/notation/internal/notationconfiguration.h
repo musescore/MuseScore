@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -45,6 +45,9 @@ public:
     void init();
 
     QColor notationColor() const override;
+    void setNotationColor(const QColor& color) override;
+    muse::async::Notification notationColorChanged() const override;
+    void resetNotationColor() override;
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
@@ -117,10 +120,11 @@ public:
     void setDefaultZoom(int zoomPercentage) override;
     muse::async::Notification defaultZoomChanged() const override;
 
-    qreal scalingFromZoomPercentage(int zoomPercentage) const override;
-    int zoomPercentageFromScaling(qreal scaling) const override;
-
     QList<int> possibleZoomPercentageList() const override;
+
+    mu::engraving::AutomationType currentAutomationType() const override;
+    void setCurrentAutomationType(mu::engraving::AutomationType type) override;
+    muse::async::Notification currentAutomationTypeChanged() const override;
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
@@ -187,9 +191,7 @@ public:
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
-
-    double guiScaling() const override;
-    double notationScaling() const override;
+    muse::async::Notification isCountInEnabledChanged() const override;
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;
@@ -244,6 +246,7 @@ public:
     muse::async::Channel<std::string> styleFileImportPathChanged() const override;
 
 private:
+    muse::async::Notification m_notationColorChanged;
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
     muse::async::Notification m_scoreInversionChanged;
@@ -257,6 +260,7 @@ private:
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;
+    muse::async::Notification m_currentAutomationTypeChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
@@ -277,5 +281,6 @@ private:
     muse::async::Channel<QColor> m_anchorColorChanged;
 
     muse::async::Notification m_isAutomaticallyPanEnabledChanged;
+    muse::async::Notification m_isCountInEnabledChanged;
 };
 }

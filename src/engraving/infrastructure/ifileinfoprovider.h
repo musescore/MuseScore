@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IFILEINFOPROVIDER_H
-#define MU_ENGRAVING_IFILEINFOPROVIDER_H
+
+#pragma once
 
 #include <memory>
 
@@ -33,6 +33,8 @@ class IFileInfoProvider
 public:
     virtual ~IFileInfoProvider() = default;
 
+    virtual bool saved() const = 0;
+
     virtual muse::io::path_t path() const = 0; //! Absolute path
     virtual muse::io::path_t fileName(bool includingExtension = true) const = 0;
     virtual muse::io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
@@ -41,9 +43,8 @@ public:
 
     virtual muse::DateTime birthTime() const = 0;
     virtual muse::DateTime lastModified() const = 0;
+    virtual bool isNewlyCreated() const = 0;
 };
 
 using IFileInfoProviderPtr = std::shared_ptr<IFileInfoProvider>;
 }
-
-#endif // MU_ENGRAVING_IFILEINFOPROVIDER_H

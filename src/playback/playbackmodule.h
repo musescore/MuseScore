@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,8 +29,9 @@
 namespace mu::playback {
 class PlaybackConfiguration;
 class PlaybackController;
-class PlaybackUiActions;
 class SoundProfilesRepository;
+class PlaybackUiActions;
+class PlaybackCommandsController;
 class PlaybackModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -57,8 +58,9 @@ public:
     void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
+    std::shared_ptr<PlaybackCommandsController> m_commandsController;
     std::shared_ptr<PlaybackController> m_playbackController;
-    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
     std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
+    std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
 };
 }

@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -62,8 +62,8 @@ StyledFlickable {
                         Layout.preferredWidth: 100
                         currentValue: voltasPage.voltaPosAbove.value.y
                         measureUnitsSymbol: qsTrc("global", "sp")
-                        maxValue: 0
-                        minValue: -100
+                        minValue: 0
+                        maxValue: 100
                         decimals: 2
                         step: 0.25
 

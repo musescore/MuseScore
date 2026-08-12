@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -79,12 +81,17 @@
       <unsorted/>
       </Order>
     <Part id="1">
+      <eid>U_U</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0" visible="1"/>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -94,10 +101,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Harp</trackName>
       <Instrument id="harp">
-        <longName>Harp</longName>
-        <shortName>Hrp.</shortName>
+        <InstrumentLabel>
+          <longName>Harp</longName>
+          <shortName>Hrp.</shortName>
+          </InstrumentLabel>
         <trackName>Harp</trackName>
         <minPitchP>23</minPitchP>
         <maxPitchP>104</maxPitchP>

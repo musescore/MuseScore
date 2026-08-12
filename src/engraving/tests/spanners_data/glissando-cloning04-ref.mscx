@@ -22,16 +22,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -76,34 +78,23 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </VBox>
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>I_I</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
@@ -113,22 +104,22 @@
               <eid>K_K</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>I_I</startElement>
+                <endElement>K_K</endElement>
+                <eid>L_L</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
@@ -136,7 +127,7 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>N_N</eid>
+      <eid>O_O</eid>
       <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -152,17 +143,19 @@
       <open>1</open>
       <metaTag name="partName">Flute</metaTag>
       <Part id="1">
+        <eid>P_P</eid>
         <Staff>
-          <eid>O_O</eid>
-          <linkedTo>C_C</linkedTo>
+          <eid>Q_Q</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Flute</trackName>
         <Instrument id="flute">
-          <longName>Flute</longName>
-          <shortName>Fl.</shortName>
+          <InstrumentLabel>
+            <longName>Flute</longName>
+            <shortName>Fl.</shortName>
+            </InstrumentLabel>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
@@ -207,72 +200,61 @@
           <height>10</height>
           <boxAutoSize>0</boxAutoSize>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>P_P</eid>
-          <linkedTo>D_D</linkedTo>
+          <eid>R_R</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>
         <Measure>
-          <eid>R_R</eid>
+          <eid>T_T</eid>
           <voice>
             <TimeSig>
-              <eid>S_S</eid>
-              <linkedTo>F_F</linkedTo>
+              <eid>U_U</eid>
+              <linkedTo>G_G</linkedTo>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
-              <eid>T_T</eid>
-              <linkedTo>G_G</linkedTo>
+              <eid>V_V</eid>
+              <linkedTo>H_H</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>U_U</eid>
-                <linkedTo>H_H</linkedTo>
+                <eid>W_W</eid>
+                <linkedTo>I_I</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
-                <Spanner type="Glissando">
-                  <Glissando>
-                    <eid>V_V</eid>
-                    <linkedTo>I_I</linkedTo>
-                    <diagonal>1</diagonal>
-                    </Glissando>
-                  <next>
-                    <location>
-                      <fractions>1/4</fractions>
-                      </location>
-                    </next>
-                  </Spanner>
                 </Note>
               </Chord>
             <Chord>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <linkedTo>J_J</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>X_X</eid>
+                <eid>Y_Y</eid>
                 <linkedTo>K_K</linkedTo>
                 <pitch>84</pitch>
                 <tpc>14</tpc>
-                <Spanner type="Glissando">
-                  <prev>
-                    <location>
-                      <fractions>-1/4</fractions>
-                      </location>
-                    </prev>
-                  </Spanner>
+                <Glissando>
+                  <startElement>W_W</startElement>
+                  <endElement>Y_Y</endElement>
+                  <eid>Z_Z</eid>
+                  <linkedTo>L_L</linkedTo>
+                  <track>0</track>
+                  <diagonal>1</diagonal>
+                  </Glissando>
                 </Note>
               </Chord>
             </voice>
           </Measure>
         <Measure>
-          <eid>Y_Y</eid>
+          <eid>a_a</eid>
           <voice>
             <Rest>
-              <eid>Z_Z</eid>
-              <linkedTo>M_M</linkedTo>
+              <eid>b_b</eid>
+              <linkedTo>N_N</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
               </Rest>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,14 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONACCESSIBILITY_H
-#define MU_NOTATION_NOTATIONACCESSIBILITY_H
+#pragma once
 
 #include "inotationaccessibility.h"
-#include "notationtypes.h"
 
 #include "async/asyncable.h"
-#include "async/notification.h"
+
+namespace mu::engraving {
+class Score;
+class Selection;
+}
 
 namespace mu::notation {
 class IGetScore;
@@ -58,5 +60,3 @@ private:
     muse::ValCh<std::string> m_accessibilityInfo;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONACCESSIBILITY_H

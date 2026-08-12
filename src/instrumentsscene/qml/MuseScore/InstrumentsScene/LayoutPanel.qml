@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -121,6 +121,16 @@ Item {
                 treeModel.removeSelectedRows()
             }
         }
+
+        ToggleButton {
+            Layout.leftMargin: contentColumn.sideMargin
+
+            text: qsTrc("layoutpanel", "Enable stave sharing")
+            checked: treeModel.isStaveSharingEnabled
+            onToggled: treeModel.toggleStaveSharing(!checked)
+        }
+
+        SeparatorLine {}
 
         StyledTextLabel {
             Layout.fillWidth: true
@@ -289,6 +299,14 @@ Item {
 
                             onChangeVisibilityRequested: function(modelIndex, visible) {
                                 treeModel.changeVisibility(modelIndex, visible)
+                            }
+
+                            onChangeEnabledOfSelectedRowsRequested: function(enabled) {
+                                treeModel.changeEnabledOfSelectedRows(enabled);
+                            }
+
+                            onChangeEnabledRequested: function(modelIndex, enabled) {
+                                treeModel.changeEnabled(modelIndex, enabled)
                             }
 
                             onDragStarted: {

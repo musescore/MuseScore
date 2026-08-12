@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 
 #include "containers.h"
 
+#include "draw/painter.h"
+
 #include "engraving/dom/barline.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
@@ -41,7 +43,7 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/rendering/score/tlayout.h"
 
-#include "draw/painter.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
 
 #include "log.h"
 

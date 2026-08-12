@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -116,8 +116,12 @@ mu::engraving::staff_idx_t mu::engraving::InstrumentName::effectiveStaffIdx() co
 {
     if (m_sysStaff->show() || m_instrumentNameRole == InstrumentNameRole::STAFF) {
         return staffIdx();
+    } else if (m_instrumentNameRole == InstrumentNameRole::PART) {
+        return system()->firstVisibleSysStaffOfPart(score()->staff(staffIdx())->part());
+    } else {
+        staff_idx_t curIdx = staffIdx();
+        Instrument* instr = score()->staff(curIdx)->part()->instrument(system()->first()->tick());
+        return system()->firstVisibleSysStaffWithInstrument(instr->id(), curIdx);
     }
-
-    return system()->firstVisibleSysStaffOfPart(score()->staff(staffIdx())->part());
 }
 }

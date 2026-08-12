@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,24 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_TIMELINE_H
-#define MU_NOTATION_TIMELINE_H
+#pragma once
 
-#include "engraving/dom/select.h"
+#include <vector>
+
+#include <QGraphicsView>
+#include <QSplitter>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotation.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-
-#include <vector>
-#include <QGraphicsView>
-#include <QSplitter>
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::engraving {
-class Score;
+class Measure;
 class Page;
+class Part;
+class Score;
+class Staff;
+enum class SelState : char;
 }
 
 namespace mu::notation {
@@ -112,6 +115,7 @@ class Timeline : public QGraphicsView, public muse::Contextable, public muse::as
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
     enum class ItemType {
@@ -121,7 +125,7 @@ public:
     };
     Q_ENUM(ItemType)
 
-    Timeline(QSplitter* splitter);
+    Timeline(QSplitter* splitter, const muse::modularity::ContextPtr& iocCtx);
 
     bool handleEvent(QEvent* event);
 
@@ -152,7 +156,7 @@ private:
 
     TimelineTheme _lightTheme, _darkTheme;
 
-    std::tuple<int, qreal, EngravingItem*, EngravingItem*, bool> _repeatInfo;
+    std::tuple<int, qreal, engraving::EngravingItem*, engraving::EngravingItem*, bool> _repeatInfo;
     std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
     std::map<engraving::BarLineType, QPixmap*> _barlines;
@@ -191,8 +195,8 @@ private:
 
     bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType, engraving::EngravingItem* element,
                       engraving::Segment* seg, engraving::Measure* measure, QString tooltip = "");
-    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, Measure* m, bool full_measure, engraving::EngravingItem* e,
-                     QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
+    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, engraving::Measure* m, bool full_measure,
+                     engraving::EngravingItem* e, QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);
 
     int _globalMeasureNumber { 0 };
@@ -268,7 +272,7 @@ private:
     engraving::Staff* numToStaff(int staff);
     void toggleShow(int staff);
     QString cursorIsOn(const QPoint& cursorPos);
+
+    void seekSelection();
 };
 }
-
-#endif // MU_NOTATION_TIMELINE_H

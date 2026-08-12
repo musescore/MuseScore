@@ -8,7 +8,7 @@ Steps to follow after we receive a [request for a new language](https://github.c
 
 3. Add the language name and/or code to these files:
 
-    - `share/locale/languages.json`
+    - `muse/framework/languages/resources/languages.json`
     - `buildscripts/packaging/macOS/Info.plist.in`
 
 4. Commit the changes and submit a PR.

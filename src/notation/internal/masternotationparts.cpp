@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,7 +27,11 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editexcerpt.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
+
+#include "inotation.h"
+#include "iexcerptnotation.h" // IWYU pragma: keep
 
 #include "log.h"
 
@@ -39,8 +43,9 @@ static NotationParts* get_impl(const INotationPartsPtr& parts)
     return static_cast<NotationParts*>(parts.get());
 }
 
-MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : NotationParts(getScore, interaction, undoStack)
+MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+                                         INotationStylePtr style)
+    : NotationParts(getScore, interaction, undoStack, style)
 {
 }
 
@@ -201,8 +206,12 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
         parts->replaceInstrument(instrumentKey, newInstrument, newStaffType);
     }
 
+    mu::engraving::Interval newTranspose = newInstrument.transpose();
     // this also transposes all linked parts
-    engraving::Transpose::transpositionChanged(score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    if (newTranspose.reduced() != oldTranspose.reduced()) {
+        engraving::Transpose::transpositionChanged(tx, score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    }
 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {

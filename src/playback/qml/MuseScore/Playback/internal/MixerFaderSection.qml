@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -48,6 +48,8 @@ MixerPanelSection {
             VolumeSlider {
                 volumeLevel: content.channelItem.volumeLevel
                 stepSize: 1.0
+                enabled: !content.channelItem.hasVolumeAutomation
+                opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
                 navigation.panel: content.channelItem.panel
                 navigation.row: root.navigationRowStart

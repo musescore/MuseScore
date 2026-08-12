@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/soundflag.h"
 
 namespace mu::engraving {
-class ChangeSoundFlag : public UndoCommand
+class ChangeSoundFlag : public UndoableCommand
 {
     SoundFlag* m_soundFlag = nullptr;
     SoundFlag::PresetCodes m_presets;
@@ -37,7 +37,7 @@ public:
     ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::PlayingTechniqueCode& technique)
         : m_soundFlag(soundFlag), m_presets(presets), m_playingTechnique(technique) {}
 
-    void flip(EditData*) override;
+    void flip() override;
     UNDO_NAME("ChangeSoundFlag")
     UNDO_CHANGED_OBJECTS({ m_soundFlag })
 };

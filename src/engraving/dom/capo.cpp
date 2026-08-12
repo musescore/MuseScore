@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,8 @@
  */
 
 #include "capo.h"
+
+#include "score.h"
 
 #include "translation.h"
 
@@ -109,6 +111,11 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
     }
 
     triggerLayout();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
+
     return true;
 }
 
@@ -170,4 +177,22 @@ muse::String Capo::generateText(size_t stringCount) const
                   .arg(stringsToApply.join(u", "));
 
     return text;
+}
+
+void Capo::added()
+{
+    StaffTextBase::added();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
+}
+
+void Capo::removed()
+{
+    StaffTextBase::removed();
+
+    if (Score* s = score()) {
+        s->updateCapo();
+    }
 }

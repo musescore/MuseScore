@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,9 +22,12 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_editstyle.h"
 
 #include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
 #include "ui/iuiconfiguration.h"
@@ -38,7 +41,7 @@
 class QQuickView;
 
 namespace mu::notation {
-class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contextable
+class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
 
@@ -56,12 +59,14 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contex
 public:
     EditStyle(QWidget* = nullptr);
 
+    void classBegin() override;
+
     QString currentPageCode() const;
     QString currentSubPageCode() const;
 
 public slots:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
@@ -73,16 +78,16 @@ signals:
     void currentSubPageChanged();
 
 private:
-    void showEvent(QShowEvent*);
-    void hideEvent(QHideEvent*);
-    void changeEvent(QEvent*);
-    void keyPressEvent(QKeyEvent* event);
+    void showEvent(QShowEvent*) override;
+    void hideEvent(QHideEvent*) override;
+    void changeEvent(QEvent*) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
     void retranslate();
     void setHeaderFooterMacroInfoText();
     void adjustPagesStackSize(int currentPageIndex);
 
-    bool isBoolStyleRepresentedByButtonGroup(StyleId id);
+    bool isBoolStyleRepresentedByButtonGroup(engraving::Sid id);
 
     struct WidgetAndView {
         QWidget* widget = nullptr;
@@ -97,14 +102,14 @@ private:
     typedef QWidget* EditStyle::* EditStylePage;
 
     struct StyleWidget {
-        StyleId idx = StyleId::NOSTYLE;
+        engraving::Sid idx = engraving::Sid::NOSTYLE;
         bool showPercent = false;
         QObject* widget = nullptr;
         QToolButton* reset = nullptr;
     };
 
     QVector<StyleWidget> styleWidgets;
-    const StyleWidget& styleWidget(StyleId id) const;
+    const StyleWidget& styleWidget(engraving::Sid id) const;
 
     class LineStyleSelect;
     std::vector<LineStyleSelect*> m_lineStyleSelects;
@@ -114,20 +119,20 @@ private:
     QPushButton* buttonApplyToAllParts = nullptr;
 
     void unhandledType(const StyleWidget);
-    PropertyValue getValue(StyleId idx);
+    engraving::PropertyValue getValue(engraving::Sid idx);
     void setValues();
 
-    const PropertyValue& styleValue(StyleId id) const;
-    const PropertyValue& defaultStyleValue(StyleId id) const;
-    bool hasDefaultStyleValue(StyleId id) const;
+    const engraving::PropertyValue& styleValue(engraving::Sid id) const;
+    const engraving::PropertyValue& defaultStyleValue(engraving::Sid id) const;
+    bool hasDefaultStyleValue(engraving::Sid id) const;
     bool dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue() const;
-    void setStyleQVariantValue(StyleId id, const QVariant& value);
-    void setStyleValue(StyleId id, const PropertyValue& value);
+    void setStyleQVariantValue(engraving::Sid id, const QVariant& value);
+    void setStyleValue(engraving::Sid id, const engraving::PropertyValue& value);
 
 private slots:
     // void selectChordDescriptionFile();
     // void setChordStyle(bool);
-    void enableStyleWidget(const StyleId idx, bool enable);
+    void enableStyleWidget(const engraving::Sid idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);
     void toggleHeaderOddEven(bool);

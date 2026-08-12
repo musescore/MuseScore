@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,7 +32,7 @@ import MuseScore.AppShell
 
 import MuseScore.NotationScene
 import MuseScore.Palette
-import MuseScore.Inspector
+import MuseScore.PropertiesPanel
 import MuseScore.InstrumentsScene
 import MuseScore.Playback
 
@@ -128,9 +128,13 @@ DockPage {
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
+            compactPriorityOrder: 1
+
             navigationSection: root.topToolbarKeyNavSec
 
             NotationToolBar {
+                isCompactMode: notationToolBar.isCompact
+
                 navigationPanel.section: notationToolBar.navigationSection
                 navigationPanel.order: 2
             }
@@ -175,6 +179,9 @@ DockPage {
 
             contentBottomPadding: floating ? 8 : 2
             contentTopPadding: floating ? 8 : 0
+
+            //! NOTE: Opened by page model when there are extensions with toolbar actions
+            visible: false
 
             dropDestinations: [
                 { "dock": notationToolBar, "dropLocation": Location.Right },
@@ -306,12 +313,12 @@ DockPage {
         },
 
         DockPanel {
-            id: inspectorPanel
+            id: propertiesPanel
 
-            objectName: root.pageModel.inspectorPanelName()
+            objectName: root.pageModel.propertiesPanelName()
             title: qsTrc("appshell", "Properties")
 
-            navigationSection: root.navigationPanelSec(inspectorPanel.location)
+            navigationSection: root.navigationPanelSec(propertiesPanel.location)
 
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
@@ -324,9 +331,9 @@ DockPage {
 
             dropDestinations: root.verticalPanelDropDestinations
 
-            InspectorForm {
-                navigationSection: inspectorPanel.navigationSection
-                navigationOrderStart: inspectorPanel.contentNavigationPanelOrderStart
+            PropertiesPanel {
+                navigationSection: propertiesPanel.navigationSection
+                navigationOrderStart: propertiesPanel.contentNavigationPanelOrderStart
                 notationView: root.notationView
             }
         },
@@ -506,32 +513,6 @@ DockPage {
             Timeline {
                 navigationSection: timelinePanel.navigationSection
                 contentNavigationPanelOrderStart: timelinePanel.contentNavigationPanelOrderStart
-            }
-        },
-
-        DockPanel {
-            id: drumsetPanel
-
-            objectName: root.pageModel.drumsetPanelName()
-            title: qsTrc("appshell", "Drumset tools")
-
-            height: 64
-            minimumHeight: 64
-            maximumHeight: 64
-
-            //! NOTE: hidden by default
-            visible: false
-
-            floatable: false
-            closable: false
-
-            location: Location.Bottom
-
-            navigationSection: root.navigationPanelSec(drumsetPanel.location)
-
-            DrumsetPanel {
-                navigationSection: drumsetPanel.navigationSection
-                contentNavigationPanelOrderStart: drumsetPanel.contentNavigationPanelOrderStart
             }
         },
 

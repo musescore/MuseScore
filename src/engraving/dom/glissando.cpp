@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -109,12 +109,11 @@ Glissando::Glissando(EngravingItem* parent)
 {
     initElementStyle(&glissandoElementStyle);
 
-    static const std::array<Pid, 5> propertiesToInitialise {
+    static const std::array<Pid, 4> propertiesToInitialise {
         Pid::GLISS_SHIFT,
         Pid::GLISS_EASEIN,
         Pid::GLISS_EASEOUT,
-        Pid::DIAGONAL,
-        Pid::ANCHOR
+        Pid::DIAGONAL
     };
 
     for (const Pid& pid : propertiesToInitialise) {
@@ -188,6 +187,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
             HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
+            playablePitches.reserve(playableTpcs.size());
             for (int t : playableTpcs) {
                 playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
             }
@@ -453,8 +453,6 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::glissandoText);
     case Pid::DIAGONAL:
         return true;
-    case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }

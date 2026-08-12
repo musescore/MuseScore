@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -72,6 +72,25 @@ BaseSection {
                 onPathEdited: function(newPath) {
                     model.path = newPath
                 }
+            }
+        }
+    }
+
+    RowLayout {
+        visible: root.model.vstEnabled
+        width: parent.width
+
+        Item { Layout.fillWidth: true }
+
+        FlatButton {
+            text: qsTrc("preferences", "Rescan VST3 plugins")
+
+            navigation.name: "rescanVstPluginsButton"
+            navigation.panel: root.navigation
+            navigation.row: view.count + 1
+
+            onClicked: {
+                Qt.callLater(root.model.rescanVstPlugins)
             }
         }
     }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CAPO_H
-#define MU_ENGRAVING_CAPO_H
+#pragma once
 
 #include "stafftextbase.h"
 
@@ -49,11 +48,12 @@ public:
     bool shouldAutomaticallyGenerateText() const;
     String generateText(size_t stringCount) const;
 
+    void added() override;
+    void removed() override;
+
 private:
     CapoParams m_params;
     bool m_shouldAutomaticallyGenerateText = true;
     String m_customText;
 };
-} // namespace mu::engraving
-
-#endif // MU_ENGRAVING_CAPO_H
+}

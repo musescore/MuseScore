@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,7 +31,7 @@
 
 #include "modularity/ioc.h"
 #include "internal/paletteprovider.h"
-#include "actions/iactionsdispatcher.h"
+#include "internal/ipalettecommandscontroller.h"
 
 namespace mu::palette {
 // TODO: Refactor entire palette module so that these are not necessary anymore
@@ -86,7 +86,7 @@ class PaletteRootModel : public QObject, public QQmlParserStatus, public muse::a
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 
     muse::ContextInject<IPaletteProvider> paletteProvider = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<IPaletteCommandsController> commandsController = { this };
 
     QML_ELEMENT
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -46,8 +46,9 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
-class TremoloTwoChord;
+class Transaction;
 class TremoloSingleChord;
+class TremoloTwoChord;
 
 enum class NoteType : unsigned char {
     ///.\{
@@ -154,7 +155,7 @@ public:
     double mag() const override;
     double noteHeadWidth() const;
 
-    EngravingItem* drop(EditData&) override;
+    EngravingItem* drop(Transaction& tx, EditData&) override;
 
     void setColor(const Color& c) override;
     void setStemDirection(DirectionV d);

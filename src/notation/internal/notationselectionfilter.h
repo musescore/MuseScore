@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,7 +25,6 @@
 #include "../inotationselectionfilter.h"
 
 #include "igetscore.h"
-#include "inotationinteraction.h"
 
 namespace mu::notation {
 class NotationSelectionFilter : public INotationSelectionFilter
@@ -33,8 +32,8 @@ class NotationSelectionFilter : public INotationSelectionFilter
 public:
     NotationSelectionFilter(const IGetScore* getScore, const std::function<void()>& selectionChangedCallback);
 
-    bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const override;
-    void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) override;
+    bool isSelectionTypeFiltered(const engraving::SelectionFilterTypesVariant& variant) const override;
+    void setSelectionTypeFiltered(const engraving::SelectionFilterTypesVariant& variant, bool filtered) override;
 
     bool includeSingleNotes() const override;
     void setIncludeSingleNotes(bool include) override;

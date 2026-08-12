@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "midiinputoutputcontroller.h"
 
 #include "midi/miditypes.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationmidiinput.h"
 
 #include "log.h"
 
@@ -146,7 +150,7 @@ void MidiInputOutputController::onMidiEventReceived(const muse::midi::tick_t tic
         return;
     }
 
-    auto notation = globalContext()->currentNotation();
+    notation::INotationPtr notation = globalContext()->currentNotation();
     if (notation) {
         notation->midiInput()->onMidiEventReceived(event);
     }

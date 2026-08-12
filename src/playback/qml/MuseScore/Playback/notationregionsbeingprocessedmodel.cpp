@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,8 +21,18 @@
  */
 
 #include "notationregionsbeingprocessedmodel.h"
-#include <QtCore/qvariant.h>
-#include <QtGui/qtransform.h>
+
+#include <QTransform>
+#include <QVariant>
+
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/system.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notation/inotationplayback.h" // IWYU pragma: keep
 
 using namespace muse::audio;
 using namespace mu::playback;
@@ -187,7 +197,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
 {
-    return globalContext()->playbackState()->playbackStatus() == muse::audio::PlaybackStatus::Running;
+    return globalContext()->playbackState()->isPlaying();
 }
 
 void NotationRegionsBeingProcessedModel::clear()
@@ -270,9 +280,7 @@ void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId 
         return;
     }
 
-    const TrackSequenceId sequenceId = playbackController()->currentTrackSequenceId();
-
-    playback()->inputProcessingProgress(sequenceId, trackId)
+    playback()->inputProcessingProgress(trackId)
     .onResolve(this, [this, instrumentTrackId](InputProcessingProgress inputProgress) {
         if (inputProgress.isStarted) {
             onProgressStarted(instrumentTrackId);

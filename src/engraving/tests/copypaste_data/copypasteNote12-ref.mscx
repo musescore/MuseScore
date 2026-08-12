@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>B_B</eid>
+    <eid>D_D</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.75</spatium>
@@ -73,8 +73,9 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>E_E</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>F_F</eid>
         <StaffType group="percussion">
           <name>perc1Line</name>
           <lines>1</lines>
@@ -82,10 +83,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="snare-drum">
-        <longName>Snare Drum</longName>
-        <shortName>SD</shortName>
+        <InstrumentLabel>
+          <longName>Snare Drum</longName>
+          <shortName>SD</shortName>
+          </InstrumentLabel>
         <trackName>Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
@@ -117,81 +119,71 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>G_G</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>H_H</eid>
           <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>I_I</eid>
           <style>subtitle</style>
           <text>Copy-Paste</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>J_J</eid>
         <voice>
           <KeySig>
-            <eid>H_H</eid>
+            <eid>K_K</eid>
             <custom>1</custom>
             <mode>none</mode>
             </KeySig>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>J_J</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>K_K</eid>
+              <eid>N_N</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>L_L</eid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>M_M</eid>
-            <durationType>half</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>N_N</eid>
-        <voice>
-          <Chord>
             <eid>O_O</eid>
             <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>P_P</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Rest>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>R_R</eid>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>Q_Q</eid>
         <voice>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>B_B</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <eid>T_T</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
@@ -200,6 +192,16 @@
         <voice>
           <Rest>
             <eid>V_V</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>W_W</eid>
+        <voice>
+          <Rest>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

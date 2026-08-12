@@ -24,21 +24,21 @@
 #include "element.h"
 #include "atts_shared.h"
 
-
 namespace libmei {
-
 /**
  * Recurring lyrics, especially at the end of each verse or stanza of a poem or
  * song lyrics; a chorus.
  **/
-class Refrain : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym {
-    public:
-        Refrain();
-        virtual ~Refrain();
+class Refrain : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttPlacementRelStaff,
+    public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym
+{
+public:
+    Refrain();
+    virtual ~Refrain();
 
 public:
     bool Read(pugi::xml_node element, bool removeAttr = false);
-    bool Write(pugi::xml_node element, const std::string &xmlId = "");
+    bool Write(pugi::xml_node element, const std::string& xmlId = "");
     void Reset();
 };
 
@@ -46,29 +46,32 @@ public:
  * Division of a poem or song lyrics, sometimes having a fixed length, meter or
  * rhyme scheme; a stanza.
  **/
-class Verse : public Element, public AttLabelled, public AttTyped, public AttColor, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym, public AttNNumberLike {
-    public:
-        Verse();
-        virtual ~Verse();
+class Verse : public Element, public AttLabelled, public AttTyped, public AttColor, public AttPlacementRelStaff, public AttTypography,
+    public AttVisualOffsetVo, public AttVoltaGroupingSym, public AttNNumberLike
+{
+public:
+    Verse();
+    virtual ~Verse();
 
 public:
     bool Read(pugi::xml_node element, bool removeAttr = false);
-    bool Write(pugi::xml_node element, const std::string &xmlId = "");
+    bool Write(pugi::xml_node element, const std::string& xmlId = "");
     void Reset();
 };
 
 /** Sung text for a specific iteration of a repeated section of music. **/
-class Volta : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttTypography, public AttVisualOffsetVo {
-    public:
-        Volta();
-        virtual ~Volta();
+class Volta : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttTypography,
+    public AttVisualOffsetVo
+{
+public:
+    Volta();
+    virtual ~Volta();
 
 public:
     bool Read(pugi::xml_node element, bool removeAttr = false);
-    bool Write(pugi::xml_node element, const std::string &xmlId = "");
+    bool Write(pugi::xml_node element, const std::string& xmlId = "");
     void Reset();
 };
-
 } // namespace libmei
 
 #endif // __LIBMEI_LYRICS_H__

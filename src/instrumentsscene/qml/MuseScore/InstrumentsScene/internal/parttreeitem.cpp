@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,14 +23,20 @@
 
 #include "async/notifylist.h"
 
+#include "engraving/dom/sharedpart.h"
+
+#include "notation/inotation.h"
+#include "notation/inotationparts.h"
+
 #include "log.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 
-PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::PART, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
+PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)
+    : AbstractLayoutPanelTreeItem(type, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
     setIsSelectable(true);
 
@@ -45,18 +51,21 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     const Part* part = notation()->parts()->part(masterPart->id());
     m_partExists = part != nullptr;
-    bool visible = m_partExists && part->show();
 
     if (!m_partExists) {
         part = masterPart;
     }
 
+    bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
+    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+
     setId(part->id());
 
-    const String instName = part->instrument()->nameAsPlainText();
+    const String instName = part->partName();
     setTitle(instName.simplified()); // Collapse whitespace...
 
     setIsVisible(visible);
+    setIsEnabled(enabled);
     setSettingsAvailable(m_partExists);
     setSettingsEnabled(m_partExists);
     setIsExpandable(m_partExists);
@@ -77,11 +86,14 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
         return;
     }
 
-    const String instName = m_part->instrument()->nameAsPlainText();
+    const String instName = m_part->partName();
     setTitle(instName.simplified()); // Collapse whitespace...
 
     m_ignoreVisibilityChange = true;
-    setIsVisible(m_partExists && m_part->show());
+    setIsVisible(m_partExists && m_part->getProperty(Pid::VISIBLE).toBool());
+    if (!m_part->isSharedPart()) {
+        setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
+    }
     m_ignoreVisibilityChange = false;
 }
 

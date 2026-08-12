@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,7 +33,9 @@
 #include "engraving/dom/sig.h"
 #include "engraving/editing/editstaff.h"
 
-#include "notation/inotationelements.h"
+#include "notation/inotationelements.h" // IWYU pragma: keep
+#include "notation/inotationinteraction.h"
+#include "notation/inotationundostack.h"
 
 #include "ui/view/widgetnavigationfix.h"
 #include "ui/view/widgetstatestore.h"
@@ -45,12 +47,17 @@ using namespace muse::ui;
 static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("MeasureProperties");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    qApp->installEventFilter(this);
+}
+
+void MeasurePropertiesDialog::componentComplete()
+{
     m_notation = context()->currentNotation();
     initMeasure();
 
@@ -73,8 +80,6 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
-
-    qApp->installEventFilter(this);
 }
 
 void MeasurePropertiesDialog::initMeasure()

@@ -21,16 +21,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Flute</trackName>
       <Instrument id="piano">
-        <longName>Alto Flute</longName>
-        <shortName>A. Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Flute</longName>
+          <shortName>A. Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Alto Flute</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -88,44 +90,34 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             </Clef>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <concertKey>0</concertKey>
             <actualKey>-1</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <duration>3/16</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>J_J</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>K_K</eid>
               <pitch>64</pitch>
@@ -145,13 +137,6 @@
             <dots>1</dots>
             <durationType>quarter</durationType>
             <duration>3/16</duration>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>N_N</eid>
               <pitch>67</pitch>
@@ -166,5 +151,13 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>M_M</endElement>
+        <eid>P_P</eid>
+        <track>0</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,12 +22,19 @@
 
 #include "notationruler.h"
 
-#include "notation/notationtypes.h"
+#include "draw/types/color.h"
+#include "draw/types/drawtypes.h"
+
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/sig.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/timesig.h"
 
 #include "ui/view/iconcodes.h"
 #include "draw/painter.h"
-#include "draw/types/color.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -46,7 +53,7 @@ void NotationRuler::paint(Painter* painter, const NoteInputState& state)
     const System* system = currSegment->system();
     const Measure* measure = currSegment->measure();
     const SysStaff* sysStaff = system ? system->staff(state.staffIdx()) : nullptr;
-    const TimeSignature* timeSig = staff ? staff->timeSig(state.tick()) : nullptr;
+    const TimeSig* timeSig = staff ? staff->timeSig(state.tick()) : nullptr;
 
     if (!measure || !sysStaff || !timeSig) {
         return;
@@ -138,7 +145,7 @@ NotationRuler::LineType NotationRuler::lineType(int lineTicks, int inputTicks, s
 void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& point, double spatium, voice_idx_t voiceIdx)
 {
     muse::RectF rect;
-    Color color = configuration()->selectionColor(voiceIdx);
+    muse::Color color = configuration()->selectionColor(voiceIdx);
 
     switch (type) {
     case LineType::CurrentPosition:
@@ -169,7 +176,7 @@ void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& poi
 
         painter->setPen(color);
         painter->setFont(font);
-        painter->drawText(rect, AlignHCenter | AlignBottom,
+        painter->drawText(rect, AlignHCenter | AlignBottom, TextDontClip,
                           Char(static_cast<char16_t>(muse::ui::IconCode::Code::DURATION_CURSOR)));
     } else {
         painter->fillRect(rect, color);

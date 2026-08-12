@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -44,7 +44,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/clef.h"
@@ -89,7 +89,8 @@
 #include "dom/utils.h"
 #include "dom/volta.h"
 
-#include "editing/transpose.h"
+#include "../../editing/editstaffbrackets.h"
+#include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
@@ -278,7 +279,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+        t->setFrameType(e.readBool() ? FrameType::RECTANGLE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
@@ -511,10 +512,12 @@ static void readFingering114(XmlReader& e, Fingering* fing)
         } else if (tag == "frame") {
             auto frame = e.readInt();
             if (frame) {
-                if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
+                if (isStringNumber) {
+                    // default value is circle for string number, rectangle is set in <circle> tag
                     fing->setFrameType(FrameType::CIRCLE);
-                } else {     //default value is square for stringnumber, circle is set in tag circle
-                    fing->setFrameType(FrameType::SQUARE);
+                } else {
+                    // default value is rectangle for string number, circle is set in <circle> tag
+                    fing->setFrameType(FrameType::RECTANGLE);
                 }
             } else {
                 fing->setFrameType(FrameType::NO_FRAME);
@@ -524,7 +527,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             if (circle) {
                 fing->setFrameType(FrameType::CIRCLE);
             } else {
-                fing->setFrameType(FrameType::SQUARE);
+                fing->setFrameType(FrameType::RECTANGLE);
             }
         } else {
             e.skipCurrentElement();
@@ -1127,6 +1130,7 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
     } else if (tag == "Segment") {
         LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
+        tl->add(ls);
         readLineSegment114(e, ctx, ls);
         // in v1.x "visible" is a property of the segment only;
         // we must ensure that it propagates also to the parent element.
@@ -1135,7 +1139,6 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
         ls->setVisible(ls->visible());
         ls->setOffset(PointF());            // ignore offsets
         ls->setAutoplace(true);
-        tl->add(ls);
     } else if (!read400::TRead::readProperties(tl, e, ctx)) {
         return false;
     }
@@ -1166,11 +1169,6 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
         }
-    }
-    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
-        volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
     volta->setOffset(PointF());          // ignore offsets
     volta->setAutoplace(true);
@@ -1853,9 +1851,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             bool courtesySig = (curTick == m->endTick());
             segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
             segment->add(ks);
-            if (!courtesySig) {
-                staff->setKey(curTick, ks->keySigEvent());
-            }
+            staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Lyrics") {
             Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
             l->setTrack(ctx.track());
@@ -2407,9 +2403,9 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "keylist") {
             read400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
-            size_t col = staff->brackets().size();
-            staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-            staff->setBracketSpan(col, e.intAttribute("span", 0));
+            size_t col = ctx.score()->brackets(staff->idx()).size();
+            EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditStaffBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
             const int barLineSpan = e.readInt();
@@ -2584,16 +2580,11 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             readText114(e, ctx, t, t);
             part->instrument()->setShortName(t->xmlText());
             delete t;
-        } else if (tag == "trackName") {
-            part->setPartName(e.readText());
         } else if (tag == "show") {
             part->setShow(e.readInt());
         } else {
             e.unknown();
         }
-    }
-    if (part->partName().isEmpty()) {
-        part->setPartName(part->instrument()->trackName());
     }
 
     if (part->instrument()->useDrumset()) {
@@ -2821,7 +2812,7 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
                 }
             }
         } else if (tag == "playMode") {
-            masterScore->setPlayMode(PlayMode(e.readInt()));
+            e.skipCurrentElement();
         } else if (tag == "SyntiSettings") {
             masterScore->m_synthesizerState.read(e);
         } else if (tag == "Spatium") {
@@ -3009,13 +3000,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 
     for (std::pair<int, Spanner*> p : masterScore->spanner()) {
         Spanner* s = p.second;
-        if (!s->isSlur()) {
-            if (s->isVolta()) {
-                Volta* volta = toVolta(s);
-                volta->setAnchor(Spanner::Anchor::MEASURE);
-            }
-        }
-
         if (s->isOttava() || s->isPedal() || s->isTrill() || s->isTextLine()) {
             double yo = 0;
             if (s->isOttava()) {
@@ -3042,8 +3026,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
             }
         }
     }
-
-    masterScore->connectTies();
 
     //
     // remove "middle beam" flags from first ChordRest in
@@ -3136,6 +3118,18 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
+    masterScore->setUpTempoMap();
+    // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+    // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+    // elements still do it).
+    // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+    // up-to-date from that point. But we weren't finished reading the score, so the score will still
+    // change. We need to tell the repeat list about that, so that it will be updated next time
+    // someone uses it.
+    masterScore->invalidateRepeatList();
+    masterScore->connectTies();
+    masterScore->undoRemoveStaleTieJumpPoints(false);
+
     // create excerpts
     {
         std::vector<Excerpt*> readExcerpts;
@@ -3160,8 +3154,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     if (masterScore->style().styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
-
-    masterScore->setUpTempoMap();
 
     for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);

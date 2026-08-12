@@ -22,24 +22,30 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff>
-        <eid>C_C</eid>
-        <StaffType group="pitched">
-          <name>stdNormal</name>
-          </StaffType>
-        <bracket type="1" span="2" col="0" visible="1"/>
-        <barLineSpan>1</barLineSpan>
-        </Staff>
+      <eid>C_C</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <Channel>
@@ -49,78 +55,58 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>Hypothetical slurs</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
+          <eid>I_I</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Clef>
           <KeySig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <concertKey>6</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <l1>22</l1>
             <l2>23</l2>
             </Beam>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>O_O</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>P_P</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>23/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>P_P</eid>
               <pitch>92</pitch>
               <tpc>22</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -130,70 +116,52 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>90</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>U_U</eid>
               <pitch>85</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>V_V</eid>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>X_X</eid>
+              <eid>W_W</eid>
               <pitch>82</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Beam>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <l1>36</l1>
             <l2>37</l2>
             </Beam>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>a_a</eid>
-                <lineType>1</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>b_b</eid>
+              <eid>Z_Z</eid>
               <pitch>87</pitch>
               <tpc>23</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>c_c</eid>
+            <eid>a_a</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -202,71 +170,53 @@
               <text>3</text>
               </Number>
             </Tuplet>
+          <Chord>
+            <eid>b_b</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>c_c</eid>
+              <pitch>85</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>d_d</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
               <eid>e_e</eid>
-              <pitch>85</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>f_f</eid>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>g_g</eid>
               <pitch>82</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>h_h</eid>
+            <eid>f_f</eid>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>i_i</eid>
+              <eid>g_g</eid>
               <pitch>78</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Beam>
-            <eid>j_j</eid>
+            <eid>h_h</eid>
             <l1>38</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
-            <eid>k_k</eid>
+            <eid>i_i</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>l_l</eid>
-                <lineType>1</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>m_m</eid>
+              <eid>j_j</eid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>n_n</eid>
+            <eid>k_k</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -276,71 +226,52 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>o_o</eid>
+            <eid>l_l</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>m_m</eid>
               <pitch>82</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>q_q</eid>
+            <eid>n_n</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>r_r</eid>
+              <eid>o_o</eid>
               <pitch>78</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>s_s</eid>
+            <eid>p_p</eid>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>t_t</eid>
+              <eid>q_q</eid>
               <pitch>73</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Beam>
-            <eid>u_u</eid>
+            <eid>r_r</eid>
             <l1>44</l1>
             <l2>50</l2>
             </Beam>
           <Chord>
-            <eid>v_v</eid>
+            <eid>s_s</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>w_w</eid>
-                <up>up</up>
-                <lineType>1</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>x_x</eid>
+              <eid>t_t</eid>
               <pitch>80</pitch>
               <tpc>22</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>y_y</eid>
+            <eid>u_u</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -350,51 +281,37 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>z_z</eid>
+            <eid>v_v</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>0_0</eid>
+              <eid>w_w</eid>
               <pitch>78</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>1_1</eid>
+            <eid>x_x</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>y_y</eid>
               <pitch>73</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>3_3</eid>
+            <eid>z_z</eid>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-23/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>4_4</eid>
+              <eid>0_0</eid>
               <pitch>70</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>5_5</eid>
+            <eid>1_1</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
@@ -404,43 +321,52 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>6_6</eid>
+            <eid>2_2</eid>
             <l1>-20</l1>
             <l2>-18</l2>
             </Beam>
           <Chord>
-            <eid>7_7</eid>
+            <eid>3_3</eid>
             <BeamMode>begin</BeamMode>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>8_8</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>9_9</eid>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-1/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>4_4</eid>
+              <pitch>75</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5_5</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>6_6</eid>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>7_7</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>8_8</eid>
+              <pitch>70</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9_9</eid>
+            <BeamMode>mid</BeamMode>
+            <durationType>32nd</durationType>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>+_+</eid>
-              <pitch>75</pitch>
-              <tpc>23</tpc>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -450,13 +376,12 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>AB_AB</eid>
-              <pitch>73</pitch>
-              <tpc>21</tpc>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>BB_BB</eid>
-            <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <StemDirection>up</StemDirection>
             <Note>
@@ -465,60 +390,9 @@
               <tpc>24</tpc>
               </Note>
             </Chord>
-          <Chord>
-            <eid>DB_DB</eid>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>EB_EB</eid>
-                <up>up</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>FB_FB</eid>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>GB_GB</eid>
-            <BeamMode>mid</BeamMode>
-            <durationType>32nd</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>HB_HB</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>IB_IB</eid>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>JB_JB</eid>
-              <pitch>70</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>KB_KB</eid>
+            <eid>DB_DB</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
@@ -528,116 +402,78 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>LB_LB</eid>
+            <eid>EB_EB</eid>
             <l1>-6</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
-            <eid>MB_MB</eid>
+            <eid>FB_FB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>NB_NB</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>OB_OB</eid>
+              <eid>GB_GB</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>PB_PB</eid>
+            <eid>HB_HB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>QB_QB</eid>
+              <eid>IB_IB</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>RB_RB</eid>
+            <eid>JB_JB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>SB_SB</eid>
+              <eid>KB_KB</eid>
               <pitch>68</pitch>
               <tpc>22</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>TB_TB</eid>
+            <eid>LB_LB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>UB_UB</eid>
-                <up>up</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>VB_VB</eid>
+              <eid>MB_MB</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>WB_WB</eid>
+            <eid>NB_NB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>XB_XB</eid>
+              <eid>OB_OB</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>YB_YB</eid>
+            <eid>PB_PB</eid>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>ZB_ZB</eid>
+              <eid>QB_QB</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>aB_aB</eid>
+            <eid>RB_RB</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
@@ -647,60 +483,100 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>bB_bB</eid>
+            <eid>SB_SB</eid>
             <l1>-40</l1>
             <l2>-34</l2>
             </Beam>
           <Chord>
-            <eid>cB_cB</eid>
+            <eid>TB_TB</eid>
             <BeamMode>begin</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>dB_dB</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>eB_eB</eid>
+              <eid>UB_UB</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>fB_fB</eid>
+            <eid>VB_VB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>gB_gB</eid>
+              <eid>WB_WB</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>hB_hB</eid>
+            <eid>XB_XB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>iB_iB</eid>
+              <eid>YB_YB</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>ZB_ZB</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>aB_aB</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>bB_bB</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>cB_cB</eid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>dB_dB</eid>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>eB_eB</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Tuplet>
+            <eid>fB_fB</eid>
+            <normalNotes>4</normalNotes>
+            <actualNotes>6</actualNotes>
+            <baseNote>32nd</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>6</text>
+              </Number>
+            </Tuplet>
+          <Beam>
+            <eid>gB_gB</eid>
+            <l1>-40</l1>
+            <l2>-34</l2>
+            </Beam>
+          <Chord>
+            <eid>hB_hB</eid>
+            <BeamMode>begin</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>iB_iB</eid>
+              <pitch>63</pitch>
+              <tpc>23</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -708,155 +584,51 @@
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>kB_kB</eid>
-                <up>up</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>lB_lB</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>mB_mB</eid>
-            <BeamMode>mid</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>nB_nB</eid>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>oB_oB</eid>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>pB_pB</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <Tuplet>
-            <eid>qB_qB</eid>
-            <normalNotes>4</normalNotes>
-            <actualNotes>6</actualNotes>
-            <baseNote>32nd</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>6</text>
-              </Number>
-            </Tuplet>
-          <Beam>
-            <eid>rB_rB</eid>
-            <l1>-40</l1>
-            <l2>-34</l2>
-            </Beam>
-          <Chord>
-            <eid>sB_sB</eid>
-            <BeamMode>begin</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>tB_tB</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>uB_uB</eid>
-              <pitch>63</pitch>
-              <tpc>23</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>vB_vB</eid>
-            <BeamMode>mid</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>wB_wB</eid>
+              <eid>kB_kB</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>xB_xB</eid>
+            <eid>lB_lB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>yB_yB</eid>
+              <eid>mB_mB</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>zB_zB</eid>
+            <eid>nB_nB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>0B_0B</eid>
+              <eid>oB_oB</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>1B_1B</eid>
+            <eid>pB_pB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>2B_2B</eid>
+              <eid>qB_qB</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>3B_3B</eid>
+            <eid>rB_rB</eid>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>4B_4B</eid>
+              <eid>sB_sB</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
@@ -865,10 +637,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>5B_5B</eid>
+        <eid>tB_tB</eid>
         <voice>
           <Tuplet>
-            <eid>6B_6B</eid>
+            <eid>uB_uB</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
@@ -878,97 +650,78 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>7B_7B</eid>
+            <eid>vB_vB</eid>
             <l1>-40</l1>
             <l2>-34</l2>
             </Beam>
           <Chord>
-            <eid>8B_8B</eid>
+            <eid>wB_wB</eid>
             <BeamMode>begin</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>9B_9B</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>+B_+B</eid>
+              <eid>xB_xB</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>/B_/B</eid>
+            <eid>yB_yB</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>AC_AC</eid>
+              <eid>zB_zB</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>BC_BC</eid>
+            <eid>0B_0B</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>CC_CC</eid>
+              <eid>1B_1B</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>DC_DC</eid>
+            <eid>2B_2B</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>EC_EC</eid>
+              <eid>3B_3B</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>FC_FC</eid>
+            <eid>4B_4B</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>GC_GC</eid>
+              <eid>5B_5B</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>HC_HC</eid>
+            <eid>6B_6B</eid>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>IC_IC</eid>
+              <eid>7B_7B</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>JC_JC</eid>
+            <eid>8B_8B</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>6</actualNotes>
             <baseNote>32nd</baseNote>
@@ -978,27 +731,96 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>KC_KC</eid>
+            <eid>9B_9B</eid>
             <l1>-40</l1>
             <l2>-34</l2>
             </Beam>
           <Chord>
-            <eid>LC_LC</eid>
+            <eid>+B_+B</eid>
             <BeamMode>begin</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>MC_MC</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <Note>
+              <eid>/B_/B</eid>
+              <pitch>63</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>AC_AC</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>BC_BC</eid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>CC_CC</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>DC_DC</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>EC_EC</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>FC_FC</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>GC_GC</eid>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>HC_HC</eid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>IC_IC</eid>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>JC_JC</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Tuplet>
+            <eid>KC_KC</eid>
+            <normalNotes>4</normalNotes>
+            <actualNotes>6</actualNotes>
+            <baseNote>32nd</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>6</text>
+              </Number>
+            </Tuplet>
+          <Beam>
+            <eid>LC_LC</eid>
+            <l1>-40</l1>
+            <l2>-34</l2>
+            </Beam>
+          <Chord>
+            <eid>MC_MC</eid>
+            <BeamMode>begin</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>32nd</durationType>
             <Note>
               <eid>NC_NC</eid>
               <pitch>63</pitch>
@@ -1053,13 +875,6 @@
             <eid>WC_WC</eid>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>XC_XC</eid>
               <pitch>58</pitch>
@@ -1080,196 +895,69 @@
           <Beam>
             <eid>ZC_ZC</eid>
             <l1>-40</l1>
-            <l2>-34</l2>
+            <l2>-38</l2>
             </Beam>
           <Chord>
             <eid>aC_aC</eid>
             <BeamMode>begin</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>bC_bC</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>cC_cC</eid>
+              <eid>bC_bC</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>dC_dC</eid>
+            <eid>cC_cC</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>eC_eC</eid>
+              <eid>dC_dC</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>fC_fC</eid>
+            <eid>eC_eC</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>gC_gC</eid>
+              <eid>fC_fC</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>hC_hC</eid>
+            <eid>gC_gC</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>iC_iC</eid>
+              <eid>hC_hC</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>jC_jC</eid>
+            <eid>iC_iC</eid>
             <BeamMode>mid</BeamMode>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>kC_kC</eid>
+              <eid>jC_jC</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>lC_lC</eid>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>mC_mC</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <Tuplet>
-            <eid>nC_nC</eid>
-            <normalNotes>4</normalNotes>
-            <actualNotes>6</actualNotes>
-            <baseNote>32nd</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>6</text>
-              </Number>
-            </Tuplet>
-          <Beam>
-            <eid>oC_oC</eid>
-            <l1>-40</l1>
-            <l2>-38</l2>
-            </Beam>
-          <Chord>
-            <eid>pC_pC</eid>
-            <BeamMode>begin</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>qC_qC</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>rC_rC</eid>
-              <pitch>63</pitch>
-              <tpc>23</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>sC_sC</eid>
-            <BeamMode>mid</BeamMode>
+            <eid>kC_kC</eid>
             <staffMove>1</staffMove>
             <durationType>32nd</durationType>
             <Note>
-              <eid>tC_tC</eid>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>uC_uC</eid>
-            <BeamMode>mid</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>vC_vC</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>wC_wC</eid>
-            <BeamMode>mid</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>xC_xC</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>yC_yC</eid>
-            <BeamMode>mid</BeamMode>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>zC_zC</eid>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>0C_0C</eid>
-            <staffMove>1</staffMove>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>1/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>1C_1C</eid>
+              <eid>lC_lC</eid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
@@ -1278,20 +966,20 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             <timeStretch>-1</timeStretch>
-            <eid>2C_2C</eid>
+            <eid>mC_mC</eid>
             </Fermata>
           <Chord>
-            <eid>3C_3C</eid>
+            <eid>nC_nC</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>4C_4C</eid>
+              <eid>oC_oC</eid>
               <pitch>70</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>5C_5C</eid>
+            <eid>pC_pC</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1303,77 +991,54 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>6C_6C</eid>
+            <eid>qC_qC</eid>
             </Clef>
           <KeySig>
-            <eid>7C_7C</eid>
+            <eid>rC_rC</eid>
             <concertKey>6</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>8C_8C</eid>
+            <eid>sC_sC</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>9C_9C</eid>
+            <eid>tC_tC</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>+C_+C</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>11/48</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>/C_/C</eid>
+              <eid>uC_uC</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>AD_AD</eid>
+            <eid>vC_vC</eid>
             <l1>50</l1>
             <l2>50</l2>
             </Beam>
           <Chord>
-            <eid>BD_BD</eid>
+            <eid>wC_wC</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>CD_CD</eid>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>DD_DD</eid>
+              <eid>xC_xC</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
-              <eid>ED_ED</eid>
+              <eid>yC_yC</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
-              <eid>FD_FD</eid>
+              <eid>zC_zC</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>GD_GD</eid>
+            <eid>0C_0C</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1383,29 +1048,119 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>HD_HD</eid>
+            <eid>1C_1C</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
             <Note>
-              <eid>ID_ID</eid>
+              <eid>2C_2C</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
-              <eid>JD_JD</eid>
+              <eid>3C_3C</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
-              <eid>KD_KD</eid>
+              <eid>4C_4C</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>LD_LD</eid>
+            <eid>5C_5C</eid>
             <BeamMode>mid</BeamMode>
             <durationType>32nd</durationType>
+            <Note>
+              <eid>6C_6C</eid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            <Note>
+              <eid>7C_7C</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            <Note>
+              <eid>8C_8C</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9C_9C</eid>
+            <durationType>32nd</durationType>
+            <Note>
+              <eid>+C_+C</eid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            <Note>
+              <eid>/C_/C</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            <Note>
+              <eid>AD_AD</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Beam>
+            <eid>BD_BD</eid>
+            <l1>36</l1>
+            <l2>42</l2>
+            </Beam>
+          <Chord>
+            <eid>CD_CD</eid>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>DD_DD</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            <Note>
+              <eid>ED_ED</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            <Note>
+              <eid>FD_FD</eid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>GD_GD</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>HD_HD</eid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            <Note>
+              <eid>ID_ID</eid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            <Note>
+              <eid>JD_JD</eid>
+              <pitch>58</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>KD_KD</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>LD_LD</eid>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              </Note>
             <Note>
               <eid>MD_MD</eid>
               <pitch>49</pitch>
@@ -1413,147 +1168,24 @@
               </Note>
             <Note>
               <eid>ND_ND</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            <Note>
-              <eid>OD_OD</eid>
               <pitch>58</pitch>
               <tpc>24</tpc>
               </Note>
             </Chord>
-          <Chord>
+          <Rest>
+            <eid>OD_OD</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
             <eid>PD_PD</eid>
-            <durationType>32nd</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-11/48</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>QD_QD</eid>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              </Note>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <eid>QD_QD</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <Note>
               <eid>RD_RD</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            <Note>
-              <eid>SD_SD</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <Beam>
-            <eid>TD_TD</eid>
-            <l1>36</l1>
-            <l2>42</l2>
-            </Beam>
-          <Chord>
-            <eid>UD_UD</eid>
-            <BeamMode>begin</BeamMode>
-            <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>VD_VD</eid>
-                <up>down</up>
-                <lineType>2</lineType>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/8</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>WD_WD</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            <Note>
-              <eid>XD_XD</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            <Note>
-              <eid>YD_YD</eid>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>ZD_ZD</eid>
-            <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/8</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>aD_aD</eid>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              </Note>
-            <Note>
-              <eid>bD_bD</eid>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            <Note>
-              <eid>cD_cD</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>dD_dD</eid>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <eid>eD_eD</eid>
-              <pitch>42</pitch>
-              <tpc>20</tpc>
-              </Note>
-            <Note>
-              <eid>fD_fD</eid>
-              <pitch>49</pitch>
-              <tpc>21</tpc>
-              </Note>
-            <Note>
-              <eid>gD_gD</eid>
-              <pitch>58</pitch>
-              <tpc>24</tpc>
-              </Note>
-            </Chord>
-          <Rest>
-            <eid>hD_hD</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <eid>iD_iD</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Chord>
-            <eid>jD_jD</eid>
-            <BeamMode>no</BeamMode>
-            <durationType>eighth</durationType>
-            <Note>
-              <eid>kD_kD</eid>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
@@ -1563,31 +1195,31 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>lD_lD</eid>
+            <eid>SD_SD</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>mD_mD</eid>
+              <eid>TD_TD</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalNatural</subtype>
-                <eid>nD_nD</eid>
+                <eid>UD_UD</eid>
                 </Accidental>
               <pitch>29</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
-              <eid>oD_oD</eid>
+              <eid>VD_VD</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>pD_pD</eid>
+            <eid>WD_WD</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <eid>qD_qD</eid>
+              <eid>XD_XD</eid>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
@@ -1595,18 +1227,18 @@
           <Fermata>
             <subtype>fermataBelow</subtype>
             <timeStretch>-1</timeStretch>
-            <eid>rD_rD</eid>
+            <eid>YD_YD</eid>
             <placement>below</placement>
             </Fermata>
           <Chord>
-            <eid>sD_sD</eid>
+            <eid>ZD_ZD</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>tD_tD</eid>
+              <eid>aD_aD</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalSharp</subtype>
-                <eid>uD_uD</eid>
+                <eid>bD_bD</eid>
                 </Accidental>
               <pitch>30</pitch>
               <tpc>20</tpc>
@@ -1614,10 +1246,164 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>vD_vD</eid>
+            <eid>cD_cD</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>O_O</startElement>
+        <endElement>V_V</endElement>
+        <eid>dD_dD</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>O_O</startElement>
+        <endElement>z_z</endElement>
+        <eid>eD_eD</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>tC_tC</startElement>
+        <endElement>9C_9C</endElement>
+        <eid>fD_fD</eid>
+        <track>4</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>Y_Y</startElement>
+        <endElement>f_f</endElement>
+        <eid>gD_gD</eid>
+        <track>0</track>
+        <lineType>1</lineType>
+        </Slur>
+      <Slur>
+        <startElement>wC_wC</startElement>
+        <endElement>GD_GD</endElement>
+        <eid>hD_hD</eid>
+        <track>4</track>
+        <up>up</up>
+        </Slur>
+      <Slur>
+        <startElement>i_i</startElement>
+        <endElement>p_p</endElement>
+        <eid>iD_iD</eid>
+        <track>0</track>
+        <lineType>1</lineType>
+        </Slur>
+      <Slur>
+        <startElement>CD_CD</startElement>
+        <endElement>GD_GD</endElement>
+        <eid>jD_jD</eid>
+        <track>4</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>s_s</startElement>
+        <endElement>z_z</endElement>
+        <eid>kD_kD</eid>
+        <track>0</track>
+        <up>up</up>
+        <lineType>1</lineType>
+        </Slur>
+      <Slur>
+        <startElement>3_3</startElement>
+        <endElement>BB_BB</endElement>
+        <eid>lD_lD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>3_3</startElement>
+        <endElement>kC_kC</endElement>
+        <eid>mD_mD</eid>
+        <track>0</track>
+        <up>up</up>
+        </Slur>
+      <Slur>
+        <startElement>9_9</startElement>
+        <endElement>JB_JB</endElement>
+        <eid>nD_nD</eid>
+        <track>0</track>
+        <up>up</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>FB_FB</startElement>
+        <endElement>PB_PB</endElement>
+        <eid>oD_oD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>LB_LB</startElement>
+        <endElement>XB_XB</endElement>
+        <eid>pD_pD</eid>
+        <track>0</track>
+        <up>up</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>TB_TB</startElement>
+        <endElement>dB_dB</endElement>
+        <eid>qD_qD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>ZB_ZB</startElement>
+        <endElement>lB_lB</endElement>
+        <eid>rD_rD</eid>
+        <track>0</track>
+        <up>up</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>hB_hB</startElement>
+        <endElement>rB_rB</endElement>
+        <eid>sD_sD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>wB_wB</startElement>
+        <endElement>6B_6B</endElement>
+        <eid>tD_tD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>+B_+B</startElement>
+        <endElement>IC_IC</endElement>
+        <eid>uD_uD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>MC_MC</startElement>
+        <endElement>WC_WC</endElement>
+        <eid>vD_vD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      <Slur>
+        <startElement>aC_aC</startElement>
+        <endElement>kC_kC</endElement>
+        <eid>wD_wD</eid>
+        <track>0</track>
+        <up>down</up>
+        <lineType>2</lineType>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

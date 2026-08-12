@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,12 +21,7 @@
  */
 #include "tie.h"
 
-#include <cmath>
-
-#include "draw/types/transform.h"
-
 #include "../editing/mscoreview.h"
-#include "../editing/undo.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -228,7 +223,6 @@ double TieSegment::dottedWidth() const
 Tie::Tie(const ElementType& type, EngravingItem* parent)
     : SlurTie(type, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 TieJumpPointList* Tie::startTieJumpPoints() const
@@ -379,7 +373,6 @@ const TieJumpPointList* Tie::tieJumpPoints() const
 Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 Tie::Tie(const Tie& t)
@@ -404,8 +397,6 @@ PropertyValue Tie::getProperty(Pid propertyId) const
 PropertyValue Tie::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return int(Anchor::NOTE);
     case Pid::TIE_PLACEMENT:
         return TiePlacement::AUTO;
     default:

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@ class Painter;
 }
 
 namespace mu::engraving {
+class Transaction;
 class Measure;
 class Segment;
 
@@ -104,7 +105,7 @@ public:
     void setPlayDynamic(bool v) { m_playDynamic = v; }
 
     bool acceptDrop(EditData& ed) const override;
-    EngravingItem* drop(EditData& ed) override;
+    EngravingItem* drop(Transaction& tx, EditData& ed) override;
 
     static int dynamicVelocity(DynamicType t);
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
@@ -121,6 +122,7 @@ public:
     bool isEditAllowed(EditData&) const override;
 
     bool positionRelativeToNoteheadRest() const override { return true; }
+    bool sizeIsSpatiumDependent() const override { return true; }
 
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }

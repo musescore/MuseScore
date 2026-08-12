@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -64,7 +64,7 @@ void MasterPalette::addPalette(PalettePtr palette)
 {
     TRACEFUNC;
 
-    PaletteWidget* widget = new PaletteWidget(this);
+    PaletteWidget* widget = new PaletteWidget(this, true /*setIocContext*/);
     widget->setReadOnly(true);
     widget->setPalette(palette);
 
@@ -88,13 +88,18 @@ MasterPalette::MasterPalette(QWidget* parent)
 
     setObjectName("MasterPalette");
     setupUi(this);
+}
+
+void MasterPalette::componentComplete()
+{
+    TopLevelDialog::componentComplete();
 
     treeWidget->clear();
 
     PaletteCreator creator(iocContext());
 
     addPalette(creator.newClefsPalette());
-    m_keyEditor = new KeyEditor;
+    m_keyEditor = new KeyEditor(this);
 
     m_keyItem = new QTreeWidgetItem();
     m_keyItem->setData(0, Qt::UserRole, stack->count());
@@ -103,8 +108,9 @@ MasterPalette::MasterPalette(QWidget* parent)
 
     m_timeItem = new QTreeWidgetItem();
     m_timeItem->setData(0, Qt::UserRole, stack->count());
-    m_timeDialog = new TimeDialog;
-    stack->addWidget(m_timeDialog);
+    m_timeEditor = new TimeEditor(this);
+    m_timeEditor->classBegin();
+    stack->addWidget(m_timeEditor);
     treeWidget->addTopLevelItem(m_timeItem);
 
     addPalette(creator.newBracketsPalette());
@@ -134,7 +140,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     m_symbolItem->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
     treeWidget->addTopLevelItem(m_symbolItem);
-    stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS));
+    stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS, this));
 
     // Add "All symbols" entry to be first in the list of categories
     QTreeWidgetItem* child = new QTreeWidgetItem({ Smufl::SMUFL_ALL_SYMBOLS });
@@ -227,8 +233,8 @@ void MasterPalette::showEvent(QShowEvent* event)
 void MasterPalette::closeEvent(QCloseEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
-    if (m_timeDialog->dirty()) {
-        m_timeDialog->save();
+    if (m_timeEditor->dirty()) {
+        m_timeEditor->save();
     }
     if (m_keyEditor->dirty()) {
         m_keyEditor->save();

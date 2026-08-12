@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -111,8 +111,8 @@ static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const Im
         BendChordData& bendChordData
             = bendDataCtx.bendDataByEndTick[note->track()][(currentTick + tickDuration).ticks()];
         bendChordData.startTick = currentTick;
-        BendNoteData bendNoteData;
-        bendNoteData.quarterTones = seg.endPitch / 25;
+        SegmentData bendNoteData;
+        bendNoteData.quarterTones = seg.endPitch / GP_PITCH_PER_QUARTERTONE;
         bendChordData.noteDataByIdx[noteIndexInChord] = std::move(bendNoteData);
 
         currentTick += tickDuration;

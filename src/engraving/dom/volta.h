@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -65,11 +65,11 @@ public:
         OPEN, CLOSED
     };
 
-    static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
-
     Volta(EngravingItem* parent);
 
     Volta* clone() const override { return new Volta(*this); }
+
+    Anchor anchor() const override { return Anchor::MEASURE; }
 
     LineSegment* createLineSegment(System* parent) override;
 
@@ -99,6 +99,9 @@ public:
     String accessibleInfo() const override;
 
     PointF linePos(Grip grip, System** system) const override;
+
+protected:
+    Sid defaultPosSid() const override;
 
 private:
     std::vector<int> m_endings;

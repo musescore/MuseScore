@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -63,7 +63,6 @@ static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/ab
 
 static const std::string UTM_MEDIUM_MENU("menu");
 
-static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 
 static const muse::io::path_t SESSION_FILE("/session.json");
@@ -205,7 +204,7 @@ std::string AppShellConfiguration::accessibilityStatementUrl() const
 
 std::string AppShellConfiguration::museScoreUrl() const
 {
-    return globalConfiguration()->museScoreUrl();
+    return updateConfiguration()->appWebSiteUrl();
 }
 
 std::string AppShellConfiguration::museScoreForumUrl() const
@@ -241,21 +240,6 @@ std::string AppShellConfiguration::museScoreVersion() const
 std::string AppShellConfiguration::museScoreRevision() const
 {
     return application()->revision().toStdString();
-}
-
-bool AppShellConfiguration::isNotationNavigatorVisible() const
-{
-    return uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, false);
-}
-
-void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const
-{
-    uiConfiguration()->setIsVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, visible);
-}
-
-muse::async::Notification AppShellConfiguration::isNotationNavigatorVisibleChanged() const
-{
-    return uiConfiguration()->isVisibleChanged(NOTATION_NAVIGATOR_VISIBLE_KEY);
 }
 
 bool AppShellConfiguration::needShowSplashScreen() const

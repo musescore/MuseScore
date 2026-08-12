@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,16 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "notationcontextmenumodel.h"
 
 #include "types/translatablestring.h"
 
 #include "ui/view/iconcodes.h"
 
-#include "widgets/editstyleutils.h"
-
-#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/staff.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotation.h"
+#include "notation/inotationselection.h"
+
+#include "notationscene/notationcommands.h"
+
+#include "widgets/editstyleutils.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -40,6 +50,13 @@ void NotationContextMenuModel::loadItems(int elementType)
     AbstractMenuModel::load();
 
     MenuItemList items = makeItemsByElementType(static_cast<ElementType>(elementType));
+
+    const INotationAutomationPtr automation = this->automation();
+    if (automation && automation->isAutomationModeEnabled()) {
+        items << makeSeparator()
+              << makeMenu(TranslatableString::untranslatable("Automation type"), makeAutomationTypeItems());
+    }
+
     setItems(items);
 }
 
@@ -96,11 +113,11 @@ MenuItemList NotationContextMenuModel::makePageItems()
 MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
-        makeMenuItem("action://notation/delete"),
+        makeMenuItem("command://notation/delete"),
     };
 
     return items;
@@ -109,15 +126,15 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
     MenuItemList items = {
-        makeMenuItem("action://notation/cut"),
-        makeMenuItem("action://notation/copy"),
-        makeMenuItem("action://notation/paste"),
+        makeMenuItem("command://notation/cut"),
+        makeMenuItem("command://notation/copy"),
+        makeMenuItem("command://notation/paste"),
         makeMenuItem("notation-swap"),
     };
 
     items << makeSeparator();
 
-    MenuItem* clearItem = makeMenuItem("action://notation/delete");
+    MenuItem* clearItem = makeMenuItem("command://notation/delete");
     clearItem->setTitle(TranslatableString("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
     deleteItem->setTitle(TranslatableString("notation", "Delete measures"));
@@ -223,10 +240,10 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
 {
     MenuItemList items {
-        makeMenuItem("action://notation/copy")
+        makeMenuItem("command://notation/copy")
     };
 
-    MenuItem* hideItem = makeMenuItem("action://notation/delete");
+    MenuItem* hideItem = makeMenuItem("command://notation/delete");
 
     ui::UiAction action = hideItem->action();
     action.iconCode = ui::IconCode::Code::NONE;
@@ -280,7 +297,7 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 
     if (element && element->isEditable()) {
         items << makeSeparator();
-        items << makeMenuItem("edit-element");
+        items << makeMenuItem("command://notation/screen-edit-element");
     }
 
     items << makeSeparator()
@@ -430,14 +447,14 @@ MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
     item->setState(uiActionsRegister()->actionState(item->action().code));
 
     if (element) {
-        QString pageCode = EditStyleUtils::pageCodeForElement(element);
+        std::string pageCode = EditStyleUtils::pageCodeForElement(element).toStdString();
 
-        if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyleUtils::subPageCodeForElement(element);
-            if (!subPageCode.isEmpty()) {
-                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+        if (!pageCode.empty()) {
+            std::string subPageCode = EditStyleUtils::subPageCodeForElement(element).toStdString();
+            if (!subPageCode.empty()) {
+                item->setArgs(ActionData::make_arg2<std::string, std::string>(pageCode, subPageCode));
             } else {
-                item->setArgs(ActionData::make_arg1<QString>(pageCode));
+                item->setArgs(ActionData::make_arg1<std::string>(pageCode));
             }
         }
     }
@@ -472,6 +489,36 @@ bool NotationContextMenuModel::isDrumsetStaff() const
     return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
 }
 
+MenuItemList NotationContextMenuModel::makeAutomationTypeItems()
+{
+    return {
+        makeAutomationTypeItem(AutomationType::Dynamics, "dynamics", TranslatableString::untranslatable("Dynamics")),
+        makeAutomationTypeItem(AutomationType::Volume, "volume", TranslatableString::untranslatable("Volume")),
+        makeAutomationTypeItem(AutomationType::Pan, "pan", TranslatableString::untranslatable("Pan")),
+    };
+}
+
+MenuItem* NotationContextMenuModel::makeAutomationTypeItem(AutomationType type, const std::string& queryTypeParam,
+                                                           const TranslatableString& title)
+{
+    MenuItem* item = makeMenuItem(SELECT_AUTOMATION_TYPE_COMMAND, title);
+    if (!item) {
+        return item;
+    }
+
+    item->setId(QString::fromStdString("automation-type-" + queryTypeParam));
+
+    ActionQuery query(SELECT_AUTOMATION_TYPE_COMMAND.toString());
+    query.addParam("type", Val(queryTypeParam));
+    item->setQuery(query);
+
+    ui::UiActionState state = item->state();
+    state.checked = notationConfiguration()->currentAutomationType() == type;
+    item->setState(state);
+
+    return item;
+}
+
 INotationInteractionPtr NotationContextMenuModel::interaction() const
 {
     INotationPtr notation = globalContext()->currentNotation();
@@ -480,8 +527,14 @@ INotationInteractionPtr NotationContextMenuModel::interaction() const
 
 INotationSelectionPtr NotationContextMenuModel::selection() const
 {
-    INotationInteractionPtr interaction = this->interaction();
-    return interaction ? interaction->selection() : nullptr;
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
+}
+
+INotationAutomationPtr NotationContextMenuModel::automation() const
+{
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    return masterNotation ? masterNotation->automation() : nullptr;
 }
 
 const EngravingItem* NotationContextMenuModel::currentElement() const

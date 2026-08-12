@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "projectpropertiesmodel.h"
 
-#include "translation.h"
 #include "log.h"
+#include "translation.h"
+
+#include "inotationproject.h"
 
 using namespace muse;
 using namespace muse::modularity;
@@ -244,7 +247,7 @@ void ProjectPropertiesModel::saveProperties()
 
 void ProjectPropertiesModel::openFileLocation()
 {
-    Ret ret = interactive()->revealInFileBrowser(m_projectMetaInfo.filePath.toQString());
+    Ret ret = platformInteractive()->revealInFileBrowser(m_projectMetaInfo.filePath.toQString());
 
     if (!ret) {
         LOGE() << "Could not open folder: " << m_projectMetaInfo.filePath.toQString();

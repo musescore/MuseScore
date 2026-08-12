@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -82,7 +82,7 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
-    PaletteWidget(QWidget* parent = nullptr);
+    PaletteWidget(QWidget* parent = nullptr, bool setIocContext = false);
 
     void setPalette(PalettePtr palette);
 
@@ -144,6 +144,8 @@ public:
     void setApplyingElementsDisabled(bool val);
     bool useDoubleClickForApplyingElements() const;
     void setUseDoubleClickForApplyingElements(bool val);
+    bool ignoreInputEvents() const;
+    void setIgnoreInputEvents(bool val);
 
     void applyCurrentElementToScore();
 
@@ -177,6 +179,8 @@ public:
 
     const PaintOptions& paintOptions() const;
     void setPaintOptions(const PaintOptions& options);
+
+    void setIocContext();
 
 signals:
     void changed();
@@ -225,6 +229,7 @@ private:
     bool m_isReadOnly = false;
     bool m_isApplyingElementsDisabled = false;
     bool m_useDoubleClickForApplyingElements = false;
+    bool m_ignoreInputEvents = false;
     bool m_showContextMenu = true;
 
     int m_currentIdx = -1;
