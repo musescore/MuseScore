@@ -106,7 +106,7 @@ jobs:
           title: "Update in-repo translations from Transifex"
           body: "Run `tx pull`"
           labels: strings
-          reviewers: cbjeukendrup
+          reviewers: shoogle
 
       - name: Pack and send to s3
         if: env.DO_PUSH_TO_S3 == 'true'
