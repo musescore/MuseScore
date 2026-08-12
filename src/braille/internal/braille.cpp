@@ -1043,6 +1043,13 @@ void Braille::computeSignDoubling()
                 presentSigns.insert(QStringLiteral("arpeggio:") + arpeggioCode);
             }
 
+            // 14.2/14.3. Only repeated-note (fractioning) tremolo may be doubled; alternation
+            // (two-note) tremolo must never be doubled, so it is never tracked here.
+            const QString tremoloCode = !isTremoloTwoChord(chord->tremoloType()) ? brailleTremolo(chord) : QString();
+            if (!tremoloCode.isEmpty()) {
+                presentSigns.insert(QStringLiteral("tremolo:") + tremoloCode);
+            }
+
             std::vector<Note*> notes;
             const ClefType clefType = chord->staff() ? chord->staff()->clef(chord->tick()) : ClefType::INVALID;
             if (ascendingChords(clefType)) {
@@ -1104,6 +1111,10 @@ void Braille::computeSignDoubling()
 
             if (!arpeggioCode.isEmpty()) {
                 openSignRuns[QStringLiteral("arpeggio:") + arpeggioCode].push_back(chord->arpeggio());
+            }
+
+            if (!tremoloCode.isEmpty()) {
+                openSignRuns[QStringLiteral("tremolo:") + tremoloCode].push_back(chord);
             }
 
             for (Note* note : notes) {
@@ -2242,7 +2253,27 @@ QString Braille::brailleChord(Chord* chord)
             break;
         }
     }
-    QString tremoloBraille = brailleTremolo(chord);
+    QString tremoloBraille;
+    {
+        const QString tremoloCode = brailleTremolo(chord);
+        if (!tremoloCode.isEmpty()) {
+            const QString signKey = QStringLiteral("tremolo:") + tremoloCode;
+            switch (signDoublingState(chord, signKey)) {
+            case SignDoubling::Double:
+                // MBC 2015, 14.2: doubled by writing the second cell of the sign twice.
+                tremoloBraille = tremoloCode + tremoloCode.right(1);
+                break;
+            case SignDoubling::Omit:
+                // Middle of a doubled group: the sign is not written.
+                break;
+            case SignDoubling::Terminate:
+            case SignDoubling::Single:
+            default:
+                tremoloBraille = tremoloCode;
+                break;
+            }
+        }
+    }
     QString glissandoLastNoteBraille = brailleGlissando(notes.back());
 
     // In Braille the order of elements is clearly defined
