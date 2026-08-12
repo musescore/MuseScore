@@ -218,10 +218,6 @@ PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> control
 
 void PlaybackUiActions::init()
 {
-    m_controller->actionCheckedChanged().onReceive(this, [this](const ActionCode& code) {
-        m_actionCheckedChanged.send({ code });
-    });
-
     m_controller->isPlayAllowedChanged().onReceive(this, [this](bool) {
         const UiActionList& actions = actionsList();
 
@@ -299,9 +295,9 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-bool PlaybackUiActions::actionChecked(const UiAction& act) const
+bool PlaybackUiActions::actionChecked(const UiAction&) const
 {
-    return m_controller->actionChecked(act.code);
+    return false;
 }
 
 muse::async::Channel<ActionCodeList> PlaybackUiActions::actionEnabledChanged() const

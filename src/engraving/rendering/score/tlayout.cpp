@@ -2436,8 +2436,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
@@ -2472,8 +2471,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
@@ -3441,11 +3439,12 @@ void TLayout::layoutJump(const Jump* item, Jump::LayoutData* ldata)
         if (position == AlignH::LEFT) {
             const BarLine* blAbove = startRepeat || !measure->prevMeasure()
                                      ? measure->startBarLine(blAboveIdx) : measure->prevMeasure()->endBarLine(blAboveIdx);
-            double blWidth = startRepeat ? blAbove->width() : 0.0;
+            double blWidth = (startRepeat && blAbove) ? blAbove->width() : 0.0;
             xAdj += padding + blWidth;
         } else if (position == AlignH::RIGHT) {
             const BarLine* blAbove = measure->endBarLine(blAboveIdx);
-            xAdj -= blAbove->width() + padding;
+            double blWidth = blAbove ? blAbove->width() : 0.0;
+            xAdj -= blWidth + padding;
         }
     }
     ldata->moveX(xAdj);
@@ -3784,7 +3783,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         }
     }
 
-    for (const SystemLockIndicator* sli : item->system()->lockIndicators()) {
+    for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
         if (sli != item) {
             // TODO: Rough spacing here
             xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;
@@ -4402,8 +4401,11 @@ void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockInd
     const RectF iconBox = metrics.boundingRect(item->iconCode());
     shape.add(iconBox, item);
 
-    // Inset 2.5sp from edge of page
-    PointF posOnPage = PointF(page->width() - iconBox.width() - iconBox.left() - 2.5 * spatium, page->height() - 2.5 * spatium);
+    const double borderWidth = iconBox.height() + spatium;
+    const double borderPadding = 2 * spatium;
+    const double iconInset = (borderWidth - iconBox.width()) / 2;
+    PointF posOnPage = PointF(page->width() - borderPadding - iconBox.width() - iconBox.left() - iconInset,
+                              page->height() - borderPadding - iconInset);
     PointF posOnSystem = posOnPage - sys->pos();
     ldata->setPos(posOnSystem);
 
@@ -4412,12 +4414,11 @@ void TLayout::layoutPageLockIndicator(const PageLockIndicator* item, PageLockInd
         RectF rangeRect = page->shape().bbox();
         PointF rectPagePos = rangeRect.topLeft() - ldata->pos() - sys->pos();
         rangeRect.translate(rectPagePos);
-        rangeRect.adjust(spatium * 2, spatium * 2, -spatium * 2, -spatium * 2);
+        rangeRect.adjust(borderPadding, borderPadding, -borderPadding, -borderPadding);
         ldata->rangeRect = rangeRect;
 
         // Inner rectangle cutout
         // Leaves border with rounded corners when painted
-        double borderWidth = iconBox.height() + spatium;
         RectF innerRect = rangeRect.adjusted(borderWidth, borderWidth, -borderWidth, -borderWidth);
         ldata->innerRangeRect = innerRect;
         shape.add(RectF(PointF(rangeRect.left(),  rangeRect.top()),     PointF(rangeRect.right(),   innerRect.top())));       // top

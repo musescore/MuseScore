@@ -28,6 +28,20 @@ QColor NotationConfigurationStub::notationColor() const
     return QColor();
 }
 
+void NotationConfigurationStub::setNotationColor(const QColor&)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::notationColorChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+void NotationConfigurationStub::resetNotationColor()
+{
+}
+
 QColor NotationConfigurationStub::backgroundColor() const
 {
     return QColor();
@@ -261,6 +275,21 @@ muse::async::Notification NotationConfigurationStub::defaultZoomChanged() const
 QList<int> NotationConfigurationStub::possibleZoomPercentageList() const
 {
     return QList<int>();
+}
+
+engraving::AutomationType NotationConfigurationStub::currentAutomationType() const
+{
+    return engraving::AutomationType::Dynamics;
+}
+
+void NotationConfigurationStub::setCurrentAutomationType(engraving::AutomationType)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::currentAutomationTypeChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 qreal NotationConfigurationStub::scalingFromZoomPercentage(int) const

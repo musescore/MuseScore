@@ -270,53 +270,40 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>M_M</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>N_N</eid>
-                  <up>up</up>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <offset x="0" y="-3"/>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>S_S</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>R_R</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>R_R</endElement>
+                <eid>S_S</eid>
+                <track>0</track>
+                <up>up</up>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -337,57 +324,44 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>W_W</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>X_X</eid>
-                  <up>up</up>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>Y_Y</eid>
             <offset x="0" y="-3"/>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>a_a</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
-            <eid>b_b</eid>
+            <eid>a_a</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>c_c</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>d_d</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>c_c</eid>
+              <Tie>
+                <startElement>W_W</startElement>
+                <endElement>c_c</endElement>
+                <eid>d_d</eid>
+                <track>0</track>
+                <up>up</up>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -439,52 +413,39 @@
             <StemDirection>up</StemDirection>
             <Note>
               <eid>l_l</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <voices>1</voices>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>m_m</startElement>
+                <endElement>l_l</endElement>
+                <eid>n_n</eid>
+                <track>5</track>
+                <up>down</up>
+                </Tie>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>m_m</eid>
+            <eid>o_o</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>p_p</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>o_o</eid>
+            <eid>q_q</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>p_p</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>q_q</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>r_r</eid>
-                  <up>down</up>
-                  </Tie>
-                <next>
-                  <location>
-                    <voices>-1</voices>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
+              <eid>m_m</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>

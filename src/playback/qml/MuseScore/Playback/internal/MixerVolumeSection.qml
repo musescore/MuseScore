@@ -50,6 +50,8 @@ MixerPanelSection {
             height: 24
             width: 46
 
+            enabled: !content.channelItem.hasVolumeAutomation
+
             textHorizontalAlignment: Qt.AlignHCenter
             textSidePadding: 0
             background.radius: 2
@@ -66,14 +68,14 @@ MixerPanelSection {
 
             validator: DoubleInputValidator {
                 id: doubleInputValidator
-                top: 12.0
-                bottom: -60.0
+                top: content.channelItem.volumeLevelMax
+                bottom: content.channelItem.volumeLevelMin
                 decimal: 1
             }
 
             currentText: Math.round(content.channelItem.volumeLevel * 10) / 10
 
-            onTextChanged: function(newTextValue) {
+            onTextEdited: function(newTextValue) {
                 if (content.channelItem.volumeLevel !== Number(newTextValue)) {
                     content.channelItem.volumeLevel = Number(newTextValue)
                 }

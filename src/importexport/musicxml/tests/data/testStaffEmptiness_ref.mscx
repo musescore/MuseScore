@@ -1272,21 +1272,9 @@
           <Chord>
             <eid>tD_tD</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>uD_uD</eid>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>vD_vD</eid>
+              <eid>uD_uD</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1296,24 +1284,25 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>vD_vD</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <eid>wD_wD</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             </Rest>
           <Rest>
             <eid>xD_xD</eid>
-            <durationType>quarter</durationType>
+            <durationType>half</durationType>
             </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Rest>
             <eid>yD_yD</eid>
-            <durationType>half</durationType>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
@@ -1445,20 +1434,15 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <beginHookType>1</beginHookType>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>BE_BE</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
+          <Rest>
+            <eid>BE_BE</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Rest>
             <eid>CE_CE</eid>
             <durationType>measure</durationType>
@@ -1468,13 +1452,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <eid>DE_DE</eid>
             <durationType>measure</durationType>
@@ -1511,52 +1488,50 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <eid>HE_HE</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>IE_IE</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8vb</subtype>
-              <eid>JE_JE</eid>
-              </Ottava>
-            <next>
-              <location>
-                <measures>8</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>KE_KE</eid>
+            <eid>HE_HE</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>LE_LE</eid>
+              <eid>IE_IE</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>ME_ME</eid>
+            <eid>JE_JE</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>NE_NE</eid>
+            <eid>KE_KE</eid>
             <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>LE_LE</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>ME_ME</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>NE_NE</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
@@ -1589,68 +1564,41 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <eid>RE_RE</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>SE_SE</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>TE_TE</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Chord>
-            <eid>UE_UE</eid>
+            <eid>RE_RE</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>VE_VE</eid>
+              <eid>SE_SE</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>WE_WE</eid>
+            <eid>TE_TE</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Chord>
+            <eid>UE_UE</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>VE_VE</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            <Note>
+              <eid>WE_WE</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>XE_XE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
               <eid>YE_YE</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            <Note>
-              <eid>ZE_ZE</eid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>aE_aE</eid>
-            <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <eid>bE_bE</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1659,55 +1607,48 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-8</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>cE_cE</eid>
+            <eid>ZE_ZE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>dE_dE</eid>
+              <eid>aE_aE</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>eE_eE</eid>
+              <eid>bE_bE</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>fE_fE</eid>
+            <eid>cE_cE</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>gE_gE</eid>
+              <eid>dE_dE</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>hE_hE</eid>
+            <eid>eE_eE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>iE_iE</eid>
+              <eid>fE_fE</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>jE_jE</eid>
+              <eid>gE_gE</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>kE_kE</eid>
+            <eid>hE_hE</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -1715,13 +1656,28 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>lE_lE</eid>
+            <eid>iE_iE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>mE_mE</eid>
+              <eid>jE_jE</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>kE_kE</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>lE_lE</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            <Note>
+              <eid>mE_mE</eid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1733,12 +1689,15 @@
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
-            <Note>
-              <eid>pE_pE</eid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              </Note>
             </Chord>
+          <Rest>
+            <eid>pE_pE</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <eid>qE_qE</eid>
             <durationType>quarter</durationType>
@@ -1749,60 +1708,70 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Rest>
+          <Chord>
             <eid>sE_sE</eid>
             <durationType>quarter</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <eid>tE_tE</eid>
-            <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>uE_uE</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>vE_vE</eid>
-            <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <eid>wE_wE</eid>
+              <eid>tE_tE</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>xE_xE</eid>
+            <eid>uE_uE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>yE_yE</eid>
+              <eid>vE_vE</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>zE_zE</eid>
+            <eid>wE_wE</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>0E_0E</eid>
+              <eid>xE_xE</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>1E_1E</eid>
+            <eid>yE_yE</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>tD_tD</startElement>
+        <endElement>vD_vD</endElement>
+        <eid>zE_zE</eid>
+        <track>4</track>
+        <up>down</up>
+        </Slur>
+      <Pedal>
+        <beginHookType>1</beginHookType>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>4</track2>
+        <startTick>23/1</startTick>
+        <ticks>1/1</ticks>
+        <eid>0E_0E</eid>
+        <track>4</track>
+        </Pedal>
+      <Ottava>
+        <subtype>8vb</subtype>
+        <track2>4</track2>
+        <startTick>30/1</startTick>
+        <ticks>8/1</ticks>
+        <eid>1E_1E</eid>
+        <track>4</track>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -107,14 +107,13 @@
               <eid>J_J</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <staves>1</staves>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>K_K</startElement>
+                <endElement>J_J</endElement>
+                <eid>L_L</eid>
+                <track>4</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           </voice>
@@ -124,29 +123,17 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>L_L</eid>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>K_K</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>N_N</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <staves>-1</staves>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Rest>

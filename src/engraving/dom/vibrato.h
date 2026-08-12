@@ -71,6 +71,8 @@ public:
 
     Vibrato* clone() const override { return new Vibrato(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
     PointF linePos(Grip grip, System** system) const override;
 

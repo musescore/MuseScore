@@ -183,34 +183,20 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Pedal">
-            <Pedal>
-              <lineVisible>0</lineVisible>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>e_e</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>f_f</eid>
+            <eid>e_e</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>f_f</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>h_h</eid>
+            <eid>g_g</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>h_h</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
@@ -220,27 +206,19 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>j_j</eid>
+            <eid>i_i</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>k_k</eid>
+              <eid>j_j</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>l_l</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
@@ -249,101 +227,64 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
+          <Chord>
+            <eid>m_m</eid>
+            <durationType>half</durationType>
+            <Note>
               <eid>n_n</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>o_o</eid>
             <durationType>half</durationType>
             <Note>
               <eid>p_p</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <eid>q_q</eid>
             <durationType>half</durationType>
             <Note>
               <eid>r_r</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Chord>
             <eid>s_s</eid>
             <durationType>half</durationType>
             <Note>
               <eid>t_t</eid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <eid>u_u</eid>
             <durationType>half</durationType>
             <Note>
               <eid>v_v</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <beginHookType>1</beginHookType>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>w_w</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/2</fractions>
-                </location>
-              </next>
-            </Spanner>
-          <Chord>
-            <eid>x_x</eid>
-            <durationType>half</durationType>
-            <Note>
-              <eid>y_y</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>z_z</eid>
+            <eid>w_w</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>0_0</eid>
+              <eid>x_x</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
@@ -353,49 +294,50 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>1_1</eid>
+            <eid>y_y</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>2_2</eid>
+              <eid>z_z</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/2</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>3_3</eid>
+            <eid>0_0</eid>
             <durationType>half</durationType>
+            <Note>
+              <eid>1_1</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>2_2</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>3_3</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
             <Note>
               <eid>4_4</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
+            <Note>
+              <eid>5_5</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <lineVisible>0</lineVisible>
-              <beginText>&lt;sym&gt;keyboardPedalSost&lt;/sym&gt;</beginText>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>5_5</eid>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <eid>6_6</eid>
             <durationType>whole</durationType>
@@ -415,42 +357,55 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Chord>
-            <eid>+_+</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>/_/</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            <Note>
-              <eid>AB_AB</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            <Note>
-              <eid>BB_BB</eid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>CB_CB</eid>
+            <eid>+_+</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Pedal>
+        <lineVisible>0</lineVisible>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>4</track2>
+        <ticks>6/4</ticks>
+        <eid>/_/</eid>
+        <track>4</track>
+        </Pedal>
+      <Pedal>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>4</track2>
+        <startTick>8/4</startTick>
+        <ticks>6/4</ticks>
+        <eid>AB_AB</eid>
+        <track>4</track>
+        </Pedal>
+      <Pedal>
+        <beginHookType>1</beginHookType>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>4</track2>
+        <startTick>16/4</startTick>
+        <ticks>6/4</ticks>
+        <eid>BB_BB</eid>
+        <track>4</track>
+        </Pedal>
+      <Pedal>
+        <lineVisible>0</lineVisible>
+        <beginText>&lt;sym&gt;keyboardPedalSost&lt;/sym&gt;</beginText>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>4</track2>
+        <startTick>24/4</startTick>
+        <ticks>4/4</ticks>
+        <eid>CB_CB</eid>
+        <track>4</track>
+        </Pedal>
+      </SpannerMap>
     </Score>
   </museScore>

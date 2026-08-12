@@ -100,7 +100,9 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/transpose.h"
+
+#include "../../editing/editstaffbrackets.h"
+#include "../../editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
@@ -838,11 +840,11 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "bracket") {
             int col = e.intAttribute("col", -1);
             if (col == -1) {
-                col = static_cast<int>(staff->brackets().size());
+                col = static_cast<int>(ctx.score()->brackets(staff->idx()).size());
             }
-            staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
-            staff->setBracketSpan(col, e.intAttribute("span", 0));
-            staff->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
+            EditStaffBrackets::setBracketType(ctx.score(), staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            EditStaffBrackets::setBracketSpan(ctx.score(), staff->idx(), col, e.intAttribute("span", 0));
+            EditStaffBrackets::setBracketVisible(ctx.score(), staff->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
             e.readNext();
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));
@@ -1245,7 +1247,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                               // because the glissando is not properly cloned into the linked staves
                 staff && (!ctx.pasteMode() || !staff->links() || staff->links()->empty())) {
                 Spanner* placeholder = new TextLine(ctx.dummy());
-                placeholder->setAnchor(Spanner::Anchor::NOTE);
                 placeholder->setEndElement(note);
                 placeholder->setTrack2(note->track());
                 placeholder->setTick(Fraction(0, 1));
@@ -1262,7 +1263,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         Spanner* placeholder = ctx.findSpanner(id);
         if (placeholder && placeholder->endElement()) {
             // if it is, fill end data from place-holder
-            sp->setAnchor(Spanner::Anchor::NOTE);                 // make sure we can set a Note as end element
             sp->setEndElement(placeholder->endElement());
             sp->setTrack2(placeholder->track2());
             sp->setTick(ctx.tick());                                // make sure tick2 will be correct
@@ -1283,7 +1283,6 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             ctx.removeSpanner(sp);          // read() added the element to the XMLReader: remove it
             delete sp;
         } else {
-            sp->setAnchor(Spanner::Anchor::NOTE);
             sp->setStartElement(note);
             sp->setTick(ctx.tick());
             note->addSpannerFor(sp);
@@ -1981,7 +1980,6 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         Note* finalNote = ch->upNote();
         Glissando* gliss = Factory::createGlissando(ctx.dummy());
         read400::TRead::read(gliss, e, ctx);
-        gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(nullptr);
         gliss->setEndElement(nullptr);
         // in TAB, use straight line with no text
@@ -2218,11 +2216,6 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
-    }
-    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
-        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
-        volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
     CompatUtils::resetHookHeightSign(volta);
     adjustPlacement(volta);
@@ -3013,9 +3006,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             bool courtesySig = (curTick == m->endTick());
             segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
             segment->add(ks);
-            if (!courtesySig) {
-                staff->setKey(curTick, ks->keySigEvent());
-            }
+            staff->setKey(curTick, ks->keySigEvent());
         } else if (tag == "Text" || tag == "StaffText") {
             // MuseScore 3 has different types for system text and
             // staff text while MuseScore 2 didn't.

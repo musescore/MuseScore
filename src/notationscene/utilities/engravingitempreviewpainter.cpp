@@ -101,6 +101,8 @@ void EngravingItemPreviewPainter::paintItem(std::shared_ptr<engraving::rendering
 
         rendering::PaintOptions opt;
         opt.invertColors = params.colorsInversionEnabled;
+        // The drawing color has been specified explicitly above, so use it as-is:
+        opt.ignoreDisplayedDefaultColor = !params.useElementColors;
 
         render->drawItem(item, painter, opt);
 

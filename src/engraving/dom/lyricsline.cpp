@@ -50,9 +50,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
-    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
@@ -60,9 +58,7 @@ LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFl
 {
     setDiagonal(false);
     initElementStyle(&lyricsLineElementStyle);
-    setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
-    setGenerated(true);             // no need to save it, as it can be re-generated
 }
 
 LyricsLine::LyricsLine(const LyricsLine& g)
@@ -170,13 +166,11 @@ void LyricsLineSegment::rebaseAnchors(EditData&, Grip)
 LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
     : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF)
 {
-    setGenerated(true);
 }
 
 LyricsLineSegment::LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f)
     : LineSegment(type, sp, parent, f)
 {
-    setGenerated(true);
 }
 
 double LyricsLineSegment::baseLineShift() const

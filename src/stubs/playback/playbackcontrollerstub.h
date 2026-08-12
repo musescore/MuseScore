@@ -37,8 +37,30 @@ public:
     bool isPlaybackInited() const override;
     muse::async::Channel<bool> playbackInitedChanged() const override;
 
+    muse::Ret togglePlay() override;
+    muse::Ret play(bool showErrors = true) override;
+    muse::Ret playFromSelection(bool showErrors = true) override;
+    muse::Ret pause(bool select = false) override;
+    muse::Ret stop() override;
+    muse::Ret rewind(muse::secs_t secs) override;
+
     bool isLoopEnabled() const override;
     muse::async::Channel<bool> loopEnabledChanged() const override;
+    muse::Ret toggleLoopPlayback() override;
+    muse::Ret addLoopBoundary(LoopBoundaryType type) override;
+
+    muse::Ret toggleMetronome() override;
+
+    muse::Ret toggleMidiInput() override;
+    muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch) override;
+
+    muse::Ret togglePlayRepeats() override;
+    muse::Ret togglePlayChordSymbols() override;
+    muse::Ret toggleAutomaticallyPan() override;
+    muse::Ret toggleCountIn() override;
+    muse::Ret toggleHearPlaybackWhenEditing() override;
+
+    muse::Ret reloadPlaybackCache() override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -65,9 +87,6 @@ public:
 
     void seekElement(const engraving::EngravingItem* element, bool flushSound = true) override;
     void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
-
-    bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
-    muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
 
     muse::secs_t totalPlayTime() const override;
     muse::async::Notification totalPlayTimeChanged() const override;

@@ -215,14 +215,29 @@
     ],
     "mnx": {
         "_x": {
-            "schemaVersion": {
-                "value": "https://w3c.github.io/mnx/docs/mnx-schema.json/version/4"
+            "mnxdom": {
+                "client": {
+                    "commit": "cb7c616c47a7",
+                    "name": "denigma",
+                    "version": "4.0.0"
+                },
+                "createdAt": "2026-07-31T22:16:12Z",
+                "mnxSchema": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/27",
+                "mnxdom": {
+                    "commit": "45bf462",
+                    "version": "3.1.0"
+                },
+                "provenanceSchemaVersion": 1,
+                "source": {
+                    "filename": "key77.enigmaxml",
+                    "format": "enigmaxml"
+                }
             }
         },
         "support": {
             "useBeams": true
         },
-        "version": 4
+        "version": 27
     },
     "parts": [
         {
@@ -238,6 +253,7 @@
                             }
                         }
                     ],
+                    "id": "P1.m1",
                     "sequences": [
                         {
                             "content": [
@@ -297,11 +313,13 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P1.m2",
                     "sequences": [
                         {
                             "content": [
@@ -361,17 +379,21 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P1.m3",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m4",
                     "sequences": []
                 },
                 {
+                    "id": "P1.m5",
                     "sequences": []
                 }
             ],
@@ -391,6 +413,7 @@
                             }
                         }
                     ],
+                    "id": "P2.m1",
                     "sequences": [
                         {
                             "content": [
@@ -450,11 +473,13 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P2.m2",
                     "sequences": [
                         {
                             "content": [
@@ -514,17 +539,21 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P2.m3",
                     "sequences": []
                 },
                 {
+                    "id": "P2.m4",
                     "sequences": []
                 },
                 {
+                    "id": "P2.m5",
                     "sequences": []
                 }
             ],
@@ -550,6 +579,7 @@
                             }
                         }
                     ],
+                    "id": "P3.m1",
                     "sequences": [
                         {
                             "content": [
@@ -609,11 +639,13 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P3.m2",
                     "sequences": [
                         {
                             "content": [
@@ -673,17 +705,21 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P3.m3",
                     "sequences": []
                 },
                 {
+                    "id": "P3.m4",
                     "sequences": []
                 },
                 {
+                    "id": "P3.m5",
                     "sequences": []
                 }
             ],
@@ -709,6 +745,7 @@
                             }
                         }
                     ],
+                    "id": "P4.m1",
                     "sequences": [
                         {
                             "content": [
@@ -768,11 +805,13 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P4.m2",
                     "sequences": [
                         {
                             "content": [
@@ -832,17 +871,21 @@
                                     "rest": {}
                                 }
                             ],
+                            "staff": 1,
                             "voice": "s1layer1"
                         }
                     ]
                 },
                 {
+                    "id": "P4.m3",
                     "sequences": []
                 },
                 {
+                    "id": "P4.m4",
                     "sequences": []
                 },
                 {
+                    "id": "P4.m5",
                     "sequences": []
                 }
             ],

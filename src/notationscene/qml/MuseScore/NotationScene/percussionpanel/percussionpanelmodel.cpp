@@ -39,6 +39,7 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationparts.h" // IWYU pragma: keep
+#include "notationscene/notationcommands.h"
 
 #include "project/inotationproject.h" // IWYU pragma: keep
 #include "project/iprojectaudiosettings.h"
@@ -525,11 +526,10 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
 
     interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
-    NoteInputParams params;
-    params.drumPitch = pitch;
-
-    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
-    dispatcher()->dispatch("note-action", args);
+    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
+    query.set("pitch", muse::Val(pitch));
+    query.set("mode", muse::Val(str_conv(addingMode)));
+    commandDispatcher()->dispatch(query);
 }
 
 void PercussionPanelModel::playPitch(int pitch)

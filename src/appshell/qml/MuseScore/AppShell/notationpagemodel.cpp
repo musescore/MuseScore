@@ -66,10 +66,9 @@ void NotationPageModel::init()
         return;
     }
 
-    for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
-        DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
-        dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
-    }
+    commandsController()->dockToggleRequested().onReceive(this, [this](const DockName& dockName) {
+        toggleDock(dockName);
+    });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();

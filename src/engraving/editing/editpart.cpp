@@ -769,8 +769,8 @@ void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t 
     for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
-        staff->init(templ, stt, int(i));
         score->undoInsertStaff(staff, i);
+        staff->init(templ, stt, int(i));
     }
 
     score->undoInsertPart(part, index);

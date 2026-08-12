@@ -45,8 +45,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/box.h
     ${CMAKE_CURRENT_LIST_DIR}/bracket.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bracket.h
-    ${CMAKE_CURRENT_LIST_DIR}/bracketItem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/bracketItem.h
+    ${CMAKE_CURRENT_LIST_DIR}/bracketitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/bracketitem.h
     ${CMAKE_CURRENT_LIST_DIR}/breath.cpp
     ${CMAKE_CURRENT_LIST_DIR}/breath.h
     ${CMAKE_CURRENT_LIST_DIR}/bsp.cpp

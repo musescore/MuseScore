@@ -134,17 +134,6 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>M_M</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>N_N</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-3/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -152,99 +141,67 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>N_N</eid>
         <endRepeat>2</endRepeat>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1.</beginText>
-              <eid>P_P</eid>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>3/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>P_P</eid>
+              <Tie>
+                <startElement>M_M</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>T_T</eid>
         <endRepeat>2</endRepeat>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>2.</beginText>
-              <eid>V_V</eid>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>W_W</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>V_V</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>Y_Y</eid>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>a_a</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>Z_Z</eid>
         <Jump>
-          <eid>c_c</eid>
+          <eid>a_a</eid>
           <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
@@ -252,94 +209,99 @@
           <continueAt>codab</continueAt>
           </Jump>
         <LayoutBreak>
-          <eid>d_d</eid>
+          <eid>b_b</eid>
           <z>-10</z>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>3.</beginText>
-              <eid>e_e</eid>
-              <endings>3</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>f_f</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>d_d</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>h_h</eid>
+                <endElement>d_d</endElement>
+                <eid>e_e</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>j_j</eid>
+            <eid>g_g</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>h_h</eid>
         <Marker>
-          <eid>l_l</eid>
+          <eid>i_i</eid>
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           <markerType>codab</markerType>
           </Marker>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>m_m</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>k_k</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
-                <eid>o_o</eid>
+                <endElement>k_k</endElement>
+                <eid>l_l</eid>
+                <track>0</track>
                 </PartialTie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>p_p</eid>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>q_q</eid>
+            <eid>n_n</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>1.</beginText>
+        <startElement>N_N</startElement>
+        <endElement>N_N</endElement>
+        <eid>o_o</eid>
+        <track>0</track>
+        <endings>1</endings>
+        </Volta>
+      <Volta>
+        <beginText>2.</beginText>
+        <startElement>T_T</startElement>
+        <endElement>T_T</endElement>
+        <eid>p_p</eid>
+        <track>0</track>
+        <endings>2</endings>
+        </Volta>
+      <Volta>
+        <endHookType>1</endHookType>
+        <beginText>3.</beginText>
+        <startElement>Z_Z</startElement>
+        <endElement>Z_Z</endElement>
+        <eid>q_q</eid>
+        <track>0</track>
+        <endings>3</endings>
+        </Volta>
+      </SpannerMap>
     </Score>
   </museScore>

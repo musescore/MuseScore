@@ -195,7 +195,7 @@
         <source>Large Korean transverse bamboo flute with a distinctive buzzing timbre.</source>
         <comment>daegeum description</comment>
         <extracomment>description for Daegeum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Large Korean transverse bamboo flute with a distinctive buzzing timbre.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
@@ -769,7 +769,7 @@
         <source>Japanese double-reed instrument used in gagaku court music.</source>
         <comment>hichiriki description</comment>
         <extracomment>description for Hichiriki; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japanese double-reed instrument used in gagaku court music.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="460"/>
@@ -1980,7 +1980,7 @@
         <source>Spanish double-reed folk instrument from the Castile region. In F♯.</source>
         <comment>fs-castilian-dulzaina description</comment>
         <extracomment>description for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Spanish double-reed folk instrument from the Castile region. In F♯.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
@@ -5816,7 +5816,7 @@
         <source>Japanese mouth organ. A free-reed instrument used in gagaku court music.</source>
         <comment>sho description</comment>
         <extracomment>description for Shō; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japanese mouth organ. A free-reed instrument used in gagaku court music.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2072"/>
@@ -10590,7 +10590,7 @@
         <source>Korean hourglass-shaped drum used in samulnori percussion ensemble.</source>
         <comment>samul-janggu description</comment>
         <extracomment>description for Samul Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean hourglass-shaped drum used in samulnori percussion ensemble.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3906"/>
@@ -10618,7 +10618,7 @@
         <source>Korean hourglass-shaped drum used in sanjo music.</source>
         <comment>sanjo-janggu description</comment>
         <extracomment>description for Sanjo Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean hourglass-shaped drum used in sanjo music.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3915"/>
@@ -10646,7 +10646,7 @@
         <source>Korean double-headed barrel drum used in samulnori percussion ensemble.</source>
         <comment>samul-buk description</comment>
         <extracomment>description for Samul Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean double-headed barrel drum used in samulnori percussion ensemble.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4167"/>
@@ -10674,7 +10674,7 @@
         <source>Korean barrel drum used to accompany pansori singing.</source>
         <comment>sori-buk description</comment>
         <extracomment>description for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean barrel drum used to accompany pansori singing.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4176"/>
@@ -10702,7 +10702,7 @@
         <source>Ancient Chinese plucked seven-string zither.</source>
         <comment>guqin description</comment>
         <extracomment>description for Guqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ancient Chinese plucked seven-string zither.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6255"/>
@@ -10730,7 +10730,7 @@
         <source>Chinese four-stringed plucked lute.</source>
         <comment>pipa description</comment>
         <extracomment>description for Pipa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chinese four-stringed plucked lute.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6264"/>
@@ -10758,7 +10758,7 @@
         <source>Chinese hammered dulcimer.</source>
         <comment>yangqin description</comment>
         <extracomment>description for Yangqin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chinese hammered dulcimer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6273"/>
@@ -10786,7 +10786,7 @@
         <source>Korean plucked twelve-string zither.</source>
         <comment>gayageum description</comment>
         <extracomment>description for Gayageum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean plucked twelve-string zither.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6282"/>
@@ -10856,7 +10856,7 @@
         <source>Korean bowed zither with thick silk strings.</source>
         <comment>ajaeng description</comment>
         <extracomment>description for Ajaeng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Korean bowed zither with thick silk strings.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6745"/>

@@ -198,37 +198,26 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>L_L</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>u_u</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>v_v</eid>
+            <eid>u_u</eid>
             <l1>56</l1>
             <l2>56</l2>
             </Beam>
           <Chord>
-            <eid>w_w</eid>
+            <eid>v_v</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>x_x</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>w_w</eid>
+              <Tie>
+                <startElement>L_L</startElement>
+                <endElement>w_w</endElement>
+                <eid>x_x</eid>
+                <track>1</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -239,17 +228,6 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>b_b</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>y_y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-13/16</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -257,11 +235,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>z_z</eid>
+        <eid>y_y</eid>
         <voice>
           <Rest>
-            <eid>0_0</eid>
+            <eid>z_z</eid>
             <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>0_0</eid>
+            <durationType>16th</durationType>
             </Rest>
           <Rest>
             <eid>1_1</eid>
@@ -269,42 +251,36 @@
             </Rest>
           <Rest>
             <eid>2_2</eid>
-            <durationType>16th</durationType>
-            </Rest>
-          <Rest>
-            <eid>3_3</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>4_4</eid>
+            <eid>3_3</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>5_5</eid>
+            <eid>4_4</eid>
             </BarLine>
           </voice>
         <voice>
           <Beam>
-            <eid>6_6</eid>
+            <eid>5_5</eid>
             <l1>56</l1>
             <l2>56</l2>
             </Beam>
           <Chord>
-            <eid>7_7</eid>
+            <eid>6_6</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>8_8</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>13/16</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>7_7</eid>
+              <Tie>
+                <startElement>b_b</startElement>
+                <endElement>7_7</endElement>
+                <eid>8_8</eid>
+                <track>1</track>
+                </Tie>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

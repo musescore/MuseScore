@@ -67,6 +67,8 @@ public:
 
     TextLine* clone() const override { return new TextLine(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;

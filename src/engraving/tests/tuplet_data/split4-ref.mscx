@@ -187,17 +187,6 @@
             <durationType>32nd</durationType>
             <Note>
               <eid>X_X</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Y_Y</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-20/27</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -208,10 +197,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Z_Z</eid>
+        <eid>Y_Y</eid>
         <voice>
           <Tuplet>
-            <eid>a_a</eid>
+            <eid>Z_Z</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -221,7 +210,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>b_b</eid>
+            <eid>a_a</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>16th</baseNote>
@@ -231,7 +220,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>c_c</eid>
+            <eid>b_b</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -241,23 +230,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>d_d</eid>
+            <eid>c_c</eid>
             <l1>-4</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
-            <eid>e_e</eid>
+            <eid>d_d</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>f_f</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>20/27</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>e_e</eid>
+              <Tie>
+                <startElement>X_X</startElement>
+                <endElement>e_e</endElement>
+                <eid>f_f</eid>
+                <track>0</track>
+                </Tie>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>

@@ -832,21 +832,21 @@
         <source>Whistle pitched in D (notated at concert pitch).</source>
         <comment>d-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D调孔哨（标准音高）</translation>
+        <translation>D调哨笛（标准音高）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="480"/>
         <source>Tin Whistle</source>
         <comment>d-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>孔哨</translation>
+        <translation>锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="482"/>
         <source>D Tin Whistle</source>
         <comment>d-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D调孔哨</translation>
+        <translation>D调锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="484"/>
@@ -867,21 +867,21 @@
         <source>Whistle pitched in C.</source>
         <comment>c-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调孔哨</translation>
+        <translation>C调哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="491"/>
         <source>Tin Whistle</source>
         <comment>c-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>孔哨</translation>
+        <translation>锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="493"/>
         <source>C Tin Whistle</source>
         <comment>c-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调孔哨</translation>
+        <translation>C调锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="495"/>
@@ -902,21 +902,21 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭调孔哨（标准音高）</translation>
+        <translation>B♭调哨笛（标准音高）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="502"/>
         <source>Tin Whistle</source>
         <comment>bflat-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>孔哨</translation>
+        <translation>锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="504"/>
         <source>B♭ Tin Whistle</source>
         <comment>bflat-tin-whistle longName</comment>
         <extracomment>longName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭调孔哨</translation>
+        <translation>B♭调锡哨笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>

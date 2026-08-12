@@ -45,6 +45,23 @@ void Interval::flip()
 }
 
 //---------------------------------------------------------
+//   reduce
+//---------------------------------------------------------
+
+void Interval::reduce()
+{
+    diatonic = diatonic % 7;
+    chromatic = chromatic % 12;
+}
+
+Interval Interval::reduced()
+{
+    Interval interval(diatonic, chromatic);
+    interval.reduce();
+    return interval;
+}
+
+//---------------------------------------------------------
 //   isZero
 //---------------------------------------------------------
 

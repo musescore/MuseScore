@@ -3046,6 +3046,10 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, XmlWriter
                     break;
                 case TremoloType::R64: count = 4;
                     break;
+                case TremoloType::R128: count = 5;
+                    break;
+                case TremoloType::R256: count = 6;
+                    break;
                 default: LOGD("unknown tremolo single %d", int(st));
                     break;
                 }
@@ -3061,6 +3065,10 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, XmlWriter
                 break;
             case TremoloType::C64: count = 4;
                 break;
+            case TremoloType::C128: count = 5;
+                break;
+            case TremoloType::C256: count = 6;
+                break;
             default: LOGD("unknown tremolo double %d", int(st));
                 break;
             }
@@ -3074,6 +3082,10 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, XmlWriter
             case TremoloType::C32: count = 3;
                 break;
             case TremoloType::C64: count = 4;
+                break;
+            case TremoloType::C128: count = 5;
+                break;
+            case TremoloType::C256: count = 6;
                 break;
             default: LOGD("unknown tremolo double %d", int(st));
                 break;
@@ -4443,7 +4455,9 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             dotTag += elementPosition(this, dot);
             m_xml.tagRaw(dotTag);
         }
-        writeAccidental(m_xml, u"accidental", note->accidental());
+        if (note->staff() && !note->staff()->isTabStaff(Fraction(0, 1))) {
+            writeAccidental(m_xml, u"accidental", note->accidental());
+        }
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
         // no stem for whole notes and beyond
@@ -5863,7 +5877,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     String lineEnd;
     switch (hookType) {
     case HookType::HOOK_90:
-        lineEnd = (hookHeight < 0.0) ? u"up" : u"down";
+        lineEnd = (tl->placement() == PlacementV::BELOW) ? u"up" : u"down";
         rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
         break;
     case HookType::HOOK_90T:
@@ -7805,31 +7819,35 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         // handle brackets
         for (size_t i = 0; i < part->nstaves(); i++) {
             Staff* st = part->staff(i);
-            if (st) {
-                for (size_t j = 0; j < st->bracketLevels() + 1; j++) {
-                    if (st->bracketType(j) != BracketType::NO_BRACKET) {
-                        bracketFound = true;
-                        if (i == 0) {
-                            // OK, found bracket in first staff of part
-                            // filter out implicit brackets
-                            if (!(st->bracketSpan(j) == part->nstaves()
-                                  && st->bracketType(j) == BracketType::BRACE)) {
-                                // filter out brackets starting in the last part
-                                // as they cannot span multiple parts
-                                if (idx < parts.size() - 1) {
-                                    // add others
-                                    int number = findPartGroupNumber(partGroupEnd);
-                                    if (number < MAX_PART_GROUPS) {
-                                        const BracketItem* bi = st->brackets().at(j);
-                                        partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
-                                        partGroupEnd[number] = static_cast<int>(staffCount + st->bracketSpan(j));
-                                    }
-                                }
-                            }
-                        } else {
-                            // bracket in other staff not supported in MusicXML
-                            LOGD("bracket starting in staff %zu not supported", i + 1);
-                        }
+            if (!st) {
+                continue;
+            }
+            const staff_idx_t staffIdx = st->idx();
+            for (size_t j = 0; j < score->bracketLevels(staffIdx) + 1; j++) {
+                if (score->bracketType(staffIdx, j) == BracketType::NO_BRACKET) {
+                    continue;
+                }
+                bracketFound = true;
+                if (i != 0) {
+                    // bracket in other staff not supported in MusicXML
+                    LOGD("bracket starting in staff %zu not supported", i + 1);
+                    continue;
+                }
+                // OK, found bracket in first staff of part
+                // filter out implicit brackets
+                if (score->bracketSpan(staffIdx, j) == part->nstaves()
+                    && score->bracketType(staffIdx, j) == BracketType::BRACE) {
+                    continue;
+                }
+                // filter out brackets starting in the last part
+                // as they cannot span multiple parts
+                if (idx < parts.size() - 1) {
+                    // add others
+                    int number = findPartGroupNumber(partGroupEnd);
+                    if (number < MAX_PART_GROUPS) {
+                        const BracketItem* bi = score->brackets(staffIdx).at(j);
+                        partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
+                        partGroupEnd[number] = static_cast<int>(staffCount + score->bracketSpan(staffIdx, j));
                     }
                 }
             }

@@ -223,7 +223,6 @@ double TieSegment::dottedWidth() const
 Tie::Tie(const ElementType& type, EngravingItem* parent)
     : SlurTie(type, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 TieJumpPointList* Tie::startTieJumpPoints() const
@@ -374,7 +373,6 @@ const TieJumpPointList* Tie::tieJumpPoints() const
 Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 Tie::Tie(const Tie& t)
@@ -399,8 +397,6 @@ PropertyValue Tie::getProperty(Pid propertyId) const
 PropertyValue Tie::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return int(Anchor::NOTE);
     case Pid::TIE_PLACEMENT:
         return TiePlacement::AUTO;
     default:

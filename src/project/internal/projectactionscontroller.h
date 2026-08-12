@@ -27,12 +27,17 @@
 #include <QObject>
 #include <QString>
 
+#include "iprojectcommandscontroller.h"
+
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/commandtypes.h"
+#include "rcommand/icommanddispatcher.h"
+#include "rcommand/commandable.h"
 #include "rcommand/icommanddispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "multiwindows/iprojectprovider.h"
@@ -57,8 +62,8 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable
+class ProjectActionsController : public IProjectCommandsController, public IProjectFilesController, public muse::mi::IProjectProvider,
+    public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -90,6 +95,17 @@ public:
 
     void init();
 
+    // IProjectCommandsController
+    bool hasProject() const override;
+    muse::async::Notification hasProjectChanged() const override;
+    bool needSave() const override;
+    muse::async::Notification needSaveChanged() const override;
+    bool isBusy(BusyStatus status) const override;
+    muse::async::Notification busyChanged() const override;
+    bool hasSelection() const override;
+    muse::async::Notification hasSelectionChanged() const override;
+    // --------
+
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     bool isUrlSupported(const QUrl& url) const override;
@@ -97,8 +113,8 @@ public:
     muse::Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool goToHome = true) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
-    bool saveProjectLocally(
-        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
+    bool saveProjectLocally(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
+                            bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
@@ -116,13 +132,15 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void newProject();
+    muse::Ret newProject();
 
-    void openProject(const muse::actions::ActionData& args);
+    muse::Ret openProject(const muse::rcommand::CommandQuery& query);
     muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString());
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
+
+    muse::Ret closeProject();
 
     bool shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
@@ -134,9 +152,9 @@ private:
     muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     muse::Ret canSaveProject() const;
-    bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    void saveProjectAt(const muse::actions::ActionData& args);
-    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
+    muse::Ret saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    muse::Ret saveProjectAt(const muse::rcommand::CommandQuery& query);
+    muse::Ret saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     struct AudioFile {
@@ -151,9 +169,9 @@ private:
         }
     };
 
-    void publish();
-    void shareAudio(const AudioFile& existingAudio);
-    void shareAudio() { shareAudio(AudioFile()); }
+    muse::Ret publish();
+    muse::Ret shareAudio(const AudioFile& existingAudio);
+    muse::Ret sharedAudio() { return shareAudio(AudioFile()); }
     void uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project, const CloudAudioInfo& info);
     void alsoShareAudioCom(const AudioFile& audio);
 
@@ -195,14 +213,14 @@ private:
 
     void moveProject(INotationProjectPtr project, const muse::io::path_t& newPath, bool replace);
 
-    void importPdf();
-    void importAudioToScore();
+    muse::Ret importPdf();
+    muse::Ret importAudioToScore();
 
-    void clearRecentScores();
+    muse::Ret clearRecentScores();
 
-    void continueLastSession();
+    muse::Ret continueLastSession();
 
-    void openProjectProperties();
+    muse::Ret openProjectProperties();
 
     muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
     muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
@@ -217,20 +235,18 @@ private:
     muse::Ret doFinishOpenProject();
     muse::Ret openPageIfNeed(muse::Uri pageUri);
 
-    void exportScore();
-    void printScore();
-
-    bool hasSelection() const;
+    muse::Ret exportScore();
+    muse::Ret printScore();
 
     QUrl scoreManagerUrl() const;
 
-    bool m_isProjectSaving = false;
-    bool m_isProjectClosing = false;
-    bool m_isProjectProcessing = false;
-    bool m_isProjectPublishing = false;
-    bool m_isProjectUploading = false;
-    bool m_isAudioSharing = false;
-    bool m_isProjectDownloading = false;
+    void setBusy(BusyStatus status, bool isBusy);
+
+    std::set<BusyStatus> m_busyStatuses;
+    muse::async::Notification m_busyChanged;
+
+    muse::async::Notification m_needSaveChanged;
+    muse::async::Notification m_hasSelectionChanged;
 
     muse::ProgressPtr m_uploadingProjectProgress = nullptr;
     muse::ProgressPtr m_uploadingAudioProgress = nullptr;

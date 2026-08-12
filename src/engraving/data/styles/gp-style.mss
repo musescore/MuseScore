@@ -43,5 +43,6 @@
     <lhTappingSlurTopAndBottomNoteOnTab>1</lhTappingSlurTopAndBottomNoteOnTab>
     <rhTappingSymbolNormalStave>T</rhTappingSymbolNormalStave>
     <rhTappingSymbolTab>T</rhTappingSymbolTab>
+    <guitarDivesAboveStaff>1</guitarDivesAboveStaff>
     </Style>
 </museScore>

@@ -8,7 +8,8 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/bend.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
+#include "engraving/editing/editstaffbrackets.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
@@ -1092,7 +1093,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     if (tR->staffCount() > 1) {
-        part->staff(0)->addBracket(mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
+        EditStaffBrackets::addBracket(_score, part->staff(0)->idx(),
+                                      mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
         part->staff(0)->setBarLineSpan(true);
     }
 
@@ -1270,7 +1272,15 @@ void GPConverter::addContinuousSlideHammerOn()
             }
 
             if (nextCr->isChord() && !toChord(nextCr)->graceNotes().empty()) {
-                nextCr = toChord(nextCr)->graceNotes().front();
+                Chord* firstGrace = toChord(nextCr)->graceNotes().front();
+                bool isDiveGrace = false;
+                if (!firstGrace->notes().empty()) {
+                    Note* gn = firstGrace->notes().front();
+                    isDiveGrace = gn->ghost() || gn->diveFor() || gn->diveBack();
+                }
+                if (!isDiveGrace) {
+                    nextCr = firstGrace;
+                }
             }
         }
 
@@ -1308,6 +1318,10 @@ void GPConverter::addContinuousSlideHammerOn()
             GuitarBend* bend = bendNote->bendFor();
 
             while (bend) {
+                if (bend->isDive()) {
+                    break;
+                }
+
                 bendNote = bend->endNote();
                 IF_ASSERT_FAILED(bendNote) {
                     LOGE() << "glissando start note may be incorrect";
@@ -1334,7 +1348,6 @@ void GPConverter::addContinuousSlideHammerOn()
         /// Layout info
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
             Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
-            gl->setAnchor(Spanner::Anchor::NOTE);
             gl->setStartElement(startNote);
             gl->setTrack(track);
             gl->setTick(startTick);
@@ -2363,9 +2376,6 @@ void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
-                                                        beat->hasWhammy());
-
     if (!beat->hasWhammy() || !cr->isChord()) {
         return;
     }

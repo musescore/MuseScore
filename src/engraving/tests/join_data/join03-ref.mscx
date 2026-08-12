@@ -92,59 +92,38 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              <veloChange>10</veloChange>
-              <beginHookHeight>-1.9</beginHookHeight>
-              <endHookHeight>-1.9</endHookHeight>
-              <eid>L_L</eid>
-              </HairPin>
-            <next>
-              <location>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>S_S</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -152,5 +131,17 @@
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>0</subtype>
+        <veloChange>10</veloChange>
+        <beginHookHeight>-1.9</beginHookHeight>
+        <endHookHeight>-1.9</endHookHeight>
+        <track2>0</track2>
+        <ticks>3/4</ticks>
+        <eid>T_T</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -179,16 +179,6 @@ const UiActionList NotationUiActions::s_actions = {
              mu::context::CTX_DISABLED
              ),
 
-    UiAction("put-note", // args: PointF pos, bool replace, bool insert
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Put note")
-             ),
-    UiAction("remove-note", // args: PointF pos
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Remove note")
-             ),
     UiAction("next-element",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -1647,12 +1637,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Accessibility: Get location"),
              TranslatableString("action", "Accessibility: get location")
              ),
-    UiAction("edit-element",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Edit element"),
-             TranslatableString("action", "Edit element")
-             ),
     UiAction("select-prev-measure",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -1760,6 +1744,13 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Lock/unlock selected system(s)"),
              TranslatableString("action", "Lock/unlock selected system(s)"),
              IconCode::Code::SYSTEM_LOCK
+             ),
+    UiAction("toggle-page-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             TranslatableString("action", "Lock/unlock selected page(s)"),
+             IconCode::Code::PAGE_LOCK
              ),
     UiAction("enh-both",
              mu::context::UiCtxProjectOpened,
@@ -2635,10 +2626,6 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Insert staff type change"),
              IconCode::Code::STAFF_TYPE_CHANGE
              ),
-    UiAction("notation-popup-menu",
-             mu::context::UiCtxProjectFocused,
-             mu::context::CTX_NOTATION_FOCUSED
-             ),
     UiAction("standard-bend",
              mu::context::UiCtxProjectFocused,
              mu::context::CTX_NOTATION_OPENED,
@@ -2930,7 +2917,7 @@ void NotationUiActions::init()
         }
 
         m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
-        m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
+        m_controller->notationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         }, Asyncable::Mode::SetReplace);
     });
@@ -3049,7 +3036,7 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
     }
 
     if (act.code == TOGGLE_CONCERT_PITCH_CODE) {
-        auto style = m_controller->currentNotationStyle();
+        auto style = m_controller->notationStyle();
         if (style) {
             return style->styleValue(StyleId::concertPitch).toBool();
         }
@@ -3065,11 +3052,6 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
         if (interaction) {
             return isScoreConfigChecked(act.code, interaction->scoreConfig());
         }
-    }
-
-    auto engravingDebuggingActionsSearch = NotationActionController::engravingDebuggingActions.find(act.code);
-    if (engravingDebuggingActionsSearch != NotationActionController::engravingDebuggingActions.cend()) {
-        return engravingConfiguration()->debuggingOptions().*(engravingDebuggingActionsSearch->second);
     }
 
     return false;

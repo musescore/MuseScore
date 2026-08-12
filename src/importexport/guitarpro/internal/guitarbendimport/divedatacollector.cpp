@@ -47,6 +47,9 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
     m_lastWhammyByTrack[track] = { pitchValues.back().pitch, tick + chord->actualTicks() };
 
     for (const Note* note : chord->notes()) {
+        if (note->displayFret() == Note::DisplayFretOption::Hide) {
+            continue;
+        }
         const bool isContinuedWhammy = hasPrecedingWhammy && pitchValues.front().pitch != 0 && note->tieBack();
         ImportedDiveInfo info = DiveInfoConverter::fillDiveInfo(note, pitchValues, isContinuedWhammy);
         if (info.type == DiveType::NONE || !info.note) {
@@ -55,12 +58,14 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
 
         const size_t noteIdx = muse::indexOf(chord->notes(), note);
 
-        if (info.type == DiveType::PRE_DIVE) {
+        const bool isCompoundPreDive = (info.type == DiveType::PRE_DIVE);
+
+        if (isCompoundPreDive) {
             m_ctx.preDiveData[track][tick][noteIdx].quarterTones = info.quarterTones;
-            if (!info.graceDiveSegments.empty()) {
-                m_ctx.graceAfterDiveData[track][tick][noteIdx].data = std::move(info.graceDiveSegments);
+            if (info.graceDiveSegments.empty()) {
+                continue;
             }
-            continue;
+            // Compound PRE_DIVE: route grace segments through the same path as DIVE
         }
 
         if (info.graceDiveSegments.size() == 1 && note->tieFor()) {
@@ -68,7 +73,17 @@ void DiveDataCollector::collectDiveData(const Chord* chord, const PitchValues& p
             continue;
         }
 
-        m_ctx.graceAfterDiveData[track][tick][noteIdx].data = std::move(info.graceDiveSegments);
+        GraceNotesImportInfo& graceInfo = m_ctx.graceAfterDiveData[track][tick][noteIdx];
+
+        if (note->tieFor() && !info.graceDiveSegments.empty()) {
+            graceInfo.lastNoteData.shouldMoveTie = true;
+            graceInfo.lastNoteData.endFactor = info.graceDiveSegments.back().endFactor;
+            if (info.graceDiveSegments.size() > 1) {
+                info.graceDiveSegments.pop_back();
+            }
+        }
+
+        graceInfo.data = std::move(info.graceDiveSegments);
     }
 }
 } // namespace mu::iex::guitarpro

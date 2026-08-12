@@ -695,7 +695,6 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
         //s->setXmlText("");
         s->setGlissandoType(GlissandoType::STRAIGHT);
         cr->add(s);
-        s->setAnchor(Spanner::Anchor::NOTE);
         Segment* prevSeg = cr->segment()->prev1(SegmentType::ChordRest);
         EngravingItem* prevElem = prevSeg->element(staffIdx);
         if (prevElem) {
@@ -1876,7 +1875,6 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
                 Glissando* glis = new Glissando(score->dummy());
                 glis->setGlissandoType(GlissandoType::STRAIGHT);
                 gn->chord()->add(glis);
-                glis->setAnchor(Spanner::Anchor::NOTE);
                 glis->setStartElement(gn);
                 glis->setTick(gn->chord()->tick());
                 glis->setTrack(gn->track());
@@ -2630,7 +2628,6 @@ bool GuitarPro3::read(IODevice* io)
                     if (nt->string() == n->string()) {
                         // auto mg = nt->magS();
                         Glissando* s = new Glissando(n);
-                        s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
                         s->setTrack(n->track());

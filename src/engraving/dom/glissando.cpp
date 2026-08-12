@@ -109,12 +109,11 @@ Glissando::Glissando(EngravingItem* parent)
 {
     initElementStyle(&glissandoElementStyle);
 
-    static const std::array<Pid, 5> propertiesToInitialise {
+    static const std::array<Pid, 4> propertiesToInitialise {
         Pid::GLISS_SHIFT,
         Pid::GLISS_EASEIN,
         Pid::GLISS_EASEOUT,
-        Pid::DIAGONAL,
-        Pid::ANCHOR
+        Pid::DIAGONAL
     };
 
     for (const Pid& pid : propertiesToInitialise) {
@@ -454,8 +453,6 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::glissandoText);
     case Pid::DIAGONAL:
         return true;
-    case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }
