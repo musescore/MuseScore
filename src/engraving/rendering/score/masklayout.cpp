@@ -82,7 +82,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
         }
 
         for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-            if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
+            if (!spannerSeg->isSlurTieSegment() || spannerSeg->isTappingHalfSlurSegment()
+                || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                 continue;
             }
 

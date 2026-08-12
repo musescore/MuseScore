@@ -1811,6 +1811,11 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.showPercent) {
             value = value * 0.01;
         }
+        if (idx == StyleId::figuredBassYOffset) {
+            // Displayed: positive = up, negative = down
+            // Internal:  negative = up, positive = down
+            value = -value;
+        }
         return value;
     } break;
     case P_TYPE::BOOL: {
@@ -1870,12 +1875,16 @@ PropertyValue EditStyle::getValue(StyleId idx)
         }
     } break;
     case P_TYPE::POINT: {
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
         if (idx == StyleId::lyricsPosAbove || idx == StyleId::lyricsPosBelow) {
             QDoubleSpinBox* dsb = qobject_cast<QDoubleSpinBox*>(sw.widget);
-            return PointF(0.0, dsb->value());
+            return PointF(0.0, -dsb->value());
         }
         if (OffsetSelect* cb = qobject_cast<OffsetSelect*>(sw.widget)) {
-            return cb->offset();
+            PointF offset = cb->offset();
+            offset.setY(-offset.y());
+            return offset;
         } else {
             ASSERT_X("unhandled muse::PointF");
         }
@@ -1914,8 +1923,10 @@ void EditStyle::setValues()
         if (sw.widget) {
             sw.widget->blockSignals(true);
         }
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
         PropertyValue val = sw.idx == StyleId::lyricsPosAbove || sw.idx == StyleId::lyricsPosBelow
-                            ? Spatium(styleValue(sw.idx).value<PointF>().y())
+                            ? Spatium(-styleValue(sw.idx).value<PointF>().y())
                             : styleValue(sw.idx);
         if (sw.reset) {
             sw.reset->setEnabled(!hasDefaultStyleValue(sw.idx));
@@ -1934,6 +1945,11 @@ void EditStyle::setValues()
             qreal value = val.toReal();
             if (sw.showPercent) {
                 value = value * 100;
+            }
+            if (sw.idx == StyleId::figuredBassYOffset) {
+                // Displayed: positive = up, negative = down
+                // Internal:  negative = up, positive = down
+                value = -value;
             }
             if (!sw.widget->setProperty("value", value)) {
                 unhandledType(sw);
@@ -2021,7 +2037,11 @@ void EditStyle::setValues()
         case P_TYPE::POINT: {
             OffsetSelect* as = qobject_cast<OffsetSelect*>(sw.widget);
             if (as) {
-                as->setOffset(val.value<muse::PointF>());
+                // Displayed: positive = up, negative = down
+                // Internal:  negative = up, positive = down
+                muse::PointF offset = val.value<muse::PointF>();
+                offset.setY(-offset.y());
+                as->setOffset(offset);
             }
         } break;
         default: {
@@ -2063,7 +2083,9 @@ void EditStyle::setValues()
         }
     }
     doubleSpinFBSize->setValue(styleValue(StyleId::figuredBassFontSize).toDouble());
-    doubleSpinFBVertPos->setValue(styleValue(StyleId::figuredBassYOffset).toDouble());
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    doubleSpinFBVertPos->setValue(-styleValue(StyleId::figuredBassYOffset).toDouble());
     spinFBLineHeight->setValue(styleValue(StyleId::figuredBassLineHeight).toDouble() * 100.0);
 
     QString mfont(styleValue(StyleId::musicalSymbolFont).value<String>());
@@ -2515,7 +2537,11 @@ void EditStyle::textStyleChanged(int row)
         }
     }
 
-    textStyleOffset->setOffset(styleValue(ts->offsetSids.above).value<PointF>());
+    // Displayed: positive = up, negative = down
+    // Internal:  negative = up, positive = down
+    PointF textStyleOffsetValue = styleValue(ts->offsetSids.above).value<PointF>();
+    textStyleOffsetValue.setY(-textStyleOffsetValue.y());
+    textStyleOffset->setOffset(textStyleOffsetValue);
     resetTextStyleOffset->setEnabled(styleValue(ts->offsetSids.above) != defaultStyleValue(ts->offsetSids.above));
 
     INotationPtr notation = globalContext()->currentNotation();
@@ -2547,7 +2573,11 @@ void EditStyle::textStyleValueChanged(TextStylePropertyType type, const Property
     const TextStyle* ts = textStyle(tid);
 
     if (type == TextStylePropertyType::Offset) {
-        setStyleValue(ts->offsetSids.above, value);
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        PointF offset = value.value<PointF>();
+        offset.setY(-offset.y());
+        setStyleValue(ts->offsetSids.above, offset);
     } else {
         for (const auto& a : *ts) {
             if (a.type == type) {

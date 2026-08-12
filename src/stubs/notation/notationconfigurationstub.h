@@ -31,6 +31,9 @@ public:
     NotationConfigurationStub() = default;
 
     QColor notationColor() const override;
+    void setNotationColor(const QColor& color) override;
+    muse::async::Notification notationColorChanged() const override;
+    void resetNotationColor() override;
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color)  override;
@@ -105,6 +108,10 @@ public:
     muse::async::Notification defaultZoomChanged() const override;
 
     QList<int> possibleZoomPercentageList() const override;
+
+    engraving::AutomationType currentAutomationType() const override;
+    void setCurrentAutomationType(engraving::AutomationType type) override;
+    muse::async::Notification currentAutomationTypeChanged() const override;
 
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;
     int zoomPercentageFromScaling(qreal scaling) const override;

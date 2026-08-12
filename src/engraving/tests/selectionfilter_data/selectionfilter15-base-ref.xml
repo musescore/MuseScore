@@ -1,77 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0/1" len="8/4" staff="0" staves="1">
   <Staff id="0">
-    <Spanner type="TextLine">
-      <TextLine>
-        <beginText>VII</beginText>
-        <ticks_f>1/1</ticks_f>
-        <eid>B_B</eid>
-        </TextLine>
-      <next>
-        <location>
-          <fractions>1/1</fractions>
-          </location>
-        </next>
-      </Spanner>
     <Chord>
-      <eid>C_C</eid>
+      <eid>B_B</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>D_D</eid>
+        <eid>C_C</eid>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       </Chord>
     <Chord>
-      <eid>E_E</eid>
+      <eid>D_D</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>F_F</eid>
+        <eid>E_E</eid>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
-      <eid>G_G</eid>
+      <eid>F_F</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>H_H</eid>
+        <eid>G_G</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
-      <eid>I_I</eid>
+      <eid>H_H</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>J_J</eid>
+        <eid>I_I</eid>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>
       </Chord>
-    <Spanner type="TextLine">
-      <prev>
-        <location>
-          <fractions>-1/1</fractions>
-          </location>
-        </prev>
-      </Spanner>
     <Chord>
-      <eid>K_K</eid>
+      <eid>J_J</eid>
       <durationType>quarter</durationType>
       <Note>
-        <eid>L_L</eid>
+        <eid>K_K</eid>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Rest>
-      <eid>M_M</eid>
+      <eid>L_L</eid>
       <durationType>quarter</durationType>
       </Rest>
     <Rest>
-      <eid>N_N</eid>
+      <eid>M_M</eid>
       <durationType>half</durationType>
       </Rest>
     </Staff>
+  <SpannerMap>
+    <TextLine>
+      <beginText>VII</beginText>
+      <track2>0</track2>
+      <ticks>1/1</ticks>
+      <eid>N_N</eid>
+      <track>0</track>
+      </TextLine>
+    </SpannerMap>
   </StaffList>

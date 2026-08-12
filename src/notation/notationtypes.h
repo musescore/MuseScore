@@ -26,6 +26,8 @@
 #include <QDate>
 #include <string>
 
+#include "global/containers.h"
+
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/durationtype.h"
@@ -127,10 +129,14 @@ enum class SelectionTarget : unsigned char
     PrevFrame,
     NextSystem,
     PrevSystem,
+    AboveStaff,
+    BelowStaff,
     UpNoteInChord,
     DownNoteInChord,
     TopNoteInChord,
     BottomNoteInChord,
+    TopStaff,
+    EmptyTrailingMeasure,
     Similar,
     SimilarInStaff,
     SimilarInRange,
@@ -156,11 +162,15 @@ static const std::map<std::string, SelectionTarget> STR_SELECTION_TARGET = {
     { "prev-frame", SelectionTarget::PrevFrame },
     { "next-system", SelectionTarget::NextSystem },
     { "prev-system", SelectionTarget::PrevSystem },
+    { "above-staff", SelectionTarget::AboveStaff },
+    { "below-staff", SelectionTarget::BelowStaff },
     { "up-note-in-chord", SelectionTarget::UpNoteInChord },
     { "down-note-in-chord", SelectionTarget::DownNoteInChord },
     { "top-note-in-chord", SelectionTarget::TopNoteInChord },
     { "bottom-note-in-chord", SelectionTarget::BottomNoteInChord },
+    { "top-staff", SelectionTarget::TopStaff },
     { "notes-in-chord", SelectionTarget::NotesInChord },
+    { "empty-trailing-measure", SelectionTarget::EmptyTrailingMeasure },
     { "similar", SelectionTarget::Similar },
     { "similar-in-staff", SelectionTarget::SimilarInStaff },
     { "similar-in-range", SelectionTarget::SimilarInRange },
@@ -175,6 +185,16 @@ inline SelectionTarget str_conv(const std::string& str, SelectionTarget def)
         return it->second;
     }
     return def;
+}
+
+inline std::string str_conv(SelectionTarget target)
+{
+    for (const auto& [key, value] : STR_SELECTION_TARGET) {
+        if (value == target) {
+            return key;
+        }
+    }
+    return "";
 }
 
 enum PlayMode {
@@ -251,24 +271,24 @@ enum class NoteName : unsigned char
     B
 };
 
+static const std::map<std::string, NoteName> STR_NOTE_NAME = {
+    { "c", NoteName::C },
+    { "d", NoteName::D },
+    { "e", NoteName::E },
+    { "f", NoteName::F },
+    { "g", NoteName::G },
+    { "a", NoteName::A },
+    { "b", NoteName::B },
+};
+
 inline NoteName str_conv(const std::string& name, NoteName def)
 {
-    if (name == "c") {
-        return NoteName::C;
-    } else if (name == "d") {
-        return NoteName::D;
-    } else if (name == "e") {
-        return NoteName::E;
-    } else if (name == "f") {
-        return NoteName::F;
-    } else if (name == "g") {
-        return NoteName::G;
-    } else if (name == "a") {
-        return NoteName::A;
-    } else if (name == "b") {
-        return NoteName::B;
-    }
-    return def;
+    return muse::value(STR_NOTE_NAME, name, def);
+}
+
+inline std::string str_conv(NoteName name)
+{
+    return muse::key(STR_NOTE_NAME, name);
 }
 
 enum class PastingType : unsigned char {

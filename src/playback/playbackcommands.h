@@ -36,7 +36,7 @@ inline static const muse::rcommand::Command LOOP_TOGGLE_COMMAND("command://playb
 inline static const muse::rcommand::Command LOOP_IN_COMMAND("command://playback/loop-in");
 inline static const muse::rcommand::Command LOOP_OUT_COMMAND("command://playback/loop-out");
 inline static const muse::rcommand::Command METRONOME_TOGGLE_COMMAND("command://playback/metronome-toggle");
-inline static const muse::rcommand::Command SHOW_PLAYBACK_SETUP_COMMAND("command://playback/show-playback-setup");
+inline static const muse::rcommand::Command OPEN_PLAYBACK_SETUP_COMMAND("command://playback/open-playback-setup");
 inline static const muse::rcommand::Command MIDI_TOGGLE_COMMAND("command://playback/midi-toggle");
 inline static const muse::rcommand::Command MIDI_INPUT_WRITTEN_PITCH_COMMAND("command://playback/midi-input-written-pitch");
 inline static const muse::rcommand::Command MIDI_INPUT_SOUNDING_PITCH_COMMAND("command://playback/midi-input-sounding-pitch");
@@ -48,4 +48,8 @@ inline static const muse::rcommand::Command COUNTIN_TOGGLE_COMMAND("command://pl
 inline static const muse::rcommand::Command CLEAR_ONLINESOUNDS_CACHE_COMMAND("command://playback/clear-onlinesounds-cache");
 inline static const muse::rcommand::Command PROCESS_ONLINESOUNDS_COMMAND("command://playback/process-onlinesounds");
 inline static const muse::rcommand::Command RELOAD_PLAYBACK_CACHE_COMMAND("command://playback/reload-playback-cache");
+
+inline static const muse::rcommand::Command TOGGLE_MIXER_SECTION_COMMAND("command://playback/toggle-mixer-section"); // with params
+inline static const muse::rcommand::Command TOGGLE_AUX_SEND_COMMAND("command://playback/toggle-aux-send");
+inline static const muse::rcommand::Command TOGGLE_AUX_CHANNEL_COMMAND("command://playback/toggle-aux-channel");
 }

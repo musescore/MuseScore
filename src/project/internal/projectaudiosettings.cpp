@@ -461,7 +461,7 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const AudioOutputParams& pa
 {
     QJsonObject result;
     result.insert("fxChain", fxChainToJson(params.fxChain));
-    result.insert("balance", params.balance);
+    result.insert("balance", params.balance.raw());
     result.insert("volumeDb", params.volume.raw());
 
     if (!params.auxSends.empty()) {

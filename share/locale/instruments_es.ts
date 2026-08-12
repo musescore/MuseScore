@@ -342,14 +342,14 @@
         <source>Alto Flute</source>
         <comment>alto-flute trackName</comment>
         <extracomment>trackName for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta contralto</translation>
+        <translation>Flauta alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="324"/>
         <source>Alto Flute</source>
         <comment>alto-flute longName</comment>
         <extracomment>longName for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta contralto</translation>
+        <translation>Flauta alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="326"/>
@@ -839,7 +839,7 @@
         <source>Tin Whistle</source>
         <comment>d-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta Irlandesa</translation>
+        <translation>Flauta irlandesa de hojalata</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="482"/>
@@ -874,7 +874,7 @@
         <source>Tin Whistle</source>
         <comment>c-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta Irlandesa</translation>
+        <translation>Flauta irlandesa de hojalata</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="493"/>
@@ -909,7 +909,7 @@
         <source>Tin Whistle</source>
         <comment>bflat-tin-whistle trackName</comment>
         <extracomment>trackName for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flauta Irlandesa</translation>
+        <translation>Flauta irlandesa de hojalata</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="504"/>
@@ -1981,7 +1981,7 @@ Afinada en Do.</translation>
         <source>Spanish double-reed folk instrument from the Castile region. In F♯.</source>
         <comment>fs-castilian-dulzaina description</comment>
         <extracomment>description for Castilian Dulzaina; transposition: F♯; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Instrumento tradicional español de lengüeta doble originario de Castilla. En Fa♯.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
@@ -17654,21 +17654,21 @@ Afinada en Do.</translation>
         <source>Bass guitar (staff notation).</source>
         <comment>bass-guitar description</comment>
         <extracomment>description for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bajo eléctrico (pentagrama).</translation>
+        <translation>Bajo (pentagrama).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5785"/>
         <source>Bass Guitar</source>
         <comment>bass-guitar trackName</comment>
         <extracomment>trackName for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bajo eléctrico</translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5787"/>
         <source>Bass Guitar</source>
         <comment>bass-guitar longName</comment>
         <extracomment>longName for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bajo eléctrico</translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5789"/>
@@ -17857,7 +17857,7 @@ Afinada en Do.</translation>
         <source>Bass Guitar</source>
         <comment>bass-guitar-tablature longName</comment>
         <extracomment>longName for Bass Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bajo eléctrico</translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5848"/>
@@ -20992,7 +20992,7 @@ Afinada en Do.</translation>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="180"/>
         <source>Bass Guitars</source>
-        <translation>Bajos eléctricos</translation>
+        <translation>Bajos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>

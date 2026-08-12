@@ -103,69 +103,46 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Ottava">
-            <Ottava>
-              <subtype>8va</subtype>
-              <endHookHeight>1.5</endHookHeight>
-              <beginText>&lt;font size=&quot;12&quot;/&gt;8va</beginText>
-              <continueText>&lt;font size=&quot;12&quot;/&gt;(8va)</continueText>
-              <eid>J_J</eid>
-              <lineWidth>0.15</lineWidth>
-              <lineStyle>solid</lineStyle>
-              </Ottava>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>N_N</eid>
         <voice>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>R_R</eid>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>S_S</eid>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -177,17 +154,26 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             </Clef>
           <KeySig>
-            <eid>U_U</eid>
+            <eid>T_T</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Rest>
+            <eid>V_V</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Rest>
             <eid>W_W</eid>
             <durationType>measure</durationType>
@@ -204,15 +190,20 @@
             </Rest>
           </voice>
         </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>Y_Y</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
       </Staff>
+    <SpannerMap>
+      <Ottava>
+        <subtype>8va</subtype>
+        <endHookHeight>1.5</endHookHeight>
+        <beginText>&lt;font size=&quot;12&quot;/&gt;8va</beginText>
+        <continueText>&lt;font size=&quot;12&quot;/&gt;(8va)</continueText>
+        <track2>0</track2>
+        <ticks>1/1</ticks>
+        <eid>Y_Y</eid>
+        <track>0</track>
+        <lineWidth>0.15</lineWidth>
+        <lineStyle>solid</lineStyle>
+        </Ottava>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -72,9 +72,7 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = s_score->staff(0)->id();
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id());
 
     // [THEN] Staff 0 all-voice curve matches expectations
     AutomationCurve expectedCurve;
@@ -100,7 +98,7 @@ TEST_F(ScoreAutomationController_Tests, Init_Dynamics_CurveMatchesExpected)
     // [THEN] Voice-1 curve on staff 0 matches expectations.
     // Voice-1 has a CURRENT_VOICE_ONLY f at tick 3840. The second pass then fills in all
     // shared-curve points so the voice curve is self-contained
-    key.voiceIdx = 1;
+    key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id(), size_t(1));
     AutomationCurve expectedVoiceCurve;
 
     // Shared points copied in by the second pass
@@ -158,8 +156,8 @@ TEST_F(ScoreAutomationController_Tests, InsertTime_Negative_RemovesMeasurePoints
     const AutomationCurveMap curvesBefore = controller.automationData()->curves();
     ASSERT_FALSE(curvesBefore.empty());
 
-    // [WHEN] Remove the first measure: -1920 ticks starting at tick 1920 -> erases points in [0, 1920]
-    controller.insertTime(Fraction(4, 4), Fraction(-4, 4));
+    // [WHEN] Remove the first measure: -1920 ticks starting at tick 0 -> erases points in [0, 1920]
+    controller.insertTime(Fraction(0, 1), Fraction(-4, 4));
 
     // [THEN] Points in the removed range are gone; points beyond it shift back by 1920 ticks
     const AutomationCurveMap& curvesAfter = controller.automationData()->curves();
@@ -184,9 +182,7 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_ShiftsPointsAtAndAfterFrom)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationPoint p1 = generatedPoint(0.3, 0.4);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
@@ -216,13 +212,8 @@ TEST_F(ScoreAutomationController_Tests, MoveTicks_AcrossMultipleCurves)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key1;
-    key1.type = AutomationType::Dynamics;
-    key1.staffId = muse::ID(1);
-
-    AutomationCurveKey key2;
-    key2.type = AutomationType::Dynamics;
-    key2.staffId = muse::ID(2);
+    AutomationCurveKey key1 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
+    AutomationCurveKey key2 = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(2));
 
     AutomationPoint p1 = generatedPoint(0.3, 0.5);
     AutomationPoint p2 = generatedPoint(0.4, 0.6);
@@ -253,9 +244,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationPoint p100 = generatedPoint(0.3, 0.4);
     AutomationPoint p300 = generatedPoint(0.4, 0.5);
@@ -270,7 +259,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_RemovesRangeAndClosesGap)
     controller.setAutomationData(data);
 
     // [WHEN] Remove ticks [300, 500] (a 200-tick gap)
-    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-200));
+    controller.insertTime(Fraction::fromTicks(300), Fraction::fromTicks(-200));
 
     // [THEN] Points at 300 and 500 removed; 700 shifts to 500
     AutomationCurve expected;
@@ -285,9 +274,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = muse::ID(1);
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, muse::ID(1));
 
     AutomationCurveMap curves;
     curves[key] = { { 200, generatedPoint(0.4, 0.5) }, { 400, generatedPoint(0.5, 0.6) } };
@@ -297,7 +284,7 @@ TEST_F(ScoreAutomationController_Tests, RemoveTicks_CleansUpEmptyCurves)
     controller.setAutomationData(data);
 
     // [WHEN] Remove ticks in range [100, 500]
-    controller.insertTime(Fraction::fromTicks(500), Fraction::fromTicks(-400));
+    controller.insertTime(Fraction::fromTicks(100), Fraction::fromTicks(-400));
 
     // [THEN] Curve entry is removed from the map
     EXPECT_TRUE(controller.automationData()->isEmpty());
@@ -370,9 +357,7 @@ TEST_F(ScoreAutomationController_Tests, UserMidpoint_InsideHairpin_CorrectInValu
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = s_score->staff(0)->id();
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id());
 
     // [WHEN] The user inserts a custom automation point at the midpoint of the hairpin
     AutomationPointEdits edits { { 5280, AutomationPointEdit::SetPoint { customPoint(0.0, MF_VALUE) } } };
@@ -406,9 +391,7 @@ TEST_F(ScoreAutomationController_Tests, EditPoints_UndoRedo_RestoresAndReapplies
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = s_score->staff(0)->id();
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id());
 
     const AutomationCurve curveBefore = controller.automationData()->curve(key);
 
@@ -452,9 +435,7 @@ TEST_F(ScoreAutomationController_Tests, MirrorEdit_OtherRepeatSegment_CopiesPoin
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = s_score->staff(0)->id();
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id());
 
     // [WHEN] The user adds a custom point during the 1st pass through measure 5
     const AutomationPoint edited = customPoint(0.4, 0.4);
@@ -484,9 +465,7 @@ TEST_F(ScoreAutomationController_Tests, MirrorEdit_MeasureRepeat_CopiesPoint)
     ScoreAutomationController controller;
     controller.init(s_score);
 
-    AutomationCurveKey key;
-    key.type = AutomationType::Dynamics;
-    key.staffId = s_score->staff(0)->id();
+    AutomationCurveKey key = AutomationCurveKey::staff(AutomationType::Dynamics, s_score->staff(0)->id());
 
     // [WHEN] The user adds a custom point inside measure 6, the measure-repeat's source measure
     const AutomationPoint edited = customPoint(0.4, 0.4);

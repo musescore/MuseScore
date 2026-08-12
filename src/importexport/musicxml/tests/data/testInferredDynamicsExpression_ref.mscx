@@ -279,50 +279,43 @@
             <direction>down</direction>
             <eid>j_j</eid>
             </Dynamic>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>2</subtype>
-              <direction>down</direction>
-              <lineVisible>0</lineVisible>
-              <eid>k_k</eid>
-              </HairPin>
-            <next>
-              <location>
-                </location>
-              </next>
-            </Spanner>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
-            <eid>l_l</eid>
+            <eid>k_k</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>m_m</eid>
+              <eid>l_l</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>n_n</eid>
+            <eid>m_m</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>o_o</eid>
+              <eid>n_n</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>p_p</eid>
+            <eid>o_o</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <HairPin>
+        <subtype>2</subtype>
+        <direction>down</direction>
+        <lineVisible>0</lineVisible>
+        <track2>0</track2>
+        <startTick>16/4</startTick>
+        <eid>p_p</eid>
+        <track>0</track>
+        </HairPin>
+      </SpannerMap>
     </Score>
   </museScore>

@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include "../dom/harmony.h"
 #include "../dom/interval.h"
 
@@ -46,7 +48,10 @@ public:
     static Key transposeKey(Key oldKey, const Interval& interval, PreferSharpFlat prefer = PreferSharpFlat::NONE);
     static int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
+    static String transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc);
     static void undoTransposeHarmony(Transaction& tx, Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+    static void doUndoTransposeHarmony(Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+    static void doUndoTransposeHarmonyDiatonic(Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);
 
 private:
     static void undoTransposeHarmonyDiatonic(Transaction& tx, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);

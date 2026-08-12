@@ -273,7 +273,7 @@ public:
 
     virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps);
     void undoChangeProperty(Pid id, const PropertyValue&);
-    void undoResetProperty(Pid id);
+    virtual void undoResetProperty(Pid id);
 
     void undoPushProperty(Pid);
 

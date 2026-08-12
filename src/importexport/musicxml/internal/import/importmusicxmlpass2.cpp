@@ -2837,7 +2837,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             Fraction missingCurr;
             int alt = -10;                          // any number outside range of xml-tag "alter"
             // note: chord and grace note handling done in note()
-            // dura > 0 iff valid rest or first note of chord found
+            // dura > 0 if valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
                            tupletStates, tuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
@@ -3968,6 +3968,7 @@ Text* MusicXmlParserDirection::addTextToHeader(const TextStyleType textStyleType
 {
     Text* t = Factory::createText(m_score->dummy(), textStyleType);
     t->setXmlText(m_wordsText.trimmed());
+    t->renderer()->layoutText1(t);
     MeasureBase* const firstMeasure = m_score->measures()->first();
     VBox* vbox
         = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score, Fraction(0, 1));
@@ -5131,12 +5132,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setBeginHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::BEGIN_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setBeginHookType(HookType::HOOK_90);
-                textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
             } else if (lineEnd == "down") {
                 textLine->setBeginHookType(HookType::HOOK_90);
+                textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
             } else if (lineEnd == "both") {
                 textLine->setBeginHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
@@ -5192,12 +5194,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             if (!endLength.empty()) {
                 double length = endLength.toDouble();
                 textLine->setEndHookHeight(Spatium(lineEnd == "both" ? length / 20 : length / 10));
+                textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
             }
             if (lineEnd == "up") {
                 textLine->setEndHookType(HookType::HOOK_90);
-                textLine->setEndHookHeight(-1 * textLine->endHookHeight());
             } else if (lineEnd == "down") {
                 textLine->setEndHookType(HookType::HOOK_90);
+                textLine->setEndHookHeight(-1 * textLine->endHookHeight());
             } else if (lineEnd == "both") {
                 textLine->setEndHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
@@ -6744,7 +6747,7 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
     }
     if (tremoloNr) {
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, muPrintable(tremoloType), ticks, _tremStart);
-        if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
+        if (tremoloNr >= 1 && tremoloNr <= 6) {
             if (tremoloType.empty() || tremoloType == u"single") {
                 TremoloType type = TremoloType::INVALID_TREMOLO;
                 switch (tremoloNr) {
@@ -6755,6 +6758,10 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                 case 3: type = TremoloType::R32;
                     break;
                 case 4: type = TremoloType::R64;
+                    break;
+                case 5: type = TremoloType::R128;
+                    break;
+                case 6: type = TremoloType::R256;
                     break;
                 }
 
@@ -6784,6 +6791,10 @@ static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremolo
                     case 3: type = TremoloType::C32;
                         break;
                     case 4: type = TremoloType::C64;
+                        break;
+                    case 5: type = TremoloType::C128;
+                        break;
+                    case 6: type = TremoloType::C256;
                         break;
                     }
 
@@ -8379,9 +8390,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             Slur* newSlur = notation.name() == "slur"
                             ? Factory::createSlur(score->dummy())
                             : toSlur(Factory::createHammerOnPullOff(score->dummy()));
-            if (cr->isGrace()) {
-                newSlur->setAnchor(Spanner::Anchor::CHORD);
-            }
             const String lineType = notation.attribute(u"line-type");
             if (lineType == u"dashed") {
                 newSlur->setStyleType(SlurStyleType::Dashed);
@@ -8970,7 +8978,6 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             logger->logError(String(u"no note for glissando/slide number %1 start").arg(glissandoNumber + 1), xmlreader);
         } else {
             gliss = Factory::createGlissando(note);
-            gliss->setAnchor(Spanner::Anchor::NOTE);
             gliss->setStartElement(note);
             gliss->setTick(tick);
             gliss->setTrack(track);

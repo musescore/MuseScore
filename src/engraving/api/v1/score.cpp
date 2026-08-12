@@ -560,6 +560,11 @@ QQmlListProperty<System> Score::systems() const
     return wrapContainerProperty<System>(this, score()->systems());
 }
 
+QQmlListProperty<EngravingItem> Score::brackets(int staffIdx)
+{
+    return wrapContainerProperty<EngravingItem>(this, score()->brackets(static_cast<staff_idx_t>(staffIdx)));
+}
+
 bool Score::hasLyrics() const
 {
     return score()->hasLyrics();

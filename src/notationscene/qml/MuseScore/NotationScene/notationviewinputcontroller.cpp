@@ -50,6 +50,8 @@
 #include "notation/inotationstyle.h"
 #include "notation/inotationviewstate.h" // IWYU pragma: keep
 
+#include "notationscene/notationcommands.h"
+
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -79,60 +81,28 @@ NotationViewInputController::NotationViewInputController(IControlledView* view, 
 {
 }
 
+NotationViewInputController::~NotationViewInputController()
+{
+}
+
 void NotationViewInputController::init()
 {
     m_possibleZoomPercentages = configuration()->possibleZoomPercentageList();
 
-    if (dispatcher()) {
-        dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
-        dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
-        dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
-        dispatcher()->reg(this, "zoom-whole-page", this, &NotationViewInputController::zoomToWholePage);
-        dispatcher()->reg(this, "zoom-two-pages", this, &NotationViewInputController::zoomToTwoPages);
-        dispatcher()->reg(this, "zoom100", [this]() { setZoom(100, findZoomFocusPoint()); });
-        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0), findZoomFocusPoint()); });
+    if (!m_readonly) {
+        commandsController()->setViewController(this);
 
-        if (!m_readonly) {
-            dispatcher()->reg(this, "view-mode-page", [this]() {
-                setViewMode(ViewMode::PAGE);
-            });
-
-            if (globalConfiguration()->devModeEnabled()) {
-                dispatcher()->reg(this, "view-mode-float", [this]() {
-                    setViewMode(ViewMode::FLOAT);
-                });
-            }
-
-            dispatcher()->reg(this, "view-mode-continuous", [this]() {
-                setViewMode(ViewMode::LINE);
-            });
-
-            dispatcher()->reg(this, "view-mode-single", [this]() {
-                setViewMode(ViewMode::SYSTEM);
-            });
-
-            dispatcher()->reg(this, "scr-next", this, &NotationViewInputController::nextScreen);
-            dispatcher()->reg(this, "scr-prev", this, &NotationViewInputController::previousScreen);
-            dispatcher()->reg(this, "page-next", this, &NotationViewInputController::nextPage);
-            dispatcher()->reg(this, "page-prev", this, &NotationViewInputController::previousPage);
-            dispatcher()->reg(this, "page-top", this, &NotationViewInputController::startOfScore);
-            dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
-
-            dispatcher()->reg(this, "notation-context-menu", [this]() {
-                m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
-            });
-
-            dispatcher()->reg(this, "notation-popup-menu", [this](const ActionData& args) {
-                if (EngravingItem* el = args.arg<EngravingItem*>()) {
-                    togglePopupForItemIfSupports(el);
-                }
-            });
-
+        onNotationChanged();
+        globalContext()->currentNotationChanged().onNotify(this, [this]() {
             onNotationChanged();
-            globalContext()->currentNotationChanged().onNotify(this, [this]() {
-                onNotationChanged();
-            });
-        }
+        });
+    }
+}
+
+void NotationViewInputController::deinit()
+{
+    if (commandsController()->viewController() == this) {
+        commandsController()->setViewController(nullptr);
     }
 }
 
@@ -176,7 +146,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
 
         const TextBase* item = notation->interaction()->editedText();
-        if (AbstractElementPopupModel::hasTextStylePopup(item)) {
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->selected()) {
             static const std::set<ElementType> TYPES_NEEDING_STAFF {
                 ElementType::LYRICS,
                 ElementType::FINGERING,
@@ -210,7 +180,7 @@ void NotationViewInputController::onNotationChanged()
         }
 
         const TextBase* item = notation->interaction()->editedText();
-        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection() && item->selected()) {
             m_view->showElementPopup(item->type());
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -232,7 +202,7 @@ void NotationViewInputController::initZoom()
 
     switch (defaultZoomType) {
     case ZoomType::Percentage:
-        setZoom(configuration()->defaultZoom());
+        doSetZoom(configuration()->defaultZoom(), {});
         break;
     case ZoomType::PageWidth:
         doZoomToPageWidth();
@@ -324,19 +294,15 @@ void NotationViewInputController::zoomIn()
 {
     int maxIndex = m_possibleZoomPercentages.size() > 0 ? m_possibleZoomPercentages.size() - 1 : 0;
     int currentIndex = std::min(currentZoomIndex() + 1, maxIndex);
-
     int zoom = m_possibleZoomPercentages[currentIndex];
-
-    setZoom(zoom, findZoomFocusPoint());
+    doSetZoom(zoom, findZoomFocusPoint());
 }
 
 void NotationViewInputController::zoomOut()
 {
     int currentIndex = std::max(currentZoomIndex() - 1, 0);
-
     int zoom = m_possibleZoomPercentages[currentIndex];
-
-    setZoom(zoom, findZoomFocusPoint());
+    doSetZoom(zoom, findZoomFocusPoint());
 }
 
 PointF NotationViewInputController::findZoomFocusPoint() const
@@ -481,7 +447,12 @@ void NotationViewInputController::setScaling(qreal scaling, const PointF& pos, b
     m_view->setScaling(correctedScaling, pos, overrideZoomType);
 }
 
-void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
+void NotationViewInputController::setZoom(int zoomPercentage)
+{
+    doSetZoom(zoomPercentage, findZoomFocusPoint());
+}
+
+void NotationViewInputController::doSetZoom(int zoomPercentage, const PointF& pos)
 {
     int minZoom = m_possibleZoomPercentages.first();
     int maxZoom = m_possibleZoomPercentages.last();
@@ -501,13 +472,18 @@ int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
     return contextConfiguration()->zoomPercentageFromScaling(scaling);
 }
 
-void NotationViewInputController::setViewMode(const ViewMode& viewMode)
+void NotationViewInputController::setViewMode(ViewMode viewMode)
 {
     auto notation = globalContext()->currentNotation();
     if (notation) {
         notation->viewState()->setViewMode(viewMode);
         notation->painting()->setViewMode(viewMode);
     }
+}
+
+void NotationViewInputController::openContextMenuOfSelection()
+{
+    m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
 }
 
 constexpr qreal scrollStep = .8;
@@ -553,12 +529,12 @@ void NotationViewInputController::movePage(int direction)
     }
     Page* page = notation->elements()->msScore()->pages().back();
     if (configuration()->canvasOrientation().val == muse::Orientation::Vertical) {
-        qreal offset = std::min((page->height() + notationScreenPadding) * direction, m_view->toLogical(
-                                    QPoint()).y() + notationScreenPadding);
+        qreal offset = std::min((page->height() + notationScreenPadding) * direction,
+                                m_view->toLogical(QPoint()).y() + notationScreenPadding);
         m_view->moveCanvasVertical(offset);
     } else {
-        qreal offset
-            = std::min((page->width() + notationScreenPadding) * direction, m_view->toLogical(QPoint()).x() + notationScreenPadding);
+        qreal offset = std::min((page->width() + notationScreenPadding) * direction,
+                                m_view->toLogical(QPoint()).x() + notationScreenPadding);
         m_view->moveCanvasHorizontal(offset);
     }
 }
@@ -768,12 +744,21 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
 
     if (event->button() == Qt::RightButton) {
         m_ignoreNextMouseContextMenuEvent = true;
-        dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
+        muse::rcommand::CommandQuery query(SCREEN_REMOVE_NOTE_COMMAND);
+        query.set("pos_x", muse::Val(logicPos.x()));
+        query.set("pos_y", muse::Val(logicPos.y()));
+        commandDispatcher()->dispatch(query);
     } else {
         const Qt::KeyboardModifiers keyState = event->modifiers();
         const bool replace = keyState & Qt::ShiftModifier;
         const bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
+
+        muse::rcommand::CommandQuery query(SCREEN_PUT_NOTE_COMMAND);
+        query.set("pos_x", muse::Val(logicPos.x()));
+        query.set("pos_y", muse::Val(logicPos.y()));
+        query.set("replace", replace);
+        query.set("insert", insert);
+        commandDispatcher()->dispatch(query);
     }
 }
 
@@ -1019,7 +1004,7 @@ void NotationViewInputController::updateTextCursorPosition()
         // Show text style popup
         const TextBase* item = viewInteraction()->editedText();
         if (AbstractElementPopupModel::hasTextStylePopup(item)
-            && (!item->isLyrics() || !item->empty())) {
+            && (!item->isLyrics() || !item->empty()) && item->selected()) {
             m_view->showElementPopup(item->type());
         }
     }
@@ -1051,11 +1036,10 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
         return false;
     }
 
-    NoteInputParams params;
-    params.drumPitch = pitchToWrite;
-
-    const ActionData args = ActionData::make_arg2<NoteInputParams, NoteAddingMode>(params, addingMode);
-    dispatcher()->dispatch("note-action", args);
+    muse::rcommand::CommandQuery query(ADD_DRUM_NOTE_COMMAND);
+    query.set("pitch", muse::Val(pitchToWrite));
+    query.set("mode", muse::Val(str_conv(addingMode)));
+    commandDispatcher()->dispatch(query);
 
     return true;
 }
@@ -1277,7 +1261,10 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 
     if (m_shouldStartEditOnLeftClickRelease) {
-        dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
+        muse::rcommand::CommandQuery query(SCREEN_EDIT_ELEMENT_COMMAND);
+        query.set("pos_x", muse::Val(m_mouseDownInfo.logicalBeginPoint.x()));
+        query.set("pos_y", muse::Val(m_mouseDownInfo.logicalBeginPoint.y()));
+        commandDispatcher()->dispatch(query);
         m_shouldStartEditOnLeftClickRelease = false;
         return;
     }
@@ -1369,21 +1356,21 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     switch (hitElement->type()) {
     case ElementType::INSTRUMENT_NAME: {
         if (modifiers != Qt::NoModifier) {
-            break; // Doesn't support modifiers...
+            break;     // Doesn't support modifiers...
         }
         m_shouldStartEditOnLeftClickRelease = true;
         break;
     }
     case ElementType::MEASURE: {
         if (modifiers != Qt::NoModifier) {
-            break; // Doesn't support modifiers...
+            break;     // Doesn't support modifiers...
         }
-        dispatcher()->dispatch("command://notation/toggle-note-input");
+        commandDispatcher()->dispatch(TOGGLE_NOTE_INPUT_COMMAND);
         break;
     }
     case ElementType::NOTE: {
         if (!selectType.has_value()) {
-            break; // Unsupported modifier(s)...
+            break;     // Unsupported modifier(s)...
         }
         const Chord* chord = toNote(hitElement)->chord();
         IF_ASSERT_FAILED(chord) {
@@ -1401,7 +1388,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     }
     case ElementType::FRET_DIAGRAM: {
         if (!selectType.has_value()) {
-            return; // Unsupported modifier(s)...
+            return;     // Unsupported modifier(s)...
         }
         if (Harmony* harmony = toFretDiagram(hitElement)->harmony()) {
             viewInteraction()->select({ hitElement, harmony }, selectType.value());
@@ -1445,7 +1432,8 @@ void NotationViewInputController::hoverLeaveEvent(QHoverEvent*)
 
 bool NotationViewInputController::isAnchorEditingEvent(QKeyEvent* event) const
 {
-    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) && event->modifiers() & Qt::ShiftModifier;
+    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
+                                 && event->modifiers() & Qt::ShiftModifier;
     EngravingItem* selectedItem = viewInteraction()->selection()->element();
     return selectedItem && selectedItem->allowTimeAnchor() && anchorEditingKeyCombo;
 }
@@ -1479,7 +1467,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     auto key = event->key();
 
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
-        dispatcher()->dispatch("edit-text");
+        commandDispatcher()->dispatch(SCREEN_EDIT_TEXT_COMMAND);
         event->accept();
     } else if (event->key() == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
         // Cancel "Alt+click to paste range"
@@ -1549,15 +1537,15 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
         RectF cursorRect = editedText->cursor()->cursorRect().translated(editedText->canvasPos());
 
         QRectF rect = m_view->fromLogical(cursorRect).toQRectF();
-        rect.setWidth(1); // InputMethod doesn't display properly if width left at 0
-        rect.setHeight(rect.height() + 10); // add a little margin under the cursor
+        rect.setWidth(1);     // InputMethod doesn't display properly if width left at 0
+        rect.setHeight(rect.height() + 10);     // add a little margin under the cursor
 
         return rect;
     }
     case Qt::ImEnabled:
-        return true; // TextBase will always accept input method input
+        return true;     // TextBase will always accept input method input
     case Qt::ImHints:
-        return Qt::ImhNone; // No hints for now, but maybe in future will give hints
+        return Qt::ImhNone;     // No hints for now, but maybe in future will give hints
     default:
         break;
     }
@@ -1785,6 +1773,11 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     }
 }
 
+void NotationViewInputController::showSearch()
+{
+    m_view->showSearch();
+}
+
 void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide)
 {
     const mu::engraving::ShadowNote* shadowNote = viewInteraction()->shadowNote();
@@ -1794,4 +1787,9 @@ void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide
     }
 
     m_view->showElementPopup(ElementType::SHADOW_NOTE);
+}
+
+void NotationViewInputController::redrawView()
+{
+    m_view->scheduleRedraw();
 }

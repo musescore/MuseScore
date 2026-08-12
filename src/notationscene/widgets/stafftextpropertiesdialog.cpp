@@ -142,6 +142,8 @@ void StaffTextPropertiesDialog::saveValues()
             m_staffText->setSwingParameters(Constants::DIVISION / 4, swingBox->value());
             swingBox->setEnabled(true);
         }
+    } else {
+        m_staffText->setSwing(false);
     }
 
     INotationUndoStackPtr stack = undoStack();

@@ -54,6 +54,13 @@ static const TranslatableString Add_X_to_chord = TranslatableString("action", "A
 static const TranslatableString Add_note_X_to_chord = TranslatableString("action", "Add note %1 to chord");
 static const TranslatableString Insert_X = TranslatableString("action", "Insert %1");
 
+//: Addition to the name of an action to indicate that this action only applies to tablature notation.
+//: '%1' is the name of the action.
+static const TranslatableString X_TAB = TranslatableString("action", "%1 (TAB)");
+
+static const TranslatableString fret_X_TAB = TranslatableString("action", "Fret %1 (TAB)");
+static const TranslatableString enter_TAB_fret_X = TranslatableString("action", "Enter TAB: fret %1");
+
 static const std::vector<CommandInfo> s_commandInfos = {
     // copy, cut, paste, delete, cancel
     CommandInfo{
@@ -164,6 +171,35 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        MOVE_UP_COMMAND,
+        TranslatableString("action", "Move to staff above"),
+        TranslatableString("action", "Move selected note/rest to staff above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MOVE_DOWN_COMMAND,
+        TranslatableString("action", "Move to staff below"),
+        TranslatableString("action", "Move selected note/rest to staff below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_LEFT_COMMAND,
+        TranslatableString("action", "Move chord/rest left"),
+        TranslatableString("action", "Move chord/rest left"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SWAP_RIGHT_COMMAND,
+        TranslatableString("action", "Move chord/rest right"),
+        TranslatableString("action", "Move chord/rest right"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
         PITCH_UP_COMMAND,
         TranslatableString("action", "Pitch up"),
         TranslatableString("action", "Pitch up the current note"),
@@ -188,6 +224,34 @@ static const std::vector<CommandInfo> s_commandInfos = {
         PITCH_DOWN_OCTAVE_COMMAND,
         TranslatableString("action", "Pitch down octave"),
         TranslatableString("action", "Pitch down the current note by an octave"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_UP_DIATONIC_COMMAND,
+        TranslatableString("action", "Diatonic pitch up"),
+        TranslatableString("action", "Move pitch up diatonically"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_DOWN_DIATONIC_COMMAND,
+        TranslatableString("action", "Diatonic pitch down"),
+        TranslatableString("action", "Move pitch down diatonically"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_UP_DIATONIC_ALTERATIONS_COMMAND,
+        TranslatableString("action", "Diatonic pitch up (keep degree alterations)"),
+        TranslatableString("action", "Move pitch up diatonically (keep degree alterations)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_DOWN_DIATONIC_ALTERATIONS_COMMAND,
+        TranslatableString("action", "Diatonic pitch down (keep degree alterations)"),
+        TranslatableString("action", "Move pitch down diatonically (keep degree alterations)"),
         InputSchema(),
         Decoration()
     },
@@ -248,6 +312,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Toggle note input mode: insert (increases measure duration)"),
         InputSchema(),
         Decoration(IconCode::Code::NOTE_PLUS, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        TOGGLE_INSERT_MODE_COMMAND,
+        TranslatableString("action", "Insert/overwrite"),
+        TranslatableString("action", "Toggle note input mode: insert/overwrite"),
+        InputSchema(),
+        Decoration()
     },
     CommandInfo{
         REALTIME_ADVANCE_COMMAND,
@@ -347,6 +418,7 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration(IconCode::Code::NOTE_1024TH)
     },
+
     CommandInfo{
         SET_DOUBLE_DURATION_COMMAND,
         TranslatableString("action", "Double duration"),
@@ -444,6 +516,42 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Toggle accidental: double-sharp"),
         InputSchema(),
         Decoration(IconCode::Code::SHARP_DOUBLE)
+    },
+
+    CommandInfo{
+        ADD_SHARP2_COMMAND,
+        TranslatableString("action", "Add double-sharp"),
+        TranslatableString("action", "Add accidental: double-sharp"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHARP_COMMAND,
+        TranslatableString("action", "Add sharp"),
+        TranslatableString("action", "Add accidental: sharp"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_NAT_COMMAND,
+        TranslatableString("action", "Add natural"),
+        TranslatableString("action", "Add accidental: natural"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FLAT_COMMAND,
+        TranslatableString("action", "Add flat"),
+        TranslatableString("action", "Add accidental: flat"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FLAT2_COMMAND,
+        TranslatableString("action", "Add double-flat"),
+        TranslatableString("action", "Add accidental: double-flat"),
+        InputSchema(),
+        Decoration()
     },
     CommandInfo{
         TOGGLE_TIE_COMMAND,
@@ -587,6 +695,16 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Add note"),
         InputSchema({
             { "note", Arg(DataType::String, u"Note name (c, d, e, f, g, a, b)") },
+            { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_DRUM_NOTE_COMMAND,
+        TranslatableString("action", "Add drum note"),
+        TranslatableString("action", "Add drum note"),
+        InputSchema({
+            { "pitch", Arg(DataType::Integer, u"Drum pitch (e.g. 35, 36, 37, 38, 39, 40, 41)", Val(0), Val(127)) },
             { "mode", Arg(DataType::String, u"Adding mode (current, next, insert)") },
         }),
         Decoration()
@@ -961,6 +1079,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         InputSchema(),
         Decoration()
     },
+    CommandInfo{
+        GOTO_TOP_STAFF_COMMAND,
+        TranslatableString("action", "Go to top staff"),
+        TranslatableString("action", "Go to top staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GOTO_EMPTY_TRAILING_MEASURE_COMMAND,
+        TranslatableString("action", "Go to first empty trailing measure"),
+        TranslatableString("action", "Go to first empty trailing measure"),
+        InputSchema(),
+        Decoration()
+    },
 
     // selection commands
     CommandInfo{
@@ -1002,6 +1134,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         SELECT_SECTION_COMMAND,
         TranslatableString("action", "Select sectio&n"),
         TranslatableString("action", "Select section"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        GET_LOCATION_COMMAND,
+        TranslatableString("action", "Get location"),
+        TranslatableString("action", "Get location"),
         InputSchema(),
         Decoration()
     },
@@ -1777,7 +1916,1310 @@ static const std::vector<CommandInfo> s_commandInfos = {
         TranslatableString("action", "Mark irregular measures"),
         InputSchema(),
         Decoration(rcommand::Checkable::Yes)
-    }
+    },
+    CommandInfo{
+        TOGGLE_CONCERT_PITCH_COMMAND,
+        TranslatableString("action", "Concert pitch"),
+        TranslatableString("action", "Toggle concert pitch"),
+        InputSchema(),
+        Decoration(IconCode::Code::TUNING_FORK, rcommand::Checkable::Yes)
+    },
+    CommandInfo{
+        STAFF_EXPLODE_COMMAND,
+        TranslatableString("action", "&Explode"),
+        TranslatableString("action", "Explode"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        STAFF_IMPLODE_COMMAND,
+        TranslatableString("action", "&Implode"),
+        TranslatableString("action", "Implode"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add grace notes commands
+    CommandInfo{
+        ADD_ACCIACCATURA_COMMAND,
+        TranslatableString("action", "Acciaccatura"),
+        TranslatableString("action", "Add grace note: acciaccatura"),
+        InputSchema(),
+        Decoration(IconCode::Code::ACCIACCATURA)
+    },
+    CommandInfo{
+        ADD_APPOGGIATURA_COMMAND,
+        TranslatableString("action", "Appoggiatura"),
+        TranslatableString("action", "Add grace note: appoggiatura"),
+        InputSchema(),
+        Decoration(IconCode::Code::APPOGGIATURA)
+    },
+    CommandInfo{
+        ADD_GRACE4_COMMAND,
+        TranslatableString("action", "Grace: quarter"),
+        TranslatableString("action", "Add grace note: quarter"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE4)
+    },
+    CommandInfo{
+        ADD_GRACE16_COMMAND,
+        TranslatableString("action", "Grace: 16th"),
+        TranslatableString("action", "Add grace note: 16th"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE16)
+    },
+    CommandInfo{
+        ADD_GRACE32_COMMAND,
+        TranslatableString("action", "Grace: 32nd"),
+        TranslatableString("action", "Add grace note: 32nd"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE32)
+    },
+    CommandInfo{
+        ADD_GRACE8_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 8th after"),
+        TranslatableString("action", "Add grace note: eighth after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE8_AFTER)
+    },
+    CommandInfo{
+        ADD_GRACE16_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 16th after"),
+        TranslatableString("action", "Add grace note: 16th after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE16_AFTER)
+    },
+    CommandInfo{
+        ADD_GRACE32_AFTER_COMMAND,
+        TranslatableString("action", "Grace: 32nd after"),
+        TranslatableString("action", "Add grace note: 32nd after"),
+        InputSchema(),
+        Decoration(IconCode::Code::GRACE32_AFTER)
+    },
+
+    // add beam commands
+    CommandInfo{
+        ADD_BEAM_AUTO_COMMAND,
+        TranslatableString("action", "Auto beam"),
+        TranslatableString("action", "Add beam: auto"),
+        InputSchema(),
+        Decoration(IconCode::Code::AUTO_TEXT)
+    },
+    CommandInfo{
+        ADD_BEAM_NONE_COMMAND,
+        TranslatableString("action", "No beam"),
+        TranslatableString("action", "Add beam: none"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_NONE)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN_COMMAND,
+        TranslatableString("action", "Break beam left"),
+        TranslatableString("action", "Break beam left"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_LEFT)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN16_COMMAND,
+        TranslatableString("action", "Break inner beams (8th)"),
+        TranslatableString("action", "Break inner beams (eighth)"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_INNER_8TH)
+    },
+    CommandInfo{
+        ADD_BEAM_BEGIN32_COMMAND,
+        TranslatableString("action", "Break inner beams (16th)"),
+        TranslatableString("action", "Break inner beams (16th)"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_BREAK_INNER_16TH)
+    },
+    CommandInfo{
+        ADD_BEAM_MID_COMMAND,
+        TranslatableString("action", "Join beams"),
+        TranslatableString("action", "Join beams"),
+        InputSchema(),
+        Decoration(IconCode::Code::BEAM_JOIN)
+    },
+    CommandInfo{
+        ADD_BEAM_SELECTED_RANGE_COMMAND,
+        TranslatableString("action", "Beam selected range"),
+        TranslatableString("action", "Beam selected range"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add brackets commands
+    CommandInfo{
+        ADD_BRACKETS_COMMAND,
+        TranslatableString("action", "Add brackets to accidental"),
+        TranslatableString("action", "Add brackets to accidental"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACKET_PARENTHESES_SQUARE)
+    },
+    CommandInfo{
+        ADD_BRACES_COMMAND,
+        TranslatableString("action", "Add braces to element"),
+        TranslatableString("action", "Add braces to element"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACE)
+    },
+    CommandInfo{
+        ADD_PARENTHESES_COMMAND,
+        TranslatableString("action", "Add parentheses to element"),
+        TranslatableString("action", "Add parentheses to element"),
+        InputSchema(),
+        Decoration(IconCode::Code::BRACKET_PARENTHESES)
+    },
+
+    // add ornament commands
+    CommandInfo{
+        ADD_TURN_COMMAND,
+        TranslatableString("action", "Toggle turn"),
+        TranslatableString("action", "Add ornament: turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_INVERTED_COMMAND,
+        TranslatableString("action", "Toggle inverted turn"),
+        TranslatableString("action", "Add ornament: inverted turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_SLASH_COMMAND,
+        TranslatableString("action", "Toggle turn with slash"),
+        TranslatableString("action", "Add ornament: turn with slash"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        ADD_TURN_UP_COMMAND,
+        TranslatableString("action", "Toggle turn up"),
+        TranslatableString("action", "Add ornament: turn up"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TURN_INVERTED_UP_COMMAND,
+        TranslatableString("action", "Toggle vertical inverted turn"),
+        TranslatableString("action", "Add ornament: vertical inverted turn"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TRILL_COMMAND,
+        TranslatableString("action", "Toggle trill"),
+        TranslatableString("action", "Add ornament: trill"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHORT_TRILL_COMMAND,
+        TranslatableString("action", "Toggle short trill"),
+        TranslatableString("action", "Add ornament: short trill"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_MORDENT_COMMAND,
+        TranslatableString("action", "Toggle mordent"),
+        TranslatableString("action", "Add ornament: mordent"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_HAYDN_COMMAND,
+        TranslatableString("action", "Toggle Haydn ornament"),
+        TranslatableString("action", "Add ornament: Haydn ornament"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TREMBLEMENT_COMMAND,
+        TranslatableString("action", "Toggle tremblement"),
+        TranslatableString("action", "Add ornament: tremblement"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_PRALL_MORDENT_COMMAND,
+        TranslatableString("action", "Toggle prall mordent"),
+        TranslatableString("action", "Add ornament: prall mordent"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHAKE_COMMAND,
+        TranslatableString("action", "Toggle shake"),
+        TranslatableString("action", "Add ornament: shake"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_SHAKE_MUFFAT_COMMAND,
+        TranslatableString("action", "Toggle shake (Muffat)"),
+        TranslatableString("action", "Add ornament: shake (Muffat)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TREMBLEMENT_COUPERIN_COMMAND,
+        TranslatableString("action", "Toggle tremblement appuyé (Couperin)"),
+        TranslatableString("action", "Add ornament: tremblement appuyé (Couperin)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // text editing commands
+    CommandInfo{
+        EDITTEXT_TOGGLE_BOLD_COMMAND,
+        TranslatableString("action", "Toggle bold"),
+        TranslatableString("action", "Toggle bold"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_ITALIC_COMMAND,
+        TranslatableString("action", "Toggle italic"),
+        TranslatableString("action", "Toggle italic"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_UNDERLINE_COMMAND,
+        TranslatableString("action", "Toggle underline"),
+        TranslatableString("action", "Toggle underline"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_STRIKE_COMMAND,
+        TranslatableString("action", "Toggle strike"),
+        TranslatableString("action", "Toggle strike"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_SUBSCRIPT_COMMAND,
+        TranslatableString("action", "Toggle subscript"),
+        TranslatableString("action", "Toggle subscript"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EDITTEXT_TOGGLE_SUPERSCRIPT_COMMAND,
+        TranslatableString("action", "Toggle superscript"),
+        TranslatableString("action", "Toggle superscript"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // add to selection commands
+    CommandInfo{
+        ADD_TO_SELECTION_NEXT_CHORD_COMMAND,
+        TranslatableString("action", "Add next chord to selection"),
+        TranslatableString("action", "Add to selection: next note/rest"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_PREV_CHORD_COMMAND,
+        TranslatableString("action", "Add previous chord to selection"),
+        TranslatableString("action", "Add to selection: previous note/rest"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_NEXT_MEASURE_COMMAND,
+        TranslatableString("action", "Add next measure to selection"),
+        TranslatableString("action", "Add to selection: next measure"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_PREV_MEASURE_COMMAND,
+        TranslatableString("action", "Add previous measure to selection"),
+        TranslatableString("action", "Add to selection: previous measure"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_ABOVE_STAFF_COMMAND,
+        TranslatableString("action", "Add staff above to selection"),
+        TranslatableString("action", "Add to selection: staff above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BELOW_STAFF_COMMAND,
+        TranslatableString("action", "Add staff below to selection"),
+        TranslatableString("action", "Add to selection: staff below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BEGIN_SYSTEM_COMMAND,
+        TranslatableString("action", "Select to beginning of system"),
+        TranslatableString("action", "Add to selection: beginning of system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_END_SYSTEM_COMMAND,
+        TranslatableString("action", "Select to end of system"),
+        TranslatableString("action", "Add to selection: end of system"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_BEGIN_SCORE_COMMAND,
+        TranslatableString("action", "Select to beginning of score"),
+        TranslatableString("action", "Add to selection: beginning of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_TO_SELECTION_END_SCORE_COMMAND,
+        TranslatableString("action", "Select to end of score"),
+        TranslatableString("action", "Add to selection: end of score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        EXTEND_TO_NEXT_NOTE_COMMAND,
+        TranslatableString("action", "Extend to next note"),
+        TranslatableString("action", "Extend to next note"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        REMOVE_SELECTED_RANGE_COMMAND,
+        TranslatableString("action", "Remove selected ran&ge"),
+        TranslatableString("action", "Delete selected measures"),
+        InputSchema(),
+        Decoration(IconCode::Code::DELETE_TANK)
+    },
+    CommandInfo{
+        REMOVE_EMPTY_TRAILING_MEASURES_COMMAND,
+        TranslatableString("action", "Remove empty trailing meas&ures"),
+        TranslatableString("action", "Remove empty trailing measures"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SLASH_FILL_COMMAND,
+        TranslatableString("action", "Fill with &slashes"),
+        TranslatableString("action", "Fill with slashes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        SLASH_RHYTHM_COMMAND,
+        TranslatableString("action", "Toggle rhythmic sl&ash notation"),
+        TranslatableString("action", "Toggle rhythmic slash notation"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_SPELL_COMMAND,
+        TranslatableString("action", "&Optimize enharmonic spelling"),
+        TranslatableString("action", "Optimize enharmonic spelling"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_SPELL_SHARPS_COMMAND,
+        TranslatableString("action", "Respell pitches with &sharps"),
+        TranslatableString("action", "Respell pitches with sharps"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        PITCH_SPELL_FLATS_COMMAND,
+        TranslatableString("action", "Respell pitches with &flats"),
+        TranslatableString("action", "Respell pitches with flats"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ENHARMONIC_SPELL_BOTH_COMMAND,
+        TranslatableString("action", "Change enharmonic spelling (concert and transposed &pitch)"),
+        TranslatableString("action", "Change enharmonic spelling (concert and transposed pitch)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ENHARMONIC_SPELL_CURRENT_COMMAND,
+        TranslatableString("action", "Change enharmonic spelling (&current pitch mode only)"),
+        TranslatableString("action", "Change enharmonic spelling (current pitch mode only)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        REGROUP_RHYTHMS_COMMAND,
+        TranslatableString("action", "Regroup &rhythms"),
+        TranslatableString("action", "Regroup rhythms"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        RESEQUENCE_REHEARSAL_MARKS_COMMAND,
+        TranslatableString("action", "Resequence re&hearsal marks"),
+        TranslatableString("action", "Resequence rehearsal marks"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        UNROLL_REPEATS_COMMAND,
+        TranslatableString("action", "U&nroll repeats"),
+        TranslatableString("action", "Unroll repeats"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        COPY_LYRICS_COMMAND,
+        TranslatableString("action", "Copy &lyrics to clipboard"),
+        TranslatableString("action", "Copy lyrics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        REPEAT_SELECTION_COMMAND,
+        TranslatableString("action", "Repeat selection"),
+        TranslatableString("action", "Repeat selection"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        ADD_UP_BOW_COMMAND,
+        TranslatableString("action", "Toggle up bow"),
+        TranslatableString("action", "Add bowing: up bow"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_DOWN_BOW_COMMAND,
+        TranslatableString("action", "Toggle down bow"),
+        TranslatableString("action", "Add bowing: down bow"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TRANSPOSE_UP_COMMAND,
+        TranslatableString("action", "Transpose up"),
+        TranslatableString("action", "Transpose up a semitone"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TRANSPOSE_DOWN_COMMAND,
+        TranslatableString("action", "Transpose down"),
+        TranslatableString("action", "Transpose down a semitone"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_MMREST_COMMAND,
+        TranslatableString("action", "Toggle multimeasure rests"),
+        TranslatableString("action", "Toggle multimeasure rests"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_HIDE_EMPTY_COMMAND,
+        TranslatableString("action", "Toggle empty staves"),
+        TranslatableString("action", "Show/hide empty staves"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        MIRROR_NOTEHEAD_COMMAND,
+        TranslatableString("action", "Mirror notehead"),
+        TranslatableString("action", "Mirror notehead"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // clef commands
+    CommandInfo{
+        ADD_CLEF_VIOLIN_COMMAND,
+        TranslatableString("action", "Add treble clef"),
+        TranslatableString("action", "Add clef: treble"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_CLEF_BASS_COMMAND,
+        TranslatableString("action", "Add bass clef"),
+        TranslatableString("action", "Add clef: bass"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo{
+        SET_VISIBLE_COMMAND,
+        TranslatableString("action", "Set visible"),
+        TranslatableString("action", "Make selected element(s) visible"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        UNSET_VISIBLE_COMMAND,
+        TranslatableString("action", "Set invisible"),
+        TranslatableString("action", "Make selected element(s) invisible"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        TOGGLE_AUTOPLACE_COMMAND,
+        TranslatableString("action", "Toggle automatic placement for selected elements"),
+        TranslatableString("action", "Toggle automatic placement for selected elements"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        AUTOPLACE_ENABLED_COMMAND,
+        TranslatableString("action", "Toggle automatic placement for entire score"),
+        TranslatableString("action", "Toggle automatic placement for entire score"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_FULL_MEASURE_REST_COMMAND,
+        TranslatableString("action", "Full measure rest"),
+        TranslatableString("action", "Insert full measure rest"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // interval commands
+    CommandInfo{
+        ADD_INTERVAL_PLUS_1_COMMAND,
+        TranslatableString("action", "&Unison"),
+        TranslatableString("action", "Enter interval: unison"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_2_COMMAND,
+        TranslatableString("action", "Se&cond above"),
+        TranslatableString("action", "Enter interval: second above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_3_COMMAND,
+        TranslatableString("action", "Thir&d above"),
+        TranslatableString("action", "Enter interval: third above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_4_COMMAND,
+        TranslatableString("action", "Fou&rth above"),
+        TranslatableString("action", "Enter interval: fourth above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_5_COMMAND,
+        TranslatableString("action", "Fift&h above"),
+        TranslatableString("action", "Enter interval: fifth above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_6_COMMAND,
+        TranslatableString("action", "Si&xth above"),
+        TranslatableString("action", "Enter interval: sixth above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_7_COMMAND,
+        TranslatableString("action", "Seve&nth above"),
+        TranslatableString("action", "Enter interval: seventh above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_8_COMMAND,
+        TranslatableString("action", "Octave &above"),
+        TranslatableString("action", "Enter interval: octave above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_9_COMMAND,
+        TranslatableString("action", "Ninth abov&e"),
+        TranslatableString("action", "Enter interval: ninth above"),
+
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_PLUS_10_COMMAND,
+        TranslatableString("action", "Tenth above"),
+        TranslatableString("action", "Enter interval: tenth above"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_2_COMMAND,
+        TranslatableString("action", "&Second below"),
+        TranslatableString("action", "Enter interval: second below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_3_COMMAND,
+        TranslatableString("action", "&Third below"),
+        TranslatableString("action", "Enter interval: third below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_4_COMMAND,
+        TranslatableString("action", "F&ourth below"),
+        TranslatableString("action", "Enter interval: fourth below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_5_COMMAND,
+        TranslatableString("action", "&Fifth below"),
+        TranslatableString("action", "Enter interval: fifth below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_6_COMMAND,
+        TranslatableString("action", "S&ixth below"),
+        TranslatableString("action", "Enter interval: sixth below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_7_COMMAND,
+        TranslatableString("action", "Se&venth below"),
+        TranslatableString("action", "Enter interval: seventh below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_8_COMMAND,
+        TranslatableString("action", "Octave &below"),
+        TranslatableString("action", "Enter interval: octave below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_9_COMMAND,
+        TranslatableString("action", "Ninth belo&w"),
+        TranslatableString("action", "Enter interval: ninth below"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        ADD_INTERVAL_MINUS_10_COMMAND,
+        TranslatableString("action", "Tenth below"),
+        TranslatableString("action", "Enter interval: tenth below"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // TAB commands
+    CommandInfo {
+        SET_DURATION_WHOLE_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Whole note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: whole note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_WHOLE)
+    },
+    CommandInfo {
+        SET_DURATION_HALF_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Half note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: half note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_HALF)
+    },
+    CommandInfo {
+        SET_DURATION_QUARTER_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Quarter note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: quarter note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_QUARTER)
+    },
+    CommandInfo {
+        SET_DURATION_EIGHTH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Eighth note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: eighth note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_8TH)
+    },
+    CommandInfo {
+        SET_DURATION_16TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "16th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 16th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_16TH)
+    },
+    CommandInfo {
+        SET_DURATION_32ND_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "32nd note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 32nd note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_32ND)
+    },
+    CommandInfo {
+        SET_DURATION_64TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "64th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 64th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_64TH)
+    },
+    CommandInfo {
+        SET_DURATION_128TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "128th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 128th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_128TH)
+    },
+    CommandInfo {
+        SET_DURATION_256TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "256th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 256th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_256TH)
+    },
+    CommandInfo {
+        SET_DURATION_512TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "512th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 512th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_512TH)
+    },
+    CommandInfo {
+        SET_DURATION_1024TH_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "1024th note")),
+        X_TAB.arg(TranslatableString("action", "Set duration: 1024th note")),
+        InputSchema(),
+        Decoration(IconCode::Code::NOTE_1024TH)
+    },
+    CommandInfo {
+        ENTER_REST_TAB_COMMAND,
+        X_TAB.arg(TranslatableString("action", "Rest")),
+        X_TAB.arg(TranslatableString("action", "Enter rest")),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        ENTER_FRET_0_COMMAND,
+        fret_X_TAB.arg(0),
+        enter_TAB_fret_X.arg(0),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_1_COMMAND,
+        fret_X_TAB.arg(1),
+        enter_TAB_fret_X.arg(1),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_2_COMMAND,
+        fret_X_TAB.arg(2),
+        enter_TAB_fret_X.arg(2),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_3_COMMAND,
+        fret_X_TAB.arg(3),
+        enter_TAB_fret_X.arg(3),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_4_COMMAND,
+        fret_X_TAB.arg(4),
+        enter_TAB_fret_X.arg(4),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_5_COMMAND,
+        fret_X_TAB.arg(5),
+        enter_TAB_fret_X.arg(5),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_6_COMMAND,
+        fret_X_TAB.arg(6),
+        enter_TAB_fret_X.arg(6),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_7_COMMAND,
+        fret_X_TAB.arg(7),
+        enter_TAB_fret_X.arg(7),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_8_COMMAND,
+        fret_X_TAB.arg(8),
+        enter_TAB_fret_X.arg(8),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_9_COMMAND,
+        fret_X_TAB.arg(9),
+        enter_TAB_fret_X.arg(9),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_10_COMMAND,
+        fret_X_TAB.arg(10),
+        enter_TAB_fret_X.arg(10),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_11_COMMAND,
+        fret_X_TAB.arg(11),
+        enter_TAB_fret_X.arg(11),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_12_COMMAND,
+        fret_X_TAB.arg(12),
+        enter_TAB_fret_X.arg(12),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_13_COMMAND,
+        fret_X_TAB.arg(13),
+        enter_TAB_fret_X.arg(13),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ENTER_FRET_14_COMMAND,
+        fret_X_TAB.arg(14),
+        enter_TAB_fret_X.arg(14),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        ADD_STANDARD_BEND_COMMAND,
+        TranslatableString("action", "Standard bend"),
+        TranslatableString("action", "Add standard bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_BEND_REGULAR)
+    },
+    CommandInfo {
+        ADD_PRE_BEND_COMMAND,
+        TranslatableString("action", "Pre-bend"),
+        TranslatableString("action", "Add pre-bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_PRE_BEND)
+    },
+    CommandInfo {
+        ADD_GRACE_NOTE_BEND_COMMAND,
+        TranslatableString("action", "Grace note bend"),
+        TranslatableString("action", "Add grace note bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_GRACE_NOTE_BEND)
+    },
+    CommandInfo {
+        ADD_SLIGHT_BEND_COMMAND,
+        TranslatableString("action", "Slight bend"),
+        TranslatableString("action", "Add slight bend"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_SLIGHT_BEND)
+    },
+    CommandInfo {
+        ADD_DIVE_COMMAND,
+        //: Standard guitar dive, i.e. a movement of the tremolo bar between two pitches
+        TranslatableString("action", "Dive"),
+        TranslatableString("action", "Add dive"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_DIVE_REGULAR)
+    },
+    CommandInfo {
+        ADD_PRE_DIVE_COMMAND,
+        //: Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note
+        TranslatableString("action", "Pre-dive"),
+        TranslatableString("action", "Add pre-dive"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_PRE_DIVE)
+    },
+    CommandInfo {
+        ADD_DIP_COMMAND,
+        //: Dip, i.e. a quick touch of the tremolo bar after the note is picked
+        TranslatableString("action", "Dip"),
+        TranslatableString("action", "Add dip"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_DIP_DOWN)
+    },
+    CommandInfo {
+        ADD_SCOOP_COMMAND,
+        //: Scoop, i.e. a quick movement of the tremolo bar at the start of the note
+        TranslatableString("action", "Scoop"),
+        TranslatableString("action", "Add scoop"),
+        InputSchema(),
+        Decoration(IconCode::Code::GUITAR_SCOOP)
+    },
+    CommandInfo {
+        ADD_HAMMER_ON_PULL_OFF_COMMAND,
+        TranslatableString("action", "Hammer-on/pull-off"),
+        TranslatableString("action", "Add hammer-on/pull-off"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        GOTO_STRING_ABOVE_COMMAND,
+        TranslatableString("action", "String above (TAB)"),
+        TranslatableString("action", "Go to string above (TAB)"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        GOTO_STRING_BELOW_COMMAND,
+        TranslatableString("action", "String below (TAB)"),
+        TranslatableString("action", "Go to string below (TAB)"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        TOGGLE_AUTOMATION_COMMAND,
+        TranslatableString("action", "Automation"),
+        TranslatableString("action", "Toggle automation"),
+        InputSchema(),
+        Decoration(IconCode::Code::AUTOMATION, rcommand::Checkable::Yes)
+    },
+    CommandInfo {
+        SELECT_AUTOMATION_TYPE_COMMAND,
+        TranslatableString::untranslatable("Automation type"),
+        TranslatableString::untranslatable("Select automation type"),
+        InputSchema({
+            { "type", Arg(DataType::String, u"Automation type (dynamics, volume, pan)") },
+        }),
+        Decoration(rcommand::Checkable::Yes)
+    },
+
+    // screen commands
+
+    CommandInfo{
+        SCREEN_PUT_NOTE_COMMAND,
+        TranslatableString("action", "Put note"),
+        TranslatableString("action", "Put note"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X position") },
+            { "pos_y", Arg(DataType::Float, u"Y position") },
+            { "replace", Arg(DataType::Boolean, u"Replace") },
+            { "insert", Arg(DataType::Boolean, u"Insert") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_REMOVE_NOTE_COMMAND,
+        TranslatableString("action", "Remove note"),
+        TranslatableString("action", "Remove note"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X position") },
+            { "pos_y", Arg(DataType::Float, u"Y position") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_EDIT_TEXT_COMMAND,
+        TranslatableString("action", "Edit text"),
+        TranslatableString("action", "Edit text"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X cursor position") },
+            { "pos_y", Arg(DataType::Float, u"Y cursor position") },
+        }),
+        Decoration()
+    },
+    CommandInfo{
+        SCREEN_EDIT_ELEMENT_COMMAND,
+        TranslatableString("action", "Edit element"),
+        TranslatableString("action", "Edit element"),
+        InputSchema({
+            { "pos_x", Arg(DataType::Float, u"X cursor position") },
+            { "pos_y", Arg(DataType::Float, u"Y cursor position") },
+        }),
+        Decoration()
+    },
+
+    // view commands
+    CommandInfo {
+        ZOOM_IN_COMMAND,
+        TranslatableString("action", "Zoom in"),
+        TranslatableString("action", "Zoom in"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_IN)
+    },
+    CommandInfo {
+        ZOOM_OUT_COMMAND,
+        TranslatableString("action", "Zoom out"),
+        TranslatableString("action", "Zoom out"),
+        InputSchema(),
+        Decoration(IconCode::Code::ZOOM_OUT)
+    },
+    CommandInfo {
+        ZOOM_TO_100_COMMAND,
+        TranslatableString("action", "Zoom to 100%"),
+        TranslatableString("action", "Zoom to 100%"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PAGE_WIDTH_COMMAND,
+        TranslatableString("action", "Zoom to page width"),
+        TranslatableString("action", "Zoom to page width"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_WHOLE_PAGE_COMMAND,
+        TranslatableString("action", "Zoom to whole page"),
+        TranslatableString("action", "Zoom to whole page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_TWO_PAGES_COMMAND,
+        TranslatableString("action", "Zoom to two pages"),
+        TranslatableString("action", "Zoom to two pages"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        ZOOM_TO_PERCENT_COMMAND,
+        TranslatableString("action", "Zoom to percent"),
+        TranslatableString("action", "Zoom to percent"),
+        InputSchema({
+            { "percent", Arg(DataType::Integer, u"Percent") },
+        }),
+        Decoration()
+    },
+
+    CommandInfo {
+        VIEW_MODE_PAGE_COMMAND,
+        TranslatableString("action", "Page view"),
+        TranslatableString("action", "Display page view"),
+        InputSchema(),
+        Decoration(IconCode::Code::PAGE_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_FLOAT_COMMAND,
+        TranslatableString("action", "Floating"),
+        TranslatableString("action", "Display floating view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        VIEW_MODE_CONTINUOUS_COMMAND,
+        TranslatableString("action", "Continuous view (horizontal)"),
+        TranslatableString("action", "Display continuous view (horizontal)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW)
+    },
+    CommandInfo {
+        VIEW_MODE_SINGLE_COMMAND,
+        TranslatableString("action", "Continuous view (vertical)"),
+        TranslatableString("action", "Display continuous view (vertical)"),
+        InputSchema(),
+        Decoration(IconCode::Code::CONTINUOUS_VIEW_VERTICAL)
+    },
+
+    CommandInfo {
+        NEXT_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Next"),
+        TranslatableString("action", "Jump to next screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_SCREEN_COMMAND,
+        TranslatableString("action", "Screen: Previous"),
+        TranslatableString("action", "Jump to previous screen"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        NEXT_PAGE_COMMAND,
+        TranslatableString("action", "Page: Next"),
+        TranslatableString("action", "Jump to next page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        PREV_PAGE_COMMAND,
+        TranslatableString("action", "Page: Previous"),
+        TranslatableString("action", "Jump to previous page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        TOP_OF_FIRST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Top of first"),
+        TranslatableString("action", "Jump to top of first page"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        BOTTOM_OF_LAST_PAGE_COMMAND,
+        TranslatableString("action", "Page: Bottom of last"),
+        TranslatableString("action", "Jump to bottom of last page"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        CONTEXT_MENU_OF_SELECTION_COMMAND,
+        TranslatableString("action", "Context menu of selection"),
+        TranslatableString("action", "Open context menu of selection"),
+        InputSchema(),
+        Decoration()
+    },
+
+    CommandInfo {
+        SHOW_SEARCH_COMMAND,
+        TranslatableString("action", "Show search"),
+        TranslatableString("action", "Show search"),
+        InputSchema(),
+        Decoration()
+    },
+
+    // piano keyboard commands
+    CommandInfo {
+        PIANO_KEYBOARD_SET_NUMBER_OF_KEYS_COMMAND,
+        TranslatableString("action", "Piano keyboard: Set number of keys"),
+        TranslatableString("action", "Set number of keys for piano keyboard"),
+        InputSchema({
+            { "keys", Arg(DataType::Integer, u"Number of keys") },
+        }),
+        Decoration()
+    },
+
+    // diagnostic commands
+    CommandInfo {
+        DIAGNOSTIC_VIEW_REDRAW_COMMAND,
+        TranslatableString("action", "View redraw"),
+        TranslatableString("action", "Diagnostic: Redraw the view"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show element bounding rects"),
+        TranslatableString("action", "Diagnostic: Show element bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_ELEMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color element shapes"),
+        TranslatableString("action", "Diagnostic: Color element shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Show segment shapes"),
+        TranslatableString("action", "Diagnostic: Show segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        COLOR_SEGMENT_SHAPES_COMMAND,
+        TranslatableString("action", "Color segment shapes"),
+        TranslatableString("action", "Diagnostic: Color segment shapes"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SKYLINES_COMMAND,
+        TranslatableString("action", "Show Skylines"),
+        TranslatableString("action", "Diagnostic: Show Skylines"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_SYSTEM_BOUNDING_RECTS_COMMAND,
+        TranslatableString("action", "Show system bounding rects"),
+        TranslatableString("action", "Diagnostic: Show system bounding rects"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ELEMENT_MASKS_COMMAND,
+        TranslatableString("action", "Show element masks"),
+        TranslatableString("action", "Diagnostic: Show element masks"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_LINE_ATTACH_POINTS_COMMAND,
+        TranslatableString("action", "Show line attach points"),
+        TranslatableString("action", "Diagnostic: Show line attach points"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_EMPTY_STAFF_COMMAND,
+        TranslatableString("action", "Mark empty staff"),
+        TranslatableString("action", "Diagnostic: Mark empty staff"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        MARK_CORRUPTED_MEASURES_COMMAND,
+        TranslatableString("action", "Mark corrupted measures"),
+        TranslatableString("action", "Diagnostic: Mark corrupted measures"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_GAP_RESTS_COMMAND,
+        TranslatableString("action", "Show gap rests"),
+        TranslatableString("action", "Diagnostic: Show gap rests"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        SHOW_ORIGIN_AND_COMBINED_COMMAND,
+        TranslatableString("action", "Show origin and combined"),
+        TranslatableString("action", "Diagnostic: Show origin and combined"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
+        CHECK_FOR_SCORE_CORRUPTIONS_COMMAND,
+        TranslatableString("action", "Check for score corruptions"),
+        TranslatableString("action", "Diagnostic: Check for score corruptions"),
+        InputSchema(),
+        Decoration()
+    },
 };
 
 std::string NotationCommandsRegister::moduleName() const

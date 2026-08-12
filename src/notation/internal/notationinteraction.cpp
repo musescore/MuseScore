@@ -101,7 +101,7 @@
 #include "engraving/editing/edithairpin.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editspanner.h"
-#include "engraving/editing/editbrackets.h"
+#include "engraving/editing/editaccidentalbrackets.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editvisibility.h"
@@ -981,6 +981,11 @@ void NotationInteraction::select(SelectionTarget target)
     m_selection->select(target);
 }
 
+void NotationInteraction::addToSelection(SelectionTarget target)
+{
+    m_selection->addToSelection(target);
+}
+
 void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 {
     if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
@@ -1590,6 +1595,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
         case ActionIconType::FFRAME:
         case ActionIconType::MEASURE:
         case ActionIconType::SYSTEM_LOCK:
+        case ActionIconType::PAGE_LOCK:
         case ActionIconType::STAFF_TYPE_CHANGE: {
             edd.ed.modifiers = keyboardModifier(modifiers);
             return prepareDropMeasureAnchorElement(pos);
@@ -2331,6 +2337,11 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
             return;
         }
+        case ActionIconType::PAGE_LOCK: {
+            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+            EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
+            return;
+        }
         case ActionIconType::PARENTHESES: {
             if (!sel.noteList().empty()) {
                 EditParentheses::addParenthesesToNotes(tx, score);
@@ -2577,6 +2588,10 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
         switch (actionType) {
         case ActionIconType::SYSTEM_LOCK: {
             EditSystemLocks::toggleSystemLock(tx, score, score->selection().selectedSystems());
+            return;
+        }
+        case ActionIconType::PAGE_LOCK: {
+            EditPageLocks::togglePageLock(tx, score, score->selection().pagesContainingSelection());
             return;
         }
         case ActionIconType::PARENTHESES: {
@@ -3217,8 +3232,8 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
 
     resetAnchorLines();
 
-    if (edd.dropRect.isValid()) {
-        edd.dropRect = RectF();
+    if (!edd.dropRects.empty()) {
+        edd.dropRects.clear();
     }
 
     if (notify) {
@@ -3226,8 +3241,8 @@ void NotationInteraction::setDropTarget(EngravingItem* item, bool notify)
     }
 }
 
-//! NOTE: Copied from ScoreView::setDropRectangle
-void NotationInteraction::setDropRect(const RectF& rect)
+//! NOTE: Copied from ScoreView::setDropRectangles
+void NotationInteraction::setDropRects(const std::vector<RectF>& rects)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return;
@@ -3235,14 +3250,16 @@ void NotationInteraction::setDropRect(const RectF& rect)
 
     ElementDropData& edd = m_dropData.elementDropData.value();
 
-    if (edd.dropRect == rect) {
+    if (edd.dropRects == rects) {
         return;
     }
 
-    edd.dropRect = rect;
+    edd.dropRects = rects;
 
-    if (rect.isValid()) {
-        score()->addRefresh(rect);
+    for (const RectF& rect : rects) {
+        if (rect.isValid()) {
+            score()->addRefresh(rect);
+        }
     }
 
     if (edd.dropTarget) {
@@ -3596,8 +3613,10 @@ void NotationInteraction::drawDrop(muse::draw::Painter* painter)
     if (m_dropData.elementDropData.has_value()) {
         const ElementDropData& edd = m_dropData.elementDropData.value();
 
-        if (edd.dropRect.isValid()) {
-            painter->fillRect(edd.dropRect, configuration()->dropRectColor());
+        for (const RectF& rect : edd.dropRects) {
+            if (rect.isValid()) {
+                painter->fillRect(rect, configuration()->dropRectColor());
+            }
         }
     }
 
@@ -3682,52 +3701,6 @@ void NotationInteraction::expandSelection(ExpandSelectionMode mode)
     }
 }
 
-void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type)
-{
-    ChordRest* cr = activeCr(score());
-    if (!cr) {
-        return;
-    }
-    ChordRest* el = 0;
-    switch (type) {
-    case MoveSelectionType::Chord: {
-        ChordRestNavigateOptions options;
-        options.skipGrace = true;
-        if (d == MoveDirection::Right) {
-            el = mu::engraving::Navigation::nextChordRest(cr, options);
-        } else {
-            el = mu::engraving::Navigation::prevChordRest(cr, options);
-        }
-        break;
-    }
-    case MoveSelectionType::Measure:
-        if (d == MoveDirection::Right) {
-            el = mu::engraving::Navigation::nextMeasure(score(), cr, true, true);
-        } else {
-            el = mu::engraving::Navigation::prevMeasure(score(), cr, true);
-        }
-        break;
-    case MoveSelectionType::Track:
-        if (d == MoveDirection::Up) {
-            el = mu::engraving::Navigation::upStaff(cr);
-        } else {
-            el = mu::engraving::Navigation::downStaff(score(), cr);
-        }
-    case MoveSelectionType::EngravingItem:
-    case MoveSelectionType::Frame:
-    case MoveSelectionType::System:
-    case MoveSelectionType::String:
-    case MoveSelectionType::Undefined:
-        break;
-    }
-
-    if (el) {
-        select({ el }, SelectType::RANGE, el->staffIdx());
-        showItem(el);
-        resetHitElementContext();
-    }
-}
-
 bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
 {
     if (type != MoveSelectionType::EngravingItem) {
@@ -3755,41 +3728,6 @@ bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
 void NotationInteraction::moveSelectionDeprecated(MoveDirection d, MoveSelectionType type)
 {
     m_selection->moveSelection(d, type);
-}
-
-void NotationInteraction::selectTopStaff()
-{
-    EngravingItem* el = Navigation::topStaff(score(), activeCr(score()));
-    if (score()->noteEntryMode()) {
-        score()->inputState().moveInputPos(el);
-    }
-
-    if (el->isChord()) {
-        el = mu::engraving::toChord(el)->upNote();
-    }
-
-    select({ el }, SelectType::SINGLE, 0);
-    showItem(el);
-    resetHitElementContext();
-}
-
-void NotationInteraction::selectEmptyTrailingMeasure()
-{
-    ChordRest* cr = activeCr(score());
-    const Measure* ftm = score()->firstTrailingMeasure(cr ? &cr : nullptr);
-    if (!ftm) {
-        ftm = score()->lastMeasure();
-    }
-    if (ftm) {
-        if (score()->style().styleB(mu::engraving::Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
-            ftm = ftm->coveringMMRestOrThis();
-        }
-        EngravingItem* el
-            = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(mu::engraving::trackZeroVoice(cr->track()), false);
-        score()->inputState().moveInputPos(el);
-        select({ el }, SelectType::SINGLE);
-        resetHitElementContext();
-    }
 }
 
 static ChordRest* asChordRest(EngravingItem* e)
@@ -4292,7 +4230,7 @@ bool NotationInteraction::doTextEdit(QKeyEvent* event, TextBase* tb)
     const int col = static_cast<int>(cursor->column());
     if (col > 1) {
         const String prev = cursor->extractText(row, col - 2, row, col - 1);
-        useCloseQuote = prev != String(" ");
+        useCloseQuote = !prev.isEmpty() && !prev.front().isSpace();
     }
 
     //: Means: an editing operation triggered by a keystroke
@@ -5460,12 +5398,12 @@ void NotationInteraction::addBracketsToSelection(BracketsType type)
     switch (type) {
     case BracketsType::Brackets:
         transaction(TranslatableString("undoableAction", "Add brackets"), [&](auto& tx) {
-            EditBrackets::addBracket(tx, score());
+            EditAccidentalBrackets::addBracket(tx, score());
         });
         break;
     case BracketsType::Braces:
         transaction(TranslatableString("undoableAction", "Add braces"), [&](auto& tx) {
-            EditBrackets::addBraces(tx, score());
+            EditAccidentalBrackets::addBraces(tx, score());
         });
         break;
     case BracketsType::Parentheses:

@@ -36,6 +36,8 @@ class ChordTextLineBase : public TextLineBase
 public:
     ChordTextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
 protected:
     friend class TextLineBaseSegment;
 

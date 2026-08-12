@@ -38,6 +38,10 @@ Rectangle {
 
     signal closed()
 
+    function show() {
+        privateProperties.show()
+    }
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "SearchPopup"
         enabled: root.visible
@@ -62,10 +66,6 @@ Rectangle {
 
     SearchPopupModel {
         id: model
-
-        onShowPopupRequested: {
-            privateProperties.show()
-        }
     }
 
     Row {

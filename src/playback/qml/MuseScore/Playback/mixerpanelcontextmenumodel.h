@@ -22,16 +22,14 @@
 
 #pragma once
 
-#include "actions/actionable.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
 
-#include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackconfiguration.h"
 
 #include "playback/playbacktypes.h"
 
 namespace mu::playback {
-class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -48,7 +46,6 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     QML_ELEMENT
 
     muse::GlobalInject<playback::IPlaybackConfiguration> configuration;
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit MixerPanelContextMenuModel(QObject* parent = nullptr);
@@ -82,10 +79,6 @@ private:
     muse::uicomponents::MenuItem* buildSectionVisibleItem(MixerSectionType sectionType);
     muse::uicomponents::MenuItem* buildAuxSendVisibleItem(muse::audio::aux_channel_idx_t index);
     muse::uicomponents::MenuItem* buildAuxChannelVisibleItem(muse::audio::aux_channel_idx_t index);
-
-    void toggleMixerSection(const muse::actions::ActionData& args);
-    void toggleAuxSend(const muse::actions::ActionData& args);
-    void toggleAuxChannel(const muse::actions::ActionData& args);
 
     void emitMixerSectionVisibilityChanged(MixerSectionType sectionType);
 

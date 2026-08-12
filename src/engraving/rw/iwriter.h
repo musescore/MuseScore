@@ -24,8 +24,10 @@
 
 #include <memory>
 #include <variant>
+#include <vector>
 
 #include "global/io/iodevice.h"
+#include "global/types/bytearray.h"
 #include "xmlwriter.h"
 
 namespace mu::engraving {
@@ -33,16 +35,29 @@ class Score;
 class EngravingItem;
 class Segment;
 class SelectionFilter;
+struct SelectedSymbol;
+}
+
+namespace mu::engraving::write {
+class WriteContext;
 }
 
 namespace mu::engraving::rw {
 struct WriteInOutData;
+
 class IWriter
 {
 public:
     virtual ~IWriter() = default;
 
     virtual bool writeScore(Score* score, muse::io::IODevice* device, WriteInOutData* out = nullptr) = 0;
+
+    virtual muse::ByteArray writeStaffSelection(Score* score, const SelectionFilter& filter, staff_idx_t staffStart, staff_idx_t staffEnd,
+                                                const Fraction& tickStart, const Fraction& tickEnd, Segment* startSegment,
+                                                Segment* endSegment) = 0;
+
+    virtual muse::ByteArray writeSymbolListSelection(track_idx_t fromTrack, track_idx_t toTrack,
+                                                     const std::vector<SelectedSymbol>& symbols) = 0;
 
     using Supported = std::variant<std::monostate
                                    >;
@@ -67,11 +82,10 @@ public:
         doWriteItem(static_cast<const EngravingItem*>(item), xml);
     }
 
-    virtual void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool,
-                               bool, Fraction& curTick) = 0;
-
 private:
     virtual void doWriteItem(const EngravingItem* item, XmlWriter& xml) = 0;
+    virtual void writeSegments(XmlWriter& xml, write::WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool,
+                               bool) = 0;
 };
 
 using IWriterPtr = std::shared_ptr<IWriter>;

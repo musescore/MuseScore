@@ -27,7 +27,7 @@ import Muse.UiComponents
 
 Rectangle {
     id: root
-    height: parent.height
+    height: parent ? parent.height : 0
     color: ui.theme.backgroundSecondaryColor
 
     default property alias contentData: content.data

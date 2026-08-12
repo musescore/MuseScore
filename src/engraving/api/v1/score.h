@@ -440,6 +440,14 @@ public:
     */
     Q_INVOKABLE void makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last);
 
+    /** APIDOC
+     * List of bracket items for staffIdx
+     * @method
+     * @param {Number} staffIdx Staff index
+     * @since 5.0
+    */
+    Q_INVOKABLE QQmlListProperty<EngravingItem> brackets(int staffIdx);
+
     QQmlListProperty<apiv1::Spanner> spanners();
 
     int harmonyCount() const { return score()->harmonyCount(); }

@@ -205,6 +205,22 @@ TEST_F(GuitarBendImporter_Tests, gpPrebendReleaseBend) {
 TEST_F(GuitarBendImporter_Tests, gpSlightBendTied) {
     gpReadTest(u"slight_bend_tied", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpSlightBendHold) {
+    gpReadTest(u"slight_bend_hold", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpTiedBendTieBack) {
+    gpReadTest(u"tied_bend_tieback", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpTiedChordSlightBend) {
+    gpReadTest(u"tied_chord_slight_bend", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpBendChordTied) {
+    gpReadTest(u"bend_chord_tied", u"gp");
+}
 #endif
 
 TEST_F(GuitarBendImporter_Tests, gpSimpleDive) {
@@ -245,6 +261,10 @@ TEST_F(GuitarBendImporter_Tests, gpPrediveDive) {
 
 TEST_F(GuitarBendImporter_Tests, gpPrediveRelease) {
     gpReadTest(u"predive_release", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPrediveNonNeutral) {
+    gpReadTest(u"predive_non_neutral", u"gp");
 }
 
 TEST_F(GuitarBendImporter_Tests, gpSimpleDiveTied) {
@@ -305,5 +325,49 @@ TEST_F(GuitarBendImporter_Tests, gpDiveTiedPrediveReturn) {
 
 TEST_F(GuitarBendImporter_Tests, gpDiveReturnDifferentFret) {
     gpReadTest(u"dive_return_different_fret", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveReturnTied) {
+    gpReadTest(u"dive_return_tied", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveReturnTiedDip) {
+    gpReadTest(u"dive_return_tied_dip", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveReturnTiedDipChain) {
+    gpReadTest(u"dive_return_tied_dip_chain", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveTiedDip) {
+    gpReadTest(u"dive_tied_dip", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveDipTiedContinuation) {
+    gpReadTest(u"dive_dip_tied_continuation", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveReturnNeutralPitch) {
+    gpReadTest(u"dive_return_neutral_pitch", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveGlissando) {
+    gpReadTest(u"dive_glissando", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveReturnUpGlissando) {
+    gpReadTest(u"dive_return_up_glissando", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveBend) {
+    gpReadTest(u"dive_bend", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveCrossZeroUp) {
+    gpReadTest(u"dive_cross_zero_up", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpDiveArtificialHarmonic) {
+    gpReadTest(u"dive_artificial_harmonic", u"gp");
 }
 }

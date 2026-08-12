@@ -46,9 +46,8 @@ double SystemHeaderLayout::layoutBrackets(System* system, LayoutContext& ctx)
     bl.swap(system->brackets());
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        const Staff* s = ctx.dom().staff(staffIdx);
         for (size_t i = 0; i < columns; ++i) {
-            for (auto bi : s->brackets()) {
+            for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
@@ -178,9 +177,8 @@ void SystemHeaderLayout::addBrackets(System* system, Measure* measure, LayoutCon
     bl.swap(system->brackets());
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        const Staff* s = ctx.dom().staff(staffIdx);
         for (size_t i = 0; i < columns; ++i) {
-            for (auto bi : s->brackets()) {
+            for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
@@ -210,7 +208,7 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
 
     size_t columns = 0;
     for (const Staff* staff : ctx.dom().staves()) {
-        for (const BracketItem* bi : staff->brackets()) {
+        for (const BracketItem* bi : ctx.dom().brackets(staff->idx())) {
             columns = std::max(columns, bi->column() + 1);
         }
     }
@@ -218,8 +216,7 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
     size_t nstaves = ctx.dom().nstaves();
     std::vector < double > bracketWidth(nstaves, 0.0);
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
-        for (auto bi : staff->brackets()) {
+        for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
             if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible() || bi->bracketType() == BracketType::GROUP) {
                 continue;
             }
@@ -1189,7 +1186,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         String result;
 
         if (actualOrientation == SharedLabelOrientation::HORIZONTAL) {
-            result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+            result = formatSharedVoiceLabel(instrumentsMappedToFirstVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
         } else {
             result = formatVerticalSharedLabel(instrumentsMappedToFirstVoice, trailingDotSingle);
         }
@@ -1197,13 +1194,13 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         return result;
     }
 
-    String result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+    String result = formatSharedVoiceLabel(instrumentsMappedToFirstVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     if (instrumentsMappedToSecondVoice.empty()) {
         return result;
     }
 
-    result += formatVoice(instrumentsMappedToSecondVoice, /*isFirstVoice*/ false, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+    result += '\n' + formatSharedVoiceLabel(instrumentsMappedToSecondVoice, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     return result;
 }
@@ -1227,22 +1224,16 @@ String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrumen
     return result;
 }
 
-String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
-                                       bool trailingDotMultiple, int hyphenLimit)
+String SystemHeaderLayout::formatSharedVoiceLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle,
+                                                  bool trailingDotMultiple, int hyphenLimit)
 {
     String result;
-
-    if (!isFirstVoice) {
-        result += '\n';
-    }
 
     size_t voiceCount = instruments.size();
     bool putTrailingDot = (voiceCount <= 1 && trailingDotSingle) || (voiceCount > 1 && trailingDotMultiple);
 
     for (size_t i = 0; i < instruments.size(); ++i) {
-        if (isFirstVoice && !result.empty()) {
-            result += '.';
-        } else if (!isFirstVoice && result.back() != '\n') {
+        if (!result.empty() && result.back() != '\n') {
             result += '.';
         }
 

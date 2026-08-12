@@ -110,6 +110,8 @@ public:
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
 

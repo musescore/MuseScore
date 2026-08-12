@@ -125,10 +125,6 @@ void MixerPanelContextMenuModel::load()
 {
     AbstractMenuModel::load();
 
-    dispatcher()->reg(this, TOGGLE_MIXER_SECTION_ACTION, this, &MixerPanelContextMenuModel::toggleMixerSection);
-    dispatcher()->reg(this, TOGGLE_AUX_SEND_ACTION, this, &MixerPanelContextMenuModel::toggleAuxSend);
-    dispatcher()->reg(this, TOGGLE_AUX_CHANNEL_ACTION, this, &MixerPanelContextMenuModel::toggleAuxChannel);
-
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxSendIndex, bool newVisibilityValue) {
         setViewMenuItemChecked(auxSendVisibleMenuItemId(auxSendIndex), newVisibilityValue);
 
@@ -166,7 +162,7 @@ void MixerPanelContextMenuModel::load()
     viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Title));
 
     MenuItemList items {
-        makeMenuItem("command://playback/show-playback-setup"),
+        makeMenuItem("command://playback/open-playback-setup"),
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 
@@ -238,43 +234,6 @@ MenuItem* MixerPanelContextMenuModel::buildAuxChannelVisibleItem(aux_channel_idx
     item->setState(state);
 
     return item;
-}
-
-void MixerPanelContextMenuModel::toggleMixerSection(const ActionData& args)
-{
-    if (args.empty()) {
-        return;
-    }
-
-    int sectionTypeInt = args.arg<int>(0);
-    MixerSectionType sectionType = static_cast<MixerSectionType>(sectionTypeInt);
-
-    bool newVisibilityValue = !isSectionVisible(sectionType);
-    configuration()->setMixerSectionVisible(sectionType, newVisibilityValue);
-}
-
-void MixerPanelContextMenuModel::toggleAuxSend(const ActionData& args)
-{
-    if (args.empty()) {
-        return;
-    }
-
-    aux_channel_idx_t auxSendIndex = static_cast<aux_channel_idx_t>(args.arg<int>(0));
-    bool newVisibilityValue = !configuration()->isAuxSendVisible(auxSendIndex);
-
-    configuration()->setAuxSendVisible(auxSendIndex, newVisibilityValue);
-}
-
-void MixerPanelContextMenuModel::toggleAuxChannel(const ActionData& args)
-{
-    if (args.empty()) {
-        return;
-    }
-
-    aux_channel_idx_t auxChannelIndex = static_cast<aux_channel_idx_t>(args.arg<int>(0));
-    bool newVisibilityValue = !configuration()->isAuxChannelVisible(auxChannelIndex);
-
-    configuration()->setAuxChannelVisible(auxChannelIndex, newVisibilityValue);
 }
 
 void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, bool checked)

@@ -39,6 +39,7 @@ static const ActionCode SET_NUMBER_OF_KEYS_CODE("piano-keyboard-set-number-of-ke
 PianoKeyboardPanelContextMenuModel::PianoKeyboardPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+    setObjectName("PianoKeyboardPanelContextMenuModel");
 }
 
 void PianoKeyboardPanelContextMenuModel::load()
@@ -48,6 +49,16 @@ void PianoKeyboardPanelContextMenuModel::load()
     };
 
     setItems(items);
+}
+
+void PianoKeyboardPanelContextMenuModel::handleMenuItem(const QString& itemId)
+{
+    MenuItem& item = findItem(itemId);
+    if (item.action().code == SET_KEY_WIDTH_SCALING_CODE) {
+        emit setKeyWidthScalingRequested(item.args().arg<qreal>(0));
+    } else {
+        AbstractMenuModel::handleMenuItem(itemId);
+    }
 }
 
 qreal PianoKeyboardPanelContextMenuModel::keyWidthScaling() const
@@ -87,14 +98,6 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
 
     updateKeyWidthScalingItems();
 
-    dispatcher()->reg(this, SET_KEY_WIDTH_SCALING_CODE, [this](const ActionData& args) {
-        IF_ASSERT_FAILED(args.count() > 0) {
-            return;
-        }
-
-        emit setKeyWidthScalingRequested(args.arg<qreal>(0));
-    });
-
     items << makeSeparator();
 
     std::vector<std::pair<muse::TranslatableString, int> > possibleNumbersOfKeys {
@@ -113,14 +116,6 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
         emit numberOfKeysChanged();
     });
 
-    dispatcher()->reg(this, SET_NUMBER_OF_KEYS_CODE, [this](const ActionData& args) {
-        IF_ASSERT_FAILED(args.count() > 0) {
-            return;
-        }
-
-        configuration()->setPianoKeyboardNumberOfKeys(args.arg<int>(0));
-    });
-
     return makeMenu(muse::TranslatableString("notation", "View"), items);
 }
 
@@ -133,7 +128,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const muse
     action.checkable = Checkable::Yes;
 
     MenuItem* item = new MenuItem(action, this);
-    item->setId(QString::number(scaling));
+    item->setId(QString("scaling-%1").arg(scaling));
     item->setState(UiActionState::make_enabled());
     item->setArgs(ActionData::make_arg1<qreal>(scaling));
 

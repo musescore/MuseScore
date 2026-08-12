@@ -44,7 +44,7 @@ void MainWindowTitleProvider::load()
                 update();
             });
 
-            currentProject->needSave().notification.onNotify(this, [this]() {
+            currentProject->needSaveChanged().onNotify(this, [this]() {
                 update();
             });
         }
@@ -116,5 +116,5 @@ void MainWindowTitleProvider::update()
 
     setFilePath((project->isNewlyCreated() || project->isCloudProject())
                 ? "" : project->path().toQString());
-    setFileModified(project->needSave().val);
+    setFileModified(project->isNeedSave());
 }

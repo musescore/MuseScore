@@ -104,6 +104,7 @@ public:
     muse::async::Notification selectionChanged() const override;
     void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, staff_idx_t staffIndex = 0) override;
     void select(SelectionTarget target) override;
+    void addToSelection(SelectionTarget target) override;
 
     void selectAndStartEditIfNeeded(EngravingItem* element) override;
 
@@ -115,9 +116,6 @@ public:
     bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) override;
     void expandSelection(ExpandSelectionMode mode) override;
-    void addToSelection(MoveDirection d, MoveSelectionType type) override;
-    void selectTopStaff() override;
-    void selectEmptyTrailingMeasure() override;
 
     EngravingItem* contextItem() const override;
 
@@ -150,7 +148,7 @@ public:
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
-    void setDropRect(const muse::RectF& rect) override;
+    void setDropRects(const std::vector<muse::RectF>& rects) override;
     void endDrop() override;
     muse::async::Notification dropChanged() const override;
 
@@ -513,7 +511,7 @@ private:
     {
         mu::engraving::EditData ed;
         EngravingItem* dropTarget = nullptr;
-        muse::RectF dropRect;
+        std::vector<muse::RectF> dropRects;
     };
 
     struct RangeDropData

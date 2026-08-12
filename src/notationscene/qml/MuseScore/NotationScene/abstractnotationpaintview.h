@@ -30,8 +30,6 @@
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationcontextconfiguration.h"
 
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "ui/imainwindow.h"
@@ -52,7 +50,7 @@
 
 namespace mu::notation {
 class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Contextable,
-    public muse::async::Asyncable, public muse::actions::Actionable
+    public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -76,7 +74,6 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
-    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::ui::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
@@ -128,6 +125,8 @@ public:
     void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
 
+    void showSearch() override;
+
     void showElementPopup(const ElementType& elementType) override;
     void hideElementPopup(const ElementType& elementType) override;
     void hideElementPopup(PopupModelType modelType = PopupModelType::TYPE_UNDEFINED) override;
@@ -139,6 +138,8 @@ public:
     INotationPlaybackPtr notationPlayback() const override;
 
     QQuickItem* asItem() override;
+
+    void scheduleRedraw(const muse::RectF& rect = muse::RectF()) override;
 
     qreal startHorizontalScrollPosition() const;
     qreal horizontalScrollbarSize() const;
@@ -162,6 +163,8 @@ public:
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
+
+    void showSearchRequested();
 
     void showElementPopupRequested(mu::notation::AbstractElementPopupModel::PopupModelType modelType);
     void hideElementPopupRequested();
@@ -220,13 +223,11 @@ private:
     void initBackground();
     void initNavigatorOrientation();
 
-    bool canReceiveAction(const muse::actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
-    void scheduleRedraw(const muse::RectF& rect = muse::RectF());
     muse::RectF correctDrawRect(const muse::RectF& rect) const;
 
     // Input

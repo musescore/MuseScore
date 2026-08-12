@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include "actions/actiontypes.h"
 #include "async/channel.h"
 #include "async/notification.h"
 #include "async/promise.h"
@@ -60,8 +59,30 @@ public:
     virtual bool isPlaying() const = 0;
     virtual muse::async::Channel<bool> isPlayingChanged() const = 0;
 
+    virtual muse::Ret togglePlay() = 0;
+    virtual muse::Ret play(bool showErrors = true) = 0;
+    virtual muse::Ret playFromSelection(bool showErrors = true) = 0;
+    virtual muse::Ret pause(bool select = false) = 0;
+    virtual muse::Ret stop() = 0;
+    virtual muse::Ret rewind(muse::secs_t secs) = 0;
+
     virtual bool isLoopEnabled() const = 0;
     virtual muse::async::Channel<bool> loopEnabledChanged() const = 0;
+    virtual muse::Ret toggleLoopPlayback() = 0;
+    virtual muse::Ret addLoopBoundary(LoopBoundaryType type) = 0;
+
+    virtual muse::Ret toggleMetronome() = 0;
+
+    virtual muse::Ret toggleMidiInput() = 0;
+    virtual muse::Ret setMidiUseWrittenPitch(bool useWrittenPitch) = 0;
+
+    virtual muse::Ret togglePlayRepeats() = 0;
+    virtual muse::Ret togglePlayChordSymbols() = 0;
+    virtual muse::Ret toggleAutomaticallyPan() = 0;
+    virtual muse::Ret toggleCountIn() = 0;
+    virtual muse::Ret toggleHearPlaybackWhenEditing() = 0;
+
+    virtual muse::Ret reloadPlaybackCache() = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
@@ -100,9 +121,6 @@ public:
 
     virtual void seekElement(const engraving::EngravingItem* element, bool flushSound = true) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) = 0;
-
-    virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
-    virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;
 
     virtual muse::secs_t totalPlayTime() const = 0;
     virtual muse::async::Notification totalPlayTimeChanged() const = 0;
