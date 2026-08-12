@@ -1147,12 +1147,9 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     // Write parens
     for (const NoteParenthesisInfo* parenPair : item->noteParentheses()) {
         xml.startElement("NoteParenGroup");
-        if (parenPair->leftParen()->isUserModified()) {
-            write(parenPair->leftParen(), xml, ctx);
-        }
-        if (parenPair->rightParen()->isUserModified()) {
-            write(parenPair->rightParen(), xml, ctx);
-        }
+
+        write(parenPair->leftParen(), xml, ctx);
+        write(parenPair->rightParen(), xml, ctx);
 
         xml.startElement("Notes");
         for (const Note* note : parenPair->notes()) {
