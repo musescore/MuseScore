@@ -964,12 +964,12 @@ void Braille::resetOctaves()
 static QString brailleSpecialNoteheadPrefix(Note* note);
 static QString brailleNoteSizePrefix(Note* note);
 
-// 22. Doubling of Signs. Music Braille Code 2015.
+// 1.12. Doubling of Signs. Page 45. Music Braille Code 2015.
 // When the same sign appears on more than three consecutive notes
-// (ignoring any rests between them), it is written twice before the first note of the group
-// and once after the last note, and omitted on the notes in between. This precomputes, per
-// sign instance, whether it should be doubled, omitted, closed, or rendered singly
-// (the default).
+// (ignoring any rests between them), it is doubled before the first note of the group and
+// terminated with a single sign, in its normal position, at its last successive occurrence.
+// It is omitted on the notes in between. This precomputes, per sign instance, whether it
+// should be doubled, omitted, terminated, or rendered singly (the default).
 void Braille::computeSignDoubling()
 {
     m_context.signDoublingComputed = true;
@@ -2134,7 +2134,6 @@ QString Braille::brailleChord(Chord* chord)
         computeSignDoubling();
     }
     QString articulationsBraille = QString();        // prefix, before the note
-    QString articulationsBrailleAfter = QString();   // suffix, after the note (doubling closing sign)
     for (Articulation* artic : chord->articulations()) {
         const QString code = brailleArticulation(artic);
         const QString signKey = QStringLiteral("articulation:") + code;
@@ -2148,9 +2147,8 @@ QString Braille::brailleChord(Chord* chord)
             articulationsBraille += code + code;
             break;
         case SignDoubling::Terminate:
-            // Last note of a doubled group: write the closing sign once, after the note.
-            articulationsBrailleAfter += code;
-            break;
+            // Last note of a doubled group: the closing sign is written once, in its
+            // normal (before-the-note) position. MBC 2015, 1.12.
         case SignDoubling::Single:
         default:
             articulationsBraille += code;
@@ -2165,7 +2163,6 @@ QString Braille::brailleChord(Chord* chord)
     QString hairpinBrailleAfter = brailleHairpinAfter(chord, chordHairpins);
 
     QString arpeggioBraille = QString();        // prefix, before the note
-    QString arpeggioBrailleAfter = QString();   // suffix, after the note (doubling closing sign)
     if (Arpeggio* arpeggio = chord->arpeggio()) {
         const QString code = brailleArpeggio(arpeggio);
         const QString signKey = QStringLiteral("arpeggio:") + code;
@@ -2179,9 +2176,8 @@ QString Braille::brailleChord(Chord* chord)
             arpeggioBraille += code + code;
             break;
         case SignDoubling::Terminate:
-            // Last note of a doubled group: write the closing sign once, after the note.
-            arpeggioBrailleAfter += code;
-            break;
+            // Last note of a doubled group: the closing sign is written once, in its
+            // normal (before-the-note) position. MBC 2015, 1.12.
         case SignDoubling::Single:
         default:
             arpeggioBraille += code;
@@ -2208,8 +2204,6 @@ QString Braille::brailleChord(Chord* chord)
     result += tupletBraille;
     result += rootNoteBraille;
     result += intervals;
-    result += arpeggioBrailleAfter;
-    result += articulationsBrailleAfter;
     result += tremoloBraille;
     result += chordTieBraille;
     result += slurBrailleAfter;
