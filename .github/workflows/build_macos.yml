@@ -75,7 +75,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_26.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
 
 jobs:
   macos_universal:
@@ -103,6 +103,10 @@ jobs:
         SENTRY_MUSE_MU4_KEY: ${{ secrets.SENTRY_MUSE_MU4_KEY }}
         SENTRY_MUSE_MU4_SANDBOX_KEY: ${{ secrets.SENTRY_MUSE_MU4_SANDBOX_KEY }}
         SENTRY_PROJECT: ${{ inputs.sentry_project }}
+        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+        APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        TRANSIFEX_API_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
       run: |
         bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -118,10 +122,10 @@ jobs:
         DO_NOTARIZE='false'
         if [ "$BUILD_MODE" != "devel" ]; then
           DO_NOTARIZE='true'
-          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
+          if [ -z "$APPLE_USERNAME" ]; then
             echo "::warning::APPLE_USERNAME is empty; notarization disabled"
             DO_NOTARIZE='false'
-          elif [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
+          elif [ -z "$APPLE_PASSWORD" ]; then
             echo "::warning::APPLE_PASSWORD is empty, notarization disabled"
             DO_NOTARIZE='false'
           fi
@@ -130,7 +134,7 @@ jobs:
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
           DO_UPDATE_TS='true'
-          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+          if [ -z "$TRANSIFEX_API_TOKEN" ]; then
             echo "::warning::TRANSIFEX_API_TOKEN is empty; updating .ts files disabled"
             DO_UPDATE_TS='false'
           fi
@@ -167,7 +171,7 @@ jobs:
         DO_PUBLISH='false'
         if [ "${{ inputs.publish }}" == "on" ]; then
           DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+          if [ -z "$OSUOSL_SSH_ENCRYPT_SECRET" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
             DO_PUBLISH='false'
           fi
@@ -231,28 +235,35 @@ jobs:
           args: "pull -f"
 
     - name: Build
+      env:
+        DOCKWIDGETS_V2: ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
       run: |
-        C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --dockwidgets_v2 ${{ inputs.dockwidgets_v2 == 'ON' && 'ON' || 'OFF' }}
+        bash ./buildscripts/ci/macos/build.sh -n "${BUILD_NUMBER}" --crash_log_url "${SENTRY_URL}" --dockwidgets_v2 "${DOCKWIDGETS_V2}"
     - name: Show ccache stats
       run: |
         ccache -sv
     - name: Package
+      env:
+        MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET: ${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}
+        MAC_SIGN_CERTIFICATE_PASSWORD: ${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}
       run: |
-        S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
-        S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
-        bash ./buildscripts/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S"
+        bash ./buildscripts/ci/macos/package.sh \
+          --signsecret "${MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET}" \
+          --signpass "${MAC_SIGN_CERTIFICATE_PASSWORD}"
     - name: Notarize
       if: env.DO_NOTARIZE == 'true'
+      env:
+        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+        APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
       run: |
-        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
-        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
-        bash ./buildscripts/ci/macos/notarize.sh -u $USER -p $PW
+        bash ./buildscripts/ci/macos/notarize.sh -u "${APPLE_USERNAME}" -p "${APPLE_PASSWORD}"
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
     - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_MUSE_AUTH_TOKEN }}
       run: |
         APP_BIN=$(pwd)/applebuild/mscore.app/Contents/MacOS/mscore
         GENERATE_ARCHS=("x86_64 arm64")
@@ -262,14 +273,16 @@ jobs:
               -DBUILD_DIR=${BUILD_DIR} \
               -DSENTRY_URL=https://sentry.musescore.com \
               -DSENTRY_ORG=sentry \
-              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
+              -DSENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN}" \
               -DSENTRY_PROJECT=${SENTRY_PROJECT} \
               -DSTAGE=${BUILD_MODE} \
               -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
+      env:
+        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
       run: |
-        bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 4
+        bash ./buildscripts/ci/tools/osuosl/publish.sh -s "${OSUOSL_SSH_ENCRYPT_SECRET}" --os macos -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v7
       with:
