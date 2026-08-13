@@ -346,9 +346,7 @@ static void buildContent(LayoutBuildContext& ctx, mnx::layout::LayoutContent con
                 break;
             }
             const mnx::LayoutSymbol symbol = toMnxLayoutSymbol(node.span.type);
-            if (symbol != mnx::LayoutSymbol::NoSymbol) {
-                mnxGroup.set_symbol(symbol);
-            }
+            mnxGroup.set_or_clear_symbol(symbol);
             buildContent(ctx, mnxGroup.content(), node.span.start, node.span.end, node.children);
             staffIdx = node.span.end + 1;
             ++childPos;

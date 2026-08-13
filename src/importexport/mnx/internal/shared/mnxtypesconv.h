@@ -63,7 +63,7 @@ extern engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientat
 extern engraving::BarLineType toMuseScoreBarLineType(mnx::BarlineType blt);
 extern engraving::BeamMode toMuseScoreBeamMode(int lowestBeamStart);
 extern engraving::BracketType toMuseScoreBracketType(mnx::LayoutSymbol lys);
-extern engraving::SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym);
+extern engraving::SymId toMuseScoreBreathMarkSym(mnx::BreathMarkSymbol brSym);
 extern engraving::ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef);
 extern std::vector<std::string> toMuseScoreDynamicGlyphNames(mnx::DynamicValue value);
 extern std::string toMuseScoreDynamicGlyphName(mnx::DynamicPrefix prefix);
@@ -88,7 +88,7 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDispla
 
 // MuseScore values -> MNX values
 extern mnx::BarlineType toMnxBarLineType(engraving::BarLineType blt);
-extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId sym);
+extern mnx::BreathMarkSymbol toMnxBreathMarkSym(engraving::SymId sym);
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
 extern MnxDynamicMapping toMnxDynamicType(engraving::DynamicType type);
 /// Recovers an MNX dynamic from the letters that spell it, for dynamics MuseScore renders but

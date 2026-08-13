@@ -457,7 +457,7 @@ void MnxImporter::importBrackets()
         }
     }
     for (const auto& span : layoutSpans) {
-        BracketType brt = toMuseScoreBracketType(span.symbol.value_or(mnx::LayoutSymbol::NoSymbol));
+        BracketType brt = toMuseScoreBracketType(span.symbol);
         if (brt == BracketType::NO_BRACKET && span.startIndex >= span.endIndex) {
             continue;
         }
