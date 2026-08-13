@@ -61,6 +61,7 @@ public:
 
     void requestElements() override;
     void requestResetToDefaults() override;
+    void disconnectAll() override;
     bool isEmpty() const override;
 
     void updateModels(const ElementKeySet& newElementKeySet);

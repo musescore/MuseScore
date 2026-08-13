@@ -540,6 +540,11 @@ void AbstractInspectorModel::requestElements()
     }
 }
 
+void AbstractInspectorModel::disconnectAll()
+{
+    async_disconnectAll();
+}
+
 void AbstractInspectorModel::onCurrentNotationChanged()
 {
 }
