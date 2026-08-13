@@ -736,6 +736,8 @@ Note::Note(const Note& n, bool link)
     m_harmonic          = n.m_harmonic;
     m_hasParens         = n.m_hasParens;
     m_hideGeneratedParens = n.m_hideGeneratedParens;
+    m_playbackStartOffset = n.m_playbackStartOffset;
+    m_playbackDurationOffset = n.m_playbackDurationOffset;
 
     if (n.m_accidental) {
         add(new Accidental(*(n.m_accidental)));
@@ -4206,7 +4208,9 @@ int Note::effectivePlaybackStartTime() const
     if (!ch) {
         return 0;
     }
-    return ch->tick().ticks() + playbackStartOffset();
+    // playbackStartOffset() and playbackDurationOffset() are independently user-settable (e.g.
+    // via the Properties panel), so clamp here rather than trust their combination to stay sane.
+    return std::max(0, ch->tick().ticks() + playbackStartOffset());
 }
 
 //--------------------------------------------------------
@@ -4219,7 +4223,7 @@ int Note::effectivePlaybackDuration() const
     if (!ch) {
         return 0;
     }
-    return ch->ticks().ticks() - playbackStartOffset() + playbackDurationOffset();
+    return std::max(1, ch->ticks().ticks() - playbackStartOffset() + playbackDurationOffset());
 }
 
 //---------------------------------------------------------
