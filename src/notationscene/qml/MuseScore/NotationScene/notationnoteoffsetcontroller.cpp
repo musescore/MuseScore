@@ -45,6 +45,7 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteoffsets.h"
 #include "notation/inotationselection.h"
+#include "notation/inotationstyle.h"
 #include "notation/inotationundostack.h"
 #include "notation/inotationelements.h" // IWYU pragma: keep
 
@@ -130,6 +131,15 @@ void NotationNoteOffsetController::onCurrentNotationChanged()
         notation->viewModeChanged().onNotify(this, [this]() {
             scheduleRebuild();
         }, Asyncable::Mode::SetReplace);
+
+        if (notation->style()) {
+            // Style edits (e.g. live-dragging "Staff space (sp)" in Page Settings) relayout the
+            // score without necessarily going through changesChannel() - without this, the
+            // overlay's cached note positions go stale and stop tracking the rescaled notation.
+            notation->style()->styleChanged().onNotify(this, [this]() {
+                scheduleRebuild();
+            }, Asyncable::Mode::SetReplace);
+        }
     }
 }
 
