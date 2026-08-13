@@ -167,6 +167,12 @@ public:
     bool convertMeasure(Measure* m, BrailleEngravingItemList* beis);
     bool convertItem(EngravingItem* el, BrailleEngravingItemList* beis);
 
+    // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
+    // In Treble, Soprano, Alto clefs: intervals are written downward from the highest note.
+    // In Tenor, Baritone, Bass clefs: intervals are written upward from the lowest note.
+    // Shared with the live Braille input so both sides of the round-trip agree for a given clef.
+    static bool ascendingChordsForClef(ClefType clefType);
+
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
 

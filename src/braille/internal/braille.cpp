@@ -1177,6 +1177,11 @@ bool Braille::ascendingChords(ClefType clefType)
         break;
     }
 
+    return ascendingChordsForClef(clefType);
+}
+
+bool Braille::ascendingChordsForClef(ClefType clefType)
+{
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
     // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.

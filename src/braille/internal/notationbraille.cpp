@@ -966,11 +966,8 @@ IntervalDirection NotationBraille::currentIntervalDirection()
     }
     if (EngravingItem* element = currentEngravingItem()) {
         if (Staff* staff = element->staff()) {
-            ClefType clef = staff->clef(element->tick());
-            if (clef >= ClefType::G && clef <= ClefType::C3) {
-                return IntervalDirection::Down;
-            }
-            return IntervalDirection::Up;
+            ClefType clef = staff->clef(Fraction(0, 1));
+            return Braille::ascendingChordsForClef(clef) ? IntervalDirection::Up : IntervalDirection::Down;
         }
     }
     return IntervalDirection::Down;
