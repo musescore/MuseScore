@@ -284,9 +284,7 @@ void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         auto mnxMarkings = mnxEvent.ensure_markings();
         auto mnxBreath = mnxMarkings.ensure_breath();
         mnxBreath.set_or_clear_orient(toMnxOrientation(breath->placement()));
-        if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
-            mnxBreath.set_symbol(breathSym.value());
-        }
+        mnxBreath.set_or_clear_symbol(toMnxBreathMarkSym(breath->symId()));
     }
 
     processAnnotations(mnxEvent, cr);
