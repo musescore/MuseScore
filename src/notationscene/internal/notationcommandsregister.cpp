@@ -2915,6 +2915,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::AUTOMATION, rcommand::Checkable::Yes)
     },
     CommandInfo {
+        TOGGLE_NOTE_OFFSET_EDITOR_COMMAND,
+        TranslatableString("action", "Note offsets"),
+        TranslatableString("action", "Toggle note offset editor"),
+        InputSchema(),
+        Decoration(IconCode::Code::CLOCK, rcommand::Checkable::Yes)
+    },
+    CommandInfo {
         SELECT_AUTOMATION_TYPE_COMMAND,
         TranslatableString::untranslatable("Automation type"),
         TranslatableString::untranslatable("Select automation type"),

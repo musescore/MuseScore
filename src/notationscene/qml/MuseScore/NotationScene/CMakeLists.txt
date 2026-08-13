@@ -70,6 +70,8 @@ qt_add_qml_module(notationscene_qml
         notationcontextmenumodel.h
         notationnavigator.cpp
         notationnavigator.h
+        notationnoteoffsetcontroller.h
+        notationnoteoffsetcontroller.cpp
         notationpaintview.cpp
         notationpaintview.h
         notationruler.cpp
@@ -88,6 +90,8 @@ qt_add_qml_module(notationscene_qml
         noteinputbarmodel.h
         noteinputcursor.cpp
         noteinputcursor.h
+        noteoffsetoverlay.cpp
+        noteoffsetoverlay.h
         paintedengravingitem.cpp
         paintedengravingitem.h
         partlistmodel.cpp
@@ -109,6 +113,8 @@ qt_add_qml_module(notationscene_qml
         playbackcursor.h
         searchpopupmodel.cpp
         searchpopupmodel.h
+        segmentcanvasinterpolation.cpp
+        segmentcanvasinterpolation.h
         selectionfilter/abstractselectionfiltermodel.cpp
         selectionfilter/abstractselectionfiltermodel.h
         selectionfilter/elementsselectionfiltermodel.cpp

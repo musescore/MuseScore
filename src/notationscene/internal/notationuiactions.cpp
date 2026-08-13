@@ -32,6 +32,7 @@
 #include "notation/imasternotation.h"
 #include "notation/inotation.h"
 #include "notation/inotationautomation.h" // IWYU pragma: keep
+#include "notation/inotationnoteoffsets.h" // IWYU pragma: keep
 #include "notation/inotationinteraction.h"
 #include "notation/inotationnoteinput.h" // IWYU pragma: keep
 #include "notation/inotationselection.h" // IWYU pragma: keep
@@ -55,6 +56,7 @@ static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
 static const ActionCode TOGGLE_AUTOMATION_CODE("toggle-automation");
+static const ActionCode TOGGLE_NOTE_OFFSET_EDITOR_CODE("toggle-note-offset-editor");
 
 // avoid translation duplication
 
@@ -2700,6 +2702,14 @@ const UiActionList NotationUiActions::s_actions = {
              IconCode::Code::AUTOMATION,
              Checkable::Yes
              ),
+    UiAction(TOGGLE_NOTE_OFFSET_EDITOR_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Note offsets"),
+             TranslatableString("action", "Toggle note offset editor"),
+             IconCode::Code::CLOCK,
+             Checkable::Yes
+             ),
 };
 
 const UiActionList NotationUiActions::s_scoreConfigActions = {
@@ -2924,10 +2934,15 @@ void NotationUiActions::init()
 
     m_controller->currentMasterNotationChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ TOGGLE_AUTOMATION_CODE });
+        m_actionCheckedChanged.send({ TOGGLE_NOTE_OFFSET_EDITOR_CODE });
 
         if (const IMasterNotationPtr masterNotation = m_controller->currentMasterNotation()) {
             masterNotation->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
                 m_actionCheckedChanged.send({ TOGGLE_AUTOMATION_CODE });
+            }, Asyncable::Mode::SetReplace);
+
+            masterNotation->noteOffsets()->editModeEnabledChanged().onNotify(this, [this]() {
+                m_actionCheckedChanged.send({ TOGGLE_NOTE_OFFSET_EDITOR_CODE });
             }, Asyncable::Mode::SetReplace);
         }
     });
@@ -3045,6 +3060,11 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
     if (act.code == TOGGLE_AUTOMATION_CODE) {
         const IMasterNotationPtr masterNotation = m_controller->currentMasterNotation();
         return masterNotation ? masterNotation->automation()->isAutomationModeEnabled() : false;
+    }
+
+    if (act.code == TOGGLE_NOTE_OFFSET_EDITOR_CODE) {
+        const IMasterNotationPtr masterNotation = m_controller->currentMasterNotation();
+        return masterNotation ? masterNotation->noteOffsets()->isEditModeEnabled() : false;
     }
 
     if (isScoreConfigAction(act.code)) {

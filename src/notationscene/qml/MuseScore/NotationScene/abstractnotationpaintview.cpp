@@ -35,6 +35,7 @@
 #include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
 #include "notation/inotationautomation.h"
+#include "notation/inotationnoteoffsets.h"
 #include "notation/inotationelements.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -111,6 +112,20 @@ void AbstractNotationPaintView::load()
     });
 
     m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+
+    // Clip note offset overlays to the view bounds
+    m_noteOffsetOverlayContainer = new QQuickItem(this);
+    m_noteOffsetOverlayContainer->setClip(true);
+    m_noteOffsetOverlayContainer->setWidth(width());
+    m_noteOffsetOverlayContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_noteOffsetOverlayContainer, [this]() {
+        m_noteOffsetOverlayContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_noteOffsetOverlayContainer, [this]() {
+        m_noteOffsetOverlayContainer->setHeight(height());
+    });
+
+    m_notationNoteOffsetController = std::make_unique<NotationNoteOffsetController>(m_noteOffsetOverlayContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -375,6 +390,12 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         emit automationModeChanged();
     });
 
+    // FIXME: only un-/re-subscribe when master notation changes
+    m_notationNoteOffsetController->init();
+    notationNoteOffsets()->editModeEnabledChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
@@ -427,6 +448,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     notationPlayback()->loopBoundariesChanged().disconnect(this);
     m_notation->viewModeChanged().disconnect(this);
     notationAutomation()->automationModeEnabledChanged().disconnect(this);
+    notationNoteOffsets()->editModeEnabledChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -475,6 +497,10 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
 
     if (m_notationAutomationController) {
         m_notationAutomationController->setViewMatrix(newMatrix);
+    }
+
+    if (m_notationNoteOffsetController) {
+        m_notationNoteOffsetController->setViewMatrix(newMatrix);
     }
 
     scheduleRedraw();
@@ -600,6 +626,11 @@ INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
 INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
 {
     return m_notation ? m_notation->masterNotation()->automation() : nullptr;
+}
+
+INotationNoteOffsetsPtr AbstractNotationPaintView::notationNoteOffsets() const
+{
+    return m_notation ? m_notation->masterNotation()->noteOffsets() : nullptr;
 }
 
 void AbstractNotationPaintView::onNoteInputStateChanged()
@@ -743,8 +774,9 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
-    const bool isAutomation = automationMode();
-    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
+    const INotationNoteOffsetsPtr noteOffsets = notationNoteOffsets();
+    const bool dimNotation = automationMode() || (noteOffsets && noteOffsets->isEditModeEnabled());
+    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, dimNotation);
 
     const INotationNoteInputPtr noteInput = notationNoteInput();
     if (noteInput->isNoteInputMode() && !publishMode()) {
