@@ -312,15 +312,18 @@ const std::unordered_map<mnx::BreathMarkSymbol, SymId> breathMarkTable = {
 };
 } // namespace
 
-SymId toMuseScoreBreathMarkSym(std::optional<mnx::BreathMarkSymbol> brSym)
+SymId toMuseScoreBreathMarkSym(mnx::BreathMarkSymbol brSym)
 {
-    using BreathMark = mnx::BreathMarkSymbol;
-    return muse::value(breathMarkTable, brSym.value_or(BreathMark::Comma), SymId::breathMarkComma);
+    // Auto has no direct MuseScore glyph; preserve the historical default.
+    if (brSym == mnx::BreathMarkSymbol::Auto) {
+        return SymId::breathMarkComma;
+    }
+    return muse::value(breathMarkTable, brSym, SymId::breathMarkComma);
 }
 
-std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(SymId sym)
+mnx::BreathMarkSymbol toMnxBreathMarkSym(SymId sym)
 {
-    return muse::key(breathMarkTable, sym, std::optional<mnx::BreathMarkSymbol> {});
+    return muse::key(breathMarkTable, sym, mnx::BreathMarkSymbol::Auto);
 }
 
 MnxDynamicMapping toMnxDynamicType(DynamicType type)
