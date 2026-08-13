@@ -84,6 +84,15 @@ void PropertiesPanelAbstractProxyModel::requestElements()
     }
 }
 
+void PropertiesPanelAbstractProxyModel::disconnectAll()
+{
+    for (PropertiesPanelAbstractModel* model : modelList()) {
+        model->disconnectAll();
+    }
+
+    PropertiesPanelAbstractModel::disconnectAll();
+}
+
 bool PropertiesPanelAbstractProxyModel::isEmpty() const
 {
     for (const PropertiesPanelAbstractModel* model : modelList()) {
@@ -107,7 +116,10 @@ void PropertiesPanelAbstractProxyModel::setModels(const QList<PropertiesPanelAbs
         auto oldModel = m_models.take(model->modelType());
 
         //! NOTE: may run synchronously from a model's own property-change callback;
-        //! deleting immediately would destroy "this" mid-call, so defer it
+        //! deleting immediately would destroy "this" mid-call, so defer it.
+        //! Disconnect now so it (and its submodels) doesn't react to further updates
+        //! while it awaits destruction
+        oldModel->disconnectAll();
         oldModel->deleteLater();
     }
 
