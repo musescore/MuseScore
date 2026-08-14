@@ -249,12 +249,13 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
             }
             const Chord* chord = toChord(item);
 
-            // The nominal (zero-offset) span is anchored on the note/segment's own real layout
-            // position, not on a tick->x interpolation - this guarantees the rectangle sits
-            // exactly on the notehead when there's no offset yet.
-            const Segment* nextSeg = seg->next1(SegmentType::ChordRest);
-            const double nominalRightX = (nextSeg && nextSeg->system() == system)
-                                         ? nextSeg->canvasX() : (seg->canvasX() + seg->width());
+            // The nominal (zero-offset) right edge is anchored on this chord's own end tick, not
+            // on "the next ChordRest segment" - that segment is shared across every voice/track at
+            // this staff, so a shorter simultaneous note in another voice would otherwise cut this
+            // chord's rectangle down to the shorter note's end tick instead of its own.
+            const int chordEndTick = chord->tick().ticks() + chord->ticks().ticks();
+            const std::optional<double> interpolatedRightX = mu::notation::canvasXFromTick(system, chordEndTick);
+            const double nominalRightX = interpolatedRightX ? *interpolatedRightX : (seg->canvasX() + seg->width());
 
             for (Note* note : chord->notes()) {
                 if (note->tieBack()) {
