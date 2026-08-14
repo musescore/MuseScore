@@ -64,7 +64,6 @@ constexpr static int MAX_DRAGGABLE_VELOCITY = 127;
 constexpr static double BAR_HALF_WIDTH_SP = 0.45;
 constexpr static double BAND_V_PADDING_SP = 0.3;
 
-
 NotationNoteVelocityController::NotationNoteVelocityController(QQuickItem* overlaysParent, const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_overlaysParent(overlaysParent)
 {
