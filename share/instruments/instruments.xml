@@ -6550,7 +6550,7 @@
                   <trackName>Vibraphone</trackName>
                   <longName>Vibraphone</longName>
                   <shortName>Vib.</shortName>
-                  <description>A large, lower-pitched glockenspiel with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</description>
+                  <description>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</description>
                   <musicXMLid>pitched-percussion.vibraphone</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -6614,7 +6614,7 @@
                   <trackName>Marimba (grand staff)</trackName>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
-                  <description>A large, lower-pitched xylophone with resonator tubes. Notated on a grand staff.</description>
+                  <description>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</description>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>2</staves>
                   <clef>G</clef>
@@ -6640,7 +6640,7 @@
                   <trackName>Marimba (single staff)</trackName>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
-                  <description>A large, lower-pitched xylophone with resonator tubes. Notated on a single staff.</description>
+                  <description>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</description>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>1</staves>
                   <clef>G</clef>

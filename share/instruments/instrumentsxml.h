@@ -3592,7 +3592,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Xylomarimba", "xylomarimba longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "XMrm.", "xylomarimba shortName"),
 
 //: description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "A large, lower-pitched glockenspiel with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.", "vibraphone description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.", "vibraphone description"),
 //: trackName for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Vibraphone", "vibraphone trackName"),
 //: longName for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3619,7 +3619,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cimbalom", "cimbalom longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cimb.", "cimbalom shortName"),
 
 //: description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "A large, lower-pitched xylophone with resonator tubes. Notated on a grand staff.", "marimba description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.", "marimba description"),
 //: trackName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba (grand staff)", "marimba trackName"),
 //: longName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3628,7 +3628,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba", "marimba longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Mrm.", "marimba shortName"),
 
 //: description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "A large, lower-pitched xylophone with resonator tubes. Notated on a single staff.", "marimba-single description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.", "marimba-single description"),
 //: trackName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba (single staff)", "marimba-single trackName"),
 //: longName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
