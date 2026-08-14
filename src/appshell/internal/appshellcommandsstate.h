@@ -32,6 +32,7 @@
 #include "ui/imainwindow.h"
 #include "braille/ibrailleconfiguration.h"
 #include "dockwindow/idockwindowprovider.h"
+#include "interactive/iinteractive.h"
 #include "iappshellstate.h"
 #include "iappshellcommandscontroller.h"
 
@@ -44,6 +45,7 @@ class AppshellCommandsState : public muse::rcommand::IModuleCommandsState, publi
     muse::ContextInject<IAppShellState> appShellState = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::ContextInject<IAppshellCommandsController> commandsController = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 public:
     AppshellCommandsState(const muse::modularity::ContextPtr& ctx)
         : muse::Contextable(ctx) {}
@@ -59,6 +61,8 @@ public:
 private:
 
     void updateCommandStates(const std::vector<muse::rcommand::Command>& commands = {});
+
+    bool isProjectPage() const;
 
     muse::rcommand::IModuleCommandsRegisterPtr m_moduleRegister;
     std::map<muse::rcommand::Command, muse::rcommand::CommandState> m_commandStates;

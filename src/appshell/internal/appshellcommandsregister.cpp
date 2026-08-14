@@ -122,101 +122,101 @@ static const std::vector<CommandInfo> s_commandInfos = {
     // docks commands
     CommandInfo(
         DOCK_TOGGLE_PLAYBACK_COMMAND,
-        TranslatableString("action", "Toggle playback"),
-        TranslatableString("action", "Dock: Toggle playback"),
+        TranslatableString("action", "&Playback controls"),
+        TranslatableString("action", "Show/hide playback controls"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_NOTEINPUT_COMMAND,
-        TranslatableString("action", "Toggle note input"),
-        TranslatableString("action", "Dock: Toggle note input"),
+        TranslatableString("action", "&Note input"),
+        TranslatableString("action", "Show/hide note input toolbar"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_PALETTES_COMMAND,
-        TranslatableString("action", "Toggle palettes"),
-        TranslatableString("action", "Dock: Toggle palettes"),
+        TranslatableString("action", "&Palettes"),
+        TranslatableString("action", "Show/hide palettes"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_INSTRUMENTS_COMMAND,
-        TranslatableString("action", "Toggle instruments"),
-        TranslatableString("action", "Dock: Toggle instruments"),
+        TranslatableString("action", "&Layout"),
+        TranslatableString("action", "Show/hide layout panel"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_PROPERTIES_COMMAND,
-        TranslatableString("action", "Toggle properties"),
-        TranslatableString("action", "Dock: Toggle properties"),
+        TranslatableString("action", "Propert&ies"),
+        TranslatableString("action", "Show/hide properties"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_SELECTION_FILTER_COMMAND,
-        TranslatableString("action", "Toggle selection filter"),
-        TranslatableString("action", "Dock: Toggle selection filter"),
+        TranslatableString("action", "S&election filter"),
+        TranslatableString("action", "Show/hide selection filter"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_UNDO_HISTORY_COMMAND,
-        TranslatableString("action", "Toggle undo history"),
-        TranslatableString("action", "Dock: Toggle undo history"),
+        TranslatableString("action", "&History"),
+        TranslatableString("action", "Show/hide undo history"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_NAVIGATOR_COMMAND,
-        TranslatableString("action", "Toggle navigator"),
-        TranslatableString("action", "Dock: Toggle navigator"),
+        TranslatableString("action", "&Navigator"),
+        TranslatableString("action", "Show/hide navigator"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_BRAILLE_COMMAND,
-        TranslatableString("action", "Toggle braille"),
-        TranslatableString("action", "Dock: Toggle braille"),
+        TranslatableString("action", "&Braille"),
+        TranslatableString("action", "Show/hide braille panel"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_TIMELINE_COMMAND,
-        TranslatableString("action", "Toggle timeline"),
-        TranslatableString("action", "Dock: Toggle timeline"),
+        TranslatableString("action", "Tim&eline"),
+        TranslatableString("action", "Show/hide timeline"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_MIXER_COMMAND,
-        TranslatableString("action", "Toggle mixer"),
-        TranslatableString("action", "Dock: Toggle mixer"),
+        TranslatableString("action", "Mixer"),
+        TranslatableString("action", "Show/hide mixer"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND,
-        TranslatableString("action", "Toggle piano keyboard"),
-        TranslatableString("action", "Dock: Toggle piano keyboard"),
+        TranslatableString("action", "Piano &keyboard"),
+        TranslatableString("action", "Show/hide piano keyboard"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_PERCUSSION_COMMAND,
-        TranslatableString("action", "Toggle percussion"),
-        TranslatableString("action", "Dock: Toggle percussion"),
+        TranslatableString("action", "Percussion"),
+        TranslatableString("action", "Show/hide percussion panel"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
     CommandInfo(
         DOCK_TOGGLE_STATUSBAR_COMMAND,
-        TranslatableString("action", "Toggle statusbar"),
-        TranslatableString("action", "Dock: Toggle statusbar"),
+        TranslatableString("action", "&Status bar"),
+        TranslatableString("action", "Show/hide status bar"),
         InputSchema(),
-        Decoration()
+        Decoration(rcommand::Checkable::Yes)
         ),
 };
 

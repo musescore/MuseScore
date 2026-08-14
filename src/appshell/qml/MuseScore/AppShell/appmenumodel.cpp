@@ -22,6 +22,7 @@
 #include "appmenumodel.h"
 
 #include "log.h"
+#include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
 #include "muse_framework_config.h"
@@ -34,6 +35,13 @@
 #include "notation/inotationundostack.h"
 #include "notationscene/notationcommands.h"
 
+#include "appshell/appshellcommands.h"
+#include "project/projectcommands.h"
+#include "notationscene/notationcommands.h"
+#include "playback/playbackcommands.h"
+#include "palette/palettecommands.h"
+#include "dockwindow_v2/dockcommands.h"
+
 using namespace muse;
 using namespace mu::appshell;
 using namespace muse::ui;
@@ -42,18 +50,19 @@ using namespace mu::project;
 using namespace muse::workspace;
 using namespace muse::actions;
 using namespace muse::extensions;
+using namespace mu::notation;
+using namespace mu::playback;
+using namespace mu::palette;
+using namespace muse::dock;
 
 static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
 static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
 
-static QString makeId(const ActionCode& actionCode, int itemIndex)
-{
-    return QString::fromStdString(actionCode) + QString::number(itemIndex);
-}
-
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+    setObjectName("AppMenuModel");
+
 #ifdef MUSE_MODULE_WORKSPACE
     m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);
 #endif
@@ -103,20 +112,10 @@ bool AppMenuModel::isGlobalMenuAvailable()
 void AppMenuModel::setupConnections()
 {
     recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
-        MenuItem& recentScoreListItem = findMenu("menu-file-open");
-
-        MenuItemList recentScoresList = makeRecentScoresItems();
-        bool openRecentEnabled = !recentScoresList.empty();
-
-        if (!recentScoresList.empty()) {
-            recentScoresList = appendClearRecentSection(recentScoresList);
-        }
-
-        UiActionState state = recentScoreListItem.state();
-        state.enabled = openRecentEnabled;
-        recentScoreListItem.setState(state);
-
-        recentScoreListItem.setSubitems(recentScoresList);
+        MenuItem& recentMenuItem = findMenu("menu-file-open");
+        MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
+        recentMenuItem.setSubitems(recentSubMenuItems);
+        recentMenuItem.setEnabled(!recentSubMenuItems.empty());
     });
 
 #ifdef MUSE_MODULE_WORKSPACE
@@ -190,80 +189,71 @@ MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole 
     return item;
 }
 
+MenuItem* AppMenuModel::makeMenuItem(const muse::rcommand::Command& command, MenuItemRole role)
+{
+    MenuItem* item = makeMenuItem(command);
+    item->setRole(role);
+    return item;
+}
+
 MenuItem* AppMenuModel::makeFileMenu()
 {
-    MenuItemList recentScoresList = makeRecentScoresItems();
-    bool openRecentEnabled = !recentScoresList.isEmpty();
-
-    if (!recentScoresList.empty()) {
-        recentScoresList = appendClearRecentSection(recentScoresList);
-    }
+    MenuItemList recentSubMenuItems = makeRecentSubMenuItems();
+    bool openRecentEnabled = !recentSubMenuItems.isEmpty();
 
     MenuItemList fileItems {
-        makeMenuItem("file-new"),
-        makeMenuItem("file-open"),
-        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
-        makeMenuItem("file-close"),
+        makeMenuItem(PROJECT_NEW_COMMAND),
+        makeMenuItem(PROJECT_OPEN_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentSubMenuItems, "menu-file-open", openRecentEnabled),
+        makeMenuItem(PROJECT_CLOSE_COMMAND),
         makeSeparator(),
-        makeMenuItem("file-save"),
-        makeMenuItem("file-save-as"),
-        makeMenuItem("file-save-to-cloud"),
-        makeMenu(TranslatableString("appshell/menu/file", "Save o&ther"), makeSaveOtherSubItems()),
-        makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
+        makeMenuItem(PROJECT_SAVE_COMMAND),
+        makeMenuItem(PROJECT_SAVE_AS_COMMAND),
+        makeMenuItem(PROJECT_SAVE_TO_CLOUD_COMMAND),
+        makeMenu(TranslatableString("appshell/menu/file", "Save o&ther"), {
+            makeMenuItem(PROJECT_SAVE_A_COPY_COMMAND),
+            makeMenuItem(PROJECT_SAVE_SELECTION_COMMAND),
+        }),
+        makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), {
+            makeMenuItem(PROJECT_PUBLISH_COMMAND),
+            makeMenuItem(PROJECT_SHARED_AUDIO_COMMAND),
+        }),
         makeSeparator(),
-        makeMenuItem("file-import-pdf"),
-        makeMenuItem("file-import-audio-to-score"),
-        makeMenuItem("file-export"),
+        makeMenuItem(PROJECT_IMPORT_PDF_COMMAND),
+        makeMenuItem(PROJECT_IMPORT_AUDIO_TO_SCORE_COMMAND),
+        makeMenuItem(PROJECT_EXPORT_COMMAND),
         makeSeparator(),
-        makeMenuItem("project-properties"),
-        makeMenuItem("parts", TranslatableString("action", "Parts…")),
+        makeMenuItem(PROJECT_PROPERTIES_COMMAND),
+        makeMenuItem(OPEN_PARTS_COMMAND),
         makeSeparator(),
-        makeMenuItem("print"),
+        makeMenuItem(PROJECT_PRINT_COMMAND),
         makeSeparator(),
-        makeMenuItem("quit", MenuItemRole::QuitRole)
+        makeMenuItem(APP_QUIT_COMMAND, MenuItemRole::QuitRole)
     };
 
     return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");
 }
 
-MenuItemList AppMenuModel::makeSaveOtherSubItems()
-{
-    MenuItemList subItems {
-        makeMenuItem("file-save-a-copy"),
-        makeMenuItem("file-save-selection"),
-    };
-    return subItems;
-}
-
-MenuItemList AppMenuModel::makePublishOnlineSubItems()
-{
-    MenuItemList subItems {
-        makeMenuItem("file-publish"),
-        makeMenuItem("file-share-audio"),
-    };
-    return subItems;
-}
-
 MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
-        makeMenuItem("command://notation/undo"),
-        makeMenuItem("command://notation/redo"),
+        makeMenuItem(UNDO_COMMAND),
+        makeMenuItem(REDO_COMMAND),
         makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
-        makeMenuItem("command://notation/cut"),
-        makeMenuItem("command://notation/copy"),
-        makeMenuItem("command://notation/paste"),
-        makeMenuItem("notation-paste-half"),
-        makeMenuItem("notation-paste-double"),
-        makeMenuItem("notation-swap"),
-        makeMenuItem("command://notation/delete"),
+        makeMenuItem(CUT_COMMAND),
+        makeMenuItem(COPY_COMMAND),
+        makeMenuItem(PASTE_COMMAND),
+        makeMenuItem(PASTE_HALF_COMMAND),
+        makeMenuItem(PASTE_DOUBLE_COMMAND),
+        makeMenuItem(COPY_PASTE_SWAP_COMMAND),
+        makeMenuItem(DELETE_COMMAND),
         makeSeparator(),
-        makeMenuItem("notation-select-all"),
-        makeMenuItem("notation-select-section"),
-        makeMenuItem("find"),
+        makeMenuItem(SELECT_ALL_COMMAND),
+        makeMenuItem(SELECT_SECTION_COMMAND),
+        makeMenuItem(SHOW_SEARCH_COMMAND),
         makeSeparator(),
-        makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
+        makeMenuItem(APP_PREFERENCES_COMMAND, MenuItemRole::PreferencesRole)
     };
 
     return makeMenu(TranslatableString("appshell/menu/edit", "&Edit"), editItems, "menu-edit");
@@ -279,13 +269,13 @@ void AppMenuModel::updateUndoRedoItems()
 {
     auto stack = undoStack();
 
-    MenuItem& undoItem = findItem(ActionCode("command://notation/undo"));
+    MenuItem& undoItem = findItem(UNDO_COMMAND);
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
                       ? TranslatableString("action", "Undo")
                       : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
-    MenuItem& redoItem = findItem(ActionCode("command://notation/redo"));
+    MenuItem& redoItem = findItem(REDO_COMMAND);
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
                       ? TranslatableString("action", "Redo")
@@ -299,34 +289,42 @@ MenuItem* AppMenuModel::makeViewMenu()
 
     MenuItemList viewItems {
 #ifndef Q_OS_MAC
-        makeMenuItem("fullscreen"),
+        makeMenuItem(APP_FULLSCREEN_COMMAND),
 #endif
-        makeMenuItem("toggle-palettes"),
-        makeMenuItem("masterpalette"),
-        makeMenuItem("toggle-instruments"),
-        makeMenuItem("toggle-properties-panel"),
-        makeMenuItem("toggle-selection-filter"),
+        makeMenuItem(DOCK_TOGGLE_PALETTES_COMMAND),
+        makeMenuItem(TOGGLE_MASTER_PALETTE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_INSTRUMENTS_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PROPERTIES_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_SELECTION_FILTER_COMMAND),
         historyItem,
-        makeMenuItem("toggle-navigator"),
-        makeMenuItem("toggle-braille-panel"),
-        makeMenuItem("toggle-timeline"),
-        makeMenuItem("toggle-mixer"),
-        makeMenuItem("toggle-piano-keyboard"),
-        makeMenuItem("toggle-percussion-panel"),
-        makeMenuItem("command://playback/open-playback-setup"),
-        //makeMenuItem("toggle-scorecmp-tool"), // not implemented
+        makeMenuItem(DOCK_TOGGLE_NAVIGATOR_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_BRAILLE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_TIMELINE_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_MIXER_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PIANO_KEYBOARD_COMMAND),
+        makeMenuItem(DOCK_TOGGLE_PERCUSSION_COMMAND),
+        makeMenuItem(OPEN_PLAYBACK_SETUP_COMMAND),
         makeSeparator(),
-        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), makeToolbarsItems(), "menu-toolbars")
-    };
-
+        makeMenu(TranslatableString("appshell/menu/view", "&Toolbars"), {
+            makeMenuItem(DOCK_TOGGLE_PLAYBACK_COMMAND),
+            makeMenuItem(DOCK_TOGGLE_NOTEINPUT_COMMAND),
+            makeMenuItem(DOCK_TOGGLE_STATUSBAR_COMMAND)
+        }, "menu-toolbars"),
 #ifdef MUSE_MODULE_WORKSPACE
-    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+        makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
-
-    viewItems << makeSeparator()
-              << makeMenu(TranslatableString("appshell/menu/view", "&Show"), makeShowItems(), "menu-show")
-              << makeSeparator()
-              << makeMenuItem("dock-restore-default-layout");
+        makeSeparator(),
+        makeMenu(TranslatableString("appshell/menu/view", "&Show"), {
+            makeMenuItem(SHOW_INVISIBLE_COMMAND),
+            makeMenuItem(SHOW_UNPRINTABLE_COMMAND),
+            makeMenuItem(SHOW_FRAMES_COMMAND),
+            makeMenuItem(SHOW_PAGEBORDERS_COMMAND),
+            makeMenuItem(SHOW_IRREGULAR_COMMAND),
+            makeMenuItem(SHOW_SOUNDFLAGS_COMMAND),
+        }, "menu-show"),
+        makeSeparator(),
+        makeMenuItem(DOCK_RESTORE_DEFAULT_LAYOUT_COMMAND),
+    };
 
     return makeMenu(TranslatableString("appshell/menu/view", "&View"), viewItems, "menu-view");
 }
@@ -585,48 +583,35 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
     return makeMenu(TranslatableString("appshell/menu/diagnostics", "&Diagnostics"), items, "menu-diagnostic");
 }
 
-MenuItemList AppMenuModel::makeRecentScoresItems()
+MenuItemList AppMenuModel::makeRecentSubMenuItems()
 {
     MenuItemList items;
     const RecentFilesList& recentFiles = recentFilesController()->recentFilesList();
 
-    int index = 0;
     for (const RecentFile& file : recentFiles) {
+        rcommand::CommandQuery query(PROJECT_OPEN_COMMAND);
+        query.set("url", Val(file.path.toQUrl().toString().toStdString()));
+        query.set("display_name", Val(file.displayNameOverride.toStdString()));
+
         MenuItem* item = new MenuItem(this);
-
-        UiAction action;
-        action.code = "file-open";
-        action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
-        bool isCloud = projectConfiguration()->isCloudProject(file.path);
-
-        if (isCloud) {
-            action.iconCode = IconCode::Code::CLOUD;
-        }
-
-        item->setAction(action);
-
-        item->setId(makeId(item->action().code, index++));
-
-        UiActionState state;
-        state.enabled = true;
-        item->setState(state);
-
+        item->setCommandQuery(query);
+        item->setTitle(TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true)));
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg2<QUrl, QString>(file.path.toQUrl(), file.displayNameOverride));
+
+        bool isCloud = projectConfiguration()->isCloudProject(file.path);
+        if (isCloud) {
+            item->setIcon(IconCode::Code::CLOUD);
+        }
 
         items << item;
     }
 
+    if (!items.empty()) {
+        items << makeSeparator()
+              << makeMenuItem(PROJECT_CLEAR_RECENT_COMMAND);
+    }
+
     return items;
-}
-
-MenuItemList AppMenuModel::appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores)
-{
-    MenuItemList result = recentScores;
-    result << makeSeparator()
-           << makeMenuItem("clear-recent");
-
-    return result;
 }
 
 MenuItemList AppMenuModel::makeNotesItems()
@@ -779,31 +764,6 @@ MenuItemList AppMenuModel::makeLinesItems()
         makeMenuItem("add-8va"),
         makeMenuItem("add-8vb"),
         makeMenuItem("add-noteline")
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makeToolbarsItems()
-{
-    MenuItemList items {
-        makeMenuItem("toggle-transport"),
-        makeMenuItem("toggle-noteinput"),
-        makeMenuItem("toggle-statusbar")
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makeShowItems()
-{
-    MenuItemList items {
-        makeMenuItem("show-invisible"),
-        makeMenuItem("show-unprintable"),
-        makeMenuItem("show-frames"),
-        makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular"),
-        makeMenuItem("show-soundflags"),
     };
 
     return items;
