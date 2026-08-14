@@ -27,9 +27,12 @@
 
 #include "draw/fontmetrics.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/transpose.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transaction/undostack.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "chordlist.h"
 #include "fret.h"

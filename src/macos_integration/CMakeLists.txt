@@ -42,7 +42,7 @@ add_executable(MuseScoreQuickLookPreviewExtension
     MACOSX_BUNDLE
     PreviewProvider.swift
     previewprovider.cpp
-    previewprovider.h
+    previewprovider.hpp
 )
 
 target_link_libraries(MuseScoreQuickLookPreviewExtension PRIVATE

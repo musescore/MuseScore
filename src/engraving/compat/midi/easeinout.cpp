@@ -26,7 +26,7 @@
  parametrerable ease-In and ease-Out.
 */
 
-#include "easeInOut.h"
+#include "easeinout.h"
 
 #include <cmath>
 

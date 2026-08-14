@@ -28,13 +28,14 @@
 #include "containers.h"
 #include "translation.h"
 
+#include "iengravingconfiguration.h"
+
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editmeasurerepeat.h"
 #include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 
-#include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
 #include "deadslapped.h"
@@ -46,7 +47,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "parenthesis.h"
 
 #include "log.h"
 

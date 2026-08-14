@@ -22,17 +22,13 @@
 
 #include "mmrest.h"
 
-#include "../editing/addremoveelement.h"
+#include "measure.h"
 #include "part.h"
 #include "score.h"
 #include "system.h"
 
-#include "log.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //    MMRest
 //--------------------------------------------------------
@@ -144,5 +140,4 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
         return Rest::setProperty(propertyId, v);
     }
     return true;
-}
 }

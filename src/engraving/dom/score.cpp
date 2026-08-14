@@ -33,6 +33,10 @@
 #include "async/channel.h"
 #include "containers.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+#include "iengravingcontextconfiguration.h" // IWYU pragma: keep
+#include "ipalettescoreprovider.h"
+
 #include "editing/addremoveelement.h"
 #include "editing/editclef.h"
 #include "editing/editkeysig.h"
@@ -43,6 +47,8 @@
 #include "editing/transaction/undostack.h"
 #include "editing/transpose.h"
 #include "editing/editstaffbrackets.h"
+
+#include "rendering/iscorerenderer.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -165,6 +171,9 @@ static BeatsPerSecond roundTempo(const BeatsPerSecond& bps)
 
 Score::Score(const modularity::ContextPtr& iocCtx)
     : EngravingObject(ElementType::SCORE, nullptr), muse::Contextable(iocCtx),
+    contextConfiguration{this},
+    elementsProvider{this},
+    paletteScoreProvider{this},
     m_selection(this),
     m_elementDestroyed(muse::async::makeOpt().disableWaitPendingsOnSend())
 {

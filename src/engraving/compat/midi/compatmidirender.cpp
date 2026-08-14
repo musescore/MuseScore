@@ -11,7 +11,6 @@
 #include "dom/drumset.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
-#include "dom/easeInOut.h"
 #include "dom/glissando.h"
 #include "dom/instrument.h"
 #include "dom/masterscore.h"
@@ -36,6 +35,8 @@
 #include "dom/volta.h"
 #include "editing/navigation.h"
 #include "types/constants.h"
+
+#include "easeinout.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);

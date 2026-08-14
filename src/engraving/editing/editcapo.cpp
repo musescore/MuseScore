@@ -21,11 +21,13 @@
  */
 
 #include "editcapo.h"
-#include "dom/staff.h"
+
+#include "dom/measure.h"
 #include "dom/note.h"
-#include "dom/stringdata.h"
-#include "dom/score.h"
 #include "dom/part.h"
+#include "dom/score.h"
+#include "dom/staff.h"
+#include "dom/stringdata.h"
 
 namespace mu::engraving {
 // static

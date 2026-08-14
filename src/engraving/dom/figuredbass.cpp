@@ -24,6 +24,7 @@
 
 #include "io/file.h"
 
+#include "rendering/iscorerenderer.h"
 #include "rw/xmlreader.h"
 #include "style/textstyle.h"
 

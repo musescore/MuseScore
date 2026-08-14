@@ -40,7 +40,7 @@
 
 namespace mu::engraving {
 struct AutomationPoint {
-    using Bend = muse::mpe::AutomationPoint::Bend;
+    using Ease = muse::mpe::AutomationPoint::Ease;
     using ArrivalFromPrevious = muse::mpe::AutomationPoint::ArrivalFromPrevious;
     using ExplicitArrival = muse::mpe::AutomationPoint::ExplicitArrival;
     using InValue = muse::mpe::AutomationPoint::InValue;
@@ -58,9 +58,9 @@ struct AutomationPoint {
 using utick_t = int;
 using AutomationCurve = muse::SharedMap<utick_t, AutomationPoint>;
 
-inline std::optional<AutomationPoint::Bend> bend(const AutomationPoint& point) noexcept
+inline std::optional<AutomationPoint::Ease> ease(const AutomationPoint& point) noexcept
 {
-    return muse::mpe::bend(point.value);
+    return muse::mpe::ease(point.value);
 }
 
 inline muse::real_t resolveInValue(const AutomationCurve& curve, AutomationCurve::const_iterator it)

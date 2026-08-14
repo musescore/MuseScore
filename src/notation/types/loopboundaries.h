@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "engraving/dom/score.h"
 #include "engraving/types/fraction.h"
+#include "engraving/types/types.h"
 
 namespace mu::notation {
 using engraving::LoopBoundaryType;

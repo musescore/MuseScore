@@ -21,12 +21,14 @@
  */
 #include "twrite.h"
 
+#include "../../iengravingconfiguration.h" // IWYU pragma: keep
 #include "../../iengravingfont.h"
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
 #include "../../infrastructure/rtti.h"
 
+#include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/factory.h"
@@ -164,6 +166,7 @@
 #include "editing/transpose.h"
 
 #include "../xmlwriter.h"
+#include "types/types.h"
 #include "writecontext.h"
 #include "connectorinfowriter.h"
 
@@ -563,9 +566,9 @@ void TWrite::writeScoreSpanners(const Score* score, track_idx_t startTrack, trac
     xml.endElement();
 }
 
-void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml)
 {
-    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore()) {
+    if (item->score()->isPaletteScore()) {
         return;
     }
 
@@ -631,7 +634,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml);
 
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
@@ -2613,7 +2616,7 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
 
     xml.startElement(item, { { "id", item->id().toUint64() } });
 
-    writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml);
 
     writeProperties(item, xml, ctx);
 
@@ -2629,7 +2632,7 @@ void TWrite::write(const SharedPart* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "id", item->id().toUint64() } });
 
-    writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml);
 
     xml.tag(propertyName(Pid::SHARED_PART_ENABLED), item->getProperty(Pid::SHARED_PART_ENABLED).toBool());
 
@@ -2887,7 +2890,7 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
 
-    writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml);
     writeItemLink(item, xml, ctx);
 
     // for copy/paste we need to know the actual transposition

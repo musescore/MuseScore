@@ -1,0 +1,9 @@
+{
+    "PLAYBACK": [
+        {
+            "command": "command://playback/pause-and-select",
+            "sequences": ["Alt+Space"],
+            "autorepeat": 0
+        }
+    ]
+}

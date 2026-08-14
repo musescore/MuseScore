@@ -23,6 +23,7 @@
 
 #include "draw/painter.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 #include "dom/engravingitem.h"
 #include "dom/barline.h"
 #include "dom/dynamic.h"

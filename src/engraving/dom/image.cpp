@@ -25,6 +25,7 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
+#include "draw/iimageprovider.h" // IWYU pragma: keep
 #include "draw/types/pixmap.h"
 #include "draw/svgrenderer.h"
 
@@ -57,7 +58,7 @@ static bool defaultSizeIsSpatium    = true;
 //---------------------------------------------------------
 
 Image::Image(EngravingItem* parent)
-    : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE), muse::Contextable(BSymbol::iocContext())
+    : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     m_imageType        = ImageType::NONE;
     m_size            = SizeF(0.0, 0.0);
@@ -69,7 +70,7 @@ Image::Image(EngravingItem* parent)
 }
 
 Image::Image(const Image& img)
-    : BSymbol(img), muse::Contextable(img.muse::Contextable::iocContext())
+    : BSymbol(img)
 {
     m_imageType        = img.m_imageType;
     m_buffer           = img.m_buffer;

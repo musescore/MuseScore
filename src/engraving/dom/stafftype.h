@@ -26,18 +26,19 @@
 
 #include "draw/types/font.h"
 
-#include "engravingitem.h"
 #include "stafflabel.h"
-
+#include "../style/styledef.h"
 #include "../types/types.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
 class Chord;
 class ChordRest;
+class MStyle;
+class Score;
 class Staff;
+class XmlReader;
 
 //---------------------------------------------------------
 //   TablatureFont
@@ -152,7 +153,8 @@ enum class ParenthesizeTiedFret : unsigned char {
 
 class StaffType
 {
-    static inline muse::GlobalInject<IEngravingConfiguration> configuration;
+    static muse::GlobalInject<class IEngravingConfiguration> configuration;
+
 public:
     StaffType();
 
@@ -412,55 +414,5 @@ private:
     static std::vector<TablatureFretFont> m_fretFonts;
     static std::vector<TablatureDurationFont> m_durationFonts;
     static std::vector<StaffType> m_presets;
-};
-
-//---------------------------------------------------------
-//   TabDurationSymbol
-//    EngravingItem used to draw duration symbols above tablatures
-//---------------------------------------------------------
-
-enum class TabBeamGrid : char {
-    NONE = 0,
-    INITIAL,
-    MEDIALFINAL,
-    NUM_OF
-};
-
-class TabDurationSymbol final : public EngravingItem
-{
-    OBJECT_ALLOCATOR(engraving, TabDurationSymbol)
-    DECLARE_CLASSOF(ElementType::TAB_DURATION_SYMBOL)
-
-public:
-    TabDurationSymbol(ChordRest* parent);
-    TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
-    TabDurationSymbol(const TabDurationSymbol&);
-    TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
-
-    bool isEditable() const override { return false; }
-
-    const StaffType* tab() const { return m_tab; }
-    const String& text() const { return m_text; }
-    void setDuration(DurationType type, int dots, const StaffType* tab)
-    {
-        m_tab = tab;
-        m_text = tab->durationString(type, dots);
-    }
-
-    bool isRepeat() const { return m_repeat; }
-    void setRepeat(bool val) { m_repeat = val; }
-
-    struct LayoutData : public EngravingItem::LayoutData {
-        TabBeamGrid beamGrid = TabBeamGrid::NONE;         // value for special 'English' grid display
-        double beamLength = 0.0;                          // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-        int beamLevel = 0.0;                                // if _grid==MEDIALFINAL, the number of beams
-    };
-    DECLARE_LAYOUTDATA_METHODS(TabDurationSymbol)
-
-private:
-
-    const StaffType* m_tab = nullptr;
-    String m_text;
-    bool m_repeat = false;
 };
 } // namespace mu::engraving
