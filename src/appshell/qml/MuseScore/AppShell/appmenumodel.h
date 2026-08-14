@@ -92,11 +92,9 @@ private:
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
+    muse::uicomponents::MenuItem* makeMenuItem(const muse::rcommand::Command& command, muse::uicomponents::MenuItemRole role);
 
     muse::uicomponents::MenuItem* makeFileMenu();
-    muse::uicomponents::MenuItemList makeSaveOtherSubItems();
-    muse::uicomponents::MenuItemList makePublishOnlineSubItems();
-
     muse::uicomponents::MenuItem* makeEditMenu();
     muse::uicomponents::MenuItem* makeViewMenu();
     muse::uicomponents::MenuItem* makeAddMenu();
@@ -107,8 +105,7 @@ private:
     muse::uicomponents::MenuItem* makeHelpMenu(bool addDiagnosticsSubMenu);
     muse::uicomponents::MenuItem* makeDiagnosticsMenu();
 
-    muse::uicomponents::MenuItemList makeRecentScoresItems();
-    muse::uicomponents::MenuItemList appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores);
+    muse::uicomponents::MenuItemList makeRecentSubMenuItems();
 
     muse::uicomponents::MenuItemList makeNotesItems();
     muse::uicomponents::MenuItemList makeIntervalsItems();
@@ -119,9 +116,6 @@ private:
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
-    muse::uicomponents::MenuItemList makeToolbarsItems();
-    muse::uicomponents::MenuItemList makeWorkspacesItems();
-    muse::uicomponents::MenuItemList makeShowItems();
     muse::uicomponents::MenuItemList makePluginsItems();
 
     mu::notation::INotationUndoStackPtr undoStack() const;
