@@ -33,6 +33,7 @@
 #include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"
+#include "measure.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"

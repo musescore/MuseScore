@@ -22,10 +22,11 @@
 
 #include "meiconverter.h"
 
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <valarray>
+
+#include "engraving/iengravingconfiguration.h"
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
@@ -65,6 +66,9 @@ using namespace mu;
 using namespace muse;
 
 StringList Convert::logs;
+
+muse::GlobalInject<engraving::IEngravingFontsProvider> Convert::engravingFonts;
+muse::GlobalInject<engraving::IEngravingConfiguration> Convert::engravingConfiguration;
 
 engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElement)
 {

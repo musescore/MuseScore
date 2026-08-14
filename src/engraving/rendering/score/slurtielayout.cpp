@@ -21,6 +21,7 @@
  */
 #include "slurtielayout.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
 #include "iengravingfont.h"
 
 #include "dom/slur.h"

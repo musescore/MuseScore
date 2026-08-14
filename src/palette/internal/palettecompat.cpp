@@ -41,6 +41,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/ornament.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"

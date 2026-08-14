@@ -23,18 +23,19 @@
 #include <climits>
 
 #include "anchors.h"
-#include "dom/timesig.h"
-#include "dom/utils.h"
 #include "factory.h"
 #include "figuredbass.h"
 #include "fret.h"
 #include "harmony.h"
+#include "measure.h"
 #include "page.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
 #include "system.h"
-#include "textline.h"
+#include "textlinebase.h"
+#include "timesig.h"
+#include "utils.h"
 
 #include "rendering/score/measurelayout.h"
 

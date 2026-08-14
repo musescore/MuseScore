@@ -25,6 +25,7 @@
 #include <QTransform>
 #include <QVariant>
 
+#include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/system.h"

@@ -1083,7 +1083,7 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
                                                                PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
-    const auto& grChords = chord->graceNotesBefore();
+    const std::vector<Chord*> grChords = chord->graceNotesBefore(); // create copy
     std::vector<Chord*> graceNotesBeforeBar;
     std::copy_if(grChords.begin(), grChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
         return ch->noteType() == NoteType::ACCIACCATURA;
@@ -1289,7 +1289,8 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
             }
 
             if (!graceNotesMerged(chord)) {
-                for (Chord* c : chord->graceNotesAfter()) {
+                const std::vector<Chord*> graceAfter = chord->graceNotesAfter(); // create copy
+                for (Chord* c : graceAfter) {
                     for (const Note* note : c->notes()) {
                         CollectNoteParams params;
                         params.velocityMultiplier = veloMultiplier;

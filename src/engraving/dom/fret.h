@@ -28,6 +28,10 @@
 
 #include "draw/types/font.h"
 
+namespace muse::io {
+struct path_t;
+}
+
 namespace mu::engraving {
 class Chord;
 class Factory;

@@ -35,21 +35,15 @@
 #include "global/types/ret.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingfontsprovider.h"
-#include "../ipalettescoreprovider.h"
-#include "../iengravingcontextconfiguration.h"
 
 #include "../automation/automationtypes_fwd.h"
 #include "../types/constants.h"
 
-#include "../rendering/iscorerenderer.h"
 #include "../rendering/layoutoptions.h"
 #include "../rendering/paddingtable.h"
 
 #include "../style/style.h"
 #include "../style/pagestyle.h"
-
-#include "../compat/midi/compatmidirenderinternal.h"
 
 #include "../editing/cmd.h"
 
@@ -60,6 +54,7 @@
 #include "property.h"
 #include "rootitem.h"
 #include "scoreorder.h"
+#include "segment.h"
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"
@@ -281,11 +276,11 @@ class Score : public EngravingObject, public muse::Contextable
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    muse::GlobalInject<IEngravingConfiguration> configuration;
-    muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    muse::ContextInject<IEngravingContextConfiguration> contextConfiguration = { this };
-    muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
-    muse::ContextInject<IPaletteScoreProvider> paletteScoreProvider = { this };
+    muse::GlobalInject<class IEngravingConfiguration> configuration;
+    muse::GlobalInject<class IEngravingFontsProvider> engravingFonts;
+    muse::ContextInject<class IEngravingContextConfiguration> contextConfiguration;
+    muse::ContextInject<class IEngravingElementsProvider> elementsProvider;
+    muse::ContextInject<class IPaletteScoreProvider> paletteScoreProvider;
     // internal
     muse::GlobalInject<rendering::IScoreRenderer> renderer;
 

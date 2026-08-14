@@ -22,6 +22,7 @@
 #include "tie.h"
 
 #include "../editing/mscoreview.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "accidental.h"
 #include "barline.h"

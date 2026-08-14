@@ -91,6 +91,7 @@
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "importmusicxmllogger.h"
 #include "importmusicxmlnoteduration.h"

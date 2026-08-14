@@ -325,7 +325,7 @@ public:
     static void writeScoreSpanners(const Score* score, track_idx_t startTrack, track_idx_t endTrack, Segment* startSegment,
                                    Segment* endSegment, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeItemEid(const EngravingObject* item, XmlWriter& xml);
     static void writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const StaffLabel& item, XmlWriter& xml);

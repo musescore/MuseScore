@@ -29,6 +29,7 @@
 #include "../editing/edittimesig.h"
 #include "../editing/transaction/transaction.h"
 
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"

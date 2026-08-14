@@ -22,6 +22,8 @@
 
 #include "systemlockindicator.h"
 
+#include "rendering/iscorerenderer.h"
+
 #include "measure.h"
 #include "measurebase.h"
 #include "page.h"

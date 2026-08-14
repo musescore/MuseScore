@@ -27,6 +27,7 @@
 #include "../dom/beam.h"
 #include "../dom/chordrest.h"
 #include "../dom/chord.h"
+#include "../dom/measure.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
