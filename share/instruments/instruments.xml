@@ -5845,7 +5845,7 @@
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-70</aPitchRange>
-                  <pPitchRange>40-74</pPitchRange>
+                  <pPitchRange>34-74</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 58; MS General: Tuba-->
                         <program value="58"/> <!--Tuba-->
@@ -5864,7 +5864,7 @@
                   <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-70</aPitchRange>
-                  <pPitchRange>40-74</pPitchRange>
+                  <pPitchRange>34-74</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
                   <Channel>
