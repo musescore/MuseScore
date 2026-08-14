@@ -131,7 +131,7 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
     int startTicks = note->effectivePlaybackStartTime();
     int durationTicks = note->effectivePlaybackDuration();
 
-    auto effectiveTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, startTicks, durationTicks, 0);
+    auto effectiveTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, startTicks, durationTicks, ctx.positionTickOffset);
     noteCtx.timestamp = effectiveTnD.timestamp;
     noteCtx.duration = effectiveTnD.duration;
 

@@ -4223,7 +4223,12 @@ int Note::effectivePlaybackDuration() const
     if (!ch) {
         return 0;
     }
-    return std::max(1, ch->ticks().ticks() - playbackStartOffset() + playbackDurationOffset());
+    // Derive from the same (possibly clamped) start effectivePlaybackStartTime() returns, rather
+    // than recomputing independently from the raw offsets - otherwise the two can disagree once
+    // the start clamp kicks in, and the note would end up playing longer than its clamped start
+    // implies.
+    const int nominalEndTick = ch->tick().ticks() + ch->ticks().ticks() + playbackDurationOffset();
+    return std::max(1, nominalEndTick - effectivePlaybackStartTime());
 }
 
 //---------------------------------------------------------
