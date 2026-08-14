@@ -130,6 +130,11 @@ GOTO END_SUCCESS
 :PACK_MSI
 ECHO "Start msi packing..."
 
+:: sign dlls and exe files
+IF %DO_SIGN% == ON (
+    CALL %SIGN% --secret %SIGN_SECRET% --key %SIGN_KEY% --dir %INSTALL_DIR% || exit /b 1
+)
+
 :: generate unique GUID
 SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\uuidgen.exe"
 %UUIDGEN% > uuid.txt
