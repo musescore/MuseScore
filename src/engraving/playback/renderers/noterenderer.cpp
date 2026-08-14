@@ -143,7 +143,7 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
         const int effectiveDurationTicks = std::max(1, nominalEndTick - effectiveStartTick);
 
         auto effectiveTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, effectiveStartTick, effectiveDurationTicks,
-                                                                           ctx.positionTickOffset);
+                                                                          ctx.positionTickOffset);
         noteCtx.timestamp = effectiveTnD.timestamp;
         noteCtx.duration = effectiveTnD.duration;
     }
