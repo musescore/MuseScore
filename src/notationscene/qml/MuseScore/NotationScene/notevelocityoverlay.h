@@ -50,6 +50,7 @@ public:
         qreal yTopN = 1.0; // current top edge, i.e. the note's velocity
         bool selected = false;
         bool userModified = false; // has an explicit user-set velocity, vs. the dynamics-derived default
+        int velocity = 0;  // current velocity (0-127), shown next to the bar while it's being dragged
     };
 
     explicit NoteVelocityOverlay(QQuickItem* parent);
@@ -66,6 +67,7 @@ public:
     void setSelectedFillColor(const QColor& color);
     void setModifiedFillColor(const QColor& color);
     void setBorderColor(const QColor& color);
+    void setValueLabelColors(const QColor& background, const QColor& text);
 
     void paint(QPainter* painter) override;
 
@@ -82,6 +84,7 @@ protected:
 
 private:
     int hitTestPx(const QPointF& posPx) const;
+    void paintValueLabel(QPainter* painter, const RectData& rect) const;
 
     QVector<RectData> m_rects;
 
@@ -89,6 +92,8 @@ private:
     QColor m_selectedFillColor;
     QColor m_modifiedFillColor;
     QColor m_borderColor;
+    QColor m_valueLabelBgColor;
+    QColor m_valueLabelTextColor;
 
     bool m_pressed = false;
     int m_activeRectIndex = -1;

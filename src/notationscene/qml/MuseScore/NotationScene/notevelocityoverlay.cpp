@@ -33,6 +33,12 @@ using namespace mu::notation;
 constexpr static qreal EDGE_HIT_MARGIN_PX = 4.0;
 constexpr static qreal BAR_HALF_WIDTH_MARGIN_PX = 1.0; // keeps adjacent chord bars from visually touching
 
+constexpr static qreal VALUE_LABEL_FONT_PX = 11.0;
+constexpr static qreal VALUE_LABEL_GAP_PX = 4.0; // horizontal gap between the bar and the label chip
+constexpr static qreal VALUE_LABEL_PADDING_X_PX = 4.0;
+constexpr static qreal VALUE_LABEL_PADDING_Y_PX = 2.0;
+constexpr static qreal VALUE_LABEL_CORNER_RADIUS_PX = 3.0;
+
 NoteVelocityOverlay::NoteVelocityOverlay(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
@@ -84,6 +90,13 @@ void NoteVelocityOverlay::setBorderColor(const QColor& color)
     update();
 }
 
+void NoteVelocityOverlay::setValueLabelColors(const QColor& background, const QColor& text)
+{
+    m_valueLabelBgColor = background;
+    m_valueLabelTextColor = text;
+    update();
+}
+
 void NoteVelocityOverlay::paint(QPainter* painter)
 {
     if (m_rects.isEmpty()) {
@@ -107,6 +120,50 @@ void NoteVelocityOverlay::paint(QPainter* painter)
         painter->setBrush(rect.selected ? m_selectedFillColor : (rect.userModified ? m_modifiedFillColor : m_fillColor));
         painter->drawRect(barRect);
     }
+
+    // Only the bar actually being dragged gets a live numeric readout, to keep the staff
+    // uncluttered the rest of the time (matches Dorico's convention for its velocity lane).
+    if (m_pressed && m_activeRectIndex >= 0 && m_activeRectIndex < m_rects.size()) {
+        paintValueLabel(painter, m_rects.at(m_activeRectIndex));
+    }
+}
+
+void NoteVelocityOverlay::paintValueLabel(QPainter* painter, const RectData& rect) const
+{
+    const QString text = QString::number(rect.velocity);
+
+    QFont font = painter->font();
+    font.setPixelSize(static_cast<int>(VALUE_LABEL_FONT_PX));
+    painter->setFont(font);
+
+    const QFontMetrics metrics(font);
+    const QSize textSize = metrics.size(Qt::TextSingleLine, text);
+
+    const qreal chipWidth = textSize.width() + 2 * VALUE_LABEL_PADDING_X_PX;
+    const qreal chipHeight = textSize.height() + 2 * VALUE_LABEL_PADDING_Y_PX;
+
+    const qreal leftPx = rect.leftN * width();
+    const qreal rightPx = rect.rightN * width();
+    const qreal topPx = rect.yTopN * height();
+
+    // Prefer sitting to the right of the bar; flip to the left if there isn't room, rather than
+    // letting the chip run off the edge of the overlay.
+    qreal chipLeft = rightPx + VALUE_LABEL_GAP_PX;
+    if (chipLeft + chipWidth > width()) {
+        chipLeft = leftPx - VALUE_LABEL_GAP_PX - chipWidth;
+    }
+    chipLeft = std::clamp(chipLeft, 0.0, std::max(0.0, width() - chipWidth));
+
+    const qreal chipTop = std::clamp(topPx - chipHeight / 2.0, 0.0, std::max(0.0, height() - chipHeight));
+
+    const QRectF chipRect(chipLeft, chipTop, chipWidth, chipHeight);
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(m_valueLabelBgColor);
+    painter->drawRoundedRect(chipRect, VALUE_LABEL_CORNER_RADIUS_PX, VALUE_LABEL_CORNER_RADIUS_PX);
+
+    painter->setPen(m_valueLabelTextColor);
+    painter->drawText(chipRect, Qt::AlignCenter, text);
 }
 
 int NoteVelocityOverlay::hitTestPx(const QPointF& posPx) const

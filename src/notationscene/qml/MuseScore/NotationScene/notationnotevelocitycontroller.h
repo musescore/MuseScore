@@ -27,6 +27,8 @@
 
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
 #include "notation/notationtypes.h"
 #include "notevelocitygeometry.h"
 
@@ -40,6 +42,7 @@ class NoteVelocityOverlay;
 class NotationNoteVelocityController : public muse::Contextable, public muse::async::Asyncable
 {
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::GlobalInject<INotationConfiguration> notationConfiguration;
 
 public:
     NotationNoteVelocityController(QQuickItem* overlaysParent, const muse::modularity::ContextPtr& iocCtx);

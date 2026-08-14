@@ -286,10 +286,12 @@ void NotationNoteVelocityController::createOverlayForStaff(const System* system,
         rect.leftN = (entry.leftX - overlayCanvasRect.x()) / overlayCanvasRect.width();
         rect.rightN = (entry.rightX - overlayCanvasRect.x()) / overlayCanvasRect.width();
         rect.y0N = (entry.yRange.y0 - overlayCanvasRect.y()) / overlayCanvasRect.height();
-        const double initialTopY = canvasYFromVelocity(entry.yRange, displayedVelocity(entry.note));
+        const int velocity = displayedVelocity(entry.note);
+        const double initialTopY = canvasYFromVelocity(entry.yRange, velocity);
         rect.yTopN = (initialTopY - overlayCanvasRect.y()) / overlayCanvasRect.height();
         rect.selected = muse::contains(selected, entry.note);
         rect.userModified = entry.note->userVelocity() != 0;
+        rect.velocity = velocity;
         rects.push_back(rect);
     }
 
@@ -334,6 +336,18 @@ void NotationNoteVelocityController::applyOverlayColors(NoteVelocityOverlay* ove
     overlay->setSelectedFillColor(QColor(60, 160, 210, 235));
     overlay->setModifiedFillColor(QColor(235, 140, 40, 230));
     overlay->setBorderColor(QColor(50, 130, 100, 255));
+
+    // The value-label chip needs to stay legible against whatever the score's own background
+    // currently is (light/dark/high-contrast paper, or a user-customized color) - picking its
+    // colors from that background's luminance, rather than hardcoding per theme, keeps it correct
+    // even for a custom paper color that doesn't match either preset.
+    const QColor background = notationConfiguration() ? notationConfiguration()->backgroundColor() : QColor(Qt::white);
+    const double luminance = 0.299 * background.red() + 0.587 * background.green() + 0.114 * background.blue();
+    if (luminance > 128.0) {
+        overlay->setValueLabelColors(QColor(40, 40, 40, 235), QColor(255, 255, 255));
+    } else {
+        overlay->setValueLabelColors(QColor(235, 235, 235, 235), QColor(20, 20, 20));
+    }
 }
 
 void NotationNoteVelocityController::updateOverlaysGeometry()
@@ -425,6 +439,7 @@ void NotationNoteVelocityController::previewBarHeight(const NoteLocation& locati
     // vector out and back on every mouse-move during a drag.
     NoteVelocityOverlay::RectData rect = rects.at(location.rectIndex);
     rect.yTopN = (newTopY - data.bandRect.y()) / data.bandRect.height();
+    rect.velocity = newVelocity;
     data.overlay->updateRect(location.rectIndex, rect);
 }
 
