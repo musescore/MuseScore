@@ -5064,7 +5064,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Harpsichord", "harpsichord longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "Hch.", "harpsichord shortName"),
 
 //: description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small harpsichord with only one string per key, which reduces the tonality and dynamic range.", "virginal description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small harpsichord with only one string per key, which limits the dynamic range and timbre.", "virginal description"),
 //: trackName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Virginal", "virginal trackName"),
 //: longName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5109,7 +5109,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Piano", "piano longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Pno.", "piano shortName"),
 
 //: description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Small piano with metal rods instead of strings (so really a small celesta). Typically lacks pedals and is intended for children.", "toy-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.", "toy-piano description"),
 //: trackName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Toy Piano", "toy-piano trackName"),
 //: longName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
