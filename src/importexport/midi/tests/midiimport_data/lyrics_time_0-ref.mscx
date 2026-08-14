@@ -111,65 +111,71 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
+          <Tempo>
+            <tempo>2.3</tempo>
             <eid>I_I</eid>
+            <visible>0</visible>
+            <text><sym>metNoteQuarterUp</sym> = 138</text>
+            </Tempo>
+          <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <text>G_maj_0</text>
               </Lyrics>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Beam>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <l1>0</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Beam>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <l1>38</l1>
             <l2>36</l2>
             </Beam>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>64</velocity>
@@ -182,41 +188,41 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <velocity>64</velocity>
