@@ -48,11 +48,18 @@ public:
     void setRects(const QVector<RectData>& rects);
     const QVector<RectData>& rects() const;
 
+    // Mutates a single rect in place, avoiding a full-vector copy-out/copy-back - used for live
+    // preview during a drag and for selection-highlight updates, both of which only ever touch a
+    // handful of rects at a time even on a staff with many notes.
+    void updateRect(int index, const RectData& rect);
+
     void setFillColor(const QColor& color);
     void setBorderColor(const QColor& color);
     void setHandleColor(const QColor& color);
 
     void paint(QPainter* painter) override;
+
+    bool isDragging() const { return m_pressed; }
 
 signals:
     void edgeDragged(int rectIndex, bool isLeftEdge, qreal newXN, bool completed);
@@ -63,6 +70,7 @@ protected:
     void mousePressEvent(QMouseEvent* e) override;
     void mouseMoveEvent(QMouseEvent* e) override;
     void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseUngrabEvent() override;
 
 private:
     struct HitResult {

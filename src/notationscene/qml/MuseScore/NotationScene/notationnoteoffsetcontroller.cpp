@@ -116,19 +116,31 @@ void NotationNoteOffsetController::onCurrentNotationChanged()
 {
     rebuildAllOverlays();
 
-    if (score()) {
+    if (mu::engraving::Score* thisScore = score()) {
         // TODO: More efficient if we only rebuild the affected staves/systems...
-        score()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges&) {
+        // SetReplace only dedupes a subscription against the exact same Score/Notation instance -
+        // switching documents subscribes to a brand new instance each time, so guard the callback
+        // itself against firing for a document that's no longer current, rather than leaking one
+        // live subscription per every document ever opened this session.
+        score()->changesChannel().onReceive(this, [this, thisScore](const mu::engraving::ScoreChanges&) {
+            if (thisScore != score()) {
+                return;
+            }
             scheduleRebuild();
         }, Asyncable::Mode::SetReplace);
     }
 
     const INotationPtr notation = currentNotation();
     if (notation) {
+        mu::notation::INotation* thisNotation = notation.get();
+
         // Switching between Page/Continuous/Continuous vertical view completely re-flows the
         // systems - the overlays' cached positions need to be rebuilt from scratch, not just
         // repositioned via the view matrix.
-        notation->viewModeChanged().onNotify(this, [this]() {
+        notation->viewModeChanged().onNotify(this, [this, thisNotation]() {
+            if (thisNotation != currentNotation().get()) {
+                return;
+            }
             scheduleRebuild();
         }, Asyncable::Mode::SetReplace);
 
@@ -136,7 +148,10 @@ void NotationNoteOffsetController::onCurrentNotationChanged()
             // Style edits (e.g. live-dragging "Staff space (sp)" in Page Settings) relayout the
             // score without necessarily going through changesChannel() - without this, the
             // overlay's cached note positions go stale and stop tracking the rescaled notation.
-            notation->style()->styleChanged().onNotify(this, [this]() {
+            notation->style()->styleChanged().onNotify(this, [this, thisNotation]() {
+                if (thisNotation != currentNotation().get()) {
+                    return;
+                }
                 scheduleRebuild();
             }, Asyncable::Mode::SetReplace);
         }
@@ -163,31 +178,52 @@ void NotationNoteOffsetController::scheduleRebuild()
 
 void NotationNoteOffsetController::rebuildAllOverlays()
 {
-    for (const auto& [key, overlay] : m_overlaysByStaff) {
-        delete overlay;
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        if (data.overlay->isDragging()) {
+            // Deleting an overlay that currently holds the mouse grab (mid-drag) would drop the
+            // in-progress edit and risk delivering the next mouse event to a freed item - wait
+            // for the drag to finish instead of rebuilding out from under it.
+            scheduleRebuild();
+            return;
+        }
     }
-    m_overlaysByStaff.clear();
-    m_notesByStaff.clear();
-    m_bandRectByStaff.clear();
+
     m_noteLocations.clear();
 
     if (!score()) {
         // Happens on close...
+        for (const auto& [key, data] : m_overlaysByStaff) {
+            delete data.overlay;
+        }
+        m_overlaysByStaff.clear();
         return;
     }
+
+    // createOverlayForStaff reuses an existing overlay item in place (just updating its rects)
+    // when a staff already had one, instead of destroying and recreating every overlay QQuickItem
+    // on every edit - it consumes matching entries out of m_overlaysByStaff as it goes, so
+    // whatever is left there afterwards belongs to a staff that's no longer visible/primary/has
+    // no offsettable notes anymore, and can be deleted.
+    OverlaysMap newOverlays;
 
     for (const System* system : score()->systems()) {
         staff_idx_t staffIdx = system->firstVisibleStaff();
         while (staffIdx != muse::nidx) {
-            createOverlayForStaff(system, staffIdx);
+            createOverlayForStaff(system, staffIdx, newOverlays);
             staffIdx = system->nextVisibleStaff(staffIdx);
         }
     }
 
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        delete data.overlay;
+    }
+
+    m_overlaysByStaff = std::move(newOverlays);
+
     updateOverlaysGeometry();
 }
 
-void NotationNoteOffsetController::createOverlayForStaff(const System* system, staff_idx_t staffIdx)
+void NotationNoteOffsetController::createOverlayForStaff(const System* system, staff_idx_t staffIdx, OverlaysMap& newOverlays)
 {
     IF_ASSERT_FAILED(system && m_overlaysParent && score()) {
         return;
@@ -221,6 +257,13 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
                                          ? nextSeg->canvasX() : (seg->canvasX() + seg->width());
 
             for (Note* note : chord->notes()) {
+                if (note->tieBack()) {
+                    // Playback (NoteRenderer::shouldRender) skips tied-continuation notes
+                    // entirely in most cases, so their own offset would silently do nothing -
+                    // don't offer a handle that can't actually affect anything.
+                    continue;
+                }
+
                 NoteEntry entry;
                 entry.note = note;
                 entry.nominalLeftX = note->canvasX();
@@ -306,19 +349,32 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
     for (int i = 0; i < static_cast<int>(entries.size()); ++i) {
         m_noteLocations[entries[i].note] = NoteLocation { key, i };
     }
-    m_notesByStaff[key] = std::move(entries);
-    m_bandRectByStaff[key] = overlayCanvasRect;
 
-    NoteOffsetOverlay* overlay = new NoteOffsetOverlay(m_overlaysParent);
-    overlay->setRects(rects);
-    applyOverlayColors(overlay);
-    overlay->setVisible(false);
+    NoteOffsetOverlay* overlay = nullptr;
+    const auto oldIt = m_overlaysByStaff.find(key);
+    if (oldIt != m_overlaysByStaff.end()) {
+        // Reuse the existing overlay item in place rather than destroying and recreating it -
+        // its drag-signal connection (bound to this same key) is still valid.
+        overlay = oldIt->second.overlay;
+        overlay->setRects(rects);
+        m_overlaysByStaff.erase(oldIt);
+    } else {
+        overlay = new NoteOffsetOverlay(m_overlaysParent);
+        overlay->setRects(rects);
+        applyOverlayColors(overlay);
+        overlay->setVisible(false);
 
-    QObject::connect(overlay, &NoteOffsetOverlay::edgeDragged, [this, key](int rectIndex, bool isLeftEdge, qreal newXN, bool completed) {
-        onEdgeDragged(key, rectIndex, isLeftEdge, newXN, completed);
-    });
+        QObject::connect(overlay, &NoteOffsetOverlay::edgeDragged,
+                          [this, key](int rectIndex, bool isLeftEdge, qreal newXN, bool completed) {
+            onEdgeDragged(key, rectIndex, isLeftEdge, newXN, completed);
+        });
+    }
 
-    m_overlaysByStaff[key] = overlay;
+    StaffOverlayData data;
+    data.overlay = overlay;
+    data.notes = std::move(entries);
+    data.bandRect = overlayCanvasRect;
+    newOverlays[key] = std::move(data);
 }
 
 void NotationNoteOffsetController::applyOverlayColors(NoteOffsetOverlay* overlay) const
@@ -336,22 +392,17 @@ void NotationNoteOffsetController::updateOverlaysGeometry()
 {
     const bool visible = noteOffsets() && noteOffsets()->isEditModeEnabled();
 
-    for (const auto& [key, overlay] : m_overlaysByStaff) {
-        overlay->setVisible(visible);
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        data.overlay->setVisible(visible);
         if (!visible) {
             continue;
         }
 
-        const auto bandRectIt = m_bandRectByStaff.find(key);
-        IF_ASSERT_FAILED(bandRectIt != m_bandRectByStaff.end()) {
-            continue;
-        }
-
-        const muse::RectF screenRect = m_viewMatrix.map(bandRectIt->second);
-        overlay->setWidth(screenRect.width());
-        overlay->setHeight(screenRect.height());
-        overlay->setX(screenRect.x());
-        overlay->setY(screenRect.y());
+        const muse::RectF screenRect = m_viewMatrix.map(data.bandRect);
+        data.overlay->setWidth(screenRect.width());
+        data.overlay->setHeight(screenRect.height());
+        data.overlay->setX(screenRect.x());
+        data.overlay->setY(screenRect.y());
     }
 }
 
@@ -379,16 +430,14 @@ std::vector<mu::engraving::Note*> NotationNoteOffsetController::selectedNotes() 
 
 void NotationNoteOffsetController::previewNoteRect(const NoteLocation& location, int newStartOffset, int newDurationOffset)
 {
-    const auto notesIt = m_notesByStaff.find(location.key);
-    const auto bandRectIt = m_bandRectByStaff.find(location.key);
-    const auto overlayIt = m_overlaysByStaff.find(location.key);
-    IF_ASSERT_FAILED(notesIt != m_notesByStaff.end() && bandRectIt != m_bandRectByStaff.end()
-                     && overlayIt != m_overlaysByStaff.end() && location.rectIndex >= 0
-                     && static_cast<size_t>(location.rectIndex) < notesIt->second.size()) {
+    const auto dataIt = m_overlaysByStaff.find(location.key);
+    IF_ASSERT_FAILED(dataIt != m_overlaysByStaff.end() && location.rectIndex >= 0
+                     && static_cast<size_t>(location.rectIndex) < dataIt->second.notes.size()) {
         return;
     }
+    const StaffOverlayData& data = dataIt->second;
 
-    const NoteEntry& entry = notesIt->second.at(location.rectIndex);
+    const NoteEntry& entry = data.notes.at(location.rectIndex);
     const Chord* chord = entry.note ? entry.note->chord() : nullptr;
     IF_ASSERT_FAILED(chord) {
         return;
@@ -403,34 +452,36 @@ void NotationNoteOffsetController::previewNoteRect(const NoteLocation& location,
     const double rightPx = entry.nominalRightX
                            + pixelDeltaForTickOffset(location.key.system, chordEndTick, newDurationOffset, fallbackPxPerTick);
 
-    QVector<NoteOffsetOverlay::RectData> rects = overlayIt->second->rects();
+    const QVector<NoteOffsetOverlay::RectData>& rects = data.overlay->rects();
     if (location.rectIndex >= rects.size()) {
         return;
     }
 
-    NoteOffsetOverlay::RectData& rect = rects[location.rectIndex];
-    rect.leftN = (leftPx - bandRectIt->second.x()) / bandRectIt->second.width();
-    rect.rightN = (rightPx - bandRectIt->second.x()) / bandRectIt->second.width();
-    overlayIt->second->setRects(rects);
+    // Single-struct copy plus an in-place update, instead of copying the whole staff's rect
+    // vector out and back on every mouse-move during a drag.
+    NoteOffsetOverlay::RectData rect = rects.at(location.rectIndex);
+    rect.leftN = (leftPx - data.bandRect.x()) / data.bandRect.width();
+    rect.rightN = (rightPx - data.bandRect.x()) / data.bandRect.width();
+    data.overlay->updateRect(location.rectIndex, rect);
 }
 
 void NotationNoteOffsetController::onEdgeDragged(const SysStaffKey& key, int rectIndex, bool isLeftEdge, qreal newXN, bool completed)
 {
-    const auto notesIt = m_notesByStaff.find(key);
-    const auto bandRectIt = m_bandRectByStaff.find(key);
-    IF_ASSERT_FAILED(key.isValid() && notesIt != m_notesByStaff.end() && bandRectIt != m_bandRectByStaff.end()
-                     && rectIndex >= 0 && static_cast<size_t>(rectIndex) < notesIt->second.size()) {
+    const auto dataIt = m_overlaysByStaff.find(key);
+    IF_ASSERT_FAILED(key.isValid() && dataIt != m_overlaysByStaff.end()
+                     && rectIndex >= 0 && static_cast<size_t>(rectIndex) < dataIt->second.notes.size()) {
         return;
     }
+    const StaffOverlayData& data = dataIt->second;
 
-    const NoteEntry& draggedEntry = notesIt->second.at(rectIndex);
+    const NoteEntry& draggedEntry = data.notes.at(rectIndex);
     Note* draggedNote = draggedEntry.note;
     Chord* draggedChord = draggedNote ? draggedNote->chord() : nullptr;
     IF_ASSERT_FAILED(draggedNote && draggedChord) {
         return;
     }
 
-    const std::optional<int> newTick = noteOffsetTickFromCanvasX(key.system, bandRectIt->second, newXN);
+    const std::optional<int> newTick = noteOffsetTickFromCanvasX(key.system, data.bandRect, newXN);
     if (!newTick) {
         return;
     }

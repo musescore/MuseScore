@@ -53,6 +53,16 @@ const QVector<NoteOffsetOverlay::RectData>& NoteOffsetOverlay::rects() const
     return m_rects;
 }
 
+void NoteOffsetOverlay::updateRect(int index, const RectData& rect)
+{
+    if (index < 0 || index >= m_rects.size()) {
+        return;
+    }
+
+    m_rects[index] = rect;
+    update();
+}
+
 void NoteOffsetOverlay::setFillColor(const QColor& color)
 {
     m_fillColor = color;
@@ -186,6 +196,15 @@ void NoteOffsetOverlay::mouseReleaseEvent(QMouseEvent* e)
     const qreal xN = std::clamp(e->position().x() / std::max(1.0, width()), 0.0, 1.0);
     emit edgeDragged(m_activeRectIndex, m_activeIsLeftEdge, xN, true);
 
+    m_pressed = false;
+    m_activeRectIndex = -1;
+}
+
+void NoteOffsetOverlay::mouseUngrabEvent()
+{
+    // The mouse grab taken in mousePressEvent can be stolen mid-drag (e.g. a popup opening) -
+    // without this, mouseReleaseEvent never fires and this item is left thinking a drag is still
+    // active. Treat it as a cancel rather than guessing a commit at an unknown final position.
     m_pressed = false;
     m_activeRectIndex = -1;
 }

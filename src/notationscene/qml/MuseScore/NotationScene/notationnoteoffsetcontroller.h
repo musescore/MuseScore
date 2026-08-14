@@ -61,10 +61,16 @@ private:
 
         bool operator<(const SysStaffKey& k) const
         {
-            if (system == k.system) {
-                return staffIdx < k.staffIdx;
+            // Compare the System pointer by address only - never dereference it here. This key
+            // is looked up against entries left over from a previous rebuild (to reuse an
+            // existing overlay item instead of recreating it), and a view mode switch
+            // (Page <-> Continuous) destroys and recreates every System, so a stale key still
+            // sitting in the map at that point has a dangling `system` - dereferencing it (as
+            // `system->first()->index()` used to) is a use-after-free/crash.
+            if (system != k.system) {
+                return system < k.system;
             }
-            return system->first()->index() < k.system->first()->index();
+            return staffIdx < k.staffIdx;
         }
     };
 
@@ -83,13 +89,20 @@ private:
         int rectIndex = -1;
     };
 
-    using OverlaysMap = std::map<SysStaffKey, NoteOffsetOverlay*>;
-    using NotesByStaffMap = std::map<SysStaffKey, std::vector<NoteEntry> >;
-    using BandRectByStaffMap = std::map<SysStaffKey, muse::RectF>;
+    // The overlay item, its notes and its canvas-space band rect were previously three separate
+    // maps kept in lockstep by every add/remove/clear - a single map to this struct removes the
+    // risk of them silently desyncing for a staff.
+    struct StaffOverlayData {
+        NoteOffsetOverlay* overlay = nullptr;
+        std::vector<NoteEntry> notes;
+        muse::RectF bandRect;
+    };
+
+    using OverlaysMap = std::map<SysStaffKey, StaffOverlayData>;
     using NoteLocationMap = std::map<mu::engraving::Note*, NoteLocation>;
 
     void rebuildAllOverlays();
-    void createOverlayForStaff(const System* system, staff_idx_t staffIdx);
+    void createOverlayForStaff(const System* system, staff_idx_t staffIdx, OverlaysMap& newOverlays);
     void updateOverlaysGeometry();
     void applyOverlayColors(NoteOffsetOverlay* overlay) const;
 
@@ -106,8 +119,6 @@ private:
 
     QQuickItem* m_overlaysParent = nullptr;
     OverlaysMap m_overlaysByStaff;
-    NotesByStaffMap m_notesByStaff;
-    BandRectByStaffMap m_bandRectByStaff;
     NoteLocationMap m_noteLocations;
     muse::draw::Transform m_viewMatrix;
     bool m_rebuildScheduled = false;
