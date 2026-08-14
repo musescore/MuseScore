@@ -22,12 +22,11 @@
 
 #include "containers.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "types/typesconv.h"
 
 #include "barline.h"
-#include "bracket.h"
-#include "bracketitem.h"
-#include "chord.h"
 #include "clef.h"
 #include "cleflist.h"
 #include "excerpt.h"
@@ -46,7 +45,6 @@
 #include "stafftype.h"
 #include "timesig.h"
 #include "utils.h"
-#include "capo.h"
 
 #include "../editing/editstaffbrackets.h"
 #include "../editing/editcapo.h"

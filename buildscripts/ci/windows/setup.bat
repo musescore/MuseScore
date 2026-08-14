@@ -33,17 +33,6 @@ IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
-:: Install dependencies
-ECHO "=== Install dependencies ==="
-CALL "curl.exe" -f -o %TEMP_DIR%\musescore_dependencies_win32.7z "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z"
-CALL "7z" x -y %TEMP_DIR%\musescore_dependencies_win32.7z "-o%TEMP_DIR%\musescore_dependencies_win32"
-SET JACK_DIR="C:\Program Files (x86)\Jack"
-XCOPY %TEMP_DIR%\musescore_dependencies_win32\dependencies\Jack %JACK_DIR% /E /I /Y
-SET PATH=%JACK_DIR%;%PATH%
-
-CALL "curl.exe" -f -o %TEMP_DIR%\dependencies.7z "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z"
-CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
-
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "=== Installing PortableApps.com Tools ==="
 :: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher

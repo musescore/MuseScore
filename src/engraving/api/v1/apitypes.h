@@ -30,6 +30,7 @@
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"

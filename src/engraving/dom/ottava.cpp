@@ -25,6 +25,7 @@
 #include "types/translatablestring.h"
 
 #include "chordrest.h"
+#include "measure.h"
 #include "score.h"
 #include "staff.h"
 #include "system.h"
@@ -32,10 +33,8 @@
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   ottavaStyle
 //---------------------------------------------------------
@@ -451,5 +450,4 @@ void Ottava::doComputeEndElement()
 Sid Ottava::defaultPosSid() const
 {
     return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
-}
 }

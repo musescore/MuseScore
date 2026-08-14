@@ -1,0 +1,40 @@
+{
+    "NOTATION": [
+        {
+            "command": "command://notation/note-longa",
+            "sequences": ["Ç", "Num+9"]
+        },
+        {
+            "command": "command://notation/note-breve",
+            "sequences": ["_", "Num+8"]
+        },
+        {
+            "command": "command://notation/set-duration-whole",
+            "sequences": ["È", "Num+7"]
+        },
+        {
+            "command": "command://notation/set-duration-half",
+            "sequences": ["-", "Num+6"]
+        },
+        {
+            "command": "command://notation/set-duration-quarter",
+            "sequences": ["(", "Num+5"]
+        },
+        {
+            "command": "command://notation/set-duration-eighth",
+            "sequences": ["'", "Num+4"]
+        },
+        {
+            "command": "command://notation/set-duration-16th",
+            "sequences": ["\"", "Num+3"]
+        },
+        {
+            "command": "command://notation/set-duration-32nd",
+            "sequences": ["É", "Num+2"]
+        },
+        {
+            "command": "command://notation/set-duration-64th",
+            "sequences": ["&", "Num+1"]
+        }
+    ]
+}

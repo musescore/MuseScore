@@ -22,11 +22,11 @@
 
 #include "automationrw.h"
 
+#include "engraving/automation/automationdata.h"
+
 #include "global/serialization/json.h"
 #include "global/containers.h"
 #include "global/log.h"
-
-#include "engraving/automation/automationdata.h"
 
 using namespace mu::engraving;
 
@@ -36,23 +36,41 @@ static const std::unordered_map<AutomationType, muse::String> AUTOMATION_TYPE_TO
     { AutomationType::Pan, u"Pan" },
 };
 
+static constexpr const char* TYPE_KEY = "type";
+static constexpr const char* PART_ID_KEY = "partId";
+static constexpr const char* INSTRUMENT_ID_KEY = "instrumentId";
+static constexpr const char* STAFF_ID_KEY = "staffId";
+static constexpr const char* VOICE_ID_KEY = "voiceId";
+static constexpr const char* OUT_VALUE_KEY = "outValue";
+static constexpr const char* IN_VALUE_KEY = "inValue";
+static constexpr const char* IN_VALUE_KIND_KEY = "inValueKind";
+static constexpr const char* EASE_KEY = "ease";
+static constexpr const char* CONTROL_POINT_T_KEY = "t";
+static constexpr const char* CONTROL_POINT_VALUE_KEY = "value";
+static constexpr const char* ITEM_ID_KEY = "itemId";
+static constexpr const char* GENERATED_KEY = "generated";
+static constexpr const char* TICK_KEY = "tick";
+static constexpr const char* POINTS_KEY = "points";
+
+static const std::string IN_VALUE_KIND_FROM_PREVIOUS = "FromPrevious";
+
 static AutomationCurveKey readKey(const muse::JsonObject& obj)
 {
-    const AutomationType type = muse::key(AUTOMATION_TYPE_TO_STRING, obj.value("type").toString(), AutomationType::Unknown);
+    const AutomationType type = muse::key(AUTOMATION_TYPE_TO_STRING, obj.value(TYPE_KEY).toString(), AutomationType::Unknown);
 
-    if (obj.contains("partId")) {
+    if (obj.contains(PART_ID_KEY)) {
         InstrumentTrackId trackId;
-        trackId.partId = muse::ID(obj.value("partId").toString().toStdString());
-        trackId.instrumentId = obj.value("instrumentId").toString();
+        trackId.partId = muse::ID(obj.value(PART_ID_KEY).toString().toStdString());
+        trackId.instrumentId = obj.value(INSTRUMENT_ID_KEY).toString();
         return AutomationCurveKey::instrument(type, trackId);
     }
 
-    if (obj.contains("staffId")) {
-        const muse::ID staffId(obj.value("staffId").toString().toStdString());
+    if (obj.contains(STAFF_ID_KEY)) {
+        const muse::ID staffId(obj.value(STAFF_ID_KEY).toString().toStdString());
 
         std::optional<size_t> voiceIdx;
-        if (obj.contains("voiceId")) {
-            voiceIdx = static_cast<size_t>(obj.value("voiceId").toInt());
+        if (obj.contains(VOICE_ID_KEY)) {
+            voiceIdx = static_cast<size_t>(obj.value(VOICE_ID_KEY).toInt());
         }
 
         return AutomationCurveKey::staff(type, staffId, voiceIdx);
@@ -64,28 +82,32 @@ static AutomationCurveKey readKey(const muse::JsonObject& obj)
 static AutomationPoint readPoint(const muse::JsonObject& obj)
 {
     AutomationPoint point;
-    point.value.outValue = obj.value("outValue").toDouble();
+    point.value.outValue = obj.value(OUT_VALUE_KEY).toDouble();
 
-    const muse::String inValueKind = obj.contains("inValueKind") ? obj.value("inValueKind").toString() : muse::String();
-    if (inValueKind == u"FromPrevious") {
+    const std::string inValueKind = obj.contains(IN_VALUE_KIND_KEY) ? obj.value(IN_VALUE_KIND_KEY).toStdString() : std::string();
+    if (inValueKind == IN_VALUE_KIND_FROM_PREVIOUS) {
         point.value.inValue = AutomationPoint::ArrivalFromPrevious {};
     } else {
-        AutomationPoint::Bend bend;
-        if (obj.contains("bend")) {
-            const muse::JsonObject bendObj = obj.value("bend").toObject();
-            bend.t = bendObj.value("t").toDouble();
-            bend.value = bendObj.value("value").toDouble();
+        AutomationPoint::Ease ease;
+        if (obj.contains(EASE_KEY)) {
+            // Array for forward-compat; only element 0 is used, since Ease only holds one point
+            const muse::JsonArray easeArray = obj.value(EASE_KEY).toArray();
+            if (!easeArray.empty()) {
+                const muse::JsonObject controlPointObj = easeArray.at(0).toObject();
+                ease.t = controlPointObj.value(CONTROL_POINT_T_KEY).toDouble();
+                ease.value = controlPointObj.value(CONTROL_POINT_VALUE_KEY).toDouble();
+            }
         }
 
-        const muse::real_t value = muse::real_t(obj.value("inValue").toDouble());
-        point.value.inValue = AutomationPoint::ExplicitArrival { value, bend };
+        const muse::real_t value = muse::real_t(obj.value(IN_VALUE_KEY).toDouble());
+        point.value.inValue = AutomationPoint::ExplicitArrival { value, ease };
     }
 
-    if (obj.contains("itemId")) {
-        point.itemId = EID::fromStdString(obj.value("itemId").toString().toStdString());
+    if (obj.contains(ITEM_ID_KEY)) {
+        point.itemId = EID::fromStdString(obj.value(ITEM_ID_KEY).toString().toStdString());
     }
-    if (obj.contains("generated")) {
-        point.generated = obj.value("generated").toBool();
+    if (obj.contains(GENERATED_KEY)) {
+        point.generated = obj.value(GENERATED_KEY).toBool();
     }
 
     return point;
@@ -93,19 +115,19 @@ static AutomationPoint readPoint(const muse::JsonObject& obj)
 
 static void writeKey(const AutomationCurveKey& key, muse::JsonObject& obj)
 {
-    obj["type"] = muse::value(AUTOMATION_TYPE_TO_STRING, key.type);
+    obj[TYPE_KEY] = muse::value(AUTOMATION_TYPE_TO_STRING, key.type);
 
     if (const std::optional<InstrumentTrackId> trackId = key.trackId()) {
-        obj["partId"] = trackId->partId.toStdString();
-        obj["instrumentId"] = trackId->instrumentId;
+        obj[PART_ID_KEY] = trackId->partId.toStdString();
+        obj[INSTRUMENT_ID_KEY] = trackId->instrumentId;
         return;
     }
 
     if (const std::optional<muse::ID> staffId = key.staffId()) {
-        obj["staffId"] = staffId->toStdString();
+        obj[STAFF_ID_KEY] = staffId->toStdString();
 
         if (const std::optional<size_t> voiceIdx = key.voiceIdx()) {
-            obj["voiceId"] = static_cast<int>(*voiceIdx);
+            obj[VOICE_ID_KEY] = static_cast<int>(*voiceIdx);
         }
     }
 }
@@ -113,25 +135,28 @@ static void writeKey(const AutomationCurveKey& key, muse::JsonObject& obj)
 static void writePoint(const AutomationPoint& point, muse::JsonObject& obj)
 {
     if (std::holds_alternative<AutomationPoint::ArrivalFromPrevious>(point.value.inValue)) {
-        obj["inValueKind"] = muse::String(u"FromPrevious");
+        obj[IN_VALUE_KIND_KEY] = IN_VALUE_KIND_FROM_PREVIOUS;
     } else {
         const AutomationPoint::ExplicitArrival& explicitArrival = std::get<AutomationPoint::ExplicitArrival>(point.value.inValue);
-        obj["inValue"] = explicitArrival.value;
-        if (!explicitArrival.bend.isNone()) {
-            muse::JsonObject bendObj;
-            bendObj["t"] = explicitArrival.bend.t.raw();
-            bendObj["value"] = explicitArrival.bend.value.raw();
-            obj["bend"] = bendObj;
+        obj[IN_VALUE_KEY] = explicitArrival.value;
+        if (!explicitArrival.ease.isNone()) {
+            muse::JsonObject controlPointObj;
+            controlPointObj[CONTROL_POINT_T_KEY] = explicitArrival.ease.t.raw();
+            controlPointObj[CONTROL_POINT_VALUE_KEY] = explicitArrival.ease.value.raw();
+
+            muse::JsonArray easeArray;
+            easeArray << controlPointObj;
+            obj[EASE_KEY] = easeArray;
         }
     }
 
-    obj["outValue"] = point.value.outValue;
+    obj[OUT_VALUE_KEY] = point.value.outValue;
 
     if (point.itemId.has_value()) {
-        obj["itemId"] = point.itemId->toStdString();
+        obj[ITEM_ID_KEY] = point.itemId->toStdString();
     }
     if (point.generated) {
-        obj["generated"] = point.generated;
+        obj[GENERATED_KEY] = point.generated;
     }
 }
 
@@ -160,7 +185,7 @@ void AutomationRW::read(AutomationData& data, const muse::ByteArray& json)
             continue;
         }
 
-        const muse::JsonArray pointArray = curveObj.value("points").toArray();
+        const muse::JsonArray pointArray = curveObj.value(POINTS_KEY).toArray();
         if (pointArray.empty()) {
             continue;
         }
@@ -169,8 +194,9 @@ void AutomationRW::read(AutomationData& data, const muse::ByteArray& json)
         for (size_t j = 0; j < pointArray.size(); ++j) {
             const muse::JsonObject pointObj = pointArray.at(j).toObject();
             const AutomationPoint point = readPoint(pointObj);
-            const utick_t tick = pointObj.value("tick").toInt();
-            curve.insert_or_assign(tick, point);
+            const utick_t tick = pointObj.value(TICK_KEY).toInt();
+            // Points are written in ascending tick order, so end() is always the right hint
+            curve.try_emplace(curve.end(), tick, point);
         }
     }
 
@@ -183,12 +209,9 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
 
     muse::JsonArray rootArray;
     for (const auto& [key, curve] : data.curves()) {
-        if (curve.empty()) {
+        IF_ASSERT_FAILED(key.isValid()) {
             continue;
         }
-
-        muse::JsonObject curveObj;
-        writeKey(key, curveObj);
 
         muse::JsonArray pointArray;
         for (const auto& [tick, point] : curve) {
@@ -197,13 +220,15 @@ muse::ByteArray AutomationRW::write(const AutomationData& data, bool writeGenera
             }
 
             muse::JsonObject pointObj;
-            pointObj["tick"] = tick;
+            pointObj[TICK_KEY] = tick;
             writePoint(point, pointObj);
             pointArray << pointObj;
         }
 
         if (!pointArray.empty()) {
-            curveObj["points"] = pointArray;
+            muse::JsonObject curveObj;
+            writeKey(key, curveObj);
+            curveObj[POINTS_KEY] = pointArray;
             rootArray << curveObj;
         }
     }

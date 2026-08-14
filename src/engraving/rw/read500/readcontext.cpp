@@ -22,12 +22,10 @@
 
 #include "readcontext.h"
 
-#include "dom/linkedobjects.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
 #include "dom/note.h"
-#include "dom/noteline.h"
 #include "dom/score.h"
-#include "dom/trill.h"
 
 #include "log.h"
 

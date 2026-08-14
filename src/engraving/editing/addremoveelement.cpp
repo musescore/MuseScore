@@ -29,6 +29,7 @@
 #include "../dom/engravingitem.h"
 #include "../dom/keysig.h"
 #include "../dom/linkedobjects.h"
+#include "../dom/measure.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"

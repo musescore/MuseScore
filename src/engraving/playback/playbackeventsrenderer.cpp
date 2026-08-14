@@ -26,6 +26,7 @@
 
 #include "dom/chord.h"
 #include "dom/harmony.h"
+#include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/sig.h"
 #include "dom/tempo.h"

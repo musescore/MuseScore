@@ -88,8 +88,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/expression.h
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamichairpingroup.h
-    ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
@@ -328,6 +326,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/systemlockindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.h
+    ${CMAKE_CURRENT_LIST_DIR}/tabdurationsymbol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tabdurationsymbol.h
     ${CMAKE_CURRENT_LIST_DIR}/tapping.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tapping.h
     ${CMAKE_CURRENT_LIST_DIR}/tempo.cpp

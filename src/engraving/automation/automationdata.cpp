@@ -302,8 +302,8 @@ std::string AutomationData::dump() const
 
         const AutomationPoint::ExplicitArrival& arrival = std::get<AutomationPoint::ExplicitArrival>(inValue);
         std::string result = "in = " + std::to_string(arrival.value.raw());
-        if (!arrival.bend.isNone()) {
-            result += " (bend t = " + std::to_string(arrival.bend.t.raw()) + ", value = " + std::to_string(arrival.bend.value.raw()) + ")";
+        if (!arrival.ease.isNone()) {
+            result += " (ease t = " + std::to_string(arrival.ease.t.raw()) + ", value = " + std::to_string(arrival.ease.value.raw()) + ")";
         }
         return result;
     };

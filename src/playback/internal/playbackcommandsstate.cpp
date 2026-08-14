@@ -61,9 +61,11 @@ void PlaybackCommandsState::init()
         }, Asyncable::Mode::SetReplace);
     });
 
-    interactive()->opened().onReceive(this, [this](const muse::Uri&) {
-        updateCommandStates();
-    });
+    if (interactive()) {
+        interactive()->opened().onReceive(this, [this](const muse::Uri&) {
+            updateCommandStates();
+        });
+    }
 
     playbackController()->isPlayAllowedChanged().onReceive(this, [this](bool) {
         updateCommandStates();
@@ -125,7 +127,9 @@ void PlaybackCommandsState::deinit()
 {
     globalContext()->currentProjectChanged().disconnect(this);
     globalContext()->currentNotationChanged().disconnect(this);
-    interactive()->opened().disconnect(this);
+    if (interactive()) {
+        interactive()->opened().disconnect(this);
+    }
     playbackController()->isPlayAllowedChanged().disconnect(this);
     playbackController()->isPlayingChanged().disconnect(this);
     playbackController()->loopEnabledChanged().disconnect(this);
@@ -212,7 +216,7 @@ bool PlaybackCommandsState::isProjectOpened() const
         return false;
     }
 
-    if (!interactive()->isOpened(PROJECT_PAGE_URI).val) {
+    if (!interactive() || !interactive()->isOpened(PROJECT_PAGE_URI).val) {
         return false;
     }
 

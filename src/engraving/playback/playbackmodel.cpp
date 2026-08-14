@@ -306,7 +306,6 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     PlaybackEventsMap result;
     PlaybackEventList& events = result[timestamp];
-    DynamicLevelLayers dynamics;
 
     SoundPresetChangeEventList soundPresets = m_playbackCtx->soundPresets(firstItemTrackIdx, firstItemUtick);
     if (!soundPresets.empty()) {
@@ -332,7 +331,6 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
                 const int utick = repeats.tick2utick(item->tick().ticks());
                 dynamicLevel = m_playbackCtx->appliableDynamicLevel(item->track(), utick);
             }
-            dynamics[static_cast<muse::mpe::layer_idx_t>(item->track())][timestamp] = dynamicLevel;
         }
 
         if (item->isHarmony()) {
@@ -343,7 +341,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         m_renderer.render(item, timestamp, duration, dynamicLevel, m_playbackCtx, profile, result);
     }
 
-    trackPlaybackData.offStream.send(result, dynamics, flushSound);
+    trackPlaybackData.offStream.send(result, flushSound);
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -357,7 +355,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, profile, result);
-    trackPlaybackData->second.offStream.send(result, {}, true /*flushOffstream*/);
+    trackPlaybackData->second.offStream.send(result, true /*flushOffstream*/);
 }
 
 void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDuration)
@@ -371,7 +369,7 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDurat
 
     PlaybackEventsMap result;
     m_renderer.renderCountIn(m_score, tick, 0, profile, result, countInDuration);
-    trackPlaybackData->second.offStream.send(result, {}, true /*flushOffstream*/);
+    trackPlaybackData->second.offStream.send(result, true /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const

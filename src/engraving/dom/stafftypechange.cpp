@@ -22,17 +22,15 @@
 
 #include "stafftypechange.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
 
-#include "log.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   StaffTypeChange
 //---------------------------------------------------------
@@ -254,5 +252,4 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
-}
 }

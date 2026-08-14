@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/repeatlist.h"
 

@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/utils.h"
 #include "utils/scorerw.h"
 

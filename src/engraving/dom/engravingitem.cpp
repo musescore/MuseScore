@@ -33,12 +33,15 @@
 #include "io/buffer.h"
 #include "translation.h"
 
+#include "iengravingconfiguration.h"
+#include "iengravingcontextconfiguration.h"
 #include "iengravingfont.h"
 
 #include "rw/rwregister.h"
 
 #include "types/typesconv.h"
 
+#include "rendering/iscorerenderer.h"
 #include "rendering/score/autoplace.h"
 #include "rendering/score/chordlayout.h"
 #include "rendering/score/tlayout.h"

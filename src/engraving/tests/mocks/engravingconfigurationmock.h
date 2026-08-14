@@ -95,9 +95,6 @@ public:
     MOCK_METHOD(void, setDebuggingOptions, (const DebuggingOptions&), (override));
     MOCK_METHOD(muse::async::Notification, debuggingOptionsChanged, (), (const, override));
 
-    MOCK_METHOD(bool, doNotSaveEIDsForBackCompat, (), (const, override));
-    MOCK_METHOD(void, setDoNotSaveEIDsForBackCompat, (bool), (override));
-
     MOCK_METHOD(bool, allowReadingImagesFromOutsideMscz, (), (const, override));
 
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
