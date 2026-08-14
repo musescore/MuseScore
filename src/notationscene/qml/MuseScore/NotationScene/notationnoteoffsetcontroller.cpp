@@ -365,7 +365,7 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
         overlay->setVisible(false);
 
         QObject::connect(overlay, &NoteOffsetOverlay::edgeDragged,
-                          [this, key](int rectIndex, bool isLeftEdge, qreal newXN, bool completed) {
+                         [this, key](int rectIndex, bool isLeftEdge, qreal newXN, bool completed) {
             onEdgeDragged(key, rectIndex, isLeftEdge, newXN, completed);
         });
     }
