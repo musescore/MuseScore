@@ -72,6 +72,8 @@ qt_add_qml_module(notationscene_qml
         notationnavigator.h
         notationnoteoffsetcontroller.h
         notationnoteoffsetcontroller.cpp
+        notationnotevelocitycontroller.h
+        notationnotevelocitycontroller.cpp
         notationpaintview.cpp
         notationpaintview.h
         notationruler.cpp
@@ -92,6 +94,10 @@ qt_add_qml_module(notationscene_qml
         noteinputcursor.h
         noteoffsetoverlay.cpp
         noteoffsetoverlay.h
+        notevelocitygeometry.cpp
+        notevelocitygeometry.h
+        notevelocityoverlay.cpp
+        notevelocityoverlay.h
         paintedengravingitem.cpp
         paintedengravingitem.h
         partlistmodel.cpp

@@ -75,6 +75,7 @@ public:
 
     INotationAutomationPtr automation() const override;
     INotationNoteOffsetsPtr noteOffsets() const override;
+    INotationNoteVelocityPtr noteVelocity() const override;
 
 private:
     friend class project::NotationProject;
@@ -104,6 +105,7 @@ private:
     INotationPlaybackPtr m_notationPlayback = nullptr;
     INotationAutomationPtr m_notationAutomation = nullptr;
     INotationNoteOffsetsPtr m_notationNoteOffsets = nullptr;
+    INotationNoteVelocityPtr m_notationNoteVelocity = nullptr;
     muse::async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;

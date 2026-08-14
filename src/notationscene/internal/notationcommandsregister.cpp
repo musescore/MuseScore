@@ -2922,6 +2922,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::CLOCK, rcommand::Checkable::Yes)
     },
     CommandInfo {
+        TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND,
+        TranslatableString("action", "Note velocities"),
+        TranslatableString("action", "Toggle note velocity editor"),
+        InputSchema(),
+        Decoration(IconCode::Code::DYNAMIC_FORTE, rcommand::Checkable::Yes)
+    },
+    CommandInfo {
         SELECT_AUTOMATION_TYPE_COMMAND,
         TranslatableString::untranslatable("Automation type"),
         TranslatableString::untranslatable("Select automation type"),

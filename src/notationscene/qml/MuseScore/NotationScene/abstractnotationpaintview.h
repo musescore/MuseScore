@@ -42,6 +42,7 @@
 #include "notationviewinputcontroller.h"
 #include "notationautomationcontroller.h"
 #include "notationnoteoffsetcontroller.h"
+#include "notationnotevelocitycontroller.h"
 #include "noteinputcursor.h"
 #include "notationruler.h"
 #include "playbackcursor.h"
@@ -220,6 +221,7 @@ private:
     INotationSelectionPtr notationSelection() const;
     INotationAutomationPtr notationAutomation() const;
     INotationNoteOffsetsPtr notationNoteOffsets() const;
+    INotationNoteVelocityPtr notationNoteVelocity() const;
 
     void clear();
     void initBackground();
@@ -292,6 +294,8 @@ private:
     std::unique_ptr<NotationAutomationController> m_notationAutomationController;
     QQuickItem* m_noteOffsetOverlayContainer = nullptr;
     std::unique_ptr<NotationNoteOffsetController> m_notationNoteOffsetController;
+    QQuickItem* m_noteVelocityOverlayContainer = nullptr;
+    std::unique_ptr<NotationNoteVelocityController> m_notationNoteVelocityController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<NotationRuler> m_ruler;

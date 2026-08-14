@@ -121,6 +121,9 @@ public:
     bool isNoteOffsetEditModeEnabled() const override;
     muse::async::Notification noteOffsetEditModeEnabledChanged() const override;
 
+    bool isNoteVelocityEditModeEnabled() const override;
+    muse::async::Notification noteVelocityEditModeEnabledChanged() const override;
+
     bool isDebuggingCommandEnabled(const muse::rcommand::Command& command) const override;
     muse::async::Notification debuggingOptionsChanged() const override;
 
@@ -273,6 +276,7 @@ private:
     void toggleAutomation();
     muse::Ret selectAutomationType(const muse::rcommand::CommandQuery& query);
     void toggleNoteOffsetEditor();
+    void toggleNoteVelocityEditor();
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
@@ -316,6 +320,7 @@ private:
     muse::async::Notification m_currentNotationStyleChanged;
     muse::async::Notification m_automationModeEnabledChanged;
     muse::async::Notification m_noteOffsetEditModeEnabledChanged;
+    muse::async::Notification m_noteVelocityEditModeEnabledChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

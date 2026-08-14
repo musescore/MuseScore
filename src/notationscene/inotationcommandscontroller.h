@@ -92,6 +92,9 @@ public:
     virtual bool isNoteOffsetEditModeEnabled() const = 0;
     virtual muse::async::Notification noteOffsetEditModeEnabledChanged() const = 0;
 
+    virtual bool isNoteVelocityEditModeEnabled() const = 0;
+    virtual muse::async::Notification noteVelocityEditModeEnabledChanged() const = 0;
+
     virtual bool isDebuggingCommandEnabled(const muse::rcommand::Command& command) const = 0;
     virtual muse::async::Notification debuggingOptionsChanged() const = 0;
 };

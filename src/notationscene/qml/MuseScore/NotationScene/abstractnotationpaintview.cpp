@@ -36,6 +36,7 @@
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
 #include "notation/inotationautomation.h"
 #include "notation/inotationnoteoffsets.h"
+#include "notation/inotationnotevelocity.h"
 #include "notation/inotationelements.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -126,6 +127,20 @@ void AbstractNotationPaintView::load()
     });
 
     m_notationNoteOffsetController = std::make_unique<NotationNoteOffsetController>(m_noteOffsetOverlayContainer, iocContext());
+
+    // Clip note velocity overlays to the view bounds
+    m_noteVelocityOverlayContainer = new QQuickItem(this);
+    m_noteVelocityOverlayContainer->setClip(true);
+    m_noteVelocityOverlayContainer->setWidth(width());
+    m_noteVelocityOverlayContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_noteVelocityOverlayContainer, [this]() {
+        m_noteVelocityOverlayContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_noteVelocityOverlayContainer, [this]() {
+        m_noteVelocityOverlayContainer->setHeight(height());
+    });
+
+    m_notationNoteVelocityController = std::make_unique<NotationNoteVelocityController>(m_noteVelocityOverlayContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -396,6 +411,12 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         scheduleRedraw();
     });
 
+    // FIXME: only un-/re-subscribe when master notation changes
+    m_notationNoteVelocityController->init();
+    notationNoteVelocity()->editModeEnabledChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
@@ -449,6 +470,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     m_notation->viewModeChanged().disconnect(this);
     notationAutomation()->automationModeEnabledChanged().disconnect(this);
     notationNoteOffsets()->editModeEnabledChanged().disconnect(this);
+    notationNoteVelocity()->editModeEnabledChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -501,6 +523,10 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
 
     if (m_notationNoteOffsetController) {
         m_notationNoteOffsetController->setViewMatrix(newMatrix);
+    }
+
+    if (m_notationNoteVelocityController) {
+        m_notationNoteVelocityController->setViewMatrix(newMatrix);
     }
 
     scheduleRedraw();
@@ -631,6 +657,11 @@ INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
 INotationNoteOffsetsPtr AbstractNotationPaintView::notationNoteOffsets() const
 {
     return m_notation ? m_notation->masterNotation()->noteOffsets() : nullptr;
+}
+
+INotationNoteVelocityPtr AbstractNotationPaintView::notationNoteVelocity() const
+{
+    return m_notation ? m_notation->masterNotation()->noteVelocity() : nullptr;
 }
 
 void AbstractNotationPaintView::onNoteInputStateChanged()
@@ -775,7 +806,9 @@ void AbstractNotationPaintView::paint(QPainter* qp)
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
     const INotationNoteOffsetsPtr noteOffsets = notationNoteOffsets();
-    const bool dimNotation = automationMode() || (noteOffsets && noteOffsets->isEditModeEnabled());
+    const INotationNoteVelocityPtr noteVelocity = notationNoteVelocity();
+    const bool dimNotation = automationMode() || (noteOffsets && noteOffsets->isEditModeEnabled())
+                             || (noteVelocity && noteVelocity->isEditModeEnabled());
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting, dimNotation);
 
     const INotationNoteInputPtr noteInput = notationNoteInput();

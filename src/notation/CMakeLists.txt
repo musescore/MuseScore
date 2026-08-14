@@ -37,6 +37,7 @@ target_sources(notation PRIVATE
     inotationselectionrange.h
     inotationautomation.h
     inotationnoteoffsets.h
+    inotationnotevelocity.h
     inotationinteraction.h
     inotationstyle.h
     inotationundostack.h
@@ -86,6 +87,8 @@ target_sources(notation PRIVATE
     internal/notationautomation.h
     internal/notationnoteoffsets.cpp
     internal/notationnoteoffsets.h
+    internal/notationnotevelocity.cpp
+    internal/notationnotevelocity.h
     internal/notationelements.cpp
     internal/notationelements.h
     internal/notationinteraction.cpp

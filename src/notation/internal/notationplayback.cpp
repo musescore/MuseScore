@@ -218,6 +218,11 @@ muse::async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
     return m_playbackModel.trackRemoved();
 }
 
+muse::mpe::dynamic_level_t NotationPlayback::appliableDynamicLevel(track_idx_t trackIdx, int tick) const
+{
+    return m_playbackModel.appliableDynamicLevel(trackIdx, tick);
+}
+
 void NotationPlayback::updateLoopBoundaries()
 {
     LoopBoundaries newBoundaries;

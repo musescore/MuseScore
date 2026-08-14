@@ -485,6 +485,7 @@ inline static const muse::rcommand::Command VOICE_ASSIGNMENT_ALL_IN_STAFF_COMMAN
 inline static const muse::rcommand::Command TOGGLE_AUTOMATION_COMMAND("command://notation/toggle-automation");
 inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("command://notation/select-automation-type"); // with params
 inline static const muse::rcommand::Command TOGGLE_NOTE_OFFSET_EDITOR_COMMAND("command://notation/toggle-note-offset-editor");
+inline static const muse::rcommand::Command TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND("command://notation/toggle-note-velocity-editor");
 
 // TAB commands
 inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");

@@ -351,6 +351,10 @@ void NotationCommandsState::init()
         updateCommandStates({ TOGGLE_NOTE_OFFSET_EDITOR_COMMAND });
     });
 
+    controller()->noteVelocityEditModeEnabledChanged().onNotify(this, [this]() {
+        updateCommandStates({ TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND });
+    });
+
     controller()->debuggingOptionsChanged().onNotify(this, [this]() {
         updateCommandStates(DEBUG_COMMANDS);
     });
@@ -491,6 +495,10 @@ CommandState NotationCommandsState::doCommandState(const Command& command) const
 
     if (command == TOGGLE_NOTE_OFFSET_EDITOR_COMMAND) {
         return CommandState(true, controller()->isNoteOffsetEditModeEnabled());
+    }
+
+    if (command == TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND) {
+        return CommandState(true, controller()->isNoteVelocityEditModeEnabled());
     }
 
     if (muse::contains(DEBUG_COMMANDS, command)) {

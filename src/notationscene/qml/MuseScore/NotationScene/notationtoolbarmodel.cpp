@@ -38,7 +38,8 @@ void NotationToolBarModel::load()
         "parts",
         "toggle-mixer",
         "toggle-automation",
-        "toggle-note-offset-editor"
+        "toggle-note-offset-editor",
+        "toggle-note-velocity-editor"
     };
 
     ToolBarItemList items;

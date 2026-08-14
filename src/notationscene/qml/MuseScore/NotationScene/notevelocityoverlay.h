@@ -1,0 +1,96 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <QColor>
+#include <QQuickPaintedItem>
+#include <QVector>
+
+// NOTE: all rectangle coordinates are normalized [0, 1], relative to this item's own width/height,
+// mirroring NoteOffsetOverlay's convention.
+//
+// Bars belonging to the same note column (i.e. sharing the same left/right X span - the notes of a
+// chord) are expected to be stored in back-to-front paint order: the highest-pitched note's bar
+// first (painted first, furthest back), the lowest-pitched note's bar last (painted last, frontmost
+// and fully opaque). Painting each bar's opaque body in that order naturally makes a taller,
+// further-back bar's tip peek out above a shorter, more-frontward one - exactly like an overlapping
+// velocity lane in a DAW piano roll. hitTestPx() reconstructs the same front-to-back visibility
+// order to find which bar is actually clickable at a given pixel.
+
+namespace mu::notation {
+class NoteVelocityOverlay : public QQuickPaintedItem
+{
+    Q_OBJECT
+
+public:
+    struct RectData {
+        qreal leftN = 0.0;
+        qreal rightN = 0.0;
+        qreal y0N = 1.0;   // velocity 0 (baseline)
+        qreal yTopN = 1.0; // current top edge, i.e. the note's velocity
+        bool selected = false;
+        bool userModified = false; // has an explicit user-set velocity, vs. the dynamics-derived default
+    };
+
+    explicit NoteVelocityOverlay(QQuickItem* parent);
+
+    void setRects(const QVector<RectData>& rects);
+    const QVector<RectData>& rects() const;
+
+    // Mutates a single rect in place, avoiding a full-vector copy-out/copy-back - used for live
+    // preview during a drag and for selection-highlight updates, both of which only ever touch a
+    // handful of rects at a time even on a staff with many notes.
+    void updateRect(int index, const RectData& rect);
+
+    void setFillColor(const QColor& color);
+    void setSelectedFillColor(const QColor& color);
+    void setModifiedFillColor(const QColor& color);
+    void setBorderColor(const QColor& color);
+
+    void paint(QPainter* painter) override;
+
+    bool isDragging() const { return m_pressed; }
+
+signals:
+    void barDragged(int rectIndex, qreal newYN, bool completed);
+
+protected:
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseUngrabEvent() override;
+
+private:
+    int hitTestPx(const QPointF& posPx) const;
+
+    QVector<RectData> m_rects;
+
+    QColor m_fillColor;
+    QColor m_selectedFillColor;
+    QColor m_modifiedFillColor;
+    QColor m_borderColor;
+
+    bool m_pressed = false;
+    int m_activeRectIndex = -1;
+};
+}

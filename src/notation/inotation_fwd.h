@@ -87,4 +87,7 @@ using INotationAutomationPtr = std::shared_ptr<INotationAutomation>;
 
 class INotationNoteOffsets;
 using INotationNoteOffsetsPtr = std::shared_ptr<INotationNoteOffsets>;
+
+class INotationNoteVelocity;
+using INotationNoteVelocityPtr = std::shared_ptr<INotationNoteVelocity>;
 }

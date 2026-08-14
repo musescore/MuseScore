@@ -93,6 +93,8 @@ public:
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
 
+    muse::mpe::dynamic_level_t appliableDynamicLevel(track_idx_t trackIdx, int tick) const;
+
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
     static const InstrumentTrackId CHORD_SYMBOLS_TRACK_ID;
