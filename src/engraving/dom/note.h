@@ -440,9 +440,6 @@ public:
     int playbackDurationOffset() const { return m_playbackDurationOffset; }
     void setPlaybackDurationOffset(int offset) { m_playbackDurationOffset = offset; }
 
-    int effectivePlaybackStartTime() const;
-    int effectivePlaybackDuration() const;
-
     SymId noteHead() const;
     bool isNoteName() const;
 
