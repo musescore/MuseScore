@@ -278,6 +278,7 @@ private:
     void toggleNoteOffsetEditor();
     void toggleNoteVelocityEditor();
     void resetNoteOffsets();
+    void resetNoteVelocities();
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);

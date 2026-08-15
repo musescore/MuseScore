@@ -487,6 +487,7 @@ inline static const muse::rcommand::Command SELECT_AUTOMATION_TYPE_COMMAND("comm
 inline static const muse::rcommand::Command TOGGLE_NOTE_OFFSET_EDITOR_COMMAND("command://notation/toggle-note-offset-editor");
 inline static const muse::rcommand::Command TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND("command://notation/toggle-note-velocity-editor");
 inline static const muse::rcommand::Command RESET_NOTE_OFFSETS_COMMAND("command://notation/reset-note-offsets");
+inline static const muse::rcommand::Command RESET_NOTE_VELOCITIES_COMMAND("command://notation/reset-note-velocities");
 
 // TAB commands
 inline static const muse::rcommand::Command SET_DURATION_WHOLE_TAB_COMMAND("command://notation/set-duration-whole-tab");

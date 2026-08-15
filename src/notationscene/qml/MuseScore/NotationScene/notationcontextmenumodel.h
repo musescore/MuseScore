@@ -30,6 +30,7 @@
 #include "notation/inotationinteraction.h"
 #include "notation/inotationautomation.h"
 #include "notation/inotationnoteoffsets.h"
+#include "notation/inotationnotevelocity.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::notation {
@@ -82,6 +83,7 @@ private:
     INotationSelectionPtr selection() const;
     INotationAutomationPtr automation() const;
     INotationNoteOffsetsPtr noteOffsets() const;
+    INotationNoteVelocityPtr noteVelocity() const;
 
     const engraving::EngravingItem* currentElement() const;
 

@@ -2936,6 +2936,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo {
+        RESET_NOTE_VELOCITIES_COMMAND,
+        TranslatableString("action", "Reset note velocities"),
+        TranslatableString("action", "Reset note velocities"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
         SELECT_AUTOMATION_TYPE_COMMAND,
         TranslatableString::untranslatable("Automation type"),
         TranslatableString::untranslatable("Select automation type"),

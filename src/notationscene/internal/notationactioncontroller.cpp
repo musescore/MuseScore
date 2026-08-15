@@ -587,6 +587,7 @@ void NotationActionController::init()
     registerCommand(TOGGLE_NOTE_OFFSET_EDITOR_COMMAND, &Controller::toggleNoteOffsetEditor);
     registerCommand(TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND, &Controller::toggleNoteVelocityEditor);
     registerCommand(RESET_NOTE_OFFSETS_COMMAND, &Controller::resetNoteOffsets);
+    registerCommand(RESET_NOTE_VELOCITIES_COMMAND, &Controller::resetNoteVelocities);
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -3340,6 +3341,28 @@ void NotationActionController::resetNoteOffsets()
     for (Note* note : notes) {
         note->undoChangeProperty(Pid::PLAYBACK_START_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
         note->undoChangeProperty(Pid::PLAYBACK_DURATION_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
+    }
+    undoStack->commitChanges();
+}
+
+void NotationActionController::resetNoteVelocities()
+{
+    TRACEFUNC;
+
+    INotationSelectionPtr selection = currentNotationSelection();
+    std::vector<Note*> notes = selection ? selection->notes() : std::vector<Note*>();
+    if (notes.empty()) {
+        return;
+    }
+
+    INotationUndoStackPtr undoStack = currentNotationUndoStack();
+    if (!undoStack) {
+        return;
+    }
+
+    undoStack->prepareChanges(TranslatableString("undoableAction", "Reset note velocities"));
+    for (Note* note : notes) {
+        note->undoChangeProperty(Pid::USER_VELOCITY, 0, mu::engraving::PropertyFlags::NOSTYLE);
     }
     undoStack->commitChanges();
 }
