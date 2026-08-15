@@ -38,6 +38,7 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
+#include "engraving/dom/tie.h"
 #include "engraving/types/types.h"
 
 #include "mpe/mpetypes.h"
@@ -491,6 +492,32 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
         const int otherVelocity = std::clamp(displayedVelocity(note) + delta, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
         changes.push_back({ note, otherVelocity });
     }
+
+    // A tied-continuation note either produces no playback event of its own (its own velocity is
+    // then irrelevant) or, in some tie configurations (a tremolo spanning the tie, a partial tie
+    // across a repeat, a multi-note articulation, a trill ending on the tie's start chord), is
+    // rendered as its own independent event using its own velocity - which was otherwise never
+    // touched by this overlay (createOverlayForStaff() doesn't offer it a handle at all). Mirror
+    // every affected note's new value onto its whole forward tie chain so neither case is left
+    // with a stale value.
+    std::vector<PendingChange> tiedChanges;
+    for (const PendingChange& change : changes) {
+        std::vector<Note*> chain { change.note };
+        for (Tie* tie = change.note->tieFor(); tie; tie = tie->endNote() ? tie->endNote()->tieFor() : nullptr) {
+            Note* tied = tie->endNote();
+            if (!tied || muse::contains(chain, tied)) {
+                break;
+            }
+            chain.push_back(tied);
+
+            const bool alreadyPending = muse::contains_if(changes, [tied](const PendingChange& c) { return c.note == tied; })
+                                        || muse::contains_if(tiedChanges, [tied](const PendingChange& c) { return c.note == tied; });
+            if (!alreadyPending) {
+                tiedChanges.push_back({ tied, change.velocity });
+            }
+        }
+    }
+    changes.insert(changes.end(), tiedChanges.begin(), tiedChanges.end());
 
     if (!completed) {
         // Live drag preview - update every affected overlay's displayed bar height without
