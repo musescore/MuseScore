@@ -401,7 +401,9 @@ void NotationNoteOffsetController::applyOverlayColors(NoteOffsetOverlay* overlay
     overlay->setSelectedFillColor(QColor(60, 160, 210, 90));
     overlay->setModifiedFillColor(QColor(235, 140, 40, 90));
     overlay->setBorderColor(QColor(50, 130, 100, 200));
-    overlay->setHandleColor(QColor(70, 70, 70, 230));
+    overlay->setHandleColor(QColor(90, 180, 140, 230).darker(160));
+    overlay->setSelectedHandleColor(QColor(60, 160, 210, 230).darker(140));
+    overlay->setModifiedHandleColor(QColor(235, 140, 40, 230).darker(140));
 }
 
 void NotationNoteOffsetController::updateSelectionHighlight()
