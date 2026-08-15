@@ -31,6 +31,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/property.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
@@ -585,6 +586,7 @@ void NotationActionController::init()
     registerQueryCommand(SELECT_AUTOMATION_TYPE_COMMAND, &Controller::selectAutomationType);
     registerCommand(TOGGLE_NOTE_OFFSET_EDITOR_COMMAND, &Controller::toggleNoteOffsetEditor);
     registerCommand(TOGGLE_NOTE_VELOCITY_EDITOR_COMMAND, &Controller::toggleNoteVelocityEditor);
+    registerCommand(RESET_NOTE_OFFSETS_COMMAND, &Controller::resetNoteOffsets);
 
     // TAB
     registerCommand(SET_DURATION_WHOLE_TAB_COMMAND, [this]() { setDuration(DurationType::V_WHOLE); });
@@ -3317,6 +3319,29 @@ void NotationActionController::toggleNoteVelocityEditor()
 
     const bool isEnabled = masterNotation->noteVelocity()->isEditModeEnabled();
     masterNotation->noteVelocity()->setEditModeEnabled(!isEnabled);
+}
+
+void NotationActionController::resetNoteOffsets()
+{
+    TRACEFUNC;
+
+    INotationSelectionPtr selection = currentNotationSelection();
+    std::vector<Note*> notes = selection ? selection->notes() : std::vector<Note*>();
+    if (notes.empty()) {
+        return;
+    }
+
+    INotationUndoStackPtr undoStack = currentNotationUndoStack();
+    if (!undoStack) {
+        return;
+    }
+
+    undoStack->prepareChanges(TranslatableString("undoableAction", "Reset note offsets"));
+    for (Note* note : notes) {
+        note->undoChangeProperty(Pid::PLAYBACK_START_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
+        note->undoChangeProperty(Pid::PLAYBACK_DURATION_OFFSET, 0, mu::engraving::PropertyFlags::NOSTYLE);
+    }
+    undoStack->commitChanges();
 }
 
 muse::Ret NotationActionController::selectAutomationType(const muse::rcommand::CommandQuery& query)

@@ -277,6 +277,7 @@ private:
     muse::Ret selectAutomationType(const muse::rcommand::CommandQuery& query);
     void toggleNoteOffsetEditor();
     void toggleNoteVelocityEditor();
+    void resetNoteOffsets();
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);

@@ -57,6 +57,12 @@ void NotationContextMenuModel::loadItems(int elementType)
               << makeMenu(TranslatableString::untranslatable("Automation type"), makeAutomationTypeItems());
     }
 
+    const INotationNoteOffsetsPtr noteOffsets = this->noteOffsets();
+    if (noteOffsets && noteOffsets->isEditModeEnabled()) {
+        items << makeSeparator()
+              << makeMenuItem(RESET_NOTE_OFFSETS_COMMAND);
+    }
+
     setItems(items);
 }
 
@@ -535,6 +541,12 @@ INotationAutomationPtr NotationContextMenuModel::automation() const
 {
     IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
     return masterNotation ? masterNotation->automation() : nullptr;
+}
+
+INotationNoteOffsetsPtr NotationContextMenuModel::noteOffsets() const
+{
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    return masterNotation ? masterNotation->noteOffsets() : nullptr;
 }
 
 const EngravingItem* NotationContextMenuModel::currentElement() const
