@@ -104,6 +104,7 @@ private:
     void rebuildAllOverlays();
     void createOverlayForStaff(const System* system, staff_idx_t staffIdx, OverlaysMap& newOverlays);
     void updateOverlaysGeometry();
+    void updateSelectionHighlight();
     void applyOverlayColors(NoteOffsetOverlay* overlay) const;
 
     void onCurrentNotationChanged();

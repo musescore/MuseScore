@@ -69,6 +69,18 @@ void NoteOffsetOverlay::setFillColor(const QColor& color)
     update();
 }
 
+void NoteOffsetOverlay::setSelectedFillColor(const QColor& color)
+{
+    m_selectedFillColor = color;
+    update();
+}
+
+void NoteOffsetOverlay::setModifiedFillColor(const QColor& color)
+{
+    m_modifiedFillColor = color;
+    update();
+}
+
 void NoteOffsetOverlay::setBorderColor(const QColor& color)
 {
     m_borderColor = color;
@@ -102,7 +114,7 @@ void NoteOffsetOverlay::paint(QPainter* painter)
         const qreal cornerRadius = std::min(halfHeightPx, bodyRect.width() / 2.0);
 
         painter->setPen(QPen(m_borderColor, 1.0));
-        painter->setBrush(m_fillColor);
+        painter->setBrush(rect.selected ? m_selectedFillColor : (rect.userModified ? m_modifiedFillColor : m_fillColor));
         painter->drawRoundedRect(bodyRect, cornerRadius, cornerRadius);
 
         painter->setPen(Qt::NoPen);

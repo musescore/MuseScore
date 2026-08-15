@@ -41,6 +41,8 @@ public:
         qreal rightN = 0.0;
         qreal centerYN = 0.5;
         qreal heightYN = 1.0;
+        bool selected = false;
+        bool userModified = false; // either playback offset is non-zero
     };
 
     explicit NoteOffsetOverlay(QQuickItem* parent);
@@ -54,6 +56,8 @@ public:
     void updateRect(int index, const RectData& rect);
 
     void setFillColor(const QColor& color);
+    void setSelectedFillColor(const QColor& color);
+    void setModifiedFillColor(const QColor& color);
     void setBorderColor(const QColor& color);
     void setHandleColor(const QColor& color);
 
@@ -86,6 +90,8 @@ private:
     QVector<RectData> m_rects;
 
     QColor m_fillColor;
+    QColor m_selectedFillColor;
+    QColor m_modifiedFillColor;
     QColor m_borderColor;
     QColor m_handleColor;
 
