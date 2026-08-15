@@ -2922,6 +2922,13 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration(IconCode::Code::CLOCK, rcommand::Checkable::Yes)
     },
     CommandInfo {
+        RESET_NOTE_OFFSETS_COMMAND,
+        TranslatableString("action", "Reset note offsets"),
+        TranslatableString("action", "Reset note offsets"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo {
         SELECT_AUTOMATION_TYPE_COMMAND,
         TranslatableString::untranslatable("Automation type"),
         TranslatableString::untranslatable("Select automation type"),
