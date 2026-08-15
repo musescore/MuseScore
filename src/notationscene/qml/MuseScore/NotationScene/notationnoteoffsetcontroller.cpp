@@ -155,6 +155,15 @@ void NotationNoteOffsetController::onCurrentNotationChanged()
                 scheduleRebuild();
             }, Asyncable::Mode::SetReplace);
         }
+
+        if (notation->interaction()) {
+            notation->interaction()->selectionChanged().onNotify(this, [this, thisNotation]() {
+                if (thisNotation != currentNotation().get()) {
+                    return;
+                }
+                updateSelectionHighlight();
+            }, Asyncable::Mode::SetReplace);
+        }
     }
 }
 
@@ -311,6 +320,8 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
     const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
     const muse::RectF overlayCanvasRect(staffCanvasRect.x(), minY, staffCanvasRect.width(), maxY - minY);
 
+    const std::vector<Note*> selected = selectedNotes();
+
     QVector<NoteOffsetOverlay::RectData> rects;
     rects.reserve(static_cast<int>(entries.size()));
 
@@ -339,6 +350,8 @@ void NotationNoteOffsetController::createOverlayForStaff(const System* system, s
         rect.rightN = (rightPx - overlayCanvasRect.x()) / overlayCanvasRect.width();
         rect.centerYN = (centerY[i] - overlayCanvasRect.y()) / overlayCanvasRect.height();
         rect.heightYN = rectHeight / overlayCanvasRect.height();
+        rect.selected = muse::contains(selected, entry.note);
+        rect.userModified = note->playbackStartOffset() != 0 || note->playbackDurationOffset() != 0;
         rects.push_back(rect);
     }
 
@@ -384,9 +397,39 @@ void NotationNoteOffsetController::applyOverlayColors(NoteOffsetOverlay* overlay
         return;
     }
 
-    overlay->setFillColor(QColor(100, 150, 220, 60));
-    overlay->setBorderColor(QColor(80, 130, 200, 200));
-    overlay->setHandleColor(QColor(60, 110, 190, 230));
+    overlay->setFillColor(QColor(90, 180, 140, 60));
+    overlay->setSelectedFillColor(QColor(60, 160, 210, 90));
+    overlay->setModifiedFillColor(QColor(235, 140, 40, 90));
+    overlay->setBorderColor(QColor(50, 130, 100, 200));
+    overlay->setHandleColor(QColor(70, 70, 70, 230));
+}
+
+void NotationNoteOffsetController::updateSelectionHighlight()
+{
+    if (!noteOffsets() || !noteOffsets()->isEditModeEnabled()) {
+        return;
+    }
+
+    const std::vector<Note*> selected = selectedNotes();
+
+    for (const auto& [key, data] : m_overlaysByStaff) {
+        const QVector<NoteOffsetOverlay::RectData>& rects = data.overlay->rects();
+        if (rects.size() != static_cast<int>(data.notes.size())) {
+            continue;
+        }
+
+        // Only a handful of notes typically change selection at once, even on a staff with many
+        // notes - update just those rects in place instead of copying the whole vector out and
+        // back regardless of how many actually changed.
+        for (int i = 0; i < rects.size(); ++i) {
+            const bool isSelected = muse::contains(selected, data.notes.at(i).note);
+            if (rects.at(i).selected != isSelected) {
+                NoteOffsetOverlay::RectData rect = rects.at(i);
+                rect.selected = isSelected;
+                data.overlay->updateRect(i, rect);
+            }
+        }
+    }
 }
 
 void NotationNoteOffsetController::updateOverlaysGeometry()
