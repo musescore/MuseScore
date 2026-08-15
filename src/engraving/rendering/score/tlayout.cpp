@@ -2581,7 +2581,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             }
             String fingerS;
             if (finger == 'T' || finger == 't' || finger == 'P' || finger == 'p') {
-                fingerS = String(QChar(finger));
+                fingerS = String(QString(QChar(finger)));
             } else {
                 fingerS = String::number(finger);
             }
