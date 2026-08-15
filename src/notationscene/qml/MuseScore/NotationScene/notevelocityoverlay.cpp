@@ -106,10 +106,7 @@ void NoteVelocityOverlay::paint(QPainter* painter)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(QPen(m_borderColor, 1.0));
 
-    // Bars are stored in back-to-front paint order (see header comment) - simply painting each
-    // one's fully opaque body in order reproduces the stacked/overlapping look of a DAW velocity
-    // lane, with no extra bookkeeping needed here.
-    for (const RectData& rect : m_rects) {
+    const auto drawBar = [&](const RectData& rect) {
         const qreal leftPx = rect.leftN * width() + BAR_HALF_WIDTH_MARGIN_PX;
         const qreal rightPx = rect.rightN * width() - BAR_HALF_WIDTH_MARGIN_PX;
         const qreal topPx = rect.yTopN * height();
@@ -119,6 +116,25 @@ void NoteVelocityOverlay::paint(QPainter* painter)
 
         painter->setBrush(rect.selected ? m_selectedFillColor : (rect.userModified ? m_modifiedFillColor : m_fillColor));
         painter->drawRect(barRect);
+    };
+
+    // Bars are stored in back-to-front paint order (see header comment) - simply painting each
+    // one's fully opaque body in order reproduces the stacked/overlapping look of a DAW velocity
+    // lane, with no extra bookkeeping needed here.
+    for (const RectData& rect : m_rects) {
+        if (!rect.selected) {
+            drawBar(rect);
+        }
+    }
+
+    // A selected note's bar must stay fully visible (and, per hitTestPx(), clickable) no matter
+    // where it sits in the pitch-based stacking order - otherwise selecting a chord note that isn't
+    // the pitch-frontmost one leaves its bar hidden behind another note's, with no way to drag it.
+    // Redraw selected bars last so they always end up on top.
+    for (const RectData& rect : m_rects) {
+        if (rect.selected) {
+            drawBar(rect);
+        }
     }
 
     // Only the bar actually being dragged gets a live numeric readout, to keep the staff
@@ -184,11 +200,40 @@ int NoteVelocityOverlay::hitTestPx(const QPointF& posPx) const
         return -1;
     }
 
-    // candidates preserve the original back-to-front order - scanning in reverse visits the
-    // frontmost (lowest-pitched) bar first, exactly matching what's actually visible on screen.
+    // A selected bar is always redrawn on top of every other bar in its column (see paint()), so
+    // it must win hit-testing too, regardless of pitch-based stacking order - otherwise a selected
+    // chord note that isn't the pitch-frontmost one would be visible but not draggable. Selected
+    // bars occlude everything below them, so account for all of them up front...
     qreal minTopSoFarPx = std::numeric_limits<qreal>::max();
+    for (int idx : candidates) {
+        const RectData& r = m_rects.at(idx);
+        if (r.selected) {
+            minTopSoFarPx = std::min(minTopSoFarPx, r.yTopN * height());
+        }
+    }
+
+    // ...then let each selected bar claim any click within its own full body, ignoring occlusion
+    // from other selected bars (there's normally at most one per column anyway).
+    for (int idx : candidates) {
+        const RectData& r = m_rects.at(idx);
+        if (!r.selected) {
+            continue;
+        }
+        const qreal topPx = r.yTopN * height();
+        const qreal basePx = r.y0N * height();
+        if (posPx.y() >= topPx - EDGE_HIT_MARGIN_PX && posPx.y() <= basePx) {
+            return idx;
+        }
+    }
+
+    // candidates preserve the original back-to-front order - scanning in reverse visits the
+    // frontmost (lowest-pitched) unselected bar first, exactly matching what's actually visible
+    // once any selected bar's on-top redraw (accounted for above) is factored in.
     for (auto it = candidates.rbegin(); it != candidates.rend(); ++it) {
         const RectData& r = m_rects.at(*it);
+        if (r.selected) {
+            continue;
+        }
         const qreal topPx = r.yTopN * height();
         const qreal basePx = r.y0N * height();
         const qreal exposedBottomPx = std::min(basePx, minTopSoFarPx);
