@@ -151,15 +151,16 @@ Item {
                             textHorizontalAlignment: Qt.AlignHCenter
                             indeterminateText: '-'
                             isIndeterminate: {
-                                const fingerInt = parseInt(repeaterItem.finger)
-                                return isNaN(fingerInt) || fingerInt < 1 || fingerInt > 5
+                                const fingerStr = repeaterItem.finger.toString()
+                                const isAllowedChar = fingerStr === 'T' || fingerStr === 't' || fingerStr === 'P' || fingerStr === 'p'
+                                const fingerInt = parseInt(fingerStr)
+                                return (!isAllowedChar && (isNaN(fingerInt) || fingerInt < 1 || fingerInt > 5))
                             }
 
                             currentText: isIndeterminate ? '' : repeaterItem.finger
 
-                            validator: IntInputValidator {
-                                top: 5
-                                bottom: 0
+                            validator: RegularExpressionValidator {
+                                regularExpression: /^[1-5TtPp]$/
                             }
 
                             navigation.name: `Finger ${repeaterItem.string + 1} text input`
@@ -168,9 +169,8 @@ Item {
                             navigation.accessible.name: qsTrc("propertiespanel", "Finger for string %1").arg(repeaterItem.string + 1)
 
                             onTextEditingFinished: function (newTextValue) {
-                                var newFinger = parseInt(newTextValue)
                                 if (root.model) {
-                                    root.model.setFingering(repeaterItem.string, newFinger)
+                                    root.model.setFingering(repeaterItem.string, newTextValue)
                                 }
                             }
                         }

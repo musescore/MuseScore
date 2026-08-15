@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
  *
@@ -175,16 +175,40 @@ PropertyItem* FretDiagramSettingsModel::showFingerings() const
 
 QStringList FretDiagramSettingsModel::fingerings() const
 {
-    QString fingerings = m_fingerings->value().value<QString>();
-    return fingerings.split(',');
+    QString fingeringsStr = m_fingerings->value().value<QString>();
+    QStringList res = fingeringsStr.split(',');
+    for (int i = 0; i < res.size(); ++i) {
+        bool ok;
+        int val = res[i].toInt(&ok);
+        if (ok) {
+            if (val == 'T' || val == 't' || val == 'P' || val == 'p') {
+                res[i] = QString(QChar(val));
+            } else if (val == 0) {
+                res[i] = "";
+            }
+        }
+    }
+    return res;
 }
 
-void FretDiagramSettingsModel::setFingering(int string, int finger)
+void FretDiagramSettingsModel::setFingering(int string, const QString& fingerStr)
 {
-    finger = std::clamp(finger, 0, 5);
+    int finger = 0;
+    bool ok;
+    int parsedInt = fingerStr.toInt(&ok);
+    if (ok && parsedInt >= 1 && parsedInt <= 5) {
+        finger = parsedInt;
+    } else if (fingerStr == "T" || fingerStr == "t" || fingerStr == "P" || fingerStr == "p") {
+        finger = fingerStr.at(0).unicode();
+    } else {
+        finger = 0;
+    }
 
-    QStringList curFingerings = fingerings();
-    assert(string < curFingerings.size());
+    QString fingeringsStr = m_fingerings->value().value<QString>();
+    QStringList curFingerings = fingeringsStr.split(',');
+    if (string >= curFingerings.size()) {
+        return;
+    }
 
     QString newFinger = QString::number(finger);
     curFingerings[string] = newFinger;

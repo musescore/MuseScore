@@ -2579,7 +2579,12 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             if (finger == 0) {
                 continue;
             }
-            String fingerS = String::number(finger);
+            String fingerS;
+            if (finger == 'T' || finger == 't' || finger == 'P' || finger == 'p') {
+                fingerS = String(QChar(finger));
+            } else {
+                fingerS = String::number(finger);
+            }
             double width = fontMetrics.width(fingerS);
             double digitHeight = fontMetrics.tightBoundingRect(fingerS).height();
             double xOff = -0.5 * width;

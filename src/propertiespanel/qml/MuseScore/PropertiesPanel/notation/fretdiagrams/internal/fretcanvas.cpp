@@ -212,7 +212,12 @@ void FretCanvas::draw(QPainter* painter)
             if (finger == 0) {
                 continue;
             }
-            QString fingerS = QString::number(finger);
+            QString fingerS;
+            if (finger == 'T' || finger == 't' || finger == 'P' || finger == 'p') {
+                fingerS = QString(QChar(finger));
+            } else {
+                fingerS = QString::number(finger);
+            }
             double width = fontMetrics.width(fingerS);
             double xOff = -0.5 * width;
             double fingerX = (m_diagram->strings() - i - 1) * stringDist + xOff;
