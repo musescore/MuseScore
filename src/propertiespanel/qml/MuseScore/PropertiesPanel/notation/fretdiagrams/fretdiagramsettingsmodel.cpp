@@ -206,7 +206,7 @@ void FretDiagramSettingsModel::setFingering(int string, const QString& fingerStr
 
     QString fingeringsStr = m_fingerings->value().value<QString>();
     QStringList curFingerings = fingeringsStr.split(',');
-    if (string >= curFingerings.size()) {
+    if (string < 0 || string >= curFingerings.size()) {
         return;
     }
 
