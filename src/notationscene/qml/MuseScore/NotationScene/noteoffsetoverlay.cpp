@@ -93,6 +93,18 @@ void NoteOffsetOverlay::setHandleColor(const QColor& color)
     update();
 }
 
+void NoteOffsetOverlay::setSelectedHandleColor(const QColor& color)
+{
+    m_selectedHandleColor = color;
+    update();
+}
+
+void NoteOffsetOverlay::setModifiedHandleColor(const QColor& color)
+{
+    m_modifiedHandleColor = color;
+    update();
+}
+
 void NoteOffsetOverlay::paint(QPainter* painter)
 {
     if (m_rects.isEmpty()) {
@@ -118,7 +130,7 @@ void NoteOffsetOverlay::paint(QPainter* painter)
         painter->drawRoundedRect(bodyRect, cornerRadius, cornerRadius);
 
         painter->setPen(Qt::NoPen);
-        painter->setBrush(m_handleColor);
+        painter->setBrush(rect.selected ? m_selectedHandleColor : (rect.userModified ? m_modifiedHandleColor : m_handleColor));
         painter->drawRoundedRect(QRectF(leftPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),
                                  EDGE_HANDLE_WIDTH_PX / 2.0, EDGE_HANDLE_WIDTH_PX / 2.0);
         painter->drawRoundedRect(QRectF(rightPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),

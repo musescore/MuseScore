@@ -60,6 +60,8 @@ public:
     void setModifiedFillColor(const QColor& color);
     void setBorderColor(const QColor& color);
     void setHandleColor(const QColor& color);
+    void setSelectedHandleColor(const QColor& color);
+    void setModifiedHandleColor(const QColor& color);
 
     void paint(QPainter* painter) override;
 
@@ -94,6 +96,8 @@ private:
     QColor m_modifiedFillColor;
     QColor m_borderColor;
     QColor m_handleColor;
+    QColor m_selectedHandleColor;
+    QColor m_modifiedHandleColor;
 
     bool m_pressed = false;
     int m_activeRectIndex = -1;
