@@ -173,6 +173,8 @@ public:
         SEGMENT, MEASURE, CHORDREST, NOTE
     };
 
+    ~Spanner() override;
+
     virtual double mag() const override;
 
     virtual void setScore(Score* s) override;
