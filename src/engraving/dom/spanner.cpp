@@ -474,6 +474,14 @@ Spanner::Spanner(const Spanner& s)
     }
 }
 
+Spanner::~Spanner()
+{
+    // A spanner owns its segments (they are its DOM children), so it has to free
+    // them. Without this they would only be unparented onto the dummy, where they
+    // would sit until the score is destroyed - with a dangling spanner() pointer.
+    eraseSpannerSegments();
+}
+
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
