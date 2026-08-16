@@ -2581,13 +2581,13 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             }
             String fingerS;
             if (finger == 'T') {
-                fingerS = "T";
+                fingerS = String("T");
             } else if (finger == 't') {
-                fingerS = "t";
+                fingerS = String("t");
             } else if (finger == 'P') {
-                fingerS = "P";
+                fingerS = String("P");
             } else if (finger == 'p') {
-                fingerS = "p";
+                fingerS = String("p");
             } else {
                 fingerS = String::number(finger);
             }
