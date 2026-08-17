@@ -40,7 +40,8 @@ bool EncHeader::readMagicAndVersion(QDataStream& ds)
     if (!isReadableEncoreMagic(magic)) {
         return false;
     }
-    ds.setByteOrder(magic == "SCO5" ? QDataStream::BigEndian : QDataStream::LittleEndian);
+    const bool macContainer = (magic == "SCO5" || magic == "MTIM");
+    ds.setByteOrder(macContainer ? QDataStream::BigEndian : QDataStream::LittleEndian);
     ds >> chuMagio;
     return true;
 }
