@@ -75,7 +75,9 @@
             <Note>
               <eid>L_L</eid>
               <LaissezVib>
+                <startElement>L_L</startElement>
                 <eid>M_M</eid>
+                <track>0</track>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -92,7 +94,9 @@
             <Note>
               <eid>P_P</eid>
               <LaissezVib>
+                <startElement>P_P</startElement>
                 <eid>Q_Q</eid>
+                <track>0</track>
                 <up>up</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -110,7 +114,9 @@
             <Note>
               <eid>T_T</eid>
               <LaissezVib>
+                <startElement>T_T</startElement>
                 <eid>U_U</eid>
+                <track>0</track>
                 <up>down</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -128,7 +134,9 @@
             <Note>
               <eid>X_X</eid>
               <LaissezVib>
+                <startElement>X_X</startElement>
                 <eid>Y_Y</eid>
+                <track>0</track>
                 <lineType>2</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -146,7 +154,9 @@
             <Note>
               <eid>b_b</eid>
               <LaissezVib>
+                <startElement>b_b</startElement>
                 <eid>c_c</eid>
+                <track>0</track>
                 <lineType>1</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -164,7 +174,9 @@
             <Note>
               <eid>f_f</eid>
               <LaissezVib>
+                <startElement>f_f</startElement>
                 <eid>g_g</eid>
+                <track>0</track>
                 <color r="255" g="38" b="0" a="255"/>
                 </LaissezVib>
               <pitch>72</pitch>

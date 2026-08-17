@@ -24,7 +24,10 @@
 
 #include <QTime>
 
+#include "global/containers.h"
+
 #include "audio/common/audiotypes.h"
+#include "engraving/types/types.h"
 
 namespace mu::playback {
 static constexpr muse::audio::aux_channel_idx_t AUX_CHANNEL_NUM = 2;
@@ -46,6 +49,28 @@ enum class MixerSectionType {
     MuteAndSolo,
     Title
 };
+
+static const std::map<MixerSectionType, std::string> MIXER_SECTION_TYPE_STR = {
+    { MixerSectionType::Unknown, "unknown" },
+    { MixerSectionType::Labels, "labels" },
+    { MixerSectionType::Sound, "sound" },
+    { MixerSectionType::AudioFX, "audio-fx" },
+    { MixerSectionType::Balance, "balance" },
+    { MixerSectionType::Volume, "volume" },
+    { MixerSectionType::Fader, "fader" },
+    { MixerSectionType::MuteAndSolo, "mute-and-solo" },
+    { MixerSectionType::Title, "title" }
+};
+
+static inline std::string str_conv(MixerSectionType type)
+{
+    return muse::value(MIXER_SECTION_TYPE_STR, type);
+}
+
+static inline MixerSectionType str_conv(const std::string& str, MixerSectionType def)
+{
+    return muse::key(MIXER_SECTION_TYPE_STR, str, def);
+}
 
 inline QList<MixerSectionType> allMixerSectionTypes()
 {
@@ -122,4 +147,6 @@ enum OnlineSoundsShowProgressBarMode {
     DuringPlayback,
     Never,
 };
+
+using LoopBoundaryType = mu::engraving::LoopBoundaryType;
 }

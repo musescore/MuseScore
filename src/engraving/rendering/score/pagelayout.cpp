@@ -26,7 +26,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/chord.h"
 #include "dom/chordrest.h"
 #include "dom/durationelement.h"
@@ -680,7 +680,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                 }
                 addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                 addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
-                for (const BracketItem* bi : staff->brackets()) {
+                for (const BracketItem* bi : ctx.dom().brackets(staffNr)) {
                     if (bi->bracketType() == BracketType::NORMAL) {
                         addSpaceAroundNormalBracket |= int(staff->idx()) > (endNormalBracket - 1);
                         endNormalBracket = std::max(endNormalBracket, int(staff->idx() + bi->bracketSpan()));

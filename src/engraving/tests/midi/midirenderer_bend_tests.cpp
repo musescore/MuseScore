@@ -1021,3 +1021,236 @@ TEST_F(MidiRendererBend_Tests, bendReleaseTwice)
 
     EXPECT_EQ(events[0].size(), 0);
 }
+
+TEST_F(MidiRendererBend_Tests, simpleDive)
+{
+    constexpr int defVol = 80;
+
+    EventsHolder events = renderMidiEvents(u"dive_simple.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 41);
+
+    checkEventInterval(events, 0, 479, 60, defVol);
+
+    /// dive parabola
+    checkPitchBend(events, 96, 8192);
+    checkPitchBend(events, 106, 8203);
+    checkPitchBend(events, 116, 8236);
+    checkPitchBend(events, 126, 8291);
+    checkPitchBend(events, 136, 8369);
+    checkPitchBend(events, 146, 8469);
+    checkPitchBend(events, 156, 8591);
+    checkPitchBend(events, 166, 8736);
+    checkPitchBend(events, 176, 8903);
+    checkPitchBend(events, 186, 9091);
+    checkPitchBend(events, 196, 9303);
+    checkPitchBend(events, 206, 9536);
+    checkPitchBend(events, 216, 9791);
+    checkPitchBend(events, 226, 10069);
+    checkPitchBend(events, 236, 10369);
+    checkPitchBend(events, 246, 10691);
+    checkPitchBend(events, 256, 11036);
+    checkPitchBend(events, 266, 11403);
+    checkPitchBend(events, 276, 11791);
+    checkPitchBend(events, 286, 12203);
+
+    /// plateau at +6 semitones
+    checkPitchBendInterval(events, 296, 476, 10, 12288);
+
+    EXPECT_TRUE(events[0].empty());
+}
+
+TEST_F(MidiRendererBend_Tests, preDive)
+{
+    constexpr int defVol = 80;
+
+    EventsHolder events = renderMidiEvents(u"dive_predive.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 3);
+
+    /// instant PB offset, no parabola
+    checkEventInterval(events, 0, 479, 60, defVol);
+    checkPitchBend(events, 0, 6827);
+
+    EXPECT_TRUE(events[0].empty());
+}
+
+TEST_F(MidiRendererBend_Tests, preDiveWithDive)
+{
+    constexpr int defVol = 80;
+
+    EventsHolder events = renderMidiEvents(u"dive_predive_with_dive.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 50);
+
+    checkEventInterval(events, 0, 479, 60, defVol);
+
+    /// PRE_DIVE instant offset + DIVE parabola
+    checkPitchBend(events, 0, 4096);
+    checkPitchBend(events, 10, 4108);
+    checkPitchBend(events, 20, 4144);
+    checkPitchBend(events, 30, 4203);
+    checkPitchBend(events, 40, 4286);
+    checkPitchBend(events, 50, 4393);
+    checkPitchBend(events, 60, 4523);
+    checkPitchBend(events, 70, 4677);
+    checkPitchBend(events, 80, 4855);
+    checkPitchBend(events, 90, 5056);
+    checkPitchBend(events, 100, 5282);
+    checkPitchBend(events, 110, 5531);
+    checkPitchBend(events, 120, 5803);
+    checkPitchBend(events, 130, 6099);
+    checkPitchBend(events, 140, 6419);
+    checkPitchBend(events, 150, 6763);
+    checkPitchBend(events, 160, 7131);
+    checkPitchBend(events, 170, 7522);
+    checkPitchBend(events, 180, 7936);
+    checkPitchBend(events, 190, 8374);
+    checkPitchBend(events, 200, 8836);
+    checkPitchBend(events, 210, 9322);
+    checkPitchBend(events, 220, 9832);
+    checkPitchBend(events, 230, 10365);
+
+    /// plateau at +4 semitones
+    checkPitchBendInterval(events, 240, 470, 10, 10922);
+
+    EXPECT_TRUE(events[0].empty());
+}
+
+TEST_F(MidiRendererBend_Tests, preDiveMultiSegment)
+{
+    constexpr int defVol = 96;
+
+    EventsHolder events = renderMidiEvents(u"dive_predive_multi_segment.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 50);
+
+    checkEventInterval(events, 0, 479, 55, defVol);
+
+    /// PRE_DIVE instant offset
+    checkPitchBend(events, 0, 6827);
+
+    /// partial return parabola
+    checkPitchBend(events, 10, 6829);
+    checkPitchBend(events, 20, 6833);
+    checkPitchBend(events, 30, 6841);
+    checkPitchBend(events, 40, 6852);
+    checkPitchBend(events, 50, 6867);
+    checkPitchBend(events, 60, 6884);
+    checkPitchBend(events, 70, 6904);
+    checkPitchBend(events, 80, 6928);
+    checkPitchBend(events, 90, 6955);
+    checkPitchBend(events, 100, 6985);
+    checkPitchBend(events, 110, 7018);
+    checkPitchBend(events, 120, 7054);
+    checkPitchBend(events, 130, 7094);
+    checkPitchBend(events, 140, 7136);
+    checkPitchBend(events, 150, 7182);
+    checkPitchBend(events, 160, 7231);
+    checkPitchBend(events, 170, 7283);
+    checkPitchBend(events, 180, 7338);
+    checkPitchBend(events, 190, 7397);
+    checkPitchBend(events, 200, 7458);
+
+    /// brief plateau between segments
+    checkPitchBendInterval(events, 210, 240, 10, 7510);
+
+    /// deep dive parabola
+    checkPitchBend(events, 250, 7505);
+    checkPitchBend(events, 260, 7490);
+    checkPitchBend(events, 270, 7466);
+    checkPitchBend(events, 280, 7431);
+    checkPitchBend(events, 290, 7387);
+    checkPitchBend(events, 300, 7333);
+    checkPitchBend(events, 310, 7270);
+    checkPitchBend(events, 320, 7196);
+    checkPitchBend(events, 330, 7113);
+    checkPitchBend(events, 340, 7020);
+    checkPitchBend(events, 350, 6917);
+    checkPitchBend(events, 360, 6804);
+    checkPitchBend(events, 370, 6681);
+    checkPitchBend(events, 380, 6549);
+    checkPitchBend(events, 390, 6407);
+    checkPitchBend(events, 400, 6255);
+    checkPitchBend(events, 410, 6093);
+    checkPitchBend(events, 420, 5921);
+    checkPitchBend(events, 430, 5740);
+    checkPitchBend(events, 440, 5549);
+    checkPitchBend(events, 450, 5348);
+    checkPitchBend(events, 460, 5137);
+    checkPitchBend(events, 470, 4916);
+
+    EXPECT_TRUE(events[0].empty());
+}
+
+TEST_F(MidiRendererBend_Tests, diveGraceAfterWithTie)
+{
+    constexpr int defVol = 96;
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"dive_grace_after_with_tie.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].size(), 66);
+
+    checkEventInterval(events, 1440, 2399, 57, defVol);
+
+    /// PRE_DIVE instant offset
+    checkPitchBend(events, 1440, 1366);
+
+    /// return parabola to neutral
+    checkPitchBend(events, 1680, 1366);
+    checkPitchBend(events, 1690, 1410);
+    checkPitchBend(events, 1700, 1543);
+    checkPitchBend(events, 1710, 1765);
+    checkPitchBend(events, 1720, 2076);
+    checkPitchBend(events, 1730, 2476);
+    checkPitchBend(events, 1740, 2964);
+    checkPitchBend(events, 1750, 3541);
+    checkPitchBend(events, 1760, 4207);
+    checkPitchBend(events, 1770, 4962);
+    checkPitchBend(events, 1780, 5806);
+    checkPitchBend(events, 1790, 6738);
+    checkPitchBend(events, 1800, 7759);
+    checkPitchBend(events, 1810, 8192);
+
+    /// dive parabola
+    checkPitchBend(events, 1920, 8192);
+    checkPitchBend(events, 1930, 8174);
+    checkPitchBend(events, 1940, 8118);
+    checkPitchBend(events, 1950, 8026);
+    checkPitchBend(events, 1960, 7896);
+    checkPitchBend(events, 1970, 7730);
+    checkPitchBend(events, 1980, 7526);
+    checkPitchBend(events, 1990, 7285);
+    checkPitchBend(events, 2000, 7007);
+    checkPitchBend(events, 2010, 6692);
+    checkPitchBend(events, 2020, 6341);
+    checkPitchBend(events, 2030, 5952);
+    checkPitchBend(events, 2040, 5526);
+    checkPitchBend(events, 2050, 5063);
+    checkPitchBend(events, 2060, 4563);
+    checkPitchBend(events, 2070, 4026);
+    checkPitchBend(events, 2080, 3452);
+    checkPitchBend(events, 2090, 2841);
+    checkPitchBend(events, 2100, 2192);
+    checkPitchBend(events, 2110, 1507);
+
+    /// plateau at bottom
+    checkPitchBendInterval(events, 2120, 2350, 10, 1366);
+
+    /// steep return at end
+    checkPitchBend(events, 2360, 1434);
+    checkPitchBend(events, 2370, 2202);
+    checkPitchBend(events, 2380, 3823);
+    checkPitchBend(events, 2390, 6298);
+
+    /// PB reset after NoteOff
+    checkPitchBend(events, 2400, pwReset);
+
+    EXPECT_TRUE(events[0].empty());
+}

@@ -33,12 +33,15 @@
 #include "io/buffer.h"
 #include "translation.h"
 
+#include "iengravingconfiguration.h"
+#include "iengravingcontextconfiguration.h"
 #include "iengravingfont.h"
 
 #include "rw/rwregister.h"
 
 #include "types/typesconv.h"
 
+#include "rendering/iscorerenderer.h"
 #include "rendering/score/autoplace.h"
 #include "rendering/score/chordlayout.h"
 #include "rendering/score/tlayout.h"
@@ -407,7 +410,6 @@ void EngravingItem::reset()
     undoResetProperty(Pid::MIN_DISTANCE);
     undoResetProperty(Pid::OFFSET);
     undoResetProperty(Pid::LEADING_SPACE);
-    setOffsetChanged(false);
     EngravingObject::reset();
 }
 
@@ -697,9 +699,9 @@ Color EngravingItem::curColor(bool isVisible, const rendering::PaintOptions& opt
 
 Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering::PaintOptions& opt) const
 {
-    // the default element color is always interpreted as black in printing
     if (opt.isPrinting) {
-        return (normalColor == configuration()->defaultColor()) ? Color::BLACK : normalColor;
+        // For printing, always use the actual color of the item (default black unless overridden by the user)
+        return normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
@@ -734,13 +736,13 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor, const rendering
         return configuration()->invisibleColor();
     }
 
-    if (opt.invertColors) {
-        if (normalColor == configuration()->defaultColor()) {
-            return maybeOverrideColor(configuration()->scoreInversionColor());
-        }
-        return maybeOverrideColor(normalColor.inverted());
+    if (!opt.ignoreDisplayedDefaultColor && normalColor == configuration()->defaultColor()) {
+        return maybeOverrideColor(configuration()->displayedDefaultColor(opt.invertColors));
     }
 
+    if (opt.invertColors) {
+        return maybeOverrideColor(normalColor.inverted());
+    }
     return maybeOverrideColor(normalColor);
 }
 
@@ -1633,6 +1635,14 @@ void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, Proper
         undoPushProperty(Pid::OFFSET);
     }
     EngravingObject::undoChangeProperty(pid, val, ps);
+}
+
+void EngravingItem::undoResetProperty(Pid id)
+{
+    EngravingObject::undoResetProperty(id);
+    if (id == Pid::OFFSET) {
+        setOffsetChanged(false);
+    }
 }
 
 //---------------------------------------------------------

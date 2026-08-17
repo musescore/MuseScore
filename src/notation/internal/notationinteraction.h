@@ -116,8 +116,6 @@ public:
     bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelectionDeprecated(MoveDirection d, MoveSelectionType type) override;
     void expandSelection(ExpandSelectionMode mode) override;
-    void selectTopStaff() override;
-    void selectEmptyTrailingMeasure() override;
 
     EngravingItem* contextItem() const override;
 

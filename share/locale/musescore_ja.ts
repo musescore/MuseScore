@@ -810,7 +810,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="452"/>
         <source>Tab font preset</source>
-        <translation type="unfinished"/>
+        <translation>タブフォントのプリセット</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="466"/>
@@ -5206,7 +5206,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>コード記号とフレットボードダイアグラムを移調</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="523"/>
@@ -5732,7 +5732,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="38"/>
         <source>Show scripts</source>
-        <translation type="unfinished"/>
+        <translation>スクリプトを表示</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
@@ -9704,12 +9704,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Import A&amp;udio to Score…</source>
-        <translation type="unfinished"/>
+        <translation>オーディオをスコアにインポート(&amp;U)…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
         <source>Import Audio to Score</source>
-        <translation type="unfinished"/>
+        <translation>オーディオをスコアにインポート</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="124"/>
@@ -10436,7 +10436,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/commonaudioapiconfigurationmodel.cpp" line="99"/>
         <source>The driver for this device could not be opened.</source>
-        <translation type="unfinished"/>
+        <translation>このデバイスのドライバーを開けませんでした。</translation>
     </message>
 </context>
 <context>
@@ -10462,62 +10462,77 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>起動時にようこそダイアログを表示しない</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="41"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="50"/>
         <source>Enjoy free cloud storage</source>
         <translation>無料のクラウドストレージを活用する</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="43"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="52"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
         <translation>楽譜を MuseScore.com にプライベート保存すれば、過去のバージョンを振り返ったり、他の人を招待して閲覧やコメントをもらったりすることができます。そして準備ができたら、あなたの音楽を世界中に公開しましょう。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="45"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="54"/>
         <source>View my scores online</source>
         <translation>オンラインで自分の楽譜を見る</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="42"/>
         <source>What’s new in MuseScore Studio</source>
         <translation>MuseScore Studio の新着情報</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
+        <source>Unlock Premium Playback</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
+        <source>Hear your scores come to life with professionally recorded instrument libraries for expressive, realistic playback in MuseScore Studio.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
+        <source>Get MuseSounds Pro</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
         <translation>主要な新しい浄書ツール、再生機能の大幅な改善、動画エクスポート、ギター用のダイブ記譜、およびワークフローを高速化する機能が含まれています。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="46"/>
         <source>Watch video</source>
         <translation>動画を見る</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="50"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="59"/>
         <source>Install our free MuseSounds libraries</source>
         <translation>無料の MuseSounds ライブラリをインストール</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="52"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="61"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
         <translation>ソロ楽器、マーチング打楽器、フルオーケストラなど、リアルなサンプルライブラリのコレクションをお試しください。MuseHub から無料で取得できます。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="54"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="63"/>
         <source>Get it on MuseHub</source>
         <translation>MuseHub で取得</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="59"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="68"/>
         <source>Explore our tutorials</source>
         <translation>チュートリアルを探す</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="61"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="70"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
         <translation>初心者から経験者まで、すべてのユーザーが MuseScore Studio を最大限に活用できるよう、チュートリアルの再生リストをご用意しました。</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="63"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="72"/>
         <source>View tutorials</source>
         <translation>チュートリアルを見る</translation>
     </message>
@@ -10578,7 +10593,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/braille/internal/notationbraille.cpp" line="880"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>6キー入力モード</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
@@ -10597,7 +10612,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="172"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>6キー入力モード</translation>
     </message>
     <message>
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="174"/>
@@ -10666,7 +10681,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>debugOption</name>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8426"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8437"/>
         <source>Toggle show gap rests</source>
         <translation>ギャップ休符を表示を切り替え</translation>
     </message>
@@ -10734,7 +10749,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="177"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1755"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1757"/>
         <source>Articulation</source>
         <translation>アーティキュレーション</translation>
     </message>
@@ -10742,8 +10757,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1131"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1142"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3436"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3448"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3504"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3516"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2543"/>
         <source>Start of %1</source>
         <translation>%1の始め</translation>
@@ -10752,8 +10767,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1134"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1144"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3440"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3456"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3508"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3524"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2558"/>
         <source>End of %1</source>
         <translation>%1の終わり</translation>
@@ -10896,7 +10911,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fingering.cpp" line="127"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1747"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1749"/>
         <source>String number</source>
         <translation>弦番</translation>
     </message>
@@ -10980,7 +10995,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1292"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1737"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1739"/>
         <source>Nashville number</source>
         <translation>ナッシュビルナンバー</translation>
     </message>
@@ -11011,107 +11026,107 @@ Fret %1 on strings %2</source>
         <translation><numerusform>%Ln小節</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="864"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="931"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1 (%2%3 として鳴る)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2252"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2320"/>
         <source>Acciaccatura</source>
         <translation>短前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2254"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2322"/>
         <source>Appoggiatura</source>
         <translation>長前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2258"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2326"/>
         <source>Grace note after</source>
         <translation>後打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2262"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2330"/>
         <source>Grace note before</source>
         <translation>前打音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2264"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2332"/>
         <source>Note</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3400"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3450"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="506"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="518"/>
         <source>Voice: %1</source>
         <translation>声部: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3340"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3408"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation> (オン %1‰ オフ %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3414"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3454"/>
         <source>Beat slash</source>
         <translation>拍 スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3414"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3454"/>
         <source>Rhythm slash</source>
         <translation>リズムスラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3350"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3390"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3418"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3458"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; 弦: %2; フレット: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3356"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3424"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; 音高: %2; 音価: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3396"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3464"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1符頭%2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3398"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3466"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="521"/>
         <source>Cross-staff above</source>
         <translation>譜表を上にまたぐ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3400"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3468"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="523"/>
         <source>Cross-staff below</source>
         <translation>譜表を下にまたぐ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3404"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3472"/>
         <source>too low</source>
         <translation>音が低すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3406"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3474"/>
         <source>too high</source>
         <translation>音が高すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3408"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3476"/>
         <source>too low for amateurs</source>
         <translation>アマチュアには低すぎる</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3478"/>
         <source>too high for amateurs</source>
         <translation>アマチュアには高すぎる</translation>
     </message>
@@ -11412,7 +11427,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="210"/>
         <source>Toggle partial tie</source>
-        <translation>部分的なタイを切り替え</translation>
+        <translation>部分タイを切り替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="3879"/>
@@ -11430,30 +11445,30 @@ Fret %1 on strings %2</source>
         <translation>音価 %2 には比率 %1 の連符を作成できません</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7975"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8155"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7976"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8156"/>
         <source>Remove stale partial tie</source>
-        <translation type="unfinished"/>
+        <translation>古い部分タイを削除</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8041"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8042"/>
         <source>Remove invalid incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>無効な前方からの部分スラーを削除</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8049"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8050"/>
         <source>Reset incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>前方からの部分スラーをリセット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8065"/>
         <source>Remove invalid outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>後方への無効な部分スラーを削除</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8072"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8073"/>
         <source>Reset outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>後方への部分スラーをリセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -11559,7 +11574,7 @@ Fret %1 on strings %2</source>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
         <source>Invalid</source>
         <translation><numerusform>無効</numerusform></translation>
     </message>
@@ -11678,12 +11693,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>partial tie segment(s)</source>
-        <translation><numerusform>部分的なタイセグメント</numerusform></translation>
+        <translation><numerusform>部分タイセグメント</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Partial tie segment(s)</source>
-        <translation><numerusform>部分的なタイセグメント</numerusform></translation>
+        <translation><numerusform>部分タイセグメント</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -11738,12 +11753,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>和音の括弧</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>和音の括弧</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
@@ -11918,12 +11933,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>partial tie(s)</source>
-        <translation><numerusform>部分的なタイ</numerusform></translation>
+        <translation><numerusform>部分タイ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Partial tie(s)</source>
-        <translation><numerusform>部分的なタイ</numerusform></translation>
+        <translation><numerusform>部分タイ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
@@ -12142,19 +12157,19 @@ Fret %1 on strings %2</source>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="360"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1748"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1750"/>
         <source>String tunings</source>
         <translation><numerusform>調弦</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="362"/>
         <source>triplet feel</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>3連符感</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="363"/>
         <source>Triplet feel</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>3連符感</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="365"/>
@@ -12229,12 +12244,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
         <source>tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>トレモロバー</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="387"/>
         <source>Tremolo bar(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>トレモロバー</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
@@ -12529,32 +12544,32 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
         <source>lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>なげなわ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="477"/>
         <source>Lasso(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>なげなわ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="479"/>
         <source>shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>ガイド音</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="480"/>
         <source>Shadow note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>ガイド音</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>タブ音価記号</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>Tab duration symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform></translation>
+        <translation><numerusform>タブ音価記号</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
@@ -12633,7 +12648,7 @@ Fret %1 on strings %2</source>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="507"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1765"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1767"/>
         <source>Let ring</source>
         <translation><numerusform>レットリング</numerusform></translation>
     </message>
@@ -13042,832 +13057,832 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1093"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1117"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2254"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2290"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2256"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2292"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3084"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3108"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3362"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1236"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3086"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3110"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3364"/>
         <source>Custom</source>
         <translation>カスタム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1700"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1699"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1701"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1700"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
         <source>Subtitle</source>
         <translation>サブタイトル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
         <source>Composer</source>
         <translation>作曲者</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1704"/>
         <source>Lyricist</source>
         <translation>作詞者</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1705"/>
         <source>Translator</source>
         <translation>翻訳者</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1704"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1706"/>
         <source>Frame</source>
         <translation>フレーム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1705"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1707"/>
         <source>Instrument name (Part)</source>
         <translation>楽器名 (パート)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1706"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1708"/>
         <source>Instrument name (Long)</source>
         <translation>楽器名 (長)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1709"/>
         <source>Instrument name (Short)</source>
         <translation>楽器名 (短)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1710"/>
         <source>Instrument change</source>
         <translation>楽器の変更</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1709"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1711"/>
         <source>Header</source>
         <translation>ヘッダー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1710"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1712"/>
         <source>Footer</source>
         <translation>フッター</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1711"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1713"/>
         <source>Copyright</source>
         <translation>著作権</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1712"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1714"/>
         <source>Page number</source>
         <translation>ページ番号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1716"/>
         <source>Measure number</source>
         <translation>小節番号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1716"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1718"/>
         <source>Measure number (alternate)</source>
         <translation>小節番号 (代替)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1717"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1719"/>
         <source>Multimeasure rest range</source>
         <translation>長休符の範囲</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
         <source>Tempo</source>
         <translation>テンポ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1720"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>Gradual tempo change</source>
         <translation>徐々のテンポ変化</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1721"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
         <source>Metronome</source>
         <translation>メトロノーム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1724"/>
         <source>Repeat play count</source>
         <translation>繰り返しの演奏回数</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
         <source>Repeat text left</source>
         <translation>左繰り返しテキスト</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1724"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
         <source>Repeat text right</source>
         <translation>右繰り返しテキスト</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1727"/>
         <source>Rehearsal mark</source>
         <translation>練習番号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
         <source>System</source>
         <translation>段</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1731"/>
         <source>Expression</source>
         <translation>発想標語</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1730"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1732"/>
         <source>Dynamics</source>
         <translation>強弱記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1731"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1733"/>
         <source>Hairpin</source>
         <translation>松葉</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1732"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1734"/>
         <source>Lyrics odd lines</source>
         <translation>歌詞の奇数行</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1733"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1735"/>
         <source>Lyrics even lines</source>
         <translation>歌詞の偶数行</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1734"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1736"/>
         <source>Chord symbol</source>
         <translation>コード記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1735"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1737"/>
         <source>Chord symbol (alternate)</source>
         <translation>コード記号 (代替)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1736"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1738"/>
         <source>Roman numeral analysis</source>
         <translation>ローマ数字による和声分析</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1739"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
         <source>Tuplet</source>
         <translation>連符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1740"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1742"/>
         <source>Sticking</source>
         <translation>スティッキング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1741"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1743"/>
         <source>Fingering</source>
         <translation>運指</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1742"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
         <source>Tablature fret number</source>
         <translation>TAB譜のフレット番号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1743"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1745"/>
         <source>LH guitar fingering</source>
         <translation>ギター左手運指</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1744"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1746"/>
         <source>RH guitar fingering</source>
         <translation>ギター右手運指</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1746"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1748"/>
         <source>Hammer-ons, pull-offs, and tapping</source>
         <translation>ハンマリング、プリングとタッピング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
         <source>Fretboard diagram fingering</source>
         <translation>フレットボードダイアグラム運指</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1754"/>
         <source>Fretboard diagram fret number</source>
         <translation>フレットボードダイアグラムフレット番号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1753"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1755"/>
         <source>Harp pedal diagram</source>
         <translation>ハープペダルダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1754"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1756"/>
         <source>Harp pedal text diagram</source>
         <translation>ハープペダルテキストダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1757"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
         <source>Text line</source>
         <translation>テキスト線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1758"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1760"/>
         <source>System text line</source>
         <translation>段テキスト線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1759"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1761"/>
         <source>Note-anchored line</source>
         <translation>音符に固定された線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1760"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1762"/>
         <source>Volta</source>
         <translation>反復括弧</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1763"/>
         <source>Ottava</source>
         <translation>オッターヴァ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1762"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1764"/>
         <source>Glissando</source>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1763"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1765"/>
         <source>Pedal</source>
         <translation>ペダル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1764"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
         <source>Bends &amp; Dives</source>
         <translation>ベンドとダイブ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1766"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1768"/>
         <source>Whammy bar</source>
         <translation>ワーミーバー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1767"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1769"/>
         <source>Palm mute</source>
         <translation>パームミュート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1769"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
         <source>User-1</source>
         <translation>ユーザー1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1770"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
         <source>User-2</source>
         <translation>ユーザー2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1773"/>
         <source>User-3</source>
         <translation>ユーザー3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1774"/>
         <source>User-4</source>
         <translation>ユーザー4</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1773"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1775"/>
         <source>User-5</source>
         <translation>ユーザー5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1774"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1776"/>
         <source>User-6</source>
         <translation>ユーザー6</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1775"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1777"/>
         <source>User-7</source>
         <translation>ユーザー7</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1776"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1778"/>
         <source>User-8</source>
         <translation>ユーザー8</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1777"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1779"/>
         <source>User-9</source>
         <translation>ユーザー9</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1778"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1780"/>
         <source>User-10</source>
         <translation>ユーザー10</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1781"/>
         <source>User-11</source>
         <translation>ユーザー11</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1782"/>
         <source>User-12</source>
         <translation>ユーザー12</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1983"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>トリプル ♯</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1987"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>トリプルシャープ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>ダブル ♯</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1992"/>
         <source>double sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>ダブルシャープ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1993"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>♯</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
         <source>sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>シャープ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>♮</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2000"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>natural</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>ナチュラル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>♭</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
         <source>flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>フラット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>ダブル ♭</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2010"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
         <source>double flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>ダブルフラット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
         <translation>トリプル ♭</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
         <translation>トリプルフラット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2058"/>
         <source>Quarter</source>
         <translation>4分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2057"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
         <source>Eighth</source>
         <translation>8分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2058"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
         <source>1024th</source>
         <translation>1024分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
         <source>512th</source>
         <translation>512分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
         <source>256th</source>
         <translation>256分音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
         <source>128th</source>
         <translation>128分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>64th</source>
         <translation>64分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>32nd</source>
         <translation>32分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
         <source>16th</source>
         <translation>16分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
         <source>Half</source>
         <translation>2分</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
         <source>Whole</source>
         <translation>全</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
         <source>Breve</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
         <source>Longa</source>
         <translation>4倍全音符</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
         <source>Zero</source>
         <translation>ゼロ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2255"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2257"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2256"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2258"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2291"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2293"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2292"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2294"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2559"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2561"/>
         <source>Arpeggio</source>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2560"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2562"/>
         <source>Up arpeggio</source>
         <translation>上向きアルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2561"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2563"/>
         <source>Down arpeggio</source>
         <translation>下向きアルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2562"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2564"/>
         <source>Bracket arpeggio</source>
         <translation>括弧アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2563"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2565"/>
         <source>Up arpeggio straight</source>
         <translation>直線上向きアルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2564"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2566"/>
         <source>Down arpeggio straight</source>
         <translation>直線下向きアルペジオ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2920"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2922"/>
         <source>Fall</source>
         <translation>フォール</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2921"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2923"/>
         <source>Doit</source>
         <translation>ドゥイット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2922"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2924"/>
         <source>Plop</source>
         <translation>プロップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2923"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
         <source>Scoop</source>
         <translation>スクープ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2925"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
         <source>Slide out down</source>
         <translation>スライド アウト ダウン</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2926"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2928"/>
         <source>Slide out up</source>
         <translation>スライド アウト アップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2927"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2929"/>
         <source>Slide in above</source>
         <translation>スライド イン アバブ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2928"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2930"/>
         <source>Slide in below</source>
         <translation>スライド イン ビロウ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2930"/>
-        <source>Slide out down (rough)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2931"/>
-        <source>Slide out up (rough)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2932"/>
-        <source>Slide in above (rough)</source>
-        <translation type="unfinished"/>
+        <source>Slide out down (rough)</source>
+        <translation>スライドアウト下（勢いよく）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2933"/>
-        <source>Slide in below (rough)</source>
-        <translation type="unfinished"/>
+        <source>Slide out up (rough)</source>
+        <translation>スライドアウト上（勢いよく）</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3050"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2934"/>
+        <source>Slide in above (rough)</source>
+        <translation>スライドイン上（勢いよく）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2935"/>
+        <source>Slide in below (rough)</source>
+        <translation>スライドイン下（勢いよく）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3052"/>
         <source>Straight glissando</source>
         <translation>直線グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3051"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3053"/>
         <source>Wavy glissando</source>
         <translation>波線グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3070"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3072"/>
         <source>Da Capo</source>
         <translation>ダ・カーポ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3071"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3073"/>
         <source>Da Capo al Fine</source>
         <translation>ダ・カーポ アル フィーネ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3072"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3074"/>
         <source>Da Capo al Coda</source>
         <translation>ダ・カーポ アル コーダ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3073"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3075"/>
         <source>D.S. al Coda</source>
         <translation>ダル・セーニョ アル コーダ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3074"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3076"/>
         <source>D.S. al Fine</source>
         <translation>ダル・セーニョ アル フィーネ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3075"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3077"/>
         <source>D.S.</source>
         <translation>ダル・セーニョ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3077"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3079"/>
         <source>Da Capo al Doppia Coda</source>
         <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3078"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3080"/>
         <source>Dal Segno al Doppia Coda</source>
         <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3079"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3081"/>
         <source>Dal Doppio Segno</source>
         <translation>Dal Doppio Segno</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3080"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3082"/>
         <source>Dal Doppio Segno al Coda</source>
         <translation>Dal Doppio Segno al Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3081"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3083"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
         <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3082"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3084"/>
         <source>Dal Doppio Segno al Fine</source>
         <translation>Dal Doppio Segno al Fine</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3098"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3100"/>
         <source>Segno</source>
         <translation>セーニョ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3099"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3101"/>
         <source>Segno variation</source>
         <translation>セーニョのバリエーション</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3100"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3102"/>
         <source>Coda</source>
         <translation>コーダ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3101"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3103"/>
         <source>Varied coda</source>
         <translation>変格コーダ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3102"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3104"/>
         <source>Doppia Coda</source>
         <translation>ダブルコーダ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3105"/>
         <source>Fine</source>
         <translation>フィーネ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
         <source>To coda</source>
         <translation>To Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3107"/>
         <source>To coda (symbol)</source>
         <translation>トゥー・コーダ (記号)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3108"/>
         <source>Da Coda</source>
         <translation>Da Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3107"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3109"/>
         <source>Da Doppia Coda</source>
         <translation>Da Doppia Coda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3346"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3348"/>
         <source>C♭ major / A♭ minor</source>
         <translation>変ハ長調 (C♭メジャー) / 変イ短調 (A♭マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3347"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3349"/>
         <source>G♭ major / E♭ minor</source>
         <translation>変ト長調 (G♭メジャー) / 変ホ短調 (E♭マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3348"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3350"/>
         <source>D♭ major / B♭ minor</source>
         <translation>変ニ長調 (D♭メジャー) / 変ロ短調 (B♭マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3349"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3351"/>
         <source>A♭ major / F minor</source>
         <translation>変イ長調 (A♭メジャー) / ヘ短調 (Fマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3350"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3352"/>
         <source>E♭ major / C minor</source>
         <translation>変ホ長調 (E♭メジャー) / ハ短調 (Cマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3351"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3353"/>
         <source>B♭ major / G minor</source>
         <translation>変ロ長調 (B♭メジャー) / ト短調 (Gマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3352"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3354"/>
         <source>F major / D minor</source>
         <translation>ヘ長調 (Fメジャー) / ニ短調 (Dマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3353"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3355"/>
         <source>C major / A minor</source>
         <translation>ハ長調 (Cメジャー) / イ短調 (Aマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3354"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3356"/>
         <source>G major / E minor</source>
         <translation>ト長調 (Gメジャー) / ホ短調 (Eマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3355"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3357"/>
         <source>D major / B minor</source>
         <translation>ニ長調 (Dメジャー) / ロ短調 (Bマイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3356"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3358"/>
         <source>A major / F♯ minor</source>
         <translation>イ長調 (Aメジャー) / 嬰ヘ短調 (F♯マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3357"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3359"/>
         <source>E major / C♯ minor</source>
         <translation>ホ長調 (Eメジャー) / 嬰ハ短調 (C♯マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3358"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3360"/>
         <source>B major / G♯ minor</source>
         <translation>ロ長調 (Bメジャー) / 嬰ト短調 (G♯マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3359"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3361"/>
         <source>F♯ major / D♯ minor</source>
         <translation>嬰ヘ長調 (F♯メジャー) / 嬰ニ短調 (D♯マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3360"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3362"/>
         <source>C♯ major / A♯ minor</source>
         <translation>嬰ハ長調 (C♯メジャー) / 嬰イ短調 (A♯マイナー)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3361"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3363"/>
         <source>Open / Atonal</source>
         <translation>不定 / 無調</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/partialtiepopupmodel.cpp" line="222"/>
         <source>Remove partial tie</source>
-        <translation>部分的なタイを削除</translation>
+        <translation>部分タイを削除</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="778"/>
@@ -13882,7 +13897,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="780"/>
         <source>Extra long</source>
-        <translation type="unfinished"/>
+        <translation>とても長い</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="374"/>
@@ -13893,53 +13908,51 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/bagpipeembellishment</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2591"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2593"/>
         <source>Single grace low G</source>
         <translation>単装飾音 low G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2592"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2594"/>
         <source>Single grace low A</source>
         <translation>単装飾音 low A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2593"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
         <source>Single grace B</source>
         <translation>単装飾音 B</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2594"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
         <source>Single grace C</source>
         <translation>単装飾音 C</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2595"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
         <source>Single grace D</source>
         <translation>単装飾音 D</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2596"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
         <source>Single grace E</source>
         <translation>単装飾音 E</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2597"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
         <source>Single grace F</source>
         <translation>単装飾音 F</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2598"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2600"/>
         <source>Single grace high G</source>
         <translation>単装飾音 high G</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2599"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2601"/>
         <source>Single grace high A</source>
         <translation>単装飾音 high A</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2602"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2603"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2604"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2605"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2606"/>
@@ -13947,802 +13960,804 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2608"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2609"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2610"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2611"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2612"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2613"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2614"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2615"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2616"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2617"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2618"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2619"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2620"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2621"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2622"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2623"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2624"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2625"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2626"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2627"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2628"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2629"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2630"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2631"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2632"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2633"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2634"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2635"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2636"/>
         <source>Double grace</source>
         <translation>複装飾音</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2637"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
         <source>Half doubling on low G</source>
         <translation>Low-Gハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2638"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2640"/>
         <source>Half doubling on low A</source>
         <translation>Low-Aハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2639"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2641"/>
         <source>Half doubling on B</source>
         <translation>Bハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2640"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2642"/>
         <source>Half doubling on C</source>
         <translation>Cハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2641"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2643"/>
         <source>Half doubling on D</source>
         <translation>Dハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2642"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2644"/>
         <source>Half doubling on E</source>
         <translation>Eハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2643"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2645"/>
         <source>Half doubling on F</source>
         <translation>Fハーフ ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2648"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
         <source>Doubling on high G</source>
         <translation>Hi-Gダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2649"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
         <source>Doubling on high A</source>
         <translation>Hi-Aダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2652"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2654"/>
         <source>Half strike on low A</source>
         <translation>Low-Aハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2653"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
         <source>Half strike on B</source>
         <translation>Bハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2654"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
         <source>Half strike on C</source>
         <translation>Cハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2655"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2656"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
         <source>Half strike on D</source>
         <translation>Dハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2657"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
         <source>Half strike on E</source>
         <translation>Eハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2658"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2660"/>
         <source>Half strike on F</source>
         <translation>Fハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2659"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2661"/>
         <source>Half strike on high G</source>
         <translation>Hi-Gハーフ ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2662"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2664"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
         <source>Grip</source>
         <translation>グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2665"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2667"/>
         <source>Half D throw</source>
         <translation>Dハーフ スロー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2668"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
         <source>Doubling on low G</source>
         <translation>Low-Gダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2669"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2671"/>
         <source>Doubling on low A</source>
         <translation>Low-Aダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2670"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2672"/>
         <source>Doubling on B</source>
         <translation>Bダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2671"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2673"/>
         <source>Doubling on C</source>
         <translation>Cダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2672"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2674"/>
         <source>Doubling on D</source>
         <translation>Dダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2673"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2675"/>
         <source>Doubling on E</source>
         <translation>Eダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2674"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2676"/>
         <source>Doubling on F</source>
         <translation>Fダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2677"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
         <source>Thumb doubling on low G</source>
         <translation>Low-Gサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2678"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
         <source>Thumb doubling on low A</source>
         <translation>Low-Aサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2679"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
         <source>Thumb doubling on B</source>
         <translation>Bサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2680"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2682"/>
         <source>Thumb doubling on C</source>
         <translation>Cサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2681"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2683"/>
         <source>Thumb doubling on D</source>
         <translation>Dサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2682"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2684"/>
         <source>Thumb doubling on E</source>
         <translation>Eサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2683"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2685"/>
         <source>Thumb doubling on F</source>
         <translation>Fサム ダブリング</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2687"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2689"/>
         <source>G grace note on low A</source>
         <translation>Low-A上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2688"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2690"/>
         <source>G grace note on B</source>
         <translation>B上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2689"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2691"/>
         <source>G grace note on C</source>
         <translation>C上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2690"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2691"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
         <source>G grace note on D</source>
         <translation>D上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2692"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2694"/>
         <source>G grace note on E</source>
         <translation>E上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2693"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2695"/>
         <source>G grace note on F</source>
         <translation>F上のGグレイス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2696"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2698"/>
         <source>Double strike on low A</source>
         <translation>Low-Aダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2697"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2699"/>
         <source>Double strike on B</source>
         <translation>Bダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2698"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2700"/>
         <source>Double strike on C</source>
         <translation>Cダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2699"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2700"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2702"/>
         <source>Double strike on D</source>
         <translation>Dダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2701"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2703"/>
         <source>Double strike on E</source>
         <translation>Eダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2702"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2704"/>
         <source>Double strike on F</source>
         <translation>Fダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2703"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2705"/>
         <source>Double strike on high G</source>
         <translation>Hi-Gダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2704"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2706"/>
         <source>Double strike on high A</source>
         <translation>Hi-Aダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2707"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
         <source>Thumb strike on low A</source>
         <translation>Low-A親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2708"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2710"/>
         <source>Thumb strike on B</source>
         <translation>B親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2709"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2711"/>
         <source>Thumb strike on C</source>
         <translation>C親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2710"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2711"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2712"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2713"/>
         <source>Thumb strike on D</source>
         <translation>D親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2712"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>Thumb strike on E</source>
         <translation>E親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2713"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
         <source>Thumb strike on F</source>
         <translation>F親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>Thumb strike on high G</source>
         <translation>Hi-G親指 ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2788"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2789"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2790"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2791"/>
         <source>Birl</source>
         <translation>バール</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>D throw</source>
         <translation>Dスロー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>Half heavy D throw</source>
         <translation>Dハーフ ヘビー スロー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2731"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2732"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2733"/>
         <source>Taorluath</source>
         <translation>Taorluath</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2785"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2730"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2787"/>
         <source>Bubbly</source>
         <translation>バブル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2731"/>
         <source>Heavy D throw</source>
         <translation>Dヘビー スロー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2734"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
         <source>Half double strike on low A</source>
         <translation>Low-Aハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2735"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
         <source>Half double strike on B</source>
         <translation>Bハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2736"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
         <source>Half double strike on C</source>
         <translation>Cハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2737"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2738"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2739"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2740"/>
         <source>Half double strike on D</source>
         <translation>Dハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2739"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2741"/>
         <source>Half double strike on E</source>
         <translation>Eハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2740"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2742"/>
         <source>Half double strike on F</source>
         <translation>Fハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2741"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2743"/>
         <source>Half double strike on high G</source>
         <translation>Hi-Gハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2742"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2744"/>
         <source>Half double strike on high A</source>
         <translation>Hi-Aハーフ ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2745"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2747"/>
         <source>Half grip on low A</source>
         <translation>Low-Aハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2746"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2748"/>
         <source>Half grip on B</source>
         <translation>Bハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2747"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2749"/>
         <source>Half grip on C</source>
         <translation>Cハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2748"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2749"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
         <source>Half grip on D</source>
         <translation>Dハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
         <source>Half grip on E</source>
         <translation>Eハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
         <source>Half grip on F</source>
         <translation>Fハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
         <source>Half grip on high G</source>
         <translation>Hi-Gハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2755"/>
         <source>Half grip on high A</source>
         <translation>Hi-Aハーフ グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2756"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2758"/>
         <source>Half pele on low A</source>
         <translation>Low-Aハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2757"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
         <source>Half pele on B</source>
         <translation>Bハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2758"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
         <source>Half pele on C</source>
         <translation>Cハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2760"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
         <source>Half pele on D</source>
         <translation>Dハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2761"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
         <source>Half pele on E</source>
         <translation>Eハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2762"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2764"/>
         <source>Half pele on F</source>
         <translation>Fハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2763"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2765"/>
         <source>Half pele on high G</source>
         <translation>Hi-Gハーフ ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2766"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2768"/>
         <source>G grace note grip on low A</source>
         <translation>Low-A Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2767"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
         <source>G grace note grip on B</source>
         <translation>B Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2768"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
         <source>G grace note grip on C</source>
         <translation>C Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2769"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2770"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
         <source>G grace note grip on D</source>
         <translation>D Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2771"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2773"/>
         <source>G grace note grip on E</source>
         <translation>E Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2772"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2774"/>
         <source>G grace note grip on F</source>
         <translation>F Gグレイス グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2775"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2777"/>
         <source>Thumb grip on low A</source>
         <translation>Low-A親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2776"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2778"/>
         <source>Thumb grip on B</source>
         <translation>B親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2777"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
         <source>Thumb grip on C</source>
         <translation>C親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2778"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2779"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
         <source>Thumb grip on D</source>
         <translation>D親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2780"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
         <source>Thumb grip on E</source>
         <translation>E親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2781"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2783"/>
         <source>Thumb grip on F</source>
         <translation>F親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2782"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2784"/>
         <source>Thumb grip on high G</source>
         <translation>Hi-G親指 グリップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2792"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
         <source>Pele on low A</source>
         <translation>Low-Aペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2793"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2795"/>
         <source>Pele on B</source>
         <translation>Bペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2794"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2796"/>
         <source>Pele on C</source>
         <translation>Cペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2795"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2796"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2797"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2798"/>
         <source>Pele on D</source>
         <translation>Dペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2797"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2799"/>
         <source>Pele on E</source>
         <translation>Eペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2798"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2800"/>
         <source>Pele on F</source>
         <translation>Fペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2801"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
         <source>Thumb grace note pele on low A</source>
         <translation> Low-A親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2802"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
         <source>Thumb grace note pele on B</source>
         <translation>B親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2803"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
         <source>Thumb grace note pele on C</source>
         <translation>C親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2804"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2805"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2806"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2807"/>
         <source>Thumb grace note pele on D</source>
         <translation>D親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2806"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2808"/>
         <source>Thumb grace note pele on E</source>
         <translation>E親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2807"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2809"/>
         <source>Thumb grace note pele on F</source>
         <translation>F親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2808"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2810"/>
         <source>Thumb grace note pele on high G</source>
         <translation>Hi-G親指グレイス ペレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2811"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
         <source>G grace note double strike on low A</source>
         <translation>Low-A Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2812"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
         <source>G grace note double strike on B</source>
         <translation>B Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2813"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
         <source>G grace note double strike on C</source>
         <translation>C Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2814"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2815"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2817"/>
         <source>G grace note double strike on D</source>
         <translation>D Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2816"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2818"/>
         <source>G grace note double strike on E</source>
         <translation>E Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2817"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2819"/>
         <source>G grace note double strike on F</source>
         <translation>F Gグレイス ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2820"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
         <source>Thumb double strike on low A</source>
         <translation>Low-A親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
         <source>Thumb double strike on B</source>
         <translation>B親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
         <source>Thumb double strike on C</source>
         <translation>C親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2823"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2824"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
         <source>Thumb double strike on D</source>
         <translation>D親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2825"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2827"/>
         <source>Thumb double strike on E</source>
         <translation>E親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2826"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2828"/>
         <source>Thumb double strike on F</source>
         <translation>F親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2827"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2829"/>
         <source>Thumb double strike on high G</source>
         <translation>Hi-G親指 ダブル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2830"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2832"/>
         <source>Triple strike on low A</source>
         <translation>Low-Aトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2831"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2833"/>
         <source>Triple strike on B</source>
         <translation>Bトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2832"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2834"/>
         <source>Triple strike on C</source>
         <translation>Cトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2833"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2834"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2835"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2836"/>
         <source>Triple strike on D</source>
         <translation>Dトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2835"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2837"/>
         <source>Triple strike on E</source>
         <translation>Eトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2836"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2838"/>
         <source>Triple strike on F</source>
         <translation>Fトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2837"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2839"/>
         <source>Triple strike on high G</source>
         <translation>Hi-Gトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2838"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2840"/>
         <source>Triple strike on high A</source>
         <translation>Hi-Aトリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2841"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2843"/>
         <source>Half triple strike on low A</source>
         <translation>Low-Aハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2842"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2844"/>
         <source>Half triple strike on B</source>
         <translation>Bハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2843"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2845"/>
         <source>Half triple strike on C</source>
         <translation>Cハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2844"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2845"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2846"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2847"/>
         <source>Half triple strike on D</source>
         <translation>Dハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2846"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2848"/>
         <source>Half triple strike on E</source>
         <translation>Eハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2847"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2849"/>
         <source>Half triple strike on F</source>
         <translation>Fハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2848"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2850"/>
         <source>Half triple strike on high G</source>
         <translation>Hi-Gハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2849"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2851"/>
         <source>Half triple strike on high A</source>
         <translation>Hi-Aハーフ トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2852"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2854"/>
         <source>G grace note triple strike on low A</source>
         <translation>Low-A Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2853"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2855"/>
         <source>G grace note triple strike on B</source>
         <translation>B Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2854"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2856"/>
         <source>G grace note triple strike on C</source>
         <translation>C Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2855"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2856"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2857"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2858"/>
         <source>G grace note triple strike on D</source>
         <translation>D Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2857"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2859"/>
         <source>G grace note triple strike on E</source>
         <translation>E Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2858"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2860"/>
         <source>G grace note triple strike on F</source>
         <translation>F Gグレイス トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2861"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2863"/>
         <source>Thumb triple strike on low A</source>
         <translation>Low-A親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2862"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2864"/>
         <source>Thumb triple strike on B</source>
         <translation>B親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2863"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2865"/>
         <source>Thumb triple strike on C</source>
         <translation>C親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2864"/>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2865"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2866"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2867"/>
         <source>Thumb triple strike on D</source>
         <translation>D親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2866"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2868"/>
         <source>Thumb triple strike on E</source>
         <translation>E親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2867"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2869"/>
         <source>Thumb triple strike on F</source>
         <translation>F親指 トリプル ストライク</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2868"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2870"/>
         <source>Thumb triple strike on high G</source>
         <translation>Hi-G親指 トリプル ストライク</translation>
     </message>
@@ -14750,27 +14765,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/brackettype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2517"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
         <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2518"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
         <source>Brace</source>
         <translation>波括弧</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2519"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2521"/>
         <source>Square</source>
         <translation>四角形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2520"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2522"/>
         <source>Line</source>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2521"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2523"/>
         <source>No bracket</source>
         <translation>括弧なし</translation>
     </message>
@@ -14778,515 +14793,515 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/cleftype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1274"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1276"/>
         <source>Treble clef</source>
         <translation>ト音記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1275"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1277"/>
         <source>Treble clef 15ma bassa</source>
         <translation>ト音記号15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1276"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1278"/>
         <source>Treble clef 8va bassa</source>
         <translation>ト音記号 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1277"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1279"/>
         <source>Treble clef 8va alta</source>
         <translation>ト音記号 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1278"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1280"/>
         <source>Treble clef 15ma alta</source>
         <translation>ト音記号15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1279"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1281"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
         <translation>二重のト音記号 (8va bassaと同義)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1280"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1282"/>
         <source>Treble clef optional 8va bassa</source>
         <translation>ト音記号オプション 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1281"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1283"/>
         <source>French violin clef</source>
         <translation>小バイオリン記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1282"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1284"/>
         <source>Soprano clef</source>
         <translation>ソプラノ記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1283"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1285"/>
         <source>Mezzo-soprano clef</source>
         <translation>メゾソプラノ記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1284"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1286"/>
         <source>Alto clef</source>
         <translation>アルト記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1285"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1287"/>
         <source>Tenor clef</source>
         <translation>テノール記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1286"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1288"/>
         <source>Baritone clef (C clef)</source>
         <translation>バリトン記号 (ハ音記号)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1287"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1289"/>
         <source>C clef, H shape (19th century)</source>
         <translation>H型のハ音記号 (19世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1288"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1290"/>
         <source>Soprano clef (French, 18th century)</source>
         <translation>ソプラノ記号 (フランス式, 18世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1289"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1291"/>
         <source>Alto clef (French, 18th century)</source>
         <translation>アルト記号 (フランス式, 18世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1290"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1292"/>
         <source>Tenor clef (French, 18th century)</source>
         <translation>テノール記号 (フランス式, 18世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1291"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
         <source>Soprano clef (French, 20th century)</source>
         <translation>ソプラノ記号 (フランス式, 20世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1292"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1294"/>
         <source>Alto clef (French, 20th century)</source>
         <translation>アルト記号 (フランス式, 20世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1293"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1295"/>
         <source>Tenor clef (French, 20th century)</source>
         <translation>テノール記号 (フランス式, 20世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1294"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1296"/>
         <source>Bass clef</source>
         <translation>ヘ音記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1295"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1297"/>
         <source>Bass clef 15ma bassa</source>
         <translation>ヘ音記号15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1296"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1298"/>
         <source>Bass clef 8va bassa</source>
         <translation>ヘ音記号 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1297"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1299"/>
         <source>Bass clef 8va alta</source>
         <translation>ヘ音記号 8va alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1298"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1300"/>
         <source>Bass clef 15ma alta</source>
         <translation>ヘ音記号15ma alta</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1299"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1301"/>
         <source>Baritone clef (F clef)</source>
         <translation>バリトン記号 (ヘ音記号)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1300"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1302"/>
         <source>Subbass clef</source>
         <translation>サブベース記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1301"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1303"/>
         <source>F clef (French, 18th century)</source>
         <translation>ヘ音記号 (フランス式, 18世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1302"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1304"/>
         <source>F clef (19th century)</source>
         <translation>ヘ音記号 (19世紀)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1304"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1306"/>
         <source>Percussion</source>
         <translation>打楽器</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1305"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1307"/>
         <source>Percussion 2</source>
         <translation>打楽器 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1307"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1309"/>
         <source>Tablature</source>
         <translation>TAB譜</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1308"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1310"/>
         <source>Tablature 4 lines</source>
         <translation>TAB譜 4線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1309"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1311"/>
         <source>Tablature Serif</source>
         <translation>TAB譜 セリフ体</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1310"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1312"/>
         <source>Tablature Serif 4 lines</source>
         <translation>TAB譜 セリフ体 4線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1312"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1314"/>
         <source>Tenor clef 8va bassa</source>
         <translation>テノール記号 8va bassa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1313"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1315"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"/>
+        <translation>オッターヴァバッサ付きト音記号（ハ音記号付き）</translation>
     </message>
 </context>
 <context>
     <name>engraving/drumset</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2958"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
         <source>High Q</source>
         <translation>High Q</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2959"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2961"/>
         <source>Slap</source>
         <translation>スラップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2960"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
         <source>Scratch Push</source>
         <translation>スクラッチ プッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2962"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
         <source>Scratch Pull</source>
         <translation>スクラッチ プル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2963"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
         <source>Sticks</source>
         <translation>スティック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2964"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
         <source>Square Click</source>
         <translation>スクエア クリック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2965"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
         <source>Metronome Click</source>
         <translation>メトロノームクリック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2966"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
         <source>Metronome Bell</source>
         <translation>メトロノームベル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2967"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
         <source>Acoustic Bass Drum</source>
         <translation>アコースティックバスドラム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2968"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
         <source>Bass Drum 1</source>
         <translation>バスドラム1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2969"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
         <source>Side Stick</source>
         <translation>サイドスティック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2970"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2972"/>
         <source>Acoustic Snare</source>
         <translation>アコースティックスネア</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2971"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
         <source>Hand Clap</source>
         <translation>ハンドクラップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2973"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
         <source>Electric Snare</source>
         <translation>エレクトリック スネア</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2974"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
         <source>Low Floor Tom</source>
         <translation>ロー フロア タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2975"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
         <source>Closed Hi-Hat</source>
         <translation>クローズド ハイハット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2976"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
         <source>High Floor Tom</source>
         <translation>ハイ フロア タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2977"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
         <source>Pedal Hi-Hat</source>
         <translation>ペダル ハイハット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2978"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
         <source>Low Tom</source>
         <translation>ロー タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2979"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2981"/>
         <source>Open Hi-Hat</source>
         <translation>オープン ハイハット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2980"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
         <source>Low-Mid Tom</source>
         <translation>ロー ミッド タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2981"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2983"/>
         <source>Hi-Mid Tom</source>
         <translation>ハイ ミッド タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2982"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
         <source>Crash Cymbal 1</source>
         <translation>クラッシュシンバル1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2984"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
         <source>High Tom</source>
         <translation>ハイ タム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2985"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2987"/>
         <source>Ride Cymbal 1</source>
         <translation>ライド シンバル 1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2986"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
         <source>Chinese Cymbal</source>
         <translation>チャイニーズシンバル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2987"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2989"/>
         <source>Ride Bell</source>
         <translation>ライド ベル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2988"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
         <source>Tambourine</source>
         <translation>タンバリン</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2989"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2991"/>
         <source>Splash Cymbal</source>
         <translation>スプラッシュ シンバル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2992"/>
         <source>Cowbell</source>
         <translation>カウベル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2991"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2993"/>
         <source>Crash Cymbal 2</source>
         <translation>クラッシュシンバル2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2992"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2994"/>
         <source>Vibraslap</source>
         <translation>ビブラスラップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2993"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2995"/>
         <source>Ride Cymbal 2</source>
         <translation>ライド シンバル 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2995"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2997"/>
         <source>Hi Bongo</source>
         <translation>ハイ ボンゴ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2996"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2998"/>
         <source>Low Bongo</source>
         <translation>ロー ボンゴ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2997"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2999"/>
         <source>Mute Hi Conga</source>
         <translation>ミュート ハイ コンガ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2998"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3000"/>
         <source>Open Hi Conga</source>
         <translation>オープン ハイ コンガ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2999"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3001"/>
         <source>Low Conga</source>
         <translation>ロー コンガ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3000"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3002"/>
         <source>High Timbale</source>
         <translation>ハイ ティンバレス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3001"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3003"/>
         <source>Low Timbale</source>
         <translation>ロー ティンバレス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3002"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3004"/>
         <source>High Agogo</source>
         <translation>ハイ アゴゴ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3003"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3005"/>
         <source>Low Agogo</source>
         <translation>ロー アゴゴ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3004"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3006"/>
         <source>Cabasa</source>
         <translation>カバサ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3006"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3008"/>
         <source>Maracas</source>
         <translation>マラカス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3007"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3009"/>
         <source>Short Whistle</source>
         <translation>ショート ホイッスル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3008"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3010"/>
         <source>Long Whistle</source>
         <translation>ロング ホイッスル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3009"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3011"/>
         <source>Short Güiro</source>
         <translation>ショートギロ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3010"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3012"/>
         <source>Long Güiro</source>
         <translation>ロングギロ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3011"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3013"/>
         <source>Claves</source>
         <translation>クラベス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3012"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3014"/>
         <source>Hi Wood Block</source>
         <translation>ハイ ウッドブロック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3013"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3015"/>
         <source>Low Wood Block</source>
         <translation>ロー ウッドブロック</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3014"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3016"/>
         <source>Mute Cuica</source>
         <translation>ミュート クイカ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3015"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3017"/>
         <source>Open Cuica</source>
         <translation>オープン クイカ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3017"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3019"/>
         <source>Mute Triangle</source>
         <translation>ミュート トライアングル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3018"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3020"/>
         <source>Open Triangle</source>
         <translation>オープン トライアングル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3019"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3021"/>
         <source>Shaker</source>
         <translation>シェイカー</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3020"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3022"/>
         <source>Sleigh Bell</source>
         <translation>スレイ ベル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3021"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3023"/>
         <source>Mark Tree</source>
         <translation>Mark Tree</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3022"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3024"/>
         <source>Castanets</source>
         <translation>カスタネット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3023"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3025"/>
         <source>Mute Surdo</source>
         <translation>ミュート スルド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3024"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3026"/>
         <source>Open Surdo</source>
         <translation>オープン スルド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3026"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
         <source>Snare (Rim shot)</source>
         <translation>スネア (リムショット)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3028"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3030"/>
         <source>Ride (Edge)</source>
         <translation>ライド (エッジ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3030"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3032"/>
         <source>Cowbell Low</source>
         <translation>低カウベル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3032"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3034"/>
         <source>Cowbell High</source>
         <translation>高カウベル</translation>
     </message>
@@ -15294,167 +15309,167 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/dynamictype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1360"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1362"/>
         <source>Other dynamic</source>
         <translation>その他の強弱記号</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1362"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1364"/>
         <source>pppppp (Pianissississississimo)</source>
         <translation>pppppp (ピアニッシシシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1364"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1366"/>
         <source>ppppp (Pianississississimo)</source>
         <translation>ppppp (ピアニッシシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1366"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1368"/>
         <source>pppp (Pianissississimo)</source>
         <translation>pppp (ピアニッシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1368"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1370"/>
         <source>ppp (Pianississimo)</source>
         <translation>ppp (ピアニッシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1370"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1372"/>
         <source>pp (Pianissimo)</source>
         <translation>pp (ピアニッシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1372"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1374"/>
         <source>p (Piano)</source>
         <translation>p (ピアノ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1375"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1377"/>
         <source>mp (Mezzo-piano)</source>
         <translation>mp (メゾピアノ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1377"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1379"/>
         <source>mf (Mezzo-forte)</source>
         <translation>mf (メゾフォルテ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1380"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1382"/>
         <source>f (Forte)</source>
         <translation>f (フォルテ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1382"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1384"/>
         <source>ff (Fortissimo)</source>
         <translation>ff (フォルテシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1384"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1386"/>
         <source>fff (Fortississimo)</source>
         <translation>fff (フォルテシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1386"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1388"/>
         <source>ffff (Fortissississimo)</source>
         <translation>ffff (フォルテシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1388"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1390"/>
         <source>fffff (Fortississississimo)</source>
         <translation>fffff (フォルテシシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1390"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1392"/>
         <source>ffffff (Fortissississississimo)</source>
         <translation>ffffff (フォルテシシシシシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1393"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1395"/>
         <source>fp (Fortepiano)</source>
         <translation>fp (フォルテピアノ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1395"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1397"/>
         <source>pf (Pianoforte)</source>
         <translation>pf (ピアノフォルテ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1398"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1400"/>
         <source>sf (Sforzando)</source>
         <translation>sf (スフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1400"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
         <source>sfz (Sforzato)</source>
         <translation>sfz (スフォルツァート)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1404"/>
         <source>sff (Sforzando)</source>
         <translation>sff (スフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1404"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1406"/>
         <source>sffz (Sforzato)</source>
         <translation>sffz (スフォルツァート)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1406"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1408"/>
         <source>sfff (Sforzando)</source>
         <translation>sfff (スフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1408"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1410"/>
         <source>sfffz (Sforzato)</source>
         <translation>sfffz (スフォルツァート)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1410"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1412"/>
         <source>sfp (Sforzando-piano)</source>
         <translation>sfp (スフォルツァンドピアノ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1412"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1414"/>
         <source>sfpp (Sforzando-pianissimo)</source>
         <translation>sfp (スフォルツァンドピアニッシモ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1415"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
         <source>rfz (Rinforzando)</source>
         <translation>rfz (リンフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1419"/>
         <source>rf (Rinforzando)</source>
         <translation>rf (リンフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1419"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1421"/>
         <source>fz (Forzando)</source>
         <translation>fz (フォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1421"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1423"/>
         <source>m (Mezzo)</source>
         <translation>m (メゾ)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1423"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1425"/>
         <source>r (Rinforzando)</source>
         <translation>r (リンフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1425"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1427"/>
         <source>s (Sforzando)</source>
         <translation>s (スフォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1427"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1429"/>
         <source>z (Forzando)</source>
         <translation>z (フォルツァンド)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1429"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1431"/>
         <source>n (Niente)</source>
         <translation>n (ニエンテ)</translation>
     </message>
@@ -15462,57 +15477,57 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/gradualtempochangetype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2139"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2141"/>
         <source>accel.</source>
         <translation>accel.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2140"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
         <source>allarg.</source>
         <translation>allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2141"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2143"/>
         <source>calando</source>
         <translation>calando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2144"/>
         <source>lentando</source>
         <translation>lentando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2143"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2145"/>
         <source>morendo</source>
         <translation>morendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2144"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2146"/>
         <source>precipitando</source>
         <translation>precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2145"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2147"/>
         <source>rall.</source>
         <translation>rall.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2146"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
         <source>rit.</source>
         <translation>rit.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2147"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2149"/>
         <source>smorz.</source>
         <translation>smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2150"/>
         <source>sost.</source>
         <translation>sost.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2149"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
         <source>string.</source>
         <translation>string.</translation>
     </message>
@@ -15548,22 +15563,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/layoutbreaktype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
         <source>System break</source>
         <translation>段区切り</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2327"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
         <source>Page break</source>
         <translation>ページ区切り</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
         <source>Section break</source>
         <translation>セクション区切り</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
         <source>Keep measures on the same system</source>
         <translation>小節を同じ段に保持</translation>
     </message>
@@ -15571,372 +15586,372 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/noteheadgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1146"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1148"/>
         <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1147"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1149"/>
         <source>Cross</source>
         <translation>クロス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1148"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1150"/>
         <source>Plus</source>
         <translation>プラス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1149"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1151"/>
         <source>XCircle</source>
         <translation>X サークル</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1150"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1152"/>
         <source>With X</source>
         <translation>X 付き</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1151"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1153"/>
         <source>Triangle up</source>
         <translation>上三角</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1152"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1154"/>
         <source>Triangle down</source>
         <translation>下三角</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1153"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1155"/>
         <source>Slashed (forwards)</source>
         <translation>スラッシュ付き (前向き)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1154"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
         <source>Slashed (backwards)</source>
         <translation>スラッシュ付き (後向き)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1155"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1157"/>
         <source>Diamond</source>
         <translation>ひし形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1156"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1158"/>
         <source>Diamond (old)</source>
         <translation>ひし形 (旧)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1157"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1159"/>
         <source>Circled</source>
         <translation>丸囲み</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1158"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1160"/>
         <source>Circled large</source>
         <translation>丸囲み大</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1159"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1161"/>
         <source>Large arrow</source>
         <translation>大矢印</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1160"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1162"/>
         <source>Alt. brevis</source>
         <translation>代替倍全</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1162"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1164"/>
         <source>Slash</source>
         <translation>スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1163"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1165"/>
         <source>Large diamond</source>
         <translation>大ひし形</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1165"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1167"/>
         <source>Heavy cross</source>
         <translation>太クロス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1166"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1168"/>
         <source>Heavy cross hat</source>
         <translation>太クロスハット</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1169"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1171"/>
         <source>Sol</source>
         <translation>ソ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1170"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1172"/>
         <source>La</source>
         <translation>ラ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1171"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1173"/>
         <source>Fa</source>
         <translation>ファ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1172"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1174"/>
         <source>Mi</source>
         <translation>ミ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1173"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1175"/>
         <source>Do</source>
         <translation>ド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1174"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1176"/>
         <source>Re</source>
         <translation>レ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1175"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1177"/>
         <source>Ti</source>
         <translation>シ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1178"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1180"/>
         <source>Do (Walker)</source>
         <translation>Do (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1181"/>
         <source>Re (Walker)</source>
         <translation>Re (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1180"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1182"/>
         <source>Ti (Walker)</source>
         <translation>Ti (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1181"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1183"/>
         <source>Do (Funk)</source>
         <translation>Do (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1182"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1184"/>
         <source>Re (Funk)</source>
         <translation>Re (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1183"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1185"/>
         <source>Ti (Funk)</source>
         <translation>Ti (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1186"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1188"/>
         <source>Do (Name)</source>
         <translation>Do (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1187"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1189"/>
         <source>Di (Name)</source>
         <translation>Di (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1188"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1190"/>
         <source>Ra (Name)</source>
         <translation>Ra (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1189"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1191"/>
         <source>Re (Name)</source>
         <translation>Re (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1190"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1192"/>
         <source>Ri (Name)</source>
         <translation>Ri (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1191"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1193"/>
         <source>Me (Name)</source>
         <translation>Me (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1192"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1194"/>
         <source>Mi (Name)</source>
         <translation>Mi (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1193"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1195"/>
         <source>Fa (Name)</source>
         <translation>Fa (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1194"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1196"/>
         <source>Fi (Name)</source>
         <translation>Fi (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1195"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1197"/>
         <source>Se (Name)</source>
         <translation>Se (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1196"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1198"/>
         <source>Sol (Name)</source>
         <translation>Sol (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1197"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1199"/>
         <source>Le (Name)</source>
         <translation>Le (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1198"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1200"/>
         <source>La (Name)</source>
         <translation>La (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1199"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1201"/>
         <source>Li (Name)</source>
         <translation>Li (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1200"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1202"/>
         <source>Te (Name)</source>
         <translation>Te (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1201"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1203"/>
         <source>Ti (Name)</source>
         <translation>Ti (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1202"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1204"/>
         <source>Si (Name)</source>
         <translation>Si (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1204"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1206"/>
         <source>A♯ (Name)</source>
         <translation>A♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1205"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1207"/>
         <source>A (Name)</source>
         <translation>A (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1206"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1208"/>
         <source>A♭ (Name)</source>
         <translation>A♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1207"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1209"/>
         <source>B♯ (Name)</source>
         <translation>B♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1208"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1210"/>
         <source>B (Name)</source>
         <translation>B (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1209"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1211"/>
         <source>B♭ (Name)</source>
         <translation>B♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1212"/>
         <source>C♯ (Name)</source>
         <translation>C♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1213"/>
         <source>C (Name)</source>
         <translation>C (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1212"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1214"/>
         <source>C♭ (Name)</source>
         <translation>C♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1215"/>
         <source>D♯ (Name)</source>
         <translation>D♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1214"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1216"/>
         <source>D (Name)</source>
         <translation>D (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1215"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1217"/>
         <source>D♭ (Name)</source>
         <translation>D♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1216"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1218"/>
         <source>E♯ (Name)</source>
         <translation>E♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1217"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1219"/>
         <source>E (Name)</source>
         <translation>E (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1218"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1220"/>
         <source>E♭ (Name)</source>
         <translation>E♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1219"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1221"/>
         <source>F♯ (Name)</source>
         <translation>F♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1220"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1222"/>
         <source>F (Name)</source>
         <translation>F (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1221"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1223"/>
         <source>F♭ (Name)</source>
         <translation>F♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1222"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1224"/>
         <source>G♯ (Name)</source>
         <translation>G♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1223"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1225"/>
         <source>G (Name)</source>
         <translation>G (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1224"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1226"/>
         <source>G♭ (Name)</source>
         <translation>G♭ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1225"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1227"/>
         <source>H (Name)</source>
         <translation>H (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1226"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1228"/>
         <source>H♯ (Name)</source>
         <translation>H♯ (Name)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1229"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1231"/>
         <source>Swiss Rudiments Flam</source>
         <translation>スイス ルディメンツ フラム</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1231"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1233"/>
         <source>Swiss Rudiments Doublé</source>
         <translation>スイス ルディメンツ ドゥブレ</translation>
     </message>
@@ -15955,36 +15970,46 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1120"/>
+        <source>Pitch names, no accidentals</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1121"/>
         <source>German pitch names</source>
         <translation>ドイツ音名</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1121"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1122"/>
+        <source>German pitch names, no accidentals</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1123"/>
         <source>Solfège movable Do</source>
         <translation>ソルフェージュ移動ド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1122"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1124"/>
         <source>Solfège fixed Do</source>
         <translation>ソルフェージュ固定ド</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1123"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1125"/>
         <source>4-shape (Walker)</source>
         <translation>4形状 (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1124"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
         <source>7-shape (Aikin)</source>
         <translation>7形状 (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1125"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1127"/>
         <source>7-shape (Funk)</source>
         <translation>7形状 (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="1128"/>
         <source>7-shape (Walker)</source>
         <translation>7形状 (Walker)</translation>
     </message>
@@ -16048,122 +16073,122 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/playtechtype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Pizzicato</source>
         <translation>ピッツィカート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>ミュート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <source>Tremolo</source>
         <translation>トレモロ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
         <source>Détaché</source>
         <translation>デタシェ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
         <source>Martelé</source>
         <translation>マルトレ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
         <source>Col legno</source>
         <translation>コル・レーニョ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
         <source>Sul ponticello</source>
         <translation>スル・ポンティチェロ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
         <source>Sul tasto</source>
         <translation>スル・タスト</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
         <source>Vibrato</source>
         <translation>ビブラート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2106"/>
         <source>Legato</source>
         <translation>レガート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2107"/>
         <source>Distortion</source>
         <translation>ディストーション</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2106"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
         <source>Overdrive</source>
         <translation>オーバードライブ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2107"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2109"/>
         <source>Harmonics</source>
         <translation>ハーモニクス</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Jazz tone</source>
         <translation>ジャズトーン</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
-        <source>Swing up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
-        <source>Swing down</source>
-        <translation type="unfinished"/>
+        <source>Swing up</source>
+        <translation>スイング↑</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
-        <source>Echo</source>
-        <translation type="unfinished"/>
+        <source>Swing down</source>
+        <translation>スイング↓</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
-        <source>Damp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
-        <source>Let vibrate</source>
-        <translation type="unfinished"/>
+        <source>Echo</source>
+        <translation>エコー</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
+        <source>Damp</source>
+        <translation>ダンプ</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
+        <source>Let vibrate</source>
+        <translation>響かせたまま</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>Ring</source>
-        <translation type="unfinished"/>
+        <translation>鳴らす</translation>
     </message>
 </context>
 <context>
@@ -16171,7 +16196,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="60"/>
         <source>subtype</source>
-        <translation type="unfinished"/>
+        <translation>サブタイプ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="61"/>
@@ -16181,7 +16206,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="62"/>
         <source>generated</source>
-        <translation type="unfinished"/>
+        <translation>生成された</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="63"/>
@@ -16227,7 +16252,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="71"/>
         <source>key signature mode</source>
-        <translation type="unfinished"/>
+        <translation>調号モード</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="72"/>
@@ -16247,12 +16272,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>調性ピッチクラス</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
         <source>transposed tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>移調後の調性ピッチクラス</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="78"/>
@@ -16262,12 +16287,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
         <source>fixed</source>
-        <translation type="unfinished"/>
+        <translation>固定</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="80"/>
         <source>fixed line</source>
-        <translation type="unfinished"/>
+        <translation>固定線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="81"/>
@@ -16294,7 +16319,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/property.cpp" line="85"/>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>anchor</source>
-        <translation type="unfinished"/>
+        <translation>アンカー</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="87"/>
@@ -16304,7 +16329,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="88"/>
         <source>horizontal direction</source>
-        <translation type="unfinished"/>
+        <translation>水平方向</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="89"/>
@@ -16325,17 +16350,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="92"/>
         <source>leading space</source>
-        <translation type="unfinished"/>
+        <translation>先頭スペース</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="93"/>
         <source>end of measure change</source>
-        <translation type="unfinished"/>
+        <translation>小節の終わりの変更</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
         <source>mirror</source>
-        <translation type="unfinished"/>
+        <translation>反転</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="95"/>
@@ -16345,7 +16370,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="96"/>
         <source>hide generated parentheses</source>
-        <translation type="unfinished"/>
+        <translation>生成された括弧を隠す</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
@@ -16355,17 +16380,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="98"/>
         <source>combine voice</source>
-        <translation type="unfinished"/>
+        <translation>声部を結合</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="99"/>
         <source>tuning</source>
-        <translation type="unfinished"/>
+        <translation>調弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>pause</source>
-        <translation type="unfinished"/>
+        <translation>休止</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
@@ -16375,22 +16400,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
         <source>span</source>
-        <translation type="unfinished"/>
+        <translation>次譜表まで延長</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="104"/>
         <source>span from</source>
-        <translation type="unfinished"/>
+        <translation>開始位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="105"/>
         <source>span to</source>
-        <translation type="unfinished"/>
+        <translation>終了位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="106"/>
         <source>show tips</source>
-        <translation type="unfinished"/>
+        <translation>先端を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="108"/>
@@ -16400,37 +16425,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="109"/>
         <source>fret</source>
-        <translation type="unfinished"/>
+        <translation>フレット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="110"/>
         <source>string</source>
-        <translation type="unfinished"/>
+        <translation>弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="111"/>
         <source>ghost</source>
-        <translation type="unfinished"/>
+        <translation>ゴースト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="112"/>
         <source>dead</source>
-        <translation type="unfinished"/>
+        <translation>デッド</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="113"/>
         <source>played</source>
-        <translation type="unfinished"/>
+        <translation>再生する</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
         <source>nominal time signature</source>
-        <translation type="unfinished"/>
+        <translation>表記上の拍子記号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
         <source>actual time signature</source>
-        <translation type="unfinished"/>
+        <translation>実際の拍子記号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="116"/>
@@ -16445,32 +16470,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
         <source>normal notes</source>
-        <translation type="unfinished"/>
+        <translation>通常の音符数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
         <source>actual notes</source>
-        <translation type="unfinished"/>
+        <translation>実際の音符数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="120"/>
         <source>bracket start offset</source>
-        <translation type="unfinished"/>
+        <translation>括弧開始オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="121"/>
         <source>bracket end offset</source>
-        <translation type="unfinished"/>
+        <translation>括弧終了オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="122"/>
         <source>grow left</source>
-        <translation type="unfinished"/>
+        <translation>左に伸ばす</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="123"/>
         <source>grow right</source>
-        <translation type="unfinished"/>
+        <translation>右に伸ばす</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="125"/>
@@ -16485,7 +16510,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="127"/>
         <source>autosize frame</source>
-        <translation type="unfinished"/>
+        <translation>フレームを自動サイズ調整</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="128"/>
@@ -16535,7 +16560,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="138"/>
         <source>autoscale</source>
-        <translation type="unfinished"/>
+        <translation>自動スケール</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
@@ -16556,7 +16581,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="143"/>
         <source>image framed</source>
-        <translation type="unfinished"/>
+        <translation>画像を枠で囲む</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="145"/>
@@ -16591,7 +16616,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="151"/>
         <source>diagrams order</source>
-        <translation type="unfinished"/>
+        <translation>ダイアグラムの順序</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="153"/>
@@ -16601,12 +16626,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="154"/>
         <source>aspect ratio locked</source>
-        <translation type="unfinished"/>
+        <translation>縦横比を固定</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="155"/>
         <source>size is spatium</source>
-        <translation type="unfinished"/>
+        <translation>サイズを譜表のスペース単位にする</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="156"/>
@@ -16627,12 +16652,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="161"/>
         <source>without slope</source>
-        <translation type="unfinished"/>
+        <translation>傾きなし</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="162"/>
         <source>beam staff move</source>
-        <translation type="unfinished"/>
+        <translation>連桁の譜表移動</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="163"/>
@@ -16642,7 +16667,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="164"/>
         <source>show stem slash</source>
-        <translation type="unfinished"/>
+        <translation>符幹スラッシュを表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="166"/>
@@ -16657,7 +16682,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="168"/>
         <source>following text</source>
-        <translation type="unfinished"/>
+        <translation>後続テキスト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="169"/>
@@ -16667,7 +16692,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="171"/>
         <source>bracket</source>
-        <translation type="unfinished"/>
+        <translation>括弧</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="172"/>
@@ -16682,32 +16707,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="174"/>
         <source>numerator string</source>
-        <translation type="unfinished"/>
+        <translation>分子の文字列</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="175"/>
         <source>denominator string</source>
-        <translation type="unfinished"/>
+        <translation>分母の文字列</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="176"/>
         <source>prefix</source>
-        <translation type="unfinished"/>
+        <translation>接頭辞</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="177"/>
         <source>digit</source>
-        <translation type="unfinished"/>
+        <translation>数字</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="178"/>
         <source>suffix</source>
-        <translation type="unfinished"/>
+        <translation>接尾辞</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="179"/>
         <source>continuation line</source>
-        <translation type="unfinished"/>
+        <translation>継続線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="187"/>
@@ -16732,7 +16757,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin with circled tip</source>
-        <translation type="unfinished"/>
+        <translation>先端が丸いヘアピン</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="193"/>
@@ -16752,17 +16777,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="196"/>
         <source>velocity change</source>
-        <translation type="unfinished"/>
+        <translation>ベロシティ変化</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="197"/>
         <source>velocity change method</source>
-        <translation type="unfinished"/>
+        <translation>ベロシティ変化の方法</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="198"/>
         <source>velocity change speed</source>
-        <translation type="unfinished"/>
+        <translation>ベロシティ変化の速さ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="199"/>
@@ -16772,12 +16797,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="201"/>
         <source>single note dynamics</source>
-        <translation type="unfinished"/>
+        <translation>単音の強弱</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>change method</source>
-        <translation type="unfinished"/>
+        <translation>変化の方法</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="203"/>
@@ -16792,27 +16817,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>multimeasure rest range bracket type</source>
-        <translation type="unfinished"/>
+        <translation>長休符の範囲の括弧の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="207"/>
         <source>jump to</source>
-        <translation type="unfinished"/>
+        <translation>ジャンプ先</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="208"/>
         <source>play until</source>
-        <translation type="unfinished"/>
+        <translation>ここまで再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>continue at</source>
-        <translation type="unfinished"/>
+        <translation>継続位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="210"/>
         <source>label</source>
-        <translation type="unfinished"/>
+        <translation>ラベル</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="211"/>
@@ -16827,37 +16852,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>marker center on symbol</source>
-        <translation type="unfinished"/>
+        <translation>マーカーを記号の中央に合わせる</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
         <source>length 1</source>
-        <translation type="unfinished"/>
+        <translation>長さ1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="215"/>
         <source>length 2</source>
-        <translation type="unfinished"/>
+        <translation>長さ2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>repeat end</source>
-        <translation type="unfinished"/>
+        <translation>リピート終了</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="217"/>
         <source>repeat start</source>
-        <translation type="unfinished"/>
+        <translation>リピート開始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>repeat jump</source>
-        <translation type="unfinished"/>
+        <translation>リピートジャンプ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="219"/>
         <source>measure number mode</source>
-        <translation type="unfinished"/>
+        <translation>小節番号モード</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="221"/>
@@ -16867,7 +16892,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="223"/>
         <source>showing text</source>
-        <translation type="unfinished"/>
+        <translation>テキストを表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="224"/>
@@ -16877,17 +16902,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="225"/>
         <source>glissando shift</source>
-        <translation type="unfinished"/>
+        <translation>グリッサンドのシフト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="226"/>
         <source>ease in</source>
-        <translation type="unfinished"/>
+        <translation>イーズイン</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="227"/>
         <source>ease out</source>
-        <translation type="unfinished"/>
+        <translation>イーズアウト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="228"/>
@@ -16897,7 +16922,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="229"/>
         <source>groups</source>
-        <translation type="unfinished"/>
+        <translation>グループ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="230"/>
@@ -16912,7 +16937,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>time stretch</source>
-        <translation type="unfinished"/>
+        <translation>時間伸縮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="233"/>
@@ -16932,27 +16957,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="236"/>
         <source>ornament show accidental</source>
-        <translation type="unfinished"/>
+        <translation>装飾音の臨時記号を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="237"/>
         <source>ornament show cue note</source>
-        <translation type="unfinished"/>
+        <translation>装飾音の小音符を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="238"/>
         <source>start on upper note</source>
-        <translation type="unfinished"/>
+        <translation>上の音から開始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="240"/>
         <source>time signature</source>
-        <translation type="unfinished"/>
+        <translation>拍子記号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="241"/>
         <source>time signature stretch</source>
-        <translation type="unfinished"/>
+        <translation>拍子記号の伸縮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="242"/>
@@ -16963,54 +16988,54 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/property.cpp" line="243"/>
         <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>tick</source>
-        <translation type="unfinished"/>
+        <translation>ティック</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="244"/>
         <location filename="../../src/engraving/dom/property.cpp" line="267"/>
         <source>ticks</source>
-        <translation type="unfinished"/>
+        <translation>ティック数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>end track</source>
-        <translation type="unfinished"/>
+        <translation>終了トラック</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="246"/>
         <location filename="../../src/engraving/dom/property.cpp" line="262"/>
         <source>end offset</source>
-        <translation type="unfinished"/>
+        <translation>終了オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>breaking multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>長休符を分割</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="248"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>長休符数の垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical offset of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>長休符数の垂直オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="250"/>
         <source>visibility of multimeasure rest number</source>
-        <translation type="unfinished"/>
+        <translation>長休符数の表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
         <source>vertical position of measure repeat number</source>
-        <translation type="unfinished"/>
+        <translation>連続小節数の垂直位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>repeat count</source>
-        <translation type="unfinished"/>
+        <translation>リピート回数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="255"/>
@@ -17020,67 +17045,67 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="256"/>
         <source>numbering offset</source>
-        <translation type="unfinished"/>
+        <translation>番号付きオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>irregular</source>
-        <translation type="unfinished"/>
+        <translation>変則</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="259"/>
         <source>start offset</source>
-        <translation type="unfinished"/>
+        <translation>開始オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>left shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>左ショルダーオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="261"/>
         <source>right shoulder offset</source>
-        <translation type="unfinished"/>
+        <translation>右ショルダーオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="263"/>
         <source>staff move</source>
-        <translation type="unfinished"/>
+        <translation>譜表移動</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="264"/>
         <source>verse</source>
-        <translation type="unfinished"/>
+        <translation>節</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="266"/>
         <source>syllabic</source>
-        <translation type="unfinished"/>
+        <translation>音節</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="268"/>
         <source>endings</source>
-        <translation type="unfinished"/>
+        <translation>エンディング</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="269"/>
         <source>visible line</source>
-        <translation type="unfinished"/>
+        <translation>可視の線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="270"/>
         <source>magnification</source>
-        <translation type="unfinished"/>
+        <translation>拡大率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="271"/>
         <source>using drumset</source>
-        <translation type="unfinished"/>
+        <translation>ドラムセットを使用</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="272"/>
         <source>duration</source>
-        <translation type="unfinished"/>
+        <translation>音価</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="273"/>
@@ -17090,77 +17115,77 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="274"/>
         <source>role</source>
-        <translation type="unfinished"/>
+        <translation>役割</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="275"/>
         <source>track</source>
-        <translation type="unfinished"/>
+        <translation>トラック</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="277"/>
         <source>strings</source>
-        <translation type="unfinished"/>
+        <translation>弦数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="278"/>
         <source>frets</source>
-        <translation type="unfinished"/>
+        <translation>フレット数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="279"/>
         <source>show nut</source>
-        <translation type="unfinished"/>
+        <translation>ナットを表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="280"/>
         <source>fret offset</source>
-        <translation type="unfinished"/>
+        <translation>フレットオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="281"/>
         <source>fret number position</source>
-        <translation type="unfinished"/>
+        <translation>フレット番号の位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="282"/>
         <source>orientation</source>
-        <translation type="unfinished"/>
+        <translation>向き</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
         <source>fretboard diagram fingering visible</source>
-        <translation type="unfinished"/>
+        <translation>フレットボードダイアグラムの運指を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="284"/>
         <source>fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>フレットボードダイアグラムの運指</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol interpretation</source>
-        <translation type="unfinished"/>
+        <translation>コード記号の解釈</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol voicing</source>
-        <translation type="unfinished"/>
+        <translation>コード記号のボイシング</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="288"/>
         <source>chord symbol duration</source>
-        <translation type="unfinished"/>
+        <translation>コード記号の音価</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>chord symbol bass scale</source>
-        <translation type="unfinished"/>
+        <translation>コード記号のベース音階</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>chord symbol do not stack modifiers</source>
-        <translation type="unfinished"/>
+        <translation>コード記号の修飾を積み重ねない</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
@@ -17170,7 +17195,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>gap</source>
-        <translation type="unfinished"/>
+        <translation>間隔</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="294"/>
@@ -17180,72 +17205,72 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="295"/>
         <source>dash line length</source>
-        <translation type="unfinished"/>
+        <translation>破線の線分の長さ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="296"/>
         <source>dash gap length</source>
-        <translation type="unfinished"/>
+        <translation>破線の間隔の長さ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="298"/>
         <source>playback voice 1</source>
-        <translation type="unfinished"/>
+        <translation>声部1を再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="299"/>
         <source>playback voice 2</source>
-        <translation type="unfinished"/>
+        <translation>声部2を再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="300"/>
         <source>playback voice 3</source>
-        <translation type="unfinished"/>
+        <translation>声部3を再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="302"/>
         <source>playback voice 4</source>
-        <translation type="unfinished"/>
+        <translation>声部4を再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="303"/>
         <source>symbol</source>
-        <translation type="unfinished"/>
+        <translation>記号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="304"/>
         <source>playing repeats</source>
-        <translation type="unfinished"/>
+        <translation>リピートを再生</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="305"/>
         <source>creating system header</source>
-        <translation type="unfinished"/>
+        <translation>段のヘッダーを作成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="306"/>
         <source>lines</source>
-        <translation type="unfinished"/>
+        <translation>線数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="307"/>
         <source>line distance</source>
-        <translation type="unfinished"/>
+        <translation>線の間隔</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="308"/>
         <source>step offset</source>
-        <translation type="unfinished"/>
+        <translation>ステップオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="309"/>
         <source>showing barlines</source>
-        <translation type="unfinished"/>
+        <translation>小節線を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="310"/>
         <source>showing ledgerlines</source>
-        <translation type="unfinished"/>
+        <translation>加線を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="312"/>
@@ -17260,47 +17285,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="316"/>
         <source>generating clefs</source>
-        <translation type="unfinished"/>
+        <translation>音部記号を生成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="317"/>
         <source>generating time signature</source>
-        <translation type="unfinished"/>
+        <translation>拍子記号を生成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="318"/>
         <source>generating key signature</source>
-        <translation type="unfinished"/>
+        <translation>調号を生成</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>y-offset</source>
-        <translation type="unfinished"/>
+        <translation>縦方向オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>distance offset</source>
-        <translation type="unfinished"/>
+        <translation>距離オフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="321"/>
         <source>barline span</source>
-        <translation type="unfinished"/>
+        <translation>次譜表まで延長</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="322"/>
         <source>barline span from</source>
-        <translation type="unfinished"/>
+        <translation>小節線の開始位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="323"/>
         <source>barline span to</source>
-        <translation type="unfinished"/>
+        <translation>小節線の終了位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="324"/>
         <source>bracket span</source>
-        <translation type="unfinished"/>
+        <translation>括弧の範囲</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="326"/>
@@ -17310,7 +17335,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="327"/>
         <source>layout position</source>
-        <translation type="unfinished"/>
+        <translation>レイアウト位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="328"/>
@@ -17320,7 +17345,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="329"/>
         <source>family</source>
-        <translation type="unfinished"/>
+        <translation>フォントファミリー</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="331"/>
@@ -17330,7 +17355,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="332"/>
         <source>user line distancing</source>
-        <translation type="unfinished"/>
+        <translation>行間</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="334"/>
@@ -17365,17 +17390,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="340"/>
         <source>spatium dependent size</source>
-        <translation type="unfinished"/>
+        <translation>サイズを譜表のスペースに連動</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="341"/>
         <source>spatium dependent text size</source>
-        <translation type="unfinished"/>
+        <translation>テキストサイズを譜表のスペースに連動</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
         <source>musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>音楽記号の拡大率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="343"/>
@@ -17385,12 +17410,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>text script align</source>
-        <translation type="unfinished"/>
+        <translation>上下付き文字の揃え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
         <source>system flag</source>
-        <translation type="unfinished"/>
+        <translation>段要素</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="347"/>
@@ -17465,7 +17490,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="361"/>
         <source>continue text musical symbols scale</source>
-        <translation type="unfinished"/>
+        <translation>継続テキストの音楽記号拡大率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="362"/>
@@ -17495,7 +17520,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="367"/>
         <source>gap between text and line</source>
-        <translation type="unfinished"/>
+        <translation>テキストと線の間隔</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="369"/>
@@ -17510,7 +17535,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="371"/>
         <source>continue text position</source>
-        <translation type="unfinished"/>
+        <translation>継続テキストの位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="372"/>
@@ -17610,92 +17635,92 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="393"/>
         <source>note-anchored line placement</source>
-        <translation type="unfinished"/>
+        <translation>音符固定線の配置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="395"/>
         <source>avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>小節線を避ける</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="396"/>
         <source>dynamic size</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号のサイズ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="397"/>
         <source>use text alignment</source>
-        <translation type="unfinished"/>
+        <translation>テキスト揃えを使用</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="398"/>
         <source>anchor to end of previous</source>
-        <translation type="unfinished"/>
+        <translation>前の小節の終わりに固定</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="400"/>
         <source>snap expression</source>
-        <translation type="unfinished"/>
+        <translation>強弱記号にスナップ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="401"/>
         <source>snap before</source>
-        <translation type="unfinished"/>
+        <translation>前にスナップ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="402"/>
         <source>snap after</source>
-        <translation type="unfinished"/>
+        <translation>後にスナップ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="404"/>
         <source>voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>声部の割り当て</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="405"/>
         <source>center between staves</source>
-        <translation type="unfinished"/>
+        <translation>譜表間の中央</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="407"/>
         <source>position above</source>
-        <translation type="unfinished"/>
+        <translation>上側の位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="409"/>
         <source>staves distance</source>
-        <translation type="unfinished"/>
+        <translation>譜表の差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="410"/>
         <source>voices distance</source>
-        <translation type="unfinished"/>
+        <translation>声部の差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="411"/>
         <source>measures distance</source>
-        <translation type="unfinished"/>
+        <translation>小節の差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>position distance</source>
-        <translation type="unfinished"/>
+        <translation>小節内位置の差</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>grace note index</source>
-        <translation type="unfinished"/>
+        <translation>装飾音符のインデックス</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>note index</source>
-        <translation type="unfinished"/>
+        <translation>音符のインデックス</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>voice</source>
-        <translation type="unfinished"/>
+        <translation>声部</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="417"/>
@@ -17705,62 +17730,62 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>concert clef type</source>
-        <translation type="unfinished"/>
+        <translation>実音の音部記号の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>transposing clef type</source>
-        <translation type="unfinished"/>
+        <translation>移調譜の音部記号の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>clef to barline position</source>
-        <translation type="unfinished"/>
+        <translation>音部記号と小節線の位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>is header</source>
-        <translation type="unfinished"/>
+        <translation>ヘッダー</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>concert key</source>
-        <translation type="unfinished"/>
+        <translation>実音の調</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="424"/>
         <source>key</source>
-        <translation type="unfinished"/>
+        <translation>調</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="426"/>
         <source>autoplace minimum distance</source>
-        <translation type="unfinished"/>
+        <translation>自動配置の最小距離</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>arpeggio type</source>
-        <translation type="unfinished"/>
+        <translation>アルペジオの種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="429"/>
         <source>chord line type</source>
-        <translation type="unfinished"/>
+        <translation>和音線の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>straight chord line</source>
-        <translation type="unfinished"/>
+        <translation>直線の和音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>wavy chord line</source>
-        <translation type="unfinished"/>
+        <translation>波形の和音線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>tremolo type</source>
-        <translation type="unfinished"/>
+        <translation>トレモロの種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="433"/>
@@ -17770,27 +17795,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>harmony type</source>
-        <translation type="unfinished"/>
+        <translation>コード記号の形式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>arpeggio span</source>
-        <translation type="unfinished"/>
+        <translation>アルペジオの範囲</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>bracket hook length</source>
-        <translation type="unfinished"/>
+        <translation>括弧のかぎの長さ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>bracket hook position</source>
-        <translation type="unfinished"/>
+        <translation>括弧のかぎの位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>bracket right side</source>
-        <translation type="unfinished"/>
+        <translation>括弧を右に配置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="443"/>
@@ -17800,72 +17825,72 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="444"/>
         <source>bend curve</source>
-        <translation type="unfinished"/>
+        <translation>ベンド曲線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="445"/>
         <source>bend vertex offset</source>
-        <translation type="unfinished"/>
+        <translation>ベンド頂点のオフセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="446"/>
         <source>bend show hold line</source>
-        <translation type="unfinished"/>
+        <translation>ベンドのホールド線を表示</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="447"/>
         <source>bend start time factor</source>
-        <translation type="unfinished"/>
+        <translation>ベンド開始時間の係数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>bend target time factor</source>
-        <translation type="unfinished"/>
+        <translation>ベンド到達時間の係数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="449"/>
         <source>bend end time factor</source>
-        <translation type="unfinished"/>
+        <translation>ベンド終了時間の係数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>guitar dive tab pos</source>
-        <translation type="unfinished"/>
+        <translation>ギターダイブのタブ位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>guitar bend amount</source>
-        <translation type="unfinished"/>
+        <translation>ギターベンド量</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>guitar dip tremolo line</source>
-        <translation type="unfinished"/>
+        <translation>ディップのトレモロ線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="453"/>
         <source>guitar dive is slack</source>
-        <translation type="unfinished"/>
+        <translation>弦を弛ませる</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>tremolobar type</source>
-        <translation type="unfinished"/>
+        <translation>トレモロバーの種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>tremolobar curve</source>
-        <translation type="unfinished"/>
+        <translation>トレモロバーの曲線</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="458"/>
         <source>start with long names</source>
-        <translation type="unfinished"/>
+        <translation>長い楽器名で開始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>start with measure one</source>
-        <translation type="unfinished"/>
+        <translation>小節番号1から開始</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="460"/>
@@ -17875,52 +17900,52 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="462"/>
         <source>path</source>
-        <translation type="unfinished"/>
+        <translation>描画パス</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>prefer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>シャープまたはフラットを優先</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="466"/>
         <source>playing technique type</source>
-        <translation type="unfinished"/>
+        <translation>奏法の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>gradual tempo change type</source>
-        <translation type="unfinished"/>
+        <translation>テンポ変化の種類</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>tempo easing method</source>
-        <translation type="unfinished"/>
+        <translation>テンポ変化の仕方</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="470"/>
         <source>tempo change factor</source>
-        <translation type="unfinished"/>
+        <translation>テンポの倍率</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>is diagram</source>
-        <translation type="unfinished"/>
+        <translation>図形式</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="474"/>
         <source>active</source>
-        <translation type="unfinished"/>
+        <translation>有効</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="476"/>
         <source>fret position</source>
-        <translation type="unfinished"/>
+        <translation>フレット位置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="477"/>
         <source>ignored strings</source>
-        <translation type="unfinished"/>
+        <translation>無視する弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="478"/>
@@ -17930,37 +17955,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="479"/>
         <source>transposition behaviour</source>
-        <translation type="unfinished"/>
+        <translation>移調の扱い</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="481"/>
         <source>tie placement</source>
-        <translation type="unfinished"/>
+        <translation>タイの配置</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="482"/>
         <source>minimum length</source>
-        <translation type="unfinished"/>
+        <translation>最小の長さ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="483"/>
         <source>partial spanner direction</source>
-        <translation type="unfinished"/>
+        <translation>部分スパナーの方向</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="485"/>
         <source>position linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>位置を総譜にリンク</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="486"/>
         <source>appearance linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>外観を総譜にリンク</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="487"/>
         <source>text linked to main score</source>
-        <translation type="unfinished"/>
+        <translation>テキストを総譜にリンク</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="488"/>
@@ -17970,17 +17995,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="490"/>
         <source>strings count</source>
-        <translation type="unfinished"/>
+        <translation>弦の本数</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="491"/>
         <source>strings preset</source>
-        <translation type="unfinished"/>
+        <translation>調弦プリセット</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>visible strings</source>
-        <translation type="unfinished"/>
+        <translation>表示する弦</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="494"/>
@@ -17995,22 +18020,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="496"/>
         <source>symbol angle</source>
-        <translation type="unfinished"/>
+        <translation>記号の角度</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="498"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>すべての譜表に適用</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="499"/>
         <source>is courtesy</source>
-        <translation type="unfinished"/>
+        <translation>予告記号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="500"/>
         <source>exclude vertical align</source>
-        <translation type="unfinished"/>
+        <translation>垂直揃えから除外</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="502"/>
@@ -18020,12 +18045,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="503"/>
         <source>play count text setting</source>
-        <translation type="unfinished"/>
+        <translation>再生回数テキストの設定</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="504"/>
         <source>play count text</source>
-        <translation type="unfinished"/>
+        <translation>再生回数テキスト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="506"/>
@@ -18035,7 +18060,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="508"/>
         <source>cutaway</source>
-        <translation type="unfinished"/>
+        <translation>カッタウェイ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="509"/>
@@ -18045,12 +18070,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="510"/>
         <source>merge matching rests</source>
-        <translation type="unfinished"/>
+        <translation>一致する休符を結合</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="511"/>
         <source>reflect transposition</source>
-        <translation type="unfinished"/>
+        <translation>移調を反映</translation>
     </message>
 </context>
 <context>
@@ -18115,17 +18140,17 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/staffgroup</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3146"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3148"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3147"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3149"/>
         <source>Percussion</source>
         <translation>打楽器</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3148"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3150"/>
         <source>Tablature</source>
         <translation>TAB譜</translation>
     </message>
@@ -18195,17 +18220,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3216"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25小ディーシス上向き（25S、~5:13S、~37S、5C plus 5C）、2°上 [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3224"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>35中ディーシス上向き（35M、~13M、~125M、5C plus 7C）、2/9トーン上</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3254"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>5:7クライスマ上向き（5:7k、~11:13k、7C less 5C）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3257"/>
@@ -18745,17 +18770,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3546"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation type="unfinished"/>
+        <translation>異名同音でほぼ等しい臨時記号に読み替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3547"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation type="unfinished"/>
+        <translation>異名同音で等しい臨時記号に読み替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3548"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation type="unfinished"/>
+        <translation>異名同音でチルダ臨時記号に読み替え</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3554"/>
@@ -19660,47 +19685,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4392"/>
         <source>Gyro</source>
-        <translation type="unfinished"/>
+        <translation>ジャイロ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4393"/>
         <source>Hand martellato</source>
-        <translation type="unfinished"/>
+        <translation>ハンド・マルテラート</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4394"/>
         <source>Mallet, bell on table</source>
-        <translation type="unfinished"/>
+        <translation>マレット、ベルをテーブルに置いて</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4395"/>
         <source>Mallet, bell suspended</source>
-        <translation type="unfinished"/>
+        <translation>マレット、ベルを吊るして</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4396"/>
         <source>Mallet lift</source>
-        <translation type="unfinished"/>
+        <translation>マレットリフト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4397"/>
         <source>Martellato</source>
-        <translation type="unfinished"/>
+        <translation>マルテラート</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4398"/>
         <source>Martellato lift</source>
-        <translation type="unfinished"/>
+        <translation>マルテラートリフト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4399"/>
         <source>Muted martellato</source>
-        <translation type="unfinished"/>
+        <translation>ミュート・マルテラート</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4400"/>
         <source>Pluck lift</source>
-        <translation type="unfinished"/>
+        <translation>プラックリフト</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
@@ -19740,57 +19765,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4798"/>
         <source>Tempus perfectum cum prolatione perfecta (9/8)</source>
-        <translation type="unfinished"/>
+        <translation>完全テンプス・完全プロラツィオ（9/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4799"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 4</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ・ディミヌツィオン4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4800"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 5</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ・ディミヌツィオン5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4801"/>
         <source>Tempus perfectum cum prolatione imperfecta (3/4)</source>
-        <translation type="unfinished"/>
+        <translation>完全テンプス・不完全プロラツィオ（3/4）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4802"/>
         <source>Tempus perfectum cum prolatione imperfecta diminution 1 (3/8)</source>
-        <translation type="unfinished"/>
+        <translation>完全テンプス・不完全プロラツィオ・ディミヌツィオン1（3/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4803"/>
         <source>Tempus perfectum cum prolatione perfecta diminution 2 (9/16)</source>
-        <translation type="unfinished"/>
+        <translation>完全テンプス・完全プロラツィオ・ディミヌツィオン2（9/16）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4804"/>
         <source>Tempus imperfectum cum prolatione perfecta (6/8)</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・完全プロラツィオ（6/8）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4805"/>
         <source>Tempus imperfectum cum prolatione imperfecta (2/4)</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ（2/4）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4806"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 1 (2/2)</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ・ディミヌツィオン1（2/2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4807"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 2 (6/16)</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ・ディミヌツィオン2（6/16）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4808"/>
         <source>Tempus imperfectum cum prolatione imperfecta diminution 3 (2/2)</source>
-        <translation type="unfinished"/>
+        <translation>不完全テンプス・不完全プロラツィオ・ディミヌツィオン3（2/2）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4851"/>
@@ -19935,7 +19960,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5595"/>
         <source>Half-open 2 (Weinberg)</source>
-        <translation type="unfinished"/>
+        <translation>ハーフオープン2（ワインバーグ）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5702"/>
@@ -20293,42 +20318,42 @@ Fret %1 on strings %2</source>
         <translation>スペース</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3248"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3250"/>
         <source>Slap</source>
         <translation>スラップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3249"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3251"/>
         <source>Pop</source>
         <translation>ポップ</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3251"/>
-        <source>Thumb damp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3252"/>
-        <source>Brush damp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3253"/>
-        <source>Ring touch</source>
-        <translation type="unfinished"/>
+        <source>Thumb damp</source>
+        <translation>サム・ダンプ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3254"/>
-        <source>Pluck</source>
-        <translation type="unfinished"/>
+        <source>Brush damp</source>
+        <translation>ブラッシュ・ダンプ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3255"/>
-        <source>Singing bell</source>
-        <translation type="unfinished"/>
+        <source>Ring touch</source>
+        <translation>リング・タッチ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3256"/>
+        <source>Pluck</source>
+        <translation>プラック</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3257"/>
+        <source>Singing bell</source>
+        <translation>シンギング・ベル</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3258"/>
         <source>Vibrato</source>
         <translation>ビブラート</translation>
     </message>
@@ -20382,47 +20407,47 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/tremolotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2470"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2472"/>
         <source>Eighth through stem</source>
         <translation>8分音符で反復</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2471"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
         <source>16th through stem</source>
         <translation>16分音符で反復</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2472"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
         <source>32nd through stem</source>
         <translation>32分音符で反復</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
         <source>64th through stem</source>
         <translation>64分音符で反復</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
         <source>Buzz roll</source>
         <translation>バズロール</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
         <source>Eighth between notes</source>
         <translation>8分音符で交互に演奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>16th between notes</source>
         <translation>16分音符で交互に演奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
         <source>32nd between notes</source>
         <translation>32分音符で交互に演奏</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="2480"/>
         <source>64th between notes</source>
         <translation>64分音符で交互に演奏</translation>
     </message>
@@ -20430,22 +20455,22 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/trilltype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3167"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3169"/>
         <source>Trill line</source>
         <translation>トリル線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3168"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
         <source>Upprall line</source>
         <translation>上プラル線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3169"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3171"/>
         <source>Downprall line</source>
         <translation>下プラル線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3172"/>
         <source>Prallprall line</source>
         <translation>複転回モルデント線</translation>
     </message>
@@ -20491,27 +20516,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/vibratotype</name>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3210"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3211"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
         <source>Guitar vibrato</source>
         <translation>ギタービブラート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3214"/>
         <source>Guitar vibrato wide</source>
         <translation>幅広ギタービブラート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3215"/>
         <source>Vibrato sawtooth</source>
         <translation>鋸歯ビブラート</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/types/typesconv.cpp" line="3215"/>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="3217"/>
         <source>Tremolo sawtooth wide</source>
         <translation>幅広鋸歯トレモロ</translation>
     </message>
@@ -20579,7 +20604,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="72"/>
         <source>Manually</source>
-        <translation type="unfinished"/>
+        <translation>手動</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensioninstaller.cpp" line="34"/>
@@ -23002,7 +23027,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/mnx/internal/export/mnxexporter.cpp" line="103"/>
         <source>MNX export skipped because the score contains no exportable parts. (Tablature is not supported yet).</source>
-        <translation type="unfinished"/>
+        <translation>MNX のエクスポートをスキップしました。エクスポート可能なパートがありません。（タブ譜はまだ未対応です。）</translation>
     </message>
     <message>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="62"/>
@@ -24194,17 +24219,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="52"/>
         <source>Gap to staff/frames</source>
-        <translation>譜表/フレームとの間隔</translation>
+        <translation>譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="72"/>
         <source>Gap to staff/frames above</source>
-        <translation type="unfinished"/>
+        <translation>上の譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="90"/>
         <source>Gap to staff/frames below</source>
-        <translation type="unfinished"/>
+        <translation>下の譜表/フレームまでの間隔</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="98"/>
@@ -24214,12 +24239,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="118"/>
         <source>Clearance for notation above</source>
-        <translation type="unfinished"/>
+        <translation>上の記譜のための余白</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="136"/>
         <source>Clearance for notation below</source>
-        <translation type="unfinished"/>
+        <translation>下の記譜のための余白</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -24246,7 +24271,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="168"/>
         <source>Finger for string %1</source>
-        <translation type="unfinished"/>
+        <translation>弦%1の指番号</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="80"/>
@@ -24458,7 +24483,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
         <source>Hooks</source>
-        <translation type="unfinished"/>
+        <translation>フック</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="69"/>
@@ -24621,7 +24646,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="62"/>
         <source>Make line to asterisk visible</source>
-        <translation type="unfinished"/>
+        <translation>アスタリスクまでの線を表示</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="52"/>
@@ -24858,7 +24883,7 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="53"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="209"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="211"/>
         <source>Stemless</source>
         <translation>符幹なし</translation>
     </message>
@@ -25116,61 +25141,71 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
+        <source>Pitch names, no accidentals</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
         <source>German pitch names</source>
         <translation>ドイツ音名</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
+        <source>German pitch names, no accidentals</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
         <source>Solfege movable Do</source>
         <translation>ソルフェージュ移動ド</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="197"/>
         <source>Solfege fixed Do</source>
         <translation>ソルフェージュ固定ド</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="198"/>
         <source>4-shape (Walker)</source>
         <translation>4形状 (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="197"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="199"/>
         <source>7-shape (Aikin)</source>
         <translation>7形状 (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="198"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="200"/>
         <source>7-shape (Funk)</source>
         <translation>7形状 (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="199"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="201"/>
         <source>7-shape (Walker)</source>
         <translation>7形状 (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="218"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="220"/>
         <source>Show barlines</source>
         <translation>縦線を表示</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="227"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="229"/>
         <source>Show ledger lines</source>
         <translation>加線を表示</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="236"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="238"/>
         <source>Generate clefs</source>
         <translation>音部記号を生成</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="245"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="247"/>
         <source>Generate time signatures</source>
         <translation>拍子記号を生成</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="256"/>
         <source>Generate key signatures</source>
         <translation>調号を生成</translation>
     </message>
@@ -25681,7 +25716,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="284"/>
         <source>Midpoint</source>
-        <translation type="unfinished"/>
+        <translation>中点</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="285"/>
@@ -25921,7 +25956,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="60"/>
         <source>Tie (partial)</source>
-        <translation>タイ (部分的)</translation>
+        <translation>タイ (部分)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="65"/>
@@ -26061,42 +26096,54 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="239"/>
+        <source>Pitch names, no accidentals</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="241"/>
         <source>German pitch names</source>
         <comment>notehead scheme</comment>
         <translation>ドイツ音名</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="240"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="242"/>
+        <source>German pitch names, no accidentals</source>
+        <comment>notehead scheme</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="244"/>
         <source>Solfège movable do</source>
         <comment>notehead scheme</comment>
         <translation>ソルフェージュ移動ド</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="241"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="245"/>
         <source>Solfège fixed do</source>
         <comment>notehead scheme</comment>
         <translation>ソルフェージュ固定ド</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="242"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="246"/>
         <source>4-shape (Walker)</source>
         <comment>notehead scheme</comment>
         <translation>4形状 (Walker)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="243"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="247"/>
         <source>7-shape (Aikin)</source>
         <comment>notehead scheme</comment>
         <translation>7形状 (Aikin)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="244"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="248"/>
         <source>7-shape (Funk)</source>
         <comment>notehead scheme</comment>
         <translation>7形状 (Funk)</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="245"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="249"/>
         <source>7-shape (Walker)</source>
         <comment>notehead scheme</comment>
         <translation>7形状 (Walker)</translation>
@@ -26356,7 +26403,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="142"/>
         <source>traits</source>
-        <translation type="unfinished"/>
+        <translation>特性</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentlistmodel.cpp" line="192"/>
@@ -26797,7 +26844,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="109"/>
         <source>Search sounds</source>
-        <translation type="unfinished"/>
+        <translation>サウンドを検索</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="197"/>
@@ -26819,7 +26866,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="70"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>この更新を適用するため、MuseScore Studio はいったん終了し、MuseSounds Manager が開きます。更新が完了するまで MuseSounds ライブラリは利用できません。</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="74"/>
@@ -26830,7 +26877,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="76"/>
         <source>To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. Your MuseSounds libraries won’t work until the update is complete.</source>
-        <translation type="unfinished"/>
+        <translation>この更新を適用するため、MuseScore Studio はいったん終了し、MuseHub が開きます。更新が完了するまで MuseSounds ライブラリは利用できません。</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="80"/>
@@ -26968,17 +27015,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
         <source>Notation/tab in open position</source>
-        <translation type="unfinished"/>
+        <translation>開放位置の記譜/タブ</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
         <source>Notation shows sounding pitches</source>
-        <translation type="unfinished"/>
+        <translation>記譜は実音を表示</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="121"/>
         <source>No transposition</source>
-        <translation type="unfinished"/>
+        <translation>移調なし</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="136"/>
@@ -28101,7 +28148,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="138"/>
         <source>Cannot paste between different local time signatures</source>
-        <translation type="unfinished"/>
+        <translation>異なるローカル拍子記号の間では貼り付けできません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
@@ -28172,27 +28219,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="175"/>
         <source>Make a list selection of notes or rests on the same beat or any range selection and retry.</source>
-        <translation type="unfinished"/>
+        <translation>同じ拍上の音符または休符のリスト選択、または範囲選択をしてから再試行してください。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="178"/>
         <source>Some fretboard diagrams could not be transposed</source>
-        <translation type="unfinished"/>
+        <translation>一部のフレットボードダイアグラムを移調できませんでした</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="179"/>
         <source>Fretboard diagrams that could not be transposed have been left blank. You can undo this action if required.</source>
-        <translation type="unfinished"/>
+        <translation>移調できなかったフレットボードダイアグラムは空白のままです。必要ならこの操作を元に戻せます。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
         <source>Can’t explode or implode</source>
-        <translation type="unfinished"/>
+        <translation>和音の分散または集約ができません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="184"/>
         <source>Cannot explode or implode between different local time signatures</source>
-        <translation type="unfinished"/>
+        <translation>異なるローカル拍子記号の間では和音の分散または集約ができません</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="123"/>
@@ -29294,7 +29341,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="254"/>
         <source>All caps (for Solfeggio and French)</source>
-        <translation type="unfinished"/>
+        <translation>すべて大文字（ソルフェージュとフランス式）</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="267"/>
@@ -29676,7 +29723,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="143"/>
         <source>Partial slurs across repeats and breaks:</source>
-        <translation>繰り返しや区切りをまたぐ部分的なスラー:</translation>
+        <translation>繰り返しや区切りをまたぐ部分スラー:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="153"/>
@@ -30264,17 +30311,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="120"/>
         <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
-        <translation type="unfinished"/>
+        <translation>これらのサウンドを鳴らす MIDI ノートとキーボードショートカットも移動しますか？</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="132"/>
         <source>Move MIDI notes and keyboard shortcuts with their sounds</source>
-        <translation type="unfinished"/>
+        <translation>MIDI ノートとキーボードショートカットをサウンドと一緒に移動</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="133"/>
         <source>Leave MIDI notes and keyboard shortcuts fixed to original pad positions</source>
-        <translation type="unfinished"/>
+        <translation>MIDI ノートとキーボードショートカットを元のパッド位置のままにする</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="58"/>
@@ -33348,7 +33395,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="627"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation type="unfinished"/>
+        <translation>作業中、オーディオはバックグラウンドで処理されます。手動で処理を開始するには、環境設定 &gt; オーディオと MIDI &gt; オンラインサウンド で自動処理をオフにしてください。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="641"/>
@@ -33528,7 +33575,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="180"/>
         <source>This may be due to a poor internet connection or server issue. Your score will still play, but some sounds may be missing. Please check your connection, and make sure MuseHub is running and you are logged in. &lt;a href=&quot;%1&quot;&gt;Learn more here&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>インターネット接続が不安定な場合やサーバーの問題が考えられます。スコアは再生できますが、一部のサウンドが欠けることがあります。接続を確認し、MuseHub が起動していてログイン済みか確かめてください。&lt;a href=&quot;%1&quot;&gt;詳細はこちら&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="186"/>
@@ -33539,7 +33586,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="220"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2. More info: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>現在の %1 向けレンダー上限に達しました。割り当てが %2 にリセットされたあと、再びオンラインサウンドを処理できます。詳細: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="227"/>
@@ -33555,7 +33602,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/internal/onlinesoundscontroller.cpp" line="245"/>
         <source>This will delete online sounds data stored on your computer for this score. Online sounds processing will try to restart immediately.</source>
-        <translation type="unfinished"/>
+        <translation>このスコア用にパソコンに保存されたオンラインサウンドのデータを削除します。オンラインサウンドの処理はすぐに再開を試みます。</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
@@ -33662,12 +33709,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
-        <translation type="unfinished"/>
+        <translation>現在の %1 向けレンダー上限に達しました。割り当てが %2 にリセットされたあと、再びオンラインサウンドを処理できます。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="132"/>
         <source>Please check your connection, and make sure MuseHub is running and you are logged in.</source>
-        <translation type="unfinished"/>
+        <translation>接続を確認し、MuseHub が起動していてログイン済みか確かめてください。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="17"/>
@@ -33894,7 +33941,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FoldersSection.qml" line="86"/>
         <source>Rescan VST3 plugins</source>
-        <translation type="unfinished"/>
+        <translation>VST3 プラグインを再スキャン</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>
@@ -34022,7 +34069,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation type="unfinished"/>
+        <translation>無効にするとエラーの原因になることがあります。インポートに失敗するファイルの場合のみ試してください。</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
@@ -34378,7 +34425,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="49"/>
         <source>Disabled text</source>
-        <translation type="unfinished"/>
+        <translation>無効なテキスト</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="50"/>
@@ -34751,7 +34798,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="87"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
         <source>Untitled score</source>
         <translation>無題のスコア</translation>
     </message>
@@ -35196,7 +35243,7 @@ failed: %2</source>
         <translation>MuseScore バックアップファイル</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1933"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1923"/>
         <source>Open</source>
         <translation>開く</translation>
     </message>
@@ -35206,7 +35253,7 @@ failed: %2</source>
         <translation>新しい変更を保存する前にディスクにファイルのバックアップを作成</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="353"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="367"/>
         <source>Untitled</source>
         <translation>無題</translation>
     </message>
@@ -35330,7 +35377,7 @@ failed: %2</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="477"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="609"/>
         <source>Please try again later, or get help for this problem on MuseScore.com.</source>
-        <translation type="unfinished"/>
+        <translation>後でもう一度試すか、MuseScore.com でこの問題のヘルプを参照してください。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="493"/>
@@ -35485,12 +35532,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
         <source>Disable to let the importing app choose beam groupings.</source>
-        <translation type="unfinished"/>
+        <translation>無効にすると、インポート側アプリが連桁のグループ分けを決定します。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
         <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
-        <translation type="unfinished"/>
+        <translation>有効にすると、すべての休符の譜線をエクスポートします。無効にすると、インポート側アプリが判断します。</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
@@ -35548,17 +35595,17 @@ failed: %2</source>
         <translation>マスクの互換性 (Adobe Illustrator のみ)</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="142"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="131"/>
         <source>16-bit integer</source>
         <translation>16ビット整数</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="144"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="133"/>
         <source>24-bit integer</source>
         <translation>24ビット整数</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="146"/>
+        <location filename="../../src/importexport/audioexport/internal/audioexportconfiguration.cpp" line="135"/>
         <source>32-bit float</source>
         <translation>32ビット浮動小数点数</translation>
     </message>
@@ -35785,50 +35832,50 @@ failed: %2</source>
         <translation>LRC ファイル</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="363"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="370"/>
         <source>Each page to a separate file</source>
         <translation>各ページを別ファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="364"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="371"/>
         <source>Each part to a separate file</source>
         <translation>各パートを別ファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="365"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="372"/>
         <source>All parts combined in one file</source>
         <translation>すべてのパートを1つのファイルにする</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="628"/>
         <source>Use page layout</source>
         <translation>ページレイアウトを使用</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="629"/>
         <source>Reflow to fit video resolution</source>
         <translation>動画の解像度に合わせて再配置</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="857"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>すべてのレイアウト</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="852"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="859"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>段区切りとページ区切り</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="854"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="861"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>手動で追加した段区切りとページ区切りのみ</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="856"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="863"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>段区切りとページ区切りを含めない</translation>
@@ -36476,12 +36523,12 @@ failed: %2</source>
         <translation>共有</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="952"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="956"/>
         <source>File “%1” could not be opened for validation. %2</source>
         <translation>ファイル『%1』 を検証のために開けませんでした。%2</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="963"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="967"/>
         <source>“%1” is corrupted or damaged.</source>
         <translation>『%1』は破損または損傷しています。</translation>
     </message>
@@ -37191,7 +37238,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="136"/>
         <source>No button</source>
-        <translation type="unfinished"/>
+        <translation>ボタンなし</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="137"/>
@@ -37386,7 +37433,7 @@ failed: %2</source>
         <translation>レセヴィブレを切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="4589"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="4590"/>
         <source>Enter rest</source>
         <translation>休符を入力</translation>
     </message>
@@ -37404,7 +37451,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/engraving/tests/voiceswitching_tests.cpp" line="209"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/inspectormodelwithvoiceandpositionoptions.cpp" line="165"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6098"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6109"/>
         <source>Change voice</source>
         <translation>声部を変更</translation>
     </message>
@@ -37509,7 +37556,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
         <source>Remove notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>符頭の括弧を削除</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/stemsettingsmodel.cpp" line="115"/>
@@ -37774,429 +37821,429 @@ failed: %2</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5265"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5286"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5318"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5329"/>
         <source>Repeat selection</source>
         <translation>選択範囲を繰り返す</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5340"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5351"/>
         <source>Paste</source>
         <translation>貼り付け</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5422"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5433"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5448"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5459"/>
         <source>Flip direction</source>
         <translation>向きを反転</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5461"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5472"/>
         <source>Flip horizontally</source>
         <translation>水平に反転</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5521"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5532"/>
         <source>Add ottava</source>
         <translation>オッターヴァを追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5528"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5568"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5539"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5579"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="207"/>
         <source>Add hairpin</source>
         <translation>松葉を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5629"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5640"/>
         <source>Add brackets</source>
         <translation>括弧を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5634"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5645"/>
         <source>Add braces</source>
         <translation>波括弧を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5639"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5650"/>
         <source>Add parentheses</source>
         <translation>括弧を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5666"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5677"/>
         <source>Toggle accidental</source>
         <translation>臨時記号を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5709"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8266"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5720"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8277"/>
         <source>Toggle articulation</source>
         <translation>アーティキュレーションを切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5726"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5737"/>
         <source>Toggle augmentation dots</source>
         <translation>付点を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5760"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5771"/>
         <source>Add grace note</source>
         <translation>装飾音符を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5787"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5798"/>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="708"/>
         <source>Add tuplet</source>
         <translation>連符を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5808"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5819"/>
         <source>Set beam type</source>
         <translation>連桁の種類を設定</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5820"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5831"/>
         <source>Decrease duration</source>
         <translation>音価を減らす</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5821"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5832"/>
         <source>Increase duration</source>
         <translation>音価を増やす</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5838"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5849"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="199"/>
         <source>Change hairpin type</source>
         <translation>松葉の種類を変更</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5881"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5892"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
         <translation>強弱記号を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5932"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5943"/>
         <source>Toggle layout break</source>
         <translation>レイアウト区切りを切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5943"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5954"/>
         <source>Move measure to previous system</source>
         <translation>小節を前の段に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5954"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5965"/>
         <source>Move measure to next system</source>
         <translation>小節を次の段に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5961"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5972"/>
         <source>Lock/unlock selected system(s)</source>
         <translation>選択した段をロック/アンロック</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5968"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5979"/>
         <source>Lock/unlock all systems</source>
         <translation>すべての段をロック/アンロック</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5981"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5992"/>
         <source>Create system from selection</source>
         <translation>選択範囲から段を作成</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5988"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5999"/>
         <source>Apply system lock to selection</source>
         <translation>選択範囲に段ロックを適用</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="5998"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6009"/>
         <source>Measures per system</source>
         <translation>段ごとの小節</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6005"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6016"/>
         <source>Transposition</source>
         <translation>移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6029"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6040"/>
         <source>Swap voices</source>
         <translation>声部を交換</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6076"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6087"/>
         <source>Add interval</source>
         <translation>音程を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6083"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6094"/>
         <source>Enter note at fret %1</source>
         <translation>フレット%1に音符を入力</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6109"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6120"/>
         <source>Change voice assignment</source>
         <translation>声部の割り当てを変更</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6120"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6131"/>
         <source>Add note-anchored line</source>
         <translation>音符に固定された線を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6207"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6218"/>
         <source>Add text</source>
         <translation>テキストを追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6275"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6286"/>
         <source>Add image</source>
         <translation>画像を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6294"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6305"/>
         <source>Add figured bass</source>
         <translation>数字付き低音を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6309"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6320"/>
         <source>Increase layout stretch</source>
         <translation>レイアウトストレッチを増やす</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6310"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6321"/>
         <source>Decrease layout stretch</source>
         <translation>レイアウトストレッチを減らす</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6333"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6344"/>
         <source>Add time signature</source>
         <translation>拍子記号を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6344"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6355"/>
         <source>Explode</source>
         <translation>和音を分散</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6360"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6371"/>
         <source>Implode</source>
         <translation>和音を集約</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6376"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6387"/>
         <source>Realize chord symbols</source>
         <translation>コード記号を再現</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6387"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6398"/>
         <source>Extend to next note</source>
         <translation>次の音符まで延長</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6433"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6444"/>
         <source>Delete %Ln measure(s)</source>
         <translation><numerusform>%Ln小節を削除</numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6444"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6455"/>
         <source>Delete range</source>
         <translation>範囲を削除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6451"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6462"/>
         <source>Remove empty trailing measures</source>
         <translation>末尾の空の小節を削除</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6462"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6473"/>
         <source>Fill with slashes</source>
         <translation>スラッシュで埋める</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6473"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6484"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>リズムのスラッシュ記譜を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6480"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6491"/>
         <source>Change enharmonic spelling</source>
         <translation>異名同音表記を変更</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6487"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6498"/>
         <source>Optimize enharmonic spelling</source>
         <translation>異名同音表記を最適化</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6494"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6505"/>
         <source>Respell pitches with sharps</source>
         <translation>音高をシャープで再表記</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6501"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6512"/>
         <source>Respell pitches with flats</source>
         <translation>音高をフラットで再表記</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6508"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6519"/>
         <source>Regroup rhythms</source>
         <translation>リズムを再グループ化</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6515"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6526"/>
         <source>Resequence rehearsal marks</source>
         <translation>練習番号を振り直す</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6522"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6533"/>
         <source>Reset layout stretch</source>
         <translation>レイアウトストレッチをリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6529"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6540"/>
         <source>Reset text style overrides</source>
         <translation>テキストスタイルの上書きをリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6536"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6547"/>
         <source>Reset beams</source>
         <translation>連桁をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6553"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6564"/>
         <source>Reset shapes and positions</source>
         <translation>形と位置をリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6573"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6584"/>
         <source>Reset to default layout</source>
         <translation>デフォルトのレイアウトにリセット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6599"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6610"/>
         <source>Set score view settings</source>
         <translation>スコアビュー設定を設定</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6769"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6780"/>
         <source>Navigate to lyrics</source>
         <translation>歌詞に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6900"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6960"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6911"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6971"/>
         <source>Navigate to next syllable</source>
         <translation>次の音節に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6922"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6933"/>
         <source>Add partial lyrics dash</source>
         <translation>部分的な歌詞ダッシュを追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7126"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7137"/>
         <source>Navigate to verse</source>
         <translation>次の行に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7183"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7273"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7194"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7284"/>
         <source>Navigate to next chord symbol</source>
         <translation>次のコード記号に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7316"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7327"/>
         <source>Navigate to chord symbol</source>
         <translation>コード記号に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7373"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7419"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7384"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7430"/>
         <source>Navigate to next figured bass</source>
         <translation>次の数字付き低音に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7467"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7478"/>
         <source>Navigate to figured bass</source>
         <translation>数字付き低音に移動</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7765"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7794"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7855"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7915"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7776"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7805"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7866"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7926"/>
         <source>Enter lyrics extension line</source>
         <translation>歌詞の延長線を入力</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7940"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7951"/>
         <source>Add lyrics verse</source>
         <translation>歌詞の行を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7991"/>
         <source>Enter guitar bend</source>
         <translation>ギターベンドを入力</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8049"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8060"/>
         <source>Add fretboard diagram</source>
         <translation>フレットボードダイアグラムを追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8190"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8201"/>
         <source>Format text</source>
         <translation>テキストをフォーマット</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8210"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8221"/>
         <source>Toggle subscript</source>
         <translation>下付き文字を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8212"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8223"/>
         <source>Toggle superscript</source>
         <translation>上付き文字を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8214"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8225"/>
         <source>Toggle subscript/superscript</source>
         <translation>下付き文字/上付き文字を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8271"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8282"/>
         <source>Toggle ornament</source>
         <translation>装飾記号を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8276"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
         <source>Toggle automatic placement</source>
         <translation>自動配置を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8298"/>
         <source>Add clef</source>
         <translation>音部記号を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8292"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8303"/>
         <source>Add accidental</source>
         <translation>臨時記号を追加</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8297"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8308"/>
         <source>Transpose semitone</source>
         <translation>半音移調</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8304"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8315"/>
         <source>Transpose diatonically</source>
         <translation>全音階で移調</translation>
     </message>
@@ -38420,7 +38467,7 @@ failed: %2</source>
         <translation>ページ設定を編集</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.cpp" line="148"/>
+        <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.cpp" line="150"/>
         <source>Edit staff text properties</source>
         <translation>譜表テキストのプロパティを編集</translation>
     </message>
@@ -38450,7 +38497,7 @@ failed: %2</source>
         <translation>「すべての譜表にサウンドフラグを適用」を切り替え</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1222"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="1226"/>
         <source>Edit project properties</source>
         <translation>プロジェクトのプロパティを編集</translation>
     </message>

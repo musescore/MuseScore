@@ -90,77 +90,54 @@
               <eid>H_H</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>I_I</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/2</fractions>
-                    <grace>0</grace>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Beam>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <l1>-20</l1>
             <l2>-18</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>16th</durationType>
             <grace16after/>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>L_L</startElement>
+                <endElement>K_K</endElement>
+                <eid>M_M</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>L_L</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>O_O</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <grace>1</grace>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>P_P</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/2</fractions>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>H_H</startElement>
+                <endElement>P_P</endElement>
+                <eid>Q_Q</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
@@ -170,68 +147,44 @@
               <eid>S_S</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>T_T</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-1/2</fractions>
-                    <grace>0</grace>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
-              <eid>W_W</eid>
+              <eid>V_V</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>X_X</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>S_S</startElement>
+                <endElement>V_V</endElement>
+                <eid>W_W</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>Y_Y</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <grace>0</grace>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>V_V</startElement>
+                <endElement>Y_Y</endElement>
+                <eid>Z_Z</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Rest>

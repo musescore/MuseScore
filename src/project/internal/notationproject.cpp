@@ -37,8 +37,9 @@
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/page.h"
+#include "engraving/dom/measure.h"
 #include "engraving/dom/measurebase.h"
+#include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/system.h"
 #include "engraving/editing/editscoreproperties.h"
@@ -1137,21 +1138,22 @@ void NotationProject::setNeedSave(bool needSave)
         m_hasNonUndoStackChanges = false;
     }
 
-    if (m_needSave == needSave) {
+    if (m_isNeedSave == needSave) {
         return;
     }
 
-    m_needSave = needSave;
-    m_needSaveNotification.notify();
+    m_isNeedSave = needSave;
+    m_needSaveChanged.notify();
 }
 
-ValNt<bool> NotationProject::needSave() const
+bool NotationProject::isNeedSave() const
 {
-    ValNt<bool> needSave;
-    needSave.val = m_needSave;
-    needSave.notification = m_needSaveNotification;
+    return m_isNeedSave;
+}
 
-    return needSave;
+muse::async::Notification NotationProject::needSaveChanged() const
+{
+    return m_needSaveChanged;
 }
 
 Ret NotationProject::canSave() const

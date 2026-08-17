@@ -161,6 +161,10 @@ FocusScope {
                         contextMenuLoader.close()
                     }
 
+                    onShowSearchRequested: {
+                        searchPopup.show()        
+                    }
+
                     onShowElementPopupRequested: function (popupType) {
                         popUpLoader.updateShow(popupType);
                     }

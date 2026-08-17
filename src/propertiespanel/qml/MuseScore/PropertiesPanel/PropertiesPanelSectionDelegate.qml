@@ -67,7 +67,7 @@ ExpandableBlank {
         switch (root.sectionModel.sectionType) {
         case PropertiesPanelAbstractModel.SECTION_GENERAL: return generalSection
         case PropertiesPanelAbstractModel.SECTION_MEASURES: return measuresSection
-        case PropertiesPanelAbstractModel.SECTION_SYSTEM_LAYOUT: return systemLayoutSection
+        case PropertiesPanelAbstractModel.SECTION_SYSTEM_PAGE_LAYOUT: return systemPageLayoutSection
         case PropertiesPanelAbstractModel.SECTION_EMPTY_STAVES: return emptyStavesSection
         case PropertiesPanelAbstractModel.SECTION_TEXT: return textSection
         case PropertiesPanelAbstractModel.SECTION_NOTATION:
@@ -115,10 +115,10 @@ ExpandableBlank {
     }
 
     Component {
-        id: systemLayoutSection
+        id: systemPageLayoutSection
 
-        SystemLayoutSection {
-            model: root.sectionModel as SystemLayoutSettingsModel
+        SystemPageLayoutSection {
+            model: root.sectionModel as SystemPageLayoutSettingsModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem

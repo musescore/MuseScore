@@ -126,59 +126,37 @@
                 <subtype>accidentalSharp</subtype>
                 <eid>O_O</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>P_P</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/12</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>26</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>S_S</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/12</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>Q_Q</eid>
+              <Tie>
+                <startElement>N_N</startElement>
+                <endElement>Q_Q</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>26</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>U_U</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>T_T</eid>
+              <Tie>
+                <startElement>Q_Q</startElement>
+                <endElement>T_T</endElement>
+                <eid>U_U</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>26</tpc>
               </Note>
@@ -282,22 +260,12 @@
                 <subtype>accidentalDoubleFlat</subtype>
                 <eid>q_q</eid>
                 </Accidental>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>r_r</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>3/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>2</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>s_s</eid>
+            <eid>r_r</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -307,26 +275,25 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>t_t</eid>
+            <eid>s_s</eid>
             <l1>32</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
-            <eid>u_u</eid>
+            <eid>t_t</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>v_v</eid>
+              <eid>u_u</eid>
               </Articulation>
             <Note>
-              <eid>w_w</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-3/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>v_v</eid>
+              <Tie>
+                <startElement>p_p</startElement>
+                <endElement>v_v</endElement>
+                <eid>w_w</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>2</tpc>
               </Note>
@@ -368,32 +335,21 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>5_5</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>6_6</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/4</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>7_7</eid>
+            <eid>6_6</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>8_8</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/4</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>7_7</eid>
+              <Tie>
+                <startElement>5_5</startElement>
+                <endElement>7_7</endElement>
+                <eid>8_8</eid>
+                <track>0</track>
+                </Tie>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>

@@ -106,56 +106,34 @@
             <durationType>16th</durationType>
             <Note>
               <eid>P_P</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>Q_Q</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/24</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <Glissando>
-                  <eid>R_R</eid>
-                  <diagonal>1</diagonal>
-                  </Glissando>
-                <next>
-                  <location>
-                    <fractions>1/24</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>T_T</eid>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/24</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <eid>R_R</eid>
+              <Tie>
+                <startElement>P_P</startElement>
+                <endElement>R_R</endElement>
+                <eid>S_S</eid>
+                <track>0</track>
+                </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
-              <Spanner type="Glissando">
-                <prev>
-                  <location>
-                    <fractions>-1/24</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Glissando>
+                <startElement>P_P</startElement>
+                <endElement>R_R</endElement>
+                <eid>T_T</eid>
+                <track>0</track>
+                <diagonal>1</diagonal>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>

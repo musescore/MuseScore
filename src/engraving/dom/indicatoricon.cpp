@@ -22,6 +22,8 @@
 
 #include "indicatoricon.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "mscore.h"
 #include "system.h"
 
@@ -38,4 +40,9 @@ Font IndicatorIcon::font() const
     Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
     font.setPointSizeF(UI_ICONS_DEFAULT_FONT_SIZE * magS());
     return font;
+}
+
+Fraction IndicatorIcon::tick() const
+{
+    return system() ? system()->endTick() : Fraction(0, 1);
 }

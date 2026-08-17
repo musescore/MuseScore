@@ -40,6 +40,8 @@ public:
 
     GradualTempoChange* clone() const override;
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
 
     GradualTempoChangeType tempoChangeType() const;

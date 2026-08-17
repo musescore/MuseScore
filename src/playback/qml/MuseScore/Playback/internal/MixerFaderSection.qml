@@ -48,6 +48,8 @@ MixerPanelSection {
             VolumeSlider {
                 volumeLevel: content.channelItem.volumeLevel
                 stepSize: 1.0
+                enabled: !content.channelItem.hasVolumeAutomation
+                opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
                 navigation.panel: content.channelItem.panel
                 navigation.row: root.navigationRowStart

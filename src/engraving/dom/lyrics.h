@@ -137,6 +137,8 @@ public:
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
 
+    Anchor anchor() const override { return Anchor::SEGMENT; }
+
     LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
 

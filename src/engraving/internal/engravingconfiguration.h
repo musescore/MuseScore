@@ -39,7 +39,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public muse::asyn
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
-    EngravingConfiguration() {}
+    EngravingConfiguration();
 
     void init();
 
@@ -59,7 +59,12 @@ public:
     String iconsFontFamily() const override;
 
     Color defaultColor() const override;
-    Color scoreInversionColor() const override;
+
+    Color displayedDefaultColor(bool inverted) const override;
+    void setDisplayedDefaultColor(Color color, bool inverted) override;
+    muse::async::Channel<bool, Color> displayedDefaultColorChanged() const override;
+    void resetDisplayedDefaultColors() override;
+
     Color indicatorIconInvertedSelectionColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
@@ -104,9 +109,6 @@ public:
     void setDebuggingOptions(const DebuggingOptions& options) override;
     muse::async::Notification debuggingOptionsChanged() const override;
 
-    bool doNotSaveEIDsForBackCompat() const override;
-    void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
-
     bool allowReadingImagesFromOutsideMscz() const override;
 
     bool guitarProImportExperimental() const override;
@@ -120,6 +122,7 @@ public:
     bool keepDeadNotesUnchangedOnTranspose() const override;
 
 private:
+    muse::async::Channel<bool, Color> m_displayedDefaultColorChanged;
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
@@ -131,6 +134,9 @@ private:
     muse::async::Channel<muse::io::path_t> m_partStyleFilePathChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
+
+    Color m_cachedDisplayedDefaultColor;
+    Color m_cachedInvertedDisplayedDefaultColor;
 
     bool m_multiVoice = false;
 };

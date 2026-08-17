@@ -40,6 +40,7 @@
 #include "dom/harmony.h"
 #include "dom/lyrics.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
 #include "dom/part.h"
@@ -107,8 +108,6 @@ muse::Ret Read500::readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* 
         Excerpt* ex = score->excerpt();
         ex->setTracksMapping(ctx.tracks());
     }
-
-    ctx.clearOrphanedConnectors();
 
     if (data) {
         data->settingsCompat = ctx.settingCompat();
@@ -192,6 +191,8 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             TRead::readSystemLocks(score, e);
         } else if (tag == "SystemDividers") {
             TRead::readSystemDividers(score, e, ctx);
+        } else if (tag == "SpannerMap") {
+            TRead::readScoreSpanners(score, e, ctx);
         } else if (tag == "Part") {
             Part* part = new Part(score);
             TRead::read(part, e, ctx);
@@ -200,16 +201,6 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             SharedPart* sharedPart = new SharedPart(score);
             TRead::read(sharedPart, e, ctx);
             score->appendPart(sharedPart);
-        } else if ((tag == "HairPin")
-                   || (tag == "Ottava")
-                   || (tag == "TextLine")
-                   || (tag == "Volta")
-                   || (tag == "Trill")
-                   || (tag == "Slur")
-                   || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
-            TRead::readItem(s, e, ctx);
-            score->addSpanner(s);
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));
@@ -270,7 +261,7 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     ctx.setMMRestEndMeasures();
-    ctx.reconnectBrokenConnectors();
+    ctx.connectNoteAnchoredSpanners();
     if (e.error() != muse::XmlStreamReader::NoError) {
         if (e.error() == muse::XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
@@ -369,8 +360,7 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
     Score* score = dst->score();
     Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
-    ReadContext ctx(score);
-    ctx.setPasteMode(true);
+    ReadContext ctx(score, /* pasteMode = */ true);
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
@@ -427,6 +417,11 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         while (e.readNextStartElement()) {
             if (done) {
                 break;
+            }
+            if (e.name() == "SpannerMap") {
+                spannerFound = true;
+                TRead::readScoreSpanners(score, e, ctx);
+                continue;
             }
             if (e.name() != "Staff") {
                 e.unknown();
@@ -661,9 +656,6 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         }
                         Paste::pasteChordRest(tx, score, cr, tick);
                     }
-                } else if (tag == "Spanner") {
-                    TRead::readSpanner(e, ctx, score, ctx.track());
-                    spannerFound = true;
                 } else if (tag == "Harmony") {
                     // transpose
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
@@ -772,7 +764,6 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 }
             }
 
-            ctx.checkConnectors();
             if (startingBeam) {
                 LOGD("The read beam was not used");
                 delete startingBeam;
@@ -802,8 +793,8 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 if (sp->staffIdx() < dstStaff || sp->staffIdx() >= dstStaff + staves) {
                     continue;
                 }
-                // CHORD and NOTE spanners are normally handled already
-                if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE) {
+                // CHORDREST and NOTE spanners are normally handled already
+                if (sp->anchor() == Spanner::Anchor::CHORDREST || sp->anchor() == Spanner::Anchor::NOTE) {
                     continue;
                 }
                 // skip if present originally
@@ -817,6 +808,8 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             }
         }
     }
+
+    ctx.connectNoteAnchoredSpanners();
 
     for (Score* s : score->scoreList()) {     // for all parts
         s->connectTies();
@@ -890,8 +883,7 @@ void Read500::pasteSymbols(XmlReader& e, ChordRest* dst)
     Score* score = dst->score();
     Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
 
-    ReadContext ctx(score);
-    ctx.setPasteMode(true);
+    ReadContext ctx(score, /* pasteMode = */ true);
 
     Segment* currSegm = dst->segment();
     Fraction destTick = Fraction(0, 1);                // the tick and track to place the pasted element at
@@ -1235,14 +1227,12 @@ void Read500::readTremoloCompat(compat::TremoloCompat* tc, XmlReader& xml)
         return;
     }
 
-    ReadContext ctx(tc->parent->score());
-    ctx.setPasteMode(true);
+    ReadContext ctx(tc->parent->score(), /* pasteMode = */ true);
     TRead::read(tc, xml, ctx);
 }
 
 void Read500::doReadItem(EngravingItem* item, XmlReader& xml)
 {
-    ReadContext ctx(item->score());
-    ctx.setPasteMode(true);
+    ReadContext ctx(item->score(), /* pasteMode = */ true);
     TRead::readItem(item, xml, ctx);
 }

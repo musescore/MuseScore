@@ -1,0 +1,366 @@
+{
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 3
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+                "id": "m2"
+            },
+            {
+                "id": "m3"
+            },
+            {
+                "barline": {
+                    "type": "double"
+                },
+                "id": "m4"
+            },
+            {
+                "id": "m5",
+                "key": {
+                    "fifths": -4
+                }
+            },
+            {
+                "id": "m6"
+            },
+            {
+                "id": "m7"
+            },
+            {
+                "id": "m8"
+            }
+        ]
+    },
+    "mnx": {
+        "support": {
+            "useBeams": true
+        },
+        "version": 19
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "id": "P1.m1",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev49",
+                                    "notes": [
+                                        {
+                                            "id": "ev49n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 1
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev50",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m2",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev51",
+                                    "notes": [
+                                        {
+                                            "id": "ev51n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 2
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev52",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m3",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev57",
+                                    "notes": [
+                                        {
+                                            "id": "ev57n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 3
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev58",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m4",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev55",
+                                    "notes": [
+                                        {
+                                            "id": "ev55n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": 4
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev56",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m5",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev41",
+                                    "notes": [
+                                        {
+                                            "id": "ev41n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 3,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": -1
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev42",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m6",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev43",
+                                    "notes": [
+                                        {
+                                            "id": "ev43n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 3,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": -2
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev44",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m7",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev45",
+                                    "notes": [
+                                        {
+                                            "id": "ev45n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 3,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": -3
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev46",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                },
+                {
+                    "id": "P1.m8",
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev47",
+                                    "notes": [
+                                        {
+                                            "id": "ev47n1",
+                                            "pitch": {
+                                                "alter": -1,
+                                                "octave": 3,
+                                                "step": "B"
+                                            },
+                                            "written": {
+                                                "diatonicDelta": -4
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev48",
+                                    "rest": {}
+                                }
+                            ],
+                            "staff": 1,
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ],
+            "name": "Horn in F",
+            "shortName": "Hn.",
+            "transposition": {
+                "interval": {
+                    "halfSteps": 7,
+                    "staffDistance": 4
+                },
+                "keyFifthsFlipAt": 7
+            }
+        }
+    ]
+}

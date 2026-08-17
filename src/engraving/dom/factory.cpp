@@ -27,6 +27,7 @@
 #include "accidental.h"
 #include "actionicon.h"
 #include "ambitus.h"
+#include "anchors.h"
 #include "arpeggio.h"
 #include "articulation.h"
 #include "bagpembell.h"
@@ -36,10 +37,10 @@
 #include "box.h"
 #include "bracket.h"
 #include "breath.h"
+#include "capo.h"
 #include "chord.h"
 #include "chordbracket.h"
 #include "chordline.h"
-#include "capo.h"
 #include "deadslapped.h"
 #include "durationline.h"
 #include "dynamic.h"
@@ -91,6 +92,7 @@
 #include "score.h"
 #include "segment.h"
 #include "slur.h"
+#include "soundflag.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -107,18 +109,16 @@
 #include "systemdivider.h"
 #include "systemlockindicator.h"
 #include "systemtext.h"
-#include "soundflag.h"
+#include "tabdurationsymbol.h"
 #include "tapping.h"
 #include "tempotext.h"
 #include "text.h"
 #include "textline.h"
 #include "tie.h"
 #include "timesig.h"
-#include "anchors.h"
-
-#include "tremolotwochord.h"
-#include "tremolosinglechord.h"
 #include "tremolobar.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tripletfeel.h"
 #include "tuplet.h"
@@ -392,9 +392,9 @@ BracketItem* Factory::createBracketItem(EngravingItem * parent)
     return bi;
 }
 
-BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, int b)
+BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
 {
-    BracketItem* bi = new BracketItem(parent, a, b);
+    BracketItem* bi = new BracketItem(parent, bracketType, span);
     return bi;
 }
 

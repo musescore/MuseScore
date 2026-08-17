@@ -19,13 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "singledraw.h"
 
 #include "draw/painter.h"
 #include "draw/svgrenderer.h"
 #include "draw/types/drawtypes.h"
 
-#include "types/typesconv.h"
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
@@ -82,6 +84,7 @@
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
+#include "dom/measure.h"
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 

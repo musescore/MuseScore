@@ -95,24 +95,15 @@
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>slight-bend</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                  <eid>O_O</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>slight-bend</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>0.25</bendEndTimeFactor>
+                <startElement>N_N</startElement>
+                <endElement>N_N</endElement>
+                <eid>O_O</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             </Chord>
           <Chord>
@@ -124,24 +115,15 @@
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>slight-bend</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                  <eid>R_R</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>slight-bend</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>0.25</bendEndTimeFactor>
+                <startElement>Q_Q</startElement>
+                <endElement>Q_Q</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             </Chord>
           <Rest>

@@ -22,11 +22,12 @@
 
 #include "markerlayout.h"
 #include "layoutcontext.h"
-#include "tlayout.h"
 #include "textlayout.h"
 #include "autoplace.h"
 
+#include "../dom/barline.h"
 #include "../dom/marker.h"
+#include "../dom/measure.h"
 
 using namespace mu::engraving::rendering::score;
 

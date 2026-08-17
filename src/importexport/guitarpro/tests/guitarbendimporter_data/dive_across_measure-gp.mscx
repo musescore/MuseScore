@@ -76,91 +76,51 @@
             <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 127</text>
             </Tempo>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
-              <beginTextOffset x="0" y="0"/>
-              <eid>J_J</eid>
-              <placement>below</placement>
-              </WhammyBar>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>dive</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.983333</bendEndTimeFactor>
-                  <eid>M_M</eid>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
               </Note>
             </Chord>
           <BarLine>
-            <eid>N_N</eid>
+            <eid>L_L</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>M_M</eid>
         <voice>
           <Chord>
-            <eid>P_P</eid>
+            <eid>N_N</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>O_O</eid>
               <parentheses>both</parentheses>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>4</string>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
+              <GuitarBend>
+                <guitarBendType>dive</guitarBendType>
+                <bendStartTimeFactor>0</bendStartTimeFactor>
+                <bendEndTimeFactor>0.983333</bendEndTimeFactor>
+                <startElement>K_K</startElement>
+                <endElement>O_O</endElement>
+                <eid>P_P</eid>
+                <track>0</track>
+                </GuitarBend>
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>Q_Q</NoteEID>
+                <NoteEID>O_O</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="WhammyBar">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>

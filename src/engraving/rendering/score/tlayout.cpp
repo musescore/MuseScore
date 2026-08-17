@@ -27,10 +27,12 @@
 #include "global/types/number.h"
 #include "draw/fontmetrics.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+#include "iengravingfont.h"
+
 #include "infrastructure/rtti.h"
 #include "infrastructure/ld_access.h"
 
-#include "iengravingfont.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 #include "dom/score.h"
@@ -91,6 +93,7 @@
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
+#include "dom/measure.h"
 #include "dom/measurebase.h"
 #include "dom/measurenumber.h"
 #include "dom/measurenumberbase.h"
@@ -2468,8 +2471,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
@@ -2504,8 +2506,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
-                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
+                        Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above);
                     }
                     ldata->moveY(yd);
                 }
@@ -3817,7 +3818,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         }
     }
 
-    for (const SystemLockIndicator* sli : item->system()->lockIndicators()) {
+    for (const SystemLockIndicator* sli : item->system()->systemLockIndicators()) {
         if (sli != item) {
             // TODO: Rough spacing here
             xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;

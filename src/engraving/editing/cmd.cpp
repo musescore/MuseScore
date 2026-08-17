@@ -119,7 +119,6 @@ static void resetElementPosition(EngravingItem* e)
     e->undoResetProperty(Pid::AUTOPLACE);
     e->undoResetProperty(Pid::OFFSET);
     e->undoResetProperty(Pid::LEADING_SPACE);
-    e->setOffsetChanged(false);
     if (e->isSpanner()) {
         e->undoResetProperty(Pid::OFFSET2);
     }
@@ -768,7 +767,6 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     GuitarBend* bend = new GuitarBend(score()->dummy()->note());
-    bend->setAnchor(Spanner::Anchor::NOTE);
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 

@@ -10588,6 +10588,41 @@
         <translation type="unfinished">B. Pans</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3568"/>
+        <source>Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</source>
+        <comment>glockenspiel description</comment>
+        <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3577"/>
+        <source>Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</source>
+        <comment>xylophone description</comment>
+        <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3595"/>
+        <source>Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</source>
+        <comment>vibraphone description</comment>
+        <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3622"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba description</comment>
+        <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3631"/>
+        <source>Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</source>
+        <comment>marimba-single description</comment>
+        <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
         <source>Korean hourglass-shaped drum used in samulnori percussion ensemble.</source>
         <comment>samul-janggu description</comment>
@@ -10698,6 +10733,104 @@
         <comment>sori-buk shortName</comment>
         <extracomment>shortName for Sori Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">So. Buk</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5031"/>
+        <source>Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</source>
+        <comment>celesta description</comment>
+        <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5040"/>
+        <source>Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</source>
+        <comment>clavichord description</comment>
+        <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5049"/>
+        <source>Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</source>
+        <comment>clavinet description</comment>
+        <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5058"/>
+        <source>Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</source>
+        <comment>harpsichord description</comment>
+        <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5067"/>
+        <source>Small harpsichord with only one string per key, which limits the dynamic range and timbre.</source>
+        <comment>virginal description</comment>
+        <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Small harpsichord with only one string per key, which limits the dynamic range and timbre.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5076"/>
+        <source>Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</source>
+        <comment>electric-piano description</comment>
+        <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5085"/>
+        <source>Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</source>
+        <comment>grand-piano description</comment>
+        <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5094"/>
+        <source>Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</source>
+        <comment>honky-tonk-piano description</comment>
+        <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5103"/>
+        <source>Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</source>
+        <comment>piano description</comment>
+        <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5112"/>
+        <source>Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</source>
+        <comment>toy-piano description</comment>
+        <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5121"/>
+        <source>Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</source>
+        <comment>upright-piano description</comment>
+        <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5541"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</source>
+        <comment>electric-guitar description</comment>
+        <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5562"/>
+        <source>Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</source>
+        <comment>electric-guitar-treble-clef description</comment>
+        <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="5621"/>
+        <source>Solid-body guitar with electrically amplified strings (tablature).</source>
+        <comment>electric-guitar-tablature description</comment>
+        <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Solid-body guitar with electrically amplified strings (tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6253"/>
@@ -10896,13 +11029,6 @@
         <translation type="unfinished">pizzicato</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3568"/>
-        <source>Glockenspiel.</source>
-        <comment>glockenspiel description</comment>
-        <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Glockenspiel.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3570"/>
         <source>Glockenspiel</source>
         <comment>glockenspiel trackName</comment>
@@ -10922,13 +11048,6 @@
         <comment>glockenspiel shortName</comment>
         <extracomment>shortName for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Glock.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3577"/>
-        <source>Xylophone.</source>
-        <comment>xylophone description</comment>
-        <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Xylophone.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3579"/>
@@ -10978,13 +11097,6 @@
         <comment>xylomarimba shortName</comment>
         <extracomment>shortName for Xylomarimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">XMrm.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3595"/>
-        <source>Vibraphone.</source>
-        <comment>vibraphone description</comment>
-        <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Vibraphone.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3597"/>
@@ -11064,13 +11176,6 @@
         <translation type="unfinished">Cimb.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3622"/>
-        <source>Marimba notated on a grand staff.</source>
-        <comment>marimba description</comment>
-        <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Marimba notated on a grand staff.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3624"/>
         <source>Marimba (grand staff)</source>
         <comment>marimba trackName</comment>
@@ -11090,13 +11195,6 @@
         <comment>marimba shortName</comment>
         <extracomment>shortName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Mrm.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3631"/>
-        <source>Marimba notated on a single staff.</source>
-        <comment>marimba-single description</comment>
-        <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Marimba notated on a single staff.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3633"/>
@@ -15292,13 +15390,6 @@
         <translation type="unfinished">Kaz.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5031"/>
-        <source>Celesta.</source>
-        <comment>celesta description</comment>
-        <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Celesta.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5033"/>
         <source>Celesta</source>
         <comment>celesta trackName</comment>
@@ -15318,13 +15409,6 @@
         <comment>celesta shortName</comment>
         <extracomment>shortName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Cel.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5040"/>
-        <source>Clavichord.</source>
-        <comment>clavichord description</comment>
-        <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Clavichord.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5042"/>
@@ -15348,13 +15432,6 @@
         <translation type="unfinished">Cch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5049"/>
-        <source>Electrically amplified clavichord.</source>
-        <comment>clavinet description</comment>
-        <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Electrically amplified clavichord.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5051"/>
         <source>Clavinet</source>
         <comment>clavinet trackName</comment>
@@ -15374,13 +15451,6 @@
         <comment>clavinet shortName</comment>
         <extracomment>shortName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Clav.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5058"/>
-        <source>Harpsichord.</source>
-        <comment>harpsichord description</comment>
-        <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Harpsichord.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5060"/>
@@ -15404,13 +15474,6 @@
         <translation type="unfinished">Hch.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5067"/>
-        <source>Virginal.</source>
-        <comment>virginal description</comment>
-        <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Virginal.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5069"/>
         <source>Virginal</source>
         <comment>virginal trackName</comment>
@@ -15430,13 +15493,6 @@
         <comment>virginal shortName</comment>
         <extracomment>shortName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Vir.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5076"/>
-        <source>Electric piano.</source>
-        <comment>electric-piano description</comment>
-        <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Electric piano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5078"/>
@@ -15460,13 +15516,6 @@
         <translation type="unfinished">El. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5085"/>
-        <source>Specifically a grand piano.</source>
-        <comment>grand-piano description</comment>
-        <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Specifically a grand piano.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5087"/>
         <source>Grand Piano</source>
         <comment>grand-piano trackName</comment>
@@ -15486,13 +15535,6 @@
         <comment>grand-piano shortName</comment>
         <extracomment>shortName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Pno.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5094"/>
-        <source>Honky-tonk (very out of tune) piano.</source>
-        <comment>honky-tonk-piano description</comment>
-        <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Honky-tonk (very out of tune) piano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5096"/>
@@ -15516,13 +15558,6 @@
         <translation type="unfinished">Hnk. Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5103"/>
-        <source>Piano.</source>
-        <comment>piano description</comment>
-        <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Piano.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5105"/>
         <source>Piano</source>
         <comment>piano trackName</comment>
@@ -15544,13 +15579,6 @@
         <translation type="unfinished">Pno.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5112"/>
-        <source>Toy piano.</source>
-        <comment>toy-piano description</comment>
-        <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Toy piano.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5114"/>
         <source>Toy Piano</source>
         <comment>toy-piano trackName</comment>
@@ -15570,13 +15598,6 @@
         <comment>toy-piano shortName</comment>
         <extracomment>shortName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Toy Pno.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5121"/>
-        <source>Specifically an upright piano.</source>
-        <comment>upright-piano description</comment>
-        <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Specifically an upright piano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5123"/>
@@ -16881,13 +16902,6 @@
         <translation type="unfinished">mute</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="5541"/>
-        <source>Electric guitar (notated with 8va bassa treble clef).</source>
-        <comment>electric-guitar description</comment>
-        <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Electric guitar (notated with 8va bassa treble clef).</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5543"/>
         <source>Electric Guitar</source>
         <comment>electric-guitar trackName</comment>
@@ -16949,13 +16963,6 @@
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">overdriven</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5562"/>
-        <source>Electric guitar (notated with normal treble clef).</source>
-        <comment>electric-guitar-treble-clef description</comment>
-        <extracomment>description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Electric guitar (notated with normal treble clef).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5564"/>
@@ -17138,13 +17145,6 @@
         <comment>guitar-nylon-treble-clef channel</comment>
         <extracomment>channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">mute</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="5621"/>
-        <source>Electric guitar (tablature).</source>
-        <comment>electric-guitar-tablature description</comment>
-        <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Electric guitar (tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5623"/>

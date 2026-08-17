@@ -3565,7 +3565,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Steel Pans", "bass-steel-drums
 QT_TRANSLATE_NOOP3("engraving/instruments", "B. Pans", "bass-steel-drums shortName"),
 
 //: description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Glockenspiel.", "glockenspiel description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned metal bars arranged like piano keys. Played with mallets. Sounds two octaves higher than written.", "glockenspiel description"),
 //: trackName for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Glockenspiel", "glockenspiel trackName"),
 //: longName for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3574,7 +3574,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Glockenspiel", "glockenspiel longNa
 QT_TRANSLATE_NOOP3("engraving/instruments", "Glock.", "glockenspiel shortName"),
 
 //: description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Xylophone.", "xylophone description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned wooden bars arranged like piano keys, sometimes with resonator tubes below. Played with mallets. Sounds an octave higher than written.", "xylophone description"),
 //: trackName for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Xylophone", "xylophone trackName"),
 //: longName for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3592,7 +3592,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Xylomarimba", "xylomarimba longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "XMrm.", "xylomarimba shortName"),
 
 //: description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Vibraphone.", "vibraphone description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned aluminium bars arranged like piano keys, with resonator tubes and a sustain pedal. Some have variable-speed electric motors that rapidly open and close the resonators to create tremolo.", "vibraphone description"),
 //: trackName for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Vibraphone", "vibraphone trackName"),
 //: longName for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3619,7 +3619,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cimbalom", "cimbalom longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cimb.", "cimbalom shortName"),
 
 //: description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba notated on a grand staff.", "marimba description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.", "marimba description"),
 //: trackName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba (grand staff)", "marimba trackName"),
 //: longName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3628,7 +3628,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba", "marimba longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Mrm.", "marimba shortName"),
 
 //: description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba notated on a single staff.", "marimba-single description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned wooden bars arranged like piano keys, with resonator tubes below. Played with mallets. Deeper and mellower than the xylophone, and sounds as written.", "marimba-single description"),
 //: trackName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marimba (single staff)", "marimba-single trackName"),
 //: longName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5028,7 +5028,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Kaz.", "kazoo shortName"),
 QT_TRANSLATE_NOOP("engraving/instruments/group", "Keyboards"),
 
 //: description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Celesta.", "celesta description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bell-piano. Essentially a key-operated glockenspiel with a sustain pedal. Sounds an octave higher than written.", "celesta description"),
 //: trackName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Celesta", "celesta trackName"),
 //: longName for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5037,7 +5037,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Celesta", "celesta longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cel.", "celesta shortName"),
 
 //: description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Clavichord.", "clavichord description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Uses tangents (small blades) to strike, and also set the length (i.e. pitch) of, metal strings. Expressive, but very quiet.", "clavichord description"),
 //: trackName for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Clavichord", "clavichord trackName"),
 //: longName for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5046,7 +5046,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Clavichord", "clavichord longName")
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cch.", "clavichord shortName"),
 
 //: description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Electrically amplified clavichord.", "clavinet description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Clavichord with electrically amplified strings. This alters the sound and removes the volume limitations.", "clavinet description"),
 //: trackName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Clavinet", "clavinet trackName"),
 //: longName for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5055,7 +5055,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Clavinet", "clavinet longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Clav.", "clavinet shortName"),
 
 //: description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Harpsichord.", "harpsichord description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Plucks strings, producing a harsher sound with smaller dynamic range compared to the piano.", "harpsichord description"),
 //: trackName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Harpsichord", "harpsichord trackName"),
 //: longName for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5064,7 +5064,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Harpsichord", "harpsichord longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "Hch.", "harpsichord shortName"),
 
 //: description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Virginal.", "virginal description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small harpsichord with only one string per key, which limits the dynamic range and timbre.", "virginal description"),
 //: trackName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Virginal", "virginal trackName"),
 //: longName for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5073,7 +5073,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Virginal", "virginal longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Vir.", "virginal shortName"),
 
 //: description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Electric piano.", "electric-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Piano with electrically amplified strings, reeds, or tuning forks. (Or a digital piano configured to sound like an electric piano.)", "electric-piano description"),
 //: trackName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Piano", "electric-piano trackName"),
 //: longName for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5082,7 +5082,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Piano", "electric-piano lo
 QT_TRANSLATE_NOOP3("engraving/instruments", "El. Pno.", "electric-piano shortName"),
 
 //: description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Specifically a grand piano.", "grand-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Has a larger horizontal frame, which can provide richer sound and more precise key control compared to an upright piano.", "grand-piano description"),
 //: trackName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Grand Piano", "grand-piano trackName"),
 //: longName for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5091,7 +5091,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Grand Piano", "grand-piano longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "Pno.", "grand-piano shortName"),
 
 //: description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Honky-tonk (very out of tune) piano.", "honky-tonk-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Honky-tonk (very out of tune) upright piano often associated with bars, country music, and music hall.", "honky-tonk-piano description"),
 //: trackName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Honky Tonk Piano", "honky-tonk-piano trackName"),
 //: longName for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5100,7 +5100,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Honky Tonk Piano", "honky-tonk-pian
 QT_TRANSLATE_NOOP3("engraving/instruments", "Hnk. Pno.", "honky-tonk-piano shortName"),
 
 //: description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Piano.", "piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Upright or grand pianoforte. Strikes strings with a hammer, enabling a large dynamic range. Notes can be sustained via a pedal.", "piano description"),
 //: trackName for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Piano", "piano trackName"),
 //: longName for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5109,7 +5109,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Piano", "piano longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Pno.", "piano shortName"),
 
 //: description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Toy piano.", "toy-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small piano with metal rods instead of strings, using a mechanism similar to a celesta. Typically lacks pedals and was originally designed for children.", "toy-piano description"),
 //: trackName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Toy Piano", "toy-piano trackName"),
 //: longName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5118,7 +5118,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Toy Piano", "toy-piano longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Toy Pno.", "toy-piano shortName"),
 
 //: description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Specifically an upright piano.", "upright-piano description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Has a smaller vertical frame, making it more compact than a grand piano. Typically used for rehearsal, or performance in a casual setting.", "upright-piano description"),
 //: trackName for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Upright Piano", "upright-piano trackName"),
 //: longName for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5538,7 +5538,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "open", "alto-guitar channel"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "alto-guitar channel"),
 
 //: description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Electric guitar (notated with 8va bassa treble clef).", "electric-guitar description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Solid-body guitar with electrically amplified strings (staff notation, with 8va bassa treble clef).", "electric-guitar description"),
 //: trackName for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar", "electric-guitar trackName"),
 //: longName for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5559,7 +5559,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "distortion", "electric-guitar chann
 QT_TRANSLATE_NOOP3("engraving/instruments", "overdriven", "electric-guitar channel"),
 
 //: description for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Electric guitar (notated with normal treble clef).", "electric-guitar-treble-clef description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Solid-body guitar with electrically amplified strings (staff notation, with normal treble clef).", "electric-guitar-treble-clef description"),
 //: trackName for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar (treble clef)", "electric-guitar-treble-clef trackName"),
 //: longName for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5618,7 +5618,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon-treble-clef ch
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon-treble-clef channel"),
 
 //: description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Electric guitar (tablature).", "electric-guitar-tablature description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Solid-body guitar with electrically amplified strings (tablature).", "electric-guitar-tablature description"),
 //: trackName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar (tablature)", "electric-guitar-tablature trackName"),
 //: longName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names

@@ -43,10 +43,11 @@ void PaletteRootModel::classBegin()
 
 void PaletteRootModel::init()
 {
-    dispatcher()->reg(this, "palette-search", [this]() {
+    commandsController()->paletteSearchRequested().onNotify(this, [this]() {
         emit paletteSearchRequested();
     });
-    dispatcher()->reg(this, "apply-current-palette-element", [this]() {
+
+    commandsController()->applyCurrentPaletteElementRequested().onNotify(this, [this]() {
         emit applyCurrentPaletteElementRequested();
     });
 }

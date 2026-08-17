@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SPANNER_H
-#define MU_ENGRAVING_SPANNER_H
+#pragma once
 
 #include <deque>
 
@@ -155,7 +154,7 @@ class Spanner : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Spanner)
 public:
     enum class Anchor : unsigned char {
-        SEGMENT, MEASURE, CHORD, NOTE
+        SEGMENT, MEASURE, CHORDREST, NOTE
     };
 
     virtual double mag() const override;
@@ -175,14 +174,10 @@ public:
     void setTrack2(track_idx_t v);
     track_idx_t effectiveTrack2() const;
 
-    bool broken() const { return m_broken; }
-    void setBroken(bool v) { m_broken = v; }
-
     bool playSpanner() const { return m_playSpanner; }
     void setPlaySpanner(bool p) { m_playSpanner = p; }
 
-    Anchor anchor() const { return m_anchor; }
-    void setAnchor(Anchor a) { m_anchor = a; }
+    virtual Anchor anchor() const = 0;
 
     const std::vector<SpannerSegment*>& spannerSegments() const { return m_segments; }
     void setSpannerSegments(const std::vector<SpannerSegment*>& s) { m_segments = s; }
@@ -288,11 +283,9 @@ private:
 
     bool m_playSpanner = true;
 
-    Anchor m_anchor = Anchor::SEGMENT;
     Fraction m_tick = Fraction(-1, 1);
     Fraction m_ticks = Fraction(0, 1);
     track_idx_t m_track2 = muse::nidx;
-    bool m_broken = false;
 
     std::vector<SpannerSegment*> m_segments;
     std::deque<SpannerSegment*> m_unusedSegments;   // Currently unused segments which can be reused later.
@@ -300,4 +293,3 @@ private:
                                                     // in undo stack or other places already.
 };
 } // namespace mu::engraving
-#endif

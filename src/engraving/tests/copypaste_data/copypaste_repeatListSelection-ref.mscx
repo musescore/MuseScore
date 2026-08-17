@@ -512,17 +512,6 @@
             <Note>
               <eid>4IlSB4LQ97P_4IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>5IlSB4LQ97P_5IlSB4LQ97P</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    <fractions>-7/8</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
@@ -539,59 +528,46 @@
         <eid>mt/BFUiNG+O_8EVBTn9xdl</eid>
         <voice>
           <Chord>
-            <eid>6IlSB4LQ97P_6IlSB4LQ97P</eid>
+            <eid>5IlSB4LQ97P_5IlSB4LQ97P</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>7IlSB4LQ97P_7IlSB4LQ97P</eid>
+              <eid>6IlSB4LQ97P_6IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>8IlSB4LQ97P_8IlSB4LQ97P</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    <fractions>7/8</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>4IlSB4LQ97P_4IlSB4LQ97P</startElement>
+                <endElement>6IlSB4LQ97P_6IlSB4LQ97P</endElement>
+                <eid>7IlSB4LQ97P_7IlSB4LQ97P</eid>
+                <track>0</track>
+                </Tie>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>7IlSB4LQ97P_7IlSB4LQ97P</NoteEID>
+                <NoteEID>6IlSB4LQ97P_6IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>
           <Chord>
-            <eid>9IlSB4LQ97P_9IlSB4LQ97P</eid>
+            <eid>8IlSB4LQ97P_8IlSB4LQ97P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>+IlSB4LQ97P_+IlSB4LQ97P</eid>
+              <eid>9IlSB4LQ97P_9IlSB4LQ97P</eid>
               <parentheses>both</parentheses>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>6IlSB4LQ97P_6IlSB4LQ97P</startElement>
+                <endElement>9IlSB4LQ97P_9IlSB4LQ97P</endElement>
+                <eid>+IlSB4LQ97P_+IlSB4LQ97P</eid>
+                <track>0</track>
+                </Tie>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteEID>+IlSB4LQ97P_+IlSB4LQ97P</NoteEID>
+                <NoteEID>9IlSB4LQ97P_9IlSB4LQ97P</NoteEID>
                 </Notes>
               </NoteParenGroup>
             </Chord>

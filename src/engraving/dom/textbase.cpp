@@ -23,11 +23,12 @@
 #include <cmath>
 #include <stack>
 
-#include "dom/harppedaldiagram.h"
 #include "draw/fontmetrics.h"
 
-#include "engraving/rendering/score/textlayout.h"
 #include "iengravingfont.h"
+
+#include "rendering/score/textlayout.h"
+#include "rendering/iscorerenderer.h"
 
 #include "style/textstyle.h"
 
@@ -43,6 +44,7 @@
 
 #include "anchors.h"
 #include "box.h"
+#include "harppedaldiagram.h"
 #include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
@@ -468,8 +470,8 @@ void TextCursor::setFormat(FormatId id, FormatValue val)
         }
     }
     format()->setFormatValue(id, val);
-    changeSelectionFormat(id, val);
     if (hasSelection()) {
+        changeSelectionFormat(id, val);
         text()->setTextInvalid();
     }
     if (!editing()) {
@@ -3386,6 +3388,15 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         default:
             break;
         }
+    }
+
+    for (EngravingItem* originItem : originItems()) {
+        // This is a shared item: propagate to all origin items
+        score()->undo(new ChangeTextProperties(toTextBase(originItem)->cursor(), id, v, ps));
+    }
+    if (EngravingItem* sharedEl = sharedItem(); sharedEl && sharedEl->originItems().front() == this) {
+        // This is the first origin item of the shared item: propagate to shared item
+        score()->undo(new ChangeTextProperties(toTextBase(sharedEl)->cursor(), id, v, ps));
     }
 }
 

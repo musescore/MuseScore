@@ -22,17 +22,20 @@
 
 #include "transpose.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
+#include "../dom/factory.h"
+#include "../dom/fret.h"
 #include "../dom/harmony.h"
+#include "../dom/keysig.h"
+#include "../dom/linkedobjects.h"
+#include "../dom/measure.h"
+#include "../dom/note.h"
 #include "../dom/part.h"
 #include "../dom/segment.h"
 #include "../dom/staff.h"
 #include "../dom/utils.h"
-#include "../dom/note.h"
-#include "../dom/factory.h"
-#include "../dom/keysig.h"
-#include "../dom/linkedobjects.h"
 #include "../dom/utils.h"
-#include "../dom/fret.h"
 
 #include "editenharmonicspelling.h"
 #include "editfretboarddiagram.h"
@@ -606,46 +609,48 @@ void Transpose::transposeFretDiagram(Transaction& tx, FretDiagram* diagram, Scor
     if (seg) {
         tick = seg->tick();
     }
-    Key key = !diagram->staff() ? Key::C : diagram->staff()->key(tick);
+    Staff* staff = diagram->staff();
+    Key key = staff ? staff->key(tick) : Key::C;
 
     String name = findBestEnharmonicFit(names, key, score->style());
 
-    diagram->setHarmony(name);
-    harmony = diagram->harmony();
-    IF_ASSERT_FAILED(harmony) {
-        return;
-    }
-
     // Transpose harmony without undo
-    Interval kv = harmony->staff()->transpose(harmony->tick());
-    Interval iv = harmony->part()->instrument(harmony->tick())->transpose();
+    Interval kv = staff ? staff->transpose(tick) : Interval(0, 0);
+
+    Part* part = diagram->part();
+    Instrument* instrument = part ? part->instrument(tick) : nullptr;
+    Interval iv = instrument ? instrument->transpose() : Interval(0, 0);
+
     Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
 
-    for (HarmonyInfo* info : harmony->chords()) {
+    String transposed = transposedChordName(score, name, [&](int tpc) {
         if (mode == TransposeMode::DIATONICALLY) {
-            info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
-            info->setBassTpc(Transpose::transposeTpcDiatonicByKey(info->bassTpc(), transposeInterval, key, trKeys, useDoubleSharpsFlats));
-        } else {
-            info->setRootTpc(Transpose::transposeTpc(info->rootTpc(), hInterval, useDoubleSharpsFlats));
-            info->setBassTpc(Transpose::transposeTpc(info->bassTpc(), hInterval, useDoubleSharpsFlats));
+            return transposeTpcDiatonicByKey(tpc, transposeInterval, key, trKeys, useDoubleSharpsFlats);
         }
-    }
-    harmony->setXmlText(harmony->harmonyName());
+        return transposeTpc(tpc, hInterval, useDoubleSharpsFlats);
+    });
 
-    std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(harmony->plainText());
+    std::vector<DiagramInfo> availableDiagrams = diagram->patternsFromHarmony(transposed);
     if (availableDiagrams.empty()) {
         diagram->undoFretClear();
         MScore::setError(MsError::TRANSPOSE_NO_FRET_DIAGRAM, true);
         return;
     }
-    tx.push(new FretDataChange(diagram, harmony->plainText()));
-
-    diagram->remove(harmony);
-    delete harmony;
+    tx.push(new FretDataChange(diagram, transposed));
 
     score->rebuildFretBox();
+}
 
-    return;
+String Transpose::transposedChordName(Score* score, const String& name, const std::function<int(int tpc)>& transformTpc)
+{
+    Harmony h(score->dummy()->segment());
+    h.setHarmony(name);
+    for (HarmonyInfo* info : h.chords()) {
+        info->setRootTpc(transformTpc(info->rootTpc()));
+        info->setBassTpc(transformTpc(info->bassTpc()));
+    }
+    h.setXmlText(h.harmonyName());
+    return h.harmonyName();
 }
 
 String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style)
@@ -768,21 +773,26 @@ private:
 
 void TransposeHarmony::flip()
 {
-    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
-
-    for (HarmonyInfo* info : m_harmony->chords()) {
-        info->setRootTpc(Transpose::transposeTpc(info->rootTpc(), m_interval, m_useDoubleSharpsFlats));
-        info->setBassTpc(Transpose::transposeTpc(info->bassTpc(), m_interval, m_useDoubleSharpsFlats));
-    }
-
-    m_harmony->setXmlText(m_harmony->harmonyName());
-    m_harmony->triggerLayout();
+    Transpose::doUndoTransposeHarmony(m_harmony, m_interval, m_useDoubleSharpsFlats);
     m_interval.flip();
 }
 
 void Transpose::undoTransposeHarmony(Transaction& tx, Harmony* harmony, Interval interval, bool doubleSharpFlat)
 {
     tx.push(new TransposeHarmony(harmony, interval, doubleSharpFlat));
+}
+
+void Transpose::doUndoTransposeHarmony(Harmony* harmony, Interval interval, bool useDoubleSharpsFlats)
+{
+    harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    for (HarmonyInfo* info : harmony->chords()) {
+        info->setRootTpc(Transpose::transposeTpc(info->rootTpc(), interval, useDoubleSharpsFlats));
+        info->setBassTpc(Transpose::transposeTpc(info->bassTpc(), interval, useDoubleSharpsFlats));
+    }
+
+    harmony->setXmlText(harmony->harmonyName());
+    harmony->triggerLayout();
 }
 
 //---------------------------------------------------------
@@ -819,22 +829,7 @@ private:
 
 void TransposeHarmonyDiatonic::flip()
 {
-    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
-
-    Fraction tick = Fraction(0, 1);
-    Segment* seg = m_harmony->getParentSeg();
-    if (seg) {
-        tick = seg->tick();
-    }
-    Key key = !m_harmony->staff() ? Key::C : m_harmony->staff()->key(tick);
-
-    for (HarmonyInfo* info : m_harmony->chords()) {
-        info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
-        info->setBassTpc(Transpose::transposeTpcDiatonicByKey(info->bassTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
-    }
-
-    m_harmony->setXmlText(m_harmony->harmonyName());
-    m_harmony->triggerLayout();
+    Transpose::doUndoTransposeHarmonyDiatonic(m_harmony, m_interval, m_useDoubleSharpsFlats, m_transposeKeys);
 
     m_interval *= -1;
 }
@@ -842,4 +837,24 @@ void TransposeHarmonyDiatonic::flip()
 void Transpose::undoTransposeHarmonyDiatonic(Transaction& tx, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys)
 {
     tx.push(new TransposeHarmonyDiatonic(harmony, interval, doubleSharpFlat, transposeKeys));
+}
+
+void Transpose::doUndoTransposeHarmonyDiatonic(Harmony* harmony, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+{
+    harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = harmony->getParentSeg();
+    if (seg) {
+        tick = seg->tick();
+    }
+    Key key = !harmony->staff() ? Key::C : harmony->staff()->key(tick);
+
+    for (HarmonyInfo* info : harmony->chords()) {
+        info->setRootTpc(Transpose::transposeTpcDiatonicByKey(info->rootTpc(), interval, key, transposeKeys, useDoubleSharpsFlats));
+        info->setBassTpc(Transpose::transposeTpcDiatonicByKey(info->bassTpc(), interval, key, transposeKeys, useDoubleSharpsFlats));
+    }
+
+    harmony->setXmlText(harmony->harmonyName());
+    harmony->triggerLayout();
 }

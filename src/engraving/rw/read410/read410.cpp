@@ -40,6 +40,7 @@
 #include "dom/harmony.h"
 #include "dom/lyrics.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
 #include "dom/part.h"
@@ -787,8 +788,8 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 if (sp->staffIdx() < dstStaff || sp->staffIdx() >= dstStaff + staves) {
                     continue;
                 }
-                // CHORD and NOTE spanners are normally handled already
-                if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE) {
+                // CHORDREST and NOTE spanners are normally handled already
+                if (sp->anchor() == Spanner::Anchor::CHORDREST || sp->anchor() == Spanner::Anchor::NOTE) {
                     continue;
                 }
                 // skip if present originally

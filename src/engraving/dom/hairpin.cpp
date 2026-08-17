@@ -31,12 +31,11 @@
 
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
+#include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "system.h"
 #include "text.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace muse::draw;

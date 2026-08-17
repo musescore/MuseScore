@@ -26,83 +26,109 @@ import QtQuick
 import Muse.Ui
 import Muse.UiComponents
 
-RadioButtonGroup {
+Grid {
     id: root
 
-    property alias colors: root.model
-    property alias currentColorIndex: root.currentIndex
+    property var colors: []
+    property int currentColorIndex: -1
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "AccentColorsList"
         enabled: root.enabled && root.visible
-        direction: NavigationPanel.Horizontal
+        direction: NavigationPanel.Both
 
         onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive) {
-                event.setData("controlIndex", [root.navigationRow, root.navigationColumnStart + root.currentIndex])
+            if (event.type === NavigationEvent.AboutActive && root.currentColorIndex >= 0) {
+                event.setData("controlIndex", [root.navigationRowOf(root.currentColorIndex),
+                                                root.navigationColumnOf(root.currentColorIndex)])
             }
         }
     }
 
-    property int navigationRow: -1
+    property int navigationRow: 0
     property int navigationColumnStart: 0
-    property int navigationColumnEnd: navigationColumnStart + count
 
-    property real sampleSize: 30
+    property real sampleSize: 24
     readonly property real totalSampleSize: sampleSize + 6
 
     signal accentColorChangeRequested(var newColorIndex)
 
-    implicitWidth: count * totalSampleSize + (count - 1) * spacing
-    implicitHeight: totalSampleSize
-    spacing: 10
+    columns: Math.floor(root.colors.length / 2)
+    spacing: 6
 
-    delegate: RoundedRadioButton {
-        id: button
+    // Visual order of the color indices (first row is left-to-right, second row is right-to-left):
+    readonly property var orderedColorIndices: {
+        let indices = []
 
-        required property int index
-        required property var modelData
-        readonly property color accentColor: modelData
-
-        width: root.totalSampleSize
-        height: width
-
-        checked: root.currentIndex === index
-
-        navigation.name: "AccentColourButton"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow
-        navigation.column: root.navigationColumnStart + index
-        navigation.accessible.name: Utils.accessibleColorDescription(accentColor)
-
-        onToggled: {
-            root.accentColorChangeRequested(index)
+        for (let i = 0; i < root.columns && i < root.colors.length; ++i) {
+            indices.push(i)
         }
+        for (let j = root.colors.length - 1; j >= root.columns; --j) {
+            indices.push(j)
+        }
+        return indices
+    }
 
-        indicator: Rectangle {
-            anchors.fill: parent
+    function navigationRowOf(colorIndex) {
+        return root.navigationRow + (colorIndex < root.columns ? 0 : 1)
+    }
 
-            color: "transparent"
-            border.color: ui.theme.fontPrimaryColor
-            border.width: parent.checked ? 1 : 0
-            radius: width / 2
+    function navigationColumnOf(colorIndex) {
+        return root.navigationColumnStart + (colorIndex < root.columns
+                                             ? colorIndex
+                                             : root.colors.length - 1 - colorIndex)
+    }
 
-            NavigationFocusBorder { navigationCtrl: button.navigation }
+    Repeater {
+        model: root.orderedColorIndices
 
-            Rectangle {
-                anchors.centerIn: parent
+        delegate: RoundedRadioButton {
+            id: button
 
-                width: root.sampleSize
-                height: width
+            required property var modelData
+            readonly property int colorIndex: modelData
+            readonly property color accentColor: root.colors[colorIndex]
+
+            width: root.totalSampleSize
+            height: width
+
+            checked: root.currentColorIndex === colorIndex
+
+            navigation.name: "AccentColourButton"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowOf(colorIndex)
+            navigation.column: root.navigationColumnOf(colorIndex)
+            navigation.accessible.name: Utils.accessibleColorDescription(accentColor)
+
+            onToggled: {
+                root.accentColorChangeRequested(colorIndex)
+            }
+
+            indicator: Rectangle {
+                anchors.fill: parent
+
+                color: "transparent"
+                border.color: ui.theme.fontPrimaryColor
+                border.width: parent.checked ? 1 : 0
                 radius: width / 2
 
-                border.color: ui.theme.strokeColor
-                border.width: 1
+                NavigationFocusBorder { navigationCtrl: button.navigation }
 
-                color: button.accentColor
+                Rectangle {
+                    anchors.centerIn: parent
+
+                    width: root.sampleSize
+                    height: width
+                    radius: width / 2
+
+                    border.color: ui.theme.strokeColor
+                    border.width: 1
+
+                    color: button.accentColor
+                }
             }
-        }
 
-        background: null
+            background: null
+        }
     }
 }

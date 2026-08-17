@@ -27,29 +27,30 @@
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
+#include "dom/beam.h"
+#include "dom/breath.h"
+#include "dom/chord.h"
+#include "dom/dynamic.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
+#include "dom/figuredbass.h"
+#include "dom/fret.h"
+#include "dom/hairpin.h"
+#include "dom/harmony.h"
+#include "dom/lyrics.h"
 #include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/measurerepeat.h"
+#include "dom/note.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
-#include "dom/text.h"
-#include "dom/tuplet.h"
-#include "dom/chord.h"
-#include "dom/beam.h"
-#include "dom/lyrics.h"
-#include "dom/note.h"
-#include "dom/measurerepeat.h"
 #include "dom/staff.h"
-#include "dom/harmony.h"
+#include "dom/text.h"
 #include "dom/tie.h"
-#include "dom/breath.h"
-#include "dom/fret.h"
-#include "dom/dynamic.h"
-#include "dom/hairpin.h"
-#include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
+#include "dom/tuplet.h"
 
 #include "engravingerrors.h"
 
@@ -778,8 +779,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 if (sp->staffIdx() < dstStaff || sp->staffIdx() >= dstStaff + staves) {
                     continue;
                 }
-                // CHORD and NOTE spanners are normally handled already
-                if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE) {
+                // CHORDREST and NOTE spanners are normally handled already
+                if (sp->anchor() == Spanner::Anchor::CHORDREST || sp->anchor() == Spanner::Anchor::NOTE) {
                     continue;
                 }
                 // skip if present originally

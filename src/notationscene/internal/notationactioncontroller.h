@@ -23,6 +23,7 @@
 
 #include "../inotationcommandscontroller.h"
 
+#include "types/ret.h"
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/actiontypes.h"
@@ -34,28 +35,28 @@
 #include "rcommand/commandtypes.h"
 #include "rcommand/icommandsstate.h"
 #include "rcommand/icommanddispatcher.h"
-#include "ui/inavigationcontroller.h"
-#include "ui/iuiactionsregister.h"
 #include "context/iglobalcontext.h"
 #include "context/iuicontextresolver.h"
 #include "playback/iplaybackcontroller.h"
 #include "engraving/iengravingconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "notationscene/inotationsceneconfiguration.h"
 
 #include "notation/inotation_fwd.h"
 #include "notation/notationtypes.h"
+
+#include "inotationviewcontroller.h"
 
 namespace mu::notation {
 class NotationActionController : public INotationCommandsController, public muse::actions::Actionable, public muse::rcommand::Commandable,
     public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
+    muse::GlobalInject<INotationSceneConfiguration> sceneConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<muse::rcommand::ICommandsState> commandsState = { this };
-    muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
-    muse::ContextInject<muse::ui::IUiActionsRegister> actionRegister = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -69,6 +70,9 @@ public:
     void init();
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
+    void setViewController(INotationViewController* controller) override;
+    INotationViewController* viewController() const override;
 
     bool hasSelection() const override;
     muse::async::Notification selectionChanged() const override;
@@ -109,6 +113,14 @@ public:
     INotationStylePtr notationStyle() const override;
     muse::async::Notification notationStyleChanged() const override;
 
+    bool isTablatureStaff() const override;
+
+    bool isAutomationModeEnabled() const override;
+    muse::async::Notification automationModeEnabledChanged() const override;
+
+    bool isDebuggingCommandEnabled(const muse::rcommand::Command& command) const override;
+    muse::async::Notification debuggingOptionsChanged() const override;
+
     muse::async::Notification currentNotationChanged() const;
 
     INotationNoteInputPtr currentNotationNoteInput() const;
@@ -117,9 +129,6 @@ public:
 
     IMasterNotationPtr currentMasterNotation() const;
     muse::async::Notification currentMasterNotationChanged() const;
-
-    using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
-    static const std::unordered_map<muse::actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
 
 private:
     INotationPtr currentNotation() const;
@@ -131,26 +140,25 @@ private:
 
     void toggleNoteInput(NoteInputMethod method);
     void toggleNoteInputInsert();
-    void handleNoteAction(NoteName note, NoteAddingMode addingMode);
-    void handleNoteAction(const muse::actions::ActionData& args);
-    void handleNoteAction(const muse::rcommand::CommandQuery& query);
-    void handleNoteAction(const NoteInputParams& params, const NoteAddingMode& addingMode);
+
+    muse::Ret addNote(const muse::rcommand::CommandQuery& query);
+    void addNote(NoteName noteName, NoteAddingMode addingMode);
+    muse::Ret addDrumNote(const muse::rcommand::CommandQuery& query);
+    void doAddNote(const NoteInputParams& params, const NoteAddingMode& addingMode);
     void setDuration(engraving::DurationType duration);
     void toggleRest();
     void toggleDots(int dots);
-    void putNote(const muse::actions::ActionData& args);
-    void removeNote(const muse::actions::ActionData& args);
+    muse::Ret putNote(const muse::rcommand::CommandQuery& query);
+    muse::Ret removeNote(const muse::rcommand::CommandQuery& query);
     void increaseDecreaseDuration(int steps, bool stepByDots);
     void realtimeAdvance();
 
     void toggleAccidental(engraving::AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);
 
-    void putTuplet(const muse::rcommand::CommandQuery& query);
+    muse::Ret putTuplet(const muse::rcommand::CommandQuery& query);
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
-
-    void select(SelectionTarget target);
 
     muse::Ret moveWithRet(MoveDirection direction, bool quickly = false);
     void move(MoveDirection direction, bool quickly = false);
@@ -178,22 +186,25 @@ private:
 
     void openSelectionMoreOptions();
 
-    void startEditSelectedElement(const muse::actions::ActionData& args);
-    void startEditSelectedText(const muse::actions::ActionData& args);
+    muse::Ret startEditSelectedElement(const muse::rcommand::CommandQuery& query);
+    muse::Ret startEditSelectedText(const muse::rcommand::CommandQuery& query);
 
-    void addMeasures(const muse::actions::ActionData& actionData, AddBoxesTarget target);
-    void addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
+    muse::Ret addMeasures(const muse::rcommand::CommandQuery& query, AddBoxesTarget target);
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
 
     void unrollRepeats();
 
+    void toggleMmrest();
+    void toggleHideEmpty();
+    void addFullMeasureRest();
+
     void resetState();
     void resetStretch();
     void resetBeamMode();
 
-    void openEditStyleDialog(const muse::rcommand::CommandQuery& query);
+    muse::Ret openEditStyleDialog(const muse::rcommand::CommandQuery& query);
     void openPageSettingsDialog();
     void openStaffProperties();
     void openEditStringsDialog();
@@ -217,18 +228,11 @@ private:
     void playSelectedElement(bool playChord = true);
 
     bool isEditingText() const;
-    bool isEditingLyrics() const;
     bool isEditingElement() const;
     bool isNotEditingElement() const;
-    bool isNotEditingOrHasPopup() const;
-    bool isNotNoteInputMode() const;
-
-    bool isToggleVisibleAllowed() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
-
-    bool measureNavigationAvailable() const;
 
     enum class TextNavigationType {
         NearNoteOrRest,
@@ -247,7 +251,7 @@ private:
     void nextBeatTextElement();
     void prevBeatTextElement();
     void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false, bool moveOnly = true);
-    void navigateToTextElementByFraction(const Fraction& fraction);
+    void navigateToTextItemByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
     bool toggleNoteInputAllowed() const;
@@ -260,53 +264,19 @@ private:
     bool elementHasPopup(const EngravingItem* e) const;
 
     bool isNotationPage() const;
-    bool isTablatureStaff() const;
 
     void checkForScoreCorruptions();
 
     void toggleAutomation();
-
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    void registerAction(const muse::actions::ActionCode&, std::function<void()>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    void registerAction(const muse::actions::ActionCode&, std::function<void(const muse::actions::ActionData& data)>,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
-                        muse::Ret (INotationInteraction::*)() const);
-    void registerAction(const muse::actions::ActionCode&, std::function<void()>,
-                        muse::Ret (INotationInteraction::*)() const);
-
-    void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
-
-    void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
-
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    template<typename P1>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    template<typename P1>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1,
-                        bool (NotationActionController::*)() const);
-    template<typename P1, typename P2, typename Q1, typename Q2>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2, PlayMode = PlayMode::NoPlay,
-                        bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
+    muse::Ret selectAutomationType(const muse::rcommand::CommandQuery& query);
 
     // commands
     void registerCommand(const muse::rcommand::Command&, std::function<void()>);
     void registerCommand(const muse::rcommand::Command&, std::function<void()>, bool (NotationActionController::*)() const);
-    void registerCommand(const muse::rcommand::Command&, std::function<void(const muse::rcommand::CommandQuery&)>);
+    void registerQueryCommand(const muse::rcommand::Command&, std::function<muse::Ret(const muse::rcommand::CommandQuery&)>);
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)());
     void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerCommand(const muse::rcommand::Command&, void (NotationActionController::*)(const muse::rcommand::CommandQuery&));
-    void registerAliases(const std::map<muse::rcommand::Command, muse::rcommand::CommandQuery>& aliases,
-                         void (NotationActionController::*handler)(const muse::rcommand::CommandQuery&));
+    void registerQueryCommand(const muse::rcommand::Command&, muse::Ret (NotationActionController::*)(const muse::rcommand::CommandQuery&));
 
     void registerCommand(const muse::rcommand::Command&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
                          bool (NotationActionController::*)() const = nullptr);
@@ -315,9 +285,20 @@ private:
                          bool (NotationActionController::*)() const = nullptr);
     void registerNoteInputCommand(const muse::rcommand::Command& command, NoteInputMethod method);
     void registerNoteCommand(const muse::rcommand::Command&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+    void registerNavigationByFractionCommand(const muse::rcommand::Command&, const Fraction&);
 
-    void select(const muse::rcommand::CommandQuery& query);
-    void registerSelectionCommand(const muse::rcommand::Command&, SelectionTarget, PlayMode playMode = PlayMode::NoPlay);
+    muse::Ret select(const muse::rcommand::CommandQuery& query);
+    void select(SelectionTarget target, PlayMode playMode = PlayMode::NoPlay);
+
+    void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)());
+    template<typename P1>
+    void registerViewCommand(const muse::rcommand::Command&, void (INotationViewController::*)(P1), P1);
+
+    muse::Ret zoomToPercent(const muse::rcommand::CommandQuery& query);
+
+    muse::Ret setPianoKeyboardNumberOfKeys(const muse::rcommand::CommandQuery& query);
+
+    INotationViewController* m_viewController = nullptr;
 
     muse::async::Channel<bool> m_hasSelectionChanged;
     muse::async::Channel<bool> m_textEditingChanged;
@@ -329,6 +310,7 @@ private:
 
     muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
     muse::async::Notification m_currentNotationStyleChanged;
+    muse::async::Notification m_automationModeEnabledChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
     std::map<muse::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;

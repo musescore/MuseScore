@@ -102,7 +102,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: maskSection
-        titleText: qsTrc("inspector", "Mask over clefs, key and time signatures")
+        titleText: qsTrc("propertiespanel", "Mask over clefs, key and time signatures")
         propertyItem: root.model ? root.model.maskSlurTie : null
 
         navigationPanel: root.navigationPanel
@@ -110,9 +110,9 @@ Column {
         navigationRowStart: tiePlacementSection.navigationRowEnd + 1
 
         model: [
-            { text: qsTrc("inspector", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
-            { text: qsTrc("inspector", "On"), value: CommonTypes.AUTO_ON_OFF_ON },
-            { text: qsTrc("inspector", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF }
+            { text: qsTrc("propertiespanel", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
+            { text: qsTrc("propertiespanel", "On"), value: CommonTypes.AUTO_ON_OFF_ON },
+            { text: qsTrc("propertiespanel", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF }
         ]
     }
 

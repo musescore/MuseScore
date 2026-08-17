@@ -33,16 +33,13 @@
 #include "chord.h"
 #include "clef.h"
 #include "factory.h"
+#include "measure.h"
 #include "ornament.h"
 #include "score.h"
 #include "system.h"
 
-#include "log.h"
-
-using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   trillStyle
 //---------------------------------------------------------
@@ -441,5 +438,4 @@ Sid Trill::defaultPosSid() const
 void Trill::doComputeEndElement()
 {
     setEndElement(score()->findChordRestEndingBeforeTickInStaffAndVoice(tick2(), track2staff(track2()), voice()));
-}
 }

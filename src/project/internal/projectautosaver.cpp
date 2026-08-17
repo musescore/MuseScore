@@ -74,7 +74,7 @@ void ProjectAutoSaver::init()
                 update();
             });
 
-            project->needSave().notification.onNotify(this, [this]() {
+            project->needSaveChanged().onNotify(this, [this]() {
                 update();
             });
         }

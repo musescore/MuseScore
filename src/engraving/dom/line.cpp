@@ -26,8 +26,11 @@
 
 #include "containers.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "anchors.h"
 #include "barline.h"
@@ -333,7 +336,7 @@ bool LineSegment::edit(EditData& ed)
     }
     break;
     case Spanner::Anchor::MEASURE:
-    case Spanner::Anchor::CHORD:
+    case Spanner::Anchor::CHORDREST:
     {
         Measure* m1 = l->startMeasure();
         Measure* m2 = l->endMeasure();
@@ -909,14 +912,14 @@ PointF SLine::linePos(Grip grip, System** system) const
         }
         return note->pagePos() - (*system)->pagePos();
     }
-    case Spanner::Anchor::CHORD:
+    case Spanner::Anchor::CHORDREST:
     case Spanner::Anchor::SEGMENT:
     {
         Segment* segment = start ? startSegment() : endSegment();
         if (!segment) {
             return PointF();
         }
-        if (anchor() == Spanner::Anchor::CHORD && !segment->isChordRestType()) {
+        if (anchor() == Spanner::Anchor::CHORDREST && !segment->isChordRestType()) {
             return PointF();
         }
         if (!start) {

@@ -74,8 +74,18 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id) const
 
 QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& logicalValue) const
 {
-    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+    P_TYPE type = mu::engraving::MStyle::valueType(id);
+
+    if (type == P_TYPE::SPATIUM) {
         return logicalValue.value<mu::engraving::Spatium>().val();
+    }
+
+    if (type == P_TYPE::POINT) {
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        PointF point = logicalValue.value<PointF>();
+        point.setY(-point.y());
+        return point.toQPointF();
     }
 
     return logicalValue.toQVariant();
@@ -83,9 +93,19 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
 
 PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
-    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+    P_TYPE type = mu::engraving::MStyle::valueType(id);
+
+    if (type == P_TYPE::SPATIUM) {
         return mu::engraving::Spatium(uiValue.toDouble());
     }
 
-    return PropertyValue::fromQVariant(uiValue, mu::engraving::MStyle::valueType(id));
+    if (type == P_TYPE::POINT) {
+        // Displayed: positive = up, negative = down
+        // Internal:  negative = up, positive = down
+        PointF point = PointF::fromQPointF(uiValue.value<QPointF>());
+        point.setY(-point.y());
+        return point;
+    }
+
+    return PropertyValue::fromQVariant(uiValue, type);
 }

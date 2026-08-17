@@ -65,11 +65,11 @@ public:
         OPEN, CLOSED
     };
 
-    static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
-
     Volta(EngravingItem* parent);
 
     Volta* clone() const override { return new Volta(*this); }
+
+    Anchor anchor() const override { return Anchor::MEASURE; }
 
     LineSegment* createLineSegment(System* parent) override;
 

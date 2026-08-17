@@ -102,52 +102,35 @@
           <Chord>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>K_K</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>L_L</eid>
+              <eid>K_K</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>O_O</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -155,21 +138,20 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>T_T</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>U_U</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/2</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <Note>
+              <eid>T_T</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
             <Note>
               <eid>V_V</eid>
               <pitch>72</pitch>
@@ -188,82 +170,49 @@
           <Chord>
             <eid>Y_Y</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/2</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>Z_Z</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>a_a</eid>
+        <voice>
           <Chord>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>c_c</eid>
-        <voice>
           <Chord>
             <eid>d_d</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>e_e</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>f_f</eid>
+              <eid>e_e</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>g_g</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>j_j</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>k_k</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>l_l</eid>
+              <eid>i_i</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -271,26 +220,33 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>m_m</eid>
+        <eid>j_j</eid>
         <LayoutBreak>
-          <eid>n_n</eid>
+          <eid>k_k</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>o_o</eid>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>p_p</eid>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <Note>
+              <eid>m_m</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>n_n</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>o_o</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>p_p</eid>
+            <durationType>quarter</durationType>
             <Note>
               <eid>q_q</eid>
               <pitch>72</pitch>
@@ -306,29 +262,29 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Chord>
-            <eid>t_t</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>u_u</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>v_v</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>w_w</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>x_x</eid>
+        <eid>t_t</eid>
         <voice>
+          <Chord>
+            <eid>u_u</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>v_v</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>w_w</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>x_x</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>y_y</eid>
             <durationType>quarter</durationType>
@@ -347,88 +303,43 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Chord>
-            <eid>2_2</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>3_3</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>4_4</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>5_5</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>6_6</eid>
+        <eid>2_2</eid>
         <voice>
+          <Chord>
+            <eid>3_3</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4_4</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5_5</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>6_6</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>7_7</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>8_8</eid>
-                </Slur>
-              <next>
-                <location>
-                  <voices>1</voices>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>9_9</eid>
+              <eid>8_8</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>+_+</eid>
+            <eid>9_9</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>/_/</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>AB_AB</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>BB_BB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>CB_CB</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <voices>1</voices>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>DB_DB</eid>
+              <eid>+_+</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -436,56 +347,37 @@
           </voice>
         <voice>
           <Chord>
-            <eid>EB_EB</eid>
+            <eid>/_/</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>FB_FB</eid>
+              <eid>AB_AB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>GB_GB</eid>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <voices>-1</voices>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>HB_HB</eid>
+              <eid>CB_CB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>IB_IB</eid>
+            <eid>DB_DB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>JB_JB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <voices>-1</voices>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>KB_KB</eid>
+              <eid>EB_EB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>LB_LB</eid>
+            <eid>FB_FB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>MB_MB</eid>
+              <eid>GB_GB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -493,57 +385,40 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>NB_NB</eid>
+        <eid>HB_HB</eid>
         <voice>
+          <Chord>
+            <eid>IB_IB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>JB_JB</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>KB_KB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>LB_LB</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>MB_MB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>NB_NB</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>OB_OB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>PB_PB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>QB_QB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>RB_RB</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>SB_SB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>TB_TB</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>UB_UB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>VB_VB</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>WB_WB</eid>
+              <eid>PB_PB</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -551,31 +426,57 @@
           </voice>
         <voice>
           <Chord>
-            <eid>XB_XB</eid>
+            <eid>QB_QB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>YB_YB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>ZB_ZB</eid>
+              <eid>RB_RB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <Chord>
+            <eid>SB_SB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>TB_TB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>UB_UB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>VB_VB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>WB_WB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>XB_XB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>YB_YB</eid>
+        <LayoutBreak>
+          <eid>ZB_ZB</eid>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
           <Chord>
             <eid>aB_aB</eid>
             <durationType>quarter</durationType>
             <Note>
               <eid>bB_bB</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -583,22 +484,62 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>dB_dB</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>eB_eB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>fB_fB</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>gB_gB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>hB_hB</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>iB_iB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>jB_jB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>kB_kB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>lB_lB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>mB_mB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>nB_nB</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>oB_oB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>pB_pB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -606,203 +547,94 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>gB_gB</eid>
-        <LayoutBreak>
-          <eid>hB_hB</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
+        <eid>qB_qB</eid>
         <voice>
           <Chord>
-            <eid>iB_iB</eid>
+            <eid>rB_rB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>jB_jB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>kB_kB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
+              <eid>sB_sB</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>lB_lB</eid>
+            <eid>tB_tB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>mB_mB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>nB_nB</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>oB_oB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>pB_pB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>qB_qB</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>rB_rB</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Chord>
-            <eid>sB_sB</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>tB_tB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <eid>uB_uB</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>vB_vB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <eid>wB_wB</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>xB_xB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>yB_yB</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>zB_zB</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>0B_0B</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>1B_1B</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
+              <eid>yB_yB</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>2B_2B</eid>
+        <eid>zB_zB</eid>
         <voice>
           <Chord>
-            <eid>3B_3B</eid>
+            <eid>0B_0B</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4B_4B</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <eid>1B_1B</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>5B_5B</eid>
+            <eid>2B_2B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>1</staves>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>6B_6B</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <eid>3B_3B</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>7B_7B</eid>
+            <eid>4B_4B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>8B_8B</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>1</staves>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
+            <Note>
+              <eid>5B_5B</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>6B_6B</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>7B_7B</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>8B_8B</eid>
+            <durationType>quarter</durationType>
             <Note>
               <eid>9B_9B</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -810,106 +642,24 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>/B_/B</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>AC_AC</eid>
-        <voice>
-          <Chord>
-            <eid>BC_BC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>CC_CC</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>DC_DC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>EC_EC</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>FC_FC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>GC_GC</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>HC_HC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>IC_IC</eid>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        <voice>
-          <Chord>
-            <eid>JC_JC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>KC_KC</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>LC_LC</eid>
+            <eid>AC_AC</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>1</staves>
-                  <voices>-1</voices>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>MC_MC</eid>
+              <eid>BC_BC</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>NC_NC</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>OC_OC</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>1</staves>
-                  <voices>-1</voices>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>PC_PC</eid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>QC_QC</eid>
+            <eid>CC_CC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>RC_RC</eid>
+              <eid>DC_DC</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -917,30 +667,30 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>SC_SC</eid>
+        <eid>EC_EC</eid>
         <voice>
           <Rest>
-            <eid>TC_TC</eid>
+            <eid>FC_FC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>UC_UC</eid>
+        <eid>GC_GC</eid>
         <LayoutBreak>
-          <eid>VC_VC</eid>
+          <eid>HC_HC</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>WC_WC</eid>
+            <eid>IC_IC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>XC_XC</eid>
+            <eid>JC_JC</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -952,201 +702,161 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>YC_YC</eid>
+            <eid>KC_KC</eid>
             </Clef>
           <KeySig>
-            <eid>ZC_ZC</eid>
+            <eid>LC_LC</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>aC_aC</eid>
+            <eid>MC_MC</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>NC_NC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>OC_OC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>PC_PC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>QC_QC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>RC_RC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>SC_SC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>TC_TC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>UC_UC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>VC_VC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>WC_WC</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>XC_XC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>YC_YC</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>ZC_ZC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>aC_aC</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
             <eid>bC_bC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>cC_cC</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <eid>cC_cC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
+          <Chord>
             <eid>dC_dC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>eC_eC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>eC_eC</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
             <eid>fC_fC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>gC_gC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>gC_gC</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
             <eid>hC_hC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <eid>iC_iC</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>iC_iC</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <eid>jC_jC</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>kC_kC</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>-1</staves>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>lC_lC</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>mC_mC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>nC_nC</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>oC_oC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>pC_pC</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>qC_qC</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>-1</staves>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>rC_rC</eid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <eid>sC_sC</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>tC_tC</eid>
-                </Slur>
-              <next>
-                <location>
-                  <staves>-1</staves>
-                  <voices>1</voices>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <eid>uC_uC</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>vC_vC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>wC_wC</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>xC_xC</eid>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>yC_yC</eid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>zC_zC</eid>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <staves>-1</staves>
-                  <voices>1</voices>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <eid>0C_0C</eid>
+              <eid>kC_kC</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1154,37 +864,37 @@
           </voice>
         <voice>
           <Chord>
-            <eid>1C_1C</eid>
+            <eid>lC_lC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>2C_2C</eid>
+              <eid>mC_mC</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>3C_3C</eid>
+            <eid>nC_nC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4C_4C</eid>
+              <eid>oC_oC</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>5C_5C</eid>
+            <eid>pC_pC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>6C_6C</eid>
+              <eid>qC_qC</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>7C_7C</eid>
+            <eid>rC_rC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>8C_8C</eid>
+              <eid>sC_sC</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
@@ -1194,7 +904,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>9C_9C</eid>
+            <eid>tC_tC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -1203,12 +913,110 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>+C_+C</eid>
+            <eid>uC_uC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>J_J</startElement>
+        <endElement>L_L</endElement>
+        <eid>vC_vC</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>S_S</startElement>
+        <endElement>W_W</endElement>
+        <eid>wC_wC</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>b_b</startElement>
+        <endElement>h_h</endElement>
+        <eid>xC_xC</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>l_l</startElement>
+        <endElement>0_0</endElement>
+        <eid>yC_yC</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>3_3</startElement>
+        <endElement>BB_BB</endElement>
+        <eid>zC_zC</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>DB_DB</startElement>
+        <endElement>9_9</endElement>
+        <eid>0C_0C</eid>
+        <track>1</track>
+        </Slur>
+      <Slur>
+        <startElement>IB_IB</startElement>
+        <endElement>OB_OB</endElement>
+        <eid>1C_1C</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>QB_QB</startElement>
+        <endElement>WB_WB</endElement>
+        <eid>2C_2C</eid>
+        <track>1</track>
+        </Slur>
+      <Slur>
+        <startElement>aB_aB</startElement>
+        <endElement>cB_cB</endElement>
+        <eid>3C_3C</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>iB_iB</startElement>
+        <endElement>kB_kB</endElement>
+        <eid>4C_4C</eid>
+        <track>1</track>
+        </Slur>
+      <Slur>
+        <startElement>eB_eB</startElement>
+        <endElement>gB_gB</endElement>
+        <eid>5C_5C</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>mB_mB</startElement>
+        <endElement>oB_oB</endElement>
+        <eid>6C_6C</eid>
+        <track>1</track>
+        </Slur>
+      <Slur>
+        <startElement>vB_vB</startElement>
+        <endElement>bC_bC</endElement>
+        <eid>7C_7C</eid>
+        <track>0</track>
+        </Slur>
+      <Slur>
+        <startElement>VC_VC</startElement>
+        <endElement>tB_tB</endElement>
+        <eid>8C_8C</eid>
+        <track>4</track>
+        </Slur>
+      <Slur>
+        <startElement>dC_dC</startElement>
+        <endElement>+B_+B</endElement>
+        <eid>9C_9C</eid>
+        <track>4</track>
+        </Slur>
+      <Slur>
+        <startElement>AC_AC</startElement>
+        <endElement>jC_jC</endElement>
+        <eid>+C_+C</eid>
+        <track>1</track>
+        </Slur>
+      </SpannerMap>
     </Score>
   </museScore>

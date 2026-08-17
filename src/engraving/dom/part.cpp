@@ -23,6 +23,9 @@
 #include "part.h"
 
 #include "containers.h"
+
+#include "iengravingconfiguration.h"
+
 #include "style/style.h"
 #include "rw/xmlwriter.h"
 

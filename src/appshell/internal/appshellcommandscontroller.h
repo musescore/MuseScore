@@ -1,0 +1,139 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
+#define MU_APPSHELL_APPLICATIONCONTROLLER_H
+
+#include <QObject>
+
+#include "async/asyncable.h"
+#include "actions/actionable.h"
+#include "rcommand/commandable.h"
+#include "rcommand/commandtypes.h"
+
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
+#include "ui/iuiactionsregister.h"
+#include "ui/imainwindow.h"
+#include "languages/ilanguagesservice.h"
+#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
+#include "iappshellconfiguration.h"
+#include "multiwindows/imultiwindowsprovider.h"
+#include "project/iprojectfilescontroller.h"
+#include "audio/main/isoundfontinstallscenario.h"
+#include "istartupscenario.h"
+#include "iapplication.h"
+#include "extensions/iextensioninstaller.h"
+#include "context/iglobalcontext.h"
+#include "context/iuicontextresolver.h"
+
+#include "iappshellcommandscontroller.h"
+
+class QDragEnterEvent;
+class QDragMoveEvent;
+class QDropEvent;
+
+namespace mu::appshell {
+class AppshellCommandsController : public QObject, public IAppshellCommandsController, public muse::Contextable,
+    public muse::actions::Actionable, public muse::async::Asyncable, public muse::rcommand::Commandable
+{
+    muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
+    muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
+    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
+    muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
+    muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
+    muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
+    muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
+    muse::ContextInject<IStartupScenario> startupScenario = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
+
+public:
+    AppshellCommandsController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx)
+    {
+    }
+
+    void preInit();
+    void init();
+
+    // IAppshellCommandsController
+    muse::rcommand::Command dockToggleCommand(const DockName& dockName) const override;
+    DockName commandDockName(const muse::rcommand::Command& command) const override;
+    muse::async::Channel<DockName> dockToggleRequested() const override;
+    // ------------------------------
+
+    muse::ValCh<bool> isFullScreen() const;
+
+private:
+
+    enum DragTarget {
+        Unknown = 0,
+        ProjectFile,
+        SoundFont,
+        Extension
+    };
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    QWindow* qWindow() const;
+
+    DragTarget dragTarget(const QUrl& url) const;
+    bool onDragEnterEvent(QDragEnterEvent* event);
+    bool onDragMoveEvent(QDragMoveEvent* event);
+    bool onDropEvent(QDropEvent* event);
+
+    void setupConnections();
+
+    muse::Ret quit(const muse::rcommand::CommandQuery& query);
+    muse::Ret quit(bool isAllInstances, const muse::io::path_t& installerPath = muse::io::path_t());
+    void restart();
+
+    void toggleFullScreen();
+    void openAboutDialog();
+    void openAboutQtDialog();
+    void openAboutMusicXMLDialog();
+
+    void openOnlineHandbookPage();
+    void openAskForHelpPage();
+    void openAccessibilityStatementPage();
+    void openPreferencesDialog();
+    void doOpenPreferencesDialog();
+    void openExtensions();
+
+    void revertToFactorySettings();
+
+    bool m_quiting = false;
+
+    muse::async::Channel<DockName> m_dockToggleRequested;
+    muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
+};
+}
+
+#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H

@@ -26,9 +26,6 @@
 #include "draw/types/geometry.h"
 
 #include "modularity/ioc.h"
-#include "../iengravingconfiguration.h"
-#include "../iengravingcontextconfiguration.h"
-#include "../rendering/iscorerenderer.h"
 #include "../rendering/paintoptions.h"
 
 #include "../infrastructure/ld_access.h"
@@ -53,7 +50,14 @@ class Painter;
     LayoutData* mutldata() { return static_cast<Class::LayoutData*>(EngravingItem::mutldata()); } \
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
+namespace mu::engraving::rendering {
+class IScoreRenderer;
+}
+
 namespace mu::engraving {
+class IEngravingConfiguration;
+class IEngravingContextConfiguration;
+
 class Transaction;
 
 template<typename T>
@@ -441,6 +445,7 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
+    void undoResetProperty(Pid id) override;
     PropertyValue propertyDefault(Pid) const override;
 
     bool custom(Pid) const;

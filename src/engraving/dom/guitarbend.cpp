@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "../iengravingconfiguration.h" // IWYU pragma: keep
+
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
 #include "../editing/editnote.h"
@@ -49,7 +51,6 @@ namespace mu::engraving {
 GuitarBend::GuitarBend(EngravingItem* parent)
     : SLine(ElementType::GUITAR_BEND, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Anchor::NOTE);
 }
 
 GuitarBend::GuitarBend(const GuitarBend& g)
@@ -413,8 +414,6 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue GuitarBend::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return static_cast<int>(Anchor::NOTE);
     case Pid::DIRECTION:
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
@@ -818,7 +817,6 @@ void GuitarBend::updateHoldLine()
         m_holdLine = new GuitarBendHold(this);
     }
 
-    m_holdLine->setAnchor(Spanner::Anchor::NOTE);
     m_holdLine->setStartElement(startOfHold);
     m_holdLine->setEndElement(endOfHold);
     m_holdLine->setTick(startOfHold->tick());
@@ -1109,7 +1107,6 @@ void GuitarBend::setTargetTimeFactor(float f)
 GuitarBendHold::GuitarBendHold(GuitarBend* parent)
     : SLine(ElementType::GUITAR_BEND_HOLD, parent, ElementFlag::MOVABLE)
 {
-    resetProperty(Pid::ANCHOR);
     resetProperty(Pid::LINE_STYLE);
 }
 
@@ -1129,8 +1126,6 @@ LineSegment* GuitarBendHold::createLineSegment(System* parent)
 PropertyValue GuitarBendHold::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::ANCHOR:
-        return static_cast<int>(Anchor::NOTE);
     case Pid::LINE_STYLE:
         return LineType::DASHED;
     default:

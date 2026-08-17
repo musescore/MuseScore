@@ -178,8 +178,8 @@ void MCursor::addPart(const String& instrument)
     }
 
     part->initFromInstrTemplate(it);
-    staff->init(it, 0, 0);
     m_score->appendPart(part);
     m_score->insertStaff(staff, 0);
+    staff->init(it, 0, 0);
 }
 }

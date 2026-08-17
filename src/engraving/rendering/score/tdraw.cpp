@@ -26,6 +26,9 @@
 #include "draw/fontmetrics.h"
 #include "draw/svgrenderer.h"
 
+#include "iengravingconfiguration.h" // IWYU pragma: keep
+#include "iengravingcontextconfiguration.h" // IWYU pragma: keep
+
 #include "rendering/paintoptions.h"
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -138,6 +141,7 @@
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
+#include "dom/tabdurationsymbol.h"
 #include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"

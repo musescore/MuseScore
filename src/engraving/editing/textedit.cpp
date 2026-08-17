@@ -35,6 +35,8 @@
 #include "../dom/symbol.h"
 #include "../dom/utils.h"
 
+#include "../rendering/iscorerenderer.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -145,7 +147,7 @@ void TextBase::endEdit(EditData& ed)
 
     //! NOTE: Current index can be less than the start index if the text element is newly added and immediately removed through
     //! undo (the "add element" command will have been popped from the stack before the calling of this method)...
-    const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
+    const bool textWasEdited = this->textWasEdited(ed);
     if (textWasEdited) {
         undo->mergeTransactions(ted->startUndoIdx);
         undo->last()->removeCommandsMatchingFilter(UndoableCommandFilter::TextEdit, this);
@@ -256,6 +258,22 @@ void TextBase::endEdit(EditData& ed)
 void TextBase::commitText()
 {
     score()->endCmd();
+}
+
+bool TextBase::textWasEdited(EditData& ed) const
+{
+    // Only for use in overriden endEdit functions BEFORE TextBase::endEdit is called
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
+    IF_ASSERT_FAILED(ted) {
+        return false;
+    }
+
+    UndoStack* undo = score()->undoStack();
+    IF_ASSERT_FAILED(undo) {
+        return false;
+    }
+
+    return undo->currentIndex() > ted->startUndoIdx;
 }
 
 //---------------------------------------------------------

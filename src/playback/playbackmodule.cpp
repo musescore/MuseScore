@@ -36,6 +36,7 @@
 #include "internal/soundprofilesrepository.h"
 #include "internal/knownaudiopluginsconfigurator.h"
 #include "internal/playbackuiactions.h"
+#include "internal/playbackcommandscontroller.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -84,10 +85,12 @@ IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ct
 
 void PlaybackContext::registerExports()
 {
+    m_commandsController = std::make_shared<PlaybackCommandsController>(iocContext());
     m_playbackController = std::make_shared<PlaybackController>(iocContext());
     m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
     m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
 
+    ioc()->registerExport<IPlaybackCommandsController>(mname, m_commandsController);
     ioc()->registerExport<IPlaybackController>(mname, m_playbackController);
     ioc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
 }
@@ -108,6 +111,7 @@ void PlaybackContext::resolveImports()
 void PlaybackContext::onInit(const IApplication::RunMode& mode)
 {
     m_playbackController->init();
+    m_commandsController->init();
 
     if (mode != IApplication::RunMode::GuiApp) {
         return;

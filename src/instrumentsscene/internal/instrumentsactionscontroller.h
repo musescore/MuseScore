@@ -27,13 +27,17 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/commandable.h"
+#include "rcommand/icommanddispatcher.h"
 #include "notationscene/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class InstrumentsActionsController : public muse::actions::Actionable, public muse::rcommand::Commandable, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandDispatcher = { this };
     muse::ContextInject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
 

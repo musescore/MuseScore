@@ -95,95 +95,69 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Spanner type="Pedal">
-            <Pedal>
-              <beginHookType>1</beginHookType>
-              <endHookType>1</endHookType>
-              <continueTextPlace>auto</continueTextPlace>
-              <endTextPlace>auto</endTextPlace>
-              <eid>G_G</eid>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0" y="0"/>
-                <off2 x="-10.5" y="0"/>
-                <eid>H_H</eid>
-                </Segment>
-              </Pedal>
-            <next>
-              <location>
-                <fractions>1/1</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
-            <eid>I_I</eid>
+            <eid>G_G</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>J_J</eid>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>3/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
-              <eid>K_K</eid>
+              <eid>H_H</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>J_J</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>L_L</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-3/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>N_N</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
+    <SpannerMap>
+      <Slur>
+        <startElement>G_G</startElement>
+        <endElement>M_M</endElement>
+        <eid>O_O</eid>
+        <track>0</track>
+        </Slur>
+      <Pedal>
+        <beginHookType>1</beginHookType>
+        <endHookType>1</endHookType>
+        <continueTextPlace>auto</continueTextPlace>
+        <endTextPlace>auto</endTextPlace>
+        <track2>0</track2>
+        <ticks>1/1</ticks>
+        <eid>P_P</eid>
+        <track>0</track>
+        <Segment>
+          <subtype>0</subtype>
+          <offset x="0" y="0"/>
+          <off2 x="-10.5" y="0"/>
+          <eid>Q_Q</eid>
+          <track>0</track>
+          </Segment>
+        </Pedal>
+      </SpannerMap>
     </Score>
   </museScore>

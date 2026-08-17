@@ -46,9 +46,17 @@ void AppearancePreferencesModel::init()
         emit isFollowSystemThemeChanged();
     });
 
+    m_lastHighContrast = highContrastEnabled();
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
         emit foregroundColorChanged();
+
+        bool hc = highContrastEnabled();
+        if (hc != m_lastHighContrast) {
+            m_lastHighContrast = hc;
+            emit highContrastEnabledChanged();
+        }
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -58,12 +66,10 @@ void AppearancePreferencesModel::init()
 
     notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
-        emit foregroundColorChanged();
     });
 
     notationConfiguration()->isOnlyInvertInDarkThemeChanged().onNotify(this, [this]() {
         emit isOnlyInvertInDarkThemeChanged();
-        emit foregroundColorChanged();
     });
 
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {
@@ -76,6 +82,10 @@ void AppearancePreferencesModel::init()
         emit foregroundColorChanged();
         emit foregroundUseColorChanged();
         emit foregroundWallpaperPathChanged();
+    });
+
+    notationConfiguration()->notationColorChanged().onNotify(this, [this]() {
+        emit engravingColorChanged();
     });
 }
 
@@ -101,6 +111,22 @@ void AppearancePreferencesModel::setFollowSystemTheme(bool enabled)
 bool AppearancePreferencesModel::highContrastEnabled() const
 {
     return uiConfiguration()->isHighContrast();
+}
+
+QStringList AppearancePreferencesModel::generalThemeCodes() const
+{
+    return {
+        QString::fromStdString(LIGHT_THEME_CODE),
+        QString::fromStdString(DARK_THEME_CODE)
+    };
+}
+
+QStringList AppearancePreferencesModel::highContrastThemeCodes() const
+{
+    return {
+        QString::fromStdString(HIGH_CONTRAST_WHITE_THEME_CODE),
+        QString::fromStdString(HIGH_CONTRAST_BLACK_THEME_CODE)
+    };
 }
 
 QVariantList AppearancePreferencesModel::generalThemes() const
@@ -140,6 +166,7 @@ void AppearancePreferencesModel::resetAppearancePreferencesToDefault()
     uiConfiguration()->resetFonts();
     notationConfiguration()->resetBackground();
     notationConfiguration()->resetForeground();
+    notationConfiguration()->resetNotationColor();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
@@ -267,9 +294,9 @@ bool AppearancePreferencesModel::isOnlyInvertInDarkTheme() const
     return notationConfiguration()->isOnlyInvertInDarkTheme();
 }
 
-bool AppearancePreferencesModel::isCurrentThemeDark() const
+QColor AppearancePreferencesModel::engravingColor() const
 {
-    return uiConfiguration()->isDarkMode();
+    return notationConfiguration()->notationColor();
 }
 
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
@@ -387,4 +414,13 @@ void AppearancePreferencesModel::setOnlyInvertInDarkTheme(bool value)
     }
 
     notationConfiguration()->setOnlyInvertInDarkTheme(value);
+}
+
+void AppearancePreferencesModel::setEngravingColor(const QColor& color)
+{
+    if (color == engravingColor()) {
+        return;
+    }
+
+    notationConfiguration()->setNotationColor(color);
 }

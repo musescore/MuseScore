@@ -79,6 +79,14 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(instrumentNumeralsHyphenEnable,                 true),
     styleDef(instrumentNumeralsHyphenThreshold,              1),
 
+    styleDef(textForUnisonLabel,                             String(u"a ")),
+    styleDef(unisonLabelRestateOnNewSystem,                  AutoOnOff::AUTO),
+    styleDef(sharedOnStaffNumeralsFollowInstrumentNumerals,  true),
+    styleDef(sharedOnStaffNumeralsTrailingDotSingle,         false),
+    styleDef(sharedOnStaffNumeralsTrailingDotMultiple,       false),
+    styleDef(sharedOnStaffNumeralsHyphenEnable,              true),
+    styleDef(sharedOnStaffNumeralsHyphenThreshold,           1),
+
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),
     styleDef(stringsNameByGroup,                         false),

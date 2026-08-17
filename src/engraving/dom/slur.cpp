@@ -25,6 +25,7 @@
 #include "../editing/mscoreview.h"
 #include "../editing/navigation.h"
 #include "../editing/transaction/transaction.h"
+#include "../rendering/iscorerenderer.h"
 
 #include "arpeggio.h"
 #include "beam.h"
@@ -382,7 +383,6 @@ Slur::Slur(const Slur& s)
 Slur::Slur(EngravingItem* parent, ElementType type)
     : SlurTie(type, parent)
 {
-    setAnchor(Anchor::CHORD);
 }
 
 double Slur::scalingFactor() const

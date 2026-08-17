@@ -121,34 +121,23 @@
             <durationType>half</durationType>
             <Note>
               <eid>O_O</eid>
-              <Spanner type="Tie">
-                <Tie>
-                  <eid>P_P</eid>
-                  </Tie>
-                <next>
-                  <location>
-                    <fractions>1/2</fractions>
-                    </location>
-                  </next>
-                </Spanner>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>Q_Q</eid>
               <autoplace>0</autoplace>
-              <Spanner type="Tie">
-                <prev>
-                  <location>
-                    <fractions>-1/2</fractions>
-                    </location>
-                  </prev>
-                </Spanner>
+              <Tie>
+                <startElement>O_O</startElement>
+                <endElement>Q_Q</endElement>
+                <eid>R_R</eid>
+                <track>0</track>
+                </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <headScheme>name-pitch-german</headScheme>

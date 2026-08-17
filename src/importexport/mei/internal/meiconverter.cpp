@@ -22,10 +22,11 @@
 
 #include "meiconverter.h"
 
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <valarray>
+
+#include "engraving/iengravingconfiguration.h"
 
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
@@ -65,6 +66,9 @@ using namespace mu;
 using namespace muse;
 
 StringList Convert::logs;
+
+muse::GlobalInject<engraving::IEngravingFontsProvider> Convert::engravingFonts;
+muse::GlobalInject<engraving::IEngravingConfiguration> Convert::engravingConfiguration;
 
 engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElement)
 {
@@ -3197,6 +3201,8 @@ engraving::TremoloType Convert::stemModFromMEI(const libmei::data_STEMMODIFIER m
     case (libmei::STEMMODIFIER_2slash): return engraving::TremoloType::R16;
     case (libmei::STEMMODIFIER_3slash): return engraving::TremoloType::R32;
     case (libmei::STEMMODIFIER_4slash): return engraving::TremoloType::R64;
+    case (libmei::STEMMODIFIER_5slash): return engraving::TremoloType::R128;
+    case (libmei::STEMMODIFIER_6slash): return engraving::TremoloType::R256;
     case (libmei::STEMMODIFIER_z): return engraving::TremoloType::BUZZ_ROLL;
     default:
         return engraving::TremoloType::INVALID_TREMOLO;
@@ -3210,6 +3216,8 @@ libmei::data_STEMMODIFIER Convert::stemModToMEI(const engraving::TremoloSingleCh
     case (engraving::TremoloType::R16): return libmei::STEMMODIFIER_2slash;
     case (engraving::TremoloType::R32): return libmei::STEMMODIFIER_3slash;
     case (engraving::TremoloType::R64): return libmei::STEMMODIFIER_4slash;
+    case (engraving::TremoloType::R128): return libmei::STEMMODIFIER_5slash;
+    case (engraving::TremoloType::R256): return libmei::STEMMODIFIER_6slash;
     case (engraving::TremoloType::BUZZ_ROLL): return libmei::STEMMODIFIER_z;
     default:
         return libmei::STEMMODIFIER_NONE;

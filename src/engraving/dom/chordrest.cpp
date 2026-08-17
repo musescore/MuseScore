@@ -53,6 +53,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "tabdurationsymbol.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "volta.h"
@@ -64,6 +65,8 @@
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
+
+#include "rendering/iscorerenderer.h"
 
 #include "log.h"
 

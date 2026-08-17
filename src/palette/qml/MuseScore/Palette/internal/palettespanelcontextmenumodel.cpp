@@ -23,6 +23,7 @@
 #include "palettespanelcontextmenumodel.h"
 
 #include "actions/actiontypes.h"
+#include "async/asyncable.h"
 #include "types/translatablestring.h"
 
 #include "log.h"
@@ -46,6 +47,10 @@ PalettesPanelContextMenuModel::PalettesPanelContextMenuModel(QObject* parent)
 
 void PalettesPanelContextMenuModel::load()
 {
+    commandsController()->expandCollapseAllRequested().onReceive(this, [this](bool expand) {
+        emit expandCollapseAllRequested(expand);
+    }, Asyncable::Mode::SetReplace);
+
     MenuItemList items {
         createIsSingleClickToOpenPaletteItem(),
         createIsSinglePaletteItem(),
@@ -82,11 +87,6 @@ MenuItem* PalettesPanelContextMenuModel::createIsSingleClickToOpenPaletteItem()
         item->setState(state);
     });
 
-    dispatcher()->reg(this, TOGGLE_SINGLE_CLICK_CODE, [this, item]() {
-        bool newValue = !item->state().checked;
-        configuration()->setIsSingleClickToOpenPalette(newValue);
-    });
-
     return item;
 }
 
@@ -115,11 +115,6 @@ MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
         item->setState(state);
     });
 
-    dispatcher()->reg(this, TOGGLE_SINGLE_PALETTE_CODE, [this, item]() {
-        bool newValue = !item->state().checked;
-        configuration()->setIsSinglePalette(newValue);
-    });
-
     return item;
 }
 
@@ -145,11 +140,6 @@ MenuItem* PalettesPanelContextMenuModel::createIsDragEnabledItem()
         UiActionState state = item->state();
         state.checked = newValue;
         item->setState(state);
-    });
-
-    dispatcher()->reg(this, TOGGLE_PALETTE_DRAG, [this, item]() {
-        bool newValue = !item->state().checked;
-        configuration()->setIsPaletteDragEnabled(newValue);
     });
 
     return item;
@@ -182,10 +172,6 @@ MenuItem* PalettesPanelContextMenuModel::createExpandCollapseAllItem(bool expand
     }
 
     item->setState(state);
-
-    dispatcher()->reg(this, action.code, [this, expand]() {
-        emit expandCollapseAllRequested(expand);
-    });
 
     return item;
 }
