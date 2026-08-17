@@ -7763,7 +7763,9 @@ FretDiagram* MusicXmlParserPass2::frame()
             int val = m_e.readInt();
             if (val > 0) {
                 fd->setProperty(Pid::FRET_FRETS, val);
-                fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
+                if (val != fd->propertyDefault(Pid::FRET_FRETS).toInt()) {
+                    fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
+                }
             } else {
                 m_logger->logError(String(u"FretDiagram::readMusicXml: illegal frame-fret %1").arg(val), &m_e);
             }
