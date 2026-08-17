@@ -2820,7 +2820,7 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
         return ptb.read();
     }
 
-    GuitarPro* gp;
+    GuitarPro* gp = nullptr;
     bool readResult = false;
     bool isVersionAbove6 = false;
     // check to see if we are dealing with a GP file via the extension
