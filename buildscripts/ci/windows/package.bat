@@ -138,13 +138,15 @@ ECHO on
 ECHO "PACKAGE_UUID: %PACKAGE_UUID%"
 ECHO off
 
-cd "%BUILD_DIR%" 
-cmake -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
+SET CMAKE_WRAPPER=%CD%\buildscripts\tools\cmake_wrapper.bat
+
+cd "%BUILD_DIR%"
+CALL "%CMAKE_WRAPPER%" -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
     -DCPACK_WIX_UPGRADE_GUID=%UPGRADE_UUID% ^
     ..
 
-SET PATH=%WIX%;%PATH% 
-cmake --build . --target package || SET WIX_ERROR=1
+SET PATH=%WIX%;%PATH%
+CALL "%CMAKE_WRAPPER%" --build . --target package || SET WIX_ERROR=1
 cd ..
 
 ECHO "Create logs dir"
