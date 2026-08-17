@@ -62,6 +62,8 @@ constexpr static qreal POLYLINE_SELECTED_CENTER_RADIUS = 3.5;
 constexpr static qreal POLYLINE_SELECTED_MIDDLE_RING_WIDTH = 1.5;
 
 constexpr static int POLYLINE_SELECTED_HOVERED_ALPHA = 127;
+constexpr static int POLYLINE_GENERATED_AREA_ALPHA = 51;
+constexpr static int POLYLINE_EDITED_AREA_ALPHA = 102;
 
 static bool polylinePointIndexIsValid(const PolylinePlot* polyline, int pointIdx)
 {
@@ -230,6 +232,14 @@ static bool isStructuralChange(const mu::engraving::ScoreChanges& changes)
     return false;
 }
 
+static qreal defaultValueFor(AutomationType type)
+{
+    if (type == AutomationType::Pan) {
+        return 0.5;
+    }
+    return 0.0;
+}
+
 NotationAutomationController::NotationAutomationController(QQuickItem* linesParent, const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_linesParent(linesParent)
 {
@@ -273,7 +283,8 @@ void NotationAutomationController::init()
     }, Asyncable::Mode::SetReplace /* FIXME */);
 
     engravingConfiguration()->selectionColorChanged().onReceive(this, [this](voice_idx_t idx, const muse::draw::Color&) {
-        if (idx == 0) {
+        // voice 1 color is used for the centre of selected points, "all voices color" is used for the area under lines
+        if (idx == 0 || idx == mu::engraving::VOICES) {
             updatePolylinesColors();
         }
     }, Asyncable::Mode::SetReplace /* FIXME */);
@@ -345,7 +356,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
     }
     polyline->setPoints(pointsForPolyline);
 
-    applyPolylineStyle(polyline);
+    applyPolylineStyle(polyline, key);
     polyline->setVisible(false);
 
     // Points can't be dragged past the system's first/last segment
@@ -368,10 +379,11 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         const bool editRestricted = !automationPoint || automationPoint->generated || automationPoint->itemId.has_value();
         const qreal clampedX = editRestricted ? oldPointData.qPointF.x() : std::clamp(x, minX, maxX);
 
-        const auto setPreviewPoint = [polyline, pointIdx](const QPointF& point) {
+        const auto setPreviewPoint = [this, polyline, pointIdx, key](const QPointF& point) {
             QVector<QPointF> points = polyline->points();
             points.replace(pointIdx, point);
             polyline->setPoints(points);
+            applyPolylineColorsUnderLine(polyline, key);
             polyline->update(); // TODO: pass update rect?
         };
 
@@ -410,6 +422,7 @@ muse::uicomponents::PolylinePlot* NotationAutomationController::createPolylineFo
         QVector<QPointF> points = polyline->points();
         points.insert(insertIdx, { x, y });
         polyline->setPoints(points);
+        applyPolylineColorsUnderLine(polyline, key);
     });
 
     QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointRemoved,
@@ -489,7 +502,7 @@ QVector<NotationAutomationController::PointData> NotationAutomationController::p
     return points;
 }
 
-void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) const
+void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline, const SysStaffKey& key) const
 {
     IF_ASSERT_FAILED(polyline) {
         return;
@@ -497,6 +510,8 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
 
     polyline->setLineWidth(POLYLINE_LINE_WIDTH);
     polyline->setDrawBackground(false);
+
+    polyline->setBaselineN(defaultValueFor(currentAutomationType()));
 
     polyline->setGhostPointsEnabled(false);
     polyline->setSelectedPointsEnabled(true);
@@ -517,10 +532,10 @@ void NotationAutomationController::applyPolylineStyle(PolylinePlot* polyline) co
     selected->setMiddleRingWidthHovered(POLYLINE_SELECTED_MIDDLE_RING_WIDTH);
     selected->setOutlineWidthHovered(POLYLINE_LINE_WIDTH);
 
-    applyPolylineColors(polyline);
+    applyPolylineColors(polyline, key);
 }
 
-void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline) const
+void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline, const SysStaffKey& key) const
 {
     IF_ASSERT_FAILED(polyline) {
         return;
@@ -549,6 +564,52 @@ void NotationAutomationController::applyPolylineColors(PolylinePlot* polyline) c
     selected->setCenterColorHovered(selectionColor);
     selected->setMiddleRingColorHovered(foregroundColor);
     selected->setOutlineColorHovered(lineColor);
+
+    applyPolylineColorsUnderLine(polyline, key);
+}
+
+void NotationAutomationController::applyPolylineColorsUnderLine(PolylinePlot* polyline, const SysStaffKey& key) const
+{
+    IF_ASSERT_FAILED(polyline) {
+        return;
+    }
+
+    const auto pointsDataIt = m_pointsDataByStaff.find(key);
+    IF_ASSERT_FAILED(pointsDataIt != m_pointsDataByStaff.end()) {
+        return;
+    }
+
+    // TODO: Cache these colors?
+    const QColor allVoicesColor = engravingConfiguration()->selectionColor(mu::engraving::VOICES).toQColor();
+
+    QColor generatedColor = allVoicesColor;
+    generatedColor.setAlpha(POLYLINE_GENERATED_AREA_ALPHA);
+
+    QColor editedColor = allVoicesColor;
+    editedColor.setAlpha(POLYLINE_EDITED_AREA_ALPHA);
+
+    const QVector<PointData>& pointsData = pointsDataIt->second;
+
+    QVector<QColor> colorsUnderLine;
+    colorsUnderLine.reserve(pointsData.size() + 1); // +1 for the "trailing color" (see below)
+
+    bool prevPointGenerated = true;
+    for (const PointData& pointData : pointsData) {
+        //! NOTE: The following can be null for newly created (always non-generated) points because they're not in the model yet
+        const mu::engraving::AutomationPoint* automationPoint = automationPointAt(key, pointData.tick);
+        const bool currPointGenerated = automationPoint && automationPoint->generated;
+
+        // Colors either side of an edited point should use the "edited color"...
+        const bool useEditedColor = !prevPointGenerated || !currPointGenerated;
+        colorsUnderLine.emplace_back(useEditedColor ? editedColor : generatedColor);
+
+        prevPointGenerated = currPointGenerated;
+    }
+
+    // This is the trailing color (after the last point) - it always follows the color of the last point...
+    colorsUnderLine.emplace_back(prevPointGenerated ? generatedColor : editedColor);
+
+    polyline->setColorsUnderLine(colorsUnderLine);
 }
 
 QColor NotationAutomationController::inversionRelativeColor(const muse::ui::ThemeStyleKey& key) const
@@ -610,7 +671,7 @@ void NotationAutomationController::updatePolylinesGeometry()
         polyline->setX(staffCanvasRect.x());
         polyline->setY(staffCanvasRect.y());
 
-        applyPolylineColors(polyline);
+        applyPolylineColors(polyline, key);
     }
 }
 
@@ -623,7 +684,7 @@ void NotationAutomationController::updatePolylinesColors()
         // TODO: Staves can have multiple polylines due to horizontal frames, at the moment we're
         // providing a single polyline over the entire staff...
         PolylinePlot* polyline = *polylines.begin();
-        applyPolylineColors(polyline);
+        applyPolylineColors(polyline, key);
     }
 }
 
@@ -833,6 +894,7 @@ void NotationAutomationController::updateStaffPointsInRange(const SysStaffKey& k
         points.push_back(pointData.qPointF);
     }
     polyline->setPoints(points);
+    applyPolylineColorsUnderLine(polyline, key);
     polyline->update();
 }
 
