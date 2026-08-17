@@ -112,9 +112,23 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
     assert(root.tag == 'TS')
 
     for message in root.findall('.//message'):
+        locations = message.findall('location')
         source = message.find('source')
         translation = message.find('translation')
         plurals = translation.findall('numerusform')
+
+        for location in locations:
+            line = location.get('line')
+            if not line or not re.match(r'^[0-9]+$', line):
+                tr_error(message, f"Location has invalid line number: '{line}'.",
+                         'Re-run lupdate with `-locations absolute` (the default) to get valid line numbers.')
+                continue
+            # Round source line numbers up to the nearest multiple of `interval` so they don't
+            # change as often. This reduces the diff in TS files so actual string changes are more
+            # noticeable. Zero isn't a valid line number hence we must round up not down.
+            interval = 10
+            line = (((int(line) - 1) // interval) * interval) + interval # Round up.
+            location.set('line', str(line))
 
         bytes = source.findall('byte')
         if bytes:
@@ -166,7 +180,7 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
                 plural.text = tr_txt
         else:
             translation.text = tr_txt
-        
+
         if translation.get('type') == 'obsolete':
             translation.set('type', 'unfinished')
 
