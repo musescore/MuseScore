@@ -301,11 +301,15 @@ muse::Ret AppshellCommandsController::quit(bool isAllInstances, const muse::io::
     }
 
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
+        //! NOTE: All windows are quitting to complete the update, apply it
+        //! in-place, falling back to handing the package to the user.
+        if (!appUpdateService()->canAutoInstall() || !appUpdateService()->applyUpdate(installerPath)) {
 #if defined(Q_OS_LINUX)
-        platformInteractive()->revealInFileBrowser(installerPath);
+            platformInteractive()->revealInFileBrowser(installerPath);
 #else
-        platformInteractive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+            platformInteractive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
 #endif
+        }
     }
 
     if (!multiwindowsProvider()->isFirstWindow()) {

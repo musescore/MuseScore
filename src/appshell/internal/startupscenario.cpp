@@ -207,15 +207,6 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 
     m_activeUpdateCheckCount = 0;
 
-    if (appUpdateScenario() && appUpdateScenario()->checkInProgress()) {
-        m_activeUpdateCheckCount++;
-        appUpdateScenario()->checkInProgressChanged().onNotify(this, [this, modeType]() {
-            appUpdateScenario()->checkInProgressChanged().disconnect(this);
-            m_activeUpdateCheckCount--;
-            showStartupDialogsIfNeed(modeType);
-        }, Asyncable::Mode::SetReplace);
-    }
-
     if (museSoundsUpdateScenario() && museSoundsUpdateScenario()->checkInProgress()) {
         m_activeUpdateCheckCount++;
         museSoundsUpdateScenario()->checkInProgressChanged().onNotify(this, [this, modeType]() {
@@ -268,27 +259,7 @@ void StartupScenario::showStartupDialogsIfNeed(StartupModeType modeType)
         }
     };
 
-    if (!appUpdateScenario() || !appUpdateScenario()->hasUpdate()) {
-        showWelcomeDialogAndSamplerUpdateIfNeed();
-        return;
-    }
-
-    //! NOTE: When in-place auto-install is available, download the update silently
-    //! in the background and surface it via the home screen banner, rather than
-    //! interrupting startup with a modal update dialog.
-    if (appUpdateScenario()->canAutoInstall()) {
-        appUpdateScenario()->downloadUpdateInBackground();
-        showWelcomeDialogAndSamplerUpdateIfNeed();
-        return;
-    }
-
-    auto promise = appUpdateScenario()->showUpdate();
-    promise.onResolve(this, [showWelcomeDialogAndSamplerUpdateIfNeed](const Ret& ret) {
-        if (ret.code() == static_cast<int>(Ret::Code::Ok)) {
-            return; // OK means the user wants to close and complete installation - don't show any more dialogs...
-        }
-        showWelcomeDialogAndSamplerUpdateIfNeed();
-    });
+    showWelcomeDialogAndSamplerUpdateIfNeed();
 }
 
 bool StartupScenario::shouldShowWelcomeDialog(StartupModeType modeType) const
