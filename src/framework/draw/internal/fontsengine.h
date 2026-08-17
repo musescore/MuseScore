@@ -92,6 +92,8 @@ private:
 
     IFontFace* createFontFace(const io::path_t& path) const;
     RequireFace* fontFace(const Font& f, bool isSymbolMode = false) const;
+    IFontFace* fontFace(const FontDataKey& dataKey, Font::Type type, int pixelSize, bool isSymbolMode) const;
+    IFontFace* sdfFontFaceFor(const IFontFace* layoutFace) const;
 
     std::vector<FontFaceTextBlock> splitTextByFontFaces(const RequireFace* rf, const TextBlock& text) const;
 
