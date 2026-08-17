@@ -92,10 +92,11 @@ static void markImpliedTupletMembers(std::vector<EncMeasureElem*>& elems)
 // a MIDI pitch that arrives in the tuplet slot.
 struct EncFormatReader_V0xC2 final : EncFormatReader_V0xC4Base
 {
-    explicit EncFormatReader_V0xC2(quint16 formatVersion)
-        : m_formatVersion(formatVersion) {}
+    EncFormatReader_V0xC2(quint16 formatVersion, bool macContainer)
+        : m_formatVersion(formatVersion), m_macContainer(macContainer) {}
 
     const char* formatName() const override { return "v0xC2"; }
+    bool usesUniformPageMargins() const override { return m_macContainer; }
     quint8 lyricTextGapAfterKie() const override { return 7; }
 
     // Format 3.07 inserted two bytes at +8, so an earlier file keeps those fields two bytes lower. The
@@ -164,10 +165,11 @@ struct EncFormatReader_V0xC2 final : EncFormatReader_V0xC4Base
 
 private:
     quint16 m_formatVersion { 0 };
+    bool m_macContainer { false };
 };
 
-std::unique_ptr<EncFormatReader> makeFormatReader_V0xC2(quint16 formatVersion)
+std::unique_ptr<EncFormatReader> makeFormatReader_V0xC2(quint16 formatVersion, bool macContainer)
 {
-    return std::make_unique<EncFormatReader_V0xC2>(formatVersion);
+    return std::make_unique<EncFormatReader_V0xC2>(formatVersion, macContainer);
 }
 } // namespace mu::iex::enc

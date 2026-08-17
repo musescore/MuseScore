@@ -47,7 +47,7 @@ The first four bytes are the file magic, and they fix the byte order for every m
 |--------|-----------|---------------|-------------------------------------------------|
 | `SCOW` | plaintext | little-endian | Windows Encore, every version `[verified]`      |
 | `SCOR` | plaintext | little-endian | Windows Encore, as `SCOW` reads `[verified]`    |
-| `SCO5` | plaintext | big-endian    | macOS Encore 5 `[verified]`                     |
+| `SCO5` | plaintext | big-endian    | macOS Encore 3 and 5 `[verified]`               |
 | `MTIW` | plaintext | little-endian | Windows MusicTime `[verified]`                  |
 | `MTIM` | plaintext | big-endian    | macOS MusicTime `[verified]`                    |
 | `ZBOT` | encrypted | ,             | wraps `SCOW`, older Encore 4 saves `[verified]` |
@@ -120,7 +120,7 @@ Every element gains exactly two bytes from 3.05 to 3.07 `[verified]`. From 3.07 
 
 ## 1.5 The version byte, and where it disagrees
 
-The byte at `0x04` is present in the plaintext containers only. `SCO5` has none: it is recognised by its magic alone and otherwise reads as the 4.20 layout.
+The byte at `0x04` is present in the plaintext containers only. `SCO5` has none, and its format version alone places it: the macOS Encore 5 writes 4.20, nearly every `SCO5` file, and the macOS Encore 3 writes 3.05, with the 22-byte note and every element body two bytes lower, exactly as a Windows 3.05 file `[verified]`. Read as 4.20, such a file takes each pitch from the playback duration and every rhythm from the wrong byte. The macOS Encore 3 also writes its own `PREC`, a classic Macintosh print record rather than the plist, and no margins anywhere.
 
 | Byte   | Generation it names                                          |
 |--------|--------------------------------------------------------------|
@@ -142,7 +142,7 @@ The byte at `0x3E` takes the values 0, 1, 2 and 4. It is **not** a layout select
 
 Two of the values have a release behind them, measured by saving one score through each program: Encore 4.5 writes 0 and Encore 5.0 writes 4 `[verified]`. Encore 4.5 also refuses a file whose `0x3E` is newer than it supports, which is why a 5.0 file will not open there.
 
-Only two of the four values say anything about a release, and a sweep of the whole corpus shows why. Revisions 0 and 1 appear in every generation the format has, from 2.50 through 4.20, and in MusicTime as well, so the pair cannot be read as an era. The 0 against 1 split is not a build boundary either: one author working in a single release produced files at both revisions in comparable numbers, and the two groups have identical instrument entry strides, element sizes, ornament vocabulary and score shapes `[verified]`. What the byte actually tracks is unresolved. Revision 2 is the sharper of the two remaining values: every `SCO5` file in the corpus carries it, and no file of any other container ever does `[observed]`.
+Only two of the four values say anything about a release, and a sweep of the whole corpus shows why. Revisions 0 and 1 appear in every generation the format has, from 2.50 through 4.20, and in MusicTime as well, so the pair cannot be read as an era. The 0 against 1 split is not a build boundary either: one author working in a single release produced files at both revisions in comparable numbers, and the two groups have identical instrument entry strides, element sizes, ornament vocabulary and score shapes `[verified]`. What the byte actually tracks is unresolved. Revision 2 is the sharper of the two remaining values: every `SCO5` file the macOS Encore 5 wrote carries it, and no file of any other container ever does `[observed]`. The macOS Encore 3 writes revision 1, like its Windows contemporaries.
 
 ## 1.7 Choosing a reader
 

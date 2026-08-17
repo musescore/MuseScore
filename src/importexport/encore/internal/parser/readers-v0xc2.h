@@ -30,5 +30,6 @@
 namespace mu::iex::enc {
 // formatVersion is the file format version at header 0x28. Below 3.07 the file predates the Encore
 // 4.0 element layout change and every element body field from +8 onward sits two bytes earlier.
-std::unique_ptr<EncFormatReader> makeFormatReader_V0xC2(quint16 formatVersion);
+// macContainer is set for a SCO5 file, which keeps no document margins.
+std::unique_ptr<EncFormatReader> makeFormatReader_V0xC2(quint16 formatVersion, bool macContainer = false);
 } // namespace mu::iex::enc
