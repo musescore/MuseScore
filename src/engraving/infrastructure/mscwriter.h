@@ -65,6 +65,7 @@ public:
     void writeThumbnailFile(const muse::ByteArray& data);
     void addImageFile(const muse::String& fileName, const muse::ByteArray& data);
     void writeAudioSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
+    void writeVideoSettingsJsonFile(const muse::ByteArray& data);
     void writeViewSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
     void writeAutomationJsonFile(const muse::ByteArray& data);
 

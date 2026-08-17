@@ -897,6 +897,7 @@ enum class TextStyleType : unsigned char {
     REPEAT_RIGHT,      // align to end of measure
     REHEARSAL_MARK,
     SYSTEM,
+    VIDEO_HIT_POINT,
 
     // Staff oriented styles
     STAFF,
