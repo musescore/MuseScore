@@ -267,6 +267,7 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
     TRACEFUNC;
 
     setScore(score);
+    std::static_pointer_cast<NotationAutomation>(m_notationAutomation)->setMasterScore(score);
 
     undoStack()->lock();
 
