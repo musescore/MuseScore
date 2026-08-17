@@ -49,6 +49,7 @@
 #include "beamlayout.h"
 #include "tupletlayout.h"
 #include "chordlayout.h"
+#include "chordbracketlayout.h"
 #include "arpeggiolayout.h"
 #include "measurelayout.h"
 #include "horizontalspacing.h"
@@ -212,6 +213,16 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                             }
                         }
                         ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
+                        for (EngravingItem* element : c->el()) {
+                            if (element->isChordBracket()) {
+                                ChordBracket* bracket = toChordBracket(element);
+                                if (c->onTabStaff()) {
+                                    TLayout::layoutItem(bracket, ctx);
+                                } else {
+                                    ChordBracketLayout::updateVerticalGeometry(bracket, ctx);
+                                }
+                            }
+                        }
                         ChordLayout::layoutSpanners(c, ctx);
                         if (c->tremoloSingleChord()) {
                             TremoloLayout::layout(c->tremoloSingleChord(), ctx);

@@ -934,7 +934,7 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
 
-    ldata->setShape(Shape(RectF(0.0, ldata->top, item->absoluteFromSpatium(item->hookLength()), ldata->bottom), item));
+    ldata->setShape(Shape(RectF(0.0, ldata->top, item->absoluteFromSpatium(item->hookLength()), ldata->bottom).normalized(), item));
 
     const Note* upnote = item->chord()->upNote();
     ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
