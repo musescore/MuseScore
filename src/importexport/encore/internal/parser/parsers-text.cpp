@@ -23,6 +23,7 @@
 // Read the file header (version/counts/score size) and the indexed TEXT block for staff text.
 
 #include "elem.h"
+#include "parsers-encoding.h"
 #include "readers.h"
 
 namespace mu::iex::enc {
@@ -40,7 +41,8 @@ bool EncHeader::readMagicAndVersion(QDataStream& ds)
     if (!isReadableEncoreMagic(magic)) {
         return false;
     }
-    ds.setByteOrder(magic == "SCO5" ? QDataStream::BigEndian : QDataStream::LittleEndian);
+    const bool macContainer = (magic == "SCO5" || magic == "MTIM");
+    ds.setByteOrder(macContainer ? QDataStream::BigEndian : QDataStream::LittleEndian);
     ds >> chuMagio;
     return true;
 }
@@ -119,10 +121,8 @@ bool EncTextBlock::read(QDataStream& ds, quint32 varSize, int textOffset, bool h
         // further and its length must be derived, not fixed. See ENCORE_FORMAT.md §5.5 Text block.
         int effTextOffset = textOffset;
         if (hasRunHeader && entrySize >= 4) {
-            // The header carries two independent counts: a run-offset table count at +0 (uint32
-            // entries) and a formatting-descriptor count at +2 (6-byte descriptors); text starts
-            // after both, at 4 + tableCount*4 + descCount*6. Assuming a single descriptor reads too
-            // early on multi-descriptor entries and misdecodes the text as byte-swapped UTF-16.
+            // Two independent counts, a run-offset table and a formatting-descriptor count, and the text starts
+            // past both; assuming one descriptor reads too early. See ENCORE_FORMAT.md 5.5.
             const int tableCount = static_cast<quint8>(payload[0])
                                    | (static_cast<quint8>(payload[1]) << 8);
             const int descCount  = static_cast<quint8>(payload[2])
@@ -140,7 +140,7 @@ bool EncTextBlock::read(QDataStream& ds, quint32 varSize, int textOffset, bool h
         if (entrySize >= effTextOffset + 2) {
             const quint8 b0 = static_cast<quint8>(payload[effTextOffset]);
             const quint8 b1 = static_cast<quint8>(payload[effTextOffset + 1]);
-            const bool isUtf16 = (b0 >= 0x20 && b0 < 0x7F && b1 == 0x00);
+            const bool isUtf16 = probeUtf16LE(b0, b1);
             // Decode the whole text region, then post-process: multi-line comments separate lines
             // with U+0004 and terminate with a U+0000 null. See ENCORE_FORMAT.md §5.5 Text block.
             const int textBytes = entrySize - effTextOffset;

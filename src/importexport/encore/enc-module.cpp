@@ -53,7 +53,7 @@ void EncoreModule::resolveImports()
 {
     auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "enc" }, std::make_shared<NotationEncoreReader>());
+        readers->reg({ "enc", "mus" }, std::make_shared<NotationEncoreReader>());
     }
 }
 

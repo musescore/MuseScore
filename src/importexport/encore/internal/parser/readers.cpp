@@ -87,10 +87,6 @@ quint8 byteAt(QDataStream& ds, qint64 offset)
     return value;
 }
 
-bool isReadableEncoreMagic(const QString& magic)
-{
-    return magic == "SCOW" || magic == "SCO5" || magic == "SCOR";
-}
 qint64 clampMeasureEnd(qint64 measStart, quint32 varsize, qint64 elemBlockOffset, qint64 deviceSize)
 {
     const qint64 end = measStart + static_cast<qint64>(varsize) + elemBlockOffset;
@@ -99,7 +95,8 @@ qint64 clampMeasureEnd(qint64 measStart, quint32 varsize, qint64 elemBlockOffset
 
 bool isReadableEncoreMagic(const QString& magic)
 {
-    return magic == "SCOW" || magic == "SCO5";
+    return magic == "SCOW" || magic == "SCO5" || magic == "SCOR"
+           || magic == "MTIW" || magic == "MTIM";
 }
 
 QString encFormatVersionString(quint16 formatVersion)
@@ -110,11 +107,31 @@ QString encFormatVersionString(quint16 formatVersion)
            .arg(formatVersion & 0xFF, 2, 16, QChar('0'));
 }
 
+// The generation a file belongs to, from its format version alone. The version byte says the same
+// thing where a container has one, and this is what decides where it does not.
+// See ENCORE_FORMAT.md §1.7 Choosing a reader.
+static std::unique_ptr<EncFormatReader> readerForFormatVersion(quint16 formatVersion)
+{
+    if (formatVersion < ENC_FORMAT_3_05) {
+        return std::make_unique<EncFormatReader_V0xA6>();
+    }
+    if (formatVersion < ENC_FORMAT_4_20) {
+        return makeFormatReader_V0xC2(formatVersion);
+    }
+    return makeFormatReader_V0xC4();
+}
+
 // SCO5 is matched by magic because its version byte is not 0xC4 even though it shares that format.
 std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const QString& magic, quint16 formatVersion)
 {
     if (magic == "SCO5") {
         return makeFormatReader_SCO5();
+    }
+    // The macOS MusicTime container has no version byte where the others keep one, so its format
+    // version decides on its own. The Windows one carries the byte in the usual place and moves
+    // through the same generations Encore does, so it follows the same rules below.
+    if (magic == "MTIM") {
+        return readerForFormatVersion(formatVersion);
     }
     switch (chuMagio) {
     case static_cast<quint8>(EncFormatVersion::V2_X):
@@ -130,18 +147,9 @@ std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const 
     // An unknown version byte still places itself: the format version is ordered, so the file
     // reads as the newest generation it is not older than.
     // See ENCORE_FORMAT.md §1.5 The version byte, and where it disagrees.
-    const char* readAs = nullptr;
-    std::unique_ptr<EncFormatReader> reader;
-    if (formatVersion < ENC_FORMAT_3_05) {
-        readAs = "2.50";
-        reader = std::make_unique<EncFormatReader_V0xA6>();
-    } else if (formatVersion < ENC_FORMAT_4_20) {
-        readAs = "3.05";
-        reader = makeFormatReader_V0xC2(formatVersion);
-    } else {
-        readAs = "4.20";
-        reader = makeFormatReader_V0xC4();
-    }
+    const char* readAs = (formatVersion < ENC_FORMAT_3_05) ? "2.50"
+                         : (formatVersion < ENC_FORMAT_4_20) ? "3.05" : "4.20";
+    std::unique_ptr<EncFormatReader> reader = readerForFormatVersion(formatVersion);
     LOGW() << QString("Encore: version byte 0x%1 is not known; the file states format %2, reading it as %3")
         .arg(chuMagio, 2, 16, QChar('0'))
         .arg(encFormatVersionString(formatVersion))
