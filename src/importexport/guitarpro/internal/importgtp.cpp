@@ -1249,7 +1249,6 @@ void GuitarPro::setTempo(int newTempo, Measure* measure)
         segment->add(tt);
         tempo = newTempo;
         last_tempo = newTempo;
-        score->setTempo(measure->tick(), BeatsPerSecond::fromBPM(newTempo));
     }
 }
 

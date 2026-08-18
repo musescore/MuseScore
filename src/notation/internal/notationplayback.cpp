@@ -36,7 +36,7 @@
 #include "engraving/dom/soundflag.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
-#include "engraving/dom/tempo.h"
+#include "engraving/dom/tempotimeline.h"
 #include "engraving/dom/utils.h"
 
 #include "notationerrors.h"
@@ -407,7 +407,7 @@ const Tempo& NotationPlayback::multipliedTempo(tick_t tick) const
         return empty;
     }
 
-    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->multipliedTempo(tick).toBPM().val));
+    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->multipliedTempo(Fraction::fromTicks(tick)).toBPM().val));
 
     return m_currentTempo;
 }
@@ -424,7 +424,7 @@ tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
 
 double NotationPlayback::tempoMultiplier() const
 {
-    return score() ? score()->tempomap()->tempoMultiplier().val : 1.0;
+    return score() ? score()->tempoTimeline().tempoMultiplier().val : 1.0;
 }
 
 void NotationPlayback::setTempoMultiplier(double multiplier)
@@ -434,7 +434,7 @@ void NotationPlayback::setTempoMultiplier(double multiplier)
         return;
     }
 
-    if (!score->tempomap()->setTempoMultiplier(multiplier)) {
+    if (!score->masterScore()->setTempoMultiplier(multiplier)) {
         return;
     }
 

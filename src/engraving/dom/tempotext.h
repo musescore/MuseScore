@@ -58,7 +58,7 @@ public:
     TempoTextType tempoTextType() const { return m_tempoTextType; }
     void setTempoTextType(TempoTextType);
 
-    BeatsPerSecond tempo() const { return m_tempo; }
+    BeatsPerSecond tempo() const;
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
     bool isRelative() const { return m_isRelative; }
@@ -80,7 +80,6 @@ public:
     void setFollowText(bool v) { m_followText = v; }
 
     void updateTempo();
-    void updateRelative();
 
     TDuration duration() const;
 

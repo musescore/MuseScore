@@ -133,6 +133,7 @@ class Staff;
 class System;
 class TDuration;
 class TempoMap;
+class TempoTimeline;
 class Text;
 class TimeSig;
 class TimeSigMap;
@@ -632,6 +633,7 @@ public:
     void setPause(const Fraction& tick, double seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
     BeatsPerSecond multipliedTempo(const Fraction& tick) const;
+    BeatsPerSecond multipliedTempoAtUtick(int utick) const;
 
     Text* getText(TextStyleType subtype) const;
 
@@ -668,6 +670,7 @@ public:
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
+    const TempoTimeline& tempoTimeline() const;
 
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }

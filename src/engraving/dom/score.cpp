@@ -109,6 +109,7 @@
 #include "systemdivider.h"
 #include "tempo.h"
 #include "tempotext.h"
+#include "tempotimeline.h"
 #include "text.h"
 #include "tie.h"
 #include "tiemap.h"
@@ -1791,22 +1792,19 @@ Segment* Score::lastSegmentMM() const
     return m ? m->last() : 0;
 }
 
-//---------------------------------------------------------
-//   utick2utime
-//---------------------------------------------------------
-
 double Score::utick2utime(int tick) const
 {
-    return repeatList().utick2utime(tick);
+    return tempoTimeline().utick2utime(tick);
 }
-
-//---------------------------------------------------------
-//   utime2utick
-//---------------------------------------------------------
 
 int Score::utime2utick(double utime) const
 {
-    return repeatList().utime2utick(utime);
+    return tempoTimeline().utime2utick(utime);
+}
+
+const TempoTimeline& Score::tempoTimeline() const
+{
+    return masterScore()->tempoTimeline();
 }
 
 //---------------------------------------------------------
@@ -3808,18 +3806,20 @@ void Score::setPause(const Fraction& tick, double seconds)
     tempomap()->setPause(tick.ticks(), seconds);
 }
 
-//---------------------------------------------------------
-//   tempo
-//---------------------------------------------------------
-
 BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
-    return tempomap()->tempo(tick.ticks());
+    const int utick = repeatList().tick2utick(tick.ticks());
+    return tempoTimeline().tempo(utick);
 }
 
 BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
 {
-    return tempomap()->multipliedTempo(tick.ticks());
+    return tempo(tick) * tempoTimeline().tempoMultiplier();
+}
+
+BeatsPerSecond Score::multipliedTempoAtUtick(int utick) const
+{
+    return tempoTimeline().tempo(utick) * tempoTimeline().tempoMultiplier();
 }
 
 //---------------------------------------------------------

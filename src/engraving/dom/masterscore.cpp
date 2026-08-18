@@ -200,8 +200,8 @@ void MasterScore::setExpandRepeats(bool expand)
 
 void MasterScore::updateRepeatListTempo()
 {
-    m_expandedRepeatList->updateTempo();
-    m_nonExpandedRepeatList->updateTempo();
+    m_expandedRepeatList->updateUticks();
+    m_nonExpandedRepeatList->updateUticks();
 }
 
 void MasterScore::updateRepeatList()
@@ -234,6 +234,25 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) c
 
     m_nonExpandedRepeatList->update(false, updateTies);
     return *m_nonExpandedRepeatList;
+}
+
+const TempoTimeline& MasterScore::tempoTimeline() const
+{
+    return m_automationController->tempoTimeline();
+}
+
+bool MasterScore::setTempoMultiplier(BeatsPerSecond val)
+{
+    IF_ASSERT_FAILED(val > BeatsPerSecond(0.0)) {
+        return false;
+    }
+
+    if (m_automationController->tempoTimeline().tempoMultiplier() == val) {
+        return false;
+    }
+
+    m_automationController->setTempoMultiplier(val);
+    return true;
 }
 
 //---------------------------------------------------------

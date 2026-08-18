@@ -28,6 +28,7 @@
 
 #include "engraving/automation/automationdata.h"
 #include "engraving/automation/automationtypes.h"
+#include "engraving/dom/tempotimeline.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
@@ -53,6 +54,9 @@ public:
     void setAutomationData(AutomationDataPtr data);
 
     void editPoints(const AutomationCurveKey& key, AutomationPointEdits& edits);
+
+    const TempoTimeline& tempoTimeline() const { return m_tempoTimeline; }
+    void setTempoMultiplier(const BeatsPerSecond& bps) { m_tempoTimeline.setTempoMultiplier(bps); }
 
 private:
     struct StaffRange {
@@ -149,5 +153,6 @@ private:
 
     Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
+    TempoTimeline m_tempoTimeline;
 };
 }

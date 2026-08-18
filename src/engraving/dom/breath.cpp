@@ -174,5 +174,4 @@ muse::TranslatableString Breath::subtypeUserName() const
 {
     return SymNames::userNameForSymId(symId());
 }
-
 }
