@@ -36,6 +36,9 @@ target_sources(iex_encore PRIVATE
     internal/parser/parsers-root.cpp
     internal/parser/parsers-encoding.h
     internal/parser/parsers-encoding.cpp
+    internal/parser/zbot.h
+    internal/parser/zbot.cpp
+    internal/parser/zbot_table.cpp
     internal/parser/readers.h
     internal/parser/readers.cpp
     internal/parser/readers-v0xa6.h

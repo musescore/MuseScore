@@ -25,6 +25,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
     ${CMAKE_CURRENT_LIST_DIR}/tst_smoke.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_zbot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_ticks.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_v0xa6.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_parser_chord.cpp
