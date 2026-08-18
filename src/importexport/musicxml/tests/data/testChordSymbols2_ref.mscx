@@ -21,6 +21,7 @@
       <staffLineWidth>0.09375</staffLineWidth>
       <ledgerLineWidth>0.15625</ledgerLineWidth>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
+      <fretFrets>5</fretFrets>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
       <concertPitch>1</concertPitch>
@@ -142,8 +143,15 @@
             <sigD>4</sigD>
             </TimeSig>
           <FretDiagram>
-            <frets>5</frets>
             <eid>K_K</eid>
+            <Harmony>
+              <harmonyInfo>
+                <name>add9</name>
+                <root>13</root>
+                <bass>17</bass>
+                </harmonyInfo>
+              <eid>L_L</eid>
+              </Harmony>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -165,14 +173,6 @@
                 </string>
               </fretDiagram>
             </FretDiagram>
-          <Harmony>
-            <harmonyInfo>
-              <name>add9</name>
-              <root>13</root>
-              <bass>17</bass>
-              </harmonyInfo>
-            <eid>L_L</eid>
-            </Harmony>
           <Chord>
             <eid>M_M</eid>
             <durationType>whole</durationType>
@@ -188,8 +188,13 @@
         <eid>O_O</eid>
         <voice>
           <FretDiagram>
-            <frets>5</frets>
             <eid>P_P</eid>
+            <Harmony>
+              <harmonyInfo>
+                <root>12</root>
+                </harmonyInfo>
+              <eid>Q_Q</eid>
+              </Harmony>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -206,12 +211,6 @@
               <barre start="1" end="5">1</barre>
               </fretDiagram>
             </FretDiagram>
-          <Harmony>
-            <harmonyInfo>
-              <root>12</root>
-              </harmonyInfo>
-            <eid>Q_Q</eid>
-            </Harmony>
           <Chord>
             <eid>R_R</eid>
             <durationType>whole</durationType>
