@@ -43,6 +43,12 @@ public:
         qreal heightYN = 1.0;
         bool selected = false;
         bool userModified = false; // either playback offset is non-zero
+
+        // A tie-chain fragment only offers the handle for the edge it actually owns: the start
+        // handle on the chain's first note, the duration handle on its last - an intermediate
+        // fragment (or one whose own chain-end lives in a different system) has neither.
+        bool hasLeftHandle = true;
+        bool hasRightHandle = true;
     };
 
     explicit NoteOffsetOverlay(QQuickItem* parent);
