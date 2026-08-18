@@ -290,24 +290,42 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 void StartAudioController::stopAudioProcessing()
 {
 #ifndef Q_OS_WASM
-    m_rpcChannel->send(rpc::make_request(Method::EngineDeinit), [this](const Msg&) {
+    /* Process pending incoming messages first, so that if the engine start
+     * has not been completed yet (EngineRunning has not been received), EngineInit
+     * is sent before the EngineDeinit request below, and the engine is not
+     * initialized again right after having been deinited. */
+    m_rpcChannel->process();
+
+    /* We must wait for the engine to be deinited, because deinit is what unsubscribes
+     * the engine objects from their channels (and it can only be done on the engine
+     * thread while it is still running). If we stop the engine thread before that, the
+     * subscriptions remain dangling and crash when the engine objects are destroyed. */
+    auto isEngineDeinited = std::make_shared<bool>(false);
+    m_rpcChannel->send(rpc::make_request(Method::EngineDeinit), [this, isEngineDeinited](const Msg&) {
+        *isEngineDeinited = true;
         if (m_isAudioStarted.val) {
             m_isAudioStarted.set(false);
         }
     });
 
+    constexpr size_t MAX_WAIT_DEINIT_ATTEMPTS = 100; // 100 * 10 ms = 1 sec
+    size_t attempts = 0;
     do {
         // Ensure that RPC process() is called at least once
         m_rpcChannel->process();
 
-        if (!m_isAudioStarted.val) {
+        if (*isEngineDeinited) {
             break;
         }
 
         std::this_thread::yield();
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(10ms);
-    } while (m_isAudioStarted.val);
+    } while (++attempts < MAX_WAIT_DEINIT_ATTEMPTS);
+
+    if (!*isEngineDeinited) {
+        LOGW() << "Failed to deinit the audio engine";
+    }
 
     audioDriverController()->close();
 
