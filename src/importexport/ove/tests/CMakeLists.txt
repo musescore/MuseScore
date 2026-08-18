@@ -1,3 +1,4 @@
+#
 # SPDX-License-Identifier: GPL-3.0-only
 # MuseScore-Studio-CLA-applies
 #
@@ -16,28 +17,26 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
 
-muse_create_module(iex_ove)
+set(MODULE_TEST iex_ove_tests)
 
-target_sources(iex_ove PRIVATE
-    ovemodule.cpp
-    ovemodule.h
-    ioveconfiguration.h
-    internal/oveconfiguration.cpp
-    internal/oveconfiguration.h
-    internal/overeader.cpp
-    internal/overeader.h
-    internal/importove.cpp
-    internal/ove.cpp
-    internal/ove.h
+set(MODULE_TEST_SRC
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorerw.h
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.cpp
+    ${PROJECT_SOURCE_DIR}/src/engraving/tests/utils/scorecomp.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ove_tests.cpp
 )
 
-target_link_libraries(iex_ove PRIVATE
+set(MODULE_TEST_LINK
     engraving
-    Qt::Core5Compat
+    iex_ove
 )
 
-if (MUE_BUILD_IMPORTEXPORT_TESTS)
-    add_subdirectory(tests)
-endif()
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(SetupGTest)
