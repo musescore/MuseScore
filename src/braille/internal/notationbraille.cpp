@@ -82,6 +82,12 @@ void NotationBraille::init()
         setIntervalDirection(direction);
     });
 
+    // The Braille generator reads signDoubling directly from configuration, so no value
+    // needs threading here; we just force a re-render so the panel reflects the change immediately.
+    brailleConfiguration()->signDoublingChanged().onNotify(this, [this]() {
+        doBraille(true);
+    });
+
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         if (notation()) {
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
