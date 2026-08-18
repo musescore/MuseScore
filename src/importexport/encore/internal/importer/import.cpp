@@ -408,38 +408,39 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->masterScore()->invalidateRepeatList();
 }
 
+// What to tell the user about a file that failed to load, from its header alone. Encore's two
+// extensions are shared with several neighbours, so whoever reaches this message has often opened
+// one of those by mistake and needs the way out, not a verdict. See ENCORE_FORMAT.md §1.2.
 muse::String encoreLoadErrorMessage(const QString& path)
 {
+    struct Foreign {
+        QByteArray magic;
+        const char* program;
+    };
+    static const std::vector<Foreign> foreign {
+        { QByteArrayLiteral("ENIGMA "), "Finale" },
+        { QByteArrayLiteral("Finale(R)"), "Finale" },
+        { QByteArrayLiteral("SOLF"), "Melody Assistant or Harmony Assistant" },
+        { QByteArray("RO\0\0", 4), "Master Tracks Pro" },
+    };
+
     QByteArray head;
     QFile file(path);
     if (file.open(QIODevice::ReadOnly)) {
-        head = file.readAll();
+        head = file.read(16);   // the longest signature above is nine bytes
     }
-    const muse::String name = muse::String::fromQString(QFileInfo(path).fileName());
-
-    // A ZBOT/ZBOP/ZBO6 container is decrypted before parsing (see importEncore); if the load still
-    // failed, report on the decrypted SCOW header underneath rather than the encrypted wrapper.
-    if (head.size() >= 4 && isZbotMagic(head.left(4))) {
-        zbotDecrypt(head);
+    for (const Foreign& f : foreign) {
+        if (head.startsWith(f.magic)) {
+            return muse::mtrc("engraving",
+                              "The Encore importer cannot open %1 files. Open the file in %1 and export it as "
+                              "MusicXML, then open the MusicXML file instead.")
+                   .arg(muse::String::fromUtf8(f.program));
+        }
     }
-    const QByteArray magic = head.left(4);
-
-    // Recognizable Encore header, but the file could not be parsed: unsupported variant, damaged,
-    // or empty.
-    if (isReadableEncoreMagic(QString::fromLatin1(magic))) {
-        const QString ver = QStringLiteral("%1").arg(
-            head.size() >= 5 ? static_cast<unsigned char>(head[4]) : 0, 2, 16, QChar('0'));
-        return muse::mtrc("engraving",
-                          "“%1” could not be read as an Encore file (format version 0x%2). It may be damaged "
-                          "or use an unsupported variant. Try opening it in Encore and saving it again, then "
-                          "import the saved file.")
-               .arg(name).arg(muse::String::fromQString(ver));
-    }
-    // No recognizable Encore header at all.
     return muse::mtrc("engraving",
-                      "“%1” is not a recognized Encore file. Its header does not match any known Encore "
-                      "format, so it may be corrupted or a different type of file.")
-           .arg(name);
+                      "Unrecognized Encore file. The file may be corrupted or have an unsupported format. Try "
+                      "opening it in Encore itself and saving it again, or exporting it as MusicXML from "
+                      "there, then open the result.");
 }
 
 Err importEncore(MasterScore* score, const QString& path, const EncImportOptions& opts)

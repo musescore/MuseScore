@@ -62,6 +62,8 @@ The names pair up the same way on both sides: `SCOW` and `MTIW` on Windows, `SCO
 
 **The magic is the whole test.** A file whose first four bytes are none of the above is not an Encore document and is to be rejected. There is no fallback signature and no recovery: the byte order, the header layout and the position of the first block all follow from the magic, so nothing below it can be read without one.
 
+**Neither extension belongs to Encore alone.** `.mus` in particular is old and widely shared: early Finale wrote its documents under it, and so did other notation programs of the period. A file that fails the magic test is therefore as likely to be another program's document as a damaged Encore one, and each of those programs opens with a signature of its own.
+
 The three encrypted magics are the three plaintext ones seen through the keystream, which is fixed and does not depend on the file: its first four bytes are `09 01 00 03`, and applying them turns `ZBOT` into `SCOW`, `ZBOP` into `SCOS` and `ZBO6` into `SCO5` `[verified]`. The `ZBO6` case is no longer arithmetic: the files carrying it decrypt to a `SCO5` document, every one big-endian format 4.20 with its first block at `0xC2`, which is a macOS Encore 5 file wrapped exactly as a Windows one is `[verified]`. No `ZBOP` file has turned up, so that row still rests on the keystream alone; the risk is contained, since a decrypted buffer has to pass the magic and header check and a file that fails it is rejected rather than imported as wrong music.
 
 `SCOX` appears in earlier descriptions of the format and is absent from the table because it has never been seen.

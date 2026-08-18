@@ -55,14 +55,39 @@ static QString writeTempFile(const QString& name, const QByteArray& bytes)
 
 TEST(EncImporterErrors, UnreadableEncoreFileMessage)
 {
-    // A SCOW header with no valid body: recognizable Encore file, but not parseable.
+    // A SCOW header with no valid body. The message does not separate a damaged Encore file from a
+    // file that was never one: both are equally unopenable and the advice would be the same.
     const QString path = writeTempFile(QStringLiteral("enc_err_scow.enc"),
                                        QByteArray("SCOW") + QByteArray(1, '\xC4') + QByteArray(8, '\0'));
     const QString msg = encoreLoadErrorMessage(path).toQString();
-    EXPECT_TRUE(msg.contains("could not be read", Qt::CaseInsensitive)) << msg.toStdString();
-    EXPECT_TRUE(msg.contains("0xc4", Qt::CaseInsensitive))
-        << "message should report the detected format version byte: " << msg.toStdString();
+    EXPECT_TRUE(msg.contains("Unrecognized Encore file", Qt::CaseInsensitive)) << msg.toStdString();
     QFile::remove(path);
+}
+
+// The .mus extension is shared with Finale and with Myriad's Melody and Harmony Assistant, so the
+// message names the program and says how to get the score out of it.
+TEST(EncImporterErrors, ForeignFormatMessagesNameTheProgram)
+{
+    struct Case {
+        const char* file;
+        QByteArray head;
+        const char* expected;
+    };
+    const std::vector<Case> cases = {
+        { "enc_err_finale.mus",   QByteArray("ENIGMA BINARY FILE") + QByteArray(16, '\0'),        "Finale" },
+        { "enc_err_finale_etf.mus", QByteArray("ENIGMA TRANSPORTABLE FILE") + QByteArray(8, '\0'), "Finale" },
+        { "enc_err_finale_pc.mus", QByteArray("Finale(R) PC 2.0 Copyright") + QByteArray(8, '\0'), "Finale" },
+        { "enc_err_myriad.mus",   QByteArray("SOLF") + QByteArray(20, '\x7F'),                     "Melody Assistant" },
+        { "enc_err_mtpro.mus",    QByteArray("RO\0\0", 4) + QByteArray("song.mts", 8),             "Master Tracks Pro" },
+    };
+    for (const Case& c : cases) {
+        const QString path = writeTempFile(QString::fromLatin1(c.file), c.head);
+        const QString msg = encoreLoadErrorMessage(path).toQString();
+        EXPECT_TRUE(msg.contains(c.expected, Qt::CaseInsensitive)) << c.file << ": " << msg.toStdString();
+        EXPECT_TRUE(msg.contains("export it as MusicXML", Qt::CaseInsensitive))
+            << c.file << ": " << msg.toStdString();
+        QFile::remove(path);
+    }
 }
 
 TEST(EncImporterErrors, NotAnEncoreFileMessage)
@@ -70,6 +95,6 @@ TEST(EncImporterErrors, NotAnEncoreFileMessage)
     const QString path = writeTempFile(QStringLiteral("enc_err_noise.enc"),
                                        QByteArray("\x7F\x45\x4C\x46 random noise not encore", 28));
     const QString msg = encoreLoadErrorMessage(path).toQString();
-    EXPECT_TRUE(msg.contains("not a recognized Encore file", Qt::CaseInsensitive)) << msg.toStdString();
+    EXPECT_TRUE(msg.contains("Unrecognized Encore file", Qt::CaseInsensitive)) << msg.toStdString();
     QFile::remove(path);
 }
