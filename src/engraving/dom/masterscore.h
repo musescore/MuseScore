@@ -51,6 +51,7 @@ class Part;
 class RepeatList;
 class Revisions;
 class TempoMap;
+class TempoTimeline;
 class TimeSigMap;
 class UndoStack;
 class ScoreAutomationController;
@@ -121,6 +122,9 @@ public:
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
 
     void invalidateRepeatList();
+
+    const TempoTimeline& tempoTimeline() const;
+    bool setTempoMultiplier(BeatsPerSecond val);
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }

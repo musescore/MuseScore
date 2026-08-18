@@ -422,6 +422,10 @@ void ScoreAutomationController::update(int tickFrom, staff_idx_t staffIdxFrom, s
     // Step 5: Mirror global/instrument points to repeats (e.g. Tempo, Volume, Pan)
     mirrorGlobalAndInstrumentPointsToRepeats(ctx);
 
+    //! TODO: build the Tempo curve here directly
+    //! TODO: seconda volta with repeat end must reset tempo to its pre-volta value (was Volta::setTempo)
+    m_tempoTimeline.rebuild(AutomationCurve {}, {});
+
     // Step 6: the new curves are fully built; merge them back, replacing only the affected ones
     m_automationData->replaceCurves(ctx.curves);
 }

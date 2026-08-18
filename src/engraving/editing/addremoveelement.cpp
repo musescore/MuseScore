@@ -36,7 +36,6 @@
 #include "../dom/spanner.h"
 #include "../dom/staff.h"
 #include "../dom/system.h"
-#include "../dom/tempotext.h"
 #include "../dom/tie.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/tuplet.h"
@@ -366,9 +365,6 @@ void ChangeElement::flip()
         if (!ks->generated()) {
             ks->staff()->setKey(ks->tick(), ks->keySigEvent());
         }
-    } else if (newElement->isTempoText()) {
-        TempoText* t = toTempoText(oldElement);
-        score->setTempo(t->segment(), t->tempo());
     }
 
     if (newElement->isSpannerSegment()) {

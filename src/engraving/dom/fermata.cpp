@@ -291,5 +291,4 @@ Sid Fermata::defaultPosSid() const
 {
     return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
 }
-
 }

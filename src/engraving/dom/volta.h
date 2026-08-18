@@ -76,7 +76,6 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
     void setChannel() const;
-    void setTempo() const;
 
     std::vector<int> endings() const { return m_endings; }
     std::vector<int>& endings() { return m_endings; }

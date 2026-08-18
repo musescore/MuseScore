@@ -34,7 +34,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-#include "tempo.h"
 
 #include "log.h"
 
@@ -179,7 +178,7 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->tempomap()->multipliedTempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+    double ratio = score()->multipliedTempo(segment()->tick()).val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:

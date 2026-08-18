@@ -29,9 +29,10 @@
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/sig.h"
-#include "dom/tempo.h"
 #include "dom/staff.h"
 #include "dom/utils.h"
+
+#include "types/bps.h"
 
 #include "utils/arrangementutils.h"
 
@@ -155,7 +156,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     ArticulationMap articulations = makeStandardArticulationMap(profile, eventTimestamp, duration);
 
-    double bps = score->tempomap()->multipliedTempo(positionTick).val;
+    double bps = score->multipliedTempoAtUtick(positionTickWithOffset).val;
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -226,10 +227,10 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const Measure* 
     int measureEndTick = measure->endTick().ticks();
 
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).nominal();
-    BeatsPerSecond bps = score->tempomap()->multipliedTempo(measureStartTick);
 
-    int step = timeSignatureFraction.isBeatedCompound(bps.val)
-               ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
+    const BeatsPerSecond measureBps = score->multipliedTempoAtUtick(measureStartTick + ticksPositionOffset);
+    const int step = timeSignatureFraction.isBeatedCompound(measureBps.val)
+                     ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
 
     int startTick = measureStartTick;
     int rtick = 0;
@@ -240,7 +241,11 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const Measure* 
         rtick = remainingTicks + timeSignatureFraction.ticksPerMeasure() - measure->ticks().ticks();
     }
 
+    // Tempo can change mid-measure (automation point or ramp), so re-read it for every click
+    // rather than reusing the tempo from the start of the measure; the click grid itself stays fixed
     for (int tick = startTick; tick < measureEndTick; tick += step, rtick += step) {
+        const BeatsPerSecond bps = score->multipliedTempoAtUtick(tick + ticksPositionOffset);
+
         timestamp_t eventTimestamp = timestampFromTicks(score, tick + ticksPositionOffset);
         BeatType beatType = timeSignatureFraction.rtick2beatType(rtick);
         mpe::NoteEvent event = buildMetronomeEvent(timeSignatureFraction, bps.val, beatType, eventTimestamp, profile);
@@ -257,7 +262,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
     }
 
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(tick).timesig();
-    BeatsPerSecond bps = score->tempomap()->multipliedTempo(tick);
+    BeatsPerSecond bps = score->multipliedTempo(Fraction::fromTicks(tick));
     BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
     mpe::NoteEvent event = buildMetronomeEvent(timeSignatureFraction, bps.val, beatType, actualTimestamp, profile);
 
@@ -275,7 +280,7 @@ void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTi
 
     int measureStartTick = measure->tick().ticks();
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).nominal();
-    BeatsPerSecond bps = score->tempomap()->multipliedTempo(measureStartTick);
+    BeatsPerSecond bps = score->multipliedTempo(Fraction::fromTicks(measureStartTick));
     int ticksPerMeasure = timeSignatureFraction.ticksPerMeasure();
 
     int step = timeSignatureFraction.isBeatedCompound(bps.val)

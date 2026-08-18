@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <cmath>
 
 #include <unordered_map>
@@ -214,13 +215,17 @@ String TempoText::duration2tempoTextString(const TDuration dur)
 }
 
 //---------------------------------------------------------
-// updateRelative
+// tempo
 //---------------------------------------------------------
 
-void TempoText::updateRelative()
+BeatsPerSecond TempoText::tempo() const
 {
-    BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::eps());
-    setTempo(tempoBefore * m_relative);
+    if (m_isRelative) {
+        const BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::eps());
+        const BeatsPerSecond v = tempoBefore * m_relative;
+        return BeatsPerSecond(std::clamp(v.val, Constants::MIN_TEMPO.val, Constants::MAX_TEMPO.val));
+    }
+    return m_tempo;
 }
 
 //---------------------------------------------------------
@@ -271,7 +276,7 @@ void TempoText::updateTempo()
         if (!match.empty()) {
             if (match.size() == 2) {
                 BeatsPerSecond nt = BeatsPerSecond(String::fromStdString(match[1].str()).toDouble() * pa.f);
-                if (nt != m_tempo) {
+                if (m_isRelative || nt != m_tempo) {
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     m_relative = 1.0;
                     m_isRelative = false;
@@ -293,7 +298,6 @@ void TempoText::updateTempo()
                 if (!match2.empty()) {
                     m_relative = pa2.f / pa.f;
                     m_isRelative = true;
-                    updateRelative();
                     return;
                 }
             }
@@ -313,6 +317,8 @@ void TempoText::setTempo(BeatsPerSecond v)
         v = Constants::MAX_TEMPO;
     }
     m_tempo = v;
+    m_relative = 1.0;
+    m_isRelative = false;
 }
 
 //---------------------------------------------------------

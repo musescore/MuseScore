@@ -30,7 +30,7 @@
 #include "dom/repeatlist.h"
 #include "dom/score.h"
 #include "dom/sig.h"
-#include "dom/tempo.h"
+#include "dom/tempotimeline.h"
 
 #include "log.h"
 
@@ -41,7 +41,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 //   calculate
 //    MIDI files cannot contain pauses so insert extra ticks and tempo changes instead.
-//    The PauseMap and new TempoMap are fully unwound to account for pauses on repeats.
+//    The PauseMap and tempo events are fully unwound to account for pauses on repeats.
 //---------------------------------------------------------
 
 void PauseMap::calculate(const Score* s)
@@ -50,43 +50,28 @@ void PauseMap::calculate(const Score* s)
         LOGE() << "failed to calculate pause map";
     }
 
-    TimeSigMap* sigmap = s->sigmap();
-    TempoMap* tempomap = s->tempomap();
-
     insert(std::pair<const int, int>(0, 0));    // can't start with a pause
 
-    m_tempomapWithPauses = std::make_shared<TempoMap>();
-    m_tempomapWithPauses->setTempoMultiplier(tempomap->tempoMultiplier());
+    const TimeSigMap* sigmap = s->sigmap();
+    const RepeatList& repeatList = s->repeatList();
 
-    for (const RepeatSegment* rs : s->repeatList()) {
-        int startTick  = rs->tick;
-        int endTick    = rs->endTick();
-        int tickOffset = rs->utick - rs->tick;
+    for (const TempoTimePoint& point : s->tempoTimeline().points()) {
+        const int utick = point.utick;
 
-        auto se = tempomap->lower_bound(startTick);
-        auto ee = tempomap->lower_bound(endTick + 1);   // +1 to include first tick of next RepeatSegment
-
-        for (auto it = se; it != ee; ++it) {
-            int tick = it->first;
-            int utick = tick + tickOffset;
-
-            if (RealIsNull(it->second.pause)) {
-                // We have a regular tempo change. Don't include tempo change from first tick of next RepeatSegment (it will be included later).
-                if (tick != endTick) {
-                    m_tempomapWithPauses->insert(std::pair<const int, TEvent>(tickWithPauses(utick), it->second));
-                }
-            } else {
-                // We have a pause event. Don't include pauses from first tick of current RepeatSegment (it was included in the previous one).
-                if (tick != startTick) {
-                    Fraction timeSig(sigmap->timesig(tick).timesig());
-                    double quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
-                    int ticksPerMeasure =  quarterNotesPerMeasure * Constants::DIVISION;           // store a full measure of ticks to keep barlines in same places
-                    m_tempomapWithPauses->setTempo(tickWithPauses(utick), quarterNotesPerMeasure / it->second.pause);           // new tempo for pause
-                    insert(std::pair<const int, int>(utick, ticksPerMeasure + offsetAtUTick(utick)));            // store running total of extra ticks
-                    m_tempomapWithPauses->setTempo(tickWithPauses(utick), it->second.tempo);           // restore previous tempo
-                }
-            }
+        if (point.pause <= 0.0) {
+            // We have a regular tempo change.
+            m_tempoEvents[tickWithPauses(utick)] = point.bps;
+            continue;
         }
+
+        // We have a pause event.
+        const int tick = repeatList.utick2tick(utick);
+        Fraction timeSig(sigmap->timesig(tick).timesig());
+        double quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
+        int ticksPerMeasure =  quarterNotesPerMeasure * Constants::DIVISION;           // store a full measure of ticks to keep barlines in same places
+        m_tempoEvents[tickWithPauses(utick)] = quarterNotesPerMeasure / point.pause;           // new tempo for pause
+        insert(std::pair<const int, int>(utick, ticksPerMeasure + offsetAtUTick(utick)));            // store running total of extra ticks
+        m_tempoEvents[tickWithPauses(utick)] = point.bps;           // restore previous tempo
     }
 }
 
