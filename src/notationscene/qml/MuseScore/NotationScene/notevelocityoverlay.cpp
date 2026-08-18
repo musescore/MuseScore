@@ -281,6 +281,7 @@ void NoteVelocityOverlay::mousePressEvent(QMouseEvent* e)
 
     m_pressed = true;
     m_activeRectIndex = hit;
+    m_dragStartYN = e->position().y() / std::max(1.0, height());
     e->accept();
 }
 
@@ -290,8 +291,12 @@ void NoteVelocityOverlay::mouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    const qreal yN = std::clamp(e->position().y() / std::max(1.0, height()), 0.0, 1.0);
-    emit barDragged(m_activeRectIndex, yN, false);
+    // Not clamped to [0, 1] - unlike the drag-start position, which is always a valid in-bounds
+    // click on a bar, the mouse can (and, mid-drag, routinely does) move outside this item's own
+    // bounds while still grabbed; clamping here would flatten the delta near the edges instead of
+    // tracking the mouse's actual displacement all the way through.
+    const qreal yN = e->position().y() / std::max(1.0, height());
+    emit barDragged(m_activeRectIndex, yN - m_dragStartYN, false);
 }
 
 void NoteVelocityOverlay::mouseReleaseEvent(QMouseEvent* e)
@@ -300,8 +305,8 @@ void NoteVelocityOverlay::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    const qreal yN = std::clamp(e->position().y() / std::max(1.0, height()), 0.0, 1.0);
-    emit barDragged(m_activeRectIndex, yN, true);
+    const qreal yN = e->position().y() / std::max(1.0, height());
+    emit barDragged(m_activeRectIndex, yN - m_dragStartYN, true);
 
     m_pressed = false;
     m_activeRectIndex = -1;

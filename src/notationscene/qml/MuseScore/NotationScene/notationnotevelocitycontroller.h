@@ -111,7 +111,7 @@ private:
 
     void onCurrentNotationChanged();
     void scheduleRebuild();
-    void onBarDragged(const SysStaffKey& key, int rectIndex, qreal newYN, bool completed);
+    void onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed);
     void previewBarHeight(const NoteLocation& location, int newVelocity);
 
     std::vector<mu::engraving::Note*> selectedNotes() const;

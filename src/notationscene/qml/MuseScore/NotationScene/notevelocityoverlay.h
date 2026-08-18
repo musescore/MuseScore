@@ -76,7 +76,11 @@ public:
     bool isDragging() const { return m_pressed; }
 
 signals:
-    void barDragged(int rectIndex, qreal newYN, bool completed);
+    // deltaYN is the mouse's own vertical displacement (normalized to this item's height) since
+    // the press that started this drag, not an absolute position - clicking anywhere on a bar acts
+    // as a drag handle for it, nudging its velocity relative to wherever it already was, rather
+    // than jumping the value to whatever the click position happens to correspond to.
+    void barDragged(int rectIndex, qreal deltaYN, bool completed);
 
 protected:
     void hoverMoveEvent(QHoverEvent* e) override;
@@ -101,5 +105,6 @@ private:
 
     bool m_pressed = false;
     int m_activeRectIndex = -1;
+    qreal m_dragStartYN = 0.0;
 };
 }

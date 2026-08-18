@@ -315,8 +315,8 @@ void NotationNoteVelocityController::createOverlayForStaff(const System* system,
         applyOverlayColors(overlay);
         overlay->setVisible(false);
 
-        QObject::connect(overlay, &NoteVelocityOverlay::barDragged, [this, key](int rectIndex, qreal newYN, bool completed) {
-            onBarDragged(key, rectIndex, newYN, completed);
+        QObject::connect(overlay, &NoteVelocityOverlay::barDragged, [this, key](int rectIndex, qreal deltaYN, bool completed) {
+            onBarDragged(key, rectIndex, deltaYN, completed);
         });
     }
 
@@ -444,7 +444,7 @@ void NotationNoteVelocityController::previewBarHeight(const NoteLocation& locati
     data.overlay->updateRect(location.rectIndex, rect);
 }
 
-void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int rectIndex, qreal newYN, bool completed)
+void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed)
 {
     const auto dataIt = m_overlaysByStaff.find(key);
     IF_ASSERT_FAILED(key.isValid() && dataIt != m_overlaysByStaff.end()
@@ -459,14 +459,23 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
         return;
     }
 
-    const double canvasY = data.bandRect.y() + newYN * data.bandRect.height();
-    const int newVelocity = std::clamp(velocityFromCanvasY(draggedEntry.yRange, canvasY),
-                                       MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
+    // The whole bar is a drag handle, wherever it was clicked - deltaYN is the mouse's own
+    // displacement since the press, never an absolute position, so this nudges the note's velocity
+    // by however far the mouse has moved rather than snapping it to whatever value the click
+    // position happens to correspond to. Computed directly from the y0-y127 span rather than via
+    // velocityFromCanvasY(), which clamps its result to [0, 127] - fine for an absolute position,
+    // but that clamp would floor every downward (negative) delta to 0 and make the bar impossible
+    // to drag back down.
+    const double deltaCanvasY = deltaYN * data.bandRect.height();
+    const double span = draggedEntry.yRange.y127 - draggedEntry.yRange.y0;
+    const int deltaVelocity = std::abs(span) < 1e-9 ? 0 : static_cast<int>(std::lround(deltaCanvasY / span * 127.0));
+    const int startVelocity = displayedVelocity(draggedNote);
+    const int newVelocity = std::clamp(startVelocity + deltaVelocity, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
 
     // If the dragged note is part of a multi-note selection, apply the same velocity delta to
     // every other selected note - including notes hidden behind others in the same chord's
     // stack - each clamped independently. Only what's selected moves.
-    const int delta = newVelocity - displayedVelocity(draggedNote);
+    const int delta = newVelocity - startVelocity;
 
     std::vector<Note*> affectedNotes { draggedNote };
     if (delta != 0 || !completed) {
