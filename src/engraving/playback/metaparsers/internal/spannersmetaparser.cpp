@@ -30,7 +30,9 @@
 #include "dom/tempo.h"
 
 #include "playback/utils/pitchutils.h"
+#include "playback/utils/arrangementutils.h"
 #include "playback/filters/spannerfilter.h"
+#include "dom/mscore.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -142,6 +144,16 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         return;
     }
 
+    int durationTicks = overallDurationTicks;
+
+    if (spanner->type() == ElementType::PEDAL) {
+        int gapTicks = 0;
+        if (MScore::pedalReleaseGapMs > 0) {
+            gapTicks = std::max(1, ticksFromTempoAndDuration(spannerCtx.beatsPerSecond.val, MScore::pedalReleaseGapMs * 1000));
+        }
+        durationTicks = std::max(1, overallDurationTicks - gapTicks);
+    }
+
     mpe::ArticulationMeta articulationMeta;
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
@@ -150,7 +162,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
     articulationMeta.overallDuration = durationFromStartAndTicks(spannerCtx.score,
                                                                  spannerCtx.nominalPositionStartTick,
-                                                                 overallDurationTicks,
+                                                                 durationTicks,
                                                                  spannerCtx.positionTickOffset);
 
     appendArticulationData(std::move(articulationMeta), result);
