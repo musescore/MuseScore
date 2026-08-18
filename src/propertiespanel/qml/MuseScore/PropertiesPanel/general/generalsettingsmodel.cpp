@@ -118,9 +118,16 @@ void GeneralSettingsModel::loadProperties()
     updateAreGeneralPropertiesAvailable();
 }
 
-void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
 {
     loadProperties(changedPropertyIdSet);
+
+    // Forwarded here rather than relying on PropertiesPanelListModel to reach these nested models
+    // directly - only top-level section models are in its own list (see onCurrentNotationChanged()
+    // just below, which forwards for the same reason). Without this, an external score change (e.g.
+    // committing a note-offset drag, or an undo/redo) never reaches m_playbackProxyModel's nested
+    // models, which then only ever refresh via the unrelated elementsUpdated()/reselection path.
+    m_playbackProxyModel->onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
 }
 
 void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
