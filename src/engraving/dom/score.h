@@ -132,7 +132,6 @@ class Spanner;
 class Staff;
 class System;
 class TDuration;
-class TempoMap;
 class TempoTimeline;
 class Text;
 class TimeSig;
@@ -549,7 +548,6 @@ public:
     void updateTicksAndTimeSigMap();
     void updateTicksAndTimeSigMapLater() { m_needUpdateTicksAndTimeSigMap = true; }
     bool needUpdateTicksAndTimeSigMap() const { return m_needUpdateTicksAndTimeSigMap; }
-    void rebuildTempoMap();
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -624,13 +622,8 @@ public:
 
     void cmdConcertPitchChanged(bool);
 
-    virtual TempoMap* tempomap() const;
     virtual TimeSigMap* sigmap() const;
 
-    void setTempo(Segment*, BeatsPerSecond bps);
-    void setTempo(const Fraction& tick, BeatsPerSecond bps);
-    void removeTempo(const Fraction& tick);
-    void setPause(const Fraction& tick, double seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
     BeatsPerSecond multipliedTempo(const Fraction& tick) const;
     BeatsPerSecond multipliedTempoAtUtick(int utick) const;
@@ -914,11 +907,7 @@ private:
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
 
-    void resetTempo();
-    void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
     void rebuildTimeSigMap(Measure* m);
-    void rebuildTempoForMeasure(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
-    void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
 
     void doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo = true);
     void doUndoResetPartialSlur(Slur* slur, bool undo);

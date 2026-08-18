@@ -50,7 +50,6 @@ class MasterScore;
 class Part;
 class RepeatList;
 class Revisions;
-class TempoMap;
 class TempoTimeline;
 class TimeSigMap;
 class UndoStack;
@@ -103,7 +102,6 @@ public:
     TransactionManager* transactionManager() const { return m_transactionManager.get(); }
     UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
-    TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
 
     AutomationDataConstPtr automationData() const override;
@@ -146,8 +144,6 @@ public:
 
     void update() { update(true); }
     void lockUpdates(bool locked);
-
-    void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return m_midiPortCount; }
     void setMidiPortCount(int val) { m_midiPortCount = val; }
@@ -228,7 +224,6 @@ private:
     std::unique_ptr<TransactionManager> m_transactionManager;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
-    TempoMap* m_tempomap = nullptr;
     RepeatList* m_expandedRepeatList = nullptr;
     RepeatList* m_nonExpandedRepeatList = nullptr;
     ScoreAutomationController* m_automationController = nullptr;

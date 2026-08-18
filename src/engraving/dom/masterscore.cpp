@@ -41,17 +41,14 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
-#include "box.h"
 #include "clef.h"
 #include "key.h"
 #include "keysig.h"
-#include "linkedobjects.h"
 #include "part.h"
 #include "repeatlist.h"
 #include "rest.h"
 #include "sig.h"
 #include "staff.h"
-#include "tempo.h"
 #include "timesig.h"
 #include "linkedobjects.h"
 
@@ -71,7 +68,6 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     m_project = project;
     m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
-    m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();
     m_automationController = new ScoreAutomationController();
     m_expandedRepeatList  = new RepeatList(this);
@@ -115,20 +111,9 @@ MasterScore::~MasterScore()
     delete m_expandedRepeatList;
     delete m_nonExpandedRepeatList;
     delete m_sigmap;
-    delete m_tempomap;
     delete m_undoStack;
     delete m_automationController;
     muse::DeleteAll(m_excerpts);
-}
-
-//---------------------------------------------------------
-//   setTempomap
-//---------------------------------------------------------
-
-void MasterScore::setTempomap(TempoMap* tm)
-{
-    delete m_tempomap;
-    m_tempomap = tm;
 }
 
 //---------------------------------------------------------
