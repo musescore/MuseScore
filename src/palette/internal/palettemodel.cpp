@@ -23,6 +23,7 @@
 #include "palettemodel.h"
 
 #include <QMimeData>
+#include <QStringList>
 
 #include "internal/palettetree.h"
 #include "internal/palettecelliconengine.h"
@@ -1120,6 +1121,106 @@ PaletteCellFilterProxyModel::PaletteCellFilterProxyModel(QObject* parent)
 }
 
 //---------------------------------------------------------
+//   PaletteCellFilterProxyModel::setSearchText
+//---------------------------------------------------------
+
+void PaletteCellFilterProxyModel::setSearchText(const QString& text)
+{
+    m_searchText = text;
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+    invalidateFilter();
+#endif
+}
+
+static const QChar SHARP_SIGN = u'♯';
+static const QChar FLAT_SIGN = u'♭';
+
+//---------------------------------------------------------
+//   spelledOutAccidentals
+///   Replaces every accidental sign in \p text with its spelled
+///   out name, e.g. "F♯ major" becomes "F sharp major". Each name
+///   takes the character the sign follows as %1, so that languages
+///   which attach the accidental to the note letter instead of
+///   writing it as a separate word can do so.
+//---------------------------------------------------------
+
+static QString spelledOutAccidentals(const QString& text)
+{
+    const QString sharp = muse::qtrc("palette", "%1 sharp",
+                                     "Spelled out name of the ♯ sign, used for searching only. "
+                                     "%1 is the character the sign follows, usually a note letter: \"F♯\" becomes \"F sharp\". "
+                                     "Languages that attach the accidental to the note letter can leave out the space, "
+                                     "e.g. \"%1is\" for German \"Fis\"");
+    const QString flat = muse::qtrc("palette", "%1 flat",
+                                    "Spelled out name of the ♭ sign, used for searching only. "
+                                    "%1 is the character the sign follows, usually a note letter: \"B♭\" becomes \"B flat\". "
+                                    "Languages that attach the accidental to the note letter can leave out the space, "
+                                    "e.g. \"%1es\" for German \"Ges\"");
+
+    QString spelledOut;
+    spelledOut.reserve(text.size() + sharp.size() + flat.size());
+
+    for (const QChar c : text) {
+        if (c != SHARP_SIGN && c != FLAT_SIGN) {
+            spelledOut += c;
+            continue;
+        }
+
+        QString noteLetter;
+        if (!spelledOut.isEmpty()) {
+            noteLetter = spelledOut.back();
+            spelledOut.chop(1);
+        }
+
+        spelledOut += (c == SHARP_SIGN ? sharp : flat).arg(noteLetter);
+    }
+
+    return spelledOut;
+}
+
+//---------------------------------------------------------
+//   searchableSpellings
+///   Returns the ways in which \p text can be spelled in the
+///   palette search box. The accidental signs used in item
+///   names cannot be typed on a regular keyboard, so they are
+///   also matched by their ASCII shorthand ("F# major") and by
+///   their spelled out name ("F sharp major").
+//---------------------------------------------------------
+
+static QStringList searchableSpellings(const QString& text)
+{
+    if (!text.contains(SHARP_SIGN) && !text.contains(FLAT_SIGN)) {
+        return { text };
+    }
+
+    QString shorthand = text;
+    shorthand.replace(SHARP_SIGN, QChar(u'#'));
+    shorthand.replace(FLAT_SIGN, QChar(u'b'));
+
+    return { text, shorthand, spelledOutAccidentals(text) };
+}
+
+//---------------------------------------------------------
+//   PaletteCellFilterProxyModel::rowMatchesSearchText
+//---------------------------------------------------------
+
+bool PaletteCellFilterProxyModel::rowMatchesSearchText(int sourceRow, const QModelIndex& sourceParent) const
+{
+    const QString name = sourceModel()->index(sourceRow, 0, sourceParent).data(filterRole()).toString();
+
+    for (const QString& spelling : searchableSpellings(name)) {
+        if (spelling.contains(m_searchText, filterCaseSensitivity())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
 //   PaletteCellFilterProxyModel::filterAcceptsRow
 //---------------------------------------------------------
 
@@ -1130,12 +1231,11 @@ bool PaletteCellFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     const int rowCount = model->rowCount(rowIndex);
 
     if (rowCount == 0) {
-        if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent)) {
+        if (rowMatchesSearchText(sourceRow, sourceParent)) {
             return true;
         }
         // accept row if its parent is accepted by filter: necessary to be able to search by palette name
-        if (sourceParent.isValid()
-            && QSortFilterProxyModel::filterAcceptsRow(sourceParent.row(), sourceParent.parent())) {
+        if (sourceParent.isValid() && rowMatchesSearchText(sourceParent.row(), sourceParent.parent())) {
             return true;
         }
         return false;
