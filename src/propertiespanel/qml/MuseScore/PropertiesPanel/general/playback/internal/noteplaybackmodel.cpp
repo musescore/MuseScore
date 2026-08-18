@@ -21,10 +21,18 @@
  */
 #include "noteplaybackmodel.h"
 
+#include <algorithm>
+#include <cmath>
+
 #include "translation.h"
 #include "dataformatter.h"
 
 #include "engraving/dom/note.h"
+
+#include "mpe/mpetypes.h"
+
+#include "notation/imasternotation.h"
+#include "notation/inotationplayback.h"
 
 using namespace mu::propertiespanel;
 
@@ -60,12 +68,84 @@ void NotePlaybackModel::requestElements()
 void NotePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tuning, formatDoubleFunc);
-    loadPropertyItem(m_velocity, [](const QVariant& value) {
-        //! NOTE: display 64 instead of 0 in the Velocity field to avoid confusing the user
-        return value.toInt() == 0 ? 64 : value;
-    });
+    loadVelocityProperty();
     loadPropertyItem(m_playbackStartOffset, headNoteElements());
     loadPropertyItem(m_playbackDurationOffset, headNoteElements());
+}
+
+void NotePlaybackModel::loadVelocityProperty()
+{
+    // loadPropertyItem()'s convertElementPropertyValueFunc only ever receives the already-read
+    // property value, with no way back to which element it came from - not enough to compute a
+    // per-note contextual fallback, so this walks m_elementList directly instead.
+    if (m_elementList.isEmpty()) {
+        m_velocity->setIsEnabled(false);
+        return;
+    }
+
+    QVariant value;
+    bool isUndefined = false;
+    bool isModified = false;
+
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        mu::engraving::Note* note = item->isNote() ? mu::engraving::toNote(item) : nullptr;
+        if (!note) {
+            continue;
+        }
+
+        const int elementValue = effectiveVelocity(note);
+
+        if (!value.isValid()) {
+            value = elementValue;
+        } else if (!isUndefined && value.toInt() != elementValue) {
+            isUndefined = true;
+        }
+
+        if (!isModified && note->userVelocity() != 0) {
+            isModified = true;
+        }
+    }
+
+    // The displayed number alone can't distinguish "still following the dynamic context" from
+    // "just pinned explicitly to the same number that context happened to produce" - e.g. dragging
+    // a forte note's velocity bar to exactly 96 doesn't change what's displayed (96 both before and
+    // after), so the plain value-equality check in updateCurrentValue() would otherwise skip
+    // notifying entirely. Force the notification through whenever isModified is about to flip, so
+    // the spinbox never silently disagrees with the (always-correct) isModified-driven color.
+    const bool forceNotify = m_velocity->isModified() != isModified;
+
+    m_velocity->setIsEnabled(value.isValid());
+    m_velocity->updateCurrentValue(isUndefined ? QVariant() : value, forceNotify);
+    m_velocity->setIsModified(isModified);
+}
+
+int NotePlaybackModel::effectiveVelocity(const mu::engraving::Note* note) const
+{
+    if (!note) {
+        return 64;
+    }
+
+    const int userVelocity = note->userVelocity();
+    if (userVelocity != 0) {
+        return userVelocity;
+    }
+
+    // No explicit velocity set on this note - fall back to the same dynamics-derived value the
+    // on-canvas velocity-bar overlay already shows (NotationNoteVelocityController::contextVelocity())
+    // instead of a flat constant that ignores whatever dynamic (piano, forte...) actually applies.
+    const notation::IMasterNotationPtr masterNotation = context()->currentMasterNotation();
+    const notation::INotationPlaybackPtr playback = masterNotation ? masterNotation->playback() : nullptr;
+    if (!playback) {
+        return 64;
+    }
+
+    const muse::mpe::dynamic_level_t level = playback->appliableDynamicLevel(note->track(), note->tick().ticks());
+    const double ratio = muse::mpe::dynamicLevelToVelocityRatio(level);
+    return std::clamp(static_cast<int>(std::lround(ratio * 127.0)), 0, 127);
 }
 
 void NotePlaybackModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)

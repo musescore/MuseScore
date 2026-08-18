@@ -66,6 +66,18 @@ private:
     // leaving both spinboxes disabled instead of silently editing a value it has no handle for.
     QList<mu::engraving::EngravingItem*> headNoteElements() const;
 
+    // loadPropertyItem()'s convertElementPropertyValueFunc only ever sees the already-read property
+    // value, not the element it came from - not enough to compute a per-note contextual fallback, so
+    // the velocity spinbox is loaded through this dedicated method instead of the generic one.
+    void loadVelocityProperty();
+
+    // The velocity spinbox used to hardcode a flat 64 whenever a note had no explicit userVelocity()
+    // (0), completely ignoring any dynamic (piano, forte...) actually in effect at that note - unlike
+    // the on-canvas velocity-bar overlay, which already falls back to the real dynamics-derived value
+    // (NotationNoteVelocityController::displayedVelocity()/contextVelocity()). Mirrors that same
+    // fallback here so both surfaces agree.
+    int effectiveVelocity(const mu::engraving::Note* note) const;
+
     PropertyItem* m_tuning = nullptr;
     PropertyItem* m_velocity = nullptr;
     PropertyItem* m_playbackStartOffset = nullptr;

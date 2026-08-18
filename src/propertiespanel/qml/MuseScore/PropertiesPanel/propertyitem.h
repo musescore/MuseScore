@@ -46,7 +46,13 @@ class PropertyItem : public QObject
 public:
     explicit PropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
 
-    void updateCurrentValue(const QVariant& currentValue);
+    // forceNotify: emit valueChanged() even if currentValue equals the cached value. Needed by a
+    // property whose displayed number is a fallback computed from something other than the raw
+    // stored property (e.g. a note's contextual/dynamics-derived velocity when no explicit value
+    // is set) - the underlying state can genuinely change (unset -> explicit) while numerically
+    // landing on the same displayed number, which the plain equality check can't tell apart from
+    // "nothing changed".
+    void updateCurrentValue(const QVariant& currentValue, bool forceNotify = false);
 
     Q_INVOKABLE void resetToDefault();
     Q_INVOKABLE void applyToStyle();
