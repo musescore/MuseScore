@@ -91,6 +91,7 @@ void Articulation::setTextType(ArticulationTextType textType)
     m_textType = textType;
 }
 
+/*! Selects or deselects this articulation, propagating to the text sub-element. */
 void Articulation::setSelected(bool f)
 {
     if (m_text) {
@@ -100,6 +101,7 @@ void Articulation::setSelected(bool f)
     EngravingItem::setSelected(f);
 }
 
+/*! Shows or hides this articulation, propagating visibility to the text sub-element. */
 void Articulation::setVisible(bool f)
 {
     if (m_text) {
@@ -238,6 +240,7 @@ Page* Articulation::page() const
     return toPage(s ? s->explicitParent() : 0);
 }
 
+/*! True if this articulation should not be rendered on the current TAB staff. */
 bool Articulation::isHiddenOnTabStaff() const
 {
     if (m_showOnTabStyles.first == Sid::NOSTYLE || m_showOnTabStyles.second == Sid::NOSTYLE) {
@@ -285,6 +288,7 @@ std::vector<LineF> Articulation::dragAnchorLines() const
 //   getProperty
 //---------------------------------------------------------
 
+/*! Returns the current value of the given articulation property. */
 PropertyValue Articulation::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -293,6 +297,10 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
     case Pid::ORNAMENT_STYLE:      return ornamentStyle();
     case Pid::PLAY:                return playArticulation();
+    case Pid::COLOR:
+        // Return the raw stored color (sentinel when inheriting from the side note) so writers and
+        // undo compare against the persisted value, not the dynamically resolved theme color.
+        return PropertyValue::fromValue(m_color);
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -302,6 +310,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
+/*! Applies @p v to the articulation property identified by @p propertyId and triggers a relayout. */
 bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
@@ -331,6 +340,13 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 //   propertyDefault
 //---------------------------------------------------------
 
+/*!
+ * Default articulation properties.
+ * For @c Pid::COLOR on a chord-attached articulation, when @c Sid::colorApplyToArticulation is set,
+ * returns the sentinel @c configuration()->defaultColor() so that resetting restores the "inherit
+ * from note" state. @c Articulation::color() resolves the sentinel to the color of the chord note
+ * on the articulation's side (@c upNote() when above, @c downNote() when below).
+ */
 PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
@@ -343,10 +359,42 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
 
+    case Pid::COLOR: {
+        ChordRest* cr = chordRest();
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            Note* sideNote = up() ? chord->upNote() : chord->downNote();
+            if (sideNote->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                // Return sentinel so resetting keeps "inherit from note"; @c Articulation::color()
+                // resolves the sentinel to @c sideNote->color() at draw time.
+                return PropertyValue::fromValue(configuration()->defaultColor());
+            }
+        }
+    }
+    // fall through
     default:
         break;
     }
     return EngravingItem::propertyDefault(propertyId);
+}
+
+/*!
+ * Draw color when using the score default: if articulations inherit note colors, returns the color
+ * of the chord note on the articulation's side (top note when above, bottom note when below).
+ */
+Color Articulation::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        ChordRest* cr = chordRest();
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            Note* sideNote = up() ? chord->upNote() : chord->downNote();
+            if (sideNote->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                return sideNote->color();
+            }
+        }
+    }
+    return m_color;
 }
 
 //---------------------------------------------------------
