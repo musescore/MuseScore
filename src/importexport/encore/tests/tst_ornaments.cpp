@@ -2629,3 +2629,44 @@ TEST_F(Tst_Ornaments, trill_end_far_from_start_is_standalone)
     EXPECT_EQ(spanReachingM2, 0) << "no far-away trill span may swallow m2's terminal trill";
     delete score;
 }
+
+// A repeat-measure sign in a score that opens with a pickup. Anything resolved by tick reads the
+// bars through the score's tick map, and while that still describes the lengths they had before the
+// pickup shortened the first one it answers with the bar before the one meant: the sign empties the
+// wrong bar and lands in the one before that, on top of its own music and past its barline.
+TEST_F(Tst_Ornaments, measure_repeat_lands_in_its_own_measure_after_a_pickup)
+{
+    MasterScore* score = readEncoreScore("ornaments_measure_repeat_after_pickup.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    std::vector<Measure*> ms;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        ms.push_back(m);
+    }
+    ASSERT_GE(ms.size(), 4u);
+
+    auto crCount = [](const Measure* m) {
+        int n = 0;
+        for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (s->element(0) && s->element(0)->isChordRest()) {
+                ++n;
+            }
+        }
+        return n;
+    };
+    auto beyondBar = [](const Measure* m) {
+        for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (s->element(0) && s->element(0)->isChordRest() && s->tick() - m->tick() >= m->ticks()) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    EXPECT_EQ(crCount(ms[1]), 4) << "the bars before the sign keep their own music";
+    EXPECT_EQ(crCount(ms[2]), 4);
+    EXPECT_FALSE(beyondBar(ms[2])) << "and nothing of the sign is pinned past their barline";
+    EXPECT_EQ(ms[3]->measureRepeatCount(0), 1) << "the sign belongs to the bar that carries it";
+}

@@ -111,18 +111,14 @@ bool isValidFaceValue(quint8 faceValue)
 
 void applyConcertPitch(Note* n, int semitone)
 {
-    // A transposed or garbage Encore semitone can land outside MIDI's [0,127]. Note::setPitch
-    // only asserts the range (no clamp), and downstream drumset lookups index a 128-entry table
-    // by pitch, so an out-of-range value is undefined behaviour. Clamp once, here, at the single
-    // choke point both the main and grace note paths go through.
+    // Note::setPitch only asserts the range, and drumset lookups index a 128-entry table by pitch, so
+    // clamp once here, where both the main and the grace path pass.
     n->setPitch(std::clamp(semitone, 0, 127));
     n->setTpcFromPitch();
 }
 
-// score->spell() re-spells the whole score with a context heuristic that can spell transposed
-// pitches with double-flats instead of the plain note the key wants. Re-derive the TPC of notes on
-// transposing staves from pitch + concert key + transposition (pitch unchanged); leave others as is.
-// TODO: format-agnostic, reads no Encore data; candidate to promote to a shared importexport util.
+// score->spell() can spell a transposed pitch with double flats, so re-derive the TPC on transposing
+// staves from pitch, concert key and transposition. Format agnostic: could move to a shared util.
 static void respellTransposingStaves(MasterScore* score)
 {
     for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
@@ -169,11 +165,8 @@ static void applyStaffScale(MasterScore* score, const EncRoot& enc)
     }
 }
 
-// Collapse a staff's voices back into voice 1 when they never sound at the same time (the
-// engraving equivalent of "move to voice 1" + Tools > Implode). All-or-nothing per staff:
-// a staff is collapsible only if every voice fits into voice 1 with no timing change (notes may
-// merge into a chord only at identical onset+duration), so the music is never altered.
-// TODO: format-agnostic, reads no Encore data; candidate to promote to a shared importexport util.
+// Collapse a staff's voices into voice 1 when they never sound together. All or nothing per staff, so
+// the music is never altered; see ENCORE_IMPORTER.md 5.4.
 static void mergeNonOverlappingVoices(MasterScore* score)
 {
     // Pass 1: find the staves that carry notes in more than voice 0 and whose voices
@@ -226,17 +219,12 @@ static void mergeNonOverlappingVoices(MasterScore* score)
         return;
     }
 
-    // Pass 2: collapse each candidate staff. No undo transaction is opened, so the
-    // editing commands below execute immediately and free themselves (see
-    // UndoStack::pushAndPerform); the surrounding ScoreLoad keeps that path quiet.
-    // (May be empty; the stale-rest cleanup below still runs.)
+    // No undo transaction is opened, so the commands below execute and free themselves.
     for (staff_idx_t si : candidates) {
         const track_idx_t base = si * VOICES;
 
-        // The voice change below rebuilds the destination chord from scratch; it carries
-        // articulations, lyrics and slurs across but not a single-chord tremolo, so a
-        // tremolo on a moved upper-voice chord would be lost. Snapshot every tremolo on
-        // the staff (keyed by onset tick) and re-attach it after the collapse.
+        // The voice change rebuilds the destination chord and carries everything across except a
+        // single-chord tremolo, so snapshot those by tick and re-attach them after.
         std::map<int, TremoloType> tremolosByTick;
         for (Measure* m = first; m; m = m->nextMeasure()) {
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
@@ -289,10 +277,8 @@ static void mergeNonOverlappingVoices(MasterScore* score)
         }
     }
 
-    // Final pass: drop redundant upper-voice rests. An upper voice (index >= 1) holding only rests
-    // in a measure is not a real second voice (voice 0 already fills the bar after the collapse);
-    // it would show as a spurious extra voice and can inflate the measure length. An upper voice
-    // still carrying a chord is a genuine overlapping voice and is left untouched.
+    // An upper voice holding only rests is not a second voice once voice 0 fills the bar: it shows as a
+    // spurious extra voice and can inflate the measure. One still holding a chord is genuine.
     for (staff_idx_t si = 0; si < score->nstaves(); ++si) {
         const track_idx_t base = si * VOICES;
         std::vector<Rest*> staleRests;
@@ -356,10 +342,8 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->style().set(Sid::tupletVHeadDistance,   0.0);
     score->style().set(Sid::tupletVStemDistance,   0.0);
 
-    // Encore does not stretch systems and staves to fill the page: it lays them out at fixed
-    // distances from the top. Keep vertical justification enabled but allow it no extra room
-    // (max system/staff spread = 0), so the imported spacing matches Encore instead of being
-    // spread to fill the page.
+    // Encore lays systems out at fixed distances from the top, so justification stays enabled with no
+    // room to spread and the imported spacing survives.
     score->style().set(Sid::enableVerticalSpread, true);
     score->style().set(Sid::maxSystemSpread,      Spatium(0.0));
     score->style().set(Sid::maxStaffSpread,       Spatium(0.0));
@@ -369,11 +353,17 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     buildMeasures(ctx);
     buildInitialSignatures(ctx);
     emitMeasures(ctx);
+    guaranteeAllMeasures(ctx);
 
     applyPageSetup(ctx);
     if (ctx.opts.importStaffSize) {
         applyStaffScale(score, enc);
     }
+
+    // The passes that fit each bar to its signature can change a measure's length, which leaves the
+    // score's tick map describing the lengths they had before. Everything below resolves elements by
+    // tick, and a stale map answers with the measure before the one meant: rebuild it first.
+    score->updateTicksAndTimeSigMap();
 
     resolveAll(ctx);
 
@@ -384,12 +374,10 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     EditEnharmonicSpelling::spell(score);
     respellTransposingStaves(score);
     addTitleFrame(score, enc.titleBlock);
-    // Assign MIDI ports/channels to every part. The file read path does this on load,
-    // but a direct import builds the score in memory without it, leaving each channel
-    // at -1; that makes Part::midiPort() index m_midiMapping[-1] and crash on a
-    // straight-to-MusicXML export.
+    // The file read path does this on load; a direct import leaves every channel at -1, which makes
+    // Part::midiPort() index the mapping at -1 and crash on a straight-to-MusicXML export.
     score->rebuildMidiMapping();
-    score->setUpTempoMap();
+    score->updateTicksAndTimeSigMap();
     score->doLayout();
 
     if (ctx.opts.mergeVoices) {
@@ -401,45 +389,44 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     // default staff space; shrink it just enough (<= 0.022 inch) to pull that system back.
     fitFirstPageStaffSpace(ctx);
 
-    // doLayout computes and caches the repeat list; at that point voltas may not yet be
-    // anchored, so the cached expansion ignores 1st/2nd endings and replays the 1st
-    // ending on every pass. The file read path invalidates the repeat list after load
-    // for the same reason; do the same here so playback right after import is correct.
+    // doLayout caches the repeat list before the voltas are anchored, so the cached expansion replays
+    // the first ending on every pass.
     score->masterScore()->invalidateRepeatList();
 }
 
+// What to tell the user about a file that failed to load, from its header alone. Encore's two
+// extensions are shared with several neighbours, so whoever reaches this message has often opened
+// one of those by mistake and needs the way out, not a verdict. See ENCORE_FORMAT.md §1.2.
 muse::String encoreLoadErrorMessage(const QString& path)
 {
+    struct Foreign {
+        QByteArray magic;
+        const char* program;
+    };
+    static const std::vector<Foreign> foreign {
+        { QByteArrayLiteral("ENIGMA "), "Finale" },
+        { QByteArrayLiteral("Finale(R)"), "Finale" },
+        { QByteArrayLiteral("SOLF"), "Melody Assistant or Harmony Assistant" },
+        { QByteArray("RO\0\0", 4), "Master Tracks Pro" },
+    };
+
     QByteArray head;
     QFile file(path);
     if (file.open(QIODevice::ReadOnly)) {
-        head = file.readAll();
+        head = file.read(16);   // the longest signature above is nine bytes
     }
-    const muse::String name = muse::String::fromQString(QFileInfo(path).fileName());
-
-    // A ZBOT/ZBOP/ZBO6 container is decrypted before parsing (see importEncore); if the load still
-    // failed, report on the decrypted SCOW header underneath rather than the encrypted wrapper.
-    if (head.size() >= 4 && isZbotMagic(head.left(4))) {
-        zbotDecrypt(head);
+    for (const Foreign& f : foreign) {
+        if (head.startsWith(f.magic)) {
+            return muse::mtrc("engraving",
+                              "The Encore importer cannot open %1 files. Open the file in %1 and export it as "
+                              "MusicXML, then open the MusicXML file instead.")
+                   .arg(muse::String::fromUtf8(f.program));
+        }
     }
-    const QByteArray magic = head.left(4);
-
-    // Recognizable Encore header, but the file could not be parsed: unsupported variant, damaged,
-    // or empty.
-    if (isReadableEncoreMagic(QString::fromLatin1(magic))) {
-        const QString ver = QStringLiteral("%1").arg(
-            head.size() >= 5 ? static_cast<unsigned char>(head[4]) : 0, 2, 16, QChar('0'));
-        return muse::mtrc("engraving",
-                          "“%1” could not be read as an Encore file (format version 0x%2). It may be damaged "
-                          "or use an unsupported variant. Try opening it in Encore and saving it again, then "
-                          "import the saved file.")
-               .arg(name).arg(muse::String::fromQString(ver));
-    }
-    // No recognizable Encore header at all.
     return muse::mtrc("engraving",
-                      "“%1” is not a recognized Encore file. Its header does not match any known Encore "
-                      "format, so it may be corrupted or a different type of file.")
-           .arg(name);
+                      "Unrecognized Encore file. The file may be corrupted or have an unsupported format. Try "
+                      "opening it in Encore itself and saving it again, or exporting it as MusicXML from "
+                      "there, then open the result.");
 }
 
 Err importEncore(MasterScore* score, const QString& path, const EncImportOptions& opts)
