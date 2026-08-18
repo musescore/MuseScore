@@ -679,7 +679,7 @@ void MasterNotation::updatePotentialExcerpts() const
     std::vector<Part*> partsWithoutExcerpt;
 
     for (Part* part : score()->parts()) {
-        if (findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
+        if (part->isSharedPart() || findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
             continue;
         }
 
