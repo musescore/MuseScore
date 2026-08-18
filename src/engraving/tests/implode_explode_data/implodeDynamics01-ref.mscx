@@ -941,6 +941,7 @@
         <beginHookHeight>-1.9</beginHookHeight>
         <endHookHeight>-1.9</endHookHeight>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/2</ticks>
         <eid>YC_YC</eid>
         <track>0</track>

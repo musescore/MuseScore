@@ -368,6 +368,7 @@
       <Trill>
         <subtype>trill</subtype>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>4/2</ticks>
         <eid>FB_FB</eid>
         <track>0</track>

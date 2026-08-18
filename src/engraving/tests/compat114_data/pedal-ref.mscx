@@ -197,6 +197,7 @@
         <continueText>&lt;font size=&quot;11&quot;/&gt;</continueText>
         <endTextPlace>auto</endTextPlace>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/1</ticks>
         <eid>Y_Y</eid>
         <track>0</track>

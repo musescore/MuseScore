@@ -104,6 +104,7 @@
       <Rasgueado>
         <beginTextOffset x="0" y="0"/>
         <track2>0</track2>
+        <startTick>0/1</startTick>
         <ticks>1/4</ticks>
         <eid>O_O</eid>
         <track>0</track>
