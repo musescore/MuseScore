@@ -26,6 +26,8 @@
 #include <QQuickPaintedItem>
 #include <QVector>
 
+class QHoverEvent;
+
 // NOTE: all rectangle coordinates are normalized [0, 1], relative to this item's own width/height,
 // mirroring NoteOffsetOverlay's convention.
 //
@@ -77,6 +79,8 @@ signals:
     void barDragged(int rectIndex, qreal newYN, bool completed);
 
 protected:
+    void hoverMoveEvent(QHoverEvent* e) override;
+    void hoverLeaveEvent(QHoverEvent* e) override;
     void mousePressEvent(QMouseEvent* e) override;
     void mouseMoveEvent(QMouseEvent* e) override;
     void mouseReleaseEvent(QMouseEvent* e) override;

@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <limits>
 
+#include <QHoverEvent>
 #include <QMouseEvent>
 #include <QPainter>
 
@@ -43,6 +44,7 @@ NoteVelocityOverlay::NoteVelocityOverlay(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
+    setAcceptHoverEvents(true);
 }
 
 void NoteVelocityOverlay::setRects(const QVector<RectData>& rects)
@@ -246,6 +248,27 @@ int NoteVelocityOverlay::hitTestPx(const QPointF& posPx) const
     }
 
     return -1;
+}
+
+void NoteVelocityOverlay::hoverMoveEvent(QHoverEvent* e)
+{
+    // Which item's cursor actually gets displayed over an overlap is decided by QQuickWindow from
+    // each item's *declared* cursor (whichever topmost item has ever called setCursor()) - it has
+    // nothing to do with which item's hoverMoveEvent ignore()s the event. NoteOffsetOverlay
+    // unconditionally declares a cursor on every hover move, so unless this item declares (and
+    // un-declares) its own right here, Qt falls through to the offset overlay's stale declaration
+    // underneath even where a bar - painted on top, and already winning mouse presses via the same
+    // hit test - visually covers it.
+    if (hitTestPx(e->position()) >= 0) {
+        setCursor(Qt::ArrowCursor);
+    } else {
+        unsetCursor();
+    }
+}
+
+void NoteVelocityOverlay::hoverLeaveEvent(QHoverEvent*)
+{
+    unsetCursor();
 }
 
 void NoteVelocityOverlay::mousePressEvent(QMouseEvent* e)
