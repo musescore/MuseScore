@@ -34,6 +34,7 @@
 #include "../parser/elem.h"
 #include "mappers.h"
 #include "../parser/ticks.h"
+#include "../parser/zbot.h"
 #include "emitters-tuplets.h"
 
 #include <algorithm>
@@ -43,6 +44,7 @@
 #include <set>
 #include <vector>
 
+#include <QBuffer>
 #include <QDataStream>
 #include <QFile>
 #include <QFileInfo>
@@ -411,18 +413,17 @@ muse::String encoreLoadErrorMessage(const QString& path)
     QByteArray head;
     QFile file(path);
     if (file.open(QIODevice::ReadOnly)) {
-        head = file.read(5);
+        head = file.readAll();
     }
-    const QByteArray magic = head.left(4);
     const muse::String name = muse::String::fromQString(QFileInfo(path).fileName());
 
-    // Older encrypted Encore container (ZBOT/ZBOP/ZBO6).
-    if (magic == "ZBOT" || magic == "ZBOP" || magic == "ZBO6") {
-        return muse::mtrc("engraving",
-                          "“%1” is in an older, encrypted Encore format (%2) that this importer cannot read. "
-                          "Open it in Encore and save it again, then import the saved file.")
-               .arg(name).arg(muse::String::fromQString(QString::fromLatin1(magic)));
+    // A ZBOT/ZBOP/ZBO6 container is decrypted before parsing (see importEncore); if the load still
+    // failed, report on the decrypted SCOW header underneath rather than the encrypted wrapper.
+    if (head.size() >= 4 && isZbotMagic(head.left(4))) {
+        zbotDecrypt(head);
     }
+    const QByteArray magic = head.left(4);
+
     // Recognizable Encore header, but the file could not be parsed: unsupported variant, damaged,
     // or empty.
     if (isReadableEncoreMagic(QString::fromLatin1(magic))) {
@@ -452,19 +453,20 @@ Err importEncore(MasterScore* score, const QString& path, const EncImportOptions
         return Err::FileOpenError;
     }
 
-    // ZBOT/ZBOP/ZBO6 are older encrypted Encore containers (only the first 42 bytes decrypt with
-    // a known XOR key; see ENCORE_FORMAT.md). Not supported here. See MuseScore#24341.
-    {
-        QByteArray magic4 = file.read(4);
-        file.seek(0);
-        if (magic4 == "ZBOT" || magic4 == "ZBOP" || magic4 == "ZBO6") {
-            LOGW() << "Encore: encrypted format (" << magic4.toStdString()
-                   << ") is not supported; re-save the file in Encore as an unencrypted file first.";
-            return Err::FileBadFormat;
-        }
+    QByteArray fileData = file.readAll();
+    file.close();
+
+    // ZBOT/ZBOP/ZBO6 are legacy Encore encrypted containers. Decrypt them in place with the stream
+    // cipher (see parser/zbot.cpp); the result is a plain SCOW buffer that the reader
+    // below parses like any other Encore file.
+    if (fileData.size() >= 4 && isZbotMagic(fileData.left(4))) {
+        LOGD() << "Encore: ZBOT encrypted format detected, decrypting to SCOW.";
+        zbotDecrypt(fileData);
     }
 
-    QDataStream ds(&file);
+    QBuffer buf(&fileData);
+    buf.open(QIODevice::ReadOnly);
+    QDataStream ds(&buf);
     ds.setByteOrder(QDataStream::LittleEndian);
 
     EncRoot enc;

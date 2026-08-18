@@ -53,21 +53,6 @@ static QString writeTempFile(const QString& name, const QByteArray& bytes)
     return path;
 }
 
-// The bad-format message must identify why a file was rejected and how to recover.
-TEST(EncImporterErrors, EncryptedContainerMessage)
-{
-    for (const char* magic : { "ZBOT", "ZBOP", "ZBO6" }) {
-        const QString path = writeTempFile(QStringLiteral("enc_err_%1.enc").arg(magic),
-                                           QByteArray(magic) + QByteArray(40, '\0'));
-        const QString msg = encoreLoadErrorMessage(path).toQString();
-        EXPECT_TRUE(msg.contains("encrypted", Qt::CaseInsensitive))
-            << magic << " -> " << msg.toStdString();
-        EXPECT_TRUE(msg.contains(QString::fromLatin1(magic)))
-            << "message should name the detected container: " << msg.toStdString();
-        QFile::remove(path);
-    }
-}
-
 TEST(EncImporterErrors, UnreadableEncoreFileMessage)
 {
     // A SCOW header with no valid body: recognizable Encore file, but not parseable.
