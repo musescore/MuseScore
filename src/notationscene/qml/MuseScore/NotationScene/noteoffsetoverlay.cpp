@@ -131,10 +131,14 @@ void NoteOffsetOverlay::paint(QPainter* painter)
 
         painter->setPen(Qt::NoPen);
         painter->setBrush(rect.selected ? m_selectedHandleColor : (rect.userModified ? m_modifiedHandleColor : m_handleColor));
-        painter->drawRoundedRect(QRectF(leftPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),
-                                 EDGE_HANDLE_WIDTH_PX / 2.0, EDGE_HANDLE_WIDTH_PX / 2.0);
-        painter->drawRoundedRect(QRectF(rightPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),
-                                 EDGE_HANDLE_WIDTH_PX / 2.0, EDGE_HANDLE_WIDTH_PX / 2.0);
+        if (rect.hasLeftHandle) {
+            painter->drawRoundedRect(QRectF(leftPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),
+                                     EDGE_HANDLE_WIDTH_PX / 2.0, EDGE_HANDLE_WIDTH_PX / 2.0);
+        }
+        if (rect.hasRightHandle) {
+            painter->drawRoundedRect(QRectF(rightPx - EDGE_HANDLE_WIDTH_PX / 2.0, bodyRect.top(), EDGE_HANDLE_WIDTH_PX, bodyRect.height()),
+                                     EDGE_HANDLE_WIDTH_PX / 2.0, EDGE_HANDLE_WIDTH_PX / 2.0);
+        }
     }
 }
 
@@ -151,16 +155,16 @@ NoteOffsetOverlay::HitResult NoteOffsetOverlay::hitTestPx(const QPointF& posPx) 
         const qreal leftPx = rect.leftN * width();
         const qreal rightPx = rect.rightN * width();
 
-        const qreal distToLeft = std::abs(posPx.x() - leftPx);
-        const qreal distToRight = std::abs(posPx.x() - rightPx);
+        const bool hitLeft = rect.hasLeftHandle && std::abs(posPx.x() - leftPx) <= EDGE_HANDLE_HIT_MARGIN_PX;
+        const bool hitRight = rect.hasRightHandle && std::abs(posPx.x() - rightPx) <= EDGE_HANDLE_HIT_MARGIN_PX;
 
-        if (distToLeft > EDGE_HANDLE_HIT_MARGIN_PX && distToRight > EDGE_HANDLE_HIT_MARGIN_PX) {
+        if (!hitLeft && !hitRight) {
             continue;
         }
 
         HitResult hit;
         hit.rectIndex = i;
-        hit.isLeftEdge = distToLeft <= distToRight;
+        hit.isLeftEdge = hitLeft && (!hitRight || std::abs(posPx.x() - leftPx) <= std::abs(posPx.x() - rightPx));
         return hit;
     }
 

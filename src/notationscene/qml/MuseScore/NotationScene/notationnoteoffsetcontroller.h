@@ -74,12 +74,22 @@ private:
         }
     };
 
-    // Nominal (zero-offset) canvas X positions, taken directly from the note's own layout -
-    // anchors the rectangle exactly on the notehead rather than relying on tick interpolation.
+    // One rectangle fragment, possibly covering only part of a tie chain (a chain that crosses a
+    // System boundary is drawn as one fragment per System it touches). headNote is always the
+    // chain's first note - the only one whose playbackStartOffset/playbackDurationOffset are ever
+    // honored during playback, so it's the sole target for property writes regardless of which
+    // fragment/handle was actually dragged. tailNote is the chain's last note, used as the tick
+    // reference for the duration handle. anchorNote is whichever note is physically laid out in
+    // this fragment's own System (equal to headNote unless this fragment is a continuation
+    // picked up from a previous System) - used for vertical positioning and note-selection lookup.
     struct NoteEntry {
-        mu::engraving::Note* note = nullptr;
+        mu::engraving::Note* headNote = nullptr;
+        mu::engraving::Note* tailNote = nullptr;
+        mu::engraving::Note* anchorNote = nullptr;
         double nominalLeftX = 0.0;
         double nominalRightX = 0.0;
+        bool hasLeftHandle = true;
+        bool hasRightHandle = true;
     };
 
     // Where a given note's rectangle lives, so a drag on a multi-note selection can update/commit
