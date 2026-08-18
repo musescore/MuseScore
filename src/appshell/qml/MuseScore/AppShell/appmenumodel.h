@@ -86,12 +86,9 @@ public:
 private:
     void setupConnections();
 
-    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
-
     bool isMuseSamplerModuleAdded() const;
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
-    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
     muse::uicomponents::MenuItem* makeMenuItem(const muse::rcommand::Command& command, muse::uicomponents::MenuItemRole role);
 
     muse::uicomponents::MenuItem* makeFileMenu();
@@ -100,8 +97,8 @@ private:
     muse::uicomponents::MenuItem* makeAddMenu();
     muse::uicomponents::MenuItem* makeFormatMenu();
     muse::uicomponents::MenuItem* makeToolsMenu();
-    muse::uicomponents::MenuItem* makePluginsMenu();
-    muse::uicomponents::MenuItemList makePluginsMenuSubitems();
+    muse::uicomponents::MenuItemList makeExtensionsSubitems();
+    muse::uicomponents::MenuItem* makeExtensionsMenu();
     muse::uicomponents::MenuItem* makeHelpMenu(bool addDiagnosticsSubMenu);
     muse::uicomponents::MenuItem* makeDiagnosticsMenu();
 
@@ -112,11 +109,10 @@ private:
     muse::uicomponents::MenuItemList makeTupletsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
-    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
     muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
-    muse::uicomponents::MenuItemList makePluginsItems();
+    muse::uicomponents::MenuItemList makeExtensionsItems();
 
     mu::notation::INotationUndoStackPtr undoStack() const;
     void updateUndoRedoItems();

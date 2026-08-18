@@ -21,6 +21,7 @@
  */
 #include "noteinputbarmodel.h"
 
+#include "rcommand/commandtypes.h"
 #include "types/translatablestring.h"
 
 #include "context/shortcutcontext.h"
@@ -44,8 +45,8 @@ using namespace muse::uicomponents;
 static const QString TOOLBAR_NAME("noteInput");
 
 static const ActionCode ADD_ACTION_CODE("add");
-static const ActionCode CROSS_STAFF_BEAMING_CODE("cross-staff-beaming");
-static const ActionCode TUPLET_ACTION_CODE("tuplet");
+static const std::string CROSS_STAFF_BEAMING_SUBITEMS("cross-staff-beaming-subitems");
+static const std::string TUPLET_SUBITEMS("tuplets-subitems");
 
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -97,11 +98,72 @@ void NoteInputBarModel::init()
     load();
 }
 
+const muse::ui::ToolConfig& NoteInputBarModel::defaultNoteInputConfig()
+{
+    static ToolConfig config;
+    if (!config.isValid()) {
+        config.items = {
+            { TOGGLE_NOTE_INPUT_BY_NOTE_NAME_COMMAND, true },
+            { TOGGLE_NOTE_INPUT_BY_DURATION_COMMAND, true },
+            { TOGGLE_NOTE_INPUT_RHYTHM_COMMAND, false },
+            { TOGGLE_NOTE_INPUT_REPITCH_COMMAND, false },
+            { TOGGLE_NOTE_INPUT_REALTIME_AUTO_COMMAND, false },
+            { TOGGLE_NOTE_INPUT_REALTIME_MANUAL_COMMAND, false },
+            { TOGGLE_NOTE_INPUT_TIMEWISE_COMMAND, false },
+            { ToolConfig::____________, true },
+            { SET_DURATION_1024TH_COMMAND, false },
+            { SET_DURATION_512TH_COMMAND, false },
+            { SET_DURATION_256TH_COMMAND, false },
+            { SET_DURATION_128TH_COMMAND, false },
+            { SET_DURATION_64TH_COMMAND, true },
+            { SET_DURATION_32ND_COMMAND, true },
+            { SET_DURATION_16TH_COMMAND, true },
+            { SET_DURATION_EIGHTH_COMMAND, true },
+            { SET_DURATION_QUARTER_COMMAND, true },
+            { SET_DURATION_HALF_COMMAND, true },
+            { SET_DURATION_WHOLE_COMMAND, true },
+            { SET_DURATION_BREVE_COMMAND, false },
+            { SET_DURATION_LONGA_COMMAND, false },
+            { ToolConfig::____________, true },
+            { TOGGLE_DOT_COMMAND, true },
+            { TOGGLE_DOT2_COMMAND, false },
+            { TOGGLE_DOT3_COMMAND, false },
+            { TOGGLE_DOT4_COMMAND, false },
+            { TOGGLE_REST_COMMAND, true },
+            { ToolConfig::____________, true },
+            { TOGGLE_FLAT2_COMMAND, true },
+            { TOGGLE_FLAT_COMMAND, true },
+            { TOGGLE_NAT_COMMAND, true },
+            { TOGGLE_SHARP_COMMAND, true },
+            { TOGGLE_SHARP2_COMMAND, true },
+            { ToolConfig::____________, true },
+            { TOGGLE_TIE_COMMAND, true },
+            { ADD_SLUR_COMMAND, true },
+            { TOGGLE_LV_COMMAND, false },
+            { ToolConfig::____________, true },
+            { TOGGLE_MARCATO_COMMAND, true },
+            { TOGGLE_SFORZATO_COMMAND, true },
+            { TOGGLE_TENUTO_COMMAND, true },
+            { TOGGLE_STACCATO_COMMAND, true },
+            { ToolConfig::____________, true },
+            { CROSS_STAFF_BEAMING_SUBITEMS, true }, // virtual
+            { TUPLET_SUBITEMS, true },              // virtual
+            { FLIP_COMMAND, true },
+            { ToolConfig::____________, true },
+            { USE_VOICE_1_COMMAND, true },
+            { USE_VOICE_2_COMMAND, true },
+            { USE_VOICE_3_COMMAND, false },
+            { USE_VOICE_4_COMMAND, false }
+        };
+    }
+    return config;
+}
+
 void NoteInputBarModel::load()
 {
     MenuItemList items;
 
-    ToolConfig noteInputConfig = uiState()->toolConfig(TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
+    ToolConfig noteInputConfig = uiState()->toolConfig(TOOLBAR_NAME, NoteInputBarModel::defaultNoteInputConfig());
 
     int section = 0;
     for (const ToolConfig::Item& citem : noteInputConfig.items) {
@@ -109,19 +171,20 @@ void NoteInputBarModel::load()
             continue;
         }
 
-        if (citem.action.empty()) {
+        if (citem.isSeparator()) {
             section++;
             continue;
         }
 
         MenuItemList subitems;
-        if (citem.action == CROSS_STAFF_BEAMING_CODE) {
+        if (citem.intent == CROSS_STAFF_BEAMING_SUBITEMS) {
             subitems = makeCrossStaffBeamingItems();
-        } else if (citem.action == TUPLET_ACTION_CODE) {
+        } else if (citem.intent == TUPLET_SUBITEMS) {
             subitems = makeTupletItems();
         }
 
-        MenuItem* item = makeActionItem(uiActionsRegister()->action(citem.action), QString::number(section), subitems);
+        const rcommand::CommandInfo info = commandsRegister()->commandInfo(rcommand::Command(citem.intent));
+        MenuItem* item = makeCommandItem(info, QString::number(section), subitems);
         items << item;
     }
 
@@ -134,10 +197,10 @@ bool NoteInputBarModel::isInputAllowed() const
     return commandsController()->isNoteInputAllowed();
 }
 
-MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section,
-                                            const muse::uicomponents::MenuItemList& subitems)
+MenuItem* NoteInputBarModel::makeCommandItem(const muse::rcommand::CommandInfo& info, const QString& section,
+                                             const muse::uicomponents::MenuItemList& subitems)
 {
-    MenuItem* item = new MenuItem(action, this);
+    MenuItem* item = new MenuItem(info, this);
     item->setSection(section);
     item->setSubitems(subitems);
     return item;
@@ -145,18 +208,19 @@ MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QStrin
 
 MenuItem* NoteInputBarModel::makeAddItem(const QString& section)
 {
-    static const UiAction addAction(ADD_ACTION_CODE, UiCtxAny, mu::context::CTX_ANY,
-                                    TranslatableString("global", "Add"),
-                                    IconCode::Code::PLUS);
-
-    return makeActionItem(addAction, section, makeAddItems());
+    MenuItem* item = new MenuItem(this);
+    item->setTitle(TranslatableString("global", "Add"));
+    item->setIcon(IconCode::Code::PLUS);
+    item->setSection(section);
+    item->setSubitems(makeAddItems());
+    return item;
 }
 
 MenuItemList NoteInputBarModel::makeCrossStaffBeamingItems()
 {
     MenuItemList items {
-        makeMenuItem("move-up"),
-        makeMenuItem("move-down")
+        makeMenuItem(MOVE_UP_COMMAND),
+        makeMenuItem(MOVE_DOWN_COMMAND)
     };
 
     return items;
@@ -197,21 +261,21 @@ MenuItemList NoteInputBarModel::makeAddItems()
 MenuItemList NoteInputBarModel::makeNotesItems()
 {
     MenuItemList items {
-        makeMenuItem("command://notation/enter-note-c"),
-        makeMenuItem("command://notation/enter-note-d"),
-        makeMenuItem("command://notation/enter-note-e"),
-        makeMenuItem("command://notation/enter-note-f"),
-        makeMenuItem("command://notation/enter-note-g"),
-        makeMenuItem("command://notation/enter-note-a"),
-        makeMenuItem("command://notation/enter-note-b"),
+        makeMenuItem(ENTER_NOTE_C_COMMAND),
+        makeMenuItem(ENTER_NOTE_D_COMMAND),
+        makeMenuItem(ENTER_NOTE_E_COMMAND),
+        makeMenuItem(ENTER_NOTE_F_COMMAND),
+        makeMenuItem(ENTER_NOTE_G_COMMAND),
+        makeMenuItem(ENTER_NOTE_A_COMMAND),
+        makeMenuItem(ENTER_NOTE_B_COMMAND),
         makeSeparator(),
-        makeMenuItem("command://notation/add-note-c"),
-        makeMenuItem("command://notation/add-note-d"),
-        makeMenuItem("command://notation/add-note-e"),
-        makeMenuItem("command://notation/add-note-f"),
-        makeMenuItem("command://notation/add-note-g"),
-        makeMenuItem("command://notation/add-note-a"),
-        makeMenuItem("command://notation/add-note-b")
+        makeMenuItem(ADD_NOTE_C_COMMAND),
+        makeMenuItem(ADD_NOTE_D_COMMAND),
+        makeMenuItem(ADD_NOTE_E_COMMAND),
+        makeMenuItem(ADD_NOTE_F_COMMAND),
+        makeMenuItem(ADD_NOTE_G_COMMAND),
+        makeMenuItem(ADD_NOTE_A_COMMAND),
+        makeMenuItem(ADD_NOTE_B_COMMAND)
     };
 
     return items;
@@ -220,26 +284,26 @@ MenuItemList NoteInputBarModel::makeNotesItems()
 MenuItemList NoteInputBarModel::makeIntervalsItems()
 {
     MenuItemList items {
-        makeMenuItem("interval1"),
-        makeMenuItem("interval2"),
-        makeMenuItem("interval3"),
-        makeMenuItem("interval4"),
-        makeMenuItem("interval5"),
-        makeMenuItem("interval6"),
-        makeMenuItem("interval7"),
-        makeMenuItem("interval8"),
-        makeMenuItem("interval9"),
-        makeMenuItem("interval10"),
+        makeMenuItem(ADD_INTERVAL_PLUS_1_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_2_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_3_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_4_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_5_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_6_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_7_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_8_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_9_COMMAND),
+        makeMenuItem(ADD_INTERVAL_PLUS_10_COMMAND),
         makeSeparator(),
-        makeMenuItem("interval-2"),
-        makeMenuItem("interval-3"),
-        makeMenuItem("interval-4"),
-        makeMenuItem("interval-5"),
-        makeMenuItem("interval-6"),
-        makeMenuItem("interval-7"),
-        makeMenuItem("interval-8"),
-        makeMenuItem("interval-9"),
-        makeMenuItem("interval-10")
+        makeMenuItem(ADD_INTERVAL_MINUS_2_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_3_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_4_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_5_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_6_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_7_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_8_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_9_COMMAND),
+        makeMenuItem(ADD_INTERVAL_MINUS_10_COMMAND)
     };
 
     return items;
@@ -248,14 +312,14 @@ MenuItemList NoteInputBarModel::makeIntervalsItems()
 MenuItemList NoteInputBarModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measure"),
-        makeMenuItem("append-measure"),
+        makeMenuItem(INSERT_MEASURES_COMMAND),
+        makeMenuItem(APPEND_MEASURES_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-measures"),
-        makeMenuItem("insert-measures-after-selection"),
+        makeMenuItem(INSERT_MEASURES_COMMAND),
+        makeMenuItem(INSERT_MEASURES_AFTER_SELECTION_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-measures-at-start-of-score"),
-        makeMenuItem("append-measures")
+        makeMenuItem(INSERT_MEASURES_AT_START_OF_SCORE_COMMAND),
+        makeMenuItem(APPEND_MEASURES_COMMAND)
     };
 
     return items;
@@ -264,24 +328,17 @@ MenuItemList NoteInputBarModel::makeMeasuresItems()
 MenuItemList NoteInputBarModel::makeFramesItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-hbox"),
-        makeMenuItem("insert-vbox"),
-        makeMenuItem("insert-textframe"),
-        makeMenuItem("insert-fretframe"),
+        makeMenuItem(INSERT_HBOX_COMMAND),
+        makeMenuItem(INSERT_VBOX_COMMAND),
+        makeMenuItem(INSERT_TEXTFRAME_COMMAND),
+        makeMenuItem(INSERT_FRETFRAME_COMMAND),
         makeSeparator(),
-        makeMenu(TranslatableString("notation", "Insert at end of score"), makeFramesAppendItems())
-    };
-
-    return items;
-}
-
-MenuItemList NoteInputBarModel::makeFramesAppendItems()
-{
-    MenuItemList items {
-        makeMenuItem("append-hbox"),
-        makeMenuItem("append-vbox"),
-        makeMenuItem("append-textframe"),
-        makeMenuItem("append-fretframe")
+        makeMenu(TranslatableString("notation", "Insert at end of score"), {
+            makeMenuItem(APPEND_HBOX_COMMAND),
+            makeMenuItem(APPEND_VBOX_COMMAND),
+            makeMenuItem(APPEND_TEXTFRAME_COMMAND),
+            makeMenuItem(APPEND_FRETFRAME_COMMAND)
+        })
     };
 
     return items;
@@ -290,27 +347,27 @@ MenuItemList NoteInputBarModel::makeFramesAppendItems()
 MenuItemList NoteInputBarModel::makeTextItems()
 {
     MenuItemList items {
-        makeMenuItem("title-text"),
-        makeMenuItem("subtitle-text"),
-        makeMenuItem("composer-text"),
-        makeMenuItem("poet-text"),
-        makeMenuItem("part-text"),
+        makeMenuItem(ADD_TITLE_TEXT_COMMAND),
+        makeMenuItem(ADD_SUBTITLE_TEXT_COMMAND),
+        makeMenuItem(ADD_COMPOSER_TEXT_COMMAND),
+        makeMenuItem(ADD_LYRICIST_TEXT_COMMAND),
+        makeMenuItem(ADD_PART_TEXT_COMMAND),
         makeSeparator(),
-        makeMenuItem("system-text"),
-        makeMenuItem("staff-text"),
-        makeMenuItem("add-dynamic"),
-        makeMenuItem("expression-text"),
-        makeMenuItem("rehearsalmark-text"),
-        makeMenuItem("instrument-change-text"),
-        makeMenuItem("fingering-text"),
+        makeMenuItem(ADD_SYSTEM_TEXT_COMMAND),
+        makeMenuItem(ADD_STAFF_TEXT_COMMAND),
+        makeMenuItem(ADD_DYNAMIC_COMMAND),
+        makeMenuItem(ADD_EXPRESSION_TEXT_COMMAND),
+        makeMenuItem(ADD_REHEARSALMARK_TEXT_COMMAND),
+        makeMenuItem(ADD_INSTRUMENT_CHANGE_TEXT_COMMAND),
+        makeMenuItem(ADD_FINGERING_TEXT_COMMAND),
         makeSeparator(),
-        makeMenuItem("sticking-text"),
-        makeMenuItem("chord-text"),
-        makeMenuItem("roman-numeral-text"),
-        makeMenuItem("nashville-number-text"),
-        makeMenuItem("lyrics"),
-        makeMenuItem("figured-bass"),
-        makeMenuItem("tempo")
+        makeMenuItem(ADD_STICKING_TEXT_COMMAND),
+        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
+        makeMenuItem(ADD_ROMAN_NUMERAL_TEXT_COMMAND),
+        makeMenuItem(ADD_NASHVILLE_NUMBER_TEXT_COMMAND),
+        makeMenuItem(ADD_LYRICS_COMMAND),
+        makeMenuItem(ADD_FIGURED_BASS_COMMAND),
+        makeMenuItem(ADD_TEMPO_COMMAND)
     };
 
     return items;
@@ -319,12 +376,12 @@ MenuItemList NoteInputBarModel::makeTextItems()
 MenuItemList NoteInputBarModel::makeLinesItems()
 {
     MenuItemList items {
-        makeMenuItem("command://notation/add-slur"),
-        makeMenuItem("add-hairpin"),
-        makeMenuItem("add-hairpin-reverse"),
-        makeMenuItem("add-8va"),
-        makeMenuItem("add-8vb"),
-        makeMenuItem("add-noteline")
+        makeMenuItem(ADD_SLUR_COMMAND),
+        makeMenuItem(ADD_HAIRPIN_COMMAND),
+        makeMenuItem(ADD_HAIRPIN_REVERSE_COMMAND),
+        makeMenuItem(ADD_OTTAVA_8VA_COMMAND),
+        makeMenuItem(ADD_OTTAVA_8VB_COMMAND),
+        makeMenuItem(ADD_NOTELINE_COMMAND)
     };
 
     return items;
@@ -333,10 +390,10 @@ MenuItemList NoteInputBarModel::makeLinesItems()
 MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
 {
     MenuItemList items {
-        makeMenuItem("chord-text"),
-        makeMenuItem("add-fretboard-diagram"),
+        makeMenuItem(ADD_CHORD_TEXT_COMMAND),
+        makeMenuItem(ADD_FRETBOARD_DIAGRAM_COMMAND),
         makeSeparator(),
-        makeMenuItem("insert-fretframe", TranslatableString("notation", "Fretboard diagram legend"))
+        makeMenuItem(INSERT_FRETFRAME_COMMAND, TranslatableString("notation", "Fretboard diagram legend"))
     };
 
     return items;
