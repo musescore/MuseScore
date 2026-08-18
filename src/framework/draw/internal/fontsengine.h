@@ -44,6 +44,7 @@ public:
 
     void init();
     void setRenderCacheDirPath(const io::path_t& path, const std::string& revision = std::string()) override;
+    void clearLoadedFaces() override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
