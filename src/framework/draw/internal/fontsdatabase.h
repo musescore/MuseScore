@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <map>
+#include <unordered_map>
 
 #include "ifontsdatabase.h"
 
@@ -39,8 +40,8 @@ public:
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
     std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const override;
-    FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
-    io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const override;
+    ByteArray fontData(const FontDataKey& requireKey, Font::Type type) const override;
+    bool isFtxFont(const FontDataKey& requireKey, Font::Type type) const override;
 
 private:
 
@@ -58,5 +59,6 @@ private:
     std::map<Font::Type, FontDataKey> m_defaults;
     std::map<FontDataKey, std::vector<FontDataKey> > m_familySubstitutions;
     std::vector<FontInfo> m_fonts;
+    mutable std::unordered_map<std::string, ByteArray> m_fileDataCache;
 };
 }

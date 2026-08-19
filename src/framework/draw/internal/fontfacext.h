@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "global/io/iodevice.h"
+#include "global/io/buffer.h"
 
 #include "ifontface.h"
 
@@ -78,7 +79,7 @@ public:
         void read(muse::io::IODevice* d);
     };
 
-    bool load(const FaceKey& key, const muse::io::path_t& path, bool isSymbolMode) override;
+    bool load(const FaceKey& key, const muse::ByteArray& data, bool isSymbolMode) override;
 
     const FaceKey& key() const override;
     bool isSymbolMode() const override;
@@ -113,6 +114,7 @@ private:
     FaceKey m_key;
     bool m_isSymbolMode = false;
 
+    std::unique_ptr<muse::io::Buffer> m_fileBuffer;
     std::unique_ptr<muse::ZipReader> m_zip;
     f26dot6_t m_leading = -1;
     f26dot6_t m_ascent = -1;

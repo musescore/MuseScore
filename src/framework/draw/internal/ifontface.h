@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "global/io/path.h"
+#include "global/types/bytearray.h"
 #include "types/fontstypes.h"
 
 namespace muse::draw {
@@ -43,7 +43,7 @@ public:
 
     virtual ~IFontFace() = default;
 
-    virtual bool load(const FaceKey& key, const io::path_t& path, bool isSymbolMode) = 0;
+    virtual bool load(const FaceKey& key, const ByteArray& data, bool isSymbolMode) = 0;
 
     virtual const FaceKey& key() const = 0;
     virtual bool isSymbolMode() const = 0;
