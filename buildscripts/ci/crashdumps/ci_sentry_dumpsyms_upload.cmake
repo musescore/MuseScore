@@ -4,7 +4,7 @@ set(ARTIFACTS_DIR "build.artifacts")
 set(SYMBOLS_PATH "${ARTIFACTS_DIR}/symbols")
 
 set(SENTRY_DOWNLOAD_SCRIPT "https://sentry.io/get-cli")  # Doesn't work on Windows
-set(SENTRY_DOWNLOAD_Windows_x86_64 "https://downloads.sentry-cdn.com/sentry-cli/1.59.0/sentry-cli-Windows-x86_64.exe")
+set(SENTRY_DOWNLOAD_Windows_x86_64 "https://downloads.sentry-cdn.com/sentry-cli/2.41.1/sentry-cli-Windows-x86_64.exe")
 
 set(SENTRY_URL "" CACHE STRING "Sentry URL")
 set(SENTRY_AUTH_TOKEN "" CACHE STRING "Sentry Auth Token")
@@ -43,7 +43,7 @@ set(ENV{SENTRY_AUTH_TOKEN} ${SENTRY_AUTH_TOKEN})
 
 if(WIN32)
     set(INSTALL_PATH "C:/sentry")
-    set(SENTRY_CLI "${INSTALL_PATH}/sentry-cli")
+    set(SENTRY_CLI "${INSTALL_PATH}/sentry-cli.exe")
     message(STATUS "windows")
 
     file(MAKE_DIRECTORY ${INSTALL_PATH})
