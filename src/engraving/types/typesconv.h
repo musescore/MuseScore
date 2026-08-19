@@ -26,6 +26,7 @@
 
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/tremolobar.h"
 
 namespace mu::engraving {
@@ -226,6 +227,11 @@ public:
     static String translatedUserName(StaffGroup v);
     static AsciiStringView toXml(StaffGroup v);
     static StaffGroup fromXml(const AsciiStringView& tag, StaffGroup def);
+
+    static const TranslatableString& userName(StaffTypes v);
+    static String translatedUserName(StaffTypes v);
+    static AsciiStringView toXml(StaffTypes v);
+    static StaffTypes fromXml(const AsciiStringView& tag, StaffTypes def);
 
     static const TranslatableString& userName(TrillType v);
     static String translatedUserName(TrillType v);
