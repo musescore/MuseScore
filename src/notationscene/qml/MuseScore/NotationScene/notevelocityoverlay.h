@@ -105,6 +105,7 @@ private:
 
     bool m_pressed = false;
     int m_activeRectIndex = -1;
-    qreal m_dragStartYN = 0.0;
+    qreal m_dragStartYPx = 0.0;
+    bool m_hoveringBar = false;
 };
 }

@@ -259,7 +259,13 @@ void NoteVelocityOverlay::hoverMoveEvent(QHoverEvent* e)
     // un-declares) its own right here, Qt falls through to the offset overlay's stale declaration
     // underneath even where a bar - painted on top, and already winning mouse presses via the same
     // hit test - visually covers it.
-    if (hitTestPx(e->position()) >= 0) {
+    const bool hoveringBar = hitTestPx(e->position()) >= 0;
+    if (hoveringBar == m_hoveringBar) {
+        return;
+    }
+    m_hoveringBar = hoveringBar;
+
+    if (hoveringBar) {
         setCursor(Qt::ArrowCursor);
     } else {
         unsetCursor();
@@ -268,6 +274,7 @@ void NoteVelocityOverlay::hoverMoveEvent(QHoverEvent* e)
 
 void NoteVelocityOverlay::hoverLeaveEvent(QHoverEvent*)
 {
+    m_hoveringBar = false;
     unsetCursor();
 }
 
@@ -281,7 +288,13 @@ void NoteVelocityOverlay::mousePressEvent(QMouseEvent* e)
 
     m_pressed = true;
     m_activeRectIndex = hit;
-    m_dragStartYN = e->position().y() / std::max(1.0, height());
+    // Stored as a raw pixel position, not pre-divided by height() - the height a drag started at
+    // and the height read on a later move/release event aren't guaranteed to be the same value (a
+    // window resize or a view zoom/pan can call setHeight() on this item while the mouse is still
+    // held down), so normalizing each endpoint separately before subtracting could mix two
+    // different scales into one delta. Dividing the raw pixel delta by a single, current height()
+    // below keeps both ends of the subtraction on the same scale.
+    m_dragStartYPx = e->position().y();
     e->accept();
 }
 
@@ -295,8 +308,8 @@ void NoteVelocityOverlay::mouseMoveEvent(QMouseEvent* e)
     // click on a bar, the mouse can (and, mid-drag, routinely does) move outside this item's own
     // bounds while still grabbed; clamping here would flatten the delta near the edges instead of
     // tracking the mouse's actual displacement all the way through.
-    const qreal yN = e->position().y() / std::max(1.0, height());
-    emit barDragged(m_activeRectIndex, yN - m_dragStartYN, false);
+    const qreal deltaYN = (e->position().y() - m_dragStartYPx) / std::max(1.0, height());
+    emit barDragged(m_activeRectIndex, deltaYN, false);
 }
 
 void NoteVelocityOverlay::mouseReleaseEvent(QMouseEvent* e)
@@ -305,8 +318,8 @@ void NoteVelocityOverlay::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    const qreal yN = e->position().y() / std::max(1.0, height());
-    emit barDragged(m_activeRectIndex, yN - m_dragStartYN, true);
+    const qreal deltaYN = (e->position().y() - m_dragStartYPx) / std::max(1.0, height());
+    emit barDragged(m_activeRectIndex, deltaYN, true);
 
     m_pressed = false;
     m_activeRectIndex = -1;
