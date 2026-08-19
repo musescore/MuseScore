@@ -22,9 +22,11 @@
 
 #include "abstractnotationpaintview.h"
 
+#include <QCoreApplication>
 #include <QCursor>
 #include <QPainter>
 #include <QMimeData>
+#include <QQuickWindow>
 
 #include "async/async.h"
 #include "log.h"
@@ -1467,6 +1469,20 @@ void AbstractNotationPaintView::keyReleaseEvent(QKeyEvent* event)
         if (m_noteOffsetOverlayContainer && m_noteVelocityOverlayContainer) {
             m_noteOffsetOverlayContainer->setZ(m_offsetOverlaysOnTop ? 1.0 : 0.0);
             m_noteVelocityOverlayContainer->setZ(m_offsetOverlaysOnTop ? 0.0 : 1.0);
+        }
+
+        // Which overlay's cursor is shown is only re-evaluated by Qt on the next hover event
+        // (see the cursor-priority comments in notevelocityoverlay.cpp/noteoffsetoverlay.cpp) -
+        // without this, a stationary mouse keeps showing whichever overlay's cursor was on top
+        // *before* the swap until it happens to move even a pixel, so a click there would already
+        // route to the new top overlay while the cursor still displays the old one. Synthesizing
+        // a button-less mouse-move at the current pointer position forces Qt Quick's normal
+        // hover-delivery path to run again immediately, the same as a real (zero-distance) move.
+        if (QQuickWindow* win = window()) {
+            const QPointF posInWindow = win->mapFromGlobal(QCursor::pos());
+            QMouseEvent hoverRefresh(QEvent::MouseMove, posInWindow, posInWindow, QCursor::pos(),
+                                     Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(win, &hoverRefresh);
         }
     }
 
