@@ -121,13 +121,9 @@ void NoteOffsetOverlay::paint(QPainter* painter)
 
         const QRectF bodyRect(leftPx, centerYPx - halfHeightPx, rightPx - leftPx, halfHeightPx * 2.0);
 
-        // Fully-rounded "pill" ends - radius tied to the rectangle's own height so it stays
-        // consistent at any zoom level or rectangle size, rather than a fixed pixel amount.
-        const qreal cornerRadius = std::min(halfHeightPx, bodyRect.width() / 2.0);
-
         painter->setPen(QPen(m_borderColor, 1.0));
         painter->setBrush(rect.selected ? m_selectedFillColor : (rect.userModified ? m_modifiedFillColor : m_fillColor));
-        painter->drawRoundedRect(bodyRect, cornerRadius, cornerRadius);
+        painter->drawRect(bodyRect);
 
         painter->setPen(Qt::NoPen);
         painter->setBrush(rect.selected ? m_selectedHandleColor : (rect.userModified ? m_modifiedHandleColor : m_handleColor));
