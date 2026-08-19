@@ -29,6 +29,9 @@
 namespace mu::engraving {
 class Score;
 
+//! Sits above the pages, which are the top of the visual hierarchy. It takes no part in
+//! that hierarchy - nothing is laid out inside it - and exists only to head the
+//! accessibility tree; see EngravingItem::accessibleChildren().
 class RootItem : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, RootItem)
@@ -38,6 +41,8 @@ public:
 
     compat::DummyElement* dummy() const;
     void init();
+
+    EngravingItemList accessibleChildren() const override;
 
     EngravingItem* clone() const override { return nullptr; }
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }

@@ -137,7 +137,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
             mb->setSystem(nullptr);
         }
 
-        page = Factory::createPage(ctx.mutDom().rootItem());
+        page = Factory::createPage(ctx.mutDom().rootItem()->score());
         ctx.mutDom().pages().push_back(page);
         page->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setPageNumber(0);
