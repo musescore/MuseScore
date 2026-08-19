@@ -53,9 +53,9 @@ FontFaceDU::~FontFaceDU()
     delete m_origin;
 }
 
-bool FontFaceDU::load(const FaceKey& key, const io::path_t& path, bool isSymbolMode)
+bool FontFaceDU::load(const FaceKey& key, const ByteArray& data, bool isSymbolMode)
 {
-    return m_origin->load(key, path, isSymbolMode);
+    return m_origin->load(key, data, isSymbolMode);
 }
 
 const FaceKey& FontFaceDU::key() const

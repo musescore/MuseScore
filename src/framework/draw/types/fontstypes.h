@@ -80,13 +80,6 @@ inline FontDataKey dataKeyForFont(const Font& f)
     return FontDataKey(f.family(), f.bold(), f.italic());
 }
 
-struct FontData {
-    FontDataKey key;
-    muse::ByteArray data;
-
-    inline bool valid() const { return key.valid() && !data.empty(); }
-};
-
 struct FaceKey {
     FontDataKey dataKey;
     Font::Type type = Font::Type::Undefined;

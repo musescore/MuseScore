@@ -37,7 +37,6 @@
 #endif
 
 #include "global/types/bytearray.h"
-#include "global/io/file.h"
 
 #include "log.h"
 
@@ -276,7 +275,7 @@ FontFaceFT::~FontFaceFT()
     delete m_data;
 }
 
-bool FontFaceFT::load(const FaceKey& key, const io::path_t& path, bool isSymbolMode)
+bool FontFaceFT::load(const FaceKey& key, const ByteArray& data, bool isSymbolMode)
 {
     if (!_init_ft()) {
         return false;
@@ -285,14 +284,12 @@ bool FontFaceFT::load(const FaceKey& key, const io::path_t& path, bool isSymbolM
     m_key = key;
     m_isSymbolMode = isSymbolMode;
 
-    {
-        io::File file(path);
-        if (!file.open(io::IODevice::ReadOnly)) {
-            return false;
-        }
-
-        m_data->fontData = file.readAll();
+    if (data.empty()) {
+        LOGE() << "empty font data: " << m_key.dataKey.family().id();
+        return false;
     }
+
+    m_data->fontData = data;
 
     int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.constData(),
                                   (FT_Long)m_data->fontData.size(), 0, &m_data->face);
