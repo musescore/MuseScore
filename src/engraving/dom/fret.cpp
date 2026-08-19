@@ -103,14 +103,9 @@ static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH(":/data/harmony_to_di
 
 static int canonicalEnharmonicTpc(int tpc)
 {
-    static const std::unordered_map<int, int> map = {
-        { TPC_F_B, TPC_E },
-        { TPC_C_B, TPC_B },
-        { TPC_E_S, TPC_F },
-        { TPC_B_S, TPC_C },
-    };
-    auto it = map.find(tpc);
-    return it != map.end() ? it->second : tpc;
+    // Normalize to one canonical TPC per pitch class
+    int mod = (tpc - Tpc::TPC_G_B) % TPC_DELTA_ENHARMONIC;
+    return Tpc::TPC_G_B + (mod < 0 ? mod + TPC_DELTA_ENHARMONIC : mod);
 }
 
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
@@ -1453,6 +1448,13 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
 
     for (auto& [key, value] : harmonyToDiagramMap) {
         HarmonyMapKey mapKey = createHarmonyMapKey(key, spellingType, chordList);
+
+        if (tpcIsValid(mapKey.rootTpc)) {
+            mapKey.rootTpc = canonicalEnharmonicTpc(mapKey.rootTpc);
+        }
+        if (tpcIsValid(mapKey.bassTpc)) {
+            mapKey.bassTpc = canonicalEnharmonicTpc(mapKey.bassTpc);
+        }
 
         s_harmonyToDiagramMap[mapKey].push_back({ key, value.xml, value.pattern });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
