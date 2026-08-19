@@ -24,6 +24,8 @@
 
 #include "types/translatablestring.h"
 
+#include "playback/playbackcommands.h"
+
 using namespace mu;
 using namespace mu::playback;
 using namespace muse;
@@ -31,10 +33,6 @@ using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::actions;
 using namespace muse::audio;
-
-static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
-static const ActionCode TOGGLE_AUX_SEND_ACTION("toggle-aux-send");
-static const ActionCode TOGGLE_AUX_CHANNEL_ACTION("toggle-aux-channel");
 
 static const QString VIEW_MENU_ID("view-menu");
 
@@ -53,16 +51,6 @@ static TranslatableString mixerSectionTitle(MixerSectionType type)
     }
 
     return {};
-}
-
-static QString auxSendVisibleMenuItemId(aux_channel_idx_t index)
-{
-    return QString("aux-send-%1-visible").arg(index);
-}
-
-static QString auxChannelVisibleMenuItemId(aux_channel_idx_t index)
-{
-    return QString("aux-channel-%1-visible").arg(index);
 }
 
 MixerPanelContextMenuModel::MixerPanelContextMenuModel(QObject* parent)
@@ -126,17 +114,20 @@ void MixerPanelContextMenuModel::load()
     AbstractMenuModel::load();
 
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxSendIndex, bool newVisibilityValue) {
-        setViewMenuItemChecked(auxSendVisibleMenuItemId(auxSendIndex), newVisibilityValue);
+        auto query = rcommand::make_query(TOGGLE_AUX_SEND_COMMAND, { { "auxsend-index", Val(auxSendIndex) } });
+        setViewMenuItemChecked(query, newVisibilityValue);
 
         emit auxSendsSectionVisibleChanged();
     });
 
     configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxChannelIndex, bool newVisibilityValue) {
-        setViewMenuItemChecked(auxChannelVisibleMenuItemId(auxChannelIndex), newVisibilityValue);
+        auto query = rcommand::make_query(TOGGLE_AUX_CHANNEL_COMMAND, { { "auxchannel-index", Val(auxChannelIndex) } });
+        setViewMenuItemChecked(query, newVisibilityValue);
     });
 
     configuration()->isMixerSectionVisibleChanged().onReceive(this, [this](MixerSectionType sectionType, bool newVisibilityValue) {
-        setViewMenuItemChecked(QString::number(static_cast<int>(sectionType)), newVisibilityValue);
+        auto query = rcommand::make_query(TOGGLE_MIXER_SECTION_COMMAND, { { "section", Val(str_conv(sectionType)) } });
+        setViewMenuItemChecked(query, newVisibilityValue);
 
         emitMixerSectionVisibilityChanged(sectionType);
     });
@@ -162,7 +153,7 @@ void MixerPanelContextMenuModel::load()
     viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Title));
 
     MenuItemList items {
-        makeMenuItem("command://playback/open-playback-setup"),
+        makeMenuItem(OPEN_PLAYBACK_SETUP_COMMAND),
         makeMenu(TranslatableString("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 
@@ -176,75 +167,41 @@ bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) 
 
 MenuItem* MixerPanelContextMenuModel::buildSectionVisibleItem(MixerSectionType sectionType)
 {
-    int sectionTypeInt = static_cast<int>(sectionType);
-
     MenuItem* item = new MenuItem(this);
-    item->setId(QString::number(sectionTypeInt));
-    item->setArgs(ActionData::make_arg1<int>(sectionTypeInt));
-
-    UiAction action;
-    action.title = mixerSectionTitle(sectionType);
-    action.code = TOGGLE_MIXER_SECTION_ACTION;
-    action.checkable = Checkable::Yes;
-    item->setAction(action);
-
-    UiActionState state;
-    state.enabled = true;
-    state.checked = isSectionVisible(sectionType);
-    item->setState(state);
-
+    item->setTitle(mixerSectionTitle(sectionType));
+    item->setCheckable(true);
+    item->setChecked(isSectionVisible(sectionType));
+    item->setCommandQuery(rcommand::make_query(TOGGLE_MIXER_SECTION_COMMAND, { { "section", Val(str_conv(sectionType)) } }));
     return item;
 }
 
 MenuItem* MixerPanelContextMenuModel::buildAuxSendVisibleItem(aux_channel_idx_t index)
 {
     MenuItem* item = new MenuItem(this);
-    item->setId(auxSendVisibleMenuItemId(index));
-    item->setArgs(ActionData::make_arg1<int>(index));
-
-    UiAction action;
-    action.title = TranslatableString("playback", String("Aux send %1").arg(index + 1));
-    action.code = TOGGLE_AUX_SEND_ACTION;
-    action.checkable = Checkable::Yes;
-    item->setAction(action);
-
-    UiActionState state;
-    state.enabled = true;
-    state.checked = configuration()->isAuxSendVisible(index);
-    item->setState(state);
-
+    item->setTitle(TranslatableString("playback", String("Aux send %1").arg(index + 1)));
+    item->setCheckable(true);
+    item->setChecked(configuration()->isAuxSendVisible(index));
+    item->setCommandQuery(rcommand::make_query(TOGGLE_AUX_SEND_COMMAND, { { "auxsend-index", Val(index) } }));
     return item;
 }
 
 MenuItem* MixerPanelContextMenuModel::buildAuxChannelVisibleItem(aux_channel_idx_t index)
 {
     MenuItem* item = new MenuItem(this);
-    item->setId(auxChannelVisibleMenuItemId(index));
-    item->setArgs(ActionData::make_arg1<int>(index));
-
-    UiAction action;
-    action.title = TranslatableString("playback", String("Aux channel %1").arg(index + 1));
-    action.code = TOGGLE_AUX_CHANNEL_ACTION;
-    action.checkable = Checkable::Yes;
-    item->setAction(action);
-
-    UiActionState state;
-    state.enabled = true;
-    state.checked = configuration()->isAuxChannelVisible(index);
-    item->setState(state);
-
+    item->setTitle(TranslatableString("playback", String("Aux channel %1").arg(index + 1)));
+    item->setCheckable(true);
+    item->setChecked(configuration()->isAuxChannelVisible(index));
+    item->setCommandQuery(rcommand::make_query(TOGGLE_AUX_CHANNEL_COMMAND, { { "auxchannel-index", Val(index) } }));
     return item;
 }
 
-void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, bool checked)
+void MixerPanelContextMenuModel::setViewMenuItemChecked(const muse::rcommand::CommandQuery& query, bool checked)
 {
     MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
 
     for (MenuItem* item : viewMenu.subitems()) {
-        if (item->id() == itemId) {
-            UiActionState state = item->state();
-            state.checked = checked;
-            item->setState(state);
+        if (item->commandQuery() == query) {
+            item->setChecked(checked);
             return;
         }
     }

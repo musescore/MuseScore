@@ -80,3 +80,22 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
 
     testChordSymToFretDiagram(score);
 }
+
+TEST_F(Engraving_FretDiagramTests, enharmonicFallbackRootAndBass)
+{
+    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+
+    // Root fallback: Fbdim7 -> Edim7 (Fb->E)
+    ASSERT_FALSE(fd->patternsFromHarmony(String(u"Edim7")).empty());
+    EXPECT_FALSE(fd->patternsFromHarmony(String(u"Fbdim7")).empty())
+        << "Fbdim7 should resolve via enharmonic root fallback (Fb->E)";
+
+    // Bass fallback: Am/Fb -> Am/E (Fb->E)
+    ASSERT_FALSE(fd->patternsFromHarmony(String(u"Am/E")).empty());
+    EXPECT_FALSE(fd->patternsFromHarmony(String(u"Am/Fb")).empty())
+        << "Am/Fb should resolve via enharmonic bass fallback (Fb->E)";
+
+    delete fd;
+    delete score;
+}

@@ -934,7 +934,7 @@ void TLayout::layoutChordBracket(const ChordBracket* item, Arpeggio::LayoutData*
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());
 
-    ldata->setShape(Shape(RectF(0.0, ldata->top, item->absoluteFromSpatium(item->hookLength()), ldata->bottom), item));
+    ldata->setShape(Shape(RectF(0.0, ldata->top, item->absoluteFromSpatium(item->hookLength()), ldata->bottom).normalized(), item));
 
     const Note* upnote = item->chord()->upNote();
     ldata->setPosY(upnote->y() + upnote->ldata()->bbox().top());
@@ -2938,16 +2938,16 @@ void TLayout::layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& 
     layoutLine(item, ctx);
 }
 
-void TLayout::layoutGuitarBend(GuitarBend* item, LayoutContext& ctx)
+void TLayout::layoutGuitarBend(GuitarBend* item, LayoutContext& ctx, System* system)
 {
     LAYOUT_CALL_ITEM(item);
     item->computeBendAmount();
 
-    GuitarBendLayout::updateSegmentsAndLayout(item, ctx);
+    GuitarBendLayout::updateSegmentsAndLayout(item, ctx, system);
 
     item->updateHoldLine();
     if (item->holdLine()) {
-        GuitarBendLayout::updateSegmentsAndLayout(item->holdLine(), ctx);
+        GuitarBendLayout::updateSegmentsAndLayout(item->holdLine(), ctx, system);
     }
 }
 
@@ -6744,13 +6744,22 @@ SpannerSegment* TLayout::layoutSystem(Spanner* item, System* system, LayoutConte
 SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                     std::function<SpannerSegment* (System* parent)> createSegment)
 {
+    // Prefer a segment which has already been added to the system
     SpannerSegment* seg = nullptr;
+    SpannerSegment* detached = nullptr;
     for (SpannerSegment* ss : spanner->spannerSegments()) {
-        if (!ss->system() || ss->isTappingHalfSlurSegment()) {
+        if (ss->system() == system) {
             seg = ss;
             break;
         }
+        if (!detached && !ss->system()) {
+            detached = ss;
+        }
     }
+    if (!seg) {
+        seg = detached;
+    }
+
     if (!seg) {
         if ((seg = spanner->popUnusedSegment())) {
             spanner->reuse(seg);
@@ -6944,20 +6953,4 @@ SpannerSegment* TLayout::layoutSystem(Slur* line, System* system, LayoutContext&
 {
     LAYOUT_CALL_ITEM(line);
     return SlurTieLayout::layoutSystem(line, system, ctx);
-}
-
-// Called after layout of all systems is done so precise
-// number of systems for this spanner becomes available.
-void TLayout::layoutSystemsDone(Spanner* item)
-{
-    LAYOUT_CALL_ITEM(item);
-    std::vector<SpannerSegment*> validSegments;
-    for (SpannerSegment* seg : item->spannerSegments()) {
-        if (seg->system()) {
-            validSegments.push_back(seg);
-        } else { // TODO: score()->selection().remove(ss); needed?
-            item->pushUnusedSegment(seg);
-        }
-    }
-    item->setSpannerSegments(validSegments);
 }

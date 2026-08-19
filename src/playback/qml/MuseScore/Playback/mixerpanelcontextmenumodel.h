@@ -82,6 +82,6 @@ private:
 
     void emitMixerSectionVisibilityChanged(MixerSectionType sectionType);
 
-    void setViewMenuItemChecked(const QString& itemId, bool checked);
+    void setViewMenuItemChecked(const muse::rcommand::CommandQuery& query, bool checked);
 };
 }
