@@ -84,10 +84,13 @@ signals:
 
     // Fired instead of a final barDragged() when a drag is cancelled by having its mouse grab
     // stolen mid-gesture (e.g. a popup opening) - unlike barDragged(..., completed=true), this is
-    // NOT a commit signal (no score change should follow it); it only exists so the controller can
-    // reset any of its own live-drag-only state (e.g. audition throttling) that would otherwise be
-    // left stuck mid-gesture with no matching completion event to clear it.
-    void dragCancelled();
+    // NOT a commit signal (no score change should follow it); it exists so the controller can both
+    // reset its own live-drag-only state (e.g. audition throttling) and snap the bar's displayed
+    // height back to the note's actual (uncommitted) velocity - previewBarHeight() calls during
+    // the drag mutate the overlay's rect directly, so without this it would keep showing the
+    // live-preview height indefinitely, out of sync with the note's real value, until some
+    // unrelated rebuild happened to refresh it.
+    void dragCancelled(int rectIndex);
 
 protected:
     void hoverMoveEvent(QHoverEvent* e) override;

@@ -335,7 +335,7 @@ void NoteVelocityOverlay::mouseUngrabEvent()
     // without this, mouseReleaseEvent never fires and this item is left thinking a drag is still
     // active. Treat it as a cancel rather than guessing a commit at an unknown final position.
     if (m_pressed) {
-        emit dragCancelled();
+        emit dragCancelled(m_activeRectIndex);
     }
     m_pressed = false;
     m_activeRectIndex = -1;

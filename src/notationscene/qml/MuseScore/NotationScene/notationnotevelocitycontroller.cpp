@@ -323,8 +323,8 @@ void NotationNoteVelocityController::createOverlayForStaff(const System* system,
         QObject::connect(overlay, &NoteVelocityOverlay::barDragged, [this, key](int rectIndex, qreal deltaYN, bool completed) {
             onBarDragged(key, rectIndex, deltaYN, completed);
         });
-        QObject::connect(overlay, &NoteVelocityOverlay::dragCancelled, [this]() {
-            resetAuditionThrottle();
+        QObject::connect(overlay, &NoteVelocityOverlay::dragCancelled, [this, key](int rectIndex) {
+            onDragCancelled(key, rectIndex);
         });
     }
 
@@ -494,6 +494,28 @@ void NotationNoteVelocityController::resetAuditionThrottle()
 {
     m_lastAuditionedVelocity = -1;
     m_auditionThrottle.invalidate();
+}
+
+void NotationNoteVelocityController::onDragCancelled(const SysStaffKey& key, int rectIndex)
+{
+    resetAuditionThrottle();
+
+    const auto dataIt = m_overlaysByStaff.find(key);
+    IF_ASSERT_FAILED(key.isValid() && dataIt != m_overlaysByStaff.end()
+                     && rectIndex >= 0 && static_cast<size_t>(rectIndex) < dataIt->second.notes.size()) {
+        return;
+    }
+
+    // previewBarHeight() calls during the drag mutate the overlay's rect directly, without ever
+    // touching the score - a grab stolen mid-drag (e.g. a popup opening) means no final
+    // barDragged(..., completed=true) ever arrives to settle that back to the note's real value,
+    // so without this the bar would keep showing the live-preview height indefinitely, out of
+    // sync with the note's actual (untouched) velocity.
+    Note* note = dataIt->second.notes.at(rectIndex).note;
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+    previewBarHeight(NoteLocation { key, rectIndex }, displayedVelocity(note));
 }
 
 void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed)

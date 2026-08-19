@@ -115,6 +115,7 @@ private:
     void onCurrentNotationChanged();
     void scheduleRebuild();
     void onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed);
+    void onDragCancelled(const SysStaffKey& key, int rectIndex);
     void previewBarHeight(const NoteLocation& location, int newVelocity);
     void auditionNote(const mu::engraving::Note* note, int velocity);
     bool auditionThrottleElapsed() const;
