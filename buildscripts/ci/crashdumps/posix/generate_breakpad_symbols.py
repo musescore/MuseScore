@@ -6,6 +6,7 @@
 # Modified 2020 MuseScore Limited  
 # Added option --dumpsyms-bin
 # Added option --arch
+# Resolve @rpath against the main executable's LC_RPATHs too, like dyld does
 
 """A tool to generate symbols for a binary suitable for breakpad.
 
@@ -140,7 +141,40 @@ def GetDeveloperDirMac():
   print('WARNING: no value found for DEVELOPER_DIR. Some commands may fail.')
 
 
-def GetSharedLibraryDependenciesMac(binary, exe_path):
+def GetOtoolPathMac(env):
+  """Return the otool to use, updating |env| if a developer dir is needed."""
+  SRC_ROOT_PATH = os.path.join(os.path.dirname(__file__), '../../../..')
+  hermetic_otool_path = os.path.join(
+      SRC_ROOT_PATH, 'build', 'mac_files', 'xcode_binaries', 'Contents',
+      'Developer', 'Toolchains', 'XcodeDefault.xctoolchain', 'usr', 'bin',
+      'otool')
+  if os.path.exists(hermetic_otool_path):
+    return hermetic_otool_path
+  developer_dir = GetDeveloperDirMac()
+  if developer_dir:
+    env['DEVELOPER_DIR'] = developer_dir
+  return 'otool'
+
+
+def GetRpathsMac(binary, exe_path):
+  """Return the LC_RPATHs of |binary|, expanded to absolute paths."""
+  env = os.environ.copy()
+  otool_path = GetOtoolPathMac(env)
+  loader_path = os.path.dirname(os.path.realpath(binary))
+  otool = subprocess.check_output(
+      [otool_path, '-lm', binary], env=env).decode('utf-8').splitlines()
+  rpaths = []
+  for idx, line in enumerate(otool):
+    if line.find('cmd LC_RPATH') != -1:
+      m = re.match(r' *path (.*) \(offset .*\)$', otool[idx+2])
+      rpath = m.group(1)
+      rpath = rpath.replace('@loader_path', loader_path)
+      rpath = rpath.replace('@executable_path', exe_path)
+      rpaths.append(rpath)
+  return rpaths
+
+
+def GetSharedLibraryDependenciesMac(binary, exe_path, exe_rpaths=()):
   """Return absolute paths to all shared library dependencies of the binary.
 
   This implementation assumes that we're running on a Mac system."""
@@ -155,18 +189,7 @@ def GetSharedLibraryDependenciesMac(binary, exe_path):
   loader_path = os.path.dirname(os.path.realpath(binary))
   env = os.environ.copy()
 
-  SRC_ROOT_PATH = os.path.join(os.path.dirname(__file__), '../../../..')
-  hermetic_otool_path = os.path.join(
-      SRC_ROOT_PATH, 'build', 'mac_files', 'xcode_binaries', 'Contents',
-      'Developer', 'Toolchains', 'XcodeDefault.xctoolchain', 'usr', 'bin',
-      'otool')
-  if os.path.exists(hermetic_otool_path):
-    otool_path = hermetic_otool_path
-  else:
-    developer_dir = GetDeveloperDirMac()
-    if developer_dir:
-      env['DEVELOPER_DIR'] = developer_dir
-    otool_path = 'otool'
+  otool_path = GetOtoolPathMac(env)
 
   otool = subprocess.check_output(
       [otool_path, '-lm', binary], env=env).decode('utf-8').splitlines()
@@ -183,10 +206,12 @@ def GetSharedLibraryDependenciesMac(binary, exe_path):
       m = re.match(r' *name (.*) \(offset .*\)$', otool[idx+2])
       dylib_id = m.group(1)
   # `man dyld` says that @rpath is resolved against a stack of LC_RPATHs from
-  # all executable images leading to the load of the current module. This is
-  # intentionally not implemented here, since we require that every .dylib
-  # contains all the rpaths it needs on its own, without relying on rpaths of
-  # the loading executables.
+  # all executable images leading to the load of the current module. Upstream
+  # dropped that (crrev.com/c/1102056) to require every .dylib to carry the
+  # rpaths it needs, so that symbolizing a framework on its own keeps working.
+  # We only ever symbolize from the main executable, and macdeployqt strips the
+  # LC_RPATHs off the bundled dylibs, so fall back to the executable's.
+  rpaths.extend(exe_rpaths)
 
   otool = subprocess.check_output(
       [otool_path, '-Lm', binary], env=env).decode('utf-8').splitlines()
@@ -219,7 +244,7 @@ def GetSharedLibraryDependenciesChromeOS(binary):
   return _GetSharedLibraryDependenciesAndroidOrChromeOS(binary)
 
 
-def GetSharedLibraryDependencies(options, binary, exe_path):
+def GetSharedLibraryDependencies(options, binary, exe_path, exe_rpaths=()):
   """Return absolute paths to all shared library dependencies of the binary."""
   deps = []
   if options.platform == 'linux':
@@ -227,7 +252,7 @@ def GetSharedLibraryDependencies(options, binary, exe_path):
   elif options.platform == 'android':
     deps = GetSharedLibraryDependenciesAndroid(binary)
   elif options.platform == 'darwin':
-    deps = GetSharedLibraryDependenciesMac(binary, exe_path)
+    deps = GetSharedLibraryDependenciesMac(binary, exe_path, exe_rpaths)
   elif options.platform == 'chromeos':
     deps = GetSharedLibraryDependenciesChromeOS(binary)
   else:
@@ -255,10 +280,18 @@ def GetTransitiveDependencies(options):
     return list(deps)
   elif (options.platform == 'darwin' or options.platform == 'android' or
         options.platform == 'chromeos'):
+    exe_rpaths = []
+    if options.platform == 'darwin':
+      # Ignore rpaths pointing outside the build dir, such as the toolchain's
+      # own copy of Qt: symbolizing those instead of the bundled ones is wrong.
+      build_dir = os.path.abspath(options.build_dir)
+      exe_rpaths = [rpath for rpath in GetRpathsMac(binary, exe_path)
+                    if os.path.abspath(rpath).startswith(build_dir)]
     binaries = set([binary])
     q = [binary]
     while q:
-      deps = GetSharedLibraryDependencies(options, q.pop(0), exe_path)
+      deps = GetSharedLibraryDependencies(options, q.pop(0), exe_path,
+                                          exe_rpaths)
       new_deps = set(deps) - binaries
       binaries |= new_deps
       q.extend(list(new_deps))

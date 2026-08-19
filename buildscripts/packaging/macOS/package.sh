@@ -6,39 +6,18 @@ trap 'echo Package failed; exit 1' ERR
 APP_NAME="MuseScore Studio"
 VOL_NAME="MuseScore-Studio"
 DO_SIGN=false
-
-function change_rpath() {
-   for P in `otool -L $1 | awk '{print $1}'`
-   do
-      if [[ "$P" == *@rpath* ]]
-      then
-         if [[ "$P" == *Qt* ]]
-         then
-            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
-            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-            install_name_tool -change $P $PSLASH $1
-            for P1 in `otool -L $FNAME | awk '{print $1}'`
-            do
-               if [[ "$P1" == *@rpath* ]]
-               then
-                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
-                   install_name_tool -change $P1 $PSLASH1 $FNAME
-               fi
-            done
-         else
-            PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
-            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-            install_name_tool -change $P $PSLASH $1
-         fi
-      fi
-   done
-}
+APPLE_TEAM_ID=""
+APPLE_USERNAME=""
+APPLE_PASSWORD=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --app-name) APP_NAME="$2"; shift ;;
         --vol-name) VOL_NAME="$2"; shift ;;
         --sign) DO_SIGN=true ;;
+        --team-id) APPLE_TEAM_ID="$2"; shift ;;
+        --user) APPLE_USERNAME="$2"; shift ;;
+        --password) APPLE_PASSWORD="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -62,31 +41,11 @@ fi
 macdeployqt ${APP_PATH} \
     -verbose=2 \
     -qmldir=. \
+    -executable="${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex/Contents/MacOS/MuseScoreQuickLookPreviewExtension" \
     $sign_args
 
 echo "otool -L post-macdeployqt"
 otool -L ${APP_PATH}/Contents/MacOS/mscore
-
-# Fix rpath after packaging, needed for generating dump symbols
-APPNAME=mscore
-VOLUME=applebuild
-SOURCE_BIN_FILE=${APP_PATH}/Contents/MacOS/${APPNAME}
-if [[ -f "$SOURCE_BIN_FILE" ]]
-then
-    change_rpath "$SOURCE_BIN_FILE"
-fi
-
-SOURCE_FRAMEWORKS=${APP_PATH}/Contents/Frameworks
-if [[ -d "$SOURCE_FRAMEWORKS" ]]
-then
-    for LIB_FILE in $SOURCE_FRAMEWORKS/*.dylib
-    do
-        if [[ -f "$LIB_FILE" ]]
-        then
-            change_rpath "$LIB_FILE"
-        fi
-    done
-fi
 
 # Remove dSYM files
 echo "Remove dSYM files"
@@ -109,10 +68,16 @@ if $DO_SIGN; then
         -s "Developer ID Application: MuseScore" \
         "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
+    # Sign the bundled dylibs that are loaded at runtime and therefore
+    # invisible to macdeployqt's dependency walk (e.g. libsndfile, vorbis)
+    echo "Sign bundled dylibs"
+    find "${APP_PATH}/Contents/Frameworks" -maxdepth 1 -type f -name "*.dylib" \
+        -exec codesign --force --options runtime --timestamp \
+        -s "Developer ID Application: MuseScore" {} +
+
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
     codesign --force \
-        --deep \
         --options runtime \
         --entitlements "buildscripts/packaging/macOS/entitlements.plist" \
         -s "Developer ID Application: MuseScore" \
@@ -123,6 +88,21 @@ if $DO_SIGN; then
 
     echo "spctl"
     spctl --assess --type execute -vvv "${APP_PATH}"
+
+    # Notarize and staple the .app before sealing the DMG
+    if [ -n "$APPLE_USERNAME" ] && [ -n "$APPLE_PASSWORD" ]; then
+        APP_ZIP="applebuild/app-notarization.zip"
+        rm -f "$APP_ZIP"
+        ditto -c -k --keepParent "${APP_PATH}" "$APP_ZIP"
+        xcrun notarytool submit "$APP_ZIP" \
+            --apple-id "$APPLE_USERNAME" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_PASSWORD" \
+            --wait
+        xcrun stapler staple "${APP_PATH}"
+        xcrun stapler validate "${APP_PATH}"
+        rm -f "$APP_ZIP"
+    fi
 else
     echo "Skipping code signing"
 fi
@@ -210,6 +190,15 @@ done
 
 # Convert the disk image to read-only
 hdiutil convert "applebuild/${DMG_NAME}" -format UDBZ -o "applebuild/${COMPRESSED_DMG_NAME}"
+
+if $DO_SIGN; then
+    echo "Codesign DMG"
+    codesign --timestamp \
+        -s "Developer ID Application: MuseScore" \
+        "applebuild/${COMPRESSED_DMG_NAME}"
+
+    codesign --verify --verbose=2 "applebuild/${COMPRESSED_DMG_NAME}"
+fi
 
 shasum -a 256 "applebuild/${COMPRESSED_DMG_NAME}"
 

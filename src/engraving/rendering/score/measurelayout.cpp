@@ -56,6 +56,7 @@
 
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
+#include "chordbracketlayout.h"
 #include "chordlayout.h"
 #include "horizontalspacing.h"
 #include "layoutcontext.h"
@@ -302,6 +303,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
                 }
             }
         } else if (segment.isChordRestType()) {
+            ChordBracketLayout::layoutSegment(&segment, ctx);
             for (EngravingItem* e : segment.annotations()) {
                 if (e->isSymbol() || e->isHarmony() || e->isFretDiagram()) {
                     TLayout::layoutItem(e, ctx);
@@ -500,6 +502,7 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             }
         }
 
+        ChordBracketLayout::layoutSegment(&seg, ctx);
         seg.createShapes();
         isFirstChordInMeasure = false;
     }
