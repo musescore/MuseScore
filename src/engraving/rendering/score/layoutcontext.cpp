@@ -611,10 +611,6 @@ LayoutContext::LayoutContext(Score* score)
 
 LayoutContext::~LayoutContext()
 {
-    for (Spanner* s : m_state.processedSpanners()) {
-        TLayout::layoutSystemsDone(s);
-    }
-
     for (MuseScoreView* v : m_score->getViewer()) {
         v->layoutChanged();
     }
