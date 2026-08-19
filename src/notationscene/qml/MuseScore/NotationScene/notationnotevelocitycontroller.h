@@ -23,6 +23,7 @@
 #pragma once
 
 #include <map>
+#include <QElapsedTimer>
 #include <QQuickItem>
 
 #include "context/iglobalcontext.h"
@@ -30,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/notationtypes.h"
+#include "playback/iplaybackcontroller.h"
 #include "notevelocitygeometry.h"
 
 namespace mu::engraving {
@@ -43,6 +45,7 @@ class NotationNoteVelocityController : public muse::Contextable, public muse::as
 {
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
     NotationNoteVelocityController(QQuickItem* overlaysParent, const muse::modularity::ContextPtr& iocCtx);
@@ -113,6 +116,10 @@ private:
     void scheduleRebuild();
     void onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed);
     void previewBarHeight(const NoteLocation& location, int newVelocity);
+    void auditionNote(const mu::engraving::Note* note, int velocity);
+    bool auditionThrottleElapsed() const;
+    void markAudition(int velocity);
+    void resetAuditionThrottle();
 
     std::vector<mu::engraving::Note*> selectedNotes() const;
 
@@ -136,5 +143,11 @@ private:
     NoteLocationMap m_noteLocations;
     muse::draw::Transform m_viewMatrix;
     bool m_rebuildScheduled = false;
+
+    // Avoids re-triggering the audition sound on every single mouse-move event during a drag -
+    // only once per actually-distinct velocity value, and never faster than a fixed minimum
+    // interval (see AUDITION_MIN_INTERVAL_MS).
+    int m_lastAuditionedVelocity = -1;
+    QElapsedTimer m_auditionThrottle;
 };
 }

@@ -62,6 +62,11 @@ using namespace mu::engraving;
 constexpr static int MIN_DRAGGABLE_VELOCITY = 1;
 constexpr static int MAX_DRAGGABLE_VELOCITY = 127;
 
+// A mouse-move event fires far more often than the velocity value actually needs to be re-heard -
+// without a minimum gap between auditions, a fast drag retriggers the sound almost every pixel of
+// movement, which sounds like a machine gun rather than a musical preview.
+constexpr static qint64 AUDITION_MIN_INTERVAL_MS = 200;
+
 constexpr static double BAR_HALF_WIDTH_SP = 0.45;
 constexpr static double BAND_V_PADDING_SP = 0.3;
 
@@ -318,6 +323,9 @@ void NotationNoteVelocityController::createOverlayForStaff(const System* system,
         QObject::connect(overlay, &NoteVelocityOverlay::barDragged, [this, key](int rectIndex, qreal deltaYN, bool completed) {
             onBarDragged(key, rectIndex, deltaYN, completed);
         });
+        QObject::connect(overlay, &NoteVelocityOverlay::dragCancelled, [this]() {
+            resetAuditionThrottle();
+        });
     }
 
     StaffOverlayData data;
@@ -444,6 +452,50 @@ void NotationNoteVelocityController::previewBarHeight(const NoteLocation& locati
     data.overlay->updateRect(location.rectIndex, rect);
 }
 
+void NotationNoteVelocityController::auditionNote(const Note* note, int velocity)
+{
+    IF_ASSERT_FAILED(note && note->chord()) {
+        return;
+    }
+
+    // playNotes() always flushes the track's sound (all-notes-off, sustain/sostenuto reset) before
+    // playing - fine for a one-off preview, but retriggering that every ~200ms while real playback
+    // is running would audibly cut the actual transport playback instead of just previewing a
+    // value. Skip the audition rather than fight the transport for the track.
+    if (playbackController()->isPlaying()) {
+        return;
+    }
+
+    // A throwaway NoteVal, never written to the real Note - playNotes() builds its own temporary
+    // Chord/Note from this to play, so the live drag value is heard without touching the score
+    // (or needing an undo entry) until the drag is actually committed.
+    NoteVal nval;
+    nval.pitch = note->pitch();
+    nval.tpc1 = note->tpc1();
+    nval.tpc2 = note->tpc2();
+    nval.headGroup = note->headGroup();
+    nval.velocityOverride = velocity;
+
+    playbackController()->playNotes({ nval }, note->staffIdx(), note->chord()->segment());
+}
+
+bool NotationNoteVelocityController::auditionThrottleElapsed() const
+{
+    return !m_auditionThrottle.isValid() || m_auditionThrottle.elapsed() >= AUDITION_MIN_INTERVAL_MS;
+}
+
+void NotationNoteVelocityController::markAudition(int velocity)
+{
+    m_lastAuditionedVelocity = velocity;
+    m_auditionThrottle.restart();
+}
+
+void NotationNoteVelocityController::resetAuditionThrottle()
+{
+    m_lastAuditionedVelocity = -1;
+    m_auditionThrottle.invalidate();
+}
+
 void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed)
 {
     const auto dataIt = m_overlaysByStaff.find(key);
@@ -471,6 +523,21 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
     const int deltaVelocity = std::abs(span) < 1e-9 ? 0 : static_cast<int>(std::lround(deltaCanvasY / span * 127.0));
     const int startVelocity = displayedVelocity(draggedNote);
     const int newVelocity = std::clamp(startVelocity + deltaVelocity, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
+
+    // Let the user hear the note at its live drag value before the change is committed - only the
+    // bar actually being dragged, and only when the (rounded) velocity has actually changed. While
+    // still dragging, also never more often than AUDITION_MIN_INTERVAL_MS - a mouse-move event
+    // fires far more often than that, so without the time gate a fast drag retriggers the sound
+    // almost every pixel of movement. On release, the throttle is bypassed rather than reset first
+    // - otherwise the exact value that ends up committed to the score could be one the user never
+    // actually heard, if it changed again within the last throttle window before release.
+    if (newVelocity != m_lastAuditionedVelocity && (completed || auditionThrottleElapsed())) {
+        auditionNote(draggedNote, newVelocity);
+        markAudition(newVelocity);
+    }
+    if (completed) {
+        resetAuditionThrottle();
+    }
 
     // If the dragged note is part of a multi-note selection, apply the same velocity delta to
     // every other selected note - including notes hidden behind others in the same chord's

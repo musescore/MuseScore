@@ -82,6 +82,13 @@ signals:
     // than jumping the value to whatever the click position happens to correspond to.
     void barDragged(int rectIndex, qreal deltaYN, bool completed);
 
+    // Fired instead of a final barDragged() when a drag is cancelled by having its mouse grab
+    // stolen mid-gesture (e.g. a popup opening) - unlike barDragged(..., completed=true), this is
+    // NOT a commit signal (no score change should follow it); it only exists so the controller can
+    // reset any of its own live-drag-only state (e.g. audition throttling) that would otherwise be
+    // left stuck mid-gesture with no matching completion event to clear it.
+    void dragCancelled();
+
 protected:
     void hoverMoveEvent(QHoverEvent* e) override;
     void hoverLeaveEvent(QHoverEvent* e) override;

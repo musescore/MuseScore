@@ -296,6 +296,10 @@ void NoteVelocityOverlay::mousePressEvent(QMouseEvent* e)
     // below keeps both ends of the subtraction on the same scale.
     m_dragStartYPx = e->position().y();
     e->accept();
+
+    // A zero delta - the mouse hasn't moved yet - so the controller hears a plain click on a bar
+    // even if it never turns into an actual drag.
+    emit barDragged(m_activeRectIndex, 0.0, false);
 }
 
 void NoteVelocityOverlay::mouseMoveEvent(QMouseEvent* e)
@@ -330,6 +334,9 @@ void NoteVelocityOverlay::mouseUngrabEvent()
     // The mouse grab taken in mousePressEvent can be stolen mid-drag (e.g. a popup opening) -
     // without this, mouseReleaseEvent never fires and this item is left thinking a drag is still
     // active. Treat it as a cancel rather than guessing a commit at an unknown final position.
+    if (m_pressed) {
+        emit dragCancelled();
+    }
     m_pressed = false;
     m_activeRectIndex = -1;
 }
