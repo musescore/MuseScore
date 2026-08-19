@@ -28,6 +28,7 @@
 #include "dataformatter.h"
 
 #include "engraving/dom/note.h"
+#include "engraving/types/types.h"
 
 #include "mpe/mpetypes.h"
 
@@ -48,7 +49,49 @@ NotePlaybackModel::NotePlaybackModel(QObject* parent, const muse::modularity::Co
 void NotePlaybackModel::createProperties()
 {
     m_tuning = buildPropertyItem(mu::engraving::Pid::TUNING);
-    m_velocity = buildPropertyItem(mu::engraving::Pid::USER_VELOCITY);
+
+    // Redirected to a dedicated callback instead of the default setPropertyValue() (which only
+    // ever writes the one Pid it's given) - dragging the on-canvas velocity bar always ends up as
+    // an absolute VeloType::USER_VAL (see NotationNoteVelocityController::onBarDragged()), and
+    // this mirrors that here too. Without it, typing a value into this spinbox for a
+    // VeloType::OFFSET_VAL note (userVelocity() is a *percentage* nudge on the dynamics-derived
+    // context for that type, not an absolute value) would leave VELO_TYPE untouched, silently
+    // reinterpreting the just-typed absolute number as a percentage the next time it's read.
+    auto onVelocityChanged = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        if (m_elementList.empty()) {
+            return;
+        }
+
+        beginCommand(muse::TranslatableString("undoableAction", "Change note velocity"));
+
+        for (mu::engraving::EngravingItem* item : m_elementList) {
+            IF_ASSERT_FAILED(item) {
+                continue;
+            }
+            mu::engraving::Note* note = item->isNote() ? mu::engraving::toNote(item) : nullptr;
+            if (!note) {
+                continue;
+            }
+
+            if (note->getProperty(mu::engraving::Pid::VELO_TYPE).value<mu::engraving::VeloType>()
+                != mu::engraving::VeloType::USER_VAL) {
+                note->undoChangeProperty(mu::engraving::Pid::VELO_TYPE, mu::engraving::VeloType::USER_VAL,
+                                         mu::engraving::PropertyFlags::NOSTYLE);
+            }
+
+            mu::engraving::PropertyFlags ps = item->propertyFlags(pid);
+            if (ps == mu::engraving::PropertyFlags::STYLED) {
+                ps = mu::engraving::PropertyFlags::UNSTYLED;
+            }
+            item->undoChangeProperty(pid, valueToElementUnits(pid, newValue, item), ps);
+        }
+
+        updateNotation();
+        endCommand();
+
+        loadProperties();
+    };
+    m_velocity = buildPropertyItem(mu::engraving::Pid::USER_VELOCITY, onVelocityChanged);
 
     // Redirected to each note's own chain head (see headNoteElements()) instead of the default
     // callback, which would write to the exact selected note.
@@ -123,20 +166,11 @@ void NotePlaybackModel::loadVelocityProperty()
     m_velocity->setIsModified(isModified);
 }
 
-int NotePlaybackModel::effectiveVelocity(const mu::engraving::Note* note) const
+int NotePlaybackModel::contextVelocity(const mu::engraving::Note* note) const
 {
-    if (!note) {
-        return 64;
-    }
-
-    const int userVelocity = note->userVelocity();
-    if (userVelocity != 0) {
-        return userVelocity;
-    }
-
-    // No explicit velocity set on this note - fall back to the same dynamics-derived value the
-    // on-canvas velocity-bar overlay already shows (NotationNoteVelocityController::contextVelocity())
-    // instead of a flat constant that ignores whatever dynamic (piano, forte...) actually applies.
+    // What the dynamics-marking/hairpin context alone would produce at this note's tick, with no
+    // per-note override - falls back to a flat constant only when there's no playback available
+    // to ask (mirrors NotationNoteVelocityController::contextVelocity()).
     const notation::IMasterNotationPtr masterNotation = context()->currentMasterNotation();
     const notation::INotationPlaybackPtr playback = masterNotation ? masterNotation->playback() : nullptr;
     if (!playback) {
@@ -146,6 +180,35 @@ int NotePlaybackModel::effectiveVelocity(const mu::engraving::Note* note) const
     const muse::mpe::dynamic_level_t level = playback->appliableDynamicLevel(note->track(), note->tick().ticks());
     const double ratio = muse::mpe::dynamicLevelToVelocityRatio(level);
     return std::clamp(static_cast<int>(std::lround(ratio * 127.0)), 0, 127);
+}
+
+int NotePlaybackModel::effectiveVelocity(const mu::engraving::Note* note) const
+{
+    if (!note) {
+        return 64;
+    }
+
+    const int userVelocity = note->userVelocity();
+    if (userVelocity == 0) {
+        // No explicit velocity set on this note - fall back to the same dynamics-derived value
+        // the on-canvas velocity-bar overlay already shows, instead of a flat constant that
+        // ignores whatever dynamic (piano, forte...) actually applies.
+        return contextVelocity(note);
+    }
+
+    // Note::customizeVelocity(): VeloType::USER_VAL means userVelocity() IS the absolute value,
+    // but VeloType::OFFSET_VAL means it's a *percentage* nudge applied on top of the dynamic
+    // context (velo += velo * userVelocity() / 100) - treating it as absolute here would show a
+    // value with no relation to either the percentage or what actually plays, and disagree with
+    // NotationNoteVelocityController::displayedVelocity(), which this is meant to mirror.
+    const mu::engraving::VeloType veloType = note->getProperty(mu::engraving::Pid::VELO_TYPE).value<mu::engraving::VeloType>();
+    if (veloType == mu::engraving::VeloType::USER_VAL) {
+        return userVelocity;
+    }
+
+    const int context = contextVelocity(note);
+    const int offset = static_cast<int>(std::lround(context * userVelocity / 100.0));
+    return std::clamp(context + offset, 0, 127);
 }
 
 void NotePlaybackModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)

@@ -71,11 +71,16 @@ private:
     // the velocity spinbox is loaded through this dedicated method instead of the generic one.
     void loadVelocityProperty();
 
+    // What the dynamics-marking/hairpin context alone would produce at this note's tick, with no
+    // per-note override - mirrors NotationNoteVelocityController::contextVelocity().
+    int contextVelocity(const mu::engraving::Note* note) const;
+
     // The velocity spinbox used to hardcode a flat 64 whenever a note had no explicit userVelocity()
     // (0), completely ignoring any dynamic (piano, forte...) actually in effect at that note - unlike
     // the on-canvas velocity-bar overlay, which already falls back to the real dynamics-derived value
     // (NotationNoteVelocityController::displayedVelocity()/contextVelocity()). Mirrors that same
-    // fallback here so both surfaces agree.
+    // fallback here so both surfaces agree - including displayedVelocity()'s VeloType::OFFSET_VAL
+    // handling (a percentage nudge on the context, not an absolute value).
     int effectiveVelocity(const mu::engraving::Note* note) const;
 
     PropertyItem* m_tuning = nullptr;
