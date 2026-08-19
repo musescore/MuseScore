@@ -88,7 +88,7 @@ void InsertRemoveMeasures::insertMeasures()
     std::vector<RepeatSegmentInfo> oldSegments;
     if (fm->isMeasure()) {
         // Snapshot before the structural edit below invalidates it
-        oldSegments = score->repeatSegmentInfoList();
+        oldSegments = score->repeatSegmentInfoList(/*expandRepeats*/ true);
 
         score->invalidateRepeatList();
         fs = toMeasure(fm)->first();
@@ -222,7 +222,7 @@ void InsertRemoveMeasures::removeMeasures()
     // Snapshot before the structural edit below invalidates it
     std::vector<RepeatSegmentInfo> oldSegments;
     if (fm->isMeasure()) {
-        oldSegments = score->repeatSegmentInfoList();
+        oldSegments = score->repeatSegmentInfoList(/*expandRepeats*/ true);
     }
 
     if (fm->isMeasure() && lm->isMeasure()) {

@@ -232,8 +232,13 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) c
 
 const TempoTimeline& MasterScore::tempoTimeline() const
 {
+    return tempoTimeline(masterScore()->expandRepeats());
+}
+
+const TempoTimeline& MasterScore::tempoTimeline(bool expandRepeats) const
+{
     m_automationController->ensureInitialized(const_cast<MasterScore*>(this));
-    return m_automationController->tempoTimeline();
+    return m_automationController->tempoTimeline(expandRepeats);
 }
 
 bool MasterScore::setTempoMultiplier(BeatsPerSecond val)

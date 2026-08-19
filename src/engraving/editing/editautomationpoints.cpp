@@ -55,7 +55,7 @@ static std::optional<ChangedRange> computeChangedRange(const Score* score, const
     }
     // else: Global/Instrument-scoped key - not tied to any staff, leave staffIdx as muse::nidx
 
-    const RepeatList& repeatList = score->repeatList();
+    const RepeatList& repeatList = score->expandedRepeatList();
 
     //! NOTE: utick2tick can be non-monotonic across repeat passes (e.g. D.S. al Coda),
     //! so the base-tick extremes aren't necessarily at the utick extremes
@@ -85,7 +85,7 @@ static void widenChangedRange(const Score* score, const AutomationCurveKey& key,
         return;
     }
 
-    const RepeatList& repeatList = score->repeatList();
+    const RepeatList& repeatList = score->expandedRepeatList();
     for (const AutomationPointEdit& edit : edits) {
         const Fraction tick = Fraction::fromTicks(repeatList.utick2tick(edit.tick));
         changedRange.tickFrom = std::min(changedRange.tickFrom, tick);

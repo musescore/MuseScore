@@ -44,6 +44,7 @@ class TempoText;
 class GradualTempoChange;
 class Volta;
 class MeasureRepeat;
+class RepeatList;
 class RepeatSegment;
 struct RepeatSegmentInfo;
 struct ScoreChanges;
@@ -62,8 +63,8 @@ public:
     AutomationDataConstPtr automationData() const { return m_automationData; }
     void setAutomationData(AutomationDataPtr data) { m_automationData = std::move(data); }
 
-    const TempoTimeline& tempoTimeline() const { return m_tempoTimeline; }
-    void setTempoMultiplier(const BeatsPerSecond& bps) { m_tempoTimeline.setTempoMultiplier(bps); }
+    const TempoTimeline& tempoTimeline(bool expandRepeats = true) const;
+    void setTempoMultiplier(const BeatsPerSecond& bps);
 
 private:
     struct UpdateRequest {
@@ -168,8 +169,9 @@ private:
     static void addMeasureRepeatPoints(UpdateContext& ctx);
 
     void mirrorAuthoredPointsToRepeats(UpdateContext& ctx);
+    void fillNoRepeatTempoCurve(const AutomationCurve& tempoCurve, AutomationCurve& noRepeatTempoCurve);
 
-    static void collectPauses(const Measure* measure, int tickOffset, std::map<int, double>& pauses);
+    static void collectPauses(const Measure* measure, int tickOffset, PausesMap& pauses, PausesMap& noRepeatPauses);
     static void addTempoTextPoint(const TempoText* tt, int tickOffset, UpdateContext& ctx);
     static void addFermataStretchPoints(const Fermata* fermata, int tickOffset, double stretch, UpdateContext& ctx);
     static void addGradualTempoChangePoints(const GradualTempoChange* tempoChange, int tickOffset, UpdateContext& ctx);
@@ -200,5 +202,6 @@ private:
     Score* m_score = nullptr;
     AutomationDataPtr m_automationData;
     TempoTimeline m_tempoTimeline;
+    TempoTimeline m_flattenedTempoTimeline;
 };
 }

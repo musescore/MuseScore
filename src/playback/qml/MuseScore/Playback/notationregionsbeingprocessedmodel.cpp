@@ -349,8 +349,8 @@ void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackI
 
     for (const InputProcessingProgress::ChunkInfo& chunk : chunks) {
         TickRange range;
-        range.tickFrom = master->playback()->secToPlayedTick(chunk.start);
-        range.tickTo = master->playback()->secToPlayedTick(chunk.end);
+        range.tickFrom = master->playback()->secToTick(chunk.start);
+        range.tickTo = master->playback()->secToTick(chunk.end);
 
         if (!muse::contains(info.ranges, range)) {
             info.ranges.push_back(range);

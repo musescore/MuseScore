@@ -238,8 +238,10 @@ void NotationPlayback::updateTotalPlayTime()
         return;
     }
 
-    int lastTick = score->repeatList(m_playbackModel.isPlayRepeatsEnabled()).ticks();
-    audio::secs_t newPlayTime = score->utick2utime(lastTick);
+    const bool expandRepeats = m_playbackModel.isPlayRepeatsEnabled();
+    const int lastTick = score->repeatList(expandRepeats).ticks();
+    const TempoTimeline& timeline = score->tempoTimeline(expandRepeats);
+    audio::secs_t newPlayTime = timeline.utick2utime(lastTick);
     newPlayTime += PLAYBACK_TAIL_SECS;
 
     if (m_totalPlayTime == newPlayTime) {
@@ -262,27 +264,36 @@ muse::async::Channel<muse::audio::secs_t> NotationPlayback::totalPlayTimeChanged
 
 muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 {
-    return score() ? score()->utick2utime(tick) : 0.0;
+    const mu::engraving::Score* sc = score();
+    if (!sc) {
+        return 0;
+    }
+
+    return sc->tempoTimeline(m_playbackModel.isPlayRepeatsEnabled()).utick2utime(tick);
 }
 
 tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 {
-    if (!score()) {
+    const mu::engraving::Score* sc = score();
+    if (!sc) {
         return 0;
     }
 
-    return score()->utime2utick(sec);
+    return sc->tempoTimeline(m_playbackModel.isPlayRepeatsEnabled()).utime2utick(sec);
 }
 
 tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 {
-    if (!score()) {
+    const mu::engraving::Score* sc = score();
+    if (!sc) {
         return 0;
     }
 
-    tick_t utick = secToPlayedTick(sec);
+    const bool expandRepeats = m_playbackModel.isPlayRepeatsEnabled();
+    const tick_t utick = sc->tempoTimeline(expandRepeats).utime2utick(sec);
 
-    return score()->repeatList(m_playbackModel.isPlayRepeatsEnabled()).utick2tick(utick);
+    // The flattened timeline's domain is already raw tick - only the expanded one needs converting back
+    return expandRepeats ? sc->expandedRepeatList().utick2tick(utick) : utick;
 }
 
 RetVal<muse::midi::tick_t> NotationPlayback::playPositionTickByRawTick(muse::midi::tick_t tick) const

@@ -238,9 +238,7 @@ void PositionsWriter::writeEventsPositions(XmlStreamWriter& writer, const mu::en
 
     writer.startElement(EVENTS_TAG);
 
-    score->masterScore()->setExpandRepeats(true);
-
-    for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
+    for (const mu::engraving::RepeatSegment* repeatSegment : score->expandedRepeatList()) {
         int startTick = repeatSegment->tick;
         int endTick = repeatSegment->endTick();
         int tickOffset = repeatSegment->utick - repeatSegment->tick;

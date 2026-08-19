@@ -51,6 +51,9 @@ static const double TEMPO_3(normalizeTempo(BeatsPerSecond(3.0)));
 static const double TEMPO_1_5(normalizeTempo(BeatsPerSecond(1.5)));
 static const double TEMPO_2(normalizeTempo(BeatsPerSecond(2.0)));
 
+static constexpr double TEMPO_ERROR(0.000001);
+static constexpr double TIME_ERROR(0.000001);
+
 // Restores a score's undo stack to its state at construction, even if an ASSERT_* exits the test early
 class UndoRestoreGuard
 {
@@ -755,6 +758,38 @@ TEST_F(ScoreAutomationController_Tests, Update_TempoRelevantType_FullRescan)
     expectedCurve[23040] = generatedPoint(TEMPO_1_5,  TEMPO_3);
 
     checkCurvesMatch(controller.automationData()->curve(TEMPO_KEY), expectedCurve);
+}
+
+TEST_F(ScoreAutomationController_Tests, TempoTimeline_ExpandRepeats_TrueVsFalse)
+{
+    // [GIVEN] tempo.mscx's end repeat plays the whole piece twice (see Init_Tempo_CurveMatchesExpected)
+    ScoreAutomationController controller;
+    controller.init(s_tempoScore);
+
+    const TempoTimeline& flattened = controller.tempoTimeline(false);
+    const TempoTimeline& expanded = controller.tempoTimeline(true);
+
+    // [THEN] The flattened timeline ignores the repeat: it only ever covers one playthrough,
+    //        ending exactly at the raw tick length of the piece (11520)
+    ASSERT_FALSE(flattened.points().empty());
+    EXPECT_EQ(flattened.points().back().utick, 11520);
+
+    // [THEN] The expanded timeline covers both passes, ending at the repeated utick length (23040)
+    ASSERT_FALSE(expanded.points().empty());
+    EXPECT_EQ(expanded.points().back().utick, 23040);
+
+    // [THEN] Both passes are tempo-identical, so the expanded timeline takes exactly twice as long
+    //        to reach the end of the 2nd pass as it does the end of the 1st, and the 1st pass's
+    //        own elapsed time matches the flattened (single-pass) timeline exactly
+    const double singlePassTime = flattened.utick2utime(11520);
+    EXPECT_GT(singlePassTime, 0.0);
+    EXPECT_NEAR(expanded.utick2utime(11520), singlePassTime, TIME_ERROR);
+    EXPECT_NEAR(expanded.utick2utime(23040), 2 * singlePassTime, TIME_ERROR);
+
+    // [THEN] Sampled mid-ritardando (M2, beat 3), the 2nd pass's tempo matches the 1st exactly,
+    //        and the flattened timeline agrees with the expanded one's 1st pass
+    EXPECT_NEAR(expanded.tempo(2880).val, expanded.tempo(2880 + 11520).val, TEMPO_ERROR);
+    EXPECT_NEAR(flattened.tempo(2880).val, expanded.tempo(2880).val, TEMPO_ERROR);
 }
 
 TEST_F(ScoreAutomationController_Tests, Update_RepeatStructureChange_ForcesFullReprocessing)
