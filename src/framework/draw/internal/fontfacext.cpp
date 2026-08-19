@@ -54,18 +54,20 @@ FontFaceXT::~FontFaceXT()
 {
 }
 
-bool FontFaceXT::load(const FaceKey& key, const muse::io::path_t& path, bool isSymbolMode)
+bool FontFaceXT::load(const FaceKey& key, const muse::ByteArray& data, bool isSymbolMode)
 {
     m_key = key;
     m_isSymbolMode = isSymbolMode;
 
-    std::unique_ptr<muse::ZipReader> zip = std::make_unique<muse::ZipReader>(path);
-    if (!zip->exists()) {
-        LOGE() << "not exists: " << path;
+    if (data.empty()) {
+        LOGE() << "empty font data: " << key.dataKey.family().id();
         return false;
     }
 
-    m_zip = std::move(zip);
+    m_fileBuffer = std::make_unique<muse::io::Buffer>(muse::ByteArray(data));
+    m_fileBuffer->open(muse::io::IODevice::ReadOnly);
+
+    m_zip = std::make_unique<muse::ZipReader>(m_fileBuffer.get());
 
     // meta
     {
@@ -110,7 +112,7 @@ bool FontFaceXT::load(const FaceKey& key, const muse::io::path_t& path, bool isS
             }
         }
 
-        LOGI() << "fxt version: " << ver << ", glyphs: " << glyphs << ", path: " << path;
+        LOGI() << "fxt version: " << ver << ", glyphs: " << glyphs << ", family: " << key.dataKey.family().id();
     }
 
     // ligatures
