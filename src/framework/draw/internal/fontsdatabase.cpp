@@ -29,6 +29,7 @@
 #endif
 
 #include "global/io/file.h"
+#include "global/io/fileinfo.h"
 
 #include "log.h"
 
@@ -103,36 +104,35 @@ std::vector<FontDataKey> FontsDatabase::substitutionFonts(const FontDataKey& req
     return null;
 }
 
-FontData FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type) const
+ByteArray FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type) const
 {
     FontDataKey key = actualFont(requireKey, type);
     io::path_t path = fontInfo(key).path;
     IF_ASSERT_FAILED(io::File::exists(path)) {
-        return FontData();
+        return ByteArray();
     }
 
-    io::File file(path);
-    if (!file.open()) {
-        LOGE() << "failed open font file: " << path;
-        return FontData();
+    std::string pathStr = path.toStdString();
+    auto it = m_fileDataCache.find(pathStr);
+    if (it != m_fileDataCache.end()) {
+        return it->second;
     }
 
-    FontData fd;
-    fd.key = key;
-    fd.data = file.readAll();
-    return fd;
+    ByteArray data;
+    if (!io::File::readFile(path, data)) {
+        LOGE() << "failed read font file: " << path;
+        return ByteArray();
+    }
+
+    m_fileDataCache.insert({ pathStr, data });
+    return data;
 }
 
-io::path_t FontsDatabase::fontPath(const FontDataKey& requireKey, Font::Type type) const
+bool FontsDatabase::isFtxFont(const FontDataKey& requireKey, Font::Type type) const
 {
     FontDataKey key = actualFont(requireKey, type);
     io::path_t path = fontInfo(key).path;
-    if (!io::File::exists(path)) {
-        LOGE() << "not exists font: " << path;
-        DO_ASSERT(io::File::exists(path));
-        return io::path_t();
-    }
-    return path;
+    return io::FileInfo::suffix(path).toLower() == u"ftx";
 }
 
 const FontsDatabase::FontInfo& FontsDatabase::fontInfo(const FontDataKey& key) const
