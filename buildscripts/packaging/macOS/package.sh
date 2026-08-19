@@ -68,6 +68,13 @@ if $DO_SIGN; then
         -s "Developer ID Application: MuseScore" \
         "${APP_PATH}/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
 
+    # Sign the bundled dylibs that are loaded at runtime and therefore
+    # invisible to macdeployqt's dependency walk (e.g. libsndfile, vorbis)
+    echo "Sign bundled dylibs"
+    find "${APP_PATH}/Contents/Frameworks" -maxdepth 1 -type f -name "*.dylib" \
+        -exec codesign --force --options runtime --timestamp \
+        -s "Developer ID Application: MuseScore" {} +
+
     # Re-sign main app after removing dSYM files and renaming qml folder
     echo "Re-sign main app"
     codesign --force \
