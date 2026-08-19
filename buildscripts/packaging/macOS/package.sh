@@ -121,7 +121,9 @@ hdiutil create -size 800m -fs APFS -volname "${VOL_NAME}" "applebuild/${DMG_NAME
 
 # Mount the disk image
 VOLUME="/Volumes/${VOL_NAME}"
-hdiutil attach "applebuild/${DMG_NAME}" -mountpoint "${VOLUME}"
+ATTACH_OUTPUT=$(hdiutil attach "applebuild/${DMG_NAME}" -mountpoint "${VOLUME}")
+echo "${ATTACH_OUTPUT}"
+DEV=$(echo "${ATTACH_OUTPUT}" | head -n1 | awk '{print $1}')
 
 # copy in the application bundle
 cp -Rp ${APP_PATH} "${VOLUME}/${APP_NAME}.app"
@@ -171,9 +173,13 @@ mv "${VOLUME}/Pictures" "${VOLUME}/.Pictures"
 
 echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
-    # Unmount the disk image
-    hdiutil detach "${VOLUME}"
-    if [ $? -eq 0 ]; then
+    # Detach by device: a failed eject can leave the image attached with the
+    # mountpoint already gone
+    if hdiutil detach "${DEV}"; then
+        break
+    fi
+    if ! hdiutil info | grep -qE "^${DEV}(s[0-9]+)?[[:space:]]"; then
+        echo "Disk image is already detached"
         break
     fi
     if [ $i -eq 20 ]; then
