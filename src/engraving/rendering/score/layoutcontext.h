@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTCONTEXT_DEV_H
-#define MU_ENGRAVING_LAYOUTCONTEXT_DEV_H
+
+#pragma once
 
 #include <vector>
 #include <set>
@@ -318,8 +318,6 @@ private:
     MeasureBase* m_pageOldMeasure = nullptr;
     int m_measureNumber = 0;
 
-    std::set<Spanner*> m_processedSpanners;
-
     bool m_rangeDone = false;
 
     bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
@@ -425,5 +423,3 @@ private:
     LayoutState m_state;
 };
 }
-
-#endif // MU_ENGRAVING_LAYOUTCONTEXT_DEV_H
