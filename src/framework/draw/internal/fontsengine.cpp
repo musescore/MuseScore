@@ -21,8 +21,6 @@
  */
 #include "fontsengine.h"
 
-#include "global/io/fileinfo.h"
-
 #include "ifontface.h"
 #ifdef MUSE_MODULE_DRAW_USE_FONTFACE_FT
 #include "fontfaceft.h"
@@ -55,16 +53,6 @@ static int fontMetricsPixelSize(const Font& f)
 static FaceKey faceKeyForMetricsFont(const Font& f)
 {
     return FaceKey(dataKeyForFont(f), f.type(), fontMetricsPixelSize(f));
-}
-
-static int loadedPixelSizeForFontPath(const io::path_t& path, int requirePixelSize)
-{
-    // FTX fonts store glyph metrics and images baked at LOADED_PIXEL_SIZE.
-    if (io::FileInfo::suffix(path).toLower() == u"ftx") {
-        return static_cast<int>(LOADED_PIXEL_SIZE);
-    }
-
-    return requirePixelSize;
 }
 
 static inline RectF fromFBBox(const FBBox& bb, double scale)
@@ -502,25 +490,27 @@ void FontsEngine::setFontFaceFactory(const FontFaceFactory& f)
     m_fontFaceFactory = f;
 }
 
-IFontFace* FontsEngine::createFontFace(const io::path_t& path) const
+IFontFace* FontsEngine::createFontFace(const FontDataKey& dataKey, Font::Type type) const
 {
+    bool isFtx = fontsDatabase()->isFtxFont(dataKey, type);
+
     if (m_fontFaceFactory) {
-        return m_fontFaceFactory(path);
+        return m_fontFaceFactory(isFtx);
     }
 
     IFontFace* origin = nullptr;
-    if (io::FileInfo::suffix(path).toLower() == u"ftx") {
+    if (isFtx) {
 #ifdef MUSE_MODULE_DRAW_USE_FONTFACE_XT
         origin = new FontFaceXT();
 #else
-        LOGE() << "XT font face backend is disabled: " << path;
+        LOGE() << "XT font face backend is disabled: " << dataKey.family().id();
         return nullptr;
 #endif
     } else {
 #ifdef MUSE_MODULE_DRAW_USE_FONTFACE_FT
         origin = new FontFaceFT();
 #else
-        LOGE() << "FreeType font face backend is disabled: " << path;
+        LOGE() << "FreeType font face backend is disabled: " << dataKey.family().id();
         return nullptr;
 #endif
     }
@@ -530,13 +520,9 @@ IFontFace* FontsEngine::createFontFace(const io::path_t& path) const
 
 IFontFace* FontsEngine::fontFace(const FontDataKey& dataKey, Font::Type type, int pixelSize, bool isSymbolMode) const
 {
-    io::path_t fontPath = fontsDatabase()->fontPath(dataKey, type);
-    if (fontPath.empty()) {
-        LOGE() << "font path is empty: " << dataKey.family().id();
-        return nullptr;
-    }
-
-    const int loadedPixelSize = loadedPixelSizeForFontPath(fontPath, pixelSize);
+    // FTX fonts store glyph metrics and images baked at LOADED_PIXEL_SIZE.
+    bool isFtx = fontsDatabase()->isFtxFont(dataKey, type);
+    const int loadedPixelSize = isFtx ? static_cast<int>(LOADED_PIXEL_SIZE) : pixelSize;
 
     for (IFontFace* face : m_loadedFaces) {
         if (face->key().dataKey == dataKey && face->key().type == type && face->key().pixelSize == loadedPixelSize
@@ -545,18 +531,24 @@ IFontFace* FontsEngine::fontFace(const FontDataKey& dataKey, Font::Type type, in
         }
     }
 
+    ByteArray data = fontsDatabase()->fontData(dataKey, type);
+    if (data.empty()) {
+        LOGE() << "font data is empty: " << dataKey.family().id();
+        return nullptr;
+    }
+
     FaceKey loadedKey;
     loadedKey.dataKey = dataKey;
     loadedKey.type = type;
     loadedKey.pixelSize = loadedPixelSize;
 
-    IFontFace* face = createFontFace(fontPath);
+    IFontFace* face = createFontFace(dataKey, type);
     IF_ASSERT_FAILED(face) {
         return nullptr;
     }
 
-    if (!face->load(loadedKey, fontPath, isSymbolMode)) {
-        LOGE() << "failed load font face: " << fontPath;
+    if (!face->load(loadedKey, data, isSymbolMode)) {
+        LOGE() << "failed load font face: " << dataKey.family().id();
         delete face;
         return nullptr;
     }
