@@ -1578,17 +1578,22 @@ Segment* Score::lastSegmentMM() const
 
 double Score::utick2utime(int tick) const
 {
-    return tempoTimeline().utick2utime(tick);
+    return tempoTimeline(/*expandRepeats*/ true).utick2utime(tick);
 }
 
 int Score::utime2utick(double utime) const
 {
-    return tempoTimeline().utime2utick(utime);
+    return tempoTimeline(/*expandRepeats*/ true).utime2utick(utime);
 }
 
 const TempoTimeline& Score::tempoTimeline() const
 {
     return masterScore()->tempoTimeline();
+}
+
+const TempoTimeline& Score::tempoTimeline(bool expandRepeats) const
+{
+    return masterScore()->tempoTimeline(expandRepeats);
 }
 
 //---------------------------------------------------------
@@ -3535,18 +3540,20 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String& 
 
 BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
-    const int utick = repeatList().tick2utick(tick.ticks());
-    return tempoTimeline().tempo(utick);
+    return tempoTimeline(/*expandRepeats*/ false).tempo(tick.ticks());
 }
 
 BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
 {
-    return tempo(tick) * tempoTimeline().tempoMultiplier();
+    const TempoTimeline& timeline = tempoTimeline(/*expandRepeats*/ false);
+    return timeline.tempo(tick.ticks()) * timeline.tempoMultiplier();
 }
 
 BeatsPerSecond Score::multipliedTempoAtUtick(int utick) const
 {
-    return tempoTimeline().tempo(utick) * tempoTimeline().tempoMultiplier();
+    // utick is only truly expanded when repeats are expanded; otherwise it's a plain tick
+    const TempoTimeline& timeline = tempoTimeline();
+    return timeline.tempo(utick) * timeline.tempoMultiplier();
 }
 
 //---------------------------------------------------------
@@ -4229,7 +4236,6 @@ int Score::lyricCount() const
 std::vector<Lyrics*> Score::lyrics() const
 {
     std::vector<Lyrics*> result;
-    masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
     for (size_t track = 0; track < ntracks(); track++) {
         size_t maxLyrics = 1;
@@ -4237,7 +4243,7 @@ std::vector<Lyrics*> Score::lyrics() const
             m->setPlaybackCount(0);
         }
         // follow the repeat segments
-        const RepeatList& rlist = repeatList();
+        const RepeatList& rlist = expandedRepeatList();
         for (const RepeatSegment* rs : rlist) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
             Fraction endTick    = Fraction::fromTicks(rs->endTick());
@@ -5176,10 +5182,15 @@ const RepeatList& Score::repeatList(bool expandRepeats, bool updateTies)  const
     return m_masterScore->repeatList(expandRepeats, updateTies);
 }
 
-std::vector<RepeatSegmentInfo> Score::repeatSegmentInfoList() const
+std::vector<RepeatSegmentInfo> Score::repeatSegmentInfoList(bool expandRepeats) const
 {
     // Read-only: don't trigger tie/jump-point cleanup, safe to call mid-edit
-    return repeatList(m_masterScore->expandRepeats(), false).segmentInfoList();
+    return repeatList(expandRepeats, false).segmentInfoList();
+}
+
+const RepeatList& Score::expandedRepeatList() const
+{
+    return repeatList(/*expandRepeats*/ true);
 }
 
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }

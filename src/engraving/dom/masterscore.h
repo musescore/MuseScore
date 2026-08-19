@@ -123,6 +123,7 @@ public:
     void invalidateRepeatList();
 
     const TempoTimeline& tempoTimeline() const;
+    const TempoTimeline& tempoTimeline(bool expandRepeats) const;
     bool setTempoMultiplier(BeatsPerSecond val);
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }

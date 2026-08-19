@@ -397,6 +397,7 @@ muse::async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
 void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                            ChangedTrackIdSet* trackChanges)
 {
+    m_score->masterScore()->setExpandRepeats(m_expandRepeats);
     updateSetupData();
     updateContext(trackFrom, trackTo, tickFrom, tickTo);
     updateEvents(tickFrom, tickTo, trackFrom, trackTo, trackChanges);

@@ -36,12 +36,12 @@ using namespace mu::engraving;
 
 void InsertTime::redo()
 {
-    score->insertTime(tick, len, score->repeatSegmentInfoList());
+    score->insertTime(tick, len, score->repeatSegmentInfoList(/*expandRepeats*/ true));
 }
 
 void InsertTime::undo()
 {
-    score->insertTime(tick, -len, score->repeatSegmentInfoList());
+    score->insertTime(tick, -len, score->repeatSegmentInfoList(/*expandRepeats*/ true));
 }
 
 //---------------------------------------------------------

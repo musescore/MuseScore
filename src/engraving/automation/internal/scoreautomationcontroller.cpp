@@ -301,6 +301,17 @@ static ChangeRelevance classifyChanges(const ScoreChanges& changes)
     return result;
 }
 
+const TempoTimeline& ScoreAutomationController::tempoTimeline(bool expandRepeats) const
+{
+    return expandRepeats ? m_tempoTimeline : m_flattenedTempoTimeline;
+}
+
+void ScoreAutomationController::setTempoMultiplier(const BeatsPerSecond& bps)
+{
+    m_tempoTimeline.setTempoMultiplier(bps);
+    m_flattenedTempoTimeline.setTempoMultiplier(bps);
+}
+
 void ScoreAutomationController::init(Score* score)
 {
     m_score = score;
@@ -337,7 +348,7 @@ void ScoreAutomationController::insertTime(const Fraction& tick, const Fraction&
     }
 
     const int rawInsertTick = tick.ticks();
-    const std::vector<RepeatSegmentInfo> newSegments = m_score->repeatList().segmentInfoList();
+    const std::vector<RepeatSegmentInfo> newSegments = m_score->expandedRepeatList().segmentInfoList();
 
     AutomationCurveMap curves = m_automationData->curves();
 
@@ -459,7 +470,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
         return;
     }
 
-    const RepeatList& repeatList = m_score->repeatList();
+    const RepeatList& repeatList = m_score->expandedRepeatList();
     if (repeatList.empty()) {
         return;
     }
@@ -491,6 +502,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
 
     if (request.includeTempo) {
         ctx.tempoCurve = &ctx.curves[TEMPO_KEY];
+        fillNoRepeatTempoCurve(*ctx.tempoCurve, ctx.noRepeatTempoCurve);
     } else {
         // Read-only access for e.g. compound dynamics,
         // which need the current tempo even when this update doesn't rebuild it
@@ -524,7 +536,7 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
             }
 
             if (request.includeTempo) {
-                collectPauses(measure, tickOffset, ctx.pauses);
+                collectPauses(measure, tickOffset, ctx.pauses, ctx.noRepeatPauses);
                 if (measure->isAnacrusis()) {
                     std::optional<utick_t> nextMeasureUTick;
                     if (mi + 1 < segMeasures.size()) {
@@ -577,10 +589,29 @@ void ScoreAutomationController::update(const UpdateRequest& request, const Autom
     if (request.includeTempo) {
         // TempoTimeline falls back to the default tempo when the curve has no points
         m_tempoTimeline.rebuild(*ctx.tempoCurve, ctx.pauses);
+        m_flattenedTempoTimeline.rebuild(ctx.noRepeatTempoCurve, ctx.noRepeatPauses);
     }
 
     // Passed through as-is: replaceCurves() clears a key when given an empty curve for it
     m_automationData->replaceCurves(ctx.curves);
+}
+
+void ScoreAutomationController::fillNoRepeatTempoCurve(const AutomationCurve& tempoCurve, AutomationCurve& noRepeatTempoCurve)
+{
+    TRACEFUNC;
+
+    const RepeatList& repeatList = m_score->expandedRepeatList();
+
+    // tempoCurve is expected to be authored-only
+    for (const auto& [utick, point] : tempoCurve) {
+        const auto segIt = repeatList.findRepeatSegmentFromUTick(utick);
+        IF_ASSERT_FAILED(segIt != repeatList.cend()) {
+            continue;
+        }
+
+        const int segTickOffset = (*segIt)->utick - (*segIt)->tick;
+        noRepeatTempoCurve.emplace(utick - segTickOffset, point);
+    }
 }
 
 void ScoreAutomationController::mirrorAuthoredPointsToRepeats(UpdateContext& ctx)
@@ -1060,7 +1091,8 @@ void ScoreAutomationController::addMeasureRepeatPoints(UpdateContext& ctx)
     }
 }
 
-void ScoreAutomationController::collectPauses(const Measure* measure, int tickOffset, std::map<int, double>& pauses)
+void ScoreAutomationController::collectPauses(const Measure* measure, int tickOffset, PausesMap& pauses,
+                                              PausesMap& noRepeatPauses)
 {
     const Fraction& startTick = measure->tick();
     const int startUtick = startTick.ticks() + tickOffset;
@@ -1069,6 +1101,8 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
     for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
         if (mb->pause()) {
             pauses[startUtick] = mb->pause();
+            // Identical value across every pass that plays this raw tick, so last-write-wins is fine
+            noRepeatPauses[startTick.ticks()] = mb->pause();
         }
     }
 
@@ -1085,6 +1119,7 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
         }
         if (!muse::RealIsNull(length)) {
             pauses[startUtick] = length;
+            noRepeatPauses[startTick.ticks()] = length;
         }
     }
 
@@ -1104,6 +1139,7 @@ void ScoreAutomationController::collectPauses(const Measure* measure, int tickOf
         }
         if (!muse::RealIsNull(length)) {
             pauses[tick.ticks() + tickOffset] = length;
+            noRepeatPauses[tick.ticks()] = length;
         }
     }
 }
@@ -1190,7 +1226,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
         startPoint.itemId = itemId;
         startPoint.generated = true;
         ctx.tempoCurve->emplace_hint(tickFromIt, tickFrom, startPoint);
-        ctx.noRepeatTempoCurve[tickFrom - tickOffset] = startPoint;
+        setNoRepeatTempoPoint(tickFrom - tickOffset, startPoint, ctx);
     }
 
     const real_t normalizedTarget = std::clamp(normalizedCurrent * tempoChange->tempoChangeFactor(),
@@ -1218,7 +1254,7 @@ void ScoreAutomationController::addGradualTempoChangePoints(const GradualTempoCh
     endPoint.itemId = itemId;
     endPoint.generated = true;
     ctx.tempoCurve->emplace_hint(tickToIt, tickTo, endPoint);
-    ctx.noRepeatTempoCurve[tickTo - tickOffset] = endPoint;
+    setNoRepeatTempoPoint(tickTo - tickOffset, endPoint, ctx);
 }
 
 void ScoreAutomationController::addVoltaTempoResetPoint(const Volta* volta, UpdateContext& ctx)
@@ -1340,6 +1376,21 @@ void ScoreAutomationController::addDynamicPoint(const AutomationCurveKey& key, u
     tryAddDynamicPoint(key, tick, point, priority, ctx);
 }
 
+void ScoreAutomationController::setNoRepeatTempoPoint(utick_t rawTick, const AutomationPoint& point, UpdateContext& ctx)
+{
+    const auto it = ctx.noRepeatTempoCurve.lower_bound(rawTick);
+    const bool exists = it != ctx.noRepeatTempoCurve.end() && it->first == rawTick;
+    if (exists && !it->second.generated) {
+        return; // an authored point at this raw tick wins over the generated one
+    }
+
+    if (exists) {
+        it->second = point;
+    } else {
+        ctx.noRepeatTempoCurve.emplace_hint(it, rawTick, point);
+    }
+}
+
 void ScoreAutomationController::setTempoPoint(utick_t tick, int tickOffset, real_t normalizedBps, UpdateContext& ctx,
                                               std::optional<EID> itemId)
 {
@@ -1426,7 +1477,7 @@ void ScoreAutomationController::mirrorEditsToRepeats(const AutomationCurveKey& k
 {
     TRACEFUNC;
 
-    const RepeatList& repeatList = m_score->repeatList();
+    const RepeatList& repeatList = m_score->expandedRepeatList();
     if (repeatList.size() <= 1) {
         return;
     }

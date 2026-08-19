@@ -32,6 +32,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/tempotimeline.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/score.h"
@@ -627,7 +628,7 @@ Fraction* Cursor::qmlFraction() const
 
 double Cursor::time(bool includeRepeats)
 {
-    return m_score->utick2utime(includeRepeats ? utick() : tick()) * 1000;
+    return m_score->tempoTimeline(includeRepeats).utick2utime(includeRepeats ? utick() : tick()) * 1000;
 }
 
 //---------------------------------------------------------

@@ -660,13 +660,17 @@ public:
     /// For small, one-step operations, where you need to get the relevant repeatList just once
     const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
     /// Read-only snapshot, safe to call mid-edit (e.g. before a structural change invalidates the current repeatList)
-    std::vector<RepeatSegmentInfo> repeatSegmentInfoList() const;
+    std::vector<RepeatSegmentInfo> repeatSegmentInfoList(bool expandRepeats) const;
+    /// Always the repeat-expanded list, regardless of the current playback setting
+    const RepeatList& expandedRepeatList() const;
 
     void invalidateRepeatList();
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
+
     const TempoTimeline& tempoTimeline() const;
+    const TempoTimeline& tempoTimeline(bool expandRepeats) const;
 
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }
