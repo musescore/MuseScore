@@ -34,6 +34,10 @@ using namespace mu::notation;
 constexpr static qreal EDGE_HIT_MARGIN_PX = 4.0;
 constexpr static qreal BAR_HALF_WIDTH_MARGIN_PX = 1.0; // keeps adjacent chord bars from visually touching
 
+// Below this, a press+release is a plain click (jump straight to that position) rather than a
+// drag (nudge relative to wherever the bar already was) - see mouseReleaseEvent().
+constexpr static qreal CLICK_MOVE_THRESHOLD_PX = 3.0;
+
 constexpr static qreal VALUE_LABEL_FONT_PX = 11.0;
 constexpr static qreal VALUE_LABEL_GAP_PX = 4.0; // horizontal gap between the bar and the label chip
 constexpr static qreal VALUE_LABEL_PADDING_X_PX = 4.0;
@@ -295,6 +299,7 @@ void NoteVelocityOverlay::mousePressEvent(QMouseEvent* e)
     // different scales into one delta. Dividing the raw pixel delta by a single, current height()
     // below keeps both ends of the subtraction on the same scale.
     m_dragStartYPx = e->position().y();
+    m_movedPastClickThreshold = false;
     e->accept();
 
     // A zero delta - the mouse hasn't moved yet - so the controller hears a plain click on a bar
@@ -306,6 +311,10 @@ void NoteVelocityOverlay::mouseMoveEvent(QMouseEvent* e)
 {
     if (!m_pressed) {
         return;
+    }
+
+    if (std::abs(e->position().y() - m_dragStartYPx) > CLICK_MOVE_THRESHOLD_PX) {
+        m_movedPastClickThreshold = true;
     }
 
     // Not clamped to [0, 1] - unlike the drag-start position, which is always a valid in-bounds
@@ -322,7 +331,20 @@ void NoteVelocityOverlay::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    const qreal deltaYN = (e->position().y() - m_dragStartYPx) / std::max(1.0, height());
+    qreal deltaYN;
+    if (m_movedPastClickThreshold) {
+        // A real drag - unchanged relative behavior, nudging from wherever the bar already was.
+        deltaYN = (e->position().y() - m_dragStartYPx) / std::max(1.0, height());
+    } else {
+        // A plain click, released without ever moving past the threshold - jump straight to the
+        // clicked position instead. barDragged()'s delta is always relative to the bar's *current*
+        // position (see its own doc comment) rather than an absolute target, so this is expressed
+        // as the delta from the bar's current top edge (yTopN) to the click position - the
+        // controller's linear canvasY -> velocity mapping means that delta alone, regardless of
+        // what it's measured from, resolves to exactly the velocity at the clicked position.
+        const qreal clickYN = e->position().y() / std::max(1.0, height());
+        deltaYN = clickYN - m_rects.at(m_activeRectIndex).yTopN;
+    }
     emit barDragged(m_activeRectIndex, deltaYN, true);
 
     m_pressed = false;
