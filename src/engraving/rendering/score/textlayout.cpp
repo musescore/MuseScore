@@ -172,7 +172,7 @@ void TextLayout::computeTextHighResShape(const TextBase* item, TextBase::LayoutD
                 }
                 RectF characterBoundingRect = fontMetrics.tightBoundingRect(text);
                 characterBoundingRect.translate(x, y);
-                shape.add(characterBoundingRect);
+                shape.add(characterBoundingRect, item);
                 if (i + 1 < textSize) {
                     x += fontMetrics.horizontalAdvance(text);
                 }
