@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "chordbracketlayout.h"
 #include "parenthesislayout.h"
 
 #include "dom/barline.h"
@@ -1338,6 +1339,13 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             d = std::max(d, f->staffShape(staffIdx).right());
         }
 
+        // Multi-staff ChordBrackets are stored on their owner chords
+        // and are therefore not fully represented in every visually spanned staff Shape.
+        // Add the missing bracket collisions before combining the per-staff minimum distances.
+        if (f->isChordRestType() || ns->isChordRestType()) {
+            ChordBracketLayout::updateHorizontalSpacing(f, ns, staffIdx, squeezeFactor, d);
+        }
+
         if (f->isChordRestType() && ns->isChordRestType()) {
             checkCollisionsWithCrossStaffStems(f, ns, staffIdx, d);
         }
@@ -1610,8 +1618,9 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 void HorizontalSpacing::computeChordBracketPadding(const EngravingItem* item1, const ChordBracket* chordBracket, double& padding)
 {
     const Chord* chord = chordBracket->chord();
-    if (chord && chord == item1->findAncestor(ElementType::CHORD)) {
-        // Padding a right-handed chord bracket to its own chord: use the same padding values as the left-handed case
+    const Chord* itemChord = toChord(item1->findAncestor(ElementType::CHORD));
+    if (chord && itemChord && chord->segment() == itemChord->segment() && chord->part() == itemChord->part()) {
+        // Padding a right-handed chord bracket to chords in the same Segment and part: use the same padding values as the left-handed case
         padding = item1->score()->paddingTable().at(ElementType::CHORD_BRACKET).at(item1->type());
     }
 }

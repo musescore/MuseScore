@@ -287,8 +287,6 @@ public:
     void setPageOldMeasure(MeasureBase* m) { m_pageOldMeasure = m; }
     void setMeasureNumber(int n) { m_measureNumber = n; }
 
-    std::set<Spanner*>& processedSpanners() { return m_processedSpanners; }
-
     void setRangeDone(bool val) { m_rangeDone = val; }
 
     void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
