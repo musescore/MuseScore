@@ -506,16 +506,42 @@ void NotationNoteVelocityController::onDragCancelled(const SysStaffKey& key, int
         return;
     }
 
-    // previewBarHeight() calls during the drag mutate the overlay's rect directly, without ever
-    // touching the score - a grab stolen mid-drag (e.g. a popup opening) means no final
-    // barDragged(..., completed=true) ever arrives to settle that back to the note's real value,
-    // so without this the bar would keep showing the live-preview height indefinitely, out of
-    // sync with the note's actual (untouched) velocity.
-    Note* note = dataIt->second.notes.at(rectIndex).note;
-    IF_ASSERT_FAILED(note) {
+    Note* draggedNote = dataIt->second.notes.at(rectIndex).note;
+    IF_ASSERT_FAILED(draggedNote) {
         return;
     }
-    previewBarHeight(NoteLocation { key, rectIndex }, displayedVelocity(note));
+
+    // previewBarHeight() calls during the drag mutate an overlay's rect directly, without ever
+    // touching the score - a grab stolen mid-drag (e.g. a popup opening) means no final
+    // barDragged(..., completed=true) ever arrives to settle those back to each note's real
+    // value, so without this the bar(s) would keep showing the live-preview height indefinitely,
+    // out of sync with the note's actual (untouched) velocity. If the dragged note was part of a
+    // multi-note selection, onBarDragged() would have live-previewed every selected note (and
+    // their forward tie chains) too - revert all of those the same way, not just the one bar that
+    // happened to own the mouse grab.
+    std::vector<Note*> affectedNotes { draggedNote };
+    const std::vector<Note*> selected = selectedNotes();
+    if (selected.size() > 1 && muse::contains(selected, draggedNote)) {
+        affectedNotes = selected;
+    }
+
+    std::vector<Note*> notesToRevert = affectedNotes;
+    for (Note* note : affectedNotes) {
+        for (Tie* tie = note->tieFor(); tie; tie = tie->endNote() ? tie->endNote()->tieFor() : nullptr) {
+            Note* tied = tie->endNote();
+            if (!tied || muse::contains(notesToRevert, tied)) {
+                break;
+            }
+            notesToRevert.push_back(tied);
+        }
+    }
+
+    for (Note* note : notesToRevert) {
+        const auto locIt = m_noteLocations.find(note);
+        if (locIt != m_noteLocations.end()) {
+            previewBarHeight(locIt->second, displayedVelocity(note));
+        }
+    }
 }
 
 void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int rectIndex, qreal deltaYN, bool completed)
@@ -544,7 +570,15 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
     const double span = draggedEntry.yRange.y127 - draggedEntry.yRange.y0;
     const int deltaVelocity = std::abs(span) < 1e-9 ? 0 : static_cast<int>(std::lround(deltaCanvasY / span * 127.0));
     const int startVelocity = displayedVelocity(draggedNote);
-    const int newVelocity = std::clamp(startVelocity + deltaVelocity, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
+    // A genuinely zero delta (a plain click landing back on the bar's own current position, or a
+    // drag that ends up exactly where it started) must leave the value untouched rather than run
+    // it through the [MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY] clamp - otherwise a note
+    // whose dynamics-derived velocity is legitimately 0 (e.g. under ppppppppp) gets silently
+    // floored to 1 by a no-op interaction, converting it from dynamics-following to an explicit
+    // user override it never asked for.
+    const int newVelocity = deltaVelocity == 0
+                            ? startVelocity
+                            : std::clamp(startVelocity + deltaVelocity, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
 
     // Let the user hear the note at its live drag value before the change is committed - only the
     // bar actually being dragged, and only when the (rounded) velocity has actually changed. While
@@ -587,7 +621,10 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
             continue;
         }
 
-        const int otherVelocity = std::clamp(displayedVelocity(note) + delta, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
+        // Same reasoning as newVelocity above - a zero delta must leave every co-selected note's
+        // own value untouched too, rather than floor a legitimately-0 one to 1.
+        const int otherStart = displayedVelocity(note);
+        const int otherVelocity = delta == 0 ? otherStart : std::clamp(otherStart + delta, MIN_DRAGGABLE_VELOCITY, MAX_DRAGGABLE_VELOCITY);
         changes.push_back({ note, otherVelocity });
     }
 
@@ -629,6 +666,21 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
         return;
     }
 
+    // A note whose target velocity turned out identical to what it's already effectively playing
+    // at (the whole gesture net out to a zero delta - e.g. a plain click that lands back on the
+    // bar's own current position) has nothing to write - skip it rather than pin it to an
+    // explicit VeloType::USER_VAL it never asked for, and skip the whole undo entry if every
+    // affected note turns out this way (e.g. a click that amounts to just an audition).
+    std::vector<PendingChange> realChanges;
+    for (const PendingChange& change : changes) {
+        if (change.velocity != displayedVelocity(change.note)) {
+            realChanges.push_back(change);
+        }
+    }
+    if (realChanges.empty()) {
+        return;
+    }
+
     const INotationPtr notation = currentNotation();
     const INotationUndoStackPtr undoStack = notation ? notation->undoStack() : nullptr;
     IF_ASSERT_FAILED(undoStack) {
@@ -641,7 +693,7 @@ void NotationNoteVelocityController::onBarDragged(const SysStaffKey& key, int re
     // USER_VAL. Its relative-to-the-dynamic-marking behavior is intentionally traded for "this is
     // now the value I dragged it to" once the user has directly edited it through this UI.
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Change note velocity"));
-    for (const PendingChange& change : changes) {
+    for (const PendingChange& change : realChanges) {
         if (change.note->getProperty(mu::engraving::Pid::VELO_TYPE).value<VeloType>() != VeloType::USER_VAL) {
             change.note->undoChangeProperty(mu::engraving::Pid::VELO_TYPE, VeloType::USER_VAL,
                                             mu::engraving::PropertyFlags::NOSTYLE);
