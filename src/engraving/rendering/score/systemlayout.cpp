@@ -1327,6 +1327,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
+    layoutLyrics(elementsToLayout, ctx);
+
     layoutDynamicExpressionAndHairpins(elementsToLayout, ctx);
 
     processLines(system, ctx, elementsToLayout.allOtherSpanners);
@@ -1347,8 +1349,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     processLines(system, ctx, elementsToLayout.ottavas);
     processLines(system, ctx, elementsToLayout.pedal, /*align=*/ true);
-
-    layoutLyrics(elementsToLayout, ctx);
 
     for (HarpPedalDiagram* hpd : elementsToLayout.harpDiagrams) {
         TLayout::layoutItem(hpd, ctx);
