@@ -477,7 +477,7 @@ COPY_ITEM_IMPL(NoteDot)
 CREATE_ITEM_IMPL(NoteLine, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(NoteLine, Note);
 
-CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
+CREATE_ITEM_IMPL(Page, Score, isAccessibleEnabled)
 
 PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {

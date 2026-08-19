@@ -38,10 +38,34 @@ using namespace mu::engraving;
 //   Page
 //---------------------------------------------------------
 
-Page::Page(RootItem* parent)
+Page::Page(Score* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE)
 {
+    // Owned by its score right away; Score::m_pages manages page lifetime
+    setParent(parent);
+
     m_bspTreeValid = false;
+}
+
+void Page::setParent(Score* score)
+{
+    EngravingItem::setParent(score);
+}
+
+EngravingItem* Page::layoutParent() const
+{
+    // A page is the top of the visual hierarchy: it is not laid out inside anything.
+    return nullptr;
+}
+
+EngravingItem* Page::accessibleParentItem() const
+{
+    // Above the visual hierarchy sits the root item, which exists only to head the
+    // accessibility tree. (The dummy's page hangs off the dummy's own root item, which
+    // the base implementation finds as its raw parent.)
+    EngravingItem* parent = EngravingItem::accessibleParentItem();
+
+    return parent ? parent : score()->rootItem();
 }
 
 Page::~Page()

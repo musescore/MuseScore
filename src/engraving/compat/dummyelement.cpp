@@ -69,11 +69,11 @@ void DummyElement::init()
     m_root->setupAccessible();
 #endif
 
-    m_page = Factory::createPage(m_root);
-    m_page->setParent(m_root);
+    // the dummy's chain is a fake hierarchy, so it deliberately bypasses the typed setters
+    m_page = Factory::createPage(score());
+    static_cast<EngravingItem*>(m_page)->setParent(m_root);
 
     m_system = Factory::createSystem(score());
-    // the dummy's chain is a fake hierarchy, so it deliberately bypasses the typed setters
     static_cast<EngravingItem*>(m_system)->setParent(m_page);
     m_system->setPage(m_page);
 

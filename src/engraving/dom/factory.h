@@ -27,7 +27,6 @@
 #include "engravingitem.h"
 namespace mu::engraving {
 class Instrument;
-class RootItem;
 class RangeLock;
 class TremoloSingleChord;
 class TremoloTwoChord;
@@ -146,7 +145,7 @@ public:
     static NoteLine* createNoteLine(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<NoteLine> makeNoteLine(Note* parent);
 
-    static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
+    static Page* createPage(Score* parent, bool isAccessibleEnabled = true);
 
     static PageLockIndicator* createPageLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
     static PageLockIndicator* copyPageLockIndicator(const PageLockIndicator& src);
