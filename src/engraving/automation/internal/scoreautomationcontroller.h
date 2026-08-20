@@ -22,6 +22,7 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include <set>
 #include <variant>
 #include <vector>
@@ -65,6 +66,8 @@ public:
 
     const TempoTimeline& tempoTimeline(bool expandRepeats = true) const;
     void setTempoMultiplier(const BeatsPerSecond& bps);
+
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
 private:
     struct UpdateRequest {
@@ -203,5 +206,6 @@ private:
     AutomationDataPtr m_automationData;
     TempoTimeline m_tempoTimeline;
     TempoTimeline m_flattenedTempoTimeline;
+    std::optional<TempoTimeline> m_tempoTimelineOverride;
 };
 }

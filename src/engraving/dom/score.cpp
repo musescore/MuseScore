@@ -1596,6 +1596,11 @@ const TempoTimeline& Score::tempoTimeline(bool expandRepeats) const
     return masterScore()->tempoTimeline(expandRepeats);
 }
 
+void Score::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
+{
+    masterScore()->setTempoTimelineOverride(std::move(timeline));
+}
+
 //---------------------------------------------------------
 //   scanElementsInRange
 //---------------------------------------------------------

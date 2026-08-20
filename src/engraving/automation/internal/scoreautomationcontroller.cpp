@@ -303,6 +303,10 @@ static ChangeRelevance classifyChanges(const ScoreChanges& changes)
 
 const TempoTimeline& ScoreAutomationController::tempoTimeline(bool expandRepeats) const
 {
+    if (m_tempoTimelineOverride) {
+        return *m_tempoTimelineOverride;
+    }
+
     return expandRepeats ? m_tempoTimeline : m_flattenedTempoTimeline;
 }
 
@@ -310,6 +314,11 @@ void ScoreAutomationController::setTempoMultiplier(const BeatsPerSecond& bps)
 {
     m_tempoTimeline.setTempoMultiplier(bps);
     m_flattenedTempoTimeline.setTempoMultiplier(bps);
+}
+
+void ScoreAutomationController::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
+{
+    m_tempoTimelineOverride = std::move(timeline);
 }
 
 void ScoreAutomationController::init(Score* score)
