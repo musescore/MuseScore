@@ -346,6 +346,8 @@ void MStyle::applyCompatStyleVals(int mscVersion)
         set(Sid::vocalsNameByGroup, false);
         set(Sid::maskSlurs, false);
         set(Sid::maskTies, false);
+
+        set(Sid::dashBarWidth, value(Sid::barWidth));
     }
 
     if (mscVersion < 470) {
