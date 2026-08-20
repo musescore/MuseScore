@@ -159,10 +159,9 @@ public:
               bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const Color& color);
 
     StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines, bool stemless,
-              bool genTimesig, bool invisible, const Color& color, const String& durFontName, double durFontSize, double durFontUserY,
-              double genDur, bool fretFontUseTextStyle, const String& fretFontName, double fretFontSize, double fretFontUserY,
-              TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-              bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
+              bool genTimesig, bool invisible, const Color& color, const String& durFontName, double genDur, bool fretFontUseTextStyle,
+              const String& fretFontName, TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
+              bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() = default;
 

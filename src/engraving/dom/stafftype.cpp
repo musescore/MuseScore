@@ -102,11 +102,9 @@ StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff,
 
 StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff, double lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimesig, bool invisible, const Color& color,
-                     const String& durFontName, double durFontSize, double durFontUserY, double genDur, bool fretFontUseTextStyle,
-                     const String& fretFontName, double fretFontSize, double fretFontUserY,
-                     TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
-                     bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers,
-                     bool showBackTied)
+                     const String& durFontName, double genDur, bool fretFontUseTextStyle, const String& fretFontName,
+                     TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
+                     bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied)
 {
     UNUSED(invisible);
     m_color = color;
@@ -121,16 +119,12 @@ StaffType::StaffType(StaffGroup sg, StaffTypes staffType, int lines, int stpOff,
     setGenTimesig(genTimesig);
     setGenKeysig(sg != StaffGroup::TAB);
     setDurationFontName(durFontName);
-    setDurationFontSize(durFontSize);
-    setDurationFontUserY(durFontUserY);
     setGenDurations(genDur);
     setFretUseTextStyle(fretFontUseTextStyle);
     if (fretFontUseTextStyle) {
         setFretTextStyle(TextStyleType::TAB_FRET_NUMBER);
     } else {
         setFretPreset(fretFontName);
-        setFretFontSize(fretFontSize);
-        setFretFontUserY(fretFontUserY);
     }
     setSymbolRepeat(symRepeat);
     setLinesThrough(linesThrough);
@@ -476,6 +470,8 @@ void StaffType::setDurationFontName(const String& name)
         idx = 0;              // if name not found, use first font
     }
     m_durationFont.setFamily(m_durationFonts[idx].family, Font::Type::Tablature);
+    setDurationFontSize(m_durationFonts[idx].defSize);
+    setDurationFontUserY(m_durationFonts[idx].defYOffset);
     m_durationFontIdx = idx;
     setDurationMetrics();
 }
@@ -945,29 +941,29 @@ void StaffType::initStaffTypes(const Color& defaultColor)
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_3LINE,           3, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, StaffTypes::PERC_5LINE,           5, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
 
-//                 group            staff type,               lin stpOff dist clef   bars stemless time  invis     color       duration font         size off genDur textStyle fret font          size off  duration symbol repeat       thru    minim style                  onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_6SIMPLE,   6,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_6COMMON,   6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_6FULL,     6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_4SIMPLE,   4,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_4COMMON,   4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_4FULL,     4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_5SIMPLE,   5,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_5COMMON,   5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_5FULL,     5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_UKULELE,   4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_BALALAJKA, 3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_DULCIMER,  3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, true,  true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_ITALIAN,   6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab Italian",15, 0, true,  false, u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    true,  true,  false, false, true,  false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_FRENCH,    6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab French", 15, 0, true,  false, u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    false, false, false, false, false, false, false, false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_7COMMON,   7,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_8COMMON,   8,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_9COMMON,   9,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_10COMMON,  10, 0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_7SIMPLE,   7,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_8SIMPLE,   8,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_9SIMPLE,   9,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
-        StaffType(StaffGroup::TAB, StaffTypes::TAB_10SIMPLE,  10, 0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+//                 group            staff type,               lin stpOff dist clef   bars stemless time  invis     color       duration font       genDur textStyle fret font                               duration symbol repeat       thru    minim style                  onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_6SIMPLE,   6,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_6COMMON,   6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_6FULL,     6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_4SIMPLE,   4,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_4COMMON,   4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_4FULL,     4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_5SIMPLE,   5,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_5COMMON,   5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_5FULL,     5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_UKULELE,   4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_BALALAJKA, 3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_DULCIMER,  3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, true,  true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_ITALIAN,   6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab Italian",true,  false, u"MuseScore Tab Renaiss",                  TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    true,  true,  false, false, true,  false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_FRENCH,    6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab French", true,  false, u"MuseScore Tab Renaiss",                  TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    false, false, false, false, false, false, false, false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_7COMMON,   7,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_8COMMON,   8,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_9COMMON,   9,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_10COMMON,  10, 0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_7SIMPLE,   7,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_8SIMPLE,   8,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_9SIMPLE,   9,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, StaffTypes::TAB_10SIMPLE,  10, 0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", false, true,  u"MuseScore Tab Sans",                     TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
     };
 }
 /* *INDENT-ON* */
