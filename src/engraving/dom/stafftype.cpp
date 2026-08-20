@@ -23,12 +23,10 @@
 #include "stafftype.h"
 
 #include "draw/fontmetrics.h"
-#include "io/file.h"
 #include "translation.h"
 
 #include "iengravingconfiguration.h"
 
-#include "rw/xmlreader.h"
 #include "style/defaultstyle.h"
 #include "style/style.h"
 #include "style/textstyle.h"
@@ -37,8 +35,6 @@
 #include "mscore.h"
 #include "score.h"
 #include "staff.h"
-
-#include "log.h"
 
 using namespace muse::draw;
 using namespace muse::io;
@@ -563,12 +559,12 @@ void StaffType::setFretFontSize(double val)
 //    construct the text string for a given fret / duration
 //---------------------------------------------------------
 
-static const String unknownFret = String(u"?");
+static const String UNKNOWN_FRET = String(u"?");
 
 String StaffType::fretString(int fret, int string, bool deadNote) const
 {
     if (fret == INVALID_FRET_INDEX) {
-        return unknownFret;
+        return UNKNOWN_FRET;
     }
     if (deadNote) {
         return String(m_fretFontInfo.xChar);
@@ -581,8 +577,8 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         // otherwise, add to prefix the relevant digit/letter string
         return text
                + (m_useNumbers
-                  ? (fret >= NUM_OF_DIGITFRETS ? unknownFret : m_fretFontInfo.displayDigit[fret])
-                  : (fret >= NUM_OF_LETTERFRETS ? unknownFret : m_fretFontInfo.displayLetter[fret]));
+                  ? (fret >= NUM_OF_DIGITFRETS ? UNKNOWN_FRET : m_fretFontInfo.displayDigit[fret])
+                  : (fret >= NUM_OF_LETTERFRETS ? UNKNOWN_FRET : m_fretFontInfo.displayLetter[fret]));
     }
 }
 
@@ -733,7 +729,7 @@ TablatureFretFont::TablatureFretFont()
     }
 
     for (size_t i = 0; i < NUM_OF_LETTERFRETS; i++) {
-        displayLetter[i] = Char(97 + static_cast<char16_t>(i));
+        displayLetter[i] = Char(u'a' + static_cast<char16_t>(i));
     }
 
     for (size_t i = 0; i < NUM_OF_BASSSTRING_SLASHES; i++) {
@@ -743,211 +739,82 @@ TablatureFretFont::TablatureFretFont()
     }
 }
 
-bool TablatureFretFont::read(XmlReader& e, int mscVersion)
+TablatureDurationFont::TablatureDurationFont()
 {
-    defSize    = 9.0;
-    defYOffset  = 0.0;
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        int val = e.intAttribute("value");
-
-        if (tag == "family") {
-            family = e.readText();
-        } else if (tag == "displayName") {
-            displayName = e.readText();
-        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
-            defSize = e.readDouble();
-        } else if (tag == "defaultYOffset") {
-            defYOffset = e.readDouble();
-        } else if (tag == "mark") {
-            String sval = e.attribute("value");
-            int num  = e.intAttribute("number", 1);
-            String txt(e.readText());
-            if (sval.size() < 1) {
-                return false;
-            }
-            if (sval == "x") {
-                xChar = txt.at(0);
-            } else if (sval == "slash") {
-                // limit within legal range
-                if (num < 1) {
-                    num = 1;
-                }
-                if (num > NUM_OF_BASSSTRING_SLASHES) {
-                    num = NUM_OF_BASSSTRING_SLASHES;
-                }
-                slashChar.at(num - 1) = txt;
-            }
-        } else if (tag == "fret") {
-            bool bLetter = e.intAttribute("letter");
-            String txt(e.readText());
-            if (bLetter) {
-                if (val >= 0 && val < NUM_OF_LETTERFRETS) {
-                    displayLetter[val] = txt.at(0);
-                }
-            } else {
-                if (val >= 0 && val < NUM_OF_DIGITFRETS) {
-                    displayDigit.at(val) = txt;
-                }
-            }
-        } else {
-            e.unknown();
-            return false;
-        }
+    for (size_t i = 0; i < size_t(TabVal::NUM_OF); i++) {
+        displayValue[i] = Char(u'a' + static_cast<char16_t>(i));
     }
-    return true;
-}
-
-bool TablatureDurationFont::read(XmlReader& e, int mscVersion)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-
-        if (tag == "family") {
-            family = e.readText();
-        } else if (tag == "displayName") {
-            displayName = e.readText();
-        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
-            defSize = e.readDouble();
-        } else if (tag == "defaultYOffset") {
-            defYOffset = e.readDouble();
-        } else if (tag == "beamWidth") {
-            gridBeamWidth = Spatium(e.readDouble());
-        } else if (tag == "stemHeight") {
-            gridStemHeight = Spatium(e.readDouble());
-        } else if (tag == "stemWidth") {
-            gridStemWidth = Spatium(e.readDouble());
-        } else if (tag == "zeroBeamValue") {
-            String val(e.readText());
-            if (val == "longa") {
-                zeroBeamLevel = DurationType::V_LONG;
-            } else if (val == "brevis") {
-                zeroBeamLevel = DurationType::V_BREVE;
-            } else if (val == "semibrevis") {
-                zeroBeamLevel = DurationType::V_WHOLE;
-            } else if (val == "minima") {
-                zeroBeamLevel = DurationType::V_HALF;
-            } else if (val == "semiminima") {
-                zeroBeamLevel = DurationType::V_QUARTER;
-            } else if (val == "fusa") {
-                zeroBeamLevel = DurationType::V_EIGHTH;
-            } else if (val == "semifusa") {
-                zeroBeamLevel = DurationType::V_16TH;
-            } else if (val == "32") {
-                zeroBeamLevel = DurationType::V_32ND;
-            } else if (val == "64") {
-                zeroBeamLevel = DurationType::V_64TH;
-            } else if (val == "128") {
-                zeroBeamLevel = DurationType::V_128TH;
-            } else if (val == "256") {
-                zeroBeamLevel = DurationType::V_256TH;
-            } else if (val == "512") {
-                zeroBeamLevel = DurationType::V_512TH;
-            } else if (val == "1024") {
-                zeroBeamLevel = DurationType::V_1024TH;
-            } else {
-                e.unknown();
-            }
-        } else if (tag == "duration") {
-            String val = e.attribute("value");
-            String txt(e.readText());
-            Char chr = txt.at(0);
-            if (val == "longa") {
-                displayValue[size_t(TabVal::VAL_LONGA)] = chr;
-            } else if (val == "brevis") {
-                displayValue[size_t(TabVal::VAL_BREVIS)] = chr;
-            } else if (val == "semibrevis") {
-                displayValue[size_t(TabVal::VAL_SEMIBREVIS)] = chr;
-            } else if (val == "minima") {
-                displayValue[size_t(TabVal::VAL_MINIMA)] = chr;
-            } else if (val == "semiminima") {
-                displayValue[size_t(TabVal::VAL_SEMIMINIMA)] = chr;
-            } else if (val == "fusa") {
-                displayValue[size_t(TabVal::VAL_FUSA)] = chr;
-            } else if (val == "semifusa") {
-                displayValue[size_t(TabVal::VAL_SEMIFUSA)] = chr;
-            } else if (val == "32") {
-                displayValue[size_t(TabVal::VAL_32)] = chr;
-            } else if (val == "64") {
-                displayValue[size_t(TabVal::VAL_64)] = chr;
-            } else if (val == "128") {
-                displayValue[size_t(TabVal::VAL_128)] = chr;
-            } else if (val == "256") {
-                displayValue[size_t(TabVal::VAL_256)] = chr;
-            } else if (val == "512") {
-                displayValue[size_t(TabVal::VAL_512)] = chr;
-            } else if (val == "1024") {
-                displayValue[size_t(TabVal::VAL_1024)] = chr;
-            } else if (val == "dot") {
-                displayDot = chr;
-            } else {
-                e.unknown();
-            }
-        } else {
-            e.unknown();
-            return false;
-        }
-    }
-    return true;
 }
 
 //---------------------------------------------------------
-//   Read Configuration File
-//
-//    reads a configuration and appends read data to g_TABFonts
-//    resets everything and reads the built-in config file if fileName is null or empty
+//   Tablature font presets
 //---------------------------------------------------------
 
-bool StaffType::readTabConfigFile(const String& fileName)
+static TablatureFretFont makeFretFontPreset(const String& family, const String& displayName)
 {
-    muse::io::path_t path;
+    // Create fret font from a regular font
+    TablatureFretFont f;
+    f.family = family;
+    f.displayName = displayName;
+    return f;
+}
 
-    if (fileName.isEmpty()) {         // defaults to built-in xml
-        path = ":/fonts/fonts_tablature.xml";
-        m_durationFonts.clear();
-        m_fretFonts.clear();
-    } else {
-        path = fileName;
+static TablatureFretFont makeMuseScoreFretFontPreset(const String& family, const String& displayName)
+{
+    // Create fret font from a specialist MuseScore tablature font
+    TablatureFretFont f;
+    f.family = family;
+    f.displayName = displayName;
+    f.defSize = 10.0;
+    f.displayDigit[10] = String(u"X");
+    for (size_t i = 0; i < NUM_OF_BASSSTRING_SLASHES; ++i) {
+        f.slashChar[i] = String(Char(u'A' + static_cast<char16_t>(i)));
     }
+    return f;
+}
 
-    File f(path);
-    if (!f.exists() || !f.open(IODevice::ReadOnly)) {
-        LOGE() << "Cannot open tablature font description: " << f.filePath();
-        return false;
-    }
+static TablatureDurationFont makeDurationFontPreset(const String& family, const String& displayName,
+                                                    Spatium beamWidth = GRID_BEAM_DEF_WIDTH,
+                                                    Spatium stemHeight = GRID_STEM_DEF_HEIGHT,
+                                                    Spatium stemWidth = GRID_STEM_DEF_WIDTH,
+                                                    DurationType zeroBeamLevel = DurationType::V_QUARTER)
+{
+    TablatureDurationFont f;
+    f.family = family;
+    f.displayName = displayName;
+    f.gridBeamWidth = beamWidth;
+    f.gridStemHeight = stemHeight;
+    f.gridStemWidth = stemWidth;
+    f.zeroBeamLevel = zeroBeamLevel;
+    return f;
+}
 
-    XmlReader e(&f);
-    while (e.readNextStartElement()) {
-        if (e.name() == "museScore") {
-            const String version = e.attribute("version");
-            const StringList sl = version.split(u'.');
-            const int mscVersion = sl.size() == 2 ? sl[0].toInt() * 100 + sl[1].toInt() : 0;
+void StaffType::initTabFonts()
+{
+    // keep displayName strings and the order/count of these presets unchanged:
+    // saved scores reference a preset by displayName (<460) or by
+    // positional index (>=460)
+    m_fretFonts = {
+        makeFretFontPreset(u"FreeSans", u"MuseScore Tab Sans"),
+        makeFretFontPreset(u"FreeSerif", u"MuseScore Tab Serif"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabRenaiss", u"MuseScore Tab Renaiss"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabPhalese", u"MuseScore Phalèse"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabBonneuilDeVisee", u"MuseScore Bonneuil-de Visée"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabBonneuilGaultier", u"MuseScore Bonneuil-Gaultier"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabDowland", u"MuseScore Dowland"),
+        makeMuseScoreFretFontPreset(u"MuseScoreTabLuteDidactic", u"MuseScore Lute Didactic"),
+    };
 
-            while (e.readNextStartElement()) {
-                const AsciiStringView tag(e.name());
-                if (tag == "fretFont") {
-                    TablatureFretFont ff;
-                    if (ff.read(e, mscVersion)) {
-                        m_fretFonts.push_back(ff);
-                    } else {
-                        continue;
-                    }
-                } else if (tag == "durationFont") {
-                    TablatureDurationFont df;
-                    if (df.read(e, mscVersion)) {
-                        m_durationFonts.push_back(df);
-                    } else {
-                        continue;
-                    }
-                } else {
-                    e.unknown();
-                }
-            }
-            return true;
-        }
-    }
-    return false;
+    m_durationFonts = {
+        makeDurationFontPreset(u"MuseScoreTabModern", u"MuseScore Tab Modern",
+                               0.5_sp, 3.0_sp, 0.1_sp, DurationType::V_QUARTER),
+        makeDurationFontPreset(u"MuseScoreTabItalian", u"MuseScore Tab Italian",
+                               0.15_sp, 1.75_sp, 0.15_sp, DurationType::V_WHOLE),
+        makeDurationFontPreset(u"MuseScoreTabFrench", u"MuseScore Tab French",
+                               0.30_sp, 3.125_sp, 0.21_sp, DurationType::V_QUARTER),
+        makeDurationFontPreset(u"MuseScoreTabFrenchBaroqueHeadless", u"MuseScore French Baroque (headless)"),
+        makeDurationFontPreset(u"MuseScoreTabFrenchBaroque", u"MuseScore French Baroque"),
+    };
 }
 
 //---------------------------------------------------------
@@ -1067,7 +934,7 @@ std::vector<StaffType> StaffType::m_presets;
 /* *INDENT-OFF* */
 void StaffType::initStaffTypes(const Color& defaultColor)
 {
-    readTabConfigFile(String());            // get TAB font config, before initStaffTypes()
+    initTabFonts();                         // set up TAB font presets, before initStaffTypes()
 
     // keep in sync with enum class StaffTypes
     m_presets = {

@@ -38,7 +38,6 @@ class ChordRest;
 class MStyle;
 class Score;
 class Staff;
-class XmlReader;
 
 //---------------------------------------------------------
 //   TablatureFont
@@ -66,8 +65,6 @@ struct TablatureFretFont {
     std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
     std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
     std::array<Char, NUM_OF_LETTERFRETS> displayLetter;       // the char to use for letter frets
-
-    bool read(XmlReader&, int mscVersion);
 };
 
 enum class TabVal : char {
@@ -101,19 +98,19 @@ enum class TablatureSymbolRepeat : char {
 };
 
 struct TablatureDurationFont {
+    TablatureDurationFont();
+
     String family;                   // the family of the physical font to use
     String displayName;              // the name to display to the user
-    double defSize = 0.0;            // the default size of the font
+    double defSize = 15.0;           // the default size of the font
     double defYOffset = 0.0;         // the default Y displacement
     Spatium gridBeamWidth  = GRID_BEAM_DEF_WIDTH;       // the width of the 'grid'-style beam (in sp)
     Spatium gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     Spatium gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
     // the note value with no beaming in 'grid'-style beaming
     DurationType zeroBeamLevel = DurationType::V_QUARTER;
-    Char displayDot;                 // the char to use to draw a dot
+    Char displayDot = 'l';                            // the char to use to draw a dot
     Char displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
-
-    bool read(XmlReader&, int mscVersion);
 };
 
 // ready-made staff types
@@ -331,7 +328,7 @@ private:
     void  setDurationMetrics();
     void  setFretMetrics();
 
-    static bool readTabConfigFile(const String& fileName);
+    static void initTabFonts();
 
     StaffGroup m_group = StaffGroup::STANDARD;
 
