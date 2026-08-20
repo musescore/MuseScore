@@ -43,7 +43,7 @@ public:
 
     virtual ~IFontFace() = default;
 
-    virtual bool load(const FaceKey& key, const ByteArray& data, bool isSymbolMode) = 0;
+    virtual bool load(const FaceKey& key, const FontData& fontData, bool isSymbolMode) = 0;
 
     virtual const FaceKey& key() const = 0;
     virtual bool isSymbolMode() const = 0;

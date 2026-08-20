@@ -104,28 +104,28 @@ std::vector<FontDataKey> FontsDatabase::substitutionFonts(const FontDataKey& req
     return null;
 }
 
-ByteArray FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type) const
+FontData FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type) const
 {
     FontDataKey key = actualFont(requireKey, type);
     io::path_t path = fontInfo(key).path;
     IF_ASSERT_FAILED(io::File::exists(path)) {
-        return ByteArray();
+        return FontData();
     }
 
     std::string pathStr = path.toStdString();
     auto it = m_fileDataCache.find(pathStr);
     if (it != m_fileDataCache.end()) {
-        return it->second;
+        return FontData { key, it->second };
     }
 
     ByteArray data;
     if (!io::File::readFile(path, data)) {
         LOGE() << "failed read font file: " << path;
-        return ByteArray();
+        return FontData();
     }
 
     m_fileDataCache.insert({ pathStr, data });
-    return data;
+    return FontData { key, data };
 }
 
 bool FontsDatabase::isFtxFont(const FontDataKey& requireKey, Font::Type type) const
