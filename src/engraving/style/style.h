@@ -92,6 +92,8 @@ private:
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
 
+    void applyCompatStyleVals(int mscVersion);
+
     std::array<PropertyValue, size_t(Sid::STYLES)> m_values;
     std::array<double, size_t(Sid::STYLES)> m_precomputedValues;
 };
