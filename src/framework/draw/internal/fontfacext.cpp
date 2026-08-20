@@ -54,17 +54,17 @@ FontFaceXT::~FontFaceXT()
 {
 }
 
-bool FontFaceXT::load(const FaceKey& key, const muse::ByteArray& data, bool isSymbolMode)
+bool FontFaceXT::load(const FaceKey& key, const FontData& fontData, bool isSymbolMode)
 {
     m_key = key;
     m_isSymbolMode = isSymbolMode;
 
-    if (data.empty()) {
+    if (!fontData.valid()) {
         LOGE() << "empty font data: " << key.dataKey.family().id();
         return false;
     }
 
-    m_fileBuffer = std::make_unique<muse::io::Buffer>(muse::ByteArray(data));
+    m_fileBuffer = std::make_unique<muse::io::Buffer>(muse::ByteArray(fontData.data));
     m_fileBuffer->open(muse::io::IODevice::ReadOnly);
 
     m_zip = std::make_unique<muse::ZipReader>(m_fileBuffer.get());
@@ -181,11 +181,11 @@ bool FontFaceXT::load(const FaceKey& key, const muse::ByteArray& data, bool isSy
             }
 
             f26dot6_t advance = std::stoi(valStr);
-            std::pair<glyph_idx_t, glyph_idx_t> key;
-            key.first = std::stoi(keyStrs[0]);
-            key.second = std::stoi(keyStrs[1]);
+            std::pair<glyph_idx_t, glyph_idx_t> keyPair;
+            keyPair.first = std::stoi(keyStrs[0]);
+            keyPair.second = std::stoi(keyStrs[1]);
 
-            m_kernings.insert({ key, advance });
+            m_kernings.insert({ keyPair, advance });
         }
     }
 
