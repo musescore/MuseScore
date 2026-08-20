@@ -26,7 +26,6 @@ target_sources(project PRIVATE
     projectmodule.cpp
     projectmodule.h
     projecterrors.h
-    projectextensionpoints.h
     iexportprojectscenario.h
     inotationproject_fwd.h
     inotationproject.h

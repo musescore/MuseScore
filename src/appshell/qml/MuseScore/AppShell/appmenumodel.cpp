@@ -47,6 +47,7 @@
 #include "vst/vstcommands.h"
 #include "audio/main/audiocommands.h"
 #include "multiwindows/multiwindowscommands.h"
+#include "extensions/extensionscommands.h"
 
 using namespace muse;
 using namespace mu::appshell;
@@ -134,12 +135,12 @@ void AppMenuModel::setupConnections()
     });
 #endif
 
-    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
+    extensionsRegister()->manifestListChanged().onNotify(this, [this]() {
         MenuItem& pluginsMenu = findMenu("menu-plugins");
         pluginsMenu.setSubitems(makeExtensionsSubitems());
     });
 
-    extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
+    extensionsRegister()->enabledChanged().onReceive(this, [this](const ExtensionUri&) {
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makeExtensionsSubitems());
     });
@@ -517,7 +518,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         };
 
         MenuItemList extensionsItems {
-            makeMenuItem("extensions-show-apidump"),
+            makeMenuItem("command://extensions/open-apidump"),
         };
 
         MenuItemList testflowItems {
@@ -736,38 +737,46 @@ MenuItemList AppMenuModel::makeExtensionsItems()
 {
     MenuItemList result;
 
-    KnownCategories categories = extensionsProvider()->knownCategories();
-    ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
+    KnownCategories categories = extensionsRegister()->knownCategories();
+    ManifestList manifests = extensionsRegister()->manifestList(Filter::Enabled);
 
-    auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
-        if (m.actions.size() == 1) {
-            const muse::extensions::Action& a = m.actions.at(0);
+    auto makeMenuItem = [this](const Manifest& m, const Action& a) {
+        MenuItem* item = new MenuItem(this);
+        item->setTitle(!a.title.empty()
+                       ? TranslatableString::untranslatable(a.title)
+                       : TranslatableString::untranslatable(m.title));
+
+        rcommand::CommandQuery query = makeCommandQuery(m.uri, a.code);
+        item->setCommandQuery(query);
+        item->setCommandState(commandsState()->commandState(query.uri()));
+
+        return item;
+    };
+
+    auto addMenuItems = [this, makeMenuItem](MenuItemList& items, const Manifest& m) {
+        MenuItemList sub;
+        for (const muse::extensions::Action& a : m.actions) {
             if (!a.showOnAppmenu) {
-                return;
+                continue;
             }
-            items << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
-                                  !a.title.empty()
-                                  ? TranslatableString::untranslatable(a.title)
-                                  : TranslatableString::untranslatable(m.title));
-        } else {
-            MenuItemList sub;
-            for (const muse::extensions::Action& a : m.actions) {
-                if (!a.showOnAppmenu) {
-                    continue;
-                }
-                sub << makeMenuItem(makeActionQuery(m.uri, a.code).toString(),
-                                    TranslatableString::untranslatable(a.title));
-            }
-
-            if (!sub.empty()) {
-                items << makeMenu(TranslatableString::untranslatable(m.title), sub);
-            }
+            sub << makeMenuItem(m, a);
         }
+
+        if (sub.empty()) {
+            return;
+        }
+
+        if (sub.size() == 1) {
+            items << sub.at(0);
+            return;
+        }
+
+        items << makeMenu(TranslatableString::untranslatable(m.title), sub);
     };
 
     std::map<std::string, MenuItemList> categoriesMap;
     MenuItemList pluginsWithoutCategories;
-    for (const Manifest& m : enabledExtensions) {
+    for (const Manifest& m : manifests) {
         std::string categoryStr = m.category.toStdString();
         if (!categoryStr.empty()) {
             if (!muse::contains(categories, categoryStr)) {
