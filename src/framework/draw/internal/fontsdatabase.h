@@ -40,7 +40,7 @@ public:
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
     std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const override;
-    ByteArray fontData(const FontDataKey& requireKey, Font::Type type) const override;
+    FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
     bool isFtxFont(const FontDataKey& requireKey, Font::Type type) const override;
 
 private:
