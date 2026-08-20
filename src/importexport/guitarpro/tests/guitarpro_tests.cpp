@@ -29,6 +29,8 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
 
 #include "modularity/ioc.h"
 
@@ -43,7 +45,34 @@ class GuitarPro_Tests : public ::testing::Test
 {
 public:
     void gpReadTest(const char* file,  const char* ext);
+
+    MasterScore* gpRead(const char* file, const char* ext, Err& err);
 };
+
+//---------------------------------------------------------
+//   collect
+//   every element of the given type in the score
+//---------------------------------------------------------
+
+static std::vector<EngravingItem*> collect(Score* score, ElementType type)
+{
+    std::vector<EngravingItem*> found;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(); s; s = s->next()) {
+            for (EngravingItem* e : s->elist()) {
+                if (e && e->type() == type) {
+                    found.push_back(e);
+                }
+            }
+            for (EngravingItem* e : s->annotations()) {
+                if (e && e->type() == type) {
+                    found.push_back(e);
+                }
+            }
+        }
+    }
+    return found;
+}
 
 void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
 {
@@ -58,6 +87,25 @@ void GuitarPro_Tests::gpReadTest(const char* file, const char* ext)
     EXPECT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", GUITARPRO_DIR + fileName + u"-ref.mscx"));
     delete score;
+}
+
+//---------------------------------------------------------
+//   gpRead
+//   import a Guitar Pro file and report the error importGTP() rejects it with;
+//   returns nullptr when it is rejected
+//---------------------------------------------------------
+
+MasterScore* GuitarPro_Tests::gpRead(const char* file, const char* ext, Err& err)
+{
+    String fileName = String::fromUtf8(file) + u'.' + String::fromUtf8(ext);
+
+    auto importFunc = [&err](MasterScore* score, const muse::io::path_t& path) -> Err {
+        muse::io::File f(path);
+        err = importGTP(score, &f, muse::modularity::globalCtx());
+        return err;
+    };
+
+    return ScoreRW::readScore(GUITARPRO_DIR + fileName, false, importFunc);
 }
 
 TEST_F(GuitarPro_Tests, gpSforzato) {
@@ -763,5 +811,71 @@ TEST_F(GuitarPro_Tests, gpBendAndGlissando) {
 
 TEST_F(GuitarPro_Tests, gp5BendAndGlissando) {
     gpReadTest("bend_and_glissando", "gp5");
+}
+
+//---------------------------------------------------------
+//   malformed files
+//
+//   The two .gp4 files below are byte patches of sforzato.gp4, which holds a single note
+//   carrying a single dynamic. The three header-only files are synthesised: importGTP()
+//   picks its reader by sniffing the content, so they need no valid body.
+//---------------------------------------------------------
+
+// The counts the .gp4 patches below measure their deltas against.
+TEST_F(GuitarPro_Tests, gp4SforzatoCounts) {
+    Err err = Err::UnknownError;
+    MasterScore* score = gpRead("sforzato", "gp4", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    EXPECT_EQ(collect(score, ElementType::CHORD).size(), 1u);
+    EXPECT_EQ(collect(score, ElementType::DYNAMIC).size(), 1u);
+    delete score;
+}
+
+// GuitarPro::addDynamic() indexes a 9 entry table with the note's dynamic field, here
+// patched to 100. Only the dynamic is dropped, so the note itself still arrives.
+TEST_F(GuitarPro_Tests, gp4DynamicOutOfRange) {
+    Err err = Err::UnknownError;
+    MasterScore* score = gpRead("dynamic-out-of-range", "gp4", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    EXPECT_EQ(collect(score, ElementType::CHORD).size(), 1u);
+    EXPECT_EQ(collect(score, ElementType::DYNAMIC).size(), 0u);
+    delete score;
+}
+
+// channelDefaults[] holds 64 entries and is indexed by the track's midiChannel, here
+// patched to 200. GuitarPro4::read() now rejects the track, which importGTP() reports as
+// Err::NoError after showing its own message, leaving the staves it had already created
+// but no notes.
+TEST_F(GuitarPro_Tests, gp4MidiChannelOutOfRange) {
+    Err err = Err::UnknownError;
+    MasterScore* score = gpRead("midi-channel-out-of-range", "gp4", err);
+    ASSERT_TRUE(score);
+    EXPECT_EQ(err, Err::NoError);
+    EXPECT_EQ(collect(score, ElementType::CHORD).size(), 0u);
+    delete score;
+}
+
+// A header matching none of the formats importGTP() recognises.
+TEST_F(GuitarPro_Tests, gpUnknownHeader) {
+    Err err = Err::UnknownError;
+    EXPECT_FALSE(gpRead("unknown-header", "gp4", err));
+    EXPECT_EQ(err, Err::FileBadFormat);
+}
+
+// A "?FIC" header whose version string matches neither "FICHIER GUITAR PRO " nor
+// "FICHIER GUITARE PRO ".
+TEST_F(GuitarPro_Tests, gpUnknownVersionString) {
+    Err err = Err::UnknownError;
+    EXPECT_FALSE(gpRead("unknown-version-string", "gp4", err));
+    EXPECT_EQ(err, Err::FileBadFormat);
+}
+
+// A recognised version string naming a major version with no reader behind it.
+TEST_F(GuitarPro_Tests, gpUnsupportedVersion) {
+    Err err = Err::UnknownError;
+    EXPECT_FALSE(gpRead("unsupported-version", "gp4", err));
+    EXPECT_EQ(err, Err::FileBadFormat);
 }
 }
