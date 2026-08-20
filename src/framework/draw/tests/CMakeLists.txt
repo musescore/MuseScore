@@ -22,10 +22,16 @@ set(MODULE_TEST muse_draw_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/painter_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fontrendercache_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fontfacext_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fontsprovider_qt_tests.cpp
 )
+
+if (OS_IS_LIN)
+    set(MODULE_TEST_SRC
+        ${MODULE_TEST_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/fontsprovider_qt_tests.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/fontrendercache_tests.cpp
+    )
+endif()
 
 set(MODULE_TEST_LINK muse_draw)
 

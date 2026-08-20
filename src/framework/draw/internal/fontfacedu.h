@@ -30,7 +30,7 @@ public:
     FontFaceDU(IFontFace* origin);
     ~FontFaceDU();
 
-    bool load(const FaceKey& key, const ByteArray& data, bool isSymbolMode) override;
+    bool load(const FaceKey& key, const FontData& fontData, bool isSymbolMode) override;
 
     const FaceKey& key() const override;
     bool isSymbolMode() const override;
