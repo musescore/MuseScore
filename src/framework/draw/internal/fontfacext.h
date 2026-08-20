@@ -79,7 +79,7 @@ public:
         void read(muse::io::IODevice* d);
     };
 
-    bool load(const FaceKey& key, const muse::ByteArray& data, bool isSymbolMode) override;
+    bool load(const FaceKey& key, const FontData& fontData, bool isSymbolMode) override;
 
     const FaceKey& key() const override;
     bool isSymbolMode() const override;

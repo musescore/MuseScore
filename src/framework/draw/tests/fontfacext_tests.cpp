@@ -28,6 +28,8 @@
 
 #include "draw/internal/fontfaceft.h"
 #include "draw/internal/fontfacext.h"
+#include "global/io/file.h"
+#include "global/io/path.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -73,6 +75,14 @@ static io::path_t edwinXtPath()
 static FaceKey edwinFaceKey()
 {
     return FaceKey(FontDataKey(u"Edwin"), Font::Type::Text, TEST_PIXEL_SIZE);
+}
+
+static ByteArray readFontData(const io::path_t& path)
+{
+    ByteArray data;
+    EXPECT_TRUE(io::File::readFile(path, data)) << path.toStdString();
+    EXPECT_FALSE(data.empty()) << path.toStdString();
+    return data;
 }
 
 static bool valueIsNear(f26dot6_t v1, f26dot6_t v2, f26dot6_t epsilon)
@@ -157,8 +167,8 @@ static std::unique_ptr<FontFaces> loadEdwinFaces()
     std::unique_ptr<FontFaces> faces = std::make_unique<FontFaces>();
     const FaceKey key = edwinFaceKey();
 
-    EXPECT_TRUE(faces->ft.load(key, edwinFtPath(), false));
-    EXPECT_TRUE(faces->xt.load(key, edwinXtPath(), false));
+    EXPECT_TRUE(faces->ft.load(key, FontData { key.dataKey, readFontData(edwinFtPath()) }, false));
+    EXPECT_TRUE(faces->xt.load(key, FontData { key.dataKey, readFontData(edwinXtPath()) }, false));
 
     return faces;
 }
