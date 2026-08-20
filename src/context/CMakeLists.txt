@@ -34,6 +34,8 @@ target_sources(context PRIVATE
     internal/playbackstate.h
     internal/uicontextresolver.cpp
     internal/uicontextresolver.h
+    internal/extensioncontextresolver.cpp
+    internal/extensioncontextresolver.h
 )
 
 if (MUSE_MODULE_SHORTCUTS_V2)

@@ -77,7 +77,6 @@ class ProjectActionsController : public IProjectCommandsController, public IProj
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
-    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };

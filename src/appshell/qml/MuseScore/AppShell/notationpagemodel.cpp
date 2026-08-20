@@ -79,7 +79,7 @@ void NotationPageModel::init()
         scheduleUpdateExtensionsToolBarVisibility();
     });
 
-    extensionsProvider()->manifestChanged().onReceive(this, [this](const muse::extensions::Manifest&) {
+    extensionsProvider()->enabledChanged().onReceive(this, [this](const muse::Uri&) {
         scheduleUpdateExtensionsToolBarVisibility();
     });
 

@@ -51,8 +51,6 @@
 #include "rcommand/icommandsstate.h"
 #include "ui/iuiactionsregister.h"
 #include "interactive/iinteractiveuriregister.h"
-#include "extensions/iextensionsexecpointsregister.h"
-#include "projectextensionpoints.h"
 
 using namespace mu::project;
 using namespace muse;
@@ -96,18 +94,6 @@ void ProjectModule::resolveImports()
     auto cr = globalIoc()->resolve<muse::rcommand::ICommandsRegister>(mname);
     if (cr) {
         cr->reg(std::make_shared<ProjectCommandsRegister>());
-    }
-
-    auto er = globalIoc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(mname);
-    if (er) {
-        er->reg(mname, { EXEC_ONPOST_PROJECT_CREATED,
-                         TranslatableString::untranslatable("On post project created") });
-        er->reg(mname, { EXEC_ONPOST_PROJECT_OPENED,
-                         TranslatableString::untranslatable("On post project opened") });
-        er->reg(mname, { EXEC_ONPRE_PROJECT_SAVE,
-                         TranslatableString::untranslatable("On pre project save") });
-        er->reg(mname, { EXEC_ONPOST_PROJECT_SAVED,
-                         TranslatableString::untranslatable("On post project saved") });
     }
 }
 
