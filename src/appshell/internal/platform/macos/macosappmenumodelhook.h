@@ -27,6 +27,6 @@ namespace mu::appshell {
 class MacOSAppMenuModelHook : public IAppMenuModelHook
 {
 public:
-    void onAppMenuInited() override;
+    void onAppMenuInited(const muse::uicomponents::MenuItemList& items) override;
 };
 }
