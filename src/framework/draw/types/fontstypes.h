@@ -75,6 +75,13 @@ private:
     bool m_italic = false;
 };
 
+struct FontData {
+    FontDataKey key;
+    muse::ByteArray data;
+
+    inline bool valid() const { return key.valid() && !data.empty(); }
+};
+
 inline FontDataKey dataKeyForFont(const Font& f)
 {
     return FontDataKey(f.family(), f.bold(), f.italic());
