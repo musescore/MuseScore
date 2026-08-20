@@ -5,14 +5,13 @@
             "name": "windows-base",
             "description": "Target Windows with the Visual Studio development environment.",
             "hidden": true,
-            "generator": "Visual Studio 17 2022",
+            "generator": "Visual Studio 18 2026",
             "binaryDir": "${sourceDir}/msvc.build/${presetName}",
             "installDir": "${sourceDir}/msvc.install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe",
-                "CMAKE_WARN_DEPRECATED": "FALSE",
-                "CMAKE_PRESET_NAME": "${presetName}"
+                "CMAKE_WARN_DEPRECATED": "FALSE"
             },
             "condition": {
                 "type": "equals",
@@ -21,7 +20,7 @@
             }
         },
         {
-            "name": "x64-debug",
+            "name": "x64-Debug",
             "displayName": "x64 Debug",
             "description": "Target Windows (64-bit) with the Visual Studio development environment. (Debug)",
             "inherits": "windows-base",
@@ -38,7 +37,7 @@
             "name": "x64-MinSizeRel",
             "displayName": "x64 Release",
             "description": "Target Windows (64-bit) with the Visual Studio development environment. (MinSizeRel)",
-            "inherits": "x64-debug",
+            "inherits": "x64-Debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "MinSizeRel"
             }
@@ -47,7 +46,7 @@
             "name": "x64-Release",
             "displayName": "x64 Release",
             "description": "Target Windows (64-bit) with the Visual Studio development environment. (Release)",
-            "inherits": "x64-debug",
+            "inherits": "x64-Debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -56,7 +55,7 @@
             "name": "x64-RelWithDebInfo",
             "displayName": "x64 RelWithDebInfo",
             "description": "Target Windows (64-bit) with the Visual Studio development environment. (RelWithDebInfo)",
-            "inherits": "x64-debug",
+            "inherits": "x64-Debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
