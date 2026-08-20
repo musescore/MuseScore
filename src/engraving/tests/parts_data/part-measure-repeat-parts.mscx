@@ -30,6 +30,7 @@
       <barWidth>0.18</barWidth>
       <doubleBarWidth>0.18</doubleBarWidth>
       <endBarWidth>0.55</endBarWidth>
+      <dashBarWidth>0.18</dashBarWidth>
       <doubleBarDistance>0.37</doubleBarDistance>
       <endBarDistance>0.37</endBarDistance>
       <repeatBarlineDotSeparation>0.37</repeatBarlineDotSeparation>
