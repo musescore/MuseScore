@@ -1674,6 +1674,20 @@ static const std::vector<CommandInfo> s_commandInfos = {
         Decoration()
     },
     CommandInfo{
+        INCREASE_DYNAMIC_COMMAND,
+        TranslatableString("action", "Increase dynamics"),
+        TranslatableString("action", "Increase selected dynamics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
+        DECREASE_DYNAMIC_COMMAND,
+        TranslatableString("action", "Decrease dynamics"),
+        TranslatableString("action", "Decrease selected dynamics"),
+        InputSchema(),
+        Decoration()
+    },
+    CommandInfo{
         ADD_NOTELINE_COMMAND,
         TranslatableString("action", "&Note-anchored line"),
         TranslatableString("action", "Add note-anchored line"),

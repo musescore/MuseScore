@@ -172,6 +172,7 @@ public:
     MOCK_METHOD(void, beamSelectedRange, (), (override));
 
     MOCK_METHOD(void, increaseDecreaseDuration, (int, bool), (override));
+    MOCK_METHOD(void, increaseDecreaseSelectedDynamicsValues, (int), (override));
 
     MOCK_METHOD(void, autoFlipHairpinsType, (engraving::Dynamic * selDyn), (override));
 
