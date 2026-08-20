@@ -40,7 +40,7 @@ public:
 
     virtual FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const = 0;
     virtual std::vector<FontDataKey> substitutionFonts(const FontDataKey& requireKey) const = 0;
-    virtual ByteArray fontData(const FontDataKey& requireKey, Font::Type type) const = 0;
+    virtual FontData fontData(const FontDataKey& requireKey, Font::Type type) const = 0;
     virtual bool isFtxFont(const FontDataKey& requireKey, Font::Type type) const = 0;
 };
 }
