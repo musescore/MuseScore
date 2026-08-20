@@ -1711,11 +1711,20 @@ static void unpitch2xml(const Note* note, String& s, int& octave)
     Fraction tick        = note->chord()->tick();
     Staff* st       = note->staff();
     ClefType ct     = st->clef(tick);
+
+    int noteLine = note->line();
+    if (noteLine == INVALID_LINE) {
+        // Invisible staves are skipped by ModifyDom::cmdUpdateNotes(), so a percussion note on
+        // one may never have had its display line computed; resolve it from the drumset instead
+        const Drumset* drumset = st->part()->instrument(tick)->drumset();
+        noteLine = (drumset && drumset->isValid(note->pitch())) ? drumset->line(note->pitch()) : 0;
+    }
+
     // offset in lines between staff with current clef and with G clef
     int clefOffset  = ClefInfo::pitchOffset(ct) - ClefInfo::pitchOffset(ClefType::G);
     // line note would be on on a five line staff with G clef
     // note top line is line 0, bottom line is line 8
-    int line5g      = note->line() - clefOffset;
+    int line5g      = noteLine - clefOffset;
     // in MusicXML with percussion clef, step and octave are determined as if G clef is used
     // when stafflines is not equal to five, in MusicXML the bottom line is still E4.
     // in MuseScore assumes line 0 is F5
@@ -3349,7 +3358,6 @@ static String symIdToTechn(const SymId sid)
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations)
 {
     for (EngravingItem* e : chord->el()) {
-        LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->isChordLine()) {
             const ChordLine* cl = toChordLine(e);
             String subtype;
