@@ -53,7 +53,6 @@ SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* par
     : EngravingItem(type, sp, f)
 {
     UNUSED(parent); // a fresh segment is not placed yet; see moveToSystem
-    m_spanner = sp;
     setParent(sp);
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
@@ -62,13 +61,11 @@ SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementF
     : EngravingItem(type, parent->score()->dummy(), f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    m_spanner = 0;
 }
 
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
     : EngravingItem(s)
 {
-    m_spanner            = s.m_spanner;
     m_spannerSegmentType = s.m_spannerSegmentType;
     m_p2                 = s.m_p2;
     m_offset2            = s.m_offset2;
@@ -81,11 +78,9 @@ SpannerSegment::~SpannerSegment()
     moveToSystem(nullptr);
 }
 
-Spanner* SpannerSegment::setSpanner(Spanner* val)
+void SpannerSegment::setSpanner(Spanner* val)
 {
-    m_spanner = val;
     setParent(val);
-    return m_spanner;
 }
 
 void SpannerSegment::setParent(Spanner* spanner)
@@ -112,7 +107,8 @@ double SpannerSegment::mag() const
 
 Fraction SpannerSegment::tick() const
 {
-    return m_spanner ? m_spanner->tick() : Fraction(0, 1);
+    const Spanner* sp = spanner();
+    return sp ? sp->tick() : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -318,8 +314,8 @@ void SpannerSegment::setSelected(bool f)
 
 void SpannerSegment::setVisible(bool f)
 {
-    if (m_spanner) {
-        m_spanner->setVisible(f);
+    if (Spanner* sp = spanner()) {
+        sp->setVisible(f);
     }
     EngravingItem::setVisible(f);
 }
@@ -330,8 +326,8 @@ void SpannerSegment::setVisible(bool f)
 
 void SpannerSegment::setColor(const Color& col)
 {
-    if (m_spanner) {
-        m_spanner->setColor(col);
+    if (Spanner* sp = spanner()) {
+        sp->setColor(col);
     }
     EngravingItem::setColor(col);
 }
@@ -342,8 +338,8 @@ void SpannerSegment::setColor(const Color& col)
 
 void SpannerSegment::setZ(int val)
 {
-    if (m_spanner) {
-        m_spanner->setZ(val);
+    if (Spanner* sp = spanner()) {
+        sp->setZ(val);
     }
     EngravingItem::setZ(val);
 }
@@ -381,8 +377,8 @@ String SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
 {
-    if (m_spanner) {
-        m_spanner->triggerLayout();
+    if (Spanner* sp = spanner()) {
+        sp->triggerLayout();
     }
 }
 
@@ -395,8 +391,9 @@ std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() con
         return result;
     }
 
-    for (const EngravingObject* linkedSpanner : m_spanner->linkList()) {
-        if (linkedSpanner == m_spanner || toSpanner(linkedSpanner)->placement() != m_spanner->placement()) {
+    const Spanner* sp = spanner();
+    for (const EngravingObject* linkedSpanner : sp->linkList()) {
+        if (linkedSpanner == sp || toSpanner(linkedSpanner)->placement() != sp->placement()) {
             continue;
         }
         const std::vector<SpannerSegment*>& linkedSegments = toSpanner(linkedSpanner)->spannerSegments();

@@ -49,8 +49,10 @@ public:
     virtual double mag() const override;
     virtual Fraction tick() const override;
 
-    Spanner* spanner() const { return m_spanner; }
-    Spanner* setSpanner(Spanner* val);
+    //! The spanner that owns this segment - derived from the explicit parent,
+    //! so that it can never go stale.
+    Spanner* spanner() const { return toSpanner(explicitParent()); }
+    void setSpanner(Spanner* val);
 
     void setSpannerSegmentType(SpannerSegmentType s) { m_spannerSegmentType = s; }
     SpannerSegmentType spannerSegmentType() const { return m_spannerSegmentType; }
@@ -149,7 +151,6 @@ private:
     String formatStartBarsAndBeats(const Segment* segment) const;
     String formatEndBarsAndBeats(const Segment* segment) const;
 
-    Spanner* m_spanner = nullptr;
     System* m_system = nullptr;   // current layout placement; not owned, not copied
     SpannerSegmentType m_spannerSegmentType = SpannerSegmentType::SINGLE;
 };
