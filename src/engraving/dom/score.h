@@ -671,6 +671,7 @@ public:
 
     const TempoTimeline& tempoTimeline() const;
     const TempoTimeline& tempoTimeline(bool expandRepeats) const;
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }

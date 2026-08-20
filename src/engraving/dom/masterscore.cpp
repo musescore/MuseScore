@@ -255,6 +255,11 @@ bool MasterScore::setTempoMultiplier(BeatsPerSecond val)
     return true;
 }
 
+void MasterScore::setTempoTimelineOverride(std::optional<TempoTimeline> timeline)
+{
+    m_automationController->setTempoTimelineOverride(std::move(timeline));
+}
+
 //---------------------------------------------------------
 //   addExcerpt
 //---------------------------------------------------------

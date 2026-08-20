@@ -125,6 +125,7 @@ public:
     const TempoTimeline& tempoTimeline() const;
     const TempoTimeline& tempoTimeline(bool expandRepeats) const;
     bool setTempoMultiplier(BeatsPerSecond val);
+    void setTempoTimelineOverride(std::optional<TempoTimeline> timeline);
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
