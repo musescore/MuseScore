@@ -175,7 +175,7 @@ AbstractElementPopup {
                     navigation.panel: stringsNavPanel
                     navigation.row: index
                     navigation.column: 1
-                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.currentValue)
+                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.spelledNote)
 
                     RowLayout {
                         anchors.fill: parent
@@ -213,38 +213,72 @@ AbstractElementPopup {
                             }
                         }
 
-                        IncrementalPropertyControl {
+                        Item {
                             id: valueControl
+
+                            property int currentValue: delegateItem.modelData["value"]
+                            property string currentText: delegateItem.modelData["valueStr"]
+                            property string spelledNote: delegateItem.modelData["valueStr"]
+                            property bool suppressNextTextCommit: false
 
                             Layout.leftMargin: 6
 
                             Layout.preferredHeight: parent.height - ui.theme.borderWidth * 2
                             Layout.preferredWidth: 64
 
-                            currentValue: delegateItem.modelData["value"]
-                            currentText: delegateItem.modelData["valueStr"]
+                            TextInputField {
+                                id: valueInput
 
-                            minValue: 0
-                            maxValue: 127
+                                anchors.fill: parent
+                                anchors.rightMargin: valueAdjustControl.width
 
-                            navigation.panel: stringsNavPanel
-                            navigation.row: delegateItem.index
-                            navigation.column: 3
+                                textSidePadding: 4
 
-                            onIncrement: function() {
-                                return stringTuningsModel.increaseStringValue(currentValue)
+                                currentText: valueControl.currentText
+
+                                navigation.panel: stringsNavPanel
+                                navigation.row: delegateItem.index
+                                navigation.column: 3
+
+                                onTextEditingFinished: function(newValue) {
+                                    if (valueControl.suppressNextTextCommit) {
+                                        valueControl.suppressNextTextCommit = false
+                                        currentText = Qt.binding(function() { return delegateItem.modelData["valueStr"] })
+                                        return
+                                    }
+
+                                    if (newValue === delegateItem.modelData["valueStr"]) {
+                                        return
+                                    }
+
+                                    var ok = stringTuningsModel.setStringValue(delegateItem.index, newValue)
+                                    if (!ok) {
+                                        currentText = delegateItem.modelData["valueStr"]
+                                        currentText = Qt.binding(function() { return delegateItem.modelData["valueStr"] })
+                                    }
+                                }
                             }
 
-                            onDecrement: function() {
-                                return stringTuningsModel.decreaseStringValue(currentValue)
-                            }
+                            ValueAdjustControl {
+                                id: valueAdjustControl
 
-                            onValueEditingFinished: function(newValue) {
-                                var ok = stringTuningsModel.setStringValue(delegateItem.index, newValue)
-                                if (!ok) {
-                                    //! NOTE: reset the text entered by the user
-                                    currentText = delegateItem.modelData["valueStr"]
-                                    currentText = Qt.binding( function() { return delegateItem.modelData["valueStr"] } )
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+
+                                radius: valueInput.background.radius - valueInput.background.border.width
+
+                                canIncrease: valueControl.currentValue < 127
+                                canDecrease: valueControl.currentValue > 0
+
+                                onIncreaseButtonClicked: {
+                                    valueControl.suppressNextTextCommit = valueInput.activeFocus
+                                    stringTuningsModel.setStringPitchValue(delegateItem.index, valueControl.currentValue + 1, false)
+                                }
+
+                                onDecreaseButtonClicked: {
+                                    valueControl.suppressNextTextCommit = valueInput.activeFocus
+                                    stringTuningsModel.setStringPitchValue(delegateItem.index, valueControl.currentValue - 1, true)
                                 }
                             }
                         }
