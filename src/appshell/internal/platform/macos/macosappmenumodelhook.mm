@@ -24,10 +24,59 @@
 
 #include <Cocoa/Cocoa.h>
 
+#include "interactive/internal/platform/macos/macosinteractivehelper.h"
+#include "notationscene/notationcommands.h"
+
 using namespace mu::appshell;
 
-void MacOSAppMenuModelHook::onAppMenuInited()
+void MacOSAppMenuModelHook::onAppMenuInited(const muse::uicomponents::MenuItemList& items)
 {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledDictationMenuItem"];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledCharacterPaletteMenuItem"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSMenuEnableActionImages"];
+
+    const muse::uicomponents::MenuItem* editMenu = nullptr;
+    int editTopLevelIndex = -1;
+    for (int i = 0; i < items.size(); ++i) {
+        if (items[i] && items[i]->id() == "menu-edit") {
+            editMenu = items[i];
+            editTopLevelIndex = i;
+            break;
+        }
+    }
+
+    if (!editMenu || editTopLevelIndex < 0) {
+        return;
+    }
+
+    // AppKit inserts the Application menu at index 0 on macOS, shifting top-level menus by +1
+    muse::MacOSInteractiveHelper::setEditMenuIndex(editTopLevelIndex + 1);
+
+    int index = 0;
+    std::map<muse::MacOSInteractiveHelper::EditAction, int> structure;
+
+    for (const muse::uicomponents::MenuItem* subitem : editMenu->subitems()) {
+        if (!subitem || subitem->id().isEmpty()) {
+            index++;
+            continue;
+        }
+
+        if (subitem->id() == mu::notation::UNDO_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::Undo] = index;
+        } else if (subitem->id() == mu::notation::REDO_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::Redo] = index;
+        } else if (subitem->id() == mu::notation::CUT_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::Cut] = index;
+        } else if (subitem->id() == mu::notation::COPY_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::Copy] = index;
+        } else if (subitem->id() == mu::notation::PASTE_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::Paste] = index;
+        } else if (subitem->id() == mu::notation::SELECT_ALL_COMMAND.toString()) {
+            structure[muse::MacOSInteractiveHelper::EditAction::SelectAll] = index;
+        }
+
+        index++;
+    }
+
+    muse::MacOSInteractiveHelper::setEditMenuStructure(structure);
 }

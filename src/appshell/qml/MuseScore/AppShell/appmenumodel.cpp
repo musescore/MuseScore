@@ -111,7 +111,7 @@ void AppMenuModel::load()
 
     //! NOTE: removes some undesired platform-specific items
     //! (such as "Start Dictation" and "Special Characters" on macOS)
-    appMenuModelHook()->onAppMenuInited();
+    appMenuModelHook()->onAppMenuInited(items);
 }
 
 bool AppMenuModel::isGlobalMenuAvailable()
