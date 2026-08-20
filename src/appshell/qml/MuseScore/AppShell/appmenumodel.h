@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
-#include "extensions/iextensionsprovider.h"
+#include "extensions/iextensionsregister.h"
 #include "global/iglobalconfiguration.h"
 #ifdef MUSE_MODULE_MUSESAMPLER
 #include "musesampler/imusesamplerinfo.h"
@@ -64,10 +64,10 @@ public:
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<muse::extensions::IExtensionsRegister> extensionsRegister;
 #ifdef MUSE_MODULE_MUSESAMPLER
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo;
 #endif
-    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
     muse::ContextInject<IAppMenuModelHook> appMenuModelHook = { this };
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };

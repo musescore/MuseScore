@@ -1,5 +1,5 @@
 {
-    "uri": "musescore://extensions/courtesy_accidentals",
+    "uri": "extension://notation/courtesy_accidentals",
     "type": "composite",
     "title": "Courtesy Accidentals",
     "description": "This plugin adds courtesy accidentals",
