@@ -67,6 +67,10 @@ public:
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
+    // Dynamic level (marking/hairpin only, no per-note override) that would apply at this tick,
+    // for use by UI that needs a musically-coherent baseline (e.g. a velocity editor).
+    virtual muse::mpe::dynamic_level_t appliableDynamicLevel(engraving::track_idx_t trackIdx, int tick) const = 0;
+
     virtual muse::audio::secs_t totalPlayTime() const = 0;
     virtual muse::async::Channel<muse::audio::secs_t> totalPlayTimeChanged() const = 0;
 

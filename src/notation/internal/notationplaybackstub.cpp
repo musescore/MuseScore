@@ -106,6 +106,11 @@ muse::async::Channel<InstrumentTrackId> NotationPlaybackStub::trackRemoved() con
     return muse::async::Channel<InstrumentTrackId>();
 }
 
+muse::mpe::dynamic_level_t NotationPlaybackStub::appliableDynamicLevel(track_idx_t, int) const
+{
+    return muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
+}
+
 muse::audio::secs_t NotationPlaybackStub::totalPlayTime() const
 {
     return muse::audio::secs_t();

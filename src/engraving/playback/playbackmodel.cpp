@@ -394,6 +394,16 @@ muse::async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
     return m_trackRemoved;
 }
 
+dynamic_level_t PlaybackModel::appliableDynamicLevel(track_idx_t trackIdx, int tick) const
+{
+    if (!m_playbackCtx) {
+        return dynamicLevelFromType(muse::mpe::DynamicType::Natural);
+    }
+
+    const int utick = repeatList().tick2utick(tick);
+    return m_playbackCtx->appliableDynamicLevel(trackIdx, utick);
+}
+
 void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                            ChangedTrackIdSet* trackChanges)
 {

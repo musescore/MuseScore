@@ -32,9 +32,9 @@ PropertyItem::PropertyItem(const mu::engraving::Pid propertyId, QObject* parent)
     m_propertyId = propertyId;
 }
 
-void PropertyItem::updateCurrentValue(const QVariant& currentValue)
+void PropertyItem::updateCurrentValue(const QVariant& currentValue, bool forceNotify)
 {
-    if (m_currentValue == currentValue) {
+    if (!forceNotify && m_currentValue == currentValue) {
         return;
     }
 

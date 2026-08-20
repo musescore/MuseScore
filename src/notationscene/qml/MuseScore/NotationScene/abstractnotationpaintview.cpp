@@ -22,9 +22,11 @@
 
 #include "abstractnotationpaintview.h"
 
+#include <QCoreApplication>
 #include <QCursor>
 #include <QPainter>
 #include <QMimeData>
+#include <QQuickWindow>
 
 #include "async/async.h"
 #include "log.h"
@@ -35,6 +37,8 @@
 #include "notation/imasternotation.h" // IWYU pragma: keep
 #include "notation/inotationaccessibility.h" // IWYU pragma: keep
 #include "notation/inotationautomation.h"
+#include "notation/inotationnoteoffsets.h"
+#include "notation/inotationnotevelocity.h"
 #include "notation/inotationelements.h"
 #include "notation/inotationnoteinput.h"
 #include "notation/inotationpainting.h" // IWYU pragma: keep
@@ -111,6 +115,34 @@ void AbstractNotationPaintView::load()
     });
 
     m_notationAutomationController = std::make_unique<NotationAutomationController>(m_automationLinesContainer, iocContext());
+
+    // Clip note offset overlays to the view bounds
+    m_noteOffsetOverlayContainer = new QQuickItem(this);
+    m_noteOffsetOverlayContainer->setClip(true);
+    m_noteOffsetOverlayContainer->setWidth(width());
+    m_noteOffsetOverlayContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_noteOffsetOverlayContainer, [this]() {
+        m_noteOffsetOverlayContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_noteOffsetOverlayContainer, [this]() {
+        m_noteOffsetOverlayContainer->setHeight(height());
+    });
+
+    m_notationNoteOffsetController = std::make_unique<NotationNoteOffsetController>(m_noteOffsetOverlayContainer, iocContext());
+
+    // Clip note velocity overlays to the view bounds
+    m_noteVelocityOverlayContainer = new QQuickItem(this);
+    m_noteVelocityOverlayContainer->setClip(true);
+    m_noteVelocityOverlayContainer->setWidth(width());
+    m_noteVelocityOverlayContainer->setHeight(height());
+    connect(this, &QQuickItem::widthChanged, m_noteVelocityOverlayContainer, [this]() {
+        m_noteVelocityOverlayContainer->setWidth(width());
+    });
+    connect(this, &QQuickItem::heightChanged, m_noteVelocityOverlayContainer, [this]() {
+        m_noteVelocityOverlayContainer->setHeight(height());
+    });
+
+    m_notationNoteVelocityController = std::make_unique<NotationNoteVelocityController>(m_noteVelocityOverlayContainer, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(iocContext(), notationConfiguration()->thinNoteInputCursor());
@@ -375,6 +407,18 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         emit automationModeChanged();
     });
 
+    // FIXME: only un-/re-subscribe when master notation changes
+    m_notationNoteOffsetController->init();
+    notationNoteOffsets()->editModeEnabledChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
+    // FIXME: only un-/re-subscribe when master notation changes
+    m_notationNoteVelocityController->init();
+    notationNoteVelocity()->editModeEnabledChanged().onNotify(this, [this]() {
+        scheduleRedraw();
+    });
+
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
@@ -427,6 +471,8 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     notationPlayback()->loopBoundariesChanged().disconnect(this);
     m_notation->viewModeChanged().disconnect(this);
     notationAutomation()->automationModeEnabledChanged().disconnect(this);
+    notationNoteOffsets()->editModeEnabledChanged().disconnect(this);
+    notationNoteVelocity()->editModeEnabledChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -475,6 +521,14 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
 
     if (m_notationAutomationController) {
         m_notationAutomationController->setViewMatrix(newMatrix);
+    }
+
+    if (m_notationNoteOffsetController) {
+        m_notationNoteOffsetController->setViewMatrix(newMatrix);
+    }
+
+    if (m_notationNoteVelocityController) {
+        m_notationNoteVelocityController->setViewMatrix(newMatrix);
     }
 
     scheduleRedraw();
@@ -600,6 +654,16 @@ INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
 INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
 {
     return m_notation ? m_notation->masterNotation()->automation() : nullptr;
+}
+
+INotationNoteOffsetsPtr AbstractNotationPaintView::notationNoteOffsets() const
+{
+    return m_notation ? m_notation->masterNotation()->noteOffsets() : nullptr;
+}
+
+INotationNoteVelocityPtr AbstractNotationPaintView::notationNoteVelocity() const
+{
+    return m_notation ? m_notation->masterNotation()->noteVelocity() : nullptr;
 }
 
 void AbstractNotationPaintView::onNoteInputStateChanged()
@@ -743,8 +807,11 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
-    const bool isAutomation = automationMode();
-    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
+    const INotationNoteOffsetsPtr noteOffsets = notationNoteOffsets();
+    const INotationNoteVelocityPtr noteVelocity = notationNoteVelocity();
+    const bool dimNotation = automationMode() || (noteOffsets && noteOffsets->isEditModeEnabled())
+                             || (noteVelocity && noteVelocity->isEditModeEnabled());
+    notation()->painting()->paintView(painter, toLogical(rect), isPrinting, dimNotation);
 
     const INotationNoteInputPtr noteInput = notationNoteInput();
     if (noteInput->isNoteInputMode() && !publishMode()) {
@@ -1368,6 +1435,17 @@ bool AbstractNotationPaintView::shortcutOverride(QKeyEvent* event)
 
 void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
 {
+    // Qt::Key_Control is Cmd on macOS, Ctrl on Windows/Linux (same swap as
+    // Qt::ControlModifier). Only *arms* here - the actual toggle only commits on a matching
+    // keyReleaseEvent() with nothing else having cancelled it in between (see event(), the single
+    // general choke point that does the cancelling). Committing on press instead would also fire
+    // as a side effect of every other Cmd/Ctrl shortcut in the app (copy, undo, Ctrl-click to
+    // extend a selection, Ctrl-wheel zoom, ...), which all necessarily start with this same
+    // physical key-down.
+    if (event->key() == Qt::Key_Control && !event->isAutoRepeat()) {
+        m_offsetOverlaysTogglePending = true;
+    }
+
     if (isInited()) {
         m_inputController->keyPressEvent(event);
     }
@@ -1382,6 +1460,32 @@ void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
 
 void AbstractNotationPaintView::keyReleaseEvent(QKeyEvent* event)
 {
+    // See keyPressEvent(). Swaps which of the note-offset and note-velocity
+    // overlays paints - and is hit-tested - on top of the other, persisting until tapped again
+    // (not just while held).
+    if (event->key() == Qt::Key_Control && !event->isAutoRepeat() && m_offsetOverlaysTogglePending) {
+        m_offsetOverlaysTogglePending = false;
+        m_offsetOverlaysOnTop = !m_offsetOverlaysOnTop;
+        if (m_noteOffsetOverlayContainer && m_noteVelocityOverlayContainer) {
+            m_noteOffsetOverlayContainer->setZ(m_offsetOverlaysOnTop ? 1.0 : 0.0);
+            m_noteVelocityOverlayContainer->setZ(m_offsetOverlaysOnTop ? 0.0 : 1.0);
+        }
+
+        // Which overlay's cursor is shown is only re-evaluated by Qt on the next hover event
+        // (see the cursor-priority comments in notevelocityoverlay.cpp/noteoffsetoverlay.cpp) -
+        // without this, a stationary mouse keeps showing whichever overlay's cursor was on top
+        // *before* the swap until it happens to move even a pixel, so a click there would already
+        // route to the new top overlay while the cursor still displays the old one. Synthesizing
+        // a button-less mouse-move at the current pointer position forces Qt Quick's normal
+        // hover-delivery path to run again immediately, the same as a real (zero-distance) move.
+        if (QQuickWindow* win = window()) {
+            const QPointF posInWindow = win->mapFromGlobal(QCursor::pos());
+            QMouseEvent hoverRefresh(QEvent::MouseMove, posInWindow, posInWindow, QCursor::pos(),
+                                     Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(win, &hoverRefresh);
+        }
+    }
+
     if (isInited()) {
         m_inputController->keyReleaseEvent(event);
     }
@@ -1395,6 +1499,33 @@ bool AbstractNotationPaintView::event(QEvent* event)
 
     QEvent::Type eventType = event->type();
     auto keyEvent = dynamic_cast<QKeyEvent*>(event);
+
+    // See keyPressEvent()/keyReleaseEvent(). A single general choke point for
+    // cancelling the pending overlay-priority toggle, instead of reproducing this check in every
+    // individual event handler (key, mouse press, wheel, a future trackpad-gesture or tablet
+    // handler, ...): every one of those event types derives from QInputEvent and carries the live
+    // modifier state in modifiers(), and event() is the one dispatch point they all pass through
+    // before reaching their specific handler. Any of them carrying Control - other than the
+    // Control key's own press/release, which legitimately arms/commits the toggle itself - means
+    // Control is being used as a modifier for something else (a shortcut, Ctrl-click, Ctrl-wheel
+    // zoom, ...), so the tap in progress shouldn't also toggle the overlays on release. Note this
+    // still can't see a key combo a native OS-level menu resolves entirely outside Qt's event
+    // system (observed to not be an issue for Cmd-C/Cmd-V in practice, but not guaranteed for
+    // every shortcut).
+    if (m_offsetOverlaysTogglePending) {
+        const bool isControlKeyEventItself = keyEvent && keyEvent->key() == Qt::Key_Control;
+        // A QHoverEvent is passive mouse-position tracking, not a user action - it's still a
+        // QInputEvent and still carries whatever modifiers happen to be held, so without this
+        // exclusion the pending toggle would self-cancel just from the mouse sitting still over
+        // the canvas while Control is held (e.g. hoverMoveEvent() is enabled here whenever note
+        // input mode is active), making the tap silently do nothing in that mode.
+        const bool isPassiveHover = dynamic_cast<QHoverEvent*>(event) != nullptr;
+        if (auto* inputEvent = dynamic_cast<QInputEvent*>(event)) {
+            if (!isPassiveHover && (inputEvent->modifiers() & Qt::ControlModifier) && !isControlKeyEventItself) {
+                m_offsetOverlaysTogglePending = false;
+            }
+        }
+    }
 
     bool isContextMenuEvent = ((eventType == QEvent::ShortcutOverride && keyEvent->key() == Qt::Key_Menu)
                                || eventType == QEvent::Type::ContextMenu) && hasFocus();
