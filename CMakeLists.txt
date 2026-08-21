@@ -102,6 +102,7 @@ option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
 
 # IMPORT EXPORT MODULES
 option(MUE_BUILD_IMPEXP_BB_MODULE "Build importexport bb module" ON)
+option(MUE_BUILD_IMPEXP_ENCORE_MODULE "Build importexport encore module" ON)
 option(MUE_BUILD_IMPEXP_BWW_MODULE "Build importexport bww module" ON)
 option(MUE_BUILD_IMPEXP_CAPELLA_MODULE "Build importexport capella module" ON)
 option(MUE_BUILD_IMPEXP_MIDI_MODULE "Build importexport midi module" ON)

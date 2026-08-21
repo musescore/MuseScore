@@ -170,6 +170,106 @@ PreferencesPage {
                 }
             }
         }
+
+        SeparatorLine { }
+
+        EncoreSection {
+            importPageLayout: importPreferencesModel.encoreImportPageLayout
+            importPageBreaks: importPreferencesModel.encoreImportPageBreaks
+            importSystemLocks: importPreferencesModel.encoreImportSystemLocks
+            importStaffSize: importPreferencesModel.encoreImportStaffSize
+            importTempoTextSemantic: importPreferencesModel.encoreImportTempoTextSemantic
+            importUnsupportedArticulationsAsText: importPreferencesModel.encoreImportUnsupportedArticulationsAsText
+
+            instrumentSearchModeModel: importPreferencesModel.encoreInstrumentSearchModeModel()
+            currentInstrumentSearchMode: importPreferencesModel.encoreInstrumentSearchMode
+
+            tablatureImportModeModel: importPreferencesModel.encoreTablatureImportModeModel()
+            currentTablatureImportMode: importPreferencesModel.encoreTablatureImportMode
+
+            underfillStrategyModel: importPreferencesModel.encoreUnderfillStrategyModel()
+            currentUnderfillStrategy: importPreferencesModel.encoreUnderfillStrategy
+            overfillStrategyModel: importPreferencesModel.encoreOverfillStrategyModel()
+            currentOverfillStrategy: importPreferencesModel.encoreOverfillStrategy
+
+            firstMeasureIsPickup: importPreferencesModel.encoreFirstMeasureIsPickup
+            mergeVoices: importPreferencesModel.encoreMergeVoices
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 6
+
+            onImportPageLayoutChangeRequested: function(value) {
+                importPreferencesModel.encoreImportPageLayout = value
+            }
+
+            onImportPageBreaksChangeRequested: function(value) {
+                importPreferencesModel.encoreImportPageBreaks = value
+            }
+
+            onImportSystemLocksChangeRequested: function(value) {
+                importPreferencesModel.encoreImportSystemLocks = value
+            }
+
+            onImportStaffSizeChangeRequested: function(value) {
+                importPreferencesModel.encoreImportStaffSize = value
+            }
+
+            onImportTempoTextSemanticChangeRequested: function(value) {
+                importPreferencesModel.encoreImportTempoTextSemantic = value
+            }
+
+            onImportUnsupportedArticulationsAsTextChangeRequested: function(value) {
+                importPreferencesModel.encoreImportUnsupportedArticulationsAsText = value
+            }
+
+            onInstrumentSearchModeChangeRequested: function(value) {
+                importPreferencesModel.encoreInstrumentSearchMode = value
+            }
+
+            onTablatureImportModeChangeRequested: function(value) {
+                importPreferencesModel.encoreTablatureImportMode = value
+            }
+
+            onUnderfillStrategyChangeRequested: function(value) {
+                importPreferencesModel.encoreUnderfillStrategy = value
+            }
+
+            onOverfillStrategyChangeRequested: function(value) {
+                importPreferencesModel.encoreOverfillStrategy = value
+            }
+
+            onFirstMeasureIsPickupChangeRequested: function(value) {
+                importPreferencesModel.encoreFirstMeasureIsPickup = value
+            }
+
+            onMergeVoicesChangeRequested: function(value) {
+                importPreferencesModel.encoreMergeVoices = value
+            }
+
+            onResetToDefaultRequested: {
+                importPreferencesModel.encoreImportPageLayout = true
+                importPreferencesModel.encoreImportPageBreaks = true
+                importPreferencesModel.encoreImportSystemLocks = true
+                importPreferencesModel.encoreImportStaffSize = true
+                importPreferencesModel.encoreImportTempoTextSemantic = true
+                importPreferencesModel.encoreImportUnsupportedArticulationsAsText = false
+                importPreferencesModel.encoreInstrumentSearchMode = 0   // NameAndMidi
+                importPreferencesModel.encoreUnderfillStrategy = 2      // IrregularMeasure
+                importPreferencesModel.encoreOverfillStrategy = 2       // IrregularMeasure
+                importPreferencesModel.encoreFirstMeasureIsPickup = true
+                importPreferencesModel.encoreMergeVoices = true
+                importPreferencesModel.encoreTablatureImportMode = 1   // Linked
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    if (!suppressEnsureVisible) {
+                        root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                    }
+                    suppressEnsureVisible = false
+                }
+            }
+        }
     }
 
     function reset() {
