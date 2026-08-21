@@ -31,6 +31,7 @@
 #include "xmlwriter.h"
 
 namespace mu::engraving {
+class Excerpt;
 class Score;
 class EngravingItem;
 class Segment;
@@ -51,6 +52,7 @@ public:
     virtual ~IWriter() = default;
 
     virtual bool writeScore(Score* score, muse::io::IODevice* device, WriteInOutData* out = nullptr) = 0;
+    virtual bool writeUninitExcerpt(Excerpt* excerpt, muse::io::IODevice* device) = 0;
 
     virtual muse::ByteArray writeStaffSelection(Score* score, const SelectionFilter& filter, staff_idx_t staffStart, staff_idx_t staffEnd,
                                                 const Fraction& tickStart, const Fraction& tickEnd, Segment* startSegment,

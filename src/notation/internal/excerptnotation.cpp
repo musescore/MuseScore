@@ -22,11 +22,16 @@
 
 #include "excerptnotation.h"
 
+#include <algorithm>
+
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/editing/editexcerpt.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "inotationundostack.h"
+#include "masternotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::notation;
 
@@ -44,18 +49,30 @@ ExcerptNotation::~ExcerptNotation()
 
 void ExcerptNotation::init()
 {
-    if (m_inited) {
+    if (score()) {
         return;
     }
 
     setScore(m_excerpt->excerptScore());
+}
 
-    m_inited = true;
+void ExcerptNotation::deinit()
+{
+    if (!m_excerpt->inited()) {
+        return;
+    }
+
+    // Delete the excerptScore and reset to uninitialised state
+    mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
+    setScore(nullptr);
+    m_excerpt->setExcerptScore(nullptr);
+    m_excerpt->setInited(false);
+    delete excerptScore;
 }
 
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 {
-    m_inited = false;
+    setScore(nullptr);
     m_excerpt = newExcerpt;
 
     init();
@@ -65,7 +82,7 @@ void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 
 bool ExcerptNotation::isInited() const
 {
-    return m_inited;
+    return m_excerpt->inited();
 }
 
 bool ExcerptNotation::isCustom() const
@@ -94,6 +111,10 @@ void ExcerptNotation::setName(const QString& name)
     m_excerpt->setName(name);
 
     if (changed) {
+        // Mark project as unsaved so asterisk appears and save confirmation is shown
+        if (m_masterNotation && m_masterNotation->project()) {
+            m_masterNotation->project()->markAsUnsaved();
+        }
         notifyAboutNotationChanged();
     }
 }
@@ -105,7 +126,16 @@ void ExcerptNotation::undoSetName(const QString& name)
     }
 
     if (!score()) {
-        setName(name);
+        if (!m_masterNotation) {
+            setName(name);
+            return;
+        }
+        //: Means: "edit the name of a part score"
+        m_masterNotation->undoStack()->transaction(muse::TranslatableString("undoableAction", "Rename part"),
+                                                   [&](engraving::Transaction& tx) {
+            tx.push(new engraving::ChangeExcerptTitle(m_excerpt, name));
+        });
+        notifyAboutNotationChanged();
         return;
     }
 

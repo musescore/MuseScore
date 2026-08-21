@@ -39,6 +39,7 @@ public:
     Writer();
 
     bool writeScore(Score* score, muse::io::IODevice* device, rw::WriteInOutData* out) override;
+    bool writeUninitExcerpt(Excerpt* excerpt, muse::io::IODevice* device) override;
 
     static void write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::WriteScoreHook& hook);
 
