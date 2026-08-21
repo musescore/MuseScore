@@ -213,6 +213,7 @@ public:
     virtual void triggerLayout() const override;
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
+    virtual void removed() override;
     EngravingItemList accessibleChildren() const override;
     virtual void scanElements(std::function<void(EngravingItem*)>) override {}
     bool removeSpannerBack();
