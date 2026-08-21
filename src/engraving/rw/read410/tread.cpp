@@ -3818,7 +3818,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
-            t->setXmlName(e.readText());
+            t->setType(TConv::fromXml(e.readAsciiText(), StaffTypes::STANDARD));
         } else if (tag == "lines") {
             t->setLines(e.readInt());
         } else if (tag == "lineDistance") {

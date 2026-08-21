@@ -147,7 +147,7 @@
     <Part>
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
