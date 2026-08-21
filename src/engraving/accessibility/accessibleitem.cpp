@@ -137,12 +137,10 @@ size_t AccessibleItem::accessibleChildCount() const
     }
 
     size_t count = 0;
-    for (const EngravingObject* obj : m_element->children()) {
-        if (obj->isEngravingItem()) {
-            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
-            if (access && access->registered()) {
-                ++count;
-            }
+    for (const EngravingItem* item : m_element->accessibleChildren()) {
+        AccessibleItemPtr access = item->accessible();
+        if (access && access->registered()) {
+            ++count;
         }
     }
     return count;
@@ -157,15 +155,13 @@ IAccessible* AccessibleItem::accessibleChild(size_t i) const
     }
 
     size_t count = 0;
-    for (const EngravingObject* obj : m_element->children()) {
-        if (obj->isEngravingItem()) {
-            AccessibleItemPtr access = toEngravingItem(obj)->accessible();
-            if (access && access->registered()) {
-                if (count == i) {
-                    return access.get();
-                }
-                ++count;
+    for (const EngravingItem* item : m_element->accessibleChildren()) {
+        AccessibleItemPtr access = item->accessible();
+        if (access && access->registered()) {
+            if (count == i) {
+                return access.get();
             }
+            ++count;
         }
     }
     return nullptr;

@@ -186,6 +186,11 @@ EngravingItem* EngravingItem::accessibleParentItem() const
     return parentItem(false /*not explicit*/);
 }
 
+EngravingItemList EngravingItem::accessibleChildren() const
+{
+    return childrenItems();
+}
+
 EngravingItem* EngravingItem::layoutParent() const
 {
     return parentItem();

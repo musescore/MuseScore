@@ -487,7 +487,11 @@ public:
 
     //! Parent in the accessibility hierarchy: the layout parent when placed,
     //! otherwise the raw parent (so that e.g. palette items reach the dummy).
-    EngravingItem* accessibleParentItem() const;
+    virtual EngravingItem* accessibleParentItem() const;
+    //! Children in the accessibility hierarchy: the items that name this one as their
+    //! accessibleParentItem(). Those are the children it owns, unless ownership and
+    //! placement diverge, in which case the item that places them lists them instead.
+    virtual EngravingItemList accessibleChildren() const;
 
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
