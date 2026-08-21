@@ -95,7 +95,7 @@ QUrl MuseSoundsConfiguration::checkForMuseSoundsUpdateUrl() const
 
 QUrl MuseSoundsConfiguration::checkForMuseSamplerUpdateUrl() const
 {
-    return QUrl("https://cosmos-customer-webservice.azurewebsites.net/graphql/v3");
+    return QUrl("https://customers-api.musehub.com/graphql/v3");
 }
 
 QString MuseSoundsConfiguration::getMuseSamplerVersionQuery() const
