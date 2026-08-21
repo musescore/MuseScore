@@ -1672,7 +1672,10 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
         xml.tag("track2", t2);
         xml.tagFraction("startTick", item->tick());
         xml.tagFraction("ticks", item->ticks());
-    } else {
+    } else if (!item->isGuitarBendHold()) {
+        /* GuitarBendHold lines are regenerated during layout by GuitarBend::updateHoldLine(),
+         * which recomputes their endpoints, so there is no point in serializing them */
+
         const bool isPartialTieOrLV = item->isPartialTie() || item->isLaissezVib();
         const bool hasStartEndElements = item->startElement() && item->endElement();
         IF_ASSERT_FAILED(item->score()->isPaletteScore() || isPartialTieOrLV || hasStartEndElements) {
