@@ -55,7 +55,6 @@
 
 namespace mu::engraving {
 class EngravingItem;
-class RootItem;
 class MeasureBase;
 class Part;
 class Page;
@@ -200,7 +199,8 @@ public:
     ChordRest* findCR(Fraction tick, track_idx_t track);
 
     // Create/Remove
-    RootItem* rootItem() const;
+    const Score* score() const;
+    Score* score();
     compat::DummyElement* dummyParent() const;
     void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
@@ -216,9 +216,6 @@ public:
     const std::set<Spanner*>& unmanagedSpanners() const;
 
 private:
-    const Score* score() const;
-    Score* score();
-
     IGetScoreInternal* m_getScore = nullptr;
 };
 

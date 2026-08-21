@@ -419,14 +419,6 @@ MeasureBase* DomAccessor::first()
     return score()->first();
 }
 
-RootItem* DomAccessor::rootItem() const
-{
-    IF_ASSERT_FAILED(score()) {
-        return nullptr;
-    }
-    return score()->rootItem();
-}
-
 compat::DummyElement* DomAccessor::dummyParent() const
 {
     IF_ASSERT_FAILED(score()) {
