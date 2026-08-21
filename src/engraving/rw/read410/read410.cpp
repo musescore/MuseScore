@@ -839,7 +839,8 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 m->checkMeasure(i);
             }
         }
-        score->m_selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
+        score->m_selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff,
+                                         /*startHBox*/ nullptr, /*endHBox*/ nullptr); // clear HBoxes
 
         //finding the first element that has a track
         //the canvas position will be set to this element

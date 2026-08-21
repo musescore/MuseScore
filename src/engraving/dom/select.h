@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "durationtype.h"
 #include "mscore.h"
 #include "pitchspelling.h"
@@ -42,6 +44,7 @@ class MeasureBase;
 class Chord;
 class Tuplet;
 class GuitarBend;
+class HBox;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -152,10 +155,17 @@ public:
 
     Segment* startSegment() const { return m_startSegment; }
     Segment* endSegment() const { return m_endSegment; }
-    void setStartSegment(Segment* s) { m_startSegment = s; }
-    void setEndSegment(Segment* s) { m_endSegment = s; }
-    void setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd);
-    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd);
+    HBox* startHBox() const { return m_startHBox; }
+    HBox* endHBox() const { return m_endHBox; }
+
+    // HBox args: nullopt = keep existing (will assert and clear if there's a segment/HBox mismatch), nullptr = clear HBox...
+    void setStartSegment(Segment* s, std::optional<HBox*> hb = std::nullopt);
+    void setEndSegment(Segment* s, std::optional<HBox*> hb = std::nullopt);
+    void setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd,
+                  std::optional<HBox*> startHBox = std::nullopt, std::optional<HBox*> endHBox = std::nullopt);
+    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd,
+                       std::optional<HBox*> startHBox = std::nullopt, std::optional<HBox*> endHBox = std::nullopt);
+
     Segment* activeSegment() const { return m_activeSegment; }
     void setActiveSegment(Segment* s) { m_activeSegment = s; }
     ChordRest* activeCR() const;
@@ -172,9 +182,10 @@ public:
     void setActiveTrack(track_idx_t v) { m_activeTrack = v; }
     bool canCopy() const;
     void updateSelectedElements();
-    bool measureRange(Measure** m1, Measure** m2) const;
+    bool measureBaseRange(MeasureBase** mb1, MeasureBase** mb2) const;
     void extendRangeSelection(ChordRest* cr);
-    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick);
+    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick,
+                              HBox* hBox = nullptr);
     bool rangeContainsMultiNoteChords() const;
 
 private:
@@ -199,8 +210,12 @@ private:
 
     staff_idx_t m_staffStart = 0;            // valid if selState is SelState::RANGE
     staff_idx_t m_staffEnd = 0;
+
     Segment* m_startSegment = nullptr;
     Segment* m_endSegment = nullptr; // next segment after selection
+
+    HBox* m_startHBox = nullptr;
+    HBox* m_endHBox = nullptr; // the last HBox included in the selection
 
     Fraction m_plannedTick1 { -1, 1 };   // Will be actually selected on updateSelectedElements() call.
     Fraction m_plannedTick2 { -1, 1 };   // Used by setRangeTicks() to restore proper selection after
