@@ -23,6 +23,7 @@
 #define MU_APPSHELL_IAPPMENUMODELHOOK_H
 
 #include "modularity/imoduleinterface.h"
+#include "uicomponents/qml/Muse/UiComponents/menuitem.h"
 
 namespace mu::appshell {
 class IAppMenuModelHook : MODULE_CONTEXT_INTERFACE
@@ -32,13 +33,14 @@ class IAppMenuModelHook : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IAppMenuModelHook() = default;
 
-    virtual void onAppMenuInited() = 0;
+    //! Invoked once the application's top-level menu hierarchy has been loaded.
+    virtual void onAppMenuInited(const muse::uicomponents::MenuItemList& items) = 0;
 };
 
 class AppMenuModelHookStub : public IAppMenuModelHook
 {
 public:
-    void onAppMenuInited() override {}
+    void onAppMenuInited(const muse::uicomponents::MenuItemList& /*items*/) override {}
 };
 }
 
